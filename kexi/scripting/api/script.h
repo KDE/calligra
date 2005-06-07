@@ -54,7 +54,7 @@ namespace Kross { namespace Api {
             /**
              * Execute the script.
              */
-            virtual Kross::Api::Object* execute() = 0;
+            virtual Kross::Api::Object::Ptr execute() = 0;
 
             /**
              * Return a list of callable functionnames this
@@ -65,7 +65,7 @@ namespace Kross { namespace Api {
             /**
              * Call a function.
              */
-            virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args) = 0;
+            virtual Kross::Api::Object::Ptr callFunction(const QString& name, Kross::Api::List::Ptr args) = 0;
 
             /**
              * Return a list of classes.
@@ -75,7 +75,7 @@ namespace Kross { namespace Api {
             /**
              * Create and return a new class instance.
              */
-            virtual Kross::Api::Object* classInstance(const QString& name) = 0;
+            virtual Kross::Api::Object::Ptr classInstance(const QString& name) = 0;
 
         protected:
             /// The \a Interpreter used to create this Script instance.

@@ -97,57 +97,57 @@ const QString KexiDBCursor::getDescription() const
     return m_cursor;
 }
 
-Kross::Api::Object* KexiDBCursor::moveFirst(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::moveFirst(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->moveFirst(),
+    return new Kross::Api::Variant(cursor()->moveFirst(),
            "Kross::KexiDB::Cursor::moveFirst::Bool");
 }
 
-Kross::Api::Object* KexiDBCursor::moveLast(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::moveLast(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->moveLast(),
+    return new Kross::Api::Variant(cursor()->moveLast(),
            "Kross::KexiDB::Cursor::moveLast::Bool");
 }
 
-Kross::Api::Object* KexiDBCursor::moveNext(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::moveNext(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->moveNext(),
+    return new Kross::Api::Variant(cursor()->moveNext(),
            "Kross::KexiDB::Cursor::moveNext::Bool");
 }
 
-Kross::Api::Object* KexiDBCursor::movePrev(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::movePrev(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->movePrev(),
+    return new Kross::Api::Variant(cursor()->movePrev(),
            "Kross::KexiDB::Cursor::movePrev::Bool");
 }
 
-Kross::Api::Object* KexiDBCursor::eof(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::eof(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->eof(),
+    return new Kross::Api::Variant(cursor()->eof(),
            "Kross::KexiDB::Cursor::eof::Bool");
 }
 
-Kross::Api::Object* KexiDBCursor::bof(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::bof(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->bof(),
+    return new Kross::Api::Variant(cursor()->bof(),
            "Kross::KexiDB::Cursor::bof::Bool");
 }
 
-Kross::Api::Object* KexiDBCursor::at(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::at(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->at(),
+    return new Kross::Api::Variant(cursor()->at(),
            "Kross::KexiDB::Cursor::at::LLONG");
 }
 
-Kross::Api::Object* KexiDBCursor::fieldCount(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBCursor::fieldCount(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(cursor()->fieldCount(),
+    return new Kross::Api::Variant(cursor()->fieldCount(),
            "Kross::KexiDB::Cursor::fieldCount::UInt");
 }
 
-Kross::Api::Object* KexiDBCursor::value(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBCursor::value(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            cursor()->value( Kross::Api::Variant::toUInt(args->item(0)) ),
            "Kross::KexiDB::Cursor::value::Variant");
 }

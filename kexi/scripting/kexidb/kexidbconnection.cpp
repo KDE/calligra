@@ -90,7 +90,7 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
     );
 
     addFunction("tableNames", &KexiDBConnection::disconnect,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", Kross::Api::Variant::create(QVariant(true))),
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(true))),
         i18n("Return names of all table schemata stored in currently "
              "used database. If the as argument passed boolean value "
              "is true, internal KexiDB system table names (kexi__*) "
@@ -112,14 +112,14 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
     addFunction("querySingleString", &KexiDBConnection::querySingleString,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant::UInt", Kross::Api::Variant::create(0)),
+            << Kross::Api::Argument("Kross::Api::Variant::UInt", new Kross::Api::Variant(0)),
         i18n("Executes the as argument passed sqlquery-string and returns "
              "the first record's field's value.")
     );
     addFunction("queryStringList", &KexiDBConnection::queryStringList,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant::Bool", Kross::Api::Variant::create(QVariant(true))),
+            << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(true))),
         i18n("Executes the as argument passed sqlquery-string and returns "
              "a stringlist of first record's first field's values.")
     );
@@ -144,7 +144,7 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
     addFunction("createTable", &KexiDBConnection::createTable,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::Api::Variant::Bool", Kross::Api::Variant::create(false)),
+            << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(false)),
         i18n("Creates table defined by the as argument passed KexiTableSchema object.")
     );
     addFunction("dropTable", &KexiDBConnection::dropTable,
@@ -246,86 +246,86 @@ const QString KexiDBConnection::getDescription() const
     return m_connection;
 }
 
-Kross::Api::Object* KexiDBConnection::data(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::data(Kross::Api::List::Ptr)
 {
     if(! m_connectiondata) // caching
         m_connectiondata = new KexiDBConnectionData( connection()->data() );
     return m_connectiondata;
 }
 
-Kross::Api::Object* KexiDBConnection::driver(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::driver(Kross::Api::List::Ptr)
 {
     if(! getParent()) // We don't check getParent()->driver() here!
         throw Kross::Api::RuntimeException(i18n("Invalid driver cause KexiDBConnection::driver() is NULL."));
     return getParent(); // the parent object is our KexiDBDriver* instance
 }
 
-Kross::Api::Object* KexiDBConnection::connect(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::connect(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->connect(),
+    return new Kross::Api::Variant(connection()->connect(),
            "Kross::KexiDB::Connection::connect::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::isConnected(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::isConnected(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->isConnected(),
+    return new Kross::Api::Variant(connection()->isConnected(),
            "Kross::KexiDB::Connection::isConnected::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::disconnect(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::disconnect(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->disconnect(),
+    return new Kross::Api::Variant(connection()->disconnect(),
            "Kross::KexiDB::Connection::disconnect::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::databaseExists(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::databaseExists(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->databaseExists(Kross::Api::Variant::toString(args->item(0))),
            "Kross::KexiDB::Connection::databaseExists::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::currentDatabase(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::currentDatabase(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->currentDatabase(),
+    return new Kross::Api::Variant(connection()->currentDatabase(),
            "Kross::KexiDB::Connection::currentDatabase::String");
 }
 
-Kross::Api::Object* KexiDBConnection::databaseNames(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::databaseNames(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->databaseNames(),
+    return new Kross::Api::Variant(connection()->databaseNames(),
            "Kross::KexiDB::Connection::databaseNames::StringList");
 }
 
-Kross::Api::Object* KexiDBConnection::isDatabaseUsed(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::isDatabaseUsed(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->isDatabaseUsed(),
+    return new Kross::Api::Variant(connection()->isDatabaseUsed(),
            "Kross::KexiDB::Connection::isDatabaseUsed::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::useDatabase(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::useDatabase(Kross::Api::List::Ptr args)
 {
     QString dbname = Kross::Api::Variant::toString(args->item(0));
     if(! connection()->databaseExists(dbname))
         throw Kross::Api::TypeException(i18n("There exists no database with the name '%1'.").arg(dbname));
-    return Kross::Api::Variant::create(m_connection->useDatabase(dbname),
+    return new Kross::Api::Variant(m_connection->useDatabase(dbname),
            "Kross::KexiDB::Connection::useDatabase::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::closeDatabase(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::closeDatabase(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->closeDatabase(),
+    return new Kross::Api::Variant(connection()->closeDatabase(),
            "Kross::KexiDB::Connection::closeDatabase::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::tableNames(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::tableNames(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->tableNames(Kross::Api::Variant::toBool(args->item(0))),
            "Kross::KexiDB::Connection::tableNames::StringList");
 }
 
-Kross::Api::Object* KexiDBConnection::executeQueryString(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::executeQueryString(Kross::Api::List::Ptr args)
 {
     /*TODO move condition to ::KexiDB to prevent crashes ?!
     if(connection()->currentDatabase().isNull())
@@ -338,7 +338,7 @@ Kross::Api::Object* KexiDBConnection::executeQueryString(Kross::Api::List* args)
     return cursor ? new KexiDBCursor(this, cursor) : 0;
 }
 
-Kross::Api::Object* KexiDBConnection::executeQuerySchema(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::executeQuerySchema(Kross::Api::List::Ptr args)
 {
     ::KexiDB::Cursor* cursor = connection()->executeQuery(
         *Kross::Api::Object::fromObject<KexiDBQuerySchema>(args->item(0))->queryschema()
@@ -346,29 +346,29 @@ Kross::Api::Object* KexiDBConnection::executeQuerySchema(Kross::Api::List* args)
     return cursor ? new KexiDBCursor(this, cursor) : 0;
 }
 
-Kross::Api::Object* KexiDBConnection::querySingleString(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::querySingleString(Kross::Api::List::Ptr args)
 {
     QString sql = Kross::Api::Variant::toString(args->item(0));
     uint column = Kross::Api::Variant::toUInt(args->item(1));
     QString value;
     if(! connection()->querySingleString(sql, value, column))
         throw Kross::Api::RuntimeException(i18n("Query the string failed."));
-    return Kross::Api::Variant::create(value,
+    return new Kross::Api::Variant(value,
            "Kross::KexiDB::Connection::querySingleString::String");
 }
 
-Kross::Api::Object* KexiDBConnection::queryStringList(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::queryStringList(Kross::Api::List::Ptr args)
 {
     QString sql = Kross::Api::Variant::toString(args->item(0));
     uint column = Kross::Api::Variant::toUInt(args->item(1));
     QStringList valuelist;
     if(! connection()->queryStringList(sql, valuelist, column))
         throw Kross::Api::RuntimeException(i18n("Query the stringlist failed."));
-    return Kross::Api::Variant::create(valuelist,
+    return new Kross::Api::Variant(valuelist,
            "Kross::KexiDB::Connection::queryStringList::StringList");
 }
 
-Kross::Api::Object* KexiDBConnection::querySingleRecord(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::querySingleRecord(Kross::Api::List::Ptr args)
 {
     QValueVector<QVariant> list;
     if(! connection()->querySingleRecord(Kross::Api::Variant::toString(args->item(0)), list))
@@ -378,13 +378,13 @@ Kross::Api::Object* KexiDBConnection::querySingleRecord(Kross::Api::List* args)
     for(QValueVector<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
         l.append(*it);
 
-    return Kross::Api::Variant::create(l,
+    return new Kross::Api::Variant(l,
            "Kross::KexiDB::Connection::querySingleRecord::ValueList");
 }
 
-Kross::Api::Object* KexiDBConnection::insertRecord(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->insertRecord(
                *Kross::Api::Object::fromObject<KexiDBFieldList>(args->item(0))->fieldlist(),
                Kross::Api::Variant::toVariant(args->item(1)) //Kross::Api::Variant::toList(args->item(1))
@@ -392,23 +392,23 @@ Kross::Api::Object* KexiDBConnection::insertRecord(Kross::Api::List* args)
            "Kross::KexiDB::Connection::insertRecord::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::createDatabase(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::createDatabase(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->createDatabase(Kross::Api::Variant::toString(args->item(0))),
            "Kross::KexiDB::Connection::createDatabase::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::dropDatabase(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::dropDatabase(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->dropDatabase(Kross::Api::Variant::toString(args->item(0))),
            "Kross::KexiDB::Connection::dropDatabase::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::createTable(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::createTable(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->createTable(
                Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema(),
                Kross::Api::Variant::toBool(args->item(1)) // replace existing tables
@@ -416,16 +416,16 @@ Kross::Api::Object* KexiDBConnection::createTable(Kross::Api::List* args)
            "Kross::KexiDB::Connection::createTable::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::dropTable(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::dropTable(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            QVariant(connection()->dropTable(Kross::Api::Variant::toString(args->item(0)))),
            "Kross::KexiDB::Connection::dropTable::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::alterTable(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::alterTable(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            QVariant(connection()->alterTable(
                *Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema(),
                *Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(1))->tableschema()
@@ -433,9 +433,9 @@ Kross::Api::Object* KexiDBConnection::alterTable(Kross::Api::List* args)
            "Kross::KexiDB::Connection::alterTable::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::alterTableName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::alterTableName(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->alterTableName(
                *Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema(),
                Kross::Api::Variant::toString(args->item(1))
@@ -443,67 +443,67 @@ Kross::Api::Object* KexiDBConnection::alterTableName(Kross::Api::List* args)
            "Kross::KexiDB::Connection::alterTableName::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::tableSchema(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::tableSchema(Kross::Api::List::Ptr args)
 {
     ::KexiDB::TableSchema* tableschema = connection()->tableSchema( Kross::Api::Variant::toString(args->item(0)) );
     if(! tableschema) return 0;
     return new KexiDBTableSchema(tableschema);
 }
 
-Kross::Api::Object* KexiDBConnection::isEmptyTable(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::isEmptyTable(Kross::Api::List::Ptr args)
 {
     bool success;
     bool notempty =
         connection()->isEmpty(
             *Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema(),
             success);
-    return Kross::Api::Variant::create(! (success && notempty),
+    return new Kross::Api::Variant(! (success && notempty),
            "Kross::KexiDB::Connection::isEmptyTable::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::autoCommit(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::autoCommit(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(connection()->autoCommit(),
+    return new Kross::Api::Variant(connection()->autoCommit(),
            "Kross::KexiDB::Connection::autoCommit::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::setAutoCommit(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::setAutoCommit(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->setAutoCommit(Kross::Api::Variant::toBool(args->item(0))),
            "Kross::KexiDB::Connection::setAutoCommit::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::beginTransaction(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::beginTransaction(Kross::Api::List::Ptr)
 {
     ::KexiDB::Transaction t = connection()->beginTransaction();
     return new KexiDBTransaction(this, t);
 }
 
-Kross::Api::Object* KexiDBConnection::commitTransaction(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::commitTransaction(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->commitTransaction(
                Kross::Api::Object::fromObject<KexiDBTransaction>(args->item(0))->transaction()
            ),
            "Kross::KexiDB::Connection::commitTransaction::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::rollbackTransaction(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::rollbackTransaction(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            connection()->rollbackTransaction(
                Kross::Api::Object::fromObject<KexiDBTransaction>(args->item(0))->transaction()
            ),
            "Kross::KexiDB::Connection::rollbackTransaction::Bool");
 }
 
-Kross::Api::Object* KexiDBConnection::defaultTransaction(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::defaultTransaction(Kross::Api::List::Ptr)
 {
     return new KexiDBTransaction(this, connection()->defaultTransaction());
 }
 
-Kross::Api::Object* KexiDBConnection::setDefaultTransaction(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnection::setDefaultTransaction(Kross::Api::List::Ptr args)
 {
     connection()->setDefaultTransaction(
         Kross::Api::Object::fromObject<KexiDBTransaction>(args->item(0))->transaction()
@@ -511,17 +511,17 @@ Kross::Api::Object* KexiDBConnection::setDefaultTransaction(Kross::Api::List* ar
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnection::transactions(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::transactions(Kross::Api::List::Ptr)
 {
-    QValueList<Object*> l;
+    QValueList<Kross::Api::Object::Ptr> l;
     QValueList< ::KexiDB::Transaction > list = connection()->transactions();
     for(QValueList< ::KexiDB::Transaction >::Iterator it = list.begin(); it != list.end(); ++it)
         l.append( new KexiDBTransaction(this, *it) );
-    return Kross::Api::List::create(l,
+    return new Kross::Api::List(l,
            "Kross::KexiDB::Connection::transactions::List");
 }
 
-Kross::Api::Object* KexiDBConnection::parser(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnection::parser(Kross::Api::List::Ptr)
 {
     return new KexiDBParser(this, new ::KexiDB::Parser(connection()));
 }

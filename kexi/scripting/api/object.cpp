@@ -25,21 +25,21 @@
 
 using namespace Kross::Api;
 
-Object::Object(const QString& name, Object* parent)
-    : m_name(name)
+Object::Object(const QString& name, Object::Ptr parent)
+    : KShared()
+    , m_name(name)
     , m_parent(parent)
 {
 #ifdef KROSS_API_OBJECT_DEBUG
-    kdDebug() << QString("Kross::Api::Object::Constructor() name='%1'").arg(m_name) << endl;
+    kdDebug() << QString("Kross::Api::Object::Constructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) << endl;
 #endif
 }
 
 Object::~Object()
 {
 #ifdef KROSS_API_OBJECT_DEBUG
-    kdDebug() << QString("Kross::Api::Object::Destructor() name='%1'").arg(m_name) << endl;
+    kdDebug() << QString("Kross::Api::Object::Destructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) << endl;
 #endif
-
     //removeAllChildren(); // not needed cause we use KShared to handle ref-couting and freeing.
 }
 
@@ -48,7 +48,7 @@ const QString& Object::getName() const
     return m_name;
 }
 
-Object* Object::getParent() const
+Object::Ptr Object::getParent() const
 {
     return m_parent;
 }
@@ -58,17 +58,17 @@ bool Object::hasChild(const QString& name) const
     return m_children.contains(name);
 }
 
-Object* Object::getChild(const QString& name) const
+Object::Ptr Object::getChild(const QString& name) const
 {
     return m_children[name];
 }
 
-ObjectMap Object::getChildren() const
+QMap<QString, Object::Ptr> Object::getChildren() const
 {
     return m_children;
 }
 
-bool Object::addChild(const QString& name, Object* object, bool replace)
+bool Object::addChild(const QString& name, Object::Ptr object, bool replace)
 {
 #ifdef KROSS_API_OBJECT_DEBUG
     kdDebug() << QString("Kross::Api::Object::addChild() name='%1' object.name='%2' object.classname='%3' replace='%4'")
@@ -98,7 +98,7 @@ void Object::removeAllChildren()
     m_children.clear();
 }
 
-Object* Object::call(const QString& name, List*)
+Object::Ptr Object::call(const QString& name, List::Ptr)
 {
     if(name.isEmpty()) // return a self-reference if no functionname is defined
         return this;

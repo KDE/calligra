@@ -65,13 +65,13 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::Transaction& m_transaction;
 
             /// Return the KexiDBConnection object this KexiDBTransaction belongs to.
-            Kross::Api::Object* connection(Kross::Api::List*);
+            Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
 
             /// Return true if the transaction is avtive (ie. started).
-            Kross::Api::Object* isActive(Kross::Api::List*);
+            Kross::Api::Object::Ptr isActive(Kross::Api::List::Ptr);
 
             /// Return true if the transaction is uinitialised (null).
-            Kross::Api::Object* isNull(Kross::Api::List*);
+            Kross::Api::Object::Ptr isNull(Kross::Api::List::Ptr);
     };
 
 }}

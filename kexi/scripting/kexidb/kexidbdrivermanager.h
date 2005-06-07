@@ -78,7 +78,7 @@ namespace Kross { namespace KexiDB {
              *
              * See \see ::KexiDB::DriverManager::driverNames()
              */
-            Kross::Api::Object* driverNames(Kross::Api::List*);
+            Kross::Api::Object::Ptr driverNames(Kross::Api::List::Ptr);
 
             /**
              * Return the to the defined drivername matching
@@ -86,7 +86,7 @@ namespace Kross { namespace KexiDB {
              *
              * See \see ::KexiDB::DriverManager::driver()
              */
-            Kross::Api::Object* driver(Kross::Api::List*);
+            Kross::Api::Object::Ptr driver(Kross::Api::List::Ptr);
 
             /**
              * Return the to the defined mimetype-string
@@ -94,27 +94,27 @@ namespace Kross { namespace KexiDB {
              *
              * See \see ::KexiDB::DriverManager::lookupByMime()
              */
-            Kross::Api::Object* lookupByMime(Kross::Api::List*);
+            Kross::Api::Object::Ptr lookupByMime(Kross::Api::List::Ptr);
 
             /**
              * Return a new \a KexiDBConnectionData object.
              */
-            Kross::Api::Object* connectionData(Kross::Api::List*);
+            Kross::Api::Object::Ptr connectionData(Kross::Api::List::Ptr);
 
             /**
              * Return a new \a KexiDBField object.
              */
-            Kross::Api::Object* field(Kross::Api::List*);
+            Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);
 
             /**
              * Return a new \a KexiDBTableSchema object.
              */
-            Kross::Api::Object* tableSchema(Kross::Api::List*);
+            Kross::Api::Object::Ptr tableSchema(Kross::Api::List::Ptr);
 
             /**
              * Return a new \a KexiDBQuerySchema object.
              */
-            Kross::Api::Object* querySchema(Kross::Api::List*);
+            Kross::Api::Object::Ptr querySchema(Kross::Api::List::Ptr);
     };
 
 }}

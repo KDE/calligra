@@ -47,7 +47,7 @@ namespace Kross { namespace Api {
         private:
 
             /// Definition of funtion-pointers.
-            typedef Object*(T::*FunctionPtr)(List*);
+            typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
 
             /**
              * The Function class is an internal container
@@ -101,7 +101,7 @@ namespace Kross { namespace Api {
              * \param parentmodule The parent \a Module object
              *        or NULL if this class has no parent.
              */
-            explicit Class(const QString& name, Object* parentmodule = 0)
+            explicit Class(const QString& name, Object::Ptr parentmodule = 0)
                 : ClassBase(name, parentmodule)
             {
             }
@@ -111,7 +111,8 @@ namespace Kross { namespace Api {
              */
             virtual ~Class()
             {
-                for(QMap<QString, Function* >::Iterator it = m_functions.begin(); it != m_functions.end(); ++it)
+                typename QMap<QString, Class<T>::Function* >::Iterator it = m_functions.begin();
+                for(; it != m_functions.end(); ++it)
                     delete it.data();
             }
 
@@ -131,14 +132,14 @@ namespace Kross { namespace Api {
              *         or NULL if there doesn't exists such a
              *         function with defined name.
              */
-            virtual Object* call(const QString& name, List* arguments)
+            virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
                 Function* f = m_functions[name];
                 if(! f) // no function with that name, pass call to super class
                     return Object::call(name, arguments);
                 T *self = static_cast<T*>(this);
 
-                QValueList<Object*>& arglist = arguments->getValue();
+                QValueList<Object::Ptr>& arglist = arguments->getValue();
                 uint fmax = f->arglist.getMaxParams();
                 uint fmin = f->arglist.getMinParams();
 
@@ -155,8 +156,7 @@ namespace Kross { namespace Api {
                         arglist.append( farglist[i].getObject() );
                         continue;
                     }
-
-                    Object* o = arguments->item(i);
+                    Object::Ptr o = arguments->item(i);
                     QString fcn = farglist[i].getClassName();
                     QString ocn = o->getClassName();
 
@@ -167,7 +167,6 @@ namespace Kross { namespace Api {
                     if(fcn.find(ocn) != 0)
                         throw AttributeException(i18n("Method '%1' expected parameter of type '%1', but got '%2'.").arg(name).arg(fcn).arg(ocn));
                 }
-
                 FunctionPtr function = f->function;
                 return (self->*function)(arguments);
             }

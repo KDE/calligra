@@ -67,12 +67,12 @@ namespace Kross { namespace Python {
             /**
              * Execute the script.
              */
-            virtual Kross::Api::Object* execute();
+            virtual Kross::Api::Object::Ptr execute();
 
             /**
              * Call a function.
              */
-            virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args);
+            virtual Kross::Api::Object::Ptr callFunction(const QString& name, Kross::Api::List::Ptr args);
 
             /**
              * Return a list of class types this script supports.
@@ -82,7 +82,7 @@ namespace Kross { namespace Python {
             /**
              * Create and return a new class instance.
              */
-            virtual Kross::Api::Object* classInstance(const QString& name);
+            virtual Kross::Api::Object::Ptr classInstance(const QString& name);
 
         private:
             PythonScriptPrivate* d;

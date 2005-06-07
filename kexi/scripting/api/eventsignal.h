@@ -20,51 +20,60 @@
 #ifndef KROSS_API_EVENTSIGNAL_H
 #define KROSS_API_EVENTSIGNAL_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
-#include <qmap.h>
-#include <qvariant.h>
-#include <qsignalmapper.h>
-#include <qguardedptr.h>
-#include <qobject.h>
-#include <kdebug.h>
+//#include <qstring.h>
+//#include <qvaluelist.h>
+//#include <qmap.h>
+//#include <qvariant.h>
+//#include <qsignalmapper.h>
+//#include <qguardedptr.h>
+//#include <qobject.h>
+//#include <kdebug.h>
+
+#include "event.h"
 
 namespace Kross { namespace Api {
 
     // Forward declarations.
-    class ScriptContainer;
-    class Object;
-    class List;
-    class QtObject;
-    class EventManager;
+    //class ScriptContainer;
+    //class Object;
+    //class List;
+    //class QtObject;
+    //class EventManager;
 
     /**
      * Each Qt signal and slot connection between a QObject
      * instance and a functionname is represented with
      * a EventSignal and handled by \a EventManager.
      */
-    class EventSignal : public QObject
+    class EventSignal : public Event
     {
             Q_OBJECT
-            friend class EventManager;
+            //friend class EventManager;
 
         public:
 
             /**
              * Constructor.
-             *
-             * \param eventmanager The \a EventManager instance
-             *       used to create this EventSignal.
              */
-            EventSignal(EventManager* eventmanager);
+            explicit EventSignal();
 
             /**
              * Destructor.
              */
             virtual ~EventSignal();
 
-        private:
-            EventManager* m_eventmanager;
+            virtual const QString getClassName() const;
+            virtual const QString getDescription() const;
+            //virtual QCString getSignal(const QCString& signal);
+            //virtual bool connect(EventManager* eventmanager, const QCString& signal, QObject* receiverobj, const QCString& slot);
+            //virtual bool disconnect();
+/*
+        signals:
+            void callback();
+            void callback(const QString&);
+            void callback(int);
+            void callback(bool);
+*/
     };
 
 }}

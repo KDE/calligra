@@ -19,25 +19,33 @@
 
 #include "eventsignal.h"
 
-#include "interpreter.h"
-#include "object.h"
-#include "list.h"
-#include "qtobject.h"
-#include "variant.h"
-#include "../main/scriptcontainer.h"
-#include "eventmanager.h"
-
-#include <qvaluelist.h>
+//#include "interpreter.h"
+//#include "object.h"
+//#include "list.h"
+//#include "qtobject.h"
+//#include "variant.h"
+//#include "../main/scriptcontainer.h"
+//#include "eventmanager.h"
+//#include <qvaluelist.h>
 
 using namespace Kross::Api;
 
-EventSignal::EventSignal(EventManager* eventmanager)
-    : QObject(eventmanager)
-    , m_eventmanager(eventmanager)
+EventSignal::EventSignal()
+    : Event()
 {
 }
 
 EventSignal::~EventSignal()
 {
+}
+
+const QString EventSignal::getClassName() const
+{
+    return "Kross::Api::EventSignal";
+}
+
+const QString EventSignal::getDescription() const
+{
+    return "";
 }
 

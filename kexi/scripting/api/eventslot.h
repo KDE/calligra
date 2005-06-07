@@ -20,94 +20,56 @@
 #ifndef KROSS_API_EVENTSLOT_H
 #define KROSS_API_EVENTSLOT_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
-#include <qmap.h>
-#include <qvariant.h>
-#include <qsignalmapper.h>
-#include <qguardedptr.h>
-#include <qobject.h>
-#include <kdebug.h>
+//#include <qstring.h>
+//#include <qvaluelist.h>
+//#include <qmap.h>
+//#include <qvariant.h>
+//#include <qsignalmapper.h>
+//#include <qguardedptr.h>
+//#include <qobject.h>
+//#include <kdebug.h>
+
+#include "event.h"
 
 namespace Kross { namespace Api {
 
     // Forward declarations.
-    class ScriptContainer;
-    class Object;
-    class List;
-    class QtObject;
-    class EventManager;
+    //class ScriptContainer;
+    //class Object;
+    //class List;
+    //class QtObject;
+    //class EventManager;
 
     /**
      * Each Qt signal and slot connection between a QObject
      * instance and a functionname is represented with
      * a EventSlot and handled by the \a EventManager.
      */
-    class EventSlot : protected QObject
+    class EventSlot : protected Event
     {
             Q_OBJECT
-            friend class EventManager;
+            //friend class EventManager;
 
         public:
 
             /**
              * Constructor.
-             *
-             * \param eventmanager The \a EventManager instance
-             *       used to create this EventSlot.
              */
-            explicit EventSlot(EventManager* eventmanager = 0);
+            explicit EventSlot();
 
             /**
              * Destructor.
              */
-            virtual ~EventSlot() {}
+            virtual ~EventSlot();
 
-            /**
-             * Create a new EventSlot instance. Reimplement
-             * this method in from EventSlot inherited
-             * classes and return there the to your class
-             * matching EventSlot.
-             *
-             * \param eventmanager The \a EventManager used
-             *       to create the new instance.
-             */
-            virtual EventSlot* create(EventManager* eventmanager);
+            virtual const QString getClassName() const;
+            virtual const QString getDescription() const;
 
-            /**
-             * Return the slot matching to the signal.
-             *
-             * \param signal The signal we should return a
-             *       slot for.
-             * \return The slot that matches the signal. The
-             *        returned QCString is empty/null if
-             *        there exists no matching slot.
-             */
-            virtual QCString getSlot(const QCString& signal);
-
-            /**
-             * Connect the event.
-             *
-             * \param senderobj The sender QObject that emits
-             *       the signal.
-             * \param signal The signal itself defined with
-             *       the Qt SIGNAL(mysignalname()) macro.
-             * \param function The name of the function we should
-             *        call if the signal got emitted.
-             * \param slot The slot to connect with. If empty we
-             *        try to determinate the slot from within
-             *        the signal by using getSlot(const QCString& signal).
-             */
-            virtual bool connect(EventManager* eventmanager, QObject* senderobj, const QCString& signal, QString function, const QCString& slot = QCString());
-
-            /**
-             * Disconnect the event.
-             *
-             * \return true if disconnection was successfull
-             *        else false.
-             */
-            virtual bool disconnect();
-
+            //virtual EventSlot* create(EventManager* eventmanager);
+            //virtual QCString getSlot(const QCString& signal);
+            //virtual bool connect(EventManager* eventmanager, QObject* senderobj, const QCString& signal, QString function, const QCString& slot = QCString());
+            //virtual bool disconnect();
+/*
         private:
             EventManager* m_eventmanager;
 
@@ -157,30 +119,9 @@ namespace Kross { namespace Api {
             // handle Kross::Api::Object instances.
             //void callback(Kross::Api::Object*);
             //void callback(Kross::Api::List*);
-    };
-
-/*TODO
-    class EventSlotTranslator : protected QObject
-    {
-            Q_OBJECT
-            //friend class EventManager;
-        public:
-            EventSlotTranslator() {}
-            virtual ~EventSlotTranslator() {}
-- Nur EINE instanz fuer alle!!!
-- connect() muss hier erfolgen. oder ???
-  => dann muessen wir uns aber auch QObject, etc. merken :-(
-- also mapper;
-  IN EVENTSLOT* =>
-    void connect(QObject* sender, const QCString& signal, QString function)
-    {
-      connect(sender,SIGNAL(),EventSlotTranslator*,SLOT())
-      connect(EventSlotTranslator*, SIGNAL(callbackSignal()), this, SLOT())
-    }
-        signals:
-            void callbackSignal(Kross::Api::List*);
-    };
 */
+
+    };
 
 }}
 

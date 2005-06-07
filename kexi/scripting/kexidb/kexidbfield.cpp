@@ -193,13 +193,13 @@ const QString KexiDBField::getDescription() const
     return i18n("KexiDB::Field wrapper to work with Meta-data for a field.");
 }
 
-Kross::Api::Object* KexiDBField::type(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::type(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->typeString(),
+    return new Kross::Api::Variant(m_field->typeString(),
            "Kross::KexiDB::KexiDBField::type::String");
 }
 
-Kross::Api::Object* KexiDBField::setType(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setType(Kross::Api::List::Ptr args)
 {
     m_field->setType(
         ::KexiDB::Field::typeForString(
@@ -209,199 +209,199 @@ Kross::Api::Object* KexiDBField::setType(Kross::Api::List* args)
     return type(args);
 }
 
-Kross::Api::Object* KexiDBField::subType(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::subType(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->subType(),
+    return new Kross::Api::Variant(m_field->subType(),
            "Kross::KexiDB::KexiDBField::subType::String");
 }
 
-Kross::Api::Object* KexiDBField::setSubType(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setSubType(Kross::Api::List::Ptr args)
 {
     m_field->setSubType(Kross::Api::Variant::toString(args->item(0)));
     return subType(args);
 }
 
-Kross::Api::Object* KexiDBField::typeGroup(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::typeGroup(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->typeGroupString(),
+    return new Kross::Api::Variant(m_field->typeGroupString(),
            "Kross::KexiDB::KexiDBField::typeGroup::String");
 }
 
-Kross::Api::Object* KexiDBField::isAutoInc(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isAutoInc(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isAutoIncrement(),
+    return new Kross::Api::Variant(m_field->isAutoIncrement(),
            "Kross::KexiDB::KexiDBField::isAutoInc::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setAutoInc(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setAutoInc(Kross::Api::List::Ptr args)
 {
     m_field->setAutoIncrement(Kross::Api::Variant::toBool(args->item(0)));
     return isAutoInc(args);
 }
 
-Kross::Api::Object* KexiDBField::isUniqueKey(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isUniqueKey(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isUniqueKey(),
+    return new Kross::Api::Variant(m_field->isUniqueKey(),
            "Kross::KexiDB::KexiDBField::isUniqueKey::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setUniqueKey(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setUniqueKey(Kross::Api::List::Ptr args)
 {
     m_field->setUniqueKey(Kross::Api::Variant::toBool(args->item(0)));
     return isUniqueKey(args);
 }
 
-Kross::Api::Object* KexiDBField::isPrimaryKey(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isPrimaryKey(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isPrimaryKey(),
+    return new Kross::Api::Variant(m_field->isPrimaryKey(),
            "Kross::KexiDB::KexiDBField::isPrimaryKey::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setPrimaryKey(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setPrimaryKey(Kross::Api::List::Ptr args)
 {
     m_field->setPrimaryKey(Kross::Api::Variant::toBool(args->item(0)));
     return isPrimaryKey(args);
 }
 
-Kross::Api::Object* KexiDBField::isForeignKey(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isForeignKey(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isForeignKey(),
+    return new Kross::Api::Variant(m_field->isForeignKey(),
            "Kross::KexiDB::KexiDBField::isForeignKey::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setForeignKey(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setForeignKey(Kross::Api::List::Ptr args)
 {
     m_field->setForeignKey(Kross::Api::Variant::toBool(args->item(0)));
     return isForeignKey(args);
 }
 
-Kross::Api::Object* KexiDBField::isNotNull(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isNotNull(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isNotNull(),
+    return new Kross::Api::Variant(m_field->isNotNull(),
            "Kross::KexiDB::KexiDBField::isNotNull::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setNotNull(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setNotNull(Kross::Api::List::Ptr args)
 {
     m_field->setNotNull(Kross::Api::Variant::toBool(args->item(0)));
     return isNotNull(args);
 }
 
-Kross::Api::Object* KexiDBField::isNotEmpty(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isNotEmpty(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isNotEmpty(),
+    return new Kross::Api::Variant(m_field->isNotEmpty(),
            "Kross::KexiDB::KexiDBField::isNotEmpty::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setNotEmpty(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setNotEmpty(Kross::Api::List::Ptr args)
 {
     m_field->setNotEmpty(Kross::Api::Variant::toBool(args->item(0)));
     return isNotEmpty(args);
 }
 
-Kross::Api::Object* KexiDBField::isIndexed(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isIndexed(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isIndexed(),
+    return new Kross::Api::Variant(m_field->isIndexed(),
            "Kross::KexiDB::KexiDBField::isIndexed::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setIndexed(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setIndexed(Kross::Api::List::Ptr args)
 {
     m_field->setIndexed(Kross::Api::Variant::toBool(args->item(0)));
     return isIndexed(args);
 }
 
-Kross::Api::Object* KexiDBField::isUnsigned(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::isUnsigned(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->isUnsigned(),
+    return new Kross::Api::Variant(m_field->isUnsigned(),
            "Kross::KexiDB::KexiDBField::isUnsigned::Bool");
 }
 
-Kross::Api::Object* KexiDBField::setUnsigned(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setUnsigned(Kross::Api::List::Ptr args)
 {
     m_field->setUnsigned(Kross::Api::Variant::toBool(args->item(0)));
     return isUnsigned(args);
 }
 
-Kross::Api::Object* KexiDBField::name(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::name(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->name(),
+    return new Kross::Api::Variant(m_field->name(),
            "Kross::KexiDB::KexiDBField::name::String");
 }
 
-Kross::Api::Object* KexiDBField::setName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setName(Kross::Api::List::Ptr args)
 {
     m_field->setName(Kross::Api::Variant::toString(args->item(0)));
     return name(args);
 }
 
-Kross::Api::Object* KexiDBField::caption(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::caption(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->caption(),
+    return new Kross::Api::Variant(m_field->caption(),
            "Kross::KexiDB::KexiDBField::caption::String");
 }
 
-Kross::Api::Object* KexiDBField::setCaption(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setCaption(Kross::Api::List::Ptr args)
 {
     m_field->setCaption(Kross::Api::Variant::toString(args->item(0)));
     return caption(args);
 }
 
-Kross::Api::Object* KexiDBField::description(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::description(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->description(),
+    return new Kross::Api::Variant(m_field->description(),
            "Kross::KexiDB::KexiDBField::description::String");
 }
 
-Kross::Api::Object* KexiDBField::setDescription(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setDescription(Kross::Api::List::Ptr args)
 {
     m_field->setDescription(Kross::Api::Variant::toString(args->item(0)));
     return description(args);
 }
 
-Kross::Api::Object* KexiDBField::length(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::length(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->length(),
+    return new Kross::Api::Variant(m_field->length(),
            "Kross::KexiDB::KexiDBField::length::UInt");
 }
 
-Kross::Api::Object* KexiDBField::setLength(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setLength(Kross::Api::List::Ptr args)
 {
     m_field->setLength(Kross::Api::Variant::toUInt(args->item(0)));
     return length(args);
 }
 
-Kross::Api::Object* KexiDBField::precision(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::precision(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->precision(),
+    return new Kross::Api::Variant(m_field->precision(),
            "Kross::KexiDB::KexiDBField::precision::UInt");
 }
 
-Kross::Api::Object* KexiDBField::setPrecision(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setPrecision(Kross::Api::List::Ptr args)
 {
     m_field->setPrecision(Kross::Api::Variant::toUInt(args->item(0)));
     return precision(args);
 }
 
-Kross::Api::Object* KexiDBField::width(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::width(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->width(),
+    return new Kross::Api::Variant(m_field->width(),
            "Kross::KexiDB::KexiDBField::width::UInt");
 }
 
-Kross::Api::Object* KexiDBField::setWidth(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setWidth(Kross::Api::List::Ptr args)
 {
     m_field->setWidth(Kross::Api::Variant::toUInt(args->item(0)));
     return width(args);
 }
 
-Kross::Api::Object* KexiDBField::defaultValue(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBField::defaultValue(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_field->defaultValue(),
+    return new Kross::Api::Variant(m_field->defaultValue(),
            "Kross::KexiDB::KexiDBField::defaultValue::Variant");
 }
 
-Kross::Api::Object* KexiDBField::setDefaultValue(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBField::setDefaultValue(Kross::Api::List::Ptr args)
 {
     m_field->setDefaultValue(Kross::Api::Variant::toVariant(args->item(0)));
     return defaultValue(args);

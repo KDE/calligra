@@ -37,7 +37,7 @@ namespace Kross { namespace Api {
     template<class T, class V>
     class Value : public Object
     {
-        protected:
+        public:
 
             /**
              * Constructor.
@@ -50,42 +50,31 @@ namespace Kross { namespace Api {
                 : Object(name)
                 , m_value(value) {}
 
-        public:
-
             /**
              * Destructor.
              */
             virtual ~Value() {}
 
             /**
-             * Create a new Value instance. This static
-             * function is the only way to instanciate
-             * value-object's.
-             */
-            static T* create(V value, const QString& name = QString::null) {
-                static ObjectList m_objectlist;
-                T* t = 0;
-                if(name.isNull())
-                    t = new T(value);
-                else
-                    t = new T(value, name);
-                m_objectlist.append(t); // garbage collector
-                return t;
-            }
-
-            /**
              * Return the value.
              *
              * \return The value this Value-class holds.
              */
-            inline V& getValue() { return m_value; }
+            V& getValue() { return m_value; }
 
+//#ifdef 0
+//to we need it anyway?
             /**
              * Set the value.
+             * The value is call-by-value cause it may
+             * contain some KShared and therefore
+             * we need to keep a local copy to keep
+             * it from disappearing.
              *
              * \param value The value to set.
              */
-            inline void setValue(V& value) { m_value = value; }
+            void setValue(V value) { m_value = value; }
+//#endif
 
         private:
             V m_value;

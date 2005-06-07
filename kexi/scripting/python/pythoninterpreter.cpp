@@ -58,7 +58,6 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     Py_SetProgramName(const_cast<char*>("Kross"));
 
     // Initialize python.
-    //if(! Py_IsInitialized()) Py_Initialize();
     Py_Initialize();
 
     // Set arguments.
@@ -67,11 +66,16 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
 
     // First we have to initialize threading if python supports it.
     PyEval_InitThreads();
-    m_globalthreadstate = PyEval_SaveThread();
-
-    // We use an own interpreter.
-    PyEval_AcquireLock();
+    // The main thread. We don't use it later.
+    m_globalthreadstate = PyThreadState_Swap(NULL);
+    //m_globalthreadstate = PyEval_SaveThread();
+    // We use an own sub-interpreter for each thread.
     m_threadstate = Py_NewInterpreter();
+    // Note that this application has multiple threads.
+    // It maintains a separate interp (sub-interpreter) for each thread.
+    PyThreadState_Swap(m_threadstate);
+    // Work done, release the lock.
+    PyEval_ReleaseLock();
 
     // Initialize the main module.
     m_module = new PythonModule(this);
@@ -104,13 +108,14 @@ PythonInterpreter::~PythonInterpreter()
     // Free the main module.
     delete m_module; m_module = 0;
 
-    // Free the used interpreter.
-    Py_EndInterpreter(m_threadstate);
-    PyEval_ReleaseLock();
-
+    // Lock threads.
+    PyEval_AcquireLock();
     // Free the used thread.
-    PyEval_AcquireThread(m_globalthreadstate);
-
+    PyEval_ReleaseThread(m_threadstate);
+    // Set back to rememberd main thread.
+    PyThreadState_Swap(m_globalthreadstate);
+    // Work done, unlock.
+    PyEval_ReleaseLock();
     // Finalize python.
     Py_Finalize();
 }

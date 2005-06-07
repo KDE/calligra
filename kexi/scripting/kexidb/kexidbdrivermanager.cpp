@@ -95,12 +95,12 @@ KexiDB::DriverManager& KexiDBDriverManager::driverManager()
     return m_drivermanager;
 }
 
-Kross::Api::Object* KexiDBDriverManager::driverNames(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriverManager::driverNames(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(driverManager().driverNames(), "Kross::KexiDB::DriverManager::driverNames::StringList");
+    return new Kross::Api::Variant(driverManager().driverNames(), "Kross::KexiDB::DriverManager::driverNames::StringList");
 }
 
-Kross::Api::Object* KexiDBDriverManager::driver(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
 {
     QString drivername = Kross::Api::Variant::toString(args->item(0));
     QGuardedPtr< ::KexiDB::Driver > driver = driverManager().driver(drivername); // caching is done by the DriverManager
@@ -111,31 +111,31 @@ Kross::Api::Object* KexiDBDriverManager::driver(Kross::Api::List* args)
     return new KexiDBDriver(this, driver);
 }
 
-Kross::Api::Object* KexiDBDriverManager::lookupByMime(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBDriverManager::lookupByMime(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
         driverManager().lookupByMime( Kross::Api::Variant::toString(args->item(0)) ),
         "Kross::KexiDB::DriverManager::lookupByMime::String");
 }
 
-Kross::Api::Object* KexiDBDriverManager::connectionData(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriverManager::connectionData(Kross::Api::List::Ptr)
 {
     return new KexiDBConnectionData( new ::KexiDB::ConnectionData() );
 }
 
-Kross::Api::Object* KexiDBDriverManager::field(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriverManager::field(Kross::Api::List::Ptr)
 {
     return new KexiDBField( new ::KexiDB::Field() );
 }
 
-Kross::Api::Object* KexiDBDriverManager::tableSchema(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBDriverManager::tableSchema(Kross::Api::List::Ptr args)
 {
     return new KexiDBTableSchema(
                new ::KexiDB::TableSchema(Kross::Api::Variant::toString(args->item(0)))
            );
 }
 
-Kross::Api::Object* KexiDBDriverManager::querySchema(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriverManager::querySchema(Kross::Api::List::Ptr)
 {
     return new KexiDBQuerySchema( new ::KexiDB::QuerySchema() );
 }

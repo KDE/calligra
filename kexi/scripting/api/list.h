@@ -32,12 +32,18 @@ namespace Kross { namespace Api {
      * The List class implementates \a Value to handle
      * lists and collections.
      */
-    class List : public Value< List, QValueList<Object*> >
+    class List : public Value< List, QValueList<Object::Ptr> >
     {
-            friend class Value< List, QValueList<Object*> >;
-        protected:
-            List(const QValueList<Object*>& value, const QString& name = "list");
+            friend class Value< List, QValueList<Object::Ptr> >;
         public:
+
+            /// Shared objects.
+            typedef KSharedPtr<List> Ptr;
+
+            /// Constructor.
+            List(QValueList<Object::Ptr> value, const QString& name = "list");
+
+            /// Destructor.
             virtual ~List();
 
             /// See \see Kross::Api::Object::getClassName
@@ -54,7 +60,7 @@ namespace Kross { namespace Api {
              * \param idx The QValueList-index.
              * \return The \a Object.
              */
-            Object* item(uint idx);
+            Object::Ptr item(uint idx);
 
             /**
              * Return the number of items in the QValueList this

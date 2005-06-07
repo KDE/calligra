@@ -40,15 +40,15 @@ const QString Variant::getDescription() const
     return i18n("Object to handle QVariant values.");
 }
 
-const QVariant& Variant::toVariant(Object* object)
+const QVariant& Variant::toVariant(Object::Ptr object)
 {
-    Kross::Api::Variant* variant = (Kross::Api::Variant*)object;
+    Kross::Api::Variant* variant = (Kross::Api::Variant*)object.data();
     if(! variant)
         throw TypeException("Kross::Api::Variant expected.");
     return variant->getValue();
 }
 
-const QString Variant::toString(Object* object)
+const QString Variant::toString(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     if(variant.type() != QVariant::String &&
@@ -57,7 +57,7 @@ const QString Variant::toString(Object* object)
     return variant.toString();
 }
 
-uint Variant::toUInt(Object* object)
+uint Variant::toUInt(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     //TODO check for QVariant::UInt ?!
@@ -68,7 +68,7 @@ uint Variant::toUInt(Object* object)
     return i;
 }
 
-Q_LLONG Variant::toLLONG(Object* object)
+Q_LLONG Variant::toLLONG(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     bool ok;
@@ -78,7 +78,7 @@ Q_LLONG Variant::toLLONG(Object* object)
     return l;
 }
 
-Q_ULLONG Variant::toULLONG(Object* object)
+Q_ULLONG Variant::toULLONG(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     bool ok;
@@ -88,7 +88,7 @@ Q_ULLONG Variant::toULLONG(Object* object)
     return l;
 }
 
-bool Variant::toBool(Object* object)
+bool Variant::toBool(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     if(variant.type() != QVariant::Bool &&
@@ -101,7 +101,7 @@ bool Variant::toBool(Object* object)
     return variant.toBool();
 }
 
-QValueList<QVariant> Variant::toList(Object* object)
+QValueList<QVariant> Variant::toList(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     if(variant.type() != QVariant::List)

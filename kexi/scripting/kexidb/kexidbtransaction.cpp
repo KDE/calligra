@@ -65,20 +65,20 @@ const QString KexiDBTransaction::getDescription() const
     return m_transaction;
 }
 
-Kross::Api::Object* KexiDBTransaction::connection(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBTransaction::connection(Kross::Api::List::Ptr)
 {
-    return static_cast<KexiDBConnection*>( getParent() );
+    return Kross::Api::Object::fromObject<KexiDBConnection>( getParent() );
 }
 
-Kross::Api::Object* KexiDBTransaction::isActive(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBTransaction::isActive(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_transaction.active(),
+    return new Kross::Api::Variant(m_transaction.active(),
            "Kross::KexiDB::Transaction::isActive::Bool");
 }
 
-Kross::Api::Object* KexiDBTransaction::isNull(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBTransaction::isNull(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_transaction.isNull(),
+    return new Kross::Api::Variant(m_transaction.isNull(),
            "Kross::KexiDB::Transaction::isNull::Bool");
 }
 

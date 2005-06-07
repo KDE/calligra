@@ -72,7 +72,7 @@ namespace Kross { namespace Api {
                     typedef QMap<QString, Option*> Map;
                     /// Constructor.
                     Option(const QString& name, const QString& comment, const QVariant& value)
-                        : m_comment(comment), m_name(name), m_value(value) {}
+                        : m_name(name), m_comment(comment), m_value(value) {}
                     /// The short name of the option.
                     QString m_name;
                     /// A description of the option.

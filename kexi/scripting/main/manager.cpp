@@ -24,6 +24,7 @@
 #include "../api/object.h"
 #include "../api/qtobject.h"
 #include "../api/eventslot.h"
+#include "../api/eventsignal.h"
 //#include "../api/script.h"
 
 #include "krossconfig.h"
@@ -37,7 +38,7 @@ using namespace Kross::Api;
 
 extern "C"
 {
-    typedef int (*def_pythoninterpreter)(Kross::Api::Manager*, const QString&);
+    typedef int (*def_interpreter_func)(Kross::Api::Manager*, const QString&);
 }
 
 namespace Kross { namespace Api {
@@ -51,10 +52,17 @@ namespace Kross { namespace Api {
             QMap<QString, Interpreter*> m_interpreter;
             /// List of avaible modules.
             QMap<QString, Object*> m_modules;
+
             /// The buildin \a EventSlot for basic Qt slots.
             EventSlot* m_buildin_slot;
             /// List of additional \a EventSlot instances.
             QValueList<EventSlot*> m_slots;
+
+            /// The buildin \a EventSignal for basic Qt signals.
+            EventSignal* m_buildin_signal;
+            /// List of additional \a EventSignal instances.
+            QValueList<EventSignal*> m_signals;
+
             /// To dynamicly load libraries.
             KLibrary* m_library;
     };
@@ -64,8 +72,15 @@ namespace Kross { namespace Api {
 Manager::Manager()
     : d( new ManagerPrivate() )
 {
+    d->m_buildin_slot = 0;
+    d->m_buildin_signal = 0;
+/*TODO
     d->m_buildin_slot = new EventSlot();
     addEventSlot(d->m_buildin_slot);
+
+    d->m_buildin_signal = new EventSignal();
+    addEventSignal(d->m_buildin_signal);
+*/
 
     d->m_library = 0;
 }
@@ -80,7 +95,9 @@ Manager::~Manager()
         delete iit.data();
     for(QMap<QString, Object*>::Iterator mit = d->m_modules.begin(); mit != d->m_modules.end(); ++mit)
         delete mit.data();
+
     delete d->m_buildin_slot;
+    delete d->m_buildin_signal;
 
     delete d;
 }
@@ -124,6 +141,16 @@ void Manager::addEventSlot(EventSlot* eventslot)
     d->m_slots.append( eventslot );
 }
 
+QValueList<EventSignal*> Manager::getEventSignals()
+{
+    return d->m_signals;
+}
+
+void Manager::addEventSignal(EventSignal* eventsignal)
+{
+    d->m_signals.append( eventsignal );
+}
+
 KSharedPtr<Kross::Api::ScriptContainer> Manager::getScriptContainer(const QString& scriptname)
 {
     //TODO at the moment we don't share ScriptContainer ...
@@ -136,7 +163,6 @@ KSharedPtr<Kross::Api::ScriptContainer> Manager::getScriptContainer(const QStrin
     //d->m_scriptcontainers.replace(scriptname, script);
 
     return KSharedPtr<Kross::Api::ScriptContainer>(script);
-    //return script;
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
@@ -177,14 +203,14 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         }
 
         // Get the extern "C" krosspython_instance function.
-        def_pythoninterpreter pythoninterpreter;
-        pythoninterpreter = (def_pythoninterpreter) d->m_library->symbol("krosspython_instance");
-        if(! pythoninterpreter) {
+        def_interpreter_func interpreter_func;
+        interpreter_func = (def_interpreter_func) d->m_library->symbol("krosspython_instance");
+        if(! interpreter_func) {
             kdWarning() << "Failed to load symbol in krosspython library." << endl;
         }
         else {
             // and execute the extern krosspython_instance function.
-            interpreter = (Kross::Api::Interpreter*) (pythoninterpreter)(this, "python");
+            interpreter = (Kross::Api::Interpreter*) (interpreter_func)(this, "python");
             if(! interpreter) {
                 kdWarning() << "Failed to load PythonInterpreter instance from krosspython library." << endl;
             }

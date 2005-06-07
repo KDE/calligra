@@ -57,16 +57,16 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::FieldList* m_fieldlist;
 
-            Kross::Api::Object* fieldCount(Kross::Api::List*);
-            Kross::Api::Object* field(Kross::Api::List*);
-            Kross::Api::Object* fields(Kross::Api::List*);
-            Kross::Api::Object* hasField(Kross::Api::List*);
-            Kross::Api::Object* names(Kross::Api::List*);
+            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr fields(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr hasField(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr names(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* addField(Kross::Api::List*);
-            Kross::Api::Object* insertField(Kross::Api::List*);
-            Kross::Api::Object* removeField(Kross::Api::List*);
-            Kross::Api::Object* clear(Kross::Api::List*);
+            Kross::Api::Object::Ptr addField(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr insertField(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr removeField(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
     };
 
 }}

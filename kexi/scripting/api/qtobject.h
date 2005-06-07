@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_QT_QTOBJECT_H
-#define KROSS_QT_QTOBJECT_H
+#ifndef KROSS_API_QTOBJECT_H
+#define KROSS_API_QTOBJECT_H
 
 #include <qstring.h>
 #include <qobject.h>
@@ -77,33 +77,33 @@ namespace Kross { namespace Api {
         private:
             ScriptContainer* m_scriptcontainer;
             QObject* m_object;
-            EventManager* m_eventmanager;
+            //EventManager* m_eventmanager;
 
             // QProperty's
-            Kross::Api::Object* propertyNames(Kross::Api::List*);
-            Kross::Api::Object* hasProperty(Kross::Api::List*);
-            Kross::Api::Object* getProperty(Kross::Api::List*);
-            Kross::Api::Object* setProperty(Kross::Api::List*);
+            Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr hasProperty(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr);
 
             // Slots
-            Kross::Api::Object* slotNames(Kross::Api::List*);
-            Kross::Api::Object* hasSlot(Kross::Api::List*);
+            Kross::Api::Object::Ptr slotNames(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr hasSlot(Kross::Api::List::Ptr);
 
             // Signals
-            Kross::Api::Object* signalNames(Kross::Api::List*);
-            Kross::Api::Object* hasSignal(Kross::Api::List*);
+            Kross::Api::Object::Ptr signalNames(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr hasSignal(Kross::Api::List::Ptr);
 
             // Connect a QObject signal with a scripting function
-            Kross::Api::Object* connectSignal(Kross::Api::List*);
+            Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
 
             // Disconnect a QObject signal from a scripting function
-            Kross::Api::Object* disconnectSignal(Kross::Api::List*);
+            Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
 
             // Emit a QObject signal per scripting
-            Kross::Api::Object* emitSignal(Kross::Api::List*);
+            Kross::Api::Object::Ptr emitSignal(Kross::Api::List::Ptr);
 
             // Call a slot in a QObject per scripting
-            Kross::Api::Object* callSlot(Kross::Api::List*);
+            Kross::Api::Object::Ptr callSlot(Kross::Api::List::Ptr);
     };
 
 }}

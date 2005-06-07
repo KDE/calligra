@@ -33,11 +33,11 @@ namespace Kross { namespace Api {
      * The Dict class implementates \a Value to handle
      * key=value base dictonaries/maps.
      */
-    class Dict : public Value< List, QMap<QString, Object*> >
+    class Dict : public Value< List, QMap<QString, Object::Ptr> >
     {
-            friend class Value< List, QMap<QString, Object*> >;
+            friend class Value< List, QMap<QString, Object::Ptr> >;
         protected:
-            Dict(const QMap<QString, Object*>& value, const QString& name = "dict");
+            Dict(const QMap<QString, Object::Ptr> value, const QString& name = "dict");
         public:
             virtual ~Dict();
 

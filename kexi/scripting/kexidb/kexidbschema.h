@@ -51,16 +51,16 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::FieldList* m_fieldlist;
 
         private:
-            Kross::Api::Object* name(Kross::Api::List*);
-            Kross::Api::Object* setName(Kross::Api::List*);
+            Kross::Api::Object::Ptr name(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setName(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* caption(Kross::Api::List*);
-            Kross::Api::Object* setCaption(Kross::Api::List*);
+            Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* description(Kross::Api::List*);
-            Kross::Api::Object* setDescription(Kross::Api::List*);
+            Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* fieldlist(Kross::Api::List*);
+            Kross::Api::Object::Ptr fieldlist(Kross::Api::List::Ptr);
     };
 
     /**
@@ -91,8 +91,8 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::QuerySchema* queryschema();
 
         private:
-            Kross::Api::Object* statement(Kross::Api::List*);
-            Kross::Api::Object* setStatement(Kross::Api::List*);
+            Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setStatement(Kross::Api::List::Ptr);
     };
 
 }}

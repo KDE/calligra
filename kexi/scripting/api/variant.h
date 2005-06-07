@@ -41,7 +41,7 @@ namespace Kross { namespace Api {
     class Variant : public Value<Variant, QVariant>
     {
             friend class Value<Variant, QVariant>;
-        protected:
+        public:
 
             /**
              * Constructor.
@@ -51,8 +51,6 @@ namespace Kross { namespace Api {
              * \param name The name this Value has.
              */
             Variant(const QVariant& value, const QString& name = "variant");
-
-        public:
 
             /**
              * Destructor.
@@ -73,7 +71,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a QVariant converted object.
              */
-            static const QVariant& toVariant(Object* object);
+            static const QVariant& toVariant(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -83,7 +81,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a QString converted object.
              */
-            static const QString toString(Object* object);
+            static const QString toString(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -93,7 +91,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a uint converted object.
              */
-            static uint toUInt(Object* object);
+            static uint toUInt(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -103,7 +101,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a Q_LLONG converted object.
              */
-            static Q_LLONG toLLONG(Object* object);
+            static Q_LLONG toLLONG(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -113,7 +111,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a Q_ULLONG converted object.
              */
-            static Q_ULLONG toULLONG(Object* object);
+            static Q_ULLONG toULLONG(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -123,7 +121,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a bool converted object.
              */
-            static bool toBool(Object* object);
+            static bool toBool(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -133,7 +131,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a QValueList converted object.
              */
-            static QValueList<QVariant> toList(Object* object);
+            static QValueList<QVariant> toList(Object::Ptr object);
     };
 
 }}

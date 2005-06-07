@@ -59,58 +59,58 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::Field* m_field;
 
-            Kross::Api::Object* type(Kross::Api::List*);
-            Kross::Api::Object* setType(Kross::Api::List*);
+            Kross::Api::Object::Ptr type(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setType(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* subType(Kross::Api::List*);
-            Kross::Api::Object* setSubType(Kross::Api::List*);
+            Kross::Api::Object::Ptr subType(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setSubType(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* typeGroup(Kross::Api::List*);
+            Kross::Api::Object::Ptr typeGroup(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isAutoInc(Kross::Api::List*);
-            Kross::Api::Object* setAutoInc(Kross::Api::List*);
+            Kross::Api::Object::Ptr isAutoInc(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setAutoInc(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isUniqueKey(Kross::Api::List*);
-            Kross::Api::Object* setUniqueKey(Kross::Api::List*);
+            Kross::Api::Object::Ptr isUniqueKey(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setUniqueKey(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isPrimaryKey(Kross::Api::List*);
-            Kross::Api::Object* setPrimaryKey(Kross::Api::List*);
+            Kross::Api::Object::Ptr isPrimaryKey(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setPrimaryKey(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isForeignKey(Kross::Api::List*);
-            Kross::Api::Object* setForeignKey(Kross::Api::List*);
+            Kross::Api::Object::Ptr isForeignKey(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setForeignKey(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isNotNull(Kross::Api::List*);
-            Kross::Api::Object* setNotNull(Kross::Api::List*);
+            Kross::Api::Object::Ptr isNotNull(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setNotNull(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isNotEmpty(Kross::Api::List*);
-            Kross::Api::Object* setNotEmpty(Kross::Api::List*);
+            Kross::Api::Object::Ptr isNotEmpty(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setNotEmpty(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isIndexed(Kross::Api::List*);
-            Kross::Api::Object* setIndexed(Kross::Api::List*);
+            Kross::Api::Object::Ptr isIndexed(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setIndexed(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* isUnsigned(Kross::Api::List*);
-            Kross::Api::Object* setUnsigned(Kross::Api::List*);
+            Kross::Api::Object::Ptr isUnsigned(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setUnsigned(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* name(Kross::Api::List*);
-            Kross::Api::Object* setName(Kross::Api::List*);
+            Kross::Api::Object::Ptr name(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setName(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* caption(Kross::Api::List*);
-            Kross::Api::Object* setCaption(Kross::Api::List*);
+            Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* description(Kross::Api::List*);
-            Kross::Api::Object* setDescription(Kross::Api::List*);
+            Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* length(Kross::Api::List*);
-            Kross::Api::Object* setLength(Kross::Api::List*);
+            Kross::Api::Object::Ptr length(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setLength(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* precision(Kross::Api::List*);
-            Kross::Api::Object* setPrecision(Kross::Api::List*);
+            Kross::Api::Object::Ptr precision(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setPrecision(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* width(Kross::Api::List*);
-            Kross::Api::Object* setWidth(Kross::Api::List*);
+            Kross::Api::Object::Ptr width(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setWidth(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* defaultValue(Kross::Api::List*);
-            Kross::Api::Object* setDefaultValue(Kross::Api::List*);
+            Kross::Api::Object::Ptr defaultValue(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setDefaultValue(Kross::Api::List::Ptr);
 
     };
 

@@ -47,7 +47,7 @@ namespace Kross { namespace Api {
              * \param object The optional default \a Object this
              *        class holds.
              */
-            Argument(const QString& classname = QString::null, Object* object = 0);
+            Argument(const QString& classname = QString::null, Object::Ptr object = 0);
 
             /**
              * Destructor.
@@ -69,7 +69,7 @@ namespace Kross { namespace Api {
              *         isn't optional and therefore doesn't have
              *         an default object.
              */
-            Object* getObject();
+            Object::Ptr getObject();
 
             /**
              * Implementation of the << operator.
@@ -85,8 +85,8 @@ namespace Kross { namespace Api {
         private:
             /// The classname of the argument.
             QString m_classname;
-            /// The optional default Object* this argument holds.
-            Object* m_object;
+            /// The optional default \a Object this argument holds.
+            Object::Ptr m_object;
     };
 
     /**

@@ -21,7 +21,7 @@
 
 using namespace Kross::Api;
 
-Argument::Argument(const QString& classname, Object* object)
+Argument::Argument(const QString& classname, Object::Ptr object)
     : m_classname(classname)
     , m_object(object)
 {
@@ -36,7 +36,7 @@ const QString& Argument::getClassName()
     return m_classname;
 }
 
-Object* Argument::getObject()
+Object::Ptr Argument::getObject()
 {
     return m_object;
 }

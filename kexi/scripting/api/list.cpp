@@ -25,8 +25,8 @@
 
 using namespace Kross::Api;
 
-List::List(const QValueList<Object*>& value, const QString& name)
-    : Value< List, QValueList<Object*> >(value, name)
+List::List(QValueList<Object::Ptr> value, const QString& name)
+    : Value< List, QValueList<Object::Ptr> >(value, name)
 {
 }
 
@@ -44,19 +44,19 @@ const QString List::getDescription() const
     return i18n("Object to handle QValueList collections.");
 }
 
-Object* List::item(uint idx)
+Object::Ptr List::item(uint idx)
 {
-    QValueList<Object*> list = getValue();
+    QValueList<Object::Ptr> list = getValue();
     if(idx >= list.count()) {
         kdDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
         throw TypeException(i18n("List-index %1 out of bounds.").arg(idx));
     }
-    Object* obj = list[idx];
+    Object::Ptr obj = list[idx];
     return obj;
 }
 
 uint List::count()
 {
-    QValueList<Object*> list = getValue();
+    QValueList<Object::Ptr> list = getValue();
     return list.count();
 }

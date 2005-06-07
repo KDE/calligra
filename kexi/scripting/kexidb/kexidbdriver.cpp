@@ -91,19 +91,19 @@ const QString KexiDBDriver::getDescription() const
     return m_driver;
 }
 
-Kross::Api::Object* KexiDBDriver::versionMajor(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriver::versionMajor(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(driver()->versionMajor(),
+    return new Kross::Api::Variant(driver()->versionMajor(),
            "Kross::KexiDB::Driver::versionMajor::Int");
 }
 
-Kross::Api::Object* KexiDBDriver::versionMinor(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriver::versionMinor(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(driver()->versionMinor(),
+    return new Kross::Api::Variant(driver()->versionMinor(),
            "Kross::KexiDB::Driver::versionMinor::Int");
 }
 
-Kross::Api::Object* KexiDBDriver::createConnection(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBDriver::createConnection(Kross::Api::List::Ptr args)
 {
     KexiDBConnectionData* data =
         Kross::Api::Object::fromObject<KexiDBConnectionData>(args->item(0));
@@ -113,27 +113,27 @@ Kross::Api::Object* KexiDBDriver::createConnection(Kross::Api::List* args)
     return new KexiDBConnection(this, connection, data);
 }
 
-Kross::Api::Object* KexiDBDriver::connectionList(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBDriver::connectionList(Kross::Api::List::Ptr)
 {
-    QValueList<Object*> list;
+    QValueList<Kross::Api::Object::Ptr> list;
     QPtrList< ::KexiDB::Connection > connectionlist = driver()->connectionsList();
     ::KexiDB::Connection* connection;
     for(connection = connectionlist.first(); connection; connection = connectionlist.next())
         list.append( new KexiDBConnection(this, connection) );
-    return Kross::Api::List::create(list,
+    return new Kross::Api::List(list,
            "Kross::KexiDB::Driver::connectionList::List");
 }
 
-Kross::Api::Object* KexiDBDriver::escapeString(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBDriver::escapeString(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            driver()->escapeString( Kross::Api::Variant::toString(args->item(0)) ),
            "Kross::KexiDB::DriverManager::escapeString::String");
 }
 
-Kross::Api::Object* KexiDBDriver::valueToSQL(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBDriver::valueToSQL(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            driver()->valueToSQL(
                (uint)::KexiDB::Field::typeForString(Kross::Api::Variant::toString(args->item(0))),
                Kross::Api::Variant::toVariant(args->item(1))

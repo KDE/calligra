@@ -161,27 +161,39 @@ bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QSt
 {
     if(! d->m_eventmanager) // create instance on demand
         d->m_eventmanager = new EventManager(this);
+/*TODO
     return d->m_eventmanager->connect(sender, signal, functionname);
+*/
+    return false;
 }
 
 bool ScriptContainer::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
 {
     if(! d->m_eventmanager)
         return false;
+/*TODO
     return d->m_eventmanager->disconnect(sender, signal, functionname);
+*/
+    return false;
 }
 
 bool ScriptContainer::connect(const QCString& signal, QObject *receiver, const QCString& slot)
 {
     if(! d->m_eventmanager) // create instance on demand
         d->m_eventmanager = new EventManager(this);
+/*TODO
     return d->m_eventmanager->connect(signal, receiver, slot);
+*/
+    return false;
 }
 
 bool ScriptContainer::disconnect(const QCString& signal, QObject *receiver, const QCString& slot)
 {
     if(! d->m_eventmanager)
         return false;
+/*TODO
     return d->m_eventmanager->disconnect(signal, receiver, slot);
+*/
+    return false;
 }
 

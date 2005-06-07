@@ -71,19 +71,19 @@ namespace Kross { namespace KexiDB {
              * Return the major version number of this driver.
              * See \see ::KexiDB::Driver::versionMajor
              */
-            Kross::Api::Object* versionMajor(Kross::Api::List*);
+            Kross::Api::Object::Ptr versionMajor(Kross::Api::List::Ptr);
 
             /**
              * Return the minor version number of this driver.
              * See \see ::KexiDB::Driver::versionMinor
              */
-            Kross::Api::Object* versionMinor(Kross::Api::List*);
+            Kross::Api::Object::Ptr versionMinor(Kross::Api::List::Ptr);
 
             /**
              * Return a driver-specific escaped SQL string.
              * See \see ::KexiDB::Driver::escapeString
              */
-            Kross::Api::Object* escapeString(Kross::Api::List*);
+            Kross::Api::Object::Ptr escapeString(Kross::Api::List::Ptr);
 
             /**
              * Return the escaped and convert as second argument
@@ -91,19 +91,19 @@ namespace Kross { namespace KexiDB {
              * argument passed \a KexiDBField::type.
              * See \see ::KexiDB::Driver::valueToSQL
              */
-            Kross::Api::Object* valueToSQL(Kross::Api::List*);
+            Kross::Api::Object::Ptr valueToSQL(Kross::Api::List::Ptr);
 
             /**
              * Create a new KexiDBConnection object and return it.
              * See \see ::KexiDB::Driver::createConnection
              */
-            Kross::Api::Object* createConnection(Kross::Api::List*);
+            Kross::Api::Object::Ptr createConnection(Kross::Api::List::Ptr);
 
             /**
              * Return a list of KexiDBConnection objects.
              * See \see ::KexiDB::Driver::connectionList
              */
-            Kross::Api::Object* connectionList(Kross::Api::List*);
+            Kross::Api::Object::Ptr connectionList(Kross::Api::List::Ptr);
 
     };
 

@@ -55,35 +55,6 @@ static KCmdLineOptions options[] =
     { 0, 0, 0 }
 };
 
-/*
-void runInterpreter(const QString& interpretername, const QString& script)
-{
-    Kross::Api::Manager* manager = new Kross::Api::Manager();
-    if(! manager) {
-        kdWarning() << "Failed to create Kross::Api::Manager instance!" << endl;
-        return;
-    }
-    Kross::Api::Interpreter* interpreter = manager->getInterpreter(interpretername); // instance will be auto deleted if manager got deleted.
-    if(! interpreter)
-        kdWarning() << QString("Failed to create Kross::Api::Interpreter instance for interpreter '%1'!").arg(interpretername) << endl;
-    else {
-        // Publish some modules. The choosen interpreter will decide what to do with them.
-        //interpreter->addModule( new Kross::KexiDB::TestModule() );
-        Kross::KexiDB::KexiDBModule* module = new Kross::KexiDB::KexiDBModule();
-        interpreter->addModule(module);
-
-        if(! interpreter->setScript(script))
-            kdWarning() << "Interpreter failed to parse script!" << endl;
-        else {
-            if(! interpreter->execute())
-                kdWarning() << "Interpreter failed to execute script!" << endl;
-        }
-        delete module; module = 0;
-    }
-    delete manager;
-}
-*/
-
 void runInterpreter(const QString& interpretername, const QString& scriptcode)
 {
     // Return the scriptingmanager instance. The manager is used as main
@@ -122,7 +93,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         Kross::Api::Object* o = scriptcontainer->execute();
 
         // Call a function.
-        //scriptcontainer->callFunction("testobjectCallback" /*, functionarguments */);
+        //scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
 
         // Call a class.
         /*
@@ -137,10 +108,10 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         */
 
         // Connect QObject signal with scriptfunction.
-        //scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
-        //scriptcontainer->connect(testobject, SIGNAL(testSignalString(const QString&)), "testobjectCallbackWithParams");
+        scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
+        scriptcontainer->connect(testobject, SIGNAL(testSignalString(const QString&)), "testobjectCallbackWithParams");
         // Call the testSlot to emit the testSignal.
-        //testobject->testSlot();
+        testobject->testSlot();
     }
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;

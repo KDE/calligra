@@ -92,66 +92,66 @@ const QString KexiDBParser::getDescription() const
     return i18n("KexiDB::Parser wrapper to parse sql statements.");
 }
 
-Kross::Api::Object* KexiDBParser::parse(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBParser::parse(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            m_parser->parse(Kross::Api::Variant::toString(args->item(0))),
            "Kross::Api::KexiDBParser::parse::Bool");
 }
 
-Kross::Api::Object* KexiDBParser::clear(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::clear(Kross::Api::List::Ptr)
 {
     m_parser->clear();
     return 0;
 }
 
-Kross::Api::Object* KexiDBParser::operation(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::operation(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_parser->operationString(),
+    return new Kross::Api::Variant(m_parser->operationString(),
            "Kross::Api::KexiDBParser::operation::String");
     return 0;
 }
 
-Kross::Api::Object* KexiDBParser::table(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::table(Kross::Api::List::Ptr)
 {
     ::KexiDB::TableSchema* t = m_parser->table();
     if(! t) return 0;
     return new KexiDBTableSchema(t);
 }
 
-Kross::Api::Object* KexiDBParser::query(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::query(Kross::Api::List::Ptr)
 {
     ::KexiDB::QuerySchema* q = m_parser->query();
     if(! q) return 0;
     return new KexiDBQuerySchema(q);
 }
 
-Kross::Api::Object* KexiDBParser::connection(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::connection(Kross::Api::List::Ptr)
 {
     return m_connection;
 }
 
-Kross::Api::Object* KexiDBParser::statement(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::statement(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_parser->statement(),
+    return new Kross::Api::Variant(m_parser->statement(),
            "Kross::Api::KexiDBParser::statement::String");
 }
 
-Kross::Api::Object* KexiDBParser::errorType(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::errorType(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_parser->error().type(),
+    return new Kross::Api::Variant(m_parser->error().type(),
            "Kross::Api::KexiDBParser::errorType::String");
 }
 
-Kross::Api::Object* KexiDBParser::errorMsg(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::errorMsg(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_parser->error().error(),
+    return new Kross::Api::Variant(m_parser->error().error(),
            "Kross::Api::KexiDBParser::errorMsg::String");
 }
 
-Kross::Api::Object* KexiDBParser::errorAt(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBParser::errorAt(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_parser->error().at(),
+    return new Kross::Api::Variant(m_parser->error().at(),
            "Kross::Api::KexiDBParser::errorAt::Int");
 }
 

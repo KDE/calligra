@@ -65,34 +65,34 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::ConnectionData* m_data;
 
-            Kross::Api::Object* connName(Kross::Api::List*);
-            Kross::Api::Object* setConnName(Kross::Api::List*);
+            Kross::Api::Object::Ptr connName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setConnName(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* description(Kross::Api::List*);
-            Kross::Api::Object* setDescription(Kross::Api::List*);
+            Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* driverName(Kross::Api::List*);
-            Kross::Api::Object* setDriverName(Kross::Api::List*);
+            Kross::Api::Object::Ptr driverName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setDriverName(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* localSocketFileName(Kross::Api::List*);
+            Kross::Api::Object::Ptr localSocketFileName(Kross::Api::List::Ptr);
 
             // For serverbased drivers
-            Kross::Api::Object* hostName(Kross::Api::List*);
-            Kross::Api::Object* setHostName(Kross::Api::List*);
-            Kross::Api::Object* port(Kross::Api::List*);
-            Kross::Api::Object* setPort(Kross::Api::List*);
-            Kross::Api::Object* password(Kross::Api::List*);
-            Kross::Api::Object* setPassword(Kross::Api::List*);
-            Kross::Api::Object* userName(Kross::Api::List*);
-            Kross::Api::Object* setUserName(Kross::Api::List*);
+            Kross::Api::Object::Ptr hostName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setHostName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr port(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setPort(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr password(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setPassword(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr userName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setUserName(Kross::Api::List::Ptr);
 
             // For filebased drivers
-            Kross::Api::Object* fileName(Kross::Api::List*);
-            Kross::Api::Object* setFileName(Kross::Api::List*);
-            Kross::Api::Object* dbPath(Kross::Api::List*);
-            Kross::Api::Object* dbFileName(Kross::Api::List*);
+            Kross::Api::Object::Ptr fileName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setFileName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr dbPath(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr dbFileName(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* serverInfoString(Kross::Api::List*);
+            Kross::Api::Object::Ptr serverInfoString(Kross::Api::List::Ptr);
     };
 
 }}

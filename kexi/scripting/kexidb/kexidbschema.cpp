@@ -78,49 +78,49 @@ KexiDBSchema<T>::~KexiDBSchema<T>()
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::name(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBSchema<T>::name(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_schema->name(),
+    return new Kross::Api::Variant(m_schema->name(),
            "Kross::KexiDB::KexiDBSchema::name::String");
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::setName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBSchema<T>::setName(Kross::Api::List::Ptr args)
 {
     m_schema->setName(Kross::Api::Variant::toString(args->item(0)));
     return name(args);
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::caption(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBSchema<T>::caption(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_schema->caption(),
+    return new Kross::Api::Variant(m_schema->caption(),
            "Kross::KexiDB::KexiDBSchema::caption::String");
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::setCaption(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBSchema<T>::setCaption(Kross::Api::List::Ptr args)
 {
     m_schema->setCaption(Kross::Api::Variant::toString(args->item(0)));
     return caption(args);
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::description(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBSchema<T>::description(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_schema->description(),
+    return new Kross::Api::Variant(m_schema->description(),
            "Kross::KexiDB::KexiDBSchema::description::String");
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::setDescription(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBSchema<T>::setDescription(Kross::Api::List::Ptr args)
 {
     m_schema->setDescription(Kross::Api::Variant::toString(args->item(0)));
     return description(args);
 }
 
 template<class T>
-Kross::Api::Object* KexiDBSchema<T>::fieldlist(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBSchema<T>::fieldlist(Kross::Api::List::Ptr)
 {
     //TODO cache; pass optional KexiDBFieldList* to our class and return here.
     return new KexiDBFieldList(m_fieldlist);
@@ -192,14 +192,14 @@ const QString KexiDBQuerySchema::getDescription() const
     return static_cast< ::KexiDB::QuerySchema* >(m_schema);
 }
 
-Kross::Api::Object* KexiDBQuerySchema::statement(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBQuerySchema::statement(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            static_cast< ::KexiDB::QuerySchema* >(m_schema)->statement(),
            "Kross::KexiDB::KexiDBQuerySchema::statement::String");
 }
 
-Kross::Api::Object* KexiDBQuerySchema::setStatement(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBQuerySchema::setStatement(Kross::Api::List::Ptr args)
 {
     static_cast< ::KexiDB::QuerySchema* >(m_schema)->setStatement(
         Kross::Api::Variant::toString(args->item(0))

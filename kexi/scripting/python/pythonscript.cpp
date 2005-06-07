@@ -41,9 +41,9 @@ namespace Kross { namespace Python {
 
             QStringList m_functions;
             QStringList m_classes;
-            //QMap<QString, Kross::Api::Object*> m_functions;
-            //QMap<QString, Kross::Api::Object*> m_classes;
-            //QValueList<Kross::Api::Object*> m_classinstances;
+            //QMap<QString, Kross::Api::Object::Ptr> m_functions;
+            //QMap<QString, Kross::Api::Object::Ptr> m_classes;
+            //QValueList<Kross::Api::Object::Ptr> m_classinstances;
     };
 
 }}
@@ -141,7 +141,7 @@ const QStringList& PythonScript::getFunctionNames()
     */
 }
 
-Kross::Api::Object* PythonScript::execute()
+Kross::Api::Object::Ptr PythonScript::execute()
 {
     if(! d->m_module)
         initialize();
@@ -175,7 +175,7 @@ Kross::Api::Object* PythonScript::execute()
             }
         }
 
-        Kross::Api::Object* r = PythonExtension::toObject(result);
+        Kross::Api::Object::Ptr r = PythonExtension::toObject(result);
         return r;
     }
     catch(Py::Exception& e) {
@@ -255,7 +255,7 @@ Kross::Api::Object* PythonScript::execute()
 */
 }
 
-Kross::Api::Object* PythonScript::callFunction(const QString& name, Kross::Api::List* args)
+Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::Api::List::Ptr args)
 {
     if(! d->m_module)
         throw Kross::Api::RuntimeException(i18n("Script not initialized."));
@@ -310,7 +310,7 @@ const QStringList& PythonScript::getClassNames()
     return d->m_classes;
 }
 
-Kross::Api::Object* PythonScript::classInstance(const QString& name)
+Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
 {
     if(! d->m_module)
         throw Kross::Api::RuntimeException(i18n("Script not initialized."));

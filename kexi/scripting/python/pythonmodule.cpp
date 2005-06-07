@@ -70,7 +70,7 @@ Py::Object PythonModule::get(const Py::Tuple& args)
 
     QString name = args[0].as_string().c_str();
 
-    Kross::Api::Object* module = m_interpreter->m_manager->getModule(name);
+    Kross::Api::Object::Ptr module = m_interpreter->m_manager->getModule(name);
     if(! module)
         throw Py::TypeError(QString("Unknown module '%1'.").arg(name).latin1());
 

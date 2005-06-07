@@ -61,7 +61,7 @@ namespace Kross { namespace Python {
              * \param object The \a Kross::Api::Object object
              *        this instance is the wrapper for.
              */
-            explicit PythonExtension(Kross::Api::Object* object);
+            explicit PythonExtension(Kross::Api::Object::Ptr object);
 
             /**
              * Destructor.
@@ -97,7 +97,7 @@ namespace Kross { namespace Python {
              * Return the \a Kross::Api::Object this
              * PythonExtension wraps.
              */
-            Kross::Api::Object* getObject();
+            Kross::Api::Object::Ptr getObject();
 
             //virtual Py::Object repr() { return Py::String(m_object->getName().latin1()); }
             //virtual Py::Object str() { return Py::String(m_object->getName().latin1()); }
@@ -105,7 +105,7 @@ namespace Kross { namespace Python {
 
         private:
             /// The \a Kross::Api::Object this PythonExtension wraps.
-            Kross::Api::Object* m_object;
+            Kross::Api::Object::Ptr m_object;
             /// Internal value used by our dirty hack to handle calls more flexible.
             QString m_methodname;
 
@@ -115,7 +115,7 @@ namespace Kross { namespace Python {
              * \param tuple The Py::Tuple to convert.
              * \return The to a Kross::Api::List converted Py::Tuple.
              */
-            static Kross::Api::List* toObject(const Py::Tuple& tuple);
+            static Kross::Api::List::Ptr toObject(const Py::Tuple& tuple);
 
             /**
              * Converts a \a Py::Object into a \a Kross::Api::Object.
@@ -123,7 +123,7 @@ namespace Kross { namespace Python {
              * \param object The Py::Object to convert.
              * \return The to a Kross::Api::Object converted Py::Object.
              */
-            static Kross::Api::Object* toObject(const Py::Object& object);
+            static Kross::Api::Object::Ptr toObject(const Py::Object& object);
 
             /**
              * Converts a QString to a Py::Object. If
@@ -173,7 +173,7 @@ namespace Kross { namespace Python {
              * \param object The Kross::Api::Object to convert.
              * \return The to a Py::Object converted Kross::Api::Object.
              */
-            static Py::Object toPyObject(Kross::Api::Object* object);
+            static Py::Object toPyObject(Kross::Api::Object::Ptr object);
 
             /**
              * Converts a \a Kross::Api::List into a Py::Tuple.
@@ -181,7 +181,7 @@ namespace Kross { namespace Python {
              * \param list The Kross::Api::List to convert.
              * \return The to a Py::Tuple converted Kross::Api::List.
              */
-            static Py::Tuple toPyTuple(Kross::Api::List* list);
+            static Py::Tuple toPyTuple(Kross::Api::List::Ptr list);
 
             /**
              * Callback function called from within python. This

@@ -33,9 +33,9 @@ namespace Kross { namespace Api {
 
     // Forward declarations.
     class ScriptContainer;
-    class QtObject;
-    class EventSignal;
-    class EventSlot;
+    //class QtObject;
+    //class EventSignal;
+    //class EventSlot;
 
     /**
      * The EventManager spends us the bridge between
@@ -47,8 +47,8 @@ namespace Kross { namespace Api {
     {
             Q_OBJECT
 
-            friend class EventSignal;
-            friend class EventSlot;
+            //friend class EventSignal;
+            //friend class EventSlot;
 
         public:
 
@@ -63,7 +63,7 @@ namespace Kross { namespace Api {
              *       EventManager instance to wrap there signals,
              *       slots and properties.
              */
-            EventManager(ScriptContainer* scriptcontainer, QtObject* qtobj = 0);
+            EventManager(ScriptContainer* scriptcontainer /*, QtObject* qtobj = 0*/);
 
             /**
              * Destructor.
@@ -82,12 +82,12 @@ namespace Kross { namespace Api {
              * \return If connection was done successfully true else
              *        false.
              */
-            bool connect(QObject *sender, const QCString& signal, const QString& functionname);
+            //bool connect(QObject *sender, const QCString& signal, const QString& functionname);
 
             /**
              * Disconnect a QObject signal from a script function.
              */
-            bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
+            //bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
 
             /**
              * Connect script signal with QObject slot.
@@ -97,22 +97,22 @@ namespace Kross { namespace Api {
              * \param slot The SLOT of the receiver to connect the Kross
              *       SIGNAL with.
              */
-            bool connect(const QCString& signal, QObject *receiver, const QCString& slot);
+            //bool connect(const QCString& signal, QObject *receiver, const QCString& slot);
 
             /**
              * Disconnect script signal from QObject slot.
              */
-            bool disconnect(const QCString& signal, QObject *receiver, const QCString& slot);
+            //bool disconnect(const QCString& signal, QObject *receiver, const QCString& slot);
 
         private:
             /// The \a ScriptContainer connected with this EventManager.
             ScriptContainer* m_scriptcontainer;
             /// The optional \a QtObject instance this EventManager wraps the events for.
-            QtObject* m_qtobj;
+            //QtObject* m_qtobj;
             /// List of \a EventSignal signals.
-            QValueList<EventSignal*> m_signals;
+            //QValueList<EventSignal*> m_signals;
             /// List of \a EventSlot slots.
-            QValueList<EventSlot*> m_slots;
+            //QValueList<EventSlot*> m_slots;
     };
 
 }}

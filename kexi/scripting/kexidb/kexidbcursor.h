@@ -71,16 +71,16 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::Cursor* cursor();
             ::KexiDB::Cursor* m_cursor;
 
-            Kross::Api::Object* moveFirst(Kross::Api::List*);
-            Kross::Api::Object* moveLast(Kross::Api::List*);
-            Kross::Api::Object* moveNext(Kross::Api::List*);
-            Kross::Api::Object* movePrev(Kross::Api::List*);
-            Kross::Api::Object* eof(Kross::Api::List*);
-            Kross::Api::Object* bof(Kross::Api::List*);
-            Kross::Api::Object* at(Kross::Api::List*);
-            Kross::Api::Object* fieldCount(Kross::Api::List*);
+            Kross::Api::Object::Ptr moveFirst(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr moveLast(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr moveNext(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr movePrev(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr eof(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr bof(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr at(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* value(Kross::Api::List*);
+            Kross::Api::Object::Ptr value(Kross::Api::List::Ptr);
     };
 
 }}

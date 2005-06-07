@@ -23,8 +23,8 @@
 
 using namespace Kross::Api;
 
-Dict::Dict(const QMap<QString, Object*>& value, const QString& name)
-    : Value< List, QMap<QString, Object*> >(value, name)
+Dict::Dict(const QMap<QString, Object::Ptr> value, const QString& name)
+    : Value< List, QMap<QString, Object::Ptr> >(value, name)
 {
 }
 

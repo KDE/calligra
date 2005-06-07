@@ -88,13 +88,13 @@ const QString KexiDBFieldList::getDescription() const
     return i18n("KexiDB::FieldList wrapper to handle a list of KexiDBField objects.");
 }
 
-Kross::Api::Object* KexiDBFieldList::fieldCount(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBFieldList::fieldCount(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_fieldlist->fieldCount(),
+    return new Kross::Api::Variant(m_fieldlist->fieldCount(),
            "Kross::KexiDB::KexiDBFieldList::fieldCount::UInt");
 }
 
-Kross::Api::Object* KexiDBFieldList::field(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBFieldList::field(Kross::Api::List::Ptr args)
 {
     QVariant variant = Kross::Api::Variant::toVariant(args->item(0));
     bool ok;
@@ -104,32 +104,32 @@ Kross::Api::Object* KexiDBFieldList::field(Kross::Api::List* args)
     );
 }
 
-Kross::Api::Object* KexiDBFieldList::fields(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBFieldList::fields(Kross::Api::List::Ptr)
 {
-    QValueList<Object*> list;
+    QValueList<Object::Ptr> list;
     ::KexiDB::Field::ListIterator it( *m_fieldlist->fields() );
     for(; it.current(); ++it)
         list.append( new KexiDBField(it.current()) );
-    return Kross::Api::List::create(list,
-           "kross::KexiDB::KexiDBFieldList::fields::List");
+    return new Kross::Api::List(list,
+           "Kross::KexiDB::KexiDBFieldList::fields::List");
 }
 
-Kross::Api::Object* KexiDBFieldList::hasField(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBFieldList::hasField(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(
+    return new Kross::Api::Variant(
            m_fieldlist->hasField(
                Kross::Api::Object::fromObject<KexiDBField>(args->item(0))->field()
            ),
            "Kross::KexiDB::KexiDBFieldList::hasField::Bool");
 }
 
-Kross::Api::Object* KexiDBFieldList::names(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBFieldList::names(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_fieldlist->names(),
+    return new Kross::Api::Variant(m_fieldlist->names(),
            "Kross::KexiDB::KexiDBFieldList::fieldCount::StringList");
 }
 
-Kross::Api::Object* KexiDBFieldList::addField(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBFieldList::addField(Kross::Api::List::Ptr args)
 {
     m_fieldlist->addField(
         Kross::Api::Object::fromObject<KexiDBField>(args->item(0))->field()
@@ -137,7 +137,7 @@ Kross::Api::Object* KexiDBFieldList::addField(Kross::Api::List* args)
     return 0;
 }
 
-Kross::Api::Object* KexiDBFieldList::insertField(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBFieldList::insertField(Kross::Api::List::Ptr args)
 {
     m_fieldlist->insertField(
         Kross::Api::Variant::toUInt(args->item(0)),
@@ -146,7 +146,7 @@ Kross::Api::Object* KexiDBFieldList::insertField(Kross::Api::List* args)
     return 0;
 }
 
-Kross::Api::Object* KexiDBFieldList::removeField(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBFieldList::removeField(Kross::Api::List::Ptr args)
 {
     m_fieldlist->removeField(
         Kross::Api::Object::fromObject<KexiDBField>(args->item(0))->field()
@@ -154,7 +154,7 @@ Kross::Api::Object* KexiDBFieldList::removeField(Kross::Api::List* args)
     return 0;
 }
 
-Kross::Api::Object* KexiDBFieldList::clear(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBFieldList::clear(Kross::Api::List::Ptr)
 {
     m_fieldlist->clear();
     return 0;

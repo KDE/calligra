@@ -58,17 +58,17 @@ namespace Kross { namespace KexiDB {
             KexiDBConnection* m_connection;
             ::KexiDB::Parser* m_parser;
 
-            Kross::Api::Object* parse(Kross::Api::List*);
-            Kross::Api::Object* clear(Kross::Api::List*);
-            Kross::Api::Object* operation(Kross::Api::List*);
-            Kross::Api::Object* table(Kross::Api::List*);
-            Kross::Api::Object* query(Kross::Api::List*);
-            Kross::Api::Object* connection(Kross::Api::List*);
-            Kross::Api::Object* statement(Kross::Api::List*);
+            Kross::Api::Object::Ptr parse(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr operation(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr table(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
 
-            Kross::Api::Object* errorType(Kross::Api::List*);
-            Kross::Api::Object* errorMsg(Kross::Api::List*);
-            Kross::Api::Object* errorAt(Kross::Api::List*);
+            Kross::Api::Object::Ptr errorType(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr errorMsg(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr errorAt(Kross::Api::List::Ptr);
     };
 
 }}

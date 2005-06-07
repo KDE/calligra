@@ -85,7 +85,7 @@ namespace Kross { namespace Python {
              * \return The call-result as Object* instance or
              *         NULL if the call has no result.
              */
-            virtual Kross::Api::Object* call(const QString& name, Kross::Api::List* arguments);
+            virtual Kross::Api::Object::Ptr call(const QString& name, Kross::Api::List::Ptr arguments);
 
             /**
              * Return a list of supported callable objects.

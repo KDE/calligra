@@ -19,28 +19,40 @@
 
 #include "eventslot.h"
 
-#include "interpreter.h"
-#include "object.h"
-#include "list.h"
-#include "qtobject.h"
-#include "variant.h"
-#include "../main/scriptcontainer.h"
-#include "eventmanager.h"
+//#include "interpreter.h"
+//#include "object.h"
+//#include "list.h"
+//#include "qtobject.h"
+//#include "variant.h"
+//#include "../main/scriptcontainer.h"
+//#include "eventmanager.h"
 
-#include <qvaluelist.h>
-#include <qmetaobject.h>
+//#include <qvaluelist.h>
+//#include <qmetaobject.h>
 
 using namespace Kross::Api;
 
-EventSlot::EventSlot(EventManager* eventmanager)
-    : QObject(eventmanager, "EventSlot")
-    , m_eventmanager(eventmanager)
-    , m_sender(0)
-    , m_signal(0)
-    , m_slot(0)
+EventSlot::EventSlot()
+    : Event()
+    //, m_sender(0), m_signal(0), m_slot(0)
 {
 }
 
+EventSlot::~EventSlot()
+{
+}
+
+const QString EventSlot::getClassName() const
+{
+    return "Kross::Api::EventSlot";
+}
+
+const QString EventSlot::getDescription() const
+{
+    return "";
+}
+
+/*
 EventSlot* EventSlot::create(EventManager* eventmanager)
 {
     return new EventSlot(eventmanager);
@@ -126,13 +138,21 @@ void EventSlot::call(const QVariant& variant)
     kdDebug() << QString("EventSlot::call() sender='%1' signal='%2' function='%3'")
                  .arg(m_sender->name()).arg(m_signal).arg(m_function) << endl;
 
+    Kross::Api::List* arglist = 0;
+
     QValueList<Kross::Api::Object*> args;
-    if(variant.isValid())
+    if(variant.isValid()) {
         args.append(Kross::Api::Variant::create(variant));
-    m_eventmanager->m_scriptcontainer->callFunction(
-        m_function,
-        variant.isValid() ? Kross::Api::List::create(args) : 0
-    );
+        arglist = Kross::Api::List::create(args);
+    }
+
+    try {
+        m_eventmanager->m_scriptcontainer->callFunction(m_function, arglist);
+    }
+    catch(Exception& e) {
+        //TODO add hadError(), getError() and setError()
+        kdDebug() << QString("EXCEPTION in EventSlot::call('%1') type='%2' description='%3'").arg(variant.toString()).arg(e.type()).arg(e.description()) << endl;
+    }
 }
 
 void EventSlot::callback() {
@@ -191,4 +211,4 @@ void EventSlot::callback(const QStringList& sl) {
     call(QVariant(sl)); }
 void EventSlot::callback(const QVariant& variant) {
     call(variant); }
-
+*/

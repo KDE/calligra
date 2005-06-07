@@ -109,7 +109,7 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
         i18n("Return database filename.")
     );
     addFunction("serverInfoString", &KexiDBConnectionData::serverInfoString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", Kross::Api::Variant::create(QVariant(true))),
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(true))),
         i18n("Return a user-friendly string representation.")
     );
 }
@@ -135,123 +135,123 @@ const QString KexiDBConnectionData::getDescription() const
     return m_data;
 }
 
-Kross::Api::Object* KexiDBConnectionData::connName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::connName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->connName,
+    return new Kross::Api::Variant(m_data->connName,
            "Kross::KexiDB::Connection::connName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setConnName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setConnName(Kross::Api::List::Ptr args)
 {
     m_data->connName = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::description(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::description(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->description,
+    return new Kross::Api::Variant(m_data->description,
            "Kross::KexiDB::Connection::description::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setDescription(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setDescription(Kross::Api::List::Ptr args)
 {
     m_data->description = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::driverName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::driverName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->driverName,
+    return new Kross::Api::Variant(m_data->driverName,
            "Kross::KexiDB::Connection::driverName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setDriverName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setDriverName(Kross::Api::List::Ptr args)
 {
     m_data->driverName = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::localSocketFileName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::localSocketFileName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->localSocketFileName,
+    return new Kross::Api::Variant(m_data->localSocketFileName,
            "Kross::KexiDB::Connection::localSocketFileName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::hostName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::hostName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->hostName,
+    return new Kross::Api::Variant(m_data->hostName,
            "Kross::KexiDB::Connection::hostName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setHostName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setHostName(Kross::Api::List::Ptr args)
 {
     m_data->hostName = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::port(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::port(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create((uint)m_data->port,
+    return new Kross::Api::Variant((uint)m_data->port,
            "Kross::KexiDB::Connection::port::UInt");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setPort(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setPort(Kross::Api::List::Ptr args)
 {
     m_data->port = Kross::Api::Variant::toUInt(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::password(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::password(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->password,
+    return new Kross::Api::Variant(m_data->password,
            "Kross::KexiDB::Connection::password::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setPassword(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setPassword(Kross::Api::List::Ptr args)
 {
     m_data->password = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::userName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::userName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->userName,
+    return new Kross::Api::Variant(m_data->userName,
            "Kross::KexiDB::Connection::userName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setUserName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setUserName(Kross::Api::List::Ptr args)
 {
     m_data->userName = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::fileName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::fileName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->fileName(),
+    return new Kross::Api::Variant(m_data->fileName(),
            "Kross::KexiDB::Connection::fileName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::setFileName(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setFileName(Kross::Api::List::Ptr args)
 {
     m_data->setFileName( Kross::Api::Variant::toString(args->item(0)) );
     return 0;
 }
 
-Kross::Api::Object* KexiDBConnectionData::dbPath(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::dbPath(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->dbPath(),
+    return new Kross::Api::Variant(m_data->dbPath(),
            "Kross::KexiDB::Connection::dbPath::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::dbFileName(Kross::Api::List*)
+Kross::Api::Object::Ptr KexiDBConnectionData::dbFileName(Kross::Api::List::Ptr)
 {
-    return Kross::Api::Variant::create(m_data->dbFileName(),
+    return new Kross::Api::Variant(m_data->dbFileName(),
            "Kross::KexiDB::Connection::dbFileName::String");
 }
 
-Kross::Api::Object* KexiDBConnectionData::serverInfoString(Kross::Api::List* args)
+Kross::Api::Object::Ptr KexiDBConnectionData::serverInfoString(Kross::Api::List::Ptr args)
 {
-    return Kross::Api::Variant::create(m_data->serverInfoString(args->item(0)),
+    return new Kross::Api::Variant(m_data->serverInfoString(args->item(0)),
            "Kross::KexiDB::Connection::serverInfoString::String");
 }
 

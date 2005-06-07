@@ -79,72 +79,72 @@ namespace Kross { namespace KexiDB {
              * used to create this connection.
              * Wrapper for \a ::KexiDB::Connection::data
              */
-            Kross::Api::Object* data(Kross::Api::List*);
+            Kross::Api::Object::Ptr data(Kross::Api::List::Ptr);
 
             /**
              * Return the KexiDBDriver object this
              * connection belongs too.
              * Wrapper for \a ::KexiDB::Connection::driver
              */
-            Kross::Api::Object* driver(Kross::Api::List*);
+            Kross::Api::Object::Ptr driver(Kross::Api::List::Ptr);
 
             /**
              * Connect and return true if we are successfully
              * connected now.
              * Wrapper for \a ::KexiDB::Connection::connect
              */
-            Kross::Api::Object* connect(Kross::Api::List*);
+            Kross::Api::Object::Ptr connect(Kross::Api::List::Ptr);
 
             /**
              * Return true if we are connected.
              * Wrapper for \a ::KexiDB::Connection::isConnected
              */
-            Kross::Api::Object* isConnected(Kross::Api::List*);
+            Kross::Api::Object::Ptr isConnected(Kross::Api::List::Ptr);
 
             /**
              * Disconnect and return true if we are successfully
              * disconnected now.
              * Wrapper for \a ::KexiDB::Connection::disconnect
              */
-            Kross::Api::Object* disconnect(Kross::Api::List*);
+            Kross::Api::Object::Ptr disconnect(Kross::Api::List::Ptr);
 
             /**
              * Return true if the as argument passed databasename exists.
              * Wrapper for \a ::KexiDB::Connection::databaseExists
              */
-            Kross::Api::Object* databaseExists(Kross::Api::List*);
+            Kross::Api::Object::Ptr databaseExists(Kross::Api::List::Ptr);
 
             /**
              * Return the name of currently used database for this
              * connection or empty string if there is no used database.
              * Wrapper for \a ::KexiDB::Connection::currentDatabase
              */
-            Kross::Api::Object* currentDatabase(Kross::Api::List*);
+            Kross::Api::Object::Ptr currentDatabase(Kross::Api::List::Ptr);
 
             /**
              * Return list of database names for opened connection.
              * Wrapper for \a ::KexiDB::Connection::databaseNames
              */
-            Kross::Api::Object* databaseNames(Kross::Api::List*);
+            Kross::Api::Object::Ptr databaseNames(Kross::Api::List::Ptr);
 
             /**
              * Return true if connection is properly established.
              * Wrapper for \a ::KexiDB::Connection::isDatabaseUsed
              */
-            Kross::Api::Object* isDatabaseUsed(Kross::Api::List*);
+            Kross::Api::Object::Ptr isDatabaseUsed(Kross::Api::List::Ptr);
 
             /**
              * Opens an existing database specified by the as
              * argument passed databasename.
              * Wrapper for \a ::KexiDB::Connection::useDatabase
              */
-            Kross::Api::Object* useDatabase(Kross::Api::List*);
+            Kross::Api::Object::Ptr useDatabase(Kross::Api::List::Ptr);
 
             /**
              * Closes currently used database for this connection.
              * Wrapper for \a ::KexiDB::Connection::closeDatabase
              */
-            Kross::Api::Object* closeDatabase(Kross::Api::List*);
+            Kross::Api::Object::Ptr closeDatabase(Kross::Api::List::Ptr);
 
             /**
              * Return names of all table schemas stored in currently
@@ -153,7 +153,7 @@ namespace Kross { namespace KexiDB {
              * are also returned.
              * Wrapper for \a ::KexiDB::Connection::tableNames
              */
-            Kross::Api::Object* tableNames(Kross::Api::List*);
+            Kross::Api::Object::Ptr tableNames(Kross::Api::List::Ptr);
 
             /**
              * Executes query described by the as argument passed
@@ -161,7 +161,7 @@ namespace Kross { namespace KexiDB {
              * created for results of this query.
              * Wrapper for \a ::KexiDB::Connection::executeQuery
              */
-            Kross::Api::Object* executeQueryString(Kross::Api::List*);
+            Kross::Api::Object::Ptr executeQueryString(Kross::Api::List::Ptr);
 
             /**
              * Executes query described by the as argument passed
@@ -169,14 +169,14 @@ namespace Kross { namespace KexiDB {
              * created for results of this query.
              * Wrapper for \a ::KexiDB::Connection::executeQuery
              */
-            Kross::Api::Object* executeQuerySchema(Kross::Api::List*);
+            Kross::Api::Object::Ptr executeQuerySchema(Kross::Api::List::Ptr);
 
             /**
              * Executes the as argument passed sqlquery-string and
              * returns the first record's field's value.
              * Wrapper for \a ::KexiDB::Connection::querySingleString
              */
-            Kross::Api::Object* querySingleString(Kross::Api::List*);
+            Kross::Api::Object::Ptr querySingleString(Kross::Api::List::Ptr);
 
             /**
              * Executes the as argument passed sqlquery-string and
@@ -184,47 +184,47 @@ namespace Kross { namespace KexiDB {
              * values.
              * Wrapper for \a ::KexiDB::Connection::queryStringList
              */
-            Kross::Api::Object* queryStringList(Kross::Api::List*);
+            Kross::Api::Object::Ptr queryStringList(Kross::Api::List::Ptr);
 
             /**
              * Executes sql query statement and returned the first
              * record's valuelist.
              * Wrapper for \a ::KexiDB::Connection::querySingleRecord
              */
-            Kross::Api::Object* querySingleRecord(Kross::Api::List*);
+            Kross::Api::Object::Ptr querySingleRecord(Kross::Api::List::Ptr);
 
             /**
              * Inserts the as argument passed KexiDBField object.
              * Wrapper for \a ::KexiDB::Connection::insertRecord
              */
-            Kross::Api::Object* insertRecord(Kross::Api::List*);
+            Kross::Api::Object::Ptr insertRecord(Kross::Api::List::Ptr);
 
             /**
              * Creates new database with the as argument passed
              * databasename.
              * Wrapper for \a ::KexiDB::Connection::createDatabase
              */
-            Kross::Api::Object* createDatabase(Kross::Api::List*);
+            Kross::Api::Object::Ptr createDatabase(Kross::Api::List::Ptr);
 
             /**
              * Drops the as argument passed databasename.
              * Wrapper for \a ::KexiDB::Connection::dropDatabase
              */
-            Kross::Api::Object* dropDatabase(Kross::Api::List*);
+            Kross::Api::Object::Ptr dropDatabase(Kross::Api::List::Ptr);
 
             /**
              * Creates table defined by the as argument passed
              * KexiTableSchema object.
              * Wrapper for \a ::KexiDB::Connection::createTable
              */
-            Kross::Api::Object* createTable(Kross::Api::List*);
+            Kross::Api::Object::Ptr createTable(Kross::Api::List::Ptr);
 
             /**
              * Drops table defined by the as argument passed
              * KexiDBTableSchema object.
              * Wrapper for \a ::KexiDB::Connection::dropTable
              */
-            Kross::Api::Object* dropTable(Kross::Api::List*);
+            Kross::Api::Object::Ptr dropTable(Kross::Api::List::Ptr);
 
             /**
              * Alters the as first argument passed KexiDBTableSchema
@@ -232,7 +232,7 @@ namespace Kross { namespace KexiDB {
              * KexiDBTableSchema.
              * Wrapper for \a ::KexiDB::Connection::alterTable
              */
-            Kross::Api::Object* alterTable(Kross::Api::List*);
+            Kross::Api::Object::Ptr alterTable(Kross::Api::List::Ptr);
 
             /**
              * Alters the tablename of the as first argument passed
@@ -240,27 +240,27 @@ namespace Kross { namespace KexiDB {
              * new tablename.
              * Wrapper for \a ::KexiDB::Connection::alterTableName
              */
-            Kross::Api::Object* alterTableName(Kross::Api::List*);
+            Kross::Api::Object::Ptr alterTableName(Kross::Api::List::Ptr);
 
             /**
              * Returns the KexiDBTableSchema object of the table
              * matching to the as argument passed tablename.
              * Wrapper for \a ::KexiDB::Connection::tableSchema
              */
-            Kross::Api::Object* tableSchema(Kross::Api::List*);
+            Kross::Api::Object::Ptr tableSchema(Kross::Api::List::Ptr);
 
             /**
              * Returns true if there is at least one valid record
              * in the as argument passed tablename.
              * Wrapper for \a ::KexiDB::Connection::isEmpty
              */
-            Kross::Api::Object* isEmptyTable(Kross::Api::List*);
+            Kross::Api::Object::Ptr isEmptyTable(Kross::Api::List::Ptr);
 
             /**
              * Return true if the \"auto commit\" option is on.
              * Wrapper for \a ::KexiDB::Connection::autoCommit
              */
-            Kross::Api::Object* autoCommit(Kross::Api::List*);
+            Kross::Api::Object::Ptr autoCommit(Kross::Api::List::Ptr);
 
             /**
              * Set the auto commit option. This does not affect
@@ -268,50 +268,50 @@ namespace Kross { namespace KexiDB {
              * even when connection is not established.
              * Wrapper for \a ::KexiDB::Connection::setAutoCommit
              */
-            Kross::Api::Object* setAutoCommit(Kross::Api::List*);
+            Kross::Api::Object::Ptr setAutoCommit(Kross::Api::List::Ptr);
 
             /**
              * Creates new transaction handle and starts a new transaction.
              * Wrapper for \a ::KexiDB::Connection::beginTransaction
              */
-            Kross::Api::Object* beginTransaction(Kross::Api::List*);
+            Kross::Api::Object::Ptr beginTransaction(Kross::Api::List::Ptr);
 
             /**
              * Commits the as rgument passed KexiDBTransaction object.
              * Wrapper for \a ::KexiDB::Connection::commitTransaction
              */
-            Kross::Api::Object* commitTransaction(Kross::Api::List*);
+            Kross::Api::Object::Ptr commitTransaction(Kross::Api::List::Ptr);
 
             /**
              * Rollback the as rgument passed KexiDBTransaction object.
              * Wrapper for \a ::KexiDB::Connection::rollbackTransaction
              */
-            Kross::Api::Object* rollbackTransaction(Kross::Api::List*);
+            Kross::Api::Object::Ptr rollbackTransaction(Kross::Api::List::Ptr);
 
             /**
              * Return the KEXIDBTransaction object for default transaction
              * for this connection.
              * Wrapper for \a ::KexiDB::Connection::defaultTransaction
              */
-            Kross::Api::Object* defaultTransaction(Kross::Api::List*);
+            Kross::Api::Object::Ptr defaultTransaction(Kross::Api::List::Ptr);
 
             /**
              * Sets default transaction that will be used as context for
              * operations on data in opened database for this connection.
              * Wrapper for \a ::KexiDB::Connection::setDefaultTransaction
              */
-            Kross::Api::Object* setDefaultTransaction(Kross::Api::List*);
+            Kross::Api::Object::Ptr setDefaultTransaction(Kross::Api::List::Ptr);
 
             /**
              * Return list of currently active KexiDBTransaction objects.
              * Wrapper for \a ::KexiDB::Connection::transactions
              */
-            Kross::Api::Object* transactions(Kross::Api::List*);
+            Kross::Api::Object::Ptr transactions(Kross::Api::List::Ptr);
 
             /**
              * Return a KexiDBParser object.
              */
-            Kross::Api::Object* parser(Kross::Api::List*);
+            Kross::Api::Object::Ptr parser(Kross::Api::List::Ptr);
     };
 
 }}

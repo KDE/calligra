@@ -34,6 +34,7 @@ namespace Kross { namespace Api {
     class Interpreter;
     class Object;
     class EventSlot;
+    class EventSignal;
     class ScriptContainer;
     class ManagerPrivate;
 
@@ -125,6 +126,25 @@ namespace Kross { namespace Api {
              *       into a functioncall.
              */
             void addEventSlot(EventSlot* eventslot);
+
+            /**
+             * Return all \a EventSlot instances.
+             *
+             * \return List of \a EventSlot instances.
+             */
+            QValueList<EventSignal*> getEventSignals();
+
+            /**
+             * Add a from \a EventSlot inherited class
+             * that implements handling of additional
+             * Qt slot macros.
+             *
+             * \param eventslot The \a EventSlot that spends
+             *       slots to get Qt signals translated
+             *       into a functioncall.
+             */
+            void addEventSignal(EventSignal* eventsignal);
+
 
             /**
              * Return the existing \a ScriptContainer with scriptname

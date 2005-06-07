@@ -33,15 +33,7 @@
 namespace Kross { namespace Api {
 
     // Forward declaration.
-    class Object;
     class List;
-
-    /// Shared objects.
-    typedef KSharedPtr<Object> ObjectShared;
-    /// A QValuelist to store shared objects.
-    typedef QValueList<ObjectShared> ObjectList;
-    /// A QMap to store shared objects.
-    typedef QMap<QString, ObjectShared> ObjectMap;
 
     /**
      * The common Object class all other object-classes are
@@ -60,6 +52,9 @@ namespace Kross { namespace Api {
     {
         public:
 
+            /// Shared objects.
+            typedef KSharedPtr<Object> Ptr;
+
             /**
              * Constructor.
              *
@@ -69,7 +64,7 @@ namespace Kross { namespace Api {
              * \param parent The parent Object or NULL if
              *        this object doesn't has an object.
              */
-            explicit Object(const QString& name, Object* parent = 0);
+            explicit Object(const QString& name, Object::Ptr parent = 0);
 
             /**
              * Destructor.
@@ -109,7 +104,7 @@ namespace Kross { namespace Api {
              * \return The parent-Object or NULL if this Object
              *         doesn't has a parent.
              */
-            Object* getParent() const;
+            Object::Ptr getParent() const;
 
             /**
              * Returns if the defined child is avaible.
@@ -126,14 +121,14 @@ namespace Kross { namespace Api {
              * \return The Object matching to the defined
              *         name or NULL if there is no such Object.
              */
-            Object* getChild(const QString& name) const;
+            Object::Ptr getChild(const QString& name) const;
 
             /**
              * Return all children.
              *
              * \return A \a ObjectMap of children this Object has.
              */
-            ObjectMap getChildren() const;
+            QMap<QString, Object::Ptr> getChildren() const;
 
             /**
              * Add a new Child.
@@ -149,7 +144,7 @@ namespace Kross { namespace Api {
              *         else (e.g. if there exists already another
              *         childobject with same name) false.
              */
-            bool addChild(const QString& name, Object* object, bool replace = false);
+            bool addChild(const QString& name, Object::Ptr object, bool replace = false);
 
             /**
              * Remove an existing child.
@@ -177,10 +172,10 @@ namespace Kross { namespace Api {
              *        the name is the functionname.
              * \param arguments The list of arguments passed to
              *        the call.
-             * \return The call-result as Object* instance or
+             * \return The call-result as \a Object::Ptr instance or
              *         NULL if the call has no result.
              */
-            virtual Object* call(const QString& name, List* arguments);
+            virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
             /**
              * Return a list of supported callable objects.
@@ -198,11 +193,11 @@ namespace Kross { namespace Api {
              * \return The to a instance from template type T
              *         casted Object.
              */
-            template<class T> static T* fromObject(Object* object)
+            template<class T> static T* fromObject(Object::Ptr object)
             {
-                T* t = (T*)object;
+                T* t = (T*) object.data();
                 if(! t)
-                    throw Kross::Api::TypeException(i18n("KexiDBField object expected."));
+                    throw Kross::Api::TypeException(i18n("Object \"%1\" invalid.").arg(object->getClassName()));
                 return t;
             }
 
@@ -210,9 +205,9 @@ namespace Kross { namespace Api {
             /// Name of this object.
             QString m_name;
             /// The parent object.
-            Object* m_parent;
+            Object::Ptr m_parent;
             /// A list of childobjects.
-            ObjectMap m_children;
+            QMap<QString, Object::Ptr> m_children;
     };
 
 }}

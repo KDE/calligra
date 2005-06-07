@@ -222,7 +222,7 @@ def testfunc(msg):
     return "this is the __main__.testfunc() returnvalue!"
 
 def testobjectCallback():
-    print "testobjectCallback() returnvalue !"
+    print "function testobjectCallback() called !"
     return "this is the __main__.testobjectCallback() returnvalue!"
 
 def testobjectCallbackWithParams(argument):

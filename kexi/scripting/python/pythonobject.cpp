@@ -71,7 +71,7 @@ const QString PythonObject::getDescription() const
     return i18n("PythonObject class to handle instances of python objects.");
 }
 
-Kross::Api::Object* PythonObject::call(const QString& name, Kross::Api::List* arguments)
+Kross::Api::Object::Ptr PythonObject::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
     kdDebug() << QString("PythonObject::call(%1)").arg(name) << endl;
 
