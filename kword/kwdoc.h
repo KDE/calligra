@@ -890,6 +890,7 @@ protected:
     void loadDefaultTableStyleTemplates();
     void loadDefaultTableTemplates();
 
+	void saveOasisCustomFied( KoXmlWriter &writer )const;
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     QValueList<KoPictureKey> savePictureList();
