@@ -60,6 +60,9 @@
 
 #include <koPoint.h>
 #include <koRect.h>
+#include <karbon_factory.h>
+#include <karbon_resourceserver.h>
+
 
 #define INITIAL_ALLOC	300
 #define ALLOC_INCREMENT	100
@@ -621,8 +624,10 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 	ArtRender *render = 0L;
 
 	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
-	if( !pat.isValid() )
-		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", KIcon::SizeMedium ) );
+	if( !pat.isValid() ) {
+		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", -KIcon::SizeMedium ) ); }
+		if( !pat.isValid() ) {
+			pat = *(dynamic_cast<VPattern *>(KarbonFactory::rServer()->patterns().getFirst() )) ;}
 
 	ArtPattern *pattern = art_new( ArtPattern, 1 );
 

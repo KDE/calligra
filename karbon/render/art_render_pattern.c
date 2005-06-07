@@ -60,6 +60,8 @@ art_render_pattern_render (ArtRenderCallback *self, ArtRender *render,
 
   y = y - render->y0;
 
+ if(theight == 0) return;
+
   for (x = 0; x < width; x++)
   {
 	  int x0 = sinangle * y + cosangle * x;
