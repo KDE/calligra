@@ -233,7 +233,6 @@ VPolylineTool::mouseButtonPress()
 
 	m_bezierPoints.append( new KoPoint( _last ) );
 	m_bezierPoints.append( new KoPoint( _last ) );
-
 	drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 	draw();
 }
@@ -247,7 +246,7 @@ VPolylineTool::mouseButtonRelease()
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 
 		m_bezierPoints.removeLast();
-		m_bezierPoints.append( new KoPoint( _last ) );    
+		m_bezierPoints.append( new KoPoint( _last ) );
 
 		VPainter* painter = view()->painterFactory()->editpainter();
 		painter->save();
@@ -265,11 +264,10 @@ VPolylineTool::mouseButtonRelease()
 	{
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 		draw();
-
 		m_bezierPoints.removeLast();
-		KoPoint* p = m_bezierPoints.last();
+		KoPoint* p = new KoPoint( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
-		KoPoint* b = m_bezierPoints.last();
+		KoPoint* b = new KoPoint( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
 
 		if( shiftPressed() )
@@ -324,6 +322,7 @@ void
 VPolylineTool::mouseDrag()
 {
 	KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+
 	if( m_bezierPoints.count() == 2 )
 	{
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
@@ -340,9 +339,9 @@ VPolylineTool::mouseDrag()
 		draw();
 
 		m_bezierPoints.removeLast();
-		KoPoint* p = m_bezierPoints.last();
+		KoPoint* p = new KoPoint( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
-		KoPoint* b = m_bezierPoints.last();
+		KoPoint* b = new KoPoint( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
 
 		if( shiftPressed() )
