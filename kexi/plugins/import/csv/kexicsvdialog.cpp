@@ -516,6 +516,8 @@ void KexiCSVDialog::fillTable()
 			}
 			else if (x == m_delimiter)
 			{
+				setText(row - m_startline, column, field);
+				field = "";
 				if ((ignoreDups == false) || (lastCharDelimiter == false))
 					++column;
 				lastCharDelimiter = true;
@@ -753,7 +755,7 @@ void KexiCSVDialog::updateColumnText(int col)
 void KexiCSVDialog::fillComboBox()
 {
 	m_comboLine->clear();
-	const uint count = m_table->numRows()-1+m_startline;
+	const uint count = QMAX(0, m_table->numRows()-1+m_startline);
 	for (uint row = 0; row < count; ++row)
 		m_comboLine->insertItem(QString::number(row + 1), row);
 	m_comboLine->setCurrentItem(m_startline);
