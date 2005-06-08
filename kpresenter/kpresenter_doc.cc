@@ -1044,6 +1044,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:presentation" );
 
+    saveOasisCustomFied( contentTmpWriter );
+
     int indexObj = 1;
     int partIndexObj = 0;
 //save page
@@ -1162,6 +1164,32 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     return true;
 }
+
+void KPresenterDoc::saveOasisCustomFied( KoXmlWriter &writer )const
+{
+    bool customVariableFound = false;
+    QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->type() == VT_CUSTOM )
+        {
+            if ( !customVariableFound )
+            {
+                writer.startElement( "text:user-field-decls" );
+                customVariableFound = true;
+            }
+            //<text:user-field-decl office:value-type="string" office:string-value="dfddd" text:name="cvbcbcbx"/>
+            writer.startElement( "text:user-field-decl" );
+            writer.addAttribute( "office:value-type", "string" );
+            writer.addAttribute( "office:string-value", static_cast<KoCustomVariable *>( it.current() )->value() );
+            writer.addAttribute( "text:name", static_cast<KoCustomVariable*>( it.current() )->name() );
+            writer.endElement();
+        }
+    }
+    if ( customVariableFound )
+        writer.endElement();
+}
+
 
 void KPresenterDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
 {

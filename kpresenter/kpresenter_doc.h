@@ -594,6 +594,8 @@ protected:
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );
     void loadOasisSettings( const QDomDocument&settingsDoc );
 
+    void saveOasisCustomFied( KoXmlWriter &writer )const;
+
     void loadOasisIgnoreList( const KoOasisSettings& settings );
 
     //we move presSpeed to each table => compatibility with old file format
