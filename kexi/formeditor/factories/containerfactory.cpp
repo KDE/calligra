@@ -157,7 +157,7 @@ InsertPageCommand::execute()
 	QCString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
-		KTabWidget *tab = (KTabWidget *)parent;
+		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
 		QString n = i18n("Page %1").arg(tab->count() + 1);
 		tab->addTab(page, n);
 		tab->showPage(page);
@@ -190,7 +190,7 @@ InsertPageCommand::unexecute()
 	QCString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
-		KTabWidget *tab = (KTabWidget *)parent;
+		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
 		tab->removePage(page);
 	}
 	else if(classname == "QWidgetStack")
@@ -268,6 +268,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	wTabWidget->addAlternateClassName("KTabWidget");
 	wTabWidget->addAlternateClassName("QTabWidget");
+//tmp:	wTabWidget->setSavingName("QTabWidget");
 	wTabWidget->setSavingName("KTabWidget");
 #else
 	wTabWidget->setSavingName("QTabWidget");
@@ -366,7 +367,7 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 	{
 		//MyTabWidget *tab = new MyTabWidget(p, n, container);
 		KFDTabWidget *tab = new KFDTabWidget(p, n);
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+#if defined(USE_KTabWidget) && KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);
 #endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
@@ -488,7 +489,7 @@ ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopu
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
 		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
-		if( ((KTabWidget*)m_widget)->count() == 1)
+		if( dynamic_cast<TabWidgetBase*>(m_widget)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
 	}
@@ -542,7 +543,7 @@ ContainerFactory::saveSpecialProperty(const QCString &, const QString &name, con
 {
 	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
-		QTabWidget *tab = (QTabWidget*)w->parentWidget()->parentWidget();
+		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget()->parentWidget());
 		KFormDesigner::FormIO::saveProperty(parentNode, parent, "attribute", "title", tab->tabLabel(w));
 	}
 	else if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
@@ -561,7 +562,7 @@ ContainerFactory::readSpecialProperty(const QCString &, QDomElement &node, QWidg
 	QString name = node.attribute("name");
 	if((name == "title") && (item->parent()->widget()->inherits("QTabWidget")))
 	{
-		QTabWidget *tab = (QTabWidget*)w->parentWidget();
+		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget());
 		tab->addTab(w, node.firstChild().toElement().text());
 		item->addModifiedProperty("title", node.firstChild().toElement().text());
 		return true;
@@ -611,8 +612,7 @@ child widgets become frozen when checked==true */
 			;
 	}
 	else if (classname == "KFDTabWidget") {
-			return (m_showAdvancedProperties || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"))
-			;
+		return (m_showAdvancedProperties || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"));
 	}
 
 	return true;
@@ -639,7 +639,7 @@ void ContainerFactory::AddTabPage()
 {
 	if (!m_widget->inherits("QTabWidget")){ return ;}
 	KCommand *com = new InsertPageCommand(m_container, m_widget);
-	if(((KTabWidget*)m_widget)->count() == 0)
+	if(dynamic_cast<TabWidgetBase*>(m_widget)->count() == 0)
 	{
 		com->execute();
 		delete com;
@@ -651,7 +651,7 @@ void ContainerFactory::AddTabPage()
 void ContainerFactory::removeTabPage()
 {
 	if (!m_widget->inherits("QTabWidget")){ return ;}
-	QTabWidget *tab = (QTabWidget *)m_widget;
+	TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(m_widget);
 	QWidget *w = tab->currentPage();
 
 	KFormDesigner::WidgetList list;
@@ -664,7 +664,7 @@ void ContainerFactory::removeTabPage()
 void ContainerFactory::renameTabPage()
 {
 	if (!m_widget->inherits("QTabWidget")){ return ;}
-	QTabWidget *tab = (QTabWidget *)m_widget;
+	TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(m_widget);
 	QWidget *w = tab->currentPage();
 	bool ok;
 
