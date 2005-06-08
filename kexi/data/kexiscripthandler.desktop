@@ -20,6 +20,7 @@ GenericName[sl]=Skripti
 GenericName[sr]=Скрипте
 GenericName[sr@Latn]=Skripte
 GenericName[sv]=Skript
+GenericName[uk]=Скрипти
 GenericName[zh_CN]=脚本
 Name=Scripts
 Name[br]=Urzhiaouegoù
@@ -38,6 +39,7 @@ Name[sl]=Skripti
 Name[sr]=Скрипте
 Name[sr@Latn]=Skripte
 Name[sv]=Skript
+Name[uk]=Скрипти
 Name[zh_CN]=脚本
 
 X-KDE-ParentApp=kexi

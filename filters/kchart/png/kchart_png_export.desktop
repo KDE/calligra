@@ -23,6 +23,7 @@ Name[sl]=Izvozni filter PNG za KChart
 Name[sr]=KChart-ов филтер за извоз у PNG
 Name[sr@Latn]=KChart-ov filter za izvoz u PNG
 Name[sv]=Kchart PNG-exportfilter
+Name[uk]=Фільтр експорту PNG для KChart
 Name[zh_CN]=KChart PNG 导出过滤器
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/png

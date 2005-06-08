@@ -69,6 +69,7 @@ Comment[sv]=Integration av Kugar-baserad rapportgenerering
 Comment[ta]=சுட்டி kugar உருவாக்கம்
 Comment[tg]=Муҷтамаъсозӣ бо системаи сохтани гузориши Kugar
 Comment[tr]=Kugar tabanlı rapor hazırlama bileşeni
+Comment[uk]=Інтеграція з Kugar для створення звітів
 Comment[zh_CN]=基于报表生成的 Kugar 集成
 
 X-KDE-Library=kexihandler_kugar

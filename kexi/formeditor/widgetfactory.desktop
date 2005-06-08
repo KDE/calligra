@@ -28,6 +28,7 @@ Comment[sr@Latn]=Osnova fabrike kontrola
 Comment[sv]=Bas för att skapa grafiska komponenter
 Comment[ta]= widget  தொழிற்சாலை தளம்
 Comment[tg]=Гузориши база, ки таркиботи идораи офис дар дохил дорад
+Comment[uk]=База фабрики віджетів
 Comment[zh_CN]=基础组件工厂
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]

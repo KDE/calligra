@@ -70,6 +70,7 @@ Comment[sv]=Den här typen av datakälla låter dig använda information från K
 Comment[ta]=பலகத்தின் தோற்றத்தை நீங்கள் இங்கே வடிவமைக்கலாம்.
 Comment[tg]=Ин намуди манбаъи маълумот гузоштани шумо истифода кардан шуморо воридҳои Китоби Адресҳои KDE.
 Comment[tr]=Bu veri kaynağı biçimi KDE Adres Defteri girdilerini kullanmanızı sağlar.
+Comment[uk]=Цей тип джерела даних дає доступ до записів адресної книги KDE.
 Comment[zh_CN]=该数据源类型允许您使用您的 KDE 地址簿条目。
 
 X-KDE-Library=kwmailmerge_kabc

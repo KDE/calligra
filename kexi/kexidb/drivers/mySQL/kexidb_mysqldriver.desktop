@@ -31,6 +31,7 @@ Comment[sr@Latn]=mySQL je brzi motor za baze podataka. Koristi se kako u lične 
 Comment[sv]=mySQL är ett snabbt databasprogram. Det används både för personligt bruk samt för enorma databaser i stora företag och organisationer. Vi rekommenderar att mySQL används för projekt som delas via nätverk.
 Comment[ta]= என்னுடைய SQL தரவுத்தளம் மிகவும் வேகமானது. இது சொந்த வேலைக்காக மட்டும் உபயோகப்படுகிறது.
 Comment[tr]=mySQL hızlı bir veritabanı motorudur.  Büyük firma ve örgütlerin devasa veritabanlarında kullanıldığı gibi kişisel uygulamalarda da kullanılabilir. Bizim tavsiyemiz, mySQL'in ağlara paylaşılan projelerde kullanılmasıdır.
+Comment[uk]=mySQL -- це швидкий рушій баз даних. Він використовується як особистих цілях, так і для величезних баз даних на великих підприємствах та в організаціях. Рекомендуємо використовувати mySQL для спільних проектів в мережах.
 Comment[zh_CN]=mySQL 是一种快速的数据库引擎。这种数据库被个人以及大公司和组织内的巨型数据库所广泛使用。我们推荐您在网络共享项目时使用 mySQL。
 X-KDE-Library=kexidb_mysqldriver
 ServiceTypes=Kexi/DBDriver

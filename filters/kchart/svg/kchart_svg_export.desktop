@@ -21,6 +21,7 @@ Name[sl]=Izvozni filter SVG za KChart
 Name[sr]=KChart-ов филтер за извоз у SVG
 Name[sr@Latn]=KChart-ov filter za izvoz u SVG
 Name[sv]=Kchart SVG-exportfilter
+Name[uk]=Фільтр експорту SVG для KChart
 Name[zh_CN]=KChart SVG 导出过滤器
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml
