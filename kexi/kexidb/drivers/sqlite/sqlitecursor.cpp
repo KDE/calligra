@@ -504,10 +504,10 @@ QVariant SQLiteCursor::value(uint i)
 		? m_fieldsExpanded->at(i)->field : 0;
 #ifdef SQLITE2
 	//from most to least frequently used types:
-	if (i==m_fieldCount || f->isIntegerType())
-		return QVariant( QCString(d->curr_coldata[i]).toInt() );
 	if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
+	if (i==m_fieldCount || f->isIntegerType())
+		return QVariant( QCString(d->curr_coldata[i]).toInt() );
 	else if (f->isFPNumericType())
 		return QVariant( QCString(d->curr_coldata[i]).toDouble() );
 
