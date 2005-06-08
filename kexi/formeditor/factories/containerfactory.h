@@ -27,6 +27,10 @@
 #include <ktabwidget.h>
 #endif
 
+//! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
+#define TabWidgetBase QTabWidget
+//#define USE_KTabWidget //todo: uncomment
+
 #include <kcommand.h>
 
 #include "widgetfactory.h"
@@ -100,13 +104,13 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 		bool  m_preview;
 };
 
-class KFORMEDITOR_EXPORT KFDTabWidget : public KTabWidget
+class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
 {
 	Q_OBJECT
 
 	public:
 		KFDTabWidget(QWidget *parent, const char *name)
-		 : KTabWidget(parent, name)
+		 : TabWidgetBase(parent, name)
 		{}
 		~KFDTabWidget() {;}
 

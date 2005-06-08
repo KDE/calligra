@@ -288,6 +288,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - allow form's surface resizing when there's global layout defined
 - fix repainting form's surface boundaries repainting when its size is changed by entering 
   value in the propeditor
+- fix spring behaviour: it cannot be shrinked if its inside a layout
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -525,6 +526,12 @@ TODO:::::::
 
 TODO: kdelibs/win32:
 commit kglobalsettings.cpp and win32_utils.h: KGlobalSettings::documentPath() now looks at the registry settings
+
+2005-06-08
+KexiDB
+- fixed crash for SQLite2 driver
+CSV Import Dialog
+- deadlock removed when importing CSV text like ","
 
 2005-06-01
 General
