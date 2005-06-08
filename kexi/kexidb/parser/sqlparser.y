@@ -431,6 +431,9 @@
 /*%type <integerValue> SIGNED_INTEGER */
 
 %{
+#ifndef YYDEBUG /* compat. */
+# define YYDEBUG 0
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <string>
