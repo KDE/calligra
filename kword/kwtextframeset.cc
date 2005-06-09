@@ -1710,7 +1710,8 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
 {
     // Save first frame with the whole contents
     KWFrame* frame = frames.getFirst();
-    frame->startOasisFrame( writer, context.mainStyles(), getName() );
+    QString lastFrameName = getName();
+    frame->startOasisFrame( writer, context.mainStyles(), lastFrameName );
 
     QString nextFrameName = getName() + "-";
 
@@ -1731,7 +1732,9 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
         ++frameIter; // skip first frame, already saved
         for ( ; frameIter.current(); ++frameIter, ++frameNumber )
         {
-            frameIter.current()->startOasisFrame( writer, context.mainStyles(), nextFrameName + QString::number( frameNumber ) );
+            const QString frameName = nextFrameName + QString::number( frameNumber );
+            frameIter.current()->startOasisFrame( writer, context.mainStyles(), frameName, lastFrameName );
+            lastFrameName = frameName; // this is used for copy-frames
             writer.startElement( "draw:text-box" );
             if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
                 writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
@@ -3359,10 +3362,8 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
         KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
         if ( footNoteVar )
         {
-            m_canvas->editFrameSet( footNoteVar->frameSet() );
-            KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_canvas->currentFrameSetEdit()->currentTextEdit());
-            if ( textedit )
-                textedit->ensureCursorVisible(); //go to the footnote frame
+            footNoteVar->frameSet()->startEditing( m_canvas );
+            // --- and now we are deleted! ---
         }
     }
 }
@@ -3719,20 +3720,12 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType, KWFootNoteVariable::
     // Layout the footnote frame
     textFrameSet()->kWordDocument()->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
 
-    KoTextParag* parag = fs->textDocument()->firstParag();
-    parag->truncate(0);
-    fs->setDefaultFormatCommand();
+    //KoTextParag* parag = fs->textDocument()->firstParag();
+    //parag->truncate(0); // why? we just created it, anyway...
 
-    KWCanvas* canvas = m_canvas;
     // And now edit the footnote frameset - all WPs do that it seems.
-    m_canvas->editFrameSet( fs );
-
-    // --- from here, we are deleted! ---
-    // (This is why we must use canvas and not m_canvas)
-    // Ensure cursor is visible
-    KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(canvas->currentFrameSetEdit()->currentTextEdit());
-    if ( textedit )
-        textedit->ensureCursorVisible();
+    fs->startEditing( m_canvas );
+    // --- and now we are deleted! ---
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
@@ -4036,6 +4029,16 @@ void KWFootNoteFrameSet::createInitialFrame( int pageNum )
     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
     frame->setNewFrameBehavior(KWFrame::NoFollowup);
     addFrame( frame );
+}
+
+void KWFootNoteFrameSet::startEditing( KWCanvas* canvas )
+{
+    canvas->editFrameSet( this );
+
+    // Ensure cursor is visible
+    KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(canvas->currentFrameSetEdit()->currentTextEdit());
+    if ( textedit )
+        textedit->ensureCursorVisible();
 }
 
 void KWFootNoteFrameSet::setFootNoteVariable( KWFootNoteVariable* var )

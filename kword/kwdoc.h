@@ -896,7 +896,7 @@ protected:
     QValueList<KoPictureKey> savePictureList();
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
-    void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
+    void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
                              KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
                              QString* plainText ) const;
 
