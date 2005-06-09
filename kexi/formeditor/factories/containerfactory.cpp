@@ -632,9 +632,9 @@ ContainerFactory::isPropertyVisibleInternal(const QCString &classname,
 /*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding 
 a fake properties which will allow to properly work in design mode, otherwise 
 child widgets become frozen when checked==true */
-			(m_showAdvancedProperties || (property != "checkable" && property != "checked"))
+			(m_showAdvancedProperties || (property != "checkable" && property != "checked")) &&
 #endif
-			&& true
+			true
 			;
 	}
 	else if (classname == "KFDTabWidget") {
