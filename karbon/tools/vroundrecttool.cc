@@ -28,24 +28,28 @@
 #include <shapes/vrectangle.h>
 #include "vroundrecttool.h"
 #include "koUnitWidgets.h"
+
 #include <kgenericfactory.h>
 
-VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )
+VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Round Rect" ), Ok | Cancel ), m_part( part )
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
-	m_widthLabel = new QLabel( i18n( "Width:" ), group );
-	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	new QLabel( i18n( "Width:" ), group );
+	m_width = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
+	m_width->setSuffix( KoUnit::unitName( m_part->unit() ) );
 
-	m_heightLabel = new QLabel( i18n( "Height:" ), group );
-	m_height = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	new QLabel( i18n( "Height:" ), group );
+	m_height = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
+	m_height->setSuffix( KoUnit::unitName( m_part->unit() ) );
 
 	new QLabel( i18n( "Edge radius X:" ), group );
-	m_roundx = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 10.0, KoUnit::U_MM );
+	m_roundx = new KDoubleSpinBox( 0.0, 100.0, 0.1, 1.0, 2, group );
+	m_roundx->setSuffix( KoUnit::unitName( m_part->unit() ) );
 
 	new QLabel( i18n( "Edge radius Y:" ), group );
-	m_roundy = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 10.0, KoUnit::U_MM );
-	refreshUnit();
+	m_roundy = new KDoubleSpinBox( 0.0, 100.0, 0.1, 1.0, 2, group );
+	m_roundy->setSuffix( KoUnit::unitName( m_part->unit() ) );
 
 	group->setInsideMargin( 4 );
 	group->setInsideSpacing( 2 );
@@ -105,10 +109,10 @@ VRoundRectTool::VRoundRectOptionsWidget::setRoundY( double value )
 void
 VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 {
-	m_width->setUnit( m_part->unit() );
-	m_height->setUnit( m_part->unit() );
-	m_roundx->setUnit( m_part->unit() );
-	m_roundy->setUnit( m_part->unit() );
+	m_width->setSuffix( KoUnit::unitName( m_part->unit() ) );
+	m_height->setSuffix( KoUnit::unitName( m_part->unit() ) );
+	m_roundx->setSuffix( KoUnit::unitName( m_part->unit() ) );
+	m_roundy->setSuffix( KoUnit::unitName( m_part->unit() ) );
 }
 
 VRoundRectTool::VRoundRectTool( KarbonPart *part )
@@ -138,20 +142,21 @@ VRoundRectTool::shape( bool interactive ) const
 			new VRectangle(
 				0L,
 				m_p,
-				KoUnit::fromUserValue( m_optionsWidget->width(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->height(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->roundx(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->roundy(), view()->part()->unit() ));
+				KoUnit::fromUserValue( m_optionsWidget->width(), part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->height(), part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->roundx(), part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->roundy(), part()->unit() ));
 	}
-	else
+	else {
 		return
 			new VRectangle(
 				0L,
 				m_p,
 				m_d1,
 				m_d2,
-				KoUnit::fromUserValue( m_optionsWidget->roundx(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->roundy(), view()->part()->unit() ) );
+				KoUnit::fromUserValue( m_optionsWidget->roundx(), part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->roundy(), part()->unit() ) );
+	}
 }
 
 bool
