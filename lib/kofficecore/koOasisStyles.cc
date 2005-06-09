@@ -166,6 +166,10 @@ void KoOasisStyles::insertStyle( const QDomElement& e )
              || localName == "font-decl"
              || localName == "presentation-page-layout" ) )
     {
+        if ( m_styles.find( name ) != 0 )
+        {
+            kdDebug(30003) << "Style: '" << name << "' allready exists" << endl;
+        }
         m_styles.insert( name, new QDomElement( e ) );
         //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
