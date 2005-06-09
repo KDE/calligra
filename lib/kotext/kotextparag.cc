@@ -1692,17 +1692,17 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 
     // Draw InputMethod Preedit Underline
     const int nSels = doc ? doc->numSelections() : 1;
-    for ( int j = 0; j < nSels; j++ ) {
-        if ( start >= selectionStarts[ j ] && start < selectionEnds[ j ] ) {
-            if ( j == KoTextDocument::InputMethodPreedit ) {
-                QColor textColor( format->color() );
-                painter.setPen( QPen( textColor ) );
+    if ( KoTextDocument::InputMethodPreedit < nSels
+         && doc->hasSelection( KoTextDocument::InputMethodPreedit )
+         && start >= selectionStarts[ KoTextDocument::InputMethodPreedit ]
+         && start < selectionEnds[ KoTextDocument::InputMethodPreedit ] )
+    {
+        QColor textColor( format->color() );
+        painter.setPen( QPen( textColor ) );
 
-                QPoint p1( startX_pix, lastY_pix + h_pix - 1 );
-                QPoint p2( startX_pix + bw_pix, lastY_pix + h_pix - 1 );
-                painter.drawLine( p1, p2 );
-            }
-        }
+        QPoint p1( startX_pix, lastY_pix + h_pix - 1 );
+        QPoint p2( startX_pix + bw_pix, lastY_pix + h_pix - 1 );
+        painter.drawLine( p1, p2 );
     }
 
     if ( draw_len > 0 )

@@ -29,6 +29,7 @@
 #include <kodom.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <assert.h>
 
 //#define DEBUG_PAINTING
 
@@ -104,7 +105,9 @@ void KoTextDocument::init()
 
     selectionColors[ Standard ] = QApplication::palette().color( QPalette::Active, QColorGroup::Highlight );
     selectionText[ Standard ] = TRUE;
+    assert( Standard < nSelections );
     selectionText[ InputMethodPreedit ] = FALSE;
+    assert( InputMethodPreedit < nSelections );
     commandHistory = new KoTextDocCommandHistory( 100 );
     tStopWidth = formatCollection()->defaultFormat()->width( 'x' ) * 8;
 }

@@ -1514,7 +1514,7 @@ void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length,
         textdoc->setSelectionColor( HighlightSelection,
                                     QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
         textdoc->setInvertSelectionText( HighlightSelection, true );
-         m_highlightSelectionAdded = true;
+        m_highlightSelectionAdded = true;
     }
 
     removeHighlight(repaint); // remove previous highlighted selection
