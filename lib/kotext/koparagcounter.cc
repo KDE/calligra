@@ -61,7 +61,6 @@ bool KoParagCounter::operator==( const KoParagCounter & c2 ) const
             m_customBulletFont==c2.m_customBulletFont &&
             m_align==c2.m_align &&
             m_custom==c2.m_custom);
-
 }
 
 QString KoParagCounter::custom() const
@@ -770,7 +769,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     m_cache.counterFormat->addRef();
     m_cache.width = 0;
     QString text = m_cache.text;
-    if (  style() ==KoParagCounter::STYLE_CUSTOMBULLET && !text.isEmpty())
+    if ( m_style == STYLE_CUSTOMBULLET && !text.isEmpty() )
     {
         text.append( "  " ); // append a trailing space, see KoTextParag::drawLabel
     }
@@ -947,3 +946,23 @@ int KoParagCounter::fromAlphaLowerNumber( const QString &string )
 
     return (ret == 0) ? -1 /*invalid value*/ : ret;
 }
+
+#ifndef NDEBUG
+void KoParagCounter::printRTDebug( KoTextParag* parag )
+{
+    QString additionalInfo;
+    if ( restartCounter() )
+        additionalInfo = "[restartCounter]";
+    if ( m_style == STYLE_CUSTOMBULLET )
+        additionalInfo += " [customBullet: " + QString::number( m_customBulletChar.unicode() )
+                          + " in font '" + m_customBulletFont + "']";
+    static const char * const s_numbering[] = { "List", "Chapter", "None", "Footnote" };
+    kdDebug(32500) << "  Counter style=" << style()
+                   << " numbering=" << s_numbering[ numbering() ]
+                   << " depth=" << depth()
+                   << " number=" << number( parag )
+                   << " text='" << text( parag ) << "'"
+                   << " width=" << width( parag )
+                   << additionalInfo << endl;
+}
+#endif

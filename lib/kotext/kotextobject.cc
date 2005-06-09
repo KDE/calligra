@@ -2511,8 +2511,10 @@ KCommand *KoTextFormatInterface::setDefaultFormatCommand()
     {
         KoTextFormat * format = coll->defaultFormat();
         return setFormatCommand( format, KoTextFormat::Format );
+    } else {
+        kdDebug() << "useless call to setDefaultFormatCommand at: " << kdBacktrace() << endl;
     }
-    return 0L;
+    return 0;
 }
 
 KCommand *KoTextFormatInterface::setAlignCommand(int align)
