@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -137,7 +137,7 @@ KoTextParag::~KoTextParag()
     {
         doc->informParagraphDeleted( this );
     }
-    //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << endl;
+    //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << " done" << endl;
     ////
 }
 
@@ -2245,34 +2245,13 @@ void KoTextParag::printRTDebug( int info )
         kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     //if ( !next() )
     //    kdDebug(32500) << "  next is 0L" << endl;
-    /*
-      static const char * const dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
-      QPtrVector<QStyleSheetItem> vec = styleSheetItems();
-      for ( uint i = 0 ; i < vec.size() ; ++i )
-      {
-      QStyleSheetItem * item = vec[i];
-      kdDebug(32500) << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
-      kdDebug(32500) << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
-      kdDebug(32500) << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
-      kdDebug(32500) << "        displaymode=" << dm[item->displayMode()] << endl;
-      }*/
     kdDebug(32500) << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
     kdDebug(32500) << "  Text: '" << string()->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {
         if ( m_layout.counter )
         {
-            QString additionalInfo;
-            if ( m_layout.counter->restartCounter() )
-                additionalInfo = "[restartCounter]";
-            static const char * const s_numbering[] = { "List", "Chapter", "None", "Footnote" };
-            kdDebug(32500) << "  Counter style=" << m_layout.counter->style()
-                      << " numbering=" << s_numbering[ m_layout.counter->numbering() ]
-                      << " depth=" << m_layout.counter->depth()
-                      << " number=" << m_layout.counter->number( this )
-                      << " text='" << m_layout.counter->text( this ) << "'"
-                      << " width=" << m_layout.counter->width( this )
-                      << additionalInfo << endl;
+            m_layout.counter->printRTDebug( this );
         }
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
         static const char * const s_linespacing[] = { "Single", "1.5", "2", "custom", "atLeast", "Multiple", "Fixed" };
@@ -2780,7 +2759,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     KoParagCounter* paragCounter = const_cast<KoTextParag *>( this )->counter(); // should be const!
     bool normalList = paragCounter && paragCounter->style() != KoParagCounter::STYLE_NONE && !outline;
-    if ( normalList ) // normal list
+    if ( normalList ) // non-heading list
     {
         writer.startElement( "text:numbered-paragraph" );
         writer.addAttribute( "text:level", (int)paragCounter->depth() + 1 );
@@ -2812,7 +2791,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
             writer.endElement();
         }
     }
-    else // normal (non-numbered) paragraph
+
+    if ( !outline ) // normal (non-numbered) paragraph, or normalList
     {
         writer.startElement( "text:p", false /*no indent inside this tag*/ );
         writer.addAttribute( "text:style-name", autoParagStyleName );

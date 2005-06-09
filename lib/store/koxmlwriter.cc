@@ -139,7 +139,11 @@ void KoXmlWriter::addCompleteElement( QIODevice* indev )
 
 void KoXmlWriter::endElement()
 {
-    Q_ASSERT( !m_tags.isEmpty() );
+    if ( m_tags.isEmpty() )
+        kdWarning() << "Ouch, endElement() was called more times than startElement(). "
+            "The generated XML will be invalid! "
+            "Please report this bug (by saving the document to another format...)" << endl;
+
     Tag tag = m_tags.pop();
     //kdDebug() << k_funcinfo << " tagName=" << tag.tagName << " hasChildren=" << tag.hasChildren << endl;
     if ( !tag.hasChildren ) {

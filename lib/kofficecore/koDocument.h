@@ -204,9 +204,16 @@ public:
      * To be preferred when a document exists. It is fast when calling
      * it multiple times since it caches the result that @ref #readNativeFormatMimeType
      * delivers.
+     * This comes from the X-KDE-NativeMimeType key in the .desktop file
      * You do NOT have to reimplement this (it is only virtual for kounavail).
      */
     virtual QCString nativeFormatMimeType() const;
+
+    /**
+     * Returns the OASIS OpenDocument mimetype of the document, if supported
+     * This comes from the X-KDE-NativeOasisMimeType key in the .desktop file
+     */
+    QCString nativeOasisMimeType() const;
 
     /// Checks whether a given mimetype can be handled natively.
     bool isNativeFormat( const QCString& mimetype ) const;
@@ -978,7 +985,6 @@ private slots:
 private:
     static KService::Ptr readNativeService( KInstance *instance );
     KService::Ptr nativeService();
-    QCString nativeOasisMimeType() const;
 
     bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );

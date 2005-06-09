@@ -865,6 +865,8 @@ bool KoDocument::saveChildren( KoStore* _store )
     return true;
 }
 
+// TODO delegate most of the work to a method which takes a list of children to save.
+// Useful for e.g. KWDocument::saveSelectedFrames
 bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     //kdDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
@@ -2086,7 +2088,6 @@ QCString KoDocument::nativeFormatMimeType() const
     return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
-// Temporary, while nativeFormatMimeType != oasis. Will go away once oasis is the only native mimetype
 QCString KoDocument::nativeOasisMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();

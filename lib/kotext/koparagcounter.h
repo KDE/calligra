@@ -186,6 +186,10 @@ public:
     static int fromAlphaUpperNumber( const QString & );
     static int fromAlphaLowerNumber( const QString & );
 
+#ifndef NDEBUG
+    void printRTDebug( KoTextParag* parag );
+#endif
+
 private:
 
     /** Return our parent paragraph, if there is such a thing. For a paragraph "1.1.",
