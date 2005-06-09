@@ -22,6 +22,8 @@
 
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <knuminput.h>
+
 
 #include "vshapetool.h"
 
@@ -61,14 +63,14 @@ private:
 		void refreshUnit ();
 
 	private:
+
+		KDoubleSpinBox* m_width;
+		KDoubleSpinBox* m_height;
+		KDoubleSpinBox* m_roundx;
+		KDoubleSpinBox* m_roundy;
+
 		KarbonPart* m_part;
 
-		KoUnitDoubleSpinBox* m_width;
-		KoUnitDoubleSpinBox* m_height;
-		KoUnitDoubleSpinBox* m_roundx;
-		KoUnitDoubleSpinBox* m_roundy;
-		QLabel* m_heightLabel;
-		QLabel* m_widthLabel;
 	};
 
 	VRoundRectOptionsWidget* m_optionsWidget;
