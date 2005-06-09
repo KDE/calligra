@@ -496,6 +496,13 @@ public:
      */
     void createInitialFrame( int pageNum );
 
+    /**
+     * Edit and ensure cursor is visible. Helper function which is useful because
+     * the caller is usually a KWFrameSetEdit, which gets deleted by the
+     * editFrameSet() call.
+     */
+    void startEditing( KWCanvas* canvas );
+
     /** Called by KWTextFrameSet::renumberFootNotes.
      *  Sets the text of the parag-counter in the footnote text.
      */

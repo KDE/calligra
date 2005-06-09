@@ -295,7 +295,13 @@ public:
     void loadBorderProperties( KoStyleStack& styleStack );
 
     QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;
-    void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, const QString& name ) const;
+    /**
+     * Write out a draw:frame element and its style.
+     * The caller is responsible for creating the child element and closing the draw:frame element.
+     * @p lastFrameName is the name of the previous frame in the same frameset; this is only used for copy-frames
+     */
+    void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, const QString& name,
+                          const QString& lastFrameName = QString::null ) const;
     void saveBorderProperties( KoGenStyle& frameStyle ) const;
 
     void setMinFrameHeight(double h);

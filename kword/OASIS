@@ -1,4 +1,5 @@
 Notes about the use of the OASIS format in kword:
+-------------------------------------------------
 
 * Tables
 In OASIS, tables are treated like paragraphs.
@@ -13,8 +14,35 @@ This gives three cases:
        compared to "putting an inline table in a non-inline textbox", so I have disabled them.
 
 * Frame behavior on new pages
-KWord supports "What happens on new page: create a new frame and reconnect, no followup, make copy.
+KWord supports "What happens on new page: create a new frame and reconnect, no followup, make copy."
 OASIS doesn't, but this doesn't matter, it doesn't affect rendering of existing documents, only editing.
 So we save this with a koffice:frame-behavior-on-new-page attribute, possible values:
 followup, copy or none. Default value: copy for header/footers, none otherwise.
+
+* DTP
+KWord supports both the normal word processing (paragraphs directly inside the body)
+and the page-based DTP mode (page-sequence element).
+
+Notes about interoperability with OpenOffice.org-2.0:
+-----------------------------------------------------
+
+List of bugs in OOo-1.9.87 affecting interoperability:
+ - <text:notes-configuration text:note-class="footnote"...> has text:start-value="0", and is ignored on loading (private mail sent)
+ - style:text-underline-type="single" is missing for underlined text, only style is specified (mail sent to OASIS TC)
+ - DTP mode not really supported; but even with single page, frames are misplaced (private mail sent)
+
+List of features that KWord has, but OOo doesn't have, and which are in the OASIS standard:
+ - OOo doesn't load nor save the cursor-position processing instruction 
+ - DTP mode (page-sequence)
+ - frame break (we model it with fo:break-after="column" in the paragraph style)
+ - copy-frames (probably)
+ - hyphenation bool as character property, for more control (probably)
+ - diagonal lines in table cells (probably)
+ - line style for footnote separator (probably)
+ - table templates (probably)
+ - DTP mode using the draw:page element (probably)
+ - (after 1.0) border around a word or any run of text (probably)
+
+Differences in rendering:
+ - In KWord endnotes are right under the end of the text; in OOo they are on a separate page.
 

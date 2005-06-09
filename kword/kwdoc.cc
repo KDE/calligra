@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2002-2004 David Faure <faure@kde.org>
+   Copyright (C) 2002-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -192,8 +192,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_footNoteSeparatorLinePos=SLP_LEFT;
 
-    //by default it's 1/5
-    m_iFootNoteSeparatorLineLength = 20;
+    m_iFootNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
     m_footNoteSeparatorLineWidth = 2.0;
     m_footNoteSeparatorLineType = SLT_SOLID;
 
@@ -1107,15 +1106,17 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         //__hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
 
-        QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-        QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
+        const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
             // style:rel-width="25%" style:color="#000000"
-            QString width = footnoteSep.attributeNS( KoXmlNS::style, "width", QString::null );
+            const QString width = footnoteSep.attributeNS( KoXmlNS::style, "width", QString::null );
+            if ( !width.isEmpty() ) {
+                m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
+            }
 
-            m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
             QString pageWidth = footnoteSep.attributeNS( KoXmlNS::style, "rel-width", QString::null );
             if ( pageWidth.endsWith( "%" ) ) {
                 pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
@@ -1123,9 +1124,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             }
             // Not in KWord: color, distance before and after separator
 
-            QString style = footnoteSep.attributeNS( KoXmlNS::style, "line-style", QString::null );
+            const QString style = footnoteSep.attributeNS( KoXmlNS::style, "line-style", QString::null );
             if ( style == "solid" || style.isEmpty() )
-                m_footNoteSeparatorLineType =SLT_SOLID;
+                m_footNoteSeparatorLineType = SLT_SOLID;
             else if ( style == "dash" )
                 m_footNoteSeparatorLineType = SLT_DASH;
             else if ( style == "dotted" )
@@ -1137,12 +1138,12 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             else
                 kdDebug() << "Unknown value for m_footNoteSeparatorLineType: " << style << endl;
 
-            QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
-            if ( pos =="centered" )
+            const QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
+            if ( pos == "centered" )
                 m_footNoteSeparatorLinePos = SLP_CENTERED;
-            else if ( pos =="right")
+            else if ( pos == "right")
                 m_footNoteSeparatorLinePos = SLP_RIGHT;
-            else // if ( pos =="left" )
+            else // if ( pos == "left" )
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
 
@@ -2721,7 +2722,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
 
         // write selected (non-inline) frames
         QString newText;
-        saveSelectedFrames( *bodyWriter, store, savingContext, pictureList,
+        saveSelectedFrames( *bodyWriter, store, manifestWriter, savingContext, pictureList,
                             &newText ); // output vars
         *plainText += newText;
         // Single image -> return it
@@ -2749,8 +2750,8 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
 
         QBuffer buffer;
         buffer.open( IO_WriteOnly );
-        KoXmlWriter noteTmpWriter( &buffer );  // TODO pass indentation level
-        noteTmpWriter.startElement( "style:footnote-sep" );
+        KoXmlWriter footnoteSepTmpWriter( &buffer );  // TODO pass indentation level
+        footnoteSepTmpWriter.startElement( "style:footnote-sep" );
         QString tmp;
         switch( m_footNoteSeparatorLinePos )
         {
@@ -2765,9 +2766,9 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
             break;
         }
 
-        noteTmpWriter.addAttribute( "style:adjustment", tmp );
-        noteTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth);
-        noteTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + "%" );
+        footnoteSepTmpWriter.addAttribute( "style:adjustment", tmp );
+        footnoteSepTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth );
+        footnoteSepTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + "%" );
         switch( m_footNoteSeparatorLineType )
         {
         case SLT_SOLID:
@@ -2787,10 +2788,10 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
             break;
         }
 
-        noteTmpWriter.addAttribute( "style:line-style", tmp );
+        footnoteSepTmpWriter.addAttribute( "style:line-style", tmp );
 
-        noteTmpWriter.endElement();
-        QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+        footnoteSepTmpWriter.endElement();
+        const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
         pageLayout.addChildElement( "separator", elementContents );
 
 
@@ -2866,7 +2867,7 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
     return multiDrag;
 }
 
-void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
                                      KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
                                      QString* plainText ) const
 {
@@ -2879,17 +2880,6 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
              && fs->frameIterator().getFirst()->isSelected() ) {
             embeddedObjects.append( static_cast<KWPartFrameSet *>(fs)->getChild() );
         }
-    }
-
-    // The old comment said:
-    // "Save internal embedded objects first, since it might change their URL"
-    // Not sure this is still the case.
-    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
-    int i = 0;
-    for( ; chl.current(); ++chl ) {
-        KoDocument* childDoc = chl.current()->document();
-        if ( childDoc && !childDoc->isStoredExtern() )
-            (void) childDoc->saveToStore( store, QString::number( i++ ) );
     }
 
     fit = framesetsIterator();
@@ -2946,10 +2936,27 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
         }
     }
 
-#if 0 // TODO embedded objects (probably to be moved to saveOasis)
-    if ( !embeddedObjects.isEmpty() )
-        m_doc->saveEmbeddedObjects( topElem, embeddedObjects );
-#endif
+    // Save embedded objects - code inspired from KoDocument::saveChildrenOasis
+    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
+    for( ; chl.current(); ++chl ) {
+        KoDocument* childDoc = chl.current()->document();
+        QString path;
+        if ( childDoc ) {
+            if ( !childDoc->isStoredExtern() ) {
+                if ( !chl.current()->saveOasisToStore( store, manifestWriter ) )
+                    return;
+
+                //assert( childDoc->url().protocol() == INTERNAL_PROTOCOL );
+                path = store->currentDirectory();
+                if ( !path.isEmpty() )
+                    path += '/';
+                path += childDoc->url().path();
+            } else {
+                path = childDoc->url().url();
+            }
+            manifestWriter->addManifestEntry( path, childDoc->nativeOasisMimeType() );
+        }
+    }
 }
 
 void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
@@ -3066,7 +3073,7 @@ void KWDocument::saveOasisCustomFied( KoXmlWriter &writer )const
 
 void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-	saveOasisCustomFied( writer );
+    saveOasisCustomFied( writer );
     if ( m_processingType == WP ) {
 
         // Write out the main text frameset's contents
@@ -3104,7 +3111,8 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
         QPtrListIterator<KWFrameSet> fit = framesetsIterator();
         for ( ; fit.current() ; ++fit ) {
             KWFrameSet* fs = fit.current();
-            if ( !fs->isFloating() &&
+            if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
+                 !fs->isFloating() &&
                  !fs->isDeleted() ) {
                 fs->saveOasis( writer, context, true );
             }

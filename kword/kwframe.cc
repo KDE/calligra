@@ -669,7 +669,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     setRunAroundSide( runAroundSide );
 }
 
-void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, const QString& name ) const
+void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, const QString& name, const QString& lastFrameName ) const
 {
     writer.startElement( "draw:frame" );
     writer.addAttribute( "draw:name", name );
@@ -687,7 +687,8 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, con
     }
     writer.addAttributePt( "svg:width", width() );
     writer.addAttributePt( "svg:height", height() );
-    // the caller fills in the child element, then closes draw:frame
+    if ( isCopy() )
+        writer.addAttribute( "draw:copy-of", lastFrameName );
 }
 
 // shared between startOasisFrame and table cells.
@@ -1792,7 +1793,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
                                   width, height );
 
     frame->setZOrder( tag.attributeNS( KoXmlNS::draw, "z-index", QString::null ).toInt() );
-    // Copy-frames. OASIS extension requested on 29/03/2004.
+    // Copy-frames.
     // We currently ignore the value of the copy-of attribute. It probably needs to
     // be handled like chain-next-name (kwtextframeset.cc) but for all types of frameset.
     frame->setCopy( tag.hasAttributeNS( KoXmlNS::draw, "copy-of" ) );
