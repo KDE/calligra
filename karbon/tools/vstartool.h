@@ -22,11 +22,12 @@
 
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <knuminput.h>
 
 #include "vshapetool.h"
 
 
-class KoUnitDoubleSpinBox;
+//class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 class KComboBox;
 class KarbonPart;
@@ -53,15 +54,13 @@ public slots:
 	void setOuterRadius( double );
 
 private:
-	KoUnitDoubleSpinBox	*m_innerR;
-	KoUnitDoubleSpinBox	*m_outerR;
+	KDoubleSpinBox	*m_innerR;
+	KDoubleSpinBox	*m_outerR;
 	KDoubleNumInput		*m_roundness;
 	KIntSpinBox			*m_edges;
 	KIntSpinBox			*m_innerAngle;
 	KComboBox			*m_type;
 	KarbonPart			*m_part;
-	QLabel				*m_innerRLabel;
-	QLabel				*m_outerRLabel;
 };
 
 class VStarTool : public VShapeTool

@@ -21,6 +21,7 @@
 #define __VSINUSTOOL_H__
 
 #include <kdialogbase.h>
+#include <knuminput.h>
 #include "vshapetool.h"
 
 class KoUnitDoubleSpinBox;
@@ -57,12 +58,10 @@ private:
 		void refreshUnit();
 
 	private:
-		KoUnitDoubleSpinBox	*m_width;
-		KoUnitDoubleSpinBox	*m_height;
+		KDoubleSpinBox	*m_width;
+		KDoubleSpinBox	*m_height;
 		KIntSpinBox			*m_periods;
 		KarbonPart			*m_part;
-		QLabel				*m_heightLabel;
-		QLabel				*m_widthLabel;
 	};
 
 	VSinusOptionsWidget *m_optionsWidget;

@@ -47,12 +47,12 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
-	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), group );
-	m_outerR = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	new QLabel( i18n( "Outer radius:" ), group );
+	m_outerR = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 5.0, 2, group );
 	connect( m_outerR, SIGNAL( valueChanged( double ) ), this, SLOT( setOuterRadius( double ) ) );
 
-	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), group );
-	m_innerR = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
+	new QLabel( i18n( "Inner radius:" ), group );
+	m_innerR = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 5.0, 2, group );
 
 	refreshUnit();
 
@@ -82,8 +82,8 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 void
 VStarOptionsWidget::refreshUnit()
 {
-	m_outerR->setUnit( m_part->unit() );
-	m_innerR->setUnit( m_part->unit() );
+	m_outerR->setSuffix( KoUnit::unitName( m_part->unit() ) );
+	m_innerR->setSuffix( KoUnit::unitName( m_part->unit() ) );
 }
 
 void
@@ -99,13 +99,13 @@ VStarOptionsWidget::setEdges( int v )
 void
 VStarOptionsWidget::setInnerRadius( double v )
 {
-	m_innerR->changeValue( v );
+	m_innerR->setValue( v );
 }
 
 void
 VStarOptionsWidget::setOuterRadius( double v )
 {
-	m_outerR->changeValue( v );
+	m_outerR->setValue( v );
 
 	// set optimal inner radius
 	if( type() == VStar::star )

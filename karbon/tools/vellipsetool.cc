@@ -47,10 +47,10 @@ VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent,
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
-	m_widthLabel = new QLabel( i18n( "Width:" ), group );
-	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
-	m_heightLabel = new QLabel( i18n( "Height:" ), group );
-	m_height = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	new QLabel( i18n( "Width:" ), group );
+	m_width = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
+	new QLabel( i18n( "Height:" ), group );
+	m_height = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
 
 	new QLabel( i18n( "Start angle:" ), group );
 	m_startAngle = new KIntSpinBox( group );
@@ -113,20 +113,20 @@ VEllipseOptionsWidget::height() const
 void
 VEllipseOptionsWidget::setWidth( double value )
 {
-	m_width->changeValue( value );
+	m_width->setValue( value );
 }
 
 void
 VEllipseOptionsWidget::setHeight( double value )
 {
-	m_height->changeValue( value );
+	m_height->setValue( value );
 }
 
 void
 VEllipseOptionsWidget::refreshUnit ()
 {
-	m_width->setUnit( m_part->unit() );
-	m_height->setUnit( m_part->unit() );
+	m_width->setSuffix( KoUnit::unitName( m_part->unit() ) );
+	m_height->setSuffix( KoUnit::unitName( m_part->unit() ) );
 }
 
 VEllipseTool::VEllipseTool( KarbonPart *part )

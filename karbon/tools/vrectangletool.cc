@@ -35,11 +35,11 @@ VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*par
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	// add width/height-input:
-	m_widthLabel = new QLabel( i18n( "Width:" ), group );
-	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	new QLabel( i18n( "Width:" ), group );
+	m_width = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
 
-	m_heightLabel = new QLabel( i18n( "Height:" ), group );
-	m_height = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	new QLabel( i18n( "Height:" ), group );
+	m_height = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
 
 	refreshUnit();
 
@@ -77,8 +77,8 @@ VRectangleTool::VRectangleOptionsWidget::setHeight( double value )
 void
 VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 {
-	m_width->setUnit( m_part->unit() );
-	m_height->setUnit( m_part->unit() );
+	m_width->setSuffix( KoUnit::unitName( m_part->unit() ) );
+	m_height->setSuffix( KoUnit::unitName( m_part->unit() ) );
 }
 
 VRectangleTool::VRectangleTool( KarbonPart *part )

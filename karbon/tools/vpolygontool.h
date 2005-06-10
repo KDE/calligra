@@ -21,10 +21,11 @@
 #define __VPOLYGONTOOL_H__
 
 #include <kdialogbase.h>
+#include <knuminput.h>
 
 #include "vshapetool.h"
 
-class KoUnitDoubleSpinBox;
+//class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 
 
@@ -57,9 +58,9 @@ private:
 		void refreshUnit();
 
 	private:
-		KoUnitDoubleSpinBox	*m_radius;
-		KIntSpinBox			*m_edges;
-		KarbonPart          *m_part;
+		KDoubleSpinBox	*m_radius;
+		KIntSpinBox	*m_edges;
+		KarbonPart      *m_part;
 	};
 
 	VPolygonOptionsWidget* m_optionsWidget;

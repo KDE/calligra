@@ -21,6 +21,7 @@
 #define __VELLIPSETOOL_H__
 
 #include <kdialogbase.h>
+#include <knuminput.h>
 
 #include "vshapetool.h"
 
@@ -54,11 +55,9 @@ private:
 	KComboBox				*m_type;
 	KIntSpinBox				*m_startAngle;
 	KIntSpinBox				*m_endAngle;
-	KoUnitDoubleSpinBox		*m_width;
-	KoUnitDoubleSpinBox		*m_height;
+	KDoubleSpinBox		*m_width;
+	KDoubleSpinBox		*m_height;
 	KarbonPart				*m_part;
-	QLabel					*m_heightLabel;
-	QLabel					*m_widthLabel;
 };
 
 class VEllipseTool : public VShapeTool

@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <knuminput.h>
 
 #include "vshapetool.h"
 
@@ -58,11 +59,9 @@ private:
 		void refreshUnit();
 
 	private:
-		KoUnitDoubleSpinBox	*m_width;
-		KoUnitDoubleSpinBox	*m_height;
+		KDoubleSpinBox	*m_width;
+		KDoubleSpinBox	*m_height;
 		KarbonPart			*m_part;
-		QLabel				*m_heightLabel;
-		QLabel				*m_widthLabel;
 	};
 
 	VRectangleOptionsWidget *m_optionWidget;

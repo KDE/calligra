@@ -36,7 +36,7 @@ VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonPart *part, QW
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	m_radius = new KDoubleSpinBox(0.0, 1000.0, 0.5, 5.0,2, group );
 	refreshUnit();
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new KIntSpinBox( group );
@@ -76,7 +76,7 @@ VPolygonTool::VPolygonOptionsWidget::setEdges( uint value )
 void
 VPolygonTool::VPolygonOptionsWidget::refreshUnit()
 {
-	m_radius->setUnit( m_part->unit() );
+	m_radius->setSuffix( KoUnit::unitName( m_part->unit() ) );
 }
 
 VPolygonTool::VPolygonTool( KarbonPart *part )
