@@ -27,7 +27,7 @@ class QComboBox;
 class QVButtonGroup;
 
 class KarbonPart;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class VStroke;
 class VColorTab;
 
@@ -41,7 +41,7 @@ public:
 private:
 	VColorTab* m_colortab;
 	KarbonPart *m_part;
-	KoUnitDoubleSpinBox *m_setLineWidth;
+	KoBuggyUnitDoubleSpinBox *m_setLineWidth;
 	QComboBox *m_styleCombo;
 	QVButtonGroup *m_typeOption;
 	QVButtonGroup *m_capOption;

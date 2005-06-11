@@ -956,7 +956,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     lx->resize( lx->sizeHint() );
     pGrid->addWidget( lx, 1, 0 );
 
-    sx = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
+    sx = new KoBuggyUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
 
     sx->resize( sx->sizeHint() );
     pGrid->addWidget( sx, 1, 1 );
@@ -965,7 +965,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     ly->resize( ly->sizeHint() );
     pGrid->addWidget( ly, 1, 2 );
 
-    sy = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
+    sy = new KoBuggyUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
     sy->resize( sy->sizeHint() );
     pGrid->addWidget( sy, 1, 3 );
 
@@ -973,7 +973,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     lw->resize( lw->sizeHint() );
     pGrid->addWidget( lw, 2, 0 );
 
-    sw = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
+    sw = new KoBuggyUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
 
     sw->resize( sw->sizeHint() );
     connect( sw, SIGNAL(valueChanged(double)),
@@ -985,7 +985,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     lh->resize( lh->sizeHint() );
     pGrid->addWidget( lh, 2, 2 );
 
-    sh = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
+    sh = new KoBuggyUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
     connect( sh, SIGNAL(valueChanged(double)),
              this, SLOT(slotUpdateWidthForHeight(double)) );
 
@@ -1095,7 +1095,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
             f=allFrames.next();
         }
-        // TODO port to KoUnitDoubleSpinBox
+        // TODO port to KoBuggyUnitDoubleSpinBox
         // and TODO show a special value when frames have a different width/height
         if ( sw->isEnabled() )
             sw->setValue( KoUnit::toUserValue( commonWidth, doc->unit() ) );
@@ -2102,7 +2102,7 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     //lml->resize( lml->sizeHint() );
     mGrid->addWidget( lml, 2, 0 );
 
-    m_inputLeft = new KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
+    m_inputLeft = new KoBuggyUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     mGrid->addWidget( m_inputLeft, 2, 1 );
 
@@ -2110,7 +2110,7 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     //lmt->resize( lmt->sizeHint() );
     mGrid->addWidget( lmt, 2, 2 );
 
-    m_inputTop = new /*KDoubleNumInput*/KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
+    m_inputTop = new /*KDoubleNumInput*/KoBuggyUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     //m_inputTop->resize( m_inputTop->sizeHint() );
 
@@ -2120,7 +2120,7 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     //lmr->resize( lmr->sizeHint() );
     mGrid->addWidget( lmr, 3, 0 );
 
-    m_inputRight = new KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
+    m_inputRight = new KoBuggyUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     //m_inputRight->resize( m_inputRight->sizeHint() );
     mGrid->addWidget( m_inputRight, 3, 1 );
@@ -2129,7 +2129,7 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     //lmb->resize( lmb->sizeHint() );
     mGrid->addWidget( lmb, 3, 2 );
 
-    m_inputBottom = new KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
+    m_inputBottom = new KoBuggyUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     //m_inputBottom->resize( m_inputBottom->sizeHint() );
     mGrid->addWidget( m_inputBottom, 3, 3 );

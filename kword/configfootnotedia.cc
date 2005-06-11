@@ -106,7 +106,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QGridLayout *layout = new QGridLayout( 0, 1, 1, 0, 6);
 
-    spWidth = new KoUnitDoubleSpinBox(page, 0, 5, 0.5, 1.0, m_doc->unit(), 1);
+    spWidth = new KoBuggyUnitDoubleSpinBox(page, 0, 5, 0.5, 1.0, m_doc->unit(), 1);
     spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
     layout->addWidget( spWidth, 1, 1 );
 

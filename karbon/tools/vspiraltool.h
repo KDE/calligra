@@ -26,7 +26,7 @@
 #include "vshapetool.h"
 
 class KComboBox;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class KDoubleNumInput;
 class KIntSpinBox;
 class KarbonPart;
@@ -66,7 +66,7 @@ private:
 		void refreshUnit();
 
 	private:
-		KoUnitDoubleSpinBox	*m_radius;
+		KoBuggyUnitDoubleSpinBox	*m_radius;
 		KIntSpinBox			*m_segments;
 		KDoubleNumInput		*m_fade;
 		KComboBox			*m_type;

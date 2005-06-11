@@ -24,7 +24,7 @@
 
 #include "vshapetool.h"
 
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class KIntSpinBox;
 
 
@@ -57,7 +57,7 @@ private:
 		void refreshUnit();
 
 	private:
-		KoUnitDoubleSpinBox	*m_radius;
+		KoBuggyUnitDoubleSpinBox	*m_radius;
 		KIntSpinBox			*m_edges;
 		KarbonPart          *m_part;
 	};

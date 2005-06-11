@@ -26,7 +26,7 @@
 #include "vshapetool.h"
 
 
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class KIntSpinBox;
 class KComboBox;
 class KarbonPart;
@@ -53,8 +53,8 @@ public slots:
 	void setOuterRadius( double );
 
 private:
-	KoUnitDoubleSpinBox	*m_innerR;
-	KoUnitDoubleSpinBox	*m_outerR;
+	KoBuggyUnitDoubleSpinBox	*m_innerR;
+	KoBuggyUnitDoubleSpinBox	*m_outerR;
 	KDoubleNumInput		*m_roundness;
 	KIntSpinBox			*m_edges;
 	KIntSpinBox			*m_innerAngle;

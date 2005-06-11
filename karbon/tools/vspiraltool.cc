@@ -42,7 +42,7 @@ VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidg
 	m_type->insertItem( i18n( "Rectangular" ), 1 );
 
 	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	m_radius = new KoBuggyUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	refreshUnit();
 	new QLabel( i18n( "Segments:" ), group );
 	m_segments = new KIntSpinBox( group );

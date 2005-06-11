@@ -160,7 +160,7 @@ class KoLineWidthChooser::KoLineWidthChooserPrivate
 {
   public:
     KoUnit::Unit m_unit;
-    KoUnitDoubleSpinBox* m_lineWidthUSBox;
+    KoBuggyUnitDoubleSpinBox* m_lineWidthUSBox;
 };
 
 KoLineWidthChooser::KoLineWidthChooser(QWidget* parent, const char* name)
@@ -174,7 +174,7 @@ KoLineWidthChooser::KoLineWidthChooser(QWidget* parent, const char* name)
   setMainWidget(mainWidget);
   QGridLayout* gl = new QGridLayout(mainWidget, 1, 2, KDialog::marginHint(), KDialog::spacingHint());
   QLabel* textLbl = new QLabel(i18n("Line width:"), mainWidget);
-  d->m_lineWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, d->m_unit, 2);
+  d->m_lineWidthUSBox = new KoBuggyUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, d->m_unit, 2);
   gl->addWidget(textLbl, 0, 0);
   gl->addWidget(d->m_lineWidthUSBox, 0, 1);
 }

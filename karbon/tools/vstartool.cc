@@ -48,11 +48,11 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), group );
-	m_outerR = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	m_outerR = new KoBuggyUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	connect( m_outerR, SIGNAL( valueChanged( double ) ), this, SLOT( setOuterRadius( double ) ) );
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), group );
-	m_innerR = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
+	m_innerR = new KoBuggyUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
 
 	refreshUnit();
 
