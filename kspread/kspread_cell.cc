@@ -6182,9 +6182,8 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
          instead of the text.  Just move it over in case we're parsing
          an old document */
       if ( cell.hasAttribute( "dataType" ) ) // new docs
-      {
         text.setAttribute( "dataType", cell.attribute( "dataType" ) );
-      }
+
       QDomElement result = cell.namedItem( "result" ).toElement();
       QString txt = text.text();
       if ((pm == ::Result) && (txt[0] == '='))
