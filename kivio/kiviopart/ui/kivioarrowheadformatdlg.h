@@ -24,7 +24,7 @@
 
 #include <koUnit.h>
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox2;
 class KComboBox;
 class KivioView;
 
@@ -58,10 +58,10 @@ class KivioArrowHeadFormatDlg : public KDialogBase
     void loadArrowHeads(KComboBox* combo, bool endArrow);
 
   protected:
-    KoBuggyUnitDoubleSpinBox* m_startAHWidthUSBox;
-    KoBuggyUnitDoubleSpinBox* m_startAHHeightUSBox;
-    KoBuggyUnitDoubleSpinBox* m_endAHWidthUSBox;
-    KoBuggyUnitDoubleSpinBox* m_endAHHeightUSBox;
+    KoUnitDoubleSpinBox2* m_startAHWidthUSBox;
+    KoUnitDoubleSpinBox2* m_startAHHeightUSBox;
+    KoUnitDoubleSpinBox2* m_endAHWidthUSBox;
+    KoUnitDoubleSpinBox2* m_endAHHeightUSBox;
     KComboBox* m_startAHTypeCBox;
     KComboBox* m_endAHTypeCBox;
     KoUnit::Unit m_unit;

@@ -53,10 +53,10 @@ void KivioArrowHeadFormatDlg::init()
   loadArrowHeads(m_startAHTypeCBox, false);
   startAHTypeLbl->setBuddy(m_startAHTypeCBox);
   QLabel* startAHWidthLbl = new QLabel(i18n("&Width:"), startGBox);
-  m_startAHWidthUSBox = new KoBuggyUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  m_startAHWidthUSBox = new KoUnitDoubleSpinBox2(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHWidthLbl->setBuddy(m_startAHWidthUSBox);
   QLabel* startAHHeightLbl = new QLabel(i18n("&Length:"), startGBox);
-  m_startAHHeightUSBox = new KoBuggyUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  m_startAHHeightUSBox = new KoUnitDoubleSpinBox2(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHHeightLbl->setBuddy(m_startAHHeightUSBox);
 
   QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead at End"), mainWidget);
@@ -65,10 +65,10 @@ void KivioArrowHeadFormatDlg::init()
   loadArrowHeads(m_endAHTypeCBox, true);
   endAHTypeLbl->setBuddy(m_endAHTypeCBox);
   QLabel* endAHWidthLbl = new QLabel(i18n("W&idth:"), endGBox);
-  m_endAHWidthUSBox = new KoBuggyUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  m_endAHWidthUSBox = new KoUnitDoubleSpinBox2(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   endAHWidthLbl->setBuddy(m_endAHWidthUSBox);
   QLabel* endAHHeightLbl = new QLabel(i18n("L&ength:"), endGBox);
-  m_endAHHeightUSBox = new KoBuggyUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  m_endAHHeightUSBox = new KoUnitDoubleSpinBox2(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   endAHHeightLbl->setBuddy(m_endAHHeightUSBox);
 
   gl->addWidget(startGBox, 0, 0);
@@ -152,12 +152,12 @@ void KivioArrowHeadFormatDlg::setStartAHType(int t)
 
 void KivioArrowHeadFormatDlg::setStartAHWidth(double w)
 {
-  m_startAHWidthUSBox->setValue(KoUnit::toUserValue(w, m_unit));
+  m_startAHWidthUSBox->changeValue(w);
 }
 
 void KivioArrowHeadFormatDlg::setStartAHHeight(double h)
 {
-  m_startAHHeightUSBox->setValue(KoUnit::toUserValue(h, m_unit));
+  m_startAHHeightUSBox->changeValue(h);
 }
 
 void KivioArrowHeadFormatDlg::setEndAHType(int t)
@@ -167,12 +167,12 @@ void KivioArrowHeadFormatDlg::setEndAHType(int t)
 
 void KivioArrowHeadFormatDlg::setEndAHWidth(double w)
 {
-  m_endAHWidthUSBox->setValue(KoUnit::toUserValue(w, m_unit));
+  m_endAHWidthUSBox->changeValue(w);
 }
 
 void KivioArrowHeadFormatDlg::setEndAHHeight(double h)
 {
-  m_endAHHeightUSBox->setValue(KoUnit::toUserValue(h, m_unit));
+  m_endAHHeightUSBox->changeValue(h);
 }
 
 void KivioArrowHeadFormatDlg::slotDefault()

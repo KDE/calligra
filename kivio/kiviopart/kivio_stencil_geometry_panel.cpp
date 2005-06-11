@@ -96,10 +96,10 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
   lw->setPixmap( QPixmap((const char **)width_xpm) );
   lh->setPixmap( QPixmap((const char **)height_xpm) );
 
-  m_pX = new KoBuggyUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
-  m_pY = new KoBuggyUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
-  m_pW = new KoBuggyUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
-  m_pH = new KoBuggyUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pX = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pY = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pW = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pH = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
   m_rotationSBox = new KIntSpinBox(-360, 360, 1, 0, 10, this);
   m_rotationSBox->hide();
 
@@ -144,28 +144,28 @@ void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
 void KivioStencilGeometryPanel::xChange( double d )
 {
   if(m_emitSignals) {
-    emit positionChanged( KoUnit::fromUserValue(d, m_unit), KoUnit::fromUserValue(m_pY->value(), m_unit) );
+    emit positionChanged( KoUnit::fromUserValue(d, m_unit), m_pY->value() );
   }
 }
 
 void KivioStencilGeometryPanel::yChange( double d )
 {
   if(m_emitSignals) {
-    emit positionChanged( KoUnit::fromUserValue(m_pX->value(), m_unit), KoUnit::fromUserValue(d, m_unit) );
+    emit positionChanged(m_pX->value(), KoUnit::fromUserValue(d, m_unit) );
   }
 }
 
 void KivioStencilGeometryPanel::wChange( double d )
 {
   if(m_emitSignals) {
-    emit sizeChanged( KoUnit::fromUserValue(d, m_unit), KoUnit::fromUserValue(m_pH->value(), m_unit) );
+    emit sizeChanged( KoUnit::fromUserValue(d, m_unit), m_pH->value() );
   }
 }
 
 void KivioStencilGeometryPanel::hChange( double d )
 {
   if(m_emitSignals) {
-    emit sizeChanged( KoUnit::fromUserValue(m_pW->value(), m_unit), KoUnit::fromUserValue(d, m_unit) );
+    emit sizeChanged( m_pW->value(), KoUnit::fromUserValue(d, m_unit) );
   }
 }
 
@@ -178,14 +178,14 @@ void KivioStencilGeometryPanel::rotationChange(int d)
 
 void KivioStencilGeometryPanel::setPosition( double x, double y )
 {
-  m_pX->setValue(KoUnit::toUserValue(x, m_unit));
-  m_pY->setValue(KoUnit::toUserValue(y, m_unit));
+  m_pX->changeValue(x);
+  m_pY->changeValue(y);
 }
 
 void KivioStencilGeometryPanel::setSize( double w, double h )
 {
-  m_pW->setValue(KoUnit::toUserValue(w, m_unit));
-  m_pH->setValue(KoUnit::toUserValue(h, m_unit));
+  m_pW->changeValue(w);
+  m_pH->changeValue(h);
 }
 
 void KivioStencilGeometryPanel::setPageLayout(const KoPageLayout& l)

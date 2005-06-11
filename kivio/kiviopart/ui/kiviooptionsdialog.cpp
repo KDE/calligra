@@ -178,20 +178,20 @@ void KivioOptionsDialog::initGrid()
   gridColorLbl->setBuddy(m_gridColorBtn);
   QGroupBox* spacingGrp = new QGroupBox(2, Qt::Horizontal, i18n("Spacing"), page);
   QLabel* spaceHorizLbl = new QLabel(i18n("&Horizontal:"), spacingGrp);
-  m_spaceHorizUSpin = new KoBuggyUnitDoubleSpinBox(spacingGrp, 0.0, pgw, 0.1,
+  m_spaceHorizUSpin = new KoUnitDoubleSpinBox2(spacingGrp, 0.0, pgw, 0.1,
     fw, unit);
   spaceHorizLbl->setBuddy(m_spaceHorizUSpin);
   QLabel* spaceVertLbl = new QLabel(i18n("&Vertical:"), spacingGrp);
-  m_spaceVertUSpin = new KoBuggyUnitDoubleSpinBox(spacingGrp, 0.0, pgh, 0.1,
+  m_spaceVertUSpin = new KoUnitDoubleSpinBox2(spacingGrp, 0.0, pgh, 0.1,
     fh, unit);
   spaceVertLbl->setBuddy(m_spaceVertUSpin);
   QGroupBox* snapGrp = new QGroupBox(2, Qt::Horizontal, i18n("Snap Distance"), page);
   QLabel* snapHorizLbl = new QLabel(i18n("H&orizontal:"), snapGrp);
-  m_snapHorizUSpin = new KoBuggyUnitDoubleSpinBox(snapGrp, 0.0, fw, 0.1,
+  m_snapHorizUSpin = new KoUnitDoubleSpinBox2(snapGrp, 0.0, fw, 0.1,
     sw, unit);
   snapHorizLbl->setBuddy(m_snapHorizUSpin);
   QLabel* snapVertLbl = new QLabel(i18n("V&ertical:"), snapGrp);
-  m_snapVertUSpin = new KoBuggyUnitDoubleSpinBox(snapGrp, 0.0, fh, 0.1,
+  m_snapVertUSpin = new KoUnitDoubleSpinBox2(snapGrp, 0.0, fh, 0.1,
     sh, unit);
   snapVertLbl->setBuddy(m_snapVertUSpin);
 
@@ -245,7 +245,7 @@ void KivioOptionsDialog::initGuides()
   orientBGrp->insert(m_orientVertRBtn);
   QLabel* posLbl = new QLabel(i18n("&Position:"), m_propertiesGrp);
   KoUnit::Unit unit = view->doc()->units();
-  m_posUSpin = new KoBuggyUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
+  m_posUSpin = new KoUnitDoubleSpinBox2(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
   posLbl->setBuddy(m_posUSpin);
 
   QGridLayout* pgl = new QGridLayout(m_propertiesGrp->layout());
@@ -366,10 +366,10 @@ void KivioOptionsDialog::defaultPage()
 void KivioOptionsDialog::defaultGrid()
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  m_spaceHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit));
-  m_spaceVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit));
-  m_snapHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit));
-  m_snapVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit));
+  m_spaceHorizUSpin->changeValue(Kivio::Config::gridXSpacing());
+  m_spaceVertUSpin->changeValue(Kivio::Config::gridYSpacing());
+  m_snapHorizUSpin->changeValue(Kivio::Config::gridXSnap());
+  m_snapVertUSpin->changeValue(Kivio::Config::gridYSnap());
   m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox->setChecked(Kivio::Config::snapGrid());
   m_gridColorBtn->setColor(Kivio::Config::gridColor());
@@ -493,7 +493,7 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
   }
 
   m_posUSpin->setMaxValue(max);
-  m_posUSpin->changeValue(KoUnit::toUserValue(data->position(), unit));
+  m_posUSpin->changeValue(data->position());
 }
 
 void KivioOptionsDialog::changePos(double p)
