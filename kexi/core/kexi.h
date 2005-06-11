@@ -76,21 +76,10 @@ namespace Kexi
 	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowScripts(); 
 
-	//some utils
-	
-	//! \return valid filename based on \a s
-	KEXICORE_EXPORT QString string2FileName(const QString &s);
-	
-	/*! always returns valid identifier based on \a s.
-	 Non alphanumeric chars (or spaces) are replaced with '_'.
-	 If a number char is at the beginning, '_' is added at start.
-	 Empty strings are not changed.
-	*/
-	KEXICORE_EXPORT QString string2Identifier(const QString &s);
-
 	/*! \return useful message "Value of "valueName" column must be an identifier.
 	  "v" is not a valid identifier.". It is also used by IdentifierValidator.  */
-	KEXICORE_EXPORT QString identifierExpectedMessage(const QString &valueName, const QVariant& v);
+	KEXICORE_EXPORT QString identifierExpectedMessage(const QString &valueName,
+	                                                  const QVariant& v);
 
 	//! Validates input for identifier name.
 	class KEXICORE_EXPORT IdentifierValidator : public KexiValidator

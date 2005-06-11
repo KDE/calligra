@@ -27,10 +27,10 @@
 #include <qguardedptr.h>
 
 #include <kexidb/object.h>
+#include <utils/tristate.h>
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"
-#include "tristate.h"
 
 namespace KexiDB
 {

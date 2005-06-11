@@ -19,6 +19,7 @@
 
 #include "kexi.h"
 #include "kexi_p.h"
+#include "utils/identifier.h"
 #include "kexi_utils.h"
 
 #include <qtimer.h>
@@ -119,59 +120,6 @@ QString Kexi::nameForViewMode(int m)
 	return i18n("Unknown");
 }
 
-//--------------------------------------------------------------------------------
-
-QString Kexi::string2FileName(const QString &s)
-{
-	QString fn = s.simplifyWhiteSpace();
-	fn.replace(' ',"_"); fn.replace('$',"_");
-	fn.replace('\\',"-"); fn.replace('/',"-"); 
-	fn.replace(':',"-"); fn.replace('*',"-"); 
-	return fn;
-}
-
-static const char* string2Identifier_conv[] = {
-"Ą", "A", "Ć", "C", "Ę", "E", "Ł", "L", "Ń", "N", "Ó", "O", "Ś", "S", "Ź", "Z", "Ż", "Z",
-"ą", "a", "ć", "c", "ę", "e", "ł", "l", "ń", "n", "ó", "o", "ś", "s", "ź", "z", "ż", "z",
-0};
-
-inline char char2Identifier(const QChar& c)
-{
-	if ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_')
-		return c;
-	else {
-		//fix for non-latin1 chars
-		for (const char **p = string2Identifier_conv; *p; p+=2) {
-			if (QString(c)==QString::fromUtf8(*p)) {
-				p++;
-				return (*p)[0];
-			}
-		}
-	}
-	return '_';
-}
-
-QString Kexi::string2Identifier(const QString &s)
-{
-	QString r, id = s.simplifyWhiteSpace();
-	if (id.isEmpty())
-		return id;
-	r.reserve(id.length());
-//		return "_";
-	id.replace(' ',"_");
-	QChar c = id[0];
-
-	if (c>='0' && c<='9') {
-		r+='_';
-		r+=c;
-	} else
-		r+=char2Identifier(c);
-
-	for (uint i=1; i<id.length(); i++)
-		r+=char2Identifier(id.at(i));
-	return r;
-}
-
 QString Kexi::identifierExpectedMessage(const QString &valueName, const QVariant& v)
 {
 	return "<p>"+i18n("Value of \"%1\" column must be an identifier.").arg(valueName)
@@ -198,7 +146,7 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos ) cons
 	if (i<input.length() && input.at(i)>='0' && input.at(i)<='9')
 		pos++; //_ will be added at the beginning
 	bool addspace = (input.right(1)==" ");
-	input = string2Identifier(input);
+	input = KexiUtils::string2Identifier(input);
 	if (addspace)
 		input += "_";
 	if((uint)pos>input.length())

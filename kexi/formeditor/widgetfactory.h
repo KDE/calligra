@@ -29,7 +29,7 @@
 #include <qpopupmenu.h>
 #include <qasciidict.h>
 
-#include <tristate.h>
+#include <utils/tristate.h>
 
 // class QPixmap;
 template<class type> class QValueVector;

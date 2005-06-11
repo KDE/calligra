@@ -26,6 +26,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include <utils/identifier.h>
 #include <core/kexi.h>
 
 KexiNameWidget::KexiNameWidget( const QString& message, 
@@ -105,7 +106,7 @@ void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
 		m_le_name_autofill=true;
 	if (m_le_name_autofill) {
 		m_le_name_txtchanged_disable = true;
-		le_name->setText( Kexi::string2Identifier( capt ) );
+		le_name->setText( KexiUtils::string2Identifier(capt) );
 		m_le_name_txtchanged_disable = false;
 	}
 }

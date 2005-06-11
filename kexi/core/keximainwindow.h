@@ -21,13 +21,12 @@
 #ifndef KEXIMAINWINDOW_H
 #define KEXIMAINWINDOW_H
 
+#include <kmdimainfrm.h>
+#include <qintdict.h>
+#include <utils/tristate.h>
+
 #include "kexisharedactionhost.h"
 #include "kexi.h"
-#include "tristate.h"
-
-#include <kmdimainfrm.h>
-
-#include <qintdict.h>
 
 class KexiDialogBase;
 class KexiProject;

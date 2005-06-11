@@ -25,7 +25,7 @@
 
 #include <sys/stat.h>
 
-#include "tristate.h"
+#include <utils/tristate.h>
 
 class KProcess;
 class KProgressDialog;

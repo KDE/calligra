@@ -42,6 +42,7 @@
 #include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
+#include "utils/identifier.h"
 #include "kexi_utils.h"
 
 #include <assert.h>
@@ -515,7 +516,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 		n = 0; //means: try not to add 'n'
 		base_name = suggestedName;
 	}
-	base_name = Kexi::string2Identifier(base_name).lower();
+	base_name = KexiUtils::string2Identifier(base_name).lower();
 	KexiPart::ItemDictIterator it(*dict);
 	QPtrDictIterator<KexiPart::Item> itUnstored(m_unstoredItems);
 	do {

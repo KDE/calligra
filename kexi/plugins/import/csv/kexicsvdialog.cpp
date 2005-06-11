@@ -51,6 +51,7 @@
 #include <kiconloader.h>
 #include <kcharsets.h>
 
+#include <utils/identifier.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
@@ -1113,7 +1114,7 @@ void KexiCSVDialog::accept()
 
 	for (uint col = 0; col < numCols; col++) {
 		QString fieldCaption( m_table->text(0, col).simplifyWhiteSpace() );
-		QString fieldName( Kexi::string2Identifier( fieldCaption ) );
+		QString fieldName( KexiUtils::string2Identifier( fieldCaption ) );
 		if (tableSchema->field(fieldName)) {
 			QString fixedFieldName;
 			uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names

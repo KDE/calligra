@@ -25,7 +25,7 @@
 
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>
-#include <tristate.h>
+#include <utils/tristate.h>
 
 class KexiProjectData;
 class KexiProjectData;

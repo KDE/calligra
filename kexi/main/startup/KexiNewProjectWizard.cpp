@@ -27,6 +27,7 @@
 #include "KexiServerDBNamePage.h"
 #include "KexiProjectSelector.h"
 #include "kexi.h"
+#include <utils/identifier.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -231,7 +232,7 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 	} else if (page==m_conn_sel) {//p 3
 		if (d->lv_types->currentItem()==d->lvi_file) {
 			m_conn_sel->showSimpleConn();
-			QString fn = Kexi::string2FileName( m_db_title->le_caption->text() );
+			QString fn = KexiUtils::string2FileName( m_db_title->le_caption->text() );
 			if (!fn.endsWith(".kexi"))
 				fn += ".kexi";
 			m_conn_sel->m_fileDlg->setLocationText(fn);
@@ -375,7 +376,8 @@ void KexiNewProjectWizard::slotServerDBCaptionTxtChanged(const QString &capt)
 		d->le_dbname_autofill=true;
 	if (d->le_dbname_autofill) {
 		d->le_dbname_txtchanged_disable = true;
-		m_server_db_name->le_dbname->setText( Kexi::string2Identifier( capt ) );
+		QString captionAsId = KexiUtils::string2Identifier(capt);
+		m_server_db_name->le_dbname->setText(captionAsId);
 		d->le_dbname_txtchanged_disable = false;
 	}
 }

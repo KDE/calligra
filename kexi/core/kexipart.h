@@ -24,8 +24,8 @@
 #include <qobject.h>
 #include <qmap.h>
 
+#include <utils/tristate.h>
 #include "kexi.h"
-#include "tristate.h"
 #include "keximainwindow.h"
 
 class KActionCollection;
