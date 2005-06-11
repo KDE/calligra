@@ -1,9 +1,8 @@
 2005-05-10  Inge Wallin  <inge@lysator.liu.se>
 	
 	More work on bug 105356:
-	* kdchart/KDChartParams.h (KDChartParams): return _lineColor
-	again.
-	* kdchart/KDChartParams_io.h (saveXML): only save the line color
+	* kdchart/KDChartParams.h (lineColor): return _lineColor again.
+	* kdchart/KDChartParams_io.h (saveXML): Only save the line color
 	if it is non-null.
 	* kchart_part.cc (setAxisDefaults): Always set lineColor to
 	null. This compensates for the (now fixed) bug in saving when
