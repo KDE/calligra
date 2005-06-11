@@ -294,12 +294,14 @@ void importWizard::arriveSrcConnPage()
             additionalMimeTypes << "application/x-msaccess";
         }
         srcConn->m_fileDlg->setMode(KexiStartupFileDialog::Opening, additionalMimeTypes);
-#ifdef Q_WS_WIN
         if (srcTypeCombo->currentText().contains("Access")) {
 //! @todo tmp: hardcoded!
+#ifdef Q_WS_WIN
             srcConn->m_fileDlg->setSelectedFilter("*.mdb");
-        }
+#else
+            srcConn->m_fileDlg->setFilter("*.mdb");
 #endif
+        }
         srcConn->m_file->label->hide();
         srcConn->m_file->btn_advanced->hide();
         srcConn->m_file->label->parentWidget()->hide();
