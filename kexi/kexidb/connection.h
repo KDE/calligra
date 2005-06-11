@@ -37,7 +37,7 @@
 #include <kexidb/transaction.h>
 #include <kexidb/driver.h>
 
-#include <utils/tristate.h>
+#include <kexiutils/tristate.h>
 
 namespace KexiDB {
 

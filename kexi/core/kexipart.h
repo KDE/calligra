@@ -24,7 +24,7 @@
 #include <qobject.h>
 #include <qmap.h>
 
-#include <utils/tristate.h>
+#include <kexiutils/tristate.h>
 #include "kexi.h"
 #include "keximainwindow.h"
 

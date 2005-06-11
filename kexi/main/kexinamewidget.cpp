@@ -26,7 +26,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include <utils/identifier.h>
+#include <kexiutils/identifier.h>
 #include <core/kexi.h>
 
 KexiNameWidget::KexiNameWidget( const QString& message, 

@@ -40,7 +40,7 @@
 
 #include "kexitableviewdata.h"
 #include "kexitableedit.h"
-#include <utils/tristate.h>
+#include <kexiutils/tristate.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include "kexidataawareobjectiface.h"

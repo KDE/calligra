@@ -51,7 +51,7 @@
 #include <kiconloader.h>
 #include <kcharsets.h>
 
-#include <utils/identifier.h>
+#include <kexiutils/identifier.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <core/kexipart.h>

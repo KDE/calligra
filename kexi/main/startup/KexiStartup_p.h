@@ -25,7 +25,7 @@
 
 #include <sys/stat.h>
 
-#include <utils/tristate.h>
+#include <kexiutils/tristate.h>
 
 class KProcess;
 class KProgressDialog;

@@ -26,7 +26,7 @@
 #include <qasciidict.h>
 #include <qguardedptr.h>
 
-#include <utils/tristate.h>
+#include <kexiutils/tristate.h>
 
 class QObject;
 class QString;

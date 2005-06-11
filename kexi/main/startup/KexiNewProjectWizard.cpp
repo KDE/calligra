@@ -27,8 +27,8 @@
 #include "KexiServerDBNamePage.h"
 #include "KexiProjectSelector.h"
 #include "kexi.h"
-#include <utils/identifier.h>
 
+#include <kexiutils/identifier.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmimetype.h>

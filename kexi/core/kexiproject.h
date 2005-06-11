@@ -26,8 +26,8 @@
 #include <qptrdict.h>
 #include <qguardedptr.h>
 
+#include <kexiutils/tristate.h>
 #include <kexidb/object.h>
-#include <utils/tristate.h>
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"

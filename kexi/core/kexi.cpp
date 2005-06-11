@@ -19,8 +19,8 @@
 
 #include "kexi.h"
 #include "kexi_p.h"
-#include "utils/identifier.h"
 #include "kexi_utils.h"
+#include <kexiutils/identifier.h>
 
 #include <qtimer.h>
 #include <qimage.h>

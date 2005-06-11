@@ -12,7 +12,7 @@ if compile_kross_plugin
   SCRIPTING=scripting
 endif
 
-SUBDIRS= 3rdparty utils kexidb core widget formeditor \
+SUBDIRS= 3rdparty kexiutils kexidb core widget formeditor \
 data pics main migration $(SCRIPTING) plugins . tests
 
 #(will be reenabled after main/startup move)  

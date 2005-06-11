@@ -23,7 +23,7 @@
 
 #include <kmdimainfrm.h>
 #include <qintdict.h>
-#include <utils/tristate.h>
+#include <kexiutils/tristate.h>
 
 #include "kexisharedactionhost.h"
 #include "kexi.h"

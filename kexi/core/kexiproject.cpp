@@ -26,6 +26,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <kexiutils/identifier.h>
+
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <kexidb/driver.h>
@@ -42,7 +44,6 @@
 #include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
-#include "utils/identifier.h"
 #include "kexi_utils.h"
 
 #include <assert.h>
