@@ -92,6 +92,7 @@ public:
     char direction;       // QChar::Direction
     /// Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
     char alignment; // Qt::AlignmentFlags
+    bool joinBorder;
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
     /** can be 0 if no counter set */
     KoParagCounter* counter;

@@ -184,6 +184,7 @@ public:
     KoBorder rightBorder() const { return m_rightBorder; }
     KoBorder topBorder() const { return m_topBorder; }
     KoBorder bottomBorder() const { return m_bottomBorder; }
+    bool joinBorder() const { return m_joinBorder; }
 
 protected:
     void updateBorders();
@@ -193,6 +194,7 @@ protected slots:
     void brdRightToggled( bool );
     void brdTopToggled( bool );
     void brdBottomToggled( bool );
+    void brdJoinToggled( bool );
     //void brdStyleChanged( const QString & );
     //void brdWidthChanged( const QString & );
     //void brdColorChanged( const QColor& );
@@ -204,6 +206,8 @@ private:
     KColorButton *bColor;
     KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
     KoBorderPreview *prev3;
+    QCheckBox *cbJoinBorder;
+    bool m_joinBorder;
 };
 
 class KOTEXT_EXPORT KoCounterStyleWidget : public QWidget
@@ -475,6 +479,7 @@ public:
     KoBorder rightBorder() const { return m_borderWidget->rightBorder(); }
     KoBorder topBorder() const { return m_borderWidget->topBorder(); }
     KoBorder bottomBorder() const { return m_borderWidget->bottomBorder(); }
+    bool joinBorder() const { return m_borderWidget->joinBorder(); }
 
     // tab 4
     const KoParagCounter & counter() const { return m_counterWidget->counter(); }
@@ -498,6 +503,7 @@ public:
                                            oldLayout.rightBorder!=rightBorder() ||
                                            oldLayout.topBorder!=topBorder() ||
                                            oldLayout.bottomBorder!=bottomBorder() ); }
+    bool isJoinBorderChanged() const { return oldLayout.joinBorder!=joinBorder(); }
     bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
     KoParagLayout paragLayout() const;
     /// @return the set of flags which were changed

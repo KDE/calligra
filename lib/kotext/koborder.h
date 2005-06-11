@@ -32,6 +32,7 @@ class QPainter;
  */
 class KOTEXT_EXPORT KoBorder : public Qt
 {
+    friend class KoTextCursor;
 public:
     // Update the DTDs if you add something here!
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4, DOUBLE_LINE = 5};
@@ -75,7 +76,7 @@ public:
     static void drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, const QRect& rect,
                              const KoBorder& left, const KoBorder& right,
                              const KoBorder& top, const KoBorder& bottom,
-                             int minborder, const QPen& defaultPen );
+                             int minborder, const QPen& defaultPen, bool drawTopBorder = true , bool drawBottomBorder = true );
 private:
     double ptWidth;
     double ptPenWidth;

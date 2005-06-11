@@ -241,11 +241,13 @@ public:
     KoBorder topBorder() const { return m_layout.topBorder; }
     KoBorder bottomBorder() const { return m_layout.bottomBorder; }
     bool hasBorder() const { return m_layout.hasBorder(); }
+    bool joinBorder() const { return m_layout.joinBorder; }
 
     void setLeftBorder( const KoBorder & _brd ) { m_layout.leftBorder = _brd; }
     void setRightBorder( const KoBorder & _brd ) { m_layout.rightBorder = _brd; }
     void setTopBorder( const KoBorder & _brd );
     void setBottomBorder( const KoBorder & _brd );
+    void setJoinBorder( bool join );
 
     // Counters are used to implement list and heading numbering/bullets.
     void setCounter( const KoParagCounter & counter );

@@ -146,15 +146,12 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 #endif
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
-    m_border.left.color = white;
+    m_border.left.color = black;
     m_border.left.setStyle (KoBorder::SOLID);
-    m_border.left.setPenWidth( 0);
+    m_border.left.setPenWidth( 1 );
     m_border.right = m_border.left;
     m_border.top = m_border.left;
     m_border.bottom = m_border.left;
-    m_border.common.color = black;
-    m_border.common.setStyle(KoBorder::SOLID);
-    m_border.common.setPenWidth( 1);
     m_currentPage = 0;
     m_specialCharDlg=0L;
     m_searchEntry = 0L;
@@ -877,8 +874,6 @@ void KWView::setupActions()
                             0, this, SLOT( borderBottom() ),  actionCollection(), "border_bottom" );
     actionBorderStyle = new KSelectAction( i18n( "Border Style" ),
                             0,  actionCollection(), "border_style" );
-    connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
-             this, SLOT( borderStyle( const QString & ) ) );
 
     QStringList lst;
     lst << KoBorder::getStyle( KoBorder::SOLID );
@@ -890,16 +885,14 @@ void KWView::setupActions()
     actionBorderStyle->setItems( lst );
     actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
                                                  actionCollection(), "border_width" );
-    connect( actionBorderWidth, SIGNAL( activated( const QString & ) ),
-             this, SLOT( borderWidth( const QString & ) ) );
     lst.clear();
     for ( unsigned int i = 1; i < 10; i++ )
         lst << QString::number( i );
     actionBorderWidth->setItems( lst );
+    actionBorderWidth->setCurrentItem( 0 );
 
     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", true );
     actionBorderColor->setDefaultColor(QColor());
-    connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
     actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color..." ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor", true);
@@ -1943,22 +1936,8 @@ void KWView::showParagBorders( const KoBorder& left, const KoBorder& right,
             actionBorderTop->isChecked() &&
             actionBorderBottom->isChecked());
 
-        if ( left.penWidth() > 0 ) {
-            m_border.common = left;
+        if ( left.penWidth() > 0 || right.penWidth() > 0 || top.penWidth() > 0 || bottom.penWidth() > 0 )
             borderShowValues();
-        }
-        if ( right.penWidth() > 0 ) {
-            m_border.common = right;
-            borderShowValues();
-        }
-        if ( top.penWidth() > 0 ) {
-            m_border.common = top;
-            borderShowValues();
-        }
-        if ( bottom.penWidth() > 0 ) {
-            m_border.common = bottom;
-            borderShowValues();
-        }
     }
 }
 
@@ -3644,6 +3623,17 @@ void KWView::slotApplyParag()
             macroCommand->addCommand(cmd);
         }
     }
+    if( m_paragDlg->isJoinBorderChanged() )
+    {
+        cmd=edit->setJoinBordersCommand( m_paragDlg->joinBorder() );
+        if(cmd)
+        {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
+
+            macroCommand->addCommand(cmd);
+        }
+    }
     if ( m_paragDlg->isPageBreakingChanged() )
     {
         cmd=edit->setPageBreakingCommand( m_paragDlg->pageBreaking() );
@@ -5067,7 +5057,7 @@ void KWView::borderOutline()
     actionBorderTop->setChecked(b);
     actionBorderBottom->setChecked(b);
 
-    borderSet();
+    borderSet( BorderOutline );
 }
 
 void KWView::borderLeft()
@@ -5078,7 +5068,7 @@ void KWView::borderLeft()
         actionBorderTop->isChecked() &&
         actionBorderBottom->isChecked());
 
-    borderSet();
+    borderSet( BorderLeft );
 }
 
 void KWView::borderRight()
@@ -5089,7 +5079,7 @@ void KWView::borderRight()
         actionBorderTop->isChecked() &&
         actionBorderBottom->isChecked());
 
-    borderSet();
+    borderSet( BorderRight );
 }
 
 void KWView::borderTop()
@@ -5100,7 +5090,7 @@ void KWView::borderTop()
         actionBorderTop->isChecked() &&
         actionBorderBottom->isChecked());
 
-    borderSet();
+    borderSet( BorderTop );
 }
 
 void KWView::borderBottom()
@@ -5111,39 +5101,7 @@ void KWView::borderBottom()
         actionBorderTop->isChecked() &&
         actionBorderBottom->isChecked());
 
-    borderSet();
-}
-
-void KWView::borderColor()
-{
-    m_border.common.color = actionBorderColor->color();
-    m_border.left.color = m_border.common.color;
-    m_border.right.color = m_border.common.color;
-    m_border.top.color = m_border.common.color;
-    m_border.bottom.color = m_border.common.color;
-    borderSet();
-}
-
-void KWView::borderWidth( const QString &width )
-{
-    m_border.common.setPenWidth( width.toInt());
-    m_border.left.setPenWidth(m_border.common.penWidth());
-    m_border.right.setPenWidth(m_border.common.penWidth());
-    m_border.top.setPenWidth(m_border.common.penWidth());
-    m_border.bottom.setPenWidth(m_border.common.penWidth());
-    borderSet();
-    m_gui->canvasWidget()->setFocus();
-}
-
-void KWView::borderStyle( const QString &style )
-{
-    m_border.common.setStyle(KoBorder::getStyle( style ));
-    m_border.left.setStyle( m_border.common.getStyle());
-    m_border.right.setStyle( m_border.common.getStyle());
-    m_border.top.setStyle( m_border.common.getStyle());
-    m_border.bottom.setStyle( m_border.common.getStyle());
-    borderSet();
-    m_gui->canvasWidget()->setFocus();
+    borderSet( BorderBottom );
 }
 
 void KWView::backgroundColor()
@@ -5164,30 +5122,67 @@ void KWView::backgroundColor()
     }
 }
 
-
-void KWView::borderSet()
+void KWView::borderSet( borderChanged type )
 {
     // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
-    m_border.left = m_border.common;
-    m_border.right = m_border.common;
-    m_border.top = m_border.common;
-    m_border.bottom = m_border.common;
-    if ( !actionBorderLeft->isChecked() )
-    {
-        m_border.left.setPenWidth( 0);
-    }
-    if ( !actionBorderRight->isChecked() )
-    {
-        m_border.right.setPenWidth( 0);
-    }
-    if ( !actionBorderTop->isChecked() )
-    {
-        m_border.top.setPenWidth(0);
-    }
-    if ( !actionBorderBottom->isChecked() )
-    {
-        m_border.bottom.setPenWidth(0);
-    }
+        if ( type == BorderLeft)
+            if ( !actionBorderLeft->isChecked() )
+                m_border.left.setPenWidth( 0 );
+            else
+            {
+                m_border.left.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.left.color = actionBorderColor->color();
+                m_border.left.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+            }
+        else if ( type == BorderRight )
+            if ( !actionBorderRight->isChecked() )
+                m_border.right.setPenWidth( 0 );
+            else
+            {
+                m_border.right.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.right.color = actionBorderColor->color();
+                m_border.right.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+            }
+        else if ( type == BorderTop )
+            if ( !actionBorderTop->isChecked() )
+                m_border.top.setPenWidth( 0 );
+            else
+            {
+                m_border.top.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.top.color = actionBorderColor->color();
+                m_border.top.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+            }
+        else if ( type == BorderBottom)
+            if ( !actionBorderBottom->isChecked() )
+                m_border.bottom.setPenWidth( 0 );
+            else
+            {
+                m_border.bottom.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.bottom.color = actionBorderColor->color();
+                m_border.bottom.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+            }
+        else if ( type == BorderOutline )
+        {
+            if ( !actionBorderOutline->isChecked() )
+            {
+                m_border.left.setPenWidth( 0 );
+                m_border.right.setPenWidth( 0 );
+                m_border.top.setPenWidth( 0 );
+                m_border.bottom.setPenWidth( 0 );
+            }
+            else
+            {
+                m_border.left.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.right.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.top.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.bottom.setPenWidth( actionBorderWidth->currentText().toInt() );
+                m_border.left.color = m_border.right.color = m_border.top.color = m_border.bottom.color = actionBorderColor->color();
+                m_border.left.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+                m_border.right.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+                m_border.top.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+                m_border.bottom.setStyle( KoBorder::getStyle( actionBorderStyle->currentText() ) );
+            }
+        }
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( edit )
     {
@@ -5198,22 +5193,14 @@ void KWView::borderSet()
     else
     {
         KMacroCommand *macro = 0L;
-        KCommand*cmd=m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+        KCommand*cmd=m_gui->canvasWidget()->setLeftFrameBorder( m_border.left, actionBorderLeft->isChecked() );
         if ( cmd )
         {
             if ( !macro )
                 macro = new KMacroCommand( i18n("Change Border"));
             macro->addCommand( cmd);
         }
-        cmd = m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
-        if ( cmd )
-        {
-            if ( !macro )
-                macro = new KMacroCommand( i18n("Change Border"));
-            macro->addCommand( cmd);
-        }
-
-        cmd = m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
+        cmd = m_gui->canvasWidget()->setRightFrameBorder( m_border.right, actionBorderRight->isChecked() );
         if ( cmd )
         {
             if ( !macro )
@@ -5221,7 +5208,15 @@ void KWView::borderSet()
             macro->addCommand( cmd);
         }
 
-        cmd = m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
+        cmd = m_gui->canvasWidget()->setTopFrameBorder( m_border.top, actionBorderTop->isChecked() );
+        if ( cmd )
+        {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Change Border"));
+            macro->addCommand( cmd);
+        }
+
+        cmd = m_gui->canvasWidget()->setBottomFrameBorder( m_border.bottom, actionBorderBottom->isChecked() );
         if ( cmd )
         {
             if ( !macro )
@@ -5252,8 +5247,12 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KWView::borderShowValues()
 {
-    actionBorderWidth->setCurrentItem( (int)m_border.common.penWidth() - 1 );
-    actionBorderStyle->setCurrentItem( (int)m_border.common.getStyle() );
+    if ( m_border.left == m_border.right && m_border.left == m_border.top && m_border.left == m_border.bottom )
+    {
+        actionBorderWidth->setCurrentItem( (int)m_border.left.penWidth() - 1 );
+        actionBorderStyle->setCurrentItem( (int)m_border.left.getStyle() );
+        actionBorderColor->setCurrentColor( m_border.left.color );
+    }
 }
 
 void KWView::tabListChanged( const KoTabulatorList & tabList )
@@ -5781,6 +5780,8 @@ void KWView::frameSelectedChanged()
         bool okForLowerRaise = false;
         bool okForChangeParagStyle = true;
         bool okForChangeInline = true;
+        bool containsCellFrame = false;
+        bool containsMainFrame = false;
         QPtrListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current() && ( okForDelete || okForLowerRaise || okForChangeParagStyle || okForChangeInline) ; ++it )
         {
@@ -5799,10 +5800,15 @@ void KWView::frameSelectedChanged()
             // As soon as we find one who we can lower/raise open the option.
             okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || it.current()->frameSet()->isFloating());
             okForChangeInline &= !(isMainWPFrame || headerFooterFootNote );
+
+            if ( it.current()->frameSet()->getGroupManager() )
+                containsCellFrame = true;
+            if ( isMainWPFrame )
+                containsMainFrame = true;
         }
         actionEditDelFrame->setEnabled( okForDelete );
-        actionEditCut->setEnabled( okForDelete );
-        actionEditCopy->setEnabled( nbFrame >= 1 && okForCopy);
+        actionEditCut->setEnabled( okForDelete && !containsCellFrame );
+        actionEditCopy->setEnabled( nbFrame >= 1 && okForCopy && !containsMainFrame && !containsCellFrame);
 
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );

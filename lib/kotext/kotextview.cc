@@ -1056,6 +1056,10 @@ KCommand * KoTextView::setBordersCommand( const KoBorder& leftBorder, const KoBo
 {
     return textObject()->setBordersCommand( m_cursor, leftBorder, rightBorder, bottomBorder, topBorder );
 }
+KCommand * KoTextView::setJoinBordersCommand( bool join )
+{
+    return textObject()->setJoinBordersCommand( m_cursor, join );
+}
 KCommand * KoTextView::setMarginCommand( QStyleSheetItem::Margin m, double margin )
 {
     return textObject()->setMarginCommand( m_cursor, m, margin );

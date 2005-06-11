@@ -300,6 +300,7 @@ public:
     KCommand * setAlignCommand( KoTextCursor * cursor, int align , int selectionId = KoTextDocument::Standard);
     KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type,int selectionId = KoTextDocument::Standard );
     KCommand * setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = KoTextDocument::Standard );
+    KCommand * setJoinBordersCommand( KoTextCursor * cursor, bool join, int selectionId = KoTextDocument::Standard );
     KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
     KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
 

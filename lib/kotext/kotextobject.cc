@@ -540,6 +540,10 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 //kdDebug(32500) << "KoTextFrameSet::doKeyboardAction currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
             }
         }
+        if ( cursor->parag()->joinBorder() && cursor->parag()->bottomBorder().width() > 0 )
+            cursor->parag()->prev()->setChanged( true );
+        if ( cursor->parag()->joinBorder() && cursor->parag()->next() && cursor->parag()->next()->joinBorder() && cursor->parag()->bottomBorder() == cursor->parag()->next()->bottomBorder())
+            cursor->parag()->next()->setChanged( true );
         emit paragraphCreated( cursor->parag() );
 
     } break;
@@ -1258,6 +1262,11 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
       cursor->parag()->setBottomBorder(bottomBorder);
       cursor->parag()->setTopBorder(topBorder);
       setLastFormattedParag( cursor->parag() );
+
+      if ( cursor->parag()->next() )
+        cursor->parag()->next()->setChanged( true );
+       if ( cursor->parag()->prev() )
+        cursor->parag()->prev()->setChanged( true );
     }
     else
     {
@@ -1277,6 +1286,11 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
         end->setBottomBorder(bottomBorder);
         textdoc->selectionStart( selectionId )->setTopBorder(topBorder);
         borderOutline = true;
+
+        if ( start && start->prev() )
+            start->prev()->setChanged( true );
+        if ( end && end->next() )
+            end->next()->setChanged( true );
     }
     formatMore( 2 );
     emit repaintChanged( this );
@@ -1295,6 +1309,64 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
     emit showCursor();
     emit updateUI( true );
     return new KoTextCommand( this, /*cmd, */i18n("Change Borders") );
+}
+
+KCommand * KoTextObject::setJoinBordersCommand( KoTextCursor * cursor, bool join, int selectionId  )
+{
+  if ( protectContent() )
+        return 0L;
+  if ( !textdoc->hasSelection( selectionId, true ) &&
+       cursor && cursor->parag()->joinBorder() == join )
+        return 0L; // No change needed.
+
+    emit hideCursor();
+     bool borderOutline = false;
+     storeParagUndoRedoInfo( cursor, KoTextDocument::Standard );
+    if ( !textdoc->hasSelection( selectionId, true ) )
+    {
+      cursor->parag()->setJoinBorder( join );
+      setLastFormattedParag( cursor->parag() );
+
+      if ( cursor->parag()->next() )
+        cursor->parag()->next()->setChanged( true );
+      if ( cursor->parag()->prev() )
+        cursor->parag()->prev()->setChanged( true );
+    }
+    else
+    {
+        KoTextParag *start = textdoc->selectionStart( selectionId );
+        KoTextParag *end = textdoc->selectionEnd( selectionId );
+        setLastFormattedParag( start );
+        KoBorder tmpBorder;
+        tmpBorder.setPenWidth(0);
+        for ( ; start && start != end->next() ; start = start->next() )
+          {
+               start->setJoinBorder( true );
+          }
+            end->setJoinBorder ( true );
+        borderOutline = true;
+
+        if ( start && start->prev() )
+            start->prev()->setChanged( true );
+        if ( end && end->next() )
+            end->next()->setChanged( true );
+    }
+    formatMore( 2 );
+
+    emit repaintChanged( this );
+    undoRedoInfo.newParagLayout.joinBorder=join;
+
+    KoTextParagCommand *cmd = new KoTextParagCommand(
+        textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+        undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
+        KoParagLayout::Borders, (QStyleSheetItem::Margin)-1, borderOutline);
+    textdoc->addCommand( cmd );
+
+    undoRedoInfo.clear();
+    emit ensureCursorVisible();
+    emit showCursor();
+    emit updateUI( true );
+    return new KoTextCommand( this, /*cmd, */i18n("Change Join Borders") );
 }
 
 

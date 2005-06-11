@@ -330,9 +330,6 @@ public slots:
     void borderRight();
     void borderTop();
     void borderBottom();
-    void borderColor();
-    void borderWidth( const QString &width );
-    void borderStyle( const QString &style );
     void backgroundColor();
 
     void showFormulaToolbar( bool show );
@@ -502,8 +499,9 @@ protected:
     virtual void updateReadWrite( bool readwrite );
     void updateTableActions( int nbFramesSelected );
 
+    enum borderChanged { BorderOutline, BorderLeft, BorderRight, BorderTop, BorderBottom };
     void borderShowValues();
-    void borderSet();
+    void borderSet( borderChanged type);
 
 
     void startKSpell();
@@ -652,7 +650,6 @@ private:
         KoBorder right;   ///< right.
         KoBorder top;     ///< top.
         KoBorder bottom;  ///< bottom.
-        KoBorder common;  ///< Value common to left, right top and bottom borders.
     } m_border;
 
     KAction *actionTableDelRow;

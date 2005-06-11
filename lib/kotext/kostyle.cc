@@ -634,6 +634,7 @@ void KoParagStyle::propagateChanges( int paragLayoutFlag, int /*formatFlag*/ )
         m_paragLayout.rightBorder = m_parentStyle->paragLayout().rightBorder;
         m_paragLayout.topBorder = m_parentStyle->paragLayout().topBorder;
         m_paragLayout.bottomBorder = m_parentStyle->paragLayout().bottomBorder;
+        m_paragLayout.joinBorder = m_parentStyle->paragLayout().joinBorder;
     }
     if ( !(paragLayoutFlag & KoParagLayout::BulletNumber) )
         m_paragLayout.counter = m_parentStyle->paragLayout().counter;

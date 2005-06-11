@@ -104,6 +104,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 
     str = new KoTextString();
     str->insert( 0, " ", formatCollection()->defaultFormat() );
+    setJoinBorder( true );
 }
 
 KoTextParag::~KoTextParag()
@@ -1012,6 +1013,11 @@ void KoTextParag::setBottomBorder( const KoBorder & _brd )
     invalidate(0);
 }
 
+void KoTextParag::setJoinBorder( bool join )
+{
+    m_layout.joinBorder = join;
+}
+
 void KoTextParag::setNoCounter()
 {
     delete m_layout.counter;
@@ -1242,7 +1248,9 @@ int KoTextParag::topMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
-        + m_layout.topBorder.width() );
+        + ( joinBorder() && prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
+        prev()->topBorder() == m_layout.topBorder && prev()->leftBorder() == m_layout.leftBorder &&
+        prev()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.topBorder.width() );
 }
 
 int KoTextParag::bottomMargin() const
@@ -1250,7 +1258,9 @@ int KoTextParag::bottomMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
-        + m_layout.bottomBorder.width() );
+        + ( joinBorder() && next() && next()->joinBorder() && next()->bottomBorder() == m_layout.bottomBorder &&
+        next()->topBorder() == m_layout.topBorder && next()->leftBorder() == m_layout.leftBorder &&
+        next()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.bottomBorder.width() );
 }
 
 int KoTextParag::leftMargin() const
@@ -1392,6 +1402,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         KoZoomHandler * zh = textDocument()->paintingZoomHandler();
         assert(zh);
 
+        bool const drawTopBorder = !joinBorder() || !prev() || !prev()->joinBorder() || prev()->bottomBorder() != bottomBorder() || prev()->topBorder() != topBorder() || prev()->leftBorder() != leftBorder() || prev()->rightBorder() != rightBorder();
+        bool const drawBottomBorder = !joinBorder() || !next() || !next()->joinBorder() || next()->bottomBorder() != bottomBorder() || next()->topBorder() != topBorder() || next()->leftBorder() != leftBorder() || next()->rightBorder() != rightBorder();
         QRect r;
         // Old solution: stick to the text
         //r.setLeft( at( 0 )->x - counterWidth() - 1 );
@@ -1414,7 +1426,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         int paragBottom = pixelRect(zh).height()-1;
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Looks nicer. OO does that too.
-        if ( m_layout.bottomBorder.width() > 0 )
+        if ( m_layout.bottomBorder.width() > 0 /*&& drawBottomBorder*/)
             paragBottom -= zh->layoutUnitToPixelY( lineSpacing( lastLine ) );
         paragBottom -= KoBorder::zoomWidthY( m_layout.bottomBorder.width(), zh, 0 );
         //kdDebug(32500) << "Parag border: paragBottom=" << paragBottom
@@ -1424,7 +1436,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " LU (" << zh->layoutUnitToPixelX(documentWidth()) << " pixels) bordersRect=" << r << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
-                               0, QPen() );
+                               0, QPen(), drawTopBorder, drawBottomBorder );
     }
 }
 
@@ -2179,6 +2191,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags, int m
         setRightBorder( layout.rightBorder );
         setTopBorder( layout.topBorder );
         setBottomBorder( layout.bottomBorder );
+        setJoinBorder( layout.joinBorder );
     }
     if ( flags & KoParagLayout::BulletNumber )
         setCounter( layout.counter );

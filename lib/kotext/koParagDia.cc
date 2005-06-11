@@ -31,6 +31,7 @@
 #include <qradiobutton.h>
 #include <qvbox.h>
 #include <qhbox.h>
+#include <qtooltip.h>
 
 #include <koCharSelectDia.h>
 #include <kcolorbutton.h>
@@ -1329,11 +1330,15 @@ KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
     bBottom->setPixmap( BarIcon( "borderbottom" ) );
     bBottom->setToggleButton( true );
     grid->addWidget( bb, 6, 0 );
+    cbJoinBorder = new QCheckBox(i18n("Merge with next paragraph"), this);
+    QToolTip::add( cbJoinBorder, i18n("Merges the border style of the current paragraph with the next paragraph") );
+    grid->addWidget( cbJoinBorder, 7, 0 );
 
     connect( bLeft, SIGNAL( toggled( bool ) ), this, SLOT( brdLeftToggled( bool ) ) );
     connect( bRight, SIGNAL( toggled( bool ) ), this, SLOT( brdRightToggled( bool ) ) );
     connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
     connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
+    connect( cbJoinBorder, SIGNAL( toggled( bool ) ), this, SLOT( brdJoinToggled( bool ) ) );
 
     QGroupBox *grp=new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), this, "previewgrp" );
     grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
@@ -1356,6 +1361,7 @@ void KoParagBorderWidget::display( const KoParagLayout & lay )
     m_rightBorder = lay.rightBorder;
     m_topBorder = lay.topBorder;
     m_bottomBorder = lay.bottomBorder;
+    m_joinBorder = lay.joinBorder;
     bLeft->blockSignals( true );
     bRight->blockSignals( true );
     bTop->blockSignals( true );
@@ -1373,6 +1379,7 @@ void KoParagBorderWidget::save( KoParagLayout & lay )
     lay.rightBorder = m_rightBorder;
     lay.topBorder = m_topBorder;
     lay.bottomBorder = m_bottomBorder;
+    lay.joinBorder = m_joinBorder;
 }
 
 #define OFFSETX 15
@@ -1455,6 +1462,7 @@ void KoParagBorderWidget::updateBorders()
     prev3->setRightBorder( m_rightBorder );
     prev3->setTopBorder( m_topBorder );
     prev3->setBottomBorder( m_bottomBorder );
+    cbJoinBorder->setChecked( m_joinBorder );
 }
 
 void KoParagBorderWidget::brdLeftToggled( bool _on )
@@ -1503,6 +1511,11 @@ void KoParagBorderWidget::brdBottomToggled( bool _on )
         m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
     }
     prev3->setBottomBorder( m_bottomBorder );
+}
+
+void KoParagBorderWidget::brdJoinToggled( bool _on )
+{
+    m_joinBorder = _on;
 }
 
 QString KoParagBorderWidget::tabName()
@@ -2187,6 +2200,7 @@ KoParagLayout KoParagDia::paragLayout() const
     newLayout.rightBorder = rightBorder();
     newLayout.topBorder = topBorder();
     newLayout.bottomBorder = bottomBorder();
+    newLayout.joinBorder = joinBorder();
     newLayout.counter = new KoParagCounter( counter() );
     return newLayout;
 }

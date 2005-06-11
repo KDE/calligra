@@ -100,6 +100,7 @@ public:
     KCommand * setPageBreakingCommand( int pageBreaking );
     KCommand * setLineSpacingCommand( double spacing, KoParagLayout::SpacingType _type );
     KCommand * setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder );
+    KCommand * setJoinBordersCommand( bool join );
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
     void applyStyle( const KoParagStyle * style );

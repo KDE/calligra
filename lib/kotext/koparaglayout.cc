@@ -53,6 +53,7 @@ void KoParagLayout::operator=( const KoParagLayout &layout )
     rightBorder = layout.rightBorder;
     topBorder = layout.topBorder;
     bottomBorder = layout.bottomBorder;
+    joinBorder = layout.joinBorder;
     if ( layout.counter )
         counter = new KoParagCounter( *layout.counter );
     else
@@ -80,7 +81,8 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
     if ( leftBorder != layout.leftBorder
          || rightBorder != layout.rightBorder
          || topBorder != layout.topBorder
-         || bottomBorder != layout.bottomBorder )
+         || bottomBorder != layout.bottomBorder
+         || joinBorder != layout.joinBorder )
         flags |= Borders;
 
     if ( layout.counter )
@@ -122,6 +124,7 @@ void KoParagLayout::initialise()
     rightBorder.setPenWidth( 0);
     topBorder.setPenWidth( 0);
     bottomBorder.setPenWidth( 0);
+    joinBorder = true;
     pageBreaking = 0;
     style = 0L;
     direction = QChar::DirON;
@@ -577,6 +580,8 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     qHeapSort( tabList );
     layout.setTabList( tabList );
 
+    layout.joinBorder = !( context.styleStack().attributeNS( KoXmlNS::style, "join-border") == "false" );
+
     // Borders
     if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","left") )
         layout.leftBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","left") );
@@ -887,6 +892,8 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, bool savingStyle ) const
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     gs.addChildElement( "style:tab-stops", elementContents );
 
+     if ( !joinBorder )
+        gs.addProperty( "style:join-border", "false" );
     bool fourBordersEqual = leftBorder.penWidth() > 0 &&
                leftBorder == rightBorder && rightBorder == topBorder && topBorder == bottomBorder;
     if ( fourBordersEqual ) {

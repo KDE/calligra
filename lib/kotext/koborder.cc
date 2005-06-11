@@ -23,6 +23,7 @@
 #include "kozoomhandler.h"
 #include "kotextformat.h"
 #include "korichtext.h" // for KoTextFormat
+#include "kotextparag.h"
 #include <float.h>
 
 static const struct BorderStyle {
@@ -112,7 +113,29 @@ void KoBorder::loadFoBorder( const QString& border )
     QCString _style = border.section(' ', 1, 1).latin1();
     QString _color = border.section(' ', 2, 2);
 
-    setPenWidth( KoUnit::parseValue( _width, 1.0 ) );
+    //TODO: let the user choose a more precise border width (in the current unit)
+    double const penWidth = KoUnit::parseValue( _width, 1.0 );
+    kdDebug() << "penWidth:" << penWidth << endl;
+    if ( penWidth < 1.5 )
+        setPenWidth( 1.0 );
+    else if ( penWidth < 2.5 )
+        setPenWidth( 2.0 );
+    else if ( penWidth < 3.5 )
+        setPenWidth( 3.0 );
+    else if ( penWidth < 4.5 )
+        setPenWidth( 4.0 );
+    else if ( penWidth < 5.5 )
+        setPenWidth( 5.0 );
+    else if ( penWidth < 6.5 )
+        setPenWidth( 6.0 );
+    else if ( penWidth < 7.5 )
+        setPenWidth( 7.0 );
+    else if ( penWidth < 8.5 )
+        setPenWidth( 8.0 );
+    else if ( penWidth < 9.5 )
+        setPenWidth( 9.0 );
+    else
+        setPenWidth( 10.0 );
 
     m_style = SOLID;
     for ( uint i = 0; i < sizeof( s_borderStyles ) / sizeof *s_borderStyles; ++i ) {
@@ -182,7 +205,7 @@ int KoBorder::zoomWidthY( double ptWidth, KoZoomHandler * zoomHandler, int minbo
     return ptWidth > 0 ? QMAX( 1, zoomHandler->zoomItY( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
-void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, const QRect& rect, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int minborder, const QPen& defaultPen )
+void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, const QRect& rect, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int minborder, const QPen& defaultPen, bool drawTopBorder /* = true */, bool drawBottomBorder /* = true */)
 {
     int topBorderWidth = zoomWidthY( topBorder.width(), zoomHandler, minborder );
     int bottomBorderWidth = zoomWidthY( bottomBorder.width(), zoomHandler, minborder );
@@ -205,7 +228,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, cons
 
     QColor defaultColor = KoTextFormat::defaultTextColor( &painter );
 
-    if ( topBorderWidth > 0 )
+    if ( topBorderWidth > 0 && drawTopBorder )
     {
         if ( topBorder.penWidth() > 0 )
             painter.setPen( KoBorder::borderPen( topBorder, topBorderPenWidth, defaultColor ) );
@@ -223,7 +246,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, cons
             painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth+lastPixelAdj, y );
         }
     }
-    if ( bottomBorderWidth > 0 )
+    if ( bottomBorderWidth > 0 && drawBottomBorder )
     {
         if ( bottomBorder.penWidth() > 0 )
             painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderPenWidth, defaultColor ) );
