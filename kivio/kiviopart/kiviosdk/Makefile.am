@@ -34,7 +34,6 @@ libkiviosdk_la_SOURCES = \
 		kivio_connector_point.cpp\
 		kivio_plugin_stencil_spawner.cpp\
 		kivio_custom_drag_data.cpp\
-		kivio_shape_painter.cpp\
 		kivio_arrowhead.cpp\
 		kivio_base_connector_stencil.cpp\
 		kivio_line_style.cpp\
