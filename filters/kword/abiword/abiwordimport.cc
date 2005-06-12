@@ -1569,6 +1569,14 @@ void StructureParser::createDocInfo(void)
     QDomElement title(mainDocument.createElement("title"));
     about.appendChild(title);
     title.appendChild(mainDocument.createTextNode(m_metadataMap["dc.title"]));
+
+    QDomElement keyword(mainDocument.createElement("keyword"));
+    about.appendChild(keyword);
+    keyword.appendChild(mainDocument.createTextNode(m_metadataMap["abiword.keywords"]));
+
+    QDomElement subject(mainDocument.createElement("subject"));
+    about.appendChild(subject);
+    subject.appendChild(mainDocument.createTextNode(m_metadataMap["dc.subject"]));    
 }
 
 bool StructureParser::endDocument(void)
