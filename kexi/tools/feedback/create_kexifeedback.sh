@@ -8,7 +8,7 @@
 # Copyright(C) 2005 by Christian Nitschkowski <segfault_ii@web.de>
 
 cd ../../3rdparty
-[ -d kfeedbackwizard ] && echo "kfeedbackwizard/ already exists: giving up" && exit 0
+[ -d kexifeedbackwizard ] && echo "kexifeedbackwizard/ already exists: giving up" && exit 0
 svn checkout svn://anonsvn.kde.org/home/kde/trunk/playground/utils/kfeedbackwizard
 
 cd kfeedbackwizard
