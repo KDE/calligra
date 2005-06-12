@@ -1,1 +1,1 @@
-SUBDIRS=koffice ooo gnumeric
+SUBDIRS=koffice ooo gnumeric abiword
