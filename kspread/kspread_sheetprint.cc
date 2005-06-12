@@ -339,8 +339,10 @@ void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range,
     //Check if we have to repeat some rows and columns (top left rect)
     if ( ( _childOffset.x() != 0.0 ) && ( _childOffset.y() != 0.0 ) )
     {
+        //QRect(left,top,width,height)  <<<< WIDTH AND HEIGHT!!!
         QRect _printRect( m_printRepeatColumns.first, m_printRepeatRows.first,
-                          m_printRepeatColumns.second, m_printRepeatRows.second );
+                          m_printRepeatColumns.second - m_printRepeatColumns.first + 1,
+                          m_printRepeatRows.second - m_printRepeatRows.first + 1);
         KoPoint _topLeft( 0.0, 0.0 );
 
         printRect( _painter, _topLeft, _printRect, view, clipRegion );
@@ -350,7 +352,8 @@ void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range,
     if ( _childOffset.y() != 0 )
     {
         QRect _printRect( page_range.left(), m_printRepeatRows.first,
-                          page_range.right(), m_printRepeatRows.second );
+                          page_range.right() - page_range.left() + 1,
+                          m_printRepeatRows.second - m_printRepeatRows.first + 1);
         KoPoint _topLeft( _childOffset.x(), 0.0 );
 
         printRect( _painter, _topLeft, _printRect, view, clipRegion );
@@ -360,7 +363,8 @@ void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range,
     if ( _childOffset.x() != 0 )
     {
         QRect _printRect( m_printRepeatColumns.first, page_range.top(),
-                          m_printRepeatColumns.second, page_range.bottom() );
+                          m_printRepeatColumns.second - m_printRepeatColumns.first + 1,
+                          page_range.bottom() - page_range.top() + 1);
         KoPoint _topLeft( 0.0, _childOffset.y() );
 
         printRect( _painter, _topLeft, _printRect, view, clipRegion );

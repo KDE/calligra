@@ -406,12 +406,14 @@ private:
      *
      * @return the last vertical line which was printed plus one.
      *
-     * @param _page_range QRect defines a rectangle of cells which should be painted
-     *                    to the device 'prn'.
-     * @view KoRect defines the sourrounding rectangle which is the printing frame.
+     * @param _page_range QRect defines a rectangle of cells which should be
+     *                    painted to the device 'prn'.
      *
-     * @param _childOffset KoPoint used to calculate the correct position of children,
-     *                    if there are repeated columns/rows
+     * @param view KoRect defines the sourrounding rectangle which is
+     *             the printing frame.
+     *
+     * @param _childOffset KoPoint used to calculate the correct position of
+     *                     children, if there are repeated columns/rows.
      */
     void printPage( QPainter &_painter, const QRect& page_range,
                     const KoRect& view, const KoPoint _childOffset );
