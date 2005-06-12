@@ -6,3 +6,4 @@
 
 === KWord 1.4 Alpha ===
 - export: fix linespacing
+- import subject/keyword in docinformation
