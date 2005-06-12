@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="132">
+<kpartgui name="kexi" version="133">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -137,7 +137,7 @@
   <Menu name="help">
     <text>&amp;Help</text>
     <Action name="help_show_important_info" noMerge="0"/>
-		<Action name="help_start_feedback_agent" noMerge="0"/>
+    <Action name="help_start_feedback_agent" noMerge="0"/>
     <!-- not yet needed: Menu name="help_licenses" noMerge="0">
     <text>Other &amp;Licenses</text>
       <Merge />
