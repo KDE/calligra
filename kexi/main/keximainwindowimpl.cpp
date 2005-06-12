@@ -113,6 +113,14 @@
 //#include "migration/importwizard.h"
 //#endif
 
+#ifndef KEXI_NO_FEEDBACK_AGENT
+#ifdef FEEDBACK_INCLUDE
+#include FEEDBACK_INCLUDE
+#endif
+#include <kapplication.h>
+#include <kaboutdata.h>
+#endif
+
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
 class KexiMainWindowImpl::Private
@@ -848,6 +856,12 @@ void KexiMainWindowImpl::initActions()
 #endif
 //TODO: UNCOMMENT TO REMOVE MDI MODES SETTING	m_pMdiModeMenu->hide();
 
+#ifndef KEXI_NO_FEEDBACK_AGENT
+#ifdef FEEDBACK_CLASS
+	new KAction(i18n("Give feedback"), "messagebox_info", 0,
+		this, SLOT(slotStartFeedbackAgent()), actionCollection(), "help_start_feedback_agent");
+#endif
+#endif
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 //	 actionCollection(), "kexi_settings");
 //	actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
@@ -3185,6 +3199,27 @@ void KexiMainWindowImpl::slotTipOfTheDay()
 void KexiMainWindowImpl::slotImportantInfo()
 {
 	importantInfo(false);
+}
+
+void KexiMainWindowImpl::slotStartFeedbackAgent()
+{
+#ifndef KEXI_NO_FEEDBACK_AGENT
+#ifdef FEEDBACK_CLASS
+	const KAboutData* about = KApplication::kApplication()->aboutData();
+	FEEDBACK_CLASS* wizard = new FEEDBACK_CLASS( about->programName(),
+		about->version(), 0, 0, 0, FEEDBACK_CLASS::AllPages );
+
+	if ( wizard->exec() )
+	{
+		KApplication::kApplication()->invokeMailer( "kexi-reports-dummy@kexi.org",
+			QString::null, QString::null,
+			about->appName() + QCString( " [feedback]" ),
+			wizard->feedbackDocument().toString( 2 ).local8Bit() );
+	}
+	
+	delete wizard;
+#endif
+#endif
 }
 
 void KexiMainWindowImpl::importantInfo(bool /*onStartup*/)

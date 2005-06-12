@@ -328,6 +328,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! Shows 'important info' dialog, is \a onStartup is false, it's always shown
 		void importantInfo(bool onStartup);
 		void slotImportantInfo(); //!< just importantInfo(false);
+		void slotStartFeedbackAgent();
 
 		void slotOptionsEnableForms(bool show, bool noMessage = false); //temp.
 
