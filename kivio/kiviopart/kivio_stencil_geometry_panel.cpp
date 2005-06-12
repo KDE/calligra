@@ -144,28 +144,28 @@ void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
 void KivioStencilGeometryPanel::xChange( double d )
 {
   if(m_emitSignals) {
-    emit positionChanged( KoUnit::fromUserValue(d, m_unit), KoUnit::fromUserValue(m_pY->value(), m_unit) );
+    emit positionChanged( KoUnit::fromUserValue(d, m_unit), m_pY->value() );
   }
 }
 
 void KivioStencilGeometryPanel::yChange( double d )
 {
   if(m_emitSignals) {
-    emit positionChanged( KoUnit::fromUserValue(m_pX->value(), m_unit), KoUnit::fromUserValue(d, m_unit) );
+    emit positionChanged( m_pX->value(), KoUnit::fromUserValue(d, m_unit) );
   }
 }
 
 void KivioStencilGeometryPanel::wChange( double d )
 {
   if(m_emitSignals) {
-    emit sizeChanged( KoUnit::fromUserValue(d, m_unit), KoUnit::fromUserValue(m_pH->value(), m_unit) );
+    emit sizeChanged( KoUnit::fromUserValue(d, m_unit), m_pH->value() );
   }
 }
 
 void KivioStencilGeometryPanel::hChange( double d )
 {
   if(m_emitSignals) {
-    emit sizeChanged( KoUnit::fromUserValue(m_pW->value(), m_unit), KoUnit::fromUserValue(d, m_unit) );
+    emit sizeChanged( m_pW->value(), KoUnit::fromUserValue(d, m_unit) );
   }
 }
 
