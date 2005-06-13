@@ -9,7 +9,12 @@
 
 cd ../../3rdparty
 [ -d kexifeedbackwizard ] && echo "kexifeedbackwizard/ already exists: giving up" && exit 0
+
+echo Fetching kfeedbackwizard from anonsvn...
+
 svn checkout svn://anonsvn.kde.org/home/kde/trunk/playground/utils/kfeedbackwizard
+
+echo Refactoring KFeedbackWizard to KexiFeedbackWizard...
 
 cd kfeedbackwizard
 rm -rf .svn
@@ -36,3 +41,14 @@ cat Makefile.am | sed -e s/kfeedback/kexifeedback/g >Makefile.am.tmp
 mv Makefile.am.tmp Makefile.am
 cd ../..
 mv kfeedbackwizard kexifeedbackwizard
+
+# Test if Makefile.am already contains a reference to the feedbackdir
+# If it's already there, stop here
+cat Makefile.am | grep FEEDBACKDIR && echo Done && cd ../tools/feedback && exit 0
+echo Adding kexifeedbackwizard to Makefile.am...
+echo -e "if use_kexifeedback\nFEEDBACKDIR = kexifeedbackwizard\nendif\n" >Makefile.am.tmp
+cat Makefile.am | sed -e "s/SUBDIRS = */SUBDIRS = \$(FEEDBACKDIR) /" >>Makefile.am.tmp
+mv Makefile.am Makefile.am.nofw
+mv Makefile.am.tmp Makefile.am
+cd ../tools/feedback
+echo Done
