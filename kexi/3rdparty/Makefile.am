@@ -1,6 +1,7 @@
 
 if use_kexifeedback
-FEEDBACKDIR = kexifeedbackwizard
+FEEDBACKDIR = 
+#kexifeedbackwizard
 endif
 
 SUBDIRS = kexisql3 kexisql $(FEEDBACKDIR)
