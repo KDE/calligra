@@ -368,7 +368,6 @@ private:
     /////// End of kotext-specific additions
 private:
     QMap<int, KoTextParagSelection> &selections() const;
-    QPtrVector<QStyleSheetItem> &styleSheetItemsVec() const;
     QPtrList<KoTextCustomItem> &floatingItems() const;
 
     QMap<int, KoTextParagLineStart*> lineStarts;

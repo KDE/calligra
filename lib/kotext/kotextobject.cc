@@ -484,10 +484,10 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
         } else if ( parag->prev() ) { // joining paragraphs
             emit paragraphDeleted( cursor->parag() );
             clearUndoRedoInfo();
-	    textdoc->setSelectionStart( KoTextDocument::Temp, cursor );
+            textdoc->setSelectionStart( KoTextDocument::Temp, cursor );
             cursor->gotoPreviousLetter();
-	    textdoc->setSelectionEnd( KoTextDocument::Temp, cursor );
-	    removeSelectedText( cursor, KoTextDocument::Temp, i18n( "Delete Text" ) );
+            textdoc->setSelectionEnd( KoTextDocument::Temp, cursor );
+            removeSelectedText( cursor, KoTextDocument::Temp, i18n( "Delete Text" ) );
             emit paragraphModified( cursor->parag(), AddChar, cursor->index(), cursor->parag()->length() - cursor->index() );
         }
     } break;
@@ -678,9 +678,9 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         // We're reverting that, and calling setLineChanged() only.
         Q_ASSERT( cursor->parag() == oldCursor.parag() ); // no newline!
         KoTextParag* parag = cursor->parag();
-	// If the new char led to a new line,
-	// the wordwrap could have changed on the line above
-	// This is why we use origLine and not calling lineStartOfChar here.
+        // If the new char led to a new line,
+        // the wordwrap could have changed on the line above
+        // This is why we use origLine and not calling lineStartOfChar here.
         parag->setChanged( false );
         parag->setLineChanged( origLine - 1 ); // if origLine=0, it'll pass -1, which is 'all'
     }
@@ -1337,13 +1337,11 @@ KCommand * KoTextObject::setJoinBordersCommand( KoTextCursor * cursor, bool join
         KoTextParag *start = textdoc->selectionStart( selectionId );
         KoTextParag *end = textdoc->selectionEnd( selectionId );
         setLastFormattedParag( start );
-        KoBorder tmpBorder;
-        tmpBorder.setPenWidth(0);
         for ( ; start && start != end->next() ; start = start->next() )
-          {
-               start->setJoinBorder( true );
-          }
-            end->setJoinBorder ( true );
+        {
+            start->setJoinBorder( true );
+        }
+        end->setJoinBorder ( true );
         borderOutline = true;
 
         if ( start && start->prev() )
@@ -2332,7 +2330,7 @@ QCString KoTextObject::providesOasis( QMimeSource* mime )
     const char* acceptMimeType = acceptSelectionMimeType();
     for ( int i = 0; (fmt = mime->format(i)); ++i )
     {
-	if ( QString( fmt ).startsWith( acceptMimeType ) )
+        if ( QString( fmt ).startsWith( acceptMimeType ) )
         {
             return fmt;
         }
