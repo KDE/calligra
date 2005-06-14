@@ -498,10 +498,18 @@ KivioConnectorTarget *KivioGroupStencil::connectToTarget( KivioConnectorPoint *p
 
 void KivioGroupStencil::searchForConnections( KivioPage *p )
 {
+    KivioStencil *pCur = 0;
     KivioStencil *pStencil = m_pGroupList->first();
+
     while( pStencil )
     {
+        // Backup the current list position
+        pCur = pStencil;
+
         pStencil->searchForConnections( p );
+
+        // Restore it
+        m_pGroupList->find( pCur );
 
         pStencil = m_pGroupList->next();
     }
