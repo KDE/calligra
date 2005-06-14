@@ -1,54 +1,41 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KivioLayerPanelBase</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>KivioLayerPanelBase</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>177</width>
-            <height>240</height>
+            <height>239</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string></string>
+    <property name="layoutMargin" stdset="0">
     </property>
-    <property>
-        <name>layoutMargin</name>
-    </property>
-    <property>
-        <name>layoutSpacing</name>
+    <property name="layoutSpacing" stdset="0">
     </property>
     <vbox>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>0</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>0</number>
         </property>
-        <widget>
-            <class>KToolBar</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="KToolBar">
+            <property name="name">
                 <cstring>bar</cstring>
             </property>
         </widget>
-        <widget>
-            <class>QListView</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QListView">
+            <property name="name">
                 <cstring>list</cstring>
             </property>
-            <property stdset="1">
-                <name>allColumnsShowFocus</name>
+            <property name="allColumnsShowFocus">
                 <bool>true</bool>
             </property>
         </widget>
@@ -66,14 +53,15 @@
         <sizepolicy>
             <hordata>5</hordata>
             <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
         </sizepolicy>
-        <pixmap>image21</pixmap>
+        <pixmap>image0</pixmap>
     </customwidget>
 </customwidgets>
 <images>
-    <image>
-        <name>image21</name>
-        <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1ddec44f503c0ae2a154410f53d0ed20e2bf6bdb656dd6861dd23d9a66591b0587fd1654235ebded6f0edcd53e419d87ae7b1f4f9b8f906d0bfe012317426a70b07bdc2f3ec77f8ed6b89559061a0343d06a124cc105596482585094bc0ae599b04646c9018926491b2205e140c485cace25755c175d0a967b622ff900b8cc9c7d29af594ea722d589167f813aa852ba07d94b9dce296e883fe7bb163f23896753</data>
+    <image name="image0">
+        <data format="PNG" length="258">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c949444154388dad55c91183300c8c341440136e862ed3842b60dc04bd405e62b0b23aec645f0c927675d9a6d6dacbc3716e17fa5fb89217b78c90211f4b806748b53f8a61ed3442eac52e964160958afc8f73bbc4ffab1519d2c8761323752fd01b9cd860c619d2682be8bdaf5db61952e4af6d6e8fb3a408f080448419a433d6486d85052fdba812d6ca7aeab3c266c6a8546b6fb540e14a9018eda87c47bded32f64e50e14ada9e219f1e9e0511a5e70bf2cbb5a9d1659ceddf30b1908f0aa019d03f1fd3e745ff01fb6c8d994fda162e0000000049454e44ae426082</data>
     </image>
 </images>
 <connections>
@@ -95,8 +83,14 @@
         <receiver>KivioLayerPanelBase</receiver>
         <slot>itemClicked(QListViewItem*,const QPoint&amp;,int)</slot>
     </connection>
+</connections>
+<slots>
     <slot access="protected">itemActivated(QListViewItem*)</slot>
     <slot access="protected">itemClicked(QListViewItem*,const QPoint&amp;,int)</slot>
     <slot access="protected">updateButtons(QListViewItem*)</slot>
-</connections>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ktoolbar.h</includehint>
+</includehints>
 </UI>
