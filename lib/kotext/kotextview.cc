@@ -313,28 +313,9 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                         break;
             }
             if ( e->text().length() &&
-//               !( e->state() & AltButton ) &&
                  ( !e->ascii() || e->ascii() >= 32 ) ||
                  ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
                 clearUndoRedoInfo = FALSE;
-                if ( e->key() == Key_Tab ) {
-                    // We don't have support for nested counters at the moment.
-                    /*if ( m_cursor->index() == 0 && m_cursor->parag()->style() &&
-                         m_cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayListItem ) {
-                        m_cursor->parag()->incDepth();
-                        emit hideCursor();
-                        emit repaintChanged();
-                        emit showCursor();
-                        break;
-                    }*/
-                }
-                // Port to setCounter if we really want that - and make configurable
-                /*if ( m_cursor->parag()->style() &&
-                     m_cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayBlock &&
-                     m_cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
-                    setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
-                    break;
-                }*/
                 QString text = e->text();
 
                 // Alt+123 feature
@@ -361,6 +342,9 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 
                     if( !doIgnoreDoubleSpace( p, m_cursor->index()-1, text[ text.length() - 1 ] ) )
                     {
+                        // ###### BUG: with the event compression, typing "kde" and then " k", might not apply
+                        // autocorrection like it does for "kde" followed by " " followed by "k". We need to insert
+                        // one character at a time...
                         insertText( text );
                         // Don't use 'p' past this point. If we replaced a selection, p could have been deleted (#48999)
                         doAutoFormat( m_cursor, m_cursor->parag(), m_cursor->index() - 1, text[ text.length() - 1 ] );
