@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -260,7 +260,8 @@ public:
                              const QString & cmdName = QString::null, bool createUndoRedo=true  );
 
     KCommand * replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
-                                        int selectionId, const QString & cmdName, bool repaint = true );
+                                        int selectionId, const QString & cmdName, bool repaint = true,
+                                        bool checkNewLine = true );
     KCommand * removeSelectedTextCommand( KoTextCursor * cursor, int selectionId, bool repaint = true );
     KCommand* insertParagraphCommand( KoTextCursor * cursor );
 
