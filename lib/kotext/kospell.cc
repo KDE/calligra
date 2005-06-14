@@ -106,8 +106,10 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
     d->parag = parag;
     d->lastTxtDocument = d->parag->textDocument();
     QString str = parag->string()->stringToSpellCheck();
+    /// ##### do we really need to create a Filter every time?
     Filter filter;
     filter.setBuffer( str );
+    filter.setSettings( broker()->settings() );
     Word w = filter.wordAtPosition( pos );
     foundWord = w.word;
     start = w.start;

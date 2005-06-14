@@ -210,10 +210,11 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
 #if KDE_VERSION > KDE_MAKE_VERSION(3,3,0)
     if ( length < 10 ) {
         QString str = parag->string()->stringToSpellCheck();
+        /// ##### do we really need to create a Filter every time?
         Filter filter;
         filter.setBuffer( str );
         filter.setCurrentPosition( pos - 1 );
-
+        filter.setSettings( d->backSpeller->settings() );
 
         for ( Word w = filter.nextWord(); !w.end; w = filter.nextWord() ) {
             bool misspelling = !d->backSpeller->checkWord( w.word );
