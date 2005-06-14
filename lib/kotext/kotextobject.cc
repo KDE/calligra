@@ -608,6 +608,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         }
         else
         {
+            // TODO: it would be better to bundle it into a KMacroCommand, together with the insert
+            // Something like using newPlaceHolderCommand maybe...
             KCommand* removeSelCmd = removeSelectedTextCommand( cursor, selectionId );
             if (removeSelCmd)
                 emitNewCommand( removeSelCmd );
