@@ -1682,20 +1682,20 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
           link_type = 2;
     }
     tmp_pos = word.find('@');
-    if( pos==-1 && tmp_pos!=-1)
+    if ( pos == -1 && tmp_pos != -1 )
     {
           pos = tmp_pos-1;
           QChar c;
-          while( pos>=0)
+          while( pos>=0 )
           {
                 c = word.at(pos);
                 if ( c.isPunct() && c!='.'&& c!='_')    break;
                 else    --pos;
           }
-          if(pos==tmp_pos-1) //it not a valid address
+          if ( pos == tmp_pos-1 ) //it not a valid address
           {
                 m_ignoreUpperCase = false;
-                pos=-1;
+                pos = -1;
           }
           else
                 ++pos;
@@ -1703,6 +1703,7 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
     }
     if(pos!=-1)
     {
+        // A URL inside e.g. quotes (like "http://www.koffice.org" with the quotes) shouldn't include the quote in the URL.
 	while ( !word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1)!='/')
         {
                 word.truncate(word.length()-1);
@@ -1718,40 +1719,43 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
         cursor.setIndex( start + length );
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-        KoVariable *var;
+        QString newWord = word;
         if(link_type==1)
-                var=new KoLinkVariable( textdoc, word, QString("mailto:")+word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
+            newWord = QString("mailto:") + word;
         else if(link_type==2)
-                var=new KoLinkVariable( textdoc, word, QString("http://")+word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
+            newWord = QString("http://") + word;
         else if(link_type==3)
-                var=new KoLinkVariable( textdoc, word, QString("ftp://")+word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
-        else
-                var=new KoLinkVariable( textdoc, word, word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
+            newWord = QString("ftp://") + word;
+
+        KoVariable* var = new KoLinkVariable( textdoc, word, newWord, m_varFormatCollection->format( "STRING" ), m_varCollection );
         CustomItemsMap customItemsMap;
         customItemsMap.insert( 0, var );
         KoTextFormat * lastFormat = parag->at( start )->format();
+        int origCursorIndex = textEditCursor->index();
         txtObj->insert( textEditCursor, lastFormat, KoTextObject::customItemChar(), false, true, i18n("Insert Variable"), customItemsMap,KoTextObject::HighlightSelection );
         var->recalc();
         parag->invalidate(0);
         parag->setChanged( true );
 
-        txtObj->emitHideCursor();
-        textEditCursor->gotoRight();
-        txtObj->emitShowCursor();
-
         // adjust index
         index -= length-1; // we removed length chars and inserted one instead
-        if(  m_completion && m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord )
-                if (word.length()>= m_minCompletionWordLength  && !word.isEmpty() && m_listCompletion->makeCompletion(word).isEmpty())
-                                {
-                                        kdDebug() << "Adding:" << word << endl;
-                                        m_listCompletion->addItem( word );
-                                        if ( word.length() > m_countMaxWords )
-                                            m_countMaxWords = word.length();
-                                }
 
+        txtObj->emitHideCursor();
+        textEditCursor->setIndex( origCursorIndex - (length-1) );
+        txtObj->emitShowCursor();
+
+        // ###### TODO: Move to a common method, this code is duplicated...
+        if ( m_completion && m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord )
+        {
+            if (word.length()>= m_minCompletionWordLength  && !word.isEmpty() && m_listCompletion->makeCompletion(word).isEmpty())
+            {
+                kdDebug() << "Adding:" << word << endl;
+                m_listCompletion->addItem( word );
+                if ( word.length() > m_countMaxWords )
+                    m_countMaxWords = word.length();
+            }
+        }
     }
-
 }
 
 void KoAutoFormat::doAutoIncludeUpperUpper(KoTextCursor* /*textEditCursor*/, KoTextParag *parag, KoTextObject* /*txtObj*/ )
