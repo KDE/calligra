@@ -87,12 +87,12 @@ public:
 
     static QString* shadowCssCompat; // used for compat with koffice-1.2 when loading
 
-    char unused;          // for future use
+    bool joinBorder:1;
+    bool unused:7;          // for future use
     char pageBreaking;    // Page breaking flags
     char direction;       // QChar::Direction
     /// Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
     char alignment; // Qt::AlignmentFlags
-    bool joinBorder;
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
     /** can be 0 if no counter set */
     KoParagCounter* counter;
