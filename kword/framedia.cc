@@ -1156,6 +1156,7 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
 
     transparentCB = new QCheckBox( i18n( "Transparent background" ), tab5 );
     grid5->addWidget(transparentCB,row++,0);
+    transparentCB->setEnabled( !m_mainFrameSetIncluded );
 
     QLabel *labelBgColor = new QLabel( i18n( "Background color:" ), tab5 );
 
