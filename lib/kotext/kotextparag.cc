@@ -1248,9 +1248,9 @@ int KoTextParag::topMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
-        + ( joinBorder() && prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
+        + ( ( joinBorder() && prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
         prev()->topBorder() == m_layout.topBorder && prev()->leftBorder() == m_layout.leftBorder &&
-        prev()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.topBorder.width() );
+        prev()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.topBorder.width() ) );
 }
 
 int KoTextParag::bottomMargin() const
@@ -1258,9 +1258,9 @@ int KoTextParag::bottomMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
-        + ( joinBorder() && next() && next()->joinBorder() && next()->bottomBorder() == m_layout.bottomBorder &&
+        + ( ( joinBorder() && next() && next()->joinBorder() && next()->bottomBorder() == m_layout.bottomBorder &&
         next()->topBorder() == m_layout.topBorder && next()->leftBorder() == m_layout.leftBorder &&
-        next()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.bottomBorder.width() );
+        next()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.bottomBorder.width() ) );
 }
 
 int KoTextParag::leftMargin() const
