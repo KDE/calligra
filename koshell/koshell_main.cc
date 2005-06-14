@@ -26,7 +26,7 @@
 #include <kuniqueapplication.h>
 #include <kwin.h>
 
-#include <koApplication.h>
+#include <koGlobal.h>
 
 #include "koshell_shell.h"
 
@@ -82,6 +82,8 @@ extern "C" KOSHELL_EXPORT int kdemain( int argc, char **argv )
     return 0;
   }
   KoShellApp app;
+  // Initialize stuff (like KoApplication does)
+  KoGlobal::initialize();
 
   return app.exec();
 }
