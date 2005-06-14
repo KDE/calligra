@@ -239,7 +239,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
 #ifdef HAVE_LIBKSPELL2
-
     m_bgSpellCheck = new KWBgSpellCheck(this);
 #endif
     m_slDataBase = new KWMailMergeDataBase( this );
@@ -1620,6 +1619,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                 m_spellCheckIgnoreList.append(spellWord.attribute("word"));
             spellWord=spellWord.nextSibling().toElement();
         }
+#ifdef HAVE_LIBKSPELL2
+        m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList );
+#endif
     }
 
     emit sigProgress(25);
