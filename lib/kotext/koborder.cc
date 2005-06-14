@@ -112,7 +112,12 @@ void KoBorder::loadFoBorder( const QString& border )
     QCString _style = border.section(' ', 1, 1).latin1();
     QString _color = border.section(' ', 2, 2);
 
-    setPenWidth( KoUnit::parseValue( _width, 1.0 ) );
+    double const width = KoUnit::parseValue( _width, 1.0 );
+    //TODO: let the user choose a more precise border width with KUIntSpinBox (or something like that)
+    if ( width < 1 )
+         setPenWidth( 1 );
+    else
+        setPenWidth( width );
 
     m_style = SOLID;
     for ( uint i = 0; i < sizeof( s_borderStyles ) / sizeof *s_borderStyles; ++i ) {

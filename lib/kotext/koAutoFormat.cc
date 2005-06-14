@@ -1162,7 +1162,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
     //if ( !m_enabled )
     //    return;
     // Auto-correction happens when pressing space, tab, CR, punct etc.
-    if ( (ch.isSpace() || ch==':' || ch=='?' || ch=='!' || ch==',' || (m_advancedAutoCorrect && ch=='.') ) && index > 0 )
+    if ( (ch.isSpace() || ch==':' || ch=='?' || ch=='!' || ch==','  || ch=='<'  || ch=='>' || (m_advancedAutoCorrect && ch=='.') ) && index > 0 )
     {
         KCommand *cmd = 0L;
         KMacroCommand *macro = 0L;
@@ -1689,7 +1689,7 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
           while( pos>=0 )
           {
                 c = word.at(pos);
-                if ( c.isPunct() && c!='.'&& c!='_')    break;
+                if ( c.isPunct() && c!='.'&& c!='_' && c!='<' && c!='>' )    break;
                 else    --pos;
           }
           if ( pos == tmp_pos-1 ) //it not a valid address
