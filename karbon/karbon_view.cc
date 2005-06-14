@@ -1147,8 +1147,12 @@ KarbonView::selectionChanged()
 
 		if( count == 1 )
 		{
-			m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
-			m_smallPreview->update( *obj->stroke(), *obj->fill() );
+			if ( shell() ) {
+				if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
+					m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
+					m_smallPreview->update( *obj->stroke(), *obj->fill() );
+				}
+			}
 			m_strokeDocker->setStroke( *( obj->stroke() ) );
 			VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
 			m_ungroupObjects->setEnabled( group );
@@ -1160,11 +1164,13 @@ KarbonView::selectionChanged()
 			VStroke stroke;
 			stroke.setType( VStroke::none );
 			VFill fill;
-			m_strokeFillPreview->update( stroke, fill );
-			m_smallPreview->update( stroke, fill );
+			if ( shell() )
+				if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
+					m_strokeFillPreview->update( stroke, fill );
+					m_smallPreview->update( stroke, fill );
+				}
 			m_groupObjects->setEnabled( true );
 		}
-
 		part()->document().selection()->setStroke( *obj->stroke() );
 		part()->document().selection()->setFill( *obj->fill() );
 		m_setLineWidth->setEnabled( true );
@@ -1175,11 +1181,12 @@ KarbonView::selectionChanged()
 	}
 	else
 	{
-		m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+		if ( shell() )
+			if ( this == shell()->rootView() || koDocument()->isEmbedded() )
+			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
 		m_setLineWidth->setEnabled( false );
 	}
-
 	emit selectionChange();
 }
 void
