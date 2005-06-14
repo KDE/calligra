@@ -5781,6 +5781,8 @@ void KWView::frameSelectedChanged()
         bool okForLowerRaise = false;
         bool okForChangeParagStyle = true;
         bool okForChangeInline = true;
+        bool containsCellFrame = false;
+        bool containsMainFrame = false;
         QPtrListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current() && ( okForDelete || okForLowerRaise || okForChangeParagStyle || okForChangeInline) ; ++it )
         {
@@ -5799,10 +5801,14 @@ void KWView::frameSelectedChanged()
             // As soon as we find one who we can lower/raise open the option.
             okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || it.current()->frameSet()->isFloating());
             okForChangeInline &= !(isMainWPFrame || headerFooterFootNote );
+            if ( it.current()->frameSet()->getGroupManager() )
+                containsCellFrame = true;
+            if ( isMainWPFrame )
+                containsMainFrame = true;
         }
         actionEditDelFrame->setEnabled( okForDelete );
-        actionEditCut->setEnabled( okForDelete );
-        actionEditCopy->setEnabled( nbFrame >= 1 && okForCopy);
+        actionEditCut->setEnabled( okForDelete  && !containsCellFrame );
+        actionEditCopy->setEnabled( nbFrame >= 1 && okForCopy && !containsMainFrame && !containsCellFrame );
 
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );
