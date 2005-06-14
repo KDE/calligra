@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KivioLayerPanelBase</class>
 <widget>
     <class>QWidget</class>
