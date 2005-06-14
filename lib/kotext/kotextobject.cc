@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1521,7 +1521,8 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 }
 
 KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
-                                                 int selectionId, const QString & cmdName, bool repaint )
+                                                 int selectionId, const QString & cmdName, bool repaint,
+                                                 bool checkNewLine )
 {
     if ( protectContent() )
         return 0L;
@@ -1541,7 +1542,7 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
 
     // Insert replacement
     insert( cursor, format,
-            replacement, true, false, QString::null /* no place holder command */,
+            replacement, checkNewLine, false, QString::null /* no place holder command */,
             CustomItemsMap(), selectionId, repaint );
 
     KoTextDocCommand * cmd = new KoTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
@@ -1831,37 +1832,41 @@ void KoTextObject::typingDone()
 }
 
 
-KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag)
+// helper for changeCaseOfText
+KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPosEnd,
+                                               KoChangeCaseDia::TypeOfCase _type,
+                                               KoTextCursor *cursor, KoTextParag *parag )
 {
     if ( protectContent() )
         return 0L;
 
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change Case") );
     KoTextFormat *curFormat = parag->paragraphFormat();
-    QString text = parag->string()->toString().mid(cursorPosStart , cursorPosEnd - cursorPosStart );
-    QString repl;
-    int posStart=cursorPosStart;
-    int posEnd=cursorPosStart;
+    const QString text = parag->string()->toString().mid( cursorPosStart, cursorPosEnd - cursorPosStart );
+    int posStart = cursorPosStart;
+    int posEnd = cursorPosStart;
     KoTextCursor c1( textdoc );
     KoTextCursor c2( textdoc );
+    //kdDebug() << k_funcinfo << "from " << cursorPosStart << " to " << cursorPosEnd << " (excluded). Parag=" << parag << " length=" << parag->length() << endl;
     for ( int i = cursorPosStart; i < cursorPosEnd; ++i )
     {
         KoTextStringChar & ch = *(parag->at(i));
         KoTextFormat * newFormat = ch.format();
-        if( ch.isCustom())
+        if( ch.isCustom() )
         {
-            posEnd=i;
-            c1.setParag(parag  );
+            posEnd = i;
+            c1.setParag( parag );
             c1.setIndex( posStart );
             c2.setParag( parag );
             c2.setIndex( posEnd );
+            //kdDebug() << k_funcinfo << "found custom at " << i << " : doing from " << posStart << " to " << posEnd << endl;
 
-            repl=text.mid(posStart-cursorPosStart,posEnd-posStart);
+            const QString repl = text.mid( posStart, posEnd - posStart );
             textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
             textdoc->setSelectionEnd( KoTextDocument::Temp, &c2 );
             macroCmd->addCommand(replaceSelectionCommand(
                                      cursor, textChangedCase(repl,_type),
-                                     KoTextDocument::Temp, "" ));
+                                     KoTextDocument::Temp, QString::null, false, false /*\n isn't new parag*/ ));
             do
             {
                 ++i;
@@ -1875,35 +1880,39 @@ KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosE
             if ( newFormat != curFormat )
             {
                 posEnd=i;
-                c1.setParag(parag  );
+                c1.setParag( parag );
                 c1.setIndex( posStart );
                 c2.setParag( parag );
                 c2.setIndex( posEnd );
+                //kdDebug() << k_funcinfo << "found new format at " << i << " : doing from " << posStart << " to " << posEnd << endl;
 
-                repl=text.mid(posStart-cursorPosStart,posEnd-posStart);
+                const QString repl = text.mid( posStart, posEnd - posStart );
                 textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( KoTextDocument::Temp, &c2 );
                 macroCmd->addCommand(replaceSelectionCommand(
                                          cursor, textChangedCase(repl,_type),
-                                         KoTextDocument::Temp, "" ));
+                                         KoTextDocument::Temp, QString::null, false, false /*\n isn't new parag*/ ));
                 posStart=i;
                 posEnd=i;
                 curFormat = newFormat;
             }
         }
     }
-    //change last word
-    c1.setParag(parag  );
-    c1.setIndex( posStart );
-    c2.setParag(parag );
-    c2.setIndex( cursorPosEnd );
+    if ( posStart != cursorPosEnd )
+    {
+        //kdDebug() << k_funcinfo << "finishing: doing from " << posStart << " to " << cursorPosEnd << endl;
+        c1.setParag( parag );
+        c1.setIndex( posStart );
+        c2.setParag( parag );
+        c2.setIndex( cursorPosEnd );
 
-    textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
-    textdoc->setSelectionEnd( KoTextDocument::Temp, &c2 );
-    repl=text.mid(posStart-cursorPosStart,cursorPosEnd-posStart);
-    macroCmd->addCommand(replaceSelectionCommand(
-                             cursor, textChangedCase(repl,_type),
-                             KoTextDocument::Temp, "" ));
+        textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
+        textdoc->setSelectionEnd( KoTextDocument::Temp, &c2 );
+        const QString repl = text.mid( posStart, cursorPosEnd - posStart );
+        macroCmd->addCommand(replaceSelectionCommand(
+                                 cursor, textChangedCase(repl,_type),
+                                 KoTextDocument::Temp, QString::null, false, false /*\n isn't new parag*/ ));
+    }
     return macroCmd;
 
 }
@@ -1916,22 +1925,32 @@ KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::T
 
     KoTextCursor start = textdoc->selectionStartCursor( KoTextDocument::Standard );
     KoTextCursor end = textdoc->selectionEndCursor( KoTextDocument::Standard );
+    emit hideCursor();
 
     if ( start.parag() == end.parag() )
     {
-        macroCmd->addCommand(changeCaseOfTextParag(start.index(),end.index() , _type,cursor, start.parag() ));
+        int endIndex = QMIN( start.parag()->length() - 1, end.index() );
+        macroCmd->addCommand( changeCaseOfTextParag( start.index(), endIndex, _type,
+                                                     cursor, start.parag() ) );
     }
     else
     {
-        macroCmd->addCommand(changeCaseOfTextParag(start.index(), start.parag()->length() - 1 - start.index(), _type,cursor, start.parag() ));
+        macroCmd->addCommand( changeCaseOfTextParag( start.index(), start.parag()->length() - 1, _type,
+                                                     cursor, start.parag() ) );
         KoTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
         {
-            macroCmd->addCommand(changeCaseOfTextParag(0,p->length()-1 , _type,cursor, p ));
+            macroCmd->addCommand( changeCaseOfTextParag(0, p->length() - 1, _type, cursor, p ) );
             p = p->next();
         }
-        macroCmd->addCommand(changeCaseOfTextParag(0,end.index() , _type,cursor, end.parag() ));
+        int endIndex = QMIN( p->length() - 1, end.index() );
+        macroCmd->addCommand( changeCaseOfTextParag(0, endIndex, _type, cursor, end.parag() ));
     }
+    formatMore( 2 );
+    emit repaintChanged( this );
+    emit ensureCursorVisible();
+    emit updateUI( true );
+    emit showCursor();
     return macroCmd;
 }
 
