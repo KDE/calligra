@@ -3244,7 +3244,10 @@ QDomDocument KWDocument::saveXML()
         {
             // Set the child geometry from the frame geometry, with no viewmode applied
             // to prepare saving below with the correct geometry
-            static_cast<KWPartFrameSet *>(frameSet)->updateChildGeometry( 0L );
+            KWPartFrameSet *fs = static_cast<KWPartFrameSet *>(frameSet);
+            fs->getChild()->blockSignals( true ); // we don't want slotChildChanged to be called as it makes KWord call setModified(true) when the user leave the part.
+            fs->updateChildGeometry( 0L );
+            fs->getChild()->blockSignals( false );
         }
 
         // If picture frameset, make a note of the image it needs.
