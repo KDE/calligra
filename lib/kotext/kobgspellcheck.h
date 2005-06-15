@@ -68,8 +68,9 @@ protected slots:
     void slotParagraphDeleted( KoTextParag* parag );
 
     void slotClearPara();
+
 protected:
-    void markWord( KoTextParag* parag, const QString &old, int pos, bool misspelled );
+    void markWord( KoTextParag* parag, int pos, int length, bool misspelled );
 private:
     class Private;
     Private *d;
