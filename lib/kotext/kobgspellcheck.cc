@@ -125,29 +125,27 @@ void KoBgSpellCheck::start()
 
 void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, int pos )
 {
-#ifdef DEBUG_BGSPELLCHECKING
     KoTextParag* parag = d->backSpeller->currentParag();
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag
                    << " (id=" << parag->paragId() << ", length="
                    << parag->length() << ") pos=" << pos << " length="
                    << old.length() << endl;
 #endif
-    markWord( old, pos, true );
-    // set the repaint flags
-    //parag->setChanged( true );
-    //parag->document()->emitRepaintChanged();
-    //d->backSpeller->continueChecking();
+    markWord( parag, old, pos, true );
 }
 
-void KoBgSpellCheck::markWord( const QString &old, int pos, bool misspelled )
+void KoBgSpellCheck::markWord( KoTextParag* parag, const QString &old, int pos, bool misspelled )
 {
-    KoTextParag* parag = d->backSpeller->currentParag();
-    if ( !parag ) return;
-    if ( pos >= parag->length() ) return;
+    if ( pos >= parag->length() ) {
+        kdDebug() << k_funcinfo << pos << "is out of parag (length=" << parag->length() << ")" << endl;
+        return;
+    }
 
     KoTextStringChar *ch = parag->at( pos );
     KoTextFormat format( *ch->format() );
     format.setMisspelled( misspelled );
+    //kdDebug() << k_funcinfo << "changing mark from " << pos << " to " << old.length() << " misspelled=" << misspelled << endl;
     parag->setFormat( pos, old.length(), &format, true, KoTextFormat::Misspelled );
 
     parag->setChanged( true );
@@ -213,13 +211,14 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         /// ##### do we really need to create a Filter every time?
         Filter filter;
         filter.setBuffer( str );
-        filter.setCurrentPosition( pos - 1 );
+        // pos - 1 wasn't enough for the case a splitting a word into two misspelled halves
+        filter.setCurrentPosition( QMAX( 0, pos - 2 ) );
         filter.setSettings( d->backSpeller->settings() );
 
         for ( Word w = filter.nextWord(); !w.end; w = filter.nextWord() ) {
             bool misspelling = !d->backSpeller->checkWord( w.word );
             //kdDebug()<<"Word = \""<< w.word<< "\" , misspelled = "<<misspelling<<endl;
-            markWord( w.word, w.start, misspelling );
+            markWord( parag, w.word, w.start, misspelling );
         }
 #else
     if ( length < 3 ) {
@@ -227,7 +226,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         int start;
         bool misspelled = !d->backSpeller->checkWordInParagraph( parag, pos,
                                                                  word, start );
-        markWord( word, start, misspelled );
+        markWord( parag, word, start, misspelled );
 #endif
     } else {
         d->backSpeller->check( parag );

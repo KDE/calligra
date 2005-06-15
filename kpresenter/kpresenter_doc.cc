@@ -320,19 +320,24 @@ void KPresenterDoc::setUnit( KoUnit::Unit _unit )
 
 void KPresenterDoc::saveConfig()
 {
-    if ( isEmbedded() || !isReadWrite())
+    if ( !isReadWrite())
         return;
-    KConfig *config = KPresenterFactory::global()->config();
-    config->setGroup( "Interface" );
-    config->writeEntry( "Zoom", m_zoomHandler->zoom() );
-    config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
-    config->writeEntry( "ViewFormattingChars", m_bViewFormattingChars );
-    config->writeEntry( "ShowGrid" , m_bShowGrid );
-    config->writeEntry( "GridToFront" , m_bGridToFont );
-    config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
-    config->writeEntry( "ResolutionX", m_gridX );
-    config->writeEntry( "ResolutionY", m_gridY );
-    config->writeEntry( "HelpLineToFront" , m_bHelplinesToFront );
+    KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
+    group.writeEntry( "PersonalDict", m_spellCheckPersonalDict );
+    if ( !isEmbedded() )
+    {
+        KConfig *config = KPresenterFactory::global()->config();
+        config->setGroup( "Interface" );
+        config->writeEntry( "Zoom", m_zoomHandler->zoom() );
+        config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
+        config->writeEntry( "ViewFormattingChars", m_bViewFormattingChars );
+        config->writeEntry( "ShowGrid" , m_bShowGrid );
+        config->writeEntry( "GridToFront" , m_bGridToFont );
+        config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
+        config->writeEntry( "ResolutionX", m_gridX );
+        config->writeEntry( "ResolutionY", m_gridY );
+        config->writeEntry( "HelpLineToFront" , m_bHelplinesToFront );
+    }
 }
 
 void KPresenterDoc::initConfig()
@@ -405,6 +410,10 @@ void KPresenterDoc::initConfig()
         m_picturePath=config->readPathEntry( "picture path",KGlobalSettings::documentPath());
         setBackupPath(config->readPathEntry( "backup path" ));
     }
+
+    // Load personal dict
+    KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
+    m_spellCheckPersonalDict = group.readListEntry( "PersonalDict" );
 
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
@@ -4573,7 +4582,7 @@ void KPresenterDoc::setSpellCheckIgnoreList( const QStringList& lst )
 {
     m_spellCheckIgnoreList = lst;
 #ifdef HAVE_LIBKSPELL2
-    m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList );
+    m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
 #endif
     setModified( true );
 }
@@ -4758,7 +4767,12 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
 #ifdef HAVE_LIBKSPELL2
     if ( m_bgSpellCheck )
     {
-        //m_bgSpellCheck->addPersonalDictonary( word );
+        if( m_spellCheckPersonalDict.findIndex( word ) == -1 )
+            m_spellCheckPersonalDict.append( word );
+        m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
+        if ( backgroundSpellCheckEnabled() )
+            // Re-check everything to make this word normal again
+            reactivateBgSpellChecking();
     }
 #endif
 }

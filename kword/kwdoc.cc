@@ -239,7 +239,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
 #ifdef HAVE_LIBKSPELL2
-
     m_bgSpellCheck = new KWBgSpellCheck(this);
 #endif
     m_slDataBase = new KWMailMergeDataBase( this );
@@ -409,27 +408,37 @@ void KWDocument::initConfig()
           m_picturePath = config->readPathEntry( "picture path" );
       setBackupPath(config->readPathEntry( "backup path" ));
   }
+
+  // Load personal dict
+  KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
+  m_spellCheckPersonalDict = group.readListEntry( "PersonalDict" );
 }
 
 void KWDocument::saveConfig()
 {
-    if ( isEmbedded() || !isReadWrite() )
+    if ( !isReadWrite() )
         return;
-    // Only save the config that is manipulated by the UI directly.
-    // The config from the config dialog is saved by the dialog itself.
-    KConfig *config = KWFactory::global()->config();
-    config->setGroup( "Interface" );
-    config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
-    config->writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
-    config->writeEntry( "ViewFormattingEndParag", m_viewFormattingEndParag );
-    config->writeEntry( "ViewFormattingTabs", m_viewFormattingTabs );
-    config->writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
-    config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
-    config->writeEntry( "Zoom", m_zoom );
-    config->writeEntry( "showDocStruct", m_bShowDocStruct);
-    config->writeEntry( "Rulers", m_bShowRuler);
-    config->writeEntry( "viewmode", m_lastViewMode);
-    config->writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
+    KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
+    group.writeEntry( "PersonalDict", m_spellCheckPersonalDict );
+
+    if ( !isEmbedded() )
+    {
+        // Only save the config that is manipulated by the UI directly.
+        // The config from the config dialog is saved by the dialog itself.
+        KConfig *config = KWFactory::global()->config();
+        config->setGroup( "Interface" );
+        config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
+        config->writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
+        config->writeEntry( "ViewFormattingEndParag", m_viewFormattingEndParag );
+        config->writeEntry( "ViewFormattingTabs", m_viewFormattingTabs );
+        config->writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
+        config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
+        config->writeEntry( "Zoom", m_zoom );
+        config->writeEntry( "showDocStruct", m_bShowDocStruct);
+        config->writeEntry( "Rulers", m_bShowRuler);
+        config->writeEntry( "viewmode", m_lastViewMode);
+        config->writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
+    }
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -1609,6 +1618,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         }
     }
 
+    QStringList lst;
     QDomElement spellCheckIgnore = word.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
     if( !spellCheckIgnore.isNull() )
     {
@@ -1617,10 +1627,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         while ( !spellWord.isNull() )
         {
             if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
-                m_spellCheckIgnoreList.append(spellWord.attribute("word"));
+                lst.append(spellWord.attribute("word"));
             spellWord=spellWord.nextSibling().toElement();
         }
     }
+    setSpellCheckIgnoreList( lst );
 
     emit sigProgress(25);
 
@@ -1795,14 +1806,12 @@ void KWDocument::endOfLoading()
 
 void KWDocument::startBackgroundSpellCheck()
 {
-    //don't start bg spell checking if
-    if(backgroundSpellCheckEnabled() && isReadWrite())
+    if ( backgroundSpellCheckEnabled() && isReadWrite() )
     {
 #ifdef HAVE_LIBKSPELL2
         m_bgSpellCheck->start();
 #endif
     }
-
 }
 
 void KWDocument::loadEmbeddedObjects( QDomElement& word )
@@ -5384,7 +5393,7 @@ void KWDocument::setSpellCheckIgnoreList( const QStringList& lst )
 {
     m_spellCheckIgnoreList = lst;
 #ifdef HAVE_LIBKSPELL2
-    m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList );
+    m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
 #endif
     setModified( true );
 }
@@ -5395,6 +5404,9 @@ void KWDocument::addSpellCheckIgnoreWord( const QString & word )
     if( m_spellCheckIgnoreList.findIndex( word ) == -1 )
         m_spellCheckIgnoreList.append( word );
     setSpellCheckIgnoreList( m_spellCheckIgnoreList );
+    if ( backgroundSpellCheckEnabled() )
+        // Re-check everything to make this word normal again
+        reactivateBgSpellChecking();
 }
 
 int KWDocument::maxZOrder( int pageNum) const
@@ -5811,12 +5823,17 @@ void KWDocument::setHorizontalLinePath( const QStringList & lst)
 }
 #endif
 
-void KWDocument::addWordToDictionary( const QString & /*word*/ )
+void KWDocument::addWordToDictionary( const QString& word )
 {
 #ifdef HAVE_LIBKSPELL2
     if ( m_bgSpellCheck )
     {
-        //m_bgSpellCheck->addPersonalDictonary( word );
+        if( m_spellCheckPersonalDict.findIndex( word ) == -1 )
+            m_spellCheckPersonalDict.append( word );
+        m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
+        if ( backgroundSpellCheckEnabled() )
+            // Re-check everything to make this word normal again
+            reactivateBgSpellChecking();
     }
 #endif
 }

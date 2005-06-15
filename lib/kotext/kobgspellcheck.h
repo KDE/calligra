@@ -69,7 +69,7 @@ protected slots:
 
     void slotClearPara();
 protected:
-    void markWord( const QString &old, int pos, bool misspelled );
+    void markWord( KoTextParag* parag, const QString &old, int pos, bool misspelled );
 private:
     class Private;
     Private *d;

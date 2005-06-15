@@ -6499,12 +6499,11 @@ void KPresenterView::slotAddIgnoreAllWord()
 void KPresenterView::addWordToDictionary()
 {
     KPTextView* edit = m_canvas->currentTextObjectView();
-    if ( edit && m_pKPresenterDoc->backgroundSpellCheckEnabled() )
+    if ( edit )
     {
         QString word = edit->wordUnderCursor( *edit->cursor() );
         if ( !word.isEmpty() )
             m_pKPresenterDoc->addWordToDictionary( word );
-        m_pKPresenterDoc->reactivateBgSpellChecking();
     }
 }
 

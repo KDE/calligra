@@ -686,7 +686,8 @@ private:
     QPtrList<KPrPage> m_pageList;
     QPtrList<KPrPage> m_deletedPageList;
 
-    QStringList m_spellCheckIgnoreList;
+    QStringList m_spellCheckIgnoreList; // per-document
+    QStringList m_spellCheckPersonalDict; // per-user
 
     double m_gridX;
     double m_gridY;
