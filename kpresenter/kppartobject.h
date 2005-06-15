@@ -55,6 +55,7 @@ public:
 
 public slots:
     void slot_changed( KoChild *_koChild );
+    void slotChildChanged();
 
 protected:
     void updateChildGeometry();

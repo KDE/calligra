@@ -207,10 +207,20 @@ void KPPartObject::activate( QWidget *_widget )
         return;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
+    QObject::connect( child, SIGNAL( changed( KoChild * ) ),
+                      this, SLOT( slotChildChanged() ) );
 }
 
 void KPPartObject::deactivate()
 {
+     QObject::disconnect( child, SIGNAL( changed( KoChild * ) ),
+                          this, SLOT( slotChildChanged() ) );
+}
+
+void KPPartObject::slotChildChanged()
+{
+     if ( child->document()->isModified() ) //if the child object has been modified...
+        child->parent()->setModified( true ); //the document should be modified too
 }
 
 #include "kppartobject.moc"
