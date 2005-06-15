@@ -214,12 +214,13 @@ void TKSelectColorAction::setActiveColor( const QColor& color )
 
 void TKSelectColorAction::selectColorDialog()
 {
-    QColor color;
+    QColor c = color();
+
     if ( d->defaultColorMenu )
     {
-        if ( KColorDialog::getColor(color,d->defaultColor) == QDialog::Accepted )
+        if ( KColorDialog::getColor(c,d->defaultColor) == QDialog::Accepted )
         {
-            setCurrentColor(color);
+            setCurrentColor(c);
             m_pRecentColor->insertColor(m_pCurrentColor);
             activate();
         }
@@ -227,9 +228,9 @@ void TKSelectColorAction::selectColorDialog()
     }
     else
     {
-        if ( KColorDialog::getColor(color) == QDialog::Accepted )
+        if ( KColorDialog::getColor(c) == QDialog::Accepted )
         {
-            setCurrentColor(color);
+            setCurrentColor(c);
             m_pRecentColor->insertColor(m_pCurrentColor);
             activate();
         }
