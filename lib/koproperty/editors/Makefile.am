@@ -1,4 +1,4 @@
-INCLUDES = -I../. $(all_includes)
+INCLUDES = -I$(srcdir)/.. $(all_includes)
 
 noinst_LTLIBRARIES =  libkopropertyeditors.la
 libkopropertyeditors_la_LIBADD =  $(LIB_KDEUI) $(LIB_KIO)

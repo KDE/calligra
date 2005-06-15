@@ -1,4 +1,4 @@
-INCLUDES = -I./editors $(all_includes)
+INCLUDES = -I$(srcdir)/editors $(all_includes)
 
 lib_LTLIBRARIES =  libkoproperty.la
 
