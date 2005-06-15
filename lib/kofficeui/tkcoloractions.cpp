@@ -9,6 +9,7 @@
 #include <qwhatsthis.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <qapplication.h>
 
 TKColorPopupMenu::TKColorPopupMenu( QWidget* parent, const char* name )
 : KPopupMenu(parent,name)
@@ -218,7 +219,7 @@ void TKSelectColorAction::selectColorDialog()
 
     if ( d->defaultColorMenu )
     {
-        if ( KColorDialog::getColor(c,d->defaultColor) == QDialog::Accepted )
+        if ( KColorDialog::getColor(c,d->defaultColor, qApp->activeWindow()) == QDialog::Accepted )
         {
             setCurrentColor(c);
             m_pRecentColor->insertColor(m_pCurrentColor);
@@ -228,7 +229,7 @@ void TKSelectColorAction::selectColorDialog()
     }
     else
     {
-        if ( KColorDialog::getColor(c) == QDialog::Accepted )
+        if ( KColorDialog::getColor(c, qApp->activeWindow()) == QDialog::Accepted )
         {
             setCurrentColor(c);
             m_pRecentColor->insertColor(m_pCurrentColor);
