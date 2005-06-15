@@ -332,8 +332,11 @@ Buffer::Buffer(PtrList *list)
     //deep copy of m_list
     for(Property::DictIterator it( list->d->dict ); it.current(); ++it)
     {
-        Property *mp = new Property( *it.current() );
-        addProperty( mp, list->d->groupForProperty[ it.current() ] );
+        Property *prop = new Property( *it.current() );
+        QCString group = list->d->groupForProperty[ it.current() ];
+        QString groupDesc = list->d->groupsDescription[ group ];
+        setGroupDescription( group, groupDesc );
+        addProperty( prop, group );
     }
     connect(list, SIGNAL( propertyChanged( Property*, PtrList* ) ),
             this, SLOT(intersectedChanged( Property*, PtrList* ) ) );
