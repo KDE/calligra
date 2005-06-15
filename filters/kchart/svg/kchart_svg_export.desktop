@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart SVG Export Filter
+Name[br]=Sil ezporzh SVG evit KChart
 Name[ca]=Filtre d'exportació SVG per a KChart
 Name[cs]=Exportní filtr do formátu SVG pro KChart
 Name[da]=KChart SVG-eksportfilter
@@ -16,6 +17,7 @@ Name[hu]=KChart SVG exportszűrő
 Name[it]=Filtro di esportazione SVG per KChart
 Name[nb]=SVG-eksportfilter for KChart
 Name[nl]=KChart SVG Exportfilter
+Name[nn]=SVG-eksportfilter for KChart
 Name[pt]=Filtro de Exportação de SVG para o KChart
 Name[pt_BR]=Filtro de Exportação SVG do KChart
 Name[ru]=Фильтр экспорта документов KChart в SVG
