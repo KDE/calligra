@@ -7337,14 +7337,11 @@ void KWView::changeHorizontalLine()
 void KWView::addWordToDictionary()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
-    if ( edit && m_doc->backgroundSpellCheckEnabled() )
+    if ( edit )
     {
         QString word = edit->wordUnderCursor( *edit->cursor() );
-        if ( !word.isEmpty()) {
-            m_doc->addWordToDictionary( word);
-            // Re-check everything to make this word normal again
-            m_doc->reactivateBgSpellChecking();
-        }
+        if ( !word.isEmpty() )
+            m_doc->addWordToDictionary( word );
     }
 }
 

@@ -1026,7 +1026,8 @@ private:
     QValueVector< QString > m_sectionTitles;
 
     double m_tabStop;
-    QStringList m_spellCheckIgnoreList;
+    QStringList m_spellCheckIgnoreList; // per-document
+    QStringList m_spellCheckPersonalDict; // per-user
     QPixmap* m_bufPixmap;
 
     KWLoadingInfo* m_loadingInfo;
