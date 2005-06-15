@@ -212,7 +212,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         Filter filter;
         filter.setBuffer( str );
         // pos - 1 wasn't enough for the case a splitting a word into two misspelled halves
-        filter.setCurrentPosition( pos - 2 );
+        filter.setCurrentPosition( QMAX( 0, pos - 2 ) );
         filter.setSettings( d->backSpeller->settings() );
 
         for ( Word w = filter.nextWord(); !w.end; w = filter.nextWord() ) {
