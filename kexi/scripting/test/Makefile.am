@@ -9,6 +9,7 @@ krosstest_LDADD = \
     $(LIB_KDECORE) \
     ../api/libkrossapi.la \
     ../kexidb/libkrosskexidb.la \
+    ../../kexiutils/libkexiutils.la \
     ../main/libkrossmain.la
 
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
