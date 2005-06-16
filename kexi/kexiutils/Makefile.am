@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkexiutils.la
 libkexiutils_la_SOURCES = identifier.cpp validator.cpp utils.cpp
 
 libkexiutilsincludedir=$(includedir)/kexiutils
-libkexiutilsinclude_HEADERS = tristate.h identifier.h validator.h utils.h
+libkexiutilsinclude_HEADERS = tristate.h identifier.h validator.h utils.h kexiutils_export.h
 
 noinst_HEADERS = utils_p.h
 
