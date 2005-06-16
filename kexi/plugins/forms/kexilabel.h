@@ -30,6 +30,7 @@
 
 class QPainter;
 class QTimer;
+class KexiLabel;
 
 class KexiLabelPrivate : public QLabel {
 		friend class KexiLabel;
