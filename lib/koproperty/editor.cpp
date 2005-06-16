@@ -161,23 +161,27 @@ Editor::fill()
 
     d->topItem = new EditorDummyItem(this);
 
+    int i = 0;
     StringListMap map = d->list->groups();
     if(map.count() == 1) { // just one group (default one), so don't show groups
+
         QValueList<QCString>::ConstIterator endIt = map.begin().data().constEnd();
         for(QValueList<QCString>::ConstIterator it2 = map.begin().data().constBegin(); it2 != endIt; ++it2)
                 addItem(*it2, d->topItem);
-    }
 
-    // else create a groupItem for each group
-    StringListMap::ConstIterator endIt = map.constEnd();
-    for(StringListMap::ConstIterator it = map.constBegin(); it != endIt; ++it) {
-        EditorGroupItem *groupItem = 0;
-        if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
-            groupItem = new EditorGroupItem(d->topItem, d->list->groupDescription(it.key()) );
+    } else { // else create a groupItem for each group
 
-        QValueList<QCString>::ConstIterator endIt = it.data().constEnd();
-        for(QValueList<QCString>::ConstIterator it2 = it.data().constBegin(); it2 != endIt; ++it2)
-                addItem(*it2, groupItem);
+        StringListMap::ConstIterator endIt = map.constEnd();
+        for(StringListMap::ConstIterator it = map.constBegin(); it != endIt; ++it) {
+            EditorGroupItem *groupItem = 0;
+            if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
+                groupItem = new EditorGroupItem(d->topItem, d->list->groupDescription(it.key()) );
+
+            QValueList<QCString>::ConstIterator endIt = it.data().constEnd();
+            for(QValueList<QCString>::ConstIterator it2 = it.data().constBegin(); it2 != endIt; ++it2)
+                    addItem(*it2, groupItem);
+        }
+
     }
 
     if (firstChild())
