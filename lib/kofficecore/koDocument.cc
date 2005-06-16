@@ -1851,7 +1851,7 @@ void KoDocument::setModified( bool mod )
     }
     d->modifiedAfterAutosave = mod;
 
-    if ( mod == KParts::ReadWritePart::isModified() )
+    if ( mod == isModified() )
         return;
 
     KParts::ReadWritePart::setModified( mod );
