@@ -38,14 +38,6 @@
 # define KEXIMAIN_EXPORT 
 #endif
 
-#ifdef MAKE_KEXIUTILS_LIB
-# define KEXIUTILS_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIUTILS_EXPORT KDE_IMPORT
-#else
-# define KEXIUTILS_EXPORT //for apps
-#endif
-
 #ifdef MAKE_KEXITABLEFILTERS_LIB
 # define KEXITABLEFILTERS_EXPORT  KDE_EXPORT
 #elif defined(KDE_MAKE_LIB)
