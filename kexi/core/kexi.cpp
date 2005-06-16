@@ -120,6 +120,12 @@ QString Kexi::nameForViewMode(int m)
 
 //--------------------------------------------------------------------------------
 
+QString Kexi::msgYouCanImproveData() {
+	return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
+}
+
+//--------------------------------------------------------------------------------
+
 ObjectStatus::ObjectStatus()
 {
 }

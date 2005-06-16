@@ -98,9 +98,7 @@ namespace Kexi
 			KexiDB::Object *dbObj; 
 	};
 
-	QString msgYouCanImproveData() {
-		return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
-	}
+	KEXICORE_EXPORT QString msgYouCanImproveData();
 
 }//namespace Kexi
 

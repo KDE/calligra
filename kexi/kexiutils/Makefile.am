@@ -12,7 +12,7 @@ libkexiutils_la_LDFLAGS = \
   $(KDE_RPATH) $(all_libraries) \
   $(VER_INFO) -Wnounresolved -no-undefined
 
-libkexiutils_la_LIBADD = $(LIB_QT)
+libkexiutils_la_LIBADD = $(LIB_QT) $(LIB_KDEUI) $(LIB_KIO) 
 
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 

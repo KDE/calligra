@@ -2623,14 +2623,14 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	}
 	else {
 		ROWID = drv_lastInsertRowID();
-		KexiDBDbg << "Connection::insertRow(): new ROWID == " << ROWID << endl;
+		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
 		if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE) {
 			KexiDBWarn << "Connection::insertRow(): m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE" << endl;
 			return false;
 		}
 	}
 	if (getROWID) {
-		KexiDBDbg << "Connection::insertRow(): new ROWID == " << ROWID << endl;
+		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
 		data[data.size()-1] = ROWID;
 	}
 	return true;
