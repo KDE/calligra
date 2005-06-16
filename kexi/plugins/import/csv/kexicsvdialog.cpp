@@ -116,7 +116,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
  : KDialogBase( 
 	KDialogBase::Plain, 
 	i18n( "Importing CSV Data File" ),
-	(mode==File ? User1 : 0) |Ok|Cancel, 
+	(mode==File ? User1 : (Mode)0) |Ok|Cancel, 
 	Ok,
 	parent, 
 	name ? name : "KexiCSVDialog", 
@@ -125,6 +125,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 	KGuiItem( i18n("&Options..."))
    ),
 //	m_pView( parent ),
+	m_mainWin(mainWin),
 	m_cancelled( false ),
 	m_adjustRows( 0 ),
 	m_startline( 0 ),
@@ -133,13 +134,12 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 	m_mode(mode),
 	m_prevSelectedCol(-1),
 //	m_targetRect( rect ),
-	m_mainWin(mainWin),
 	m_columnsAdjusted(false),
 	m_1stRowForFieldNamesDetected(false),
 	m_firstFillTableCall(true),
 	m_primaryKeyColumn(-1)
 {
-	setButtonGuiItem(Ok, KGuiItem( i18n("&Import..."), _IMPORT_ICON));
+	setButtonOK(KGuiItem( i18n("&Import..."), _IMPORT_ICON));
 
 	m_typeNames.resize(3);
 	m_typeNames[0] = i18n("text");
