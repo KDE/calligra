@@ -19,7 +19,7 @@
 
 #include "kexisectionheader.h"
 #include "kexiviewbase.h"
-#include "kexi_utils.h"
+#include <kexiutils/utils.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -102,7 +102,7 @@ bool KexiSectionHeader::eventFilter( QObject *o, QEvent *e )
 	if (o == d->lbl && e->type()==QEvent::MouseButtonRelease) {//|| e->type()==QEvent::FocusOut) {// && o->inherits("QWidget")) {
 		if (d->lyr->view)
 			d->lyr->view->setFocus();
-//		if (Kexi::hasParent( this, static_cast<QWidget*>(o))) {
+//		if (KexiUtils::hasParent( this, static_cast<QWidget*>(o))) {
 //			d->lbl->setPaletteBackgroundColor( e->type()==QEvent::FocusIn ? red : blue);
 //		}
 	}

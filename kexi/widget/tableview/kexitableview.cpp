@@ -54,8 +54,8 @@
 #endif
 
 #include "kexitableview.h"
-#include "kexi_utils.h"
-#include "kexivalidator.h"
+#include <kexiutils/utils.h>
+#include <kexiutils/validator.h>
 
 #include "kexidatetableedit.h"
 #include "kexitimetableedit.h"
@@ -2179,7 +2179,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	QWidget *w = focusWidget();
 //	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view() && w!=m_editor)) {
 //	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view())) {
-	if (!w || w!=viewport() && w!=this && (!m_editor || !Kexi::hasParent(dynamic_cast<QObject*>(m_editor), w))) {
+	if (!w || w!=viewport() && w!=this && (!m_editor || !KexiUtils::hasParent(dynamic_cast<QObject*>(m_editor), w))) {
 		//don't process stranger's events
 		e->ignore();
 		return;
@@ -4249,8 +4249,8 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 	}
 /*	else if (e->type()==QEvent::FocusOut && o->inherits("QWidget")) {
 		//hp==true if currently focused widget is a child of this table view
-		const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
-		if (!hp && Kexi::hasParent( this, static_cast<QWidget*>(o))) {
+		const bool hp = KexiUtils::hasParent( static_cast<QWidget*>(o), focusWidget());
+		if (!hp && KexiUtils::hasParent( this, static_cast<QWidget*>(o))) {
 			//accept row editing if focus is moved to foreign widget 
 			//(not a child, like eg. editor) from one of our table view's children
 			//or from table view itself

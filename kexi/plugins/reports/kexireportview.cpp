@@ -102,8 +102,8 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
 		connect(reportPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 	}
 	else {
-		connect(reportPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)),
-			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
+		connect(reportPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *, bool)),
+			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *, bool)));
 		connect(reportPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
@@ -224,10 +224,13 @@ KexiReportView::loadForm()
 }
 
 void
-KexiReportView::managerPropertyChanged(KexiPropertyBuffer *b)
+KexiReportView::managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload)
 {
 	m_buffer = b;
-	propertyBufferSwitched();
+	if (forceReload)
+		propertyBufferReloaded(true/*preservePrevSelection*/);
+	else
+		propertyBufferSwitched();
 }
 
 tristate

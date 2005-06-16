@@ -45,7 +45,7 @@
 #include <kpopupmenu.h>
 #include <kdatewidget.h>
 
-#include "kexi_utils.h"
+#include <kexiutils/utils.h>
 
 KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
  : KexiTableEdit(column, parent,"KexiDateTimeTableEdit")
@@ -74,7 +74,7 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
 	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
 
-	KDateTable *dt = Kexi::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
+	KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
 	if (dt)
 		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
 	m_datePicker->setCloseButton(true);
@@ -83,8 +83,8 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 	dateBtn->setPopup(m_datePickerPopupMenu);
 	
 #ifdef QDateTimeEditor_HACK
-	m_dte_date = Kexi::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
-	m_dte_time = Kexi::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
+	m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
+	m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
 	if (m_dte_date && m_dte_time) {
 		m_dte_date->installEventFilter(this);
 		m_dte_time->installEventFilter(this);

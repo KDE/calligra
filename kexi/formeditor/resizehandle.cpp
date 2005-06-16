@@ -40,10 +40,7 @@ ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
 {
 	m_dragging = false;
 	//m_editing = editing;
-	if(editing)
-		setBackgroundColor(blue);
-	else
-		setBackgroundColor(black);
+	setEditingMode(editing);
 	setFixedWidth(6);
 	setFixedHeight(6);
 	m_pos = pos;
@@ -53,6 +50,18 @@ ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
 
 	updatePos();
 	show();
+}
+
+ResizeHandle::~ResizeHandle()
+{
+}
+
+void ResizeHandle::setEditingMode(bool editing)
+{
+	if(editing)
+		setBackgroundColor(blue);
+	else
+		setBackgroundColor(black);
 }
 
 void ResizeHandle::updatePos()
@@ -92,9 +101,7 @@ void ResizeHandle::updatePos()
 			setCursor(QCursor(SizeFDiagCursor));
 			break;
 	}
-
 }
-
 
 bool ResizeHandle::eventFilter(QObject *, QEvent *ev)
 {
@@ -250,10 +257,6 @@ void ResizeHandle::paintEvent( QPaintEvent * )
 	bitBlt( this, QPoint(0,0), parentWidget(), rect(), XorROP);*/
 }
 
-ResizeHandle::~ResizeHandle()
-{
-}
-
 /////////////// ResizeHandleSet //////////////////
 
 ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
@@ -285,9 +288,10 @@ ResizeHandleSet::setWidget(QWidget *modify, bool editing)
 	if(modify == m_widget)
 		return;
 
-	if(m_widget)
+	if(m_widget) {
 		for(int i = 0; i < 8; i++)
 			delete m_handles[i];
+	}
 
 	m_widget = modify;
 
@@ -306,6 +310,12 @@ ResizeHandleSet::raise()
 {
 	for(int i = 0; i < 8; i++)
 		m_handles[i]->raise();
+}
+
+void ResizeHandleSet::setEditingMode(bool editing)
+{
+	for(int i = 0; i < 8; i++)
+		m_handles[i]->setEditingMode(editing);
 }
 
 #include "resizehandle.moc"

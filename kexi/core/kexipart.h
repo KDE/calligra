@@ -35,6 +35,7 @@ class KexiViewBase;
 class KexiMainWindowImpl;
 class KAction;
 class KShortcut;
+class KTabWidget;
 
 namespace KexiPart
 {
@@ -231,6 +232,14 @@ class KEXICORE_EXPORT Part : public QObject
 		void setActionAvailable(const char *action_name, bool avail);
 
 		inline void setInfo(Info *info) { m_info = info; }
+
+		/*! This method can be reimplemented to setup additional tabs 
+		 in the property editor panel. Default implementation does nothing. 
+		 This method is called whenever current dialog (KexiDialogBase) is switched and
+		 type (mime type) of its contents differs from previous one. 
+		 For example, if a user switched from Table Designer to Form Designer,
+		 additional tab containing Form Designer's object tree should be shown. */
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 		//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
 		//! The names are useful because the same action can have other name for each part

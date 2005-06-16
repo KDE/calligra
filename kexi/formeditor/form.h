@@ -103,8 +103,8 @@ class FormPrivate
 
 		PixmapCollection  *pixcollection;
 
-		//! This map is used to store cursors before inserting (so we can restore it later)
-		QMap<QString, QCursor>  *cursors;
+		//! This map is used to store cursor shapes before inserting (so we can restore them later)
+		QMap<QObject*,QCursor> cursors;
 
 		//!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
 		QStringList *mouseTrackers;
@@ -289,6 +289,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 resize handle's dragging. As a result, current widget's editing (if any) 
 		 is finished - see WidgetFactory::resetEditor(). */
 //		void resizeHandleDraggingStarted(QWidget *draggedWidget);
+
+		ResizeHandleSet* resizeHandlesForWidget(QWidget* w);
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor.

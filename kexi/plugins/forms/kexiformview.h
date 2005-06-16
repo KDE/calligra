@@ -76,7 +76,7 @@ class KexiFormView : public KexiDataAwareView
 		virtual void show();
 
 	protected slots:
-		void managerPropertyChanged(KexiPropertyBuffer *b);
+		void managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload = false);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 		void slotFocus(bool in);
 
@@ -158,6 +158,9 @@ class KexiFormView : public KexiDataAwareView
 		 Our form's area will be resized more than once.
 		 We will resize form widget itself later (in resizeEvent()). */
 		int m_delayedFormContentsResizeOnShow;
+
+		//! @internal Used in setFocusInternal()
+		QWidget *m_setFocusInternalOnce;
 };
 
 #endif

@@ -34,7 +34,7 @@
 #include <kpushbutton.h>
 #include <kiconloader.h>
 
-#include <kexi_utils.h>
+#include <kexiutils/utils.h>
 #include <kexipropertybuffer.h>
 
 #include "propertyeditorlist.h"
@@ -434,6 +434,10 @@ KexiPropertyEditor::slotColumnSizeChanged(int section)
 void
 KexiPropertyEditor::reset(bool editorOnly)
 {
+	if (m_buffer && m_editItem) {
+		//store prev. selection for this buffer
+		m_buffer->setPrevSelection( m_editItem->name() );
+	}
 //	delete m_currentEditor;
 	m_currentEditor->deleteLater();
 	m_currentEditor = 0;
@@ -511,12 +515,13 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection)
 		if (!item && !selectedPropertyName1.isEmpty()) //try old one for current buffer
 			item = m_items[selectedPropertyName1];
 		if (item) {
-			doNotSetFocusOnSelection = !Kexi::hasParent(this,focusWidget());
+			doNotSetFocusOnSelection = !KexiUtils::hasParent(this,focusWidget());
 			 setSelected(item, true);
 			doNotSetFocusOnSelection = false;
 			ensureItemVisible(item);
 		}
 	}
+	emit bufferChanged(m_buffer);
 }
 
 //! @internal

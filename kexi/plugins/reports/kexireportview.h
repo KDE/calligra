@@ -81,7 +81,7 @@ class KexiReportView : public KexiViewBase
 		int resizeMode() const { return m_resizeMode; }
 
 	protected slots:
-		void managerPropertyChanged(KexiPropertyBuffer *b);
+		void managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload = false);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 
 		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);

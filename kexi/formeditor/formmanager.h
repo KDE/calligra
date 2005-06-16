@@ -149,14 +149,19 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! \return A pointer to the KexiPropertyEditor we use.
 		KexiPropertyEditor* propertyEditor() const { return m_editor; }
 
-		/*! Shows a propertybuffer in PropertyBuffer */
-		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
+		/*! Shows a propertybuffer \a buff in a Property Editor. 
+		 If \a buff is 0, Property Editor will be cleared.
+		 If \a forceReload is true, the buffer needs to be reloaded even 
+		 if it's the same as previous one. */
+		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff, bool forceReload = false);
 
-		/*! Sets the external editors used by FormDesigner (as they may be docked).
+		/*! Sets the external property editor pane used by FormDesigner (it may be docked).*/
+		void setEditor(KexiPropertyEditor *editor);
+
+		/*! Sets the external object tree view used by FormDesigner (it may be docked).
 		 This function also connects appropriate signals and slots to ensure
-		 sync with the current Form.
-		 */
-		void setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview);
+		 sync with the current Form. */
+		void setObjectTreeView(ObjectTreeView *treeview);
 
 		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
 		void previewForm(Form *form, QWidget *w, Form *toForm=0);
@@ -298,8 +303,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void changeFont();
 
 	signals:
-		/*! this signal is emited as the property buffer switched */
-		void bufferSwitched(KexiPropertyBuffer *buff);
+		/*! This signal is emited as the property buffer switched. 
+		 If \a forceReload is true, the buffer needs to be reloaded even 
+		 if it's the same as previous one. */
+		void bufferSwitched(KexiPropertyBuffer *buff, bool forceReload);
 
 		/*! This signal is emitted when any change is made to the Form \a form,
 		 so it will need to be saved. */

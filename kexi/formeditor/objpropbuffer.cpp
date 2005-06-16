@@ -38,10 +38,10 @@
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
 #include "commands.h"
-
 #include "objpropbuffer.h"
 
-#include <kexi_utils.h> //Cedric: we need to add this header to KFD sources
+#include <kexiutils/utils.h>
+#include <kexiutils/identifier.h>
 
 using namespace KFormDesigner;
 
@@ -82,7 +82,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 //! @todo add to undo buffer
 		QWidget *w = m_widgets.first();
 		//also update widget's name in QObject member
-		if (!Kexi::isIdentifier( value.toString() )) {
+		if (!KexiUtils::isIdentifier( value.toString() )) {
 			KMessageBox::sorry( m_manager->activeForm()->widget(),
 				i18n("Could not rename widget. ")
 				+i18n("\"%1\" is not a valid name for a widget.\n").arg(value.toString())
@@ -327,6 +327,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		m_propValDesc["Plain"] = i18n("for Frame Shadow", "Plain");
 		m_propValDesc["Raised"] = i18n("for Frame Shadow", "Raised");
 		m_propValDesc["Sunken"] = i18n("for Frame Shadow", "Sunken");
+		m_propValDesc["MShadow"] = i18n("for Frame Shadow", "Internal");
 		
 		m_propValDesc["NoFocus"] = i18n("for Focus", "No Focus");
 		m_propValDesc["TabFocus"] = i18n("for Focus", "Tab");
@@ -354,7 +355,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 	if(w == m_widgets.first() && !m_multiple)
 		return;
 
-	resetBuffer();
+	resetBuffer(true); //reset but do not reload to avoid blinking
 	m_widgets.append(w);
 
 	QStrList pList = w->metaObject()->propertyNames(true);
@@ -372,6 +373,8 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 
 	//pList.sort();
 	QStrListIterator it(pList);
+	KexiProperty *newProp = 0;
+
 	// We go through the list of properties
 	for(; it.current() != 0; ++it)
 	{
@@ -381,8 +384,6 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		const char* propertyName = meta->name();
 		if(meta->designable(w) && !hasProperty(propertyName))
 		{
-			KexiProperty *newProp = 0;
-
 			QString desc( m_propDesc[meta->name()] );
 			if (desc.isEmpty()) {
 				//try to get property description from factory
@@ -427,8 +428,24 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		updateOldValue(tree, propertyName); // update the KexiProperty.oldValue using the value in modifProp
 	}//for
 
-	if (winfo)
+	if (winfo) {
 		m_manager->lib()->setPropertyOptions(*this, *winfo, w);
+
+		//add meta-information
+		if (m_multiple) {
+			//this doesn't work yet as multiselection isn't shown well in propeditor
+			add( newProp = new KexiProperty("this:className", i18n("Multiple Widgets") + QString(" (%1)").arg(m_widgets.count())) );
+			newProp->setVisible(false);
+			add( newProp = new KexiProperty("this:iconName", "multiple_obj") );
+			newProp->setVisible(false);
+		}
+		else {
+			add( newProp = new KexiProperty("this:className", winfo->name()) );
+			newProp->setVisible(false);
+			add( newProp = new KexiProperty("this:iconName", winfo->pixmap()) );
+			newProp->setVisible(false);
+		}
+	}
 
 	(*this)["name"].setAutoSync(false); // name should be updated only when pressing Enter
 
@@ -453,7 +470,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 			createLayoutProperty(objectIt->container());
 	}
 
-	m_manager->showPropertyBuffer(this);
+	m_manager->showPropertyBuffer(this, true/*force*/);
 	w->installEventFilter(this);
 
 	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
@@ -494,11 +511,12 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 }
 
 void
-ObjectPropertyBuffer::resetBuffer()
+ObjectPropertyBuffer::resetBuffer(bool dontSignalShowPropertyBuffer)
 {
 	checkModifiedProp();
 
-	m_manager->showPropertyBuffer(0);
+	if (!dontSignalShowPropertyBuffer)
+		m_manager->showPropertyBuffer(0);
 
 	m_widgets.clear();
 	m_multiple = false;
@@ -703,8 +721,9 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 		updateOldValue(tree, "vAlign");
 	}
 
-	if(!possibleValues.grep("WordBreak").empty())
-	{
+	if(!possibleValues.grep("WordBreak").empty() 
+		&& !obj->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
+	)	{
 		// Create the wordbreak property
 		add(newProp = new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
 		if(!isPropertyVisible(newProp->name(), isTopLevel)) {

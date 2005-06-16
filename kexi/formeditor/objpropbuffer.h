@@ -104,7 +104,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void addWidget(QWidget *w);
 
 		/*! Resets the buffer, ie empty it and reset all members. */
-		void resetBuffer();
+		void resetBuffer(bool dontSignalShowPropertyBuffer = false);
 
 		/*! This function filters the event of the sselected widget to automatically updates the "geometry" property
 		  when the widget is moved or resized in the Form.

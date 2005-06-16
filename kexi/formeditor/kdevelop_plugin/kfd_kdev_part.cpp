@@ -132,7 +132,8 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
 		dockEditor->setCaption(i18n("Properties"));
 		dockEditor->setResizeEnabled(true);
 
-		m_manager->setEditors(editor, view);
+		m_manager->setEditor(editor);
+		m_manager->setObjectTreeView(view);
 
 		setupActions();
 		setModified(false);

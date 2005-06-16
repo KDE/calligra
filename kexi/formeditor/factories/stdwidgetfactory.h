@@ -58,7 +58,8 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		StdWidgetFactory(QObject *parent, const char *name, const QStringList &args);
 		~StdWidgetFactory();
 
-		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
+		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+			WidgetFactory::OrientationHint orientationHint = Any);
 
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container);
@@ -85,13 +86,13 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, 
 			const QCString &property);
 		virtual bool changeText(const QString &newText);
-		virtual void resizeEditor(QWidget *widget, const QCString &classname);
+		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 		void saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc);
 		void readListItem(QDomElement &node, QListViewItem *parent, KListView *listview);
 
 	private:
 		KFormDesigner::Container *m_container;
-		QWidget *m_widget;
+//		QWidget *m_widget;
 };
 
 #endif

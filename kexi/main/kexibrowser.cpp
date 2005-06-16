@@ -41,7 +41,7 @@
 #include "kexiproject.h"
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
-#include "kexi_utils.h"
+#include <kexiutils/identifier.h>
 
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
@@ -82,7 +82,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->sort();
 	m_list->setAllColumnsShowFocus(true);
 	m_list->setTooltipColumn(0);
-	m_list->renameLineEdit()->setValidator( new Kexi::IdentifierValidator(this) );
+	m_list->renameLineEdit()->setValidator( new KexiUtils::IdentifierValidator(this) );
 	m_list->setResizeMode(QListView::LastColumn);
 
 	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),

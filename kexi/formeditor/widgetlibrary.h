@@ -84,10 +84,16 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * searches the right factory and creates a widget.
 		 * @returns the widget or 0 if something falid
 		 */
-		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c);
+		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c, 
+			WidgetFactory::OrientationHint orientationHint = WidgetFactory::Any);
 
 		bool createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
 			KFormDesigner::Container *container);
+
+		WidgetFactory::OrientationHint showOrientationSelectionPopup(
+			const QCString &classname, QWidget* parent, const QPoint& pos);
+
+		QString internalProperty(const QCString& classname, const QCString& property);
 
 		QString displayName(const QCString &classname);
 		QString namePrefix(const QCString &classname);
@@ -117,6 +123,8 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		WidgetInfo* widgetInfoForClassName(const char* classname);
 
 		WidgetFactory* factoryForClassName(const char* className);
+
+		WidgetFactory* factory(const char* factoryName) const;
 
 		/*! \return true if advanced properties like "mouseTracking" should 
 		 be user-visible. True by default (in KFD), but Kexi set's this to false. 

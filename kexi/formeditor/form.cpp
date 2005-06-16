@@ -48,7 +48,6 @@ FormPrivate::FormPrivate()
 {
 	toplevel = 0;
 	topTree = 0;
-	cursors = 0;
 	widget = 0;
 	resizeHandles.setAutoDelete(true);
 	dirty = false;
@@ -258,6 +257,12 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 
 	if(w && w != widget())
 		d->resizeHandles.insert(w->name(), new ResizeHandleSet(w, this));
+}
+
+ResizeHandleSet*
+Form::resizeHandlesForWidget(QWidget* w)
+{
+	return d->resizeHandles[w->name()];
 }
 
 void

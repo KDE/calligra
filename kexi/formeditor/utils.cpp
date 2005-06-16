@@ -84,8 +84,10 @@ void
 KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 {
 	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
-	if(tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty()) )
-			return; // if the user has set a cursor for this widget or this is a container, don't change it
+	if(tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty())
+		&& !w->inherits("QLineEdit") && !w->inherits("QTextEdit")
+		) //fix weird behaviour
+		return; // if the user has set a cursor for this widget or this is a container, don't change it
 
 	if(w->ownCursor())
 		w->setCursor(Qt::ArrowCursor);

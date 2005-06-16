@@ -17,12 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KEXI_P_H__
-#define __KEXI_P_H__
+#ifndef __KEXIUTILS_P_H__
+#define __KEXIUTILS_P_H__
 
 #include <qtimer.h>
 #include <qapplication.h>
 
+/*! @internal */
 class DelayedCursorHandler : public QObject
 {
 	Q_OBJECT

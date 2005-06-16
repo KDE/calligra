@@ -342,6 +342,33 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	m_propValDesc["RichText"] = i18n("For Text Format", "Hypertext");
 	m_propValDesc["AutoText"] = i18n("For Text Format", "Auto");
 	m_propValDesc["LogText"] = i18n("For Text Format", "Log");
+
+	//KTextEdit
+	m_propDesc["tabStopWidth"] = i18n("Tab Stop Width");
+	m_propDesc["tabChangesFocus"] = i18n("Tab Changes Focus");
+	m_propDesc["wrapPolicy"] = i18n("Word Wrap Policy");
+	m_propValDesc["AtWordBoundary"] = i18n("For Word Wrap Policy", "At Word Boundary");
+	m_propValDesc["Anywhere"] = i18n("For Word Wrap Policy", "Anywhere");
+	m_propValDesc["AtWordOrDocumentBoundary"] = i18n("For Word Wrap Policy", "At Word Boundary If Possible");
+	m_propDesc["wordWrap"] = i18n("Word Wrapping");
+	m_propDesc["wrapColumnOrWidth"] = i18n("Word Wrap Position");
+	m_propValDesc["NoWrap"] = i18n("For Word Wrap Position", "None");
+	m_propValDesc["WidgetWidth"] = i18n("For Word Wrap Position", "Widget's Width");
+	m_propValDesc["FixedPixelWidth"] = i18n("For Word Wrap Position", "In Pixels");
+	m_propValDesc["FixedColumnWidth"] = i18n("For Word Wrap Position", "In Columns");
+	m_propDesc["linkUnderline"] = i18n("Links Underlined");
+
+	//internal props
+	setInternalProperty("Line","orientationSelectionPopup","1");
+	setInternalProperty("Line","orientationSelectionPopup:horizontalIcon","line_horizontal");
+	setInternalProperty("Line","orientationSelectionPopup:verticalIcon","line_vertical");
+	setInternalProperty("Line","orientationSelectionPopup:horizontalText",i18n("Insert &Horizontal Line"));
+	setInternalProperty("Line","orientationSelectionPopup:verticalText",i18n("Insert &Vertical Line"));
+	setInternalProperty("Spring","orientationSelectionPopup","1");
+	setInternalProperty("Spring","orientationSelectionPopup:horizontalIcon","spring");
+	setInternalProperty("Spring","orientationSelectionPopup:verticalIcon","spring_vertical");
+	setInternalProperty("Spring","orientationSelectionPopup:horizontalText",i18n("Insert &Horizontal Spring"));
+	setInternalProperty("Spring","orientationSelectionPopup:verticalText",i18n("Insert &Vertical Spring"));
 }
 
 StdWidgetFactory::~StdWidgetFactory()
@@ -349,7 +376,8 @@ StdWidgetFactory::~StdWidgetFactory()
 }
 
 QWidget*
-StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
+StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container, 
+	WidgetFactory::OrientationHint orientationHint)
 {
 	QWidget *w=0;
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
@@ -408,10 +436,14 @@ StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		w = new KDateTimeWidget(QDateTime::currentDateTime(), p, n);
 
 	else if(c == "Line")
-		w= new Line(Line::Horizontal, p, n);
+		w = new Line(orientationHint==WidgetFactory::Vertical ? Line::Vertical : Line::Horizontal, p, n);
 
-	else if(c == "Spring")
+	else if(c == "Spring") {
 		w = new Spring(p, n);
+		if (orientationHint!=WidgetFactory::Any)
+			static_cast<Spring*>(w)->setOrientation(
+				orientationHint==WidgetFactory::Vertical ? Qt::Vertical : Qt::Horizontal);
+	}
 
 	if(w)
 		return w;
@@ -463,7 +495,8 @@ StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 		QLabel *label = static_cast<QLabel*>(w);
 		if(label->textFormat() == RichText)
 		{
-			m_widget = w;
+			//m_widget = w;
+			setWidget(w);
 			editText();
 		}
 		else
@@ -479,7 +512,7 @@ StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 		//r.setY(r.y() + 5);
 		//r.setWidth(r.width()-10);
 		//r.setHeight(r.height() - 10);
-		createEditor(classname, push->text(), push, container, editorRect, Qt::AlignCenter, false, Qt::PaletteButton);
+		createEditor(classname, push->text(), push, container, editorRect, Qt::AlignCenter, false, false, Qt::PaletteButton);
 		return true;
 	}
 	else if(classname == "QRadioButton")
@@ -560,8 +593,8 @@ StdWidgetFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 bool
 StdWidgetFactory::changeText(const QString &text)
 {
-	QCString n = WidgetFactory::m_widget->className();
-	QWidget *w = WidgetFactory::m_widget;
+	QCString n = WidgetFactory::widget()->className();
+	QWidget *w = WidgetFactory::widget();
 	if(n == "KIntSpinBox")
 		((KIntSpinBox*)w)->setValue(text.toInt());
 	else
@@ -597,7 +630,7 @@ StdWidgetFactory::changeText(const QString &text)
 }
 
 void
-StdWidgetFactory::resizeEditor(QWidget *widget, const QCString &classname)
+StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname)
 {
 	QSize s = widget->size();
 	QPoint p = widget->pos();
@@ -623,8 +656,8 @@ StdWidgetFactory::resizeEditor(QWidget *widget, const QCString &classname)
 		s = r.size();
 	}
 
-	m_editor->resize(s);
-	m_editor->move(p);
+	editor->resize(s);
+	editor->move(p);
 }
 
 bool
@@ -826,11 +859,23 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *
 		if(property == "pixmap")
 			return false;
 	}
-	else if(classname == "QLineEdit")
+	else if(classname == "KLineEdit")
 	{
 		if(property == "vAlign")
 			return false;
 	}
+	else if(classname == "KTextEdit")
+		return m_showAdvancedProperties || 
+			   property!="undoDepth"
+			&& property!="undoRedoEnabled" //always true!
+			&& property!="dragAutoScroll" //always true!
+			&& property!="overwriteMode" //always false!
+			&& property!="resizePolicy" 
+			&& property!="autoFormatting" //too complex
+#ifdef KEXI_NO_UNFINISHED
+			&& property!="paper"
+#endif
+			;
 	else if(classname == "Line")
 	{
 		if((property == "frameShape") || (property == "font") || (property == "margin"))
@@ -888,28 +933,28 @@ StdWidgetFactory::autoSaveProperties(const QCString &classname)
 void
 StdWidgetFactory::editText()
 {
-	QCString classname = m_widget->className();
+	QCString classname = widget()->className();
 	QString text;
 	if(classname == "KTextEdit")
-		text = ((KTextEdit*)m_widget)->text();
+		text = ((KTextEdit*)widget())->text();
 	else if(classname == "QLabel")
-		text = ((QLabel*)m_widget)->text();
+		text = ((QLabel*)widget())->text();
 
-	if(editRichText(m_widget, text))
+	if(editRichText(widget(), text))
 	{
 		changeProperty("textFormat", "RichText", m_container);
 		changeProperty("text", text, m_container);
 	}
 
 	if(classname == "QLabel")
-		m_widget->resize(m_widget->sizeHint());
+		widget()->resize(widget()->sizeHint());
 }
 
 void
 StdWidgetFactory::editListContents()
 {
-	if(m_widget->inherits("QListView"))
-		editListView((QListView*)m_widget);
+	if(widget()->inherits("QListView"))
+		editListView((QListView*)widget());
 }
 
 void

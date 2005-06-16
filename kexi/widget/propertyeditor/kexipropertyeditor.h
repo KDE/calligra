@@ -116,6 +116,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		*/
 		void valueChanged(const QString &propname, QVariant value);
 
+		/*! THis signal is emitted when current buffer has been changed. May be 0. */
+		void bufferChanged(KexiPropertyBuffer *b);
+
 	public slots:
 		/*! On focus:
 		 - previously focused editor is activated

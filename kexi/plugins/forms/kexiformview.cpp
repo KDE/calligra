@@ -29,7 +29,7 @@
 #include <formeditor/objpropbuffer.h>
 #include <formeditor/container.h>
 
-#include <kexi_utils.h>
+#include <kexi.h>
 #include <kexidialogbase.h>
 #include <kexidatasourcewizard.h>
 #include <kexidb/fieldlist.h>
@@ -51,6 +51,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
  , m_query(0)
  , m_queryIsOwned(false)
  , m_cursor(0)
+ , m_setFocusInternalOnce(0)
 // , m_firstFocusWidget(0)
 {
 	m_delayedFormContentsResizeOnShow = 0;
@@ -78,8 +79,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	}
 	else
 	{
-		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)),
-			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
+		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *, bool)),
+			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *, bool)));
 		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
@@ -265,10 +266,13 @@ KexiFormView::loadForm()
 }
 
 void
-KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b)
+KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload)
 {
 	m_buffer = b;
-	propertyBufferSwitched();
+	if (forceReload)
+		propertyBufferReloaded(true/*preservePrevSelection*/);
+	else
+		propertyBufferSwitched();
 }
 
 tristate
@@ -380,6 +384,7 @@ KexiFormView::afterSwitchFrom(int mode)
 
 			it.current()->setFocus();
 			SET_FOCUS_USING_REASON(it.current(), QFocusEvent::Tab);
+			m_setFocusInternalOnce = it.current();
 		}
 
 		if (m_query)
@@ -709,7 +714,12 @@ KexiFormView::setFocusInternal()
 	if (viewMode() == Kexi::DataViewMode) {
 		if (m_dbform->focusWidget()) {
 			//better-looking focus
-			SET_FOCUS_USING_REASON(m_dbform->focusWidget(), QFocusEvent::Tab);
+			if (m_setFocusInternalOnce) {
+				SET_FOCUS_USING_REASON(m_setFocusInternalOnce, QFocusEvent::Tab);
+			}
+			else {
+				SET_FOCUS_USING_REASON(m_dbform->focusWidget(), QFocusEvent::Tab);
+			}
 			return;
 		}
 	}

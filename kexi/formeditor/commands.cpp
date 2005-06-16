@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <kmessagebox.h>
 
 #include "formIO.h"
 #include "container.h"
@@ -596,10 +598,31 @@ InsertWidgetCommand::execute()
 	if (!titem)
 		return; //better this than a crash
 	Container *m_container = titem->container();
-	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name, m_container);
+	FormManager *manager = m_container->form()->manager();
+	WidgetFactory::OrientationHint ohint = WidgetFactory::Any;
+	if (manager->lib()->internalProperty(m_class, "orientationSelectionPopup")=="1") {
+		if(m_insertRect.isValid()) {
+			if (m_insertRect.width() < m_insertRect.height())
+				ohint = WidgetFactory::Vertical;
+			else if (m_insertRect.width() > m_insertRect.height())
+				ohint = WidgetFactory::Horizontal;
+		}
+		if (ohint == WidgetFactory::Any) {
+			ohint = manager->lib()->showOrientationSelectionPopup(
+				m_class, m_container->m_container, m_point);
+			if (ohint == WidgetFactory::Any)
+				return; //cancelled
+		}
+	}
+	QWidget *w = manager->lib()->createWidget(m_class, m_container->m_container, m_name, 
+		m_container, ohint);
 
-	if(!w)
-	{
+	if(!w) {
+		manager->stopInsert();
+		WidgetInfo *winfo = manager->lib()->widgetInfoForClassName(m_class);
+		KMessageBox::sorry(manager->activeForm() ? manager->activeForm()->widget() : 0,
+				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.")
+				.arg(winfo ? winfo->name() : QString::null));
 		kdDebug() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
 	}
@@ -630,17 +653,17 @@ InsertWidgetCommand::execute()
 	w->setBackgroundOrigin(QWidget::ParentOrigin);
 	w->show();
 
-	m_container->form()->manager()->stopInsert();
+	manager->stopInsert();
 
 	if (!m_container->form()->objectTree()->lookup(m_name))
 	{
 		m_container->form()->objectTree()->addItem(m_container->m_tree,
-		   new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w, m_container));
+		   new ObjectTreeItem(manager->lib()->displayName(m_class), m_name, w, m_container));
 	}
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
-	QValueList<QCString> list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));
+	QValueList<QCString> list(manager->lib()->autoSaveProperties(w->className()));
 
 	QValueList<QCString>::ConstIterator endIt = list.constEnd();
 	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it)

@@ -42,7 +42,9 @@ class RowEditBuffer;
 class Cursor;
 }
 
-class KexiValidator;
+namespace KexiUtils {
+class Validator;
+}
 class KexiTableViewData;
 
 
@@ -101,10 +103,10 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! Assigns validator \a v for this column. 
 		 If the validator has no parent object, it will be owned by the column, 
 		 so you shouldn't care about destroying it. */
-		void setValidator( KexiValidator* v );
+		void setValidator( KexiUtils::Validator* v );
 
 		//! \return validator assigned for this column of 0 if there is no validator assigned.
-		inline KexiValidator* validator() const { return m_validator; }
+		inline KexiUtils::Validator* validator() const { return m_validator; }
 
 		/*! For not-db-aware data only:
 		 Sets related data \a data for this column, what defines simple one-field, 
@@ -157,7 +159,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		QString m_captionAliasOrName;
 
-		KexiValidator* m_validator;
+		KexiUtils::Validator* m_validator;
 
 		//! Data that this column is assigned to.
 		KexiTableViewData* m_data;

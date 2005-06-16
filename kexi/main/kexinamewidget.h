@@ -24,8 +24,10 @@
 #include <qlayout.h>
 #include <klineedit.h>
 
-class KexiValidator;
-class KexiMultiValidator;
+namespace KexiUtils {
+class Validator;
+class MultiValidator;
+}
 
 class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 {
@@ -74,12 +76,12 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		/*! \return true if name or caption is empty. */
 		bool empty() const;
 
-		KexiValidator *nameValidator() const;
+		KexiUtils::Validator *nameValidator() const;
 
 		/*! Adds subvalidator for name field. In fact it's is added to internal 
 		 multivalidator. If \a owned is true, \a validator will be owned by the object.
-		 \sa KexiMultiValidator::addSubvalidator(). */
-		void addNameSubvalidator( KexiValidator* validator, bool owned = true );
+		 \sa MultiValidator::addSubvalidator(). */
+		void addNameSubvalidator( KexiUtils::Validator* validator, bool owned = true );
 
 		/*! \return true if name text cannot be empty (true by default). */
 		bool isNameRequired() const;
@@ -127,7 +129,7 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		KLineEdit* le_caption;
 		KLineEdit* le_name;
 		QGridLayout* lyr;
-		KexiMultiValidator *m_validator;
+		KexiUtils::MultiValidator *m_validator;
 		QString m_nameWarning, m_captionWarning;
 
 		bool m_le_name_txtchanged_disable : 1;

@@ -67,8 +67,8 @@ class KexiScriptContainer : public QObject
         void setCode(const QString& code);
 
     signals:
-        void stdout(const QString&);
-        void stderr(const QString&);
+        void stdOut(const QString&);
+        void stdErr(const QString&);
 
     public slots:
 

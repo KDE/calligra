@@ -25,14 +25,16 @@
 */
 
 #include "kexidataawareobjectiface.h"
-#include "kexivalidator.h"
 
+#include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
 #include <kexidb/roweditbuffer.h>
 #include <kexidataiteminterface.h>
 
 #include <kmessagebox.h>
+
+using namespace KexiUtils;
 
 KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 {
@@ -799,7 +801,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	m_inside_acceptEditor = true;//avoid recursion
 
 	QVariant newval;
-	KexiValidator::Result res = KexiValidator::Ok;
+	Validator::Result res = Validator::Ok;
 	QString msg, desc;
 	bool setNull = false;
 //	bool allow = true;
@@ -815,9 +817,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		if (m_editor->valueIsNull()) {//null value entered
 			if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!" << endl;
-				res = KexiValidator::Error;
-				msg = KexiValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-					+ "\n\n" + KexiValidator::msgYouCanImproveData();
+				res = Validator::Error;
+				msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
+					+ "\n\n" + Validator::msgYouCanImproveData();
 				desc = i18n("The column's constraint is declared as NOT NULL.");
 				editCurrentCellAgain = true;
 	//			allow = false;
@@ -834,9 +836,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			if (m_editor->field()->hasEmptyProperty()) {
 				if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
-					res = KexiValidator::Error;
-					msg = KexiValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-						+ "\n\n" + KexiValidator::msgYouCanImproveData();
+					res = Validator::Error;
+					msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
+						+ "\n\n" + Validator::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY.");
 					editCurrentCellAgain = true;
 	//				allow = false;
@@ -850,9 +852,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			else {
 				if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
-					res = KexiValidator::Error;
-					msg = KexiValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-						+ "\n\n" + KexiValidator::msgYouCanImproveData();
+					res = Validator::Error;
+					msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
+						+ "\n\n" + Validator::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
 					editCurrentCellAgain = true;
 //				allow = false;
@@ -875,7 +877,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	}
 
 	//try to get the value entered:
-	if (res == KexiValidator::Ok) {
+	if (res == Validator::Ok) {
 		if (!setNull && !valueChanged
 			|| setNull && m_currentItem->at( realFieldNumber ).isNull()) {
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED." << endl;
@@ -905,7 +907,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		//Check other validation rules:
 		//1. check using validator
 //		KexiValidator *validator = m_data->column(m_curCol)->validator();
-		KexiValidator *validator = column(m_curCol)->validator();
+		Validator *validator = column(m_curCol)->validator();
 		if (validator) {
 //			res = validator->check(m_data->column(m_curCol)->field()->captionOrName(), 
 			res = validator->check(column(m_curCol)->field()->captionOrName(), 
@@ -914,7 +916,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	}
 
 	//show the validation result if not OK:
-	if (res == KexiValidator::Error) {
+	if (res == Validator::Error) {
 		if (desc.isEmpty())
 			KMessageBox::sorry(dynamic_cast<QWidget*>(this), msg);
 		else
@@ -922,13 +924,13 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		editCurrentCellAgain = true;
 //		allow = false;
 	}
-	else if (res == KexiValidator::Warning) {
+	else if (res == Validator::Warning) {
 		//js: todo: message!!!
 		KMessageBox::messageBox(dynamic_cast<QWidget*>(this), KMessageBox::Sorry, msg + "\n" + desc);
 		editCurrentCellAgain = true;
 	}
 
-	if (res == KexiValidator::Ok) {
+	if (res == Validator::Ok) {
 		//2. check using signal
 		//bool allow = true;
 //		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
@@ -939,7 +941,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			m_data->rowEditBuffer()->debug();
 		} else {
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ CHANGE FAILED in KexiDataAwareObjectInterface::updateRowEditBuffer()" << endl;
-			res = KexiValidator::Error;
+			res = Validator::Error;
 
 			//now: there might be called cancelEditor() in updateRowEditBuffer() handler,
 			//if this is true, d->pEditor is NULL.
@@ -957,14 +959,14 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		}
 	}
 
-	if (res == KexiValidator::Ok) {
+	if (res == Validator::Ok) {
 		removeEditor();
 		/*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol, 
 			m_currentItem->at( realFieldNumber ));
 		/*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol);
 	}
 	m_inside_acceptEditor = false;
-	if (res == KexiValidator::Ok) {
+	if (res == Validator::Ok) {
 		if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
 			acceptRowEdit();
 		return true;

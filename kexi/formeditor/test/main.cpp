@@ -38,10 +38,10 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("kformdesigner", I18N_NOOP("KFormDesigner"), version, description,
-                     KAboutData::License_LGPL, "(C) 2003-2004 Kexi Team", 0, 0);
+                     KAboutData::License_LGPL, "(C) 2003-2005 Kexi Team", 0, 0);
     about.addCredit( "Lucijan Busch", "Original author", 0, "lucijan@kde.org" );
     about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
-    about.addCredit( "Jaroslaw Staniek", "Win32 version, some icons, other little fixes and lots of ideas and bug reports", "js@iidea.pl", 0);
+    about.addCredit( "Jarosław Staniek", "Win32 version, some icons, many fixes, ideas and bug reports", "js@iidea.pl", 0);
     about.addCredit( "Kristof Borrey ", "Icons", 0, "kristof.borrey@skynet.be" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);

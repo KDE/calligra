@@ -40,6 +40,8 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 		//! \return the ObjectTreeItem associated to this item.
 		ObjectTreeItem* objectTree() const { return m_item; }
 
+		virtual void setOpen( bool o );
+
 	protected:
 		//! Reimplemented to draw custom contents (copied from Property Editor)
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
@@ -85,7 +87,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		/*! Just renames the list item from \a oldname to \a newname. */
 		void renameItem(const QString &oldname, const QString &newname);
 
-	private slots:
+	protected slots:
 		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
 		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
 		void slotColumnSizeChanged(int);
@@ -99,8 +101,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		ObjectTreeViewItem* findItem(const QString &name);
 
 	private:
-		Form    *m_form;
-		ObjectTreeViewItem   *m_topItem;
+		Form *m_form;
+		ObjectTreeViewItem *m_topItem;
 
 	friend class TabStopDialog;
 };

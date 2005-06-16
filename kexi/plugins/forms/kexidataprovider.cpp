@@ -28,7 +28,7 @@
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <kexidb/queryschema.h>
-#include <kexi_utils.h>
+#include <kexiutils/utils.h>
 
 #include "kexidbform.h"
 
@@ -62,12 +62,12 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 		if (!dynamic_cast<KexiFormDataItemInterface*>(obj))
 			continue;
 #if 0 //! @todo reenable when subform is moved to KexiDBForm
-		KexiDBForm *dbForm = Kexi::findParent<KexiDBForm>(obj, "KexiDBForm"); //form's surface...
+		KexiDBForm *dbForm = KexiUtils::findParent<KexiDBForm>(obj, "KexiDBForm"); //form's surface...
 		if (dbForm!=m_mainWidget) //only set data for this form's data items
 			continue;
 #else
 		//tmp: reject widgets within subforms
-		if (Kexi::findParent<KexiDBForm>(obj, "KexiSubForm"))
+		if (KexiUtils::findParent<KexiDBForm>(obj, "KexiSubForm"))
 			continue;
 #endif
 		QString dataSource( dynamic_cast<KexiFormDataItemInterface*>(obj)->dataSource().lower() );

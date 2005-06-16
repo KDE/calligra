@@ -124,7 +124,7 @@ valueToCursorName(int shape)
 		case Qt::UpArrowCursor: return i18n("Up Arrow");
 		case Qt::CrossCursor: return i18n("Cross");
 		case Qt::WaitCursor: return i18n("Waiting");
-		case Qt::IbeamCursor: return i18n("iBeam");
+		case Qt::IbeamCursor: return i18n("I Beam");
 		case Qt::SizeVerCursor: return i18n("Size Vertical");
 		case Qt::SizeHorCursor: return i18n("Size Horizontal");
 		case Qt::SizeFDiagCursor: return i18n("Size Slash");

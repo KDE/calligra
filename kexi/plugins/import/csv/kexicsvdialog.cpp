@@ -52,6 +52,7 @@
 #include <kcharsets.h>
 
 #include <kexiutils/identifier.h>
+#include <kexiutils/utils.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
@@ -338,7 +339,7 @@ if ( m_mode == Clipboard )
 #ifdef Q_WS_WIN
 	//! @todo remove
 		m_fname = QFileDialog::getOpenFileName( KGlobalSettings::documentPath(), 
-			fileDialogFilterStrings(mimetypes, false),
+			KexiUtils::fileDialogFilterStrings(mimetypes, false),
 			this, "KexiCSVDialog", i18n("Open CSV Data File"));
 #else
 		m_fname = KFileDialog::getOpenFileName(":CSVImportDialog", mimetypes.join("\n"), this);
@@ -473,7 +474,7 @@ void KexiCSVDialog::fillTable()
 	QPushButton *pb = actionButton(KDialogBase::Cancel);
 	if (pb)
 		pb->setEnabled(true); //allow to cancel
-	Kexi::WaitCursor wait;
+	KexiUtils::WaitCursor wait;
 
 	if (m_table->numRows()>0) //to accept editor
 		m_table->setCurrentCell(0,0);

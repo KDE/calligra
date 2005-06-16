@@ -32,10 +32,7 @@
 
 #include "objecttreeview.h"
 
-namespace KFormDesigner
-{
-
-// ObjectTreeViewItem
+using namespace KFormDesigner;
 
 ObjectTreeViewItem::ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item)
  : KListViewItem(parent, item->name(), item->className())
@@ -146,7 +143,15 @@ ObjectTreeViewItem::setup()
 		setHeight(0);
 }
 
-// ObjectTreeView itself
+void
+ObjectTreeViewItem::setOpen( bool o )
+{
+	//don't allow to collapse the node, user may be tricked because we're not displaying [+] marks
+	if (o)
+		KListViewItem::setOpen(o);
+}
+
+// ObjectTreeView itself ----------------
 
 ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
  : KListView(parent, name)
@@ -154,6 +159,8 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 	m_form = 0;
 	addColumn(i18n("Name"), 130);
 	addColumn(i18n("Class"), 100);
+
+	installEventFilter(this);
 
 	connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
 	if(!tabStop)
@@ -191,11 +198,12 @@ ObjectTreeView::slotColumnSizeChanged(int)
 void
 ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &)
 {
-	if((list != this) || !m_form)
+	if(list != this || !m_form || !item)
 		return;
 
 	QWidget *w = ((ObjectTreeViewItem*)item)->m_item->widget();
-	if(!w)  return;
+	if(!w)
+		return;
 
 	m_form->manager()->createContextMenu(w, m_form->activeContainer());
 }
@@ -251,8 +259,8 @@ ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
 void
 ObjectTreeView::slotSelectionChanged()
 {
+	const bool hadFocus = hasFocus();
 	QPtrList<QListViewItem> list = selectedItems();
-
 	m_form->resetSelection();
 	for(QListViewItem *item = list.first(); item; item = list.next())
 	{
@@ -261,6 +269,8 @@ ObjectTreeView::slotSelectionChanged()
 		if(w && (m_form->selectedWidgets()->findRef(w) == -1))
 			m_form->setSelectedWidget(w, true, true);
 	}
+	if (hadFocus)
+		setFocus(); //restore focus
 }
 
 void
@@ -339,8 +349,6 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 		loadTree(it, treeItem);
 
 	return treeItem;
-}
-
 }
 
 #include "objecttreeview.moc"

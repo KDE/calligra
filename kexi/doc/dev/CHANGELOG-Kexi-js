@@ -259,6 +259,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   http://mfc.dundas.com/mfc/grid/index.aspx?section=Grid&body=celltypes.htm
 	--including: red corner with a note; sliders; radio buttons
 - highlight sorted column's cells slightly darker, like in current KListView's impl.
+- clicking on a header section (to sort), it ensures current cell is visible, but 
+  only y-position should be changed, not x
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -289,6 +291,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - fix repainting form's surface boundaries repainting when its size is changed by entering 
   value in the propeditor
 - fix spring behaviour: it cannot be shrinked if its inside a layout
+- KTextEdit doesn't allow to set custom cursor (also in Qt Designer)
+- support for multiple widgets selection in the property editor (requires changes to kexiproperty)
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -519,7 +523,6 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 - (1.0) add "skip empty columns" and "skip empty rows" option
 - add option for adding explicit primary key column with autonumber
 
-
 TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
@@ -527,15 +530,39 @@ TODO:::::::
 TODO: kdelibs/win32:
 commit kglobalsettings.cpp and win32_utils.h: KGlobalSettings::documentPath() now looks at the registry settings
 
+2005-06-10..16
+General 
+- more utility functions and clases moved to kexiutils library
+Form Designer
+- data aware 'text editor' widget added
+- inline editor pointer is now being kept only within parent factory
+- we're not creating additional (blue) resize handle set, but just changes color 
+  of existing set thus resizing works well even if we're during inline editing
+- inconsistences with storing pointers to currently edited widget removed 
+  (m_widget, m_editor members are now private)
+- we're copying common properties from an editing widget to an inline editor 
+  (e.g. "margin")
+- fixed resetting cursor after editing
+- on creating a new spring, splitter and line widget, orientation is set according 
+  its to aspect ratio; if the ratio is undefined, popup menu with vertical/horizontal/cancel 
+  options is displayed
+- fixed crash when pressing Tab key on form surface in design mode
+- added 2 custom tabs to property pane: Data Source (mockup for now), Widgets
+Property Pane
+- widget class is displayed above property editor
+- blinking reduced on property buffer switching
+
 2005-06-08
 KexiDB
 - fixed crash for SQLite2 driver
 CSV Import Dialog
 - deadlock removed when importing CSV text like ","
+Form Designer
+- (all branches) temp. fix: QTabWidget used instead of KTabWidget ('&' bug)
 
 2005-06-01
 General
-- -(all branches) missing icons added
+- (all branches) missing icons added
 KexiDB
 - (all branches) field names converted to lowercase in memory to avoid problems with comparisons
 

@@ -44,14 +44,18 @@
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kiconloader.h>
+#include <ktabwidget.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
 #include <kexidb/cursor.h>
+#include <kexidb/dbobjectnamevalidator.h>
+#include <kexiutils/utils.h>
 
 //#include "projectsettingsui.h"
 #include "kexibrowser.h"
 #include "kexipropertyeditorview.h"
+#include "kexipropertyeditor.h"
 #include "kexipropertybuffer.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
@@ -63,7 +67,6 @@
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexi.h"
-#include "kexi_utils.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 #include "kexiuseraction.h"
@@ -132,6 +135,7 @@ class KexiMainWindowImpl::Private
 		KexiContextHelp *ctxHelp;
 #endif
 		KexiBrowser *nav;
+		KTabWidget *propEditorTabWidget;
 		QGuardedPtr<KexiPropertyEditorView> propEditor;
 		QGuardedPtr<KexiPropertyBuffer> propBuffer;
 
@@ -243,6 +247,7 @@ class KexiMainWindowImpl::Private
 	{
 		propEditor=0;
 		propEditorToolWindow=0;
+		propEditorTabWidget=0;
 		final = false;
 		nav=0;
 		navToolWindow=0;
@@ -366,6 +371,7 @@ void updatePropEditorDockWidthInfo() {
 			}
 		}
 	}
+
 	void restoreNavigatorWidth()
 	{
 #if defined(KDOCKWIDGET_P)
@@ -953,7 +959,7 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	if (d->nav)
 		d->nav->setEnabled(d->prj);
 	if (d->propEditor)
-		d->propEditor->setEnabled(d->prj);
+		d->propEditorTabWidget->setEnabled(d->prj);
 }
 
 void KexiMainWindowImpl::invalidateViewModeActions()
@@ -973,7 +979,7 @@ tristate KexiMainWindowImpl::startup()
 {
 	switch (Kexi::startupHandler().action()) {
 	case KexiStartupHandler::CreateBlankProject:
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 		return createBlankProject();
 	case KexiStartupHandler::UseTemplate:
 		return cancelled;
@@ -985,7 +991,7 @@ tristate KexiMainWindowImpl::startup()
 		}
 		break;
 	default:;
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 	}
 	return true;
 }
@@ -1090,7 +1096,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
 #if defined(KDOCKWIDGET_P)
 	if (d->propEditor) {
-				KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+				KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 				if(ds)
 					ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
@@ -1138,7 +1144,7 @@ tristate KexiMainWindowImpl::closeProject()
 #if defined(KDOCKWIDGET_P)
 	//remember docks position - will be used on storeSettings()
 	if (d->propEditor) {
-		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		if (ds)
 			d->propEditorDockSeparatorPos = ds->separatorPosInPercent();
@@ -1148,8 +1154,8 @@ tristate KexiMainWindowImpl::closeProject()
 
 		if (d->propEditor) {
 			if (d->dialogs.isEmpty())
-				makeWidgetDockVisible(d->propEditor);
-			KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+				makeWidgetDockVisible(d->propEditorTabWidget);
+			KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			if(ds)
 				ds->setSeparatorPosInPercent(80);
@@ -1159,7 +1165,7 @@ tristate KexiMainWindowImpl::closeProject()
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		int dwWidth = dw->width();
 		if (ds) {
-				if (!d->dialogs.isEmpty() && d->propEditor->isVisible())
+				if (!d->dialogs.isEmpty() && d->propEditorTabWidget->isVisible())
 					d->navDockSeparatorPos = ds->separatorPosInPercent();
 //				else
 //					d->navDockSeparatorPos = (100 * dwWidth) / width();
@@ -1184,7 +1190,7 @@ tristate KexiMainWindowImpl::closeProject()
 	}
 
 	if (d->propEditor)
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 
 //	if(d->propEditorToolWindow)
 	//	d->propEditorToolWindow->hide();
@@ -1305,25 +1311,28 @@ void KexiMainWindowImpl::initPropertyEditor()
 #ifdef KEXI_PROP_EDITOR
 	if (!d->propEditor) {
 //TODO: FIX LAYOUT PROBLEMS
+		d->propEditorTabWidget = new KTabWidget(this);
+		d->propEditorTabWidget->hide();
 		d->propEditor = new KexiPropertyEditorView(this);
-		d->propEditor->hide();
+		d->propEditorTabWidget->setCaption(d->propEditor->caption());
+		d->propEditorTabWidget->addTab(d->propEditor, i18n("Properties"));
 		d->propEditor->installEventFilter(this);
-		d->propEditorToolWindow = addToolWindow(d->propEditor,
+		d->propEditorToolWindow = addToolWindow(d->propEditorTabWidget,
 			KDockWidget::DockRight, getMainDockWidget(), 20);
 
 		d->config->setGroup("PropertyEditor");
 		int size = d->config->readNumEntry("FontSize", -1);
-		QFont f(d->propEditor->font());
+		QFont f(d->propEditorTabWidget->font());
 		if (size<0) {
 			const int wdth = KGlobalSettings::desktopGeometry(this).width();
 			size = 10 + QMAX(0, wdth - 1100) / 100;
-			size = QMIN( d->propEditor->fontInfo().pixelSize(), size );
+			size = QMIN( d->propEditorTabWidget->fontInfo().pixelSize(), size );
 		}
 		f.setPixelSize( size );
-		d->propEditor->setFont(f);
+		d->propEditorTabWidget->setFont(f);
 
 		if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
-		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 	#if defined(KDOCKWIDGET_P)
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 //			ds->setKeepSize(true);
@@ -1458,7 +1467,7 @@ void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 	activeWindowChanged(0);
 
 	if (d->propEditor)
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 //	if (d->propEditorToolWindow)
 	//	d->propEditorToolWindow->hide();
 }
@@ -1635,7 +1644,7 @@ KexiMainWindowImpl::storeSettings()
 
 	if (d->propEditor) {
 		d->config->setGroup("PropertyEditor");
-		d->config->writeEntry("FontSize", d->propEditor->font().pixelSize());
+		d->config->writeEntry("FontSize", d->propEditorTabWidget->font().pixelSize());
 	}
 }
 
@@ -1743,14 +1752,52 @@ KexiMainWindowImpl::updateDialogViewGUIClient(KXMLGUIClient *viewClient)
 	}
 }
 
-void
-KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
+void KexiMainWindowImpl::updateCustomPropertyPanelTabs(KexiDialogBase *prevDialog, int prevViewMode)
+{
+	updateCustomPropertyPanelTabs(
+		prevDialog ? prevDialog->part() : 0, 
+		prevDialog ? prevDialog->currentViewMode() : prevViewMode,
+		d->curDialog ? d->curDialog->part() : 0, 
+		d->curDialog ? d->curDialog->currentViewMode() : Kexi::NoViewMode
+	);
+}
+
+void KexiMainWindowImpl::updateCustomPropertyPanelTabs(
+	KexiPart::Part *prevDialogPart, int prevViewMode, KexiPart::Part *curDialogPart, int curViewMode )
+{
+	if (!d->propEditorTabWidget)
+		return;
+
+	if (!curDialogPart
+		|| (/*prevDialogPart &&*/ curDialogPart
+		    && (prevDialogPart!=curDialogPart || prevViewMode!=curViewMode)
+		 ))
+	{
+		//delete old custom tabs (other than 'property' tab)
+		const uint count = d->propEditorTabWidget->count();
+		for (uint i=1; i < count; i++)
+			d->propEditorTabWidget->removePage( d->propEditorTabWidget->page(1) );
+	}
+
+	//don't change anything if part is not switched nor view mode changed
+	if ((!prevDialogPart && !curDialogPart)
+		|| (prevDialogPart == curDialogPart && prevViewMode==curViewMode)
+		|| (curDialogPart && curViewMode!=Kexi::DesignViewMode))
+		return;
+
+	//recreate custom tabs
+	if (curDialogPart)
+		curDialogPart->setupCustomPropertyPanelTabs(d->propEditorTabWidget);
+}
+
+void KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 {
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	kdDebug() << "KexiMainWindowImpl::activeWindowChanged() to = " << (dlg ? dlg->caption() : "<none>") << endl;
 
 	KXMLGUIClient *client=0; //common for all views
 	KXMLGUIClient *viewClient=0; //specific for current dialog's view
+	KexiDialogBase* prevDialog = d->curDialog;
 
 	if (!dlg)
 		client=0;
@@ -1840,6 +1887,7 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	d->curDialog=dlg;
 
 	propertyBufferSwitched(d->curDialog);
+	updateCustomPropertyPanelTabs(prevDialog, prevDialog ? prevDialog->currentViewMode() : Kexi::NoViewMode);
 
 	if (dialogChanged) {
 //		invalidateSharedActions();
@@ -2280,14 +2328,15 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 //js		d->config->setGroup("MainWindow");
 //js		ds->setSeparatorPos(d->config->readNumEntry("RightDockPosition", 80/* % */), true);
 
-	if (!d->propEditor->isVisible())
-		makeWidgetDockVisible(d->propEditor);
+	if (!d->propEditorTabWidget->isVisible())
+		makeWidgetDockVisible(d->propEditorTabWidget);
 
 
 	d->propEditorToolWindow->wrapperWidget()->raise();
 
 	d->block_KMdiMainFrm_eventFilter=true;
-	d->propEditor->setFocus();
+	if (d->propEditorTabWidget->currentPage())
+		d->propEditorTabWidget->currentPage()->setFocus();
 	d->block_KMdiMainFrm_eventFilter=false;
 
 /*#if defined(KDOCKWIDGET_P)
@@ -2313,14 +2362,18 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		return false;
 	}
 //	bool cancelled;
+	int prevViewMode = d->curDialog->currentViewMode();
+	updateCustomPropertyPanelTabs(d->curDialog, prevViewMode);
 	tristate res = d->curDialog->switchToViewMode( viewMode );
 	if (!res) {
+		updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
 		showErrorMessage(i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(viewMode)),
 			d->curDialog);
 		d->toggleLastCheckedMode();
 		return false;
 	}
 	if (~res) {
+		updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
 		d->toggleLastCheckedMode();
 		return false;
 	}
@@ -2481,7 +2534,7 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 			messageWhenAskingForName, this, "nameDialog");
 		//check if that name is allowed
 		d->nameDialog->widget()->addNameSubvalidator(
-			new Kexi::KexiDBObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
+			new KexiDB::ObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
 	}
 	else {
 		d->nameDialog->widget()->setMessageText( messageWhenAskingForName );
@@ -2888,7 +2941,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 	//remember currently focued window invalidate act.
 	if (e->type()==QEvent::FocusOut) {
 		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
-			if (Kexi::hasParent(d->curDialog, focus_w)) {
+			if (KexiUtils::hasParent(d->curDialog, focus_w)) {
 				invalidateSharedActions(d->curDialog);
 				d->focus_before_popup=d->curDialog;
 			}
@@ -2944,7 +2997,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 {
 	if (!d->prj || !item)
 		return 0;
-	Kexi::WaitCursor wait;
+	KexiUtils::WaitCursor wait;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	bool needsUpdateViewGUIClient = true;
 	if (dlg) {
@@ -2968,12 +3021,20 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	}
 	else {
 		d->updatePropEditorVisibility(viewMode);
+		KexiPart::Part *part = Kexi::partManager().part(item->mime());
+		//update tabs before opening
+		updateCustomPropertyPanelTabs(d->curDialog ? d->curDialog->part() : 0,
+			d->curDialog ? d->curDialog->currentViewMode() : Kexi::NoViewMode,
+			part, viewMode);
+
 		dlg = d->prj->openObject(this, *item, viewMode);
+
 //moved up		if (dlg)
 //			d->updatePropEditorVisibility(dlg->currentViewMode());
 	}
 
 	if (!dlg || !activateWindow(dlg)) {
+		updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
 		//js TODO: add error msg...
 		return 0;
 	}
@@ -3251,7 +3312,7 @@ void KexiMainWindowImpl::importantInfo(bool /*onStartup*/)
 		if ( f.open( IO_ReadOnly ) ) {
 			QTextStream ts(&f);
 			ts.setCodec( KGlobal::locale()->codecForEncoding() );
-			QTextBrowser *tb = Kexi::findFirstChild<KTextBrowser>(&tipDialog,"KTextBrowser");
+			QTextBrowser *tb = KexiUtils::findFirstChild<KTextBrowser>(&tipDialog,"KTextBrowser");
 			if (tb) {
 				tb->setText( QString("<qt>%1</qt>").arg(ts.read()) );
 			}

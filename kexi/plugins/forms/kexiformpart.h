@@ -52,7 +52,7 @@ class KexiFormPart : public KexiPart::Part
 		KexiFormPart(QObject *parent, const char *name, const QStringList &);
 		virtual ~KexiFormPart();
 
-		KFormDesigner::FormManager *manager() { return m_manager; }
+		KFormDesigner::FormManager *manager() const;
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
@@ -78,6 +78,7 @@ class KexiFormPart : public KexiPart::Part
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 	protected slots:
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
@@ -85,7 +86,8 @@ class KexiFormPart : public KexiPart::Part
 		void slotPropertyChanged(KexiPropertyBuffer&, KexiProperty& prop);
 
 	private:
-		QGuardedPtr<KFormDesigner::FormManager> m_manager;
+		class Private;
+		Private* d;
 };
 
 #endif

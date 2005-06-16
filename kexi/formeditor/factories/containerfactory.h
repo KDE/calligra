@@ -150,24 +150,28 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
 		~ContainerFactory();
 
-		virtual QWidget				*create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
+		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+			WidgetFactory::OrientationHint orientationHint = Any);
 		virtual bool createMenuActions(const QCString& classname, QWidget *w, QPopupMenu *menu,
-		   KFormDesigner::Container *container);
-		virtual bool startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual bool previewWidget(const QCString &classname, QWidget *widget, KFormDesigner::Container *container);
-		virtual bool saveSpecialProperty(const QCString &classname, const QString &name, const QVariant &value, QWidget *w,
-		                        QDomElement &parentNode, QDomDocument &parent);
-		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
+			KFormDesigner::Container *container);
+		virtual bool startEditing(const QCString &classname, QWidget *w, 
+			KFormDesigner::Container *container);
+		virtual bool previewWidget(const QCString &classname, QWidget *widget, 
+			KFormDesigner::Container *container);
+		virtual bool saveSpecialProperty(const QCString &classname, const QString &name, 
+			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
+		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, 
+			KFormDesigner::ObjectTreeItem *item);
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	protected:
 		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, const QCString &property);
 		virtual bool changeText(const QString &newText);
-		virtual void resizeEditor(QWidget *widget, const QCString &classname);
+		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 
 	public slots:
-		void AddTabPage();
-		void AddStackPage();
+		void addTabPage();
+		void addStackPage();
 		void renameTabPage();
 		void removeTabPage();
 		void removeStackPage();
@@ -176,7 +180,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		void reorderTabs(int oldpos, int newpos);
 
 	private:
-		QWidget *m_widget;
+//		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
 		KFormDesigner::FormManager  *m_manager;
 };

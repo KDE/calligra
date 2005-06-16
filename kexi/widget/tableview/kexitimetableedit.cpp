@@ -43,7 +43,7 @@
 #include <kpopupmenu.h>
 #include <kdatewidget.h>
 
-#include "kexi_utils.h"
+#include <kexiutils/utils.h>
 
 KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
  : KexiTableEdit(column, parent,"KexiTimeTableEdit")
@@ -55,7 +55,7 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_cleared = false;
 	m_setNumberOnFocus = -1;
 
-	m_dte_time_obj = Kexi::findFirstChild<QObject>(m_edit, "QDateTimeEditor");
+	m_dte_time_obj = KexiUtils::findFirstChild<QObject>(m_edit, "QDateTimeEditor");
 	if (m_dte_time_obj)
 		m_dte_time_obj->installEventFilter(this);
 	

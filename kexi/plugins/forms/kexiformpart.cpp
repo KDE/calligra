@@ -23,13 +23,15 @@
 #include <kgenericfactory.h>
 #include <kdialogbase.h>
 #include <klistview.h>
+#include <ktabwidget.h>
+#include <kiconloader.h>
+#include <kcombobox.h>
 
-#include "kexiviewbase.h"
-#include "keximainwindow.h"
-#include "kexiproject.h"
+#include <kexiviewbase.h>
+#include <keximainwindow.h>
+#include <kexiproject.h>
 #include <kexipartitem.h>
 #include <kexidialogbase.h>
-
 #include <kexidb/connection.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/field.h>
@@ -38,6 +40,7 @@
 #include <formIO.h>
 #include <objpropbuffer.h>
 #include <widgetlibrary.h>
+#include <objecttreeview.h>
 
 #include "kexiformview.h"
 #include "kexidbform.h"
@@ -46,8 +49,26 @@
 #include "kexiformmanager.h"
 #include "kexiformpart.h"
 
+class KexiFormPart::Private
+{
+	public:
+		Private()
+		{
+		}
+		~Private()
+		{
+			delete static_cast<KFormDesigner::ObjectTreeView*>(objectTreeView);
+			delete static_cast<QWidget*>(dataPage);
+		}
+		QGuardedPtr<KFormDesigner::FormManager> manager;
+		QGuardedPtr<KFormDesigner::ObjectTreeView> objectTreeView;
+		QGuardedPtr<QWidget> dataPage;
+		KComboBox *dataSourceCombo;
+};
+
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
+ , d(new Private())
 {
 	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
 	m_names["instance"] = i18n("Form");
@@ -57,16 +78,17 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi";
-	m_manager = new KexiFormManager(this, supportedFactoryGroups, "form_manager");
+	d->manager = new KexiFormManager(this, supportedFactoryGroups, "form_manager");
 
-	connect(m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
+	connect(d->manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
 		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
-	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
+	connect(d->manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
 		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()
 {
+	delete d;
 }
 
 #if 0
@@ -102,12 +124,12 @@ void KexiFormPart::initPartActions()
 void KexiFormPart::initInstanceActions()
 {
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
-	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Key_U, m_manager, SLOT(showFormUICode()),
+	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Key_U, d->manager, SLOT(showFormUICode()),
 		actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
 #endif
 
 	KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
-	m_manager->createActions( col );
+	d->manager->createActions( col );
 
 	//connect actions provided by widget factories
 	connect( col->action("widget_assign_action"), SIGNAL(activated()), this, SLOT(slotAssignAction()));
@@ -327,17 +349,17 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
 void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
 {
-	m_manager->buffer()->changeProperty("autoTabStops", QVariant(set, 4));
+	d->manager->buffer()->changeProperty("autoTabStops", QVariant(set, 4));
 }
 
 void KexiFormPart::slotAssignAction()
 {
 	KexiDBForm *dbform;
-	if (!m_manager->activeForm() || !m_manager->activeForm()->designMode()
-		|| !(dbform = dynamic_cast<KexiDBForm*>(m_manager->activeForm()->formWidget())))
+	if (!d->manager->activeForm() || !d->manager->activeForm()->designMode()
+		|| !(dbform = dynamic_cast<KexiDBForm*>(d->manager->activeForm()->formWidget())))
 		return;
 
-	KexiProperty &onClickActionProp = m_manager->buffer()->property("onClickAction");
+	KexiProperty &onClickActionProp = d->manager->buffer()->property("onClickAction");
 	if (onClickActionProp.isNull())
 		return;
 	QCString onClickActionValue( onClickActionProp.value().toCString() );
@@ -351,12 +373,12 @@ void KexiFormPart::slotAssignAction()
 
 	KexiMainWindow * mainWin = formViewWidget->parentDialog()->mainWin();
 	KexiActionSelectionDialog dlg(mainWin, dbform, onClickActionValue, 
-		m_manager->buffer()->property("name").value().toCString());
+		d->manager->buffer()->property("name").value().toCString());
 	dlg.exec();
 	onClickActionValue = dlg.selectedActionName();
 	if (QDialog::Accepted==dlg.result()) {
 		//update property value
-		m_manager->buffer()->changeProperty("onClickAction", onClickActionValue);
+		d->manager->buffer()->changeProperty("onClickAction", onClickActionValue);
 	}
 }
 
@@ -372,13 +394,51 @@ QString KexiFormPart::i18nMessage(const QCString& englishMessage) const
 
 void KexiFormPart::slotPropertyChanged(KexiPropertyBuffer&, KexiProperty& prop)
 {
-	if (!m_manager->activeForm())
+	if (!d->manager->activeForm())
 		return;
 	if (prop.name()=="autoTabStops") {
-		QWidget *w = m_manager->activeForm()->selectedWidget();
+		QWidget *w = d->manager->activeForm()->selectedWidget();
 		//update autoTabStops setting at KFD::Form level
-		m_manager->activeForm()->setAutoTabStops( prop.value().toBool() );
+		d->manager->activeForm()->setAutoTabStops( prop.value().toBool() );
 	}
+}
+
+KFormDesigner::FormManager* KexiFormPart::manager() const
+{
+	return d->manager;
+}
+
+void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+{
+	if (!d->objectTreeView) {
+		d->objectTreeView = new KFormDesigner::ObjectTreeView(0, "KexiFormPart:ObjectTreeView");
+		d->manager->setObjectTreeView(d->objectTreeView);
+		d->dataPage = new QWidget(0, "dataSource");
+		QVBoxLayout *vlyr = new QVBoxLayout(d->dataPage);
+		QLabel *dsLabel = new QLabel(i18n("Data Source:"), d->dataPage);
+		dsLabel->setMargin(2);
+		dsLabel->setMinimumHeight(IconSize(KIcon::Small));
+		vlyr->addWidget(dsLabel);
+		d->dataSourceCombo = new KComboBox(true, d->dataPage, "dataSourceCombo");
+		vlyr->addWidget(d->dataSourceCombo);
+		dsLabel->setBuddy(d->dataSourceCombo);
+		QLabel *fLabel = new QLabel(i18n("Available fields:"), d->dataPage);
+		fLabel->setMargin(2);
+		fLabel->setMinimumHeight(IconSize(KIcon::Small));
+		vlyr->addWidget(fLabel);
+		//tmp/mock-up
+		KListView *fields = new KListView(d->dataPage);
+		fLabel->setBuddy(fields);
+		fields->addColumn(i18n("Primary Key", "PK"));
+		fields->addColumn(i18n("Field Name"));
+		fields->addColumn(i18n("Data Type"));
+		vlyr->addWidget(fields);
+	}
+	tab->addTab( d->dataPage, SmallIconSet("database"), "");
+	tab->setTabToolTip( d->dataPage, i18n("Data Source"));
+
+	tab->addTab( d->objectTreeView, SmallIconSet("widgets"), "");
+	tab->setTabToolTip( d->objectTreeView, i18n("Widgets"));
 }
 
 //----------------

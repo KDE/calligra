@@ -68,7 +68,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
 	d->dataAwareObject = dataAwareObject;
 	m_hasFocusableWidget = false;
 
-	setFocusPolicy(NoFocus);
+//	setFocusPolicy(NoFocus);
 
 	//m_conn = conn;
 	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;

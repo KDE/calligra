@@ -158,6 +158,8 @@ class KEXICORE_EXPORT KexiDataItemInterface
 
 		inline virtual void setFocus() { if (widget()) widget()->setFocus(); }
 
+		inline bool cursorAtNewRow() { return m_listener ? m_listener->cursorAtNewRow() : false; }
+
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
 		 value (already storted in m_origValue). 
@@ -173,8 +175,6 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! Call this in your implementation when value changes, 
 		//! so installed listener can react on this change.
 		void signalValueChanged();
-
-		inline bool cursorAtNewRow() { return m_listener ? m_listener->cursorAtNewRow() : false; }
 
 //moved to KexiFormDataItemInterface: QString m_dataSource;
 		KexiDataItemChangesListener* m_listener;

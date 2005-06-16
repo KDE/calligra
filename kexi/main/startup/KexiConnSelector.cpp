@@ -23,7 +23,6 @@
 #include <kexidb/connectiondata.h>
 
 #include "kexi.h"
-#include "kexi_utils.h"
 #include "KexiConnSelectorBase.h"
 #include "KexiOpenExistingFile.h"
 

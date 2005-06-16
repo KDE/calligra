@@ -28,7 +28,7 @@
 #include <kmessagebox.h>
 #include <kiconloader.h>
 
-#include <kexi_utils.h>
+#include <kexiutils/utils.h>
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>

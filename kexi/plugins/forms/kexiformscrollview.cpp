@@ -51,7 +51,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 	m_popup = new KPopupMenu(this, "contextMenu");
 
-	setFocusPolicy(NoFocus);
+//	setFocusPolicy(NoFocus);
 }
 
 KexiFormScrollView::~KexiFormScrollView()

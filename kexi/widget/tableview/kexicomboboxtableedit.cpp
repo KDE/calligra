@@ -27,7 +27,7 @@
 #include "kexicomboboxpopup.h"
 #include "kexitableview.h"
 #include "kexitableitem.h"
-#include "kexi_utils.h"
+#include "kexi.h"
 
 #include <kpushbutton.h>
 #include <klineedit.h>

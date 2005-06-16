@@ -47,6 +47,7 @@ class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 			BottomLeft = 32, BottomCenter = 64, BottomRight = 128 };
 		ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing=false);
 		virtual ~ResizeHandle();
+		void setEditingMode(bool editing);
 
 	protected:
 		virtual void mousePressEvent(QMouseEvent *ev);
@@ -84,8 +85,8 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 
 		void setWidget(QWidget *modify, bool editing = false);
 		QWidget *widget() const { return m_widget; }
-
-		void  raise();
+		void raise();
+		void setEditingMode(bool editing);
 
 	private:
 		QGuardedPtr<ResizeHandle> m_handles[8];

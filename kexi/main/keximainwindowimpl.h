@@ -243,10 +243,18 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Helper: switches to view \a mode. */
 		bool switchToViewMode(int viewMode);
 
-		/*! Helper. Removed and/or adds GUI client for current dialog's view;
+		/*! Helper. Removes and/or adds GUI client for current dialog's view;
 		 on switching to other dialog (activeWindowChanged())
 		 or on switching to other view within the same dialog (switchToViewMode()). */
 		void updateDialogViewGUIClient(KXMLGUIClient *viewClient);
+
+		/*! Helper. Updates setup of property panel's tabs. Used when switching 
+		 from \a prevDialog dialog to a current dialog.	*/
+		void updateCustomPropertyPanelTabs(KexiDialogBase *prevDialog, int prevViewMode);
+
+		/*! @overload void updateCustomPropertyPanelTabs(KexiDialogBase *prevDialog, int prevViewMode) */
+		void updateCustomPropertyPanelTabs(
+			KexiPart::Part *prevDialogPart, int prevViewMode, KexiPart::Part *curDialogPart, int curViewMode );
 
 	protected slots:
 

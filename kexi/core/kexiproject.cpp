@@ -35,6 +35,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/parser/parser.h>
 #include <kexidb/msghandler.h>
+#include <kexiutils/utils.h>
 
 #include "kexiproject.h"
 #include "kexipartmanager.h"
@@ -44,7 +45,6 @@
 #include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
-#include "kexi_utils.h"
 
 #include <assert.h>
 
@@ -279,7 +279,7 @@ KexiProject::items(KexiPart::Info *i)
 		bool ok;
 		int ident = cursor->value(0).toInt(&ok);
 		QString objName = cursor->value(1).toString();
-		if ( ok && (ident>0) && Kexi::isIdentifier(objName) ) {
+		if ( ok && (ident>0) && KexiUtils::isIdentifier(objName) ) {
 			it->setIdentifier(ident);
 			it->setMime(i->mime()); //js: may be not null???
 			it->setName(objName);
@@ -449,7 +449,7 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 
 bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const QString& _newName )
 {
-	Kexi::WaitCursor wait;
+	KexiUtils::WaitCursor wait;
 	clearError();
 	QString newName = _newName.stripWhiteSpace();
 	{

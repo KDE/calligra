@@ -22,6 +22,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
 #include <keximainwindow.h>
+#include <kexiutils/utils.h>
 
 #include "kexiqueryview.h"
 #include "kexiquerypart.h"
@@ -41,7 +42,7 @@ bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 {
 	if (!query)
 		return false;
-	Kexi::WaitCursor wait;
+	KexiUtils::WaitCursor wait;
 	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*query);
 	if (!rec) {
 		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query executing failed."));

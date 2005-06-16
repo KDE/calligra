@@ -43,9 +43,9 @@ KexiScriptTextView::KexiScriptTextView(KexiScriptManager* manager, KexiMainWindo
     m_scriptcontainer = m_manager->getScriptContainer( parentDialog()->partItem()->name() );
     //plugSharedAction( "script_execute", m_scriptcontainer, SLOT(execute()) );
 
-    connect(m_scriptcontainer, SIGNAL(stdout(const QString&)),
+    connect(m_scriptcontainer, SIGNAL(stdOut(const QString&)),
             this, SLOT(addStdOut(const QString&)));
-    connect(m_scriptcontainer, SIGNAL(stderr(const QString&)),
+    connect(m_scriptcontainer, SIGNAL(stdErr(const QString&)),
             this, SLOT(addStdErr(const QString&)));
 }
 

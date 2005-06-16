@@ -120,16 +120,21 @@ FormManager::~FormManager()
 }
 
 void
-FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
+FormManager::setEditor(KexiPropertyEditor *editor)
 {
 	m_editor = editor;
-	m_treeview = treeview;
 
 	if(editor)
 		editor->setBuffer(m_buffer);
+}
 
-	if(treeview)
-		connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), treeview, SLOT(renameItem(const QString&, const QString&)));
+void
+FormManager::setObjectTreeView(ObjectTreeView *treeview)
+{
+	m_treeview = treeview;
+	if (m_treeview)
+		connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), 
+			m_treeview, SLOT(renameItem(const QString&, const QString&)));
 }
 
 ActionList
@@ -222,7 +227,7 @@ FormManager::insertWidget(const QCString &classname)
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		form->d->cursors = new QMap<QString, QCursor>();
+//		form->d->cursors = new QMap<QString, QCursor>();
 		if (form->toplevelContainer())
 			form->widget()->setCursor(QCursor(CrossCursor));
 		QObjectList *l = form->widget()->queryList( "QWidget" );
@@ -230,8 +235,9 @@ FormManager::insertWidget(const QCString &classname)
 		{
 			if( ((QWidget*)o)->ownCursor() )
 			{
-				form->d->cursors->insert(o->name(), ((QWidget*)o)->cursor());
-				((QWidget*)o)->setCursor(QCursor(Qt::CrossCursor));
+//				form->d->cursors->insert(o->name(), ((QWidget*)o)->cursor());
+				form->d->cursors.insert(o, static_cast<QWidget*>(o)->cursor());
+				static_cast<QWidget*>(o)->setCursor(QCursor(Qt::CrossCursor));
 			}
 
 		}
@@ -258,12 +264,16 @@ FormManager::stopInsert()
 		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
-			if( ((QWidget*)o)->ownCursor())
-				((QWidget*)o)->setCursor( (*(form->d->cursors))[o->name()] ) ;
+			if( ((QWidget*)o)->ownCursor()) {
+				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(o) );
+				if (curIt!=form->d->cursors.constEnd())
+					static_cast<QWidget*>(o)->setCursor( *curIt );
+//				((QWidget*)o)->setCursor( (*(form->d->cursors))[o->name()] ) ;
+			}
 		}
 		delete l;
-		delete (form->d->cursors);
-		form->d->cursors = 0;
+//		delete (form->d->cursors);
+//		form->d->cursors = 0;
 	}
 	m_inserting = false;
 	m_pointer->setChecked(true);
@@ -288,7 +298,7 @@ FormManager::startCreatingConnection()
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		form->d->cursors = new QMap<QString, QCursor>();
+//		form->d->cursors = new QMap<QString, QCursor>();
 		form->d->mouseTrackers = new QStringList();
 		if (form->toplevelContainer())
 		{
@@ -298,10 +308,11 @@ FormManager::startCreatingConnection()
 		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
-			QWidget *w = (QWidget*)o;
+			QWidget *w = static_cast<QWidget*>(o);
 			if( w->ownCursor() )
 			{
-				form->d->cursors->insert(w->name(), w->cursor());
+				form->d->cursors.insert(w, w->cursor());
+//				form->d->cursors->insert(w->name(), w->cursor());
 				w->setCursor(QCursor(PointingHandCursor ));
 			}
 			if(w->hasMouseTracking())
@@ -325,7 +336,8 @@ FormManager::resetCreatedConnection()
 
 	if(m_active && m_active->formWidget())
 		m_active->formWidget()->clearForm();
-	m_active->widget()->repaint();
+	if (m_active)
+		m_active->widget()->repaint();
 }
 
 void
@@ -346,13 +358,17 @@ FormManager::stopCreatingConnection()
 		for(QObject *o = l->first(); o; o = l->next())
 		{
 			QWidget *w = (QWidget*)o;
-			if( w->ownCursor())
-				w->setCursor( (*(form->d->cursors))[o->name()] ) ;
+			if( w->ownCursor()) {
+				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(o) );
+				if (curIt!=form->d->cursors.constEnd())
+					static_cast<QWidget*>(o)->setCursor( *curIt );
+			}
+//				w->setCursor( (*(form->d->cursors))[o->name()] ) ;
 			w->setMouseTracking( !form->d->mouseTrackers->grep(w->name()).isEmpty() );
 		}
 		delete l;
-		delete (form->d->cursors);
-		form->d->cursors = 0;
+//		delete (form->d->cursors);
+//		form->d->cursors = 0;
 		delete (form->d->mouseTrackers);
 		form->d->mouseTrackers = 0;
 	}
@@ -427,7 +443,7 @@ FormManager::windowChanged(QWidget *w)
 			emit  dirty(form, form->isModified());
 			// update actions state
 			m_active->emitActionSignals();
-			//uodate the buffer too
+			//update the buffer too
 			form->emitSelectionSignals();
 			return;
 		}
@@ -999,12 +1015,12 @@ FormManager::breakLayout()
 }
 
 void
-FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
+FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff, bool forceReload)
 {
 	if(m_editor)
 		m_editor->setBuffer(buff);
 
-	emit bufferSwitched(buff);
+	emit bufferSwitched(buff, forceReload);
 }
 
 void

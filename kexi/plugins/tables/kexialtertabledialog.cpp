@@ -37,6 +37,8 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/error.h>
 
+#include <kexiutils/identifier.h>
+
 #include <kexiproject.h>
 #include <keximainwindow.h>
 
@@ -104,7 +106,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	d->data->addColumn( col );
 
 	col = new KexiTableViewColumn(i18n("Field Name"), KexiDB::Field::Text);
-	KexiValidator *vd = new Kexi::IdentifierValidator();
+	KexiUtils::Validator *vd = new KexiUtils::IdentifierValidator();
 	vd->setAcceptsEmptyValue(true);
 	col->setValidator( vd );
 
@@ -273,8 +275,16 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	KexiPropertyBuffer *buff = new KexiPropertyBuffer(d->buffers, typeName);
 //	connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 //		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
-	//name
+
 	KexiProperty *prop;
+
+	//meta-info for property editor
+	buff->add(prop = new KexiProperty("this:className", i18n("Table field")) );
+	prop->setVisible(false);
+//! \todo add table_field icon (add	buff->add(prop = new KexiProperty("this:iconName", "table_field") );
+//	prop->setVisible(false);
+
+	//name
 	buff->add(prop = new KexiProperty("name", QVariant(field->name()), i18n("Name")) );
 	prop->setVisible(false);//always hidden
 

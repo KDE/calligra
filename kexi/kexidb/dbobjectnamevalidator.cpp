@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -18,39 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIPROPERTYEDITORVIEW_H
-#define KEXIPROPERTYEDITORVIEW_H
+#include "dbobjectnamevalidator.h"
 
-#include "kexiviewbase.h"
+#include "driver.h"
 
-class KexiPropertyBuffer;
-class KexiPropertyEditor;
+using namespace KexiDB;
+using namespace KexiUtils;
 
-/*! The container (acts as a dock window) for KexiPropertyEditor
-*/
-class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorView : public KexiViewBase
+ObjectNameValidator::ObjectNameValidator(
+	KexiDB::Driver *drv, QObject * parent, const char * name)
+: Validator(parent,name)
 {
-	Q_OBJECT
+	m_drv = drv;
+}
 
-	public:
-		KexiPropertyEditorView(KexiMainWindow *mainWin);
-		~KexiPropertyEditorView();
+ObjectNameValidator::~ObjectNameValidator()
+{
+}
 
-		virtual QSize sizeHint() const;
-		virtual QSize minimumSizeHint() const;
-		KexiPropertyEditor *editor() const;
+Validator::Result ObjectNameValidator::internalCheck(
+	const QString & /*valueName*/, const QVariant& v, 
+	QString &message, QString &details)
+{
 
-	public slots:
-		virtual void setGeometry( const QRect &r );
-		virtual void resize( int w, int h );
-
-	protected slots:
-		void slotBufferChanged(KexiPropertyBuffer* );
-
-	protected:
-		class Private;
-		Private *d;
-};
-
-#endif
-
+	if (m_drv.isNull() ? !KexiDB::Driver::isKexiDBSystemObjectName(v.toString())
+		 : !m_drv->isSystemObjectName(v.toString()))
+		return Validator::Ok;
+	message = i18n("You cannot use name \"%1\" for your object.\n"
+		"It is reserved for internal Kexi objects. Please choose another name.")
+		.arg(v.toString());
+	details = i18n("Names of internal Kexi objects are starting with \"kexi__\".");
+	return Validator::Error;
+}

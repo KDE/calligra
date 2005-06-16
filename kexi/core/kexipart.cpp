@@ -338,6 +338,10 @@ QString Part::i18nMessage(const QCString& englishMessage) const
 	return englishMessage;
 }
 
+void Part::setupCustomPropertyPanelTabs(KTabWidget *tab)
+{
+}
+
 //-------------------------------------------------------------------------
 
 

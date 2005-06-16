@@ -22,10 +22,9 @@
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 
-#include "kexi_utils.h"
-
 #include <kexidb/error.h>
 #include <kexidb/driver.h>
+#include <kexiutils/utils.h>
 
 #include <assert.h>
 #include <string.h>
@@ -144,7 +143,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 					return QDate::fromString( GET_sqlite3_column_text, Qt::ISODate );
 				case Field::Time:
 					//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-					return Kexi::stringToHackedQTime(GET_sqlite3_column_text);
+					return KexiUtils::stringToHackedQTime(GET_sqlite3_column_text);
 				case Field::DateTime: {
 					QString tmp( GET_sqlite3_column_text );
 					tmp[10] = 'T'; //for ISODate compatibility
@@ -474,7 +473,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 				break;
 			case Field::Time:
 				//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-				data[i] = Kexi::stringToHackedQTime(QString::fromLatin1(*col));
+				data[i] = KexiUtils::stringToHackedQTime(QString::fromLatin1(*col));
 				break;
 			case Field::DateTime: {
 				QString tmp( QString::fromLatin1(*col) );

@@ -22,7 +22,18 @@
 
 using namespace KexiUtils;
 
-QString string2FileName(const QString &s)
+bool KexiUtils::isIdentifier(const QString& s)
+{
+	uint i;
+	for (i=0; i<s.length(); i++) {
+		QChar c = s.at(i).lower();
+		if (!(c=='_' || c>='a' && c<='z' || i>0 && c>='0' && c<='9'))
+			break;
+	}
+	return i>0 && i==s.length();
+}
+
+QString KexiUtils::string2FileName(const QString &s)
 {
 	QString fn = s.simplifyWhiteSpace();
 	fn.replace(' ',"_"); fn.replace('$',"_");
@@ -59,7 +70,7 @@ inline char char2Identifier(const QChar& c)
 	return '_';
 }
 
-QString string2Identifier(const QString &s)
+QString KexiUtils::string2Identifier(const QString &s)
 {
 	QString r, id = s.simplifyWhiteSpace();
 	if (id.isEmpty())
@@ -82,7 +93,7 @@ QString string2Identifier(const QString &s)
 
 //--------------------------------------------------------------------------------
 
-QString Kexi::identifierExpectedMessage(const QString &valueName, const QVariant& v)
+QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVariant& v)
 {
 	return "<p>"+i18n("Value of \"%1\" column must be an identifier.").arg(valueName)
 		+"</p><p>"+i18n("\"%1\" is not a valid identifier.").arg(v.toString())+"</p>";
@@ -91,7 +102,7 @@ QString Kexi::identifierExpectedMessage(const QString &valueName, const QVariant
 //--------------------------------------------------------------------------------
 
 IdentifierValidator::IdentifierValidator(QObject * parent, const char * name)
-: KexiValidator(parent,name)
+: Validator(parent,name)
 {
 }
 
@@ -108,7 +119,7 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos ) cons
 	if (i<input.length() && input.at(i)>='0' && input.at(i)<='9')
 		pos++; //_ will be added at the beginning
 	bool addspace = (input.right(1)==" ");
-	input = KexiUtils::string2Identifier(input);
+	input = string2Identifier(input);
 	if (addspace)
 		input += "_";
 	if((uint)pos>input.length())
@@ -116,13 +127,13 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos ) cons
 	return input.isEmpty() ? Valid : Acceptable;
 }
 
-KexiValidator::Result IdentifierValidator::internalCheck(
+Validator::Result IdentifierValidator::internalCheck(
 	const QString &valueName, const QVariant& v, 
 	QString &message, QString & /*details*/)
 {
-	if (Kexi::isIdentifier(v.toString()))
-		return KexiValidator::Ok;
-	message = Kexi::identifierExpectedMessage(valueName, v);
-	return KexiValidator::Error;
+	if (isIdentifier(v.toString()))
+		return Validator::Ok;
+	message = identifierExpectedMessage(valueName, v);
+	return Validator::Error;
 }
 

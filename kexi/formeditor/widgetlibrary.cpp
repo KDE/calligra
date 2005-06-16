@@ -26,6 +26,8 @@
 #include <klibloader.h>
 #include <kparts/componentfactory.h>
 #include <ktrader.h>
+#include <kiconloader.h>
+#include <kpopupmenu.h>
 
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
@@ -214,6 +216,7 @@ WidgetLibrary::loadFactories()
 				<< (*it.current())->library() << endl;
 			continue;
 		}
+		f->m_library = this;
 		f->m_showAdvancedProperties = d->showAdvancedProperties; //inherit this flag from the library
 		d->factories.insert( f->name(), f );
 		//collect information about classes to be hidden
@@ -312,14 +315,15 @@ WidgetLibrary::addCustomWidgetActions(KActionCollection *parent)
 }
 
 QWidget*
-WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c)
+WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
+	WidgetFactory::OrientationHint orientationHint)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
 	if(!wclass)
 		return 0;
 
-	QWidget *widget = wclass->factory()->create(wclass->className(), parent, name, c);
+	QWidget *widget = wclass->factory()->create(wclass->className(), parent, name, c, orientationHint);
 	if (widget)
 		return widget;
 	//try to instantiate from inherited class
@@ -627,6 +631,76 @@ void WidgetLibrary::setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInf
 	if (!parentFactory)
 		return;
 	parentFactory->setPropertyOptions(buf, winfo, w);
+}
+
+WidgetFactory* WidgetLibrary::factory(const char* factoryName) const
+{
+	return d->factories[factoryName];
+}
+
+QString WidgetLibrary::internalProperty(const QCString& classname, const QCString& property)
+{
+	loadFactories();
+	WidgetInfo *wclass = d->widgets[classname];
+	if(!wclass)
+		return QString::null;
+	QString value( wclass->factory()->internalProperty(classname, property) );
+	if (value.isEmpty() && wclass->inheritedClass())
+		return wclass->inheritedClass()->factory()->internalProperty(classname, property);
+	return value;
+}
+
+WidgetFactory::OrientationHint WidgetLibrary::showOrientationSelectionPopup(
+	const QCString &classname, QWidget* parent, const QPoint& pos)
+{
+	loadFactories();
+	WidgetInfo *wclass = d->widgets[classname];
+	if(!wclass)
+		return WidgetFactory::Any;
+
+	//get custom icons and strings
+	QPixmap iconHorizontal, iconVertical;
+	QString iconName( wclass->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalIcon") );
+	if (iconName.isEmpty() && wclass->inheritedClass())
+		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalIcon");
+	if (!iconName.isEmpty())
+		iconHorizontal = SmallIcon(iconName);
+
+	iconName = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:verticalIcon");
+	if (iconName.isEmpty() && wclass->inheritedClass())
+		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:verticalIcon");
+	if (!iconName.isEmpty())
+		iconVertical = SmallIcon(iconName);
+
+	QString textHorizontal = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalText");
+	if (textHorizontal.isEmpty() && wclass->inheritedClass())
+		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalText");
+	if (textHorizontal.isEmpty()) //default
+		textHorizontal = i18n("Insert Horizontal Widget", "Insert Horizontal");
+
+	QString textVertical = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
+	if (textVertical.isEmpty() && wclass->inheritedClass())
+		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
+	if (textVertical.isEmpty()) //default
+		textVertical = i18n("Insert Vertical Widget", "Insert Vertical");
+		
+	KPopupMenu* popup = new KPopupMenu(parent, "orientationSelectionPopup");
+	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert widget: %1").arg(wclass->name()));
+	popup->insertItem(iconHorizontal, textHorizontal, 0, 0, 0, 1);
+	popup->insertItem(iconVertical, textVertical, 0, 0, 0, 2);
+	popup->insertSeparator();
+	popup->insertItem(SmallIcon("button_cancel"), i18n("Cancel"), 0, 0, 0, 3);
+	WidgetFactory::OrientationHint result;
+	switch (popup->exec(pos)) {
+	case 1:
+		result = WidgetFactory::Horizontal; break;
+	case 2:
+		result = WidgetFactory::Vertical; break;
+	default:
+		result = WidgetFactory::Any; //means "cancelled"
+	}
+	delete popup;
+	return result;
 }
 
 #include "widgetlibrary.moc"

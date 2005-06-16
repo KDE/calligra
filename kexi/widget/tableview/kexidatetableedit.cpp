@@ -47,7 +47,7 @@
 #include <kpopupmenu.h>
 #include <kdatewidget.h>
 
-#include "kexi_utils.h"
+#include <kexiutils/utils.h>
 
 KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent)
  : KexiTableEdit(column, parent,"KexiDateTableEdit")
@@ -84,7 +84,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
 	btn->setPopupDelay(1); //1 ms
 
-	m_dte_date_obj = Kexi::findFirstChild<QObject>(m_edit, "QDateTimeEditor");
+	m_dte_date_obj = KexiUtils::findFirstChild<QObject>(m_edit, "QDateTimeEditor");
 	if (m_dte_date_obj)
 		m_dte_date_obj->installEventFilter(this);
 	
@@ -98,7 +98,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
 	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
 
-	KDateTable *dt =Kexi::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
+	KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
 	if (dt)
 		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
 	m_datePicker->setCloseButton(true);

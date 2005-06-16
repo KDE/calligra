@@ -44,6 +44,7 @@
 #include <KexiProjectSelector.h>
 #include <KexiOpenExistingFile.h>
 #include <KexiDBTitlePage.h>
+#include <kexiutils/utils.h>
 
 using namespace KexiMigration;
 
@@ -410,7 +411,7 @@ void importWizard::progressUpdated(int percent) {
 //
 void importWizard::accept()
 {
-    Kexi::WaitCursor wait;
+    KexiUtils::WaitCursor wait;
     QGuardedPtr<KexiDB::Connection> kexi_conn;
     KexiMigrate* import;
     KexiDB::ConnectionData *cdata;
@@ -490,7 +491,7 @@ void importWizard::accept()
                       false);
     }
     kdDebug() << "Performing import..." << endl;
-    Kexi::removeWaitCursor();
+    KexiUtils::removeWaitCursor();
     if (import->performImport())
     {
         KWizard::accept(); //tmp, before adding "final page"

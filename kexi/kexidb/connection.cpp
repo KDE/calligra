@@ -19,19 +19,22 @@
 
 #include <kexidb/connection.h>
 
-#include <kexidb/error.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/driver.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/schemadata.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/relationship.h>
-#include <kexidb/transaction.h>
-#include <kexidb/cursor.h>
-#include <kexidb/global.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/utils.h>
-#include <kexidb/parser/parser.h>
+#include "error.h"
+#include "connectiondata.h"
+#include "driver.h"
+#include "driver_p.h"
+#include "schemadata.h"
+#include "tableschema.h"
+#include "relationship.h"
+#include "transaction.h"
+#include "cursor.h"
+#include "global.h"
+#include "roweditbuffer.h"
+#include "utils.h"
+#include "parser/parser.h"
+
+#include <kexiutils/utils.h>
+#include <kexiutils/identifier.h>
 
 #include <qfileinfo.h>
 #include <qguardedptr.h>
@@ -40,8 +43,6 @@
 #include <kdebug.h>
 
 #include <assert.h>
-
-#include "kexi_utils.h"
 
 namespace KexiDB {
 
@@ -656,7 +657,7 @@ QStringList Connection::tableNames(bool also_system_tables)
 	for (c->moveFirst(); !c->eof(); c->moveNext())
 	{
 		QString tname = c->value(0).toString(); //kexi__objects.o_name
-		if (Kexi::isIdentifier( tname )) {
+		if (KexiUtils::isIdentifier( tname )) {
 			list.append(tname);
 		}
 	}
@@ -714,7 +715,7 @@ QValueList<int> Connection::objectIds(int objType)
 	for (c->moveFirst(); !c->eof(); c->moveNext())
 	{
 		QString tname = c->value(1).toString(); //kexi__objects.o_name
-		if (Kexi::isIdentifier( tname )) {
+		if (KexiUtils::isIdentifier( tname )) {
 			list.append(c->value(0).toInt()); //kexi__objects.o_id
 		}
 	}
@@ -1415,7 +1416,7 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		setError(ERR_OBJECT_NOT_EXISTING, i18n("Unknown table \"%1\"").arg(tableSchema.name()));
 		return false;
 	}
-	if (newName.isEmpty() || !Kexi::isIdentifier(newName)) {
+	if (newName.isEmpty() || !KexiUtils::isIdentifier(newName)) {
 		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"").arg(newName));
 		return false;
 	}
@@ -1892,7 +1893,7 @@ bool Connection::setupObjectSchemaData( const RowData &data, SchemaData &sdata )
 		return false;
 	}
 	sdata.m_name = data[2].toString();
-	if (!Kexi::isIdentifier( sdata.m_name )) {
+	if (!KexiUtils::isIdentifier( sdata.m_name )) {
 		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"").arg(sdata.m_name));
 		return false;
 	}
@@ -2150,7 +2151,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		if (!ok)
 			break;
 
-		if (!Kexi::isIdentifier( cursor->value(2).asString() )) {
+		if (!KexiUtils::isIdentifier( cursor->value(2).asString() )) {
 			setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
 				.arg( cursor->value(2).asString() ));
 			ok=false;

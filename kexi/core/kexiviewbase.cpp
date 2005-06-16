@@ -23,10 +23,11 @@
 #include "kexidialogbase.h"
 #include "kexipropertybuffer.h"
 #include "kexiproject.h"
-#include "kexi_utils.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
+#include <kexiutils/utils.h>
+
 #include <kdebug.h>
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
@@ -204,8 +205,8 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 //		//hp==true if currently focused widget is a child of this table view
 //		const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
 //		kexidbg << "KexiViewBase::eventFilter(): " << o->name() << " " << e->type() << endl;
-		if (Kexi::hasParent( this, static_cast<QWidget*>(o))) {
-			if (e->type()==QEvent::FocusOut && focusWidget() && !Kexi::hasParent( this, focusWidget())) {
+		if (KexiUtils::hasParent( this, static_cast<QWidget*>(o))) {
+			if (e->type()==QEvent::FocusOut && focusWidget() && !KexiUtils::hasParent( this, focusWidget())) {
 				//focus out: when currently focused widget is not a parent of this view
 				emit focus(false);
 			} else if (e->type()==QEvent::FocusIn) {
@@ -214,11 +215,13 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 			if (e->type()==QEvent::FocusOut) { // && focusWidget() && Kexi::hasParent( this, focusWidget())) { // && focusWidget()->inherits("KexiViewBase")) {
 //				kdDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
 //				kdDebug() << o->className() << " " << o->name()<< endl;
-				KexiViewBase *v = Kexi::findParent<KexiViewBase>(o, "KexiViewBase") ;
+				KexiViewBase *v = KexiUtils::findParent<KexiViewBase>(o, "KexiViewBase") ;
+				QWidget *www=v->focusWidget();
 				if (v) {
 					while (v->m_parentView)
 						v = v->m_parentView;
-					v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(o); //focusWidget();
+					v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(v->focusWidget());
+//					v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(o); //focusWidget();
 				}
 			}
 

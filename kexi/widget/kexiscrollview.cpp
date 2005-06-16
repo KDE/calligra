@@ -30,6 +30,7 @@
 
 #include <utils/kexirecordnavigator.h>
 #include <core/kexi.h>
+#include <kexiutils/utils.h>
 
 // @todo warning: not reentrant!
 static KStaticDeleter<QPixmap> KexiScrollView_bufferPm_deleter;
@@ -46,7 +47,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	QColor fc = palette().active().foreground(),
 		bc = viewport()->paletteBackgroundColor();
-	m_helpColor = blendColors(fc, bc, 1, 2);
+	m_helpColor = KexiUtils::blendColors(fc, bc, 1, 2);
 //	m_helpColor = QColor((fc.red()+bc.red()*2)/3, (fc.green()+bc.green()*2)/3, 
 //		(fc.blue()+bc.blue()*2)/3);
 	m_helpFont.setPointSize( m_helpFont.pointSize() * 3 );

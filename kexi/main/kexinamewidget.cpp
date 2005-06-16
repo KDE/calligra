@@ -26,8 +26,11 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include <kexiutils/validator.h>
 #include <kexiutils/identifier.h>
 #include <core/kexi.h>
+
+using namespace KexiUtils;
 
 KexiNameWidget::KexiNameWidget( const QString& message, 
 	QWidget* parent, const char* name, WFlags fl )
@@ -75,8 +78,8 @@ void KexiNameWidget::init(
 
 	le_name = new KLineEdit( nameText, this, "le_name" );
 	le_name->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed,1,0));
-	KexiValidator *idValidator = new Kexi::IdentifierValidator(0, "id_val");
-	le_name->setValidator( m_validator = new KexiMultiValidator(idValidator, this, "val") );
+	Validator *idValidator = new IdentifierValidator(0, "id_val");
+	le_name->setValidator( m_validator = new MultiValidator(idValidator, this, "val") );
 	lyr->addWidget( le_name, 2, 1 );
 
 	setFocusProxy(le_caption);
@@ -106,7 +109,7 @@ void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
 		m_le_name_autofill=true;
 	if (m_le_name_autofill) {
 		m_le_name_txtchanged_disable = true;
-		le_name->setText( KexiUtils::string2Identifier(capt) );
+		le_name->setText( string2Identifier(capt) );
 		m_le_name_txtchanged_disable = false;
 	}
 }
@@ -184,7 +187,7 @@ bool KexiNameWidget::checkValidity()
 	}
 	QString dummy, message, details;
 	if (m_validator->check(dummy, le_name->text(), message, details)
-		==KexiValidator::Error) {
+		==Validator::Error) {
 		KMessageBox::detailedSorry(0, message, details);
 		le_name->setFocus();
 		return false;
@@ -192,12 +195,12 @@ bool KexiNameWidget::checkValidity()
 	return true;
 }
 
-KexiValidator *KexiNameWidget::nameValidator() const 
+Validator *KexiNameWidget::nameValidator() const 
 {
 	return m_validator;
 }
 
-void KexiNameWidget::addNameSubvalidator( KexiValidator* validator, bool owned )
+void KexiNameWidget::addNameSubvalidator( Validator* validator, bool owned )
 {
 	m_validator->addSubvalidator( validator, owned );
 }

@@ -29,6 +29,7 @@
 #include "kexi.h"
 
 #include <kexiutils/identifier.h>
+#include <kexiutils/utils.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
@@ -152,7 +153,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	connect(m_server_db_name->le_dbname, SIGNAL(returnPressed()),
 		this,SLOT(accept()));
 	m_server_db_name->le_caption->setText(i18n("New database"));
-	m_server_db_name->le_dbname->setValidator(new Kexi::IdentifierValidator(this, "id_val"));
+	m_server_db_name->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this, "id_val"));
 	m_project_selector = new KexiProjectSelectorWidget(
 		m_server_db_name->frm_dblist, "KexiProjectSelectorWidget", 0, false, false );
 	GLUE_WIDGET(m_project_selector, m_server_db_name->frm_dblist);

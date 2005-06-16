@@ -21,7 +21,8 @@
 #include "kexisharedactionhost_p.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
-#include "kexi_utils.h"
+
+#include <kexiutils/utils.h>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -137,7 +138,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
 	if (!d)
 		return;
-	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0!=Kexi::findParent<KexiDialogBase>(o, "KexiDialogBase"));
+	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0!=KexiUtils::findParent<KexiDialogBase>(o, "KexiDialogBase"));
 
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
 	for (KActionPtrList::ConstIterator it=d->sharedActions.constBegin(); it!=d->sharedActions.constEnd(); ++it) {

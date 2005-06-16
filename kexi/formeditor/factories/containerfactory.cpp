@@ -380,7 +380,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 }
 
 QWidget*
-ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
+ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
+	WidgetFactory::OrientationHint orientationHint)
 {
 	if(c == "QButtonGroup")
 	{
@@ -395,8 +396,8 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		KFDTabWidget *tab = new KFDTabWidget(p, n);
 #if defined(USE_KTabWidget) && KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);
-#endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
+#endif
 		container->form()->objectTree()->addItem(container->objectTree(), new KFormDesigner::ObjectTreeItem(
 		        container->form()->manager()->lib()->displayName(c), n, tab, container));
 		m_manager = container->form()->manager();
@@ -404,9 +405,10 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		// if we are loading, don't add this tab
 		if(container->form()->interactiveMode())
 		{
-			m_widget=tab;
+			//m_widget=tab;
+			setWidget(tab);
 			m_container=container;
-			AddTabPage();
+			addTabPage();
 		}
 
 		return tab;
@@ -442,9 +444,10 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 
 		if(container->form()->interactiveMode())
 		{
-			m_widget = stack;
+			//m_widget = stack;
+			setWidget(stack);
 			m_container = container;
-			AddStackPage();
+			addStackPage();
 		}
 		return stack;
 	}
@@ -469,6 +472,9 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 	}
 	else if(c == "QSplitter") {
 		QSplitter *split = new QSplitter(p, n);
+		if (orientationHint!=WidgetFactory::Any)
+			split->setOrientation(
+				orientationHint==WidgetFactory::Vertical ? Qt::Vertical : Qt::Horizontal);
 		new KFormDesigner::Container(container, split, container);
 		return split;
 	}
@@ -501,34 +507,40 @@ bool
 ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu, 
 	KFormDesigner::Container *container)
 {
-	m_widget = w;
+	setWidget(w);
+	//m_widget = w;
 	m_container = container;
 
 	if((classname == "KFDTabWidget") || (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
 		if(w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 		{
-			m_widget = w->parentWidget()->parentWidget();
+			//m_widget = w->parentWidget()->parentWidget();
+			setWidget(w->parentWidget()->parentWidget());
 			m_container = m_container->toplevel();
 		}
 
-		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
+		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(addTabPage()) );
 		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
-		if( dynamic_cast<TabWidgetBase*>(m_widget)->count() == 1)
+//		if( dynamic_cast<TabWidgetBase*>(m_widget)->count() == 1)
+		if( dynamic_cast<TabWidgetBase*>(widget())->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
 	}
 	else if(w->parentWidget()->isA("QWidgetStack") && !w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 	{
-		m_widget = w->parentWidget();
-		QWidgetStack *stack = (QWidgetStack*)m_widget;
-		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
+		//m_widget = w->parentWidget();
+		setWidget(w->parentWidget());
+		QWidgetStack *stack = (QWidgetStack*)w->parentWidget(); //m_widget;
+//		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
+		m_container = container->form()->objectTree()->lookup(stack->name())->parent()->container();
 
-		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddStackPage()) );
+		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(addStackPage()) );
 
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
-		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
+//		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
+		if(stack->children()->count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
 		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
@@ -652,20 +664,22 @@ ContainerFactory::changeText(const QString &text)
 }
 
 void
-ContainerFactory::resizeEditor(QWidget *widget, const QCString &)
+ContainerFactory::resizeEditor(QWidget *editor, QWidget *widget, const QCString &)
 {
 	QSize s = widget->size();
-	m_editor->move(widget->x() + 2, widget->y() - 5);
-	m_editor->resize(s.width() - 20, widget->fontMetrics().height() +10);
+	editor->move(widget->x() + 2, widget->y() - 5);
+	editor->resize(s.width() - 20, widget->fontMetrics().height() +10);
 }
 
 // Widget Specific slots used in menu items
 
-void ContainerFactory::AddTabPage()
+void ContainerFactory::addTabPage()
 {
-	if (!m_widget->inherits("QTabWidget")){ return ;}
-	KCommand *com = new InsertPageCommand(m_container, m_widget);
-	if(dynamic_cast<TabWidgetBase*>(m_widget)->count() == 0)
+//	if (!m_widget->inherits("QTabWidget"))
+	if (!widget()->inherits("QTabWidget"))
+		return;
+	KCommand *com = new InsertPageCommand(m_container, widget());
+	if(dynamic_cast<TabWidgetBase*>(widget())->count() == 0)
 	{
 		com->execute();
 		delete com;
@@ -676,8 +690,9 @@ void ContainerFactory::AddTabPage()
 
 void ContainerFactory::removeTabPage()
 {
-	if (!m_widget->inherits("QTabWidget")){ return ;}
-	TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(m_widget);
+	if (!widget()->inherits("QTabWidget"))
+		return;
+	TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(widget());
 	QWidget *w = tab->currentPage();
 
 	KFormDesigner::WidgetList list;
@@ -689,8 +704,9 @@ void ContainerFactory::removeTabPage()
 
 void ContainerFactory::renameTabPage()
 {
-	if (!m_widget->inherits("QTabWidget")){ return ;}
-	TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(m_widget);
+	if (!widget()->inherits("QTabWidget"))
+		return;
+	TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(widget());
 	QWidget *w = tab->currentPage();
 	bool ok;
 
@@ -713,11 +729,12 @@ void ContainerFactory::reorderTabs(int oldpos, int newpos)
 	tab->children()->insert(newpos, item);
 }
 
-void ContainerFactory::AddStackPage()
+void ContainerFactory::addStackPage()
 {
-	if (!m_widget->isA("QWidgetStack")){ return ;}
-	KCommand *com = new InsertPageCommand(m_container, m_widget);
-	if(!((QWidgetStack*)m_widget)->visibleWidget())
+	if (!widget()->isA("QWidgetStack"))
+		return;
+	KCommand *com = new InsertPageCommand(m_container, widget());
+	if(!((QWidgetStack*)widget())->visibleWidget())
 	{
 		com->execute();
 		delete com;
@@ -728,8 +745,9 @@ void ContainerFactory::AddStackPage()
 
 void ContainerFactory::removeStackPage()
 {
-	if (!m_widget->isA("QWidgetStack")){ return ;}
-	QWidgetStack *stack = (QWidgetStack*)m_widget;
+	if (!widget()->isA("QWidgetStack"))
+		return;
+	QWidgetStack *stack = (QWidgetStack*)widget();
 	QWidget *page = stack->visibleWidget();
 
 	KFormDesigner::WidgetList list;
@@ -748,7 +766,7 @@ void ContainerFactory::removeStackPage()
 
 void ContainerFactory::prevStackPage()
 {
-	QWidgetStack *stack = (QWidgetStack*)m_widget;
+	QWidgetStack *stack = (QWidgetStack*)widget();
 	int id = stack->id(stack->visibleWidget()) - 1;
 	if(stack->widget(id))
 		stack->raiseWidget(id);
@@ -756,7 +774,7 @@ void ContainerFactory::prevStackPage()
 
 void ContainerFactory::nextStackPage()
 {
-	QWidgetStack *stack = (QWidgetStack*)m_widget;
+	QWidgetStack *stack = (QWidgetStack*)widget();
 	int id = stack->id(stack->visibleWidget()) + 1;
 	if(stack->widget(id))
 		stack->raiseWidget(id);

@@ -431,9 +431,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if((kev->key() == Key_Tab) || (kev->key() == Key_BackTab)){
 				ObjectTreeItem *item = form()->objectTree()->lookup(form()->selectedWidgets()->first()->name());
-				if(!item) return true;
+				if(!item || !item->parent())
+					return true;
 				ObjectTreeList *list = item->parent()->children();
-				if(list->count() == 1) return true;
+				if(list->count() == 1)
+					return true;
 				int index = list->findRef(item);
 
 				if(kev->key() == Key_BackTab){
@@ -812,9 +814,9 @@ Container::layoutTypeToString(int type)
 Container::LayoutType
 Container::stringToLayoutType(const QString &name)
 {
-	if(name == "HBox")        return HBox;
-	if(name == "VBox")        return VBox;
-	if(name == "Grid")        return Grid;
+	if(name == "HBox") return HBox;
+	if(name == "VBox") return VBox;
+	if(name == "Grid") return Grid;
 	return NoLayout;
 }
 

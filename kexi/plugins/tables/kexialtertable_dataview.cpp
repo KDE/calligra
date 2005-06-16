@@ -21,6 +21,7 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+#include <kexiutils/utils.h>
 #include "kexitableview.h"
 #include "kexidatatableview.h"
 #include "keximainwindow.h"
@@ -57,7 +58,7 @@ tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
 tristate KexiAlterTable_DataView::afterSwitchFrom(int mode)
 {
 	if (tempData()->tableSchemaChangedInPreviousView) {
-		Kexi::WaitCursor wait;
+		KexiUtils::WaitCursor wait;
 		KexiDB::Cursor *c = mainWin()->project()->dbConnection()->prepareQuery(*tempData()->table);
 		if (!c)
 			return false;

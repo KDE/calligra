@@ -17,24 +17,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexivalidator.h"
+#include "validator.h"
 
-KexiValidator::KexiValidator(QObject * parent, const char * name)
+using namespace KexiUtils;
+
+Validator::Validator(QObject * parent, const char * name)
 : QValidator(parent,name)
 , m_acceptsEmptyValue(false)
 {
 }
 
-KexiValidator::~KexiValidator()
+Validator::~Validator()
 {
 }
 
-KexiValidator::Result KexiValidator::check(const QString &valueName, const QVariant& v, 
+Validator::Result Validator::check(const QString &valueName, const QVariant& v, 
 	QString &message, QString &details)
 {
 	if (v.isNull() || v.type()==QVariant::String && v.toString().isEmpty()) {
 		if (!m_acceptsEmptyValue) {
-			message = KexiValidator::msgColumnNotEmpty().arg(valueName);
+			message = Validator::msgColumnNotEmpty().arg(valueName);
 			return Error;
 		}
 		return Ok;
@@ -42,34 +44,34 @@ KexiValidator::Result KexiValidator::check(const QString &valueName, const QVari
 	return internalCheck(valueName, v, message, details);
 }
 
-KexiValidator::Result KexiValidator::internalCheck(const QString & /*valueName*/, 
+Validator::Result Validator::internalCheck(const QString & /*valueName*/, 
 	const QVariant& /*v*/, QString & /*message*/, QString & /*details*/)
 {
 	return Error;
 }
 
-QValidator::State KexiValidator::validate ( QString & , int & ) const
+QValidator::State Validator::validate ( QString & , int & ) const
 {
 	return QValidator::Acceptable;
 }
 
 //-----------------------------------------------------------
 
-KexiMultiValidator::KexiMultiValidator(QObject* parent, const char * name)
- : KexiValidator(parent, name)
+MultiValidator::MultiValidator(QObject* parent, const char * name)
+ : Validator(parent, name)
 {
 	m_ownedSubValidators.setAutoDelete(true);
 }
 
-KexiMultiValidator::KexiMultiValidator(KexiValidator *validator, 
+MultiValidator::MultiValidator(Validator *validator, 
 	QObject * parent, const char * name)
- : KexiValidator(parent, name)
+ : Validator(parent, name)
 {
 	addSubvalidator(validator);
 }
 
 
-void KexiMultiValidator::addSubvalidator( KexiValidator* validator, bool owned )
+void MultiValidator::addSubvalidator( Validator* validator, bool owned )
 {
 	if (!validator)
 		return;
@@ -78,12 +80,12 @@ void KexiMultiValidator::addSubvalidator( KexiValidator* validator, bool owned )
 		m_ownedSubValidators.append(validator);
 }
 
-QValidator::State KexiMultiValidator::validate( QString & input, int & pos ) const
+QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 {
 	if (m_subValidators.isEmpty())
 		return Invalid;
 	State s;
-	QValueList<KexiValidator*>::const_iterator it;
+	QValueList<Validator*>::const_iterator it;
 	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
 		s = (*it)->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
@@ -92,15 +94,15 @@ QValidator::State KexiMultiValidator::validate( QString & input, int & pos ) con
 	return Acceptable;
 }
 
-void KexiMultiValidator::fixup ( QString & input ) const
+void MultiValidator::fixup ( QString & input ) const
 {
-	QValueList<KexiValidator*>::const_iterator it;
+	QValueList<Validator*>::const_iterator it;
 	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
 		(*it)->fixup(input);
 	}
 }
 
-KexiValidator::Result KexiMultiValidator::internalCheck(
+Validator::Result MultiValidator::internalCheck(
 	const QString &valueName, const QVariant& v, 
 	QString &message, QString &details)
 {
@@ -108,7 +110,7 @@ KexiValidator::Result KexiMultiValidator::internalCheck(
 		return Error;
 	Result r;
 	bool warning = false;
-	QValueList<KexiValidator*>::const_iterator it;
+	QValueList<Validator*>::const_iterator it;
 	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
 		r = (*it)->internalCheck(valueName, v, message, details);
 		if (r==Error)

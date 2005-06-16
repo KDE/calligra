@@ -24,7 +24,7 @@
 
 #include "kexitableviewdata.h"
 
-#include <kexivalidator.h>
+#include <kexiutils/validator.h>
 
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
@@ -131,7 +131,7 @@ void KexiTableViewColumn::init()
 	m_relatedDataEditable = false;
 }
 
-void KexiTableViewColumn::setValidator( KexiValidator* v )
+void KexiTableViewColumn::setValidator( KexiUtils::Validator* v )
 {
 	if (m_validator) {//remove old one
 		if (!m_validator->parent()) //destroy if has no parent
@@ -509,7 +509,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			if (val->isNull() && !f->isAutoIncrement()) {
 				//NOT NULL violated
 				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
-					.arg(f->captionOrName()) + "\n\n" + KexiValidator::msgYouCanImproveData();
+					.arg(f->captionOrName()) + "\n\n" + KexiUtils::Validator::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
 				m_result.column = col;
 				return false;
@@ -520,7 +520,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			if (!f->isAutoIncrement() && (val->isNull() || KexiDB::isEmptyValue( f, *val ))) {
 				//NOT EMPTY violated
 				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
-					.arg(f->captionOrName()) + "\n\n" + KexiValidator::msgYouCanImproveData();
+					.arg(f->captionOrName()) + "\n\n" + KexiUtils::Validator::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
 				m_result.column = col;
 				return false;
@@ -534,7 +534,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 				m_containsROWIDInfo/*also retrieve ROWID*/ )) 
 			{
 				m_result.msg = i18n("Row inserting failed.") + "\n\n" 
-					+ KexiValidator::msgYouCanImproveData();
+					+ KexiUtils::Validator::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
 
 /*			if (desc)
@@ -553,7 +553,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer(),
 					m_containsROWIDInfo/*use ROWID*/))
 			{
-				m_result.msg = i18n("Row changing failed.") + "\n\n" + KexiValidator::msgYouCanImproveData();
+				m_result.msg = i18n("Row changing failed.") + "\n\n" + KexiUtils::Validator::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 				return false;
 			}

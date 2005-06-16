@@ -27,6 +27,7 @@
 #include <kpixmap.h>
 
 #include "kexiformdataiteminterface.h"
+#include "kexidbfactory.h"
 #include <widget/utils/kexidisplayutils.h>
 
 class QPainter;
@@ -52,12 +53,12 @@ class KexiLabelPrivate : public QLabel {
 };
 
 /**
-An extended, data-aware, read-only text label.
-It's text may have a drop-shadow.
+ An extended, data-aware, read-only text label.
+ It's text may have a drop-shadow.
 
-@author Christian Nitschkowski
+ @author Christian Nitschkowski, Jaroslaw Staniek
 */
-class KexiLabel : public QLabel, public KexiFormDataItemInterface {
+class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
 		Q_OBJECT
 		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
 		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
@@ -144,10 +145,9 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 		QPoint p_shadowPosition;
 		KexiLabelPrivate* p_privateLabel;
 		QTimer* p_timer;
-		KexiDisplayUtils::DisplayParameters *p_autonumberDisplayParameters;
 		bool p_pixmapDirty : 1;
 		bool p_shadowEnabled : 1;
 		bool p_resizeEvent : 1;
-	};
+};
 
 #endif

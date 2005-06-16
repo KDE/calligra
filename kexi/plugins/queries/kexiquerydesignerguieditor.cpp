@@ -23,6 +23,7 @@
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qdom.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -33,6 +34,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
 #include <kexidb/parser/sqlparser.h>
+#include <kexiutils/identifier.h>
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -44,7 +46,7 @@
 #include "kexiquerypart.h"
 #include "kexidialogbase.h"
 #include "kexidatatable.h"
-#include "kexi_utils.h"
+#include "kexi.h"
 #include "kexisectionheader.h"
 #include "kexitableviewpropertybuffer.h"
 #include "widget/relations/kexirelationwidget.h"
@@ -1004,7 +1006,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 		valueExpr = new KexiDB::ConstExpr(SQL_NULL, QVariant());
 	}
 	else {//identfier
-		if (!Kexi::isIdentifier(str))
+		if (!KexiUtils::isIdentifier(str))
 			return 0;
 		valueExpr = new KexiDB::VariableExpr(str);
 		//find first matching field for name 'str':
@@ -1044,7 +1046,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				const int id = fieldId.find(':');
 				if (id>0) {
 					alias = fieldId.left(id).stripWhiteSpace().latin1();
-					if (!Kexi::isIdentifier(alias)) {
+					if (!KexiUtils::isIdentifier(alias)) {
 						result->success = false;
 						result->column = 0;
 						result->msg = i18n("Entered column alias \"%1\" is not a valid identifier.").arg(alias);
@@ -1264,8 +1266,14 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	const bool asterisk = isAsterisk(tableName, fieldName);
 	QString typeName = "KexiQueryDesignerGuiEditor::Column";
 	KexiPropertyBuffer *buff = new KexiPropertyBuffer(d->buffers, typeName);
-
 	KexiProperty *prop;
+
+	//meta-info for property editor
+	buff->add(prop = new KexiProperty("this:className", i18n("Query column")) );
+	prop->setVisible(false);
+//! \todo add table_field icon (add	buff->add(prop = new KexiProperty("this:iconName", "table_field") );
+//	prop->setVisible(false);
+
 	buff->add(prop = new KexiProperty("table", QVariant(tableName)) );
 	prop->setVisible(false);//always hidden
 
@@ -1321,9 +1329,9 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KexiPropertyBuffer &buf, Ke
  */
 	if (pname=="alias" || pname=="name") {
 		const QVariant& v = property.value();
-		if (!v.toString().stripWhiteSpace().isEmpty() && !Kexi::isIdentifier( v.toString() )) {
+		if (!v.toString().stripWhiteSpace().isEmpty() && !KexiUtils::isIdentifier( v.toString() )) {
 			KMessageBox::sorry(this,
-				Kexi::identifierExpectedMessage(property.desc(), v.toString()));
+				KexiUtils::identifierExpectedMessage(property.desc(), v.toString()));
 			property.resetValue();
 		}
 		if (pname=="alias") {

@@ -35,6 +35,7 @@
    <Action name="library_widget_KexiLabel"/>
    <Action name="library_widget_KexiPictureLabel"/>
    <Action name="library_widget_KexiDBLineEdit"/>
+   <Action name="library_widget_KexiDBTextEdit"/>
    <Action name="library_widget_KIntSpinBox"/>
    <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_KComboBox"/>

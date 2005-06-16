@@ -48,7 +48,7 @@ class KexiScriptTextView : public KexiViewBase
         virtual ~KexiScriptTextView();
 
     public slots:
-        /// Add a string to our stdout handler.
+        /// Add a string to our stdOut handler.
         void addStdOut(const QString&);
         /// Add a string to our stderr handler.
         void addStdErr(const QString&);
@@ -70,7 +70,7 @@ class KexiScriptTextView : public KexiViewBase
 
         /**
          * The textbrowser used to display feedback like the
-         * stdout and stderr messages of the scripting code.
+         * stdOut and stdErr messages of the scripting code.
          */
         KTextBrowser* m_browser;
 };

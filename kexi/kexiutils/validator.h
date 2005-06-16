@@ -28,7 +28,9 @@
 
 #include <klocale.h>
 
-/*! KexiValidator class extends QValidator with offline-checking 
+namespace KexiUtils {
+
+/*! KexiUtils::Validator class extends QValidator with offline-checking 
  for value's validity (check() method).
  Thus, it groups two purposes into one container:
  -string validator for line editors (online checking, "on typing")
@@ -39,13 +41,13 @@
  -  QValidator::State IdentifierValidator::validate( QString& input, int& pos ) const;
  -  Result check(const QString &valueName, QVariant v, QString &message, QString &details);
  */
-class KEXIUTILS_EXPORT KexiValidator : public QValidator
+class KEXIUTILS_EXPORT Validator : public QValidator
 {
 	public:
 		typedef enum Result { Error = 0, Ok = 1, Warning = 2 };
 
-		KexiValidator(QObject * parent = 0, const char * name = 0);
-		virtual ~KexiValidator();
+		Validator(QObject * parent = 0, const char * name = 0);
+		virtual ~Validator();
 
 		/*! Sets accepting empty values on (true) or off (false). 
 		 By default the validator does not accepts empty values. */
@@ -78,7 +80,7 @@ class KEXIUTILS_EXPORT KexiValidator : public QValidator
 		}
 
 
-		void addChildValidator( KexiValidator* v );
+		void addChildValidator( Validator* v );
 
 	protected:
 		/* Used by check(), for reimplementation, 
@@ -88,10 +90,10 @@ class KEXIUTILS_EXPORT KexiValidator : public QValidator
 
 		bool m_acceptsEmptyValue : 1;
 
-	friend class KexiMultiValidator;
+	friend class MultiValidator;
 };
 
-/*! KexiMultiValidator behaves like normal KexiValidator,
+/*! MultiValidator behaves like normal KexiUtils::Validator,
  but it allows to add define more than one different validator.
  Given validation is successfull if every subvalidator accepted given value.
 
@@ -113,22 +115,22 @@ class KEXIUTILS_EXPORT KexiValidator : public QValidator
    - If there is no subvalidators defined, Invalid is always returned.
 
 */
-class KEXIUTILS_EXPORT KexiMultiValidator : public KexiValidator
+class KEXIUTILS_EXPORT MultiValidator : public Validator
 {
 	public:
 		/*! Constructs multivalidator with no subvalidators defined.
 		 You can add more validators with addSubvalidator(). */
-		KexiMultiValidator(QObject * parent = 0, const char * name = 0);
+		MultiValidator(QObject * parent = 0, const char * name = 0);
 
 		/*! Constructs multivalidator with one \a validator.
 		 It will be owned if has no parent defined.
 		 You can add more validators with addSubvalidator(). */
-		KexiMultiValidator(KexiValidator *validator, QObject * parent = 0, const char * name = 0);
+		MultiValidator(Validator *validator, QObject * parent = 0, const char * name = 0);
 
 		/*! Adds validator \a validator as another subvalidator.
 		 Subvalidator will be owned by this multivalidator if \a owned is true
 		 and its parent is NULL. */
-		void addSubvalidator( KexiValidator* validator, bool owned = true );
+		void addSubvalidator( Validator* validator, bool owned = true );
 
 		/*! Reimplemented to call validate() on subvalidators. */
 		virtual QValidator::State validate ( QString & input, int & pos ) const;
@@ -139,14 +141,16 @@ class KEXIUTILS_EXPORT KexiMultiValidator : public KexiValidator
 		virtual void fixup ( QString & input ) const;
 
 	private:
-		virtual KexiValidator::Result internalCheck(
+		virtual Validator::Result internalCheck(
 			const QString &valueName, const QVariant& v, 
 			QString &message, QString &details);
 
 
 	protected:
-		QPtrList<KexiValidator> m_ownedSubValidators;
-		QValueList<KexiValidator*> m_subValidators;
+		QPtrList<Validator> m_ownedSubValidators;
+		QValueList<Validator*> m_subValidators;
 };
+
+}
 
 #endif

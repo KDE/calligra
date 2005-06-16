@@ -340,9 +340,10 @@ QRect KexiLabelPrivate::getBounding( const QImage &image, const QRect& startRect
 
 KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
 		: QLabel( parent, name, f )
+		, KexiDBTextWidgetInterface()
 		, KexiFormDataItemInterface()
 		, p_timer(0)
-		, p_autonumberDisplayParameters(0)
+//		, p_autonumberDisplayParameters(0)
 		, p_pixmapDirty( true )
 		, p_shadowEnabled( false )
 		, p_resizeEvent( false )
@@ -354,9 +355,10 @@ KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
 
 KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WFlags f )
 		: QLabel( parent, name, f )
+		, KexiDBTextWidgetInterface()
 		, KexiFormDataItemInterface()
 		, p_timer(0)
-		, p_autonumberDisplayParameters(0)
+//		, p_autonumberDisplayParameters(0)
 		, p_pixmapDirty( true )
 		, p_shadowEnabled( false )
 		, p_resizeEvent( false )
@@ -369,7 +371,7 @@ KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WF
 
 KexiLabel::~KexiLabel()
 {
-	delete p_autonumberDisplayParameters;
+//	delete p_autonumberDisplayParameters;
 }
 
 void KexiLabel::updatePixmapLater() {
@@ -435,15 +437,7 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 		}
 	}
 
-	if (m_field && m_field->isAutoIncrement() && p_autonumberDisplayParameters 
-		&& cursorAtNewRow() && text().isEmpty())
-	{
-		QPainter p( this );
-		int m = lineWidth()+midLineWidth();
-		KexiDisplayUtils::drawAutonumberSign(*p_autonumberDisplayParameters, &p, 
-			2+m+margin(), m, width()-m*2 -2-2, height()-m*2 -2, alignment(), false);
-	}
-
+	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), false );
 	QLabel::paintEvent( e );
 }
 
@@ -516,12 +510,7 @@ bool KexiLabel::setProperty( const char * name, const QVariant & value )
 void KexiLabel::setField(KexiDB::Field* field)
 {
 	KexiFormDataItemInterface::setField(field);
-
-	if (m_field->isAutoIncrement()) {
-		if (!p_autonumberDisplayParameters)
-			p_autonumberDisplayParameters = new KexiDisplayUtils::DisplayParameters();
-		KexiDisplayUtils::initDisplayForAutonumberSign(*p_autonumberDisplayParameters, this);
-	}
+	KexiDBTextWidgetInterface::setField(m_field, this);
 }
 
 void KexiLabel::setShadowEnabled( bool state ) {

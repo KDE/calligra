@@ -27,6 +27,7 @@
 #include <widget/utils/kexidisplayutils.h>
 
 #include <klineedit.h>
+#include <ktextedit.h>
 #include <kpushbutton.h>
 
 class KAction;
@@ -63,8 +64,30 @@ class KexiSubForm : public QScrollView
 		QString m_formName;
 };
 
+//! Interface for a few text editor's features
+class KexiDBTextWidgetInterface
+{
+	public:
+		KexiDBTextWidgetInterface() 
+		 : m_autonumberDisplayParameters(0)
+		{
+		}
+		~KexiDBTextWidgetInterface() {
+			delete m_autonumberDisplayParameters;
+		}
+		void setField(KexiDB::Field* field, QWidget *w);
+		void paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus );
+		void event( QEvent * e, QWidget *w, bool textIsEmpty );
+
+		//! parameters for displaying autonumber sign
+		KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
+};
+
 //! Line edit widget for Kexi forms
-class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
+class KexiDBLineEdit : 
+	public KLineEdit, 
+	protected KexiDBTextWidgetInterface, 
+	public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -111,8 +134,58 @@ class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		virtual bool event ( QEvent * );
+};
 
-		KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
+//! Multi line edit widget for Kexi forms
+class KexiDBTextEdit : 
+	public KTextEdit, 
+	protected KexiDBTextWidgetInterface, 
+	public KexiFormDataItemInterface
+{
+	Q_OBJECT
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+
+	public:
+		KexiDBTextEdit(QWidget *parent, const char *name=0);
+		virtual ~KexiDBTextEdit();
+
+		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		virtual QVariant value();
+		virtual void setInvalidState( const QString& displayText );
+
+		//! \return true if editor's value is null (not empty)
+		//! Used for checking if a given constraint within table of form is met.
+		virtual bool valueIsNull();
+
+		//! \return true if editor's value is empty (not necessary null).
+		//! Only few data types can accept "EMPTY" property
+		//! (use KexiDB::Field::hasEmptyProperty() to check this).
+		//! Used for checking if a given constraint within table or form is met.
+		virtual bool valueIsEmpty();
+
+		/*! \return 'readOnly' flag for this item. The flag is usually taken from
+		 the item's widget, e.g. KLineEdit::isReadOnly().
+		 By default, always returns false. */
+		virtual bool isReadOnly() const;
+
+		/*! \return the view widget of this item, e.g. line edit widget. */
+		virtual QWidget* widget();
+
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
+		virtual void clear();
+
+		virtual void setField(KexiDB::Field* field);
+
+	public slots:
+		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
+
+	protected slots:
+		void slotTextChanged();
+
+	protected:
+		virtual void paintEvent ( QPaintEvent * );
+		virtual void setValueInternal(const QVariant& add, bool removeOld);
 };
 
 //! Push Button widget for Kexi forms
@@ -143,7 +216,8 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual ~KexiDBFactory();
 
 //		virtual QString	name();
-		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
+		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+			WidgetFactory::OrientationHint orientationHint = Any);
 
 		virtual void createCustomActions(KActionCollection* col);
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,

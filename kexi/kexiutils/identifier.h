@@ -21,14 +21,15 @@
 #ifndef __IDENTIFIER_H
 #define __IDENTIFIER_H
 
-#include "kexivalidator.h"
+#include "validator.h"
 #include <qstring.h>
 
 namespace KexiUtils {
 
-	//! \return Valid filename based on \a s
-	KEXIUTILS_EXPORT QString string2FileName(const QString &s);
-	
+	/*! \return true if \a s is a valid identifier, ie. starts with a letter or '_' 
+	 and contains only letters, numbers and '_'. */
+	KEXIUTILS_EXPORT bool isIdentifier(const QString& s);
+
 	/*! Always returns valid identifier based on \a s.
 	 Non alphanumeric chars (or spaces) are replaced with '_'.
 	 If a number char is at the beginning, '_' is added at start.
@@ -41,8 +42,11 @@ namespace KexiUtils {
 	KEXIUTILS_EXPORT QString identifierExpectedMessage(const QString &valueName,
 	                                                  const QVariant& v);
 
+	//! \return Valid filename based on \a s
+	KEXIUTILS_EXPORT QString string2FileName(const QString &s);
+
 	//! Validates input for identifier name.
-	class KEXIUTILS_EXPORT IdentifierValidator : public KexiValidator
+	class KEXIUTILS_EXPORT IdentifierValidator : public Validator
 	{
 		public:
 			IdentifierValidator(QObject * parent = 0, const char * name = 0);
@@ -50,7 +54,7 @@ namespace KexiUtils {
 			virtual State validate( QString & input, int & pos) const;
 
 		protected:
-			virtual Result internalCheck(const QString &valueName, const QVariant& v, 
+			virtual Validator::Result internalCheck(const QString &valueName, const QVariant& v, 
 				QString &message, QString &details);
 	};
 }

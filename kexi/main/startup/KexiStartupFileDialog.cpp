@@ -21,6 +21,7 @@
 
 #include <kexidb/driver.h>
 #include <core/kexi.h>
+#include <kexiutils/utils.h>
 
 #include <qlayout.h>
 #include <qobjectlist.h>
@@ -94,7 +95,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 		|| m_mode == KexiStartupFileDialog::SavingFileBasedDB) {
 		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
 		if (mime) {
-			filter += fileDialogFilterString(mime);
+			filter += KexiUtils::fileDialogFilterString(mime);
 //			filter += mime->patterns().join(" ") + "|" + mime->comment() 
 //					+ " ("+mime->patterns().join(" ")+")\n";
 			allfilters += mime->patterns().join(" ");
@@ -107,7 +108,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 		if (mime) {
 //			filter += mime->patterns().join(" ") + "|" + mime->comment() 
 //				+ " ("+mime->patterns().join(" ")+")\n";
-			filter += fileDialogFilterString(mime);
+			filter += KexiUtils::fileDialogFilterString(mime);
 //			allfilters += mime->patterns().join(" ");
 		}
 	}
@@ -116,10 +117,10 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 //		mime = KMimeType::mimeType(*it);
 //		filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("
 //			+ mime->patterns().join(" ")+")\n";
-		filter += fileDialogFilterString(*it);
+		filter += KexiUtils::fileDialogFilterString(*it);
 	}
 
-	filter += fileDialogFilterString("all/allfiles");
+	filter += KexiUtils::fileDialogFilterString("all/allfiles");
 //	mime = KMimeType::mimeType("all/allfiles");
 //	if (mime) {
 //		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) 

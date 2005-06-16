@@ -22,17 +22,16 @@
 
 #include <qguardedptr.h>
 
-#include <kmimetype.h>
-
-class QColor;
-
+#include <kexi_version.h>
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include "kexivalidator.h"
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
+
+#include <klocale.h>
+#include <kmessagebox.h>
 
 namespace Kexi
 {
@@ -76,64 +75,6 @@ namespace Kexi
 	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowScripts(); 
 
-	/*! \return useful message "Value of "valueName" column must be an identifier.
-	  "v" is not a valid identifier.". It is also used by IdentifierValidator.  */
-	KEXICORE_EXPORT QString identifierExpectedMessage(const QString &valueName,
-	                                                  const QVariant& v);
-
-	//! Validates input for identifier name.
-	class KEXICORE_EXPORT IdentifierValidator : public KexiValidator
-	{
-		public:
-			IdentifierValidator(QObject * parent = 0, const char * name = 0);
-			virtual ~IdentifierValidator();
-			virtual State validate( QString & input, int & pos) const;
-
-		protected:
-			virtual Result internalCheck(const QString &valueName, const QVariant& v, 
-				QString &message, QString &details);
-	};
-
-	/*! Validates input: 
-	 accepts if the name is not reserved for internal kexi objects. */
-	class KEXICORE_EXPORT KexiDBObjectNameValidator : public KexiValidator
-	{
-		public:
-			/*! \a drv is a KexiDB driver on which isSystemObjectName() will be 
-			 called inside check(). If \a drv is 0, KexiDB::Driver::isKexiDBSystemObjectName()
-			 static function is called instead. */
-			KexiDBObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0, const char * name = 0);
-			virtual ~KexiDBObjectNameValidator();
-
-		protected:
-			virtual Result internalCheck(const QString &valueName, const QVariant& v, 
-				QString &message, QString &details);
-			QGuardedPtr<KexiDB::Driver> m_drv;
-	};
-
-	/*! Sets "wait" cursor with 1 second delay. 
-	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
-	KEXICORE_EXPORT void setWaitCursor();
-
-	/*! Remove "wait" cursor previously set with \a setWaitCursor(), 
-	 even if it's not yet visible.
-	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
-	KEXICORE_EXPORT void removeWaitCursor();
-
-	/*! Helper class. Allocate it in yor code block as follows:
-	 <code>
-	 Kexi::WaitCursor wait;
-	 </code>
-	 .. and wait cursor will be visible (with a delay) until you're in this block. without 
-	 a need to call removeWaitCursor() before exiting the block.
-	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
-	class KEXICORE_EXPORT WaitCursor
-	{
-		public:
-			WaitCursor();
-			~WaitCursor();
-	};
-
 	/*! Helper class for storing object status. */
 	class KEXICORE_EXPORT ObjectStatus
 	{
@@ -159,32 +100,28 @@ namespace Kexi
 
 }//namespace Kexi
 
-//! sometimes we leave a space in the form of empty QFrame and want to insert here
-//! a widget that must be instantiated by hand.
-//! This macro inserts a widget \a what into a frame \a where.
-#define GLUE_WIDGET(what, where) \
-	{ QVBoxLayout *lyr = new QVBoxLayout(where); \
-	  lyr->addWidget(what); }
+//! displays information that feature "feature_name" is not availabe in the current application version
+inline void KEXI_UNFINISHED(QString feature_name, QString extra_text = QString::null) 
+{
+	QString msg;
+	if (feature_name.isEmpty())
+		msg = i18n("This function is not available for version %1 of %2 application.")
+			.arg(KEXI_VERSION_STRING)
+			.arg(KEXI_APP_NAME); 
+	else 
+		msg = i18n("\"%1\" function is not available for version %2 of %3 application.")
+			.arg(feature_name.replace("&",""))
+			.arg(KEXI_VERSION_STRING)
+			.arg(KEXI_APP_NAME); 
 
-//! @todo move this somewhere
+	if (!extra_text.isEmpty())
+		extra_text.prepend("\n");
 
-/*! \return filter string in QFileDialog format for a mime type pointed by \a mime
- If \a kdeFormat is true, QFileDialog-compatible filter string is generated, 
- eg. "Image files (*.png *.xpm *.jpg)", otherwise KFileDialog -compatible 
- filter string is generated, eg. "*.png *.xpm *.jpg|Image files (*.png *.xpm *.jpg)".
- "\\n" is appended if \a kdeFormat is true, otherwise ";;" is appended. */
-KEXICORE_EXPORT QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true);
+	KMessageBox::sorry(0, msg + extra_text);
+}
 
-/*! @overload QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true) */
-KEXICORE_EXPORT QString fileDialogFilterString(const QString& mimeString, bool kdeFormat = true);
-
-/*! Like QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true)
- but returns a list of filter strings. */
-KEXICORE_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat);
-
-/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 
- and \a factor1 factors: (c1*factor1+c2*factor2)/(factor1+factor2). */
-KEXICORE_EXPORT QColor blendColors(const QColor& c1, const QColor& c2, int factor1, int factor2);
+//! like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
+#define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
+	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString::null)
 
 #endif
-

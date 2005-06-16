@@ -283,7 +283,7 @@ PropertyEditorCursor::PropertyEditorCursor(QWidget *parent, KexiProperty *proper
 	m_combo->insertItem(i18n("Up Arrow"), Qt::UpArrowCursor);
 	m_combo->insertItem(i18n("Cross"), Qt::CrossCursor);
 	m_combo->insertItem(i18n("Waiting"), Qt::WaitCursor);
-	m_combo->insertItem(i18n("iBeam"), Qt::IbeamCursor);
+	m_combo->insertItem(i18n("I Beam"), Qt::IbeamCursor);
 	m_combo->insertItem(i18n("Size Vertical"), Qt::SizeVerCursor);
 	m_combo->insertItem(i18n("Size Horizontal"), Qt::SizeHorCursor);
 	m_combo->insertItem(i18n("Size Slash"), Qt::SizeBDiagCursor);

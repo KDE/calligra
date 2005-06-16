@@ -14,7 +14,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp \
 	kexidataiteminterface.cpp kexievents.cpp
 
-noinst_HEADERS = kexi_p.h kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
+noinst_HEADERS = kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
 
 libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolved -no-undefined
 

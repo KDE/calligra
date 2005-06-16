@@ -54,16 +54,16 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
     d->manager = Kross::Api::Manager::scriptManager();
     d->scriptcontainer = d->manager->getScriptContainer(name);
 
-    d->scriptcontainer->connect(SIGNAL(stdout(const QString&)), this, SIGNAL(stdout(const QString&)));
-    d->scriptcontainer->connect(SIGNAL(stderr(const QString&)), this, SIGNAL(stderr(const QString&)));
+    d->scriptcontainer->connect(SIGNAL(stdOut(const QString&)), this, SIGNAL(stdOut(const QString&)));
+    d->scriptcontainer->connect(SIGNAL(stdErr(const QString&)), this, SIGNAL(stdErr(const QString&)));
 #endif
 }
 
 KexiScriptContainer::~KexiScriptContainer()
 {
 #ifdef KEXI_KROSS_SUPPORT
-    d->scriptcontainer->disconnect(SIGNAL(stdout(const QString&)), this, SLOT(stdout(const QString&)));
-    d->scriptcontainer->disconnect(SIGNAL(stderr(const QString&)), this, SLOT(stderr(const QString&)));
+    d->scriptcontainer->disconnect(SIGNAL(stdOut(const QString&)), this, SLOT(stdOut(const QString&)));
+    d->scriptcontainer->disconnect(SIGNAL(stdErr(const QString&)), this, SLOT(stdErr(const QString&)));
 #endif
     delete d;
 }
@@ -106,9 +106,10 @@ void KexiScriptContainer::setCode(const QString& code)
 
 bool KexiScriptContainer::execute()
 {
+    bool ret = false;
 #ifdef KEXI_KROSS_SUPPORT
     try {
-        d->scriptcontainer->execute();
+        ret = d->scriptcontainer->execute();
     }
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
@@ -116,6 +117,7 @@ bool KexiScriptContainer::execute()
 #else
     kdWarning() << "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." << endl;
 #endif
+    return ret;
 }
 
 /*** KexiScriptManager ***/

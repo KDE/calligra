@@ -42,7 +42,7 @@
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
-#include "kexi_utils.h"
+#include <kexi.h>
 
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
  : QScrollView(parent, name, WStaticContents)

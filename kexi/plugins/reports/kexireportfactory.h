@@ -32,7 +32,8 @@ class KexiReportFactory : public KFormDesigner::WidgetFactory
 		virtual ~KexiReportFactory();
 
 		virtual QString  name();
-		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
+		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+			WidgetFactory::OrientationHint orientationHint = Any);
 
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container);

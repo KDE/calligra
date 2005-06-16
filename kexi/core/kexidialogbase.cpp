@@ -28,10 +28,10 @@
 #include "kexipartinfo.h"
 #include "kexipropertybuffer.h"
 #include "kexiproject.h"
-#include "kexi_utils.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
+#include <kexiutils/utils.h>
 
 #include <qwidgetstack.h>
 #include <qobjectlist.h>
@@ -301,11 +301,11 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 	KexiViewBase *newView = (m_stack->widget(newViewMode) && m_stack->widget(newViewMode)->inherits("KexiViewBase"))
 		? static_cast<KexiViewBase*>(m_stack->widget(newViewMode)) : 0;
 	if (!newView) {
-		Kexi::setWaitCursor();
+		KexiUtils::setWaitCursor();
 		//ask the part to create view for the new mode
 		m_creatingViewsMode = newViewMode;
 		newView = m_part->createView(m_stack, this, *m_item, newViewMode);
-		Kexi::removeWaitCursor();
+		KexiUtils::removeWaitCursor();
 		if (!newView) {
 			//js TODO error?
 			kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
@@ -374,9 +374,13 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 {
 	if (KMdiChildView::eventFilter(obj, e))
 		return true;
+	if (e->type()==QEvent::FocusIn) {
+		QWidget *w = m_parentWindow->activeWindow();
+		w=0;
+	}
 	if ((e->type()==QEvent::FocusIn && m_parentWindow->activeWindow()==this)
 		|| e->type()==QEvent::MouseButtonPress) {
-		if (m_stack->visibleWidget() && Kexi::hasParent(m_stack->visibleWidget(), obj)) {
+		if (m_stack->visibleWidget() && KexiUtils::hasParent(m_stack->visibleWidget(), obj)) {
 			//pass the activation
 			activate();
 		}
@@ -490,7 +494,7 @@ void KexiDialogBase::activate()
 {
 	KexiViewBase *v = selectedView();
 	//kdDebug() << "focusWidget(): " << focusWidget()->name() << endl;
-	if (Kexi::hasParent( v, KMdiChildView::focusedChildWidget()))//focusWidget()))
+	if (KexiUtils::hasParent( v, KMdiChildView::focusedChildWidget()))//focusWidget()))
 		KMdiChildView::activate();
 	else {//ah, focused widget is not in this view, move focus:
 		if (v)

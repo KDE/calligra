@@ -18,17 +18,21 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
+#include "widgetfactory.h"
+
 #include <qcursor.h>
 #include <qobjectlist.h>
 #include <qdict.h>
+#include <qmetaobject.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#ifdef KEXI_KTEXTEDIT
+//#ifdef KEXI_KTEXTEDIT
 #include <ktextedit.h>
-#else
+//#else
 #include <klineedit.h>
-#endif
+//#endif
 #include <kdialogbase.h>
 #include <keditlistbox.h>
 
@@ -40,7 +44,7 @@
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
-#include "widgetfactory.h"
+#include "widgetlibrary.h"
 #include "utils.h"
 
 using namespace KFormDesigner;
@@ -154,65 +158,81 @@ void WidgetFactory::hideClass(const char *classname)
 void
 WidgetFactory::createEditor(const QCString &classname, const QString &text,
 	QWidget *w, Container *container, QRect geometry,
-	int align,  bool useFrame, BackgroundMode background)
+	int align, bool useFrame, bool multiLine, BackgroundMode background)
 {
-#ifdef KEXI_KTEXTEDIT
-	KTextEdit *textedit = new KTextEdit(text, QString::null, w->parentWidget());
-	textedit->setTextFormat(Qt::PlainText);
-	textedit->setAlignment(align);
-	textedit->setPalette(w->palette());
-	textedit->setFont(w->font());
-	textedit->setGeometry(geometry);
-	if(background == Qt::NoBackground)
-		textedit->setBackgroundMode(w->backgroundMode());
-	else
-		textedit->setBackgroundMode(background);
-	textedit->setPaletteBackgroundColor(textedit->colorGroup().color( QColorGroup::Background ));
-	for(int i =0; i <= textedit->paragraphs(); i++)
-		textedit->setParagraphBackgroundColor(i, textedit->colorGroup().color( QColorGroup::Background ));
-	textedit->installEventFilter(this);
-	textedit->setFrameShape(useFrame ? QFrame::LineEditPanel : QFrame::NoFrame);
-	textedit->setMargin(2); //to move away from resize handle
-	textedit->show();
-	textedit->setFocus();
-	textedit->selectAll();
-	m_editor = textedit;
+//#ifdef KEXI_KTEXTEDIT
+	if (multiLine) {
+		KTextEdit *textedit = new KTextEdit(text, QString::null, w->parentWidget());
+		textedit->setTextFormat(Qt::PlainText);
+		textedit->setAlignment(align);
+		if (dynamic_cast<QTextEdit*>(w)) {
+			textedit->setWordWrap(dynamic_cast<QTextEdit*>(w)->wordWrap());
+			textedit->setWrapPolicy(dynamic_cast<QTextEdit*>(w)->wrapPolicy());
+		}
+		textedit->setPalette(w->palette());
+		textedit->setFont(w->font());
+		textedit->setGeometry(geometry);
+		if(background == Qt::NoBackground)
+			textedit->setBackgroundMode(w->backgroundMode());
+		else
+			textedit->setBackgroundMode(background);
+//		textedit->setPaletteBackgroundColor(textedit->colorGroup().color( QColorGroup::Base ));
+//		for(int i =0; i <= textedit->paragraphs(); i++)
+//			textedit->setParagraphBackgroundColor(i, textedit->colorGroup().color( QColorGroup::Background ));
+		textedit->installEventFilter(this);
+		textedit->setFrameShape(useFrame ? QFrame::LineEditPanel : QFrame::NoFrame);
+		textedit->setMargin(2); //to move away from resize handle
+		textedit->show();
+		textedit->setFocus();
+		textedit->selectAll();
+		setEditor(w, textedit);
 
-	connect(textedit, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-	connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+		connect(textedit, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+		connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+		connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+//#else
+	}
+	else {
+		KLineEdit *editor = new KLineEdit(text, w->parentWidget());
+		editor->setAlignment(align);
+		editor->setPalette(w->palette());
+		editor->setFont(w->font());
+		editor->setGeometry(geometry);
+		if(background == Qt::NoBackground)
+			editor->setBackgroundMode(w->backgroundMode());
+		else
+			editor->setBackgroundMode(background);
+		editor->installEventFilter(this);
+		editor->setFrame(useFrame);
+		editor->setMargin(2); //to move away from resize handle
+		editor->show();
+		editor->setFocus();
+		editor->selectAll();
+		connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeTextInternal(const QString&)));
+		connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+		connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
-#else
-
-	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
-	editor->setAlignment(align);
-	editor->setPalette(w->palette());
-	editor->setFont(w->font());
-	editor->setGeometry(geometry);
-	if(background == Qt::NoBackground)
-		editor->setBackgroundMode(w->backgroundMode());
-	else
-		editor->setBackgroundMode(background);
-	editor->installEventFilter(this);
-	editor->setFrame(useFrame);
-	editor->setMargin(2); //to move away from resize handle
-	editor->show();
-	editor->setFocus();
-	editor->selectAll();
-	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeTextInternal(const QString&)));
-	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
-
-	m_editor = editor;
-#endif
-	m_handles = new ResizeHandleSet(w, container->form(), true);
+		setEditor(w, editor);
+//		m_editor = editor;
+	}
+	//copy properties if available
+	if (-1!=m_editor->metaObject()->findProperty("margin", true) && -1!=w->metaObject()->findProperty("margin", true))
+		m_editor->setProperty("margin", w->property("margin"));
+//#endif
+//js	m_handles = new ResizeHandleSet(w, container->form(), true);
+	m_handles = container->form()->resizeHandlesForWidget(w);
+	if (m_handles) {
+		m_handles->setEditingMode(true);
+		m_handles->raise();
+	}
 
 	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
 	if(!tree)
 		return;
 	tree->eventEater()->setContainer(this);
 
-	m_widget = w;
+	//m_widget = w;
+	setWidget(w);
 	m_editedWidgetClass = classname;
 	m_firstText = text;
 	m_container = container;
@@ -229,10 +249,18 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 	tree->eventEater()->setContainer(this);
 
 	w->setFocus();
-	m_handles = new ResizeHandleSet(w, container->form(), true);
-	m_widget = w;
+//js	m_handles = new ResizeHandleSet(w, container->form(), true);
+	m_handles = container->form()->resizeHandlesForWidget(w);
+	if (m_handles) {
+		m_handles->setEditingMode(true);
+		m_handles->raise();
+	}
+
+	//m_widget = w;
+	setWidget(w);
 	m_container = container;
-	m_editor = 0;
+	setEditor(w, 0);
+//	m_editor = 0;
 
 	// widget is disabled, so we re-enable it while editing
 	if(!tree->isEnabled()) {
@@ -287,49 +315,65 @@ WidgetFactory::editListView(QListView *listview)
 bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 {
-	// widget resize using resize handles
-	if( ((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move) ) && m_editor && (obj == m_widget))
-		resizeEditor(m_widget, m_widget->className());
-	// paint event for container edited (eg button group)
-	else if((ev->type() == QEvent::Paint) && m_editor && (obj == m_widget))
+	if( ((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move) ) && (obj == m_widget) && editor(m_widget)) {
+		// resize widget using resize handles
+		QWidget *ed = editor(m_widget);
+		resizeEditor(ed, m_widget, m_widget->className());
+	}
+	else if((ev->type() == QEvent::Paint) && (obj == m_widget) && editor(m_widget)) {
+		// paint event for container edited (eg button group)
 		return m_container->eventFilter(obj, ev);
-	// click outside editor --> cancel editing
-	else if((ev->type() == QEvent::MouseButtonPress) && m_editor && (obj == m_widget)) {
+	}
+	else if((ev->type() == QEvent::MouseButtonPress) && (obj == m_widget) && editor(m_widget)) {
+		// click outside editor --> cancel editing
 		Container *cont = m_container;
 		resetEditor();
 		return cont->eventFilter(obj, ev);
 	}
 
-	QWidget *w = m_editor ? m_editor : (QWidget *)m_widget;
-
-	if(obj != (QObject *)w)
-		return false;
-
-	else if(ev->type() == QEvent::FocusOut)
+	if(ev->type() == QEvent::FocusOut)
 	{
+		QWidget *w = editor(m_widget);
+		if (!w)
+			w = (QWidget *)m_widget;
+		if(obj != (QObject *)w)
+			return false;
+
 		QWidget *focus = w->topLevelWidget()->focusWidget();
 		if(w != focus && !w->child(focus->name(), focus->className()))
 			resetEditor();
 	}
 	else if(ev->type() == QEvent::KeyPress)
 	{
+		QWidget *w = editor(m_widget);
+		if (!w)
+			w = (QWidget *)m_widget;
+		if(obj != (QObject *)w)
+			return false;
+
 		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
 		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != AltButton))
 			resetEditor();
 		if(e->key() == Qt::Key_Escape)
 		{
-			m_editor->setText(m_firstText);
+			setEditorText(m_firstText);
 			//changeText(m_firstText);
 			resetEditor();
 		}
 	}
-	else if(ev->type() == QEvent::ContextMenu)
-		return true;
+	else if(ev->type() == QEvent::ContextMenu) {
+		QWidget *w = editor(m_widget);
+		if (!w)
+			w = (QWidget *)m_widget;
+		if(obj != (QObject *)w)
+			return false;
 
+		return true;
+	}
 //	if(obj == m_widget)
 //		return m_container->eventFilter(obj, ev);
 //	else
-		return false;
+	return false;
 }
 
 void
@@ -338,20 +382,26 @@ WidgetFactory::resetEditor()
 	if (m_container)
 		m_container->stopInlineEditing();
 
+	QWidget *ed = editor(m_widget);
 	if(m_widget)
 	{
-		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(m_widget->name());
+		ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->name()) : 0;
 		if(!tree)
 		{
 			kdDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item " << endl;
 			return;
 		}
 		tree->eventEater()->setContainer(m_container);
-		if(!m_editor && m_widget)
+		if(m_widget) {// && !ed)
 			setRecursiveCursor(m_widget, m_container->form());
+			if (m_widget->inherits("QLineEdit") || m_widget->inherits("QTextEdit")) { //fix weird behaviour
+				m_widget->unsetCursor();
+				m_widget->setCursor(Qt::ArrowCursor);
+			}
+		}
 
 		// disable again the widget
-		if(!m_editor && !tree->isEnabled()) {
+		if(!ed && !tree->isEnabled()) {
 			QPalette p = m_widget->palette();
 			QColorGroup cg = p.active();
 			p.setActive(p.disabled());
@@ -359,11 +409,11 @@ WidgetFactory::resetEditor()
 			m_widget->setPalette(p);
 		}
 	}
-	if(m_editor)
+	if(ed)
 	{
-		changeTextInternal(m_editor->text());
-		disconnect(m_editor, 0, this, 0);
-		m_editor->deleteLater();
+		changeTextInternal(editorText());
+		disconnect(ed, 0, this, 0);
+		ed->deleteLater();
 	}
 
 	if(m_widget)
@@ -372,9 +422,14 @@ WidgetFactory::resetEditor()
 		m_widget->repaint();
 	}
 
-	delete m_handles;
-	m_editor = 0;
-	m_widget = 0;
+//js	delete m_handles;
+	if (m_handles) {
+		m_handles->setEditingMode(false);
+	}
+	setEditor(m_widget, 0);
+//	m_editor = 0;
+	setWidget(0);
+	//m_widget = 0;
 	m_handles = 0;
 	m_container = 0;
 }
@@ -388,7 +443,11 @@ WidgetFactory::widgetDestroyed()
 		m_editor = 0;
 	}
 
-	delete m_handles;
+//js	delete m_handles;
+	if (m_handles) {
+		m_handles->setEditingMode(false);
+	
+	}
 	m_widget = 0;
 	m_handles = 0;
 	m_container = 0;
@@ -397,11 +456,15 @@ WidgetFactory::widgetDestroyed()
 void
 WidgetFactory::editorDeleted()
 {
-	delete m_handles;
-	m_widget = 0;
+//js	delete m_handles;
+	if (m_handles) {
+		m_handles->setEditingMode(false);
+	}
+	setEditor(m_widget, 0);
+	setWidget(0);
+//	m_widget = 0;
 	m_handles = 0;
 	m_container = 0;
-	m_editor= 0;
 }
 
 void
@@ -447,14 +510,14 @@ WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w,
 }
 
 void
-WidgetFactory::resizeEditor(QWidget *, const QCString&)
+WidgetFactory::resizeEditor(QWidget *, QWidget *, const QCString&)
 {
 }
 
 void
 WidgetFactory::slotTextChanged()
 {
-	changeTextInternal(m_editor->text());
+	changeTextInternal(editorText());
 }
 
 bool
@@ -502,6 +565,76 @@ bool WidgetFactory::inheritsFactories()
 			return true;
 	}
 	return false;
+}
+
+QString WidgetFactory::editorText() const {
+	QWidget *ed = editor(m_widget);
+	return dynamic_cast<KTextEdit*>(ed) ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
+}
+
+void WidgetFactory::setEditorText(const QString& text) {
+	QWidget *ed = editor(m_widget);
+	if (dynamic_cast<KTextEdit*>(ed))
+		dynamic_cast<KTextEdit*>(ed)->setText(text);
+	else
+		dynamic_cast<KLineEdit*>(ed)->setText(text);
+}
+
+void WidgetFactory::setEditor(QWidget *widget, QWidget *editor)
+{
+	if (!widget)
+		return;
+	WidgetInfo *winfo = m_classesByName[widget->className()];
+	if (!winfo || winfo->parentFactoryName().isEmpty()) {
+		m_editor = editor;
+	}
+	else {
+		WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
+		if (f!=this)
+			f->setEditor(widget, editor);
+		m_editor = editor; //keep a copy
+	}
+}
+
+QWidget *WidgetFactory::editor(QWidget *widget) const
+{
+	if (!widget)
+		return 0;
+	WidgetInfo *winfo = m_classesByName[widget->className()];
+	if (!winfo || winfo->parentFactoryName().isEmpty()) {
+		return m_editor;
+	}
+	else {
+		WidgetFactory *f = m_library->factoryForClassName(widget->className());
+		if (f!=this)
+			return f->editor(widget);
+		return m_editor;
+	}
+}
+
+void WidgetFactory::setWidget(QWidget *widget)
+{
+	WidgetInfo *winfo = widget ? m_classesByName[widget->className()] : 0;
+	if (!winfo || winfo->parentFactoryName().isEmpty()) {
+		m_widget = widget;
+	}
+	else {
+		WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
+		if (f!=this)
+			f->setWidget(widget);
+		m_widget = widget; //keep a copy
+	}
+}
+
+QWidget *WidgetFactory::widget() const
+{
+	return m_widget;
+}
+
+void WidgetFactory::setInternalProperty(const QCString& classname, const QCString& property, 
+	const QString& value)
+{
+	m_internalProp[classname+":"+property]=value;
 }
 
 #include "widgetfactory.moc"
