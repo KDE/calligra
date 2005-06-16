@@ -109,7 +109,7 @@ void KoLineWidthAction::execute(int index)
     d->m_currentWidth = (double) index + 1.0;
     ok = true;
   } if(index == 11) { // Custom width dialog...
-    KoLineWidthChooser dlg;
+    KoLineWidthChooser dlg(qApp->activeWindow());
     dlg.setUnit(d->m_unit);
     dlg.setWidth(d->m_currentWidth);
 
