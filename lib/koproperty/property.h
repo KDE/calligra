@@ -259,9 +259,11 @@ class KPROPERTY_EXPORT Property
         bool operator ==(const Property &prop) const;
 
     protected:
-        //PtrList*  list() { return d->list; }
+        QValueList<PtrList*> lists() const;
 
         void addList(PtrList *list);
+
+        const QValueList<Property*>*  related() const;
         void addRelatedProperty(Property *property);
 
         void debug();

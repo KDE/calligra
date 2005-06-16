@@ -172,7 +172,6 @@ class KPROPERTY_EXPORT Buffer : public PtrList
 
     protected slots:
         void intersectedChanged(Property *prop, PtrList *list);
-        void intersectedChanged();
         void intersectedReset(Property *prop, PtrList *list);
 };
 

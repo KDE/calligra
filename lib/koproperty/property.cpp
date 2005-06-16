@@ -506,12 +506,24 @@ Property::addChild(Property *prop)
     prop->d->parent = this;
 }
 
+QValueList<PtrList*>
+Property::lists() const
+{
+    return d->lists;
+}
+
 void
 Property::addList(PtrList *list)
 {
     QValueList<PtrList*>::iterator it = qFind( d->lists.begin(), d->lists.end(), list);
     if(it == d->lists.end()) // not in our list
         d->lists.append(list);
+}
+
+const QValueList<Property*>*
+Property::related() const
+{
+    return d->relatedProperties;
 }
 
 void

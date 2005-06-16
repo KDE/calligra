@@ -337,15 +337,13 @@ Buffer::Buffer(PtrList *list)
         QString groupDesc = list->d->groupsDescription[ group ];
         setGroupDescription( group, groupDesc );
         addProperty( prop, group );
+        prop->addRelatedProperty( it.current() );
     }
-    connect(list, SIGNAL( propertyChanged( Property*, PtrList* ) ),
-            this, SLOT(intersectedChanged( Property*, PtrList* ) ) );
+    connect( this, SIGNAL( propertyChanged( Property*, PtrList* ) ),
+             this, SLOT(intersectedChanged( Property*, PtrList* ) ) );
 
-    connect(list, SIGNAL( propertyChanged() ),
-            this, SLOT(intersectedChanged() ) );
-
-    connect(list, SIGNAL( propertyReset( Property*, PtrList* ) ),
-            this, SLOT(intersectedReset( Property*, PtrList* ) ) );
+    connect( this, SIGNAL( propertyReset( Property*, PtrList* ) ),
+             this, SLOT(intersectedReset( Property*, PtrList* ) ) );
 }
 
 void Buffer::intersect(const PtrList *list)
@@ -359,7 +357,7 @@ void Buffer::intersect(const PtrList *list)
                  ( list->d->groupForProperty[ property ] ==
                    d->groupForProperty[ it.current() ] ) )
             {
-                it.current()->addChild( property );
+                it.current()->addRelatedProperty( property );
                 continue;
             }
         }
@@ -367,14 +365,11 @@ void Buffer::intersect(const PtrList *list)
 //         --it;
         removeProperty( key );
     }
-    connect( list, SIGNAL( propertyChanged( Property*, PtrList* ) ),
+    connect( this, SIGNAL( propertyChanged( Property*, PtrList* ) ),
              this, SLOT( intersectedChanged( Property*, PtrList* ) ) );
 
-    connect(list, SIGNAL( propertyChanged() ),
-            this, SLOT(intersectedChanged() ) );
-
-    connect(list, SIGNAL( propertyReset( Property*, PtrList* ) ),
-            this, SLOT(intersectedReset( Property*, PtrList* ) ) );
+    connect( this, SIGNAL( propertyReset( Property*, PtrList* ) ),
+             this, SLOT(intersectedReset( Property*, PtrList* ) ) );
 }
 
 void Buffer::intersectedChanged(Property *prop, PtrList *list)
@@ -383,18 +378,12 @@ void Buffer::intersectedChanged(Property *prop, PtrList *list)
     if ( !contains( propertyName ) )
         return;
 
-    if ( prop == &property( propertyName ) )
+    const QValueList<Property*> *props = prop->related();
+    QValueList<Property*>::const_iterator it = props->begin();
+    for ( ; it != props->end(); ++it )
     {
-        const QValueList<Property*> *props = prop->children();
-        QValueList<Property*>::const_iterator it = props->begin();
-        for ( ; it != props->end(); ++it )
-            emit propertyChanged( ( *it ), list );
+        ( *it )->setValue( prop->value(), false );
     }
-}
-
-void Buffer::intersectedChanged()
-{
-    emit propertyChanged();
 }
 
 void Buffer::intersectedReset(Property *prop, PtrList *list)
@@ -403,12 +392,11 @@ void Buffer::intersectedReset(Property *prop, PtrList *list)
     if ( !contains( propertyName ) )
         return;
 
-    if ( prop == &property( propertyName ) )
+    const QValueList<Property*> *props = prop->related();
+    QValueList<Property*>::const_iterator it = props->begin();
+    for ( ; it != props->end(); ++it )
     {
-        const QValueList<Property*> *props = prop->children();
-        QValueList<Property*>::const_iterator it = props->begin();
-        for ( ; it != props->end(); ++it )
-            emit propertyReset( ( *it ), list );
+        ( *it )->setValue( prop->value(), false );
     }
 }
 
