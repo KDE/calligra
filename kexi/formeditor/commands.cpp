@@ -609,7 +609,8 @@ InsertWidgetCommand::execute()
 		}
 		if (ohint == WidgetFactory::Any) {
 			ohint = manager->lib()->showOrientationSelectionPopup(
-				m_class, m_container->m_container, m_point);
+				m_class, m_container->m_container,
+				m_container->form()->widget()->mapToGlobal(m_point));
 			if (ohint == WidgetFactory::Any)
 				return; //cancelled
 		}
