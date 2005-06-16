@@ -18,25 +18,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-
 #ifndef __IDENTIFIER_H
 #define __IDENTIFIER_H
 
+#include "kexiutils_export.h"
 #include <qstring.h>
 
 namespace KexiUtils {
   //! @todo  Do these need to be KDE_EXPORT'ed?
 
 	//! \return Valid filename based on \a s
-	QString string2FileName(const QString &s);
+	KEXIUTILS_EXPORT QString string2FileName(const QString &s);
 	
 	/*! Always returns valid identifier based on \a s.
 	 Non alphanumeric chars (or spaces) are replaced with '_'.
 	 If a number char is at the beginning, '_' is added at start.
 	 Empty strings are not changed.
 	*/
-	QString string2Identifier(const QString &s);
-
+	KEXIUTILS_EXPORT QString string2Identifier(const QString &s);
 }
 
 #endif
