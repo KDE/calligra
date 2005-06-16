@@ -99,7 +99,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     m_structure = new Kudesigner::StructureWidget(dw);
     dw->boxLayout()->addWidget(m_structure, 1);
     m_propertyEditor = new Editor( dw );
-    m_propertyEditor->setMinimumWidth( 400 );
+    dw->setFixedExtentWidth( 400 );
     dw->boxLayout()->addWidget(m_propertyEditor, 2);
 
     if (m_doc->plugin()) {

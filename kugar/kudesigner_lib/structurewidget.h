@@ -20,7 +20,7 @@
 #ifndef KUDESIGNERSTRUCTUREWIDGET_H
 #define KUDESIGNERSTRUCTUREWIDGET_H
 
-#include <qlistview.h>
+#include <klistview.h>
 #include <qmap.h>
 
 class KudesignerDoc;
@@ -32,7 +32,7 @@ class Band;
 class Canvas;
 class StructureItem;
 
-class StructureWidget: public QListView {
+class StructureWidget: public KListView {
 Q_OBJECT
 public:
     StructureWidget(QWidget* parent = 0, const char* name = 0);
@@ -42,7 +42,7 @@ public slots:
     void selectionMade();
     void selectionClear();
 
-    void selectItem(QListViewItem *item);
+    void selectItem(KListViewItem *item);
     void setDocument(Kudesigner::Canvas *doc);
 
 private:

@@ -40,12 +40,12 @@ namespace Kudesigner {
 
 using namespace KOProperty;
 
-class StructureItem: public QListViewItem {
+class StructureItem: public KListViewItem {
 public:
-    StructureItem(QListView *parent, const QString &name)
-        :QListViewItem(parent, name), m_bold(false) {}
-    StructureItem(QListViewItem *parent, const QString &name)
-        :QListViewItem(parent, name), m_bold(false) {}
+    StructureItem(KListView *parent, const QString &name)
+        :KListViewItem(parent, name), m_bold(false) {}
+    StructureItem(KListViewItem *parent, const QString &name)
+        :KListViewItem(parent, name), m_bold(false) {}
     void setBold(bool b) { m_bold = b; }
     bool isBold() const { return m_bold; }
 
@@ -57,7 +57,7 @@ public:
             f.setWeight(75);
             p->setFont(f);
         }
-        QListViewItem::paintCell(p, cg, column, width, align);
+        KListViewItem::paintCell(p, cg, column, width, align);
     }
 
 private:
@@ -65,11 +65,12 @@ private:
 };
 
 StructureWidget::StructureWidget(QWidget* parent, const char* name)
-    :QListView(parent, name)
+    :KListView(parent, name)
 {
+    setFullWidth( true );
     addColumn(tr("Report Structure"));
     setSorting(-1);
-    connect(this, SIGNAL(clicked( QListViewItem* )), this, SLOT(selectItem( QListViewItem* )));
+    connect(this, SIGNAL(clicked( KListViewItem* )), this, SLOT(selectItem( KListViewItem* )));
 }
 
 void StructureWidget::refresh()
@@ -204,7 +205,7 @@ void StructureWidget::selectionClear()
     m_selected.clear();
 }
 
-void StructureWidget::selectItem(QListViewItem *item)
+void StructureWidget::selectItem(KListViewItem *item)
 {
     if (!item)
         return;
