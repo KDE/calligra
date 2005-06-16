@@ -26,6 +26,7 @@
 
 #include "kexidataawareobjectiface.h"
 
+#include <kexi.h>
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
@@ -819,7 +820,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 				kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!" << endl;
 				res = Validator::Error;
 				msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-					+ "\n\n" + Validator::msgYouCanImproveData();
+					+ "\n\n" + Kexi::msgYouCanImproveData();
 				desc = i18n("The column's constraint is declared as NOT NULL.");
 				editCurrentCellAgain = true;
 	//			allow = false;
@@ -838,7 +839,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 					res = Validator::Error;
 					msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-						+ "\n\n" + Validator::msgYouCanImproveData();
+						+ "\n\n" + Kexi::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY.");
 					editCurrentCellAgain = true;
 	//				allow = false;
@@ -854,7 +855,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 					res = Validator::Error;
 					msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
-						+ "\n\n" + Validator::msgYouCanImproveData();
+						+ "\n\n" + Kexi::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
 					editCurrentCellAgain = true;
 //				allow = false;

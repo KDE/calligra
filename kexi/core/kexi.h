@@ -98,6 +98,10 @@ namespace Kexi
 			KexiDB::Object *dbObj; 
 	};
 
+	QString msgYouCanImproveData() {
+		return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
+	}
+
 }//namespace Kexi
 
 //! displays information that feature "feature_name" is not availabe in the current application version

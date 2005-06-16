@@ -75,11 +75,6 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 			return I18N_NOOP("\"%1\" value has to be entered.");
 		}
 
-		static const QString msgYouCanImproveData() {
-			return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
-		}
-
-
 		void addChildValidator( Validator* v );
 
 	protected:

@@ -31,6 +31,7 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
+#include <kexi.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -509,7 +510,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			if (val->isNull() && !f->isAutoIncrement()) {
 				//NOT NULL violated
 				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
-					.arg(f->captionOrName()) + "\n\n" + KexiUtils::Validator::msgYouCanImproveData();
+					.arg(f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
 				m_result.column = col;
 				return false;
@@ -520,7 +521,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			if (!f->isAutoIncrement() && (val->isNull() || KexiDB::isEmptyValue( f, *val ))) {
 				//NOT EMPTY violated
 				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
-					.arg(f->captionOrName()) + "\n\n" + KexiUtils::Validator::msgYouCanImproveData();
+					.arg(f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
 				m_result.column = col;
 				return false;
@@ -534,7 +535,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 				m_containsROWIDInfo/*also retrieve ROWID*/ )) 
 			{
 				m_result.msg = i18n("Row inserting failed.") + "\n\n" 
-					+ KexiUtils::Validator::msgYouCanImproveData();
+					+ Kexi::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
 
 /*			if (desc)
@@ -553,7 +554,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer(),
 					m_containsROWIDInfo/*use ROWID*/))
 			{
-				m_result.msg = i18n("Row changing failed.") + "\n\n" + KexiUtils::Validator::msgYouCanImproveData();
+				m_result.msg = i18n("Row changing failed.") + "\n\n" + Kexi::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 				return false;
 			}
