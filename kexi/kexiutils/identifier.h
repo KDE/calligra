@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -21,11 +21,10 @@
 #ifndef __IDENTIFIER_H
 #define __IDENTIFIER_H
 
-#include "kexiutils_export.h"
+#include "kexivalidator.h"
 #include <qstring.h>
 
 namespace KexiUtils {
-  //! @todo  Do these need to be KDE_EXPORT'ed?
 
 	//! \return Valid filename based on \a s
 	KEXIUTILS_EXPORT QString string2FileName(const QString &s);
@@ -36,6 +35,24 @@ namespace KexiUtils {
 	 Empty strings are not changed.
 	*/
 	KEXIUTILS_EXPORT QString string2Identifier(const QString &s);
+
+	/*! \return useful message "Value of "valueName" column must be an identifier.
+	  "v" is not a valid identifier.". It is also used by IdentifierValidator.  */
+	KEXIUTILS_EXPORT QString identifierExpectedMessage(const QString &valueName,
+	                                                  const QVariant& v);
+
+	//! Validates input for identifier name.
+	class KEXIUTILS_EXPORT IdentifierValidator : public KexiValidator
+	{
+		public:
+			IdentifierValidator(QObject * parent = 0, const char * name = 0);
+			virtual ~IdentifierValidator();
+			virtual State validate( QString & input, int & pos) const;
+
+		protected:
+			virtual Result internalCheck(const QString &valueName, const QVariant& v, 
+				QString &message, QString &details);
+	};
 }
 
 #endif

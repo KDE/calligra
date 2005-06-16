@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 
 #include "identifier.h"
 
-namespace KexiUtils {
+using namespace KexiUtils;
 
 QString string2FileName(const QString &s)
 {
@@ -80,4 +80,49 @@ QString string2Identifier(const QString &s)
 	return r;
 }
 
+//--------------------------------------------------------------------------------
+
+QString Kexi::identifierExpectedMessage(const QString &valueName, const QVariant& v)
+{
+	return "<p>"+i18n("Value of \"%1\" column must be an identifier.").arg(valueName)
+		+"</p><p>"+i18n("\"%1\" is not a valid identifier.").arg(v.toString())+"</p>";
 }
+
+//--------------------------------------------------------------------------------
+
+IdentifierValidator::IdentifierValidator(QObject * parent, const char * name)
+: KexiValidator(parent,name)
+{
+}
+
+IdentifierValidator::~IdentifierValidator()
+{
+}
+
+QValidator::State IdentifierValidator::validate( QString& input, int& pos ) const
+{
+	uint i;
+	for (i=0; i<input.length() && input.at(i)==' '; i++)
+		;
+	pos -= i; //i chars will be removed from beginning
+	if (i<input.length() && input.at(i)>='0' && input.at(i)<='9')
+		pos++; //_ will be added at the beginning
+	bool addspace = (input.right(1)==" ");
+	input = KexiUtils::string2Identifier(input);
+	if (addspace)
+		input += "_";
+	if((uint)pos>input.length())
+		pos=input.length();
+	return input.isEmpty() ? Valid : Acceptable;
+}
+
+KexiValidator::Result IdentifierValidator::internalCheck(
+	const QString &valueName, const QVariant& v, 
+	QString &message, QString & /*details*/)
+{
+	if (Kexi::isIdentifier(v.toString()))
+		return KexiValidator::Ok;
+	message = Kexi::identifierExpectedMessage(valueName, v);
+	return KexiValidator::Error;
+}
+
