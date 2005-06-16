@@ -32,7 +32,7 @@
 class KexiPropertyEditorView::Private
 {
 	public:
-		KexiPropertyEditorView::Private()
+		Private()
 		{
 		}
 		KexiPropertyEditor *editor;
