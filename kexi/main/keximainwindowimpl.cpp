@@ -2385,6 +2385,8 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		guiFactory()->removeClient(d->curDialogViewGUIClient);
 	d->curDialogViewGUIClient=viewClient; //remember
 
+	updateCustomPropertyPanelTabs(
+		d->curDialog->part(), prevViewMode, d->curDialog->part(), viewMode );
 	d->updatePropEditorVisibility(viewMode);
 	invalidateSharedActions();
 	return true;
