@@ -3,88 +3,81 @@
 # Subdir relative project main directory: ./kudesigner_lib
 # Target is a library:  kudesignercommonqt
 
+TRANSLATIONS += ru.ts 
+HEADERS += section.h \
+           box.h \
+           commdefs.h \
+           band.h \
+           detailbase.h \
+           reportheader.h \
+           pageheader.h \
+           pagefooter.h \
+           reportfooter.h \
+           detail.h \
+           detailfooter.h \
+           detailheader.h \
+           canvas.h \
+           kugartemplate.h \
+           command.h \
+           calcfield.h \
+           field.h \
+           propertyserializer.h \
+           line.h \
+           specialfield.h \
+           view.h \
+           label.h \
+           reportitem.h \
+           structurewidget.h 
+SOURCES += section.cpp \
+           box.cpp \
+           commdefs.cpp \
+           band.cpp \
+           detailbase.cpp \
+           reportheader.cpp \
+           pageheader.cpp \
+           pagefooter.cpp \
+           reportfooter.cpp \
+           detail.cpp \
+           detailfooter.cpp \
+           detailheader.cpp \
+           canvas.cpp \
+           kugartemplate.cpp \
+           command.cpp \
+           calcfield.cpp \
+           field.cpp \
+           propertyserializer.cpp \
+           line.cpp \
+           specialfield.cpp \
+           view.cpp \
+           label.cpp \
+           reportitem.cpp \
+           structurewidget.cpp 
+INCLUDEPATH = ../compat_lib \
+../propeditor
+DEFINES = PURE_QT
+TARGET = kudesignercommonqt
+CONFIG += debug \
+warn_on \
+qt \
+thread \
+rtti \
+exceptions \
+staticlib
+TEMPLATE = lib
 LANGUAGE = C++
-TEMPLATE = lib 
-CONFIG += release \
-          warn_on \
-          qt \
-          thread \
-          staticlib 
-TARGET = kudesignercommonqt 
-DEFINES = PURE_QT 
-OBJECTS_DIR = .obj 
-UI_DIR = .ui 
-MOC_DIR = .moc 
-MAKEFILE = Makefile.qt 
-SOURCES += canvband.cpp \
-           canvbox.cpp \
-           canvdefs.cpp \
-           canvdetail.cpp \
-           canvdetailfooter.cpp \
-           canvdetailheader.cpp \
-           canvkutemplate.cpp \
-           canvpagefooter.cpp \
-           canvpageheader.cpp \
-           canvreportfooter.cpp \
-           canvreportheader.cpp \
-           canvsection.cpp \
-           ccalcfield.cpp \
-           cfield.cpp \
-           clabel.cpp \
-           cline.cpp \
-           creportitem.cpp \
-           cspecialfield.cpp \
-           cv.cpp \
-           kudesigner_command.cpp \
-           mycanvas.cpp \
-           mycolorcombo.cpp \
-           pcolorcombo.cpp \
-           pcombobox.cpp \
-           pfontcombo.cpp \
-           plineedit.cpp \
-           plinestyle.cpp \
-           plugin.cpp \
-           property.cpp \
-           propertyeditor.cpp \
-           propertywidget.cpp \
-           pspinbox.cpp \
-           psymbolcombo.cpp \
-           mycommand.cpp \
-           qlocale.cpp \
-	   canvdetailbase.cpp
-HEADERS += canvband.h \
-           canvbox.h \
-           canvdefs.h \
-           canvdetailfooter.h \
-           canvdetail.h \
-           canvdetailheader.h \
-           canvkutemplate.h \
-           canvpagefooter.h \
-           canvpageheader.h \
-           canvreportfooter.h \
-           canvreportheader.h \
-           canvsection.h \
-           ccalcfield.h \
-           cfield.h \
-           clabel.h \
-           cline.h \
-           creportitem.h \
-           cspecialfield.h \
-           cv.h \
-           kudesigner_command.h \
-           mycanvas.h \
-           mycolorcombo.h \
-           pcolorcombo.h \
-           pcombobox.h \
-           pfontcombo.h \
-           plineedit.h \
-           plinestyle.h \
-           plugin.h \
-           propertyeditor.h \
-           property.h \
-           propertywidget.h \
-           pspinbox.h \
-           psymbolcombo.h \
-           qlocale.h \
-           mycommand.h \
-	   canvdetailbase.h
+unix{
+  OBJECTS_DIR = .obj
+  UI_DIR = .ui
+  MOC_DIR = .moc
+}
+win32{
+  OBJECTS_DIR = obj
+  UI_DIR = ui
+  MOC_DIR = moc
+  TARGETDEPS += ../propeditor/propeditor.lib
+  LIBS += ../propeditor/propeditor.lib
+  win32-msvc.net{
+    QMAKE_CXXFLAGS_DEBUG += /Zc:forScope /GR
+    QMAKE_CXXFLAGS_RELEASE += /Zc:forScope /GR
+  }
+}

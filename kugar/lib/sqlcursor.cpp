@@ -3,7 +3,7 @@
 							 -------------------
 	begin				 : 2003-03-22 23:54:51
 	copyright			 : (C) 2003 by Joris Marcillac
-	email				 : joris@marcillac.org
+	email				 : joris@marcillac.com
 **************************************************************************/
 /**************************************************************************
 *                                                                         *
@@ -53,7 +53,7 @@ CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase*
 			append( *it );
 		}	    
 	}else {
-		// an error occurred if the cursor is not active
+		// an error occured if the cursor is not active
 		if ( !isActive() ) {
 			QSqlError err = lastError();
 			QString errStr ( "The database reported an error\n" );
@@ -61,11 +61,11 @@ CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase*
 				errStr += err.databaseText();
 			if ( !err.driverText().isEmpty() )
 				errStr += err.driverText();
-			//QMessageBox::critical( 0, tr("Report Engine Error"), errStr );
+			//QMessageBox::critical( 0, tr("report engine error"), errStr );
 			qWarning( "%s", errStr.local8Bit().data() );
 		} else {
 			// we have not a select query statement
-			//QMessageBox::critical( 0, tr("Report Engine Error"), tr("The string query is not a select sql statement.") );
+			//QMessageBox::critical( 0, tr("report engine error"), tr("The string query is not a select sql statement.") );
 			qWarning( "The string query is not a select sql statement." );
 		}
     }

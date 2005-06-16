@@ -41,7 +41,10 @@
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
   <Separator/> -->
-  <Action name="edit_delete"/>
+   <Action name="edit_delete"/>
+   <Separator/>
+   <Action name="gridlabel"/>
+   <Action name="gridaction"/>
  </ToolBar>
 <ToolBar name="sectionsToolBar" position="bottom" noMerge="1"><text>Sections</text>
     <Action name="rheader"/>

@@ -22,11 +22,10 @@
 #include "mreportengine.h"
 #include "mpagecollection.h"
 #include "mpagedisplay.h"
-#include "koffice_export.h"
+
 #define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
 
 class QPrinter;
-class QDomDocument;
 
 /** Application reference, required for event processing */
 extern QApplication *mAppRef;
@@ -35,7 +34,7 @@ extern QApplication *mAppRef;
   *@author Mutiny Bay Software
   */
 
-class KUGAR_EXPORT MReportViewer : public QWidget
+class MReportViewer : public QWidget
 {
 	Q_OBJECT
 
@@ -46,7 +45,6 @@ public:
 
 	bool setReportData(const QString &);
 	bool setReportData(QIODevice *);
-	bool setReportTemplate(const QDomDocument &);
 	bool setReportTemplate(const QString &);
 	bool setReportTemplate(QIODevice *);
 	bool renderReport();

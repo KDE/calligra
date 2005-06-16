@@ -5,7 +5,7 @@
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
     copyright : (C) 2002 Alexander Dymo
-    email     : cloudtemple@mksat.net	
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #include <qfile.h>
@@ -28,8 +28,8 @@ MReportEngine::MReportEngine() : QObject(){
   leftMargin = 0;
   rightMargin = 0;
 
-	// Set cancel flag
-	cancelRender = false;
+    // Set cancel flag
+    cancelRender = false;
 
   // Set the grand total list to AutoDelete
   grandTotal.setAutoDelete( true );
@@ -64,48 +64,47 @@ MReportEngine MReportEngine::operator=(const MReportEngine& mReportEngine){
   // Copy the base class's data
   //((QObject &) *this) = mReportEngine;
 
-	return *this;
+    return *this;
 }
 
 /** Destructor */
 MReportEngine::~MReportEngine(){
-	// Clear the grand total data
+    // Clear the grand total data
   grandTotal.clear();
   if (m_pageCollection) m_pageCollection->removeRef();
   qDebug("MReportEngine::~MReportEngine()");
 }
 
 void MReportEngine::addRef() {
-	m_refCount++;
+    m_refCount++;
 }
 
 void MReportEngine::removeRef() {
-	m_refCount--;
-	if (!m_refCount) deleteLater();
+    m_refCount--;
+    if (!m_refCount) deleteLater();
 }
 
 /** Clears report formatting */
 void MReportEngine::clearFormatting(){
-	rHeader.clear();
-	pHeader.clear();
-	MReportDetail *detail;
-	for (detail = details.first(); detail; detail = details.next())
-	{
-		detail->clear();
-	}
-    details.clear();
-	pFooter.clear();
-	rFooter.clear();
+    rHeader.clear();
+    pHeader.clear();
+    MReportDetail *detail;
+    for (detail = details.first(); detail; detail = details.next())
+    {
+        detail->clear();
+    }
+    pFooter.clear();
+    rFooter.clear();
 }
 
 
 //Set the report data from an existing QDomDocument
 bool MReportEngine::setReportData(const QDomDocument &data)
 {
-	rd=data.cloneNode(true).toDocument();
-	initData();
+    rd=data.cloneNode(true).toDocument();
+    initData();
 
-	return true;
+    return true;
 }
 
 
@@ -114,15 +113,15 @@ bool MReportEngine::setReportData(const QDomDocument &data)
 
 bool MReportEngine::setReportData(const QString &data)
 {
-	
-	if (!rd.setContent(data))
-	{
-		qWarning("Unable to parse report data");
-		return false;
-	}
-	initData();
 
-	return true;
+    if (!rd.setContent(data))
+    {
+        qWarning("Unable to parse report data");
+        return false;
+    }
+    initData();
+
+    return true;
 }
 
 
@@ -130,14 +129,14 @@ bool MReportEngine::setReportData(const QString &data)
 
 bool MReportEngine::setReportData(QIODevice *dev)
 {
-	if (!rd.setContent(dev))
-	{
-		qWarning("Unable to parse report data");
-		return false;
-	}
-	initData();
+    if (!rd.setContent(dev))
+    {
+        qWarning("Unable to parse report data");
+        return false;
+    }
+    initData();
 
-	return true;
+    return true;
 }
 
 
@@ -145,38 +144,27 @@ bool MReportEngine::setReportData(QIODevice *dev)
 
 void MReportEngine::initData()
 {
-	m_needRegeneration=true;
-	// Get the record set (we assume there is only one).
+    m_needRegeneration=true;
+    // Get the record set (we assume there is only one).
 
-	for (QDomNode n = rd.firstChild(); !n.isNull(); n = n.nextSibling())
-		if (n.nodeName() == "KugarData")
-		{
-			// Get the records.
+    for (QDomNode n = rd.firstChild(); !n.isNull(); n = n.nextSibling())
+        if (n.nodeName() == "KugarData")
+        {
+            // Get the records.
 
-			records = n.childNodes();
+            records = n.childNodes();
 
-			// See if there is a preferred template given.
+            // See if there is a prefered template given.
 
-			QDomNamedNodeMap attr = n.attributes();
-			QDomNode tempattr = attr.namedItem("Template");
-			QString tempname = tempattr.nodeValue();
+            QDomNamedNodeMap attr = n.attributes();
+            QDomNode tempattr = attr.namedItem("Template");
+            QString tempname = tempattr.nodeValue();
 
-			if (!tempname.isNull())
-				emit preferedTemplate(tempname);
+            if (!tempname.isNull())
+                emit preferedTemplate(tempname);
 
-			break;
-		}
-}
-
-//Set the eport's template from an existing QDomDocument
-bool MReportEngine::setReportTemplate(const QDomDocument &data)
-{
-	clearFormatting();
-
-	rt=data.cloneNode(true).toDocument();
-	initTemplate();
-
-	return true;
+            break;
+        }
 }
 
 
@@ -185,17 +173,17 @@ bool MReportEngine::setReportTemplate(const QDomDocument &data)
 
 bool MReportEngine::setReportTemplate(const QString &tpl)
 {
-	clearFormatting();
+    clearFormatting();
 
-	if (!rt.setContent(tpl))
-	{
-		qWarning("Unable to parse report template");
-		return false;
-	}
+    if (!rt.setContent(tpl))
+    {
+        qWarning("Unable to parse report template");
+        return false;
+    }
 
-	initTemplate();
+    initTemplate();
 
-	return true;
+    return true;
 }
 
 
@@ -204,59 +192,59 @@ bool MReportEngine::setReportTemplate(const QString &tpl)
 
 bool MReportEngine::setReportTemplate(QIODevice *dev)
 {
-	clearFormatting();
+    clearFormatting();
 
-	if (!rt.setContent(dev))
-	{
-		qWarning("Unable to parse report template");
-		return false;
-	}
+    if (!rt.setContent(dev))
+    {
+        qWarning("Unable to parse report template");
+        return false;
+    }
 
-	initTemplate();
+    initTemplate();
 
-	return true;
+    return true;
 }
 
 
 /** Cancels rendering of a report */
 void MReportEngine::slotCancelRendering(){
-	cancelRender = true;
+    cancelRender = true;
 }
 
-/** Finds the detail header object, which is appropriate for the given level */
+/** Finds the detail header object, which is apropriate for the given level */
 MReportSection *MReportEngine::findDetailHeader(int level)
 {
-	MReportSection *sec;
-	for (sec = dHeaders.first(); sec; sec = dHeaders.next())
-	{
-		if (sec->getLevel() == level)
-			return sec;
-	}
-	return NULL;
+    MReportSection *sec;
+    for (sec = dHeaders.first(); sec; sec = dHeaders.next())
+    {
+        if (sec->getLevel() == level)
+            return sec;
+    }
+    return NULL;
 }
 
-/** Finds the detail object, which is appropriate for the given level */
+/** Finds the detail object, which is apropriate for the given level */
 MReportDetail *MReportEngine::findDetail(int level)
 {
-	MReportDetail *sec;
-	for (sec = details.first(); sec; sec = details.next())
-	{
-		if (sec->getLevel() == level)
-			return sec;
-	}
-	return NULL;
+    MReportDetail *sec;
+    for (sec = details.first(); sec; sec = details.next())
+    {
+        if (sec->getLevel() == level)
+            return sec;
+    }
+    return NULL;
 }
 
-/** Finds the detail footer object, which is appropriate for the given level */
+/** Finds the detail footer object, which is apropriate for the given level */
 MReportSection *MReportEngine::findDetailFooter(int level)
 {
-	MReportSection *sec;
-	for (sec = dFooters.first(); sec; sec = dFooters.next())
-	{
-		if (sec->getLevel() == level)
-			return sec;
-	}
-	return NULL;
+    MReportSection *sec;
+    for (sec = dFooters.first(); sec; sec = dFooters.next())
+    {
+        if (sec->getLevel() == level)
+            return sec;
+    }
+    return NULL;
 }
 
 /** Renders the report as a page collection - the caller
@@ -265,154 +253,182 @@ MReportSection *MReportEngine::findDetailFooter(int level)
   */
 MPageCollection* MReportEngine::renderReport(){
 
-	if (!m_needRegeneration) return m_pageCollection;
-	if (m_pageCollection) m_pageCollection->removeRef();
-	unsigned int j;
-	unsigned int i;
-	
-	// Set cancel flag
-	cancelRender = false;
+    if (!m_needRegeneration) return m_pageCollection;
+    if (m_pageCollection) m_pageCollection->removeRef();
+    unsigned int j;
+    unsigned int i;
 
-	// Create the page collection
-	MPageCollection* pages = new MPageCollection;
+    // Set cancel flag
+    cancelRender = false;
 
-	// Initialize the basic page data
-	currHeight = pageHeight - (topMargin + bottomMargin + pFooter.getHeight());
-	currPage = 0;
-	currDate = QDate::currentDate();
+    // Create the page collection
+    MPageCollection* pages = new MPageCollection;
 
-	// Initialize the grand total array
-	grandTotal.clear();
-	for(int i = 0; i < rFooter.getCalcFieldCount(); i++)
-		grandTotal.append(new QMemArray<double>);
+    // Initialize the basic page data
+    currHeight = pageHeight - (topMargin + bottomMargin + pFooter.getHeight());
+    currPage = 0;
+    currDate = QDate::currentDate();
 
-	// Create the first page
-	startPage(pages);
+    // Initialise global report variables
+    unsigned int rowCount = records.length();
+    for(j = 0; j < rowCount; j++){
+        QDomNode record = records.item(j);
+        if((record.nodeType() == QDomNode::ElementNode)
+            && (record.nodeName() == "Var")){
+            // Process the variable ...
+            QDomNamedNodeMap fields = record.attributes();
+            for (int k = 0; k < fields.count(); ++k)
+            {
+                qWarning("set field %s to %s", fields.item(k).nodeName().ascii(), fields.item(k).nodeValue().ascii());
+                rHeader.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
+                rFooter.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
+                pHeader.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
+                pFooter.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
+            }
+        }
+    }
 
-	// Draw the detail section by looping through all the records
-	unsigned int rowCount = records.length();
-	int chkRow = 0;
-	int curDetailLevel = 0;
-	int prevDetailLevel = -1;
 
-	for(j = 0; j < rowCount; j++){
-	    QString detailValue;
-    	QDomNode record = records.item(j);
+    // Initialize the grand total array
+    grandTotal.clear();
+    for(int i = 0; i < rFooter.getCalcFieldCount(); i++)
+        grandTotal.append(new QMemArray<double>);
 
-	    if(record.nodeType() == QDomNode::ElementNode){
-			// Update status event
-			if((chkRow = (j / 2) % 20) == 0)
-				emit signalRenderStatus(j / 2);
+    // Create the first page
+    startPage(pages);
 
-			// Check for cancel action
-			if(cancelRender){
-    			p.end();
-				delete pages;
-				return 0;
-			}
+    // Draw the detail section by looping through all the records
+    int chkRow = 0;
+    int curDetailLevel = 0;
+    int prevDetailLevel = -1;
 
-			// Process the record ...
-			QDomNamedNodeMap fields = record.attributes();
+    for(j = 0; j < rowCount; j++){
+        QString detailValue;
+        QDomNode record = records.item(j);
 
-			// Find the detail object to process with rendering
-			detailValue = fields.namedItem("level").nodeValue();
-			curDetailLevel = detailValue.toInt();
+        if((record.nodeType() == QDomNode::ElementNode)
+         && (record.nodeName() == "Row")){
+            // Update status event
+            if((chkRow = (j / 2) % 20) == 0)
+                emit signalRenderStatus(j / 2);
 
-		    // Draw detail footer if appropriate
-		    if (curDetailLevel <= prevDetailLevel){
-				// Draw footer for previous detail levels
-				//   from prevDetailLevel up to curDetailLevel
-				// Draw footer for current detail level
-				for (int i = prevDetailLevel; i >= curDetailLevel; i--)
-				{
-					MReportSection *footer = findDetailFooter(i);
-					if (footer)
-					{
-						footer->setPageNumber(currPage);
-						footer->setReportDate(currDate);
-						if((currY + footer->getHeight()) > currHeight)
-			    	 		newPage(pages);
-						
-    	 				footer->draw(&p, leftMargin, currY);
-	    				currY += footer->getHeight();
-	    			}
-	    		}
-			}
-		   	
-		   	// Draw detail header for level curDetailLevel
-			MReportSection *header = findDetailHeader(curDetailLevel);
-			if (header)
-			{		
-				header->setPageNumber(currPage);
-				header->setReportDate(currDate);
-				if((currY + header->getHeight()) > currHeight)
-    		 		newPage(pages);
-				
-   				header->draw(&p, leftMargin, currY);
-    			currY += header->getHeight();
-    		}
-    	
-    		MReportDetail *detail = findDetail(detailValue.toInt());
-			unsigned int fieldCount = detail->getFieldCount();
+            // Check for cancel action
+            if(cancelRender){
+                p.end();
+                delete pages;
+                return 0;
+            }
 
-			for(i = 0; i < fieldCount; i++){
-				// Get the field value
-				detailValue =  fields.namedItem(detail->getFieldName(i)).nodeValue();
-				// Set the field
-		        detail->setFieldData(i, detailValue);
-				// Set the grand total data
-				int calcIdx = rFooter.getCalcFieldIndex(detail->getFieldName(i));
-				if(calcIdx != -1){
-	    			int vsize = grandTotal.at(calcIdx)->size();
-					grandTotal.at(calcIdx)->resize(vsize + 1);
-					grandTotal.at(calcIdx)->at(vsize) = detailValue.toDouble();
-	        	}
-			}
+            // Process the record ...
+            QDomNamedNodeMap fields = record.attributes();
 
-			detail->setPageNumber(currPage);
-			detail->setReportDate(currDate);
-			if((currY +  detail->getHeight()) > currHeight)
-    	 		newPage(pages);
+            // Find the detail object to process with rendering
+            detailValue = fields.namedItem("level").nodeValue();
+            curDetailLevel = detailValue.toInt();
 
-     		detail->draw(&p, leftMargin, currY);
-	    	currY += detail->getHeight();
-		}
-		prevDetailLevel = curDetailLevel;
-	}
-	
-	// Draw detail footers that was not drawn before
-	//   for details from curDetailLevel up to prevDetailLevel
-	for (int i = prevDetailLevel; i >= curDetailLevel; i--)
-	{
-		MReportSection *footer = findDetailFooter(i);
-		if (footer)
-		{
-			footer->setPageNumber(currPage);
-			footer->setReportDate(currDate);
-			if((currY + footer->getHeight()) > currHeight)
-    	 		newPage(pages);
-			
-    		footer->draw(&p, leftMargin, currY);
-			currY += footer->getHeight();
-		}
-	}
-	
-	// Finish the last page of the report
-	endPage(pages);
+            // Draw detail footer if appropriate
+            if (curDetailLevel <= prevDetailLevel){
+                // Draw footer for previous detail levels
+                //   from prevDetailLevel up to curDetailLevel
+                // Draw footer for current detail level
+                for (int i = prevDetailLevel; i >= curDetailLevel; i--)
+                {
+                    MReportSection *footer = findDetailFooter(i);
+                    if (footer)
+                    {
+                        qWarning("drawing detail footer: %d",  footer->getLevel());
+                        
+                        footer->setPageNumber(currPage);
+                        footer->setReportDate(currDate);
+                        footer->setCalcFieldData(&grandTotal);
+                        if((currY + footer->getHeight()) > currHeight)
+                             newPage(pages);
 
-	// Destroy the page painter
-	p.end();
+                        footer->draw(&p, leftMargin, currY);
+                        currY += footer->getHeight();
+                    }
+                }
+            }
 
-	// Set the page collection attributes
-	pages->setPageDimensions(QSize(pageWidth, pageHeight));
-	pages->setPageSize(pageSize);
-	pages->setPageOrientation(pageOrientation);
+               // Draw detail header for level curDetailLevel
+            MReportSection *header = findDetailHeader(curDetailLevel);
+            if (header)
+            {
+                header->setPageNumber(currPage);
+                header->setReportDate(currDate);
+                if((currY + header->getHeight()) > currHeight)
+                     newPage(pages);
 
-	// Send final status
-	emit signalRenderStatus(rowCount / 2);
-	m_needRegeneration=false;
-	m_pageCollection=pages;
-	return pages;
+                   header->draw(&p, leftMargin, currY);
+                currY += header->getHeight();
+            }
+
+            MReportDetail *detail = findDetail(detailValue.toInt());
+            unsigned int fieldCount = detail->getFieldCount();
+
+            for(i = 0; i < fieldCount; i++){
+                // Get the field value
+                detailValue =  fields.namedItem(detail->getFieldName(i)).nodeValue();
+                // Set the field
+                detail->setFieldData(i, detailValue);
+                // Set the grand total data
+                int calcIdx = rFooter.getCalcFieldIndex(detail->getFieldName(i));
+                if(calcIdx != -1){
+                    int vsize = grandTotal.at(calcIdx)->size();
+                    grandTotal.at(calcIdx)->resize(vsize + 1);
+                    grandTotal.at(calcIdx)->at(vsize) = detailValue.toDouble();
+                }
+            }
+
+            detail->setPageNumber(currPage);
+            detail->setReportDate(currDate);
+            if((currY +  detail->getHeight()) > currHeight)
+                 newPage(pages);
+
+             detail->draw(&p, leftMargin, currY);
+            currY += detail->getHeight();
+            prevDetailLevel = curDetailLevel;
+        }
+    }
+
+    // Draw detail footers that was not drawn before
+    //   for details from curDetailLevel up to prevDetailLevel
+    qWarning("prevDetailLevel: %d", prevDetailLevel);
+    qWarning("curDetailLevel: %d", curDetailLevel);
+    for (int i = prevDetailLevel; i >= 0; i--)
+    {
+        qWarning("    -1");
+        MReportSection *footer = findDetailFooter(i);
+        if (footer)
+        {
+            qWarning("    -2");
+            footer->setPageNumber(currPage);
+            footer->setReportDate(currDate);
+            footer->setCalcFieldData(&grandTotal);
+            if((currY + footer->getHeight()) > currHeight)
+                 newPage(pages);
+
+            footer->draw(&p, leftMargin, currY);
+            currY += footer->getHeight();
+        }
+    }
+
+    // Finish the last page of the report
+    endPage(pages);
+
+    // Destroy the page painter
+    p.end();
+
+    // Set the page collection attributes
+    pages->setPageDimensions(QSize(pageWidth, pageHeight));
+    pages->setPageSize(pageSize);
+    pages->setPageOrientation(pageOrientation);
+
+    // Send final status
+    emit signalRenderStatus(rowCount / 2);
+    m_needRegeneration=false;
+    m_pageCollection=pages;
+    return pages;
 }
 
 /** Starts a new page of the report */
@@ -456,7 +472,7 @@ void MReportEngine::newPage(MPageCollection* pages){
 
 /** Draws the report header object to the current page */
 void MReportEngine::drawReportHeader(MPageCollection* pages){
-	if(rHeader.getHeight() == 0) return;
+    if(rHeader.getHeight() == 0) return;
 
   if((rHeader.printFrequency() == MReportSection::FirstPage && currPage == 1)
      ||(rHeader.printFrequency() == MReportSection::EveryPage)){
@@ -470,7 +486,7 @@ void MReportEngine::drawReportHeader(MPageCollection* pages){
 
 /** Draws the page header to the current page */
 void MReportEngine::drawPageHeader(MPageCollection* pages){
-	if(pHeader.getHeight() == 0) return;
+    if(pHeader.getHeight() == 0) return;
 
   if((currY + pHeader.getHeight()) > currHeight)
     newPage(pages);
@@ -487,7 +503,7 @@ void MReportEngine::drawPageHeader(MPageCollection* pages){
 
 /** Draws the page footer to the current page */
 void MReportEngine::drawPageFooter(MPageCollection* pages){
-	if(pFooter.getHeight() == 0) return;
+    if(pFooter.getHeight() == 0) return;
 
   if((pFooter.printFrequency() == MReportSection::FirstPage && currPage == 1)
      ||(pFooter.printFrequency() == MReportSection::EveryPage)){
@@ -501,7 +517,7 @@ void MReportEngine::drawPageFooter(MPageCollection* pages){
 
 /** Draws the report footer to the current page */
 void MReportEngine::drawReportFooter(MPageCollection* pages){
-	if(rFooter.getHeight() == 0) return;
+    if(rFooter.getHeight() == 0) return;
 
   if((currY + rFooter.getHeight()) > currHeight)
     newPage(pages);
@@ -509,6 +525,7 @@ void MReportEngine::drawReportFooter(MPageCollection* pages){
   if((rFooter.printFrequency() == MReportSection::EveryPage)
      ||(rFooter.printFrequency() == MReportSection::LastPage)){
 
+      qWarning("drawing report footer");
     rFooter.setCalcFieldData(&grandTotal);
 
     rFooter.setPageNumber(currPage);
@@ -541,17 +558,79 @@ QSize MReportEngine::getPageMetrics(int size, int orientation){
   return ps;
 }
 
+
+/**
+This recalculates report dimensions to 96 dpi, standard on Windows
+platform.
+
+FIXME: TODO: get the proper screen resolution and not hardcode 96dpi
+FIXME: TODO: make this function work on X11 too
+*/
+void MReportEngine::recalcDimensions()
+{
+    QDomNode report;
+    QDomNode child;
+    for (report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
+        if (report.nodeName() == "KugarTemplate")
+            break;
+
+    QDomNamedNodeMap rattributes = report.attributes();
+    recalcAttribute("BottomMargin", rattributes);
+    recalcAttribute("TopMargin", rattributes);
+    recalcAttribute("LeftMargin", rattributes);
+    recalcAttribute("RightMargin", rattributes);
+
+    QDomNodeList children = report.childNodes();
+    int childCount = children.length();
+
+    for(int j = 0; j < childCount; j++){
+        child = children.item(j);
+        QDomNamedNodeMap attributes = child.attributes();
+
+        QDomNodeList children2 = child.childNodes();
+        int childCount2 = children2.length();
+        recalcAttribute("Height", attributes);
+
+        for(int k = 0; k < childCount2; k++){
+            QDomNode child2 = children2.item(k);
+            QDomNamedNodeMap attributes = child2.attributes();
+            recalcAttribute("X", attributes);
+            recalcAttribute("Y", attributes);
+            recalcAttribute("Width", attributes);
+            recalcAttribute("Height", attributes);
+            recalcAttribute("X1", attributes);
+            recalcAttribute("X2", attributes);
+            recalcAttribute("Y1", attributes);
+            recalcAttribute("Y2", attributes);
+        }
+    }
+
+}
+
+void MReportEngine::recalcAttribute(const QString& name, QDomNamedNodeMap attributes)
+{
+    if (!attributes.namedItem(name).isNull())
+    {
+        attributes.namedItem(name).setNodeValue(QString("%1").arg(attributes.namedItem(name).nodeValue().toInt()*93/81));
+    }
+}
+
 /** Walks the document tree, setting the report layout */
 void MReportEngine::initTemplate(){
+
+#ifdef Q_WS_WIN
+  recalcDimensions();
+#endif
+
   QDomNode report;
   QDomNode child;
 
   m_needRegeneration=true;
-	// Get the report - assume there is only one.
+    // Get the report - assume there is only one.
 
-	for (report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
-		if (report.nodeName() == "KugarTemplate")
-			break;
+    for (report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
+        if (report.nodeName() == "KugarTemplate")
+            break;
 
   setReportAttributes(&report);
 
@@ -570,17 +649,17 @@ void MReportEngine::initTemplate(){
         setSectionAttributes(&pHeader, &child);
       else if(child.nodeName() == "DetailHeader")
       {
-      	MReportSection *dHeader = new MReportSection;
-      	dHeaders.append(dHeader);
-      	setDetMiscAttributes(dHeader, &child);
+          MReportSection *dHeader = new MReportSection;
+          dHeaders.append(dHeader);
+          setDetMiscAttributes(dHeader, &child);
       }
       else if(child.nodeName() == "Detail")
         setDetailAttributes(&child);
       else if(child.nodeName() == "DetailFooter")
       {
-      	MReportSection *dFooter = new MReportSection;
-      	setDetMiscAttributes(dFooter, &child);
-      	dFooters.append(dFooter);
+          MReportSection *dFooter = new MReportSection;
+          setDetMiscAttributes(dFooter, &child);
+          dFooters.append(dFooter);
       }
       else if(child.nodeName() == "PageFooter")
         setSectionAttributes(&pFooter, &child);
@@ -626,7 +705,7 @@ void MReportEngine::setSectionAttributes(MReportSection* section, QDomNode* repo
   for(int j = 0; j < childCount; j++){
     QDomNode child = children.item(j);
     if(child.nodeType() == QDomNode::ElementNode){
-	if(child.nodeName() == "Line"){
+    if(child.nodeName() == "Line"){
           QDomNamedNodeMap attributes = child.attributes();
           MLineObject* line = new MLineObject();
           setLineAttributes(line, &attributes);
@@ -649,6 +728,13 @@ void MReportEngine::setSectionAttributes(MReportSection* section, QDomNode* repo
           MCalcObject* field = new MCalcObject();
           setCalculatedFieldAttributes(field, &attributes);
           section->addCalculatedField(field);
+        }
+        else if(child.nodeName() == "Field"){
+          QDomNamedNodeMap attributes = child.attributes();
+          MFieldObject* field = new MFieldObject();
+          setFieldAttributes(field, &attributes);
+          section->addField(field);
+          qWarning("added field");
         }
     }
   }
@@ -685,7 +771,7 @@ void MReportEngine::setDetailAttributes(QDomNode* report){
   for(int j = 0; j < childCount; j++){
     QDomNode child = children.item(j);
     if(child.nodeType() == QDomNode::ElementNode){
-	if(child.nodeName() == "Line"){
+    if(child.nodeName() == "Line"){
           QDomNamedNodeMap attributes = child.attributes();
           MLineObject* line = new MLineObject();
           setLineAttributes(line, &attributes);
@@ -718,7 +804,7 @@ void MReportEngine::setDetailAttributes(QDomNode* report){
 /** Sets a line's layout attributes */
 void MReportEngine::setLineAttributes(MLineObject* line, QDomNamedNodeMap* attr){
   line->setLine(attr->namedItem("X1").nodeValue().toInt(),
-  		attr->namedItem("Y1").nodeValue().toInt(),
+          attr->namedItem("Y1").nodeValue().toInt(),
                 attr->namedItem("X2").nodeValue().toInt(),
                 attr->namedItem("Y2").nodeValue().toInt());
 
@@ -759,6 +845,14 @@ void MReportEngine::setLabelAttributes(MLabelObject* label, QDomNamedNodeMap* at
 
   label->setBorderWidth(attr->namedItem("BorderWidth").nodeValue().toInt());
   label->setBorderStyle(attr->namedItem("BorderStyle").nodeValue().toInt());
+  if (!attr->namedItem("DrawBottom").isNull())
+      label->setDrawBottom(attr->namedItem("DrawBottom").nodeValue().toInt());
+  if (!attr->namedItem("DrawTop").isNull())
+      label->setDrawTop(attr->namedItem("DrawTop").nodeValue().toInt());
+  if (!attr->namedItem("DrawLeft").isNull())
+      label->setDrawLeft(attr->namedItem("DrawLeft").nodeValue().toInt());
+  if (!attr->namedItem("DrawRight").isNull())
+      label->setDrawRight(attr->namedItem("DrawRight").nodeValue().toInt());
   label->setFont(attr->namedItem("FontFamily").nodeValue(),
                  attr->namedItem("FontSize").nodeValue().toInt(),
                  attr->namedItem("FontWeight").nodeValue().toInt(),
@@ -817,21 +911,21 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
   rightMargin = mReportEngine->rightMargin;
   pageWidth = mReportEngine->pageWidth;
   pageHeight = mReportEngine->pageHeight;
-  
+
   // Copy the report header
   rHeader = mReportEngine->rHeader;
   // Copy the page header
   pHeader = mReportEngine->pHeader;
   // Copy the detail sections
-	MReportDetail *detail;
-	QPtrList<MReportDetail> temp = mReportEngine->details;
-	temp.setAutoDelete(false);
-	for (detail = temp.first(); detail; detail = temp.next())
-	{
-		MReportDetail *new_detail = new MReportDetail;
-		*new_detail = *detail;
-		details.append(new_detail);
-	}
+    MReportDetail *detail;
+    QPtrList<MReportDetail> temp = mReportEngine->details;
+    temp.setAutoDelete(false);
+    for (detail = temp.first(); detail; detail = temp.next())
+    {
+        MReportDetail *new_detail = new MReportDetail;
+        *new_detail = *detail;
+        details.append(new_detail);
+    }
   // Copy the page footer
   pFooter = mReportEngine->pFooter;
   // Copy the report footer
@@ -842,10 +936,10 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
   currHeight = mReportEngine->currHeight;
   currPage = mReportEngine->currPage;
   currDate = mReportEngine->currDate;
-	cancelRender = mReportEngine->cancelRender;
+    cancelRender = mReportEngine->cancelRender;
 
-	// Copy grand totals list
-	grandTotal = mReportEngine->grandTotal;
+    // Copy grand totals list
+    grandTotal = mReportEngine->grandTotal;
   m_pageCollection=mReportEngine->m_pageCollection;
   m_needRegeneration=mReportEngine->m_needRegeneration;
   if (m_pageCollection) m_pageCollection->addRef();

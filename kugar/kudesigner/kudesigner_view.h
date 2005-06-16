@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003-2004 Alexander Dymo <cloudtemple@mksat.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MEm_viewHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -16,32 +16,54 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#ifndef KUDESIGNER_VIEW
-#define KUDESIGNER_VIEW
+#ifndef KUDESIGNER_VIEW_H
+#define KUDESIGNER_VIEW_H
 
 #include <koView.h>
 #include <kparts/event.h>
 
+#include <qdom.h>
+
+#include <list.h>
+
+class QLabel;
+class QSpinBox;
+class QAction;
+class QPaintEvent;
+class QDockWindow;
+class QToolBar;
+
 class KAction;
 class KRadioAction;
-class QPaintEvent;
+class KWidgetAction;
 
 class KudesignerDoc;
 
-class ReportCanvas;
-class CanvasReportItem;
-class PropertyEditor;
-class CanvasBand;
+using namespace KOProperty;
 
-class KudesignerView : public KoView
-{
+namespace KOProperty {
+class Editor;
+class Buffer;
+}
+
+namespace Kudesigner {
+class View;
+class StructureWidget;
+class ReportItem;
+}
+
+class KudesignerView: public KoView {
     Q_OBJECT
-    friend class ReportCanvas;
+    friend class Kudesigner::View;
+
 public:
     KudesignerView( KudesignerDoc* part, QWidget* parent = 0, const char* name = 0 );
     virtual ~KudesignerView();
+
+    Kudesigner::View *view() { return m_view; }
+
 protected slots:
+    void populateProperties(Buffer *buf);
     void cut();
     void copy();
     void paste();
@@ -64,17 +86,19 @@ protected slots:
     void placeItem(int x, int y, int band, int bandLevel);
 
 protected:
+    void initActions();
+
     void paintEvent( QPaintEvent* );
     virtual void resizeEvent(QResizeEvent* _ev);
-
     virtual void updateReadWrite( bool readwrite );
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
-    void initActions();
-
 private:
-    ReportCanvas *rc;
-    PropertyEditor *pe;
+    Kudesigner::View *m_view;
+    Kudesigner::StructureWidget *m_structure;
+    KOProperty::Editor *m_propertyEditor;
+    KOProperty::Buffer *m_buffer;
+
     KudesignerDoc *m_doc;
 
     KAction* sectionsReportHeader;
@@ -98,9 +122,13 @@ private:
     KAction* selectAllAction;
     KAction* deleteAction;
 
+    KWidgetAction *gridActionLabel;
+    KWidgetAction *gridAction;
+    QLabel *gridLabel;
+    QSpinBox *gridBox;
+
     KActionCollection *itemsCollection;
     KActionCollection *sectionsCollection;
-
 };
 
 #endif

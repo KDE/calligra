@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2002-2004 Alexander Dymo <cloudtemple@mksat.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MEm_viewHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -16,17 +16,24 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
 #include "kudesigner_view.h"
 #include "kudesigner_factory.h"
 #include "kudesigner_doc.h"
-#include <kudesigner_command.h>
 
 #include <map>
 
 #include <qpainter.h>
 #include <qiconset.h>
 #include <qinputdialog.h>
+#include <qevent.h>
+#include <qmainwindow.h>
+#include <qaction.h>
+#include <qlayout.h>
+#include <qdockwindow.h>
+#include <qmenubar.h>
+#include <qmessagebox.h>
+#include <qspinbox.h>
+#include <qlabel.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -35,29 +42,35 @@
 
 #include <koMainWindow.h>
 
-#include <cv.h>
+#include <commdefs.h>
+#include <view.h>
+#include <structurewidget.h>
+#include <canvas.h>
+#include <command.h>
 
-#include <canvdefs.h>
-#include <cfield.h>
-#include <ccalcfield.h>
-#include <clabel.h>
-#include <cline.h>
-#include <cspecialfield.h>
-#include <mycanvas.h>
-#include <propertyeditor.h>
+#include <field.h>
+#include <calcfield.h>
+#include <label.h>
+#include <line.h>
+#include <specialfield.h>
+
+#include <kugartemplate.h>
+#include <reportheader.h>
+#include <reportfooter.h>
+#include <pageheader.h>
+#include <pagefooter.h>
+#include <detailheader.h>
+#include <detailfooter.h>
+#include <detail.h>
+
+#include <editor.h>
 #include <property.h>
+#include <list.h>
 
-#include <canvkutemplate.h>
-#include <canvreportheader.h>
-#include <canvreportfooter.h>
-#include <canvpageheader.h>
-#include <canvpagefooter.h>
-#include <canvdetailheader.h>
-#include <canvdetailfooter.h>
-#include <canvdetail.h>
+using namespace Kudesigner;
 
 KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name ),pe(0),m_doc(part)
+    :KoView( part, parent, name ), m_propertyEditor(0), m_doc(part)
 {
     setInstance( KudesignerFactory::global() );
     if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror
@@ -65,29 +78,80 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     else
         setXMLFile( "kudesignerui.rc" );
 
-    initActions();
-
-    rc = new ReportCanvas((QCanvas *)(part->canvas()), this);
+    QVBoxLayout *l = new QVBoxLayout(this, 0, 0);
+    m_view = new Kudesigner::View(part->canvas(), this);
     if (part->plugin())
     {
-       rc->setAcceptDrops(part->plugin()->acceptsDrops());
-       rc->viewport()->setAcceptDrops(part->plugin()->acceptsDrops());
-       rc->setPlugin(part->plugin());
+        m_view->setAcceptDrops(part->plugin()->acceptsDrops());
+        m_view->viewport()->setAcceptDrops(part->plugin()->acceptsDrops());
+        m_view->setPlugin(part->plugin());
     }
-    rc->viewport()->setFocusProxy(rc);
-    rc->viewport()->setFocusPolicy(WheelFocus);
-    rc->setFocus();
+    l->addWidget(m_view);
 
-    rc->itemToInsert = 0;
+    m_view->viewport()->setFocusProxy(m_view);
+    m_view->viewport()->setFocusPolicy(WheelFocus);
+    m_view->setFocus();
 
-    connect(rc, SIGNAL(selectedActionProcessed()), this, SLOT(unselectItemAction()));
-    connect(rc, SIGNAL(modificationPerformed()), part, SLOT(setModified()));
-    connect(rc, SIGNAL(itemPlaced(int, int, int, int)), this, SLOT(placeItem(int, int, int, int)));
+    m_view->itemToInsert = 0;
+
+    QDockWindow *dw = new QDockWindow(QDockWindow::OutsideDock, shell());
+    dw->setResizeEnabled(true);
+    m_structure = new Kudesigner::StructureWidget(dw);
+    dw->boxLayout()->addWidget(m_structure, 1);
+    m_propertyEditor = new Editor( dw );
+    m_propertyEditor->setMinimumWidth( 400 );
+    dw->boxLayout()->addWidget(m_propertyEditor, 2);
+
+    if (m_doc->plugin()) {
+//                 connect( m_propertyEditor, SIGNAL(createPluggedInEditor(QWidget*&, Editor *, Property*, Box *)),
+//                          m_doc->plugin(), SLOT(createPluggedInEditor(QWidget*&, Editor *, Property*, Box *)));
+
+        kdDebug()<<"*************Property and plugin have been connected"<<endl;
+    }
+
+    shell()->addDockWindow(dw, m_doc->propertyPosition());
+
+    m_structure->setDocument( m_doc->canvas() );
+
+    connect( m_doc, SIGNAL( canvasChanged( Kudesigner::Canvas * ) ),
+             m_structure, SLOT( setDocument( Kudesigner::Canvas * ) ) );
+    connect( m_doc, SIGNAL( modificationMade( bool ) ),
+             m_structure, SLOT( refresh() ) );
+
+    connect( m_view, SIGNAL( selectionMade( Buffer* ) ),
+             this, SLOT( populateProperties( Buffer* ) ) );
+
+    connect( m_view, SIGNAL( selectionClear() ),
+             m_propertyEditor, SLOT( clear() ) );
+
+    connect( m_view, SIGNAL( changed() ),
+             m_doc, SLOT( setModified() ) );
+
+    connect( m_view, SIGNAL( selectionMade( Buffer* ) ),
+             m_structure, SLOT( selectionMade() ) );
+    connect( m_view, SIGNAL( selectionClear() ),
+             m_structure, SLOT( selectionClear() ) );
+
+    connect(m_view, SIGNAL(selectedActionProcessed()), this, SLOT(unselectItemAction()));
+    connect(m_view, SIGNAL(modificationPerformed()), part, SLOT(setModified()));
+    connect(m_view, SIGNAL(itemPlaced(int, int, int, int)), this, SLOT(placeItem(int, int, int, int)));
+
+    gridLabel = new QLabel( i18n(" Grid Size: "), shell() );
+    gridBox = new QSpinBox(1, 100, 1, shell());
+    gridBox->setValue( 10 );
+    connect(gridBox, SIGNAL(valueChanged(int)), m_view, SLOT(setGridSize(int)));
+
+    initActions();
+
+    show();
+    m_view->show();
+    m_structure->refresh();
 }
 
 KudesignerView::~KudesignerView()
 {
-    delete pe;
+    delete gridLabel;
+    delete gridBox;
 }
 
 void KudesignerView::paintEvent( QPaintEvent* ev )
@@ -103,6 +167,10 @@ void KudesignerView::paintEvent( QPaintEvent* ev )
     painter.end();
 }
 
+void KudesignerView::resizeEvent(QResizeEvent* /*_ev*/)
+{
+    m_view->setGeometry(0, 0, width(), height());
+}
 
 void KudesignerView::initActions()
 {
@@ -111,48 +179,53 @@ void KudesignerView::initActions()
     pasteAction = KStdAction::paste(this, SLOT(paste()), actionCollection());
     selectAllAction = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection());
     deleteAction = new KAction(i18n("Delete"), "editdelete", 0, this,
-        SLOT(deleteItems()), actionCollection(), "edit_delete");
+                               SLOT(deleteItems()), actionCollection(), "edit_delete");
     cutAction->setEnabled(false);
     copyAction->setEnabled(false);
     pasteAction->setEnabled(false);
 //    deleteAction->setEnabled(false);
 
     sectionsReportHeader = new KAction(i18n("Report Header"), "irh", 0, this,
-        SLOT(slotAddReportHeader()), actionCollection(), "rheader");
+                                       SLOT(slotAddReportHeader()), actionCollection(), "rheader");
     sectionsReportFooter = new KAction(i18n("Report Footer"), "irf", 0, this,
-        SLOT(slotAddReportFooter()), actionCollection(), "rfooter");
+                                       SLOT(slotAddReportFooter()), actionCollection(), "rfooter");
     sectionsPageHeader = new KAction(i18n("Page Header"), "iph", 0, this,
-        SLOT(slotAddPageHeader()), actionCollection(), "pheader");
+                                     SLOT(slotAddPageHeader()), actionCollection(), "pheader");
     sectionsPageFooter = new KAction(i18n("Page Footer"), "ipf", 0, this,
-        SLOT(slotAddPageFooter()), actionCollection(), "pfooter");
+                                     SLOT(slotAddPageFooter()), actionCollection(), "pfooter");
     sectionsDetailHeader = new KAction(i18n("Detail Header"), "idh", 0, this,
-        SLOT(slotAddDetailHeader()), actionCollection(), "dheader");
+                                       SLOT(slotAddDetailHeader()), actionCollection(), "dheader");
     sectionsDetail = new KAction(i18n("Detail"), "id", 0, this,
-        SLOT(slotAddDetail()), actionCollection(), "detail");
+                                 SLOT(slotAddDetail()), actionCollection(), "detail");
     sectionsDetailFooter = new KAction(i18n("Detail Footer"), "idf", 0, this,
-        SLOT(slotAddDetailFooter()), actionCollection(), "dfooter");
+                                       SLOT(slotAddDetailFooter()), actionCollection(), "dfooter");
 
     itemsNothing = new KRadioAction(i18n("Clear Selection"), "frame_edit", 0, this,
-        SLOT(slotAddItemNothing()), actionCollection(), "nothing");
+                                    SLOT(slotAddItemNothing()), actionCollection(), "nothing");
     itemsNothing->setExclusiveGroup("itemsToolBar");
     itemsNothing->setChecked(true);
     itemsLabel = new KRadioAction(i18n("Label"), "frame_text", 0, this,
-        SLOT(slotAddItemLabel()), actionCollection(), "label");
+                                  SLOT(slotAddItemLabel()), actionCollection(), "label");
     itemsLabel->setExclusiveGroup("itemsToolBar");
     itemsField = new KRadioAction(i18n("Field"), "frame_field", 0, this,
-        SLOT(slotAddItemField()), actionCollection(), "field");
+                                  SLOT(slotAddItemField()), actionCollection(), "field");
     itemsField->setExclusiveGroup("itemsToolBar");
     itemsSpecial = new KRadioAction(i18n("Special Field"), "frame_query", 0, this,
-        SLOT(slotAddItemSpecial()), actionCollection(), "special");
+                                    SLOT(slotAddItemSpecial()), actionCollection(), "special");
     itemsSpecial->setExclusiveGroup("itemsToolBar");
     itemsCalculated = new KRadioAction(i18n("Calculated Field"), "frame_formula", 0, this,
-        SLOT(slotAddItemCalculated()), actionCollection(), "calcfield");
+                                       SLOT(slotAddItemCalculated()), actionCollection(), "calcfield");
     itemsCalculated->setExclusiveGroup("itemsToolBar");
     itemsLine = new KRadioAction(i18n("Line"), "frame_chart", 0, this,
-        SLOT(slotAddItemLine()), actionCollection(), "line");
+                                 SLOT(slotAddItemLine()), actionCollection(), "line");
     itemsLine->setExclusiveGroup("itemsToolBar");
-}
 
+    gridActionLabel = new KWidgetAction( gridLabel, i18n("Grid Label"), 0, this,
+                                         0, actionCollection(), "gridlabel");
+
+    gridAction = new KWidgetAction( gridBox, i18n("Grid Size"), 0, this,
+                                    0, actionCollection(), "gridaction");
+}
 
 void KudesignerView::updateReadWrite( bool /*readwrite*/ )
 {
@@ -161,172 +234,30 @@ void KudesignerView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-void KudesignerView::copy()
+void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    kdDebug(31000) << "KudesignerView::copy(): COPY called" << endl;
+    if ( ev->activated() )
+        m_propertyEditor->show();
+    else
+        m_propertyEditor->hide();
+    KoView::guiActivateEvent( ev );
+}
+
+void KudesignerView::populateProperties(Buffer *buf)
+{
+    connect(buf, SIGNAL(propertyChanged()), m_doc->canvas(), SLOT(changed()));
+    connect(buf, SIGNAL(propertyChanged()), m_doc, SLOT(setModified()));
+    m_propertyEditor->setList(buf);
 }
 
 void KudesignerView::cut()
 {
-    kdDebug(31000) << "KudesignerView::cut(): CUT called" << endl;
+//    kdDebug(31000) << "KudesignerView::cut(): CUT called" << endl;
 }
 
-void KudesignerView::resizeEvent(QResizeEvent* /*_ev*/)
+void KudesignerView::copy()
 {
-    rc->setGeometry(0, 0, width(), height());
-}
-
-void KudesignerView::slotAddReportHeader(){
-    if (!(((KudesignerDoc *)(koDocument())))->canvas()->templ->reportHeader)
-    {
-        m_doc->addCommand( new AddReportHeaderCommand(m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddReportFooter(){
-    if (!m_doc->canvas()->templ->reportFooter)
-    {
-        m_doc->addCommand( new AddReportFooterCommand(m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddPageHeader(){
-    if (!m_doc->canvas()->templ->pageHeader)
-    {
-        m_doc->addCommand( new AddPageHeaderCommand(m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddPageFooter(){
-    if (!m_doc->canvas()->templ->pageFooter)
-    {
-        m_doc->addCommand( new AddPageFooterCommand(m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddDetailHeader(){
-    bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(i18n("Add Detail Header"), i18n("Enter detail level:"),
-        0, 0, 100, 1, &Ok, this);
-    if (!Ok) return;
-    if (m_doc->canvas()->templ->detailsCount >= level)
-    {
-        m_doc->addCommand( new AddDetailHeaderCommand(level, m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddDetail(){
-    bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(i18n("Add Detail"), i18n("Enter detail level:"),
-        0, 0, 100, 1, &Ok, this);
-    if (!Ok) return;
-    if ( ((level == 0) && (m_doc->canvas()->templ->detailsCount == 0))
-        || (m_doc->canvas()->templ->detailsCount == level))
-    {
-        m_doc->addCommand( new AddDetailCommand(level, m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddDetailFooter(){
-    bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(i18n("Add Detail Footer"), i18n("Enter detail level:"),
-        0, 0, 100, 1, &Ok, this);
-    if (!Ok) return;
-
-    if (m_doc->canvas()->templ->detailsCount >= level)
-    {
-        m_doc->addCommand( new AddDetailFooterCommand(level, m_doc->canvas()) );
-    }
-}
-
-void KudesignerView::slotAddItemNothing(){
-    if (m_doc->canvas())
-    {
-        if (rc->itemToInsert)
-        {
-            rc->itemToInsert = 0;
-        }
-    }
-}
-
-void KudesignerView::slotAddItemLabel(){
-    if (m_doc->canvas())
-    {
-        rc->itemToInsert = KuDesignerRttiCanvasLabel;
-    }
-}
-
-void KudesignerView::slotAddItemField(){
-    if (m_doc->canvas())
-    {
-        rc->itemToInsert = KuDesignerRttiCanvasField;
-    }
-}
-
-void KudesignerView::slotAddItemSpecial(){
-    if (m_doc->canvas())
-    {
-        rc->itemToInsert = KuDesignerRttiCanvasSpecial;
-    }
-}
-
-void KudesignerView::slotAddItemCalculated(){
-    if (m_doc->canvas())
-    {
-        rc->itemToInsert = KuDesignerRttiCanvasCalculated;
-    }
-}
-
-void KudesignerView::slotAddItemLine(){
-    if (m_doc->canvas())
-    {
-        rc->itemToInsert = KuDesignerRttiCanvasLine;
-    }
-}
-
-void KudesignerView::unselectItemAction(){
-    itemsNothing->setChecked(true);
-}
-
-void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
-{
-        if ( ev->activated() ) {
-	    if ((!pe))
-	    {
-        	pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
-		if (m_doc->plugin()) {
-			connect(pe,SIGNAL(createPluggedInEditor(QWidget*&,PropertyEditor *,
-				Property*,CanvasBox *)),
-				m_doc->plugin(),
-				SLOT(createPluggedInEditor(QWidget*&, PropertyEditor *,
-                                Property*,CanvasBox *)));
-
-			kdDebug()<<"*************Property and plugin have been connected"<<endl;
-		}
-	        shell()->addDockWindow(pe, m_doc->propertyPosition());
-	        pe->show();
-
-	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*,CanvasBox*) ), pe,
-        	    SLOT( populateProperties(std::map<QString, PropPtr >*, CanvasBox*) ));
-	        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
-    		connect(pe, SIGNAL(propertyChanged(QString, QString)), rc, SLOT(updateProperty(QString, QString)));
-	    }
-
-
-		pe->show();
-		kdDebug()<<"pe->show()"<<endl;
-        }
-        else
-        {
-		pe->hide();
-		kdDebug()<<"pe->hide()"<<endl;
-        }
-    KoView::guiActivateEvent( ev );
-}
-
-void KudesignerView::placeItem( int x, int y, int band, int bandLevel )
-{
-    m_doc->addCommand(new AddReportItemCommand(m_doc->canvas(), rc, x, y, (KuDesignerCanvasRtti)band, bandLevel) );
+//    kdDebug(31000) << "KudesignerView::copy(): COPY called" << endl;
 }
 
 void KudesignerView::paste( )
@@ -344,4 +275,123 @@ void KudesignerView::selectAll( )
     m_doc->canvas()->selectAll();
 }
 
+void KudesignerView::slotAddReportHeader(){
+    if (!(((KudesignerDoc *)(koDocument())))->canvas()->kugarTemplate()->reportHeader)
+    {
+        m_doc->addCommand( new AddReportHeaderCommand(m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddReportFooter(){
+    if (!(((KudesignerDoc *)(koDocument())))->canvas()->kugarTemplate()->reportFooter)
+    {
+        m_doc->addCommand( new AddReportFooterCommand(m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddPageHeader(){
+    if (!(((KudesignerDoc *)(koDocument())))->canvas()->kugarTemplate()->pageHeader)
+    {
+        m_doc->addCommand( new AddPageHeaderCommand(m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddPageFooter(){
+    if (!(((KudesignerDoc *)(koDocument())))->canvas()->kugarTemplate()->pageFooter)
+    {
+        m_doc->addCommand( new AddPageFooterCommand(m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddDetailHeader(){
+    bool Ok = false;
+    unsigned int level = QInputDialog::getInteger(tr("Add Detail Header"), tr("Enter detail level:"),
+        0, 0, 100, 1, &Ok, this);
+    if (!Ok) return;
+    if (m_doc->canvas()->kugarTemplate()->detailsCount >= level)
+    {
+        m_doc->addCommand( new AddDetailHeaderCommand(level, m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddDetail(){
+    bool Ok = false;
+    unsigned int level = QInputDialog::getInteger(tr("Add Detail"), tr("Enter detail level:"),
+        0, 0, 100, 1, &Ok, this);
+    if (!Ok) return;
+    if ( ((level == 0) && (m_doc->canvas()->kugarTemplate()->detailsCount == 0))
+        || (m_doc->canvas()->kugarTemplate()->detailsCount == level))
+    {
+        m_doc->addCommand( new AddDetailCommand(level, m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddDetailFooter(){
+    bool Ok = false;
+    unsigned int level = QInputDialog::getInteger(tr("Add Detail Footer"), tr("Enter detail level:"),
+        0, 0, 100, 1, &Ok, this);
+    if (!Ok) return;
+
+    if (m_doc->canvas()->kugarTemplate()->detailsCount >= level)
+    {
+        m_doc->addCommand( new AddDetailFooterCommand(level, m_doc->canvas()) );
+    }
+}
+
+void KudesignerView::slotAddItemNothing(){
+    if (m_doc->canvas())
+    {
+        if (m_view->itemToInsert)
+        {
+            m_view->itemToInsert = 0;
+        }
+    }
+}
+
+void KudesignerView::slotAddItemLabel(){
+    if (m_doc->canvas())
+    {
+        m_view->itemToInsert = Rtti_Label;
+    }
+}
+
+void KudesignerView::slotAddItemField(){
+    if (m_doc->canvas())
+    {
+        m_view->itemToInsert = Rtti_Field;
+    }
+}
+
+void KudesignerView::slotAddItemSpecial(){
+    if (m_doc->canvas())
+    {
+        m_view->itemToInsert = Rtti_Special;
+    }
+}
+
+void KudesignerView::slotAddItemCalculated(){
+    if (m_doc->canvas())
+    {
+        m_view->itemToInsert = Rtti_Calculated;
+    }
+}
+
+void KudesignerView::slotAddItemLine(){
+    if (m_doc->canvas())
+    {
+        m_view->itemToInsert = Rtti_Line;
+    }
+}
+
+void KudesignerView::unselectItemAction(){
+/*    itemsNothing->setOn(true);*/
+}
+
+void KudesignerView::placeItem( int x, int y, int band, int bandLevel )
+{
+    m_doc->addCommand(new AddReportItemCommand(m_doc->canvas(), m_view, x, y, (Kudesigner::RttiValues)band, bandLevel) );
+}
+
+#ifndef PURE_QT
 #include "kudesigner_view.moc"
+#endif

@@ -20,30 +20,33 @@
 
 #include <qobject.h>
 #include <property.h>
+#include <editor.h>
+#include <box.h>
 
-class PropertyEditor;
 class QString;
-class CanvasBox;
 class QWidget;
 class CanvasReportItem;
 class KoStore;
 
+using namespace KOProperty;
+using namespace Kudesigner;
+
 class KuDesignerPlugin: public QObject {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KuDesignerPlugin(QObject *parent, const char* name, const QStringList& args);
-	virtual ~KuDesignerPlugin();
+    KuDesignerPlugin(QObject *parent, const char* name, const QStringList& args);
+    virtual ~KuDesignerPlugin();
         virtual bool acceptsDrops(){return false;}
-	virtual bool dragMove(QDragMoveEvent *,CanvasBox *cb) {return false;}
-	virtual void newCanvasBox(int type, CanvasBox *cb){;}
-        virtual void modifyItemPropertyOnSave(CanvasReportItem *item, const PropPtr & p ,QString &propertyName,QString &propertyValue){;}
-        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item, const PropPtr & p,QString &propertyName,QString &propertyValue){;}
+    virtual bool dragMove(QDragMoveEvent *, Box *cb) {return false;}
+    virtual void newCanvasBox(int type, Box *cb){;}
+        virtual void modifyItemPropertyOnSave(CanvasReportItem *item, const Property & p ,QString &propertyName,QString &propertyValue){;}
+        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item, const Property & p,QString &propertyName,QString &propertyValue){;}
         virtual bool store (KoStore*){return true;}
         virtual bool load (KoStore*){return true;}
 
 public slots:
-    virtual void createPluggedInEditor(QWidget *& retVal, PropertyEditor *editor,
-        Property *property,CanvasBox *);
+    virtual void createPluggedInEditor(QWidget *& retVal, Editor *editor,
+        Property *property, Box *);
 };
 
 #endif

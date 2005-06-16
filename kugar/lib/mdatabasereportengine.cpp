@@ -3,7 +3,7 @@
 							 -------------------
 	begin				 : 2003-03-22 23:58:12
 	copyright			 : (C) 2003 by Joris Marcillac
-	email				 : joris@marcillac.org
+	email				 : joris@marcillac.com
 **************************************************************************/
 /**************************************************************************
 *                                                                         *
@@ -247,7 +247,7 @@ void MDatabaseReportEngine::initDatabase()
 	// create the database object
     QSqlDatabase* db = QSqlDatabase::addDatabase( m_strDriverType );
     if ( !db ) {
-		//QMessageBox::warning( 0, tr( "Database Connection Error" ), tr( "Could not open driver database." ) );
+		//QMessageBox::warning( 0, tr( "Database connection Error" ), tr( "Could not open driver database." ) );
 		qWarning( "Could not open driver database." );
 		return;
     }
@@ -262,7 +262,7 @@ void MDatabaseReportEngine::initDatabase()
 			"Failed to open database: " +
 			db->lastError().driverText() +
 			db->lastError().databaseText() ;
-		//QMessageBox::critical( this, tr("Database Connection Error"), strError );
+		//QMessageBox::critical( this, tr("Database connection Error"), strError );
 		qWarning( "%s", strError.local8Bit().data() );
 		return;
     }
@@ -453,7 +453,7 @@ void MDatabaseReportEngine::setHeaderDataFile()
 /** pop up a dialog to ask the user for create a database connection */
 void MDatabaseReportEngine::initDatabaseDlg()
 {
-//	ConnectDialog* cnnDlg = new ConnectDialog( 0, tr("Database Connection Dialog"), TRUE );
+//	ConnectDialog* cnnDlg = new ConnectDialog( 0, tr("Database connection dialog"), TRUE );
 //    if ( cnnDlg->exec() != QDialog::Accepted )
 //		return;
     // set data for the new connection

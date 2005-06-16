@@ -1,10 +1,10 @@
 /***************************************************************************
               mreportsection.h  -  Kugar report section
               -------------------
-    begin     : Mon Aug 23 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
-    copyright : (C) 2002 Alexander Dymo
+    begin     : Mon Aug 23 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
+    copyright : (C) 2002-2004 Alexander Dymo
     email     : cloudtemple@mksat.net
  ***************************************************************************/
 
@@ -18,6 +18,7 @@
 #include "mlabelobject.h"
 #include "mspecialobject.h"
 #include "mcalcobject.h"
+#include "mfieldobject.h"
 
 /**Kugar report section
   *@author Mutiny Bay Software
@@ -30,13 +31,13 @@ public:
   enum PrintFrequency { FirstPage = 0, EveryPage, LastPage };
 
   /** Constructor */
-	MReportSection();
+    MReportSection();
   /** Copy constructor */
   MReportSection(const MReportSection& mReportSection);
   /** Assignment operator */
   MReportSection operator=(const MReportSection& mReportSection);
   /** Destructor */
-	virtual ~MReportSection();
+    virtual ~MReportSection();
 
 protected:
   /** Sections's height */
@@ -50,7 +51,7 @@ protected:
   /** Report date - used by special fields */
   QDate reportDate;
 
-	/** Section's line collection */
+    /** Section's line collection */
   QPtrList<MLineObject> lines;
   /** Section's label collection */
   QPtrList<MLabelObject> labels;
@@ -58,12 +59,16 @@ protected:
   QPtrList<MSpecialObject> specialFields;
   /** Section's calculated field collection */
   QPtrList<MCalcObject> calculatedFields;
+  /** Section's field collection (for use as report variables) */
+  QPtrList<MFieldObject> fields;
 
 public:
-	/** Adds a new line object to the section's line collection */
+    /** Adds a new line object to the section's line collection */
   void addLine(MLineObject* line);
   /** Adds a new label object to the section's label collection */
   void addLabel(MLabelObject* label);
+  /** Adds a new field object to the section's field collection */
+  void addField(MFieldObject* field);
   /** Adds a new special field object to the section's special field collection */
   void addSpecialField(MSpecialObject* special);
   /** Adds a new calculated field object to the section's calculated field collection */
@@ -94,6 +99,8 @@ public:
   void setCalcFieldData(QPtrList<QMemArray<double> >* values);
   /** Returns the number of calculated fields in the section */
   int getCalcFieldCount();
+  /** Sets the field data */
+  void setFieldData(QString name, QString data);
   /** Draws the section to the specified painter & x/y-offsets */
   virtual void draw(QPainter* p, int xoffset, int yoffset);
   /** Frees all resources allocated by the report section */

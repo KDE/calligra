@@ -4,31 +4,38 @@
     begin     : Wed Aug 11 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2004 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #include "mreportobject.h"
 
 /** Constructor */
 MReportObject::MReportObject() : QObject(){
-	// Set the object's default geometry
-	xpos = 0;
-	ypos = 0;
-	width = 40;
-	height = 23;
+    // Set the object's default geometry
+    xpos = 0;
+    ypos = 0;
+    width = 40;
+    height = 23;
 
-	// Set the object's default colors
-	backgroundColor.setRgb(255, 255, 255);
-	foregroundColor.setRgb(0, 0, 0);
+    // Set the object's default colors
+    backgroundColor.setRgb(255, 255, 255);
+    foregroundColor.setRgb(0, 0, 0);
 
-	// Set the object's default border attributes
-	borderColor.setRgb(0, 0, 0);
-	borderWidth = 1;
+    // Set the object's default border attributes
+    borderColor.setRgb(0, 0, 0);
+    borderWidth = 1;
   borderStyle = MReportObject::SolidLine;
+
+    drawLeft = true;
+    drawRight = true;
+    drawTop = true;
+    drawBottom = true;
 }
 
 /** Copy constructor */
 MReportObject::MReportObject(const MReportObject& mReportObject) /*: QObject((QObject &) mReportObject)*/{
-  copy(&mReportObject);	
+  copy(&mReportObject);
 }
 
 /** Assignment operator */
@@ -41,7 +48,7 @@ MReportObject MReportObject::operator=(const MReportObject& mReportObject){
   // Copy the base class's data
   //((QObject &) *this) = mReportObject;
 
-	return *this;
+    return *this;
 }
 
 /** Destructor */
@@ -64,13 +71,21 @@ void MReportObject::drawBase(QPainter* p, int xoffset, int yoffset){
 
   // Set background in specified color
   p->setBrush(bgBrush);
-	p->setPen(borderPen);
+    p->setPen(Qt::NoPen);
   p->drawRect(xcalc, ycalc, width, height);
 
   // Set border
   if(borderStyle != 0){
     p->setPen(borderPen);
-    p->drawRect(xcalc, ycalc, width, height);
+    if (drawLeft)
+        p->drawLine(xcalc, ycalc, xcalc, ycalc+height);
+    if (drawRight)
+        p->drawLine(xcalc+width, ycalc, xcalc+width, ycalc+height);
+    if (drawTop)
+        p->drawLine(xcalc, ycalc, xcalc+width, ycalc);
+    if (drawBottom)
+        p->drawLine(xcalc, ycalc+height, xcalc+width, ycalc+height);
+//    p->drawRect(xcalc, ycalc, width, height);
   }
   else {
     p->setPen(QPen(QColor(255,255,255), 1, QPen::SolidLine));
@@ -80,16 +95,16 @@ void MReportObject::drawBase(QPainter* p, int xoffset, int yoffset){
 
 /** Set the object's position and size */
 void MReportObject::setGeometry(int x, int y, int w, int h){
-	xpos = x;
-	ypos = y;
-	width = w;
-	height = h;	
+    xpos = x;
+    ypos = y;
+    width = w;
+    height = h;
 }
 
 /** Set the object's position */
 void MReportObject::move(int x, int y){
-	xpos = x;
-	ypos = y;
+    xpos = x;
+    ypos = y;
 }
 
 /** Gets the object's x position */
@@ -109,43 +124,79 @@ void MReportObject::setBackgroundColor(int r, int g, int b){
 
 /** Sets the object's foreground color */
 void MReportObject::setForegroundColor(int r, int g, int b){
-	foregroundColor.setRgb(r, g, b);
+    foregroundColor.setRgb(r, g, b);
 }
 
 /** Sets the object's border color */
 void MReportObject::setBorderColor(int r, int g, int b){
-	borderColor.setRgb(r, g, b);
+    borderColor.setRgb(r, g, b);
 }
 
 /** Sets the object's border width */
 void MReportObject::setBorderWidth(int width){
-	borderWidth = width;
+    borderWidth = width;
 }
 
 /** Sets the object's border style */
 void MReportObject::setBorderStyle(int style){
-	borderStyle = style;
+    borderStyle = style;
 }
 
 /** Copies member data from one object to another.
     Used by the copy constructor and assignment operator */
 void MReportObject::copy(const MReportObject* mReportObject){
   // Copy the object's geometry
-	xpos = mReportObject->xpos;
-	ypos = mReportObject->ypos;
-	width = mReportObject->width;
-	height = mReportObject->height;
+    xpos = mReportObject->xpos;
+    ypos = mReportObject->ypos;
+    width = mReportObject->width;
+    height = mReportObject->height;
 
   // Copy the colors
   backgroundColor = mReportObject->backgroundColor;
-	foregroundColor = mReportObject->foregroundColor;
+    foregroundColor = mReportObject->foregroundColor;
 
-	// Copy the border attributes
-	borderColor = mReportObject->borderColor;
-	borderWidth = mReportObject->borderWidth;
+    // Copy the border attributes
+    borderColor = mReportObject->borderColor;
+    borderWidth = mReportObject->borderWidth;
   borderStyle = mReportObject->borderStyle;
 }
 
+bool MReportObject::getDrawLeft( )
+{
+    return drawLeft;
+}
 
+bool MReportObject::getDrawRight( )
+{
+    return drawRight;
+}
 
+bool MReportObject::getDrawTop( )
+{
+    return drawTop;
+}
 
+bool MReportObject::getDrawBottom( )
+{
+    return drawBottom;
+}
+
+void MReportObject::setDrawLeft( bool d )
+{
+    drawLeft = d;
+}
+
+void MReportObject::setDrawRight( bool d )
+{
+    drawRight = d;
+}
+
+void MReportObject::setDrawTop( bool d )
+{
+    drawTop = d;
+}
+
+void MReportObject::setDrawBottom( bool d )
+{
+    drawBottom = d;
+}

@@ -4,6 +4,8 @@
     begin     : Wed Aug 11 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2004 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #ifndef MREPORTOBJECT_H
@@ -26,7 +28,7 @@ public:
     DotLine, DashDotLine, DashDotDotLine };
 
   /** Constructor */
-  MReportObject();		
+  MReportObject();
   /** Copy constructor */
   MReportObject(const MReportObject& mReportObject);
   /** Assignment operator */
@@ -55,6 +57,14 @@ protected:
   int borderWidth;
   /** Object's border style */
   int borderStyle;
+  /** Draw left border */
+  bool drawLeft;
+  /** Draw right border */
+  bool drawRight;
+  /** Draw top border */
+  bool drawTop;
+  /** Draw bottom border */
+  bool drawBottom;
 
 public:
   /** Draws the object to the specified painter & x/y offsets */
@@ -78,6 +88,24 @@ public:
   /** Sets the object's border style - default is SolidLine*/
   void setBorderStyle(int style);
 
+  /** Gets the draw left border flag */
+  bool getDrawLeft();
+  /** Gets the draw right border flag */
+  bool getDrawRight();
+  /** Gets the draw top border flag */
+  bool getDrawTop();
+  /** Gets the draw bottom border flag */
+  bool getDrawBottom();
+
+  /** Sets the draw left border flag */
+  void setDrawLeft(bool d);
+  /** Sets the draw right border flag */
+  void setDrawRight(bool d);
+  /** Sets the draw top border flag */
+  void setDrawTop(bool d);
+  /** Sets the draw bottom border flag */
+  void setDrawBottom(bool d);
+
 protected:
   /** Draws the base object to the specified painter & x/y offsets */
   void drawBase(QPainter* p, int xoffset, int yoffset);
@@ -91,70 +119,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

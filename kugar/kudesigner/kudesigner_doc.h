@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003-2004 Alexander Dymo <cloudtemple@mksat.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,27 +16,28 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#ifndef KUDESIGNER_PART_H
-#define KUDESIGNER_PART_H
+#ifndef KUDESIGNER_DOC_H
+#define KUDESIGNER_DOC_H
 
 #include <koDocument.h>
 #include <kcommand.h>
 #include <kocommandhistory.h>
 #include "plugin.h"
 
-class MyCanvas;
 class QCanvas;
 class QDomNode;
-class CanvasReportItem;
-class CanvasBand;
-class KCommand;
+class QIODevice;
+class QDomDocument;
 
-class KudesignerDoc : public KoDocument
-{
+namespace Kudesigner {
+class Canvas;
+}
+
+class KudesignerDoc: public KoDocument {
     Q_OBJECT
 public:
     KudesignerDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+
     ~KudesignerDoc();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
@@ -49,7 +50,7 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
 
-    MyCanvas *canvas() const;
+    Kudesigner::Canvas *canvas();
 
     void loadPlugin(const QString& name);
     KuDesignerPlugin *plugin();
@@ -57,6 +58,16 @@ public:
     void setForcedPropertyEditorPosition(Dock);
 
     void addCommand(KCommand *cmd);
+
+    virtual bool modified() const;
+
+signals:
+    void canvasChanged( Kudesigner::Canvas * );
+    void modificationMade(bool);
+
+public slots:
+    virtual void setModified(const bool val);
+    virtual void setModified();
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
@@ -70,20 +81,11 @@ protected slots:
 private:
     KoCommandHistory *history;
 
-    MyCanvas *docCanvas;
+    Kudesigner::Canvas *docCanvas;
 
     KuDesignerPlugin *m_plugin;
     Dock m_propPos;
-
-    void setReportItemAttributes(QDomNode *node, CanvasReportItem *item);
-    void addReportItems(QDomNode *node, CanvasBand *section);
-    void setReportHeaderAttributes(QDomNode *node);
-    void setReportFooterAttributes(QDomNode *node);
-    void setPageHeaderAttributes(QDomNode *node);
-    void setPageFooterAttributes(QDomNode *node);
-    void setDetailHeaderAttributes(QDomNode *node);
-    void setDetailAttributes(QDomNode *node);
-    void setDetailFooterAttributes(QDomNode *node);
+    bool m_modified;
 };
 
 #endif

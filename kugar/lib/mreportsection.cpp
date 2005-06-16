@@ -5,7 +5,7 @@
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
     copyright : (C) 2002 Alexander Dymo
-    email     : cloudtemple@mksat.net	
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #include "mreportsection.h"
@@ -23,10 +23,12 @@ MReportSection::MReportSection(){
   reportDate = QDate::currentDate();
   pageNumber = 0;
 
-	// Set the line list to AutoDelete
+    // Set the line list to AutoDelete
   lines.setAutoDelete( true );
   // Set the label list to AutoDelete
   labels.setAutoDelete( true );
+  // Set the field list to AutoDelete
+  fields.setAutoDelete( true );
   // Set the special field list to AutoDelete
   specialFields.setAutoDelete( true );
 }
@@ -46,25 +48,27 @@ MReportSection MReportSection::operator=(const MReportSection& mReportSection){
   // Copy the base class's data
   //((QObject &) *this) = mReportSection;
 
-	return *this;
+    return *this;
 }
 
 /** Destructor */
 MReportSection::~MReportSection(){
-	clear();
+    clear();
 }
 
 /** Frees all resources allocated by the report section */
 void MReportSection::clear(){
-	clearBase();
+    clearBase();
 }
 
 /** Frees base resources allocated by the report section */
 void MReportSection::clearBase(){
-	// Clear the line collection
+    // Clear the line collection
   lines.clear();
   // Clear the label collection
   labels.clear();
+  // Clear the field collection
+  fields.clear();
   // Clear the special field collection
   specialFields.clear();
   // Clear the calculated field collection
@@ -79,6 +83,12 @@ void MReportSection::addLine(MLineObject* line){
 /** Adds a new label object to the section's label collection */
 void MReportSection::addLabel(MLabelObject* label){
   labels.append(label);
+}
+
+/** Adds a new field object to the section's label collection */
+void MReportSection::addField( MFieldObject * field )
+{
+  fields.append(field);
 }
 
 /** Adds a new special field object to the section's special field collection */
@@ -104,13 +114,13 @@ void MReportSection::setHeight(int h){
 /** Sets the level of the section */
 void MReportSection::setLevel(int l)
 {
-	level = l;
+    level = l;
 }
 
 /** Gets the level of the section */
 int MReportSection::getLevel()
 {
-	return level;
+    return level;
 }
 
 /** Set the current page number - used by special fields */
@@ -152,6 +162,7 @@ void MReportSection::setCalcFieldData(QPtrList<QMemArray<double> >* values){
   MCalcObject* field;
   int i = 0;
 
+  qWarning("here");
   // Calculate and set the calculated field's data
   for (field = calculatedFields.first(); field != 0; field=calculatedFields.next()) {
     switch(field->getCalculationType()){
@@ -159,7 +170,7 @@ void MReportSection::setCalcFieldData(QPtrList<QMemArray<double> >* values){
         field->setText(QString::number(MUtil::count(values->at(i))));
         break;
       case MCalcObject::Sum:
-        field->setText(QString::number(MUtil::sum(values->at(i))));
+        field->setText(QString::number(MUtil::sum(values->at(i)), 'f', 2));
         break;
       case MCalcObject::Average:
         field->setText(QString::number(MUtil::average(values->at(i))));
@@ -200,15 +211,16 @@ void MReportSection::draw(QPainter* p, int xoffset, int yoffset){
 /** Draws the section base objects to the specified painter & x/y offsets */
 void MReportSection::drawObjects(QPainter* p, int xoffset, int yoffset){
   MLineObject* line;
-	MLabelObject* label;
+    MLabelObject* label;
   MSpecialObject* special;
-  MCalcObject* field;
+  MCalcObject* cfield;
+  MFieldObject* field;
 
   // Set the offsets
   int xcalc = xoffset;
   int ycalc = yoffset;
 
-	// Draw the line collection
+    // Draw the line collection
   for (line = lines.first(); line != 0; line=lines.next()) {
     line->draw(p, xcalc, ycalc);
   }
@@ -218,9 +230,14 @@ void MReportSection::drawObjects(QPainter* p, int xoffset, int yoffset){
     label->draw(p, xcalc, ycalc);
   }
 
-  // Draw the calculated field collection
-  for (field = calculatedFields.first(); field != 0; field=calculatedFields.next()) {
+  // Draw the field collection
+  for (field = fields.first(); field != 0; field=fields.next()) {
     field->draw(p, xcalc, ycalc);
+  }
+
+  // Draw the calculated field collection
+  for (cfield = calculatedFields.first(); cfield != 0; cfield=calculatedFields.next()) {
+    cfield->draw(p, xcalc, ycalc);
   }
 
   // Draw the special field collection
@@ -241,18 +258,30 @@ void MReportSection::drawObjects(QPainter* p, int xoffset, int yoffset){
       Used by the copy constructor and assignment operator */
 void MReportSection::copy(const MReportSection* mReportSection){
   // Copy the section's geometry
-	height = mReportSection->height;
+    height = mReportSection->height;
 
   // Copy the print frequency
   frequency = mReportSection->frequency;
 
-	// Copy the line list
+    // Copy the line list
   lines = mReportSection->lines;
   // Copy the label list
   labels = mReportSection->labels;
+  // Copy the field list
+  fields = mReportSection->fields;
   // Copy the special field list
   specialFields = mReportSection->specialFields;
   // Copy the calculated field list
   calculatedFields = mReportSection->calculatedFields;
+}
+
+void MReportSection::setFieldData( QString name, QString data )
+{
+  MFieldObject* field;
+  for (field = fields.first(); field != 0; field=fields.next()) {
+      qWarning("    checking field %s", field->getFieldName().ascii());
+      if (field->getFieldName() == name)
+          field->setText(data);
+  }
 }
 
