@@ -4,6 +4,7 @@ Type=Service
 Name=Abiword Info
 Name[da]=Abiword-info
 Name[es]=Info de Abiword
+Name[ru]=Информация Abiword
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_abiword
 MimeType=application/x-abiword
