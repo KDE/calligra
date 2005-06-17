@@ -1,10 +1,10 @@
 /***************************************************************************
-                          plugin.h  -  description
-                             -------------------
-    begin                : 19.01.2003
-    copyright            : (C) 2003 Joseph Wenninger
-    email                : jowenn@kde.org
- ***************************************************************************/
+                       plugin.h  -  description
+                          -------------------
+ begin                : 19.01.2003
+ copyright            : (C) 2003 Joseph Wenninger
+ email                : jowenn@kde.org
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -31,22 +31,44 @@ class KoStore;
 using namespace KOProperty;
 using namespace Kudesigner;
 
-class KuDesignerPlugin: public QObject {
+class KuDesignerPlugin: public QObject
+{
     Q_OBJECT
 public:
-    KuDesignerPlugin(QObject *parent, const char* name, const QStringList& args);
+    KuDesignerPlugin( QObject *parent, const char* name, const QStringList& args );
     virtual ~KuDesignerPlugin();
-        virtual bool acceptsDrops(){return false;}
-    virtual bool dragMove(QDragMoveEvent *, Box *cb) {return false;}
-    virtual void newCanvasBox(int type, Box *cb){;}
-        virtual void modifyItemPropertyOnSave(CanvasReportItem *item, const Property & p ,QString &propertyName,QString &propertyValue){;}
-        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item, const Property & p,QString &propertyName,QString &propertyValue){;}
-        virtual bool store (KoStore*){return true;}
-        virtual bool load (KoStore*){return true;}
+    virtual bool acceptsDrops()
+    {
+        return false;
+    }
+    virtual bool dragMove( QDragMoveEvent *, Box *cb )
+    {
+        return false;
+    }
+    virtual void newCanvasBox( int type, Box *cb )
+    {
+        ;
+    }
+    virtual void modifyItemPropertyOnSave( CanvasReportItem *item, const Property & p , QString &propertyName, QString &propertyValue )
+    {
+        ;
+    }
+    virtual void modifyItemPropertyOnLoad( CanvasReportItem *item, const Property & p, QString &propertyName, QString &propertyValue )
+    {
+        ;
+    }
+    virtual bool store ( KoStore* )
+    {
+        return true;
+    }
+    virtual bool load ( KoStore* )
+    {
+        return true;
+    }
 
 public slots:
-    virtual void createPluggedInEditor(QWidget *& retVal, Editor *editor,
-        Property *property, Box *);
+    virtual void createPluggedInEditor( QWidget *& retVal, Editor *editor,
+                                        Property *property, Box * );
 };
 
 #endif

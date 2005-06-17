@@ -1,10 +1,10 @@
 /***************************************************************************
-                          plugin.h  -  description
-                             -------------------
-    begin                : 19.01.2003
-    copyright            : (C) 2003 Joseph Wenninger
-    email                : jowenn@kde.org
- ***************************************************************************/
+                       plugin.h  -  description
+                          -------------------
+ begin                : 19.01.2003
+ copyright            : (C) 2003 Joseph Wenninger
+ email                : jowenn@kde.org
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -20,7 +20,10 @@
 #include "plugin.moc"
 #endif
 
-KuDesignerPlugin::KuDesignerPlugin(QObject *parent, const char *name, const QStringList&):QObject(parent,name){}
-KuDesignerPlugin::~KuDesignerPlugin(){}
-void KuDesignerPlugin::createPluggedInEditor(QWidget *&retVal, Editor *editor,
-        Property *property, Box *cb){}
+KuDesignerPlugin::KuDesignerPlugin( QObject *parent, const char *name, const QStringList& ) : QObject( parent, name )
+{}
+KuDesignerPlugin::~KuDesignerPlugin()
+{}
+void KuDesignerPlugin::createPluggedInEditor( QWidget *&retVal, Editor *editor,
+        Property *property, Box *cb )
+{}

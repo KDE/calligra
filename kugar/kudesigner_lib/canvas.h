@@ -1,20 +1,20 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2004 Alexander Dymo <adymo@mksat.net>
+ Copyright (C) 2002-2004 Alexander Dymo <adymo@mksat.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+ You should have received a copy of the GNU Library General Public License
+ along with this library; see the file COPYING.LIB.  If not, write to
+ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ Boston, MA 02111-1307, USA.
 */
 #ifndef MYCANVAS_H
 #define MYCANVAS_H
@@ -28,7 +28,8 @@ class QDomNode;
 class QIODevice;
 class KuDesignerPlugin;
 
-namespace Kudesigner {
+namespace Kudesigner
+{
 
 class KugarTemplate;
 class Band;
@@ -36,29 +37,30 @@ class ReportItem;
 
 typedef QValueList<Box*> BoxList;
 
-class Canvas: public QCanvas{
+class Canvas: public QCanvas
+{
     Q_OBJECT
 public:
-    Canvas(int w, int h);
+    Canvas( int w, int h );
     ~Canvas();
 
     KugarTemplate *kugarTemplate();
-    void setKugarTemplate(KugarTemplate *kugarTemplate);
+    void setKugarTemplate( KugarTemplate *kugarTemplate );
 
-//    KudesignerDoc *document(){return m_doc;}
+    //    KudesignerDoc *document(){return m_doc;}
 
     BoxList selected;
 
     KuDesignerPlugin *plugin();
-    void setPlugin(KuDesignerPlugin *plugin);
+    void setPlugin( KuDesignerPlugin *plugin );
 
     void unselectAll();
     void selectAll();
-    void selectItem(Box *it, bool addToSelection = true);
-    void unselectItem(Box *it);
-//    void deleteSelected();
+    void selectItem( Box *it, bool addToSelection = true );
+    void unselectItem( Box *it );
+    //    void deleteSelected();
 
-    virtual bool loadXML(const QDomNode &report);
+    virtual bool loadXML( const QDomNode &report );
 
 public slots:
     void changed();
@@ -67,21 +69,21 @@ signals:
     void itemSelected();
 
 protected:
-    virtual void drawForeground(QPainter &painter, const QRect &clip);
+    virtual void drawForeground( QPainter &painter, const QRect &clip );
 
-    void setReportItemAttributes(QDomNode *node, ReportItem *item);
-    void addReportItems(QDomNode *node, Band *section);
-    void setReportHeaderAttributes(QDomNode *node);
-    void setReportFooterAttributes(QDomNode *node);
-    void setPageHeaderAttributes(QDomNode *node);
-    void setPageFooterAttributes(QDomNode *node);
-    void setDetailHeaderAttributes(QDomNode *node);
-    void setDetailAttributes(QDomNode *node);
-    void setDetailFooterAttributes(QDomNode *node);
+    void setReportItemAttributes( QDomNode *node, ReportItem *item );
+    void addReportItems( QDomNode *node, Band *section );
+    void setReportHeaderAttributes( QDomNode *node );
+    void setReportFooterAttributes( QDomNode *node );
+    void setPageHeaderAttributes( QDomNode *node );
+    void setPageFooterAttributes( QDomNode *node );
+    void setDetailHeaderAttributes( QDomNode *node );
+    void setDetailAttributes( QDomNode *node );
+    void setDetailFooterAttributes( QDomNode *node );
 
 private:
-//    KudesignerDoc *m_doc;
-    void scaleCanvas(int scale);
+    //    KudesignerDoc *m_doc;
+    void scaleCanvas( int scale );
     KuDesignerPlugin *m_plugin;
     KugarTemplate *m_kugarTemplate;
 

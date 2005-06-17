@@ -1,20 +1,20 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2004 Alexander Dymo <adymo@mksat.net>
+ Copyright (C) 2002-2004 Alexander Dymo <adymo@mksat.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+ You should have received a copy of the GNU Library General Public License
+ along with this library; see the file COPYING.LIB.  If not, write to
+ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ Boston, MA 02111-1307, USA.
 */
 #ifndef COMMAND_H
 #define COMMAND_H
@@ -37,7 +37,8 @@
 
 //class KudesignerDoc;
 
-namespace Kudesigner {
+namespace Kudesigner
+{
 
 class DetailFooter;
 class Detail;
@@ -52,9 +53,10 @@ class View;
 class Canvas;
 class Box;
 
-class AddDetailFooterCommand: public KNamedCommand{
+class AddDetailFooterCommand: public KNamedCommand
+{
 public:
-    AddDetailFooterCommand(int level, Canvas *doc);
+    AddDetailFooterCommand( int level, Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -65,9 +67,10 @@ private:
     DetailFooter *m_section;
 };
 
-class AddDetailCommand: public KNamedCommand{
+class AddDetailCommand: public KNamedCommand
+{
 public:
-    AddDetailCommand(int level, Canvas *doc);
+    AddDetailCommand( int level, Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -78,9 +81,10 @@ private:
     Detail *m_section;
 };
 
-class AddDetailHeaderCommand: public KNamedCommand{
+class AddDetailHeaderCommand: public KNamedCommand
+{
 public:
-    AddDetailHeaderCommand(int level, Canvas *doc);
+    AddDetailHeaderCommand( int level, Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -91,9 +95,10 @@ private:
     DetailHeader *m_section;
 };
 
-class AddPageFooterCommand: public KNamedCommand{
+class AddPageFooterCommand: public KNamedCommand
+{
 public:
-    AddPageFooterCommand(Canvas *doc);
+    AddPageFooterCommand( Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -103,9 +108,10 @@ private:
     PageFooter *m_section;
 };
 
-class AddPageHeaderCommand: public KNamedCommand{
+class AddPageHeaderCommand: public KNamedCommand
+{
 public:
-    AddPageHeaderCommand(Canvas *doc);
+    AddPageHeaderCommand( Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -115,9 +121,10 @@ private:
     PageHeader *m_section;
 };
 
-class AddReportFooterCommand: public KNamedCommand{
+class AddReportFooterCommand: public KNamedCommand
+{
 public:
-    AddReportFooterCommand(Canvas *doc);
+    AddReportFooterCommand( Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -127,9 +134,10 @@ private:
     ReportFooter *m_section;
 };
 
-class AddReportHeaderCommand: public KNamedCommand{
+class AddReportHeaderCommand: public KNamedCommand
+{
 public:
-    AddReportHeaderCommand(Canvas *doc);
+    AddReportHeaderCommand( Canvas *doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -139,9 +147,10 @@ private:
     ReportHeader *m_section;
 };
 
-class AddReportItemCommand: public KNamedCommand{
+class AddReportItemCommand: public KNamedCommand
+{
 public:
-    AddReportItemCommand(Canvas *doc, View *rc, int x, int y, RttiValues section, int sectionLevel = -1);
+    AddReportItemCommand( Canvas *doc, View *rc, int x, int y, RttiValues section, int sectionLevel = -1 );
 
     virtual void execute();
     virtual void unexecute();
@@ -157,9 +166,10 @@ private:
     int m_sectionLevel;
 };
 
-class DeleteReportItemsCommand: public KNamedCommand{
+class DeleteReportItemsCommand: public KNamedCommand
+{
 public:
-    DeleteReportItemsCommand(Canvas *doc, QValueList<Box*>& items);
+    DeleteReportItemsCommand( Canvas *doc, QValueList<Box*>& items );
     virtual void execute();
     virtual void unexecute();
 

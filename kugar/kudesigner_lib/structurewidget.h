@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+*   Copyright (C) 2005 by Alexander Dymo                                  *
+*   adymo@kdevelop.org                                                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU Library General Public License as       *
+*   published by the Free Software Foundation; either version 2 of the    *
+*   License, or (at your option) any later version.                       *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU Library General Public     *
+*   License along with this program; if not, write to the                 *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************/
 #ifndef KUDESIGNERSTRUCTUREWIDGET_H
 #define KUDESIGNERSTRUCTUREWIDGET_H
 
@@ -25,29 +25,31 @@
 
 class KudesignerDoc;
 
-namespace Kudesigner {
+namespace Kudesigner
+{
 
 class Box;
 class Band;
 class Canvas;
 class StructureItem;
 
-class StructureWidget: public KListView {
-Q_OBJECT
+class StructureWidget: public KListView
+{
+    Q_OBJECT
 public:
-    StructureWidget(QWidget* parent = 0, const char* name = 0);
+    StructureWidget( QWidget* parent = 0, const char* name = 0 );
 
 public slots:
     void refresh();
     void selectionMade();
     void selectionClear();
 
-    void selectItem(KListViewItem *item);
-    void setDocument(Kudesigner::Canvas *doc);
+    void selectItem( QListViewItem *item );
+    void setDocument( Kudesigner::Canvas *doc );
 
 private:
-    void refreshSection(Kudesigner::Band *section, StructureItem *root, int level = -1);
-    void refreshSectionContents(Kudesigner::Band *section, StructureItem *root);
+    void refreshSection( Kudesigner::Band *section, StructureItem *root, int level = -1 );
+    void refreshSectionContents( Kudesigner::Band *section, StructureItem *root );
 
     Kudesigner::Canvas *m_doc;
     QMap<Kudesigner::Box*, StructureItem*> m_items;
