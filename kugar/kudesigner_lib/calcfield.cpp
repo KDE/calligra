@@ -43,7 +43,7 @@ CalculatedField::CalculatedField( int x, int y, int width, int height, Canvas *c
     m[ i18n( "Average" ) ] = "2";
     m[ i18n( "Variance" ) ] = "3";
     m[ i18n( "StandardDeviation" ) ] = "4";
-    props.addProperty( new Property( "CalculationType", i18n( "Calculation type" ), i18n( "Calculation type" ), m, "1" ), "Calculation" );
+    props.addProperty( new Property( "CalculationType", i18n( "Type" ), i18n( "Calculation Type" ), m, "1" ), "Calculation" );
 
     registerAs( Rtti_Calculated );
 }

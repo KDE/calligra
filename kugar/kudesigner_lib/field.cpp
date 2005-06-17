@@ -39,14 +39,14 @@ Field::Field( int x, int y, int width, int height, Canvas *canvas, bool reg )
     QMap<QString, QVariant> m;
 
     props.setGroupDescription( "Field", i18n( "Field" ) );
-    props.addProperty( new Property( "Field", i18n( "Field to Display" ), i18n( "Field Name" ), "", KOProperty::String ), "Field" );
+    props.addProperty( new Property( "Field", i18n( "Name" ), i18n( "Field Name" ), "", KOProperty::String ), "Field" );
 
     m[ i18n( "String" ) ] = "0";
     m[ i18n( "Integer" ) ] = "1";
     m[ i18n( "Float" ) ] = "2";
     m[ i18n( "Date" ) ] = "3";
     m[ i18n( "Currency" ) ] = "4";
-    props.addProperty( new Property( "DataType", i18n( "Data Type" ), "d", m, "0", KOProperty::String ), "Field" );
+    props.addProperty( new Property( "DataType", i18n( "Type" ), "d", m, "0", KOProperty::String ), "Field" );
     m.clear();
 
     m[ i18n( "m/d/y" ) ] = "0";
@@ -63,13 +63,13 @@ Field::Field( int x, int y, int width, int height, Canvas *canvas, bool reg )
     m[ i18n( "dd.mm.yyyy" ) ] = "11";
 
     //TODO: make date format not hard-coded, use locale settings
-    props.addProperty( new Property( "DateFormat", i18n( "Date format" ), i18n( "Date format" ), m, "11", KOProperty::String ), "Field" );
+    props.addProperty( new Property( "DateFormat", i18n( "Date Format" ), i18n( "Date Format" ), m, "11", KOProperty::String ), "Field" );
     m.clear();
 
-    props.addProperty( new Property( "Precision", i18n( "Number of Digits After Comma" ), i18n( "Number of Digits After Comma" ), 2, KOProperty::Integer ), "Field" );
+    props.addProperty( new Property( "Precision", i18n( "Precision" ), i18n( "Number of Digits After Comma" ), 2, KOProperty::Integer ), "Field" );
 
     //TODO: make currency locale-aware
-    props.addProperty( new Property( "Currency", i18n( "Currency Symbol" ), i18n( "Currency Symbol" ), 32, KOProperty::Symbol ), "Field" );
+    props.addProperty( new Property( "Currency", i18n( "Currency" ), i18n( "Currency Symbol" ), 32, KOProperty::Symbol ), "Field" );
 
     props.addProperty( new Property( "NegValueColor", i18n( "Negative Value Color" ), i18n( "Negative Value Color" ), QColor( 0, 0, 0 ),  KOProperty::Color ), "Field" );
 

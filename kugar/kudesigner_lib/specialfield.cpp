@@ -38,7 +38,7 @@ SpecialField::SpecialField( int x, int y, int width, int height, Canvas *canvas 
 
     m[ i18n( "Date" ) ] = "0";
     m[ i18n( "PageNumber" ) ] = "1";
-    props.addProperty( new Property( "Type", i18n( "Special Field Type" ), i18n( "Special Field Type" ), m, "0" ), "SpecialField" );
+    props.addProperty( new Property( "Type", i18n( "Type" ), i18n( "Special Field Type" ), m, "0" ), "SpecialField" );
     m.clear();
 
     m[ i18n( "m/d/y" ) ] = "0";
@@ -54,7 +54,7 @@ SpecialField::SpecialField( int x, int y, int width, int height, Canvas *canvas 
     m[ i18n( "dd.mm.yy" ) ] = "10";
     m[ i18n( "dd.mm.yyyy" ) ] = "11";
     //TODO: make date format not hard-coded, use locale settings
-    props.addProperty( new Property( "DateFormat", i18n( "Date format" ), i18n( "Date format" ), m, "11" ), "SpecialField" );
+    props.addProperty( new Property( "DateFormat", i18n( "Date Format" ), i18n( "Date Format" ), m, "11" ), "SpecialField" );
 }
 
 void SpecialField::draw( QPainter &painter )
