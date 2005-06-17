@@ -77,7 +77,7 @@ QImage* getImg(const unsigned char* data, int id)
 	return img;
 }
 
-static void initImages()
+static void initRecordMarkerImages()
 {
 	if (!KexiRecordMarker_pen) {
 /*! @warning not reentrant! */
@@ -99,18 +99,18 @@ KexiRecordMarker::KexiRecordMarker(QWidget *parent, const char* name)
 	
 //	getImg(m_penImg, img_pen_data, 0);
 //	getImg(m_plusImg, img_plus_data, 1);
-	initImages();
+	initRecordMarkerImages();
 }
 
 QImage* KexiRecordMarker::penImage()
 {
-	initImages();
+	initRecordMarkerImages();
 	return KexiRecordMarker_pen;
 }
 
 QImage* KexiRecordMarker::plusImage()
 {
-	initImages();
+	initRecordMarkerImages();
 	return KexiRecordMarker_plus;
 }
 

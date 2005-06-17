@@ -76,7 +76,7 @@ QPixmap* getPix(int id)
 	return pix;
 }
 
-static void initImages()
+static void initDisplayUtilsImages()
 {
 	if (!KexiDisplayUtils_autonum) {
 /*! @warning not reentrant! */
@@ -88,7 +88,7 @@ static void initImages()
 
 void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget)
 {
-	initImages();
+	initDisplayUtilsImages();
 
 	par.textColor = Qt::blue;
 	par.font = widget->font();
