@@ -60,7 +60,7 @@ void KudesignerDoc::addCommand(KCommand *cmd)
 {
     cmd->execute();
     setModified(true);
-    history->addCommand(cmd);
+/*    history->addCommand(cmd);*/
 }
 
 bool KudesignerDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
