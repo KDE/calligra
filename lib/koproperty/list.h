@@ -165,7 +165,7 @@ class KPROPERTY_EXPORT Buffer : public PtrList
 
     public:
         Buffer();
-        Buffer(PtrList *list);
+        Buffer(const PtrList *list);
 
         /*! Intersects with other PtrList.*/
         virtual void intersect(const PtrList *list);
@@ -173,6 +173,9 @@ class KPROPERTY_EXPORT Buffer : public PtrList
     protected slots:
         void intersectedChanged(Property *prop, PtrList *list);
         void intersectedReset(Property *prop, PtrList *list);
+
+    private:
+        void initialList(const PtrList *list);
 };
 
 

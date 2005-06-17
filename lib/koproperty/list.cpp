@@ -324,10 +324,26 @@ PtrList::setPrevSelection(const QCString &prevSelection)
 Buffer::Buffer()
     :PtrList(false)
 {
+    connect( this, SIGNAL( propertyChanged( Property*, PtrList* ) ),
+              this, SLOT(intersectedChanged( Property*, PtrList* ) ) );
+
+    connect( this, SIGNAL( propertyReset( Property*, PtrList* ) ),
+             this, SLOT(intersectedReset( Property*, PtrList* ) ) );
 }
 
-Buffer::Buffer(PtrList *list)
+Buffer::Buffer(const PtrList *list)
     :PtrList(false)
+{
+    connect( this, SIGNAL( propertyChanged( Property*, PtrList* ) ),
+             this, SLOT(intersectedChanged( Property*, PtrList* ) ) );
+
+    connect( this, SIGNAL( propertyReset( Property*, PtrList* ) ),
+             this, SLOT(intersectedReset( Property*, PtrList* ) ) );
+
+    initialList( list );
+}
+
+void Buffer::initialList(const PtrList *list)
 {
     //deep copy of m_list
     for(Property::DictIterator it( list->d->dict ); it.current(); ++it)
@@ -339,15 +355,16 @@ Buffer::Buffer(PtrList *list)
         addProperty( prop, group );
         prop->addRelatedProperty( it.current() );
     }
-    connect( this, SIGNAL( propertyChanged( Property*, PtrList* ) ),
-             this, SLOT(intersectedChanged( Property*, PtrList* ) ) );
-
-    connect( this, SIGNAL( propertyReset( Property*, PtrList* ) ),
-             this, SLOT(intersectedReset( Property*, PtrList* ) ) );
 }
 
 void Buffer::intersect(const PtrList *list)
 {
+    if ( d->dict.isEmpty() )
+    {
+        initialList( list );
+        return;
+    }
+
     for(Property::DictIterator it( d->dict ); it.current(); ++it)
     {
         const char* key = it.current()->name();
@@ -361,15 +378,9 @@ void Buffer::intersect(const PtrList *list)
                 continue;
             }
         }
-
-//         --it;
-        removeProperty( key );
+        else
+            removeProperty( key );
     }
-    connect( this, SIGNAL( propertyChanged( Property*, PtrList* ) ),
-             this, SLOT( intersectedChanged( Property*, PtrList* ) ) );
-
-    connect( this, SIGNAL( propertyReset( Property*, PtrList* ) ),
-             this, SLOT(intersectedReset( Property*, PtrList* ) ) );
 }
 
 void Buffer::intersectedChanged(Property *prop, PtrList *list)
