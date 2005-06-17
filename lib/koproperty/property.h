@@ -24,9 +24,6 @@
 
 #include <qvariant.h>
 
-template<class U> class QAsciiDict;
-template<class U> class QAsciiDictIterator;
-
 /*! \brief
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -142,9 +139,6 @@ class KPROPERTY_EXPORT Property
 {
     public:
         QT_STATIC_CONST Property null;
-
-        typedef QAsciiDict<Property> Dict;
-        typedef QAsciiDictIterator<Property> DictIterator;
 
         Property();
         Property(const QCString &name, const QString &caption=QString::null, const QString &description=QString::null,

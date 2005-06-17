@@ -23,7 +23,6 @@
 #define KPROPERTY_LIST_H
 
 #include <qobject.h>
-#include <qasciidict.h>
 
 /*! \brief
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -34,6 +33,8 @@ namespace KOProperty {
 class Property;
 class PtrListPrivate;
 
+typedef QValueList<Property*> PropertyList;
+typedef QValueListIterator<Property*> PropertyListIterator;
 typedef QMap<QCString, QValueList<QCString> > StringListMap ;
 typedef QMapIterator<QCString, QStringList> StringListMapIterator;
 
@@ -67,7 +68,7 @@ class KPROPERTY_EXPORT PtrList : public QObject
                 Property*  current();
 
             private:
-                QAsciiDictIterator<Property> *iterator;
+                PropertyList::iterator iterator;
                 friend class PtrList;
         };
 

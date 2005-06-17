@@ -22,7 +22,8 @@
 #include "list.h"
 #include "property.h"
 
-#include <qasciidict.h>
+// #include <qasciidict.h>
+#include <qvaluelist.h>
 
 #ifdef QT_ONLY
 // \todo
@@ -36,11 +37,12 @@ namespace KOProperty {
 class KPROPERTY_EXPORT PtrListPrivate
 {
     public:
-        PtrListPrivate() : dict(101, false){}
+        PtrListPrivate() /*: dict(101, false)*/{}
         ~PtrListPrivate(){}
 
     //dict of properties in form name: property
-    Property::Dict dict;
+//     Property::Dict dict;
+    PropertyList properties;
     //groups of properties:
     // list of group name: (list of property names)
     StringListMap propertiesOfGroup;
@@ -52,41 +54,74 @@ class KPROPERTY_EXPORT PtrListPrivate
     static Property nonConstNull;
     QCString prevSelection;
     //QString typeName;
+
+    bool contains(const QCString &name)
+    {
+        PropertyList::iterator it = properties.begin();
+        for( ; it != properties.end(); ++it )
+            if ( ( *it )->name() == name )
+                return true;
+
+        return false;
+    }
+
+    Property* operator[](const QCString &name)
+    {
+        PropertyList::iterator it = properties.begin();
+        for( ; it != properties.end(); ++it )
+            if ( ( *it )->name() == name )
+                return ( *it );
+
+        return 0L;
+    }
+
+    Property* take(const QCString &name)
+    {
+        Property *p = 0L;
+        PropertyList::iterator it = properties.begin();
+        for( ; it != properties.end(); ++it )
+            if ( ( *it )->name() == name )
+            {
+                p = ( *it );
+/*                properties.remove( it );*/
+            }
+        return p;
+    }
+
 };
 
 //PtrList::Iterator class
 PtrList::Iterator::Iterator(const PtrList &list)
 {
-    iterator = new Property::DictIterator(list.d->dict);
+    iterator = list.d->properties.begin();
 }
 
 PtrList::Iterator::~Iterator()
 {
-    delete iterator;
 }
 
 void
 PtrList::Iterator::operator ++()
 {
-    ++(*iterator);
+    ++(iterator);
 }
 
 Property*
 PtrList::Iterator::operator *()
 {
-    return current();
+    return (*iterator);
 }
 
 QString
 PtrList::Iterator::currentKey()
 {
-    return iterator->currentKey();
+    return (*iterator)->name();
 }
 
 Property*
 PtrList::Iterator::current()
 {
-    return iterator->current();
+    return (*iterator);
 }
 
  //////////////////////////////////////////////
@@ -130,12 +165,12 @@ PtrList::addProperty(Property *property, QCString group)
     if (property == 0)
         return;
 
-    if(d->dict.find(property->name())) {
-        Property *p = d->dict[property->name()];
+    if(d->contains(property->name())) {
+        Property *p = (*d)[property->name()];
         p->addRelatedProperty(property);
     }
     else {
-        d->dict.insert(property->name(), property);
+        d->properties.append(property);
         addToGroup(group, property);
     }
 
@@ -157,7 +192,7 @@ PtrList::removeProperty(const QCString &name)
     if(name.isNull())
         return;
 
-    Property *p = d->dict.take(name);
+    Property *p = d->take(name);
     removeFromGroup(p);
     if(d->ownProperty) {
         emit aboutToDeleteProperty(p, this);
@@ -168,8 +203,9 @@ PtrList::removeProperty(const QCString &name)
 void
 PtrList::clear()
 {
-    for(Property::DictIterator it(d->dict); it.current(); ++it)
-        removeProperty(it.current()->name());
+    PropertyList::iterator it = d->properties.begin();
+    for( ; it != d->properties.end(); ++it)
+        removeProperty( ( *it ) ->name() );
 }
 
 /////////////////////////////////////////////////////
@@ -228,25 +264,25 @@ PtrList::groupDescription(const QCString &group)
 uint
 PtrList::count() const
 {
-    return d->dict.count();
+    return d->properties.count();
 }
 
 bool
 PtrList::isEmpty() const
 {
-    return d->dict.count() == 0;
+    return d->properties.count() == 0;
 }
 
 bool
 PtrList::contains(const QCString &name)
 {
-    return d->dict.find(name);
+    return d->contains(name);
 }
 
 Property&
 PtrList::property(const QCString &name)
 {
-    Property *p = d->dict.find(name);
+    Property *p = (*d)[name];
     if(!p) {
         p = new Property(name);
         addProperty(p);
@@ -267,7 +303,7 @@ PtrList::operator= (const PtrList &l)
     if(&l == this)
         return *this;
 
-    d->dict.clear();
+    d->properties.clear();
     d->groupForProperty.clear();
 
     d->ownProperty = l.d->ownProperty;
@@ -276,9 +312,11 @@ PtrList::operator= (const PtrList &l)
     d->propertiesOfGroup = l.d->propertiesOfGroup;
 
     // Copy all properties in the list
-    for(Property::DictIterator it(l.d->dict); it.current(); ++it) {
-        Property *prop = new Property( *it.current() );
-        addProperty(prop, l.d->groupForProperty[ it.current() ] );
+    PropertyList::iterator it = d->properties.begin();
+    for( ; it != d->properties.end(); ++it)
+    {
+        Property *prop = new Property( *( ( *it ) ) );
+        addProperty(prop, l.d->groupForProperty[ ( *it ) ] );
     }
 
     return *this;
@@ -287,7 +325,7 @@ PtrList::operator= (const PtrList &l)
 void
 PtrList::changeProperty(const QCString &property, const QVariant &value)
 {
-    Property *p = d->dict.find(property);
+    Property *p = (*d)[property];
     if(p)
         p->setValue(value);
 }
@@ -298,14 +336,15 @@ void
 PtrList::debug()
 {
     //kdDebug(45000) << "List: typeName='" << m_typeName << "'" << endl;
-    if(d->dict.isEmpty()) {
+    if(d->properties.isEmpty()) {
         kdDebug(100300) << "<EMPTY>" << endl;
         return;
     }
-    kdDebug(100300) << d->dict.count() << " properties:" << endl;
+    kdDebug(100300) << d->properties.count() << " properties:" << endl;
 
-    for(Property::DictIterator it(d->dict); it.current(); ++it)
-        it.current()->debug();
+    PropertyList::iterator it = d->properties.begin();
+    for( ; it != d->properties.end(); ++it)
+        (* it )->debug();
 }
 
 QCString
@@ -346,35 +385,37 @@ Buffer::Buffer(const PtrList *list)
 void Buffer::initialList(const PtrList *list)
 {
     //deep copy of m_list
-    for(Property::DictIterator it( list->d->dict ); it.current(); ++it)
+    PropertyList::iterator it = list->d->properties.begin();
+    for( ; it != list->d->properties.end(); ++it)
     {
-        Property *prop = new Property( *it.current() );
-        QCString group = list->d->groupForProperty[ it.current() ];
+        Property *prop = new Property( *( *it ) );
+        QCString group = list->d->groupForProperty[ ( *it ) ];
         QString groupDesc = list->d->groupsDescription[ group ];
         setGroupDescription( group, groupDesc );
         addProperty( prop, group );
-        prop->addRelatedProperty( it.current() );
+        prop->addRelatedProperty( ( *it ) );
     }
 }
 
 void Buffer::intersect(const PtrList *list)
 {
-    if ( d->dict.isEmpty() )
+    if ( d->properties.isEmpty() )
     {
         initialList( list );
         return;
     }
 
-    for(Property::DictIterator it( d->dict ); it.current(); ++it)
+    PropertyList::iterator it = d->properties.begin();
+    for( ; it != d->properties.end(); ++it)
     {
-        const char* key = it.current()->name();
-        if ( Property *property = list->d->dict.find( key ) )
+        const char* key = ( *it )->name();
+        if ( Property *property = ( *( list->d ) )[ key ] )
         {
-            if ( ( ( it.current() ) == property ) &&
+            if ( ( ( ( *it ) ) == property ) &&
                  ( list->d->groupForProperty[ property ] ==
-                   d->groupForProperty[ it.current() ] ) )
+                   d->groupForProperty[ ( *it ) ] ) )
             {
-                it.current()->addRelatedProperty( property );
+                ( *it )->addRelatedProperty( property );
                 continue;
             }
         }
