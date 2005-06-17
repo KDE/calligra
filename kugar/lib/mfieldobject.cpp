@@ -100,7 +100,8 @@ void MFieldObject::setText(const QString txt){
                 text = txt;
       break;
     case MFieldObject::Currency:
-      text.setNum(txt.toDouble(), 'f', 2);
+      int prec = precision < 2 ? precision : 2;
+      text.setNum(txt.toDouble(), 'f', prec);
             if (comma) formatCommas();
             formatNegValue();
             text = QString(currency + text);
@@ -155,8 +156,8 @@ void MFieldObject::formatNegValue(){
 
 /** Formats the string representation of a number with comma separators */
 void MFieldObject::formatCommas(){
-    text = text.replace(".", ",");
-/*    QString tmp;
+//     text = text.replace(".", ",");
+    QString tmp;
     int i, j;
     int offset;
 
@@ -188,7 +189,7 @@ void MFieldObject::formatCommas(){
     if (offset) tmp = "-" + tmp;
 
     // Set the new string to the field
-    text = tmp;*/
+    text = tmp;
 }
 
 /** Copies member data from one object to another.

@@ -337,7 +337,7 @@ MPageCollection* MReportEngine::renderReport(){
                     if (footer)
                     {
                         qWarning("drawing detail footer: %d",  footer->getLevel());
-                        
+
                         footer->setPageNumber(currPage);
                         footer->setReportDate(currDate);
                         footer->setCalcFieldData(&grandTotal);
@@ -846,13 +846,13 @@ void MReportEngine::setLabelAttributes(MLabelObject* label, QDomNamedNodeMap* at
   label->setBorderWidth(attr->namedItem("BorderWidth").nodeValue().toInt());
   label->setBorderStyle(attr->namedItem("BorderStyle").nodeValue().toInt());
   if (!attr->namedItem("DrawBottom").isNull())
-      label->setDrawBottom(attr->namedItem("DrawBottom").nodeValue().toInt());
+      label->setDrawBottom(attr->namedItem("DrawBottom").nodeValue() == "true");
   if (!attr->namedItem("DrawTop").isNull())
-      label->setDrawTop(attr->namedItem("DrawTop").nodeValue().toInt());
+      label->setDrawTop(attr->namedItem("DrawTop").nodeValue() == "true");
   if (!attr->namedItem("DrawLeft").isNull())
-      label->setDrawLeft(attr->namedItem("DrawLeft").nodeValue().toInt());
+      label->setDrawLeft(attr->namedItem("DrawLeft").nodeValue() == "true");
   if (!attr->namedItem("DrawRight").isNull())
-      label->setDrawRight(attr->namedItem("DrawRight").nodeValue().toInt());
+      label->setDrawRight(attr->namedItem("DrawRight").nodeValue() == "true");
   label->setFont(attr->namedItem("FontFamily").nodeValue(),
                  attr->namedItem("FontSize").nodeValue().toInt(),
                  attr->namedItem("FontWeight").nodeValue().toInt(),
