@@ -14,6 +14,7 @@
 #include "mreportengine.h"
 #include "mutil.h"
 
+#include <kdebug.h>
 
 /** Constructor */
 MReportEngine::MReportEngine() : QObject(){
@@ -27,6 +28,7 @@ MReportEngine::MReportEngine() : QObject(){
   bottomMargin = 0;
   leftMargin = 0;
   rightMargin = 0;
+  heightOfDetails = 0;
 
     // Set cancel flag
     cancelRender = false;
@@ -116,7 +118,7 @@ bool MReportEngine::setReportData(const QString &data)
 
     if (!rd.setContent(data))
     {
-        qWarning("Unable to parse report data");
+        kdDebug() << "Unable to parse report data" << endl;
         return false;
     }
     initData();
@@ -131,7 +133,7 @@ bool MReportEngine::setReportData(QIODevice *dev)
 {
     if (!rd.setContent(dev))
     {
-        qWarning("Unable to parse report data");
+        kdDebug() << "Unable to parse report data" << endl;
         return false;
     }
     initData();
@@ -177,7 +179,7 @@ bool MReportEngine::setReportTemplate(const QString &tpl)
 
     if (!rt.setContent(tpl))
     {
-        qWarning("Unable to parse report template");
+        kdDebug() << "Unable to parse report template" << endl;
         return false;
     }
 
@@ -196,7 +198,7 @@ bool MReportEngine::setReportTemplate(QIODevice *dev)
 
     if (!rt.setContent(dev))
     {
-        qWarning("Unable to parse report template");
+        kdDebug() << "Unable to parse report template" << endl;
         return false;
     }
 
@@ -279,7 +281,6 @@ MPageCollection* MReportEngine::renderReport(){
             QDomNamedNodeMap fields = record.attributes();
             for (int k = 0; k < fields.count(); ++k)
             {
-                qWarning("set field %s to %s", fields.item(k).nodeName().ascii(), fields.item(k).nodeValue().ascii());
                 rHeader.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
                 rFooter.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
                 pHeader.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
@@ -336,8 +337,6 @@ MPageCollection* MReportEngine::renderReport(){
                     MReportSection *footer = findDetailFooter(i);
                     if (footer)
                     {
-                        qWarning("drawing detail footer: %d",  footer->getLevel());
-
                         footer->setPageNumber(currPage);
                         footer->setReportDate(currDate);
                         footer->setCalcFieldData(&grandTotal);
@@ -382,10 +381,23 @@ MPageCollection* MReportEngine::renderReport(){
 
             detail->setPageNumber(currPage);
             detail->setReportDate(currDate);
-            if((currY +  detail->getHeight()) > currHeight)
-                 newPage(pages);
+            if((currY + detail->getHeight()) > currHeight ||
+               (detail->getRepeat() && currY + heightOfDetails > currHeight))
+            {
+                newPage(pages);
 
-             detail->draw(&p, leftMargin, currY);
+                MReportDetail *sec;
+                for (sec = details.first(); sec; sec = details.next())
+                {
+                    if (sec->getLevel() != curDetailLevel && sec->getRepeat())
+                    {
+                        sec->draw(&p, leftMargin, currY);
+                        currY += sec->getHeight();
+                    }
+                }
+            }
+
+            detail->draw(&p, leftMargin, currY);
             currY += detail->getHeight();
             prevDetailLevel = curDetailLevel;
         }
@@ -393,15 +405,11 @@ MPageCollection* MReportEngine::renderReport(){
 
     // Draw detail footers that was not drawn before
     //   for details from curDetailLevel up to prevDetailLevel
-    qWarning("prevDetailLevel: %d", prevDetailLevel);
-    qWarning("curDetailLevel: %d", curDetailLevel);
     for (int i = prevDetailLevel; i >= 0; i--)
     {
-        qWarning("    -1");
         MReportSection *footer = findDetailFooter(i);
         if (footer)
         {
-            qWarning("    -2");
             footer->setPageNumber(currPage);
             footer->setReportDate(currDate);
             footer->setCalcFieldData(&grandTotal);
@@ -525,7 +533,6 @@ void MReportEngine::drawReportFooter(MPageCollection* pages){
   if((rFooter.printFrequency() == MReportSection::EveryPage)
      ||(rFooter.printFrequency() == MReportSection::LastPage)){
 
-      qWarning("drawing report footer");
     rFooter.setCalcFieldData(&grandTotal);
 
     rFooter.setPageNumber(currPage);
@@ -734,7 +741,6 @@ void MReportEngine::setSectionAttributes(MReportSection* section, QDomNode* repo
           MFieldObject* field = new MFieldObject();
           setFieldAttributes(field, &attributes);
           section->addField(field);
-          qWarning("added field");
         }
     }
   }
@@ -761,8 +767,11 @@ void MReportEngine::setDetailAttributes(QDomNode* report){
 
   // Get the report detail attributes
   MReportDetail *detail = new MReportDetail;
-  detail->setHeight(attributes.namedItem("Height").nodeValue().toInt());
+  int height = attributes.namedItem("Height").nodeValue().toInt();
+  heightOfDetails += height;
+  detail->setHeight(height);
   detail->setLevel(attributes.namedItem("Level").nodeValue().toInt());
+  detail->setRepeat(attributes.namedItem("Repeat").nodeValue() == "true");
 
   // Process the report detail labels
   QDomNodeList children = report->childNodes();
@@ -911,6 +920,7 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
   rightMargin = mReportEngine->rightMargin;
   pageWidth = mReportEngine->pageWidth;
   pageHeight = mReportEngine->pageHeight;
+  heightOfDetails = mReportEngine->heightOfDetails;
 
   // Copy the report header
   rHeader = mReportEngine->rHeader;

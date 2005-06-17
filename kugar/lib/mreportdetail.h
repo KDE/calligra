@@ -1,9 +1,9 @@
 /***************************************************************************
               mreportdetail.h  -  Kugar report detail section
               -------------------
-    begin     : Mon Aug 23 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Mon Aug 23 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #ifndef MREPORTDETAIL_H
@@ -20,19 +20,25 @@ class MReportDetail : public MReportSection  {
 
 public:
   /** Constructor */
-	MReportDetail();
+    MReportDetail();
   /** Copy constructor */
   MReportDetail(const MReportDetail& mReportDetail);
   /** Assignment operator */
   MReportDetail operator=(const MReportDetail& mReportDetail);
   /** Destructor */
-	virtual ~MReportDetail();
+    virtual ~MReportDetail();
 
 protected:
+  /** Sections's repeat on new pages */
+  bool repeat;
   /** Section's field collection */
   QPtrList<MFieldObject> fields;
 
 public:
+  /** Sets whether to repeat the detail on new pages */
+  void setRepeat(bool b);
+  /** Sets whether to repeat the detail on new pages */
+  bool getRepeat() const;
   /** Draws the detail section to the specified painter & x/y-offsets */
   void draw(QPainter* p, int xoffset, int yoffset);
   /** Adds a new field object to the section's field collection */
@@ -43,7 +49,7 @@ public:
   int getFieldCount();
   /** Returns the name of the bound field for field object at the given index */
   QString getFieldName(int idx);
-	/** Frees all resources allocated by the report section */
+    /** Frees all resources allocated by the report section */
   void clear();
 
 private:

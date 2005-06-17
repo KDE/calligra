@@ -92,7 +92,6 @@ void MFieldObject::setText(const QString txt){
                 day =  txt.mid(3,2);
 
         d.setYMD(year.toInt(), month.toInt(), day.toInt());
-        qWarning("txt = %s", txt.ascii());
 //        d = QDate::fromString(txt, Qt::LocalDate);
           text = MUtil::formatDate(d, format);
             }

@@ -5,7 +5,7 @@
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
     copyright : (C) 2002 Alexander Dymo
-    email     : cloudtemple@mksat.net	
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #ifndef MREPORTENGINE_H
@@ -33,43 +33,43 @@
 
 class MReportEngine : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	enum PageOrientation { Portrait, Landscape };
+    enum PageOrientation { Portrait, Landscape };
 
-	enum PageSize {
-		A4, B5, Letter, Legal, Executive,
-		A0, A1, A2, A3, A5, A6, A7, A8, A9, B0, B1,
-		B10, B2, B3, B4, B6, B7, B8, B9, C5E, Comm10E,
-		DLE, Folio, Ledger, Tabloid, NPageSize
-	};
+    enum PageSize {
+        A4, B5, Letter, Legal, Executive,
+        A0, A1, A2, A3, A5, A6, A7, A8, A9, B0, B1,
+        B10, B2, B3, B4, B6, B7, B8, B9, C5E, Comm10E,
+        DLE, Folio, Ledger, Tabloid, NPageSize
+    };
 
-	MReportEngine();
-	MReportEngine(const MReportEngine& mReportEngine);
-	MReportEngine operator=(const MReportEngine& mReportEngine);
-	virtual ~MReportEngine();
+    MReportEngine();
+    MReportEngine(const MReportEngine& mReportEngine);
+    MReportEngine operator=(const MReportEngine& mReportEngine);
+    virtual ~MReportEngine();
 
-	bool setReportData(const QString &);
-	bool setReportData(QIODevice *);
-	bool setReportData(const QDomDocument&);
-	bool setReportTemplate(const QString &);
-	bool setReportTemplate(QIODevice *);
-	int getRenderSteps() {return records.length() / 2;}
-	MPageCollection* renderReport();
+    bool setReportData(const QString &);
+    bool setReportData(QIODevice *);
+    bool setReportData(const QDomDocument&);
+    bool setReportTemplate(const QString &);
+    bool setReportTemplate(QIODevice *);
+    int getRenderSteps() {return records.length() / 2;}
+    MPageCollection* renderReport();
 
-	void addRef();
-	void removeRef();
+    void addRef();
+    void removeRef();
 public slots:
-	void slotCancelRendering();
+    void slotCancelRendering();
 
 signals:
-	void signalRenderStatus(int);
-	void preferedTemplate(const QString &);
+    void signalRenderStatus(int);
+    void preferedTemplate(const QString &);
 
 protected:
-	void recalcDimensions();
-	void recalcAttribute(const QString& name, QDomNamedNodeMap attributes);
+    void recalcDimensions();
+    void recalcAttribute(const QString& name, QDomNamedNodeMap attributes);
 
 private:
 
@@ -116,6 +116,9 @@ private:
   /** Report footer */
   MReportSection rFooter;
 
+  /** Stores the combined heights of the detail levels */
+  int heightOfDetails;
+
   /** Current y position on page */
   int currY;
   /** Current height of page excluding margins */
@@ -128,8 +131,8 @@ private:
   /** Grand total array */
   QPtrList<QMemArray<double> > grandTotal;
 
-	/** Cancel rendering flag */
-	bool cancelRender;
+    /** Cancel rendering flag */
+    bool cancelRender;
   int m_refCount;
 private:
   // The set of records being rendered.
@@ -165,7 +168,7 @@ private:
   void setDetMiscAttributes(MReportSection* section, QDomNode* report);
   /** Sets the layout attributes for the detail section */
   void setDetailAttributes(QDomNode* report);
-	/** Sets a line's layout attributes */
+    /** Sets a line's layout attributes */
   void setLineAttributes(MLineObject* line, QDomNamedNodeMap* attr);
   /** Sets a label's layout attributes */
   void setLabelAttributes(MLabelObject* label, QDomNamedNodeMap* attr);
@@ -182,11 +185,11 @@ private:
   void copy(const MReportEngine* mReportEngine);
 
 /** Finds the detail header object, which is apropriate for the given level */
-	MReportSection *findDetailHeader(int level);
+    MReportSection *findDetailHeader(int level);
 /** Finds the detail object, which is apropriate for the given level */
-	MReportDetail *findDetail(int level);
+    MReportDetail *findDetail(int level);
 /** Finds the detail footer object, which is apropriate for the given level */
-	MReportSection *findDetailFooter(int level);
+    MReportSection *findDetailFooter(int level);
 };
 
 #endif

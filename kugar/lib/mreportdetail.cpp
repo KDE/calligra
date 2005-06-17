@@ -1,9 +1,9 @@
 /***************************************************************************
               mreportdetail.cpp  -  Kugar report detail section
               -------------------
-    begin     : Mon Aug 23 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Mon Aug 23 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #include "mreportdetail.h"
@@ -16,7 +16,7 @@ MReportDetail::MReportDetail() : MReportSection(){
 
 /** Copy constructor */
 MReportDetail::MReportDetail(const MReportDetail& mReportDetail): MReportSection((MReportSection &) mReportDetail){
-  copy(&mReportDetail);	
+  copy(&mReportDetail);
 }
 
 /** Assignment operator */
@@ -29,21 +29,31 @@ MReportDetail MReportDetail::operator=(const MReportDetail& mReportDetail){
   // Copy the base class's data
   ((MReportSection &) *this) = mReportDetail;
 
-	return *this;
+    return *this;
 }
 
 /** Destructor */
 MReportDetail::~MReportDetail(){
-	clear();
+    clear();
 }
 
 /** Frees all resources allocated by the report section */
 void MReportDetail::clear(){
-	// Free the base resources
-	clearBase();
+    // Free the base resources
+    clearBase();
 
-	// Clear the field collection
+    // Clear the field collection
   fields.clear();
+}
+
+void MReportDetail::setRepeat(bool b)
+{
+    repeat = b;
+}
+
+bool MReportDetail::getRepeat() const
+{
+    return repeat;
 }
 
 /** Draws the detail section to the selected painter & x/y-offsets */
