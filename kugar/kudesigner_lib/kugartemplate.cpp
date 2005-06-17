@@ -44,6 +44,8 @@ Boston, MA 02111-1307, USA.
 #include "detailfooter.h"
 #include "detail.h"
 
+#include <kdebug.h>
+
 namespace Kudesigner
 {
 

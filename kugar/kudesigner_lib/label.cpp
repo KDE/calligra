@@ -46,10 +46,6 @@ Label::Label( int x, int y, int width, int height, Canvas *canvas )
 
     props.addProperty( new Property( "Text", i18n( "Text" ), i18n( "Text to Display" ), i18n( "Text" ), KOProperty::String ) );
 
-    props.addProperty( new Property( "BackgroundColor", i18n( "Background Color" ), i18n( "Background Color" ), QColor( 255, 255, 255 ), KOProperty::Color ) );
-
-    props.addProperty( new Property( "ForegroundColor", i18n( "Foreground Color" ), i18n( "Foreground Color" ), QColor( 0, 0, 0 ), KOProperty::Color ) );
-
     props.setGroupDescription( "Geometry", i18n( "Geometry" ) );
     props.addProperty( new Property( "X", i18n( "X" ), i18n( "X value" ), x, KOProperty::Integer ), "Geometry" );
 
@@ -59,6 +55,9 @@ Label::Label( int x, int y, int width, int height, Canvas *canvas )
 
     props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), height, KOProperty::Integer ), "Geometry" );
 
+    props.addProperty( new Property( "BackgroundColor", i18n( "Background Color" ), i18n( "Background Color" ), QColor( 255, 255, 255 ), KOProperty::Color ) );
+
+    props.addProperty( new Property( "ForegroundColor", i18n( "Foreground Color" ), i18n( "Foreground Color" ), QColor( 0, 0, 0 ), KOProperty::Color ) );
 
     props.setGroupDescription( "BorderStyle", i18n( "Border Style" ) );
     props.addProperty( new Property( "BorderColor", i18n( "Color" ), i18n( "Border Color" ), QColor( 0, 0, 0 ), KOProperty::Color ), "BorderStyle" );
