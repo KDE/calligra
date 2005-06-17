@@ -74,7 +74,7 @@ class KPROPERTY_EXPORT EditorPrivate
 
         QGuardedPtr<PtrList>  list;
         //! widget cache for property types, widget will be deleted
-        QMap<int, Widget* >  widgetCache;
+        QMap<Property*, Widget* >  widgetCache;
         QGuardedPtr<Widget> currentWidget;
         EditorItem *currentItem;
         EditorItem *topItem; //! The top item is used to control the drawing of every branches.
@@ -165,20 +165,21 @@ Editor::fill()
     StringListMap map = d->list->groups();
     if(map.count() == 1) { // just one group (default one), so don't show groups
 
-        QValueList<QCString>::ConstIterator endIt = map.begin().data().constEnd();
-        for(QValueList<QCString>::ConstIterator it2 = map.begin().data().constBegin(); it2 != endIt; ++it2)
-                addItem(*it2, d->topItem);
+        QValueList<QCString> props = map.begin().data();
+        QValueList<QCString>::ConstIterator it = props.constBegin();
+        for( ; it != props.constEnd(); ++it)
+            addItem(*it, d->topItem);
 
     } else { // else create a groupItem for each group
 
-        StringListMap::ConstIterator endIt = map.constEnd();
-        for(StringListMap::ConstIterator it = map.constBegin(); it != endIt; ++it) {
+        StringListMap::ConstIterator it = map.constBegin();
+        for( ; it != map.constEnd(); ++it) {
             EditorGroupItem *groupItem = 0;
             if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
                 groupItem = new EditorGroupItem(d->topItem, d->list->groupDescription(it.key()) );
 
-            QValueList<QCString>::ConstIterator endIt = it.data().constEnd();
-            for(QValueList<QCString>::ConstIterator it2 = it.data().constBegin(); it2 != endIt; ++it2)
+            QValueList<QCString>::ConstIterator it2 = it.data().constBegin();
+            for( ; it2 != it.data().constEnd(); ++it2)
                     addItem(*it2, groupItem);
         }
 
@@ -465,11 +466,11 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
     int type = property->type();
     Widget *widget = 0;
 
-    if(d->widgetCache.contains(type))
-        widget = d->widgetCache[type];
+    if(d->widgetCache.contains(property) )
+        widget = d->widgetCache[property];
     else {
         widget = Factory::getInstance()->widgetForProperty(property);
-        d->widgetCache[type] = widget;
+        d->widgetCache[property] = widget;
         widget->setProperty(0); // to force reloading property later
         widget->hide();
         connect(widget, SIGNAL(valueChanged(Widget*)),
@@ -492,7 +493,7 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 void
 Editor::clearWidgetCache()
 {
-    for(QMap<int, Widget*>::iterator it = d->widgetCache.begin(); it != d->widgetCache.end(); ++it)
+    for(QMap<Property*, Widget*>::iterator it = d->widgetCache.begin(); it != d->widgetCache.end(); ++it)
         delete it.data();
     d->widgetCache.clear();
 }
