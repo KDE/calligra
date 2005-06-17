@@ -633,12 +633,7 @@ void
 Editor::setFocus()
 {
     EditorItem *item = static_cast<EditorItem *>(selectedItem());
-    if (item) {
-        if (!d->justClickedItem)
-            ensureItemVisible(item);
-        d->justClickedItem = false;
-    }
-    else {
+    if (!item) {
         //select an item before focusing
         item = static_cast<EditorItem *>(itemAt(QPoint(10,1)));
         if (item) {
