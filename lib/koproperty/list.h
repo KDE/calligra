@@ -69,6 +69,7 @@ class KPROPERTY_EXPORT PtrList : public QObject
 
             private:
                 PropertyList::iterator iterator;
+                PropertyList::iterator end;
                 friend class PtrList;
         };
 

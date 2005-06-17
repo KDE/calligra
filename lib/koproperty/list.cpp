@@ -83,7 +83,7 @@ class KPROPERTY_EXPORT PtrListPrivate
             if ( ( *it )->name() == name )
             {
                 p = ( *it );
-/*                properties.remove( it );*/
+                properties.remove( it );
             }
         return p;
     }
@@ -94,6 +94,7 @@ class KPROPERTY_EXPORT PtrListPrivate
 PtrList::Iterator::Iterator(const PtrList &list)
 {
     iterator = list.d->properties.begin();
+    end = list.d->properties.end();
 }
 
 PtrList::Iterator::~Iterator()
@@ -115,13 +116,19 @@ PtrList::Iterator::operator *()
 QString
 PtrList::Iterator::currentKey()
 {
-    return (*iterator)->name();
+    if ((*iterator))
+        return (*iterator)->name();
+    else
+        return QString::null;
 }
 
 Property*
 PtrList::Iterator::current()
 {
-    return (*iterator);
+    if ( iterator != end )
+        return (*iterator);
+    else
+        return 0L;
 }
 
  //////////////////////////////////////////////
