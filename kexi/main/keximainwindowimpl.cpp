@@ -2361,9 +2361,9 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		d->toggleLastCheckedMode();
 		return false;
 	}
-//	bool cancelled;
 	int prevViewMode = d->curDialog->currentViewMode();
-	updateCustomPropertyPanelTabs(d->curDialog, prevViewMode);
+	updateCustomPropertyPanelTabs(d->curDialog->part(), prevViewMode,
+		d->curDialog->part(), viewMode );
 	tristate res = d->curDialog->switchToViewMode( viewMode );
 	if (!res) {
 		updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
@@ -2385,8 +2385,6 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		guiFactory()->removeClient(d->curDialogViewGUIClient);
 	d->curDialogViewGUIClient=viewClient; //remember
 
-	updateCustomPropertyPanelTabs(
-		d->curDialog->part(), prevViewMode, d->curDialog->part(), viewMode );
 	d->updatePropEditorVisibility(viewMode);
 	invalidateSharedActions();
 	return true;
