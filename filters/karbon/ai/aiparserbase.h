@@ -226,9 +226,6 @@ typedef struct {
   PointType pttype;
 } PathElement;
 
-class AI88Handler;
-class AI3Handler;
-
 class AIParserBase : protected AILexer  {
   friend class AI88Handler;
   friend class AI3Handler;
