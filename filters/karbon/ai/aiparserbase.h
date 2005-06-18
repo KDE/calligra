@@ -44,8 +44,8 @@ class DocumentHandlerBase;
 class ModuleHandlerBase;
 class EmbeddedHandlerBase;
 class TextHandlerBase;
-class Ai88Handler;
-class Ai3Handler;
+class AI88Handler;
+class AI3Handler;
 
 /**
   *@author Dirk Schönberger
