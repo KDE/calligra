@@ -60,10 +60,8 @@ METASOURCES = AUTO
 messages: rc.cpp
 	rm -f tips.cpp
 #	(cd data && $(PREPARETIPS) > ../tips.cpp)
-	EXCLUDE="-path ./formeditor -o -path ./doc -o -path ./main/projectWizard \
-	-o -path ./filters -o -path ./plugins/kugar -o -path ./plugins/importwizard \
-	-o -path ./main/filters -o -path ./interfaces -o -path ./tests \
-	-o -path ./scripting"; \
+	EXCLUDE="-path ./formeditor -o -path ./doc \
+	-o -path ./plugins/importwizard -o -path ./tests"; \
 	LIST="data/*.rc `find . \( \( $$EXCLUDE \) -prune -o -name \*.ui \) -type f | grep -v -e '/\.' -e projectsettingsui.ui`"; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \
