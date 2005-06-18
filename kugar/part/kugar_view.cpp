@@ -30,30 +30,30 @@
 
 // The view ctor.
 
-KugarView::KugarView(KugarPart *part,QWidget *parent,const char *name)
-	: KoView(part,parent,name)
+KugarView::KugarView( KugarPart *part, QWidget *parent, const char *name )
+        : KoView( part, parent, name )
 {
-	setInstance(KugarFactory::global());
+    setInstance( KugarFactory::global() );
 
-	(new QVBoxLayout(this))->setAutoAdd(true);
-	view = new KReportViewer(part->reportEngine(),this);
+    ( new QVBoxLayout( this ) ) ->setAutoAdd( true );
+    view = new KReportViewer( part->reportEngine(), this );
 
-	view -> setFocusPolicy(QWidget::ClickFocus);
-	view -> show();
+    view -> setFocusPolicy( QWidget::ClickFocus );
+    view -> show();
 
-//	setWidget(view);
+    //  setWidget(view);
 
-//	m_extension = new KugarBrowserExtension(this);
+    //  m_extension = new KugarBrowserExtension(this);
 
 
-	// Define the actions.
+    // Define the actions.
 
-	KStdAction::prior(view,SLOT(slotPrevPage()),actionCollection(),"kuPrevPage");
-	KStdAction::next(view,SLOT(slotNextPage()),actionCollection(),"kuNextPage");
-	KStdAction::firstPage(view,SLOT(slotFirstPage()),actionCollection(),"kuFirstPage");
-	KStdAction::lastPage(view,SLOT(slotLastPage()),actionCollection(),"kuLastPage");
+    KStdAction::prior( view, SLOT( slotPrevPage() ), actionCollection(), "kuPrevPage" );
+    KStdAction::next( view, SLOT( slotNextPage() ), actionCollection(), "kuNextPage" );
+    KStdAction::firstPage( view, SLOT( slotFirstPage() ), actionCollection(), "kuFirstPage" );
+    KStdAction::lastPage( view, SLOT( slotLastPage() ), actionCollection(), "kuLastPage" );
 
-	setXMLFile("kugarpart.rc");
+    setXMLFile( "kugarpart.rc" );
 
 }
 
@@ -61,17 +61,16 @@ KugarView::KugarView(KugarPart *part,QWidget *parent,const char *name)
 // The view dtor.
 
 KugarView::~KugarView()
-{
-}
+{}
 
 void KugarView::setupPrinter( KPrinter &printer )
 {
-	view->setupPrinter(printer);
+    view->setupPrinter( printer );
 }
 
 void KugarView::print( KPrinter &printer )
 {
-	view->printReport(printer);
+    view->printReport( printer );
 }
 
 
@@ -82,25 +81,25 @@ void KugarView::print( KPrinter &printer )
 
 bool KugarPart::openFile()
 {
-	bool ok = false;
-	QFile f(m_file);
+    bool ok = false;
+    QFile f( m_file );
 
-	if (f.open(IO_ReadOnly))
-	{
-		if (view -> setReportData(&f))
-		{
-			if (view -> renderReport())
-				ok = true;
-		}
-		else
-			KMessageBox::sorry(this,i18n("Invalid data file: %1").arg(m_file));
+    if ( f.open( IO_ReadOnly ) )
+    {
+        if ( view -> setReportData( &f ) )
+        {
+            if ( view -> renderReport() )
+                ok = true;
+        }
+        else
+            KMessageBox::sorry( this, i18n( "Invalid data file: %1" ).arg( m_file ) );
 
-		f.close();
-	}
-	else
-		KMessageBox::sorry(this,i18n("Unable to open data file: %1").arg(m_file));
+        f.close();
+    }
+    else
+        KMessageBox::sorry( this, i18n( "Unable to open data file: %1" ).arg( m_file ) );
 
-	return ok;
+    return ok;
 }
 
 
@@ -108,9 +107,9 @@ bool KugarPart::openFile()
 
 bool KugarPart::closeURL()
 {
-	// Nothing to do.
+    // Nothing to do.
 
-	return true;
+    return true;
 }
 
 
@@ -118,7 +117,7 @@ bool KugarPart::closeURL()
 
 void KugarPart::print()
 {
-	view -> printReport();
+    view -> printReport();
 }
 
 #endif
@@ -126,7 +125,7 @@ void KugarPart::print()
 
 bool KugarView::renderReport()
 {
-       	return (view -> renderReport());
+    return ( view -> renderReport() );
 }
 
 

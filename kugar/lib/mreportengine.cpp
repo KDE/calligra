@@ -1,12 +1,12 @@
 /***************************************************************************
-              mreportengine.cpp  -  Kugar report engine
-              -------------------
-    begin     : Sun Aug 15 1999
-    copyright : (C) 1999 by Mutiny Bay Software
-    email     : info@mutinybaysoftware.com
-    copyright : (C) 2002 Alexander Dymo
-    email     : cloudtemple@mksat.net
- ***************************************************************************/
+             mreportengine.cpp  -  Kugar report engine
+             -------------------
+   begin     : Sun Aug 15 1999
+   copyright : (C) 1999 by Mutiny Bay Software
+   email     : info@mutinybaysoftware.com
+   copyright : (C) 2002 Alexander Dymo
+   email     : cloudtemple@mksat.net
+***************************************************************************/
 
 #include <qfile.h>
 #include <qprinter.h>
@@ -17,81 +17,91 @@
 #include <kdebug.h>
 
 /** Constructor */
-MReportEngine::MReportEngine() : QObject(){
-  // Set page params
-  m_pageCollection=0;
-  m_needRegeneration=true;
-  m_refCount=1;
-  pageSize = MReportEngine::Letter;
-  pageOrientation = MReportEngine::Portrait;
-  topMargin = 0;
-  bottomMargin = 0;
-  leftMargin = 0;
-  rightMargin = 0;
-  heightOfDetails = 0;
+MReportEngine::MReportEngine() : QObject()
+{
+    // Set page params
+    m_pageCollection = 0;
+    m_needRegeneration = true;
+    m_refCount = 1;
+    pageSize = MReportEngine::Letter;
+    pageOrientation = MReportEngine::Portrait;
+    topMargin = 0;
+    bottomMargin = 0;
+    leftMargin = 0;
+    rightMargin = 0;
+    heightOfDetails = 0;
 
     // Set cancel flag
     cancelRender = false;
 
-  // Set the grand total list to AutoDelete
-  grandTotal.setAutoDelete( true );
-  // Set the details lists to AutoDelete
-  dHeaders.setAutoDelete(true);
-  details.setAutoDelete(true);
-  dFooters.setAutoDelete(true);
+    // Set the grand total list to AutoDelete
+    grandTotal.setAutoDelete( true );
+    // Set the details lists to AutoDelete
+    dHeaders.setAutoDelete( true );
+    details.setAutoDelete( true );
+    dFooters.setAutoDelete( true );
 
-  rHeader.setPrintFrequency(MReportSection::FirstPage);
-  pHeader.setPrintFrequency(MReportSection::EveryPage);
-  pFooter.setPrintFrequency(MReportSection::EveryPage);
-  rFooter.setPrintFrequency(MReportSection::LastPage);
+    rHeader.setPrintFrequency( MReportSection::FirstPage );
+    pHeader.setPrintFrequency( MReportSection::EveryPage );
+    pFooter.setPrintFrequency( MReportSection::EveryPage );
+    rFooter.setPrintFrequency( MReportSection::LastPage );
 
-  // Set the default page metrics
-  QSize ps = getPageMetrics(pageSize, pageOrientation);
-  pageWidth = ps.width();
-  pageHeight = ps.height();
+    // Set the default page metrics
+    QSize ps = getPageMetrics( pageSize, pageOrientation );
+    pageWidth = ps.width();
+    pageHeight = ps.height();
 }
 
 /** Copy constructor */
-MReportEngine::MReportEngine(const MReportEngine& mReportEngine) /*: QObject((QObject &) mReportEngine)*/{
-  copy(&mReportEngine);
+MReportEngine::MReportEngine( const MReportEngine& mReportEngine )  /*: QObject((QObject &) mReportEngine)*/
+{
+    copy( &mReportEngine );
 }
 
 /** Assignment operator */
-MReportEngine MReportEngine::operator=(const MReportEngine& mReportEngine){
-  if(&mReportEngine == this) return *this;
+MReportEngine MReportEngine::operator=( const MReportEngine& mReportEngine )
+{
+    if ( &mReportEngine == this )
+        return * this;
 
-  // Copy the derived class's data
-  copy(&mReportEngine);
+    // Copy the derived class's data
+    copy( &mReportEngine );
 
-  // Copy the base class's data
-  //((QObject &) *this) = mReportEngine;
+    // Copy the base class's data
+    //((QObject &) *this) = mReportEngine;
 
     return *this;
 }
 
 /** Destructor */
-MReportEngine::~MReportEngine(){
+MReportEngine::~MReportEngine()
+{
     // Clear the grand total data
-  grandTotal.clear();
-  if (m_pageCollection) m_pageCollection->removeRef();
-  qDebug("MReportEngine::~MReportEngine()");
+    grandTotal.clear();
+    if ( m_pageCollection )
+        m_pageCollection->removeRef();
+    qDebug( "MReportEngine::~MReportEngine()" );
 }
 
-void MReportEngine::addRef() {
+void MReportEngine::addRef()
+{
     m_refCount++;
 }
 
-void MReportEngine::removeRef() {
+void MReportEngine::removeRef()
+{
     m_refCount--;
-    if (!m_refCount) deleteLater();
+    if ( !m_refCount )
+        deleteLater();
 }
 
 /** Clears report formatting */
-void MReportEngine::clearFormatting(){
+void MReportEngine::clearFormatting()
+{
     rHeader.clear();
     pHeader.clear();
     MReportDetail *detail;
-    for (detail = details.first(); detail; detail = details.next())
+    for ( detail = details.first(); detail; detail = details.next() )
     {
         detail->clear();
     }
@@ -101,9 +111,9 @@ void MReportEngine::clearFormatting(){
 
 
 //Set the report data from an existing QDomDocument
-bool MReportEngine::setReportData(const QDomDocument &data)
+bool MReportEngine::setReportData( const QDomDocument &data )
 {
-    rd=data.cloneNode(true).toDocument();
+    rd = data.cloneNode( true ).toDocument();
     initData();
 
     return true;
@@ -113,10 +123,10 @@ bool MReportEngine::setReportData(const QDomDocument &data)
 // Set the report's data from an inline string.  Return true if it was valid
 // data.
 
-bool MReportEngine::setReportData(const QString &data)
+bool MReportEngine::setReportData( const QString &data )
 {
 
-    if (!rd.setContent(data))
+    if ( !rd.setContent( data ) )
     {
         kdDebug() << "Unable to parse report data" << endl;
         return false;
@@ -129,9 +139,9 @@ bool MReportEngine::setReportData(const QString &data)
 
 // Set the report's data from an i/o device.  Return true if it was valid data.
 
-bool MReportEngine::setReportData(QIODevice *dev)
+bool MReportEngine::setReportData( QIODevice *dev )
 {
-    if (!rd.setContent(dev))
+    if ( !rd.setContent( dev ) )
     {
         kdDebug() << "Unable to parse report data" << endl;
         return false;
@@ -146,11 +156,11 @@ bool MReportEngine::setReportData(QIODevice *dev)
 
 void MReportEngine::initData()
 {
-    m_needRegeneration=true;
+    m_needRegeneration = true;
     // Get the record set (we assume there is only one).
 
-    for (QDomNode n = rd.firstChild(); !n.isNull(); n = n.nextSibling())
-        if (n.nodeName() == "KugarData")
+    for ( QDomNode n = rd.firstChild(); !n.isNull(); n = n.nextSibling() )
+        if ( n.nodeName() == "KugarData" )
         {
             // Get the records.
 
@@ -159,11 +169,11 @@ void MReportEngine::initData()
             // See if there is a prefered template given.
 
             QDomNamedNodeMap attr = n.attributes();
-            QDomNode tempattr = attr.namedItem("Template");
+            QDomNode tempattr = attr.namedItem( "Template" );
             QString tempname = tempattr.nodeValue();
 
-            if (!tempname.isNull())
-                emit preferedTemplate(tempname);
+            if ( !tempname.isNull() )
+                emit preferedTemplate( tempname );
 
             break;
         }
@@ -173,11 +183,11 @@ void MReportEngine::initData()
 // Set the report's template from an inline string.  Return true if it was a
 // valid template.
 
-bool MReportEngine::setReportTemplate(const QString &tpl)
+bool MReportEngine::setReportTemplate( const QString &tpl )
 {
     clearFormatting();
 
-    if (!rt.setContent(tpl))
+    if ( !rt.setContent( tpl ) )
     {
         kdDebug() << "Unable to parse report template" << endl;
         return false;
@@ -192,11 +202,11 @@ bool MReportEngine::setReportTemplate(const QString &tpl)
 // Set the report's template from an i/o device.  Return true if it was a valid
 // template.
 
-bool MReportEngine::setReportTemplate(QIODevice *dev)
+bool MReportEngine::setReportTemplate( QIODevice *dev )
 {
     clearFormatting();
 
-    if (!rt.setContent(dev))
+    if ( !rt.setContent( dev ) )
     {
         kdDebug() << "Unable to parse report template" << endl;
         return false;
@@ -209,41 +219,42 @@ bool MReportEngine::setReportTemplate(QIODevice *dev)
 
 
 /** Cancels rendering of a report */
-void MReportEngine::slotCancelRendering(){
+void MReportEngine::slotCancelRendering()
+{
     cancelRender = true;
 }
 
 /** Finds the detail header object, which is apropriate for the given level */
-MReportSection *MReportEngine::findDetailHeader(int level)
+MReportSection *MReportEngine::findDetailHeader( int level )
 {
-    MReportSection *sec;
-    for (sec = dHeaders.first(); sec; sec = dHeaders.next())
+    MReportSection * sec;
+    for ( sec = dHeaders.first(); sec; sec = dHeaders.next() )
     {
-        if (sec->getLevel() == level)
+        if ( sec->getLevel() == level )
             return sec;
     }
     return NULL;
 }
 
 /** Finds the detail object, which is apropriate for the given level */
-MReportDetail *MReportEngine::findDetail(int level)
+MReportDetail *MReportEngine::findDetail( int level )
 {
-    MReportDetail *sec;
-    for (sec = details.first(); sec; sec = details.next())
+    MReportDetail * sec;
+    for ( sec = details.first(); sec; sec = details.next() )
     {
-        if (sec->getLevel() == level)
+        if ( sec->getLevel() == level )
             return sec;
     }
     return NULL;
 }
 
 /** Finds the detail footer object, which is apropriate for the given level */
-MReportSection *MReportEngine::findDetailFooter(int level)
+MReportSection *MReportEngine::findDetailFooter( int level )
 {
-    MReportSection *sec;
-    for (sec = dFooters.first(); sec; sec = dFooters.next())
+    MReportSection * sec;
+    for ( sec = dFooters.first(); sec; sec = dFooters.next() )
     {
-        if (sec->getLevel() == level)
+        if ( sec->getLevel() == level )
             return sec;
     }
     return NULL;
@@ -253,10 +264,13 @@ MReportSection *MReportEngine::findDetailFooter(int level)
   * is responsible for de-allocating the returned
   * collection
   */
-MPageCollection* MReportEngine::renderReport(){
+MPageCollection* MReportEngine::renderReport()
+{
 
-    if (!m_needRegeneration) return m_pageCollection;
-    if (m_pageCollection) m_pageCollection->removeRef();
+    if ( !m_needRegeneration )
+        return m_pageCollection;
+    if ( m_pageCollection )
+        m_pageCollection->removeRef();
     unsigned int j;
     unsigned int i;
 
@@ -267,24 +281,26 @@ MPageCollection* MReportEngine::renderReport(){
     MPageCollection* pages = new MPageCollection;
 
     // Initialize the basic page data
-    currHeight = pageHeight - (topMargin + bottomMargin + pFooter.getHeight());
+    currHeight = pageHeight - ( topMargin + bottomMargin + pFooter.getHeight() );
     currPage = 0;
     currDate = QDate::currentDate();
 
     // Initialise global report variables
     unsigned int rowCount = records.length();
-    for(j = 0; j < rowCount; j++){
-        QDomNode record = records.item(j);
-        if((record.nodeType() == QDomNode::ElementNode)
-            && (record.nodeName() == "Var")){
+    for ( j = 0; j < rowCount; j++ )
+    {
+        QDomNode record = records.item( j );
+        if ( ( record.nodeType() == QDomNode::ElementNode )
+                && ( record.nodeName() == "Var" ) )
+        {
             // Process the variable ...
             QDomNamedNodeMap fields = record.attributes();
-            for (int k = 0; k < fields.count(); ++k)
+            for ( int k = 0; k < fields.count(); ++k )
             {
-                rHeader.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
-                rFooter.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
-                pHeader.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
-                pFooter.setFieldData(fields.item(k).nodeName(), fields.item(k).nodeValue());
+                rHeader.setFieldData( fields.item( k ).nodeName(), fields.item( k ).nodeValue() );
+                rFooter.setFieldData( fields.item( k ).nodeName(), fields.item( k ).nodeValue() );
+                pHeader.setFieldData( fields.item( k ).nodeName(), fields.item( k ).nodeValue() );
+                pFooter.setFieldData( fields.item( k ).nodeName(), fields.item( k ).nodeValue() );
             }
         }
     }
@@ -292,29 +308,32 @@ MPageCollection* MReportEngine::renderReport(){
 
     // Initialize the grand total array
     grandTotal.clear();
-    for(int i = 0; i < rFooter.getCalcFieldCount(); i++)
-        grandTotal.append(new QMemArray<double>);
+    for ( int i = 0; i < rFooter.getCalcFieldCount(); i++ )
+        grandTotal.append( new QMemArray<double> );
 
     // Create the first page
-    startPage(pages);
+    startPage( pages );
 
     // Draw the detail section by looping through all the records
     int chkRow = 0;
     int curDetailLevel = 0;
     int prevDetailLevel = -1;
 
-    for(j = 0; j < rowCount; j++){
+    for ( j = 0; j < rowCount; j++ )
+    {
         QString detailValue;
-        QDomNode record = records.item(j);
+        QDomNode record = records.item( j );
 
-        if((record.nodeType() == QDomNode::ElementNode)
-         && (record.nodeName() == "Row")){
+        if ( ( record.nodeType() == QDomNode::ElementNode )
+                && ( record.nodeName() == "Row" ) )
+        {
             // Update status event
-            if((chkRow = (j / 2) % 20) == 0)
-                emit signalRenderStatus(j / 2);
+            if ( ( chkRow = ( j / 2 ) % 20 ) == 0 )
+                emit signalRenderStatus( j / 2 );
 
             // Check for cancel action
-            if(cancelRender){
+            if ( cancelRender )
+            {
                 p.end();
                 delete pages;
                 return 0;
@@ -324,80 +343,83 @@ MPageCollection* MReportEngine::renderReport(){
             QDomNamedNodeMap fields = record.attributes();
 
             // Find the detail object to process with rendering
-            detailValue = fields.namedItem("level").nodeValue();
+            detailValue = fields.namedItem( "level" ).nodeValue();
             curDetailLevel = detailValue.toInt();
 
             // Draw detail footer if appropriate
-            if (curDetailLevel <= prevDetailLevel){
+            if ( curDetailLevel <= prevDetailLevel )
+            {
                 // Draw footer for previous detail levels
                 //   from prevDetailLevel up to curDetailLevel
                 // Draw footer for current detail level
-                for (int i = prevDetailLevel; i >= curDetailLevel; i--)
+                for ( int i = prevDetailLevel; i >= curDetailLevel; i-- )
                 {
-                    MReportSection *footer = findDetailFooter(i);
-                    if (footer)
+                    MReportSection *footer = findDetailFooter( i );
+                    if ( footer )
                     {
-                        footer->setPageNumber(currPage);
-                        footer->setReportDate(currDate);
-                        footer->setCalcFieldData(&grandTotal);
-                        if((currY + footer->getHeight()) > currHeight)
-                             newPage(pages);
+                        footer->setPageNumber( currPage );
+                        footer->setReportDate( currDate );
+                        footer->setCalcFieldData( &grandTotal );
+                        if ( ( currY + footer->getHeight() ) > currHeight )
+                            newPage( pages );
 
-                        footer->draw(&p, leftMargin, currY);
+                        footer->draw( &p, leftMargin, currY );
                         currY += footer->getHeight();
                     }
                 }
             }
 
-               // Draw detail header for level curDetailLevel
-            MReportSection *header = findDetailHeader(curDetailLevel);
-            if (header)
+            // Draw detail header for level curDetailLevel
+            MReportSection *header = findDetailHeader( curDetailLevel );
+            if ( header )
             {
-                header->setPageNumber(currPage);
-                header->setReportDate(currDate);
-                if((currY + header->getHeight()) > currHeight)
-                     newPage(pages);
+                header->setPageNumber( currPage );
+                header->setReportDate( currDate );
+                if ( ( currY + header->getHeight() ) > currHeight )
+                    newPage( pages );
 
-                   header->draw(&p, leftMargin, currY);
+                header->draw( &p, leftMargin, currY );
                 currY += header->getHeight();
             }
 
-            MReportDetail *detail = findDetail(detailValue.toInt());
+            MReportDetail *detail = findDetail( detailValue.toInt() );
             unsigned int fieldCount = detail->getFieldCount();
 
-            for(i = 0; i < fieldCount; i++){
+            for ( i = 0; i < fieldCount; i++ )
+            {
                 // Get the field value
-                detailValue =  fields.namedItem(detail->getFieldName(i)).nodeValue();
+                detailValue = fields.namedItem( detail->getFieldName( i ) ).nodeValue();
                 // Set the field
-                detail->setFieldData(i, detailValue);
+                detail->setFieldData( i, detailValue );
                 // Set the grand total data
-                int calcIdx = rFooter.getCalcFieldIndex(detail->getFieldName(i));
-                if(calcIdx != -1){
-                    int vsize = grandTotal.at(calcIdx)->size();
-                    grandTotal.at(calcIdx)->resize(vsize + 1);
-                    grandTotal.at(calcIdx)->at(vsize) = detailValue.toDouble();
+                int calcIdx = rFooter.getCalcFieldIndex( detail->getFieldName( i ) );
+                if ( calcIdx != -1 )
+                {
+                    int vsize = grandTotal.at( calcIdx ) ->size();
+                    grandTotal.at( calcIdx ) ->resize( vsize + 1 );
+                    grandTotal.at( calcIdx ) ->at( vsize ) = detailValue.toDouble();
                 }
             }
 
-            detail->setPageNumber(currPage);
-            detail->setReportDate(currDate);
-            if((currY + detail->getHeight()) > currHeight ||
-               (detail->getRepeat() && currY + heightOfDetails > currHeight))
+            detail->setPageNumber( currPage );
+            detail->setReportDate( currDate );
+            if ( ( currY + detail->getHeight() ) > currHeight ||
+                    ( detail->getRepeat() && currY + heightOfDetails > currHeight ) )
             {
-                newPage(pages);
+                newPage( pages );
 
                 MReportDetail *sec;
-                for (sec = details.first(); sec; sec = details.next())
+                for ( sec = details.first(); sec; sec = details.next() )
                 {
-                    if (sec->getLevel() != curDetailLevel && sec->getRepeat())
+                    if ( sec->getLevel() != curDetailLevel && sec->getRepeat() )
                     {
-                        sec->draw(&p, leftMargin, currY);
+                        sec->draw( &p, leftMargin, currY );
                         currY += sec->getHeight();
                     }
                 }
             }
 
-            detail->draw(&p, leftMargin, currY);
+            detail->draw( &p, leftMargin, currY );
             currY += detail->getHeight();
             prevDetailLevel = curDetailLevel;
         }
@@ -405,164 +427,180 @@ MPageCollection* MReportEngine::renderReport(){
 
     // Draw detail footers that was not drawn before
     //   for details from curDetailLevel up to prevDetailLevel
-    for (int i = prevDetailLevel; i >= 0; i--)
+    for ( int i = prevDetailLevel; i >= 0; i-- )
     {
-        MReportSection *footer = findDetailFooter(i);
-        if (footer)
+        MReportSection *footer = findDetailFooter( i );
+        if ( footer )
         {
-            footer->setPageNumber(currPage);
-            footer->setReportDate(currDate);
-            footer->setCalcFieldData(&grandTotal);
-            if((currY + footer->getHeight()) > currHeight)
-                 newPage(pages);
+            footer->setPageNumber( currPage );
+            footer->setReportDate( currDate );
+            footer->setCalcFieldData( &grandTotal );
+            if ( ( currY + footer->getHeight() ) > currHeight )
+                newPage( pages );
 
-            footer->draw(&p, leftMargin, currY);
+            footer->draw( &p, leftMargin, currY );
             currY += footer->getHeight();
         }
     }
 
     // Finish the last page of the report
-    endPage(pages);
+    endPage( pages );
 
     // Destroy the page painter
     p.end();
 
     // Set the page collection attributes
-    pages->setPageDimensions(QSize(pageWidth, pageHeight));
-    pages->setPageSize(pageSize);
-    pages->setPageOrientation(pageOrientation);
+    pages->setPageDimensions( QSize( pageWidth, pageHeight ) );
+    pages->setPageSize( pageSize );
+    pages->setPageOrientation( pageOrientation );
 
     // Send final status
-    emit signalRenderStatus(rowCount / 2);
-    m_needRegeneration=false;
-    m_pageCollection=pages;
+    emit signalRenderStatus( rowCount / 2 );
+    m_needRegeneration = false;
+    m_pageCollection = pages;
     return pages;
 }
 
 /** Starts a new page of the report */
-void MReportEngine::startPage(MPageCollection* pages){
-  // Set the current y pos
-  currY = topMargin;
+void MReportEngine::startPage( MPageCollection* pages )
+{
+    // Set the current y pos
+    currY = topMargin;
 
-  // Create a new page
-  pages->appendPage();
-  // Increment the page count
-  currPage++;
+    // Create a new page
+    pages->appendPage();
+    // Increment the page count
+    currPage++;
 
-  // Set the page painter to the current page
-  p.begin(pages->getCurrentPage());
+    // Set the page painter to the current page
+    p.begin( pages->getCurrentPage() );
 
-  // Draw the report header
-  drawReportHeader(pages);
-  // Draw the page header
-  drawPageHeader(pages);
+    // Draw the report header
+    drawReportHeader( pages );
+    // Draw the page header
+    drawPageHeader( pages );
 }
 
 /** Finishes the current page of the report */
-void MReportEngine::endPage(MPageCollection* pages){
-  // Draw the report footer
-  drawReportFooter(pages);
-  // Draw the page footer
-  drawPageFooter(pages);
+void MReportEngine::endPage( MPageCollection* pages )
+{
+    // Draw the report footer
+    drawReportFooter( pages );
+    // Draw the page footer
+    drawPageFooter( pages );
 }
 
 /** Finishes the current page and adds a new page */
-void MReportEngine::newPage(MPageCollection* pages){
-  // Draw the page footer
-  drawPageFooter(pages);
+void MReportEngine::newPage( MPageCollection* pages )
+{
+    // Draw the page footer
+    drawPageFooter( pages );
 
-  // Stop the painter
-  p.end();
+    // Stop the painter
+    p.end();
 
-  // Start a new page
-  startPage(pages);
+    // Start a new page
+    startPage( pages );
 }
 
 /** Draws the report header object to the current page */
-void MReportEngine::drawReportHeader(MPageCollection* pages){
-    if(rHeader.getHeight() == 0) return;
+void MReportEngine::drawReportHeader( MPageCollection* pages )
+{
+    if ( rHeader.getHeight() == 0 )
+        return ;
 
-  if((rHeader.printFrequency() == MReportSection::FirstPage && currPage == 1)
-     ||(rHeader.printFrequency() == MReportSection::EveryPage)){
+    if ( ( rHeader.printFrequency() == MReportSection::FirstPage && currPage == 1 )
+            || ( rHeader.printFrequency() == MReportSection::EveryPage ) )
+    {
 
-    rHeader.setPageNumber(currPage);
-    rHeader.setReportDate(currDate);
-    rHeader.draw(&p, leftMargin, currY);
-    currY += rHeader.getHeight();
-  }
+        rHeader.setPageNumber( currPage );
+        rHeader.setReportDate( currDate );
+        rHeader.draw( &p, leftMargin, currY );
+        currY += rHeader.getHeight();
+    }
 }
 
 /** Draws the page header to the current page */
-void MReportEngine::drawPageHeader(MPageCollection* pages){
-    if(pHeader.getHeight() == 0) return;
+void MReportEngine::drawPageHeader( MPageCollection* pages )
+{
+    if ( pHeader.getHeight() == 0 )
+        return ;
 
-  if((currY + pHeader.getHeight()) > currHeight)
-    newPage(pages);
+    if ( ( currY + pHeader.getHeight() ) > currHeight )
+        newPage( pages );
 
-  if((pHeader.printFrequency() == MReportSection::FirstPage && currPage == 1)
-     ||(pHeader.printFrequency() == MReportSection::EveryPage)){
+    if ( ( pHeader.printFrequency() == MReportSection::FirstPage && currPage == 1 )
+            || ( pHeader.printFrequency() == MReportSection::EveryPage ) )
+    {
 
-    pHeader.setPageNumber(currPage);
-    pHeader.setReportDate(currDate);
-    pHeader.draw(&p, leftMargin, currY);
-    currY += pHeader.getHeight();
-  }
+        pHeader.setPageNumber( currPage );
+        pHeader.setReportDate( currDate );
+        pHeader.draw( &p, leftMargin, currY );
+        currY += pHeader.getHeight();
+    }
 }
 
 /** Draws the page footer to the current page */
-void MReportEngine::drawPageFooter(MPageCollection* pages){
-    if(pFooter.getHeight() == 0) return;
+void MReportEngine::drawPageFooter( MPageCollection* pages )
+{
+    if ( pFooter.getHeight() == 0 )
+        return ;
 
-  if((pFooter.printFrequency() == MReportSection::FirstPage && currPage == 1)
-     ||(pFooter.printFrequency() == MReportSection::EveryPage)){
+    if ( ( pFooter.printFrequency() == MReportSection::FirstPage && currPage == 1 )
+            || ( pFooter.printFrequency() == MReportSection::EveryPage ) )
+    {
 
-    pFooter.setPageNumber(currPage);
-    pFooter.setReportDate(currDate);
-    pFooter.draw(&p, leftMargin, (pageHeight - bottomMargin) - pFooter.getHeight());
-    currY += pFooter.getHeight();
-  }
+        pFooter.setPageNumber( currPage );
+        pFooter.setReportDate( currDate );
+        pFooter.draw( &p, leftMargin, ( pageHeight - bottomMargin ) - pFooter.getHeight() );
+        currY += pFooter.getHeight();
+    }
 }
 
 /** Draws the report footer to the current page */
-void MReportEngine::drawReportFooter(MPageCollection* pages){
-    if(rFooter.getHeight() == 0) return;
+void MReportEngine::drawReportFooter( MPageCollection* pages )
+{
+    if ( rFooter.getHeight() == 0 )
+        return ;
 
-  if((currY + rFooter.getHeight()) > currHeight)
-    newPage(pages);
+    if ( ( currY + rFooter.getHeight() ) > currHeight )
+        newPage( pages );
 
-  if((rFooter.printFrequency() == MReportSection::EveryPage)
-     ||(rFooter.printFrequency() == MReportSection::LastPage)){
+    if ( ( rFooter.printFrequency() == MReportSection::EveryPage )
+            || ( rFooter.printFrequency() == MReportSection::LastPage ) )
+    {
 
-    rFooter.setCalcFieldData(&grandTotal);
+        rFooter.setCalcFieldData( &grandTotal );
 
-    rFooter.setPageNumber(currPage);
-    rFooter.setReportDate(currDate);
-    rFooter.draw(&p, leftMargin, currY);
-    currY += rFooter.getHeight();
-  }
+        rFooter.setPageNumber( currPage );
+        rFooter.setReportDate( currDate );
+        rFooter.draw( &p, leftMargin, currY );
+        currY += rFooter.getHeight();
+    }
 }
 
 /** Gets the metrics for the selected page size & orientation */
-QSize MReportEngine::getPageMetrics(int size, int orientation){
-  QPrinter* printer;
-  QSize ps;
+QSize MReportEngine::getPageMetrics( int size, int orientation )
+{
+    QPrinter * printer;
+    QSize ps;
 
-  // Set the page size
-  printer = new QPrinter();
-  printer->setFullPage(true);
-  printer->setPageSize((QPrinter::PageSize)size);
-  printer->setOrientation((QPrinter::Orientation)orientation);
+    // Set the page size
+    printer = new QPrinter();
+    printer->setFullPage( true );
+    printer->setPageSize( ( QPrinter::PageSize ) size );
+    printer->setOrientation( ( QPrinter::Orientation ) orientation );
 
-  // Get the page metrics
-  QPaintDeviceMetrics pdm(printer);
+    // Get the page metrics
+    QPaintDeviceMetrics pdm( printer );
 
-  // Display the first page of the report
-  ps.setWidth(pdm.width());
-  ps.setHeight(pdm.height());
+    // Display the first page of the report
+    ps.setWidth( pdm.width() );
+    ps.setHeight( pdm.height() );
 
-  delete printer;
+    delete printer;
 
-  return ps;
+    return ps;
 }
 
 
@@ -577,382 +615,410 @@ void MReportEngine::recalcDimensions()
 {
     QDomNode report;
     QDomNode child;
-    for (report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
-        if (report.nodeName() == "KugarTemplate")
+    for ( report = rt.firstChild(); !report.isNull(); report = report.nextSibling() )
+        if ( report.nodeName() == "KugarTemplate" )
             break;
 
     QDomNamedNodeMap rattributes = report.attributes();
-    recalcAttribute("BottomMargin", rattributes);
-    recalcAttribute("TopMargin", rattributes);
-    recalcAttribute("LeftMargin", rattributes);
-    recalcAttribute("RightMargin", rattributes);
+    recalcAttribute( "BottomMargin", rattributes );
+    recalcAttribute( "TopMargin", rattributes );
+    recalcAttribute( "LeftMargin", rattributes );
+    recalcAttribute( "RightMargin", rattributes );
 
     QDomNodeList children = report.childNodes();
     int childCount = children.length();
 
-    for(int j = 0; j < childCount; j++){
-        child = children.item(j);
+    for ( int j = 0; j < childCount; j++ )
+    {
+        child = children.item( j );
         QDomNamedNodeMap attributes = child.attributes();
 
         QDomNodeList children2 = child.childNodes();
         int childCount2 = children2.length();
-        recalcAttribute("Height", attributes);
+        recalcAttribute( "Height", attributes );
 
-        for(int k = 0; k < childCount2; k++){
-            QDomNode child2 = children2.item(k);
+        for ( int k = 0; k < childCount2; k++ )
+        {
+            QDomNode child2 = children2.item( k );
             QDomNamedNodeMap attributes = child2.attributes();
-            recalcAttribute("X", attributes);
-            recalcAttribute("Y", attributes);
-            recalcAttribute("Width", attributes);
-            recalcAttribute("Height", attributes);
-            recalcAttribute("X1", attributes);
-            recalcAttribute("X2", attributes);
-            recalcAttribute("Y1", attributes);
-            recalcAttribute("Y2", attributes);
+            recalcAttribute( "X", attributes );
+            recalcAttribute( "Y", attributes );
+            recalcAttribute( "Width", attributes );
+            recalcAttribute( "Height", attributes );
+            recalcAttribute( "X1", attributes );
+            recalcAttribute( "X2", attributes );
+            recalcAttribute( "Y1", attributes );
+            recalcAttribute( "Y2", attributes );
         }
     }
 
 }
 
-void MReportEngine::recalcAttribute(const QString& name, QDomNamedNodeMap attributes)
+void MReportEngine::recalcAttribute( const QString& name, QDomNamedNodeMap attributes )
 {
-    if (!attributes.namedItem(name).isNull())
+    if ( !attributes.namedItem( name ).isNull() )
     {
-        attributes.namedItem(name).setNodeValue(QString("%1").arg(attributes.namedItem(name).nodeValue().toInt()*93/81));
+        attributes.namedItem( name ).setNodeValue( QString( "%1" ).arg( attributes.namedItem( name ).nodeValue().toInt() * 93 / 81 ) );
     }
 }
 
 /** Walks the document tree, setting the report layout */
-void MReportEngine::initTemplate(){
+void MReportEngine::initTemplate()
+{
 
 #ifdef Q_WS_WIN
-  recalcDimensions();
+    recalcDimensions();
 #endif
 
-  QDomNode report;
-  QDomNode child;
+    QDomNode report;
+    QDomNode child;
 
-  m_needRegeneration=true;
+    m_needRegeneration = true;
     // Get the report - assume there is only one.
 
-    for (report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
-        if (report.nodeName() == "KugarTemplate")
+    for ( report = rt.firstChild(); !report.isNull(); report = report.nextSibling() )
+        if ( report.nodeName() == "KugarTemplate" )
             break;
 
-  setReportAttributes(&report);
+    setReportAttributes( &report );
 
-  // Get all the child report elements
-  QDomNodeList children = report.childNodes();
-  int childCount = children.length();
+    // Get all the child report elements
+    QDomNodeList children = report.childNodes();
+    int childCount = children.length();
 
-  for(int j = 0; j < childCount; j++){
-    child = children.item(j);
+    for ( int j = 0; j < childCount; j++ )
+    {
+        child = children.item( j );
 
-    if(child.nodeType() == QDomNode::ElementNode){
-      // Report Header
-      if(child.nodeName() == "ReportHeader")
-        setSectionAttributes(&rHeader, &child);
-      else if(child.nodeName() == "PageHeader")
-        setSectionAttributes(&pHeader, &child);
-      else if(child.nodeName() == "DetailHeader")
-      {
-          MReportSection *dHeader = new MReportSection;
-          dHeaders.append(dHeader);
-          setDetMiscAttributes(dHeader, &child);
-      }
-      else if(child.nodeName() == "Detail")
-        setDetailAttributes(&child);
-      else if(child.nodeName() == "DetailFooter")
-      {
-          MReportSection *dFooter = new MReportSection;
-          setDetMiscAttributes(dFooter, &child);
-          dFooters.append(dFooter);
-      }
-      else if(child.nodeName() == "PageFooter")
-        setSectionAttributes(&pFooter, &child);
-      else if(child.nodeName() == "ReportFooter")
-        setSectionAttributes(&rFooter, &child);
+        if ( child.nodeType() == QDomNode::ElementNode )
+        {
+            // Report Header
+            if ( child.nodeName() == "ReportHeader" )
+                setSectionAttributes( &rHeader, &child );
+            else if ( child.nodeName() == "PageHeader" )
+                setSectionAttributes( &pHeader, &child );
+            else if ( child.nodeName() == "DetailHeader" )
+            {
+                MReportSection * dHeader = new MReportSection;
+                dHeaders.append( dHeader );
+                setDetMiscAttributes( dHeader, &child );
+            }
+            else if ( child.nodeName() == "Detail" )
+                setDetailAttributes( &child );
+            else if ( child.nodeName() == "DetailFooter" )
+            {
+                MReportSection * dFooter = new MReportSection;
+                setDetMiscAttributes( dFooter, &child );
+                dFooters.append( dFooter );
+            }
+            else if ( child.nodeName() == "PageFooter" )
+                setSectionAttributes( &pFooter, &child );
+            else if ( child.nodeName() == "ReportFooter" )
+                setSectionAttributes( &rFooter, &child );
+        }
     }
-  }
 }
 
 /** Sets the main layout attributes for the report */
-void MReportEngine::setReportAttributes(QDomNode* report){
-  // Get the attributes for the report
-  QDomNamedNodeMap attributes = report->attributes();
+void MReportEngine::setReportAttributes( QDomNode* report )
+{
+    // Get the attributes for the report
+    QDomNamedNodeMap attributes = report->attributes();
 
-  pageSize = attributes.namedItem("PageSize").nodeValue().toInt();
-  pageOrientation = attributes.namedItem("PageOrientation").nodeValue().toInt();
-  topMargin = attributes.namedItem("TopMargin").nodeValue().toInt();
-  bottomMargin = attributes.namedItem("BottomMargin").nodeValue().toInt();
-  leftMargin = attributes.namedItem("LeftMargin").nodeValue().toInt();
-  rightMargin = attributes.namedItem("RightMargin").nodeValue().toInt();
+    pageSize = attributes.namedItem( "PageSize" ).nodeValue().toInt();
+    pageOrientation = attributes.namedItem( "PageOrientation" ).nodeValue().toInt();
+    topMargin = attributes.namedItem( "TopMargin" ).nodeValue().toInt();
+    bottomMargin = attributes.namedItem( "BottomMargin" ).nodeValue().toInt();
+    leftMargin = attributes.namedItem( "LeftMargin" ).nodeValue().toInt();
+    rightMargin = attributes.namedItem( "RightMargin" ).nodeValue().toInt();
 
-  // Set the page metrics
-  QSize ps = getPageMetrics(pageSize, pageOrientation);
-  pageWidth = ps.width();
-  pageHeight = ps.height();
+    // Set the page metrics
+    QSize ps = getPageMetrics( pageSize, pageOrientation );
+    pageWidth = ps.width();
+    pageHeight = ps.height();
 }
 
 /** Sets the layout attributes for the given report section */
-void MReportEngine::setSectionAttributes(MReportSection* section, QDomNode* report){
-  // Get the attributes for the section
-  QDomNamedNodeMap attributes = report->attributes();
+void MReportEngine::setSectionAttributes( MReportSection* section, QDomNode* report )
+{
+    // Get the attributes for the section
+    QDomNamedNodeMap attributes = report->attributes();
 
-  // Get the section attributes
-  section->setHeight(attributes.namedItem("Height").nodeValue().toInt());
-  section->setPrintFrequency(attributes.namedItem("PrintFrequency").nodeValue().toInt());
+    // Get the section attributes
+    section->setHeight( attributes.namedItem( "Height" ).nodeValue().toInt() );
+    section->setPrintFrequency( attributes.namedItem( "PrintFrequency" ).nodeValue().toInt() );
 
-  // Process the sections labels
-  QDomNodeList children = report->childNodes();
-  int childCount = children.length();
+    // Process the sections labels
+    QDomNodeList children = report->childNodes();
+    int childCount = children.length();
 
-  // For each label, extract the attr list and add the new label
-  // to the sections's label collection
-  for(int j = 0; j < childCount; j++){
-    QDomNode child = children.item(j);
-    if(child.nodeType() == QDomNode::ElementNode){
-    if(child.nodeName() == "Line"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MLineObject* line = new MLineObject();
-          setLineAttributes(line, &attributes);
-          section->addLine(line);
-        }
-        else if(child.nodeName() == "Label"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MLabelObject* label = new MLabelObject();
-          setLabelAttributes(label, &attributes);
-          section->addLabel(label);
-        }
-        else if(child.nodeName() == "Special"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MSpecialObject* field = new MSpecialObject();
-          setSpecialAttributes(field, &attributes);
-          section->addSpecialField(field);
-        }
-        else if(child.nodeName() == "CalculatedField"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MCalcObject* field = new MCalcObject();
-          setCalculatedFieldAttributes(field, &attributes);
-          section->addCalculatedField(field);
-        }
-        else if(child.nodeName() == "Field"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MFieldObject* field = new MFieldObject();
-          setFieldAttributes(field, &attributes);
-          section->addField(field);
+    // For each label, extract the attr list and add the new label
+    // to the sections's label collection
+    for ( int j = 0; j < childCount; j++ )
+    {
+        QDomNode child = children.item( j );
+        if ( child.nodeType() == QDomNode::ElementNode )
+        {
+            if ( child.nodeName() == "Line" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MLineObject* line = new MLineObject();
+                setLineAttributes( line, &attributes );
+                section->addLine( line );
+            }
+            else if ( child.nodeName() == "Label" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MLabelObject* label = new MLabelObject();
+                setLabelAttributes( label, &attributes );
+                section->addLabel( label );
+            }
+            else if ( child.nodeName() == "Special" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MSpecialObject* field = new MSpecialObject();
+                setSpecialAttributes( field, &attributes );
+                section->addSpecialField( field );
+            }
+            else if ( child.nodeName() == "CalculatedField" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MCalcObject* field = new MCalcObject();
+                setCalculatedFieldAttributes( field, &attributes );
+                section->addCalculatedField( field );
+            }
+            else if ( child.nodeName() == "Field" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MFieldObject* field = new MFieldObject();
+                setFieldAttributes( field, &attributes );
+                section->addField( field );
+            }
         }
     }
-  }
 }
 
 /** Sets the layout attributes for the detail headers and footers */
-void MReportEngine::setDetMiscAttributes(MReportSection* section, QDomNode* report)
+void MReportEngine::setDetMiscAttributes( MReportSection* section, QDomNode* report )
 {
-  // Get the attributes for the section
-  QDomNamedNodeMap attributes = report->attributes();
+    // Get the attributes for the section
+    QDomNamedNodeMap attributes = report->attributes();
 
-  // Get the section attributes
-  section->setLevel(attributes.namedItem("Level").nodeValue().toInt());
+    // Get the section attributes
+    section->setLevel( attributes.namedItem( "Level" ).nodeValue().toInt() );
 
-  // Set other section attributes
-  setSectionAttributes(section, report);
+    // Set other section attributes
+    setSectionAttributes( section, report );
 }
 
 
 /** Sets the layout attributes for the detail section */
-void MReportEngine::setDetailAttributes(QDomNode* report){
-  // Get the attributes for the detail section
-  QDomNamedNodeMap attributes = report->attributes();
+void MReportEngine::setDetailAttributes( QDomNode* report )
+{
+    // Get the attributes for the detail section
+    QDomNamedNodeMap attributes = report->attributes();
 
-  // Get the report detail attributes
-  MReportDetail *detail = new MReportDetail;
-  int height = attributes.namedItem("Height").nodeValue().toInt();
-  heightOfDetails += height;
-  detail->setHeight(height);
-  detail->setLevel(attributes.namedItem("Level").nodeValue().toInt());
-  detail->setRepeat(attributes.namedItem("Repeat").nodeValue() == "true");
+    // Get the report detail attributes
+    MReportDetail *detail = new MReportDetail;
+    int height = attributes.namedItem( "Height" ).nodeValue().toInt();
+    heightOfDetails += height;
+    detail->setHeight( height );
+    detail->setLevel( attributes.namedItem( "Level" ).nodeValue().toInt() );
+    detail->setRepeat( attributes.namedItem( "Repeat" ).nodeValue() == "true" );
 
-  // Process the report detail labels
-  QDomNodeList children = report->childNodes();
-  int childCount = children.length();
+    // Process the report detail labels
+    QDomNodeList children = report->childNodes();
+    int childCount = children.length();
 
-  for(int j = 0; j < childCount; j++){
-    QDomNode child = children.item(j);
-    if(child.nodeType() == QDomNode::ElementNode){
-    if(child.nodeName() == "Line"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MLineObject* line = new MLineObject();
-          setLineAttributes(line, &attributes);
-          detail->addLine(line);
-        }
-        else if(child.nodeName() == "Label"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MLabelObject* label = new MLabelObject();
-          setLabelAttributes(label, &attributes);
-          detail->addLabel(label);
-        }
-        else if(child.nodeName() == "Special"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MSpecialObject* field = new MSpecialObject();
-          setSpecialAttributes(field, &attributes);
-          detail->addSpecialField(field);
-        }
-        else if(child.nodeName() == "Field"){
-          QDomNamedNodeMap attributes = child.attributes();
-          MFieldObject* field = new MFieldObject();
-          setFieldAttributes(field, &attributes);
-          detail->addField(field);
+    for ( int j = 0; j < childCount; j++ )
+    {
+        QDomNode child = children.item( j );
+        if ( child.nodeType() == QDomNode::ElementNode )
+        {
+            if ( child.nodeName() == "Line" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MLineObject* line = new MLineObject();
+                setLineAttributes( line, &attributes );
+                detail->addLine( line );
+            }
+            else if ( child.nodeName() == "Label" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MLabelObject* label = new MLabelObject();
+                setLabelAttributes( label, &attributes );
+                detail->addLabel( label );
+            }
+            else if ( child.nodeName() == "Special" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MSpecialObject* field = new MSpecialObject();
+                setSpecialAttributes( field, &attributes );
+                detail->addSpecialField( field );
+            }
+            else if ( child.nodeName() == "Field" )
+            {
+                QDomNamedNodeMap attributes = child.attributes();
+                MFieldObject* field = new MFieldObject();
+                setFieldAttributes( field, &attributes );
+                detail->addField( field );
+            }
         }
     }
-  }
-  // Append a newly created detail to the list
-  details.append(detail);
+    // Append a newly created detail to the list
+    details.append( detail );
 }
 
 /** Sets a line's layout attributes */
-void MReportEngine::setLineAttributes(MLineObject* line, QDomNamedNodeMap* attr){
-  line->setLine(attr->namedItem("X1").nodeValue().toInt(),
-          attr->namedItem("Y1").nodeValue().toInt(),
-                attr->namedItem("X2").nodeValue().toInt(),
-                attr->namedItem("Y2").nodeValue().toInt());
+void MReportEngine::setLineAttributes( MLineObject* line, QDomNamedNodeMap* attr )
+{
+    line->setLine( attr->namedItem( "X1" ).nodeValue().toInt(),
+                   attr->namedItem( "Y1" ).nodeValue().toInt(),
+                   attr->namedItem( "X2" ).nodeValue().toInt(),
+                   attr->namedItem( "Y2" ).nodeValue().toInt() );
 
-  QString tmp = attr->namedItem("Color").nodeValue();
+    QString tmp = attr->namedItem( "Color" ).nodeValue();
 
-  line->setColor(tmp.left(tmp.find(",")).toInt(),
-                 tmp.mid(tmp.find(",") + 1, (tmp.findRev(",") - tmp.find(",")) - 1).toInt(),
-                 tmp.right(tmp.length() - tmp.findRev(",") - 1).toInt());
+    line->setColor( tmp.left( tmp.find( "," ) ).toInt(),
+                    tmp.mid( tmp.find( "," ) + 1, ( tmp.findRev( "," ) - tmp.find( "," ) ) - 1 ).toInt(),
+                    tmp.right( tmp.length() - tmp.findRev( "," ) - 1 ).toInt() );
 
-  line->setWidth(attr->namedItem("Width").nodeValue().toInt());
-  line->setStyle(attr->namedItem("Style").nodeValue().toInt());
+    line->setWidth( attr->namedItem( "Width" ).nodeValue().toInt() );
+    line->setStyle( attr->namedItem( "Style" ).nodeValue().toInt() );
 }
 
 /** Sets a label's layout attributes */
-void MReportEngine::setLabelAttributes(MLabelObject* label, QDomNamedNodeMap* attr){
-  QString tmp;
+void MReportEngine::setLabelAttributes( MLabelObject* label, QDomNamedNodeMap* attr )
+{
+    QString tmp;
 
-  label->setText(attr->namedItem("Text").nodeValue());
-  label->setGeometry(attr->namedItem("X").nodeValue().toInt(),
-                     attr->namedItem("Y").nodeValue().toInt(),
-                     attr->namedItem("Width").nodeValue().toInt(),
-                     attr->namedItem("Height").nodeValue().toInt());
+    label->setText( attr->namedItem( "Text" ).nodeValue() );
+    label->setGeometry( attr->namedItem( "X" ).nodeValue().toInt(),
+                        attr->namedItem( "Y" ).nodeValue().toInt(),
+                        attr->namedItem( "Width" ).nodeValue().toInt(),
+                        attr->namedItem( "Height" ).nodeValue().toInt() );
 
-  tmp = attr->namedItem("BackgroundColor").nodeValue();
-  label->setBackgroundColor(tmp.left(tmp.find(",")).toInt(),
-                            tmp.mid(tmp.find(",") + 1, (tmp.findRev(",") - tmp.find(",")) - 1).toInt(),
-                            tmp.right(tmp.length() - tmp.findRev(",") - 1).toInt());
+    tmp = attr->namedItem( "BackgroundColor" ).nodeValue();
+    label->setBackgroundColor( tmp.left( tmp.find( "," ) ).toInt(),
+                               tmp.mid( tmp.find( "," ) + 1, ( tmp.findRev( "," ) - tmp.find( "," ) ) - 1 ).toInt(),
+                               tmp.right( tmp.length() - tmp.findRev( "," ) - 1 ).toInt() );
 
-  tmp = attr->namedItem("ForegroundColor").nodeValue();
-  label->setForegroundColor(tmp.left(tmp.find(",")).toInt(),
-                            tmp.mid(tmp.find(",") + 1, (tmp.findRev(",") - tmp.find(",")) - 1).toInt(),
-                            tmp.right(tmp.length() - tmp.findRev(",") - 1).toInt());
+    tmp = attr->namedItem( "ForegroundColor" ).nodeValue();
+    label->setForegroundColor( tmp.left( tmp.find( "," ) ).toInt(),
+                               tmp.mid( tmp.find( "," ) + 1, ( tmp.findRev( "," ) - tmp.find( "," ) ) - 1 ).toInt(),
+                               tmp.right( tmp.length() - tmp.findRev( "," ) - 1 ).toInt() );
 
-  tmp = attr->namedItem("BorderColor").nodeValue();
-  label->setBorderColor(tmp.left(tmp.find(",")).toInt(),
-                            tmp.mid(tmp.find(",") + 1, (tmp.findRev(",") - tmp.find(",")) - 1).toInt(),
-                            tmp.right(tmp.length() - tmp.findRev(",") - 1).toInt());
+    tmp = attr->namedItem( "BorderColor" ).nodeValue();
+    label->setBorderColor( tmp.left( tmp.find( "," ) ).toInt(),
+                           tmp.mid( tmp.find( "," ) + 1, ( tmp.findRev( "," ) - tmp.find( "," ) ) - 1 ).toInt(),
+                           tmp.right( tmp.length() - tmp.findRev( "," ) - 1 ).toInt() );
 
-  label->setBorderWidth(attr->namedItem("BorderWidth").nodeValue().toInt());
-  label->setBorderStyle(attr->namedItem("BorderStyle").nodeValue().toInt());
-  if (!attr->namedItem("DrawBottom").isNull())
-      label->setDrawBottom(attr->namedItem("DrawBottom").nodeValue() == "true");
-  if (!attr->namedItem("DrawTop").isNull())
-      label->setDrawTop(attr->namedItem("DrawTop").nodeValue() == "true");
-  if (!attr->namedItem("DrawLeft").isNull())
-      label->setDrawLeft(attr->namedItem("DrawLeft").nodeValue() == "true");
-  if (!attr->namedItem("DrawRight").isNull())
-      label->setDrawRight(attr->namedItem("DrawRight").nodeValue() == "true");
-  label->setFont(attr->namedItem("FontFamily").nodeValue(),
-                 attr->namedItem("FontSize").nodeValue().toInt(),
-                 attr->namedItem("FontWeight").nodeValue().toInt(),
-                 (attr->namedItem("FontItalic").nodeValue().toInt() == 0 ? false : true));
-  label->setHorizontalAlignment(attr->namedItem("HAlignment").nodeValue().toInt());
-  label->setVerticalAlignment(attr->namedItem("VAlignment").nodeValue().toInt());
-  label->setWordWrap(attr->namedItem("WordWrap").nodeValue().toInt() == 0 ? false : true);
+    label->setBorderWidth( attr->namedItem( "BorderWidth" ).nodeValue().toInt() );
+    label->setBorderStyle( attr->namedItem( "BorderStyle" ).nodeValue().toInt() );
+    if ( !attr->namedItem( "DrawBottom" ).isNull() )
+        label->setDrawBottom( attr->namedItem( "DrawBottom" ).nodeValue() == "true" );
+    if ( !attr->namedItem( "DrawTop" ).isNull() )
+        label->setDrawTop( attr->namedItem( "DrawTop" ).nodeValue() == "true" );
+    if ( !attr->namedItem( "DrawLeft" ).isNull() )
+        label->setDrawLeft( attr->namedItem( "DrawLeft" ).nodeValue() == "true" );
+    if ( !attr->namedItem( "DrawRight" ).isNull() )
+        label->setDrawRight( attr->namedItem( "DrawRight" ).nodeValue() == "true" );
+    label->setFont( attr->namedItem( "FontFamily" ).nodeValue(),
+                    attr->namedItem( "FontSize" ).nodeValue().toInt(),
+                    attr->namedItem( "FontWeight" ).nodeValue().toInt(),
+                    ( attr->namedItem( "FontItalic" ).nodeValue().toInt() == 0 ? false : true ) );
+    label->setHorizontalAlignment( attr->namedItem( "HAlignment" ).nodeValue().toInt() );
+    label->setVerticalAlignment( attr->namedItem( "VAlignment" ).nodeValue().toInt() );
+    label->setWordWrap( attr->namedItem( "WordWrap" ).nodeValue().toInt() == 0 ? false : true );
 }
 
 /** Sets a special field's layout attributes */
-void MReportEngine::setSpecialAttributes(MSpecialObject* field, QDomNamedNodeMap* attr){
-  field->setType(attr->namedItem("Type").nodeValue().toInt());
-  field->setDateFormat(attr->namedItem("DateFormat").nodeValue().toInt());
+void MReportEngine::setSpecialAttributes( MSpecialObject* field, QDomNamedNodeMap* attr )
+{
+    field->setType( attr->namedItem( "Type" ).nodeValue().toInt() );
+    field->setDateFormat( attr->namedItem( "DateFormat" ).nodeValue().toInt() );
 
-  setLabelAttributes((MLabelObject *)field, attr);
+    setLabelAttributes( ( MLabelObject * ) field, attr );
 }
 
 /** Sets a field's layout attributes */
-void MReportEngine::setFieldAttributes(MFieldObject* field, QDomNamedNodeMap* attr){
-  field->setFieldName(attr->namedItem("Field").nodeValue());
-  field->setDataType(attr->namedItem("DataType").nodeValue().toInt());
-  field->setDateFormat(attr->namedItem("DateFormat").nodeValue().toInt());
-  field->setPrecision(attr->namedItem("Precision").nodeValue().toInt());
-  field->setCurrency(attr->namedItem("Currency").nodeValue().toInt());
-  field->setCommaSeparator(attr->namedItem("CommaSeparator").nodeValue().toInt());
+void MReportEngine::setFieldAttributes( MFieldObject* field, QDomNamedNodeMap* attr )
+{
+    field->setFieldName( attr->namedItem( "Field" ).nodeValue() );
+    field->setDataType( attr->namedItem( "DataType" ).nodeValue().toInt() );
+    field->setDateFormat( attr->namedItem( "DateFormat" ).nodeValue().toInt() );
+    field->setPrecision( attr->namedItem( "Precision" ).nodeValue().toInt() );
+    field->setCurrency( attr->namedItem( "Currency" ).nodeValue().toInt() );
+    field->setCommaSeparator( attr->namedItem( "CommaSeparator" ).nodeValue().toInt() );
 
-  QString tmp = attr->namedItem("NegValueColor").nodeValue();
+    QString tmp = attr->namedItem( "NegValueColor" ).nodeValue();
 
-  field->setNegValueColor(tmp.left(tmp.find(",")).toInt(),
-                          tmp.mid(tmp.find(",") + 1, (tmp.findRev(",") - tmp.find(",")) - 1).toInt(),
-                          tmp.right(tmp.length() - tmp.findRev(",") - 1).toInt());
+    field->setNegValueColor( tmp.left( tmp.find( "," ) ).toInt(),
+                             tmp.mid( tmp.find( "," ) + 1, ( tmp.findRev( "," ) - tmp.find( "," ) ) - 1 ).toInt(),
+                             tmp.right( tmp.length() - tmp.findRev( "," ) - 1 ).toInt() );
 
-  setLabelAttributes((MLabelObject *)field, attr);
+    setLabelAttributes( ( MLabelObject * ) field, attr );
 }
 
 /** Sets a calculated field's layout attributes */
-void MReportEngine::setCalculatedFieldAttributes(MCalcObject* field, QDomNamedNodeMap* attr){
-  field->setCalculationType(attr->namedItem("CalculationType").nodeValue().toInt());
-  setFieldAttributes((MFieldObject *)field, attr);
+void MReportEngine::setCalculatedFieldAttributes( MCalcObject* field, QDomNamedNodeMap* attr )
+{
+    field->setCalculationType( attr->namedItem( "CalculationType" ).nodeValue().toInt() );
+    setFieldAttributes( ( MFieldObject * ) field, attr );
 }
 
 /** Copies member data from one object to another.
   Used by the copy constructor and assignment operator */
-void MReportEngine::copy(const MReportEngine* mReportEngine){
-  // Copy document data
-  m_refCount=1;
-  rd = mReportEngine->rd;
-  rt = mReportEngine->rt;
+void MReportEngine::copy( const MReportEngine* mReportEngine )
+{
+    // Copy document data
+    m_refCount = 1;
+    rd = mReportEngine->rd;
+    rt = mReportEngine->rt;
 
-  // Copy page metrics
-  pageSize = mReportEngine->pageSize;
-  pageOrientation = mReportEngine->pageOrientation;
-  topMargin = mReportEngine->topMargin;
-  bottomMargin = mReportEngine->bottomMargin;
-  leftMargin = mReportEngine->leftMargin;
-  rightMargin = mReportEngine->rightMargin;
-  pageWidth = mReportEngine->pageWidth;
-  pageHeight = mReportEngine->pageHeight;
-  heightOfDetails = mReportEngine->heightOfDetails;
+    // Copy page metrics
+    pageSize = mReportEngine->pageSize;
+    pageOrientation = mReportEngine->pageOrientation;
+    topMargin = mReportEngine->topMargin;
+    bottomMargin = mReportEngine->bottomMargin;
+    leftMargin = mReportEngine->leftMargin;
+    rightMargin = mReportEngine->rightMargin;
+    pageWidth = mReportEngine->pageWidth;
+    pageHeight = mReportEngine->pageHeight;
+    heightOfDetails = mReportEngine->heightOfDetails;
 
-  // Copy the report header
-  rHeader = mReportEngine->rHeader;
-  // Copy the page header
-  pHeader = mReportEngine->pHeader;
-  // Copy the detail sections
+    // Copy the report header
+    rHeader = mReportEngine->rHeader;
+    // Copy the page header
+    pHeader = mReportEngine->pHeader;
+    // Copy the detail sections
     MReportDetail *detail;
     QPtrList<MReportDetail> temp = mReportEngine->details;
-    temp.setAutoDelete(false);
-    for (detail = temp.first(); detail; detail = temp.next())
+    temp.setAutoDelete( false );
+    for ( detail = temp.first(); detail; detail = temp.next() )
     {
-        MReportDetail *new_detail = new MReportDetail;
+        MReportDetail * new_detail = new MReportDetail;
         *new_detail = *detail;
-        details.append(new_detail);
+        details.append( new_detail );
     }
-  // Copy the page footer
-  pFooter = mReportEngine->pFooter;
-  // Copy the report footer
-  rFooter = mReportEngine->rFooter;
+    // Copy the page footer
+    pFooter = mReportEngine->pFooter;
+    // Copy the report footer
+    rFooter = mReportEngine->rFooter;
 
-  // Copy the rendering state
-  currY = mReportEngine->currY;
-  currHeight = mReportEngine->currHeight;
-  currPage = mReportEngine->currPage;
-  currDate = mReportEngine->currDate;
+    // Copy the rendering state
+    currY = mReportEngine->currY;
+    currHeight = mReportEngine->currHeight;
+    currPage = mReportEngine->currPage;
+    currDate = mReportEngine->currDate;
     cancelRender = mReportEngine->cancelRender;
 
     // Copy grand totals list
     grandTotal = mReportEngine->grandTotal;
-  m_pageCollection=mReportEngine->m_pageCollection;
-  m_needRegeneration=mReportEngine->m_needRegeneration;
-  if (m_pageCollection) m_pageCollection->addRef();
+    m_pageCollection = mReportEngine->m_pageCollection;
+    m_needRegeneration = mReportEngine->m_needRegeneration;
+    if ( m_pageCollection )
+        m_pageCollection->addRef();
 }
 #ifndef PURE_QT
 #include "mreportengine.moc"

@@ -15,37 +15,40 @@ class KugarPart;
 
 class KugarView: public KoView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-        KugarView( KugarPart *part, QWidget *parent, const char *name);
-	virtual ~KugarView();
+    KugarView( KugarPart *part, QWidget *parent, const char *name );
+    virtual ~KugarView();
 
-	void setForcedUserTemplate(const QString &name);
-	
-	void updateReadWrite(bool) {;}
+    void setForcedUserTemplate( const QString &name );
 
-	bool renderReport();
-	
-	bool setReportTemplate(const QString &data)
-	{
-		return view -> setReportTemplate(data);
-	}
+    void updateReadWrite( bool )
+    {
+        ;
+    }
 
+    bool renderReport();
 
-	virtual void setupPrinter( KPrinter &printer );
-	virtual void print( KPrinter &printer );
-
+    bool setReportTemplate( const QString &data )
+    {
+        return view -> setReportTemplate( data );
+    }
 
 
-//protected:
-//	virtual bool openFile();
-//	virtual bool closeURL();
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
+
+
+
+    //protected:
+    //  virtual bool openFile();
+    //  virtual bool closeURL();
 
 
 private:
-	KReportViewer *view;
-	QString m_forcedUserTemplate;
+    KReportViewer *view;
+    QString m_forcedUserTemplate;
 };
 
-#endif 
+#endif

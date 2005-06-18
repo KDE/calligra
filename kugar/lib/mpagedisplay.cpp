@@ -1,38 +1,42 @@
 /***************************************************************************
-              mpagedisplay.cpp  -  Kugar page display widget
-              -------------------
-    begin     : Sun Aug 15 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
- ***************************************************************************/
+             mpagedisplay.cpp  -  Kugar page display widget
+             -------------------
+   begin     : Sun Aug 15 1999
+   copyright : (C) 1999 by Mutiny Bay Software
+   email     : info@mutinybaysoftware.com
+***************************************************************************/
 
 #include "mpagedisplay.h"
 
 /** Constructor */
-MPageDisplay::MPageDisplay(QWidget *parent, const char *name ) : QWidget(parent,name) {
-  buffer.resize(1,1);
+MPageDisplay::MPageDisplay( QWidget *parent, const char *name ) : QWidget( parent, name )
+{
+    buffer.resize( 1, 1 );
 }
 
 /** Destructor */
-MPageDisplay::~MPageDisplay(){
-}
+MPageDisplay::~MPageDisplay()
+{}
 
 /** Sets the report page image */
-void MPageDisplay::setPage(QPicture* image){
-  buffer.fill(white);
-  QPainter p(&buffer);
-  image->play(&p);
+void MPageDisplay::setPage( QPicture* image )
+{
+    buffer.fill( white );
+    QPainter p( &buffer );
+    image->play( &p );
 }
 
 /** Display object's paint event */
-void MPageDisplay::paintEvent(QPaintEvent* event){
-  bitBlt(this, 0, 0, &buffer);
+void MPageDisplay::paintEvent( QPaintEvent* event )
+{
+    bitBlt( this, 0, 0, &buffer );
 }
 
 /** Sets the page display dimensions */
-void MPageDisplay::setPageDimensions(QSize size){
-  buffer.resize(size);
-  resize(size);
+void MPageDisplay::setPageDimensions( QSize size )
+{
+    buffer.resize( size );
+    resize( size );
 }
 
 
@@ -40,7 +44,7 @@ void MPageDisplay::setPageDimensions(QSize size){
 
 QSize MPageDisplay::sizeHint() const
 {
-	return buffer.size();
+    return buffer.size();
 }
 
 
@@ -48,7 +52,7 @@ QSize MPageDisplay::sizeHint() const
 
 QSizePolicy MPageDisplay::sizePolicy() const
 {
-	return QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 }
 #ifndef PURE_QT
 #include "mpagedisplay.moc"

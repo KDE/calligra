@@ -17,38 +17,47 @@ class KugarBrowserExtension;
 
 class KugarPart: public KoDocument
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-        KugarPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
-                const char* name = 0, bool singleViewMode = false);
-	virtual ~KugarPart();
+    KugarPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
+               const char* name = 0, bool singleViewMode = false );
+    virtual ~KugarPart();
 
-	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
+    virtual bool initDoc( InitDocFlags flags, QWidget* parentWidget = 0 );
 
-	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
-	virtual bool saveOasis(KoStore*, KoXmlWriter*);
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
+    virtual bool saveOasis( KoStore*, KoXmlWriter* );
 
-	virtual bool loadXML( QIODevice *, const QDomDocument & );
-//	virtual QDomDocument saveXML();
+    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    //  virtual QDomDocument saveXML();
 
-	virtual void paintContent( QPainter& painter, const QRect& rect,
-		bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 ){;}
+    virtual void paintContent( QPainter& painter, const QRect& rect,
+                               bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 )
+    {
+        ;
+    }
 
-	MReportEngine *reportEngine(){return m_reportEngine;}
+    MReportEngine *reportEngine()
+    {
+        return m_reportEngine;
+    }
 private:
-	QString m_reportData;
-	MReportEngine *m_reportEngine;
-	bool m_templateOk;
-	KURL m_docURL;
+    QString m_reportData;
+    MReportEngine *m_reportEngine;
+    bool m_templateOk;
+    KURL m_docURL;
 protected:
-	virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 public slots:
-	void setForcedUserTemplate(const QString &name){;}
+    void setForcedUserTemplate( const QString &name )
+    {
+        ;
+    }
 
 private slots:
-        void slotPreferredTemplate(const QString &);
+    void slotPreferredTemplate( const QString & );
 
 };
 

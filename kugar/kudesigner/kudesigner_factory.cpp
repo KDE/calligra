@@ -1,20 +1,20 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
+  Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+  Boston, MA 02111-1307, USA.
 */
 
 #include <kudesigner_factory.h>
@@ -30,7 +30,7 @@ KInstance* KudesignerFactory::s_global = 0L;
 KAboutData* KudesignerFactory::s_aboutData = 0L;
 
 KudesignerFactory::KudesignerFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+        : KoFactory( parent, name )
 {
     global();
 }
@@ -43,7 +43,7 @@ KudesignerFactory::~KudesignerFactory()
     s_global = 0L;
 }
 
-KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & data)
+KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & data )
 {
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and single view.
@@ -52,23 +52,23 @@ KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const 
     KudesignerDoc *part = new KudesignerDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
-      part->setReadWrite( false );
+        part->setReadWrite( false );
 
-    if (bWantKoDocument && (data.count()>0))
+    if ( bWantKoDocument && ( data.count() > 0 ) )
     {
-	for (QStringList::const_iterator it=data.begin();it!=data.end();++it)
-	{
-		if ((*it).startsWith("plugin="))
-		{
-			part->loadPlugin((*it).right((*it).length()-7));
-		}
-		else if ((*it).startsWith("forcePropertyEditorPosition="))
-		{
-			QString tmp=(*it).right((*it).length()-28).upper();
-			kdDebug()<<"forced property editor position: "<<tmp<<endl;
-			part->setForcedPropertyEditorPosition(tmp =="LEFT" ?DockLeft:DockRight);
-		}
-	}
+        for ( QStringList::const_iterator it = data.begin();it != data.end();++it )
+        {
+            if ( ( *it ).startsWith( "plugin=" ) )
+            {
+                part->loadPlugin( ( *it ).right( ( *it ).length() - 7 ) );
+            }
+            else if ( ( *it ).startsWith( "forcePropertyEditorPosition=" ) )
+            {
+                QString tmp = ( *it ).right( ( *it ).length() - 28 ).upper();
+                kdDebug() << "forced property editor position: " << tmp << endl;
+                part->setForcedPropertyEditorPosition( tmp == "LEFT" ? DockLeft : DockRight );
+            }
+        }
     }
 
     return part;
@@ -87,11 +87,11 @@ KInstance* KudesignerFactory::global()
     {
         s_global = new KInstance( aboutData() );
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("kudesigner_template",
-            KStandardDirs::kde_default("data") + "kudesigner/templates/");
+        s_global->dirs() ->addResourceType( "kudesigner_template",
+                                            KStandardDirs::kde_default( "data" ) + "kudesigner/templates/" );
 
         // Tell the iconloader about share/apps/koffice/icons
-        s_global->iconLoader()->addAppDir("koffice");
+        s_global->iconLoader() ->addAppDir( "koffice" );
     }
     return s_global;
 }

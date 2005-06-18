@@ -1,12 +1,12 @@
 /***************************************************************************
-              mreportviewer.h  -  Kugar QT report viewer widget
-              -------------------
-    begin     : Fri Aug 13 1999
-    copyright : (C) 1999 by Mutiny Bay Software
-    email     : info@mutinybaysoftware.com
-    copyright : (C) 2002 Alexander Dymo
-    email     : cloudtemple@mksat.net
- ***************************************************************************/
+             mreportviewer.h  -  Kugar QT report viewer widget
+             -------------------
+   begin     : Fri Aug 13 1999
+   copyright : (C) 1999 by Mutiny Bay Software
+   email     : info@mutinybaysoftware.com
+   copyright : (C) 2002 Alexander Dymo
+   email     : cloudtemple@mksat.net
+***************************************************************************/
 
 #ifndef MREPORTVIEWER_H
 #define MREPORTVIEWER_H
@@ -23,7 +23,7 @@
 #include "mpagecollection.h"
 #include "mpagedisplay.h"
 
-#define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
+#define M_PROGRESS_DELAY 500            // Number of ms to delay progress dialog display
 
 class QPrinter;
 
@@ -36,53 +36,53 @@ extern QApplication *mAppRef;
 
 class MReportViewer : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	MReportViewer(QWidget *parent=0, const char *name=0);
-	MReportViewer(MReportEngine* engine, QWidget *parent=0, const char *name=0);
-	virtual ~MReportViewer();
+    MReportViewer( QWidget *parent = 0, const char *name = 0 );
+    MReportViewer( MReportEngine* engine, QWidget *parent = 0, const char *name = 0 );
+    virtual ~MReportViewer();
 
-	bool setReportData(const QString &);
-	bool setReportData(QIODevice *);
-	bool setReportTemplate(const QString &);
-	bool setReportTemplate(QIODevice *);
-	bool renderReport();
-	void clearReport();
-	void printReport();
-	void printReport(QPrinter *printer);
-	void setupPrinter(QPrinter *printer);
-    void printReportSilent(int printFrom = -1, int printTo = -1, int printCopies = -1, QString printerName = QString::null);
+    bool setReportData( const QString & );
+    bool setReportData( QIODevice * );
+    bool setReportTemplate( const QString & );
+    bool setReportTemplate( QIODevice * );
+    bool renderReport();
+    void clearReport();
+    void printReport();
+    void printReport( QPrinter *printer );
+    void setupPrinter( QPrinter *printer );
+    void printReportSilent( int printFrom = -1, int printTo = -1, int printCopies = -1, QString printerName = QString::null );
 
-	QSize sizeHint() const;
+    QSize sizeHint() const;
 
 public slots:
-	void slotFirstPage();
-	void slotNextPage();
-	void slotPrevPage();
-	void slotLastPage();
+    void slotFirstPage();
+    void slotNextPage();
+    void slotPrevPage();
+    void slotLastPage();
 
 signals:
-	void preferedTemplate(const QString &);
+    void preferedTemplate( const QString & );
 
 private slots:
-	void slotCancelPrinting();
-	void slotRenderProgress(int);
+    void slotCancelPrinting();
+    void slotRenderProgress( int );
 
 protected:
-	void paintEvent(QPaintEvent *event);
-	void resizeEvent(QResizeEvent *event);
+    void paintEvent( QPaintEvent *event );
+    void resizeEvent( QResizeEvent *event );
 
-	QScrollView *scroller;
-	MPageDisplay *display;
-	MReportEngine *rptEngine;
-	MPageCollection *report;
-	QPrinter *printer;
+    QScrollView *scroller;
+    MPageDisplay *display;
+    MReportEngine *rptEngine;
+    MPageCollection *report;
+    QPrinter *printer;
 
 private:
-        QProgressDialog* progress;
-        int totalSteps;
-	void init();
+    QProgressDialog* progress;
+    int totalSteps;
+    void init();
 };
 
 #endif

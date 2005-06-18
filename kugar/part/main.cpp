@@ -1,10 +1,10 @@
 /***************************************************************************
-                          main.cpp  -  description
-                             -------------------
-    begin                : Mon Nov 25 17:45:00 CET 2002
-    copyright            : (C) 2002 by Joseph Wenninger
-    email                : jowenn@kde.org
- ***************************************************************************/
+                         main.cpp  -  description
+                            -------------------
+   begin                : Mon Nov 25 17:45:00 CET 2002
+   copyright            : (C) 2002 by Joseph Wenninger
+   email                : jowenn@kde.org
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -22,22 +22,23 @@
 #include "kugar_about.h"
 
 static KCmdLineOptions options[] =
+    {
+        { "+[File]", I18N_NOOP( "File to open" ), 0 },
+        // INSERT YOUR COMMANDLINE OPTIONS HERE
+        KCmdLineLastOption
+    };
+
+extern "C" KUGAR_EXPORT int kdemain( int argc, char *argv[] )
 {
-  { "+[File]", I18N_NOOP("File to open"), 0 },
-  // INSERT YOUR COMMANDLINE OPTIONS HERE
-  KCmdLineLastOption
-};
 
-extern "C" KUGAR_EXPORT int kdemain(int argc, char *argv[])
-{
+    KCmdLineArgs::init( argc, argv, newKugarAboutData() );
+    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-	KCmdLineArgs::init( argc, argv, newKugarAboutData() );
-	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+    KoApplication app;
 
-	KoApplication app;
+    if ( !app.start() )
+        return 1;
 
-	if (!app.start()) return 1;
-
-	app.exec();
-	return 0;
+    app.exec();
+    return 0;
 }
