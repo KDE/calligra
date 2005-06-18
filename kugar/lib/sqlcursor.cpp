@@ -31,6 +31,8 @@ email                : joris@marcillac.com
 
 #include "sqlcursor.h"
 
+#include <kdebug.h>
+
 CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase* db )
         : QSqlCursor( QString::null, autopopulate, db )
 {

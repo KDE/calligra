@@ -9,9 +9,9 @@
 ***************************************************************************/
 
 #include <qapplication.h>
-#include <qmessagebox.h>
-#include <qprinter.h>
-//#include <klocale.h>
+#include <kmessagebox.h>
+#include <kprinter.h>
+#include <klocale.h>
 
 #include "mreportviewer.h"
 
@@ -156,7 +156,7 @@ void MReportViewer::clearReport()
     }
 }
 
-/** Prints the rendered report to the selected printer - displays Qt print dialog */
+/** Prints the rendered report to the selected printer - displays KDE print dialog */
 void MReportViewer::printReport()
 {
     // Check for a report
@@ -169,19 +169,16 @@ void MReportViewer::printReport()
     // Check if there is a report or any pages to print
     if ( cnt == 0 )
     {
-        QMessageBox::critical( this, "Kugar", "There are no pages in the\nreport to print.",
-                               QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
+        KMessageBox::error( this, i18n( "There are no pages in the\nreport to print." ) );
         return ;
     }
 
     // Set the printer dialog
-    printer = new QPrinter();
+    KPrinter printer;
+
     setupPrinter( printer );
-
-    if ( printer->setup( this ) )
+    if ( printer.setup( this ) )
         printReport( printer );
-
-    delete printer;
 }
 
 /** Shows the first page in the report */
@@ -298,9 +295,23 @@ QSize MReportViewer::sizeHint() const
     return scroller -> sizeHint();
 }
 
-void MReportViewer::printReport( QPrinter * printer )
+void MReportViewer::printReport( KPrinter &printer )
 {
+    // Check for a report
+    if ( report == 0 )
+        return ;
+
+    // Get the page count
     int cnt = report->pageCount();
+
+    // Check if there is a report or any pages to print
+    if ( cnt == 0 )
+    {
+        KMessageBox::error( this, i18n( "There are no pages in the\nreport to print." ) );
+        return ;
+    }
+
+
     QPicture* page;
     QPainter painter;
     bool printRev;
@@ -309,25 +320,25 @@ void MReportViewer::printReport( QPrinter * printer )
     int viewIdx = report->getCurrentIndex();
 
     // Check the order we are printing the pages
-    if ( printer->pageOrder() == QPrinter::FirstPageFirst )
+    if ( printer.pageOrder() == KPrinter::FirstPageFirst )
         printRev = false;
     else
         printRev = true;
 
     // Get the count of pages and copies to print
-    int printFrom = printer->fromPage() - 1;
-    int printTo = printer->toPage();
+    int printFrom = printer.fromPage() - 1;
+    int printTo = printer.toPage();
     int printCnt = ( printTo - printFrom );
-    int printCopies = printer->numCopies();
+    int printCopies = printer.numCopies();
     int totalSteps = printCnt * printCopies;
     int currentStep = 1;
 
-    // Set copies to 1, QPrinter copies does not appear to work ...
-    //      printer->setNumCopies(1);
+    // Set copies to 1, KPrinter copies does not appear to work ...
+    printer.setNumCopies( 1 );
 
     // Setup the progress dialog
-    QProgressDialog progress( "Printing report...",
-                              "Cancel",
+    QProgressDialog progress( i18n( "Printing report..." ),
+                              i18n( "Cancel" ),
                               totalSteps, this, "progress", true );
     progress.setMinimumDuration( M_PROGRESS_DELAY );
     QObject::connect( &progress, SIGNAL( cancelled() ), this, SLOT( slotCancelPrinting() ) );
@@ -335,7 +346,7 @@ void MReportViewer::printReport( QPrinter * printer )
     qApp->processEvents();
 
     // Start the printer
-    painter.begin( printer );
+    painter.begin( &printer );
 
     // Print each copy
     for ( int j = 0; j < printCopies; j++ )
@@ -343,7 +354,7 @@ void MReportViewer::printReport( QPrinter * printer )
         // Print each page in the collection
         for ( int i = printFrom ; i < printTo; i++, currentStep++ )
         {
-            if ( !printer->aborted() )
+            if ( !printer.aborted() )
             {
                 progress.setProgress( currentStep );
                 qApp->processEvents();
@@ -356,7 +367,7 @@ void MReportViewer::printReport( QPrinter * printer )
                 page = report->getCurrentPage();
                 page->play( &painter );
                 if ( i < printCnt - 1 )
-                    printer->newPage();
+                    printer.newPage();
             }
             else
             {
@@ -365,7 +376,7 @@ void MReportViewer::printReport( QPrinter * printer )
             }
         }
         if ( j < printCopies - 1 )
-            printer->newPage();
+            printer.newPage();
     }
 
     // Cleanup printing
@@ -374,14 +385,15 @@ void MReportViewer::printReport( QPrinter * printer )
     report->setCurrentPage( viewIdx );
 }
 
-void MReportViewer::setupPrinter( QPrinter * printer )
+void MReportViewer::setupPrinter( KPrinter &printer )
 {
     int cnt = report->pageCount();
-    printer->setPageSize( ( QPrinter::PageSize ) report->pageSize() );
-    printer->setOrientation( ( QPrinter::Orientation ) report->pageOrientation() );
-    printer->setMinMax( 1, cnt );
-    printer->setFromTo( 1, cnt );
-    printer->setFullPage( true );
+
+    printer.setPageSize( ( KPrinter::PageSize ) report->pageSize() );
+    printer.setOrientation( ( KPrinter::Orientation ) report->pageOrientation() );
+    printer.setMinMax( 1, cnt );
+    printer.setFromTo( 1, cnt );
+    printer.setFullPage( true );
 }
 
 void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopies, QString printerName )
@@ -395,10 +407,10 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
         printCopies = 1;
 
 
-    printer = new QPrinter();
+    printer = new KPrinter();
 
-    printer->setPageSize( ( QPrinter::PageSize ) report->pageSize() );
-    printer->setOrientation( ( QPrinter::Orientation ) report->pageOrientation() );
+    printer->setPageSize( ( KPrinter::PageSize ) report->pageSize() );
+    printer->setOrientation( ( KPrinter::Orientation ) report->pageOrientation() );
     printer->setMinMax( 1, cnt );
     printer->setFullPage( true );
     printer->setNumCopies( printCopies );
@@ -406,7 +418,7 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
     if ( !printerName.isEmpty() )
         printer->setPrinterName( printerName );
 
-    printReport( printer );
+    printReport( *printer );
 
     delete printer;
 }

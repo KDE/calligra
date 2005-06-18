@@ -9,6 +9,8 @@
 #include "mpagecollection.h"
 #include "mreportengine.h"
 
+#include <kdebug.h>
+
 /** Constructor */
 MPageCollection::MPageCollection() : QObject()
 {

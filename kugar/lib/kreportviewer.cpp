@@ -13,7 +13,6 @@
 
 #include "kreportviewer.h"
 
-
 /** Prints the rendered report to the selected printer - displays KDE print dialog */
 void KReportViewer::printReport()
 {
