@@ -37,15 +37,19 @@ KAboutData * newKudesignerAboutData()
                              version, description, KAboutData::License_LGPL,
                              "(c) 2002,2003, Alexander Dymo (and the Kugar Team)" );
     aboutData->addAuthor( "Alexander Dymo",
-                          I18N_NOOP( "Maintainer, Report Designer, Kugar library enhancements" ), "cloudtemple@mksat.net",
+                          I18N_NOOP( "Maintainer, Report Designer, Kugar library enhancements" ),
+                          "cloudtemple@mksat.net",
                           "http://www.cloudtemple.mksat.net" );
     aboutData->addAuthor( "Joseph Wenninger",
-                          I18N_NOOP( "Major bugfixes, additional features and Kexi integration" ), "jowenn@kde.org",
+                          I18N_NOOP( "Major bugfixes, additional features and Kexi integration" ),
+                          "jowenn@kde.org",
                           "" );
     aboutData->addCredit( "Per Winkvist",
-                          I18N_NOOP( "Fast property editing for report items" ), "per.winkvist@cellnetwork.com",
+                          I18N_NOOP( "Fast property editing for report items" ),
+                          "per.winkvist@cellnetwork.com",
                           "" );
-    aboutData->setTranslator( I18N_NOOP( "_:NAME OF TRANSLATORS\nNames" ), I18N_NOOP( "_:EMAIL OF TRANSLATORS\ne-mail" ) );
+    aboutData->setTranslator( I18N_NOOP( "_:NAME OF TRANSLATORS\nNames" ),
+                              I18N_NOOP( "_:EMAIL OF TRANSLATORS\ne-mail" ) );
     return aboutData;
 }
 
