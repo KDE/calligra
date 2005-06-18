@@ -18,13 +18,8 @@ Boston, MA 02111-1307, USA.
 */
 #include "field.h"
 
-#ifndef PURE_QT
 #include <klocale.h>
 #include <klineeditdlg.h>
-#else
-#include <compat_tools.h>
-#include <qinputdialog.h>
-#endif
 
 #include <kdebug.h>
 
@@ -95,16 +90,8 @@ void Field::fastProperty()
 {
     bool accepted;
     QString sValue = props[ "Field" ].value().toString();
-
-#ifndef PURE_QT
-
     QString sText = KLineEditDlg::getText( i18n( "Change Field" ),
                                            "Enter field name:", sValue , &accepted );
-#else
-
-    QString sText = QInputDialog::getText( i18n( "Change Field" ),
-                                           "Enter field name:", QLineEdit::Normal, sValue , &accepted );
-#endif
 
     if ( accepted )
         props[ "Field" ].setValue( sText );

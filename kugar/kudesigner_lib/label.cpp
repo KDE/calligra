@@ -18,13 +18,8 @@
 */
 #include "label.h"
 
-#ifndef PURE_QT
 #include <klocale.h>
 #include <klineeditdlg.h>
-#else
-#include <compat_tools.h>
-#include <qinputdialog.h>
-#endif
 
 #include <qmap.h>
 #include <qpainter.h>
@@ -250,15 +245,9 @@ void Label::fastProperty()
 {
     bool accepted;
 
-#ifndef PURE_QT
-
     QString sText = KLineEditDlg::getText( i18n( "Change Label" ),
-                                           "Enter label name:", props[ "Text" ].value().toString(), &accepted );
-#else
-
-    QString sText = QInputDialog::getText( i18n( "Change Label" ),
-                                           "Enter label name:", QLineEdit::Normal, props[ "Text" ].value().toString(), &accepted );
-#endif
+                                           "Enter label name:", props[ "Text" ].value().toString(),
+                                           &accepted );
 
     if ( accepted )
         props[ "Text" ].setValue( sText );

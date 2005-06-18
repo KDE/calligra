@@ -16,11 +16,8 @@
  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  Boston, MA 02111-1307, USA.
 */
-#ifndef PURE_QT
+
 #include <klocale.h>
-#else
-#include <qapplication.h>
-#endif
 
 #include <qsettings.h>
 

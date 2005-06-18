@@ -141,19 +141,6 @@ void MDatabaseReportEngine::setDriverAttributes( QDomNode* report )
     m_strPassword = attributes.namedItem( "password" ).nodeValue();
     m_strHostName = attributes.namedItem( "hostName" ).nodeValue();
     m_strPort = attributes.namedItem( "port" ).nodeValue();
-#if defined(QT_DEBUG)
-
-    qDebug( "m_strDriverType : %s \n \
-            m_strDatabaseName : %s \n \
-            m_strUserName : %s \n \
-            m_strPassword : %s \n \
-            m_strHostName : %s ", \
-            m_strDriverType.latin1(), \
-            m_strDatabaseName.latin1(), \
-            m_strUserName.latin1(), \
-            m_strPassword.latin1(), \
-            m_strHostName.latin1() );
-#endif
 }
 /** Sets the sql query attributes */
 void MDatabaseReportEngine::setSqlQueryAttributes( QDomNode* report )
@@ -161,10 +148,6 @@ void MDatabaseReportEngine::setSqlQueryAttributes( QDomNode* report )
     // Get the attributes for the connection database
     QDomNamedNodeMap attributes = report->attributes();
     m_strSql = attributes.namedItem( "SqlText" ).nodeValue();
-#if defined(QT_DEBUG)
-
-    qDebug( "m_strSql : %s", m_strSql.latin1() );
-#endif
 }
 /** Sets the group by attributes */
 void MDatabaseReportEngine::setGroupByAttributes( QDomNode* report )
@@ -185,16 +168,6 @@ void MDatabaseReportEngine::setGroupByAttributes( QDomNode* report )
                                       );
         m_mapOldValue[ level ] = field2Level;
     }
-#if defined(QT_DEBUG)
-    for ( uint i = 0; i < m_mapOldValue.count(); ++i )
-    {
-        qDebug( "List of group by level= Level : %i, NameField : %s, OldValue : %s",
-                m_mapOldValue[ i ].level(),
-                m_mapOldValue[ i ].fieldName().latin1(),
-                m_mapOldValue[ i ].oldValue().toString().latin1()
-              );
-    }
-#endif
 }
 /** Sets the order by attributes */
 void MDatabaseReportEngine::setSqlOrderByAttributes( QDomNode* report )
@@ -215,9 +188,6 @@ void MDatabaseReportEngine::setSqlOrderByAttributes( QDomNode* report )
         if ( j < childCount - 1 )
             m_strOrderBy += ',';
     }
-#if defined(QT_DEBUG)
-    qDebug( "m_strOrderBy : %s", m_strOrderBy.latin1() );
-#endif
 }
 /** Sets the detail attributes */
 void MDatabaseReportEngine::setDetailAttributes( QDomNode* report )
@@ -507,12 +477,6 @@ void MDatabaseReportEngine::setSQLQuery()
     m_strSql += " ORDER BY ";
     m_strSql += m_strOrderBy;
     m_strSql += ';';
-#if defined(QT_DEBUG)
-
-    qDebug( "The SQL Query executed : %s", m_strSql.latin1() );
-#endif
 }
 
-#ifndef PURE_QT
 #include "mdatabasereportengine.moc"
-#endif

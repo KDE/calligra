@@ -31,9 +31,7 @@
 #include <qimage.h>
 
 #include <qprinter.h>
-#ifndef PURE_QT
 #include <kdebug.h>
-#endif
 
 #include <property.h>
 
@@ -66,25 +64,25 @@ void SelectionRect::draw( QPainter & painter )
         m_canvas->drawArea( m_canvas->rect(), &p );
       } */
 
-    /*    qDebug("creating pixmap");
+    /*  kdDebug(31000) << "creating pixmap" << endl;
         QPixmap mp(rect().size());
-        qDebug("creating painter");
+        kdDebug(31000) << "creating painter" << endl;
         QPainter p(&mp);
-        qDebug("filling pixmap");
+        kdDebug(31000) << "filling pixmap" << endl;
         m_canvas->drawArea(m_canvas->rect(), &p);
-        qDebug("converting to image");
+        kdDebug(31000) << "converting to image" << endl;
         QImage im = mp.convertToImage();
         if (!im.isNull())
         {
-            qDebug("do dither");
+            kdDebug(31000) << "do dither" << endl;
             mp.convertFromImage(im,  Qt::OrderedAlphaDither);
 
-            qDebug("creating brush");
+            kdDebug(31000) << "creating brush" << endl;
             QBrush br(KGlobalSettings::highlightColor(),Qt::CustomPattern);
             br.setPixmap(mp);
             painter.setBrush(br);
         }
-        qDebug("drawing");*/
+        kdDebug(31000) << "drawing" << endl;*/
     //    painter.drawRect(rect());
     QPen pen( QColor( 0, 0, 0 ), 0, Qt::DotLine );
     painter.setPen( pen );
@@ -583,8 +581,6 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
     }
     if ( selectionStarted )
     {
-        /*        qDebug("x_start = %d, y_start = %d, x_end = %d, y_end = %d", moving_start.x(),
-                    moving_start.y(), e->pos().x(), e->pos().y());*/
         selectionRect->setSize( ( int ) ( e->pos().x() - selectionRect->x() ),
                                 ( int ) ( e->pos().y() - selectionRect->y() ) );
         m_canvas->unselectAll();
@@ -747,7 +743,7 @@ void View::contentsDragEnterEvent ( QDragEnterEvent * /*event*/ )
 
 void View::keyPressEvent( QKeyEvent *e )
 {
-    qDebug( "keyPress (selection : %d)", m_canvas->selected.count() );
+kdDebug(31000) <<  "keyPress (selection : %d)", m_canvas->selected.count() << endl;
 
     if ( m_canvas->selected.count() == 1 )
     {
@@ -756,7 +752,7 @@ void View::keyPressEvent( QKeyEvent *e )
         switch ( e->key() )
         {
         case Qt::Key_Delete:
-            qDebug( "Deleting selection" );
+            kdDebug(31000) <<  "Deleting selection" << endl;
             /*                unselectItem(item);
                             ( (MyCanvas*) m_canvas )->templ->removeReportItem( item );
                             clearRequest();*/
@@ -842,6 +838,4 @@ void View::setGridSize( int size )
 
 }
 
-#ifndef PURE_QT
 #include "view.moc"
-#endif

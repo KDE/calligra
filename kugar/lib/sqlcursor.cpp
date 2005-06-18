@@ -88,9 +88,11 @@ QString CSqlCursor::getXMLValue( int i )
 
 QString CSqlCursor::getXMLValue( const QString& name )
 {
-#if defined(QT_DEBUG)
-    qDebug( "getXMLValue : name: %s, value: %s", name.latin1(), value( name ).toString().latin1() );
-#endif
+    kdDebug(31000) << "getXMLValue: name: "
+                   << name
+                   << ", value: "
+                   << value( name ).toString()
+                   << endl;
 
     QString val = specialXMLData( value( name ).toString() );
     return name + "=\"" + val + "\" ";

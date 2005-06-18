@@ -18,12 +18,8 @@
 */
 #include "reportitem.h"
 
-#ifndef PURE_QT
 #include <klocale.h>
 #include <kglobalsettings.h>
-#else
-#include <compat_tools.h>
-#endif
 
 #include <qrect.h>
 #include <qpainter.h>
@@ -146,13 +142,7 @@ int ReportItem::isInHolder( const QPoint p )
 void ReportItem::drawHolders( QPainter &painter )
 {
     painter.setPen( QColor( 0, 0, 0 ) );
-#ifndef PURE_QT
-
     painter.setBrush( KGlobalSettings::highlightColor() );
-#else
-
-    painter.setBrush( QColor( 160, 160, 160 ) );
-#endif
 
     painter.drawRect( topLeftResizableRect() );
     painter.drawRect( topRightResizableRect() );

@@ -18,11 +18,7 @@
 */
 #include "pageheader.h"
 
-#ifndef PURE_QT
 #include <klocale.h>
-#else
-#include <compat_tools.h>
-#endif
 
 #include <qpainter.h>
 

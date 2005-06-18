@@ -382,6 +382,4 @@ void Canvas::changed()
 
 }
 
-#ifndef PURE_QT
 #include "canvas.moc"
-#endif

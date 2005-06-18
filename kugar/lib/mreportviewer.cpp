@@ -411,6 +411,4 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
     delete printer;
 }
 
-#ifndef PURE_QT
 #include "mreportviewer.moc"
-#endif

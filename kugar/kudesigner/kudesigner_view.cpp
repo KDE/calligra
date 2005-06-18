@@ -409,6 +409,4 @@ void KudesignerView::placeItem( int x, int y, int band, int bandLevel )
     m_doc->addCommand( new AddReportItemCommand( m_doc->canvas(), m_view, x, y, ( Kudesigner::RttiValues ) band, bandLevel ) );
 }
 
-#ifndef PURE_QT
 #include "kudesigner_view.moc"
-#endif

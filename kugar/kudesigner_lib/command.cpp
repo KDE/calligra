@@ -18,12 +18,8 @@
 */
 #include "command.h"
 
-#ifndef PURE_QT
 #include <klocale.h>
 #include <kdebug.h>
-#else
-#include <compat_tools.h>
-#endif
 
 //#include "kudesigner_doc.h"
 

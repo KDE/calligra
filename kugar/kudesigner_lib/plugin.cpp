@@ -16,9 +16,6 @@
  ***************************************************************************/
 
 #include "plugin.h"
-#ifndef PURE_QT
-#include "plugin.moc"
-#endif
 
 KuDesignerPlugin::KuDesignerPlugin( QObject *parent, const char *name, const QStringList& ) : QObject( parent, name )
 {}
@@ -27,3 +24,5 @@ KuDesignerPlugin::~KuDesignerPlugin()
 void KuDesignerPlugin::createPluggedInEditor( QWidget *&retVal, Editor *editor,
         Property *property, Box *cb )
 {}
+
+#include "plugin.moc"

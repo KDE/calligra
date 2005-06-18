@@ -48,7 +48,7 @@ MPageCollection MPageCollection::operator=( const MPageCollection& mPageCollecti
 MPageCollection::~MPageCollection()
 {
     pages.clear();
-    qDebug( "MPage Collection::~MPageCollection<<<<<" );
+    kdDebug(31000) << k_funcinfo << endl;
 }
 
 /** Clears the page collection */

@@ -80,7 +80,7 @@ MReportEngine::~MReportEngine()
     grandTotal.clear();
     if ( m_pageCollection )
         m_pageCollection->removeRef();
-    qDebug( "MReportEngine::~MReportEngine()" );
+    kdDebug(31000) << k_funcinfo << endl;
 }
 
 void MReportEngine::addRef()
@@ -1020,6 +1020,5 @@ void MReportEngine::copy( const MReportEngine* mReportEngine )
     if ( m_pageCollection )
         m_pageCollection->addRef();
 }
-#ifndef PURE_QT
+
 #include "mreportengine.moc"
-#endif

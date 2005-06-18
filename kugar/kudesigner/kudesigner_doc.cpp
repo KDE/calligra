@@ -279,6 +279,4 @@ void KudesignerDoc::setModified()
     setModified( true );
 }
 
-#ifndef PURE_QT
 #include "kudesigner_doc.moc"
-#endif

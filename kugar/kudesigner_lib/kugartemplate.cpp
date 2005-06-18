@@ -18,11 +18,7 @@ Boston, MA 02111-1307, USA.
 */
 #include "kugartemplate.h"
 
-#ifndef PURE_QT
 #include <klocale.h>
-#else
-#include <compat_tools.h>
-#endif
 
 #include <qcanvas.h>
 #include <qpainter.h>
@@ -302,14 +298,6 @@ bool KugarTemplate::removeReportItem( QCanvasItem *item )
     {
 
         item->hide();
-        /*        qDebug("%d items of %p in canvas()", canvas()->allItems().remove( section ), section );
-                qDebug("%d items of %p removed from list",canvas()->allItems().remove( section ), section);
-                qDebug("%d items of %p in canvas()", canvas()->allItems().remove( section ), section );
-                qDebug("%d items of %p removed from list",canvas()->allItems().remove( section ), section);
-                int i = canvas()->allItems().remove( section );
-                int j = ((CanvasReportItem *)section)->section()->items.remove(section);
-                qDebug("Deleting section %p (%d removed, %d removed)", section, i,j);
-                qDebug("Items :%d, items:%d", canvas()->allItems().contains( section ),  ((CanvasReportItem *)section)->section()->items.contains( section));*/
         ReportItem *ritem = dynamic_cast<ReportItem*>( item );
         if ( ritem != 0 )
         {
