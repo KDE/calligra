@@ -952,6 +952,19 @@ bool KoDocument::saveNativeFormat( const QString & file )
         backend = KoStore::Directory;
         kdDebug(30003) << "Saving as uncompressed XML, using directory store." << endl;
     }
+    else if ( d->m_specialOutputFlag == SaveAsFlatXML )
+    {
+        kdDebug(30003) << "Saving as a flat XML file." << endl;
+        QFile f( file );
+        if ( f.open( IO_WriteOnly | IO_Translate ) )
+        {
+            bool success = saveToStream( &f );
+            f.close();
+            return success;
+        }
+        else
+            return false;
+    }
 
     kdDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
     // OLD: bool oasis = d->m_specialOutputFlag == SaveAsOASIS;
