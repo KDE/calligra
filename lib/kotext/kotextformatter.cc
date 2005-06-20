@@ -155,7 +155,7 @@ bool KoTextFormatterCore::format()
         c = 0;
 
     KoTextStringChar *firstChar = 0;
-    int left = doc ? parag->leftMargin() + doc->leftMargin() : 0;
+    int left = doc ? leftMargin(true) : 0;
     int initialLMargin = leftMargin( true );
 
     y = doc && doc->addMargins() ? parag->topMargin() : 0;
