@@ -6,6 +6,7 @@ Name[da]=Gnumeric info
 Name[es]=Info de Gnumeric
 Name[ga]=Ginearálta
 Name[ru]=Информация Gnumeric
+Name[sv]=Gnumeric-information
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric
 MimeType=application/x-gnumeric
