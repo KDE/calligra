@@ -294,6 +294,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		if (cs == 0) {
 			kdDebug() << "Krita does not suport profile " << image -> colorspace << "\n";
 			CloseCacheView(vi);
+			DestroyImage(image);
 			DestroyExceptionInfo(&ei);
 			DestroyImageList(images);
 			DestroyImageInfo(ii);
@@ -307,7 +308,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
  			kdDebug() << "Layer has profile: " << profile -> productName() << "\n";
 
 		if( ! m_img) {
-			m_img = new KisImage(m_adapter, image -> columns, image -> rows, cs, "built image");
+			m_img = new KisImage(m_doc, image -> columns, image -> rows, cs, "built image");
 			Q_CHECK_PTR(m_img);
 
  			if (profile)
@@ -389,6 +390,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
 				if (m_stop) {
 					CloseCacheView(vi);
+					DestroyImage(image);
 					DestroyImageList(images);
 					DestroyImageInfo(ii);
 					DestroyExceptionInfo(&ei);
