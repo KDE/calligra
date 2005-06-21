@@ -512,7 +512,7 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
     //objects in current page
     drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
     //draw sticky object
-    if ( page->masterPage() )
+    if ( page->masterPage() && page->displayObjectFromMasterPage() )
       drawObjectsEdit( painter, rect, page->masterPage()->objectList(), selectionMode, pageNum );
 }
 
