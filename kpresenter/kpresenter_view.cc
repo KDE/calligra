@@ -2254,6 +2254,11 @@ void KPresenterView::initGui()
     m_pKPresenterDoc->updatePresentationButton();
 }
 
+void KPresenterView::updateDisplayObjectMasterPageButton()
+{
+    actionDisplayObjectFromMasterPage->setChecked( m_canvas->activePage()->displayObjectFromMasterPage());
+}
+
 void KPresenterView::updateHeaderFooterButton()
 {
     actionViewHeader->setChecked( m_canvas->activePage()->hasHeader());
@@ -3119,7 +3124,22 @@ void KPresenterView::setupActions()
     actionCustomSlideShow = new KAction( i18n( "Custom Slide Show..." ), 0,
                                          this, SLOT( customSlideShow() ),
                                          actionCollection(), "custom_slide_show" );
+
+    actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Display Object From Master Page" ), 0,
+                                         this, SLOT( displayObjectFromMasterPage() ),
+                                         actionCollection(), "display_object_from_master_page" );
+
 }
+
+void KPresenterView::displayObjectFromMasterPage()
+{
+    bool state=actionDisplayObjectFromMasterPage->isChecked();
+    m_canvas->activePage()->setDisplayObjectFromMasterPage( state );
+    KPrDisplayObjectFromMasterPage * cmd =new KPrDisplayObjectFromMasterPage( state ? i18n("Display Object From Master Page") : i18n("Hide Object From Master Page"), m_pKPresenterDoc, m_canvas->activePage(), state);
+    m_pKPresenterDoc->addCommand(cmd);
+    m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
+}
+
 
 void KPresenterView::customSlideShow()
 {

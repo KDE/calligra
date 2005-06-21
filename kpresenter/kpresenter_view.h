@@ -148,6 +148,7 @@ public:
 
     //refresh footer/header button when we make undo/redo show/hide header/footer
     void updateHeaderFooterButton();
+    void updateDisplayObjectMasterPageButton();
 
     void updateHelpLineButton();
 
@@ -459,6 +460,8 @@ public slots:
     void slotAddIgnoreAllWord();
     void addWordToDictionary();
     void customSlideShow();
+
+    void displayObjectFromMasterPage();
 
 public:
     // create GUI
@@ -1094,6 +1097,8 @@ private:
     KSelectAction *actionFormatStyle;
 
     KToggleAction *actionAllowAutoFormat;
+    
+    KToggleAction *actionDisplayObjectFromMasterPage;
 
     KAction *actionFormatStylist;
 

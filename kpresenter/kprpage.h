@@ -528,6 +528,9 @@ public:
     void setHeader( bool b );
     void setFooter( bool b );
 
+    void setDisplayObjectFromMasterPage( bool _b );
+    bool displayObjectFromMasterPage() const { return m_displayObjectFromMasterPage;}
+
     QString oasisNamePage( int posPage ) const;
 
 private:
@@ -550,6 +553,9 @@ private:
     QString m_pictureFile;
     bool m_bHasHeader, m_bHasFooter;
     bool m_useMasterBackground;
+
+
+    bool m_displayObjectFromMasterPage;
 
     /**
      * The page effect

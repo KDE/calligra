@@ -3665,6 +3665,15 @@ void KPresenterDoc::deSelectObj(KPObject *obj)
         ((KPresenterView*)it.current())->getCanvas()->deSelectObj( obj );
 }
 
+void KPresenterDoc::setDisplayObjectMasterPage( bool b )
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        ((KPresenterView*)it.current())->updateDisplayObjectMasterPageButton();
+    repaint(b);
+}
+
+
 void KPresenterDoc::setHeader( bool b )
 {
     _header->setDrawEditRect( b );

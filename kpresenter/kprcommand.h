@@ -406,7 +406,7 @@ public:
     struct Brush {
         Brush() {}
         Brush( QBrush _brush, QColor _gColor1, QColor _gColor2,
-               BCType _gType, FillType _fillType, bool _unbalanced, 
+               BCType _gType, FillType _fillType, bool _unbalanced,
                int _xfactor, int _yfactor )
             : brush( _brush )
             , gColor1( _gColor1 )
@@ -918,6 +918,19 @@ protected:
     KPObject *object;
     KPresenterDoc *doc;
     KPrPage *m_page;
+};
+
+class KPrDisplayObjectFromMasterPage : public KNamedCommand
+{
+public:
+    KPrDisplayObjectFromMasterPage( const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue);
+    ~KPrDisplayObjectFromMasterPage(){};
+    void execute();
+    void unexecute();
+protected:
+    KPresenterDoc *m_doc;
+    KPrPage *m_page;
+    bool newValue;
 };
 
 class KPrHideShowHeaderFooter : public KNamedCommand

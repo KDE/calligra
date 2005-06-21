@@ -2196,6 +2196,27 @@ void KPrNameObjectCommand::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
+KPrDisplayObjectFromMasterPage::KPrDisplayObjectFromMasterPage(const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue)
+    :KNamedCommand(name),
+     m_doc( _doc ),
+     m_page(_page),
+     newValue(_newValue)
+{
+}
+
+void KPrDisplayObjectFromMasterPage::execute()
+{
+    m_page->setDisplayObjectFromMasterPage( newValue );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
+}
+
+void KPrDisplayObjectFromMasterPage::unexecute()
+{
+    m_page->setDisplayObjectFromMasterPage( !newValue );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
+}
+
+
 KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, KPrPage *_page,
                                                   bool _newValue, KPTextObject *_textObject):
     KNamedCommand(name),

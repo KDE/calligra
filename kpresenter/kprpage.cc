@@ -83,6 +83,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
     , m_bHasHeader( false )
     , m_bHasFooter( false )
     , m_useMasterBackground( false )
+    , m_displayObjectFromMasterPage( true )
     , m_pageEffect( PEF_NONE )
     , m_pageEffectSpeed( ES_MEDIUM )
     , m_soundEffect( false )
@@ -306,6 +307,13 @@ void KPrPage::loadOasis(KoOasisContext & context )
     kdDebug()<<"KPrPage::loadOasis()\n";
     styleStack.setTypeProperties( "drawing-page" );
 
+    //FIXME: fix it in old file format
+    if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-objects-visible" ) )
+    {
+        const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-objects-visible" );
+        m_displayObjectFromMasterPage = str == "true" ? true : false;
+    }
+
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-visible" ) )
     {
         const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-visible" );
@@ -526,7 +534,7 @@ QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
 {
     KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
     stylepageauto.addProperty( "presentation:background-visible", m_useMasterBackground == true ? "true" : "false" );
-    stylepageauto.addProperty( "presentation:background-objects-visible", "true" );
+    stylepageauto.addProperty( "presentation:background-objects-visible", m_displayObjectFromMasterPage == true ? "true" : "false" );
     QString transition = saveOasisPageEffect();
     if ( !transition.isEmpty() )
     {
@@ -2487,4 +2495,10 @@ bool KPrPage::useMasterBackground() const
 bool KPrPage::isMasterPage() const
 {
     return ( m_masterPage==0 );
+}
+
+void KPrPage::setDisplayObjectFromMasterPage( bool _b )
+{
+    m_displayObjectFromMasterPage = _b;
+    m_doc->setDisplayObjectMasterPage( _b );
 }
