@@ -1644,8 +1644,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QString masterPageName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
 
-    kdDebug()<<" master :"<<master<<endl;
-    kdDebug()<<" masterPageName:"<<masterPageName<<endl;
+    //kdDebug()<<" master :"<<master<<endl;
+    //kdDebug()<<" masterPageName:"<<masterPageName<<endl;
     if ( ! master )
     {
         masterPageName = "Standard"; // use default layout as fallback (default in kpresenter)
