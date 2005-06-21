@@ -6,10 +6,9 @@
 #ifndef _KUGAR_VIEW_H
 #define _KUGAR_VIEW_H
 
+#include "mreportviewer.h"
 
 #include <koView.h>
-
-#include "kugar.h"
 
 class KugarPart;
 
@@ -47,7 +46,7 @@ public:
 
 
 private:
-    MReportViewer *view;
+    Kugar::MReportViewer *view;
     QString m_forcedUserTemplate;
 };
 

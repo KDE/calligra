@@ -34,6 +34,9 @@ extern QApplication *mAppRef;
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MReportViewer : public QWidget
 {
     Q_OBJECT
@@ -84,5 +87,7 @@ private:
     int totalSteps;
     void init();
 };
+
+}
 
 #endif

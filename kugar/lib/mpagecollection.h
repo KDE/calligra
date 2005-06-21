@@ -18,6 +18,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MPageCollection : public QObject
 {
 
@@ -100,43 +103,6 @@ private:
     int m_ref;
 };
 
+}
+
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

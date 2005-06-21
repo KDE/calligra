@@ -8,6 +8,9 @@
 
 #include "mcalcobject.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MCalcObject::MCalcObject() : MFieldObject()
 {
@@ -60,6 +63,4 @@ void MCalcObject::copy( const MCalcObject* mCalcObject )
     calcType = mCalcObject->calcType;
 }
 
-
-
-
+}

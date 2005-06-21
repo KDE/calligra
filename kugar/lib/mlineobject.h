@@ -18,6 +18,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MLineObject : public QObject
 {
 
@@ -75,5 +78,6 @@ private:
     void copy( const MLineObject* mLineObject );
 };
 
-#endif
+}
 
+#endif

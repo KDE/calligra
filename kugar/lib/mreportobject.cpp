@@ -10,6 +10,9 @@
 
 #include "mreportobject.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MReportObject::MReportObject() : QObject()
 {
@@ -217,4 +220,6 @@ void MReportObject::setDrawTop( bool d )
 void MReportObject::setDrawBottom( bool d )
 {
     drawBottom = d;
+}
+
 }

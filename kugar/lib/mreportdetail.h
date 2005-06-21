@@ -16,6 +16,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MReportDetail : public MReportSection
 {
 
@@ -60,6 +63,8 @@ private:
     void copy( const MReportDetail* mReportDetail );
 
 };
+
+}
 
 #endif
 

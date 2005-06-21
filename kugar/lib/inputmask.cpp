@@ -14,6 +14,9 @@
 
 #include "inputmask.h"
 
+namespace Kugar
+{
+
 InputMask::InputMask( QObject *parent, const char *name )
         : QObject( parent, name ),
         m_text( QString::null ),
@@ -349,6 +352,8 @@ int InputMask::findInMask( int pos, bool forward, bool findSeparator, QChar sear
         i += step;
     }
     return -1;
+}
+
 }
 
 #include "inputmask.moc"

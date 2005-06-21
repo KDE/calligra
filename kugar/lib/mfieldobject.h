@@ -13,11 +13,14 @@
 
 #include "mlabelobject.h"
 
-class InputMask;
-
 /**Kugar report field object
   *@author Mutiny Bay Software
   */
+
+namespace Kugar
+{
+
+class InputMask;
 
 class MFieldObject : public MLabelObject
 {
@@ -94,26 +97,6 @@ private:
 
 };
 
+}
+
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

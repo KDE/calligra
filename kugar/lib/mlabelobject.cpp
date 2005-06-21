@@ -13,6 +13,9 @@
 
 #include "mlabelobject.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MLabelObject::MLabelObject() : MReportObject(), xMargin( 0 ), yMargin( 0 )
 {
@@ -168,45 +171,4 @@ void MLabelObject::copy( const MLabelObject* mLabelObject )
     wordWrap = mLabelObject->wordWrap;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

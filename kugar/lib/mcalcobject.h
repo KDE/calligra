@@ -15,6 +15,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MCalcObject : public MFieldObject
 {
 
@@ -47,5 +50,7 @@ private:
     void copy( const MCalcObject* mCalcObject );
 
 };
+
+}
 
 #endif

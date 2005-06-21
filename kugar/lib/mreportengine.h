@@ -31,6 +31,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MReportEngine : public QObject
 {
     Q_OBJECT
@@ -194,5 +197,7 @@ private:
     /** Finds the detail footer object, which is apropriate for the given level */
     MReportSection *findDetailFooter( int level );
 };
+
+}
 
 #endif

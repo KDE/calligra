@@ -11,6 +11,9 @@
 
 #include "inputmask.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MFieldObject::MFieldObject() : MLabelObject()
 {
@@ -246,4 +249,4 @@ void MFieldObject::copy( const MFieldObject* mFieldObject )
     comma = mFieldObject->comma;
 }
 
-
+}

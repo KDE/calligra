@@ -13,6 +13,9 @@
 #include "mutil.h"
 
 
+namespace Kugar
+{
+
 /** Formats a date using one of the pre-defined formats */
 QString MUtil::formatDate( const QDate& value, int format )
 {
@@ -119,4 +122,6 @@ double MUtil::variance( QMemArray<double>* values )
 double MUtil::stdDeviation( QMemArray<double>* values )
 {
     return sqrt( variance( values ) );
+}
+
 }

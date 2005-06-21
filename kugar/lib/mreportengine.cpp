@@ -16,6 +16,9 @@
 
 #include <kdebug.h>
 
+namespace Kugar
+{
+
 /** Constructor */
 MReportEngine::MReportEngine() : QObject()
 {
@@ -1020,6 +1023,8 @@ void MReportEngine::copy( const MReportEngine* mReportEngine )
     m_needRegeneration = mReportEngine->m_needRegeneration;
     if ( m_pageCollection )
         m_pageCollection->addRef();
+}
+
 }
 
 #include "mreportengine.moc"

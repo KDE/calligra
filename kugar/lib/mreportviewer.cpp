@@ -15,6 +15,8 @@
 
 #include "mreportviewer.h"
 
+namespace Kugar
+{
 
 /** Constructor */
 MReportViewer::MReportViewer( MReportEngine *engine, QWidget *parent, const char *name ) : QWidget( parent, name ), progress( 0 )
@@ -421,6 +423,8 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
     printReport( *printer );
 
     delete printer;
+}
+
 }
 
 #include "mreportviewer.moc"

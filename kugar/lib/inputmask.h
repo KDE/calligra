@@ -17,6 +17,9 @@
 
 #include <qobject.h>
 
+namespace Kugar
+{
+
 class InputMask : public QObject
 {
     Q_OBJECT
@@ -52,5 +55,7 @@ private:
     };
     MaskInputData *m_maskData;
 };
+
+}
 
 #endif

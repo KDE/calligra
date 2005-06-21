@@ -11,6 +11,9 @@
 #include "mreportsection.h"
 #include "mutil.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MReportSection::MReportSection()
 {
@@ -318,5 +321,7 @@ void MReportSection::setFieldData( QString name, QString data )
         if ( field->getFieldName() == name )
             field->setText( data );
     }
+}
+
 }
 

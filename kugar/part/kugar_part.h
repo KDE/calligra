@@ -9,8 +9,9 @@
 
 #include <koDocument.h>
 
-#include "kugar.h"
-
+#include "mpagecollection.h"
+#include "mreportengine.h"
+#include "mdatabasereportengine.h"
 
 class KInstance;
 class KugarBrowserExtension;
@@ -38,13 +39,13 @@ public:
         ;
     }
 
-    MReportEngine *reportEngine()
+    Kugar::MReportEngine *reportEngine()
     {
         return m_reportEngine;
     }
 private:
     QString m_reportData;
-    MReportEngine *m_reportEngine;
+    Kugar::MReportEngine *m_reportEngine;
     bool m_templateOk;
     KURL m_docURL;
 protected:

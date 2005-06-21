@@ -21,8 +21,6 @@
 #include "config.h"
 #endif
 
-#include "kugar.h"
-
 #include "kugar_part.h"
 #include "kugar_view.h"
 #include "kugar_factory.h"
@@ -36,7 +34,7 @@ KugarView::KugarView( KugarPart *part, QWidget *parent, const char *name )
     setInstance( KugarFactory::global() );
 
     ( new QVBoxLayout( this ) ) ->setAutoAdd( true );
-    view = new MReportViewer( part->reportEngine(), this );
+    view = new Kugar::MReportViewer( part->reportEngine(), this );
 
     view -> setFocusPolicy( QWidget::ClickFocus );
     view -> show();

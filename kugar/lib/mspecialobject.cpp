@@ -9,6 +9,9 @@
 #include "mspecialobject.h"
 #include "mutil.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MSpecialObject::MSpecialObject() : MLabelObject()
 {
@@ -80,4 +83,4 @@ void MSpecialObject::copy( const MSpecialObject* mSpecialObject )
     type = mSpecialObject->type;
 }
 
-
+}

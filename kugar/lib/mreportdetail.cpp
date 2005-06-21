@@ -8,6 +8,9 @@
 
 #include "mreportdetail.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MReportDetail::MReportDetail() : MReportSection()
 {
@@ -117,7 +120,4 @@ void MReportDetail::copy( const MReportDetail* mReportDetail )
     fields = mReportDetail->fields;
 }
 
-
-
-
-
+}

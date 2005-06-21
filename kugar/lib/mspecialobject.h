@@ -17,6 +17,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MSpecialObject : public MLabelObject
 {
 
@@ -57,6 +60,8 @@ private:
     void copy( const MSpecialObject* mSpecialObject );
 
 };
+
+}
 
 #endif
 

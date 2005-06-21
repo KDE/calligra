@@ -8,6 +8,9 @@
 
 #include "mlineobject.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MLineObject::MLineObject() : QObject()
 {
@@ -113,3 +116,4 @@ void MLineObject::copy( const MLineObject* mLineObject )
     penStyle = mLineObject->penStyle;
 }
 
+}

@@ -33,6 +33,9 @@ email                : joris@marcillac.com
 
 #include <kdebug.h>
 
+namespace Kugar
+{
+
 CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase* db )
         : QSqlCursor( QString::null, autopopulate, db )
 {
@@ -109,4 +112,6 @@ QString CSqlCursor::specialXMLData( const QString& str )
     s.replace( "\"", "&quot;" );
     s.replace( "\'", "&apos;" );
     return s;
+}
+
 }

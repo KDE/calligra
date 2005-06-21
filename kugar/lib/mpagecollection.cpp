@@ -11,6 +11,9 @@
 
 #include <kdebug.h>
 
+namespace Kugar
+{
+
 /** Constructor */
 MPageCollection::MPageCollection() : QObject()
 {
@@ -184,30 +187,4 @@ void MPageCollection::removeRef()
         deleteLater();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

@@ -43,6 +43,9 @@ Some parts of code copyright    : (C) 1999 by Mutiny Bay Software (info@mutinyba
 Some parts of code copyright    : (C) 2002 Alexander Dymo (cloudtemple@mksat.net)
 */
 
+namespace Kugar
+{
+
 MDatabaseReportEngine::MDatabaseReportEngine( QWidget *parent, const char *name )
         : QObject( parent, name ), m_strIndent( "    " )
 {
@@ -477,6 +480,8 @@ void MDatabaseReportEngine::setSQLQuery()
     m_strSql += " ORDER BY ";
     m_strSql += m_strOrderBy;
     m_strSql += ';';
+}
+
 }
 
 #include "mdatabasereportengine.moc"

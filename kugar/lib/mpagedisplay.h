@@ -19,6 +19,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MPageDisplay : public QWidget
 {
     Q_OBJECT
@@ -46,5 +49,7 @@ protected:
     void paintEvent( QPaintEvent* event );
 
 };
+
+}
 
 #endif

@@ -24,8 +24,6 @@
 #include "config.h"
 #endif
 
-#include "kugar.h"
-
 #include "kugar_part.h"
 #include "kugar_view.h"
 #include "kugar_factory.h"
@@ -37,7 +35,7 @@ KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, QObject* pa
         m_templateOk( false )
 {
     setInstance( KugarFactory::global(), false );
-    m_reportEngine = new MReportEngine();
+    m_reportEngine = new Kugar::MReportEngine();
     connect( m_reportEngine, SIGNAL( preferedTemplate( const QString & ) ),
              SLOT( slotPreferredTemplate( const QString & ) ) );
 }
@@ -67,24 +65,18 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc )
         file->reset();
         //      m_reportData=QString(file->readAll());
         //direct database access
-        MDatabaseReportEngine* rptdata = new MDatabaseReportEngine();
+        Kugar::MDatabaseReportEngine* rptdata = new Kugar::MDatabaseReportEngine();
         m_reportData = rptdata->mergeReportDataFile( file );
 
         if ( m_reportData.length() != 0 )
         {
             ok = m_reportEngine->setReportData( m_reportData );
-            //          ok=m_reportEngine->setReportData(doc);
-//             kdDebug() << "KugarPart::loadXML: report data set" << endl;
-//             kdDebug() << "Report data is " << m_reportData << endl;
 
             if ( m_templateOk )
             {
-                kdDebug() << "templateok" << endl;
                 m_reportEngine->renderReport();
                 if ( ok )
                 {
-//                     kdDebug() << "ok" << endl;
-//                     kdDebug() << m_reportData << endl;
                     QPtrList<KoView> vs = views();
                     if ( vs.count() )
                     {

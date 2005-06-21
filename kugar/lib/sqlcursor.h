@@ -23,13 +23,17 @@ email                : joris@marcillac.com
 *   MA 02111-1307, USA                                                    *
 *                                                                         *
 **************************************************************************/
-#if !defined(CSQLCURSOR_H)
+
+#ifndef CSQLCURSOR_H
 #define CSQLCURSOR_H
 
 #include <qsqlcursor.h>
 
 class QSqlDatabase;
 class QString;
+
+namespace Kugar
+{
 
 class CSqlCursor :
             public QSqlCursor
@@ -70,4 +74,7 @@ public:
 private:
     QString specialXMLData( const QString& str );
 };
-#endif // !defined(CSQLCURSOR_H)
+
+}
+
+#endif

@@ -21,6 +21,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MUtil
 {
 
@@ -50,5 +53,7 @@ public:
     static double stdDeviation( QMemArray<double>* values );
 
 };
+
+}
 
 #endif

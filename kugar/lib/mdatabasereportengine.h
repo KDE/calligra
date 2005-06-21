@@ -39,6 +39,9 @@ class QSqlDatabase;
 class QString;
 class QTextStream;
 
+namespace Kugar
+{
+
 /** this internal class link the field name of database recordset and level number used in kugar */
 class CLinkFieldLevel
 {
@@ -137,5 +140,7 @@ private:
     void setSQLQuery();
     void initDatabaseDlg();
 };
+
+}
 
 #endif // !defined(MDATABASEREPORTENGINE_H)

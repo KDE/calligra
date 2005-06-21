@@ -8,6 +8,9 @@
 
 #include "mpagedisplay.h"
 
+namespace Kugar
+{
+
 /** Constructor */
 MPageDisplay::MPageDisplay( QWidget *parent, const char *name ) : QWidget( parent, name )
 {
@@ -53,6 +56,8 @@ QSize MPageDisplay::sizeHint() const
 QSizePolicy MPageDisplay::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+}
+
 }
 
 #include "mpagedisplay.moc"

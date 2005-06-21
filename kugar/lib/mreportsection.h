@@ -24,6 +24,9 @@
   *@author Mutiny Bay Software
   */
 
+namespace Kugar
+{
+
 class MReportSection : public QObject
 {
 
@@ -120,6 +123,8 @@ private:
     void copy( const MReportSection* mReportSection );
 
 };
+
+}
 
 #endif
 
