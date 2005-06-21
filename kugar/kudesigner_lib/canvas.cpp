@@ -278,6 +278,7 @@ void Canvas::setDetailAttributes( QDomNode *node )
                             attributes.namedItem( "Level" ).nodeValue().toInt(), this );
     d->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue() );
     d->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    d->props[ "Repeat" ].setValue( attributes.namedItem( "Repeat" ).nodeValue() == "true" );
     kugarTemplate() ->details[ attributes.namedItem( "Level" ).nodeValue().toInt() ].second = d;
     addReportItems( node, d );
 }
@@ -312,7 +313,8 @@ void Canvas::addReportItems( QDomNode *node, Band *section )
             {
                 Line * line = new Line( 0, 0, 50, 20, this );
                 section->items.append( line );
-                setReportItemAttributes( &child, line );
+
+                ( &child, line );
                 line->setSectionUndestructive( section );
                 //line->show();
             }

@@ -32,6 +32,7 @@ Detail::Detail( int x, int y, int width, int height, int level, Canvas *canvas )
 {
     props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KOProperty::Integer ), "Detail" );
     props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KOProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Repeat", i18n( "Repeat" ), i18n( "Repeat After Page Break" ), false, KOProperty::Boolean ), "Detail" );
 
     registerAs( Rtti_Detail );
 }

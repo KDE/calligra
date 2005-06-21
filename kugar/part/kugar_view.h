@@ -47,7 +47,7 @@ public:
 
 
 private:
-    KReportViewer *view;
+    MReportViewer *view;
     QString m_forcedUserTemplate;
 };
 

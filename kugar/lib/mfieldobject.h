@@ -13,6 +13,8 @@
 
 #include "mlabelobject.h"
 
+class InputMask;
+
 /**Kugar report field object
   *@author Mutiny Bay Software
   */
@@ -50,6 +52,8 @@ protected:
     QColor saveColor;
     /** Field's comma flag */
     int comma;
+    /** Input mask */
+    QString inputMask;
 
 public:
     /** Returns the bound data field name */
@@ -71,16 +75,22 @@ public:
     /** Sets if object should delimit numeric values with commas */
     void setCommaSeparator( int c );
 
+    QString getInputMask() const;
+    void setInputMask( const QString &inputMask );
+
 private:
     /** Formats a string representation of a negative number using the negative value color */
     void formatNegValue();
     /** Formats a string representation of number with comma seperators */
     void formatCommas();
+    void parseInputMask();
 
     /** Copies member data from one object to another.
       * Used by the copy constructor and assignment operator
       */
     void copy( const MFieldObject* mFieldObject );
+
+    InputMask *m_inputMask;
 
 };
 

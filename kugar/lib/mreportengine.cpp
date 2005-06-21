@@ -950,6 +950,7 @@ void MReportEngine::setFieldAttributes( MFieldObject* field, QDomNamedNodeMap* a
     field->setPrecision( attr->namedItem( "Precision" ).nodeValue().toInt() );
     field->setCurrency( attr->namedItem( "Currency" ).nodeValue().toInt() );
     field->setCommaSeparator( attr->namedItem( "CommaSeparator" ).nodeValue().toInt() );
+    field->setInputMask( attr->namedItem( "InputMask" ).nodeValue() );
 
     QString tmp = attr->namedItem( "NegValueColor" ).nodeValue();
 

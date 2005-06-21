@@ -68,15 +68,14 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc )
         //      m_reportData=QString(file->readAll());
         //direct database access
         MDatabaseReportEngine* rptdata = new MDatabaseReportEngine();
-        qWarning( "!!!!!!!!!!!!!!!!!!!!!!!" );
         m_reportData = rptdata->mergeReportDataFile( file );
 
         if ( m_reportData.length() != 0 )
         {
             ok = m_reportEngine->setReportData( m_reportData );
             //          ok=m_reportEngine->setReportData(doc);
-            kdDebug() << "KugarPart::loadXML: report data set" << endl;
-            kdDebug() << "Report data is " << m_reportData << endl;
+//             kdDebug() << "KugarPart::loadXML: report data set" << endl;
+//             kdDebug() << "Report data is " << m_reportData << endl;
 
             if ( m_templateOk )
             {
@@ -84,8 +83,8 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc )
                 m_reportEngine->renderReport();
                 if ( ok )
                 {
-                    kdDebug() << "ok" << endl;
-                    kdDebug() << m_reportData << endl;
+//                     kdDebug() << "ok" << endl;
+//                     kdDebug() << m_reportData << endl;
                     QPtrList<KoView> vs = views();
                     if ( vs.count() )
                     {
@@ -158,7 +157,7 @@ KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 
 void KugarPart::slotPreferredTemplate( const QString &tpl )
 {
-    kdDebug() << "slotPreferredTemplate called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tpl = " << tpl.latin1() << endl;
+/*    kdDebug() << "slotPreferredTemplate called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tpl = " << tpl.latin1() << endl;*/
     //        KURL url(m_forcedUserTemplate.isEmpty()?tpl:m_forcedUserTemplate);
     KURL url( tpl );
     QString localtpl;
@@ -166,7 +165,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
 
     if ( !url.isValid() )
     {
-        kdDebug() << "mailformed url" << endl;
+/*        kdDebug() << "mailformed url" << endl;*/
         if ( tpl.find( '/' ) >= 0 )
         {
             if ( tpl.startsWith( "." ) )
@@ -206,14 +205,14 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
             KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
     }
 
-    kdDebug() << "localtpl: " << localtpl.latin1() << endl;
+/*    kdDebug() << "localtpl: " << localtpl.latin1() << endl;*/
     if ( !localtpl.isEmpty() )
     {
         QFile f( localtpl );
 
         if ( f.open( IO_ReadOnly ) )
         {
-            kdDebug() << "localtpl opened" << endl;
+/*            kdDebug() << "localtpl opened" << endl;*/
             // Try to find out whether it is a mime multi part file
             char buf[ 5 ];
             if ( f.readBlock( buf, 4 ) == 4 )
@@ -223,14 +222,14 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
 
                 if ( isRawXML )
                 {
-                    kdDebug() << "RawXML" << endl;
+/*                    kdDebug() << "RawXML" << endl;*/
                     f.open( IO_ReadOnly );
                     if ( !m_reportEngine -> setReportTemplate( &f ) )
                         KMessageBox::sorry( 0, i18n( "Invalid template file: %1" ).arg( localtpl ) );
                     else
                     {
                         m_templateOk = true;
-                        kdDebug() << "Setting m_templateOk" << endl;
+/*                        kdDebug() << "Setting m_templateOk" << endl;*/
                     }
                     f.close();
                 }

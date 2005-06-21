@@ -70,6 +70,8 @@ Field::Field( int x, int y, int width, int height, Canvas *canvas, bool reg )
 
     props.addProperty( new Property( "CommaSeparator", i18n( "Comma Separator" ), i18n( "Comma Separator" ), 44, KOProperty::Symbol ), "Field" );
 
+    props.addProperty( new Property( "InputMask", i18n( "InputMask" ), i18n( "InputMask" ), "", KOProperty::String ), "Field" );
+
     if ( reg )
         registerAs( Rtti_Field );
 }

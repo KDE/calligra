@@ -36,7 +36,7 @@ KugarView::KugarView( KugarPart *part, QWidget *parent, const char *name )
     setInstance( KugarFactory::global() );
 
     ( new QVBoxLayout( this ) ) ->setAutoAdd( true );
-    view = new KReportViewer( part->reportEngine(), this );
+    view = new MReportViewer( part->reportEngine(), this );
 
     view -> setFocusPolicy( QWidget::ClickFocus );
     view -> show();

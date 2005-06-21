@@ -1,13 +1,15 @@
 /***************************************************************************
-             mfieldobject.cpp  -  Kugar report field object
-             -------------------
-   begin     : Mon Aug 23 1999
-   copyright : (C) 1999 by Mutiny Bay Software
-   email     : info@mutinybaysoftware.com
+           mfieldobject.cpp  -  Kugar report field object
+           -------------------
+ begin     : Mon Aug 23 1999
+ copyright : (C) 1999 by Mutiny Bay Software
+ email     : info@mutinybaysoftware.com
 ***************************************************************************/
 
 #include "mfieldobject.h"
 #include "mutil.h"
+
+#include "inputmask.h"
 
 /** Constructor */
 MFieldObject::MFieldObject() : MLabelObject()
@@ -20,6 +22,7 @@ MFieldObject::MFieldObject() : MLabelObject()
     currency = 36;
     negativeValueColor.setRgb( 255, 0, 0 );
     comma = 0;
+    m_inputMask = new InputMask();
 }
 
 /** Copy constructor */
@@ -77,6 +80,8 @@ void MFieldObject::setText( const QString txt )
     {
     case MFieldObject::String:
         text = txt;
+        if ( !getInputMask().isEmpty() )
+            text = m_inputMask->formatText( txt );
         break;
     case MFieldObject::Integer:
         text.setNum( txt.toDouble(), 'f', 0 );
@@ -119,6 +124,16 @@ void MFieldObject::setText( const QString txt )
         text = QString( currency + text );
         break;
     }
+}
+
+QString MFieldObject::getInputMask() const
+{
+    return m_inputMask->mask();
+}
+
+void MFieldObject::setInputMask( const QString &inputMask )
+{
+    m_inputMask->setMask( inputMask );
 }
 
 /** Sets the field's data type */
