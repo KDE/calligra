@@ -197,8 +197,10 @@ KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent, co
 {
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName( m_service->library() ) );
 
-    if ( !factory )
+    if ( !factory ) {
+        kdWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
         return 0;
+    }
 
     QObject* obj = factory->create( parent, name, "KoFilter" );
     if ( !obj || !obj->inherits( "KoFilter" ) )
