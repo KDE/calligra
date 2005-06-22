@@ -33,7 +33,7 @@ class QTimer;
 class KexiLabel;
 
 class KexiLabelPrivate : public QLabel {
-		friend class KexiLabel;
+		friend class ::KexiLabel;
 	public:
 		KexiLabelPrivate( KexiLabel* );
 		virtual ~KexiLabelPrivate();
