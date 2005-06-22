@@ -63,38 +63,24 @@ void KPPartObject::rotate( float _angle )
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavingContext& context, int indexObj, int partIndexObj, KoXmlWriter* manifestWriter ) const
+bool KPPartObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug() << "KPPartObject::saveOasisPart " << partIndexObj << endl;
-    xmlWriter.startElement( "draw:frame" );
-    // saveOasisBackgroundStyle also saves draw:id, x,y,width and height....
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
+    kdDebug() << "KPPartObject::saveOasisPart " << sc.partIndexObj << endl;
 
-#if 0 // geometry was already saved, this isn't needed
-    // geometry is no zoom value !
-    QRect _rect = child->geometry();
-    KoZoomHandler* zh = child->parent()->zoomHandler();
-    double tmpX = zh->unzoomItX( _rect.x() );
-    double tmpY = zh->unzoomItY( _rect.y() );
-    double tmpWidth = zh->unzoomItX( _rect.width() );
-    double tmpHeight = zh->unzoomItY( _rect.height() );
-    //child->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) ); // ## why?
-    xmlWriter.addAttributePt( "svg:width", tmpWidth );
-    xmlWriter.addAttributePt( "svg:height", tmpHeight );
-    xmlWriter.addAttributePt( "svg:x", tmpX );
-    xmlWriter.addAttributePt( "svg:y", tmpY );
-#endif
+    sc.xmlWriter.startElement( "draw:object" );
+    const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
+    ++sc.partIndexObj;
+    child->saveOasisAttributes( sc.xmlWriter, name );
 
-    xmlWriter.startElement( "draw:object" );
-    const QString name = QString( "Object_%1" ).arg( partIndexObj+1 );
-    child->saveOasisAttributes( xmlWriter, name );
-
-    xmlWriter.endElement(); // draw:object
-    xmlWriter.endElement(); // draw:frame
+    sc.xmlWriter.endElement();
     return true;
 }
+
+const char * KPPartObject::getOasisElementName() const
+{
+    return "draw:frame";
+}
+
 
 void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
 {

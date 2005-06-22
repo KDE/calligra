@@ -2,6 +2,7 @@
 
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,7 +73,6 @@ public:
         { return i18n("Picture"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const;
 
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
@@ -113,11 +113,15 @@ public:
     virtual void flip(bool horizontal );
 
 protected:
+    virtual const char * getOasisElementName() const;
+    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+
     KPPixmapObject() {}
 
     QPixmap changePictureSettings( QPixmap _tmpPixmap );
-    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto );
+    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const;
     void loadOasisPictureEffect(KoOasisContext & context );
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**
      * @internal

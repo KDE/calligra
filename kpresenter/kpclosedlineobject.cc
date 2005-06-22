@@ -90,11 +90,8 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
     return fragment;
 }
 
-bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPClosedLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:polygon" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
-
     QString listOfPoint;
     int maxX=0;
     int maxY=0;
@@ -111,14 +108,16 @@ bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& con
         maxX = QMAX( maxX, tmpX );
         maxY = QMAX( maxY, tmpY );
     }
-    xmlWriter.addAttribute("draw:points", listOfPoint );
-    xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
-
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    xmlWriter.endElement();
+    sc.xmlWriter.addAttribute("draw:points", listOfPoint );
+    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
     return true;
 }
+
+const char * KPClosedLineObject::getOasisElementName() const
+{
+    return "draw:polygon";
+}
+
 
 double KPClosedLineObject::load( const QDomElement &element )
 {

@@ -131,6 +131,8 @@ bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSav
 
 void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter, bool stickyObj ) const
 {
+    KPObject::KPOasisSaveContext sc( xmlWriter, context, indexObj, partIndexObj, isMasterPage() );
+
     KTempFile animationTmpFile;
     animationTmpFile.setAutoDelete( true );
     QFile* tmpFile = animationTmpFile.file();
@@ -139,17 +141,10 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->getType() == OT_PART )
-        {
-            static_cast<KPPartObject*>( it.current() )->saveOasisPart( xmlWriter, store, context, indexObj, partIndexObj, manifestWriter);
-            ++partIndexObj;
-        }
-        else
-        {
-            if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
-                continue;
-            it.current()->saveOasis( xmlWriter, context, indexObj );
-        }
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        it.current()->saveOasisObject( sc );
+
         if ( !stickyObj && it.current()->haveAnimation() )
         {
             kdDebug()<<" it.current()->haveAnimation() \n";

@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@
 #include <kdebug.h>
 #include <kozoomhandler.h>
 #include <kooasiscontext.h>
+#include <koUnit.h>
 
 #include <math.h>
 using namespace std;
@@ -68,17 +70,33 @@ double KPPolylineObject::load(const QDomElement &element)
     return KPPointObject::load( element );
 }
 
-bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPPolylineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:polyline" );
-    saveOasisPosObject(xmlWriter, indexObj );
-    xmlWriter.addAttribute( "draw:style-name", saveOasisStrokeElement( context.mainStyles() ) );
-
-    KPPointObject::saveOasis( xmlWriter, context );
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    xmlWriter.endElement();
+    QString listOfPoint;
+    int maxX=0;
+    int maxY=0;
+    KoPointArray::ConstIterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        int tmpX = 0;
+        int tmpY = 0;
+        tmpX = ( int ) ( KoUnit::toMM( ( *it ).x() )*100 );
+        tmpY = ( int ) ( KoUnit::toMM( ( *it ).y() )*100 );
+        kdDebug(33001) << "poly (x,y) (sx,xy) (" << ( *it ).x() << "," << ( *it ).y() << ") (" << tmpX << "," << tmpY << ")" << endl;
+        if ( !listOfPoint.isEmpty() )
+            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+        else
+            listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+        maxX = QMAX( maxX, tmpX );
+        maxY = QMAX( maxY, tmpY );
+    }
+    sc.xmlWriter.addAttribute("draw:points", listOfPoint );
+    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
     return true;
+}
+
+const char * KPPolylineObject::getOasisElementName() const
+{
+    return "draw:polyline";
 }
 
 

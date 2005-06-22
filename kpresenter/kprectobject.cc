@@ -76,15 +76,16 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
+bool KPRectObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:rect" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
-
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    xmlWriter.endElement();
+    // TODO corner-radius
     return true;
+}
+
+
+const char * KPRectObject::getOasisElementName() const
+{
+    return "draw:rect";
 }
 
 

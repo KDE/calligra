@@ -76,10 +76,15 @@ void KPAutoformObject::setFileName( const QString & _filename )
 }
 
 
-bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter ) not implemented\n";
+    kdDebug()<<"bool KPAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
     return true;
+}
+
+const char * KPAutoformObject::getOasisElementName() const
+{
+    return "draw:custom-shape";
 }
 
 QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )

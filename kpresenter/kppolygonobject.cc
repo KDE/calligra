@@ -68,12 +68,8 @@ DCOPObject* KPPolygonObject::dcopObject()
     return dcop;
 }
 
-bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
+bool KPPolygonObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    //FIXME me wait that it will define into oo spec
-    xmlWriter.startElement( "draw:regular-polygon" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
-
     QString listOfPoint;
     int maxX=0;
     int maxY=0;
@@ -90,13 +86,15 @@ bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& contex
         maxX = QMAX( maxX, tmpX );
         maxY = QMAX( maxY, tmpY );
     }
-    xmlWriter.addAttribute("draw:points", listOfPoint );
-    xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+    sc.xmlWriter.addAttribute("draw:points", listOfPoint );
+    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
 
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    xmlWriter.endElement();
     return true;
+}
+
+const char * KPPolygonObject::getOasisElementName() const
+{
+    return "draw:regular-polygon";
 }
 
 

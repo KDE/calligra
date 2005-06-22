@@ -136,9 +136,25 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info);
 
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) const =0;
+    struct KPOasisSaveContext
+    {
+        KPOasisSaveContext( KoXmlWriter &_xmlWriter, KoSavingContext &_context,
+                            int &_indexObj, int &_partIndexObj, bool _onMaster )
+            : xmlWriter( _xmlWriter )
+            , context( _context ) 
+            , indexObj( _indexObj )
+            , partIndexObj( _partIndexObj )
+            , onMaster( _onMaster ) {};
+            
+        KoXmlWriter &xmlWriter;
+        KoSavingContext &context;
+        int &indexObj;
+        int &partIndexObj;
+        bool onMaster;
+    };
 
-    void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
+    virtual bool saveOasisObject( KPOasisSaveContext &sc ) const;
+
     //return true if we have a animation into object
     bool saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int objectId );
     bool saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int objectId );
@@ -297,7 +313,13 @@ protected:
 
     void saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const;
     void saveOasisShadowElement( KoGenStyle &styleobjectauto ) const;
-    virtual void saveOasisPictureElement( KoGenStyle& /*styleobjectauto*/ ) const {};
+
+    QString getStyle( KPOasisSaveContext &sc ) const;
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
+    virtual const char * getOasisElementName() const = 0;
+    //virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const = 0;
+    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+    virtual void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
 
     float angle;
     KoPoint orig;
@@ -377,6 +399,8 @@ public:
     QString saveOasisStrokeStyle( KoGenStyles& mainStyles ) const;
 
 protected:
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
+
     /**
      * @ref save() only saves if the pen is different from the default pen.
      * The default pen can vary depending on the subclass of KPShadowObject
@@ -450,9 +474,9 @@ public:
 
 protected:
     QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
-    QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) const;
 
-    virtual void saveOasisMarginElement( KoGenStyle& /*styleobjectauto*/ ) const { /* nothing just used into kptextobject*/};
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
+    void saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     KPrBrush m_brush;
     KPGradient *gradient;

@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,14 +61,16 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
     return *this;
 }
 
-bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPQuadricBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
-    //todo
-    // call saveOasisShadowElement( styleobjectauto );
-    // call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
-    //call xmlWriter.addAttribute( "draw:style-name", style );
+    kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
     return true;
+}
+
+const char * KPQuadricBezierCurveObject::getOasisElementName() const
+{
+    // use draw:path ?
+    return "draw:custom-shape";
 }
 
 void KPQuadricBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info )

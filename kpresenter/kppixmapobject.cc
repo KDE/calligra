@@ -2,6 +2,7 @@
 
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -101,7 +102,7 @@ QString KPPixmapObject::convertValueToPercent( int val ) const
    return QString::number( val )+"%";
 }
 
-void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
+void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const
 {
 
     if ( bright != 0 )
@@ -201,23 +202,21 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
     }
 }
 
-
-bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPPixmapObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:frame" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
+    sc.xmlWriter.startElement( "draw:image" );
+    sc.xmlWriter.addAttribute( "xlink:type", "simple" );
+    sc.xmlWriter.addAttribute( "xlink:show", "embed" );
+    sc.xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
+    sc.xmlWriter.addAttribute( "xlink:href", imageCollection->getOasisFileName( image ) );
+    sc.xmlWriter.endElement();
 
-    xmlWriter.startElement( "draw:image" );
-    xmlWriter.addAttribute( "xlink:type", "simple" );
-    xmlWriter.addAttribute( "xlink:show", "embed" );
-    xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
-    xmlWriter.addAttribute( "xlink:href", imageCollection->getOasisFileName(image) );
-    xmlWriter.endElement();
-
-    xmlWriter.endElement();
     return true;
+}
+
+const char * KPPixmapObject::getOasisElementName() const
+{
+    return "draw:frame";
 }
 
 
@@ -337,6 +336,12 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
        bright = str.toInt();
     }
 
+}
+
+void KPPixmapObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+{
+    KP2DObject::fillStyle( styleObjectAuto, mainStyles );
+    saveOasisPictureElement( styleObjectAuto );
 }
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)

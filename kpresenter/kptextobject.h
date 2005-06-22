@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,7 +82,6 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext& context, KPRLoadingInfo *info);
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const;
     virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const;
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
@@ -180,8 +180,13 @@ protected slots:
     void slotAfterFormatting( int, KoTextParag*, bool* );
     void slotParagraphDeleted(KoTextParag*_parag);
 protected:
+    virtual const char * getOasisElementName() const;
+    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
+
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     virtual void loadKTextObject( const QDomElement &e );
     void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );

@@ -212,20 +212,17 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
+bool KPTextObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:frame" );
-    // #### This should use KoGenStyle to share the style
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-
-    xmlWriter.startElement( "draw:text-box" );
-    m_textobj->saveOasisContent( xmlWriter, context );
-    xmlWriter.endElement();
-
-    xmlWriter.endElement();
+    sc.xmlWriter.startElement( "draw:text-box" );
+    m_textobj->saveOasisContent( sc.xmlWriter, sc.context );
+    sc.xmlWriter.endElement();
     return true;
+}
+
+const char * KPTextObject::getOasisElementName() const
+{
+    return "draw:frame";
 }
 
 void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto ) const
@@ -671,6 +668,12 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
         element.setAttribute(attrWhitespace, tmpText.length());
     element.appendChild(doc.createTextNode(tmpText));
     return element;
+}
+
+void KPTextObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+{
+    KP2DObject::fillStyle( styleObjectAuto, mainStyles );
+    saveOasisMarginElement( styleObjectAuto );
 }
 
 void KPTextObject::loadKTextObject( const QDomElement &elem )

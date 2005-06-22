@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2004 Thorsten Zachmann  <zachmann@kde.org>
+   Copyright (C) 2004-2005 Thorsten Zachmann  <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,6 @@ public:
     virtual KoPoint getRealOrig() const;
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context ) const;
 
     virtual double load( const QDomElement &element );
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info );
@@ -53,10 +52,14 @@ public:
 
     virtual void closeObject( bool close );
     virtual bool isClosed() const;
-    virtual QString saveOasisStrokeElement( KoGenStyles& mainStyles ) const;
 
 protected:
+    virtual const char * getOasisElementName() const;
+    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+
     void loadOasisMarker( KoOasisContext & context );
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
+
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
     virtual void updatePoints( double _fx, double _fy );
