@@ -29,7 +29,7 @@
 // - karbon/karbon_aboutdata.h
 //
 
-#define KOFFICE_VERSION_STRING "1.4"
+#define KOFFICE_VERSION_STRING "1.4.0a"
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 4
 #define KOFFICE_VERSION_RELEASE 0
