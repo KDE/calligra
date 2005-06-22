@@ -354,11 +354,6 @@ bool KoDocument::exp0rt( const KURL & _url )
 bool KoDocument::saveFile()
 {
     kdDebug(30003) << "KoDocument::saveFile() doc='" << url().url() <<"'"<< endl;
-    if ( !kapp->inherits( "KoApplication" ) )
-    {
-        d->lastErrorMessage = i18n( "Internal error: not a KOffice application, saving not allowed." );
-        return false;
-    }
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified ();
