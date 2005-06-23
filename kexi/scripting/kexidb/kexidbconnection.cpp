@@ -89,7 +89,7 @@ KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* c
         i18n("Closes currently used database for this connection.")
     );
 
-    addFunction("tableNames", &KexiDBConnection::disconnect,
+    addFunction("tableNames", &KexiDBConnection::tableNames,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(true))),
         i18n("Return names of all table schemata stored in currently "
              "used database. If the as argument passed boolean value "
