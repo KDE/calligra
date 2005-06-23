@@ -109,6 +109,17 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 KoTextParag::~KoTextParag()
 {
     //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << " id=" << paragId() << endl;
+
+    // #107961: unregister custom items; KoTextString::clear() will delete them
+    const int len = str->length();
+    for ( int i = 0; i < len; ++i ) {
+	KoTextStringChar *c = at( i );
+	if ( doc && c->isCustom() ) {
+	    doc->unregisterCustomItem( c->customItem(), this );
+	    //removeCustomItem();
+	}
+    }
+
     delete str;
     str = 0;
 //    if ( doc && p == doc->minwParag ) {
