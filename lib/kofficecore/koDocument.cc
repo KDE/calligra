@@ -1920,9 +1920,12 @@ int KoDocument::queryCloseExternalChildren()
             KoDocument *doc = it.current()->document();
             if ( doc )
             {
-                if ( doc->isStoredExtern() ) //###TODO: Handle non-native mimetype docs
+		bool foo = doc->isStoredExtern();
+		kdDebug(36001) << "========== isStoredExtern() returned " 
+			       << foo << " ==========" << endl;
+
+                if ( foo ) //###TODO: Handle non-native mimetype docs
                 {
-                    if ( doc->isModified() )
                     {
                         kdDebug(30003)<<k_funcinfo<<" found modified child: "<<doc->url().url()<<" extern="<<doc->isStoredExtern()<<endl;
                         if ( doc->queryCloseDia() == KMessageBox::Cancel )

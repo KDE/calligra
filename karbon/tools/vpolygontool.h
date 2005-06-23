@@ -58,7 +58,9 @@ private:
 		void refreshUnit();
 
 	private:
+		// FIXME: This should be a KoUnitDoubleSpinBox!
 		KDoubleSpinBox	*m_radius;
+
 		KIntSpinBox	*m_edges;
 		KarbonPart      *m_part;
 	};

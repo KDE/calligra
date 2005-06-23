@@ -29,7 +29,7 @@
 
 class KarbonPart;
 class QLabel;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 
 class VRectangleTool : public VShapeTool
 {
@@ -59,8 +59,10 @@ private:
 		void refreshUnit();
 
 	private:
+		// FIXME: These should be KoUnitDoubleSpinBoxes!
 		KDoubleSpinBox	*m_width;
 		KDoubleSpinBox	*m_height;
+
 		KarbonPart			*m_part;
 	};
 

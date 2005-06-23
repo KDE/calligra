@@ -67,7 +67,9 @@ private:
 		void refreshUnit();
 
 	private:
+		// FIXME: This should be a KoUnitDoubleSpinBox!
 		KDoubleSpinBox	*m_radius;
+
 		KIntSpinBox			*m_segments;
 		KDoubleNumInput		*m_fade;
 		KComboBox			*m_type;

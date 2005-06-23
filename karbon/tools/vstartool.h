@@ -54,8 +54,10 @@ public slots:
 	void setOuterRadius( double );
 
 private:
+	// FIXME: These should be KoUnitDoubleSpinBoxes!
 	KDoubleSpinBox	*m_innerR;
 	KDoubleSpinBox	*m_outerR;
+
 	KDoubleNumInput		*m_roundness;
 	KIntSpinBox			*m_edges;
 	KIntSpinBox			*m_innerAngle;

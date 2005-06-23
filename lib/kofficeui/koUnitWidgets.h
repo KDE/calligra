@@ -77,7 +77,7 @@ protected:
      */
     QString getVisibleText( double value ) const;
     /**
-     * Transfrom a string inot a double, while taking care of locale specific symbols.
+     * Transfrom a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @param ok true, if the conversion was succesful
      * @return the value as double
@@ -94,11 +94,11 @@ protected:
  * Spin box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
+class KOFFICEUI_EXPORT KoBuggyUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
     // lower, upper, step and value are in pt
-    KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+    KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -121,6 +121,22 @@ private:
     double m_upperInPoints; ///< highest value in points
     double m_stepInPoints;  ///< step in points
 };
+
+/**
+ * Temporary class that will be merged with koBuggyUnitDoubleSpinBox
+ * and renamed into KoUnitDoubleSpinBox when all the users of that
+ * class have been converted.
+ */
+class KOFFICEUI_EXPORT KoUnitDoubleSpinBox2 : public KoBuggyUnitDoubleSpinBox
+{
+public:
+    // lower, upper, step and value are in pt
+    KoUnitDoubleSpinBox2( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+
+    virtual void changeValue( double );
+};
+
 
 /**
  * Line edit for double precision numbers with unit display

@@ -37,6 +37,7 @@ VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonPart *part, QW
 
 	new QLabel( i18n( "Radius:" ), group );
 	m_radius = new KDoubleSpinBox(0.0, 1000.0, 0.5, 5.0,2, group );
+	//m_radius = new KoBuggyUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	refreshUnit();
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new KIntSpinBox( group );

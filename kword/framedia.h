@@ -81,7 +81,7 @@ public slots:
     void slotValueChanged( double );
 
 private:
-    KoUnitDoubleSpinBox *m_inputLeft, *m_inputRight, *m_inputTop, *m_inputBottom;
+    KoBuggyUnitDoubleSpinBox *m_inputLeft, *m_inputRight, *m_inputTop, *m_inputBottom;
     QCheckBox *m_synchronize;
     KWDocument *doc;
     bool m_changed;
@@ -168,7 +168,7 @@ private:
     QWidget *tab4;
     QGroupBox *grp1;
     QLabel *lx, *ly, *lw, *lh;
-    KoUnitDoubleSpinBox *sx, *sy, *sw, *sh;
+    KoBuggyUnitDoubleSpinBox *sx, *sy, *sw, *sh;
     KWFourSideConfigWidget* m_paddingConfigWidget;
     QCheckBox *floating;
     QCheckBox *protectSize;

@@ -27,7 +27,7 @@ class KarbonView;
 class KConfig;
 class KIntNumInput;
 class KColorButton;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class QCheckBox;
 class QComboBox;
 
@@ -129,10 +129,10 @@ protected slots:
 
 private:
 	KarbonView* m_view;
-	KoUnitDoubleSpinBox* m_spaceHorizUSpin;
-	KoUnitDoubleSpinBox* m_spaceVertUSpin;
-	KoUnitDoubleSpinBox* m_snapHorizUSpin;
-	KoUnitDoubleSpinBox* m_snapVertUSpin;
+	KoBuggyUnitDoubleSpinBox* m_spaceHorizUSpin;
+	KoBuggyUnitDoubleSpinBox* m_spaceVertUSpin;
+	KoBuggyUnitDoubleSpinBox* m_snapHorizUSpin;
+	KoBuggyUnitDoubleSpinBox* m_snapVertUSpin;
 	QCheckBox* m_gridChBox;
 	QCheckBox* m_snapChBox;
 	KColorButton* m_gridColorBtn;

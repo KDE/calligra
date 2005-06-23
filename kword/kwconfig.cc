@@ -301,7 +301,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     QHBox* hbGridX = new QHBox( gbInterfaceGroup );
     QLabel* labelGridX = new QLabel( i18n("&Horizontal grid size:"), hbGridX );
-    gridX=new KoUnitDoubleSpinBox( hbGridX,
+    gridX=new KoBuggyUnitDoubleSpinBox( hbGridX,
                                    0.1,
                                    50,
                                    0.1,
@@ -313,7 +313,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     QHBox* hbGridY = new QHBox( gbInterfaceGroup );
     QLabel* labelGridY = new QLabel( i18n("&Vertical grid size:"), hbGridY );
-    gridY=new KoUnitDoubleSpinBox( hbGridY,
+    gridY=new KoBuggyUnitDoubleSpinBox( hbGridY,
                                    0.1,
                                    50,
                                    0.1,
@@ -326,7 +326,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     QHBox* hbIndent = new QHBox( gbInterfaceGroup );
     QLabel* labelIdent = new QLabel( i18n("&Paragraph indent by toolbar buttons:"), hbIndent );
-    indent = new KoUnitDoubleSpinBox( hbIndent,
+    indent = new KoBuggyUnitDoubleSpinBox( hbIndent,
                                       0.1,
                                       50,
                                       0.1,
@@ -662,7 +662,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     QHBox* hbColumnSpacing = new QHBox( gbDocumentDefaults );
     QLabel* columnSpacingLabel = new QLabel( i18n("Default column spacing:"), hbColumnSpacing );
-    m_columnSpacing = new KoUnitDoubleSpinBox( hbColumnSpacing,
+    m_columnSpacing = new KoBuggyUnitDoubleSpinBox( hbColumnSpacing,
                                                0.1,
                                                50,
                                                0.1,
@@ -764,7 +764,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     QHBox* hbTabStop = new QHBox( gbDocumentSettings );
     tabStop = new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
-    m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
+    m_tabStopWidth = new KoBuggyUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
                                               doc->ptPaperWidth(),
                                               0.1,

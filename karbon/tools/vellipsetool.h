@@ -25,8 +25,7 @@
 
 #include "vshapetool.h"
 
-class KoUnitDoubleSpinBox;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class KComboBox;
 class KIntSpinBox;
 class KarbonPart;
@@ -55,8 +54,11 @@ private:
 	KComboBox				*m_type;
 	KIntSpinBox				*m_startAngle;
 	KIntSpinBox				*m_endAngle;
+
+	// FIXME: These should be KoUnitDoubleSpinBoxes!
 	KDoubleSpinBox		*m_width;
 	KDoubleSpinBox		*m_height;
+
 	KarbonPart				*m_part;
 };
 

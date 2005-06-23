@@ -29,7 +29,7 @@ namespace KFormula {
 class KWView;
 class QCheckBox;
 class KIntNumInput;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class KConfig;
 class QComboBox;
 class KIntNumInput;
@@ -69,8 +69,8 @@ private:
     KWView* m_pView;
     KConfig* config;
     QComboBox *m_unitCombo;
-    KoUnitDoubleSpinBox* gridX,*gridY;
-    KoUnitDoubleSpinBox* indent;
+    KoBuggyUnitDoubleSpinBox* gridX,*gridY;
+    KoBuggyUnitDoubleSpinBox* indent;
     KIntNumInput* recentFiles;
     QCheckBox *showStatusBar, *showScrollBar, *pgUpDownMovesCaret;
     int oldNbRecentFiles;
@@ -114,7 +114,7 @@ private:
     QLabel *fontName;
     QLabel *tabStop;
 
-    KoUnitDoubleSpinBox* m_columnSpacing;
+    KoBuggyUnitDoubleSpinBox* m_columnSpacing;
 
     KIntNumInput* autoSave;
     int oldAutoSaveValue;
@@ -123,7 +123,7 @@ private:
     int m_oldStartingPage;
     bool m_oldBackupFile;
     KIntNumInput* m_variableNumberOffset;
-    KoUnitDoubleSpinBox *m_tabStopWidth;
+    KoBuggyUnitDoubleSpinBox *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
 //     QCheckBox *m_directInsertCursor;

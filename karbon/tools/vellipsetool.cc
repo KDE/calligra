@@ -49,8 +49,10 @@ VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent,
 	// add width/height-input:
 	new QLabel( i18n( "Width:" ), group );
 	m_width = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
+	//m_width = new KoBuggyUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 	new QLabel( i18n( "Height:" ), group );
 	m_height = new KDoubleSpinBox( 0.0, 1000.0, 0.5, 10.0, 2, group );
+	//m_height = new KoBuggyUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 
 	new QLabel( i18n( "Start angle:" ), group );
 	m_startAngle = new KIntSpinBox( group );

@@ -24,7 +24,7 @@
 #include <knuminput.h>
 #include "vshapetool.h"
 
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 class KIntSpinBox;
 class KarbonPart;
 class QLabel;
@@ -58,8 +58,10 @@ private:
 		void refreshUnit();
 
 	private:
+		// FIXME: These should be KoUnitDoubleSpinBoxes!
 		KDoubleSpinBox	*m_width;
 		KDoubleSpinBox	*m_height;
+
 		KIntSpinBox			*m_periods;
 		KarbonPart			*m_part;
 	};

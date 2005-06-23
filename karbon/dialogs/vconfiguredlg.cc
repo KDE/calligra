@@ -317,17 +317,17 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	gridColorLbl->setBuddy( m_gridColorBtn );
 	QGroupBox* spacingGrp = new QGroupBox( 2, Qt::Horizontal, i18n( "Spacing" ), page );
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ), spacingGrp );
-	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
+	m_spaceHorizUSpin = new KoBuggyUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
 	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ), spacingGrp );
-	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, fh, unit );
+	m_spaceVertUSpin = new KoBuggyUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, fh, unit );
 	spaceVertLbl->setBuddy( m_spaceVertUSpin );
 	QGroupBox* snapGrp = new QGroupBox( 2, Qt::Horizontal, i18n( "Snap Distance" ), page );
 	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ), snapGrp );
-	m_snapHorizUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
+	m_snapHorizUSpin = new KoBuggyUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
 	snapHorizLbl->setBuddy( m_snapHorizUSpin );
 	QLabel* snapVertLbl = new QLabel( i18n( "V&ertical:" ), snapGrp );
-	m_snapVertUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
+	m_snapVertUSpin = new KoBuggyUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
 	snapVertLbl->setBuddy( m_snapVertUSpin );
 
 	QGridLayout* gl = new QGridLayout();

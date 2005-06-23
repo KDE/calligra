@@ -29,7 +29,7 @@
 
 class KarbonPart;
 class QLabel;
-class KoUnitDoubleSpinBox;
+class KoBuggyUnitDoubleSpinBox;
 
 
 class VRoundRectTool : public VShapeTool
