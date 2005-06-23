@@ -132,23 +132,9 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, int pos )
                    << parag->length() << ") pos=" << pos << " length="
                    << old.length() << endl;
 #endif
-    markWord( parag, old, pos, true );
-}
-
-void KoBgSpellCheck::markWord( KoTextParag* parag, const QString &old, int pos, bool misspelled )
-{
-    if ( pos >= parag->length() ) {
-        kdDebug() << k_funcinfo << pos << "is out of parag (length=" << parag->length() << ")" << endl;
-        return;
-    }
-
-    KoTextStringChar *ch = parag->at( pos );
-    KoTextFormat format( *ch->format() );
-    format.setMisspelled( misspelled );
-    //kdDebug() << k_funcinfo << "changing mark from " << pos << " to " << old.length() << " misspelled=" << misspelled << endl;
-    parag->setFormat( pos, old.length(), &format, true, KoTextFormat::Misspelled );
-
-    parag->setChanged( true );
+    markWord( parag, pos, old.length(), true );
+    // Repaint immediately, since the checking is timer-based (slow), it looks
+    // slow (chunky) if we only repaint once a paragraph is completely done.
     parag->document()->emitRepaintChanged();
 
     if ( d->startupChecking && d->marked > delayAfterMarked ) {
@@ -159,6 +145,24 @@ void KoBgSpellCheck::markWord( KoTextParag* parag, const QString &old, int pos, 
             ++d->marked;
         checkerContinue();
     }
+}
+
+void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool misspelled )
+{
+    if ( pos >= parag->length() ) {
+        kdDebug(32500) << "markWord: " << pos << " is out of parag (length=" << parag->length() << ")" << endl;
+        return;
+    }
+
+    KoTextStringChar *ch = parag->at( pos );
+    KoTextFormat format( *ch->format() );
+    format.setMisspelled( misspelled );
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "markWord: changing mark from " << pos << " length=" << length << " misspelled=" << misspelled << endl;
+#endif
+    parag->setFormat( pos, length, &format, true, KoTextFormat::Misspelled );
+    parag->setChanged( true );
+    // don't repaint here, in the slotParagraphModified case we want to repaint only once at the end
 }
 
 void KoBgSpellCheck::checkerContinue()
@@ -204,7 +208,10 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         d->paragCache.insert( parag, parag );
         return;
     }
-    //kdDebug()<<"Para modified " << parag << " pos = "<<pos<<", length = "<< length <<endl;
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "Para modified " << parag << " pos = "<<pos<<", length = "<< length <<endl;
+#endif
+
 #if KDE_VERSION > KDE_MAKE_VERSION(3,3,0)
     if ( length < 10 ) {
         QString str = parag->string()->stringToSpellCheck();
@@ -213,22 +220,32 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         filter.setBuffer( str );
         // pos - 1 wasn't enough for the case a splitting a word into two misspelled halves
         filter.setCurrentPosition( QMAX( 0, pos - 2 ) );
+        int curPos = filter.currentPosition(); // Filter adjusted it by going back to the last word
         filter.setSettings( d->backSpeller->settings() );
+
+        // Tricky: KSpell2::Filter::nextWord's behavior makes the for() loop skip ignored words,
+        // so it doesn't mark them as OK... So we need to clear the marks everywhere first.
+        // To avoid flickering the repainting is only done once, after checking the parag.
+        markWord( parag, curPos, parag->length() - curPos, false );
 
         for ( Word w = filter.nextWord(); !w.end; w = filter.nextWord() ) {
             bool misspelling = !d->backSpeller->checkWord( w.word );
             //kdDebug()<<"Word = \""<< w.word<< "\" , misspelled = "<<misspelling<<endl;
-            markWord( parag, w.word, w.start, misspelling );
+            markWord( parag, w.start, w.word.length(), misspelling );
         }
+        if ( parag->hasChanged() ) // always true currently
+            parag->document()->emitRepaintChanged();
 #else
     if ( length < 3 ) {
         QString word;
         int start;
         bool misspelled = !d->backSpeller->checkWordInParagraph( parag, pos,
                                                                  word, start );
-        markWord( parag, word, start, misspelled );
+        markWord( parag, start, word.length(), misspelled );
+        parag->document()->emitRepaintChanged();
 #endif
-    } else {
+    } else
+    {
         d->backSpeller->check( parag );
     }
 }
@@ -246,11 +263,20 @@ void KoBgSpellCheck::slotClearPara()
 
     // We remove any misspelled format from the paragraph
     // - otherwise we'd never notice words being ok again :)
+    // (e.g. due to adding a word to the ignore list, not due to editing)
+    //
+    // TODO: do this all only if there was a format with 'misspelled' in the paragraph,
+    // to minimize repaints
     KoTextStringChar *ch = parag->at( 0 );
     KoTextFormat format( *ch->format() );
     format.setMisspelled( false );
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "clearPara: resetting mark on paragraph " << parag->paragId() << endl;
+#endif
     parag->setFormat( 0, parag->length()-1, &format, true,
                       KoTextFormat::Misspelled );
+    parag->setChanged( true );
+    parag->document()->emitRepaintChanged();
 }
 
 KSpell2::Settings * KoBgSpellCheck::settings() const

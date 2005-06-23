@@ -1225,11 +1225,18 @@ void KoTextString::clear()
     for ( int i = 0; i < (int)data.count(); ++i ) {
 	KoTextStringChar &ch = data[ i ];
 	if ( ch.isCustom() ) {
+            // Can't do that here, no access to the doc. See ~KoTextParag instead.
+            // However clear() is also called by operator=, many times in kotextobject.cc...
+            // Hopefully not with customitems in there...
+            //if ( doc )
+            //    doc->unregisterCustomItem( ch->customItem(), this );
+
 	    delete ch.customItem();
 	    if ( ch.d.custom->format )
 		ch.d.custom->format->removeRef();
 	    delete ch.d.custom;
 	    ch.d.custom = 0;
+
 	} else if ( ch.format() ) {
 	    ch.format()->removeRef();
 	}
