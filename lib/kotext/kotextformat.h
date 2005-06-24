@@ -123,7 +123,7 @@ public:
                  WordByWord | Attribute | Hyphenation | UnderLineWidth
     };
 
-    enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript }; // QRT now has it in another order, but it's too late, we use this order in KWord's file format now !
+    enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript, AlignCustom }; // QRT now has it in another order, but it's too late, we use this order in KWord's file format now !
     enum UnderlineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
     enum StrikeOutType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
     enum UnderlineStyle { U_SOLID = 0 , U_DASH = 1, U_DOT = 2, U_DASH_DOT = 3, U_DASH_DOT_DOT = 4};

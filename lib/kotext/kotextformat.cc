@@ -258,8 +258,9 @@ static void importTextPosition( const QString& text_position, double fontSize, K
             textPos.truncate( textPos.length() - 1 );
             double val = textPos.toDouble();
             offset = qRound( fontSize * val / 100.0 );
+	    value = KoTextFormat::AlignCustom;
         }
-        if ( textPos == "super" )
+        else if ( textPos == "super" )
             value = KoTextFormat::AlignSuperScript;
         else if ( textPos == "sub" )
             value = KoTextFormat::AlignSubScript;
@@ -1538,8 +1539,8 @@ QStringList KoTextFormat::underlineTypeList()
     QStringList lst;
     lst <<i18n("Underline Style", "None");
     lst <<i18n("Single");
-    lst <<i18n("Simple Bold");
     lst <<i18n("Double");
+    lst <<i18n("Simple Bold");
     lst <<i18n("Wave");
     return lst;
 }
@@ -1549,8 +1550,8 @@ QStringList KoTextFormat::strikeOutTypeList()
     QStringList lst;
     lst <<i18n("Strikeout Style", "None");
     lst <<i18n("Single");
-    lst <<i18n("Simple Bold");
     lst <<i18n("Double");
+    lst <<i18n("Simple Bold");
     return lst;
 }
 

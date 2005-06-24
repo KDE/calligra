@@ -12,6 +12,9 @@ libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
 	koParagDia.cc kovariable.cc koVariableDlgs.cc \
 	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
 	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
+	kfontdialog_local.cpp kofonttabbase.ui kofonttab.cc kohighlightingtabbase.ui kohighlightingtab.cc \
+	kodecorationtabbase.ui kodecorationtab.cc kolayouttabbase.ui kolayouttab.cc kolanguagetabbase.ui kolanguagetab.cc \
+	kofontdiapreview.cc \
 	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc kobgspellcheck.cc \
 	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
 	koimportstyledia.cc kotextiterator.cc kooasiscontext.cc koliststylestack.cc

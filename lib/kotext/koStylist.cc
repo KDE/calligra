@@ -669,9 +669,22 @@ void KoStyleParagTab::resizeEvent( QResizeEvent *e )
 KoStyleFontTab::KoStyleFontTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
-    ( new QVBoxLayout( this ) )->setAutoAdd( true );
-    m_chooser = new KoFontChooser( this, 0, true, KFontChooser::SmoothScalableFonts);
-    m_zoomHandler = new KoZoomHandler;
+	( new QVBoxLayout( this ) )->setAutoAdd( true );
+	QTabWidget *fontTabContainer = new QTabWidget( this );
+
+	m_fontTab = new KoFontTab( KFontChooser::SmoothScalableFonts, this );
+	m_decorationTab = new KoDecorationTab( this );
+	m_highlightingTab = new KoHighlightingTab( this );
+	m_layoutTab = new KoLayoutTab( true, this );
+	m_languageTab = new KoLanguageTab( 0, this );
+
+	fontTabContainer->addTab( m_fontTab, i18n( "Font" ) );
+	fontTabContainer->addTab( m_decorationTab, i18n( "Decoration" ) );
+	fontTabContainer->addTab( m_highlightingTab, i18n( "Highlighting" ) );
+	fontTabContainer->addTab( m_layoutTab, i18n( "Layout" ) );
+	fontTabContainer->addTab( m_languageTab, i18n( "Language" ) );
+
+	m_zoomHandler = new KoZoomHandler;
 }
 
 KoStyleFontTab::~KoStyleFontTab()
@@ -681,8 +694,21 @@ KoStyleFontTab::~KoStyleFontTab()
 
 void KoStyleFontTab::update()
 {
-    m_chooser->setFormat( m_style->format() );
-
+	m_fontTab->setSelection( m_style->format().font() );
+	m_highlightingTab->setUnderline( m_style->format().underlineType() );
+	m_highlightingTab->setUnderlineStyle( m_style->format().underlineStyle() );
+	m_highlightingTab->setUnderlineColor( m_style->format().textUnderlineColor() );
+	m_highlightingTab->setStrikethrough( m_style->format().strikeOutType() );
+	m_highlightingTab->setStrikethroughStyle( m_style->format().strikeOutStyle() );
+	m_highlightingTab->setWordByWord( m_style->format().wordByWord() );
+	m_highlightingTab->setCapitalisation( m_style->format().attributeFont() );
+	m_decorationTab->setTextColor( m_style->format().color() );
+	m_decorationTab->setBackgroundColor( m_style->format().textBackgroundColor() );
+	m_decorationTab->setShadow( m_style->format().shadowDistanceX(), m_style->format().shadowDistanceY(), m_style->format().shadowColor() );
+	m_layoutTab->setSubSuperScript( m_style->format().vAlign(), m_style->format().offsetFromBaseLine(), m_style->format().relativeTextSize() );
+	m_layoutTab->setAutoHyphenation( m_style->format().hyphenation() );
+	m_languageTab->setLanguage( m_style->format().language() );
+/*
 #if 0
     bool subScript = m_style->format().vAlign() == KoTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == KoTextFormat::AlignSuperScript;
@@ -709,28 +735,36 @@ void KoStyleFontTab::update()
     m_chooser->setLanguage( m_style->format().language());
     m_chooser->setHyphenation( m_style->format().hyphenation());
 #endif
-}
+*/}
 
 void KoStyleFontTab::save()
 {
-    m_style->format() = m_chooser->newFormat();
-#if 0
-    QFont fn = m_chooser->getNewFont();
-    kdDebug()<<" save fn.bold() :"<<fn.bold()<<" fn.italic():"<<fn.italic()<<endl;
-    kdDebug()<<" save fn.family() :"<<fn.family()<<endl;
+	m_style->format() = KoTextFormat( m_fontTab->getSelection(),
+                         m_layoutTab->getSubSuperScript(),
+                         m_decorationTab->getTextColor(),
+                         m_decorationTab->getBackgroundColor(),
+                         m_highlightingTab->getUnderlineColor(),
+                         m_highlightingTab->getUnderline(),
+                         m_highlightingTab->getUnderlineStyle(),
+                         m_highlightingTab->getStrikethrough(),
+                         m_highlightingTab->getStrikethroughStyle(),
+                         m_highlightingTab->getCapitalisation(),
+                         m_languageTab->getLanguage(),
+                         m_layoutTab->getRelativeTextSize(),
+                         m_layoutTab->getOffsetFromBaseline(),
+                         m_highlightingTab->getWordByWord(),
+                         m_layoutTab->getAutoHyphenation(),
+                         m_decorationTab->getShadowDistanceX(),
+                         m_decorationTab->getShadowDistanceY(),
+                         m_decorationTab->getShadowColor()
+			);
+/*
+	m_style->format().setFont( m_fontTab->getSelection() );
+	m_style->format().setColor( m_decorationTab->getTextColor() );
+	if( m_decorationTab->getBackGroundColor()!=QApplication::palette().color( QPalette::Active, QColorGroup::Base ))
+        m_style->format().setTextBackgroundColor( m_decorationTab->getBackGroundColor() );
 
-    m_style->format().setFont( fn );
-    if ( m_chooser->getSubScript() )
-        m_style->format().setVAlign( KoTextFormat::AlignSubScript );
-    else if ( m_chooser->getSuperScript() )
-        m_style->format().setVAlign( KoTextFormat::AlignSuperScript );
-    else
-        m_style->format().setVAlign( KoTextFormat::AlignNormal );
-    m_style->format().setColor( m_chooser->color() );
-    if(m_chooser->backGroundColor()!=QApplication::palette().color( QPalette::Active, QColorGroup::Base ))
-        m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());
-
-    m_style->format().setTextUnderlineColor(m_chooser->underlineColor());
+	m_style->format().setTextUnderlineColor(m_chooser->underlineColor());
     m_style->format().setUnderlineType (m_chooser->getUnderlineType());
     m_style->format().setUnderlineStyle (m_chooser->getUnderlineStyle());
     m_style->format().setStrikeOutStyle( m_chooser->getStrikeOutStyle() );
@@ -740,19 +774,13 @@ void KoStyleFontTab::save()
     m_style->format().setRelativeTextSize( m_chooser->getRelativeTextSize());
     m_style->format().setAttributeFont( m_chooser->getFontAttribute());
     m_style->format().setOffsetFromBaseLine( m_chooser->getOffsetFromBaseLine());
+	m_style->format().setVAlign( m_layoutTab->getSubSuperScript() );
 
     m_style->format().setLanguage( m_chooser->getLanguage());
     m_style->format().setHyphenation( m_chooser->getHyphenation());
-#endif
-}
+*/}
 
 QString KoStyleFontTab::tabName()
 {
     return i18n("Font");
-}
-
-void KoStyleFontTab::resizeEvent( QResizeEvent *e )
-{
-    QWidget::resizeEvent( e );
-    if ( m_chooser ) m_chooser->resize( size() );
 }

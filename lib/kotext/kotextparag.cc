@@ -1838,7 +1838,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
         str = format->displayedString( str ); // #### This converts the whole string, instead of from start to start+len!
 	if ( format->vAlign() == KoTextFormat::AlignNormal ) {
-            int posY = lastY + baseLine - format->offsetFromBaseLine();
+            int posY = lastY + baseLine;
             //we must move to bottom text because we create
             //shadow to 'top'.
             int sy = format->shadowY( zh );
@@ -1860,7 +1860,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.restore();
 #endif
 	} else if ( format->vAlign() == KoTextFormat::AlignSuperScript ) {
-            int posY =lastY + baseLine - ( painter.fontMetrics().height() / 2 )-format->offsetFromBaseLine();
+            int posY =lastY + baseLine - ( painter.fontMetrics().height() / 2 );
             //we must move to bottom text because we create
             //shadow to 'top'.
             int sy = format->shadowY( zh );
@@ -1868,14 +1868,22 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
                 posY -= sy;
 	    painter.drawText( startX, posY, str, start, len, dir );
 	} else if ( format->vAlign() == KoTextFormat::AlignSubScript ) {
-            int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 )-format->offsetFromBaseLine();
+            int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 );
             //we must move to bottom text because we create
             //shadow to 'top'.
             int sy = format->shadowY( zh );
             if ( sy < 0)
                 posY -= sy;
 	    painter.drawText( startX, posY, str, start, len, dir );
-	}
+	} else if ( format->vAlign() == KoTextFormat::AlignCustom ) {
+            int posY = lastY + baseLine - format->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
+	    painter.drawText( startX, posY, str, start, len, dir );
+	}	
     }
     if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {
 	painter.save();
@@ -2393,9 +2401,9 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 
     dimd = KoBorder::zoomWidthY( format->underLineWidth(), zh, 1 );
     if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
-	(format->vAlign() == KoTextFormat::AlignSubScript ))
+	(format->vAlign() == KoTextFormat::AlignSubScript ) || (format->vAlign() == KoTextFormat::AlignCustom ))
 	dimd*=format->relativeTextSize();
-    y = lastY + baseLine + offset - format->offsetFromBaseLine();
+    y = lastY + baseLine + offset - ( (format->vAlign() == KoTextFormat::AlignCustom)?format->offsetFromBaseLine():0 );
 
     if ( format->doubleUnderline())
     {
@@ -2507,9 +2515,9 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 
     dimd = KoBorder::zoomWidthY( static_cast<double>(format->pointSize())/18.0, zh, 1 );
     if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
-	(format->vAlign() == KoTextFormat::AlignSubScript ))
+	(format->vAlign() == KoTextFormat::AlignSubScript ) || (format->vAlign() == KoTextFormat::AlignCustom ))
 	dimd*=format->relativeTextSize();
-    y = lastY + baseLine + offset - format->offsetFromBaseLine();
+    y = lastY + baseLine + offset - ( (format->vAlign() == KoTextFormat::AlignCustom)?format->offsetFromBaseLine():0 );
 
     if ( format->strikeOutType() == KoTextFormat::S_SIMPLE
          || format->strikeOutType() == KoTextFormat::S_SIMPLE_BOLD)

@@ -24,11 +24,16 @@
 #include <qstringlist.h>
 
 #include <koParagDia.h>
+#include <kofonttab.h>
+#include <kodecorationtab.h>
+#include <kohighlightingtab.h>
+#include <kolayouttab.h>
+#include <kolanguagetab.h>
 #include <koUnit.h>
 #include <qptrlist.h>
 #include <kostyle.h>
 
-class KoFontChooser;
+//class KoFontChooser;
 class KoParagStyle;
 class KoStyleEditor;
 class KoStyleManagerTab;
@@ -159,11 +164,13 @@ public:
     virtual void update();
     virtual QString tabName();
     virtual void save();
-protected:
-    virtual void resizeEvent( QResizeEvent *e );
 private:
-    KoFontChooser* m_chooser;
-    KoZoomHandler* m_zoomHandler;
+	KoFontTab *m_fontTab;
+	KoDecorationTab *m_decorationTab;
+	KoHighlightingTab *m_highlightingTab;
+	KoLayoutTab *m_layoutTab;
+	KoLanguageTab *m_languageTab;
+	KoZoomHandler* m_zoomHandler;
 };
 
 /*
