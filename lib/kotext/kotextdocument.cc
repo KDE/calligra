@@ -135,6 +135,7 @@ void KoTextDocument::clear( bool createEmptyParag )
 	flow_->clear();
     while ( fParag ) {
 	KoTextParag *p = fParag->next();
+	fParag->string()->clear(); // avoid the "unregister custom items" code, not needed
 	delete fParag;
 	fParag = p;
     }
@@ -142,6 +143,7 @@ void KoTextDocument::clear( bool createEmptyParag )
     if ( createEmptyParag )
 	fParag = lParag = createParag( this );
     selections.clear();
+    customItems.clear();
 }
 
 /*
