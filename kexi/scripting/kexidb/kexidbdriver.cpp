@@ -79,7 +79,7 @@ const QString KexiDBDriver::getClassName() const
 const QString KexiDBDriver::getDescription() const
 {
     return i18n("KexiDB::Driver wrapper to access the generic "
-                "database abstraction functionality KexiDB spends.");
+                "database abstraction functionality provided by KexiDB.");
 }
 
 ::KexiDB::Driver* KexiDBDriver::driver()

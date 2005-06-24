@@ -33,15 +33,15 @@ KexiDBTransaction::KexiDBTransaction(KexiDBConnection* connection, ::KexiDB::Tra
 {
     addFunction("connection", &KexiDBTransaction::connection,
         Kross::Api::ArgumentList(),
-        i18n("Return the KexiDBConnection object this KexiDBTransaction belongs to.")
+        i18n("Returns the KexiDBConnection object to which this KexiDBTransaction belongs.")
     );
     addFunction("isActive", &KexiDBTransaction::isActive,
         Kross::Api::ArgumentList(),
-        i18n("Return true if the transaction is active (ie. started).")
+        i18n("Returns true if the transaction is active (ie. started).")
     );
     addFunction("isNull", &KexiDBTransaction::isNull,
         Kross::Api::ArgumentList(),
-        i18n("Return true if the transaction is uninitialized (null).")
+        i18n("Returns true if the transaction is uninitialized (null).")
     );
 }
 

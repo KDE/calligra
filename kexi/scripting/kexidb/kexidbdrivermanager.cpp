@@ -46,7 +46,7 @@ KexiDBDriverManager::KexiDBDriverManager()
     );
     addFunction("driver", &KexiDBDriverManager::driver,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Returns the to name matching KexiDBDriver object.")
+        i18n("Returns the KexiDBDriver object whose name matches the passed string.")
     );
     addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
@@ -57,19 +57,19 @@ KexiDBDriverManager::KexiDBDriverManager()
 
     addFunction("connectionData", &KexiDBDriverManager::connectionData,
         Kross::Api::ArgumentList(),
-        i18n("Return a new KexiDBConnectionData object.")
+        i18n("Returns a new KexiDBConnectionData object.")
     );
     addFunction("field", &KexiDBDriverManager::field,
         Kross::Api::ArgumentList(),
-        i18n("Return a new KexiDBField object.")
+        i18n("Returns a new KexiDBField object.")
     );
     addFunction("tableSchema", &KexiDBDriverManager::tableSchema,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Return a new KexiDBTableSchema object.")
+        i18n("Returns a new KexiDBTableSchema object.")
     );
     addFunction("querySchema", &KexiDBDriverManager::querySchema,
         Kross::Api::ArgumentList(),
-        i18n("Return a new KexiDBQuerySchema object.")
+        i18n("Returns a new KexiDBQuerySchema object.")
     );
 }
 

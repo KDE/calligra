@@ -34,43 +34,43 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
 {
     addFunction("fieldCount", &KexiDBFieldList::fieldCount,
         Kross::Api::ArgumentList(),
-        i18n("Return the number of fields.")
+        i18n("Returns the number of fields.")
     );
     addFunction("field", &KexiDBFieldList::field,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant"),
-        i18n("Return the field with the as argument passed number.")
+        i18n("Returns the field specified by the number passed as an argument.")
     );
     addFunction("fields", &KexiDBFieldList::fields,
         Kross::Api::ArgumentList(),
-        i18n("Return a list of fields.")
+        i18n("Returns a list of fields.")
     );
     addFunction("hasField", &KexiDBFieldList::hasField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Return true if the as argument passed KexiDBField object is in the fieldlist.")
+        i18n("Returns true if the KexiDBField object passed as an argument is in the field list.")
     );
     addFunction("names", &KexiDBFieldList::names,
         Kross::Api::ArgumentList(),
-        i18n("Return a stringlist of fieldnames.")
+        i18n("Returns a stringlist of field names.")
     );
     addFunction("addField", &KexiDBFieldList::addField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Add the as argument passed KexiDBField object to the fieldlist.")
+        i18n("Adds the KexiDBField object passed as an argument to the field list.")
     );
     addFunction("insertField", &KexiDBFieldList::insertField,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::UInt")
             << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Insert the as second argument passed KexiDBField object "
-             "into the fieldlist at the position defined by the as second "
-             "argument passed number.")
+        i18n("Inserts the KexiDBField object passed as the second argument "
+             "into the field list at the position defined by the first "
+             "argument.")
     );
     addFunction("removeField", &KexiDBFieldList::removeField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Remove the as argument passed KexiDBField object from the fieldlist.")
+        i18n("Removes the KexiDBField object passed as an argument from the field list.")
     );
     addFunction("clear", &KexiDBFieldList::clear,
         Kross::Api::ArgumentList(),
-        i18n("Remove all KexiDBField objects from the fieldlist.")
+        i18n("Removes all KexiDBField objects from the fieldlist.")
     );
 }
 

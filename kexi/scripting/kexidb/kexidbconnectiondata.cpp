@@ -126,7 +126,7 @@ const QString KexiDBConnectionData::getClassName() const
 
 const QString KexiDBConnectionData::getDescription() const
 {
-    return i18n("KexiDB::ConnectionData wrapper for database "
+    return i18n("KexiDB::ConnectionData wrapper for database-"
                 "specific connection data, e.g. host, port.");
 }
 

@@ -147,8 +147,8 @@ const QString KexiDBTableSchema::getClassName() const
 const QString KexiDBTableSchema::getDescription() const
 {
     return i18n("KexiDB::TableSchema wrapper to provide information "
-                "about native database table that can be stored using "
-                "SQL database engine.");
+                "about a native database table that can be stored using "
+                "the SQL database engine.");
 }
 
 ::KexiDB::TableSchema* KexiDBTableSchema::tableschema()
@@ -165,11 +165,11 @@ KexiDBQuerySchema::KexiDBQuerySchema(::KexiDB::QuerySchema* queryschema)
 {
     addFunction("statement", &KexiDBQuerySchema::statement,
         Kross::Api::ArgumentList(),
-        i18n("Return the SQL statement of this Queryschema.")
+        i18n("Return the SQL statement of this query schema.")
     );
     addFunction("setStatement", &KexiDBQuerySchema::setStatement,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set the SQL statement of this Queryschema.")
+        i18n("Set the SQL statement of this query schema.")
     );
 }
 
@@ -184,7 +184,7 @@ const QString KexiDBQuerySchema::getClassName() const
 
 const QString KexiDBQuerySchema::getDescription() const
 {
-    return i18n("KexiDB::QuerySchema wrapper to spend abstraction of queries.");
+    return i18n("KexiDB::QuerySchema wrapper to provide abstraction of queries.");
 }
 
 ::KexiDB::QuerySchema* KexiDBQuerySchema::queryschema()

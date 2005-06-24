@@ -59,17 +59,17 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
     addFunction("at", &KexiDBCursor::at,
         Kross::Api::ArgumentList(),
         i18n("Returns current internal position of the cursor's query. "
-             "We are counting records from 0 and value -1 means that "
-             "cursor does not point to any valid record")
+             "Records are numbered from 0; the value -1 means that "
+             "the cursor does not point to a valid record.")
     );
     addFunction("fieldCount", &KexiDBCursor::fieldCount,
         Kross::Api::ArgumentList(),
-        i18n("Returns number of fields available for this cursor.")
+        i18n("Returns the number of fields available for this cursor.")
     );
 
     addFunction("value", &KexiDBCursor::value,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Returns a value stored in column number \a i (counting from 0).")
+        i18n("Returns the value stored in column number \a i (counting from 0).")
     );
 }
 
