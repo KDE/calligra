@@ -128,6 +128,7 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     if ( m_page->useMasterBackground() )
     {
         element=doc.createElement("BACKMASTER");
+	element.setAttribute("displayMasterPageObject", static_cast<int>( m_page->displayObjectFromMasterPage() ));
         page.appendChild(element);
     }
     else
@@ -442,6 +443,8 @@ void KPBackGround::load( const QDomElement &element )
     if ( !e.isNull() )
     {
         m_page->setUseMasterBackground( true );
+	if(e.hasAttribute("displayMasterPageObject"))
+		m_page->setDisplayObjectFromMasterPage( (bool)e.attribute("displayMasterPageObject").toInt());
     }
     else
     {
