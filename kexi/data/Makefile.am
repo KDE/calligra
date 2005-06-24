@@ -1,10 +1,5 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-#if compile_qsa_plugin
-#scripthandler = kexiscripthandler.desktop
-#scriptrc = kexiscriptpartui.rc
-#endif
-
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
 # kde_sounddir        Where your sounds should go to.

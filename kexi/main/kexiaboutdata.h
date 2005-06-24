@@ -23,7 +23,6 @@
 
 #include <kexi_version.h>
 #include <kaboutdata.h>
-#include <config.h>
 #include <kdeversion.h>
 
 static const char *description =

@@ -38,10 +38,6 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
-#include <unistd.h>
-
-#include <config.h>
-
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
