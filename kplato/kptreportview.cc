@@ -175,7 +175,7 @@ void KPTReportView::draw(const QString &report) {
     m_reportview->clearReport();
     m_reportTags = new ReportTagsPrivate();
     getTemplateFile(report);
-    m_reportview->setReportTemplate(templateDoc);
+    m_reportview->setReportTemplate(templateDoc.toString());
     setReportData();
     m_reportview->renderReport();
     m_reportview->show();
