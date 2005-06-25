@@ -374,6 +374,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
 			m_img->add(layer, 0);
 
+			Q_UINT32 layerBytesPerChannel = cs -> pixelSize() / cs -> nChannels();
+
 			for (Q_UINT32 y = 0; y < image->rows; y ++)
 			{
 				const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
@@ -389,17 +391,33 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 				}
 
 				KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
-				while(! hiter.isDone())
-				{
-					Q_UINT8 *ptr= hiter.rawData();
-					// XXX: not colorstrategy and bitdepth independent
-					*(ptr++) = Downscale(pp->blue);
-					*(ptr++) = Downscale(pp->green);
-					*(ptr++) = Downscale(pp->red);
-					*(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
 
-					pp++;
-					++hiter;
+				if (layerBytesPerChannel == 2) {
+					while(! hiter.isDone())
+					{
+						Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+						// XXX: not colorstrategy independent
+						*(ptr++) = ScaleQuantumToShort(pp->blue);
+						*(ptr++) = ScaleQuantumToShort(pp->green);
+						*(ptr++) = ScaleQuantumToShort(pp->red);
+						*(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
+
+						pp++;
+						++hiter;
+					}
+				} else {
+					while(! hiter.isDone())
+					{
+						Q_UINT8 *ptr= hiter.rawData();
+						// XXX: not colorstrategy and bitdepth independent
+						*(ptr++) = Downscale(pp->blue);
+						*(ptr++) = Downscale(pp->green);
+						*(ptr++) = Downscale(pp->red);
+						*(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
+
+						pp++;
+						++hiter;
+					}
 				}
 
 				emit notifyProgress(this, y * 100 / image->rows);
@@ -537,6 +555,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	width = img -> width();
 
 	bool alpha = layer -> alpha();
+	Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
 	for (y = 0; y < height; y++) {
 
@@ -552,19 +571,35 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		}
 
 		KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
-		while (!it.isDone()) {
 
-			Q_UINT8 * d = it.rawData();
-			// NOTE: Upscale is necessary for a correct export, otherwise
-			// only Krita can read the result.
-			pp -> red = Upscale(d[PIXEL_RED]);
-			pp -> green = Upscale(d[PIXEL_GREEN]);
-			pp -> blue = Upscale(d[PIXEL_BLUE]);
-			if (alpha)
-				pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+		if (layerBytesPerChannel == 2) {
+			while (!it.isDone()) {
 
-			pp++;
-			++it;
+				const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+				pp -> red = ScaleShortToQuantum(d[PIXEL_RED]);
+				pp -> green = ScaleShortToQuantum(d[PIXEL_GREEN]);
+				pp -> blue = ScaleShortToQuantum(d[PIXEL_BLUE]);
+				if (alpha)
+					pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_ALPHA]);
+
+				pp++;
+				++it;
+			}
+		} else {
+			while (!it.isDone()) {
+
+				Q_UINT8 * d = it.rawData();
+				// NOTE: Upscale is necessary for a correct export, otherwise
+				// only Krita can read the result.
+				pp -> red = Upscale(d[PIXEL_RED]);
+				pp -> green = Upscale(d[PIXEL_GREEN]);
+				pp -> blue = Upscale(d[PIXEL_BLUE]);
+				if (alpha)
+					pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+
+				pp++;
+				++it;
+			}
 		}
 
 		emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
@@ -640,6 +675,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	width = img -> width();
 
 	bool alpha = layer -> alpha();
+	Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
 	for (y = 0; y < height; y++) {
 
@@ -655,21 +691,36 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		}
 
 		KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
-		while (!it.isDone()) {
 
-			Q_UINT8 * d = it.rawData();
-			// NOTE: Upscale is necessary for a correct export, otherwise
-			// only Krita can read the result.
-			pp -> red = Upscale(d[PIXEL_RED]);
-			pp -> green = Upscale(d[PIXEL_GREEN]);
-			pp -> blue = Upscale(d[PIXEL_BLUE]);
-			if (alpha)
-				pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+		if (layerBytesPerChannel == 2) {
+			while (!it.isDone()) {
 
-			pp++;
-			++it;
+				const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+				pp -> red = ScaleShortToQuantum(d[PIXEL_RED]);
+				pp -> green = ScaleShortToQuantum(d[PIXEL_GREEN]);
+				pp -> blue = ScaleShortToQuantum(d[PIXEL_BLUE]);
+				if (alpha)
+					pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_ALPHA]);
+
+				pp++;
+				++it;
+			}
+		} else {
+			while (!it.isDone()) {
+	
+				Q_UINT8 * d = it.rawData();
+				// NOTE: Upscale is necessary for a correct export, otherwise
+				// only Krita can read the result.
+				pp -> red = Upscale(d[PIXEL_RED]);
+				pp -> green = Upscale(d[PIXEL_GREEN]);
+				pp -> blue = Upscale(d[PIXEL_BLUE]);
+				if (alpha)
+					pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+	
+				pp++;
+				++it;
+			}
 		}
-
 		emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
 
 #ifdef HAVE_MAGICK6
