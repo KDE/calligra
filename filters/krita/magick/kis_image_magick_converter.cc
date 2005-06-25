@@ -62,15 +62,22 @@ namespace {
 	 * Make this more flexible -- although... ImageMagick
 	 * isn't that flexible either.
 	 */
-	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type) {
+	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
+
+		
 		if (type == GRAYColorspace) {
-			KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
+			if (imageDepth == 8)
+				return KisColorSpaceRegistry::instance() -> get(KisID("GRAYA", ""));
 		}
 		else if (type == CMYKColorspace) {
-			return KisColorSpaceRegistry::instance() -> get(KisID("GRAYA", ""));
+			if (imageDepth == 8)
+				return KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
 		}
 		else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
-			return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+			if (imageDepth == 8)
+				return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+			else if (imageDepth == 16)
+				return KisColorSpaceRegistry::instance()->get(KisID("RGBA16", ""));
 		}
 		return 0;
 
@@ -254,22 +261,27 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		return KisImageBuilder_RESULT_INTR;
 	}
 
+	kdDebug() << "1\n";
+
 	GetExceptionInfo(&ei);
 	ii = CloneImageInfo(0);
-
+	kdDebug() << "2\n";
 	if (isBlob) {
+		kdDebug() << "3\n";
 		// TODO : Test.  Does BlobToImage even work?
 		Q_ASSERT(uri.isEmpty());
 		images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
 	} else {
+		kdDebug() << "4\n";
 		qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
 		if (ii -> filename[MaxTextExtent - 1]) {
 			emit notifyProgressError(this);
 			return KisImageBuilder_RESULT_PATH;
 		}
-
+		kdDebug() << "5\n";
 		images = ReadImage(ii, &ei);
+		kdDebug() << "6\n";
 	}
 
 	if (ei.severity != UndefinedException)
@@ -289,10 +301,14 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 	while ((image = RemoveFirstImageFromList(&images))) {
 		ViewInfo *vi = OpenCacheView(image);
 
+		// Determine image depth -- for now, all channels of an imported image are of the same depth
+		unsigned long imageDepth = image->depth;
+		kdDebug() << "Image depth: " << imageDepth << "\n";
+
 		// Determine image type -- rgb, grayscale or cmyk
-		KisStrategyColorSpaceSP cs = getColorSpaceForColorType(image -> colorspace);
+		KisStrategyColorSpaceSP cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
 		if (cs == 0) {
-			kdDebug() << "Krita does not suport profile " << image -> colorspace << "\n";
+			kdDebug() << "Krita does not suport colorspace " << image -> colorspace << "\n";
 			CloseCacheView(vi);
 			DestroyImage(image);
 			DestroyExceptionInfo(&ei);
