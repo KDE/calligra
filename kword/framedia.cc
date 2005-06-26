@@ -35,6 +35,7 @@
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qlistview.h>
@@ -92,6 +93,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 {
     noSignal=false;
     frame = _frame;
+    mainFrame = 0;
     if(frame==0) {
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
@@ -104,6 +106,8 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     frameSetProtectedSize = fs->isProtectSize();
     m_mainFrameSetIncluded = fs->isMainFrameset();
     m_defaultFrameSetIncluded = fs->isMainFrameset() || fs->isHeaderOrFooter() || fs->isFootEndNote();
+    if ( m_mainFrameSetIncluded )
+        mainFrame = frame;
 
     doc = 0;
     init();
@@ -125,14 +129,15 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
     }
+    mainFrame = 0;
     init();
 }
 
 KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Apply | Cancel, Ok, parent, "framedialog", true) , allFrames() {
     noSignal=false;
 
-    frame=0L;
-    tab1 = tab2 = tab3 = tab4 = tab5 = 0;
+    mainFrame = frame = 0L;
+    tab1 = tab2 = tab3 = tab4 = tab5 = tab6 = 0;
 
     KWFrame *f=listOfFrames.first();
     if(f==0) {
@@ -152,6 +157,9 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
         allFrames.append(f);
         frameTypeUnset=false;
     }
+    else
+        mainFrame = f;
+
     f=listOfFrames.next();
     while(f) {
         fs = f->frameSet()->getGroupManager();
@@ -175,7 +183,11 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
     for ( f = allFrames.first(); f; f = allFrames.next() ) {
         fs = f->frameSet();
         if ( !m_mainFrameSetIncluded )
+        {
             m_mainFrameSetIncluded = fs->isMainFrameset();
+            if ( m_mainFrameSetIncluded )
+                mainFrame = f;
+        }
         if ( !m_defaultFrameSetIncluded )
             m_defaultFrameSetIncluded = fs->isMainFrameset() || fs->isHeaderOrFooter() || fs->isFootEndNote();
     }
@@ -186,7 +198,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
 
 void KWFrameDia::init() {
 
-    tab1 = tab2 = tab3 = tab4 = tab5 = 0;
+    tab1 = tab2 = tab3 = tab4 = tab5 = tab6 = 0;
     sw = sh = 0L;
     cbAspectRatio=0L;
     KWFrameSet *fs=0;
@@ -206,6 +218,7 @@ void KWFrameDia::init() {
     }
     if( fs && fs->isMainFrameset() )
     {
+        setupTab6();
         setupTab5();
         setupTab4();
     }
@@ -216,6 +229,7 @@ void KWFrameDia::init() {
             setupTab2();
         setupTab4();
         setupTab5();
+        setupTab6();
     }
     else if(frameType == FT_TEXT)
     {
@@ -227,6 +241,7 @@ void KWFrameDia::init() {
         setupTab3();
         setupTab4();
         setupTab5();
+        setupTab6();
         if(! fs) // first creation
             showPage(2);
     }
@@ -241,6 +256,7 @@ void KWFrameDia::init() {
             setupTab2();
         if(frame)       // not for multiframe dia
             setupTab4();
+        setupTab6();
         showPage(1); // while options are not implemented..
     }
     else if(frameType == FT_PART)
@@ -248,6 +264,7 @@ void KWFrameDia::init() {
         setupTab2();
         if(frame)       // not for multiframe dia
             setupTab4();
+        setupTab6();
     }
     else if(frameType == FT_FORMULA)
     {
@@ -255,12 +272,14 @@ void KWFrameDia::init() {
         setupTab2();
         if(frame)       // not for multiframe dia
             setupTab4();
+        setupTab6();
         showPage(1); // while options are not implemented..
     }
     else if(frameType == FT_TABLE)
     {
         setupTab4();
         setupTab5();
+        setupTab6();
     }
     setInitialSize( QSize(550, 400) );
 }
@@ -1018,7 +1037,41 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         m_paddingConfigWidget = 0;
     }
 
+    initGeometrySettings();
 
+    if ( !frame || m_defaultFrameSetIncluded ) {
+        // is multi frame, positions don't work for that..
+        // also not for default frames.
+        sx->setEnabled( false );
+        sy->setEnabled( false );
+        lx->setEnabled( false );
+        ly->setEnabled( false );
+        lw->setEnabled( false );
+        lh->setEnabled( false );
+        floating->setEnabled( false );
+    }
+
+    if ( m_defaultFrameSetIncluded || m_mainFrameSetIncluded)
+    {
+        sw->setEnabled( false );
+        sh->setEnabled( false );
+        grp1->setEnabled( false );
+    }
+
+    if ( m_mainFrameSetIncluded )
+    {
+        grp1->hide();
+        floating->hide( );
+        protectSize->hide();
+    }
+    noSignal=false;
+
+    ++row;
+    grid4->setRowStretch( row, 1 );
+}
+
+void KWFrameDia::initGeometrySettings()
+{
     if ( frame ) {
         // is single frame dia. Fill position strings and checkboxes now.
 
@@ -1110,35 +1163,6 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 #endif
         }
     }
-
-    if ( !frame || m_defaultFrameSetIncluded ) {
-        // is multi frame, positions don't work for that..
-        // also not for default frames.
-        sx->setEnabled( false );
-        sy->setEnabled( false );
-        lx->setEnabled( false );
-        ly->setEnabled( false );
-        lw->setEnabled( false );
-        lh->setEnabled( false );
-        floating->setEnabled( false );
-    }
-    if ( m_defaultFrameSetIncluded ) { // the multiframe case is handled before
-        sw->setEnabled( false );
-        sh->setEnabled( false );
-        grp1->setEnabled( false );
-    }
-
-
-    if ( m_mainFrameSetIncluded )
-    {
-        grp1->hide();
-        floating->hide( );
-        protectSize->hide();
-    }
-    noSignal=false;
-
-    ++row;
-    grid4->setRowStretch( row, 1 );
 }
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
@@ -1214,6 +1238,216 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
 
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
     grid5->addItem( spacer,row,0 );
+}
+
+void KWFrameDia::setupTab6() // Border style
+{
+    tab6 = addPage( i18n("&Borders") );
+
+    QGridLayout *grid = new QGridLayout( tab6, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel * lStyle = new QLabel( i18n( "St&yle:" ), tab6 );
+    grid->addWidget( lStyle, 0, 0 );
+
+    cStyle = new QComboBox( false, tab6 );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::SOLID ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
+    lStyle->setBuddy( cStyle );
+    grid->addWidget( cStyle, 1, 0 );
+
+    QLabel * lWidth = new QLabel( i18n( "&Width:" ), tab6 );
+    grid->addWidget( lWidth, 2, 0 );
+
+    cWidth = new QComboBox( false, tab6 );
+    for( unsigned int i = 1; i <= 10; i++ )
+        cWidth->insertItem(QString::number(i));
+    lWidth->setBuddy( cWidth );
+    grid->addWidget( cWidth, 3, 0 );
+
+    QLabel * lColor = new QLabel( i18n( "Co&lor:" ), tab6 );
+    grid->addWidget( lColor, 4, 0 );
+
+    bColor = new KColorButton( black,
+                                black,
+                                tab6 );
+
+    lColor->setBuddy( bColor );
+    grid->addWidget( bColor, 5, 0 );
+
+    QButtonGroup * bb = new QHButtonGroup( tab6 );
+    bb->setFrameStyle(QFrame::NoFrame);
+    bLeft = new QPushButton(bb);
+    bLeft->setPixmap( BarIcon( "borderleft" ) );
+    bLeft->setToggleButton( true );
+    bRight = new QPushButton(bb);
+    bRight->setPixmap( BarIcon( "borderright" ) );
+    bRight->setToggleButton( true );
+    bTop = new QPushButton(bb);
+    bTop->setPixmap( BarIcon( "bordertop" ) );
+    bTop->setToggleButton( true );
+    bBottom = new QPushButton(bb);
+    bBottom->setPixmap( BarIcon( "borderbottom" ) );
+    bBottom->setToggleButton( true );
+    grid->addWidget( bb, 6, 0 );
+
+    connect( bLeft, SIGNAL( toggled( bool ) ), this, SLOT( brdLeftToggled( bool ) ) );
+    connect( bRight, SIGNAL( toggled( bool ) ), this, SLOT( brdRightToggled( bool ) ) );
+    connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
+    connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
+
+    initBorderSettings();
+
+    QGroupBox *grp=new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), tab6, "previewgrp" );
+    grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
+    grp->layout()->setSpacing(KDialog::spacingHint());
+    grp->layout()->setMargin(KDialog::marginHint());
+    prev3 = new KoBorderPreview( grp );
+    QVBoxLayout *lay1 = new QVBoxLayout( grp->layout() );
+    lay1->addWidget(prev3);
+
+    connect( prev3, SIGNAL( choosearea(QMouseEvent * ) ),
+             this, SLOT( slotPressEvent(QMouseEvent *) ) );
+
+    // update the bordet preview widget
+    prev3->setLeftBorder( m_leftBorder );
+    prev3->setRightBorder( m_rightBorder );
+    prev3->setTopBorder( m_topBorder );
+    prev3->setBottomBorder( m_bottomBorder );
+
+    grid->setRowStretch( 7, 1 );
+    grid->setColStretch( 1, 1 );
+}
+
+void KWFrameDia::initBorderSettings()
+{
+    KWFrame *f = mainFrame ? mainFrame : ( frame ? frame : allFrames.first() );
+    m_leftBorder = f->leftBorder();
+    m_rightBorder = f->rightBorder();
+    m_topBorder = f->topBorder();
+    m_bottomBorder = f->bottomBorder();
+}
+
+#define OFFSETX 15
+#define OFFSETY 7
+#define Ko_SPACE 30
+void KWFrameDia::slotPressEvent(QMouseEvent *_ev)
+{
+    QRect r = prev3->contentsRect();
+    QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+Ko_SPACE);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        if( (  ((int)m_topBorder.penWidth() != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
+               ||(m_topBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bTop->isOn() )
+        {
+            m_topBorder.setPenWidth( cWidth->currentText().toInt() );
+            m_topBorder.color = QColor( bColor->color() );
+            m_topBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
+            prev3->setTopBorder( m_topBorder );
+        }
+        else
+            bTop->setOn(!bTop->isOn());
+    }
+    rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-Ko_SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        if( (  ((int)m_bottomBorder.penWidth() != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
+               ||(m_bottomBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
+        {
+            m_bottomBorder.setPenWidth(cWidth->currentText().toInt());
+            m_bottomBorder.color = QColor( bColor->color() );
+            m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
+            prev3->setBottomBorder( m_bottomBorder );
+        }
+        else
+            bBottom->setOn(!bBottom->isOn());
+    }
+
+    rect.setCoords(r.x()+OFFSETX,r.y()+OFFSETY,r.x()+Ko_SPACE+OFFSETX,r.height()-OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+
+        if( (  ((int)m_leftBorder.penWidth() != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
+               ||(m_leftBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
+        {
+            m_leftBorder.setPenWidth( cWidth->currentText().toInt());
+            m_leftBorder.color = QColor( bColor->color() );
+            m_leftBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
+            prev3->setLeftBorder( m_leftBorder );
+        }
+        else
+            bLeft->setOn(!bLeft->isOn());
+    }
+    rect.setCoords(r.width()-OFFSETX-Ko_SPACE,r.y()+OFFSETY,r.width()-OFFSETX,r.height()-OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+
+        if( (  ((int)m_rightBorder.penWidth() != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
+               ||(m_rightBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bRight->isOn() )
+        {
+            m_rightBorder.setPenWidth( cWidth->currentText().toInt());
+            m_rightBorder.color = bColor->color();
+            m_rightBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
+            prev3->setRightBorder( m_rightBorder );
+        }
+        else
+            bRight->setOn(!bRight->isOn());
+    }
+}
+#undef OFFSETX
+#undef OFFSETY
+#undef Ko_SPACE
+
+
+void KWFrameDia::brdLeftToggled( bool _on )
+{
+    if ( !_on )
+        m_leftBorder.setPenWidth(0);
+    else {
+        m_leftBorder.setPenWidth(cWidth->currentText().toInt());
+        m_leftBorder.color = bColor->color();
+        m_leftBorder.setStyle(KoBorder::getStyle( cStyle->currentText() ));
+    }
+    prev3->setLeftBorder( m_leftBorder );
+}
+
+void KWFrameDia::brdRightToggled( bool _on )
+{
+    if ( !_on )
+        m_rightBorder.setPenWidth(0);
+    else {
+        m_rightBorder.setPenWidth(cWidth->currentText().toInt());
+        m_rightBorder.color = bColor->color();
+        m_rightBorder.setStyle( KoBorder::getStyle( cStyle->currentText() ));
+    }
+    prev3->setRightBorder( m_rightBorder );
+}
+
+void KWFrameDia::brdTopToggled( bool _on )
+{
+    if ( !_on )
+        m_topBorder.setPenWidth(0);
+    else {
+        m_topBorder.setPenWidth(cWidth->currentText().toInt());
+        m_topBorder.color = bColor->color();
+        m_topBorder.setStyle(KoBorder::getStyle( cStyle->currentText() ));
+    }
+    prev3->setTopBorder( m_topBorder );
+}
+
+void KWFrameDia::brdBottomToggled( bool _on )
+{
+    if ( !_on )
+        m_bottomBorder.setPenWidth ( 0 );
+    else {
+        m_bottomBorder.setPenWidth( cWidth->currentText().toInt());
+        m_bottomBorder.color = bColor->color();
+        m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
+    }
+    prev3->setBottomBorder( m_bottomBorder );
 }
 
 void KWFrameDia::slotProtectContentChanged( bool b )
@@ -1975,11 +2209,11 @@ bool KWFrameDia::applyChanges()
 
             }
             if ( !fs->isMainFrameset() &&
-                ( oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() ) )
+                ( ( oldX != sx->value() && sx->isEnabled() )|| ( oldY != sy->value() && sy->isEnabled() ) || ( oldW != sw->value() && sw->isEnabled() ) || ( oldH != sh->value() && sh->isEnabled() ) ) )
             {
                 //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
-                //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
+                  //        << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
                 if( !doc->isOutOfPage( rect, f->pageNum() ) )
                 {
@@ -2021,6 +2255,87 @@ bool KWFrameDia::applyChanges()
             f=allFrames.next();
         }
     }
+    if ( tab6 ) // Border style
+    {
+        if ( mainFrame )
+            allFrames.append( mainFrame );
+
+        KWFrame *f = allFrames.first();
+        if(f==0L) f=frame;
+        for ( ; f ; f = allFrames.next() )
+        {
+            if ( f->leftBorder() != m_leftBorder )
+            {
+                kdDebug() << "Changing borders!" << endl;
+                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<FrameIndex> frameindexList;
+                f = KWFrameSet::settingsFrame( f );
+                FrameIndex *index = new FrameIndex( f );
+                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                tmp->m_OldBorder = f->leftBorder();
+                tmp->m_EFrameType = FBLeft;
+                tmpBorderList.append( tmp );
+                frameindexList.append( index );
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change Border"));
+                KWFrameBorderCommand *cmd = new KWFrameBorderCommand(i18n("Change Left Border Frame"), frameindexList, tmpBorderList, m_leftBorder);
+                cmd->execute();
+                macroCmd->addCommand( cmd);
+            }
+            if ( f->rightBorder() != m_rightBorder )
+            {
+                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<FrameIndex> frameindexList;
+                f = KWFrameSet::settingsFrame( f );
+                FrameIndex *index = new FrameIndex( f );
+                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                tmp->m_OldBorder = f->rightBorder();
+                tmp->m_EFrameType = FBRight;
+                tmpBorderList.append( tmp );
+                frameindexList.append( index );
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change Border"));
+                KWFrameBorderCommand *cmd = new KWFrameBorderCommand(i18n("Change Right Border Frame"), frameindexList, tmpBorderList, m_rightBorder);
+                cmd->execute();
+                macroCmd->addCommand( cmd);
+            }
+            if ( f->topBorder() != m_topBorder )
+            {
+                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<FrameIndex> frameindexList;
+                f = KWFrameSet::settingsFrame( f );
+                FrameIndex *index = new FrameIndex( f );
+                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                tmp->m_OldBorder = f->topBorder();
+                tmp->m_EFrameType = FBTop;
+                tmpBorderList.append( tmp );
+                frameindexList.append( index );
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change Border"));
+                KWFrameBorderCommand *cmd = new KWFrameBorderCommand(i18n("Change Top Border Frame"), frameindexList, tmpBorderList, m_topBorder);
+                cmd->execute();
+                macroCmd->addCommand( cmd);
+            }
+            if ( f->bottomBorder() != m_bottomBorder )
+            {
+                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<FrameIndex> frameindexList;
+                f = KWFrameSet::settingsFrame( f );
+                FrameIndex *index = new FrameIndex( f );
+                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                tmp->m_OldBorder = f->bottomBorder();
+                tmp->m_EFrameType = FBBottom;
+                tmpBorderList.append( tmp );
+                frameindexList.append( index );
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change Border"));
+                KWFrameBorderCommand *cmd = new KWFrameBorderCommand(i18n("Change Bottom Border Frame"), frameindexList, tmpBorderList, m_bottomBorder);
+                cmd->execute();
+                macroCmd->addCommand( cmd);
+            }
+        }
+    }
+
     if(macroCmd)
         doc->addCommand(macroCmd);
 
@@ -2044,6 +2359,10 @@ void KWFrameDia::updateFrames()
 void KWFrameDia::slotApply()
 {
     applyChanges();
+    if ( tab4 )
+        initGeometrySettings();
+    if ( tab6 )
+        initBorderSettings();
 }
 
 void KWFrameDia::slotOk()

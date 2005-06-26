@@ -20,6 +20,7 @@
 #ifndef framedia_h
 #define framedia_h
 
+#include "../lib/kotext/koParagDia_p.h"
 #include <kdialogbase.h>
 #include <koUnit.h>
 #include <koUnitWidgets.h>
@@ -111,6 +112,10 @@ protected:
     void setupTab3();
     void setupTab4();
     void setupTab5();
+    void setupTab6();
+    void initBorderSettings();
+    void initGeometrySettings();
+    
     void updateFrames();
     void enableOnNewPageOptions();
     void initBrush();
@@ -138,6 +143,11 @@ protected slots:
     void slotUpdateHeightForWidth( double width );
     void slotKeepRatioToggled(bool on);
     void ensureValidFramesetSelected();
+    void brdLeftToggled( bool );
+    void brdRightToggled( bool );
+    void brdTopToggled( bool );
+    void brdBottomToggled( bool );
+    void slotPressEvent(QMouseEvent *_ev);
 private:
     // TAB 1:
     QWidget *tab1;
@@ -175,6 +185,15 @@ private:
 
     // TAB 5:
     QWidget *tab5;
+
+    // TAB 6:
+    QWidget *tab6;
+    QComboBox *cWidth, *cStyle;
+    QPushButton *bLeft, *bRight, *bTop, *bBottom;
+    KColorButton *bColor;
+    KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
+    KoBorderPreview *prev3;
+
     //QComboBox *brushStyle;
     QCheckBox* transparentCB;
     KColorButton *brushColor;
@@ -182,6 +201,7 @@ private:
     QCheckBox *overwriteColor;
 
     KWFrame *frame;
+    KWFrame *mainFrame;
     QPtrList<KWFrame> allFrames;
     KWDocument *doc;
     FrameSetType frameType;
