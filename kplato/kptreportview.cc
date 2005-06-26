@@ -23,7 +23,7 @@
 #include "kptpart.h"
 #include "kptcontext.h"
 
-#include <kreportviewer.h>
+#include <mreportviewer.h>
 
 #include <koStoreDevice.h>
 
@@ -144,7 +144,7 @@ KPTReportView::KPTReportView(KPTView *view, QWidget *parent)
 {
     //kdDebug()<<k_funcinfo<<endl;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_reportview = new KReportViewer(this);
+    m_reportview = new Kugar::MReportViewer(this);
     layout->add(m_reportview);
 
 	//connect(m_reportview,SIGNAL(preferedTemplate(const QString &)), SLOT(slotPreferredTemplate(const QString &)));

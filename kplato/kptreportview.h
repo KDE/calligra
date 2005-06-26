@@ -29,7 +29,11 @@
 
 class KAction;
 class KPrinter;
-class KReportViewer;
+
+namespace Kugar
+{
+  class MReportViewer;
+}
 
 //class QString;
 class QStringList;
@@ -95,7 +99,7 @@ public slots:
 
 private:
     KPTView *m_mainview;
-    KReportViewer *m_reportview;
+    Kugar::MReportViewer *m_reportview;
     int m_defaultFontSize;
 
     QDomDocument templateDoc;
