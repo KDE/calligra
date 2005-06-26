@@ -1,41 +1,57 @@
 This file is intended to coordinate the TODO items for the documentation.
+Please also see README.documentation for general info.
 
-TODO for KOffice 1.4 (before message freeze!!):
+Maintainer updates required/desired:
 
-Message freeze is on: April 11, 2005
+Pamela Roberts (KSpread), she's not working on KSpread docs anymore
+Jonathan Drews (KFormula), he's not working on KFormula docs anymore
+Neil Lucock (KPresenter), mail delivery failed
+Ben Lambs (Kivio) tends to fall behind the state of the art
 
-- Update KChart handbook
-  reported by: Inge, Raphael
-  taken by: Raphael
-  Status: DONE
+Please also check README.documentation for completely unmaintained
+handbooks!
+
+
+New Handbooks:
+
+- The following handbooks are missing, they should be done for KOffice 1.5:
+  Krita (Boudewijn started something, he'd appreciate help though)
+  Karbon14
+  Kexi (currently being translated from Polish to English)
+  KPlato (contact raphael)
+
+
+Complete Handbook Reviews:
 
 - Update the KOffice handbook
   reported by: Raphael
   taken by: Raphael
-  Status: reviewed, postponed
+  Status: (quickly) reviewed for 1.4, currently postponed
 
-- Review the KFormula handbook
-  reported by: Raphael
-  taken by: Raphael
-  Status: section about math fonts is updated (most important IMO)
+- Update the KFormula handbook
+  reported by: Raphael, Natalie
+  bugs: 106117
+  taken by: 
+  Status: the first paragraph about math fonts is up-to-date,
+          expand it over the whole chapter
 
-- Check Kugar handbook (possibly update screenshots,...)
-  reported by: Raphael
+- Update Kugar handbook
+  note: possibly update screenshots, improve language!
+  reported by: Raphael, Natalie
   taken by:
 
-- The following handbooks are not missing (??):
-  Krita
-  Karbon14
-  Kexi
+- Update KPresenter handbook
+  note: generally outdated and incomplete
+  bugs: 105588
+  reported by: Natalie
+  taken by:
 
 
-TODO after 1.4 release:
+General issues:
 
-in koffice/kspread/extensions/datetime.xml
-
-> -In these KSpread messages comma is used instead of semicolon (as
-> separator):
->
-> msgid "DAYS360(\"2/22/2002\", \"4/21/2002\", FALSE) returns 59"
->
-> msgid "COUPNUM(settlement, maturity, frequency, basis)"
+- KSpread handbook
+  note: There are various bug reports in the "docs" product,
+        screenshots, language/typos, ...
+  bugs: 104770, 104970
+  reported by: Natalie
+  taken by:

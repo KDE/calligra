@@ -1,9 +1,27 @@
 If you want to contribute to the KOffice documentation, please
-check this file regularly to see what needs to be done and to
-avoid duplicating work. If a task in the list below is already
-assigned to somebody, that doesn't mean you can't work on it.
-Just contact the person in charge, there's enough work for
-everybody.
+check the TODO file regularly to see what needs to be done and to
+avoid duplicating work. If a task is already assigned to somebody,
+that doesn't mean you can't work on it. Just contact the person
+in charge, there's enough work for everybody.
+
+
+This file lists the people working on documentation and on what
+parts they are working on. If there is no name next to a
+KOffice component that means no one is working actively
+on the documentation of that part. You are very welcome
+to take over such unmaintained components. You can also
+contribute to components that have a maintainer of course.
+
+In any case, please contact the documentation maintainer of
+the specific component you want to work on. If the maintainer
+does not respond or no maintainer is listed - or you have
+any question, contact Raphael.
+
+--------------------------------------------------------------
+KOffice documentation coordinatior:
+
+Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+
 --------------------------------------------------------------
 People working on documentation:
 
@@ -12,18 +30,19 @@ Ben Lamb <kde@zurgy.org>
 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 Martin Ellis <kde@martinellis.co.uk>
 Jaroslaw Staniek <js@iidea.pl>
+Boudewijn Rempt <boud@valdyas.org>
 
 [add yourself here]
 --------------------------------------------------------------
 Tasks:
-KWord		Mike
-KPresenter	
-KSpread		Raphael
-KChart		Raphael
-Kivio		Ben
-Kexi		Martin, Jaroslaw
-KPlato
-Krita
+KWord       Mike
+KPresenter
+KSpread     Raphael
+KChart      Raphael
+Kivio       Ben
+Kexi        Martin, Jaroslaw
+KPlato      Raphael
+Krita       Boudewijn
 Karbon14
 Kugar
 KFormula
@@ -33,12 +52,22 @@ KOffice/general
 KOffice FAQ
 
 --------------------------------------------------------------
+
+Questions?
+
 What if I don't know DocBook?
-Write in plain text and send it to Mike or Jost. We'll convert it
+Write in plain text and send it to Raphael or Mike. We'll convert it
 and check it in. Note that it's easier for us if you send us
 plain text rather than HTML.
 
 What if I haven't got Subversion access?
-Send it to Mike or Jost. We'll check it in for you. BTW, please
+Send it to Raphael or Mike. We'll check it in for you. BTW, please
 send us only the parts of the documentation you've written/changed
 as this makes it easier for us to merge your work with our work.
+
+Where should I send patches to?
+You can send it either to the KOffice development list
+(koffice-devel@kde.org) or to the documentation coordinator.
+It is helpful if you use [PATCH] in the subject line.
+
+Still a question? Contact raphael.langerhorst@kdemail.net
