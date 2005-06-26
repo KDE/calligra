@@ -194,6 +194,14 @@ SvgExport::visitVSubpath( VSubpath& )
 {
 }
 
+void 
+SvgExport::visitVLayer( VLayer& layer ) 
+{ 
+        *m_body << "<g" << getID( &layer ) << ">" << endl; 
+        VVisitor::visitVLayer( layer ); 
+        *m_body << "</g>" << endl; 
+}
+
 QString createUID()
 {
 	static unsigned int nr = 0;
