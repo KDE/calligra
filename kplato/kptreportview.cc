@@ -23,7 +23,7 @@
 #include "kptpart.h"
 #include "kptcontext.h"
 
-#include <kugar.h>
+#include <kreportviewer.h>
 
 #include <koStoreDevice.h>
 
