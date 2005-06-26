@@ -295,7 +295,7 @@
       </Parameter>
       <Help>
 	<Text>The COUPNUM function returns the number of coupons to be paid between the settlement and the maturity. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
-	<Syntax>COUPNUM(settlement, maturity, frequency, basis)</Syntax>
+	<Syntax>COUPNUM(settlement; maturity; frequency; basis)</Syntax>
 	<Example>COUPNUM("2/28/2001"; "8/31/2001"; 2; 0) returns 1</Example>
       </Help>
     </Function>
