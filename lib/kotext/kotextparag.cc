@@ -1437,7 +1437,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         int paragBottom = pixelRect(zh).height()-1;
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Looks nicer. OO does that too.
-        if ( m_layout.bottomBorder.width() > 0 /*&& drawBottomBorder*/)
+        if ( m_layout.bottomBorder.width() > 0 && drawBottomBorder)
             paragBottom -= zh->layoutUnitToPixelY( lineSpacing( lastLine ) );
         paragBottom -= KoBorder::zoomWidthY( m_layout.bottomBorder.width(), zh, 0 );
         //kdDebug(32500) << "Parag border: paragBottom=" << paragBottom
@@ -1621,7 +1621,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
                         if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
                             chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
                                                      drawSelections && nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
-                        }
+                    }
                 }
                 paintStart = i+1;
             }
