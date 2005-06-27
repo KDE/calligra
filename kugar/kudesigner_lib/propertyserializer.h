@@ -40,6 +40,6 @@ public:
     static QVariant fromString( Property *prop, const QString &str );
 };
 
-};
+}
 
 #endif
