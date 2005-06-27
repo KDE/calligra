@@ -28,8 +28,8 @@ class KoFontTab : public KoFontTabBase
     Q_OBJECT
 
 public:
-    KoFontTab::KoFontTab( uint fontListCriteria=0, QWidget* parent=0, const char* name=0, WFlags fl=0 );
-    KoFontTab::~KoFontTab();
+    KoFontTab( uint fontListCriteria=0, QWidget* parent=0, const char* name=0, WFlags fl=0 );
+    ~KoFontTab();
 
     QFont getSelection();
 
