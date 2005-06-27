@@ -33,6 +33,8 @@
 #include <qbutton.h>
 #include <kdialogbase.h>
 
+#include <koffice_export.h>
+
 class QComboBox;
 class QCheckBox;
 class QFont;

@@ -58,6 +58,8 @@
 		    // not needed any more...
 #endif
 
+#include <koffice_export.h>
+
 #include "kfontdialog_local.h"
 #include "kfontdialog_local.moc"
 
