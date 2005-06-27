@@ -35,6 +35,7 @@ class VPath;
 class VDocument;
 class VFill;
 class VGroup;
+class VImage;
 class VLayer;
 class VSubpath;
 class VStroke;
@@ -55,6 +56,8 @@ private:
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVGroup( VGroup& group );
+	virtual void visitVImage( VImage& image );
+	virtual void visitVLayer( VLayer& layer );
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
         virtual void visitVLayer( VLayer& layer ); 
@@ -63,6 +66,7 @@ private:
 	void getColorStops( const QPtrVector<VColorStop> &colorStops );
 	void getFill( const VFill& fill  );
 	void getGradient( const VGradient& grad );
+	void getPattern( const VPattern& patt );
 	void getHexColor( QTextStream *, const VColor& color  );
 	QString getID( VObject *obj );
 
