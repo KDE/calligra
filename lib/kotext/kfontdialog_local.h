@@ -52,7 +52,7 @@ class KIntNumInput;
  * @author Preston Brown <pbrown@kde.org>, Bernd Wuebben <wuebben@kde.org>
  * @version $Id: kfontdialog.h,v 1.71 2004/10/10 10:27:49 bhards Exp $
  */
-class KDEUI_EXPORT KFontChooser_local : public QWidget
+class KOTEXT_EXPORT KFontChooser_local : public QWidget
 {
   Q_OBJECT
   Q_PROPERTY( QFont font READ font WRITE setFont )
@@ -345,7 +345,7 @@ private:
  * @author Preston Brown <pbrown@kde.org>, Bernd Wuebben <wuebben@kde.org>
  * @version $Id: kfontdialog.h,v 1.71 2004/10/10 10:27:49 bhards Exp $
  */
-class KDEUI_EXPORT KFontDialog_local : public KDialogBase  {
+class KOTEXT_EXPORT KFontDialog_local : public KDialogBase  {
     Q_OBJECT
 
 public:
