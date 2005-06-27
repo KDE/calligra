@@ -64,28 +64,26 @@ that can be used in a formula cell. They can be seen and accessed by selecting
 a cell then choosing <guimenuitem>Function...</guimenuitem> from the 
 <guimenu>Insert</guimenu> menu. This brings up the <guilabel>Function
 </guilabel> dialog box.</para>
-<para>Select the expression you want to use from the listbox at the left of the 
+<para>Select the function you want to use from the listbox at the left of the 
 dialog box then press the button with the down arrow key symbol on it to paste 
-the expression into the text edit box at the bottom of the <guilabel>Math 
+it into the text edit box at the bottom of the <guilabel>Math 
 Expression</guilabel> dialog.</para>
 <para>The <guilabel>Parameters</guilabel> tab page will then be displayed 
-to let you enter the parameter(s) for the expression you have just 
+to let you enter the parameter(s) for the function you have just 
 chosen. If you want to enter an actual value for a parameter, just type it 
 into the appropriate text box in the <guilabel>Parameters</guilabel> page. To
 enter a cell reference rather than a value, <mousebutton>left</mousebutton> 
-click on the appropriate text box in the <guilabel>Parameters</guilabel> page 
+click on the appropriate text box in the <guilabel>Parameters</guilabel> page;
 then <mousebutton>left</mousebutton> click on the target cell in 
 the spreadsheet.</para>
 <para>Instead of using the <guilabel>Parameters</guilabel> page, cell 
 references such as <userinput>B6</userinput> can be entered by typing them 
 directly into the edit box at the bottom of the <guilabel>Function</guilabel> 
-dialog. If an expression has more than one parameter separate them with a 
+dialog. If a function has more than one parameter separate them with a 
 semi-colon (<keysym>;</keysym>).</para>
-<para>Pressing the <guibutton>OK</guibutton> button will transfer the 
-expression to the main &kspread; window's Formula toolbar edit box and close 
-the <guilabel>Function</guilabel> dialog. Press the Formula toolbar 
-button marked with a large green tick to put the expression into the selected 
-cell.</para>
+<para>Pressing the <guibutton>OK</guibutton> button will insert the 
+function into the current cell and close the <guilabel>Function</guilabel>
+dialog.</para>
 <para>You can of course do without the <guilabel>Function</guilabel> 
 dialog and simply type the complete expression into the Formula toolbar's 
 main edit box. Function names are not case sensitive. Do not forget that all 
@@ -225,7 +223,7 @@ for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
 <title>Goal Seeking</title>
 <para>&kspread; can be used to solve algebraic expressions such as <emphasis>
 x + x^2 = 4</emphasis> or <emphasis>For what value of x does x + x squared 
-equal 4 ?</emphasis>.</para>
+equal 4 ?</emphasis></para>
 <para>For this example you could enter <userinput>=A2+A2*A2</userinput>
 into A1 then either try different values in A2 until the result in A1 is as 
 close as you wish to <emphasis>4</emphasis> or, preferably, use &kspread;'s  
@@ -236,19 +234,19 @@ possible to a target value.</para>
 the <guimenu>Data</guimenu> menu. This brings up a dialog box in which you 
 should enter the reference of the target value cell (<userinput>A1</userinput> 
 in this case) into the <guilabel>Set cell</guilabel> box, the target value 
-itself (<userinput>4</userinput>) into the <guilabel>to value</guilabel> box 
+itself (<userinput>4</userinput>) into the <guilabel>To value</guilabel> box 
 and the reference of the cell that is to be changed 
-(<userinput>A2</userinput>) into the <guilabel>by changing cell</guilabel> 
+(<userinput>A2</userinput>) into the <guilabel>By changing cell</guilabel> 
 box. Note that you need to have entered some initial value into the cell that 
 is to be changed before starting <guimenuitem>Goal Seek</guimenuitem>.</para>
-<para>Pressing the <guibutton>Start</guibutton> button in the <guilabel>
-Goal Seek</guilabel> menu will start the calculation. When it finishes and if 
-it has found a solution press the <guibutton>OK</guibutton> button to accept 
-the result or <guibutton>Cancel</guibutton> to keep the original value. 
+<para>Pressing the <guibutton>Start</guibutton> button will start the
+calculation. When it finishes and if it has found a solution press the
+<guibutton>OK</guibutton> button to accept the result or
+<guibutton>Cancel</guibutton> to keep the original value.
 </para>
 </sect1>
 
-<sect1 id="tables">
+<sect1 id="sheets">
 <title>Using more than one Worksheet</title>
 <para>When you start a new, empty, document with &kspread; it will create a 
 number of blank worksheets. The number of sheets it creates is determined 
@@ -280,7 +278,7 @@ for the sheet you want to remove.</para>
 Sheet</guisubmenu></menuchoice> submenu allow you to show or hide a sheet in 
 much the same way as rows and columns can be hidden.</para>
 <para>If you want a formula in one sheet to refer to a cell in another sheet, 
-the cell reference must start with the table name followed by an exclamation 
+the cell reference must start with the sheet name followed by an exclamation 
 mark (<keysym>!</keysym>). For example if you enter <userinput>=Sheet2!A2
 </userinput> into a cell in Sheet 1, that cell will take the value from A2 of 
 Sheet2. Note that sheet names are case sensitive.</para>
@@ -296,18 +294,17 @@ of the corresponding data items in the other sheets.</para>
 Consolidate...</guimenuitem> item from the <guimenu>Data</guimenu> menu.</para>
 <para>Selecting this option brings up the <guilabel>Consolidate</guilabel>
 dialog box.</para>
-<para>For each of the source sheets, enter a reference to the wanted data area 
-in the <guilabel>Reference</guilabel> box in the <guilabel>Consolidate
-</guilabel> dialog then press <guibutton>Add</guibutton> which should transfer 
-it to the <guilabel>Entered References</guilabel> box. The reference should 
-include the name of the sheet containing the source data, such as <userinput>
-January!A1:A10</userinput>, and can be entered automatically by selecting the 
-area in the appropriate table.</para>
-<para>When you have entered the references for all of the source data sheets 
+<para>For each of the source sheets, enter a reference to the desired data area
+in the <guilabel>Reference</guilabel> box. Press <guibutton>Add</guibutton> to
+transfer it to the <guilabel>Entered References</guilabel> box. The reference
+should include the name of the sheet containing the source data, such as
+<userinput>January!A1:A10</userinput>, and can be entered automatically by
+selecting the area in the appropriate sheet.</para>
+<para>After entering the references for all of the source data sheets 
 select the cell in the target sheet where you want the top left corner of the 
-consolidated results to appear, choose the appropriate function from
-the <guilabel>Function</guilabel> 
-combo box then press the <guibutton>OK</guibutton> button.</para>
+consolidated results to appear. Then choose the appropriate function from
+the <guilabel>Function</guilabel> combo box and press the
+<guibutton>OK</guibutton> button.</para>
 <para>If you check the <guilabel>Copy data</guilabel> box in the <guilabel>
 Consolidate</guilabel> dialog the values resulting from the consolidation will 
 be placed into the target cells rather than the formulae to calculate them.

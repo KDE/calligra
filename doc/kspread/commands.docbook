@@ -554,7 +554,7 @@ See the section
 <guimenu>Insert</guimenu>
 <guimenuitem>Object...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embed a KOffice document into the table.</action>
+<listitem><para><action>Embed a KOffice document into the sheet.</action>
 </para></listitem>
 </varlistentry>
 

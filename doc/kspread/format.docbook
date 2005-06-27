@@ -168,7 +168,7 @@ menu to clear any conditional attributes from selected cells.</para>
 
 <sect1 id="cellsize">
 <title>Changing Cell Sizes</title>
-<para>The <guilabel>Position</guilabel> page in the <guilabel>Cell Format...
+<para>The <guilabel>Position</guilabel> page in the <guilabel>Cell Format
 </guilabel> dialog lets you alter the size of the selected cell(s). Note that 
 changing the height of a single cell will change the height for all cells in 
 that row, similarly changing the width will affect the entire column.</para>

@@ -48,7 +48,7 @@ document from a template, opening an existing or recent document, or starting
 with an empty document. Choose <guilabel>Start with an empty document</guilabel>
 .</para>
 
-<para>Looking at &kspread; once it has started up, you will see a table of
+<para>Looking at &kspread; once it has started up, you will see a sheet of
 empty rectangular cells arranged in numbered rows and lettered columns. This
 is where you enter data or formula, text or charts.
 <mediaobject>
@@ -83,7 +83,7 @@ done.</para>
 <para>At this point you may think that &kspread; is doing no more than you
 could manage with pencil, paper and a calculator, and you could be right, but
 remember that this is a very small example of a spreadsheet, doing simple
-calculations on only a few numbers. For any reasonably sized table of values
+calculations on only a few numbers. For any reasonably amount of values or data
 using a spreadsheet to do the calculations is much quicker and more accurate
 than doing them manually.</para>
 <para>Also, a spreadsheet lets you play the <quote>What if?</quote> game.
@@ -241,7 +241,9 @@ right of the original cell(s). To use this method select the cell(s) to be
 copied then position the mouse pointer over the small black square at the 
 bottom right corner of the selected cell(s) so the cursor changes to a double 
 headed arrow. Then hold the <mousebutton>left</mousebutton> mouse button down 
-while you drag the selected cell(s) as far as you wish.</para>
+while you drag the selected cell(s) as far as you wish. Note that cell
+references in formulae are incremented according to the
+relative position change. Absolute references are not changed.</para>
 </sect2>
 
 <sect2 id="specialpaste">
