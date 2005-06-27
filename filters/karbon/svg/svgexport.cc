@@ -36,8 +36,10 @@
 #include "vfill.h"
 #include "vgradient.h"
 #include "vgroup.h"
+#include "vimage.h"
 #include "vlayer.h"
 #include "vpath.h"
+#include "vpattern.h"
 #include "vsegment.h"
 #include "vselection.h"
 #include "vstroke.h"
@@ -119,11 +121,9 @@ SvgExport::visitVDocument( VDocument& document )
 		"\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
 	<< endl;
 
-	// add some PR
+	// add some PR.  one line is more than enough.  
 	*m_defs <<
-		"<!-- This file was created using the SVG export filter from Karbon14, a free vector drawing app. -->" << endl;
-	*m_defs <<
-		"<!-- It is part of koffice, the free, integrated office suite for KDE (http://www.koffice.org/). -->" << endl;
+		"<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
 
 	*m_defs <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
@@ -161,6 +161,29 @@ SvgExport::visitVGroup( VGroup& group )
 {
 	*m_body << "<g" << getID( &group ) << ">" << endl;
 	VVisitor::visitVGroup( group );
+	*m_body << "</g>" << endl;
+}
+
+// horrible but at least something gets exported now
+// will need this for patterns
+void
+SvgExport::visitVImage( VImage& image )
+{
+	*m_body << "<image ";
+	VVisitor::visitVImage( image );
+	*m_body << "x=\"" << "\" ";
+	*m_body << "y=\"" << "\" ";
+	*m_body << "width=\"" << "\" ";
+	*m_body << "height=\"" << "\" ";
+	*m_body << "xlink:href=\"" << "\"";
+	*m_body << " />" << endl;
+}
+
+void
+SvgExport::visitVLayer( VLayer& layer )
+{
+	*m_body << "<g" << getID( &layer ) << ">" << endl;
+	VVisitor::visitVLayer( layer );
 	*m_body << "</g>" << endl;
 }
 
@@ -261,6 +284,47 @@ SvgExport::getGradient( const VGradient& grad )
 		*m_defs << "</radialGradient>" << endl;
 		*m_body << "url(#" << uid << ")";
 	}
+	// gah! pointless abbreviation of conical to conic
+	else if( grad.type() == VGradient::conic )
+	{
+		// fake conical grad as radial.  
+		// fugly but better than data loss.  
+		*m_defs << "<radialGradient id=\"" << uid << "\" ";
+		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
+		*m_defs << "cy=\"" << grad.origin().y() << "\" ";
+		*m_defs << "fx=\"" << grad.focalPoint().x() << "\" ";
+		*m_defs << "fy=\"" << grad.focalPoint().y() << "\" ";
+		double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
+		*m_defs << "r=\"" << QString().setNum( r ) << "\" ";
+		if( grad.repeatMethod() == VGradient::reflect )
+			*m_defs << "spreadMethod=\"reflect\" ";
+		else if( grad.repeatMethod() == VGradient::repeat )
+			*m_defs << "spreadMethod=\"repeat\" ";
+		*m_defs << ">" << endl;
+
+		// color stops
+		getColorStops( grad.colorStops() );
+
+		*m_defs << "</radialGradient>" << endl;
+		*m_body << "url(#" << uid << ")";
+	}
+}
+
+// better than nothing
+void
+SvgExport::getPattern( const VPattern & patt )
+{
+	QString uid = createUID();
+	*m_defs << "<pattern id=\"" << uid << "\" ";
+	*m_defs << "width=\"" << "\" ";
+	*m_defs << "height=\"" << "\" ";
+	*m_defs << "patternUnits=\"userSpaceOnUse\" ";
+	*m_defs << "patternContentUnits=\"userSpaceOnUse\" "; 
+	*m_defs << " />" << endl;
+	// TODO: insert hard work here ;)
+	*m_defs << "</pattern>" << endl;
+	*m_body << "url(#" << uid << ")";
 }
 
 void
@@ -271,6 +335,8 @@ SvgExport::getFill( const VFill& fill )
 		*m_body << "none";
 	else if( fill.type() == VFill::grad )
 		getGradient( fill.gradient() );
+	else if( fill.type() == VFill::patt )
+		getPattern( fill.pattern() );
 	else
 		getHexColor( m_body, fill.color() );
 	*m_body << "\"";
