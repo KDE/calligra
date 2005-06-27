@@ -59,8 +59,8 @@ public:
         m_workingIntervals = intervals;
     }
     
-    bool KPTCalendarDay::hasIntervalBefore(const QTime &time) const;
-    bool KPTCalendarDay::hasIntervalAfter(const QTime &time) const;
+    bool hasIntervalBefore(const QTime &time) const;
+    bool hasIntervalAfter(const QTime &time) const;
 
     QTime startOfDay() const;
     QTime endOfDay() const;

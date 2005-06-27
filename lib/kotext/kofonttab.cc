@@ -53,6 +53,6 @@ void KoFontTab::slotFontChanged( const QFont &font )
     if ( comparisonFont.italic() != font.italic() ) emit italicChanged();
     if ( comparisonFont.pointSize() != font.pointSize() ) emit sizeChanged();
     comparisonFont = font;
-};
+}
 
 #include "kofonttab.moc"

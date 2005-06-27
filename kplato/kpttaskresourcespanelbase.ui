@@ -131,7 +131,7 @@
     <include location="local" impldecl="in implementation">kptdurationwidget.h</include>
 </includes>
 <forwards>
-    <forward>namespace KPlato { class KPTDurationWidget; }</forward>
+    <forward>namespace KPlato { class KPTDurationWidget; } class ignore_fix_compile</forward>
 </forwards>
 <variables>
     <variable access="public">KPlato::KPTDurationWidget *effort;</variable>

@@ -218,6 +218,6 @@ private:
     KAction *actionEditResource;
 };
 
-}; //Kplato namespace
+} //Kplato namespace
 
 #endif
