@@ -37,6 +37,8 @@ QString PropertySerializer::toString( Property *prop )
     {
     case KOProperty::Color:
         return QString( "%1,%2,%3" ).arg( val.toColor().red() ).arg( val.toColor().green() ).arg( val.toColor().blue() );
+    case KOProperty::Boolean:
+        return val.toBool() ? "true" : "false";
     default:
         return val.toString();
     }

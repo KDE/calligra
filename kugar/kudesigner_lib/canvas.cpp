@@ -314,7 +314,7 @@ void Canvas::addReportItems( QDomNode *node, Band *section )
                 Line * line = new Line( 0, 0, 50, 20, this );
                 section->items.append( line );
 
-                ( &child, line );
+                setReportItemAttributes( &child, line );
                 line->setSectionUndestructive( section );
                 //line->show();
             }
