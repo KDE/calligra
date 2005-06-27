@@ -103,11 +103,7 @@ void MReportEngine::clearFormatting()
 {
     rHeader.clear();
     pHeader.clear();
-    MReportDetail *detail;
-    for ( detail = details.first(); detail; detail = details.next() )
-    {
-        detail->clear();
-    }
+    details.clear();
     pFooter.clear();
     rFooter.clear();
 }

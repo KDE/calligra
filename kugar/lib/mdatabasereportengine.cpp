@@ -34,6 +34,8 @@ email                : joris@marcillac.com
 #include <qfile.h>
 #include <qtextstream.h>
 
+#include <kdebug.h>
+
 /** connection dialog */
 //#include "connect.h"
 #include "mdatabasereportengine.h"
@@ -59,7 +61,7 @@ bool MDatabaseReportEngine::setReportTemplate( const QString &tpl )
 {
     if ( !rt.setContent( tpl ) )
     {
-        qWarning( "Unable to parse database report template" );
+        kdDebug(30001) << "Unable to parse database report template" << endl;
         return false;
     }
 
@@ -73,7 +75,7 @@ bool MDatabaseReportEngine::setReportTemplate( QIODevice *dev )
 {
     if ( !rt.setContent( dev ) )
     {
-        qWarning( "Unable to parse database report template" );
+        kdDebug(30001) << "Unable to parse database report template" << endl;
         return false;
     }
 
@@ -235,7 +237,7 @@ void MDatabaseReportEngine::initDatabase()
     if ( !db )
     {
         //QMessageBox::warning( 0, tr( "Database connection Error" ), tr( "Could not open driver database." ) );
-        qWarning( "Could not open driver database." );
+        kdDebug(30001) << "Could not open driver database." << endl;
         return ;
     }
     db->setDatabaseName( m_strDatabaseName );
@@ -250,8 +252,6 @@ void MDatabaseReportEngine::initDatabase()
             "Failed to open database: " +
             db->lastError().driverText() +
             db->lastError().databaseText() ;
-        //QMessageBox::critical( this, tr("Database connection Error"), strError );
-        qWarning( "%s", strError.local8Bit().data() );
         return ;
     }
 }
@@ -264,14 +264,14 @@ bool MDatabaseReportEngine::createReportDataFile( QIODevice* dev, const QString&
     {
         if ( !setReportTemplate( &ft ) )
         {
-            qWarning( "Invalid data file: %s", QFile::encodeName( templateFile ).data() );
+            kdDebug(30001) << "Invalid data file: " << QFile::encodeName( templateFile ).data() << endl;
             return false;
         }
         ft.close();
     }
     else
     {
-        qWarning( "Unable to open data file: %s", QFile::encodeName( templateFile ).data() );
+        kdDebug(30001) << "Unable to open data file: " << QFile::encodeName( templateFile ).data() << endl;
         return false;
     }
 
@@ -309,7 +309,6 @@ QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev )
     }
     if ( formerDataSource == 0 )
     {
-        qWarning( "datasource not found" );
         return result;
     }
 
@@ -324,14 +323,14 @@ QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev )
     {
         if ( !setReportTemplate( &ft ) )
         {
-            qWarning( "Invalid template file: %s", templateFile.latin1() );
+            kdDebug(30001) << "Invalid template file: " << templateFile.latin1() << endl;
             return result;
         }
         ft.close();
     }
     else
     {
-        qWarning( "Unable to open template file: %s", templateFile.latin1() );
+        kdDebug(30001) << "Unable to open template file: " << templateFile.latin1() << endl;
         return result;
     }
 
@@ -347,7 +346,7 @@ QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev )
 
     QDomDocument d;
     d.setContent( "<temp>" + data + "</temp>" );
-    qWarning( "temp dom is: %s", d.toString( 4 ).latin1() );
+    kdDebug(30001) << "temp dom is: " << d.toString( 4 ).latin1() << endl;
     n = d.documentElement().lastChild();
     while ( !n.isNull() )
     {
@@ -359,11 +358,11 @@ QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev )
         n = n.previousSibling();
     }
 
-    qWarning( "DOM (before): %s", dom.toString( 4 ).latin1() );
+    kdDebug(30001) << "DOM (before): " << dom.toString( 4 ).latin1() << endl;
 
     dom.documentElement().removeChild( *formerDataSource );
 
-    qWarning( "DOM: %s", dom.toString( 4 ).latin1() );
+    kdDebug(30001) << "DOM: " << dom.toString( 4 ).latin1() << endl;
 
     delete m_strDataBuffer;
 
@@ -380,7 +379,7 @@ bool MDatabaseReportEngine::setBufferFromDatabase( const QString& strTemplateFil
     CSqlCursor* cursor = new CSqlCursor( m_strSql );
     if ( !cursor->isActive() )
     {
-        qWarning( "Unable to get data from database, the cursor is not active." );
+        kdDebug(30001) << "Unable to get data from database, the cursor is not active." << endl;
         delete cursor;
         return false;
     }
