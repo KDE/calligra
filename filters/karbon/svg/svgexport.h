@@ -60,7 +60,6 @@ private:
 	virtual void visitVLayer( VLayer& layer );
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
-        virtual void visitVLayer( VLayer& layer ); 
 
 	void getStroke( const VStroke& stroke );
 	void getColorStops( const QPtrVector<VColorStop> &colorStops );
