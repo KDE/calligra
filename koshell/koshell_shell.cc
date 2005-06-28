@@ -663,20 +663,35 @@ QString KoShellWindow::configFile() const
 void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 {
   KPopupMenu menu;
-  int const mnuClose = menu.insertItem( i18n("Close") );
+  KIconLoader il;
+  int const mnuSave = menu.insertItem( il.loadIcon( "filesave", KIcon::Small ), i18n("Save") );
+  int const mnuClose = menu.insertItem( il.loadIcon( "fileclose", KIcon::Small ), i18n("Close") );
+  
+  int tabnr = m_pFrame->indexOf( w );
+  Page page = m_lstPages[tabnr];
+  // disable save if there's nothing to save
+  if ( !page.m_pDoc->isModified() )
+    menu.setItemEnabled( mnuSave, false );
+  
+  // show menu
   int const choice = menu.exec(p);
 
-  if ( choice == mnuClose )
+  if( choice == mnuClose )
   {
     const int index = m_pFrame->currentPageIndex();
-    m_pFrame->setCurrentPage( m_pFrame->indexOf(w) );
+    m_pFrame->setCurrentPage( tabnr );
     slotFileClose();
     if ( index > m_pFrame->currentPageIndex() )
-        m_pFrame->setCurrentPage(index-1);
+      m_pFrame->setCurrentPage(index-1);
     else
-        m_pFrame->setCurrentPage(index);
+      m_pFrame->setCurrentPage(index);
+  }
+  else if ( choice == mnuSave )
+  {
+      page.m_pView->shell()->slotFileSave();
   }
 }
+
 void KoShellWindow::slotConfigureKeys()
 {
   KoView *view = rootView();
