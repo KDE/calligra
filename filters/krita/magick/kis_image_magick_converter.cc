@@ -52,11 +52,11 @@
 
 
 namespace {
-
 	const Q_UINT8 PIXEL_BLUE = 0;
 	const Q_UINT8 PIXEL_GREEN = 1;
 	const Q_UINT8 PIXEL_RED = 2;
 	const Q_UINT8 PIXEL_ALPHA = 3;
+
 
 	/**
 	 * Make this more flexible -- although... ImageMagick

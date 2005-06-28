@@ -60,7 +60,7 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
 
 	KisLayerSP dst;
 
-	KisImage * img = new KisImage(*output->currentImage());
+	KisImageSP img = new KisImage(*output->currentImage());
 	Q_CHECK_PTR(img);
 
 	KisImageMagickConverter ib(output, output->undoAdapter());
