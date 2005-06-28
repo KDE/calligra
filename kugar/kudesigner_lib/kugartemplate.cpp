@@ -131,6 +131,7 @@ KugarTemplate::~KugarTemplate()
 
 void KugarTemplate::draw( QPainter &painter )
 {
+    updatePaperProps();
     painter.setPen( QPen( QColor( 160, 160, 160 ), 0, Qt::SolidLine ) );
     QPoint p1( ( int ) ( x() + props[ "LeftMargin" ].value().toInt() ),
                ( int ) ( y() + props[ "TopMargin" ].value().toInt() ) );
@@ -262,6 +263,10 @@ QString KugarTemplate::getXml()
         if ( !attribute.isEmpty() && !value.isEmpty() )
             result += " " + attribute + "=" + "\"" + value + "\"";
     }
+
+    result += " PageWidth=\"" + QString::number( width() )
+           + "\" PageHeight=\"" + QString::number( height() ) + "\"";
+
     result += ">\n";
 
     if ( reportHeader )

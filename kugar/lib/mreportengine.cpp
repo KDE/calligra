@@ -16,6 +16,8 @@
 
 #include <kdebug.h>
 
+#include <math.h>
+
 namespace Kugar
 {
 
@@ -33,6 +35,8 @@ MReportEngine::MReportEngine() : QObject()
     leftMargin = 0;
     rightMargin = 0;
     heightOfDetails = 0;
+    widthDelta = 1;
+    heightDelta = 1;
 
     // Set cancel flag
     cancelRender = false;
@@ -581,6 +585,7 @@ void MReportEngine::drawReportFooter( MPageCollection* pages )
 /** Gets the metrics for the selected page size & orientation */
 QSize MReportEngine::getPageMetrics( int size, int orientation )
 {
+
     QPrinter * printer;
     QSize ps;
 
@@ -726,15 +731,40 @@ void MReportEngine::setReportAttributes( QDomNode* report )
 
     pageSize = attributes.namedItem( "PageSize" ).nodeValue().toInt();
     pageOrientation = attributes.namedItem( "PageOrientation" ).nodeValue().toInt();
-    topMargin = attributes.namedItem( "TopMargin" ).nodeValue().toInt();
-    bottomMargin = attributes.namedItem( "BottomMargin" ).nodeValue().toInt();
-    leftMargin = attributes.namedItem( "LeftMargin" ).nodeValue().toInt();
-    rightMargin = attributes.namedItem( "RightMargin" ).nodeValue().toInt();
+    int templateWidth = attributes.namedItem( "PageWidth" ).nodeValue().toInt();
+    int templateheight = attributes.namedItem( "PageHeight" ).nodeValue().toInt();
 
-    // Set the page metrics
     QSize ps = getPageMetrics( pageSize, pageOrientation );
     pageWidth = ps.width();
     pageHeight = ps.height();
+
+    widthDelta = (float)pageWidth / templateWidth;
+    heightDelta = (float)pageHeight / templateheight;
+
+    kdDebug() << "pagewidth: " << pageWidth
+        << " pageheight: " << pageHeight << "\n"
+        << " templateWidth: " << templateWidth
+        << " templateheight: " << templateheight << "\n"
+        << " widthDelta: " << widthDelta
+        << " heightDelta: " << heightDelta << "\n"
+        << endl;
+
+    topMargin = scaleDeltaHeight( attributes.namedItem( "TopMargin" ).nodeValue().toInt() );
+    bottomMargin = scaleDeltaHeight( attributes.namedItem( "BottomMargin" ).nodeValue().toInt() );
+    leftMargin = scaleDeltaWidth( attributes.namedItem( "LeftMargin" ).nodeValue().toInt() );
+    rightMargin = scaleDeltaWidth( attributes.namedItem( "RightMargin" ).nodeValue().toInt() );
+}
+
+int MReportEngine::scaleDeltaWidth( int width ) const
+{
+    int r = ceil( width * widthDelta );
+    return r;
+}
+
+int MReportEngine::scaleDeltaHeight( int height ) const
+{
+    int r = ceil( height * heightDelta );
+    return r;
 }
 
 /** Sets the layout attributes for the given report section */
@@ -744,7 +774,7 @@ void MReportEngine::setSectionAttributes( MReportSection* section, QDomNode* rep
     QDomNamedNodeMap attributes = report->attributes();
 
     // Get the section attributes
-    section->setHeight( attributes.namedItem( "Height" ).nodeValue().toInt() );
+    section->setHeight( scaleDeltaHeight( attributes.namedItem( "Height" ).nodeValue().toInt() ) );
     section->setPrintFrequency( attributes.namedItem( "PrintFrequency" ).nodeValue().toInt() );
 
     // Process the sections labels
@@ -819,7 +849,7 @@ void MReportEngine::setDetailAttributes( QDomNode* report )
 
     // Get the report detail attributes
     MReportDetail *detail = new MReportDetail;
-    int height = attributes.namedItem( "Height" ).nodeValue().toInt();
+    int height = scaleDeltaHeight( attributes.namedItem( "Height" ).nodeValue().toInt() );
     heightOfDetails += height;
     detail->setHeight( height );
     detail->setLevel( attributes.namedItem( "Level" ).nodeValue().toInt() );
@@ -871,10 +901,10 @@ void MReportEngine::setDetailAttributes( QDomNode* report )
 /** Sets a line's layout attributes */
 void MReportEngine::setLineAttributes( MLineObject* line, QDomNamedNodeMap* attr )
 {
-    line->setLine( attr->namedItem( "X1" ).nodeValue().toInt(),
-                   attr->namedItem( "Y1" ).nodeValue().toInt(),
-                   attr->namedItem( "X2" ).nodeValue().toInt(),
-                   attr->namedItem( "Y2" ).nodeValue().toInt() );
+    line->setLine( scaleDeltaWidth( attr->namedItem( "X1" ).nodeValue().toInt() ),
+                   scaleDeltaHeight( attr->namedItem( "Y1" ).nodeValue().toInt() ),
+                   scaleDeltaWidth( attr->namedItem( "X2" ).nodeValue().toInt() ),
+                   scaleDeltaHeight( attr->namedItem( "Y2" ).nodeValue().toInt() ) );
 
     QString tmp = attr->namedItem( "Color" ).nodeValue();
 
@@ -892,10 +922,10 @@ void MReportEngine::setLabelAttributes( MLabelObject* label, QDomNamedNodeMap* a
     QString tmp;
 
     label->setText( attr->namedItem( "Text" ).nodeValue() );
-    label->setGeometry( attr->namedItem( "X" ).nodeValue().toInt(),
-                        attr->namedItem( "Y" ).nodeValue().toInt(),
-                        attr->namedItem( "Width" ).nodeValue().toInt(),
-                        attr->namedItem( "Height" ).nodeValue().toInt() );
+    label->setGeometry( scaleDeltaWidth( attr->namedItem( "X" ).nodeValue().toInt() ),
+                        scaleDeltaHeight( attr->namedItem( "Y" ).nodeValue().toInt() ),
+                        scaleDeltaWidth( attr->namedItem( "Width" ).nodeValue().toInt() ),
+                        scaleDeltaHeight( attr->namedItem( "Height" ).nodeValue().toInt() ) );
 
     tmp = attr->namedItem( "BackgroundColor" ).nodeValue();
     label->setBackgroundColor( tmp.left( tmp.find( "," ) ).toInt(),

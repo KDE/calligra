@@ -107,6 +107,9 @@ private:
     /** Report page height */
     int pageHeight;
 
+    float widthDelta;
+    float heightDelta;
+
     /** Report header */
     MReportSection rHeader;
     /** Page header */
@@ -168,6 +171,10 @@ private:
 
     /** Sets the main layout attributes for the report */
     void setReportAttributes( QDomNode* report );
+
+    int scaleDeltaWidth( int width ) const;
+    int scaleDeltaHeight( int width ) const;
+
     /** Sets the layout attributes for the given report section */
     void setSectionAttributes( MReportSection* section, QDomNode* report );
     /** Sets the layout attributes for the detail headers and footers */
