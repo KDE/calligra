@@ -63,20 +63,24 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
 	KisImageSP img = new KisImage(*output->currentImage());
 	Q_CHECK_PTR(img);
 
+	// Don't store this information in the document's undo adapter
+	bool undo = output->undoAdapter()->undo();
+	output->undoAdapter()->setUndo(false);
+
 	KisImageMagickConverter ib(output, output->undoAdapter());
 
 	img->flatten();
 
 	dst = img->layer(0);
 	Q_ASSERT(dst);
+	
+	output->undoAdapter()->setUndo(undo);
 
 	vKisAnnotationSP_it beginIt = img->beginAnnotations();
 	vKisAnnotationSP_it endIt = img->endAnnotations();
 	if (ib.buildFile(url, dst, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
-		delete img;
 		return KoFilter::OK;
 	}
-	delete img;
 	return KoFilter::InternalError;
 }
 
