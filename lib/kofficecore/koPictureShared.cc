@@ -180,7 +180,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
     {
         strExtension="wmf";
     }
-    else if ((array[0]=='<') && (array[1]=='?') && ( (array[2]=='X') || (array[2]=='x') ) && ( (array[3]=='M') || (array[3]=='m')) && ( (array[4]=='L') || (array[4]=='l') ) )
+    else if ((array[0]=='<') && (array[1]=='?') && ( array[2]=='x' ) && (array[3]=='m') && ( array[4]=='l' ) )
     {
         strExtension="svg";
     }
