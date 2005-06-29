@@ -223,7 +223,7 @@ AddReportItemCommand::AddReportItemCommand( Canvas *doc, View *rc, int x, int y,
         KNamedCommand( QObject::tr( "Insert Report Item" ) ), m_doc( doc ), m_rc( rc ), m_x( x ), m_y( y ), m_section( section ), m_sectionLevel( sectionLevel )
 {
     m_rtti = m_rc->itemToInsert;
-    setName( Kudesigner::insertItemActionName( m_rc->itemToInsert ) );
+    setName( "Insert " + Kudesigner::rttiName( m_rc->itemToInsert ) );
 }
 
 void AddReportItemCommand::execute()

@@ -26,23 +26,23 @@
 namespace Kudesigner
 {
 
-QString insertItemActionName( int rtti )
+QString rttiName( int rtti )
 {
     switch ( rtti )
     {
     case Rtti_Label:
-        return i18n( "Insert Label" );
+        return i18n( "Label" );
     case Rtti_Field:
-        return i18n( "Insert Field" );
+        return i18n( "Field" );
     case Rtti_Special:
-        return i18n( "Insert Special" );
+        return i18n( "Special" );
     case Rtti_Calculated:
-        return i18n( "Insert Calculated Field" );
+        return i18n( "Calculated Field" );
     case Rtti_Line:
-        return i18n( "Insert Line" );
+        return i18n( "Line" );
     case Rtti_ReportItem:
     default:
-        return i18n( "Insert Report Item" );
+        return i18n( "Report Item" );
     }
 }
 

@@ -757,14 +757,14 @@ void MReportEngine::setReportAttributes( QDomNode* report )
 
 int MReportEngine::scaleDeltaWidth( int width ) const
 {
-    int r = ceil( width * widthDelta );
-    return r;
+    float f = width * widthDelta;
+    return f > 1 ? round( f ) : ceil( f );
 }
 
 int MReportEngine::scaleDeltaHeight( int height ) const
 {
-    int r = ceil( height * heightDelta );
-    return r;
+    float f = height * heightDelta;
+    return f > 1 ? round( f ) : ceil( f );
 }
 
 /** Sets the layout attributes for the given report section */

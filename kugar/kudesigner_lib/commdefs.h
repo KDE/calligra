@@ -26,13 +26,28 @@
 namespace Kudesigner
 {
 
-enum RttiValues { Rtti_Box = 1700, Rtti_Section, Rtti_Band,
-                  Rtti_KugarTemplate = 1800, Rtti_ReportHeader, Rtti_PageHeader, Rtti_DetailHeader,
-                  Rtti_Detail, Rtti_DetailFooter, Rtti_PageFooter, Rtti_ReportFooter,
-                  Rtti_TextBox = 2000, Rtti_ReportItem, Rtti_Label, Rtti_Field,
-                  Rtti_Special, Rtti_Calculated, Rtti_Line};
+enum RttiValues {
+    Rtti_Box = 1700,
+    Rtti_Section = 1701,
+    Rtti_Band = 1702,
+    Rtti_KugarTemplate = 1800,
+    Rtti_ReportHeader = 1801,
+    Rtti_PageHeader = 1802,
+    Rtti_DetailHeader = 1803,
+    Rtti_Detail = 1804,
+    Rtti_DetailFooter = 1805,
+    Rtti_PageFooter = 1806,
+    Rtti_ReportFooter = 1807,
+    Rtti_TextBox = 2000,
+    Rtti_ReportItem = 2001,
+    Rtti_Label = 2002,
+    Rtti_Field = 2003,
+    Rtti_Special = 2004,
+    Rtti_Calculated = 2005,
+    Rtti_Line = 2006
+};
 
-QString insertItemActionName( int rtti );
+QString rttiName( int rtti );
 
 class Config
 {

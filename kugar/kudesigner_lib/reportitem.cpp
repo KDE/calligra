@@ -158,9 +158,14 @@ void ReportItem::drawHolders( QPainter &painter )
         case Rtti_Special:
         case Rtti_Calculated:
         case Rtti_Line:
-            if ( intersects( static_cast<ReportItem*>( *it ) ) )
+            {
+            ReportItem *item = static_cast<ReportItem*>( *it );
+            if ( section() != item->section() )
+                continue;
+            if ( intersects( item ) )
                 painter.setBrush( Qt::red );
             break;
+            }
         default:
             break;
         }
@@ -181,11 +186,54 @@ void ReportItem::drawHolders( QPainter &painter )
 
 bool ReportItem::intersects( ReportItem *item )
 {
-    QRect r1( props["X"].value().toInt(), props["Y"].value().toInt(),
-              props["Width"].value().toInt(), props["Height"].value().toInt() );
-    QRect r2( item->props["X"].value().toInt(), item->props["Y"].value().toInt(),
-              item->props["Width"].value().toInt(), item->props["Height"].value().toInt() );
-    return r1.intersects( r2 );
+    QRect r1;
+    QRect r2;
+
+    if ( rtti() == Rtti_Line /*line*/ )
+    {
+        int x1 = props["X1"].value().toInt();
+        int x2 = props["X2"].value().toInt();
+        int y1 = props["Y1"].value().toInt();
+        int y2 = props["Y2"].value().toInt();
+        int width = props["Width"].value().toInt();
+        //TODO I'm not sure of a good fix for this, but for now I'm assuming lines
+        // in reports are either horizontal or vertical.
+        if ( x1 == x2 )
+            r1 = QRect( x1, y1, x2 + width, y2 );
+        else if ( y1 == y2 )
+            r1 = QRect( x1, y1, x2, y2 + width );
+    }
+    else
+        r1 = QRect( props["X"].value().toInt(), props["Y"].value().toInt(),
+                    props["Width"].value().toInt(), props["Height"].value().toInt() );
+
+    if ( item->rtti() == Rtti_Line /*line*/ )
+    {
+        int x1 = item->props["X1"].value().toInt();
+        int x2 = item->props["X2"].value().toInt();
+        int y1 = item->props["Y1"].value().toInt();
+        int y2 = item->props["Y2"].value().toInt();
+        int width = item->props["Width"].value().toInt();
+        //TODO I'm not sure of a good fix for this, but for now I'm assuming lines
+        // in reports are either horizontal or vertical.
+        if ( x1 == x2 )
+            r2 = QRect( x1, y1, x2 + width, y2 );
+        else if ( y1 == y2 )
+            r2 = QRect( x1, y1, x2, y2 + width );
+    }
+    else
+        r2 = QRect( item->props["X"].value().toInt(), item->props["Y"].value().toInt(),
+                    item->props["Width"].value().toInt(), item->props["Height"].value().toInt() );
+
+    bool intersects = r1.intersects( r2 );
+
+    if ( intersects )
+        kdDebug(30001) << rttiName( rtti() ) << " " << r1 << "\n"
+                  << "...is intersected by..." << "\n"
+                  << rttiName( item->rtti() ) << " " << r2
+                  << endl;
+
+    return intersects;
 }
 
 QString ReportItem::escape( QString string )
