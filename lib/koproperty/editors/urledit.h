@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_URLEDIT_H
 #define KPROPERTY_URLEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #ifndef QT_ONLY
@@ -32,7 +33,7 @@ class QLineEdit;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT URLEdit : public Widget
+class URLEdit : public Widget
 {
 	Q_OBJECT
 

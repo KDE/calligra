@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>
@@ -29,7 +30,7 @@ class QLabel;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT RectEdit : public Widget
+class RectEdit : public Widget
 {
 	Q_OBJECT
 

@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_DATEEDIT_H
 #define KPROPERTY_DATEEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 class QDateEdit;
@@ -28,7 +29,7 @@ class QDate;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT DateEdit : public Widget
+class DateEdit : public Widget
 {
 	Q_OBJECT
 

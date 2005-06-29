@@ -21,6 +21,8 @@
 #ifndef KPROPERTY_FACTORY_H
 #define KPROPERTY_FACTORY_H
 
+#include <koffice_export.h>
+
 template<class U> class QValueList;
 
 namespace KOProperty {
@@ -63,7 +65,7 @@ typedef CustomProperty *(*createCustomProperty) (int);
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
  */
-class KPROPERTY_EXPORT Factory
+class KOPROPERTY_EXPORT Factory
 {
 	public:
 		/*! Registers property editor factory function for a type.

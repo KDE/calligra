@@ -23,6 +23,7 @@
 #define KPROPERTY_PROPERTYEDITOR_H
 
 #include <qguardedptr.h>
+#include <koffice_export.h>
 
 #ifdef QT_ONLY
 #include <qlistview.h>
@@ -37,7 +38,7 @@ namespace KOProperty {
 
 class EditorPrivate;
 class Property;
-class PtrList;
+class Set;
 class Widget;
 class EditorItem;
 
@@ -56,7 +57,7 @@ class EditorItem;
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
  */
-class KPROPERTY_EXPORT Editor : public QListView
+class KOPROPERTY_EXPORT Editor : public QListView
 {
     Q_OBJECT
 
@@ -78,17 +79,22 @@ class KPROPERTY_EXPORT Editor : public QListView
         /*! Populates the editor with an item for each property in the List.
           Also creates child items for composed properties.
         */
-        void  setList(PtrList *l, bool preservePrevSelection=false);
+        void  changeSet(Set *l, bool preservePrevSelection=false);
         /*! Clears all items in the list.
            if \a editorOnly is true, then only the current editor will be cleared,
             not the whole list.
         */
         void clear(bool editorOnly = false);
+	/*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
+	void  acceptInput();
+
+    signals:
+        void  propertySetChanged(KOProperty::Set *list);
 
     protected slots:
         /*! Updates property widget in the editor.*/
-        void  slotPropertyChanged(Property* property, PtrList *list);
-        void  slotPropertyReset(Property* property, PtrList *list);
+        void  slotPropertyChanged(KOProperty::Property* property, KOProperty::Set *list);
+        void  slotPropertyReset(KOProperty::Property* property, KOProperty::Set *list);
         /*! Updates property in the list when new value is selected in the editor.*/
         void slotWidgetValueChanged(Widget *widget);
         /*! Called when the user presses Enter to accet the input
@@ -98,7 +104,7 @@ class KPROPERTY_EXPORT Editor : public QListView
         void slotWidgetRejectInput(Widget *widget);
 
         /*! Called when current buffer is about to be destroyed. */
-        void slotListDeleted();
+        void slotSetDeleted();
         /*! This slot is called when the user clicks the list view.
            It takes care of deleting current editor and
            creating a new editor for the newly selected item. */
@@ -124,7 +130,7 @@ class KPROPERTY_EXPORT Editor : public QListView
         void clearWidgetCache();
 
         void  fill();
-        void  setListLater();
+        void  changeSetLater();
         void addItem(const QCString &name, EditorItem *parent);
 
         void showUndoButton( bool show );

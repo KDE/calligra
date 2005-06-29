@@ -38,7 +38,7 @@
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT EditorItemPrivate
+class EditorItemPrivate
 {
 	public:
 		EditorItemPrivate()
@@ -100,7 +100,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 
 	if(column == 0)
 	{
-		QFont font;
+		QFont font = listView()->font();
 		if(d->property->isModified())
 			font.setBold(true);
 		p->setFont(font);

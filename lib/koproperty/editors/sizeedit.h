@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_SIZEEDIT_H
 #define KPROPERTY_SIZEEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>
@@ -29,7 +30,7 @@ class QLabel;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT SizeEdit : public Widget
+class SizeEdit : public Widget
 {
 	Q_OBJECT
 

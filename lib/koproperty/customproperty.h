@@ -20,6 +20,8 @@
 #ifndef KPROPERTY_CUSTOMPROPERTY_H
 #define KPROPERTY_CUSTOMPROPERTY_H
 
+#include <koffice_export.h>
+
 class QVariant;
 
 namespace KOProperty {
@@ -35,7 +37,7 @@ class Property;
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
 */
-class KPROPERTY_EXPORT CustomProperty
+class KOPROPERTY_EXPORT CustomProperty
 {
 	public:
 		CustomProperty(Property *parent);
@@ -60,7 +62,7 @@ class KPROPERTY_EXPORT CustomProperty
 		Property  *m_property;
 };
 
-class KPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
+class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 {
 	public:
 		SizeCustomProperty(Property *parent);
@@ -71,7 +73,7 @@ class KPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 		bool handleValue();
 };
 
-class KPROPERTY_EXPORT PointCustomProperty : public CustomProperty
+class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 {
 	public:
 		PointCustomProperty(Property *parent);
@@ -82,7 +84,7 @@ class KPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 		bool handleValue();
 };
 
-class KPROPERTY_EXPORT RectCustomProperty : public CustomProperty
+class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 {
 	public:
 		RectCustomProperty(Property *parent);
@@ -93,7 +95,7 @@ class KPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 		bool handleValue();
 };
 
-class KPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
+class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
 {
 	public:
 		SizePolicyCustomProperty(Property *parent);

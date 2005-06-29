@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_POINTEDIT_H
 #define KPROPERTY_POINTEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>
@@ -29,7 +30,7 @@ class QLabel;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT PointEdit : public Widget
+class PointEdit : public Widget
 {
 	Q_OBJECT
 

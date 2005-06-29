@@ -21,13 +21,14 @@
 #ifndef KPROPERTY_DUMMYWIDGET_H
 #define KPROPERTY_DUMMYWIDGET_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT DummyWidget: public Widget
+class DummyWidget: public Widget
 {
 	Q_OBJECT
 

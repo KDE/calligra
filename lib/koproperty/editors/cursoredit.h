@@ -21,13 +21,14 @@
 #ifndef KPROPERTY_CURSOREDIT_H
 #define KPROPERTY_CURSOREDIT_H
 
+#include <koffice_export.h>
 #include "combobox.h"
 
 template<class U, class T> class QDict;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT CursorEdit : public ComboBox
+class CursorEdit : public ComboBox
 {
 	Q_OBJECT
 

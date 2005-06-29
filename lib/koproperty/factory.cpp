@@ -54,7 +54,7 @@ namespace KOProperty {
 
 Factory* Factory::m_factory = 0;
 
-class KPROPERTY_EXPORT FactoryPrivate
+class FactoryPrivate
 {
 	public:
 		FactoryPrivate() {}

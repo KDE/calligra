@@ -28,7 +28,7 @@ class QPushButton;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT PixmapEdit : public Widget
+class PixmapEdit : public Widget
 {
 	Q_OBJECT
 

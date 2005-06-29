@@ -21,7 +21,7 @@
 
 #include "property.h"
 #include "customproperty.h"
-#include "list.h"
+#include "set.h"
 #include "factory.h"
 
 #ifndef QT_ONLY
@@ -35,7 +35,7 @@ namespace KOProperty {
 
 QT_STATIC_CONST_IMPL Property Property::null;
 
-class KPROPERTY_EXPORT PropertyPrivate
+class PropertyPrivate
 {
     public:
         PropertyPrivate()
@@ -71,12 +71,30 @@ class KPROPERTY_EXPORT PropertyPrivate
     //! Flag used to allow CustomProperty to use setValue()
     bool useCustomProperty;
 
-    QValueList<PtrList*>  lists;
+    QValueList<Set*>  lists;
     Property  *parent;
     QValueList<Property*>  *children;
     //! list of properties with the same name (when intersecting buffers)
     QValueList<Property*>  *relatedProperties;
 };
+
+
+QMap<QString, QVariant>
+createValueListFromStringLists(const QStringList &keys, const QStringList &values)
+{
+	QMap<QString, QVariant> map;
+	if(keys.count() != values.count())
+		return map;
+
+	QStringList::ConstIterator valueIt = values.begin();
+	QStringList::ConstIterator endIt = keys.constEnd();
+	for(QStringList::ConstIterator it = keys.begin(); it != endIt; ++it, ++valueIt)
+		map.insert( *it, *valueIt);
+
+	return map;
+}
+
+
 
 Property::Property(const QCString &name, const QString &caption, const QString &desc,
         const QVariant &value, int type)
@@ -269,8 +287,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
         d->custom->setValue(value, rememberOldValue);
     d->value = value;
 
-    QValueList<PtrList*>::ConstIterator endIt = d->lists.constEnd();
-    for(QValueList<PtrList*>::ConstIterator it = d->lists.constBegin(); it != endIt; ++it) {
+    QValueList<Set*>::ConstIterator endIt = d->lists.constEnd();
+    for(QValueList<Set*>::ConstIterator it = d->lists.constBegin(); it != endIt; ++it) {
         emit (*it)->propertyChanged(this, *it);
         emit (*it)->propertyChanged();
     }
@@ -281,8 +299,8 @@ Property::resetValue()
 {
     d->changed = false;
     setValue(oldValue(), false);
-    QValueList<PtrList*>::ConstIterator endIt = d->lists.constEnd();
-    for(QValueList<PtrList*>::ConstIterator it = d->lists.constBegin(); it != endIt; ++it)
+    QValueList<Set*>::ConstIterator endIt = d->lists.constEnd();
+    for(QValueList<Set*>::ConstIterator it = d->lists.constBegin(); it != endIt; ++it)
         emit (*it)->propertyReset(this, *it);
 }
 
@@ -506,16 +524,16 @@ Property::addChild(Property *prop)
     prop->d->parent = this;
 }
 
-QValueList<PtrList*>
+QValueList<Set*>
 Property::lists() const
 {
     return d->lists;
 }
 
 void
-Property::addList(PtrList *list)
+Property::addList(Set *list)
 {
-    QValueList<PtrList*>::iterator it = qFind( d->lists.begin(), d->lists.end(), list);
+    QValueList<Set*>::iterator it = qFind( d->lists.begin(), d->lists.end(), list);
     if(it == d->lists.end()) // not in our list
         d->lists.append(list);
 }

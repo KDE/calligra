@@ -22,6 +22,7 @@
 #define KPROPERTY_PROPERTYWIDGET_H
 
 #include <qwidget.h>
+#include <koffice_export.h>
 
 namespace KOProperty {
 
@@ -32,7 +33,7 @@ class Property;
   \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
 */
-class KPROPERTY_EXPORT Widget : public QWidget
+class KOPROPERTY_EXPORT Widget : public QWidget
 {
 	Q_OBJECT
 

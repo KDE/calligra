@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_SYMBOLCOMBO_H
 #define KPROPERTY_SYMBOLCOMBO_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 class QLineEdit;
@@ -28,7 +29,7 @@ class QPushButton;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT SymbolCombo : public Widget
+class SymbolCombo : public Widget
 {
 	Q_OBJECT
 

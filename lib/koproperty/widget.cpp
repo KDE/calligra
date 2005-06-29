@@ -35,7 +35,7 @@
 using namespace KOProperty;
 
 namespace KOProperty {
-class KPROPERTY_EXPORT WidgetPrivate
+class WidgetPrivate
 {
 	public:
 		WidgetPrivate()

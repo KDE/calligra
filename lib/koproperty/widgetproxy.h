@@ -22,6 +22,7 @@
 #define KPROPERTY_PROPERTYWIDGETPROXY_H
 
 #include <qwidget.h>
+#include <koffice_export.h>
 
 class QVariant;
 
@@ -33,7 +34,7 @@ class WidgetProxyPrivate;
   \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
 */
-class KPROPERTY_EXPORT WidgetProxy : public QWidget
+class KOPROPERTY_EXPORT WidgetProxy : public QWidget
 {
 	Q_OBJECT
 

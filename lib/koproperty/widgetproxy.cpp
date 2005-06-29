@@ -25,9 +25,9 @@
 #include <qlayout.h>
 #include <qvariant.h>
 
-namespace KProperty {
+namespace KOProperty {
 
-class KPROPERTY_EXPORT WidgetProxyPrivate
+class WidgetProxyPrivate
 {
 	public:
 		WidgetProxyPrivate()

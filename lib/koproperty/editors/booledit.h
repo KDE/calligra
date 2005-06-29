@@ -21,13 +21,14 @@
 #ifndef KPROPERTY_BOOLEDIT_H
 #define KPROPERTY_BOOLEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 class QToolButton;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT BoolEdit : public Widget
+class BoolEdit : public Widget
 {
 	Q_OBJECT
 

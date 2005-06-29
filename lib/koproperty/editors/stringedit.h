@@ -21,13 +21,14 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 class QLineEdit;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT StringEdit : public Widget
+class StringEdit : public Widget
 {
 	Q_OBJECT
 

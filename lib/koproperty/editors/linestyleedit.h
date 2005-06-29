@@ -21,13 +21,14 @@
 #ifndef KPROPERTY_LINESTYLEEDIT_H
 #define KPROPERTY_LINESTYLEEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 class QComboBox;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT LineStyleEdit : public Widget
+class LineStyleEdit : public Widget
 {
 	Q_OBJECT
 

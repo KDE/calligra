@@ -23,6 +23,10 @@
 #define KPROPERTY_PROPERTY_H
 
 #include <qvariant.h>
+#include <koffice_export.h>
+
+template<class U> class QAsciiDict;
+template<class U> class QAsciiDictIterator;
 
 /*! \brief
 
@@ -34,7 +38,10 @@ namespace KOProperty {
 
 class PropertyPrivate;
 class CustomProperty;
-class PtrList;
+class Set;
+
+/*! Helper function to create a value list from two string lists. */
+QMap<QString, QVariant> createValueListFromStringLists(const QStringList &keys, const QStringList &values);
 
 /*! PropertyType.
 Integers that represent the type of the property. */
@@ -135,10 +142,13 @@ enum PropertyType {
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
  */
-class KPROPERTY_EXPORT Property
+class KOPROPERTY_EXPORT Property
 {
     public:
         QT_STATIC_CONST Property null;
+
+	typedef QAsciiDict<Property> Dict;
+	typedef QAsciiDictIterator<Property> DictIterator;
 
         Property();
         Property(const QCString &name, const QString &caption=QString::null, const QString &description=QString::null,
@@ -253,9 +263,9 @@ class KPROPERTY_EXPORT Property
         bool operator ==(const Property &prop) const;
 
     protected:
-        QValueList<PtrList*> lists() const;
+        QValueList<Set*> lists() const;
 
-        void addList(PtrList *list);
+        void addList(Set *list);
 
         const QValueList<Property*>*  related() const;
         void addRelatedProperty(Property *property);
@@ -265,7 +275,7 @@ class KPROPERTY_EXPORT Property
     protected:
         PropertyPrivate   *d;
 
-    friend class PtrList;
+    friend class Set;
     friend class Buffer;
     friend class CustomProperty;
 };

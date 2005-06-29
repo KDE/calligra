@@ -21,13 +21,14 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 class KFontRequester;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT FontEdit : public Widget
+class FontEdit : public Widget
 {
 	Q_OBJECT
 

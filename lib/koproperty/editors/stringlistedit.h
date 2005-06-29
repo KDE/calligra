@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_STRINGLISTEDIT_H
 #define KPROPERTY_STRINGLISTEDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #include <qstringlist.h>
@@ -29,7 +30,7 @@ class QLineEdit;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT StringListEdit : public Widget
+class StringListEdit : public Widget
 {
 	Q_OBJECT
 

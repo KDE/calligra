@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_PROPERTYEDITORITEM_H
 #define KPROPERTY_PROPERTYEDITORITEM_H
 
+#include <koffice_export.h>
 #ifdef QT_ONLY
 #include <qlistview.h>
 #else
@@ -44,9 +45,9 @@ class Editor;
    \author Alexander Dymo <cloudtemple@mskat.net>
  */
 #ifdef QT_ONLY
-class KPROPERTY_EXPORT EditorItem : public QListViewItem
+class KOPROPERTY_EXPORT EditorItem : public QListViewItem
 #else
-class KPROPERTY_EXPORT EditorItem : public KListViewItem
+class KOPROPERTY_EXPORT EditorItem : public KListViewItem
 #endif
 {
 	public:
@@ -86,7 +87,7 @@ class KPROPERTY_EXPORT EditorItem : public KListViewItem
 		EditorItemPrivate  *d;
 };
 
-class KPROPERTY_EXPORT EditorGroupItem : public EditorItem
+class KOPROPERTY_EXPORT EditorGroupItem : public EditorItem
 {
 	public:
 		EditorGroupItem(EditorItem *parent, const QString &text);
@@ -98,7 +99,7 @@ class KPROPERTY_EXPORT EditorGroupItem : public EditorItem
 		virtual void setup();
 };
 
-class KPROPERTY_EXPORT EditorDummyItem : public EditorItem
+class KOPROPERTY_EXPORT EditorDummyItem : public EditorItem
 {
 	public:
 		EditorDummyItem(KListView *parent);

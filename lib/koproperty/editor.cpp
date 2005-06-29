@@ -21,7 +21,7 @@
 
 #include "editor.h"
 #include "editoritem.h"
-#include "list.h"
+#include "set.h"
 #include "factory.h"
 #include "property.h"
 #include "widget.h"
@@ -56,7 +56,7 @@ inline bool hasParent(QObject* par, QObject* o)
     return o == par;
 }
 
-class KPROPERTY_EXPORT EditorPrivate
+class EditorPrivate
 {
     public:
         EditorPrivate()
@@ -72,7 +72,7 @@ class KPROPERTY_EXPORT EditorPrivate
             delete topItem;
         }
 
-        QGuardedPtr<PtrList>  list;
+        QGuardedPtr<Set>  list;
         //! widget cache for property types, widget will be deleted
         QMap<Property*, Widget* >  widgetCache;
         QGuardedPtr<Widget> currentWidget;
@@ -85,14 +85,14 @@ class KPROPERTY_EXPORT EditorPrivate
         bool sync : 1;
         bool insideSlotValueChanged : 1;
 
-        //! Helpers for setListLater()
+        //! Helpers for changeSetLater()
         bool setListLater_set : 1;
         bool preservePrevSelection_preservePrevSelection : 1;
         bool doNotSetFocusOnSelection : 1;
         //! Used in setFocus() to prevent scrolling to previously selected item on mouse click
         bool justClickedItem : 1;
-        //! Helper for setList()
-        PtrList* setListLater_list;
+        //! Helper for changeSet()
+        Set* setListLater_list;
 };
 }
 
@@ -158,6 +158,8 @@ Editor::fill()
 {
     KListView::clear();
     d->itemDict.clear();
+    if(!d->list)
+    	return;
 
     d->topItem = new EditorDummyItem(this);
 
@@ -196,7 +198,7 @@ Editor::fill()
 void
 Editor::addItem(const QCString &name, EditorItem *parent)
 {
-    if(!d->list->contains(name))
+    if(!d->list || !d->list->contains(name))
         return;
 
     Property *property = &(d->list->property(name));
@@ -227,7 +229,7 @@ Editor::addItem(const QCString &name, EditorItem *parent)
 }
 
 void
-Editor::setList(PtrList *l, bool preservePrevSelection)
+Editor::changeSet(Set *l, bool preservePrevSelection)
 {
     if (d->insideSlotValueChanged) {
         //setBuffer() called from inside of slotValueChanged()
@@ -238,7 +240,7 @@ Editor::setList(PtrList *l, bool preservePrevSelection)
         qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
         if (!d->setListLater_set) {
             d->setListLater_set = true;
-            QTimer::singleShot(10, this, SLOT(setListLater()));
+            QTimer::singleShot(10, this, SLOT(changeSetLater()));
         }
         return;
     }
@@ -265,9 +267,11 @@ Editor::setList(PtrList *l, bool preservePrevSelection)
     d->list = l;
     if (d->list) {
         //receive property changes
-        connect(d->list, SIGNAL(propertyChanged(Property*, PtrList*)), this, SLOT(slotPropertyChanged(Property*, PtrList*)));
-        connect(d->list, SIGNAL(propertyReset(Property*, PtrList*)), this, SLOT(slotPropertyReset(Property*, PtrList*)));
-        connect(d->list,SIGNAL(aboutToBeDeleted()), this, SLOT(slotListDeleted()));
+        connect(d->list, SIGNAL(propertyChanged(KOProperty::Property*, KOProperty::Set*)),
+		this, SLOT(slotPropertyChanged(KOProperty::Property*, KOProperty::Set*)));
+        connect(d->list, SIGNAL(propertyReset(KOProperty::Property*, KOProperty::Set*)),
+		this, SLOT(slotPropertyReset(KOProperty::Property*, KOProperty::Set*)));
+        connect(d->list,SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetDeleted()));
     }
 
     fill();
@@ -285,11 +289,13 @@ Editor::setList(PtrList *l, bool preservePrevSelection)
             ensureItemVisible(item);
         }
     }
+
+    emit propertySetChanged(d->list);
 }
 
 //! @internal
 void
-Editor::setListLater()
+Editor::changeSetLater()
 {
     d->setListLater_set = false;
     if (!d->setListLater_list)
@@ -297,7 +303,7 @@ Editor::setListLater()
 
     bool b = d->insideSlotValueChanged;
     d->insideSlotValueChanged = false;
-    setList(d->setListLater_list, d->preservePrevSelection_preservePrevSelection);
+    changeSet(d->setListLater_list, d->preservePrevSelection_preservePrevSelection);
     d->insideSlotValueChanged = b;
 }
 
@@ -333,7 +339,7 @@ Editor::undo()
 }
 
 void
-Editor::slotPropertyChanged(Property* property, PtrList *list)
+Editor::slotPropertyChanged(Property* property, Set *list)
 {
     if(list != d->list)
         return;
@@ -357,7 +363,7 @@ Editor::slotPropertyChanged(Property* property, PtrList *list)
 }
 
 void
-Editor::slotPropertyReset(Property* property, PtrList *list)
+Editor::slotPropertyReset(Property* property, Set *list)
 {
     if(list != d->list)
         return;
@@ -398,6 +404,12 @@ Editor::slotWidgetValueChanged(Widget *widget)
     }
 
     d->insideSlotValueChanged = false;
+}
+
+void
+Editor::acceptInput()
+{
+	slotWidgetAcceptInput(d->currentWidget);
 }
 
 void
@@ -454,7 +466,7 @@ Editor::slotCurrentChanged(QListViewItem *item)
 }
 
 void
-Editor::slotListDeleted()
+Editor::slotSetDeleted()
 {
     clear();
     d->list = 0;

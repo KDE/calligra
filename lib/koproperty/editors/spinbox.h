@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
+#include <koffice_export.h>
 #include <knuminput.h>
 
 #include "widget.h"
@@ -29,7 +30,7 @@ namespace KOProperty {
 
 // Int Editor
 
-class KPROPERTY_EXPORT IntSpinBox : public KIntSpinBox
+class IntSpinBox : public KIntSpinBox
 {
 	Q_OBJECT
 
@@ -41,7 +42,7 @@ class KPROPERTY_EXPORT IntSpinBox : public KIntSpinBox
 		QLineEdit * editor () const { return KIntSpinBox::editor(); }
 };
 
-class KPROPERTY_EXPORT IntEdit : public Widget
+class IntEdit : public Widget
 {
 	Q_OBJECT
 
@@ -62,7 +63,7 @@ class KPROPERTY_EXPORT IntEdit : public Widget
 
 // Double editor
 
-class KPROPERTY_EXPORT DoubleSpinBox : public KDoubleSpinBox
+class DoubleSpinBox : public KDoubleSpinBox
 {
 	Q_OBJECT
 
@@ -75,7 +76,7 @@ class KPROPERTY_EXPORT DoubleSpinBox : public KDoubleSpinBox
 		QLineEdit * editor () const { return KDoubleSpinBox::editor(); }
 };
 
-class KPROPERTY_EXPORT DoubleEdit : public Widget
+class DoubleEdit : public Widget
 {
 	Q_OBJECT
 

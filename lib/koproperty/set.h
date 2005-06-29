@@ -19,10 +19,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPROPERTY_LIST_H
-#define KPROPERTY_LIST_H
+#ifndef KPROPERTY_SET_H
+#define KPROPERTY_SET_H
 
 #include <qobject.h>
+#include <koffice_export.h>
+#include <qasciidict.h>
 
 /*! \brief
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -31,10 +33,10 @@
 namespace KOProperty {
 
 class Property;
-class PtrListPrivate;
+class SetPrivate;
 
-typedef QValueList<Property*> PropertyList;
-typedef QValueListIterator<Property*> PropertyListIterator;
+//typedef QValueList<Property*> PropertyList;
+//typedef QValueListIterator<Property*> PropertyListIterator;
 typedef QMap<QCString, QValueList<QCString> > StringListMap ;
 typedef QMapIterator<QCString, QStringList> StringListMapIterator;
 
@@ -44,39 +46,38 @@ typedef QMapIterator<QCString, QStringList> StringListMapIterator;
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>
  */
-class KPROPERTY_EXPORT PtrList : public QObject
+class KPROPERTY_EXPORT Set : public QObject
 {
     Q_OBJECT
 
     public:
-        /*! \brief A class to iterate over a PtrListPrivate
+        /*! \brief A class to iterate over a SetPrivate
         It behaves as a QDictIterator. To use it:
-        \code  PtrList::Iterator it(list);
+        \code  Set::Iterator it(list);
                    for(; it.current(); ++it) { .... }
         \endcode
           \author Cedric Pasteur <cedric.pasteur@free.fr>
           \author Alexander Dymo <cloudtemple@mskat.net> */
-        class Iterator {
+        class KOPROPERTY_EXPORT Iterator {
             public:
-                Iterator(const PtrList &list);
+                Iterator(const Set &list);
                 ~Iterator();
 
                 void operator ++();
                 Property*  operator *();
 
-                QString  currentKey();
+                QCString  currentKey();
                 Property*  current();
 
             private:
-                PropertyList::iterator iterator;
-                PropertyList::iterator end;
-                friend class PtrList;
+                QAsciiDictIterator<Property> *iterator;
+                friend class Set;
         };
 
 
-        PtrList(QObject *parent=0, const char *name=0);
-        PtrList(const PtrList&);
-        ~PtrList();
+        Set(QObject *parent=0, const QString &typeName=QString::null);
+        Set(const Set&);
+        ~Set();
 
 
         /*! Adds the property to the list, in the group. You can use any group name, except "common"
@@ -109,7 +110,7 @@ class KPROPERTY_EXPORT PtrList : public QObject
         /endcode
         \return \ref Property with given name.*/
         Property&  operator[](const QCString &name);
-        const PtrList& operator= (const PtrList &l);
+        const Set& operator= (const Set &l);
 
 
         /*! Change the value of property whose key is \a property to \a value.
@@ -125,30 +126,38 @@ class KPROPERTY_EXPORT PtrList : public QObject
         QCString prevSelection() const;
         void setPrevSelection(const QCString& prevSelection);
 
+	/*! A name of this property list type, that is usable when
+	 we want to know if two property list objects have the same type.
+	 This avoids e.g. reloading of all Editor's contents.
+	 Also, this allows to know if two property list objects are compatible
+	 by their property sets.
+	 For comparing purposes, type names are case insensitive.*/
+	QString typeName() const;
+
+        void debug();
+
     protected:
         /*! Constructs a list which owns or does not own it's properties.*/
-        PtrList(bool propertyOwner);
+        Set(bool propertyOwner);
 
         /*! Adds property to a group.*/
         void addToGroup(const QCString &group, Property *property);
         /*! Removes property from a group.*/
         void removeFromGroup(Property *property);
 
-        void debug();
-
     signals:
         /*! Emitted when the value of the property is changed.*/
-        void propertyChanged(Property* property, PtrList *list);
+        void propertyChanged(KOProperty::Property* property, KOProperty::Set *list);
         /*! Parameterless version of the above method. */
         void propertyChanged();
-        void propertyReset(Property *property, PtrList *list);
+        void propertyReset(KOProperty::Property *property, KOProperty::Set *list);
         /*! Emitted when property is about to be deleted.*/
-        void aboutToDeleteProperty(Property* property, PtrList *list);
+        void aboutToDeleteProperty(KOProperty::Property* property, KOProperty::Set *list);
 
         void aboutToBeDeleted();
 
     protected:
-        PtrListPrivate   *d;
+        SetPrivate   *d;
 
     friend class Property;
     friend class Buffer;
@@ -161,23 +170,23 @@ class KPROPERTY_EXPORT PtrList : public QObject
    \author Adam Treat <treat@kde.org>
  */
 
-class KPROPERTY_EXPORT Buffer : public PtrList
+class KPROPERTY_EXPORT Buffer : public Set
 {
     Q_OBJECT
 
     public:
         Buffer();
-        Buffer(const PtrList *list);
+        Buffer(const Set *list);
 
-        /*! Intersects with other PtrList.*/
-        virtual void intersect(const PtrList *list);
+        /*! Intersects with other Set.*/
+        virtual void intersect(const Set *list);
 
     protected slots:
-        void intersectedChanged(Property *prop, PtrList *list);
-        void intersectedReset(Property *prop, PtrList *list);
+        void intersectedChanged(Property *prop, Set *list);
+        void intersectedReset(Property *prop, Set *list);
 
     private:
-        void initialList(const PtrList *list);
+        void initialList(const Set *list);
 };
 
 

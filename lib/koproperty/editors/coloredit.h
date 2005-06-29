@@ -21,6 +21,7 @@
 #ifndef KPROPERTY_COLOREDIT_H
 #define KPROPERTY_COLOREDIT_H
 
+#include <koffice_export.h>
 #include "widget.h"
 
 #ifdef QT_ONLY
@@ -31,7 +32,7 @@ class KColorCombo;
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT ColorButton : public Widget
+class ColorButton : public Widget
 {
 	Q_OBJECT
 
