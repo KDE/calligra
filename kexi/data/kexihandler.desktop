@@ -48,9 +48,6 @@ Type=int
 [PropertyDef::X-Kexi-TypeName]
 Type=QString
 
-[PropertyDef::X-Kexi-GroupIcon]
-Type=QString
-
 [PropertyDef::X-Kexi-ItemIcon]
 Type=QString
 

@@ -43,7 +43,6 @@ X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1
 X-Kexi-TypeName=script
 X-Kexi-TypeMime=kexi/script
-X-Kexi-GroupIcon=script
 X-Kexi-ItemIcon=script
 
 X-KDE-Library=kexihandler_script

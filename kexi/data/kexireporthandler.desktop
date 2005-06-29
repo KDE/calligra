@@ -61,7 +61,6 @@ X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1
 X-Kexi-TypeName=report
 X-Kexi-TypeMime=kexi/report
-X-Kexi-GroupIcon=reports
 X-Kexi-ItemIcon=report
 
 X-KDE-Library=kexihandler_report

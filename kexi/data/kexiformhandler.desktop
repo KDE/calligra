@@ -69,7 +69,6 @@ X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1
 X-Kexi-TypeName=form
 X-Kexi-TypeMime=kexi/form
-X-Kexi-GroupIcon=forms
 X-Kexi-ItemIcon=form
 
 X-KDE-Library=kexihandler_form
