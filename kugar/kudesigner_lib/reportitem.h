@@ -69,7 +69,7 @@ public:
     virtual void fastProperty()
     { }
     ;
-
+    bool intersects( ReportItem *item );
     QString escape( QString string );
 
 protected:

@@ -31,6 +31,8 @@
 #include "band.h"
 #include "propertyserializer.h"
 
+#include <kdebug.h>
+
 namespace Kudesigner
 {
 
@@ -142,7 +144,30 @@ int ReportItem::isInHolder( const QPoint p )
 void ReportItem::drawHolders( QPainter &painter )
 {
     painter.setPen( QColor( 0, 0, 0 ) );
+
     painter.setBrush( KGlobalSettings::highlightColor() );
+
+    QCanvasItemList list = collisions( false );
+    QCanvasItemList::iterator it = list.begin();
+    for ( ; it != list.end(); ++it )
+    {
+        switch ( ( *it )->rtti() )
+        {
+        case Rtti_Label:
+        case Rtti_Field:
+        case Rtti_Special:
+        case Rtti_Calculated:
+        case Rtti_Line:
+            if ( intersects( static_cast<ReportItem*>( *it ) ) )
+                painter.setBrush( Qt::red );
+            break;
+        default:
+            break;
+        }
+    }
+
+    if ( props["Height"].value().toInt() > section()->props["Height"].value().toInt() )
+        painter.setBrush( Qt::red );
 
     painter.drawRect( topLeftResizableRect() );
     painter.drawRect( topRightResizableRect() );
@@ -152,6 +177,15 @@ void ReportItem::drawHolders( QPainter &painter )
     painter.drawRect( bottomMiddleResizableRect() );
     painter.drawRect( leftMiddleResizableRect() );
     painter.drawRect( rightMiddleResizableRect() );
+}
+
+bool ReportItem::intersects( ReportItem *item )
+{
+    QRect r1( props["X"].value().toInt(), props["Y"].value().toInt(),
+              props["Width"].value().toInt(), props["Height"].value().toInt() );
+    QRect r2( item->props["X"].value().toInt(), item->props["Y"].value().toInt(),
+              item->props["Width"].value().toInt(), item->props["Height"].value().toInt() );
+    return r1.intersects( r2 );
 }
 
 QString ReportItem::escape( QString string )
