@@ -741,12 +741,12 @@ void MReportEngine::setReportAttributes( QDomNode* report )
     widthDelta = (float)pageWidth / templateWidth;
     heightDelta = (float)pageHeight / templateheight;
 
-    kdDebug() << "pagewidth: " << pageWidth
+    kdDebug(30001) << "pagewidth: " << pageWidth
         << " pageheight: " << pageHeight << "\n"
-        << " templateWidth: " << templateWidth
+        << "templateWidth: " << templateWidth
         << " templateheight: " << templateheight << "\n"
-        << " widthDelta: " << widthDelta
-        << " heightDelta: " << heightDelta << "\n"
+        << "widthDelta: " << widthDelta
+        << " heightDelta: " << heightDelta
         << endl;
 
     topMargin = scaleDeltaHeight( attributes.namedItem( "TopMargin" ).nodeValue().toInt() );
