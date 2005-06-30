@@ -170,15 +170,8 @@
 #else
 
 #if KDE_IS_VERSION( 3,3,90 )
-/* life is great */
-#else
-/* workaround typo that breaks compilation with newer gcc */
-#undef KDE_EXPORT
-#define KDE_EXPORT
-#undef KDE_NO_EXPORT
-#define KDE_NO_EXPORT
-#endif
 
+/* kdemacros is OK, we can use gcc visibility macros */
 #define KOFFICECORE_EXPORT KDE_EXPORT
 #define KOFFICEUI_EXPORT KDE_EXPORT
 #define KOTEXT_EXPORT KDE_EXPORT
@@ -228,6 +221,67 @@
 #define KRITATOOL_EXPORT KDE_EXPORT
 #define KRITAPAINT_EXPORT KDE_EXPORT
 #define KOPROPERTY_EXPORT KDE_EXPORT
-#endif
+
+#else
+
+/* workaround typo that breaks compilation with newer gcc */
+#undef KDE_EXPORT
+#define KDE_EXPORT
+#undef KDE_NO_EXPORT
+#define KDE_NO_EXPORT
+
+#define KOFFICECORE_EXPORT
+#define KOFFICEUI_EXPORT
+#define KOTEXT_EXPORT
+#define KOFORMULA_EXPORT
+#define KOSTORE_EXPORT
+#define KOWMF_EXPORT
+#define KOSCRIPT_EXPORT
+#define KOPAINTER_EXPORT
+#define KSPREAD_EXPORT
+#define KFORMULA_EXPORT
+#define KWORD_EXPORT
+#define KWORD_MAILMERGE_EXPORT
+#define KPRESENTER_EXPORT
+#define KCHART_EXPORT
+#define KDCHART_EXPORT
+#define KARBONCOMMON_EXPORT
+#define KARBONBASE_EXPORT
+#define KARBONCOMMAND_EXPORT
+#define KOSHELL_EXPORT
+#define KPLATO_EXPORT
+#define KPLATOCHART_EXPORT
+#define KUGAR_EXPORT
+#define KUGARDESIGNER_EXPORT
+#define KOFFICETOOLS_EXPORT
+#define KOFFICEFILTER_EXPORT
+#define KOCHARTINTERFACE_EXPORT
+#define KIVIOPLUGINS_EXPORT
+#define KIVIO_EXPORT
+#define KEXICORE_EXPORT
+#define KEXIMAIN_EXPORT
+#define KEXI_DB_EXPORT
+#define KEXITABLEFILTERS_EXPORT
+#define KEXIDATATABLE_EXPORT
+#define KEXIEXTWIDGETS_EXPORT
+#define KFORMEDITOR_EXPORT
+#define KEXIPRJWIZARD_EXPORT
+#define KEXIFILTER_EXPORT
+#define KEXIWIDGETS_EXPORT
+#define KEXIUUID_EXPORT
+#define KEXIPROPERTYEDITOR_EXPORT
+#define KEXIRELATIONSVIEW_EXPORT
+#define KEXIMIGR_EXPORT
+#define KEXIGUIUTILS_EXPORT
+#define KRITA_EXPORT
+#define KRITAUI_EXPORT
+#define KRITACORE_EXPORT
+#define KRITATOOL_EXPORT
+#define KRITAPAINT_EXPORT
+#define KOPROPERTY_EXPORT
+
+#endif /* KDE version */
+
+#endif /* not windows */
 
 #endif /* _KOFFICE_EXPORT_H */
