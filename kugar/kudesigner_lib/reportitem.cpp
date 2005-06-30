@@ -108,11 +108,11 @@ QString ReportItem::getXml()
     QString result = "";
 
     int i = 1;
-    for ( PtrList::Iterator it( props ); it.current(); ++it )
+    for ( Set::Iterator it( props ); it.current(); ++it )
     {
         if ( !( i % 3 ) )
             result += "\n\t\t  ";
-        result += " " + it.currentKey() + "=" + "\"" + escape( PropertySerializer::toString( it.current() ) ) + "\"";
+        result += " " + QString(it.currentKey()) + "=" + "\"" + escape( PropertySerializer::toString( it.current() ) ) + "\"";
         i++;
     }
 

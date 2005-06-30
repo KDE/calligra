@@ -19,7 +19,7 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include <list.h>
+#include <set.h>
 #include <property.h>
 
 #include "commdefs.h"
@@ -67,7 +67,7 @@ public:
         ;
     }
 
-    PtrList props;
+    Set props;
 
 protected:
     void registerAs( int type );

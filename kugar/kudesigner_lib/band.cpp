@@ -86,9 +86,9 @@ QString Band::getXml()
 {
     QString result = "";
 
-    for ( PtrList::Iterator it( props ); it.current(); ++it )
+    for ( Set::Iterator it( props ); it.current(); ++it )
     {
-        result += " " + it.currentKey() + "=" + "\"" + PropertySerializer::toString( it.current() ) + "\"";
+        result += " " + QString(it.currentKey()) + "=" + "\"" + PropertySerializer::toString( it.current() ) + "\"";
     }
 
     result += ">\n";

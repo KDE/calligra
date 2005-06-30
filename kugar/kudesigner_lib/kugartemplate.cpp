@@ -256,7 +256,7 @@ QString KugarTemplate::getXml()
     result += "<!DOCTYPE KugarTemplate SYSTEM \"kugartemplate.dtd\">\n\n";
     result += "<KugarTemplate";
 
-    for ( PtrList::Iterator it( props ); it.current(); ++it )
+    for ( Set::Iterator it( props ); it.current(); ++it )
     {
         QString attribute = it.currentKey();
         QString value = PropertySerializer::toString( it.current() );
