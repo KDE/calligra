@@ -169,7 +169,7 @@
 
 #else // not windows
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,9)
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
 #define KOFFICE_EXPORT KDE_EXPORT
 #else
 #define KOFFICE_EXPORT
