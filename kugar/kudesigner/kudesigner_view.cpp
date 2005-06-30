@@ -65,7 +65,6 @@
 
 #include <editor.h>
 #include <property.h>
-#include <list.h>
 
 using namespace Kudesigner;
 
