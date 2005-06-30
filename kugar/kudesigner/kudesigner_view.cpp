@@ -248,7 +248,7 @@ void KudesignerView::populateProperties( Buffer *buf )
 {
     connect( buf, SIGNAL( propertyChanged() ), m_doc->canvas(), SLOT( changed() ) );
     connect( buf, SIGNAL( propertyChanged() ), m_doc, SLOT( setModified() ) );
-    m_propertyEditor->setList( buf );
+    m_propertyEditor->changeSet( buf );
 }
 
 void KudesignerView::cut()
