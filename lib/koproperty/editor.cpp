@@ -67,10 +67,7 @@ class EditorPrivate
             topItem = 0;
         }
         ~EditorPrivate()
-        {
-            delete undoButton;
-            delete topItem;
-        }
+        {}
 
         QGuardedPtr<Set>  list;
         //! widget cache for property types, widget will be deleted
@@ -553,7 +550,7 @@ void
 Editor::showUndoButton( bool show )
 {
     int y = viewportToContents(QPoint(0, itemRect(d->currentItem).y())).y();
-    QRect geometry(columnWidth(0), y, columnWidth(1) + 1, d->currentItem->height());
+    QRect geometry(columnWidth(0), y, columnWidth(1) + 1, d->currentItem ? d->currentItem->height() : d->undoButton->height());
     d->undoButton->resize(d->baseRowHeight, d->baseRowHeight);
 
     updateEditorGeometry(true, show);
@@ -570,7 +567,7 @@ Editor::showUndoButton( bool show )
     }
 
     QPoint p = contentsToViewport(QPoint(0, geometry.y()));
-    d->undoButton->move(geometry.x() + geometry.width() -(d->currentWidget->hasBorders()?1:0)/*editor is moved by 1 to left*/
+    d->undoButton->move(geometry.x() + geometry.width() -((d->currentWidget && d->currentWidget->hasBorders()) ? 1 : 0)/*editor is moved by 1 to left*/
         - d->undoButton->width(), p.y());
 //  if (d->currentWidget) {
 //      d->currentWidget->move(d->currentWidget->x(), p.y());
