@@ -25,8 +25,7 @@
 
 #include <kdeversion.h>
  
-/* Uncomment when -fvisibility support is finished */
-#ifdef Q_WS_WIN /* KDE_IS_VERSION(3,3,90) */
+#ifdef Q_WS_WIN
  
 #include <kdemacros.h>
  
@@ -167,7 +166,19 @@
 #define KRITACORE_EXPORT KDE_EXPORT
 #define KRITATOOL_EXPORT KDE_EXPORT
 #define KRITAPAINT_EXPORT KDE_EXPORT
+
 #else
+
+#if KDE_IS_VERSION( 3,3,90 )
+/* life is great */
+#else
+/* workaround typo that breaks compilation with newer gcc */
+#undef KDE_EXPORT
+#define KDE_EXPORT
+#undef KDE_NO_EXPORT
+#define KDE_NO_EXPORT
+#endif
+
 #define KOFFICECORE_EXPORT KDE_EXPORT
 #define KOFFICEUI_EXPORT KDE_EXPORT
 #define KOTEXT_EXPORT KDE_EXPORT
