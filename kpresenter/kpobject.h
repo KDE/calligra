@@ -316,6 +316,9 @@ protected:
 
     QString getStyle( KPOasisSaveContext &sc ) const;
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
+    /**
+     * Get the element name for saving the object
+     */
     virtual const char * getOasisElementName() const = 0;
     //virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const = 0;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
@@ -399,6 +402,17 @@ public:
     QString saveOasisStrokeStyle( KoGenStyles& mainStyles ) const;
 
 protected:
+    /**
+     * Helper method for saving draw:points. The svg:viewBox is also saved.
+     */
+    static bool saveOasisDrawPoints( const KoPointArray &points, KPOasisSaveContext &sc );
+
+    /**
+     * Helper method for loading draw:points. The svg:viewBox is taken into account.
+     */
+    bool loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
+                              KoOasisContext & context, KPRLoadingInfo *info );
+
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**

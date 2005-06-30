@@ -36,7 +36,6 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info );
 
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
@@ -55,7 +54,6 @@ public:
 
 protected:
     virtual const char * getOasisElementName() const;
-    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
 
     void loadOasisMarker( KoOasisContext & context );
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;

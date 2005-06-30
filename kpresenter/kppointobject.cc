@@ -83,12 +83,6 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPointObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
-{
-    kdDebug()<<"bool KPAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
-    return true;
-}
-
 const char * KPPointObject::getOasisElementName() const
 {
     return "draw:custom-shape";
@@ -106,32 +100,6 @@ void KPPointObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainSty
     saveOasisMarkerElement( mainStyles, styleObjectAuto );
 }
 
-
-void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info )
-{
-    //kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
-    KPShadowObject::loadOasis( element, context, info );
-    //load point.
-    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
-    QString pt_x, pt_y;
-    double tmp_x, tmp_y;
-    unsigned int index = 0;
-    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
-    {
-        tmp_x = (*it).section(',',0,0).toInt() / 100;
-        tmp_y = (*it).section(',',1,1).toInt() / 100;
-
-        pt_x.setNum(tmp_x);
-        pt_x+="mm";
-
-        pt_y.setNum(tmp_y);
-        pt_y+="mm";
-
-        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
-        ++index;
-    }
-    loadOasisMarker( context );
-}
 
 double KPPointObject::load( const QDomElement &element )
 {

@@ -72,25 +72,7 @@ double KPPolylineObject::load(const QDomElement &element)
 
 bool KPPolylineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    QString listOfPoint;
-    int maxX=0;
-    int maxY=0;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        int tmpX = 0;
-        int tmpY = 0;
-        tmpX = ( int ) ( KoUnit::toMM( ( *it ).x() )*100 );
-        tmpY = ( int ) ( KoUnit::toMM( ( *it ).y() )*100 );
-        kdDebug(33001) << "poly (x,y) (sx,xy) (" << ( *it ).x() << "," << ( *it ).y() << ") (" << tmpX << "," << tmpY << ")" << endl;
-        if ( !listOfPoint.isEmpty() )
-            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-        else
-            listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-        maxX = QMAX( maxX, tmpX );
-        maxY = QMAX( maxY, tmpY );
-    }
-    sc.xmlWriter.addAttribute("draw:points", listOfPoint );
-    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+    KPShadowObject::saveOasisDrawPoints( points, sc );
     return true;
 }
 
@@ -103,5 +85,7 @@ const char * KPPolylineObject::getOasisElementName() const
 void KPPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPPolylineObject::loadOasis(const QDomElement &element)************\n";
-    KPPointObject::loadOasis( element,context, info );
+    KPShadowObject::loadOasis( element, context, info );
+    KPShadowObject::loadOasisDrawPoints( points, element, context, info );
+    loadOasisMarker( context );
 }

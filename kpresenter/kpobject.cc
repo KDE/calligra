@@ -390,7 +390,7 @@ void KPObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyle
     saveOasisShadowElement( styleObjectAuto );
 }
 
-bool KPObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
 {
     kdDebug()<<"bool saveOasisObjectAttributes not implemented";
 }
@@ -1672,6 +1672,92 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
     }
     return mainStyles.lookup( stroke, "stroke" );
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
+}
+
+bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSaveContext &sc )
+{
+    QString listOfPoint;
+    int maxX=0;
+    int maxY=0;
+    KoPointArray::ConstIterator it( points.begin() );
+    for ( ; it != points.end(); ++it ) 
+    {
+        int tmpX = int( ( *it ).x() * 10000 );
+        int tmpY = int( ( *it ).y() * 10000 );
+        //if ( !listOfPoint.isEmpty() )
+            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+        //else
+        //    listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+        maxX = QMAX( maxX, tmpX );
+        maxY = QMAX( maxY, tmpY );
+    }
+    sc.xmlWriter.addAttribute("draw:points", listOfPoint );
+    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+    return true;
+}
+
+bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element, 
+                                          KoOasisContext & context, KPRLoadingInfo *info )
+{
+    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
+    QStringList viewBox = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+    //for ( QStringList::Iterator it = viewBox.begin(); it != viewBox.end(); ++it )
+    //{
+    //    kdDebug(33001) << "viewBox = " << *it << endl;
+    //}
+
+    int left = 0;
+    int top = 0;
+    int right = 0;
+    int bottom = 0;
+
+    if ( viewBox.size() == 4 )
+    {
+        QStringList::Iterator it = viewBox.begin();
+        left = ( *it++ ).toInt();
+        top = ( *it++ ).toInt();
+        right = ( *it++ ).toInt();
+        bottom = ( *it ).toInt();
+        //kdDebug(33001) << "left = " << left
+        //               << "top = " << top
+        //               << "right =" << right
+        //               << "bottom =" << bottom << endl;
+    }
+    else
+    {
+        //if no viewBox is found
+        for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+        {
+            right = QMAX( (*it).section( ',', 0, 0 ).toInt(), right );
+            bottom = QMAX( (*it).section( ',', 1, 1 ).toInt(), bottom );
+        }
+    }
+    
+    if ( right - left != 0 && bottom - top != 0 )
+    {
+        double tmp_x, tmp_y;
+        unsigned int index = 0;
+        for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+        {
+            tmp_x = double( (*it).section( ',', 0, 0 ).toInt() + left ) / ( right - left ) * ext.width();
+            tmp_y = double( (*it).section( ',', 1, 1 ).toInt() + top ) / ( bottom - top ) * ext.height();
+
+            //kdDebug(33001) << "p" << index << " x: " << tmp_x << endl;
+            //kdDebug(33001) << "p" << index << " y: " << tmp_y << endl;
+
+            points.putPoints( index, 1, tmp_x, tmp_y );
+            ++index;
+        }
+    }
+    else
+    {
+        kdDebug(33001) << "problem in viewBox values are: "
+                       << "left = " << left << ", "
+                       << "top = " << top << ", "
+                       << "right =" << right << ", "
+                       << "bottom =" << bottom << endl;
+    }
+    return true;
 }
 
 void KPShadowObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const

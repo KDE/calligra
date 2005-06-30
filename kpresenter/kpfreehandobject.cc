@@ -66,6 +66,15 @@ const char * KPFreehandObject::getOasisElementName() const
     return "draw:path";
 }
 
+void KPFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo* info )
+{
+    //todo
+    //we use draw:path
+
+    //load marker
+    loadOasisMarker( context );
+}
+
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 {
     return KPPointObject::save( doc, offset );
