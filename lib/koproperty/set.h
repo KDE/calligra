@@ -46,7 +46,7 @@ typedef QMapIterator<QCString, QStringList> StringListMapIterator;
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>
  */
-class KPROPERTY_EXPORT Set : public QObject
+class KOPROPERTY_EXPORT Set : public QObject
 {
     Q_OBJECT
 
@@ -170,7 +170,7 @@ class KPROPERTY_EXPORT Set : public QObject
    \author Adam Treat <treat@kde.org>
  */
 
-class KPROPERTY_EXPORT Buffer : public Set
+class KOPROPERTY_EXPORT Buffer : public Set
 {
     Q_OBJECT
 

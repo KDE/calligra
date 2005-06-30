@@ -34,7 +34,7 @@
 
 namespace KOProperty {
 
-class KPROPERTY_EXPORT SetPrivate
+class KOPROPERTY_EXPORT SetPrivate
 {
     public:
         SetPrivate() : dict(101, false){}
