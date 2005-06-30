@@ -23,7 +23,6 @@
 #include <qpainter.h>
 #include <qptrlist.h>
 
-#include <list.h>
 #include <property.h>
 
 class KuDesignerPlugin;

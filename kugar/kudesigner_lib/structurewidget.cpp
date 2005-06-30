@@ -234,3 +234,5 @@ void StructureWidget::setDocument( Kudesigner::Canvas *doc )
 }
 
 }
+
+#include "structurewidget.moc"
