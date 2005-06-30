@@ -45,8 +45,10 @@ on your desktop or panel, or you can select
 from the K menu.</para>
 <para>When it has started you will be given the choice of creating a new
 document from a template, opening an existing or recent document, or starting
-with an empty document. Choose <guilabel>Start with an empty document</guilabel>
-.</para>
+with an empty document. Select the <guilabel>Create Document</guilabel> tab,
+then select the <guilabel>General</guilabel> category on the left and
+choose the <guilabel>Blank Worksheet</guilabel> template. Then click the
+<guilabel>OK</guilabel> button.</para>
 
 <para>Looking at &kspread; once it has started up, you will see a sheet of
 empty rectangular cells arranged in numbered rows and lettered columns. This
@@ -100,12 +102,16 @@ into the atmosphere. </para>
 <title>Selecting Cells</title>
 <para>You can select a single cell or a rectangular area of cells in the 
 spreadsheet. The selected cell(s) are displayed with a thick black border
-.</para>
-<para>To select a single cell <mousebutton>left</mousebutton> click on it 
-or enter the cell reference (for example <userinput>B5</userinput>) into the 
-cell reference box at the left end of the Formula toolbar and press <keycap>
-Enter</keycap>, or use the <menuchoice><guimenu>View</guimenu>
-<guimenuitem>Goto Cell...</guimenuitem></menuchoice> menu option.</para>
+and a colored background.</para>
+<itemizedlist>
+<title>You can select a single cell in one of the following ways</title>
+<listitem><para><mousebutton>left</mousebutton> click on it</para></listitem>
+<listitem><para>enter the cell reference (for example <userinput>B5</userinput>)
+into the cell reference box at the left end of the Formula toolbar and press
+<keycap>Enter</keycap></para></listitem>
+<listitem><para>use the <menuchoice><guimenu>View</guimenu><guimenuitem>Goto
+Cell...</guimenuitem></menuchoice> menu option</para></listitem>
+</itemizedlist>
 
 <para>You can also steer your way around with the <keysym>arrow</keysym> keys. 
 Pressing the <keysym>Enter</keysym> key will move the current selection one 
@@ -160,7 +166,7 @@ century, for example <userinput>9/1/2</userinput> for 9th January 2002.
 Times should also be entered using the <quote>System</quote> format. For 
 example if you are using a 12 hour clock then enter times in HH:MIN am|pm or 
 HH:MIN:SS am|pm format such as <userinput>9:42 am</userinput> or <userinput>
-10:30:52 pm</userinput>
+10:30:52 pm</userinput>.
 </para></listitem>
 <listitem><para>
 &kspread; defines any input data as <quote>text</quote> if it cannot 
@@ -286,9 +292,9 @@ including comments and special formatting, use <keycombo action="simul">
 up menu you get when you <mousebutton>right</mousebutton> click on a selection.
 </para>
 <para>To remove selected row(s) or column(s) completely, use the  
-<guimenuitem>Delete Row(s)...</guimenuitem> or <guimenuitem>Delete Column(s)...
-</guimenuitem> options from the <mousebutton>right</mousebutton> mouse button 
-pop up menu.</para>
+<guimenuitem>Delete Rows</guimenuitem> or <guimenuitem>Delete
+Columns</guimenuitem> options from the <mousebutton>right</mousebutton> mouse
+button pop up menu.</para>
 <para>If you select a cell or cells and choose <guimenuitem>Remove Cells...
 </guimenuitem> from the <mousebutton>right</mousebutton> mouse button pop up 
 menu, you can then choose whether other cells in the worksheet will be moved 
@@ -296,8 +302,8 @@ up or to the left to fill in the space left by the cell(s) you have chosen to
 remove.</para>
 <para>If you want to insert new, blank, row(s) or column(s) into the 
 sheet, select row(s) or column(s) where you wish the new row(s) or
-column(s) to be placed and choose the <guimenuitem>Insert Row(s)...</guimenuitem>, 
-<guimenuitem>Insert Column(s)...</guimenuitem> option from the <mousebutton>
+column(s) to be placed and choose the <guimenuitem>Insert Rows</guimenuitem>, 
+<guimenuitem>Insert Columns</guimenuitem> option from the <mousebutton>
 right</mousebutton> mouse button pop up menu.</para>
 <para>You can insert new cells into the worksheet by selecting the 
 area where you want them to appear then choosing the <guimenuitem>

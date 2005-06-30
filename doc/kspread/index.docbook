@@ -154,8 +154,8 @@ Documentation copyright 2002 Pamela Roberts
 <appendix id="installation">
 <title>Installation</title>
 
-<para>&kspread; is part of the &kde;'s &koffice; package and uses various
-&koffice; libraries. &koffice; itself is part of and depends on the
+<para>&kspread; is part of &kde;'s &koffice; package and uses various
+&koffice; libraries. &koffice; itself is part of &kde; and depends on the
 general &kde; libraries.</para>
 <para>For instructions on acquiring and installing &kde;, &koffice; and
 &kspread; please visit
