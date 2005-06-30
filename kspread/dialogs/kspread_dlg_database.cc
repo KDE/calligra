@@ -600,8 +600,8 @@ void KSpreadDatabaseDlg::accept()
   // An update command must also be followed by a space, or it would be parsed
   // as an identifier.
   // For sanity, also check that there is a SELECT 
-  QRegExp couldModifyDB( "(^|[( \s])(UPDATE|DELETE|INSERT|CREATE) ", false /* cs */ );
-  QRegExp couldQueryDB( "(^|[( \s])(SELECT) ", false /* cs */ );
+  QRegExp couldModifyDB( "(^|[( \\s])(UPDATE|DELETE|INSERT|CREATE) ", false /* cs */ );
+  QRegExp couldQueryDB( "(^|[( \\s])(SELECT) ", false /* cs */ );
 
   if (couldModifyDB.search( queryStr ) != -1 || couldQueryDB.search ( queryStr ) == -1 )
   {
