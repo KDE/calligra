@@ -12,6 +12,8 @@ kde_kcfg_DATA = koshell.kcfg
 
 METASOURCES = AUTO
 
+KDE_ICON=AUTO
+
 rcdir = $(kde_datadir)/koshell
 rc_DATA = koshellui.rc
 
