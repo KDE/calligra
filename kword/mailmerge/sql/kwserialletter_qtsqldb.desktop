@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=Qt-SQL Source (single table)
+Name[cy]=Ffynhonell Qt-SQL (tabl sengl)
 Name[da]=Qt-SQL-kilde (enkelt tabel)
 Name[de]=Qt-SQL (Einzeltabelle)
 Name[el]=Qt-SQL πηγή (μονός πίνακας)
