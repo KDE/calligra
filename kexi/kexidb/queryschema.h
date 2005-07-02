@@ -57,7 +57,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		{
 		}
 		//! \return alias if it's not empty, field's name otherwise.
-		inline QCString aliasOrName() const { return alias.isEmpty() ? field->name().latin1() : alias; }
+		inline QCString aliasOrName() const { return alias.isEmpty() ? field->name().latin1() : (const char*)alias; }
 
 		Field *field;
 		QCString alias;
