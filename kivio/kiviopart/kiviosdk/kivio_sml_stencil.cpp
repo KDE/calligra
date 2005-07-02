@@ -34,6 +34,7 @@
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_stencil_spawner_set.h"
+#include "object.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -75,10 +76,20 @@ KivioSMLStencil::~KivioSMLStencil()
 {
     delete m_pShapeList;
     m_pShapeList = 0;
-    
+
+    QValueList<Kivio::Object*>::iterator it = m_childObjectList.begin();
+    QValueList<Kivio::Object*>::iterator itEnd = m_childObjectList.end();
+    Kivio::Object* object;
+
+    while(it != itEnd) {
+      object = *it;
+      it = m_childObjectList.remove(it);
+      delete object;
+    }
+
     delete m_pConnectorTargets;
     m_pConnectorTargets = 0;
-    
+
     m_pSubSelection = 0;
 }
 
@@ -276,6 +287,18 @@ KivioStencil *KivioSMLStencil::duplicate()
         pNewStencil->m_pShapeList->append( pNewShape );
 
         pShape = m_pShapeList->next();
+    }
+
+    QValueList<Kivio::Object*>::iterator it;
+    QValueList<Kivio::Object*>::iterator itEnd = m_childObjectList.end();
+    Kivio::Object* object = 0;
+
+    for(it = m_childObjectList.begin(); it != itEnd; ++it) {
+      object = (*it);
+      if(object) {
+//         kdDebug() << "Object: " << object->id() << endl;
+        pNewStencil->addChildObject(object->duplicate());
+      }
     }
 
     // Copy the Connector Targets
@@ -762,6 +785,13 @@ void KivioSMLStencil::paint( KivioIntraStencilData *pData )
   pData->painter->setTranslation(m_zoomHandler->zoomItX(m_x), m_zoomHandler->zoomItY(m_y));
   rotatePainter(pData);  // Rotate the painter if needed
 
+  QValueList<Kivio::Object*>::iterator it = m_childObjectList.begin();
+  QValueList<Kivio::Object*>::iterator itEnd = m_childObjectList.end();
+
+  for(;it != itEnd; ++it) {
+    (*it)->paint(*(static_cast<KivioScreenPainter*>(pData->painter)->painter()), pData->zoomHandler);
+  }
+/*
   pShape = m_pShapeList->first();
   while( pShape )
   {
@@ -824,7 +854,7 @@ void KivioSMLStencil::paint( KivioIntraStencilData *pData )
 
     pShape = m_pShapeList->next();
   }
-
+*/
   pData->painter->restoreState();
 }
 
@@ -2105,4 +2135,9 @@ bool KivioSMLStencil::hasTextBox() const
   }
 
   return false;
+}
+
+void KivioSMLStencil::addChildObject(Kivio::Object* object)
+{
+  m_childObjectList.append(object);
 }

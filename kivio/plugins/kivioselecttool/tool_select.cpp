@@ -445,7 +445,7 @@ void SelectTool::mouseMove(QMouseEvent* e)
 {
     QPoint pos = e->pos();
     bool ignoreGridGuides = e->state() & ShiftButton;
-    
+
     switch( m_mode )
     {
         case stmDrawRubber:

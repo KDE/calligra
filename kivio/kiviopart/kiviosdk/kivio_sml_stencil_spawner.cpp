@@ -25,6 +25,8 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
+#include "object.h"
+#include "smlobjectloader.h"
 
 #include <qdom.h>
 #include <qfile.h>
@@ -171,6 +173,12 @@ void KivioSMLStencilSpawner::loadShape( QDomNode &shapeNode )
     KivioShapeData::KivioShapeType t;
     KivioShape *pShape = NULL;
     QDomElement shapeElement = shapeNode.toElement();
+    Kivio::SmlObjectLoader objectloader;
+    Kivio::Object* object = objectloader.loadObject(shapeElement);
+
+    if(object) {
+      m_pStencil->addChildObject(object);
+    }
 
     t = KivioShapeData::shapeTypeFromString( XmlReadString( shapeElement, "type", "None" ) );
 

@@ -21,6 +21,7 @@
 #define KIVIO_SML_STENCIL_H
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include "kivio_stencil.h"
 class QDomElement;
@@ -33,12 +34,19 @@ class KivioPainter;
 class KivioShape;
 class KoZoomHandler;
 
+namespace Kivio {
+
+class Object;
+
+}
+
 class KivioSMLStencil : public KivioStencil
 {
-protected:
+  protected:
     friend class KivioSMLStencilSpawner;
 
     QPtrList<KivioShape> *m_pShapeList;
+    QValueList<Kivio::Object*> m_childObjectList;
     KivioShape *m_pSubSelection;
     QPtrList<KivioConnectorTarget> *m_pConnectorTargets;
 
@@ -48,8 +56,8 @@ protected:
     int _xoff, _yoff;
     KoZoomHandler* m_zoomHandler;
 
-// Drawing routines
-protected:
+  // Drawing routines
+  protected:
     void drawOutlineArc( KivioShape *, KivioIntraStencilData * );
     void drawOutlineBezier( KivioShape *, KivioIntraStencilData * );
     void drawOutlineOpenPath( KivioShape *, KivioIntraStencilData * );
@@ -93,7 +101,7 @@ protected:
     KivioShape *locateShape( const QString & );
     void loadConnectorTargetListXML( const QDomElement & );
 
-public:
+  public:
     KivioSMLStencil();
     virtual ~KivioSMLStencil();
 
@@ -139,7 +147,7 @@ public:
 
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
-    
+
     virtual KoPoint snapToTarget( const KoPoint& p, double thresh, bool& hit );
 
     virtual void updateGeometry();
@@ -163,6 +171,9 @@ public:
     virtual void addConnectorTarget(const KoPoint&);
 
     virtual bool hasTextBox() const;
+
+    /// Add a child object... This functions assumes that the object's coords already are relative to parent.
+    virtual void addChildObject(Kivio::Object* object);
 };
 
 #endif
