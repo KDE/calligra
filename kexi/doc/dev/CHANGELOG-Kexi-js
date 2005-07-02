@@ -531,7 +531,15 @@ TODO:::::::
 
 TODO: query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
 
-2005-06-20..24
+2005-07-02
+Form Designer
+- fixed i18n for property captions
+- fixed filling enum values
+
+2005-06-20..30
+- * KexiProperty library made more generic as KoProperty *
+- Kexi now uses KoProperty
+
 Form Designer
 - Data source tab in the Property Pane implemented
 - 'dataSourceMimeType' property added for data-aware widgets, so it can be explicity 
@@ -553,7 +561,6 @@ Core
 - added 'higlight object' action for KexiProject (available from property pane)
 - improved API for reaction on object creation/deletion/renaming
 General
-- * KexiProperty library made more generic as KoProperty *
 - small icons cleaned up; added better query/form/report/script icons
 - 'X-Kexi-GroupIcon' property no longer used; such icons are too hard to design and recognize
 - KexiFieldListView and KexiFieldComboBox added

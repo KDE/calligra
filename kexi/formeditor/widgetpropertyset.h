@@ -38,6 +38,7 @@ namespace KFormDesigner {
 class FormManager;
 class ObjectTreeItem;
 class WidgetPropertySetPrivate;
+class WidgetInfo;
 
 class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 {
@@ -50,12 +51,15 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		FormManager* manager();
 
 		Property&  operator[](const QCString &name);
+
 		Property&  property(const QCString &name);
+
 		bool  contains(const QCString &property);
 
 		/*! i18n function used by factories to add new property caption.
 		  Should be called on Factory creation. */
 		void  addPropertyCaption(const QCString &property, const QString &caption);
+
 		void  addValueCaption(const QCString &value, const QString &caption);
 
 	public slots:
@@ -67,6 +71,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*!  This function is called every time a property is modifed.  It also takes
 		 care of saving set and enum properties. */
 		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+
 		/*! This slot is called when a property is reset using the "reload" button in PropertyEditor. */
 		void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
@@ -87,12 +92,15 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 	protected:
 		/*! Adds the widget in d->widgets, and updates property visibilty. */
 		void addWidget(QWidget *w);
+
 		/*! Fills the list with properties related to the widget \a w. Also updates
 		properties old value and changed state. */
 		void createPropertiesForWidget(QWidget *w);
+
 		/*! Creates a map property description->prop. value from
 		 the list of keys \a list. */
-		QMap<QString, QVariant> createValueList(const QStringList &list);
+		QMap<QString, QVariant> createValueList(WidgetInfo *winfo, const QStringList &list);
+
 		/*! Changes \a property old value and changed state, using the value
 		stored in \a tree. */
 		void  updatePropertyValue(ObjectTreeItem *tree, const char *property);
@@ -110,9 +118,10 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! Checks if the name entered by user is valid, ie that it is
 		 a valid identifier, and that there is no name conflict.  */
-		bool  isNameValid(const QString &name);
+		bool isNameValid(const QString &name);
+
 		/*! Saves 'enabled' property, and takes care of updating widget's palette. */
-		void  saveEnabledProperty(bool value);
+		void saveEnabledProperty(bool value);
 
 		/*! This function filters the event of the selected widget to
 		automatically updates the "geometry" property
@@ -121,8 +130,10 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! Changes undoing state of the list. Used by Undo command to
 		 prevent recursion. */
-		void  setUndoing(bool isUndoing);
-		bool  isUndoing();
+		void setUndoing(bool isUndoing);
+
+		bool isUndoing();
+
 		/*! This function is used to filter the properties to be shown
 		   (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.*/
@@ -133,12 +144,14 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for
 		 the QWidget \a obj. \a meta  is the QMetaProperty for "alignment" property".  */
 		void createAlignProperty(const QMetaProperty *meta, QWidget *obj);
+
 		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak)
 		 and modifies the "alignment" property of  the widget.*/
 		void saveAlignProperty(const QString &property);
 
 		/*! Creates the "layout" property, for the Container representing \a item. */
 		void createLayoutProperty(ObjectTreeItem *item);
+
 		/*! Saves the "layout" property and changes the Container 's layout (
 		using Container::setLayout() ).*/
 		void saveLayoutProperty(const QString &property, const QVariant &value);
@@ -146,11 +159,14 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		// Some i18n functions
 		//! Adds translations for general properties, by adding items in d->propDesc
 		void  initPropertiesDescription();
+
 		/*! \return The i18n'ed name of the property whose name is \a name, that will be
 		displayed in PropertyEditor. */
 		QString propertyCaption(const QCString &name);
+
 		/*! \return The i18n'ed name of the property's value whose name is \a name. */
 		QString valueCaption(const QCString &name);
+
 		/*! \return The i18n'ed list of values, that will be shown by Property
 		Editor (using descFromValue()).*/
 		//QStringList captionForList(const QStringList &list);

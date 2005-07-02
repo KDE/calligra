@@ -91,6 +91,8 @@ WidgetPropertySet::WidgetPropertySet(FormManager *manager)
 		this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 	connect(&d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
 		this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
+
+	initPropertiesDescription();
 }
 
 WidgetPropertySet::~WidgetPropertySet()
@@ -256,8 +258,8 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			//! \todo add another list for property description
 			QString desc( d->propCaption[meta->name()] );
 			//! \todo change i18n
-			//if (desc.isEmpty())  //try to get property description from factory
-			//	desc = d->manager->lib()->propertyCaptionForName(winfo, propertyName);
+			if (desc.isEmpty())  //try to get property description from factory
+				desc = d->manager->lib()->propertyDescForName(winfo, propertyName);
 
 			if(meta->isEnumType())  {
 				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
@@ -266,7 +268,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 					continue;
 				}
 
-				newProp = new Property(propertyName, createValueList(keys),
+				newProp = new Property(propertyName, createValueList(winfo, keys),
 					meta->valueToKey( w->property(propertyName).toInt() ), desc, desc );
 			}
 			else
@@ -599,6 +601,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 	delete enumKeys;
 
 	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(obj->name());
+	bool isTopLevel = d->manager->isTopLevel(obj);
 
 	if(!possibleValues.grep("AlignHCenter").empty())  {
 		// Create the horizontal alignment property
@@ -614,10 +617,13 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 			value = "AlignAuto";
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-		Property *p = new Property("hAlign", createValueList(list), value,
+		Property *p = new Property("hAlign", createValueList(0, list), value,
 			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Align."), 
 			i18n("Horizontal Alignment"));
 		d->set.addProperty(p);
+		if(!isPropertyVisible(p->name(), isTopLevel)) {
+			p->setVisible(false);
+		}
 		updatePropertyValue(tree, "hAlign");
 		list.clear();
 	}
@@ -633,10 +639,13 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		Property *p = new Property("vAlign", createValueList(list), value,
+		Property *p = new Property("vAlign", createValueList(0, list), value,
 			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Align."), 
 			i18n("Vertical Alignment"));
 		d->set.addProperty(p);
+		if(!isPropertyVisible(p->name(), isTopLevel)) {
+			p->setVisible(false);
+		}
 		updatePropertyValue(tree, "vAlign");
 	}
 
@@ -704,7 +713,7 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
-	Property *p = new Property("layout", createValueList(list), value, 
+	Property *p = new Property("layout", createValueList(0, list), value, 
 		i18n("Container's Layout"), i18n("Container's Layout"));
 	p->setVisible( d->manager->lib()->advancedPropertiesVisible() );
 	d->set.addProperty(p);
@@ -877,13 +886,23 @@ WidgetPropertySet::valueCaption(const QCString &name)
 }
 
 QMap<QString, QVariant>
-WidgetPropertySet::createValueList(const QStringList &list)
+WidgetPropertySet::createValueList(WidgetInfo *winfo, const QStringList &list)
 {
 	QMap <QString, QVariant> map;
 	QStringList::ConstIterator endIt = list.end();
-	for(QStringList::ConstIterator it = list.begin(); it != endIt; ++it)
-		map.insert(valueCaption( (*it).latin1() ), (*it).latin1() );
-
+	for(QStringList::ConstIterator it = list.begin(); it != endIt; ++it) {
+		QString n( d->propValCaption[ (*it).latin1() ] );
+		if (n.isEmpty()) { //try within factory and (maybe) parent factory
+			if (winfo)
+				n = d->manager->lib()->propertyDescForValue( winfo, (*it).latin1() );
+			if (n.isEmpty())
+				map.insert(*it, (*it).latin1()); //untranslated
+			else
+				map.insert(*it, n);
+		}
+		else
+			map.insert(*it, n);
+	}
 	return map;
 }
 
