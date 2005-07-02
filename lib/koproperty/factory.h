@@ -25,7 +25,7 @@
 
 template<class U> class QValueList;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class Widget;
 class CustomProperty;

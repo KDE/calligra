@@ -27,7 +27,7 @@
 #include <qlayout.h>
 #include <qvariant.h>
 
-namespace KOProperty {
+namespace KoProperty {
 
     static const char *nopen[]={
     "48 16 1 1",

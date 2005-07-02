@@ -26,7 +26,7 @@
 class QLabel;
 class QPushButton;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class PixmapEdit : public Widget
 {

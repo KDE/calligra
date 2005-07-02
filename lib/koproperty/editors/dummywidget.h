@@ -26,7 +26,7 @@
 
 #include <qvariant.h>
 
-namespace KOProperty {
+namespace KoProperty {
 
 class DummyWidget: public Widget
 {

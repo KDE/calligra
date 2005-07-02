@@ -24,7 +24,7 @@
 #include <qlineedit.h>
 #include <qvariant.h>
 
-namespace KOProperty {
+namespace KoProperty {
 
 StringEdit::StringEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

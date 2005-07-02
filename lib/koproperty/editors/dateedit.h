@@ -27,7 +27,7 @@
 class QDateEdit;
 class QDate;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class DateEdit : public Widget
 {

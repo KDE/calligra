@@ -26,7 +26,7 @@
 
 class QComboBox;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class LineStyleEdit : public Widget
 {

@@ -24,7 +24,7 @@
 #include <qwidget.h>
 #include <koffice_export.h>
 
-namespace KOProperty {
+namespace KoProperty {
 
 class WidgetPrivate;
 class Property;

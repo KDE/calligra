@@ -26,7 +26,7 @@
 
 class KFontRequester;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class FontEdit : public Widget
 {

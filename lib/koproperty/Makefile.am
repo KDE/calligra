@@ -11,4 +11,10 @@ METASOURCES = AUTO
 
 SUBDIRS = editors .
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKOPROPERTY_EXPORT=
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
+
+icondir = $(kde_datadir)/koffice/icons
+icon_ICON = button_no
+
+EXTRA_DIST = $(icon_ICON)

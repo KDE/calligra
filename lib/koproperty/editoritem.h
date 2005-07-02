@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +35,7 @@
 template<class U> class QAsciiDict;
 
 
-namespace KOProperty {
+namespace KoProperty {
 
 class EditorItemPrivate;
 class Property;
@@ -43,6 +44,7 @@ class Editor;
 /*! \brief
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
+   \author Jaroslaw Staniek <js@iidea.pl>
  */
 #ifdef QT_ONLY
 class KOPROPERTY_EXPORT EditorItem : public QListViewItem
@@ -110,7 +112,6 @@ class KOPROPERTY_EXPORT EditorDummyItem : public EditorItem
 		/*virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 		virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);*/
 };
-
 
 }
 

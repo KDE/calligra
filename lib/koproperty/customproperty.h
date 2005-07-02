@@ -24,7 +24,7 @@
 
 class QVariant;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class Property;
 
@@ -41,7 +41,7 @@ class KOPROPERTY_EXPORT CustomProperty
 {
 	public:
 		CustomProperty(Property *parent);
-		~CustomProperty() {}
+		virtual ~CustomProperty() {}
 
 		/*! This function is called by \ref Property::setValue() when
 		a custom property is set.
@@ -49,14 +49,16 @@ class KOPROPERTY_EXPORT CustomProperty
 		You just have to update child or parent properties value, using \ref Property::setValue().
 		Please notice that, when calling Property::setValue, you <b>need</b> to set
 		useCustomProperty (3rd parameter) to false, or there will be infinite recursion. */
-		virtual void setValue(const QVariant &value, bool rememberOldValue)=0;
+		virtual void setValue(const QVariant &value, bool rememberOldValue) = 0;
+
 		/*! This function is called by \ref Property::value() when
 		a custom property is set and \ref handleValue() is true.
 		You should return property's value, taken from parent's value.*/
-		virtual QVariant value()=0;
+		virtual QVariant value() const = 0;
+
 		/*! Tells whether CustomProperty should be use to get the property's value.
 		You should return true for child properties, and false for others. */
-		virtual bool handleValue() { return false; }
+		virtual bool handleValue() const { return false; }
 
 	protected:
 		Property  *m_property;
@@ -69,8 +71,8 @@ class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 		~SizeCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value();
-		bool handleValue();
+		QVariant value() const;
+		bool handleValue() const;
 };
 
 class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
@@ -80,8 +82,8 @@ class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 		~PointCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value();
-		bool handleValue();
+		QVariant value() const;
+		bool handleValue() const;
 };
 
 class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
@@ -91,8 +93,8 @@ class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 		~RectCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value();
-		bool handleValue();
+		QVariant value() const;
+		bool handleValue() const;
 };
 
 class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
@@ -102,8 +104,8 @@ class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
 		~SizePolicyCustomProperty();
 
 		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value();
-		bool handleValue();
+		QVariant value() const;
+		bool handleValue() const;
 };
 
 }

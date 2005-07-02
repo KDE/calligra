@@ -26,7 +26,7 @@
 
 #include "widget.h"
 
-namespace KOProperty {
+namespace KoProperty {
 
 // Int Editor
 

@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-namespace KOProperty {
+namespace KoProperty {
 
 DummyWidget::DummyWidget(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

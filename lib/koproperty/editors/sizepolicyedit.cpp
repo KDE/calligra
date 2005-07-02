@@ -33,7 +33,7 @@
 #include <klocale.h>
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 QMap<QString, QVariant> *SizePolicyEdit::m_spValues = 0;
 

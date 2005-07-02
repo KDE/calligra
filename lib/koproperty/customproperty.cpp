@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #endif
 
-namespace KOProperty {
+using namespace KoProperty;
 
 CustomProperty::CustomProperty(Property *parent)
  : m_property(parent)
@@ -45,8 +45,8 @@ SizeCustomProperty::SizeCustomProperty(Property *property)
 {
 	if(property && (property->type() == Size) ) {
 		QSize s = property->value().toSize();
-		property->addChild(new Property("width", i18n("Width"), i18n("Width"), s.width(), Size_Width));
-		property->addChild(new Property("height", i18n("Height"), i18n("Height"), s.height(), Size_Height));
+		property->addChild(new Property("width", s.width(), i18n("Width"), i18n("Width"), Size_Width));
+		property->addChild(new Property("height", s.height(), i18n("Height"), i18n("Height"), Size_Height));
 	}
 }
 
@@ -54,7 +54,7 @@ SizeCustomProperty::~SizeCustomProperty()
 {}
 
 bool
-SizeCustomProperty::handleValue()
+SizeCustomProperty::handleValue() const
 {
 	if(!m_property)
 		return false;
@@ -91,7 +91,7 @@ SizeCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 }
 
 QVariant
-SizeCustomProperty::value()
+SizeCustomProperty::value() const
 {
 	if(!m_property || !m_property->parent())
 		return QVariant();
@@ -111,13 +111,16 @@ PointCustomProperty::PointCustomProperty(Property *property)
 {
 	if(property && (property->type() == Point) ) {
 		QPoint p = property->value().toPoint();
-		property->addChild(new Property("x", i18n("X"), i18n("x"), p.x(), Point_X));
-		property->addChild(new Property("y", i18n("Y"), i18n("y"), p.y(), Point_Y));
+		property->addChild(new Property("x", p.x(), i18n("X"), i18n("x"), Point_X));
+		property->addChild(new Property("y", p.y(), i18n("Y"), i18n("y"), Point_Y));
 	}
 }
 
+PointCustomProperty::~PointCustomProperty()
+{}
+
 bool
-PointCustomProperty::handleValue()
+PointCustomProperty::handleValue() const
 {
 	if(!m_property)
 		return false;
@@ -154,7 +157,7 @@ PointCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 }
 
 QVariant
-PointCustomProperty::value()
+PointCustomProperty::value() const
 {
 	if(!m_property || !m_property->parent())
 		return QVariant();
@@ -174,15 +177,18 @@ RectCustomProperty::RectCustomProperty(Property *property)
 {
 	if(property && (property->type() == Rect) ) {
 		QRect r = property->value().toRect();
-		property->addChild(new Property("x",  i18n("X"), i18n("x"), r.x(), Rect_X));
-		property->addChild(new Property("y", i18n("Y"), i18n("y"), r.y(), Rect_Y));
-		property->addChild(new Property("width", i18n("Width"), i18n("Width"), r.width(), Rect_Width));
-		property->addChild(new Property("height", i18n("Height"), i18n("Height"), r.height(), Rect_Height));
+		property->addChild(new Property("x", r.x(), i18n("X"), i18n("x"), Rect_X));
+		property->addChild(new Property("y", r.y(), i18n("Y"), i18n("y"), Rect_Y));
+		property->addChild(new Property("width", r.width(), i18n("Width"), i18n("Width"), Rect_Width));
+		property->addChild(new Property("height", r.height(), i18n("Height"), i18n("Height"), Rect_Height));
 	}
 }
 
+RectCustomProperty::~RectCustomProperty()
+{}
+
 bool
-RectCustomProperty::handleValue()
+RectCustomProperty::handleValue() const
 {
 	if(!m_property)
 		return false;
@@ -225,7 +231,7 @@ RectCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 }
 
 QVariant
-RectCustomProperty::value()
+RectCustomProperty::value() const
 {
 	if(!m_property || !m_property->parent())
 		return QVariant();
@@ -258,19 +264,30 @@ SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 		spValues[i18n("Minimum Expanding")] = QSizePolicy::MinimumExpanding;
 		spValues[i18n("Ignored")] = QSizePolicy::Ignored;
 
-		property->addChild(new Property("hSizeType", i18n("Hor. Size Type"),i18n("Horizontal Size Type"),
-			spValues, (int)property->value().toSizePolicy().horData(), SizePolicy_HorData));
-		property->addChild(new Property("vSizeType", i18n("Ver. Size Type"), i18n("Vertical Size Type"),
-			spValues, (int)property->value().toSizePolicy().verData(), SizePolicy_VerData));
-		property->addChild(new Property("hStretch", i18n("Hor. Stretch"), i18n("Horizontal Stretch"),
-			property->value().toSizePolicy().horStretch(), SizePolicy_HorStretch));
-		property->addChild(new Property("vStretch", i18n("Ver. Stretch"), i18n("Vertical Stretch"),
-			property->value().toSizePolicy().verStretch(), SizePolicy_VerStretch));
+		property->addChild(new Property("hSizeType", 
+			spValues, (int)property->value().toSizePolicy().horData(), 
+			i18n("Hor. Size Type"),i18n("Horizontal Size Type"),
+			SizePolicy_HorData));
+		property->addChild(new Property("vSizeType", 
+			spValues, (int)property->value().toSizePolicy().verData(), 
+			i18n("Ver. Size Type"), i18n("Vertical Size Type"),
+			SizePolicy_VerData));
+		property->addChild(new Property("hStretch", 
+			property->value().toSizePolicy().horStretch(), 
+			i18n("Hor. Stretch"), i18n("Horizontal Stretch"),
+			SizePolicy_HorStretch));
+		property->addChild(new Property("vStretch", 
+			property->value().toSizePolicy().verStretch(), 
+			i18n("Ver. Stretch"), i18n("Vertical Stretch"),
+			SizePolicy_VerStretch));
 	}
 }
 
+SizePolicyCustomProperty::~SizePolicyCustomProperty()
+{}
+
 bool
-SizePolicyCustomProperty::handleValue()
+SizePolicyCustomProperty::handleValue() const
 {
 	if(!m_property)
 		return false;
@@ -313,7 +330,7 @@ SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 }
 
 QVariant
-SizePolicyCustomProperty::value()
+SizePolicyCustomProperty::value() const
 {
 	if(!m_property || !m_property->parent())
 		return QVariant();
@@ -329,6 +346,3 @@ SizePolicyCustomProperty::value()
 
 	return QVariant();
 }
-
-}
-

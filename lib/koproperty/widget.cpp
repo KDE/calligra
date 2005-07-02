@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,9 +32,9 @@
 #include <kdebug.h>
 #endif
 
-using namespace KOProperty;
+using namespace KoProperty;
 
-namespace KOProperty {
+namespace KoProperty {
 class WidgetPrivate
 {
 	public:
@@ -141,7 +141,7 @@ Widget::eventFilter(QObject*, QEvent* e)
 void
 Widget::setFocusWidget(QWidget*focusProxy)
 {
-	if (focusProxy) {// && focusProxy->focusPolicy() != NoFocus) {
+	if (focusProxy && focusProxy->focusPolicy() != NoFocus) {
 		setFocusProxy(focusProxy);
 		focusProxy->installEventFilter(this);
 	}

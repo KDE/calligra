@@ -32,7 +32,7 @@
 
 #include "symbolcombo.h"
 
-namespace KOProperty {
+namespace KoProperty {
 
 SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

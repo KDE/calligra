@@ -34,7 +34,7 @@
 #include <klocale.h>
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 FontEdit::FontEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

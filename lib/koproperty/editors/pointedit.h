@@ -28,7 +28,7 @@
 
 class QLabel;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class PointEdit : public Widget
 {

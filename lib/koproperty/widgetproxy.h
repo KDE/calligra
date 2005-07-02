@@ -26,7 +26,7 @@
 
 class QVariant;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class WidgetProxyPrivate;
 

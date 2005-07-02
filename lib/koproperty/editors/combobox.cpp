@@ -33,7 +33,7 @@
 
 #include "property.h"
 
-namespace KOProperty {
+namespace KoProperty {
 
 ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -57,7 +57,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 #endif
 
 	fillBox();
-	setLeavesTheSpaceForRevertButton(true);
+//not needed for combo	setLeavesTheSpaceForRevertButton(true);
 
 	setFocusWidget(m_edit);
 	connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
@@ -134,13 +134,15 @@ ComboBox::slotValueChanged(int)
 QString
 ComboBox::keyForValue(const QVariant &value)
 {
-	QMap<QString, QVariant> list( *(property()->valueList()));
-	QMap<QString, QVariant>::ConstIterator endIt = list.constEnd();
-	for(QMap<QString, QVariant>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+	const QMap<QString, QVariant> *list = property()->valueList();
+	if (!list)
+		return QString::null;
+	QMap<QString, QVariant>::ConstIterator endIt = list->constEnd();
+	for(QMap<QString, QVariant>::ConstIterator it = list->constBegin(); it != endIt; ++it) {
 		if(it.data() == value)
 			return it.key();
 	}
-	return QString();
+	return QString::null;
 }
 
 }

@@ -25,7 +25,7 @@
 #include <qlayout.h>
 #include <qpainter.h>
 
-namespace KOProperty {
+namespace KoProperty {
 
 PointEdit::PointEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

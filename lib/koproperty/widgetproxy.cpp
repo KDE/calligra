@@ -25,8 +25,7 @@
 #include <qlayout.h>
 #include <qvariant.h>
 
-namespace KOProperty {
-
+namespace KoProperty {
 class WidgetProxyPrivate
 {
 	public:
@@ -41,6 +40,9 @@ class WidgetProxyPrivate
 
 		QHBoxLayout *layout;
 };
+}
+
+using namespace KoProperty;
 
 WidgetProxy::WidgetProxy(QWidget *parent, const char *name)
  : QWidget(parent, name)
@@ -118,8 +120,6 @@ WidgetProxy::setWidget()
 		d->widget->reparent(this, QPoint(0,0), true);
 		d->layout->addWidget(d->widget);
 	}
-}
-
 }
 
 #include "widgetproxy.moc"

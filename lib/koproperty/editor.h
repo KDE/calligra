@@ -34,7 +34,7 @@
 
 class QSize;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class EditorPrivate;
 class Property;
@@ -56,92 +56,107 @@ class EditorItem;
     or down buttons (for DoubleEdit) </li></ul>
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
+   \author Jaroslaw Staniek <js@iidea.pl>
  */
 class KOPROPERTY_EXPORT Editor : public QListView
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
-        /*! Creates an empty Editor with \a parent as parent widget.
-           If \a autoSync == true, properties values are automatically synced as
-            soon as editor contents change (eg the user types text, etc.)
-            and the values are written in the buffer. Otherwise, buffer
-             is updated only when selected item changes or user presses Enter key.
-             Each property can overwrite this if its autoSync() == 0 or 1.
-        */
-        Editor(QWidget *parent=0, bool autoSync=true, const char *name=0);
-        ~Editor();
+	public:
+		/*! Creates an empty Editor with \a parent as parent widget.
+		If \a autoSync == true, properties values are automatically synced as
+		soon as editor contents change (eg the user types text, etc.)
+		and the values are written in the buffer. Otherwise, buffer
+		is updated only when selected item changes or user presses Enter key.
+		Each property can overwrite this if its autoSync() == 0 or 1.
+		*/
+		Editor(QWidget *parent=0, bool autoSync=true, const char *name=0);
 
-        virtual QSize sizeHint() const;
-        virtual void setFocus();
+		~Editor();
 
-    public slots:
-        /*! Populates the editor with an item for each property in the List.
-          Also creates child items for composed properties.
-        */
-        void  changeSet(Set *l, bool preservePrevSelection=false);
-        /*! Clears all items in the list.
-           if \a editorOnly is true, then only the current editor will be cleared,
-            not the whole list.
-        */
-        void clear(bool editorOnly = false);
-	/*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
-	void  acceptInput();
+		virtual QSize sizeHint() const;
+		virtual void setFocus();
 
-    signals:
-        void  propertySetChanged(KOProperty::Set *list);
+	public slots:
+		/*! Populates the editor with an item for each property in the List.
+		  Also creates child items for composed properties.
+		*/
+		void changeSet(Set *set, bool preservePrevSelection=false);
 
-    protected slots:
-        /*! Updates property widget in the editor.*/
-        void  slotPropertyChanged(KOProperty::Property* property, KOProperty::Set *list);
-        void  slotPropertyReset(KOProperty::Property* property, KOProperty::Set *list);
-        /*! Updates property in the list when new value is selected in the editor.*/
-        void slotWidgetValueChanged(Widget *widget);
-        /*! Called when the user presses Enter to accet the input
-           (only applies when autoSync() == false).*/
-        void slotWidgetAcceptInput(Widget *widget);
-        /*! Called when the user presses Esc. Calls undo(). */
-        void slotWidgetRejectInput(Widget *widget);
+		/*! Clears all items in the list.
+		   if \a editorOnly is true, then only the current editor will be cleared,
+			not the whole list.
+		*/
+		void clear(bool editorOnly = false);
 
-        /*! Called when current buffer is about to be destroyed. */
-        void slotSetDeleted();
-        /*! This slot is called when the user clicks the list view.
-           It takes care of deleting current editor and
-           creating a new editor for the newly selected item. */
-        void  slotClicked(QListViewItem *item);
-        /*! Undoes the last change in property editor.*/
-        void  undo();
+		/*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
+		void acceptInput();
 
-        void  updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
-        void  hideEditor();
+	signals:
+		/*! Emitted when current buffer has been changed. May be 0. */
+		void propertySetChanged(KoProperty::Set *set);
 
-        void  slotCollapsed(QListViewItem *item);
-        void  slotExpanded(QListViewItem *item);
-        void  slotColumnSizeChanged(int section);
-        void  slotColumnSizeChanged(int section, int, int newS);
-        void  slotCurrentChanged(QListViewItem *item);
+	protected slots:
+		/*! Updates property widget in the editor.*/
+		void  slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-    protected:
-        /*! \return \ref Widget for given property.
-        Uses cache to store created widgets.
-        Cache will be cleared only with clearWidgetCache().*/
-        Widget *createWidgetForProperty(Property *property, bool changeWidgetProperty=true);
-        /*! Deletes cached machines.*/
-        void clearWidgetCache();
+		void  slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
-        void  fill();
-        void  changeSetLater();
-        void addItem(const QCString &name, EditorItem *parent);
+		/*! Updates property in the list when new value is selected in the editor.*/
+		void slotWidgetValueChanged(Widget *widget);
 
-        void showUndoButton( bool show );
+		/*! Called when the user presses Enter to accet the input
+		   (only applies when autoSync() == false).*/
+		void slotWidgetAcceptInput(Widget *widget);
 
-        virtual void resizeEvent(QResizeEvent *ev);
-        bool handleKeyPress(QKeyEvent* ev);
+		/*! Called when the user presses Esc. Calls undo(). */
+		void slotWidgetRejectInput(Widget *widget);
 
-    private:
-        EditorPrivate *d;
+		/*! Called when current buffer is about to be cleared. */
+		void slotSetWillBeCleared();
 
-    friend class EditorItem;
+		/*! Called when current buffer is about to be destroyed. */
+		void slotSetWillBeDeleted();
+
+		/*! This slot is called when the user clicks the list view.
+		   It takes care of deleting current editor and
+		   creating a new editor for the newly selected item. */
+		void  slotClicked(QListViewItem *item);
+
+		/*! Undoes the last change in property editor.*/
+		void  undo();
+
+		void  updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+		void  hideEditor();
+
+		void  slotCollapsed(QListViewItem *item);
+		void  slotExpanded(QListViewItem *item);
+		void  slotColumnSizeChanged(int section);
+		void  slotColumnSizeChanged(int section, int, int newS);
+		void  slotCurrentChanged(QListViewItem *item);
+
+	protected:
+		/*! \return \ref Widget for given property.
+		Uses cache to store created widgets.
+		Cache will be cleared only with clearWidgetCache().*/
+		Widget *createWidgetForProperty(Property *property, bool changeWidgetProperty=true);
+
+		/*! Deletes cached machines.*/
+		void clearWidgetCache();
+
+		void fill();
+		void changeSetLater();
+		void addItem(const QCString &name, EditorItem *parent);
+
+		void showUndoButton( bool show );
+
+		virtual void resizeEvent(QResizeEvent *ev);
+		bool handleKeyPress(QKeyEvent* ev);
+
+	private:
+		EditorPrivate *d;
+
+	friend class EditorItem;
 };
 
 }

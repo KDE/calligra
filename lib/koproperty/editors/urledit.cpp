@@ -34,7 +34,7 @@
 #include "property.h"
 
 
-namespace KOProperty {
+namespace KoProperty {
 
 URLEdit::URLEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

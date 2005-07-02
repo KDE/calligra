@@ -33,7 +33,7 @@
 
 #include "property.h"
 
-namespace KOProperty {
+namespace KoProperty {
 
 QMap<QString, QVariant> *CursorEdit::m_spValues = 0;
 

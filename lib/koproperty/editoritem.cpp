@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,8 +37,7 @@
 
 #define BRANCHBOX_SIZE 9
 
-namespace KOProperty {
-
+namespace KoProperty {
 class EditorItemPrivate
 {
 	public:
@@ -49,6 +49,9 @@ class EditorItemPrivate
 		Editor  *editor;
 		int  order;
 };
+}
+
+using namespace KoProperty;
 
 EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, QListViewItem *after)
  : KListViewItem(parent, after, property->caption().isEmpty() ? property->name() : property->caption())
@@ -114,7 +117,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 
 		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 		p->drawLine(width-1, 0, width-1, height()-1);
-        }
+	}
 	else if(column == 1)
 	{
 		QColorGroup icg(cg);
@@ -175,7 +178,8 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 			const int marg = (item->height() - BRANCHBOX_SIZE) / 2;
 			p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 			p->drawRect(2, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
-			p->fillRect(2+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2, backgroundColor);
+			p->fillRect(2+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2, item->listView()->paletteBackgroundColor());
+			p->setPen( item->listView()->paletteForegroundColor() );
 			p->drawLine(2+2, marg+BRANCHBOX_SIZE/2, BRANCHBOX_SIZE-1, marg + BRANCHBOX_SIZE / 2);
 			if(!item->isOpen())
 				p->drawLine(2+BRANCHBOX_SIZE/2, marg+2,
@@ -185,7 +189,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 		}
 
 		// draw icon (if there is one)
-		EditorItem *editorItem = static_cast<EditorItem*>(item);
+		EditorItem *editorItem = dynamic_cast<EditorItem*>(item);
 		if (editorItem && editorItem->property() && !editorItem->property()->icon().isEmpty()) {
 			//int margin = listView()->itemMargin();
 			QPixmap pix = SmallIcon(editorItem->property()->icon());
@@ -270,6 +274,4 @@ void
 EditorDummyItem::setup()
 {
 	setHeight(0);
-}
-
 }

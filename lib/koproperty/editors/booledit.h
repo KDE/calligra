@@ -26,7 +26,7 @@
 
 class QToolButton;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class BoolEdit : public Widget
 {

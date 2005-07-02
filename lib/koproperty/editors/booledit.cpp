@@ -32,7 +32,7 @@
 
 #include <kdebug.h>
 
-using namespace KOProperty;
+using namespace KoProperty;
 
 BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -46,7 +46,7 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
     //we're not using layout to because of problems with button size
     m_toggle->move(0, 0);
     m_toggle->resize(width(), height());
-    m_toggle->show();
+//    m_toggle->show();
 
     setFocusWidget(m_toggle);
     connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
@@ -88,11 +88,11 @@ BoolEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVa
 
     if(value.toBool()) {
         p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_ok"));
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("True"));
+        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
     }
     else  {
-        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_cancel"));
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("False"));
+        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_no"));
+        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
     }
 }
 
@@ -102,12 +102,12 @@ BoolEdit::setState(bool state)
     if(state)
     {
         m_toggle->setIconSet(QIconSet(SmallIcon("button_ok")));
-        m_toggle->setTextLabel(i18n("True"));
+        m_toggle->setTextLabel(i18n("Yes"));
     }
     else
     {
-        m_toggle->setIconSet(QIconSet(SmallIcon("button_cancel")));
-        m_toggle->setTextLabel(i18n("False"));
+        m_toggle->setIconSet(QIconSet(SmallIcon("button_no")));
+        m_toggle->setTextLabel(i18n("No"));
     }
 }
 

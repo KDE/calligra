@@ -27,7 +27,7 @@
 class QLineEdit;
 class QPushButton;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class SymbolCombo : public Widget
 {

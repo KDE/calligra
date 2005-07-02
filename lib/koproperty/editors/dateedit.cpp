@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 DateEdit::DateEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

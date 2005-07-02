@@ -40,7 +40,7 @@
 
 #include "property.h"
 
-namespace KOProperty {
+namespace KoProperty {
 
 StringListEdit::StringListEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

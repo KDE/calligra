@@ -50,7 +50,7 @@
 #include <kdebug.h>
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 Factory* Factory::m_factory = 0;
 
@@ -64,6 +64,9 @@ class FactoryPrivate
 		QMap<int, createWidget > registeredWidgets;
 		QMap<int, createCustomProperty > registeredCustomProperties;
 };
+}
+
+using namespace KoProperty;
 
 Factory::Factory()
 {
@@ -222,7 +225,5 @@ Factory::customPropertyForProperty(Property *prop)
 		default:
 			return 0;
 	}
-}
-
 }
 

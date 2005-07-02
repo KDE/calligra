@@ -27,7 +27,7 @@
 class QDateTimeEdit;
 class QDateTime;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class DateTimeEdit : public Widget
 {

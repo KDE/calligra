@@ -30,7 +30,7 @@ class QPushButton;
 class KColorCombo;
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 class ColorButton : public Widget
 {

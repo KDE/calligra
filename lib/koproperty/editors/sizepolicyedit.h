@@ -30,7 +30,7 @@ template<class U, class T> class QDict;
 
 class QLabel;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class SizePolicyEdit : public Widget
 {

@@ -26,7 +26,7 @@
 
 class QTimeEdit;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class TimeEdit : public Widget
 {

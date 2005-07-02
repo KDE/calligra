@@ -33,7 +33,7 @@
 #include <kcolorcombo.h>
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 ColorButton::ColorButton(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

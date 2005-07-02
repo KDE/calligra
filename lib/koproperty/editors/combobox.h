@@ -30,7 +30,7 @@ class QComboBox;
 class KComboBox;
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 class ComboBox : public Widget
 {

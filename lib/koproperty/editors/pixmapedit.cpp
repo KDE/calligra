@@ -34,7 +34,7 @@
 #include <qfiledialog.h>
 #endif
 
-using namespace KOProperty;
+using namespace KoProperty;
 
 PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)

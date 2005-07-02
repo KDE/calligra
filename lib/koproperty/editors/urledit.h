@@ -31,7 +31,7 @@ class QPushButton;
 class QLineEdit;
 #endif
 
-namespace KOProperty {
+namespace KoProperty {
 
 class URLEdit : public Widget
 {

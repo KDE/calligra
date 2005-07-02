@@ -28,7 +28,7 @@
 
 class QLineEdit;
 
-namespace KOProperty {
+namespace KoProperty {
 
 class StringListEdit : public Widget
 {
