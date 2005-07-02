@@ -23,8 +23,12 @@
 #include "kexiformview.h"
 
 #include <formmanager.h>
+#include <widgetpropertyset.h>
 #include <form.h>
 #include <widgetlibrary.h>
+
+#include <koproperty/set.h>
+#include <koproperty/property.h>
 
 KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
 	const char* name)
@@ -81,3 +85,68 @@ void KexiFormManager::enableAction( const char* name, bool enable )
 	formViewWidget->setAvailable(translateName( name ).latin1(), enable);
 }
 
+void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& name)
+{
+	if (!activeForm())
+		return;
+//	KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(activeForm()->widget());
+//	if (!formWidget)
+//		return;
+//	QCString oldDataSourceMimeType( formWidget->dataSourceMimeType() );
+//	QCString oldDataSource( formWidget->dataSource().latin1() );
+
+	KFormDesigner::WidgetPropertySet *set = propertySet();
+	if (!set || !set->contains("dataSource"))
+		return;
+	(*set)["dataSource"].setValue(name);
+
+	if (set->contains("dataSourceMimeType"))
+		(*set)["dataSourceMimeType"].setValue(mime);
+	
+
+/*	if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
+		formWidget->setDataSourceMimeType(mime);
+		formWidget->setDataSource(name);
+		emit dirty(activeForm(), true);
+	}*/
+}
+
+void KexiFormManager::setDataSourceFieldOrExpression(const QString& string)
+{
+	if (!activeForm())
+		return;
+//	KexiFormDataItemInterface* dataWidget = dynamic_cast<KexiFormDataItemInterface*>(activeForm()->selectedWidget());
+//	if (!dataWidget)
+//		return;
+	
+	KFormDesigner::WidgetPropertySet *set = propertySet();
+	if (!set || !set->contains("dataSource"))
+		return;
+
+	(*set)["dataSource"].setValue(string);
+
+/*	QString oldDataSource( dataWidget->dataSource() );
+	if (string!=oldDataSource) {
+		dataWidget->setDataSource(string);
+		emit dirty(activeForm(), true);
+
+		buffer
+	}*/
+}
+
+/*
+bool KexiFormManager::loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf)
+{
+	QMap<QCString,QString> customProperties;
+	FormIO::loadFormFromDom(myform, container, domDoc, &customProperties);
+}
+
+bool KexiFormManager::saveFormToStringInternal(Form *form, QString &dest, int indent)
+{
+	QMap<QCString,QString> customProperties;
+	return KFormDesigner::FormIO::saveFormToString(form, dest, indent, &customProperties);
+}
+
+*/
+
+#include "kexiformmanager.moc"

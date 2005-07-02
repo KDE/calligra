@@ -37,7 +37,7 @@ class PixmapCollection;
 namespace KFormDesigner {
 
 class Container;
-class ObjectPropertyBuffer;
+class WidgetPropertySet;
 class FormManager;
 class ObjectTree;
 class ObjectTreeItem;
@@ -110,6 +110,8 @@ class FormPrivate
 		QStringList *mouseTrackers;
 
 		FormWidget  *formWidget;
+
+		QMap<QCString,QString> customHeader;
 };
 
 /*!
@@ -220,17 +222,6 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! \return the default spacing for all the layout inside this Form.
 		int defaultSpacing() { return 6;}
 
-		/*! Pastes the widget represented by the QDomElement \a widg in the Form.
-		    \a widg is created by FormManager::saveWidget().\n
-		    If \a pos is null or not given, then the widget will be pasted
-		    in the actual Container, at the same position as
-		    in its former parent widget. Otherwise, it is pasted at \a pos in
-		    the active Container (when the user used the context menu).
-		    If \a cont is 0, the Form::activeContainer() is used, otherwise
-		    the widgets are pasted in the \a cont Container.
-		 */
-		//void pasteWidget(QDomElement &widg, Container *cont=0, QPoint pos=QPoint());
-
 		/*! This function is used by ObjectTree to emit childAdded() signal (as it is not a QObject). */
 		void emitChildAdded(ObjectTreeItem *item);
 
@@ -285,18 +276,22 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		QString m_recentlyLoadedUICode;
 #endif
 
-		/*! Internal: called by ResizeHandle when mouse move event causes first 
-		 resize handle's dragging. As a result, current widget's editing (if any) 
+		/*! Internal: called by ResizeHandle when mouse move event causes first
+		 resize handle's dragging. As a result, current widget's editing (if any)
 		 is finished - see WidgetFactory::resetEditor(). */
 //		void resizeHandleDraggingStarted(QWidget *draggedWidget);
 
 		ResizeHandleSet* resizeHandlesForWidget(QWidget* w);
 
+		/*! A set of value/key pairs provided to be stored as attributes in 
+		 <kfd:customHeader/> XML element (saved as a first child of <UI> element). */
+		QMap<QCString,QString>* customHeader() const { return &d->customHeader; }
+
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor.
 		It renames the ObjectTreeItem associated to this widget.
 		 */
-		void changeName(const QString &oldname, const QString &newname);
+		void changeName(const QCString &oldname, const QCString &newname);
 
 		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.

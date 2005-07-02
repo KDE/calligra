@@ -42,7 +42,7 @@ namespace KexiPart
 	class Info;
 	class Item;
 	class GUIClient;
-	class DataSource;
+//	class DataSource;
 	class PartPrivate;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
@@ -139,11 +139,13 @@ class KEXICORE_EXPORT Part : public QObject
 		inline GUIClient *instanceGuiClient(int mode = 0) const
 			{ return m_instanceGuiClients[mode]; }
 
+#if 0
 		/**
 		 * @returns the datasource object of this part
 		 * reeimplement it to make a part work as dataprovider ;)
 		 */
 		virtual DataSource *dataSource() { return 0; }
+#endif
 
 		KActionCollection* actionCollectionForMode(int viewMode) const;
 
@@ -239,7 +241,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 type (mime type) of its contents differs from previous one. 
 		 For example, if a user switched from Table Designer to Form Designer,
 		 additional tab containing Form Designer's object tree should be shown. */
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
 
 		//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
 		//! The names are useful because the same action can have other name for each part

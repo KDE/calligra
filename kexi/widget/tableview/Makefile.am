@@ -7,13 +7,13 @@ libkexidatatable_la_SOURCES = kexidataawareobjectiface.cpp \
 	kexitableitem.cpp kexitableviewdata.cpp \
 	kexidatetableedit.cpp kexitimetableedit.cpp kexidatetimetableedit.cpp \
 	kexiinputtableedit.cpp kexiblobtableedit.cpp kexibooltableedit.cpp \
-	kexicomboboxtableedit.cpp kexicomboboxpopup.cpp kexitableviewpropertybuffer.cpp
+	kexicomboboxtableedit.cpp kexicomboboxpopup.cpp kexidataawarepropertyset.cpp
 
 noinst_HEADERS = kexitableview_p.h kexidatetimeeditor_p.h
 
 libkexidatatable_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
-libkexidatatable_la_LIBADD = $(LIB_KDEUI) \
-	../../core/libkexicore.la ../utils/libkexiguiutils.la 
+libkexidatatable_la_LIBADD =  $(top_builddir)/kexi/core/libkexicore.la $(top_builddir)/kexi/widget/utils/libkexiguiutils.la \
+	$(top_builddir)/lib/koproperty/libkoproperty.la $(LIB_KDEUI)
 
 #TODO: remove libkexicore link when kexiutils arrive
 
@@ -41,7 +41,8 @@ SUBDIRS = .
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core $(all_includes)
+INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core \
+	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore $(all_includes)
 
 METASOURCES = AUTO
 

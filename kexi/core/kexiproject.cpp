@@ -295,6 +295,31 @@ KexiProject::items(KexiPart::Info *i)
 	return dict;
 }
 
+KexiPart::ItemDict*
+KexiProject::items(const QCString &mime)
+{
+	KexiPart::Info *info = Kexi::partManager().info(mime);
+	return items(info);
+}
+
+void
+KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
+{
+	list.clear();
+	KexiPart::ItemDict* dict = items(i);
+	if (!dict)
+		return;
+	for (KexiPart::ItemDictIterator it(*dict); it.current(); ++it)
+		list.append(it.current());
+}
+
+void
+KexiProject::getSortedItems(KexiPart::ItemList& list, const QCString &mime)
+{
+	KexiPart::Info *info = Kexi::partManager().info(mime);
+	getSortedItems(list, info);
+}
+
 void
 KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 {
@@ -305,14 +330,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 	m_unstoredItems.take(item); //no longer unstored
 	dict->insert( item->identifier(), item );
 	//let's update e.g. navigator
-	emit newItemStored(item);
-}
-
-KexiPart::ItemDict*
-KexiProject::items(const QCString &mime)
-{
-	KexiPart::Info *info = Kexi::partManager().info(mime);
-	return items(info);
+	emit newItemStored(*item);
 }
 
 KexiPart::Item*
@@ -435,9 +453,9 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 	if (!m_connection->removeObject( item.identifier() )) {
 		return false;
 	}
-	emit itemRemoved(item);
 	if (!tg.commit())
 		return false;
+	emit itemRemoved(item);
 	//now: remove this item from cache
 	if (part->info()) {
 		KexiPart::ItemDict *dict = m_itemDictsCache[ part->info()->projectPartID() ];
@@ -488,8 +506,9 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		setError(m_connection);
 		return false;
 	}
+	QCString oldName( item.name() );
 	item.setName( newName );
-	emit itemRenamed(item);
+	emit itemRenamed(item, oldName);
 	return true;
 }
 

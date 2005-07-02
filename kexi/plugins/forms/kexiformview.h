@@ -76,7 +76,7 @@ class KexiFormView : public KexiDataAwareView
 		virtual void show();
 
 	protected slots:
-		void managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload = false);
+		void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 		void slotFocus(bool in);
 
@@ -90,14 +90,14 @@ class KexiFormView : public KexiDataAwareView
 	protected:
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 		virtual tristate afterSwitchFrom(int mode);
-		virtual KexiPropertyBuffer* propertyBuffer() { return m_buffer; }
+		virtual KoProperty::Set* propertySet() { return m_propertySet; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 		virtual tristate storeData();
 
 		KexiFormPart::TempData* tempData() const {
-			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
-		KexiFormPart* formPart() const { return static_cast<KexiFormPart*>(part()); }
+			return dynamic_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
+		KexiFormPart* formPart() const { return dynamic_cast<KexiFormPart*>(part()); }
 
 //moved to formmanager		void disableWidgetActions();
 //moved to formmanager		void enableFormActions();
@@ -129,13 +129,16 @@ class KexiFormView : public KexiDataAwareView
 		/*! @internal */
 		void deleteQuery();
 
+		/*! @internal */
+		void updateDataSourcePage();
+
 		/*! Reimplemented after KexiViewBase.
 		 Updates actions (e.g. availability). */
 // todo		virtual void updateActions(bool activated);
 
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;
-		KexiPropertyBuffer *m_buffer;
+		KoProperty::Set *m_propertySet;
 
 		/*! Database cursor used for data retrieving.
 		 It is shared between subsequent Data view sessions (just reopened on switch),

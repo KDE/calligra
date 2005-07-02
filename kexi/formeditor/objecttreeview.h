@@ -85,7 +85,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		/*! Removess the ObjectTreeItem \a item from the list. */
 		void removeItem(ObjectTreeItem *item);
 		/*! Just renames the list item from \a oldname to \a newname. */
-		void renameItem(const QString &oldname, const QString &newname);
+		void renameItem(const QCString &oldname, const QCString &newname);
 
 	protected slots:
 		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */

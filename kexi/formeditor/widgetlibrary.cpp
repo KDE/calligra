@@ -333,7 +333,7 @@ WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const ch
 }
 
 bool
-WidgetLibrary::createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu, 
+WidgetLibrary::createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
 	KFormDesigner::Container *container)
 {
 	loadFactories();
@@ -530,7 +530,7 @@ bool WidgetLibrary::advancedPropertiesVisible() const
 }
 
 bool
-WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w, 
+WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
 	const QCString &property, bool multiple)
 {
 	if (dynamic_cast<FormWidget*>(w)) {
@@ -548,7 +548,7 @@ WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
 	if (!wi->factory()->isPropertyVisible(classname, w, property, multiple))
 		return false;
 	//try from inherited class
-	if (wi->inheritedClass() 
+	if (wi->inheritedClass()
 		&& !wi->inheritedClass()->factory()->isPropertyVisible(wi->className(), w, property, multiple))
 		return false;
 
@@ -594,11 +594,11 @@ QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QCString& pr
 	if (winfo->m_parentFactoryName.isEmpty())
 		return QString::null;
 
-	//try in parent factory, if exists	
+	//try in parent factory, if exists
 	WidgetFactory *parentFactory = d->factories[winfo->m_parentFactoryName];
 	if (!parentFactory)
 		return QString::null;
-	
+
 	return parentFactory->propertyDescForName(propertyName);
 }
 
@@ -612,15 +612,15 @@ QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QCString& n
 	if (winfo->m_parentFactoryName.isEmpty())
 		return QString::null;
 
-	//try in parent factory, if exists	
+	//try in parent factory, if exists
 	WidgetFactory *parentFactory = d->factories[winfo->m_parentFactoryName];
 	if (!parentFactory)
 		return QString::null;
-	
+
 	return parentFactory->propertyDescForValue(name);
 }
 
-void WidgetLibrary::setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInfo& winfo, QWidget* w )
+void WidgetLibrary::setPropertyOptions( WidgetPropertySet& buf, const WidgetInfo& winfo, QWidget* w )
 {
 	if (!winfo.factory())
 		return;
@@ -683,7 +683,7 @@ WidgetFactory::OrientationHint WidgetLibrary::showOrientationSelectionPopup(
 		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
 	if (textVertical.isEmpty()) //default
 		textVertical = i18n("Insert Vertical Widget", "Insert Vertical");
-		
+
 	KPopupMenu* popup = new KPopupMenu(parent, "orientationSelectionPopup");
 	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert widget: %1").arg(wclass->name()));
 	popup->insertItem(iconHorizontal, textHorizontal, 0, 0, 0, 1);

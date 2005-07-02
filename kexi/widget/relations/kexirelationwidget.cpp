@@ -33,6 +33,7 @@
 #include <kpushbutton.h>
 
 #include <kexidb/connection.h>
+#include <kexidb/utils.h>
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -285,16 +286,18 @@ void KexiRelationWidget::removeSelectedObject()
 
 void KexiRelationWidget::openSelectedTable()
 {
-	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->table())
+/*! @todo what about query? */
+	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->schema()->table())
 		return;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), Kexi::DataViewMode);
+	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), Kexi::DataViewMode);
 }
 
 void KexiRelationWidget::designSelectedTable()
 {
-	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->table())
+/*! @todo what about query? */
+	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->schema()->table())
 		return;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), Kexi::DesignViewMode);
+	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), Kexi::DesignViewMode);
 }
 
 QSize KexiRelationWidget::sizeHint() const
@@ -320,9 +323,10 @@ void KexiRelationWidget::slotTableHidden(KexiDB::TableSchema &table)
 
 void KexiRelationWidget::aboutToShowPopupMenu()
 {
-	if (m_relationView->focusedTableView() && m_relationView->focusedTableView()->table()) {
+/*! @todo what about query? */
+	if (m_relationView->focusedTableView() && m_relationView->focusedTableView()->schema()->table()) {
 		m_tableQueryPopup->changeTitle(m_tableQueryPopupTitleID, SmallIcon("table"),
-			m_relationView->focusedTableView()->table()->name() + " : " + i18n("Table"));
+			QString(m_relationView->focusedTableView()->schema()->name()) + " : " + i18n("Table"));
 	}
 	else if (m_relationView->selectedConnection()) {
 		m_connectionPopup->changeTitle( m_connectionPopupTitleID, 
@@ -335,7 +339,7 @@ KexiRelationWidget::slotTableFieldDoubleClicked(QListViewItem *i,const QPoint&,i
 {
 	if (!sender()->isA("KexiRelationViewTable"))
 		return;
-	emit tableFieldDoubleClicked( static_cast<const KexiRelationViewTable*>(sender())->table(), i->text(1) );
+	emit tableFieldDoubleClicked( static_cast<const KexiRelationViewTable*>(sender())->schema()->table(), i->text(1) );
 }
 
 void 
@@ -355,10 +359,50 @@ KexiRelationWidget::fillTablesCombo()
 }
 
 void
-KexiRelationWidget::tableCreated(const QString& tableName)
+KexiRelationWidget::objectCreated(const QCString &mime, const QCString& name)
 {
-	m_tableCombo->insertItem(tableName);
-	m_tableCombo->listBox()->sort();
+	if (mime=="kexi/table" || mime=="kexi/query") {
+//! @todo query?
+		m_tableCombo->insertItem(QString(name));
+		m_tableCombo->listBox()->sort();
+	}
+}
+
+void
+KexiRelationWidget::objectDeleted(const QCString &mime, const QCString& name)
+{
+	if (mime=="kexi/table" || mime=="kexi/query") {
+		QString strName(name);
+		for (int i=0; i<m_tableCombo->count(); i++) {
+//! @todo query?
+			if (m_tableCombo->text(i)==strName) {
+				m_tableCombo->removeItem(i);
+				if (m_tableCombo->currentItem()==i) {
+					if (i==(m_tableCombo->count()-1))
+						m_tableCombo->setCurrentItem(i-1);
+					else
+						m_tableCombo->setCurrentItem(i);
+				}
+				break;
+			}
+		}
+	}
+}
+
+void
+KexiRelationWidget::objectRenamed(const QCString &mime, const QCString& name, const QCString& newName)
+{
+	if (mime=="kexi/table" || mime=="kexi/query") {
+		QString strName(name);
+		for (int i=0; i<m_tableCombo->count(); i++) {
+//! @todo query?
+			if (m_tableCombo->text(i)==strName) {
+				m_tableCombo->changeItem(QString(newName), i);
+				m_tableCombo->listBox()->sort();
+				break;
+			}
+		}
+	}
 }
 
 #include "kexirelationwidget.moc"

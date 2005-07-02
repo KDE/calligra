@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,28 +24,57 @@
 #include <qdragobject.h>
 
 class QString;
+class QStringList;
 class QWidget;
 
+//! Drag object containing information about field(s).
 class KEXICORE_EXPORT KexiFieldDrag : public QStoredDrag
 {
-        public:
-                KexiFieldDrag(const QString& sourceType, const QString& source,const QString& field, QWidget *parent=0, const char *name=0);
-                ~KexiFieldDrag() { };
+	public:
+		/*! Creates drag object for a single field \a field. */
+		KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
+			const QString& field, QWidget *parent, const char *name);
 
-                static bool canDecode( QDragMoveEvent* e);
-		static bool decode( QDropEvent* e, QString& sourceType, QString& source, QString& field );
+		/*! Creates drag object for multiple fields \a fields. 
+		 If there's less than two elements in the list, data is set up as for above ctor. */
+		KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
+			const QStringList& field, QWidget *parent=0, const char *name=0);
 
+		~KexiFieldDrag();
+
+		void addField(const QString& field);
+
+		/*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
+		 can be decoded as "kexi/field" data */
+		static bool canDecodeSingle( QMimeSource* e );
+
+		/*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
+		 an be decoded as "kexi/fields" data. If decoding of "kexi/field" 
+		 type is supported, decoding of "kexi/fields" is always supported. */
+		static bool canDecodeMultiple( QMimeSource* e );
+
+		/*! Decodes data of single-field drag ("kexi/field" mime type) coming with event \a e. 
+		 Sets \a sourceMimeType, \a sourceName and \a field. 
+		 \return true on successful decoding. */
+		static bool decodeSingle( QDropEvent* e, QString& sourceMimeType, 
+			QString& sourceName, QString& field );
+
+		/*! Decodes data of multiple-field drag ("kexi/fields" mime type) coming with event \a e. 
+		 Sets \a sourceMimeType, \a sourceName and \a fields. Also works with "kexi/field" data.
+		 \return true on successful decoding. */
+		static bool KexiFieldDrag::decodeMultiple( QDropEvent* e, QString& sourceMimeType, 
+			QString& sourceName, QStringList& fields );
 };
 
 class KEXICORE_EXPORT KexiDataProviderDrag : public QStoredDrag
 {
-        public:
-                KexiDataProviderDrag(const QString& sourceType, const QString& source, 
+	public:
+		KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName, 
 		QWidget *parent=0, const char *name=0);
-                ~KexiDataProviderDrag() { };
+		~KexiDataProviderDrag() { };
 
-                static bool canDecode( QDragMoveEvent* e);
-		static bool decode( QDropEvent* e, QString& sourceType, QString& source);
+		static bool canDecode( QDragMoveEvent* e);
+		static bool decode( QDropEvent* e, QString& sourceMimeType, QString& sourceName);
 
 };
 

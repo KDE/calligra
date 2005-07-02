@@ -55,8 +55,7 @@
 # include <kactioncollection.h>
 #endif
 
-#include "kexipropertyeditor.h"
-#include "objpropbuffer.h"
+#include "widgetpropertyset.h"
 #include "objecttree.h"
 #include "widgetlibrary.h"
 #include "form.h"
@@ -69,6 +68,8 @@
 #include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
+#include <koproperty/editor.h>
+#include <koproperty/property.h>
 
 #include "formmanager.h"
 
@@ -88,7 +89,7 @@ FormManager::FormManager(QObject *parent,
 	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
 
 	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
-	m_buffer = new ObjectPropertyBuffer(this, this, "buffer");
+	m_propSet = new WidgetPropertySet(this);
 
 	m_editor = 0;
 	m_active = 0;
@@ -106,7 +107,7 @@ FormManager::FormManager(QObject *parent,
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
-	connect( this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)), 
+	connect( this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)),
 		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 }
 
@@ -120,12 +121,12 @@ FormManager::~FormManager()
 }
 
 void
-FormManager::setEditor(KexiPropertyEditor *editor)
+FormManager::setEditor(KoProperty::Editor *editor)
 {
 	m_editor = editor;
 
 	if(editor)
-		editor->setBuffer(m_buffer);
+		editor->changeSet(m_propSet->set());
 }
 
 void
@@ -133,8 +134,8 @@ FormManager::setObjectTreeView(ObjectTreeView *treeview)
 {
 	m_treeview = treeview;
 	if (m_treeview)
-		connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), 
-			m_treeview, SLOT(renameItem(const QString&, const QString&)));
+		connect(m_propSet, SIGNAL(widgetNameChanged(const QCString&, const QCString&)),
+			m_treeview, SLOT(renameItem(const QCString&, const QCString&)));
 }
 
 ActionList
@@ -147,11 +148,11 @@ FormManager::createActions(KActionCollection *parent)
 	if (m_options & HideSignalSlotConnections)
 		m_dragConnection = 0;
 	else {
-		m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), 
+		m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"),
 			"signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent,
 			"drag_connection");
 		//to be exclusive with any 'widget' action
-		m_dragConnection->setExclusiveGroup("LibActionWidgets"); 
+		m_dragConnection->setExclusiveGroup("LibActionWidgets");
 		m_dragConnection->setChecked(false);
 		actions.append(m_dragConnection);
 	}
@@ -334,8 +335,13 @@ FormManager::resetCreatedConnection()
 	delete m_connection;
 	m_connection = new Connection();
 
-	if(m_active && m_active->formWidget())
+	if(m_active && m_active->formWidget()) {
+		Form *ff = (Form*)m_active;
+		FormWidget *fw = 0;
+		if (ff)
+			fw = ff->formWidget();
 		m_active->formWidget()->clearForm();
+	}
 	if (m_active)
 		m_active->widget()->repaint();
 }
@@ -395,7 +401,7 @@ FormManager::windowChanged(QWidget *w)
 		m_active = 0;
 		if(m_treeview)
 			m_treeview->setForm(0);
-		showPropertyBuffer(0);
+		propertySetSwitched(0);
 		if(isCreatingConnection())
 			stopCreatingConnection();
 
@@ -411,8 +417,8 @@ FormManager::windowChanged(QWidget *w)
 		{
 			if(m_treeview)
 				m_treeview->setForm(form);
-			if(m_buffer)
-				m_buffer->setCollection(form->pixmapCollection());
+			//if(m_propSet)
+			//	m_propList->setCollection(form->pixmapCollection());
 
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 
@@ -476,7 +482,7 @@ FormManager::windowChanged(QWidget *w)
 
 			emit dirty(form, false);
 			emitNoFormSelected();
-			showPropertyBuffer(0);
+			showPropertySet(0);
 		}
 	}
 	//m_active = 0;
@@ -511,7 +517,7 @@ FormManager::deleteForm(Form *form)
 
 	if(m_forms.count() == 0) {
 		m_active = 0;
-		showPropertyBuffer(0);
+		propertySetSwitched(0);
 	}
 }
 
@@ -537,14 +543,15 @@ FormManager::initForm(Form *form)
 
 	m_active = form;
 
-	connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_buffer, SLOT(setSelectedWidget(QWidget*, bool)));
+	connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_propSet, SLOT(setSelectedWidget(QWidget*, bool)));
 	if(m_treeview)
 	{
 		connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
 		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	}
-	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
+	connect(m_propSet, SIGNAL(widgetNameChanged(const QCString&, const QCString&)), 
+		form, SLOT(changeName(const QCString&, const QCString&)));
 
 	form->setSelectedWidget(form->widget());
 	windowChanged(form->widget());
@@ -556,7 +563,8 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 	if(!form || !container || !form->objectTree())
 		return;
 	QDomDocument domDoc;
-	FormIO::saveFormToDom(form, domDoc);
+	if (!FormIO::saveFormToDom(form, domDoc))
+		return;
 
 	Form *myform;
 	if(!toForm)
@@ -565,12 +573,29 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 		myform = toForm;
 	myform->createToplevel(container);
 	container->setStyle( &(form->widget()->style()) );
-	FormIO::loadFormFromDom(myform, container, domDoc);
+
+	if (!FormIO::loadFormFromDom(myform, container, domDoc)) {
+		delete myform;
+		return;
+	}
 
 	myform->setDesignMode(false);
 	m_preview.append(myform);
 	container->show();
 }
+
+/*
+bool
+FormManager::loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf)
+{
+	return FormIO::loadFormFromDom(myform, container, domDoc);
+}
+
+bool
+FormManager::saveFormToStringInternal(Form *form, QString &dest, int indent)
+{
+	return KFormDesigner::FormIO::saveFormToString(form, dest, indent);
+}*/
 
 bool
 FormManager::isTopLevel(QWidget *w)
@@ -755,7 +780,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 			m_popup->insertTitle(SmallIcon(m_lib->icon(w->className())), n + ": " + w->name() );
 	}
 	else
-		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets") 
+		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets")
 		+ QString(" (%1)").arg(widgetsCount));
 
 	KAction *a;
@@ -858,7 +883,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 			}
 		}
 	}
-	
+
 	//show the popup at the selected widget
 	QPoint popupPos;
 	if (popupAtCursor) {
@@ -968,9 +993,9 @@ FormManager::createLayout(int layoutType)
 	if(list->count() == 1)
 	{
 		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->name());
-		if(!item || !item->container() || !(*m_buffer)["layout"])
+		if(!item || !item->container() || !m_propSet->contains("layout"))
 			return;
-		(*m_buffer)["layout"] = Container::layoutTypeToString(layoutType);
+		(*m_propSet)["layout"] = Container::layoutTypeToString(layoutType);
 		return;
 	}
 
@@ -1008,19 +1033,19 @@ FormManager::breakLayout()
 	else // normal container
 	{
 		if(activeForm()->selectedWidgets()->count() == 1)
-			(*m_buffer)["layout"] = "NoLayout";
+			(*m_propSet)["layout"] = "NoLayout";
 		else
 			container->setLayout(Container::NoLayout);
 	}
 }
 
 void
-FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff, bool forceReload)
+FormManager::showPropertySet(WidgetPropertySet *propSet, bool forceReload)
 {
 	if(m_editor)
-		m_editor->setBuffer(buff);
+		m_editor->changeSet(propSet->set());
 
-	emit bufferSwitched(buff, forceReload);
+	emit propertySetSwitched(propSet ? propSet->set(): 0, forceReload);
 }
 
 void
@@ -1255,7 +1280,10 @@ FormManager::showFormUICode()
 		return;
 
 	QString uiCode;
-	KFormDesigner::FormIO::saveFormToString(activeForm(), uiCode, 3);
+	if (!FormIO::saveFormToString(activeForm(), uiCode, 3)) {
+		//! @todo show err?
+		return;
+	}
 
 	if (!m_uiCodeDialog) {
 		m_uiCodeDialog = new KDialogBase(0, "uiwindow", true, i18n("Form's UI Code"),
@@ -1510,7 +1538,7 @@ FormManager::changeFont()
 	if (1==widgetsWithFontProperty.count()) {
 		//single widget's settings
 		widget = widgetsWithFontProperty.first();
-		KexiProperty &fontProp = m_buffer->property("font");
+		KoProperty::Property &fontProp = m_propSet->property("font");
 		if (QDialog::Accepted != KFontDialog::getFont(font, false, m_active->widget()))
 			return;
 		fontProp = font;
@@ -1518,7 +1546,7 @@ FormManager::changeFont()
 	}
 	//multiple widgets
 	int diffFlags=0;
-	if (QDialog::Accepted != KFontDialog::getFontDiff(font, diffFlags, false, m_active->widget()) 
+	if (QDialog::Accepted != KFontDialog::getFontDiff(font, diffFlags, false, m_active->widget())
 		|| 0==diffFlags)
 		return;
 	//update font
@@ -1532,8 +1560,8 @@ FormManager::changeFont()
 		}
 		if (diffFlags & KFontChooser::FontDiffSize)
 			prevFont.setPointSize( font.pointSize() );
-/*! @todo this modification is not added to UNDO BUFFER: 
-          do it when KexiPropertyBuffer supports multiple selections */
+/*! @todo this modification is not added to UNDO BUFFER:
+          do it when KoProperty::Set supports multiple selections */
 		widget->setFont( prevFont );
 		//temporary fix for dirty flag:
 		emit dirty(m_active, true);

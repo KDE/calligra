@@ -61,6 +61,7 @@ class KexiLabelPrivate : public QLabel {
 class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
 		Q_OBJECT
 		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
+		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
 		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
 		Q_OVERRIDE( QPixmap pixmap DESIGNABLE false )
 		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
@@ -70,9 +71,8 @@ class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public Kex
 		KexiLabel( const QString& text, QWidget *parent, const char *name = 0, WFlags f = 0 );
 		virtual ~KexiLabel();
 
-		inline QString dataSource() const {
-			return KexiFormDataItemInterface::dataSource();
-		}
+		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		virtual QVariant value();
 
@@ -101,19 +101,15 @@ class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public Kex
 		virtual bool setProperty ( const char * name, const QVariant & value );
 
 	public slots:
-		/*!
-		Sets the datasource to \a ds
-		*/
-		inline void setDataSource( const QString &ds ) {
-			KexiFormDataItemInterface::setDataSource( ds );
-		}
+		//! Sets the datasource to \a ds
+		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
+
+		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		virtual void setText( const QString& text );
 
-		/*!
-		Enable/Disable the shadow effect.
-		KexiLabel acts just like a normal QLabel when shadow is disabled.
-		*/
+		/*! Enable/Disable the shadow effect.
+		 KexiLabel acts just like a normal QLabel when shadow is disabled. */
 		void setShadowEnabled( bool state );
 
 	protected slots:
@@ -123,11 +119,8 @@ class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public Kex
 		virtual void setField(KexiDB::Field* field);
 		virtual void paintEvent( QPaintEvent* );
 		virtual void resizeEvent( QResizeEvent* e );
-//		virtual bool event( QEvent* );
 
-		/*!
-		Sets value \a value for a widget.
-		*/
+		//! Sets value \a value for a widget.
 		virtual void setValueInternal( const QVariant& add, bool removeOld );
 
 		virtual void fontChange( const QFont& font );

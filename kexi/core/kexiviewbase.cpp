@@ -21,8 +21,8 @@
 
 #include "keximainwindow.h"
 #include "kexidialogbase.h"
-#include "kexipropertybuffer.h"
 #include "kexiproject.h"
+#include <koproperty/set.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -91,21 +91,21 @@ void KexiViewBase::closeEvent( QCloseEvent * e )
 	QWidget::closeEvent(e);
 }
 
-KexiPropertyBuffer *KexiViewBase::propertyBuffer()
+KoProperty::Set *KexiViewBase::propertySet()
 {
 	return 0;
 }
 
-void KexiViewBase::propertyBufferSwitched()
+void KexiViewBase::propertySetSwitched()
 {
 	if (parentDialog())
-		m_mainWin->propertyBufferSwitched( parentDialog(), false );
+		m_mainWin->propertySetSwitched( parentDialog(), false );
 }
 
-void KexiViewBase::propertyBufferReloaded(bool preservePrevSelection)
+void KexiViewBase::propertySetReloaded(bool preservePrevSelection)
 {
 	if (parentDialog())
-		m_mainWin->propertyBufferSwitched( parentDialog(), true, preservePrevSelection );
+		m_mainWin->propertySetSwitched( parentDialog(), true, preservePrevSelection );
 }
 
 void KexiViewBase::setDirty(bool set)
@@ -188,7 +188,7 @@ bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dat
 	else
 		effectiveID = m_dialog->id();
 
-	return effectiveID>0 
+	return effectiveID>0
 		&& m_mainWin->project()->dbConnection()->storeDataBlock(effectiveID, dataString, dataID);
 }
 
@@ -263,8 +263,10 @@ void KexiViewBase::addChildView( KexiViewBase* childView )
 void KexiViewBase::setFocus()
 {
 	if (!m_lastFocusedChildBeforeFocusOut.isNull()) {
-		kdDebug() << "FOCUS: " << m_lastFocusedChildBeforeFocusOut->className() << " " << m_lastFocusedChildBeforeFocusOut->name()<< endl;
-		m_lastFocusedChildBeforeFocusOut->setFocus();
+//		kdDebug() << "FOCUS: " << m_lastFocusedChildBeforeFocusOut->className() << " " << m_lastFocusedChildBeforeFocusOut->name()<< endl;
+		QWidget *w = m_lastFocusedChildBeforeFocusOut;
+		m_lastFocusedChildBeforeFocusOut = 0;
+		w->setFocus();
 	}
 	else {
 		if (hasFocus())

@@ -104,12 +104,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Reimplemented for internal reasons. */
 		virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd );
 
-		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
-		 used will be asked if saving should be perforemed.
-		 \return true on successull closing or false on closing error.
-		 If closing was cancelled by user, cancelled is returned. */
+		/*! Implemented for KexiMainWindow */
 		virtual tristate closeDialog(KexiDialogBase *dlg);
 
+		/*! Implemented for KexiMainWindow */
 		tristate closeDialog(KexiDialogBase *dlg, bool layoutTaskBar);
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
@@ -121,30 +119,16 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
-		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
-		 user is asked for name and title, before saving (see getNewObjectInfo()).
-		 \return true on successul saving or false on error.
-		 If saving was cancelled by user, cancelled is returned.
-		 \a messageWhenAskingForName is a i18n'ed text that will be visible
-		 within name/caption dialog (see KexiNameDialog), which is popped
-		 up for never saved objects. */
+		/*! Implemented for KexiMainWindow */
 		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null );
 
-		/*! Displays a dialog for entering object's name and title. 
-		 Used on new object saving. 
-		 \return true on successul closing or cancelled on cancel returned.
-		 It's unlikely to have false returned here.
-		 \a messageWhenAskingForName is a i18n'ed text that will be visible
-		 within name/caption dialog (see KexiNameDialog).
-		 If \a allowOverwriting is true, user will be asked for existing 
-		 object's overwriting, else it will be impossible to enter 
-		 a name of exisiting object.
-		 You can check \a allowOverwriting after calling this method.
-		 If it's true, user agreed on overwriting, if it's false, user picked
-		 nonexisting name, so no overwrite will be needed. */
+		/*! Implemented for KexiMainWindow */
 		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part, 
 			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null );
+
+		/*! Implemented for KexiMainWindow */
+		virtual void highlightObject(const QCString& mime, const QCString& name);
 
 	protected:
 		/*! Initialises final mode: constructs window according to kexi__final database
@@ -248,7 +232,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 or on switching to other view within the same dialog (switchToViewMode()). */
 		void updateDialogViewGUIClient(KXMLGUIClient *viewClient);
 
-		/*! Helper. Updates setup of property panel's tabs. Used when switching 
+		/*! Helper. Updates setup of property panel's tabs. Used when switching
 		 from \a prevDialog dialog to a current dialog.	*/
 		void updateCustomPropertyPanelTabs(KexiDialogBase *prevDialog, int prevViewMode);
 
@@ -299,7 +283,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Reaction for object rename (signalled by KexiProject).
 		 If this item has opened dialog, it's caption is updated,
 		 and also optionally application's caption. */
-		virtual void slotObjectRenamed(const KexiPart::Item &item);
+		virtual void slotObjectRenamed(const KexiPart::Item &item, const QCString& oldName);
 
 		virtual void fillWindowMenu();
 
@@ -346,9 +330,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! There are performed all actions that need to be done immediately after  ctro (using timer)
 		void slotLastActions();
 
-		virtual void acceptPropertyBufferEditing();
+		virtual void acceptPropertySetEditing();
 
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false,
+		virtual void propertySetSwitched(KexiDialogBase *dlg, bool force=false,
 			bool preservePrevSelection = true);
 
 		/*! Handles changes in 'dirty' flag for dialogs. */

@@ -479,7 +479,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	KexiDataAwareWidgetInfo *wView = new KexiDataAwareWidgetInfo(this);
 	wView->setPixmap("form");
 	wView->setClassName("KexiDBForm");
-	wView->setName(i18n("Database Form"));
+	wView->setName(i18n("Form"));
 	wView->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "form"));
 	wView->setDescription(i18n("A data-aware form widget"));
@@ -487,7 +487,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	
 #ifndef KEXI_NO_SUBFORM
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
-	wSubForm->setPixmap("form");
+	wSubForm->setPixmap("subform");
 	wSubForm->setClassName("KexiSubForm");
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(
@@ -751,6 +751,10 @@ bool
 KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *, 
 	const QCString& property)
 {
+	//general
+	if (property=="dataSource" || property=="dataSourceMimeType")
+		return false;
+
 	if(classname == "KexiPushButton") {
 		return property!="isDragEnabled" 
 #ifdef KEXI_NO_UNFINISHED

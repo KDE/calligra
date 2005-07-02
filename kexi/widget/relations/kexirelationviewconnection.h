@@ -67,11 +67,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 		QGuardedPtr<KexiRelationViewTableContainer> m_detailsTable;
 		QString				m_masterField;
 		QString				m_detailsField;
-
 		QRect				m_oldRect;
-
 		bool				m_selected;
-
 		QGuardedPtr<KexiRelationView> m_parent;
 };
 

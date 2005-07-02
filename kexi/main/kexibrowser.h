@@ -68,12 +68,13 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
 	public slots:
-		void addGroup(KexiPart::Info *info);
-		void addItem(KexiPart::Item *item);
+		void addGroup(KexiPart::Info& info);
+		void addItem(KexiPart::Item& item);
 		void slotRemoveItem(const KexiPart::Item &item);
 		void clear();
 		virtual void setFocus();
-		void updateItemName( KexiPart::Item *item, bool dirty );
+		void updateItemName(KexiPart::Item& item, bool dirty);
+		void highlightItem(KexiPart::Item& item);
 
 	signals: 
 		void openItem( KexiPart::Item*, int viewMode );

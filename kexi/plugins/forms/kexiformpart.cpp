@@ -32,15 +32,17 @@
 #include <kexiproject.h>
 #include <kexipartitem.h>
 #include <kexidialogbase.h>
+#include <kexidatasourcecombobox.h>
 #include <kexidb/connection.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/field.h>
 
 #include <form.h>
 #include <formIO.h>
-#include <objpropbuffer.h>
+#include <widgetpropertyset.h>
 #include <widgetlibrary.h>
 #include <objecttreeview.h>
+#include <koproperty/property.h>
 
 #include "kexiformview.h"
 #include "kexidbform.h"
@@ -48,6 +50,7 @@
 #include "kexiactionselectiondialog.h"
 #include "kexiformmanager.h"
 #include "kexiformpart.h"
+#include "kexidatasourcepage.h"
 
 class KexiFormPart::Private
 {
@@ -58,12 +61,12 @@ class KexiFormPart::Private
 		~Private()
 		{
 			delete static_cast<KFormDesigner::ObjectTreeView*>(objectTreeView);
-			delete static_cast<QWidget*>(dataPage);
+			delete static_cast<KexiDataSourcePage*>(dataSourcePage);
 		}
 		QGuardedPtr<KFormDesigner::FormManager> manager;
 		QGuardedPtr<KFormDesigner::ObjectTreeView> objectTreeView;
-		QGuardedPtr<QWidget> dataPage;
-		KComboBox *dataSourceCombo;
+		QGuardedPtr<KexiDataSourcePage> dataSourcePage;
+		KexiDataSourceComboBox *dataSourceCombo;
 };
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
@@ -80,9 +83,9 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	supportedFactoryGroups += "kexi";
 	d->manager = new KexiFormManager(this, supportedFactoryGroups, "form_manager");
 
-	connect(d->manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
-		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
-	connect(d->manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
+	connect(d->manager->propertySet(), SIGNAL(widgetPropertyChanged(QWidget *, const QCString &, const QVariant&)),
+		this, SLOT(slotPropertyChanged(QWidget *, const QCString &, const QVariant&)));
+	connect(d->manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)),
 		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
@@ -144,17 +147,17 @@ void KexiFormPart::initInstanceActions()
 	KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"), "", 0, "formpart_layout_menu", "KActionMenu");
 	KActionMenu *menu = static_cast<KActionMenu*>(action);
 
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"),
 		QString::null, 0, "formpart_layout_hbox"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Vertically"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Vertically"),
 		QString::null, 0, "formpart_layout_vbox"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"),
 		QString::null, 0, "formpart_layout_grid"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in a &Splitter"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in a &Splitter"),
 		QString::null, 0, "formpart_layout_hsplitter"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in a Splitter"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in a Splitter"),
 		QString::null, 0, "formpart_layout_vsplitter"));
-		
+
 	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
 /*
 	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString::null, 0, "formpart_layout_hbox");
@@ -182,7 +185,7 @@ void KexiFormPart::initInstanceActions()
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), "aowidest", 0, "formpart_adjust_width_big") );
 }
 
-KexiDialogTempData* 
+KexiDialogTempData*
 KexiFormPart::createTempData(KexiDialogBase* dialog)
 {
 	return new KexiFormPart::TempData(dialog);
@@ -196,7 +199,7 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
-	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(), 
+	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(),
 		win->project()->dbConnection() );
 
 	return view;
@@ -349,7 +352,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
 void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
 {
-	d->manager->buffer()->changeProperty("autoTabStops", QVariant(set, 4));
+	(*d->manager->propertySet())["autoTabStops"].setValue(QVariant(set, 4));
 }
 
 void KexiFormPart::slotAssignAction()
@@ -359,7 +362,7 @@ void KexiFormPart::slotAssignAction()
 		|| !(dbform = dynamic_cast<KexiDBForm*>(d->manager->activeForm()->formWidget())))
 		return;
 
-	KexiProperty &onClickActionProp = d->manager->buffer()->property("onClickAction");
+	KoProperty::Property &onClickActionProp = d->manager->propertySet()->property("onClickAction");
 	if (onClickActionProp.isNull())
 		return;
 	QCString onClickActionValue( onClickActionProp.value().toCString() );
@@ -372,17 +375,18 @@ void KexiFormPart::slotAssignAction()
 		return;
 
 	KexiMainWindow * mainWin = formViewWidget->parentDialog()->mainWin();
-	KexiActionSelectionDialog dlg(mainWin, dbform, onClickActionValue, 
-		d->manager->buffer()->property("name").value().toCString());
+	KexiActionSelectionDialog dlg(mainWin, dbform, onClickActionValue,
+		d->manager->propertySet()->property("name").value().toCString());
 	dlg.exec();
 	onClickActionValue = dlg.selectedActionName();
 	if (QDialog::Accepted==dlg.result()) {
 		//update property value
-		d->manager->buffer()->changeProperty("onClickAction", onClickActionValue);
+		(*d->manager->propertySet())["onClickAction"].setValue(onClickActionValue);
 	}
 }
 
-QString KexiFormPart::i18nMessage(const QCString& englishMessage) const
+QString
+KexiFormPart::i18nMessage(const QCString& englishMessage) const
 {
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of form \"%1\" has been modified.");
@@ -392,50 +396,48 @@ QString KexiFormPart::i18nMessage(const QCString& englishMessage) const
 	return englishMessage;
 }
 
-void KexiFormPart::slotPropertyChanged(KexiPropertyBuffer&, KexiProperty& prop)
+void
+KexiFormPart::slotPropertyChanged(QWidget *w, const QCString &name, const QVariant &value)
 {
 	if (!d->manager->activeForm())
 		return;
-	if (prop.name()=="autoTabStops") {
-		QWidget *w = d->manager->activeForm()->selectedWidget();
+	if (name == "autoTabStops") {
+		//QWidget *w = d->manager->activeForm()->selectedWidget();
 		//update autoTabStops setting at KFD::Form level
-		d->manager->activeForm()->setAutoTabStops( prop.value().toBool() );
+		d->manager->activeForm()->setAutoTabStops( value.toBool() );
 	}
 }
 
-KFormDesigner::FormManager* KexiFormPart::manager() const
+KFormDesigner::FormManager*
+KexiFormPart::manager() const
 {
 	return d->manager;
 }
 
-void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
+KexiDataSourcePage* KexiFormPart::dataSourcePage() const
+{
+	return d->dataSourcePage;
+}
+
+void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin)
 {
 	if (!d->objectTreeView) {
 		d->objectTreeView = new KFormDesigner::ObjectTreeView(0, "KexiFormPart:ObjectTreeView");
-		d->manager->setObjectTreeView(d->objectTreeView);
-		d->dataPage = new QWidget(0, "dataSource");
-		QVBoxLayout *vlyr = new QVBoxLayout(d->dataPage);
-		QLabel *dsLabel = new QLabel(i18n("Data Source:"), d->dataPage);
-		dsLabel->setMargin(2);
-		dsLabel->setMinimumHeight(IconSize(KIcon::Small));
-		vlyr->addWidget(dsLabel);
-		d->dataSourceCombo = new KComboBox(true, d->dataPage, "dataSourceCombo");
-		vlyr->addWidget(d->dataSourceCombo);
-		dsLabel->setBuddy(d->dataSourceCombo);
-		QLabel *fLabel = new QLabel(i18n("Available fields:"), d->dataPage);
-		fLabel->setMargin(2);
-		fLabel->setMinimumHeight(IconSize(KIcon::Small));
-		vlyr->addWidget(fLabel);
-		//tmp/mock-up
-		KListView *fields = new KListView(d->dataPage);
-		fLabel->setBuddy(fields);
-		fields->addColumn(i18n("Primary Key", "PK"));
-		fields->addColumn(i18n("Field Name"));
-		fields->addColumn(i18n("Data Type"));
-		vlyr->addWidget(fields);
+		d->manager->setObjectTreeView(d->objectTreeView); //important: assign to manager
+		d->dataSourcePage = new KexiDataSourcePage(0, "dataSourcePage");
+		connect(d->dataSourcePage, SIGNAL(jumpToObjectRequested(const QCString&, const QCString&)),
+			mainWin, SLOT(highlightObject(const QCString&, const QCString&)));
+		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
+			d->manager, SLOT(setFormDataSource(const QCString&, const QCString&)));
+		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&)),
+			d->manager, SLOT(setDataSourceFieldOrExpression(const QString&)));
 	}
-	tab->addTab( d->dataPage, SmallIconSet("database"), "");
-	tab->setTabToolTip( d->dataPage, i18n("Data Source"));
+
+	KexiProject *prj = mainWin->project();
+	d->dataSourcePage->setProject(prj);
+
+	tab->addTab( d->dataSourcePage, SmallIconSet("database"), "");
+	tab->setTabToolTip( d->dataSourcePage, i18n("Data Source"));
 
 	tab->addTab( d->objectTreeView, SmallIconSet("widgets"), "");
 	tab->setTabToolTip( d->objectTreeView, i18n("Widgets"));

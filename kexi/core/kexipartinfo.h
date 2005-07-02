@@ -52,10 +52,10 @@ class KEXICORE_EXPORT Info
 		 */
 		inline QCString mime() const { return m_mime; }
 
-		/**
-		 * @return the icon for groups
-		 */
-		inline QString groupIcon() const { return m_groupIcon; }
+//		/**
+//		 * @return the icon for groups
+//		 */
+//		inline QString groupIcon() const { return m_groupIcon; }
 
 		/**
 		 * @return the icon for a item
@@ -126,7 +126,7 @@ class KEXICORE_EXPORT Info
 
 		QString m_groupName;
 		QCString m_mime;
-		QString m_groupIcon;
+//		QString m_groupIcon;
 		QString m_itemIcon;
 		QString m_objectName;
 		int 			m_projectPartID;

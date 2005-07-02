@@ -44,7 +44,6 @@
 #include "container.h"
 #include "formmanager.h"
 #include "objecttreeview.h"
-#include "kexipropertyeditor.h"
 
 #include "kfd_kdev_part.h"
 
@@ -127,7 +126,7 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
 		dockTree->setFixedExtentWidth(256);
 
 		QDockWindow *dockEditor = new QDockWindow(dockArea);
-		KexiPropertyEditor *editor = new KexiPropertyEditor(dockEditor);
+		KoProperty::Editor *editor = new KoProperty::Editor(dockEditor);
 		dockEditor->setWidget(editor);
 		dockEditor->setCaption(i18n("Properties"));
 		dockEditor->setResizeEnabled(true);

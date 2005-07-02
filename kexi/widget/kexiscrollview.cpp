@@ -91,7 +91,7 @@ KexiScrollView::setWidget(QWidget *w)
 void
 KexiScrollView::setRecordNavigatorVisible(bool visible)
 {
-	if(m_scrollViewNavPanel->isVisible() && !visible)
+	if(/*m_scrollViewNavPanel->isVisible() &&*/ !visible)
 		m_scrollViewNavPanel->hide();
 	else if(visible)  {
 		m_scrollViewNavPanel->show();

@@ -5,7 +5,7 @@ kexipics_DATA = cp-wiz.png
 kexipicsdir = $(kde_datadir)/kexi/pics
 
 
-icon_ICON = button button_no test_it database widgets form_edit \
+icon_ICON = button test_it database widgets form_edit \
 	lineedit business_user urlrequest tabwidget frame \
 	relation state_data state_edit state_sql state_text state_view \
 	table table_newobj \

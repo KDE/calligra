@@ -135,11 +135,13 @@ KexiTablePart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 	return dlg->mainWin()->project()->dbConnection()->tableSchema( sdata.name() );
 }
 
+#if 0
 KexiPart::DataSource *
 KexiTablePart::dataSource()
 {
 	return new KexiTableDataSource(this);
 }
+#endif
 
 tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, KexiDB::Connection& conn, 
 	KexiDB::TableSchema& table, const QString& msg)
@@ -186,6 +188,7 @@ KexiTablePart::i18nMessage(const QCString& englishMessage) const
 
 //----------------
 
+#if 0
 KexiTableDataSource::KexiTableDataSource(KexiPart::Part *part)
  : KexiPart::DataSource(part)
 {
@@ -208,6 +211,7 @@ KexiTableDataSource::cursor(KexiProject * /*project*/,
 {
 	return 0;
 }
+#endif
 
 //----------------
 

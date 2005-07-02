@@ -43,6 +43,7 @@ namespace KFormDesigner {
 class Container;
 class ObjectTreeItem;
 class WidgetLibraryPrivate;
+class WidgetPropertySet;
 
 typedef QPtrList<KAction> ActionList;
 
@@ -84,7 +85,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * searches the right factory and creates a widget.
 		 * @returns the widget or 0 if something falid
 		 */
-		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c, 
+		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
 			WidgetFactory::OrientationHint orientationHint = WidgetFactory::Any);
 
 		bool createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
@@ -126,34 +127,34 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		WidgetFactory* factory(const char* factoryName) const;
 
-		/*! \return true if advanced properties like "mouseTracking" should 
-		 be user-visible. True by default (in KFD), but Kexi set's this to false. 
-		 See WidgetLibraryPrivate class implementation for complete list 
+		/*! \return true if advanced properties like "mouseTracking" should
+		 be user-visible. True by default (in KFD), but Kexi set's this to false.
+		 See WidgetLibraryPrivate class implementation for complete list
 		 of advanced properties. */
 		bool advancedPropertiesVisible() const;
 
 		void setAdvancedPropertiesVisible(bool set);
 
-		/*! \return The i18n'ed name of the property \a propertyName 
-		 for a class described by \a winfo. The name can be displayed in 
+		/*! \return The i18n'ed name of the property \a propertyName
+		 for a class described by \a winfo. The name can be displayed in
 		 PropertyEditor. The name is retrieved from class' widget library.
-		 If this library doesn't define description for such property, 
-		 and there is a parent library for \a winfo defined, parent library 
-		 is asked for returning description string. 
-		 Eventually, if even this failed, empty string is returned. 
+		 If this library doesn't define description for such property,
+		 and there is a parent library for \a winfo defined, parent library
+		 is asked for returning description string.
+		 Eventually, if even this failed, empty string is returned.
 		 @see WidgetFactory::propertyDescForName() */
 		QString propertyDescForName(WidgetInfo *winfo, const QCString& propertyName);
 
-		/*! \return The i18n'ed name of the property's value whose name is \a name. 
-		 Works in the same way as propertyDescForName(): if actual library 
-		 does not define a description we are looking for, parent factory is asked 
-		 to return such description. 
-		 Eventually, if even this failed, empty string is returned. 
+		/*! \return The i18n'ed name of the property's value whose name is \a name.
+		 Works in the same way as propertyDescForName(): if actual library
+		 does not define a description we are looking for, parent factory is asked
+		 to return such description.
+		 Eventually, if even this failed, empty string is returned.
 		 @see WidgetFactory::propertyDescForValue() */
 		QString propertyDescForValue(WidgetInfo *winfo, const QCString& name);
 
-		/*! Used by ObjectPropertyBuffer::setWidget() after creating properties. */
-		void setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInfo& winfo, QWidget* w );
+		/*! Used by WidgetPropertySet::setWidget() after creating properties. */
+		void setPropertyOptions( WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w );
 
 	signals:
 		void prepareInsert(const QCString &c);

@@ -26,13 +26,15 @@
 #include <qlabel.h>
 #include <klistview.h>
 
+#include <widget/kexifieldlistview.h>
+
 class KexiRelationView;
 class KexiRelationViewTable;
 class KexiRelationViewTableContainerHeader;
 
 namespace KexiDB
 {
-	class TableSchema;
+	class TableOrQuerySchema;
 }
 
 class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
@@ -40,13 +42,17 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t);
+//		KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t);
+		KexiRelationViewTableContainer::KexiRelationViewTableContainer(
+			KexiRelationView *parent, KexiDB::TableOrQuerySchema *schema);
+
 		virtual ~KexiRelationViewTableContainer();
 
 		int globalY(const QString &field);
-		KexiDB::TableSchema *table();
+//		KexiDB::TableSchema *table();
 
 		KexiRelationViewTable* tableView() const { return m_tableView; }
+		KexiDB::TableOrQuerySchema* schema() const;
 		
 		int right() { return x() + width() - 1; }
 		int bottom() { return y() + height() - 1; }
@@ -66,7 +72,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 		void slotContextMenu(KListView *lv, QListViewItem *i, const QPoint& p);
 
 	protected:
-		KexiDB::TableSchema *m_table;
+//		KexiDB::TableSchema *m_table;
 		KexiRelationViewTableContainerHeader *m_tableHeader;
 		KexiRelationViewTable *m_tableView;
 		KexiRelationView *m_parent;
@@ -74,28 +80,29 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 		friend class KexiRelationViewTableContainerHeader;
 };
 
-
+/*
 class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableItem : public KListViewItem
 {
 	public:
 		KexiRelationViewTableItem(QListView *parent, QListViewItem *after,
 			QString key, QString field);
 		virtual void paintFocus ( QPainter * p, const QColorGroup & cg, const QRect & r );
-};
+};*/
 
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KListView
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KexiFieldListView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name=0);
+		KexiRelationViewTable(KexiDB::TableOrQuerySchema* tableOrQuerySchema, 
+			KexiRelationView *view, QWidget *parent, const char *name = 0);
+//		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name=0);
 		virtual ~KexiRelationViewTable();
 
-		KexiDB::TableSchema *table() const { return m_table; };
+//		KexiDB::TableSchema *table() const { return m_table; };
 		int globalY(const QString &item);
-		void setReadOnly(bool);
-
+//		void setReadOnly(bool);
 		virtual QSize sizeHint();
 
 	signals:
@@ -104,19 +111,19 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KListView
 	protected slots:
 		void slotDropped(QDropEvent *e);
 		void slotContentsMoving(int, int);
-		void slotItemDoubleClicked( QListViewItem *i, const QPoint &, int );
+//		void slotItemDoubleClicked( QListViewItem *i, const QPoint &, int );
 
 	protected:
 		virtual void contentsMousePressEvent( QMouseEvent * e );
 		virtual bool acceptDrag(QDropEvent *e) const;
-		virtual QDragObject *dragObject();
+//moved		virtual QDragObject *dragObject();
 		virtual QRect drawItemHighlighter(QPainter *painter, QListViewItem *item); 
 
 	private:
-		QStringList m_fieldList;
-		KexiDB::TableSchema *m_table;
+//		QStringList m_fieldList;
+//		KexiDB::TableSchema *m_table;
 		KexiRelationView *m_view;
-		QPixmap m_keyIcon, m_noIcon;
+//		QPixmap m_keyIcon, m_noIcon;
 };
 
 class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainerHeader : public QLabel

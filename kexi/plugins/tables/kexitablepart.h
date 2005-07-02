@@ -25,12 +25,12 @@
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexidialogbase.h>
-#include <kexipartdatasource.h>
+//#include <kexipartdatasource.h>
 #include <kexipartitem.h>
 #include <kexidb/fieldlist.h>
 
 class KexiMainWin;
-class KexiTableDataSource;
+//class KexiTableDataSource;
 
 class KexiTablePart : public KexiPart::Part
 {
@@ -45,7 +45,7 @@ class KexiTablePart : public KexiPart::Part
 		virtual tristate rename(KexiMainWindow *win, KexiPart::Item &item, 
 			const QString& newName);
 
-		virtual KexiPart::DataSource *dataSource();
+//		virtual KexiPart::DataSource *dataSource();
 
 		class TempData : public KexiDialogTempData
 		{
@@ -75,6 +75,7 @@ class KexiTablePart : public KexiPart::Part
 	virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
 };
 
+#if 0
 class KexiTableDataSource : public KexiPart::DataSource
 {
 	public:
@@ -84,6 +85,7 @@ class KexiTableDataSource : public KexiPart::DataSource
 		virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &item);
 		virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &item, bool buffer);
 };
+#endif
 
 #endif
 

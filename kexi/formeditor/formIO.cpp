@@ -39,7 +39,6 @@
 
 #include "form.h"
 #include "container.h"
-#include "objpropbuffer.h"
 #include "objecttree.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
@@ -87,7 +86,7 @@ FormIO::FormIO(QObject *parent, const char *name=0)
 {
 }
 
-int
+bool
 FormIO::saveFormToFile(Form *form, const QString &filename)
 {
 	QString m_filename;
@@ -98,7 +97,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 	{
 		m_filename = KFileDialog::getSaveFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
 		if(m_filename.isNull())
-			return 0;
+			return false;
 	}
 	else
 		m_filename = filename;
@@ -106,38 +105,40 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 
 	QDomDocument domDoc;
 	if (!saveFormToDom(form, domDoc))
-		return 0;
+		return false;
 
 	QFile file(m_filename);
 	if (!file.open(IO_WriteOnly))
-		return 0;
+		return false;
 
 	QTextStream stream(&file);
 	stream << domDoc.toString(3) << endl;
 	file.close();
 
-	return 1;
+	return true;
 }
 
-int
+bool
 FormIO::saveFormToByteArray(Form *form, QByteArray &dest)
 {
 	QDomDocument domDoc;
-	saveFormToDom(form, domDoc);
+	if (!saveFormToDom(form, domDoc))
+		return false;
 	dest = domDoc.toCString();
-	return 1;
+	return true;
 }
 
-int
+bool
 FormIO::saveFormToString(Form *form, QString &dest, int indent)
 {
 	QDomDocument domDoc;
-	saveFormToDom(form, domDoc);
+	if (!saveFormToDom(form, domDoc))
+		return false;
 	dest = domDoc.toString(indent);
-	return 1;
+	return true;
 }
 
-int
+bool
 FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 {
 	m_currentForm = form;
@@ -147,6 +148,15 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	domDoc.appendChild(uiElement);
 	uiElement.setAttribute("version", "3.1");
 	uiElement.setAttribute("stdsetdef", 1);
+
+	//custom properties
+	if (!form->customHeader()->isEmpty()) {
+		QDomElement customHeaderEl = domDoc.createElement("kfd:customHeader");
+		for (QMapConstIterator<QCString,QString> it=form->customHeader()->constBegin(); it!=form->customHeader()->constEnd(); ++it) {
+			customHeaderEl.setAttribute(it.key(), it.data());
+		}
+		uiElement.appendChild(customHeaderEl);
+	}
 
 	/// We save the savePixmapsInline property in the Form
 	QDomElement inlinePix = domDoc.createElement("pixmapinproject");
@@ -191,10 +201,10 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	m_currentItem = 0;
 	//m_currentWidget = 0;
 
-	return 1;
+	return true;
 }
 
-int
+bool
 FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, bool preview)
 {
 	QString errMsg;
@@ -208,16 +218,17 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
 	{
 		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
 		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
-		return 0;
+		return false;
 	}
 
-	loadFormFromDom(form, container, inBuf);
+	if (!loadFormFromDom(form, container, inBuf))
+		return false;
 	if(preview)
 		form->setDesignMode(false);
-	return 1;
+	return true;
 }
 
-int
+bool
 FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool preview)
 {
 	QString errMsg;
@@ -235,16 +246,17 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 	{
 		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
 		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
-		return 0;
+		return false;
 	}
 
-	loadFormFromDom(form, container, inBuf);
+	if (!loadFormFromDom(form, container, inBuf))
+		return false;
 	if(preview)
 		form->setDesignMode(false);
-	return 1;
+	return true;
 }
 
-int
+bool
 FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename)
 {
 	QString errMsg;
@@ -256,7 +268,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 	{
 		m_filename = KFileDialog::getOpenFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
 		if(m_filename.isNull())
-			return 0;
+			return false;
 	}
 	else
 		m_filename = filename;
@@ -265,7 +277,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 	if(!file.open(IO_ReadOnly))
 	{
 		kdDebug() << "Cannot open the file " << filename << endl;
-		return 0;
+		return false;
 	}
 	QTextStream stream(&file);
 	QString text = stream.read();
@@ -277,19 +289,28 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 	{
 		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
 		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
-		return 0;
+		return false;
 	}
 
-	loadFormFromDom(form, container, inBuf);
-	return 1;
+	return loadFormFromDom(form, container, inBuf);
 }
 
-int
+bool
 FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 {
 	m_currentForm = form;
 
 	QDomElement ui = inBuf.namedItem("UI").toElement();
+
+	//custom properties
+	form->customHeader()->clear();
+	QDomElement customHeaderEl = ui.namedItem("kfd:customHeader").toElement();
+	QDomAttr attr = customHeaderEl.firstChild().toAttr();
+	while (!attr.isNull() && attr.isAttr()) {
+		form->customHeader()->insert(attr.name().latin1(), attr.value());
+		attr = attr.nextSibling().toAttr();
+	}
+
 	// Load the pixmap collection
 	m_savePixmapsInline = ( (ui.namedItem("pixmapinproject").isNull()) || (!ui.namedItem("images").isNull()) );
 	form->pixmapCollection()->load(ui.namedItem("collection"));
@@ -299,31 +320,32 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	// Loading the tabstops
 	QDomElement tabStops = ui.namedItem("tabstops").toElement();
-	if(tabStops.isNull())
-		return 1;
-
-	int i = 0;
-	uint itemsNotFound = 0;
-	for(QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++)
-	{
-		QString name = n.toElement().text();
-		ObjectTreeItem *item = form->objectTree()->lookup(name);
-		if(!item)
+//	if(tabStops.isNull())
+//		return 1;
+	if(!tabStops.isNull()) {
+		int i = 0;
+		uint itemsNotFound = 0;
+		for(QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++)
 		{
-			kdDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem " << endl;
-			continue;
-		}
-		const int index = form->tabStops()->findRef(item);
-		/* Compute a real destination index: "a number of not found items so far". */
-		const int realIndex = i - itemsNotFound;
-		if((index != -1) && (index != realIndex)) // the widget is not in the same place, so we move it
-		{
-			form->tabStops()->remove(item);
-			form->tabStops()->insert(realIndex, item);
-		}
-		if(index == -1) {
-			itemsNotFound++;
-			kdDebug() << "FormIO: item '" << name << "' not in list" << endl;
+			QString name = n.toElement().text();
+			ObjectTreeItem *item = form->objectTree()->lookup(name);
+			if(!item)
+			{
+				kdDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem " << endl;
+				continue;
+			}
+			const int index = form->tabStops()->findRef(item);
+			/* Compute a real destination index: "a number of not found items so far". */
+			const int realIndex = i - itemsNotFound;
+			if((index != -1) && (index != realIndex)) // the widget is not in the same place, so we move it
+			{
+				form->tabStops()->remove(item);
+				form->tabStops()->insert(realIndex, item);
+			}
+			if(index == -1) {
+				itemsNotFound++;
+				kdDebug() << "FormIO: item '" << name << "' not in list" << endl;
+			}
 		}
 	}
 
@@ -333,7 +355,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	m_currentForm = 0;
 	m_currentItem = 0;
 
-	return 1;
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////

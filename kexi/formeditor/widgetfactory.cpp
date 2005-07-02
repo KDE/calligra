@@ -39,13 +39,14 @@
 #include "richtextdialog.h"
 #include "editlistviewdialog.h"
 #include "resizehandle.h"
-#include "objpropbuffer.h"
 #include "formmanager.h"
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
 #include "widgetlibrary.h"
 #include "utils.h"
+#include "widgetpropertyset.h"
+#include <koproperty/property.h>
 
 using namespace KFormDesigner;
 
@@ -309,7 +310,7 @@ void
 WidgetFactory::editListView(QListView *listview)
 {
 	EditListViewDialog dlg(((QWidget*)listview)->topLevelWidget());
-	dlg.exec(listview);
+	//dlg.exec(listview);
 }
 
 bool
@@ -446,7 +447,7 @@ WidgetFactory::widgetDestroyed()
 //js	delete m_handles;
 	if (m_handles) {
 		m_handles->setEditingMode(false);
-	
+
 	}
 	m_widget = 0;
 	m_handles = 0;
@@ -481,9 +482,9 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 	}
 	else
 	{
-		KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
-		if((*buff)[name])
-			(*buff)[name] = value;
+		WidgetPropertySet *set = container->form()->manager()->propertySet();
+		if(set->contains(name))
+			(*set)[name] = value;
 	}
 }
 
@@ -491,19 +492,19 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 void
 WidgetFactory::addPropertyDescription(Container *container, const char *prop, const QString &desc)
 {
-	ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
+	WidgetPropertySet *buff = container->form()->manager()->buffer();
 	buff->addPropertyDescription(prop, desc);
 }
 
 void
 WidgetFactory::addValueDescription(Container *container, const char *value, const QString &desc)
 {
-	ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
+	WidgetPropertySet *buff = container->form()->manager()->buffer();
 	buff->addValueDescription(value, desc);
 }*/
 
 bool
-WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w, 
+WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w,
 	const QCString &property, bool multiple)
 {
 	return !multiple && isPropertyVisibleInternal(classname, w, property);
@@ -631,7 +632,7 @@ QWidget *WidgetFactory::widget() const
 	return m_widget;
 }
 
-void WidgetFactory::setInternalProperty(const QCString& classname, const QCString& property, 
+void WidgetFactory::setInternalProperty(const QCString& classname, const QCString& property,
 	const QString& value)
 {
 	m_internalProp[classname+":"+property]=value;

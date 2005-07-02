@@ -33,11 +33,11 @@
 #include "objecttree.h"
 #include "formmanager.h"
 #include "form.h"
-#include "objpropbuffer.h"
-#include "kexiproperty.h"
 #include "widgetlibrary.h"
 #include "events.h"
 #include "utils.h"
+#include "widgetpropertyset.h"
+#include <koproperty/property.h>
 
 #include "commands.h"
 
@@ -45,60 +45,60 @@ namespace KFormDesigner {
 
 // PropertyCommand
 
-PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QString &wname, const QVariant &oldValue, const QVariant &value, const QCString &property)
-  : KCommand(), m_buffer(buf), m_value(value), m_property(property)
+PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QString &wname, const QVariant &oldValue, const QVariant &value, const QCString &property)
+  : KCommand(), m_propSet(set), m_value(value), m_property(property)
 {
 	m_oldvalues.insert(wname, oldValue);
 }
 
-PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QCString &property)
-  : KCommand(), m_buffer(buf), m_value(value), m_oldvalues(oldvalues), m_property(property)
+PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QCString &property)
+  : KCommand(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
 {}
 
 void
 PropertyCommand::setValue(const QVariant &value)
 {
 	m_value = value;
-	emit m_buffer->manager()->dirty(m_buffer->manager()->activeForm());
+	emit m_propSet->manager()->dirty(m_propSet->manager()->activeForm());
 }
 
 void
 PropertyCommand::execute()
 {
-	m_buffer->m_manager->activeForm()->resetSelection();
-	m_buffer->m_undoing = true;
+	m_propSet->manager()->activeForm()->resetSelection();
+	m_propSet->setUndoing(true);
 
 	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
-		QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
-		m_buffer->m_manager->activeForm()->setSelectedWidget(widg, true);
+		QWidget *widg = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key())->widget();
+		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
 	}
 
-	(*m_buffer)[m_property] = m_value;
-	m_buffer->m_undoing = false;
+	(*m_propSet)[m_property] = m_value;
+	m_propSet->setUndoing(false);
 }
 
 void
 PropertyCommand::unexecute()
 {
-	m_buffer->m_manager->activeForm()->resetSelection();
-	m_buffer->m_undoing = true;
+	m_propSet->manager()->activeForm()->resetSelection();
+	m_propSet->setUndoing(true);
 
 	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* titem = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key());
-		if (!titem)
+		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key());
+		if (!item)
 			continue; //better this than a crash
-		QWidget *widg = titem->widget();
-		m_buffer->m_manager->activeForm()->setSelectedWidget(widg, true);
-		//m_buffer->setSelectedWidget(widg, true);
+		QWidget *widg = item->widget();
+		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
+		//m_propSet->setSelectedWidget(widg, true);
 		widg->setProperty(m_property, it.data());
 	}
 
-	(*m_buffer)[m_property] = m_oldvalues.begin().data();
-	m_buffer->m_undoing = false;
+	(*m_propSet)[m_property] = m_oldvalues.begin().data();
+	m_propSet->setUndoing(false);
 }
 
 QString
@@ -112,14 +112,14 @@ PropertyCommand::name() const
 
 // GeometryPropertyCommand (for multiples widgets)
 
-GeometryPropertyCommand::GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, QPoint oldPos)
- : KCommand(), m_buffer(buf), m_names(names), m_oldPos(oldPos)
+GeometryPropertyCommand::GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, QPoint oldPos)
+ : KCommand(), m_propSet(set), m_names(names), m_oldPos(oldPos)
 {}
 
 void
 GeometryPropertyCommand::execute()
 {
-	m_buffer->m_undoing = true;
+	m_propSet->setUndoing(true);
 	int dx = m_pos.x() - m_oldPos.x();
 	int dy = m_pos.y() - m_oldPos.y();
 
@@ -127,19 +127,19 @@ GeometryPropertyCommand::execute()
 	// We move every widget in our list by (dx, dy)
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* titem = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it);
-		if (!titem)
+		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(*it);
+		if (!item)
 			continue; //better this than a crash
-		QWidget *w = titem->widget();
+		QWidget *w = item->widget();
 		w->move(w->x() + dx, w->y() + dy);
 	}
-	m_buffer->m_undoing = false;
+	m_propSet->setUndoing(false);
 }
 
 void
 GeometryPropertyCommand::unexecute()
 {
-	m_buffer->m_undoing = true;
+	m_propSet->setUndoing(true);
 	int dx = m_pos.x() - m_oldPos.x();
 	int dy = m_pos.y() - m_oldPos.y();
 
@@ -147,20 +147,20 @@ GeometryPropertyCommand::unexecute()
 	// We move every widget in our list by (-dx, -dy) to undo the move
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* titem = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it);
-		if (!titem)
+		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(*it);
+		if (!item)
 			continue; //better this than a crash
-		QWidget *w = titem->widget();
+		QWidget *w = item->widget();
 		w->move(w->x() - dx, w->y() - dy);
 	}
-	m_buffer->m_undoing = false;
+	m_propSet->setUndoing(false);
 }
 
 void
 GeometryPropertyCommand::setPos(QPoint pos)
 {
 	m_pos = pos;
-	emit m_buffer->manager()->dirty(m_buffer->manager()->activeForm());
+	emit m_propSet->manager()->dirty(m_propSet->manager()->activeForm());
 }
 
 QString
@@ -530,10 +530,10 @@ AdjustSizeCommand::name() const
 
 // LayoutPropertyCommand
 
-LayoutPropertyCommand::LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value)
+LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const QString &name, const QVariant &oldValue, const QVariant &value)
  : PropertyCommand(buf, name, oldValue, value, "layout")
 {
-	m_form = buf->m_manager->activeForm();
+	m_form = buf->manager()->activeForm();
 	ObjectTreeItem* titem = m_form->objectTree()->lookup(name);
 	if (!titem)
 		return; //better this than a crash

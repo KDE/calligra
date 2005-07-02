@@ -27,6 +27,8 @@
 //! Used to customize KFormDesigner::FormManager behaviour.
 class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 {
+	Q_OBJECT
+
 	public:
 		KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
 			const char* name = 0);
@@ -35,8 +37,17 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 		virtual KAction* action( const char* name );
 		virtual void enableAction( const char* name, bool enable );
 
+	public slots:
+		//! Receives signal from KexiDataSourcePage about changed form's data source
+		void setFormDataSource(const QCString& mime, const QCString& name);
+
+		//! Receives signal from KexiDataSourcePage about changed widget's data source
+		void setDataSourceFieldOrExpression(const QString& string);
+
 	protected:
 		inline QString translateName( const char* name ) const;
+//		virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
+//		virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
 
 		KexiPart::Part* m_part;
 };

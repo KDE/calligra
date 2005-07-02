@@ -32,7 +32,7 @@
 
 #include <kexidb/object.h>
 
-#include "kexipartdatasource.h"
+//#include "kexipartdatasource.h"
 
 namespace KexiDB
 {
@@ -57,7 +57,7 @@ namespace KexiPart
 	typedef QValueList<Missing> MissingList;
 	typedef QPtrList<Info> PartInfoList;
 	typedef QIntDict<Part> PartDict;
-	typedef QPtrList<DataSource> DataSourceList;
+//	typedef QPtrList<DataSource> DataSourceList;
 
 /**
  * queries parts and dlopens them when needed, they aren't dlopened at startup tough
@@ -114,9 +114,8 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		 */
 		PartInfoList *partInfoList() { return &m_partlist; }
 
-
-		DataSourceList *dataSources() { return &m_datasources; }
 #if 0
+		DataSourceList *dataSources() { return &m_datasources; }
 		void unloadPart(Info *i);
 		void unloadAllParts();
 #endif
@@ -128,7 +127,9 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		PartInfoList m_partlist;
 		PartInfoDict m_partsByMime;
 		MissingList m_missing;
+#if 0
 		DataSourceList m_datasources;
+#endif
 
 		bool m_lookupDone : 1;
 };

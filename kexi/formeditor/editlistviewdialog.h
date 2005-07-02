@@ -32,23 +32,27 @@ class KListView;
 class KListBox;
 class QListBoxItem;
 
-class KexiProperty;
-class KexiPropertyBuffer;
-class KexiPropertyEditor;
+namespace KoProperty {
+	class Property;
+	class Set;
+	class Editor;
+}
 
 namespace KFormDesigner {
 
 //! A dialog to edit the contents of a listvuew (KListView or QListView)
-/*! The dialog contains two pages, one to edit columns and one to edit ist items. KexiPropertyEditor is used in columns to edit column properties
-  (there are two properties not supported by Qt Designer: 'width' and 'resizable'). The user can enter list contents inside the list
-  using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
+/*! The dialog contains two pages, one to edit columns and one to edit ist items. 
+ KoProperty::Editor is used in columns to edit column properties
+ (there are two properties not supported by Qt Designer: 'width' and 'resizable'). 
+ The user can enter list contents inside the list
+ using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
 class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 {
 	Q_OBJECT
 
 	public:
 		EditListViewDialog(QWidget *parent);
-		~EditListViewDialog() {;}
+		~EditListViewDialog() {}
 
 		int exec(QListView *listview);
 
@@ -59,7 +63,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		void removeItem();
 		void MoveItemUp();
 		void MoveItemDown();
-		void changeProperty(KexiPropertyBuffer&, KexiProperty&);
+		void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
 
 		// Contents page
 		void updateButtons(QListViewItem*);
@@ -76,8 +80,8 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 
 	protected:
 		enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
-		KexiPropertyEditor  *m_editor;
-		KexiPropertyBuffer  *m_buffer;
+		KoProperty::Editor  *m_editor;
+		KoProperty::Set  *m_propSet;
 		QFrame   *m_contents, *m_column;
 		KListBox  *m_listbox;
 		KListView  *m_listview;

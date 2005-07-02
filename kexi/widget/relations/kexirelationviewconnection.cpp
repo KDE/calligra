@@ -30,6 +30,7 @@
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 #include <kexidb/tableschema.h>
+#include <kexidb/utils.h>
 
 #include "r1.xpm"
 #include "rn.xpm"
@@ -259,12 +260,13 @@ QString
 KexiRelationViewConnection::toString() const
 {
 	QString str;
-	if (m_masterTable && m_masterTable->table()) {
-		str += (m_masterTable->table()->name() + "." + m_masterField);
+/*! @todo what about query? */
+	if (m_masterTable && m_masterTable->schema()->table()) {
+		str += (QString(m_masterTable->schema()->name()) + "." + m_masterField);
 	}
-	if (m_detailsTable && m_detailsTable->table()) {
+	if (m_detailsTable && m_detailsTable->schema()->table()) {
 		str += " - ";
-		str += (m_detailsTable->table()->name() + "." + m_detailsField);
+		str += (QString(m_detailsTable->schema()->name()) + "." + m_detailsField);
 	}
 	return str;
 }

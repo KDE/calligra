@@ -25,7 +25,6 @@
 #include <qsplitter.h>
 
 #include <kexiviewbase.h>
-#include <kexipropertybuffer.h>
 #include "kexiquerypart.h"
 
 class KexiMainWindow;
@@ -34,13 +33,18 @@ class KexiDataTable;
 class KexiTableItem;
 class KexiRelationWidget;
 class KexiSectionHeader;
-class KexiDataAwarePropertyBuffer;
+class KexiDataAwarePropertySet;
 class KexiRelationViewTableContainer;
 class KexiRelationViewConnection;
 
 namespace KexiPart
 {
 	class Item;
+}
+
+namespace KoProperty {
+	class Property;
+	class Set;
 }
 
 namespace KexiDB
@@ -87,14 +91,14 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		/*! \return property buffer associated with currently selected row (i.e. field)
 		 or 0 if current row is empty. */
-		virtual KexiPropertyBuffer *propertyBuffer();
+		virtual KoProperty::Set *propertySet();
 
-		KexiPropertyBuffer* createPropertyBuffer( int row, 
+		KoProperty::Set* createPropertySet( int row,
 			const QString& tableName, const QString& fieldName, bool newOne = false );
 
-		/*! Builds query schema out of information provided by gui. 
-		 The schema is stored in temp->query member. 
-		 \a errMsg is optional error message returned. 
+		/*! Builds query schema out of information provided by gui.
+		 The schema is stored in temp->query member.
+		 \a errMsg is optional error message returned.
 		 \return true on proper schema creation. */
 		bool buildSchema(QString *errMsg = 0);
 
@@ -103,21 +107,21 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
 		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
 
-		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token, 
+		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token,
 			bool allowRelationalOperator);
 
 		QCString generateUniqueAlias() const;
-		void updatePropertiesVisibility(KexiPropertyBuffer& buf);
+		void updatePropertiesVisibility(KoProperty::Set& buf);
 
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
-		void slotDroppedAtRow(KexiTableItem *item, int row, 
+		void slotDroppedAtRow(KexiTableItem *item, int row,
 			QDropEvent *ev, KexiTableItem*& newItem);
 		void slotTableAdded(KexiDB::TableSchema &t);
 		void slotTableHidden(KexiDB::TableSchema &t);
 
 		//! Called before cell change in tableview.
-		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
+		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
 			QVariant& newValue, KexiDB::ResultInfo* result);
 
 		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);
@@ -134,9 +138,12 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query);
 		void showFieldsForQuery(KexiDB::QuerySchema *query);
 
-		void slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
+		void slotPropertyChanged(KoProperty::Set& list, KoProperty::Property& property);
 
-		void slotTableCreated(KexiDB::TableSchema& schema);
+//		void slotObjectCreated(const QCString &mime, const QCString& name);
+		void slotNewItemStored(KexiPart::Item&);
+		void slotItemRemoved(const KexiPart::Item& item);
+		void slotItemRenamed(const KexiPart::Item& item, const QCString& oldName);
 
 	private:
 		KexiQueryDesignerGuiEditorPrivate *d;

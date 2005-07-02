@@ -26,15 +26,16 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kexipropertyeditor.h"
-#include "kexipropertybuffer.h"
+#include <koproperty/editor.h>
+#include <koproperty/set.h>
+#include <koproperty/property.h>
 
 #include "editlistviewdialog.h"
 
 namespace KFormDesigner {
 
 //////////////////////////////////////////////////////////////////////////////////
-// A Dialog to edit the contents of a listview ////////////////////////////////////
+/// A Dialog to edit the contents of a listview /////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
 EditListViewDialog::EditListViewDialog(QWidget *parent)
@@ -104,15 +105,16 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	QHBoxLayout *hbox = new QHBoxLayout(m_column, 0, 6);
 
 	// The "item properties" field
-	m_editor = new KexiPropertyEditor(m_column, "editcolumn_propeditor");
-	m_buffer = new KexiPropertyBuffer(this, "columns");
-	m_buffer->add(new KexiProperty("caption", "Caption" ,i18n("Caption")));
-	m_buffer->add(new KexiProperty("width", 100, i18n("Width")));
-	m_buffer->add(new KexiProperty("clickable", QVariant(true, 3), i18n("Clickable")));
-	m_buffer->add(new KexiProperty("resizable", QVariant(true, 3), i18n("Resizable")));
-	m_buffer->add(new KexiProperty("fullwidth", QVariant(false, 3), i18n("Full Width")));
-	m_editor->setBuffer(m_buffer);
-	connect(m_buffer, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(changeProperty(KexiPropertyBuffer&, KexiProperty&)));
+	m_editor = new KoProperty::Editor(m_column, "editcolumn_propeditor");
+	m_propSet = new KoProperty::Set(this, "columns");
+	m_propSet->addProperty(new KoProperty::Property("caption", "Caption", i18n("Caption"),i18n("Caption")));
+	m_propSet->addProperty(new KoProperty::Property("width", 100, i18n("Width"), i18n("Width")));
+	m_propSet->addProperty(new KoProperty::Property("clickable", QVariant(true, 3), i18n("Clickable"), i18n("Clickable") ));
+	m_propSet->addProperty(new KoProperty::Property("resizable", QVariant(true, 3), i18n("Resizable"), i18n("Resizable") ));
+	m_propSet->addProperty(new KoProperty::Property("fullwidth", QVariant(false, 3), i18n("Full Width"), i18n("Full Width") ));
+	m_editor->changeSet(m_propSet);
+	connect(m_propSet, SIGNAL(propertyChanged(KoProperty::Set & KoProperty::Property&)),
+		this, SLOT(changeProperty(KoProperty::Set & KoProperty::Property&)));
 
 	// Setup the icon toolbar //////////
 	QVBoxLayout *vbox = new QVBoxLayout(hbox, 3);
@@ -154,7 +156,6 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 
 	//// Init dialog and display it ////////////////////////
 	setInitialSize(QSize(500, 300), true);
-
 }
 
 int
@@ -176,8 +177,7 @@ EditListViewDialog::exec(QListView *listview)
 		m_listview->setRenameable(i, true);
 	}
 	QListViewItem *item = listview->firstChild();
-	while(item)
-	{
+	while(item)  {
 		loadChildNodes(m_listview, item, 0);
 		item = item->nextSibling();
 	}
@@ -222,27 +222,27 @@ EditListViewDialog::exec(QListView *listview)
 
 /// Columns page slots ///////
 void
-EditListViewDialog::changeProperty(KexiPropertyBuffer &buffer, KexiProperty &prop)
+EditListViewDialog::changeProperty(KoProperty::Set& set, KoProperty::Property& property)
 {
-	if(&buffer != m_buffer)
+	if(&set != m_propSet)
 		return;
 
-	QString name = prop.name();
-	if(name == "caption")
-	{
-		m_buffer->blockSignals(true); // we need to block signals because changeItem will modify selection, and call updateItemProperties
-		m_listbox->changeItem(prop.value().toString(), m_listbox->currentItem());
-		m_listview->setColumnText(m_listbox->currentItem(), prop.value().toString());
-		m_buffer->blockSignals(false);
+	QString name = property.name();
+	QVariant value = property.value();
+	if(name == "caption") {
+		m_propSet->blockSignals(true); // we need to block signals because changeItem will modify selection, and call updateItemProperties
+		m_listbox->changeItem(value.toString(), m_listbox->currentItem());
+		m_listview->setColumnText(m_listbox->currentItem(), value.toString());
+		m_propSet->blockSignals(false);
 	}
 	else if(name == "width")
-		m_listview->setColumnWidth(m_listbox->currentItem(), prop.value().toInt());
+		m_listview->setColumnWidth(m_listbox->currentItem(), value.toInt());
 	else if(name == "resizable")
-		m_listview->header()->setResizeEnabled(prop.value().toBool(), m_listbox->currentItem());
+		m_listview->header()->setResizeEnabled(value.toBool(), m_listbox->currentItem());
 	else if(name == "clickable")
-		m_listview->header()->setClickEnabled(prop.value().toBool(), m_listbox->currentItem());
+		m_listview->header()->setClickEnabled(value.toBool(), m_listbox->currentItem());
 	else if(name == "fullwidth")
-		m_listview->header()->setStretchEnabled(prop.value().toBool(), m_listbox->currentItem());
+		m_listview->header()->setStretchEnabled(value.toBool(), m_listbox->currentItem());
 }
 
 void
@@ -252,16 +252,15 @@ EditListViewDialog::updateItemProperties(QListBoxItem *item)
 		return;
 
 	int id = m_listbox->index(item);
-	if(m_buffer)
-	{
-		m_buffer->blockSignals(true); // we don't want changeProperty to be called
-		(*m_buffer)["caption"].setValue(m_listview->columnText(id), false);
-		(*m_buffer)["width"].setValue(m_listview->columnWidth(id), false);
-		(*m_buffer)["clickable"].setValue(QVariant(m_listview->header()->isClickEnabled(id), 4), false);
-		(*m_buffer)["resizable"].setValue(QVariant(m_listview->header()->isResizeEnabled(id), 4), false);
-		(*m_buffer)["fullwidth"].setValue(QVariant(m_listview->header()->isStretchEnabled(id), 4), false);
-		m_buffer->blockSignals(false);
-		m_editor->setBuffer(m_buffer);
+	if(m_propSet) {
+		m_propSet->blockSignals(true); // we don't want changeProperty to be called
+		(*m_propSet)["caption"].setValue(m_listview->columnText(id), false);
+		(*m_propSet)["width"].setValue(m_listview->columnWidth(id), false);
+		(*m_propSet)["clickable"].setValue(QVariant(m_listview->header()->isClickEnabled(id), 4), false);
+		(*m_propSet)["resizable"].setValue(QVariant(m_listview->header()->isResizeEnabled(id), 4), false);
+		(*m_propSet)["fullwidth"].setValue(QVariant(m_listview->header()->isStretchEnabled(id), 4), false);
+		m_propSet->blockSignals(false);
+		m_editor->changeSet(m_propSet);
 	}
 
 	m_buttons[BColUp]->setEnabled(item->prev());
@@ -308,11 +307,11 @@ EditListViewDialog::MoveItemUp()
 	m_listview->header()->setStretchEnabled(m_listview->header()->isStretchEnabled(current - 1), current);
 
 	m_listbox->changeItem(text, current - 1);
-	m_listview->setColumnText(current - 1, (*m_buffer)["caption"].value().toString());
-	m_listview->setColumnWidth(current - 1,(*m_buffer)["width"].value().toBool());
-	m_listview->header()->setClickEnabled((*m_buffer)["clickable"].value().toBool(), current - 1);
-	m_listview->header()->setResizeEnabled((*m_buffer)["resizable"].value().toBool(), current - 1);
-	m_listview->header()->setStretchEnabled((*m_buffer)["fullwidth"].value().toBool(), current - 1);
+	m_listview->setColumnText(current - 1, (*m_propSet)["caption"].value().toString());
+	m_listview->setColumnWidth(current - 1,(*m_propSet)["width"].value().toBool());
+	m_listview->header()->setClickEnabled((*m_propSet)["clickable"].value().toBool(), current - 1);
+	m_listview->header()->setResizeEnabled((*m_propSet)["resizable"].value().toBool(), current - 1);
+	m_listview->header()->setStretchEnabled((*m_propSet)["fullwidth"].value().toBool(), current - 1);
 
 	m_listbox->blockSignals(false);
 	m_listbox->setCurrentItem(current - 1);
@@ -333,11 +332,11 @@ EditListViewDialog::MoveItemDown()
 	m_listview->header()->setStretchEnabled(m_listview->header()->isStretchEnabled(current + 1), current);
 
 	m_listbox->changeItem(text, current+1);
-	m_listview->setColumnText(current + 1, (*m_buffer)["caption"].value().toString());
-	m_listview->setColumnWidth(current + 1,(*m_buffer)["width"].value().toBool());
-	m_listview->header()->setClickEnabled((*m_buffer)["clickable"].value().toBool(), current + 1);
-	m_listview->header()->setResizeEnabled((*m_buffer)["resizable"].value().toBool(), current + 1);
-	m_listview->header()->setStretchEnabled((*m_buffer)["fullwidth"].value().toBool(), current + 1);
+	m_listview->setColumnText(current + 1, (*m_propSet)["caption"].value().toString());
+	m_listview->setColumnWidth(current + 1,(*m_propSet)["width"].value().toBool());
+	m_listview->header()->setClickEnabled((*m_propSet)["clickable"].value().toBool(), current + 1);
+	m_listview->header()->setResizeEnabled((*m_propSet)["resizable"].value().toBool(), current + 1);
+	m_listview->header()->setStretchEnabled((*m_propSet)["fullwidth"].value().toBool(), current + 1);
 
 	m_listbox->blockSignals(false);
 	m_listbox->setCurrentItem(current + 1);
@@ -398,8 +397,7 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 	QListViewItem *child = item->firstChild();
 	if(child)
 		newItem->setOpen(true);
-	while(child)
-	{
+	while(child)  {
 		loadChildNodes(listview, child, newItem);
 		child = child->nextSibling();
 	}

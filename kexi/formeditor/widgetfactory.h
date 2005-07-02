@@ -41,9 +41,12 @@ class QDomDocument;
 class QVariant;
 class QListView;
 class KActionCollection;
-class KexiPropertyBuffer;
 class KTextEdit;
 class KLineEdit;
+
+namespace KoProperty {
+	class Set;
+}
 
 namespace KFormDesigner {
 
@@ -52,6 +55,7 @@ class WidgetLibrary;
 class Container;
 class ResizeHandleSet;
 class ObjectTreeItem;
+class WidgetPropertySet;
 
 /**
  * This class holds properties of widget classes provided by a factory.
@@ -131,7 +135,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 
 		/*! Sets autoSync flag for property \a propertyName.
 		 This allows to override autoSync flag for certain widget's property, because
-		 e.g. KexiPropertyEditor can have autoSync flag set to false or true, but
+		 e.g. KoProperty::Editor can have autoSync flag set to false or true, but
 		 not all properties have to comply with that.
 		 \a flag equal to cancelled value means there is no overriding (the default). */
 		void setAutoSyncForProperty(const char *propertyName, tristate flag);
@@ -218,12 +222,12 @@ class KFORMEDITOR_EXPORT WidgetInfo
   * "orientationSelectionPopup:verticalIcon" - the same for "Vertical" item.
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:horizontalText" - sets a i18n'd text for "Horizontal" item
-    for objects of class 'ClassName', e.g. i18n("Insert Horizontal Line"). 
+    for objects of class 'ClassName', e.g. i18n("Insert Horizontal Line").
     Set this property only for classes supporting orientations.
-  * "orientationSelectionPopup:verticalText" - the same for "Vertical" item, 
+  * "orientationSelectionPopup:verticalText" - the same for "Vertical" item,
     e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
 
-  See StdWidgetFactory::StdWidgetFactory() for properies like 
+  See StdWidgetFactory::StdWidgetFactory() for properies like
   "Line:orientationSelectionPopup:horizontalIcon".
 
   \n\n
@@ -307,7 +311,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		then multiple widgets of the same class are selected, and you should
 		only show properties shared by widgets (eg font, color). By default,
 		all properties are shown if multiple == true, and none if multiple == false. */
-		bool isPropertyVisible(const QCString &classname, QWidget *w, 
+		bool isPropertyVisible(const QCString &classname, QWidget *w,
 			const QCString &property, bool multiple);
 
 		/*! You need to return here a list of the properties that should automatically be saved
@@ -322,13 +326,13 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! \return The i18n'ed name of the property's value whose name is \a name. */
 		inline QString propertyDescForValue(const QCString &name) { return m_propValDesc[name]; };
 
-		/*! This method is called after ObjectPropertyBuffer was filled with properties 
+		/*! This method is called after WidgetPropertySet was filled with properties
 		 of a widget \a w, of class defined by \a info.
 		 Default implementation does nothing.
-		 Implement this if you need to set options for properties within the buffer \a buf. */
-		virtual void setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInfo& info, QWidget *w ) {}
+		 Implement this if you need to set options for properties within the set \a buf. */
+		virtual void setPropertyOptions( WidgetPropertySet& buf, const WidgetInfo& info, QWidget *w ) {}
 
-		/*! \return internal property \a property for a class \a classname. 
+		/*! \return internal property \a property for a class \a classname.
 		 Internal properties are not stored within objects, but can be just provided
 		 to describe classes' details. */
 		inline QString internalProperty(const QCString& classname, const QCString& property) const {
@@ -336,7 +340,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		}
 
 	protected:
-		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, 
+		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w,
 			const QCString &property) { return false; }
 
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents.
@@ -346,7 +350,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		void createEditor(const QCString &classname, const QString &text,
 			QWidget *w, Container *container, QRect geometry,
-			int align, bool useFrame=false, bool multiLine = false, 
+			int align, bool useFrame=false, bool multiLine = false,
 			BackgroundMode background = Qt::NoBackground);
 
 		/*! This function provides a simple editing mode : it justs disable event filtering
@@ -379,7 +383,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		*/
 		void changeProperty(const char *name, const QVariant &value, Container *container);
 
-		/*! This function is called when the widget is resized, 
+		/*! This function is called when the widget is resized,
 		 and the \a editor size needs to be updated. */
 		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 
@@ -426,7 +430,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		void setWidget(QWidget *widget);
 		QWidget *widget() const;
 
-		/*! Assigns \a value for internal property \a property for a class \a classname. 
+		/*! Assigns \a value for internal property \a property for a class \a classname.
 		 Internal properties are not stored within objects, but can be just provided
 		 to describe classes' details. */
 		void setInternalProperty(const QCString& classname, const QCString& property, const QString& value);
@@ -451,9 +455,9 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		//! internal properties
 		QMap<QCString, QString> m_internalProp;
 
-		/*! flag useful to decide whether to hide some properties. 
+		/*! flag useful to decide whether to hide some properties.
 		 It's value is inherited from WidgetLibrary. */
-		bool m_showAdvancedProperties; 
+		bool m_showAdvancedProperties;
 
 	private:
 		QGuardedPtr<QWidget> m_widget;

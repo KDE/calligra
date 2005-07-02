@@ -20,11 +20,13 @@
 
 #include "kexireportview.h"
 
+#include <kdebug.h>
+
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
 #include <objecttree.h>
-#include <objpropbuffer.h>
+#include <widgetpropertyset.h>
 #include <container.h>
 
 #include <kexidialogbase.h>
@@ -80,7 +82,7 @@ KexiReportScrollView::slotResizingStarted()
 
 KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char *name,
 	KexiDB::Connection *conn)
- : KexiViewBase(win, parent, name), m_buffer(0), m_conn(conn)
+ : KexiViewBase(win, parent, name), m_propertySet(0), m_conn(conn)
  , m_resizeMode(KexiReportView::ResizeDefault)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
@@ -99,19 +101,21 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
 
 	if (viewMode()==Kexi::DataViewMode) {
 		m_scrollView->viewport()->setPaletteBackgroundColor(m_reportform->palette().active().background());
+#if 0
 		connect(reportPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
+#endif
 	}
 	else {
-		connect(reportPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *, bool)),
-			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *, bool)));
+		connect(reportPart()->manager(), SIGNAL(propertySetSwitched(KoProperty::Set *, bool)),
+			this, SLOT(slotPropertySetSwitched(KoProperty::Set *, bool)));
 		connect(reportPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
-		connect(reportPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
+		/*connect(reportPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
 		connect(reportPart()->manager(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
 		connect(reportPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
-		connect(reportPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
+		connect(reportPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));*/
 
 		plugSharedAction("edit_copy", reportPart()->manager(), SLOT(copyWidget()));
 		plugSharedAction("edit_cut", reportPart()->manager(), SLOT(cutWidget()));
@@ -143,12 +147,18 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
 
 	initForm();
 
+	connect(this, SIGNAL(focus(bool)), this, SLOT(slotFocus(bool)));
 	/// @todo skip this if ther're no borders
 //	m_reportform->resize( m_reportform->size()+QSize(m_scrollView->verticalScrollBar()->width(), m_scrollView->horizontalScrollBar()->height()) );
 }
 
 KexiReportView::~KexiReportView()
 {
+	// Important: form window is closed.
+	// Set property set to 0 because there is *only one* instance of a property set class
+	// in Kexi, so the main window wouldn't know the set in fact has been changed.
+	m_propertySet = 0;
+	propertySetSwitched();
 }
 
 KFormDesigner::Form*
@@ -224,13 +234,13 @@ KexiReportView::loadForm()
 }
 
 void
-KexiReportView::managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload)
+KexiReportView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload)
 {
-	m_buffer = b;
+	m_propertySet = set;
 	if (forceReload)
-		propertyBufferReloaded(true/*preservePrevSelection*/);
+		propertySetReloaded(true/*preservePrevSelection*/);
 	else
-		propertyBufferSwitched();
+		propertySetSwitched();
 }
 
 tristate
@@ -271,7 +281,9 @@ KexiReportView::afterSwitchFrom(int mode)
 		m_scrollView->setWidget(m_reportform);
 
 		initForm();
+#if 0
 		slotNoFormSelected();
+#endif
 
 		//reset position
 		m_scrollView->setContentsPos(0,0);
@@ -319,7 +331,7 @@ KexiReportView::storeData()
 	return true;
 }
 
-
+#if 0
 /// Action stuff /////////////////
 void
 KexiReportView::slotWidgetSelected(KFormDesigner::Form *f, bool multiple)
@@ -413,6 +425,7 @@ KexiReportView::setRedoEnabled(bool enabled)
 {
 	setAvailable("edit_redo", enabled);
 }
+#endif
 
 QSize
 KexiReportView::preferredSizeHint(const QSize& otherSize)
@@ -435,6 +448,29 @@ KexiReportView::resizeEvent( QResizeEvent *e )
 	KexiViewBase::resizeEvent(e);
 	m_scrollView->updateNavPanelGeometry();
 }
+
+void
+KexiReportView::show()
+{
+	KexiViewBase::show();
+
+//moved from KexiFormScrollView::show():
+
+	//now get resize mode settings for entire form
+	//	if (resizeMode() == KexiFormView::ResizeAuto)
+	if (viewMode()==Kexi::DataViewMode) {
+		if (resizeMode() == ResizeAuto)
+			m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
+	}
+}
+
+void
+KexiReportView::slotFocus(bool in)
+{
+	if(in && form() && form()->manager() && form()->manager()->activeForm() != form())
+			form()->manager()->windowChanged(form()->widget());//m_dbform);
+}
+
 
 #include "kexireportview.moc"
 

@@ -29,7 +29,7 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 
 	m_groupName = m_ptr->name();
 	m_mime = m_ptr->property("X-Kexi-TypeMime").toCString();
-	m_groupIcon = m_ptr->property("X-Kexi-GroupIcon").toString();
+//	m_groupIcon = m_ptr->property("X-Kexi-GroupIcon").toString();
 	m_itemIcon = m_ptr->property("X-Kexi-ItemIcon").toString();
 	m_objectName = m_ptr->property("X-Kexi-TypeName").toString();
 
@@ -56,60 +56,4 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 Info::~Info()
 {
 }
-
-/*
-QString
-Info::groupName()
-{
-	return m_ptr->name();
-}
-
-QString
-Info::mime()
-{
-	return m_ptr->property("X-Kexi-TypeMime").toString();
-}
-
-QString
-Info::groupIcon()
-{
-	return m_ptr->property("X-Kexi-GroupIcon").toString();
-}
-
-QString
-Info::itemIcon()
-{
-	return m_ptr->property("X-Kexi-ItemIcon").toString();
-}
-
-QString
-Info::objectName()
-{
-	return m_ptr->property("X-Kexi-TypeName").toString();
-}
-
-int
-Info::projectPartID()
-{
-	//! @todo (js)..... now it's hardcoded!
-	if(objectName() == "table")
-		return KexiDB::TableObjectType;
-	else if(objectName() == "query")
-		return KexiDB::QueryObjectType;
-	else
-		return m_projectPartID;
-}
-*/
-#if 0//js
-Part *
-Info::instance()
-{
-	if(m_instance)
-		return m_instance;
-
-	m_instance = m_manager->load(this);
-	return m_instance;
-}
-#endif
-
 

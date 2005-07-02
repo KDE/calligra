@@ -80,21 +80,26 @@ class KexiReportView : public KexiViewBase
 
 		int resizeMode() const { return m_resizeMode; }
 
-	protected slots:
-		void managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload = false);
-		void slotDirty(KFormDesigner::Form *f, bool isDirty);
+	public slots:
+		/*! Reimplemented to update resize policy. */
+		virtual void show();
 
-		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+	protected slots:
+		void slotPropertySetSwitched(KoProperty::Set *set, bool forceReload = false);
+		void slotDirty(KFormDesigner::Form *f, bool isDirty);
+		void slotFocus(bool in);
+
+		/*void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
 		void slotFormWidgetSelected(KFormDesigner::Form *form);
 		void slotNoFormSelected();
 
 		void setUndoEnabled(bool enabled);
-		void setRedoEnabled(bool enabled);
+		void setRedoEnabled(bool enabled); */
 
 	protected:
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 		virtual tristate afterSwitchFrom(int mode);
-		virtual KexiPropertyBuffer* propertyBuffer() { return m_buffer; }
+		virtual KoProperty::Set* propertySet() { return m_propertySet; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 		virtual tristate storeData();
@@ -117,7 +122,7 @@ class KexiReportView : public KexiViewBase
 	private:
 		KexiReportForm *m_reportform;
 		KexiReportScrollView *m_scrollView;
-		KexiPropertyBuffer *m_buffer;
+		KoProperty::Set *m_propertySet;
 		KexiDB::Connection *m_conn;
 		int m_resizeMode;
 };

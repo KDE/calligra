@@ -26,7 +26,6 @@
 #include "kexipart.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
-#include "kexipropertybuffer.h"
 #include "kexiproject.h"
 
 #include <kexidb/connection.h>
@@ -159,7 +158,7 @@ void KexiDialogBase::detachFromGUIClient() {
 	//TODO
 }
 
-int KexiDialogBase::id() const 
+int KexiDialogBase::id() const
 {
 	return (partItem() && partItem()->identifier()>0) ? partItem()->identifier() : m_id;
 }
@@ -175,7 +174,7 @@ void KexiDialogBase::setContextHelp(const QString& caption, const QString& text,
 
 void KexiDialogBase::closeEvent( QCloseEvent * e )
 {
-	m_parentWindow->acceptPropertyBufferEditing();
+	m_parentWindow->acceptPropertySetEditing();
 
 	//let any view send "closing" signal
 	QObjectList *list = m_stack->queryList( "KexiViewBase", 0, false, false);
@@ -266,7 +265,7 @@ KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
 
 tristate KexiDialogBase::switchToViewMode( int newViewMode )
 {
-	m_parentWindow->acceptPropertyBufferEditing();
+	m_parentWindow->acceptPropertySetEditing();
 
 	if (newViewMode==Kexi::TextViewMode && !viewForMode(Kexi::DesignViewMode) && supportsViewMode(Kexi::DesignViewMode)) {
 		/* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
@@ -329,7 +328,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 	res = newView->afterSwitchFrom(prevViewMode);
 	if (!res) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
-			<< prevViewMode << " restored." << endl; 
+			<< prevViewMode << " restored." << endl;
 		m_currentViewMode = prevViewMode;
 		return false;
 	}
@@ -342,7 +341,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 		takeActionProxyChild( view ); //take current proxy child
 	addActionProxyChild( newView ); //new proxy child
 	m_stack->raiseWidget( newView );
-	newView->propertyBufferSwitched();
+	newView->propertySetSwitched();
 	m_parentWindow->invalidateSharedActions( newView );
 //	setFocus();
 	return true;
@@ -362,22 +361,23 @@ void KexiDialogBase::setFocus()
 	activate();
 }
 
-KexiPropertyBuffer *KexiDialogBase::propertyBuffer()
+KoProperty::Set*
+KexiDialogBase::propertySet()
 {
 	KexiViewBase *v = selectedView();
 	if (!v)
 		return 0;
-	return v->propertyBuffer();
+	return v->propertySet();
 }
 
 bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 {
 	if (KMdiChildView::eventFilter(obj, e))
 		return true;
-	if (e->type()==QEvent::FocusIn) {
+/*	if (e->type()==QEvent::FocusIn) {
 		QWidget *w = m_parentWindow->activeWindow();
 		w=0;
-	}
+	}*/
 	if ((e->type()==QEvent::FocusIn && m_parentWindow->activeWindow()==this)
 		|| e->type()==QEvent::MouseButtonPress) {
 		if (m_stack->visibleWidget() && KexiUtils::hasParent(m_stack->visibleWidget(), obj)) {
@@ -415,7 +415,7 @@ void KexiDialogBase::dirtyChanged()
 
 void KexiDialogBase::updateCaption()
 {
-	if (!m_item || !m_origCaption.isEmpty())
+	if (!m_item || !m_part || !m_origCaption.isEmpty())
 		return;
 //	m_origCaption = c;
 	QString capt = m_item->name();
@@ -432,7 +432,7 @@ void KexiDialogBase::updateCaption()
 	}
 }
 
-bool KexiDialogBase::neverSaved() const 
+bool KexiDialogBase::neverSaved() const
 {
 	return m_item ? m_item->neverSaved() : true;
 }
@@ -457,13 +457,13 @@ tristate KexiDialogBase::storeNewData()
 	if (cancel)
 		return cancelled;
 	if (!m_schemaData) {
-		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's definition failed."),""); 
+		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's definition failed."),"");
 		return false;
 	}
 	/* Sets 'dirty' flag on every dialog's view. */
 	setDirty(false);
 //	v->setDirty(false);
-	//new schema data has now ID updated to a unique value 
+	//new schema data has now ID updated to a unique value
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
 	m_parentWindow->project()->addStoredItem( part()->info(), m_item );
@@ -481,7 +481,7 @@ tristate KexiDialogBase::storeData()
 	if (~res)
 		return res;
 	if (!res) {
-		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's data failed."),""); 
+		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's data failed."),"");
 		return res;
 	}
 	/* Sets 'dirty' flag on every dialog's view. */

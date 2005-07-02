@@ -420,8 +420,15 @@ void KexiFormScrollView::initDataContents()
 {
 	KexiDataAwareObjectInterface::initDataContents();
 
-	recordNavigator()->setEditingIndicatorEnabled( !isReadOnly() );
-	recordNavigator()->showEditingIndicator(false);
+	if (m_preview) {
+//! @todo here we can react if user wanted to show the navigator
+		setRecordNavigatorVisible(m_data);
+		recordNavigator()->setEnabled(m_data);
+		if (m_data) {
+			recordNavigator()->setEditingIndicatorEnabled( !isReadOnly() );
+			recordNavigator()->showEditingIndicator(false);
+		}
+	}
 }
 
 KexiTableViewColumn* KexiFormScrollView::column(int col)

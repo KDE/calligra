@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -75,17 +76,31 @@ class KEXICORE_EXPORT Item
 		bool isNull() const { return m_id==0; }
 
 	private:
-		QCString		m_mime;
-		QString		m_name;
-		QString 	m_caption;
-		QString 	m_desc;
-		int		m_id;
+		QCString m_mime;
+		QString m_name;
+		QString m_caption;
+		QString m_desc;
+		int m_id;
 		bool m_neverSaved : 1;
 };
 
-//typedef QValueList<Item> ItemList;
 typedef QIntDict<KexiPart::Item> ItemDict;
 typedef QIntDictIterator<KexiPart::Item> ItemDictIterator;
+
+/*! This is part item list with reimplemented compareItems() method.
+ Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
+ so you can call sort() on the list to sort it by item name. */
+class KEXICORE_EXPORT ItemList : public QPtrList<KexiPart::Item> {
+	public:
+		ItemList() {}
+	protected:
+		virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 ) {
+			return QString::compare(
+				static_cast<KexiPart::Item*>(item1)->name(), 
+				static_cast<KexiPart::Item*>(item2)->name());
+		}
+};
+typedef QPtrListIterator<KexiPart::Item> ItemListIterator;
 
 }
 

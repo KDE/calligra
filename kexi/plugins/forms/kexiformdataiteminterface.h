@@ -35,13 +35,24 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		KexiFormDataItemInterface();
 		virtual ~KexiFormDataItemInterface();
 
-		//! \return the name of the data source for this widget
-		//! Data source usually means here a table or query or field name name.
+		//! \return the name of the data source for this widget.
+		//! Data source usually means here a table or query, a field name or an expression.
 		inline QString dataSource() const { return m_dataSource; }
 
-		//! Sets the name of the data source for this widget
+		//! Sets the name of the data source for this widget.
 		//! Data source usually means here a table or query or field name name.
 		inline void setDataSource(const QString &ds) { m_dataSource = ds; }
+
+		/*! \return the mime type of the data source for this widget.
+		 Data source mime type means here types like "kexi/table" or "kexi/query"
+		 in.the data source is set to object (as within form or subform) or is empty
+		 if the data source is set to table field or query column. */
+		inline QCString dataSourceMimeType() const { return m_dataSourceMimeType; }
+
+		/*! Sets the mime type of the data source for this widget.
+		 Data source usually means here a "kexi/table" or "kexi/query".
+		 @see dataSourceMimeType() */
+		inline void setDataSourceMimeType(const QCString &ds) { m_dataSourceMimeType = ds; }
 
 		/*! Convenience function: casts this item to a QWidget. 
 		 Can return 0 if the item is not a QWidget-derived object. */
@@ -76,6 +87,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 
 	protected:
 		QString m_dataSource;
+		QCString m_dataSourceMimeType;
 		KexiDB::Field *m_field;
 };
 

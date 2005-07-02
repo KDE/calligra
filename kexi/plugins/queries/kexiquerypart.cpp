@@ -66,8 +66,16 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 		KexiQueryDesignerGuiEditor* view = new KexiQueryDesignerGuiEditor(
 			dialog->mainWin(), parent, "guieditor");
 		//needed for updating tables combo box:
-		connect(dialog->mainWin()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
-			view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
+		KexiProject *prj = dialog->mainWin()->project();
+		connect(prj, SIGNAL(newItemStored(KexiPart::Item&)),
+			view, SLOT(slotNewItemStored(KexiPart::Item&)));
+		connect(prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
+			view, SLOT(slotItemRemoved(const KexiPart::Item&)));
+		connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QCString&)),
+			view, SLOT(slotItemRenamed(const KexiPart::Item&, const QCString&)));
+
+//		connect(dialog->mainWin()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
+//			view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
 		return view;
 	}
 	else if (viewMode == Kexi::TextViewMode) {
@@ -90,13 +98,13 @@ KexiQueryPart::remove(KexiMainWindow *win, KexiPart::Item &item)
 	return conn->removeObject( item.identifier() );
 }
 
+#if 0
 KexiPart::DataSource *
 KexiQueryPart::dataSource()
 {
 	return new KexiQueryDataSource(this);
 }
 
-#if 0
 void KexiQueryPart::initPartActions( KActionCollection *col )
 {
 }
@@ -228,6 +236,7 @@ QString KexiQueryPart::i18nMessage(const QCString& englishMessage) const
 
 //----------------
 
+#if 0
 KexiQueryDataSource::KexiQueryDataSource(KexiPart::Part *part)
  : KexiPart::DataSource(part)
 {
@@ -248,6 +257,7 @@ KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
 {
 	return 0;
 }
+#endif
 
 //----------------
 

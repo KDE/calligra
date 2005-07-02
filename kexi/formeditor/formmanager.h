@@ -31,9 +31,6 @@
 class QWidget;
 class QWorkspace;
 class KPopupMenu;
-class KexiPropertyEditor;
-class KexiPropertyBuffer;
-class KexiProperty;
 class KActionCollection;
 class KAction;
 class KToggleAction;
@@ -42,9 +39,15 @@ class KTextEdit;
 class KXMLGUIClient;
 class KMainWindow;
 
+namespace KoProperty {
+	class Editor;
+	class Set;
+	class Property;
+}
+
 namespace KFormDesigner {
 
-class ObjectPropertyBuffer;
+class WidgetPropertySet;
 class Form;
 class Container;
 class WidgetLibrary;
@@ -58,7 +61,7 @@ typedef QPtrList<KAction> ActionList;
    It deals with creating, saving and loading Form, as well as widget insertion and copying.
    It also ensures all the components (ObjectTreeView, Form and PropertyEditor) are synced,
    and link them.
-   It holds the WidgetLibrary, the ObjectPropertyBuffer, links to ObjectTreeView and PropertyEditor,
+   It holds the WidgetLibrary, the WidgetPropertySet, links to ObjectTreeView and PropertyEditor,
    as well as the copied widget and the insert state.
  **/
 class KFORMEDITOR_EXPORT FormManager : public QObject
@@ -68,14 +71,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	public:
 		/*! Constructs FormManager object.
 		 See WidgetLibrary's constructor documentation for information about
-		 \a supportedFactoryGroups parameter. 
+		 \a supportedFactoryGroups parameter.
 		 Using \a options you can control manager's behaviour, see \ref Options. */
 		FormManager(QObject *parent = 0, const QStringList& supportedFactoryGroups = QStringList(),
 			int options = 0, const char *name = 0);
 
 		virtual ~FormManager();
 
-		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2, 
+		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2,
 			HideSignalSlotConnections = 4 }; //todo
 
 		/*! Creates all the KAction related to widget insertion, and plug them
@@ -85,7 +88,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 */
 		ActionList createActions(KActionCollection *parent);
 
-		/*! Enables or disables actions \a name. 
+		/*! Enables or disables actions \a name.
 		 KFD uses KPart's, action collection here.
 		 Kexi implements this to get (shared) actions defined elsewhere. */
 		virtual void enableAction( const char* name, bool enable ) = 0;
@@ -98,8 +101,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! \return A pointer to the WidgetLibrary owned by this Manager.
 		WidgetLibrary* lib() const { return m_lib; }
 
-		//! \return A pointer to the ObjectPropertyBuffer owned by this Manager.
-		ObjectPropertyBuffer* buffer() const { return m_buffer; }
+		//! \return A pointer to the WidgetPropertySet owned by this Manager.
+		WidgetPropertySet* propertySet() const { return m_propSet; }
 
 		/*! \return true if one of the insert buttons was pressed and the forms
 		 are ready to create a widget. */
@@ -129,7 +132,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Creates and display a menu with all the slots of widget \a w.
 		void createSlotMenu(QWidget *w);
 
-		//! Emits the signal \ref createFormSlot(). Used by \ref ObjectPropertyBuffer.
+		//! Emits the signal \ref createFormSlot(). Used by \ref WidgetPropertySet.
 		void  emitCreateSlot(const QString &widget, const QString &value)
 			{ emit createFormSlot(m_active, widget, value); }
 
@@ -146,17 +149,17 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 an icon ...) */
 		bool isTopLevel(QWidget *w);
 
-		//! \return A pointer to the KexiPropertyEditor we use.
-		KexiPropertyEditor* propertyEditor() const { return m_editor; }
+		//! \return A pointer to the KoProperty::Editor we use.
+		KoProperty::Editor* propertyEditor() const { return m_editor; }
 
-		/*! Shows a propertybuffer \a buff in a Property Editor. 
+		/*! Shows a propertybuffer \a buff in a Property Editor.
 		 If \a buff is 0, Property Editor will be cleared.
-		 If \a forceReload is true, the buffer needs to be reloaded even 
+		 If \a forceReload is true, the buffer needs to be reloaded even
 		 if it's the same as previous one. */
-		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff, bool forceReload = false);
+		virtual void showPropertySet(WidgetPropertySet *list, bool forceReload = false);
 
 		/*! Sets the external property editor pane used by FormDesigner (it may be docked).*/
-		void setEditor(KexiPropertyEditor *editor);
+		void setEditor(KoProperty::Editor *editor);
 
 		/*! Sets the external object tree view used by FormDesigner (it may be docked).
 		 This function also connects appropriate signals and slots to ensure
@@ -303,10 +306,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void changeFont();
 
 	signals:
-		/*! This signal is emited as the property buffer switched. 
-		 If \a forceReload is true, the buffer needs to be reloaded even 
+		/*! This signal is emited as the property buffer switched.
+		 If \a forceReload is true, the buffer needs to be reloaded even
 		 if it's the same as previous one. */
-		void bufferSwitched(KexiPropertyBuffer *buff, bool forceReload);
+		void propertySetSwitched(KoProperty::Set *list, bool forceReload = false);
 
 		/*! This signal is emitted when any change is made to the Form \a form,
 		 so it will need to be saved. */
@@ -356,9 +359,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Signal emitted when new form gets created.  */
 		void formCreated(KFormDesigner::Form *form);
 
-		/*! This signal is emitted when a property has been changed. */
-		void propertyChanged(KexiPropertyBuffer&, KexiProperty&);
-
 	protected slots:
 		void deleteWidgetLaterTimeout();
 
@@ -381,6 +381,15 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Inits the Form, adds it to m_forms, and conects slots. */
 		void initForm(Form *form);
 
+#if 0
+		/*! Default implementation just calls FormIO::loadFormFromDom().
+		 Change this if you need to handle, eg. custom UI XML tags, as in Kexi's Form Designer. */
+		virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
+
+		/*! Default implementation just calls FormIO::saveFormToString().
+		 Change this if you need to handle, eg. custom UI XML tags, as in Kexi's Form Designer. */
+		virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
+#endif
 		/*! Function called by the "Lay out in..." menu items. It creates a layout from the
 		  currently selected widgets (that must have the same parent).
 		  Calls \ref CreateLayoutCommand. */
@@ -399,9 +408,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301,
 			MenuVBox, MenuGrid, MenuHSplitter, MenuVSplitter, MenuNoBuddy = 501 };
 
-		ObjectPropertyBuffer	*m_buffer;
-		WidgetLibrary		*m_lib;
-		QGuardedPtr<KexiPropertyEditor>  m_editor;
+		WidgetPropertySet *m_propSet;
+		WidgetLibrary *m_lib;
+		QGuardedPtr<KoProperty::Editor>  m_editor;
 		QGuardedPtr<ObjectTreeView>  m_treeview;
 		// Forms
 		QPtrList<Form>		m_forms;

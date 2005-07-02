@@ -51,8 +51,10 @@
 #include "form.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
+#include "widgetpropertyset.h"
+#include <koproperty/property.h>
+
 #include "stdwidgetfactory.h"
-#include <kexipropertybuffer.h>
 
 // Some widgets subclass to allow event filtering and some other things
 KexiPictureLabel::KexiPictureLabel(const QPixmap &pix, QWidget *parent, const char *name)
@@ -313,13 +315,13 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
 	wDateTime->setDescription(i18n("A widget to input and display a time and a date"));
 	addClass(wDateTime);
-	
+
 	m_propDesc["toggleButton"] = i18n("Toggle");
 	m_propDesc["autoRepeat"] = i18n("Auto Repeat");
 	m_propDesc["autoDefault"] = i18n("Auto Default");
 	m_propDesc["default"] = i18n("Default");
 	m_propDesc["flat"] = i18n("Flat");
-	m_propDesc["echoMode"] = 
+	m_propDesc["echoMode"] =
 		i18n("Echo mode for Line Edit widget eg. Normal, NoEcho, Password","Echo Mode");
 	m_propDesc["indent"] = i18n("Indent");
 	//line
@@ -327,12 +329,12 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	//checkbox
 	m_propDesc["checked"] = i18n("Checked checkbox", "Checked");
 	m_propDesc["tristate"] = i18n("Tristate checkbox", "Tristate");
-		
+
 	//for EchoMode
 	m_propValDesc["Normal"] = i18n("For Echo Mode", "Normal");
 	m_propValDesc["NoEcho"] = i18n("For Echo Mode", "No Echo");
 	m_propValDesc["Password"] = i18n("For Echo Mode", "Password");
-	
+
 	//for spring
 	m_propDesc["sizeType"] = i18n("Size Type");
 
@@ -376,7 +378,7 @@ StdWidgetFactory::~StdWidgetFactory()
 }
 
 QWidget*
-StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container, 
+StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
 	WidgetFactory::OrientationHint orientationHint)
 {
 	QWidget *w=0;
@@ -865,12 +867,12 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *
 			return false;
 	}
 	else if(classname == "KTextEdit")
-		return m_showAdvancedProperties || 
+		return m_showAdvancedProperties ||
 			   property!="undoDepth"
 			&& property!="undoRedoEnabled" //always true!
 			&& property!="dragAutoScroll" //always true!
 			&& property!="overwriteMode" //always false!
-			&& property!="resizePolicy" 
+			&& property!="resizePolicy"
 			&& property!="autoFormatting" //too complex
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="paper"
@@ -958,9 +960,9 @@ StdWidgetFactory::editListContents()
 }
 
 void
-StdWidgetFactory::setPropertyOptions( KexiPropertyBuffer& buf, const KFormDesigner::WidgetInfo& info, QWidget *w )
+StdWidgetFactory::setPropertyOptions( KFormDesigner::WidgetPropertySet& buf, const KFormDesigner::WidgetInfo& info, QWidget *w )
 {
-	if (buf.hasProperty("indent")) {
+	if (buf.contains("indent")) {
 		buf["indent"].setOption("min", -1);
 		buf["indent"].setOption("minValueText", i18n("default indent value", "default"));
 	}

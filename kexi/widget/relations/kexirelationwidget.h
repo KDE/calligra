@@ -61,8 +61,10 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 
 		virtual QSize sizeHint() const;
 
-		/*! Used to add newly created table to the combo box. */
-		void tableCreated(const QString& tableName);
+		/*! Used to add newly created object information to the combo box. */
+		void objectCreated(const QCString &mime, const QCString& name);
+		void objectDeleted(const QCString &mime, const QCString& name);
+		void objectRenamed(const QCString &mime, const QCString& name, const QCString& newName);
 
 	signals:
 		void tableAdded(KexiDB::TableSchema& t);

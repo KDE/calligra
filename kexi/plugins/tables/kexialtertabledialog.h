@@ -21,12 +21,15 @@
 #define KEXIALTERTABLEDIALOG_H
 
 #include <kexidatatable.h>
-#include <kexipropertybuffer.h>
 #include "kexitablepart.h"
 
-class KexiTableViewPropertyBuffer;
 class KexiTableItem;
 class KexiAlterTableDialogPrivate;
+
+namespace KoProperty {
+	class Set;
+	class Property;
+}
 
 class KexiAlterTableDialog : public KexiDataTable
 {
@@ -34,7 +37,7 @@ class KexiAlterTableDialog : public KexiDataTable
 
 	public:
 		/*! Creates a new alter table dialog. */
-		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
+		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 			const char *name = 0);
 
 		virtual ~KexiAlterTableDialog();
@@ -54,20 +57,20 @@ class KexiAlterTableDialog : public KexiDataTable
 		//! called whenever data should be reloaded (on switching to this view mode)
 		void initData();
 
-		/*! Creates a new property buffer for \a field. 
-		 The buffer will be asigned to \a row, and owned by this dialog. 
-		 If \a newOne is true, the property buffer will be marked as newly created.
-		 \return newly created property buffer. */
-		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field, bool newOne = false );
+		/*! Creates a new property set for \a field.
+		 The property set will be asigned to \a row, and owned by this dialog.
+		 If \a newOne is true, the property set will be marked as newly created.
+		 \return newly created property set. */
+		KoProperty::Set* createPropertySet( int row, KexiDB::Field *field, bool newOne = false );
 
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 		virtual tristate afterSwitchFrom(int mode);
 
-		/*! \return property buffer associated with currently selected row (i.e. field)
+		/*! \return property set associated with currently selected row (i.e. field)
 		 or 0 if current row is empty. */
-		virtual KexiPropertyBuffer *propertyBuffer();
+		virtual KoProperty::Set *propertySet();
 
-		void removeCurrentPropertyBuffer();
+		void removeCurrentPropertySet();
 
 		/*! Reimplemented from KexiViewBase, because tables creation is more complex. */
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
@@ -80,22 +83,23 @@ class KexiAlterTableDialog : public KexiDataTable
 		QString messageForSavingChanges(bool &emptyTable);
 
 		/*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
-		 Sets primary key icon and value for buffer, and deselects it from previous pkey's row. */
-		void setPrimaryKey(KexiPropertyBuffer &buf, bool set);
+		 Assigns primary key icon and value for property set \a propertySet, 
+		 and deselects it from previous pkey's row. */
+		void setPrimaryKey(KoProperty::Set &propertySet, bool set);
 
 		//! helper
 		KexiTableView *m_view;
 
 	protected slots:
-		/*! Equivalent to updateActions(false). Called on row insert/delete 
-		 in a KexiTableViewPropertyBuffer. */
+		/*! Equivalent to updateActions(false). Called on row insert/delete
+		 in a KexiDataAwarePropertySet. */
 		void updateActions();
 
 //		void slotCellSelected(int col, int row);
 		virtual void slotUpdateRowActions(int row);
 
 		//! Called before cell change in tableview.
-		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
+		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
 			QVariant& newValue, KexiDB::ResultInfo* result);
 
 		//! Called on row change in a tableview.
@@ -104,16 +108,16 @@ class KexiAlterTableDialog : public KexiDataTable
 		//! Called before row inserting in tableview.
 		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
 
-		/*! Called after any property has been changed in the current property buffer, 
+		/*! Called after any property has been changed in the current property set,
 		 to perform some actions (like updating other dependent properties) */
-		void slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
+		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-		/*! Toggles primary key for currently selected field. 
+		/*! Toggles primary key for currently selected field.
 		 Does nothing for empty row. */
 		void slotTogglePrimaryKey();
 
 /*		//! Called before row updating in tableview.
-		void slotAboutToUpdateRow(KexiTableItem* item, 
+		void slotAboutToUpdateRow(KexiTableItem* item,
 			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
 */
 //		void slotEmptyRowInserted(KexiTableItem*, uint index);

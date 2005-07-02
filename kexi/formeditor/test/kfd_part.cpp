@@ -44,13 +44,13 @@
 #include "container.h"
 #include "formmanager.h"
 #include "objecttreeview.h"
-#include "kexipropertyeditor.h"
+#include "koproperty/editor.h"
 
 #include "kfd_part.h"
 
 /*
-#define ENABLE_ACTION(name, enable) 
-	if(actionCollection()->action( name )) 
+#define ENABLE_ACTION(name, enable)
+	if(actionCollection()->action( name ))
 		actionCollection()->action( name )->setEnabled( enable )
 */
 
@@ -59,7 +59,7 @@ class KFDPart_FormManager : public KFormDesigner::FormManager
 	public:
 		/*! Constructs FormManager object.
 		 See WidgetLibrary's constructor documentation for information about
-		 \a supportedFactoryGroups parameter. 
+		 \a supportedFactoryGroups parameter.
 		 Using \a options you can control manager's behaviour, see \ref Options. */
 		KFDPart_FormManager(KFormDesignerPart *part, const QStringList& supportedFactoryGroups = QStringList(),
 			int options = 0, const char *name = 0)
@@ -74,7 +74,7 @@ class KFDPart_FormManager : public KFormDesigner::FormManager
 		}
 
 		virtual void enableAction( const char* name, bool enable ) {
-			if(m_part->actionCollection()->action( name )) 
+			if(m_part->actionCollection()->action( name ))
 				m_part->actionCollection()->action( name )->setEnabled( enable );
 		}
 
@@ -157,7 +157,7 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 		dockTree->setFixedExtentWidth(256);
 
 		QDockWindow *dockEditor = new QDockWindow(dockArea);
-		KexiPropertyEditor *editor = new KexiPropertyEditor(dockEditor);
+		KoProperty::Editor *editor = new KoProperty::Editor(dockEditor);
 		dockEditor->setWidget(editor);
 		dockEditor->setCaption(i18n("Properties"));
 		dockEditor->setResizeEnabled(true);

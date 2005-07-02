@@ -27,7 +27,7 @@
 
 #include "kexipartguiclient.h"
 #include "keximainwindow.h"
-#include "kexipartdatasource.h"
+//#include "kexipartdatasource.h"
 #include "kexi.h"
 
 #include <kexidb/connection.h>
@@ -338,7 +338,7 @@ QString Part::i18nMessage(const QCString& englishMessage) const
 	return englishMessage;
 }
 
-void Part::setupCustomPropertyPanelTabs(KTabWidget *tab)
+void Part::setupCustomPropertyPanelTabs(KTabWidget *, KexiMainWindow*)
 {
 }
 

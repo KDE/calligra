@@ -130,6 +130,7 @@ Manager::part(Info *i)
 			return 0;
 		}
 
+#if 0
 		DataSource *ds = p->dataSource();
 
 		if(ds)
@@ -141,6 +142,7 @@ Manager::part(Info *i)
 		{
 			kdDebug() << "Manager::part(): " << i->groupName() << " doesn't provide data" << endl;
 		}
+#endif
 
 		p->setInfo(i);
 		m_parts.insert(i->projectPartID(),p);

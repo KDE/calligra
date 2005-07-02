@@ -26,8 +26,8 @@
 #include <formeditor/formIO.h>
 #include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
-#include <formeditor/objpropbuffer.h>
 #include <formeditor/container.h>
+#include <formeditor/widgetpropertyset.h>
 
 #include <kexi.h>
 #include <kexidialogbase.h>
@@ -37,16 +37,21 @@
 #include <kexidb/cursor.h>
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
+#include <widget/kexipropertyeditorview.h>
+
+#include <koproperty/set.h>
+#include <koproperty/property.h>
 
 #include "kexidbform.h"
 #include "kexiformscrollview.h"
+#include "kexidatasourcepage.h"
 
 #define NO_DSWIZARD
 
 KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	const char *name, bool /*dbAware*/)
  : KexiDataAwareView( mainWin, parent, name )
- , m_buffer(0)
+ , m_propertySet(0)
  , m_resizeMode(KexiFormView::ResizeDefault)
  , m_query(0)
  , m_queryIsOwned(false)
@@ -79,8 +84,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	}
 	else
 	{
-		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *, bool)),
-			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *, bool)));
+		connect(formPart()->manager(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool)),
+			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool)));
 		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
@@ -135,7 +140,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 
 	initForm();
 
-	KexiDataAwareView::init( m_scrollView, m_scrollView, m_scrollView, 
+	KexiDataAwareView::init( m_scrollView, m_scrollView, m_scrollView,
 		/* skip data-awarness if design mode */ viewMode()==Kexi::DesignViewMode );
 
 	connect(this, SIGNAL(focus(bool)), this, SLOT(slotFocus(bool)));
@@ -149,11 +154,11 @@ KexiFormView::~KexiFormView()
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	conn->deleteCursor(m_cursor);
 
-	// Important: form window is closed. 
-	// Set buffer to 0 because there is *only one* instance of ObjPropertyBuffer
-	// in Kexi, so the main window wouldn't know buffer in fact has been changed.
-	m_buffer = 0;
-	propertyBufferSwitched();
+	// Important: form window is closed.
+	// Set property set to 0 because there is *only one* instance of a property set class
+	// in Kexi, so the main window wouldn't know the set in fact has been changed.
+	m_propertySet = 0;
+	propertySetSwitched();
 }
 
 void
@@ -211,6 +216,7 @@ KexiFormView::initForm()
 		QDomDocument dom;
 		formPart()->generateForm(fields, dom);
 		KFormDesigner::FormIO::loadFormFromDom(form(), m_dbform, dom);
+		//! @todo handle errors
 	}
 	else
 		loadForm();
@@ -240,6 +246,8 @@ KexiFormView::initForm()
 		Let's resize form widget itself later. */
 		m_delayedFormContentsResizeOnShow = 3;
 	}
+
+	updateDataSourcePage();
 }
 
 void
@@ -266,13 +274,17 @@ KexiFormView::loadForm()
 }
 
 void
-KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b, bool forceReload)
+KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload)
 {
-	m_buffer = b;
+	//if (m_buffer == b)
+	//	return;
+	m_propertySet = set;
 	if (forceReload)
-		propertyBufferReloaded(true/*preservePrevSelection*/);
+		propertySetReloaded(true/*preservePrevSelection*/);
 	else
-		propertyBufferSwitched();
+		propertySetSwitched();
+
+	formPart()->dataSourcePage()->assignPropertySet(m_propertySet);
 }
 
 tristate
@@ -295,7 +307,9 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 	// we don't store on db, but in our TempData
 	dontStore = true;
 	if(dirty() && (mode == Kexi::DataViewMode) && form()->objectTree()) {
-		KFormDesigner::FormIO::saveFormToString(form(), tempData()->tempForm);
+		KexiFormPart::TempData* temp = tempData();
+		if (!KFormDesigner::FormIO::saveFormToString(form(), temp->tempForm))
+			return false;
 	}
 
 	return true;
@@ -402,38 +416,61 @@ void KexiFormView::initDataSource()
 {
 	deleteQuery();
 	QString dataSourceString( m_dbform->dataSource() );
+	QCString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
 //! @todo also handle anonymous (not stored) queries provided as statements here
-	if (dataSourceString.isEmpty())
-		return;
+	bool ok = !dataSourceString.isEmpty();
+
 /*			if (m_previousDataSourceString.lower()==dataSourceString.lower() && !m_cursor) {
 			//data source changed: delete previous cursor
 			m_conn->deleteCursor(m_cursor);
 			m_cursor = 0;
 		}*/
-	m_previousDataSourceString = dataSourceString;
-	bool ok = true;
-	//collect all data-aware widgets and create query schema
-	m_scrollView->setMainDataSourceWidget(m_dbform);
-	QStringList sources( m_scrollView->usedDataSources() );
-	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );
-	if (tableSchema) {
-		/* We will build a _minimum_ query schema from selected table fields. */
-		m_query = new KexiDB::QuerySchema();
-		m_queryIsOwned = true;
-	}
-	else {
-		//No such table schema: try to find predefined query schema.
-		//Note: In general, we could not skip unused fields within this query because
-		//      it can have GROUP BY clause.
-//! @todo check if the query could have skipped unused fields (no GROUP BY, no joins, etc.)
-		m_query = conn->querySchema( dataSourceString );
-		m_queryIsOwned = false;
-		ok = m_query != 0;
+
+	KexiDB::TableSchema *tableSchema = 0;
+	KexiDB::Connection *conn = 0;
+	QStringList sources;
+
+	if (ok) {
+//		m_previousDataSourceString = dataSourceString;
+
+		//collect all data-aware widgets and create query schema
+		m_scrollView->setMainDataSourceWidget(m_dbform);
+		sources = m_scrollView->usedDataSources();
+		conn = parentDialog()->mainWin()->project()->dbConnection();
+		if (dataSourceMimeTypeString.isEmpty() /*table type is the default*/ 
+			|| dataSourceMimeTypeString=="kexi/table")
+		{
+			tableSchema = conn->tableSchema( dataSourceString );
+			if (tableSchema) {
+				/* We will build a _minimum_ query schema from selected table fields. */
+				m_query = new KexiDB::QuerySchema();
+				m_queryIsOwned = true;
+
+				if (dataSourceMimeTypeString.isEmpty())
+					m_dbform->setDataSourceMimeType("kexi/table"); //update for compatibility
+			}
+		}
+		
+		if (!tableSchema) {
+			if (dataSourceMimeTypeString.isEmpty() /*also try to find a query (for compatibility with Kexi<=0.9)*/ 
+				|| dataSourceMimeTypeString=="kexi/query")
+			{
+				//try to find predefined query schema.
+				//Note: In general, we could not skip unused fields within this query because
+				//      it can have GROUP BY clause.
+		//! @todo check if the query could have skipped unused fields (no GROUP BY, no joins, etc.)
+				m_query = conn->querySchema( dataSourceString );
+				m_queryIsOwned = false;
+				ok = m_query != 0;
+				if (ok && dataSourceMimeTypeString.isEmpty())
+					m_dbform->setDataSourceMimeType("kexi/query"); //update for compatibility
+			}
+			else //no other mime types supported
+				ok = false;
+		}
 	}
 
 	QValueList<uint> invalidSources;
-
 	if (ok) {
 		KexiDB::IndexSchema *pkey = tableSchema ? tableSchema->primaryKey() : 0;
 		if (pkey) {
@@ -535,7 +572,8 @@ KexiFormView::storeData()
 {
 	kexipluginsdbg << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QString data;
-	KFormDesigner::FormIO::saveFormToString(tempData()->form, data);
+	if (!KFormDesigner::FormIO::saveFormToString(tempData()->form, data))
+		return false;
 	if (!storeDataBlock(data))
 		return false;
 	tempData()->tempForm = QString();
@@ -744,8 +782,25 @@ KexiFormView::show()
 void
 KexiFormView::slotFocus(bool in)
 {
-	if(in && form() && form()->manager() && form()->manager()->activeForm() != form())
-			form()->manager()->windowChanged(m_dbform);
+	if(in && form() && form()->manager() && form()->manager()->activeForm() != form()) {
+		form()->manager()->windowChanged(m_dbform);
+		updateDataSourcePage();
+	}
+}
+
+void
+KexiFormView::updateDataSourcePage()
+{
+	if (viewMode()==Kexi::DesignViewMode) {
+		QCString dataSourceMimeType, dataSource;
+		KFormDesigner::WidgetPropertySet *set = formPart()->manager()->propertySet();
+		if (set->contains("dataSourceMimeType"))
+			dataSourceMimeType = (*set)["dataSourceMimeType"].value().toCString();
+		if (set->contains("dataSource"))
+			dataSource = (*set)["dataSource"].value().toCString();
+
+		formPart()->dataSourcePage()->setDataSource(dataSourceMimeType, dataSource);
+	}
 }
 
 /*

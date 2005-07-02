@@ -419,6 +419,8 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
   http://dev.mysql.com/doc/query-browser/en/mysql-gui-appendix-store-connections.html
 - allow to choose if the file should be locked (opened in EXCLUSIVE mode) or not
   (THIS SHOULD BE DEFAULT BEHAVIOUR)
+- (linux) remove stupid message 'Please select the file to open' 
+   when opening exisiting server project and clicking 'OK'
 
 === CLI TODO ===
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
@@ -527,8 +529,38 @@ TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 
-TODO: kdelibs/win32:
-commit kglobalsettings.cpp and win32_utils.h: KGlobalSettings::documentPath() now looks at the registry settings
+TODO: query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
+
+2005-06-20..24
+Form Designer
+- Data source tab in the Property Pane implemented
+- 'dataSourceMimeType' property added for data-aware widgets, so it can be explicity 
+  defined whether an object pointed by 'dataSource' property is a table of query. 
+  This change is backward compatible.
+- fixed switching property buffers when switching between child windows
+- record navigator is now hidden if there's no data source assigned for a form
+Query Designer
+- object combo box now also contain queries (supporting queries is not implemented yet though)
+  the list within the combo is property sorted and grouped; it's reused in 'Data source' tab 
+  of Prop. Pane; the combo now reacts on deleting/creating/renaming of table or query
+KexiDB
+- TableOrQuerySchema helper class added
+Main Window
+- crash fixed in 'detach window' action
+Core
+- Field draging: API improved, now both query and table fields/columns can be dragged;
+  added support for multiple fields dragging
+- added 'higlight object' action for KexiProject (available from property pane)
+- improved API for reaction on object creation/deletion/renaming
+General
+- * KexiProperty library made more generic as KoProperty *
+- small icons cleaned up; added better query/form/report/script icons
+- 'X-Kexi-GroupIcon' property no longer used; such icons are too hard to design and recognize
+- KexiFieldListView and KexiFieldComboBox added
+- "kfd:customHeader" element added for inserting custom information like kexiformdesigner's version
+- Number of currently selected tab of the Property Pane is preserved when switching back 
+  to dialog for a particular part (in design mode). So if a user have looked at "data source" tab, 
+	it's no longer necessary to click this tab again.
 
 2005-06-10..16
 General 

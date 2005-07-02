@@ -40,7 +40,7 @@ namespace KexiDB
 	class FieldList;
 }
 
-class KexiProperty;
+class KexiDataSourcePage;
 
 //! Kexi Form Plugin
 /*! It just creates a \ref KexiFormView. See there for most of code. */
@@ -53,6 +53,7 @@ class KexiFormPart : public KexiPart::Part
 		virtual ~KexiFormPart();
 
 		KFormDesigner::FormManager *manager() const;
+		KexiDataSourcePage* dataSourcePage() const;
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
@@ -78,12 +79,12 @@ class KexiFormPart : public KexiPart::Part
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
 
 	protected slots:
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
 		void slotAssignAction();
-		void slotPropertyChanged(KexiPropertyBuffer&, KexiProperty& prop);
+		void slotPropertyChanged(QWidget *widget, const QCString &name, const QVariant &value);
 
 	private:
 		class Private;

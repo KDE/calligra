@@ -37,6 +37,7 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 	Q_OBJECT
 	Q_OVERRIDE(QString text DESIGNABLE false)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 	Q_ENUMS( WidgetType )
@@ -60,6 +61,7 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 		virtual ~KexiDBInputWidget();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& text );
 
@@ -96,6 +98,7 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 		}
 		
 		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
+		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		void setMinValue( int value );
 		void setMaxValue( int value );

@@ -110,8 +110,26 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 */
 		KexiPart::ItemDict* items(const QCString &mime);
 
+		/**
+		 * Puts a list of items of a type \a i in this project into \a list.
+		 * You can then sort this list using ItemList::sort().
+		 */
+		void getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
+
+		/**
+		 * Puts a sorted list of items of a type \a mime in this project into \a list.
+		 * You can then sort this list using ItemList::sort().
+		 */
+		void getSortedItems(KexiPart::ItemList& list, const QCString &mime);
+
+		/**
+		 * @return item of type \a mime and name \a name
+		 */
 		KexiPart::Item* item(const QCString &mime, const QString &name);
-		//! convenience function
+
+		/**
+		 * @return item of type \a i and name \a name
+		 */
 		KexiPart::Item* item(KexiPart::Info *i, const QString &name);
 
 		/**
@@ -190,11 +208,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		static tristate dropProject(KexiProjectData* data, 
 			KexiDB::MessageHandler* handler, bool dontAsk = false);
 
-		/** new table \a schema created */
-		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
-
-	signals:
-		void newItemStored(KexiPart::Item *item);
+//		/** used to emit objectCreated() signal */
+//		void emitObjectCreated(const QCString &mime, const QCString& name) { emit objectCreated(mime, name); }
+//		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
 
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
@@ -233,14 +249,19 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		/** signal emitted on error (not KexiDB-related) */
 		void error(const QString &msg, const QString &desc);
 
+		/** New \a item has been stored. */
+		void newItemStored(KexiPart::Item& item);
+
 		/** instance pointed by \a item is removed */
 		void itemRemoved(const KexiPart::Item &item);
 
 		/** instance pointed by \a item is renamed */
-		void itemRenamed(const KexiPart::Item &item);
+		void itemRenamed(const KexiPart::Item &item, const QCString& oldName);
 
-		/** new table \a schema created */
-		void tableCreated(KexiDB::TableSchema& schema);
+//		/** new table \a schema created */
+//		void tableCreated(KexiDB::TableSchema& schema);
+//		/** New object of mimetype \a mime and \a name has been created. */
+//		void objectCreated(const QCString &mime, const QCString& name);
 
 	protected:
 		QGuardedPtr<KexiDB::Connection> m_connection;

@@ -9,10 +9,11 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexiprojectdata.cpp kexiinternalpart.cpp \
 	kexidragobjects.cpp \
-	kexiproperty.cpp kexipropertybuffer.cpp kexipartdatasource.cpp \
 	kexiuseraction.cpp kexiuseractionmethod.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp \
 	kexidataiteminterface.cpp kexievents.cpp
+
+#kexipartdatasource.cpp
 
 noinst_HEADERS = kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
 
@@ -21,11 +22,13 @@ libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolve
 SUBDIRS = .
 
 libkexicore_la_LIBADD = $(LIB_KEXI_KMDI) \
-	../kexiutils/libkexiutils.la \
-	../kexidb/libkexidb.la ../kexidb/parser/libkexidbparser.la
+	$(top_builddir)/kexi/kexiutils/libkexiutils.la \
+	$(top_builddir)/kexi/kexidb/libkexidb.la $(top_builddir)/kexi/kexidb/parser/libkexidbparser.la \
+	$(top_builddir)/lib/koproperty/libkoproperty.la
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
-	-I$(top_srcdir)/lib/kofficeui \
+	-I$(top_srcdir)/lib/kofficecore \
+	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/kexi \
 	$(all_includes)
 

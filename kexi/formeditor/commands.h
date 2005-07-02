@@ -48,9 +48,9 @@ class Form;
 class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 {
 	public:
-		PropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue,
+		PropertyCommand(WidgetPropertySet *set, const QString &name, const QVariant &oldValue,
 			const QVariant &value, const QCString &property);
-		PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues,
+		PropertyCommand(WidgetPropertySet *set, const QMap<QString, QVariant> &oldvalues,
 			 const QVariant &value, const QCString &property);
 
 		virtual void execute();
@@ -61,10 +61,10 @@ class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 		void  setValue(const QVariant &value);
 
 	protected:
-		ObjectPropertyBuffer *m_buffer;
-		QVariant   m_value;
+		WidgetPropertySet *m_propSet;
+		QVariant m_value;
 		QMap<QString, QVariant> m_oldvalues;
-		QCString    m_property;
+		QCString m_property;
 };
 
 /*! This command is used when moving multiples widgets at the same time, while holding Ctrl or Shift.
@@ -73,7 +73,7 @@ class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 {
 	public:
-		GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, QPoint oldPos);
+		GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, QPoint oldPos);
 
 		virtual void execute();
 		virtual void unexecute();
@@ -82,8 +82,8 @@ class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 		void setPos(QPoint pos);
 
 	protected:
-		ObjectPropertyBuffer *m_buffer;
-		QStringList  m_names;
+		WidgetPropertySet *m_propSet;
+		QStringList m_names;
 		QPoint m_oldPos;
 		QPoint m_pos;
 };
@@ -138,7 +138,7 @@ class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 	public:
-		LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QString &name,
+		LayoutPropertyCommand(WidgetPropertySet *set, const QString &name,
 			const QVariant &oldValue, const QVariant &value);
 
 		virtual void execute();

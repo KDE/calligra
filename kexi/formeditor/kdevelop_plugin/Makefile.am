@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-INCLUDES = -I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget/propertyeditor $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/core $(all_includes)
 METASOURCES = AUTO
 
 # KFormDesigner KDevelop plugin

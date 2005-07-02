@@ -7,13 +7,15 @@ kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesignersql.cpp \
 				kexiqueryview.cpp
 kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module -no-undefined
 kexihandler_query_la_LIBADD = ../../core/libkexicore.la \
-  ../../kexidb/libkexidb.la \
-  ../../widget/libkexiextendedwidgets.la \
-  ../../widget/tableview/libkexidatatable.la \
-  ../../widget/relations/libkexirelationsview.la
+  $(top_builddir)/kexi/kexidb/libkexidb.la \
+  $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
+  $(top_builddir)/kexi/widget/tableview/libkexidatatable.la \
+  $(top_builddir)/kexi/widget/relations/libkexirelationsview.la \
+  $(top_builddir)/lib/koproperty/libkoproperty.la
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/widget/tableview \
+	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
 	-I$(top_srcdir)/kexi/kexidb $(all_includes)
 
 METASOURCES = AUTO

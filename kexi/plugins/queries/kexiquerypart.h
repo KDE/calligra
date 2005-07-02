@@ -26,7 +26,7 @@
 #include <kexidialogbase.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
-#include <kexipartdatasource.h>
+//#include <kexipartdatasource.h>
 
 #include <kexidb/queryschema.h>
 #include <kexidb/connection.h>
@@ -38,7 +38,7 @@ namespace KexiDB
 	class Connection;
 }
 
-class KexiQueryDataSource;
+//class KexiQueryDataSource;
 class KexiProject;
 
 class KexiQueryPart : public KexiPart::Part
@@ -53,7 +53,7 @@ class KexiQueryPart : public KexiPart::Part
 
 //		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
 
-		virtual KexiPart::DataSource *dataSource();
+//		virtual KexiPart::DataSource *dataSource();
 
 		class TempData : public KexiDialogTempData, public KexiDB::Connection::TableSchemaChangeListenerInterface
 		{
@@ -90,6 +90,7 @@ class KexiQueryPart : public KexiPart::Part
 		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
 };
 
+#if 0
 class KexiQueryDataSource : public KexiPart::DataSource
 {
 	public:
@@ -99,7 +100,7 @@ class KexiQueryDataSource : public KexiPart::DataSource
 		virtual KexiDB::FieldList *fields(KexiProject *prj, const KexiPart::Item &);
 		virtual KexiDB::Cursor *cursor(KexiProject *prj, const KexiPart::Item &i, bool buffer);
 };
-
+#endif
 
 #endif
 

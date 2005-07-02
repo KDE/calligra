@@ -91,12 +91,14 @@ class KexiDBLineEdit :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
 	public:
 		KexiDBLineEdit(QWidget *parent, const char *name=0);
 		virtual ~KexiDBLineEdit();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -126,6 +128,7 @@ class KexiDBLineEdit :
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 	protected slots:
 		void slotTextChanged(const QString&);
@@ -144,12 +147,14 @@ class KexiDBTextEdit :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
 	public:
 		KexiDBTextEdit(QWidget *parent, const char *name=0);
 		virtual ~KexiDBTextEdit();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -179,6 +184,7 @@ class KexiDBTextEdit :
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 	protected slots:
 		void slotTextChanged();

@@ -159,30 +159,28 @@ KexiBrowser::clear()
 }
 
 void
-KexiBrowser::addGroup(KexiPart::Info *info)
+KexiBrowser::addGroup(KexiPart::Info& info)
 {
-	if(!info->addTree())
+	if(!info.addTree())
 		return;
 
-	KexiBrowserItem *item = new KexiBrowserItem(m_list, info);
-	m_baseItems.insert(info->mime().lower(), item);
+	KexiBrowserItem *item = new KexiBrowserItem(m_list, &info);
+	m_baseItems.insert(info.mime().lower(), item);
 
 //	kdDebug() << "KexiBrowser::addGroup()" << endl;
 }
 
 void
-KexiBrowser::addItem(KexiPart::Item *item)
+KexiBrowser::addItem(KexiPart::Item& item)
 {
-	if (!item)
-		return;
 	//part object for this item
-	KexiBrowserItem *parent = item->mime().isEmpty() ? 0 : m_baseItems.find(item->mime().lower());
+	KexiBrowserItem *parent = item.mime().isEmpty() ? 0 : m_baseItems.find(item.mime().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 //	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
 	
-	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
-	m_normalItems.insert(item->identifier(), bitem);
+	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), &item);
+	m_normalItems.insert(item.identifier(), bitem);
 }
 
 void 
@@ -419,7 +417,8 @@ void KexiBrowser::itemRenameDone()
 	if (!ok) {
 		txt = it->item()->name(); //revert
 	}
-	it->setText(0, QString(" ") + txt + " ");
+//	it->setText(0, QString(" ") + txt + " ");
+	it->setText(0, txt);
 	it->parent()->sort();
 	m_list->setFocus();
 }
@@ -431,14 +430,13 @@ void KexiBrowser::setFocus()
 		m_list->setSelected(m_list->firstChild(), true);
 }
 
-void KexiBrowser::updateItemName( KexiPart::Item *item, bool dirty )
+void KexiBrowser::updateItemName( KexiPart::Item& item, bool dirty )
 {
-	if (!item)
-		return;
-	KexiBrowserItem *bitem = m_normalItems[item->identifier()];
+	KexiBrowserItem *bitem = m_normalItems[item.identifier()];
 	if (!bitem)
 		return;
-	bitem->setText( 0, " "+ item->name() + (dirty ? "* " : " ") );
+//	bitem->setText( 0, " "+ item.name() + (dirty ? "* " : " ") );
+	bitem->setText( 0, item.name() + (dirty ? "*" : "") );
 }
 
 /*void KexiBrowser::focusInEvent( QFocusEvent *e )
@@ -452,6 +450,16 @@ void KexiBrowser::updateItemName( KexiPart::Item *item, bool dirty )
 void KexiBrowser::slotSettingsChanged(int)
 {
 	m_singleClick = KGlobalSettings::singleClick();
+}
+
+void KexiBrowser::highlightItem(KexiPart::Item& item)
+{
+	KexiBrowserItem *bitem = m_normalItems[item.identifier()];
+	if (!bitem)
+		return;
+	m_list->setSelected(bitem, true);
+	m_list->ensureItemVisible(bitem);
+	m_list->setCurrentItem(bitem);
 }
 
 //--------------------------------------------
@@ -469,7 +477,7 @@ void KexiBrowserListView::rename(QListViewItem *item, int c)
 	if (it->item() && c==0) {
 		//only edit 1st column for items, not item groups
 //TODO: also check it this item is not read-only
-		item->setText(0, item->text(0).mid(1,item->text(0).length()-2));
+//		item->setText(0, item->text(0).mid(1,item->text(0).length()-2));
 		KListView::rename(item, c);
 		adjustColumn(0);
 	}

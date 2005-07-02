@@ -49,7 +49,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project() = 0;
-		
+
 		/*! Registers dialog \a dlg for watching and adds it to the main window's stack. */
 		virtual void registerChild(KexiDialogBase *dlg) = 0;
 
@@ -57,33 +57,34 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
-		 Private means that the object is not stored as-is in the project but is somewhat 
+		 Private means that the object is not stored as-is in the project but is somewhat
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
 		virtual int generatePrivateID() = 0;
 
-		/*! \return a list of all actions defined by application. 
-		 Not all of them are shared. Don't use plug these actions 
+		/*! \return a list of all actions defined by application.
+		 Not all of them are shared. Don't use plug these actions
 		 in your windows by hand but user methods from KexiViewBase! */
 		virtual KActionPtrList allActions() const = 0;
 
 	public slots:
 		//! Opens object pointed by \a item in a view \a viewMode
 		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode) = 0;
+
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode) = 0;
 
 		/*! Called to accept property butter editing. */
-		virtual void acceptPropertyBufferEditing() = 0;
+		virtual void acceptPropertySetEditing() = 0;
 
-		/*! Received information from active view that \a dlg has switched 
-		its property buffer, so property editor contents should be reloaded. 
-		 If \a force is true, property editor's data is reloaded even 
-		 if the currently pointed buffer is the same as before.
-		 If \a preservePrevSelection is true and there was a buffer 
-		 set before call, previously selected item will be preselected 
+		/*! Received information from active view that \a dlg has switched
+		its property set, so property editor contents should be reloaded.
+		 If \a force is true, property editor's data is reloaded even
+		 if the currently pointed property set is the same as before.
+		 If \a preservePrevSelection is true and there was a property set
+		 set before call, previously selected item will be preselected
 		 in the editor (if found). */
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, 
+		virtual void propertySetSwitched(KexiDialogBase *dlg, bool force=false,
 			bool preservePrevSelection = true) = 0;
 
 		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
@@ -95,30 +96,35 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 up for never saved objects. */
 		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null ) = 0;
-	
+
 		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
 		 used will be asked if saving should be perforemed.
 		 \return true on successull closing or false on closing error.
 		 If closing was cancelled by user, cancelled is returned. */
 		virtual tristate closeDialog(KexiDialogBase *dlg) = 0;
 
-		/*! Displays a dialog for entering object's name and title. 
-		 Used on new object saving. 
+		/*! Displays a dialog for entering object's name and title.
+		 Used on new object saving.
 		 \return true on successul closing or cancelled on cancel returned.
 		 It's unlikely to have false returned here.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
-		 within name/caption dialog (see KexiNameDialog). 
-		 If \a allowOverwriting is true, user will be asked for existing 
-		 object's overwriting, else it will be impossible to enter 
-		 a name of exisiting object. 
+		 within name/caption dialog (see KexiNameDialog).
+		 If \a allowOverwriting is true, user will be asked for existing
+		 object's overwriting, else it will be impossible to enter
+		 a name of exisiting object.
 		 You can check \a allowOverwriting after calling this method.
 		 If it's true, user agreed on overwriting, if it's false, user picked
 		 nonexisting name, so no overwrite will be needed. */
 		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part,
 			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null ) = 0;
 
+		/*! Highlights object of mime \a mime and name \a name.
+		 This can be done in the Project Navigator or so. 
+		 If a window for the object is opened (in any mode), it should be raised. */
+		virtual void highlightObject(const QCString& mime, const QCString& name) = 0;
+
 	protected slots:
-		virtual void slotObjectRenamed(const KexiPart::Item &item) = 0;
+		virtual void slotObjectRenamed(const KexiPart::Item &item, const QCString& oldName) = 0;
 
 };
 

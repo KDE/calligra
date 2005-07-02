@@ -54,9 +54,6 @@
 
 //#include "projectsettingsui.h"
 #include "kexibrowser.h"
-#include "kexipropertyeditorview.h"
-#include "kexipropertyeditor.h"
-#include "kexipropertybuffer.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
@@ -70,6 +67,10 @@
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 #include "kexiuseraction.h"
+
+#include <widget/kexipropertyeditorview.h>
+#include <koproperty/editor.h>
+#include <koproperty/set.h>
 
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectWizard.h"
@@ -136,8 +137,12 @@ class KexiMainWindowImpl::Private
 #endif
 		KexiBrowser *nav;
 		KTabWidget *propEditorTabWidget;
+		//! poits to kexi part which has been previously used to setup proppanel's tabs using 
+		//! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().
+		QGuardedPtr<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
+		QMap<KexiPart::Part*, int> recentlySelectedPropertyPanelPages;
 		QGuardedPtr<KexiPropertyEditorView> propEditor;
-		QGuardedPtr<KexiPropertyBuffer> propBuffer;
+		QGuardedPtr<KoProperty::Set> propBuffer;
 
 		KexiDialogDict dialogs;
 		KXMLGUIClient *curDialogGUIClient, *curDialogViewGUIClient,
@@ -161,7 +166,7 @@ class KexiMainWindowImpl::Private
 
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
-		 *action_project_properties, *action_open_recent_more, 
+		 *action_project_properties, *action_open_recent_more,
 		 *action_project_relations, *action_project_import_data_table;
 		KActionMenu *action_open_recent, *action_show_other;
 		int action_open_recent_more_id;
@@ -434,10 +439,11 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
 	manager()->setSplitterHighResolution(true);
-  manager()->setSplitterKeepSize(true);
+	manager()->setSplitterKeepSize(true);
 	setStandardMDIMenuEnabled(false);
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
+	KGlobal::iconLoader()->addAppDir("koffice");
 
 	//get informed
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
@@ -652,7 +658,7 @@ void KexiMainWindowImpl::initActions()
 
 #ifndef KEXI_NO_CSV_IMPORT
 	d->action_project_import_data_table = new KAction(i18n("Import->Data Table...", "Data &Table..."),
-		"download_manager"/*todo: change to "file_import" or so*/, 
+		"download_manager"/*todo: change to "file_import" or so*/,
 		0, this, SLOT(slotToolsProjectImportDataTable()), actionCollection(), "project_import_data_table");
 #else
 	d->action_project_import_data_table = d->dummy_action;
@@ -669,8 +675,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
 
 #ifndef KEXI_NO_CSV_IMPORT
-	d->action_edit_paste_special_data_table = new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."), 
-		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()), 
+	d->action_edit_paste_special_data_table = new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
+		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()),
 		actionCollection(), "edit_paste_special_data_table");
 #else
 	d->action_edit_paste_special_data_table = d->dummy_action;
@@ -1258,7 +1264,7 @@ KexiMainWindowImpl::initNavigator()
 			if (!it->addTree())
 				continue;
 			kdDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
-			d->nav->addGroup(it);
+			d->nav->addGroup(*it);
 
 /*			KexiPart::Part *p=Kexi::partManager().part(it);
 			if (!p) {
@@ -1280,11 +1286,11 @@ KexiMainWindowImpl::initNavigator()
 			if (!item_dict)
 				continue;
 			for (KexiPart::ItemDictIterator item_it( *item_dict ); item_it.current(); ++item_it) {
-				d->nav->addItem(item_it);
+				d->nav->addItem(*item_it.current());
 			}
 		}
 	}
-	connect(d->prj, SIGNAL(newItemStored(KexiPart::Item*)), d->nav, SLOT(addItem(KexiPart::Item*)));
+	connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav, SLOT(addItem(KexiPart::Item&)));
 	d->nav->setFocus();
 	invalidateActions();
 }
@@ -1466,8 +1472,8 @@ void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
 
-	if (d->propEditor)
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
+//js: too WEIRD	if (d->propEditor)
+//js: too WEIRD		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 //	if (d->propEditorToolWindow)
 	//	d->propEditorToolWindow->hide();
 }
@@ -1755,9 +1761,9 @@ KexiMainWindowImpl::updateDialogViewGUIClient(KXMLGUIClient *viewClient)
 void KexiMainWindowImpl::updateCustomPropertyPanelTabs(KexiDialogBase *prevDialog, int prevViewMode)
 {
 	updateCustomPropertyPanelTabs(
-		prevDialog ? prevDialog->part() : 0, 
+		prevDialog ? prevDialog->part() : 0,
 		prevDialog ? prevDialog->currentViewMode() : prevViewMode,
-		d->curDialog ? d->curDialog->part() : 0, 
+		d->curDialog ? d->curDialog->part() : 0,
 		d->curDialog ? d->curDialog->currentViewMode() : Kexi::NoViewMode
 	);
 }
@@ -1773,6 +1779,17 @@ void KexiMainWindowImpl::updateCustomPropertyPanelTabs(
 		    && (prevDialogPart!=curDialogPart || prevViewMode!=curViewMode)
 		 ))
 	{
+		if (d->partForPreviouslySetupPropertyPanelTabs) {
+			//remember current page number for this part
+			if (prevViewMode==Kexi::DesignViewMode && 
+				((KexiPart::Part*)d->partForPreviouslySetupPropertyPanelTabs != curDialogPart) //part changed
+				|| curViewMode!=Kexi::DesignViewMode) //..or switching to other view mode
+			{
+				d->recentlySelectedPropertyPanelPages.insert( d->partForPreviouslySetupPropertyPanelTabs, 
+					d->propEditorTabWidget->currentPageIndex() );
+			}
+		}
+		
 		//delete old custom tabs (other than 'property' tab)
 		const uint count = d->propEditorTabWidget->count();
 		for (uint i=1; i < count; i++)
@@ -1783,11 +1800,26 @@ void KexiMainWindowImpl::updateCustomPropertyPanelTabs(
 	if ((!prevDialogPart && !curDialogPart)
 		|| (prevDialogPart == curDialogPart && prevViewMode==curViewMode)
 		|| (curDialogPart && curViewMode!=Kexi::DesignViewMode))
+	{
+		//new part for 'previously setup tabs'
+		d->partForPreviouslySetupPropertyPanelTabs = curDialogPart;
 		return;
+	}
 
-	//recreate custom tabs
-	if (curDialogPart)
-		curDialogPart->setupCustomPropertyPanelTabs(d->propEditorTabWidget);
+	if (curDialogPart) {
+		//recreate custom tabs
+		curDialogPart->setupCustomPropertyPanelTabs(d->propEditorTabWidget, this);
+
+		//restore current page number for this part
+		if (d->recentlySelectedPropertyPanelPages.contains( curDialogPart )) {
+			d->propEditorTabWidget->setCurrentPage( 
+				d->recentlySelectedPropertyPanelPages[ curDialogPart ] 
+			);
+		}
+	}
+
+	//new part for 'previously setup tabs'
+	d->partForPreviouslySetupPropertyPanelTabs = curDialogPart;
 }
 
 void KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
@@ -1886,7 +1918,7 @@ void KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	}
 	d->curDialog=dlg;
 
-	propertyBufferSwitched(d->curDialog);
+	propertySetSwitched(d->curDialog);
 	updateCustomPropertyPanelTabs(prevDialog, prevDialog ? prevDialog->currentViewMode() : Kexi::NoViewMode);
 
 	if (dialogChanged) {
@@ -2018,7 +2050,7 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 //	d->prj = ::createKexiProject(new_data);
 //provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 //provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
-	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&)));
+	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QCString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QCString&)));
 
 	if (d->nav)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -2520,8 +2552,8 @@ void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 	closeDialog(dynamic_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
 }
 
-tristate KexiMainWindowImpl::getNewObjectInfo( 
-	KexiPart::Item *partItem, KexiPart::Part *part, 
+tristate KexiMainWindowImpl::getNewObjectInfo(
+	KexiPart::Item *partItem, KexiPart::Part *part,
 	bool& allowOverwriting, const QString& messageWhenAskingForName )
 {
 	//data was never saved in the past -we need to create a new object at the backend
@@ -2555,11 +2587,11 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 				d->nameDialog->widget()->nameText(), tmp_sdata );
 		if (found) {
 			if (allowOverwriting) {
-				int res = KMessageBox::warningYesNoCancel(this, 
+				int res = KMessageBox::warningYesNoCancel(this,
 					"<p>"+part->i18nMessage("Object \"%1\" already exists.")
 						.arg(d->nameDialog->widget()->nameText())
-					+"</p><p>"+i18n("Do you want to replace it?")+"</p>", 0, 
-					KGuiItem(i18n("&Replace"), "button_yes"), 
+					+"</p><p>"+i18n("Do you want to replace it?")+"</p>", 0,
+					KGuiItem(i18n("&Replace"), "button_yes"),
 					KGuiItem(i18n("&Choose other name...")));
 				if (res == KMessageBox::No)
 					continue;
@@ -2571,7 +2603,7 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 				}
 			}
 			else {
-				KMessageBox::information(this, 
+				KMessageBox::information(this,
 					"<p>"+part->i18nMessage("Object \"%1\" already exists.")
 						.arg(d->nameDialog->widget()->nameText())
 					+"</p><p>"+i18n("Please choose other name.")+"</p>");
@@ -2605,7 +2637,7 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 	const int oldItemID = dlg->partItem()->identifier();
 
 	bool allowOverwriting = false;
-	res = getNewObjectInfo( dlg->partItem(), dlg->part(), allowOverwriting, 
+	res = getNewObjectInfo( dlg->partItem(), dlg->part(), allowOverwriting,
 		messageWhenAskingForName );
 	if (res != true)
 		return res;
@@ -2644,7 +2676,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		if (d->propEditor) {
 			// ah, closing detached window - better switch off property buffer right now...
 			d->propBuffer = 0;
-			d->propEditor->editor()->setBuffer( 0, false );
+			d->propEditor->editor()->changeSet( 0, false );
 		}
 	}
 
@@ -2698,7 +2730,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	else {
 		//not dirty now
 		if(d->nav)
-			d->nav->updateItemName( dlg->partItem(), false );
+			d->nav->updateItemName( *dlg->partItem(), false );
 	}
 
 	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
@@ -3136,7 +3168,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	}
 
 	if (!it->neverSaved()) //only add stored objects to the browser
-		d->nav->addItem(it);
+		d->nav->addItem(*it);
 	return openObject(it, Kexi::DesignViewMode);
 }
 
@@ -3199,7 +3231,7 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 	}
 }
 
-void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item)
+void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const QCString& /*oldName*/)
 {
 	KexiDialogBase *dlg = d->dialogs[item.identifier()];
 	if (dlg) {//change item
@@ -3214,22 +3246,22 @@ int KexiMainWindowImpl::generatePrivateID()
 	return --d->privateIDCounter;
 }
 
-void KexiMainWindowImpl::acceptPropertyBufferEditing()
+void KexiMainWindowImpl::acceptPropertySetEditing()
 {
 	if (d->propEditor)
-		d->propEditor->editor()->acceptEditor();
+		d->propEditor->editor()->acceptInput();
 }
 
-void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection)
+void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection)
 {
-	kdDebug() << "KexiMainWindowImpl::propertyBufferSwitched()" << endl;
+	kdDebug() << "KexiMainWindowImpl::propertySetSwitched()" << endl;
 	if ((KexiDialogBase*)d->curDialog!=dlg)
 		return;
 	if (d->propEditor) {
-		KexiPropertyBuffer *newBuf = d->curDialog ? d->curDialog->propertyBuffer() : 0;
-		if (!newBuf || (force || static_cast<KexiPropertyBuffer*>(d->propBuffer) != newBuf)) {
+		KoProperty::Set *newBuf = d->curDialog ? d->curDialog->propertySet() : 0;
+		if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
 			d->propBuffer = newBuf;
-			d->propEditor->editor()->setBuffer( d->propBuffer, preservePrevSelection );
+			d->propEditor->editor()->changeSet( d->propBuffer, preservePrevSelection );
 		}
 	}
 }
@@ -3239,7 +3271,7 @@ void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
 	KexiPart::Item *item = dlg->partItem();
 	//update text in navigator and app. caption
 	if(!d->final)
-		d->nav->updateItemName( item, dlg->dirty() );
+		d->nav->updateItemName( *item, dlg->dirty() );
 
 	invalidateActions();
 	updateAppCaption();
@@ -3277,7 +3309,7 @@ void KexiMainWindowImpl::slotStartFeedbackAgent()
 			about->appName() + QCString( " [feedback]" ),
 			wizard->feedbackDocument().toString( 2 ).local8Bit() );
 	}
-	
+
 	delete wizard;
 #endif
 #endif
@@ -3505,7 +3537,7 @@ void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )
 }
 
 /// TMP (until there's true template support)
-void  KexiMainWindowImpl::slotGetNewStuff()
+void KexiMainWindowImpl::slotGetNewStuff()
 {
 #ifdef HAVE_KNEWSTUFF
 	if(!d->newStuff)
@@ -3515,5 +3547,17 @@ void  KexiMainWindowImpl::slotGetNewStuff()
 #endif
 }
 
-#include "keximainwindowimpl.moc"
+void KexiMainWindowImpl::highlightObject(const QCString& mime, const QCString& name)
+{
+	slotViewNavigator();
+	if (!d->prj)
+		return;
+	KexiPart::Item *item = d->prj->item(mime, name);
+	if (!item)
+		return;
+	if (d->nav) {
+		d->nav->highlightItem(*item);
+	}
+}
 
+#include "keximainwindowimpl.moc"

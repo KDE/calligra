@@ -50,6 +50,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
 
 	public:
@@ -59,6 +60,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		KexiDataAwareObjectInterface* dataAwareObject() const;
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		//! no effect
 		QVariant value() { return QVariant(); }
@@ -100,6 +102,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 	public slots:
 		void setAutoTabStops(bool set);
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 	protected:
 		//! no effect

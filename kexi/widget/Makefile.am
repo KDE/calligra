@@ -3,12 +3,15 @@ include $(top_srcdir)/kexi/Makefile.global
 lib_LTLIBRARIES = libkexiextendedwidgets.la
 libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexidatatable.cpp kexidatatableview.cpp \
-	kexiquerydesignersqleditor.cpp kexidatasourcecombo.cpp \
-	kexidatasourcewizard.cpp kexidswelcome.cpp kexidssource.cpp \
-	kexidatasourcefields.cpp kexisectionheader.cpp pixmapcollection.cpp \
+	kexiquerydesignersqleditor.cpp  \
+	kexisectionheader.cpp pixmapcollection.cpp \
 	kexiscrollview.cpp kexidbconnectionwidgetbase.ui kexidbconnectionwidget.cpp \
 	kexidbconnectionwidgetdetailsbase.ui kexidbdrivercombobox.cpp \
-	kexieditor.cpp
+	kexieditor.cpp \
+	kexifieldlistview.cpp kexifieldcombobox.cpp kexidatasourcecombobox.cpp \
+	kexipropertyeditorview.cpp
+
+#TODO	kexidatasourcecombo.cpp kexidatasourcewizard.cpp kexidswelcome.cpp kexidssource.cpp kexidatasourcefields.cpp 
 
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
@@ -38,7 +41,8 @@ SUBDIRS = utils tableview . propertyeditor relations
 # set the include path for X, qt and KDE - all_includes must remain last!
 INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/widget/tableview \
 	$(LIB_KEXI_KMDI_INCLUDES) \
-	-I$(top_srcdir)/kexi/core $(all_includes)
+	-I$(top_srcdir)/kexi/core \
+	-I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib $(all_includes)
 
 METASOURCES = AUTO
 

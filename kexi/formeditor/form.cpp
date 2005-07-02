@@ -31,7 +31,7 @@
 
 #include "container.h"
 #include "objecttree.h"
-#include "objpropbuffer.h"
+#include "widgetpropertyset.h"
 #include "formIO.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
@@ -39,6 +39,7 @@
 #include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
+#include <koproperty/property.h>
 
 #include "form.h"
 
@@ -68,9 +69,13 @@ FormPrivate::~FormPrivate()
 	// otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
+//--------------------------------------
+
 FormWidget::FormWidget()
 {
 }
+
+//--------------------------------------
 
 Form::Form(FormManager *manager, const char *name)
   : QObject(manager, name)
@@ -319,7 +324,7 @@ Form::formDeleted()
 }
 
 void
-Form::changeName(const QString &oldname, const QString &newname)
+Form::changeName(const QCString &oldname, const QCString &newname)
 {
 	if(oldname == newname)
 		return;
@@ -327,12 +332,12 @@ Form::changeName(const QString &oldname, const QString &newname)
 	{
 		KMessageBox::sorry(widget()->topLevelWidget(),
 			i18n("Renaming widget \"%1\" to \"%2\" failed.").arg(oldname).arg(newname));
-//moved to ObjectPropertyBuffer::slotChangeProperty()
+//moved to WidgetPropertySet::slotChangeProperty()
 //		KMessageBox::sorry(widget()->topLevelWidget(),
 //		i18n("A widget with this name already exists. "
 //			"Please choose another name or rename existing widget."));
 		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
-		(*(d->manager->buffer()))["name"] = oldname;
+		d->manager->propertySet()->property("name") = QVariant(oldname);
 	}
 	else
 	{

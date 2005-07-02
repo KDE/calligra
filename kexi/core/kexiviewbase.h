@@ -26,7 +26,10 @@
 
 class KexiMainWindow;
 class KexiDialogBase;
-class KexiPropertyBuffer;
+
+namespace KoProperty {
+	class Set;
+}
 
 namespace KexiDB {
 	class SchemaData;
@@ -42,8 +45,8 @@ namespace KexiDB {
  KexiViewBase objects are usually allocated within KexiDialogBase objects by implementing
  KexiPart::createView() method. See query or table part code for examples.
 
- KexiViewBase object can be also allocated without attaching it KexiDialogBase, 
- especially withinn dock window. see KexiMainWindowImpl::initNavigator() to see example 
+ KexiViewBase object can be also allocated without attaching it KexiDialogBase,
+ especially withinn dock window. see KexiMainWindowImpl::initNavigator() to see example
  how KexiBrowser does this.
 */
 class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
@@ -61,14 +64,14 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		KexiDialogBase* parentDialog() const { return m_dialog; }
 
 		/*! Added for convenience.
-		 \return KexiPart object that was used to create this view (with a dialog) 
+		 \return KexiPart object that was used to create this view (with a dialog)
 		 or 0 if this view is not created using KexiPart. \sa parentDialog() */
 		KexiPart::Part* part() const;
 
 		/*! \return preferred size hint, that can be used to resize the view.
-		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size, 
+		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size,
 		 so the view won't exceed this maximum size. The method is used e.g. in KexiDialogBase::sizeHint().
-		 If you reimplement this method, dont forget to return value of 
+		 If you reimplement this method, dont forget to return value of
 		 yoursize.boundedTo( KexiViewBase::preferredSizeHint(otherSize) ). */
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
@@ -77,12 +80,12 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		void addChildView( KexiViewBase* childView );
 
 		/*! True if contents (data) of the view is dirty and need to be saved
-		 This may or not be used, depending if changes in the dialog 
+		 This may or not be used, depending if changes in the dialog
 		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
 		 (e.g. like in alter-table dialog).
 		 "Dirty" flag is reused by KexiDialogBase::dirty().
 		 Default implementation just uses internal m_dirty flag, that is false by default.
-		 Reimplement this if you e.g. want reuse other "dirty" 
+		 Reimplement this if you e.g. want reuse other "dirty"
 		 flag from internal structures that may be changed. */
 		virtual bool dirty() const { return m_dirty; }
 
@@ -91,25 +94,25 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		/*! Reimpelmented from KexiActionProxy.
 		 \return shared action with name \a action_name for this view.
-		 If there's no such action declared in Kexi Part (part()), 
+		 If there's no such action declared in Kexi Part (part()),
 		 global shared action is returned (if exists). */
 		virtual KAction* sharedAction( const char *action_name );
 
-		/*! Enables or disables shared action declared in Kexi Part (part()). 
+		/*! Enables or disables shared action declared in Kexi Part (part()).
 		 If there's no such action, global shared action is enabled or disabled (if exists). */
 		virtual void setAvailable(const char* action_name, bool set);
 
 	public slots:
 		virtual void setFocus();
 
-		/*! Call this in your view's implementation whenever current property buffer 
-		 (returned by propertyBuffer()) is switched to other,
+		/*! Call this in your view's implementation whenever current property set
+		 (returned by propertySet()) is switched to other,
 		 so property editor contents need to be completely replaced. */
-		void propertyBufferSwitched();
+		void propertySetSwitched();
 
-		/*! Sets dirty flag on or off. It the flag changes, 
+		/*! Sets dirty flag on or off. It the flag changes,
 		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
-		 to inform the world about that. If this view has a parent view, setDirty() 
+		 to inform the world about that. If this view has a parent view, setDirty()
 		 is called also on parent view.
 		 Always use this function to update 'dirty' flag information. */
 		void setDirty(bool set);
@@ -125,78 +128,78 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 	protected:
 		/*! called by KexiDialogBase::switchToViewMode() right before dialog is switched to new mode
-		 By default does nothing. Reimplement this if you need to do something 
+		 By default does nothing. Reimplement this if you need to do something
 		 before switching to this view.
 		 \return true if you accept or false if a error occupied and view shouldn't change
-		 If there is no error but switching should be just cancelled 
+		 If there is no error but switching should be just cancelled
 		 (probably after showing some info messages), you need to return cancelled.
 		 Set \a dontStore to true (it's false by default) if you want to avoid data storing
 		 by storeData() or storeNewData(). */
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 
 		/*! called by KexiDialogBase::switchToViewMode() right after dialog is switched to new mode
-		 By default does nothing. Reimplement this if you need to do something 
+		 By default does nothing. Reimplement this if you need to do something
 		 after switching to this view.
 		 \return true if you accept or false if a error occupied and view shouldn't change
-		 If there is no error but switching should be just cancelled 
+		 If there is no error but switching should be just cancelled
 		 (probably after showing some info messages), you need to return cancelled. */
 		virtual tristate afterSwitchFrom(int mode);
 
 		virtual void closeEvent( QCloseEvent * e );
 
-		/*! \return a property buffer for this view. For reimplementation. By default returns NULL. */
-		virtual KexiPropertyBuffer *propertyBuffer();
+		/*! \return a property set for this view. For reimplementation. By default returns NULL. */
+		virtual KoProperty::Set *propertySet();
 
-		/*! Call this in your view's implementation whenever current property buffer 
+		/*! Call this in your view's implementation whenever current property set
 		 is changed that few properties are now visible and/or few other are invisible,
-		 so property editor operating on this buffer should be completely reloaded. 
-		 If \a preservePrevSelection is true and there was a buffer 
-		 set before call, previously selected item will be preselected 
+		 so property editor operating on this property set should be completely reloaded.
+		 If \a preservePrevSelection is true and there was a property set
+		 assigned before call, previously selected item will be preselected
 		 in the editor (if found). */
-		void propertyBufferReloaded(bool preservePrevSelection = false);
+		void propertySetReloaded(bool preservePrevSelection = false);
 
 		/*! Tells this dialog to create and store data of the new object
-		 pointed by \a sdata on the backend. 
+		 pointed by \a sdata on the backend.
 		 Called by KexiDialogBase::storeNewData().
 		 Default implementation:
 		 - makes a deep copy of \a sdata
 		 - stores object schema data \a sdata in 'kexi__objects' internal table
 		   using Connection::storeObjectSchemaData().
-		 Reimpelment this for your needs. 
-		 Requirements: 
+		 Reimpelment this for your needs.
+		 Requirements:
 		 - deep copy of \a sdata should be made
 		 - schema data should be created at the backend
 		   (by calling KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)),
-		   or using Connection::storeObjectSchemaData() or more specialized 
-		   method. For example, KexiAlterTableDialog 
-		   uses Connection::createTable(TableSchema) for this 
-		   (tableschema is SchemaData subclass) to store more information than 
+		   or using Connection::storeObjectSchemaData() or more specialized
+		   method. For example, KexiAlterTableDialog
+		   uses Connection::createTable(TableSchema) for this
+		   (tableschema is SchemaData subclass) to store more information than
 		   just a schem adata. You should use such subclasses if needed.
-		 Should return newly created schema data object on success. 
+		 Should return newly created schema data object on success.
 		 In this case, do not store schema object yourself (make deep copy if needed). */
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
-		/*! Loads large string data \a dataString block (e.g. xml form's representation), 
+		/*! Loads large string data \a dataString block (e.g. xml form's representation),
 		 indexed with optional \a dataID, from the database backend.
 		 \return true on success
 		 \sa storeDataBlock(). */
 		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
 
-		/*! Tells this view to store data changes on the backend. 
+		/*! Tells this view to store data changes on the backend.
 		 Called by KexiDialogBase::storeData().
 		 Default implementation:
 		 - makes a deep copy of \a sdata
 		 - stores object schema data \a sdata in 'kexi__objects' internal table
 		   using Connection::storeObjectSchemaData().
-		 Reimpelment this for your needs. Should return true on success. 
+		 Reimpelment this for your needs. Should return true on success.
 		 \sa storeNewData() */
 		virtual tristate storeData();
 
 		/*! Stores (potentially large) string data \a dataString, block (e.g. xml form's representation),
 		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by
-		 this object's id and an optional \a dataID identifier. 
+		 this object's id and an optional \a dataID identifier.
 
-		 If dialog's id is not available (KexiDialogBase::id()), 
+		 If dialog's id is not available (KexiDialogBase::id()),
 		 then ID that was just created in storeNewData() is used
 		 (see description of m_newlyAssignedID member).
 		 If there is already such record in the table, it's simply overwritten.
@@ -204,7 +207,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		*/
 		bool storeDataBlock( const QString &dataString, const QString &dataID = QString::null );
 
-		/*! Removes (potentially large) string data (e.g. xml form's representation), 
+		/*! Removes (potentially large) string data (e.g. xml form's representation),
 		 pointed by optional \a dataID, from the database backend.
 		 \return true on success. Does not fail if the block doe not exists.
 		 Note that if \a dataID is not specified, all data blocks for this view will be removed.
@@ -213,11 +216,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		void setViewWidget(QWidget* w, bool focusProxy = false);
 
-		/*! Updates actions (e.g. availability). Reimplement it, if needed (you must 
+		/*! Updates actions (e.g. availability). Reimplement it, if needed (you must
 		 call superclass impelmentation at the end!).
-		 This implementation does nothing for this view but calls updateActions() 
+		 This implementation does nothing for this view but calls updateActions()
 		 for every child-view of this view.
-		 called by KexiDialogBase on dialog's activation (\a activated is true) 
+		 called by KexiDialogBase on dialog's activation (\a activated is true)
 		 or deactivation. */
 		virtual void updateActions(bool activated);
 

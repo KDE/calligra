@@ -38,6 +38,7 @@
 
 #include <kexidb/tableschema.h>
 #include <kexidb/indexschema.h>
+#include <kexidb/utils.h>
 
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
@@ -116,7 +117,10 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	}
 	*/
 
-	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, t);
+	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, 
+/*! @todo what about query? */
+		new KexiDB::TableOrQuerySchema(t)
+	);
 	connect(c, SIGNAL(endDrag()), this, SLOT(slotTableViewEndDrag()));
 	connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
 //	connect(c, SIGNAL(headerContextMenuRequest(const QPoint&)), 
@@ -195,8 +199,10 @@ KexiRelationView::addConnection(const SourceConnection& _conn)
 	if (!master || !details)
 		return;
 
-	KexiDB::TableSchema *masterTable = master->table();
-	KexiDB::TableSchema *detailsTable = details->table();
+/*! @todo what about query? */
+	KexiDB::TableSchema *masterTable = master->schema()->table();
+/*! @todo what about query? */
+	KexiDB::TableSchema *detailsTable = details->schema()->table();
 	if (!masterTable || !detailsTable)
 		return;
 
@@ -490,7 +496,8 @@ KexiRelationView::removeSelectedObject()
 void
 KexiRelationView::hideTable(KexiRelationViewTableContainer* tableView)
 {
-	KexiDB::TableSchema *ts = tableView->table();
+/*! @todo what about query? */
+	KexiDB::TableSchema *ts = tableView->schema()->table();
 	//for all connections: find and remove all connected with this table
 	QPtrListIterator<KexiRelationViewConnection> it(m_connectionViews);
 	for (;it.current();) {
@@ -504,7 +511,7 @@ KexiRelationView::hideTable(KexiRelationViewTableContainer* tableView)
 			++it;
 		}
 	}
-	m_tables.take(tableView->table()->name());
+	m_tables.take(tableView->schema()->name());
 	delete tableView;
 	emit tableHidden( *ts );
 }
