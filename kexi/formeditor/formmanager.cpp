@@ -1043,7 +1043,7 @@ void
 FormManager::showPropertySet(WidgetPropertySet *propSet, bool forceReload)
 {
 	if(m_editor)
-		m_editor->changeSet(propSet->set());
+		m_editor->changeSet(propSet ? propSet->set() : 0);
 
 	emit propertySetSwitched(propSet ? propSet->set(): 0, forceReload);
 }
