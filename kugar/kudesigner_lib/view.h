@@ -30,6 +30,11 @@ class KuDesignerPlugin;
 class QMouseEvent;
 class QCanvasItemList;
 
+namespace KOProperty
+{
+class Buffer;
+}
+
 using namespace KOProperty;
 
 namespace Kudesigner
