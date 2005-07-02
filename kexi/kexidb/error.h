@@ -34,6 +34,7 @@
 #define ERR_MISSING_DB_LOCATION 20
 #define ERR_ALREADY_CONNECTED 30
 #define ERR_NO_CONNECTION 40 //!< when opened connection was expected using KexiDB::Connection
+#define ERR_CONNECTION_FAILED 41 //!< when connection has failed
 #define ERR_NO_DB_USED 41 //!< when used database was expected in KexiDB::Connection
 #define ERR_OBJECT_EXISTS 50
 #define ERR_OBJECT_THE_SAME 51

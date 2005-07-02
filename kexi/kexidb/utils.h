@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -131,7 +131,23 @@ namespace KexiDB
 	/*! \return identifier for object \a objName of type \a objType
 	 or 0 if such object does not exist. */
 	KEXI_DB_EXPORT int idForObjectName( Connection &conn, const QString& objName, int objType );
+
+	/*! Variant class providing a pointer to table or query. */
+	class KEXI_DB_EXPORT TableOrQuerySchema {
+		public:
+			TableOrQuerySchema(Connection *conn, const QCString& name, bool table);
+			TableOrQuerySchema(TableSchema* table);
+			TableOrQuerySchema(QuerySchema* query);
+
+			QuerySchema* query() const { return m_query; }
+			TableSchema* table() const { return m_table; }
+			QCString name() const;
+			const QueryColumnInfo::Vector columns();
+
+		protected:
+			TableSchema* m_table;
+			QuerySchema* m_query;
+	};
 }
 
 #endif
-

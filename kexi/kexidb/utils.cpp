@@ -22,6 +22,7 @@
 
 #include <qmap.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 
 using namespace KexiDB;
@@ -161,3 +162,51 @@ int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objTy
 	return ok ? id : 0;
 }
 
+//-----------------------------------------
+
+TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QCString& name, bool table)
+ : m_table(table ? conn->tableSchema(QString(name)) : 0)
+ , m_query(table ? 0 : conn->querySchema(QString(name)))
+{
+	if (table && !m_table)
+		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : no table specified!" << endl;
+	if (!table && !m_query)
+		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : no query specified!" << endl;
+}
+
+TableOrQuerySchema::TableOrQuerySchema(TableSchema* table)
+ : m_table(table)
+ , m_query(0)
+{
+	if (!m_table)
+		kdWarning() << "TableOrQuery(TableSchema* table) : no table specified!" << endl;
+}
+
+TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
+ : m_table(0)
+ , m_query(query)
+{
+	if (!m_query)
+		kdWarning() << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
+}
+
+const QueryColumnInfo::Vector TableOrQuerySchema::columns()
+{
+	if (m_table)
+		return m_table->query()->fieldsExpanded();
+	
+	if (m_query)
+		return m_query->fieldsExpanded();
+
+	kdWarning() << "TableOrQuery::fields() : no query or table specified!" << endl;
+	return QueryColumnInfo::Vector();
+}
+
+QCString TableOrQuerySchema::name() const
+{
+	if (m_table)
+		return m_table->name().latin1();
+	if (m_query)
+		return m_query->name().latin1();
+	return QCString();
+}
