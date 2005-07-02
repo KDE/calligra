@@ -43,10 +43,24 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdeversion.h>
+#include <ksharedptr.h>
 #endif
 
-
 namespace KoProperty {
+
+#ifndef QT_ONLY
+class Global : public KShared
+{
+	public:
+		Global() : KShared() {
+			//this code is not koffice-only, so enable loading icons from koffice space
+			// -- will be change to global space
+			KGlobal::iconLoader()->addAppDir("koffice");
+		}
+};
+
+KSharedPtr<Global> _int;
+#endif
 
 //! \return true if \a o has parent \a par.
 inline bool hasParent(QObject* par, QObject* o)
@@ -65,6 +79,10 @@ class EditorPrivate
 			currentItem = 0;
 			undoButton = 0;
 			topItem = 0;
+#ifndef QT_ONLY
+			if (!_int)
+				_int = new Global();
+#endif
 		}
 		~EditorPrivate()
 		{
