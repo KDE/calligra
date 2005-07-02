@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qintdict.h>
+#include <qptrlist.h>
 
 namespace KexiDB
 {

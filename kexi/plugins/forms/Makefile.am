@@ -26,9 +26,7 @@ libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp kexidataawarewidgeti
 	kexidatasourcepage.cpp
 libkexiformutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiformutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
-	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
-	$(top_builddir)/kexi/widget/propertyeditor/libkexipropertyeditor.la
-
+	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la 
 servicesdir=$(kde_servicesdir)/kformdesigner
 services_DATA = kexidbfactory.desktop
 

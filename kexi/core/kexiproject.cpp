@@ -506,7 +506,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		setError(m_connection);
 		return false;
 	}
-	QCString oldName( item.name() );
+	QCString oldName( item.name().latin1() );
 	item.setName( newName );
 	emit itemRenamed(item, oldName);
 	return true;

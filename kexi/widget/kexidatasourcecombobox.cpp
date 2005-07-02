@@ -161,14 +161,16 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 	QString name(item.name());
 	//insert a new item, maintaining sort order and splitting to tables and queries
 	if (item.mime()=="kexi/table") {
-		for (uint i=2 /*skip empty and 'define query' row*/; i<d->firstQueryIndex() && name>=text(i); i++)
+		uint i = 2; /*skip empty and 'define query' row*/
+		for (; i < d->firstQueryIndex() && name>=text(i); i++)
 			;
 		insertItem(d->tableIcon, name, i);
 		completionObject()->addItem(name);
 		d->tablesCount++;
 	}
 	else if (item.mime()=="kexi/query") {
-		for (int i=d->firstQueryIndex(); i<count() && name>=text(i); i++)
+		int i;
+		for (i=d->firstQueryIndex(); i<count() && name>=text(i); i++)
 			;
 		insertItem(d->queryIcon, name, i);
 		completionObject()->addItem(name);

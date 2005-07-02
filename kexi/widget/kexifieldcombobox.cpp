@@ -141,7 +141,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 	const QString name(string); //string.stripWhiteSpace().lower());
 	const int pos = name.find('.');
 	if (pos!=-1) {
-		QCString objectName = name.left(pos);
+		QCString objectName = name.left(pos).latin1();
 		if (d->tableOrQueryName!=objectName) {
 			d->fieldOrExpression = name;
 			setCurrentItem(0);
