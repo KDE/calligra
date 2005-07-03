@@ -1934,7 +1934,7 @@ int KoDocument::queryCloseExternalChildren()
             if ( doc )
             {
 		bool foo = doc->isStoredExtern();
-		kdDebug(36001) << "========== isStoredExtern() returned " 
+		kdDebug(36001) << "========== isStoredExtern() returned "
 			       << foo << " ==========" << endl;
 
                 if ( foo ) //###TODO: Handle non-native mimetype docs
@@ -2382,6 +2382,26 @@ void KoDocument::slotStarted( KIO::Job* job )
     {
         job->setWindow( d->m_shells.current() );
     }
+}
+
+static const struct {
+    const char* localName;
+    const char* documentType;
+} TN2DTArray[] = {
+    { "text", I18N_NOOP( "a word processing" ) },
+    { "spreadsheet", I18N_NOOP( "a spreadsheet" ) },
+    { "presentation", I18N_NOOP( "a presentation" ) },
+    { "chart", I18N_NOOP( "a chart" ) },
+    { "drawing", I18N_NOOP( "a drawing" ) }
+};
+static const unsigned int numTN2DT = sizeof( TN2DTArray ) / sizeof( *TN2DTArray );
+
+QString KoDocument::tagNameToDocumentType( const QString& localName )
+{
+    for ( unsigned int i = 0 ; i < numTN2DT ; ++i )
+        if ( localName == TN2DTArray[i].localName )
+            return i18n( TN2DTArray[i].documentType );
+    return localName;
 }
 
 #include "koDocument_p.moc"

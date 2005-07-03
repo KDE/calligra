@@ -1,7 +1,7 @@
 // -*- c-basic-offset: 4 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2004 David Faure <faure@kde.org>
+   Copyright (C) 2000-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -558,6 +558,14 @@ public:
      *  @param version the DTD version (usually the application's version).
      */
     static QDomDocument createDomDocument( const QString& appName, const QString& tagName, const QString& version );
+
+    /**
+     *  The first thing to do in loadOasis is get hold of the office:body tag, then its child.
+     *  If the child isn't the expected one, the error message can indicate what it is instead.
+     *  This method returns a translated name for the type of document,
+     *  e.g. i18n("Word Processing") for office:text.
+     */
+    static QString tagNameToDocumentType( const QString& localName );
 
     /**
      *  Save the document. The default implementation is to call
