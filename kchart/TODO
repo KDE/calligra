@@ -14,8 +14,8 @@ inge	Inge has taken this subtask
 RAPH	Raphael has taken this task
 
 
-Before release of KOffice 1.4
-=============================
+Before release of KOffice 1.4.1
+===============================
 
 
 Item								   Prio Status
@@ -27,15 +27,6 @@ Item								   Prio Status
      - Enable settings in the config dialog.				done
      - Read and write the values from the axis parameters		--
      - Do it in the wizard as well					done
-  + 55606: [modified] tag doesn't work correctly.		      2 DONE
-  + 90893: never-saved doc failes autosave			      2 DONE
-  + 77839: Program hangs when only one value for pie chart 	      1	DONE
-	   and value = 0.
-  + 100004: Manual should describe stand-alone charting  	      2	DONE
-            (see details below)
-  + 101007: Error in reading back axis labels.			      1 DONE
-  + 101290: KChart changes font for axes when Polar chart is chosen   1	DONE
-       Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	----
        Fixed by new KDChart version (hopefully)
   + 102414: A chart in a spreadsheet opens the template dialog 	      1 DONE
@@ -43,80 +34,32 @@ Item								   Prio Status
   + 105356: Lines in a line chart are all black			      1 DONE
 
 * Wishes
-  + 14971: Data in rows or columns				      1	DONE
-  + 99391: Linear or Logarithmic scale for Y axis		     S2 DONE
-  + 99996: KChart should be able to export charts as bitmap files.   S1 DONE
 
 * Issues with KSpread
-  + Handling: The chart changes size when selected and unselected.    2 DONE
-  + Printing: The chart is of thumbnail size, and wrongly placed.     2	DONE
-  + Labels are no longer generated correctly.			      1	DONE
 
 * Miscellaneous fixes
-  + Make setting of line width nicer / more well-placed		     S1 DONE
-  + Remove the predefined bar chart?				      2 DONE
-      Issue: What is an empty chart document?
-  + Include me in Authors					      2	DONE
-  + Can HiLo charts be made thicker than one pixel? No.		      3 DONE
-  + Make the settings in Edit->"Page Layout" clearer?		      2 DONE
-  + Singular or plural for tooltips, not both.			     S1 DONE
-
-  + Grep for FIXME and fix the urgent ones.			      2 DONE
-  + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
-  + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
   + Save position of Actions toolbar in config.			      2 ----
   + Wrong images for HiLo subtype icons.			      1 ----
-  + Don't warn about unsaved data on exit if inside another program   2 KOLIBS
 
 * Toolbars
-  + Separate toolbar for chart types (separate from config, etc).     2 DONE
-  + Reorder chart types into a more logical order.		      1	DONE
 
 * Data editor
-  + Make table size handling work.				      1	DONE
-  + Make Apply button work.					      1	DONE
-  + Smaller column widths?					      2	DONE
-  + Transfer the Tooltips and WhatsThis from the old editor.	      1	DONE
   + Better keyboard shortcuts?					      1 ----
-    - Moving within the data table					done
     - Remove the spinboxes from the buddy list.				--
 
 * Config dialog
-  + Make Data page work.					      1	DONE
-  + Pie settings at the same place as Subtype?			      1 DONE
-  + Type specific settings for each type?			      2 DONE
-  + Move type specific settings right after subtype (Pie, etc)	      1 DONE
-  + Move Line Marker from Axes page?				      2 DONE
-  + Check *all* subpages for uglyness and bugs			     S1 DONE
-    - NOTE: A few of these didn't make it to 1.4 and are moved down.
-  + Check handling of defaults.					      1 DONE
-  + Bring back "line width" for line charts.			      1 DONE
   + Check keyboard shortcuts for all tabs			     S1 ----
-  + Enable titles for axes again.				      1	DONE
   + Setting background image doesn't work			      2 ----
   + According to Fredrik, background page works badly all over	      2 ----
 
 * Wizard
-  + "Select Chart Type" page: Reorder like the toolbar			DONE
-  + Make Help button work or disable it.			      1 DONE
-  + Enable Finish button for all pages.				      1 DONE
 
 * Manual
-  + Describe stand-alone charting.				      1 DONE
-  + New screen shots.						      1 DONE
-  + Describe all chart types					      1 DONE
-  + Other enhancements?						      2 DONE
 
 * Filters
-  + Make a non-part library that the filters can link against	      1	DONE
-  + PNG export filter						      1 DONE
-  + SVG export filter						      2 DONE
-  + CSV import filter						      1 DONE
 
 * KDChart (See also above)
   + Titles for axes don't work.						----
-  + Font for X axis labels changes when Polar chart is chosen.		DONE
-  + Strange looks when negative values.					DONE
   + Logarithmic Y axis is painted wrong - Axis itself is not scaled.	----
   + Legend is not painted (or is not scaled?) when printing from
     an embedded chart in KSpread.					----
@@ -125,8 +68,41 @@ Item								   Prio Status
     it becomes editable.
 
 
+Before release of KOffice 1.5 / 2.0
+===================================
+
+
+Item								   Prio Status
+------------------------------------------------------------------------------
+
+* Bugs
+
+* Wishes
+
+* New features
+  + Integrate with Kexi							----
+
+* Miscellaneous fixes
+
+* Toolbars
+
+* Data editor
+
+* Config dialog
+
+* Wizard
+
+* Manual
+
+* Filters
+
+* KDChart (See also above)
+
+* Issues with KSpread
+
+
 ================================================================
-                  After release of KOffice 1.4
+                  After release of KOffice 1.5
 ================================================================
 
 * Config dialog
