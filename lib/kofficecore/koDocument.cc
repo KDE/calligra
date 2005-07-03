@@ -890,6 +890,9 @@ bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter 
                 kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
                 path = childDoc->url().url();
             }
+            // OOo uses a trailing slash for the path to embedded objects (== directories)
+            if ( !path.endsWith( "/" ) )
+                path += '/';
             manifestWriter->addManifestEntry( path, childDoc->nativeOasisMimeType() );
         }
     }

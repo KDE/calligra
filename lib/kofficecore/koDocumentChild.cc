@@ -230,6 +230,8 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
         QString relPath = KURL( m_tmpURL ).path();
         path += relPath.mid( 1 ); // remove leading '/'
     }
+    if ( !path.endsWith( "/" ) )
+        path += '/';
     const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
     kdDebug() << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
     if ( mimeType.isEmpty() ) {
