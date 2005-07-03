@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "band.h"
 
@@ -38,40 +38,42 @@ Label::Label( int x, int y, int width, int height, Canvas *canvas )
         : ReportItem( x, y, width, height, canvas )
 {
     QMap<QString, QVariant> m;
+#warning TODO
+#if 0
 
-    props.addProperty( new Property( "Text", i18n( "Text" ), i18n( "Text to Display" ), i18n( "Text" ), KOProperty::String ) );
+    props.addProperty( new Property( "Text", i18n( "Text" ), i18n( "Text to Display" ), i18n( "Text" ), KoProperty::String ) );
 
     props.setGroupDescription( "Geometry", i18n( "Geometry" ) );
-    props.addProperty( new Property( "X", i18n( "X" ), i18n( "X value" ), x, KOProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "X", i18n( "X" ), i18n( "X value" ), x, KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "Y", i18n( "Y" ), i18n( "Y value" ), y, KOProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "Y", i18n( "Y" ), i18n( "Y value" ), y, KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "Width", i18n( "Width" ), i18n( "Width" ), width, KOProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "Width", i18n( "Width" ), i18n( "Width" ), width, KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), height, KOProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), height, KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "BackgroundColor", i18n( "Background Color" ), i18n( "Background Color" ), QColor( 255, 255, 255 ), KOProperty::Color ) );
+    props.addProperty( new Property( "BackgroundColor", i18n( "Background Color" ), i18n( "Background Color" ), QColor( 255, 255, 255 ), KoProperty::Color ) );
 
-    props.addProperty( new Property( "ForegroundColor", i18n( "Foreground Color" ), i18n( "Foreground Color" ), QColor( 0, 0, 0 ), KOProperty::Color ) );
+    props.addProperty( new Property( "ForegroundColor", i18n( "Foreground Color" ), i18n( "Foreground Color" ), QColor( 0, 0, 0 ), KoProperty::Color ) );
 
     props.setGroupDescription( "BorderStyle", i18n( "Border Style" ) );
-    props.addProperty( new Property( "BorderColor", i18n( "Color" ), i18n( "Border Color" ), QColor( 0, 0, 0 ), KOProperty::Color ), "BorderStyle" );
+    props.addProperty( new Property( "BorderColor", i18n( "Color" ), i18n( "Border Color" ), QColor( 0, 0, 0 ), KoProperty::Color ), "BorderStyle" );
 
-    props.addProperty( new Property( "BorderWidth", i18n( "Width" ), i18n( "Border Width" ), 1, KOProperty::Integer ), "BorderStyle" );
+    props.addProperty( new Property( "BorderWidth", i18n( "Width" ), i18n( "Border Width" ), 1, KoProperty::Integer ), "BorderStyle" );
 
-    props.addProperty( new Property( "BorderStyle", i18n( "Line" ), i18n( "Border Style" ), 1, KOProperty::LineStyle ), "BorderStyle" );
+    props.addProperty( new Property( "BorderStyle", i18n( "Line" ), i18n( "Border Style" ), 1, KoProperty::LineStyle ), "BorderStyle" );
 
     props.setGroupDescription( "DrawBorder", i18n( "Border" ) );
-    props.addProperty( new Property( "DrawTop", i18n( "Top" ), i18n( "Draw Top Border" ), QVariant( false, 3 ), KOProperty::Boolean ), "DrawBorder" );
-    props.addProperty( new Property( "DrawBottom", i18n( "Bottom" ), i18n( "Draw Bottom Border" ), QVariant( false, 3 ), KOProperty::Boolean ), "DrawBorder" );
-    props.addProperty( new Property( "DrawLeft", i18n( "Left" ), i18n( "Draw Left Border" ), QVariant( false, 3 ), KOProperty::Boolean ), "DrawBorder" );
-    props.addProperty( new Property( "DrawRight", i18n( "Right" ), i18n( "Draw Right Border" ), QVariant( false, 3 ), KOProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawTop", i18n( "Top" ), i18n( "Draw Top Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawBottom", i18n( "Bottom" ), i18n( "Draw Bottom Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawLeft", i18n( "Left" ), i18n( "Draw Left Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawRight", i18n( "Right" ), i18n( "Draw Right Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
 
 
     props.setGroupDescription( "Font", i18n( "Font" ) );
-    props.addProperty( new Property( "FontFamily", i18n( "Family" ), i18n( "Font Family" ), QFont( "Times New Roman" ), KOProperty::Font ), "Font" );
+    props.addProperty( new Property( "FontFamily", i18n( "Family" ), i18n( "Font Family" ), QFont( "Times New Roman" ), KoProperty::Font ), "Font" );
 
-    props.addProperty( new Property( "FontSize", i18n( "Size" ), i18n( "Font Size" ), 12, KOProperty::Integer ), "Font" );
+    props.addProperty( new Property( "FontSize", i18n( "Size" ), i18n( "Font Size" ), 12, KoProperty::Integer ), "Font" );
 
     m[ i18n( "Light" ) ] = "25";
     m[ i18n( "Normal" ) ] = "50";
@@ -102,6 +104,7 @@ Label::Label( int x, int y, int width, int height, Canvas *canvas )
     m[ i18n( "False" ) ] = "0";
     m[ i18n( "True" ) ] = "1";
     props.addProperty( new Property( "WordWrap", i18n( "Word wrap" ), i18n( "Word wrap" ), m, "0" ) );
+#endif
 }
 
 int Label::getTextAlignment()

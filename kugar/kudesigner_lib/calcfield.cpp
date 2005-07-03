@@ -22,7 +22,7 @@
 
 #include <qmap.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 namespace Kudesigner
 {

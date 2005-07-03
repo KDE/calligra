@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 namespace Kudesigner
 {
@@ -30,8 +30,11 @@ namespace Kudesigner
 DetailHeader::DetailHeader( int x, int y, int width, int height, int level, Canvas *canvas )
         : DetailBase( x, y, width, height, level, canvas )
 {
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KOProperty::Integer ), "Detail" );
-    props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KOProperty::Integer ), "Detail" );
+#warning TODO port to new Property API
+#if 0
+    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KoProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KoProperty::Integer ), "Detail" );
+#endif
 }
 
 void DetailHeader::draw( QPainter &painter )

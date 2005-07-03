@@ -35,9 +35,9 @@ QString PropertySerializer::toString( Property *prop )
     QVariant val = prop->value();
     switch ( prop->type() )
     {
-    case KOProperty::Color:
+    case KoProperty::Color:
         return QString( "%1,%2,%3" ).arg( val.toColor().red() ).arg( val.toColor().green() ).arg( val.toColor().blue() );
-    case KOProperty::Boolean:
+    case KoProperty::Boolean:
         return val.toBool() ? "true" : "false";
     default:
         return val.toString();
@@ -48,7 +48,7 @@ QVariant PropertySerializer::fromString( Property *prop, const QString &str )
 {
     switch ( prop->type() )
     {
-    case KOProperty::Color:
+    case KoProperty::Color:
         return QVariant( QColor( str.section( ',', 0, 0 ).toInt(),
                                  str.section( ',', 1, 1 ).toInt(),
                                  str.section( ',', 2, 2 ).toInt() ) );

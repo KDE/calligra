@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 namespace Kudesigner
 {
@@ -30,7 +30,9 @@ namespace Kudesigner
 PageFooter::PageFooter( int x, int y, int width, int height, Canvas *canvas ) :
         Band( x, y, width, height, canvas )
 {
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KOProperty::Integer ), "Section" );
+#warning TODO
+#if 0
+    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KoProperty::Integer ), "Section" );
     QMap<QString, QVariant> m;
 
     m[ i18n( "First Page" ) ] = "0";
@@ -38,6 +40,7 @@ PageFooter::PageFooter( int x, int y, int width, int height, Canvas *canvas ) :
     m[ i18n( "Last Page" ) ] = "2";
 
     props.addProperty( new Property( "PrintFrequency", i18n( "Print Frequency" ), i18n( "Print Frequency" ), m, "1" ), "Section" );
+#endif
 }
 
 void PageFooter::draw( QPainter &painter )

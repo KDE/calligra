@@ -23,19 +23,19 @@
 #include <qpainter.h>
 #include <qptrlist.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 class KuDesignerPlugin;
 
 class QMouseEvent;
 class QCanvasItemList;
 
-namespace KOProperty
+namespace KoProperty
 {
 class Buffer;
 }
 
-using namespace KOProperty;
+using namespace KoProperty;
 
 namespace Kudesigner
 {

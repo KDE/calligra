@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "band.h"
 
@@ -32,20 +32,23 @@ namespace Kudesigner
 Line::Line( int x, int y, int width, int height, Canvas *canvas ) :
         ReportItem( x, y, width, height, canvas )
 {
+#warning TODO PORT to new Property API
+#if 0
     props.setGroupDescription( "Line", i18n( "Line" ) );
-    props.addProperty( new Property( "X1", i18n( "X1" ), i18n( "X1" ), x, KOProperty::Integer ), "Line" );
+    props.addProperty( new Property( "X1", i18n( "X1" ), i18n( "X1" ), x, KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Y1", i18n( "Y1" ), i18n( "Y1" ), y, KOProperty::Integer ), "Line" );
+    props.addProperty( new Property( "Y1", i18n( "Y1" ), i18n( "Y1" ), y, KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "X2", i18n( "X2" ), i18n( "X2" ), x + width, KOProperty::Integer ), "Line" );
+    props.addProperty( new Property( "X2", i18n( "X2" ), i18n( "X2" ), x + width, KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Y2", i18n( "Y2" ), i18n( "Y2" ), y + height, KOProperty::Integer ), "Line" );
+    props.addProperty( new Property( "Y2", i18n( "Y2" ), i18n( "Y2" ), y + height, KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Color", i18n( "Color" ), i18n( "Color" ), QColor( 0, 0, 0 ), KOProperty::Color ), "Line" );
+    props.addProperty( new Property( "Color", i18n( "Color" ), i18n( "Color" ), QColor( 0, 0, 0 ), KoProperty::Color ), "Line" );
 
-    props.addProperty( new Property( "Width", i18n( "Width" ), i18n( "Width" ), 1, KOProperty::Integer ), "Line" );
+    props.addProperty( new Property( "Width", i18n( "Width" ), i18n( "Width" ), 1, KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Style", i18n( "Line Style" ), i18n( "Line Style" ), 1, KOProperty::LineStyle ), "Line" );
+    props.addProperty( new Property( "Style", i18n( "Line Style" ), i18n( "Line Style" ), 1, KoProperty::LineStyle ), "Line" );
+#endif
 }
 
 QString Line::getXml()

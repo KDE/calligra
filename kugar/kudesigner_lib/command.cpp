@@ -23,8 +23,8 @@
 
 //#include "kudesigner_doc.h"
 
-#include <editor.h>
-#include <property.h>
+#include <koproperty/editor.h>
+#include <koproperty/property.h>
 
 #include "view.h"
 #include "canvas.h"

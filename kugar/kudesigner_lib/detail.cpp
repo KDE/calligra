@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 namespace Kudesigner
 {
@@ -30,9 +30,12 @@ namespace Kudesigner
 Detail::Detail( int x, int y, int width, int height, int level, Canvas *canvas )
         : DetailBase( x, y, width, height, level, canvas )
 {
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KOProperty::Integer ), "Detail" );
-    props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KOProperty::Integer ), "Detail" );
-    props.addProperty( new Property( "Repeat", i18n( "Repeat" ), i18n( "Repeat After Page Break" ), QVariant( false, 3 ), KOProperty::Boolean ), "Detail" );
+#warning TODO port this to new Property API!!!!!
+#if 0
+    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KoProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KoProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Repeat", i18n( "Repeat" ), i18n( "Repeat After Page Break" ), QVariant( false, 3 ), KoProperty::Boolean ), "Detail" );
+#endif
 
     registerAs( Rtti_Detail );
 }

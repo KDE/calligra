@@ -25,7 +25,7 @@
 #include <qpainter.h>
 #include <qregexp.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "canvas.h"
 #include "band.h"

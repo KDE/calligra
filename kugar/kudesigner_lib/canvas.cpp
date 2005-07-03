@@ -21,7 +21,7 @@
 #include <qdom.h>
 #include <qstringlist.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "box.h"
 #include "kugartemplate.h"

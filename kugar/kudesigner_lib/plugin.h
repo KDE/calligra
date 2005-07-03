@@ -19,16 +19,16 @@
 #define _KUGAR_DESIGNER_PLUGIN_H_
 
 #include <qobject.h>
-#include <property.h>
-#include <editor.h>
-#include <box.h>
+#include <koproperty/property.h>
+#include <koproperty/editor.h>
+#include <koproperty/box.h>
 
 class QString;
 class QWidget;
 class CanvasReportItem;
 class KoStore;
 
-using namespace KOProperty;
+using namespace KoProperty;
 using namespace Kudesigner;
 
 class KuDesignerPlugin: public QObject

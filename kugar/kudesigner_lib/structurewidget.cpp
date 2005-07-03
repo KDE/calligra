@@ -22,7 +22,7 @@
 #include <qpainter.h>
 #include <qcanvas.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "canvas.h"
 #include "kugartemplate.h"
@@ -39,7 +39,7 @@
 namespace Kudesigner
 {
 
-using namespace KOProperty;
+using namespace KoProperty;
 
 class StructureItem: public KListViewItem
 {

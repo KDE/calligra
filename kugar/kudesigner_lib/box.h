@@ -19,12 +19,12 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include <set.h>
-#include <property.h>
+#include <koproperty/set.h>
+#include <koproperty/property.h>
 
 #include "commdefs.h"
 
-using namespace KOProperty;
+using namespace KoProperty;
 
 namespace Kudesigner
 {

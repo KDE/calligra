@@ -6,7 +6,8 @@ AC_SUBST(KOFFICECORE_INCLUDES, '-I$(top_srcdir)/lib/kofficecore -I$(top_builddir
 AC_SUBST(KOFFICEUI_INCLUDES, '-I$(top_srcdir)/lib/kofficeui -I$(top_builddir)/lib/kofficeui')
 AC_SUBST(KFORMULA_INCLUDES, '-I$(top_srcdir)/lib/kformula -I$(top_builddir)/lib/kformula')
 AC_SUBST(KOSCRIPT_INCLUDES, '-I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript')
-AC_SUBST(KOPROPERTY_INCLUDES, '-I$(top_srcdir)/lib/koproperty -I$(top_builddir)/lib/koproperty')
+dnl those are included with e.g. <koproperty/set.h>
+AC_SUBST(KOPROPERTY_INCLUDES, '-I$(top_srcdir)/lib -I$(top_builddir)/lib')
 AC_SUBST(LIB_KOFFICEUI, '$(top_builddir)/lib/kofficeui/libkofficeui.la')
 AC_SUBST(LIB_KOFFICECORE, '$(top_builddir)/lib/kofficecore/libkofficecore.la')
 AC_SUBST(LIB_KSTORE, '$(top_builddir)/lib/store/libkstore.la')

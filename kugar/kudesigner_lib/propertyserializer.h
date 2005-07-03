@@ -20,9 +20,9 @@
 #ifndef KUDESIGNERPROPERTYSERIALIZER_H
 #define KUDESIGNERPROPERTYSERIALIZER_H
 
-#include <property.h>
+#include <koproperty/property.h>
 
-using namespace KOProperty;
+using namespace KoProperty;
 
 namespace Kudesigner
 {

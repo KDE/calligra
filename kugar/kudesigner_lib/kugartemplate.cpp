@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 #include <qprinter.h>
 #include <qpaintdevicemetrics.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "propertyserializer.h"
 
@@ -100,10 +100,10 @@ KugarTemplate::KugarTemplate( int x, int y, int width, int height, Canvas *canva
     props.addProperty( new Property( "PageOrientation", i18n( "Page Orientation" ), i18n( "Page Orientation" ), m, "0" ), "DocumentSettings" );
     m.clear();
 
-    props.addProperty( new Property( "TopMargin", i18n( "Top Margin" ), i18n( "Top Margin" ), 0, KOProperty::Integer ), "DocumentSettings" );
-    props.addProperty( new Property( "BottomMargin", i18n( "Bottom Margin" ), i18n( "Bottom Margin" ), 0, KOProperty::Integer ), "DocumentSettings" );
-    props.addProperty( new Property( "LeftMargin", i18n( "Left Margin" ), i18n( "Left Margin" ), 0, KOProperty::Integer ), "DocumentSettings" );
-    props.addProperty( new Property( "RightMargin", i18n( "Right Margin" ), i18n( "Right Margin" ), 0, KOProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "TopMargin", i18n( "Top Margin" ), i18n( "Top Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "BottomMargin", i18n( "Bottom Margin" ), i18n( "Bottom Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "LeftMargin", i18n( "Left Margin" ), i18n( "Left Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "RightMargin", i18n( "Right Margin" ), i18n( "Right Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
 }
 
 KugarTemplate::~KugarTemplate()

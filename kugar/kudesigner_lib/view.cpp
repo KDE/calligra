@@ -33,7 +33,7 @@
 #include <qprinter.h>
 #include <kdebug.h>
 
-#include <property.h>
+#include <koproperty/property.h>
 
 #include "canvas.h"
 #include "box.h"
