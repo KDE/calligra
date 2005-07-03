@@ -16,11 +16,11 @@
 namespace KChart
 {
 
-KChartButton::KChartButton(QWidget *parent, const QString & _text, QPixmap *_pixmap)
+KChartButton::KChartButton(QWidget *parent, const QString & _text, const QPixmap &_pixmap)
   : QVBox(parent)
 {
   m_button = new QPushButton(this);
-  m_button->setPixmap(*_pixmap);
+  m_button->setPixmap(_pixmap);
   m_button->setToggleButton( true );
   QLabel *label = new QLabel(_text, this);
   label->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
@@ -30,16 +30,16 @@ KChartButton::KChartButton(QWidget *parent, const QString & _text, QPixmap *_pix
 KChartButton::~KChartButton()
 {
 }
-  
+
 void KChartWizardSelectChartTypePage::addButton(const QString &name,
                                                 const QString &icon_name,
                                                 int type)
 {
-  KChartButton *button = new KChartButton( this, name, &BarIcon( icon_name,KIcon::SizeMedium, KIcon::DefaultState,KChartFactory::global() )  );
+  KChartButton *button = new KChartButton( this, name, BarIcon( icon_name,KIcon::SizeMedium, KIcon::DefaultState,KChartFactory::global() )  );
   _layout->addWidget(button,r_pos,c_pos);
   _typeBG->insert( button->button(), type );
 
-  if (c_pos == 3) 
+  if (c_pos == 3)
   {
     c_pos=0;
     r_pos++; //place the next button in the second row
