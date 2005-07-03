@@ -141,6 +141,7 @@ QString KoFontDiaPreview::formatCapitalisation( QString string )
 {
     switch ( m_capitalisation )
     {
+    case KoTextFormat::ATT_NONE :
         return string;
     case KoTextFormat::ATT_UPPER :
         return string.upper();
@@ -157,7 +158,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
 {
     p->save();
 
-// sort ou the font to use
+    // sort out the font to use
 
     //Capitalisation
     double capitalisationCoeff;
@@ -206,19 +207,19 @@ void KoFontDiaPreview::drawContents( QPainter* p )
     int subSuperOffset = 0;
     switch ( m_subSuper ) {
         case 0: //normal
-            displayFont.setPointSize( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = -( m_offset );
             break;
         case 1: //subscript
-            displayFont.setPointSize( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = fm1.height() / 6;
             break;
         case 2: //superscript
-            displayFont.setPointSize( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = 0 - ( fm1.height() / 2 );
             break;
         default:
-            displayFont.setPointSize( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = 0 - m_offset;
             break;
     }
