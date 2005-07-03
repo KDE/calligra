@@ -11,5 +11,3 @@ libkopropertyeditors_la_SOURCES = booledit.cpp coloredit.cpp combobox.cpp cursor
 METASOURCES = AUTO
 
 SUBDIRS = .
-
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKOPROPERTY_EXPORT=

@@ -109,7 +109,7 @@ PixmapEdit::selectPixmap()
 }
 
 void
-PixmapEdit::resizeEvent(QResizeEvent *ev)
+PixmapEdit::resizeEvent(QResizeEvent *)
 {
 //	m_edit->resize(ev->size().width(), ev->size().height()-1);
 //	m_button->move(ev->size().width() - m_button->width(), 0);
