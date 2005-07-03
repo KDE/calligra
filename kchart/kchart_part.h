@@ -36,8 +36,8 @@ class KCHART_EXPORT KChartPart : public KoChart::Part
     Q_OBJECT
 
 public:
-    KChartPart( QWidget *parentWidget = 0, const char *widgetName = 0, 
-		QObject* parent = 0, const char* name = 0, 
+    KChartPart( QWidget *parentWidget = 0, const char *widgetName = 0,
+		QObject* parent = 0, const char* name = 0,
 		bool singleViewMode = false );
     ~KChartPart();
 
@@ -94,10 +94,12 @@ protected:
     bool  loadOldXML( const QDomDocument& doc );
     bool  loadAuxiliary( const QDomDocument& doc );
     bool  loadData( const QDomDocument& doc, KoChart::Data& currentData );
+    bool  loadOasisData( const QDomElement& tableElem );
+    void endOfLoading();
 
 private:
     QDomElement  createElement(const QString &tagName,
-			       const QFont &font, 
+			       const QFont &font,
 			       QDomDocument &doc) const;
     QFont        toFont(QDomElement &element)     const;
 

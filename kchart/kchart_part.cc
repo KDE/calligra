@@ -4,23 +4,25 @@
  */
 
 
-#include <qdom.h>
-#include <qtextstream.h>
-#include <qbuffer.h>
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "kchartWizard.h"
-#include <kstandarddirs.h>
-
-#include <kglobal.h>
-#include <kdebug.h> // "ported" to kdDebug(35001)
-
-#include <koTemplateChooseDia.h>
-
 #include "kchart_params.h"
 #include "kdchart/KDChart.h"
 
+#include <koTemplateChooseDia.h>
+#include <kodom.h>
+#include <koxmlns.h>
+
+#include <kstandarddirs.h>
+#include <kglobal.h>
+#include <kdebug.h>
+
+#include <qdom.h>
+#include <qtextstream.h>
+#include <qbuffer.h>
+#include <qpainter.h>
 
 using namespace std;
 
@@ -35,8 +37,6 @@ using namespace std;
 /* ----- data set colors (RGB) ----- */
 // QColor   sc[2]    = { QColor( 255, 128, 128 ), QColor( 128, 128, 255 ) };
 
-
-#include <qpainter.h>
 
 namespace KChart
 {
@@ -721,14 +721,165 @@ QDomDocument KChartPart::saveXML()
     return doc;
 }
 
+bool KChartPart::loadOasisData( const QDomElement& tableElem )
+{
+    int numberHeaderColumns = 0;
+    QDomElement tableHeaderColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-columns" );
+    QDomElement elem;
+    forEachElement( elem, tableHeaderColumns ) {
+        if ( elem.localName() == "table-column" ) {
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
+            numberHeaderColumns += QMAX( 1, repeated );
+        }
+    }
+    Q_ASSERT( numberHeaderColumns == 1 ); // with 0 you get no titles, and with more than 1 we ignore the others.
 
-bool KChartPart::loadOasis( const QDomDocument& /*doc*/,
-			    KoOasisStyles&      /*oasisStyles*/,
+    int numberDataColumns = 0;
+    QDomElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
+    forEachElement( elem, tableColumns ) {
+        if ( elem.localName() == "table-column" ) {
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
+            numberDataColumns += QMAX( 1, repeated );
+        }
+    }
+
+    // Parse table-header-rows for the column names.
+    m_colLabels.clear();
+    QDomElement tableHeaderRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
+    if ( tableHeaderRows.isNull() )
+        kdWarning(35001) << "No table-header-rows element found!" << endl;
+    QDomElement tableHeaderRow = KoDom::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
+    if ( tableHeaderRow.isNull() )
+        kdWarning(35001) << "No table-row inside table-header-rows!" << endl;
+    int cellNum = 0;
+    forEachElement( elem, tableHeaderRow ) {
+        if ( elem.localName() == "table-cell" ) {
+            ++cellNum;
+            if ( cellNum > numberHeaderColumns ) {
+                QDomElement pElem = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
+                m_colLabels.append( pElem.text() );
+            }
+        }
+    }
+    if ( (int)m_colLabels.count() != numberDataColumns )
+        kdWarning(35001) << "Got " << m_colLabels.count() << " column titles, expected " << numberDataColumns << endl;
+
+    // Get the number of rows, and read row labels
+    m_rowLabels.clear();
+    int numberDataRows = 0;
+    QDomElement tableRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
+    forEachElement( elem, tableRows ) {
+        if ( elem.localName() == "table-row" ) {
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt();
+            Q_ASSERT( repeated <= 1 ); // we don't handle yet the case where data rows are repeated (can this really happen?)
+            numberDataRows += QMAX( 1, repeated );
+            if ( numberHeaderColumns > 0 ) {
+                QDomElement firstCell = KoDom::namedItemNS( elem, KoXmlNS::table, "table-cell" );
+                QDomElement pElem = KoDom::namedItemNS( firstCell, KoXmlNS::text, "p" );
+                m_rowLabels.append( pElem.text() );
+            }
+        }
+    }
+
+    kdDebug(35001) << "numberHeaderColumns=" << numberHeaderColumns << " numberDataColumns=" << numberDataColumns
+                   << " numberDataRows=" << numberDataRows << endl;
+
+    if ( (int)m_rowLabels.count() != numberDataRows)
+        kdWarning(35001) << "Got " << m_rowLabels.count() << " row labels, expected " << numberDataRows << endl;
+
+    m_currentData.expand( numberDataRows, numberDataColumns );
+    m_currentData.setUsedCols( numberDataColumns );
+    m_currentData.setUsedRows( numberDataRows );
+
+    // Now really load the cells
+    int row = 0;
+    QDomElement rowElem;
+    forEachElement( rowElem, tableRows ) {
+        if ( rowElem.localName() == "table-row" ) {
+            int col = 0;
+            int cellNum = 0;
+            QDomElement cellElem;
+            forEachElement( cellElem, rowElem ) {
+                if ( cellElem.localName() == "table-cell" ) {
+                    ++cellNum;
+                    if ( cellNum > numberHeaderColumns ) {
+                        QString valueType = cellElem.attributeNS( KoXmlNS::office, "value-type", QString::null );
+                        if ( valueType != "float" )
+                            kdWarning(35001) << "Don't know how to handle value-type " << valueType << endl;
+                        else {
+                            QString value = cellElem.attributeNS( KoXmlNS::office, "value", QString::null );
+                            double val = value.toDouble();
+                            m_currentData.setCell( row, col, val );
+                        }
+                        ++col;
+                    }
+                }
+            }
+            ++row;
+        }
+    }
+
+    return true;
+}
+
+bool KChartPart::loadOasis( const QDomDocument& doc,
+			    KoOasisStyles&      oasisStyles,
 			    const QDomDocument& /*settings*/,
 			    KoStore* )
 {
-    //todo
-    return false;
+    kdDebug(35001) << "kchart loadOasis called" << endl;
+    QDomElement content = doc.documentElement();
+    QDomElement bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    if ( bodyElem.isNull() )
+    {
+        kdError(32001) << "No office:body found!" << endl;
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
+        return false;
+    }
+    QDomElement officeChartElem = KoDom::namedItemNS( bodyElem, KoXmlNS::office, "chart" );
+    if ( officeChartElem.isNull() )
+    {
+        kdError(32001) << "No office:chart found!" << endl;
+        QDomElement childElem;
+        QString localName;
+        forEachElement( childElem, bodyElem ) {
+            localName = childElem.localName();
+        }
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+        return false;
+    }
+
+    QDomElement chartElem = KoDom::namedItemNS( officeChartElem, KoXmlNS::chart, "chart" );
+    if ( chartElem.isNull() )
+    {
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
+        return false;
+    }
+
+    // Load parameters
+    QString errorMessage;
+    bool ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage );
+    if ( !ok ) {
+        setErrorMessage( errorMessage );
+        return false;
+    }
+
+    // TODO Load data direction (see loadAuxiliary)
+
+    // Load data
+    QDomElement tableElem = KoDom::namedItemNS( chartElem, KoXmlNS::table, "table" );
+    if ( !tableElem.isNull() ) {
+        ok = loadOasisData( tableElem );
+        if ( !ok )
+            return false; // TODO setErrorMessage
+    }
+
+    setAxisDefaults();
+
+    return true;
 }
 
 

@@ -23,9 +23,9 @@ class KChartButton : public QVBox
 {
   Q_OBJECT
   public:
-    KChartButton(QWidget* parent, const QString &, QPixmap *);
+    KChartButton(QWidget* parent, const QString &, const QPixmap &);
     ~KChartButton();
-    
+
     QPushButton *button() const { return m_button;}
   private:
     QPushButton *m_button;

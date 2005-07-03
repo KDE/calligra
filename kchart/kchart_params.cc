@@ -23,6 +23,9 @@
 #include <dcopobject.h>
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"
+#include <koxmlns.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 namespace KChart
 {
@@ -46,6 +49,45 @@ DCOPObject* KChartParams::dcopObject()
     if ( !m_dcop )
 	m_dcop = new KChartParamsIface( this );
     return m_dcop;
+}
+
+static const struct {
+    const char* oasisClass;
+    KDChartParams::ChartType chartType;
+} oasisChartTypes[] = {
+    { "chart:bar", KDChartParams::Bar }
+// TODO...
+};
+
+static const unsigned int numOasisChartTypes
+  = sizeof oasisChartTypes / sizeof *oasisChartTypes;
+
+
+bool KChartParams::loadOasis( const QDomElement& chartElem,
+                              KoOasisStyles& /*oasisStyles*/,
+                              QString& errorMessage )
+{
+    const QString chartClass = chartElem.attributeNS( KoXmlNS::chart, "class", QString::null );
+    bool knownType = false;
+    for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
+        if ( chartClass == oasisChartTypes[i].oasisClass ) {
+            kdDebug(35001) << "found chart of type " << chartClass << endl;
+            setChartType( oasisChartTypes[i].chartType );
+            knownType = true;
+        }
+    }
+    if ( !knownType ) {
+        errorMessage = i18n( "Unknown chart type %1" ).arg( chartClass );
+        kdDebug(35001) << errorMessage << endl;
+        return false;
+    }
+
+    // TODO title
+    // TODO legend
+    // TODO plot-area
+    // TODO...
+
+    return true;
 }
 
 }  //KChart namespace

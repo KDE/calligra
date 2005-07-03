@@ -22,6 +22,7 @@
 #define KCHART_PARAMS_H
 
 
+class KoOasisStyles;
 class KDChartParams;
 class DCOPObject;
 
@@ -38,6 +39,10 @@ class KChartParams : public KDChartParams
     ~KChartParams();
 
     DCOPObject  *dcopObject();
+
+    bool loadOasis( const QDomElement& chartElem,
+                    KoOasisStyles& oasisStyles,
+                    QString& errorMessage );
 
   private:
     DCOPObject  *m_dcop;
