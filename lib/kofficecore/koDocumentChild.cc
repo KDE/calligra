@@ -314,6 +314,8 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
         }
         if ( !res )
         {
+            // Keep the error message from the attempted loading
+            QString errorMessage = d->m_doc->errorMessage();
             delete d->m_doc;
             d->m_doc = 0;
             QString tmpURL = m_tmpURL; // keep a copy, createUnavailDocument will erase it
@@ -324,7 +326,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
                 d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
                 d->m_doc->setStoreInternal( true );
                 if ( internalURL )
-                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load embedded object." ) );
+                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load embedded object." ) + "\n" + errorMessage );
                 else
                     d->m_doc->setProperty( "unavailReason", i18n( "External document not found:\n%1" ).arg( tmpURL ) );
             }
