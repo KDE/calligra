@@ -390,20 +390,29 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
   m_bLoading = true;
 
   QDomElement contents = doc.documentElement();
-  QDomElement body(KoDom::namedItemNS( contents, KoXmlNS::office, "body"));
+  QDomElement realBody(KoDom::namedItemNS( contents, KoXmlNS::office, "body"));
 
-  if(body.isNull()) {
+  if(realBody.isNull()) {
     kdDebug(43000) << "No office:body found!" << endl;
     setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
     m_bLoading = false;
     return false;
   }
 
-  body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
+  QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "drawing");
 
   if(body.isNull()) {
     kdDebug(43000) << "No office:drawing found!" << endl;
-    setErrorMessage(i18n("Invalid OASIS document. No office:drawing tag found."));
+    QDomElement childElem;
+    QString localName;
+    forEachElement( childElem, realBody ) {
+        localName = childElem.localName();
+    }
+    if ( localName.isEmpty() )
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+    else
+        setErrorMessage( i18n( "This document is not a drawing, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+
     m_bLoading = false;
     return false;
   }

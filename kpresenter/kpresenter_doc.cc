@@ -1599,27 +1599,36 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     emit sigProgress( 5 );
 
     QDomElement content = doc.documentElement();
-    QDomElement body (KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( body.isNull() )
+    QDomElement realBody (KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    if ( realBody.isNull() )
     {
         kdError(33001) << "No office:body found!" << endl;
-        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return false;
     }
-    body = KoDom::namedItemNS( body, KoXmlNS::office, "presentation" );
+    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "presentation" );
     if ( body.isNull() )
     {
         kdError(33001) << "No office:presentation found!" << endl;
-        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
-       return false;
+        QDomElement childElem;
+        QString localName;
+        forEachElement( childElem, realBody ) {
+            localName = childElem.localName();
+        }
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This document is not a presentation, but a %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+        return false;
     }
-	//load settings
+
+    //load settings
     QDomNode settings  = KoDom::namedItemNS( body, KoXmlNS::presentation, "settings" );
     kdDebug()<<"settings :"<<settings.isNull()<<endl;
     if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
         loadOasisPresentationSettings( settings );
 
-// it seems that ooimpress has different paper-settings for every slide.
+    // it seems that ooimpress has different paper-settings for every slide.
     // we take the settings of the first slide for the whole document.
     QDomNode drawPage = KoDom::namedItemNS( body, KoXmlNS::draw, "page" );
     if ( drawPage.isNull() ) // no slides? give up.

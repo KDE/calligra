@@ -1067,19 +1067,26 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     __hf.ptFootNoteBodySpacing = 10.0;
 
     QDomElement content = doc.documentElement();
-    QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( body.isNull() )
+    QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    if ( realBody.isNull() )
     {
         kdError(32001) << "No office:body found!" << endl;
-        setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return false;
     }
-    body = KoDom::namedItemNS( body, KoXmlNS::office, "text" );
+    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "text" );
     if ( body.isNull() )
     {
         kdError(32001) << "No office:text found!" << endl;
-        // ## TODO: print the actual tag that was found, it might help finding the right app to use :)
-        setErrorMessage( i18n( "Invalid OASIS document. No office:text tag found." ) );
+        QDomElement childElem;
+        QString localName;
+        forEachElement( childElem, realBody ) {
+            localName = childElem.localName();
+        }
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This is not a word processing document, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
         return false;
     }
 

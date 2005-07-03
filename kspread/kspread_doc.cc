@@ -927,18 +927,27 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     d->refs.clear();
 
     QDomElement content = doc.documentElement();
-    QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( body.isNull() )
+    QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    if ( realBody.isNull() )
     {
-        setErrorMessage( i18n( "Invalid document. No office:body." ));
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ));
         deleteLoadingInfo();
         return false;
     }
-    body = KoDom::namedItemNS( body, KoXmlNS::office, "spreadsheet" );
+    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {
-        setErrorMessage( i18n( "Invalid document. No office:spreadsheet." ));
+        kdError(32001) << "No office:spreadsheet found!" << endl;
+        QDomElement childElem;
+        QString localName;
+        forEachElement( childElem, realBody ) {
+            localName = childElem.localName();
+        }
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
         deleteLoadingInfo();
         return false;
     }
