@@ -39,7 +39,7 @@ class PropertyPrivate
 {
 	public:
 		PropertyPrivate()
-		:  valueList(0), changed(false), storable(true), readOnly(false), visible(true), 
+		:  valueList(0), changed(false), storable(true), readOnly(false), visible(true),
 		 autosync(-1), custom(0), useCustomProperty(true),
 		 parent(0), children(0), relatedProperties(0)
 		{
@@ -118,7 +118,7 @@ Property::Property(const QCString &name, const QVariant &value,
 	d->custom = Factory::getInstance()->customPropertyForProperty(this);
 }
 
-Property::Property(const QCString &name, const QStringList &keys, const QStringList &values, 
+Property::Property(const QCString &name, const QStringList &keys, const QStringList &values,
 	const QVariant &value, const QString &caption, const QString &description, int type)
  : d( new PropertyPrivate() )
 {
@@ -133,7 +133,7 @@ Property::Property(const QCString &name, const QStringList &keys, const QStringL
 	d->custom = Factory::getInstance()->customPropertyForProperty(this);
 }
 
-Property::Property(const QCString &name, const QMap<QString, QVariant> &v_valueList, 
+Property::Property(const QCString &name, const QMap<QString, QVariant> &v_valueList,
 	const QVariant &value, const QString &caption, const QString &description, int type)
  : d( new PropertyPrivate() )
 {
@@ -307,6 +307,10 @@ Property::resetValue()
 {
 	d->changed = false;
 	setValue(oldValue(), false);
+	// maybe parent  prop is also unchanged now
+	if(d->parent && d->parent->value() == d->parent->oldValue())
+		d->parent->d->changed = false;
+
 	QValueList<Set*>::ConstIterator endIt = d->sets.constEnd();
 	for(QValueList<Set*>::ConstIterator it = d->sets.constBegin(); it != endIt; ++it)
 		emit (*it)->propertyReset(**it, *this);

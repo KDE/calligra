@@ -157,6 +157,7 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		EditorPrivate *d;
 
 	friend class EditorItem;
+	friend class Widget;
 };
 
 }

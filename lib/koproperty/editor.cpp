@@ -119,6 +119,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	d->undoButton = new QPushButton(viewport());
 	d->undoButton->setFocusPolicy(QWidget::NoFocus);
 	setFocusPolicy(QWidget::ClickFocus);
+	d->undoButton->setMinimumSize(QSize(5,5)); // allow to resize undoButton even below pixmap size
 	d->undoButton->setPixmap(SmallIcon("undo"));
 	QToolTip::add(d->undoButton, i18n("Undo changes"));
 	d->undoButton->hide();
@@ -422,7 +423,7 @@ Editor::acceptInput()
 void
 Editor::slotWidgetAcceptInput(Widget *widget)
 {
-	if(!widget || !d->set)
+	if(!widget || !d->set || !widget->property())
 		return;
 
 	widget->property()->setValue(widget->value());
@@ -456,6 +457,8 @@ Editor::slotClicked(QListViewItem *it)
 	updateEditorGeometry();
 	showUndoButton( p->isModified() );
 	d->currentWidget->show();
+
+	d->justClickedItem = true;
 }
 
 void
@@ -665,7 +668,12 @@ void
 Editor::setFocus()
 {
 	EditorItem *item = static_cast<EditorItem *>(selectedItem());
-	if (!item) {
+	if (item) {
+		if (!d->justClickedItem)
+			ensureItemVisible(item);
+		d->justClickedItem = false;
+	}
+	else {
 		//select an item before focusing
 		item = static_cast<EditorItem *>(itemAt(QPoint(10,1)));
 		if (item) {
@@ -673,9 +681,8 @@ Editor::setFocus()
 			setSelected(item, true);
 		}
 	}
-	if (d->currentWidget) {
+	if (d->currentWidget)
 		d->currentWidget->setFocus();
-	}
 	else
 		KListView::setFocus();
 }

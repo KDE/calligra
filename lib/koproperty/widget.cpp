@@ -21,6 +21,7 @@
 #include "widget.h"
 #include "property.h"
 #include "editoritem.h"
+#include "editor.h"
 
 #include <qpainter.h>
 #include <qvariant.h>
@@ -80,7 +81,7 @@ Widget::setProperty(Property *property)
 }
 
 void
-Widget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+Widget::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &value)
 {
 	p->eraseRect(r);
 	QRect rect(r);
@@ -116,9 +117,14 @@ Widget::eventFilter(QObject*, QEvent* e)
 			emit acceptInput(this);
 			return true;
 		}
-		KListView *list = static_cast<KListView*>(parentWidget()->parentWidget());
-		KListViewItem *item = static_cast<KListViewItem*>(list->itemAt(mapToParent(QPoint(2,2))));
+		else {
+			Editor *list = static_cast<KoProperty::Editor*>(parentWidget()->parentWidget());
+			if (!list)
+				return false; //for sanity
+			return list->handleKeyPress(ev);
+		}
 
+		/* moved in Editor
 		if (item) {
 			if(ev->key() == Key_Up && ev->state() != ControlButton)
 			{
@@ -132,7 +138,7 @@ Widget::eventFilter(QObject*, QEvent* e)
 					list->setCurrentItem(item->itemBelow());
 				return true;
 			}
-		}
+		}*/
 	}
 
 	return false;
