@@ -111,7 +111,7 @@ the menubar.</para>
 <imagedata fileref="scan.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-
+<note><para>Depending on the features of the selected scanner, your scanning window may have different controls than the example above.</para></note>
 <para>You should begin by selecting the image type that you want to scan and the resolution.  First determine the picture type using the drop down box labeled 
 <guilabel>Scan Mode</guilabel>.  You can choose between <guilabel>Color</guilabel>, <guilabel>Greyscale</guilabel> or <guilabel>Binary</guilabel> image.</para>
 <para>If you want to select a different scanner, click the <guibutton>Source...</guibutton> button.</para>
@@ -119,7 +119,7 @@ the menubar.</para>
 <para>Select your resolution using the drop down box labeled <guilabel>Resolution</guilabel></para>
 <para>Now place the object you want to scan in the scanner and click <guibutton>Preview Scan</guibutton>.  Your scanner will take a low resolution 
 scan and preview it in the window in the far right of the dialog</para>
-<para>Using your mouse, click on the upper left corner of he area you want to scan with the &LMB; and hold the button down.  Drag the mouse down and 
+<para>Using your mouse, click on the upper left corner of the area you want to scan with the &LMB; and hold the button down.  Drag the mouse down and 
 to the right to create a box for a high-resolution scan. When you have an appropriate sized box, release the &LMB;. Once the box is drawn, you 
 can adjust the selection box using the mouse. </para>
 <para>You can refer to the box to the left of the preview window labeled <guilabel>Selection</guilabel>.  This box will show you the height and 
@@ -175,7 +175,7 @@ If <guilabel>White</guilabel> is chosen, then &kword; will look for an area surr
 checkbox, &kword; will ask you to select your scanner each time you insert a scanned image into your document.  If there is no mark, then &kword; uses the previously 
 selected scanner.  If you have access to only one scanner, or you only use one scanner, you should remove any mark from this box.</para>
 <para>The checbox labled <guilabel>Query the network for scan devices</guilabel> is also used to select scanners.  If there is a mark in this checkbox, 
-&kword; will check your local network for scanners that are avaialbe.  If there is no mark in this box, &kword; will only look for scanners connected directly to 
+&kword; will check your local network for scanners that are available.  If there is no mark in this box, &kword; will only look for scanners connected directly to 
 your machine.</para>
 <para>To save these options, click <guibutton>Close</guibutton>.</para>
 

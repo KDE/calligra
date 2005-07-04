@@ -116,7 +116,7 @@ you are adding a subsection to the list.  </para>
 
 <para>Adjust the depth setting to determine where in the list this text occurs.</para>
 <para>By adjusting the spin box labeled <guilabel>Display levels:</guilabel> you can determine if previous levels are displayed.  For example, with a list where <guilabel>Depth:</guilabel> is set to three and 
-<guilabel>Display levesl:</guilabel> is set to one might be: </para>
+<guilabel>Display levels:</guilabel> is set to one might be: </para>
  
 <informalexample><simplelist>
 <member>i. This is a step</member>

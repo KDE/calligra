@@ -1269,8 +1269,8 @@ ask about this word again.</para>
 in the document that the spellchecking was begun.</para>
 
 <note>
-<para>If the document does not have any spelling errors, &kword; does
-not show a dialog box informing you there were no spelling errors.</para>
+<para>If the document does not have any spelling errors, &kword; immediatly returns you to your 
+document (It does not show a dialog box informing you there were no spelling errors).</para>
 
 <para>When spellchecking is started, it
 will proceed to check all of the document against the dictionary, and
@@ -1435,7 +1435,7 @@ words in between the two underscores.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Replace 1/2... with ½</guilabel></term>
+<term><guilabel>Replace 1/2... with Â½</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically change 1/2, 1/3 and 3/4 to their single character equivalents.</para>
 </listitem>

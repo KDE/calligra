@@ -22,8 +22,7 @@ a date, a time, or nearly anything you desire.</para>
 change), or <emphasis>variable</emphasis> (where the placeholder is 
 <link linkend="update-variables">updated by &kword;</link> to reflect
 the current value of the variable).</para>
-<para>This chapter will begin with a few examples of commonly used variables 
-(<link linkend="insert-date">date</link>,
+<para>This chapter will begin with a few examples of commonly used variables (<link linkend="insert-date">date</link>,
 <link linkend="insert-time">time</link>, and
 <link linkend="page-number">page numbers</link>),
 then detail the
@@ -35,8 +34,8 @@ custom variables</link> for documents.</para>
 <sect2 id="date-time"><title>Date and Time</title>
 <para>Many letters, reports and documents contain
 information about the dates or times they correspond to.  The date and time
-information may establish the creation of a document (which will remain 
-fixed as long as the document is around), or the date and time may serve as
+information may establish the creation of a document (this will not change 
+as long as the document is around), or the date and time may serve as
 a notice of the last date of modification (which would change with each passing day).</para>
 <para>&kword; allows for both fixed and variable date and time variables in the document.</para>
 <sect3 id="insert-date"><title>Insert Date</title>
@@ -134,9 +133,9 @@ specific rules (which are outlined below) to create the completed date.</para>
 <para>Simply combine placeholders with normal text (separators) to create completed date strings. </para>
 
 <para>For example:</para>
-<para><quote>MM/dd/yyyy</quote> is translated to 01/06/2004</para>
+<para><quote>MM/dd/yyyy</quote> is translated to 01/30/2005</para>
 <para>and</para>
-<para><quote>MMMM d, yyyy</quote> becomes January 6, 2004</para>
+<para><quote>MMMM d, yyyy</quote> becomes January 30, 2005</para>
 <para>Notice that only the placeholders change.  Spaces, commas, slashes and other text remains unchanged.</para>
 <note><para>It is important to remember that placeholders are case sensitive.
 <quote>DD</quote> is not a placeholder,

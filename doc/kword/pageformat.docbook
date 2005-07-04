@@ -91,7 +91,7 @@ entry boxes (labeled <guilabel>Width:</guilabel> and
 </variablelist>
 
 <para>Below the page size, are two radio boxes in the section labeled
-<guilabel>Orientation</guilabel> you can select either <link
+<guilabel>Orientation</guilabel>. You can select either <link
 linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for
 your document. </para>

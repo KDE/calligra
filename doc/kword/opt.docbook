@@ -410,7 +410,7 @@ left margin, etc....</para>
 <varlistentry>
 <term><guilabel>Cursor in protected area</guilabel></term>
 <listitem><para>  
-When there is a mark in this check box, and you click in a protected frame of your document, a cursor appears.  When the 
+When there is a mark in this check box, and you click in a protected frame of your document, a cursor is visible.  You can not make any changes in this protected frame, but the cursor is visible.  When the 
 mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para></listitem>
 </varlistentry>
 
@@ -499,12 +499,6 @@ Following Words</guilabel> and click the <guibutton>Add</guibutton> button.</par
 <sect4><title>Deleteing a word from the ignore list</title>
 <para>To remove a word, select the word in the listbox containing all the currently ignored words by clicking on it with 
 the &LMB;.  Now click the <guibutton>Remove</guibutton> button.</para>
-</sect4>
-
-<sect4><title>Changing the order a word appears in the list</title>
-<para>To move a word in the list, select the word in the listbox containing all the currently ignored words by clicking on it with 
-the &LMB;.  Now click the <guibutton>Move Up</guibutton> button or the <guibutton>Move Up</guibutton> button to move the word
-within the list.</para>
 
 <para>When you are happy with the changes, simply click
 <guibutton>OK</guibutton>.</para>

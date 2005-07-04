@@ -157,7 +157,7 @@ will allow you to change the color of the background using the
 
 <para>The subsection labeled <guilabel>Underlining</guilabel> has two combo boxes and a <guibutton>Change Color...</guibutton> button.  
 In the left most combo box select between
-no underline (Without), Single, Simple Bold, Double or Wave underlining.  </para>
+no underline (None), Single, Simple Bold, Double or Wave underlining.  </para>
 
 <screenshot>
 <mediaobject>

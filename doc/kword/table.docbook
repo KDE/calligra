@@ -334,7 +334,7 @@ continuing.</para>
 
 <para>When a table is created, all columns are equal in width.  You can change the width of individual columns by using
 <link linkend="table-resize-column-mouse">the mouse</link> or <link linkend="table-resize-column-dialog">the keyboard</link>.</para>
-<sect3 id="table-resize-column-mouse"><title>Using the mouse</title>
+<sect3 id="table-resize-column-mouse"><title>Using a dialog box</title>
 <para>First select any cell in the column you want to change, by holding down the &Ctrl; key and clicking once with the &LMB;.</para>
 <para>The cell is now surrounded by 8 colored boxes.  Place the mouse over the box in the middle of the
 right vertical border of the cell.  The mouse pointer changes to a double-headed arrow.  Click on the box and drag the right edge of the
@@ -350,8 +350,8 @@ the dialog box will default to the correct column automatically.</para></tip>
 Column...</guimenuitem></menuchoice> from the menubar.</para>
 <para>A dialog box will appear.  In the spin box labeled <guilabel>Column:</guilabel>, you can chose a different column to set.  
 In the spin box labeled <guilabel>Width:</guilabel>, enter the desired width of the column.</para>
-<para>Click <guibutton>OK</guibutton> to change the width, or click <guibutton>Cancel</guibutton> to leave the column 
-width unchanged.</para>
+<para>Click <guibutton>Reset</guibutton> to revert any changes you made but keep the dialog box open for new changes. Click <guibutton>OK</guibutton> to change the width of the column and exit the dialog. Click <guibutton>Apply</guibutton> to see your changes and keep the dialog box open. Click <guibutton>Cancel</guibutton> to leave the column 
+width unchanged and close the dialog.</para>
 </sect3>
 </sect2>
 

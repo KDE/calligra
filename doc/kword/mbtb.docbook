@@ -1184,7 +1184,7 @@ using the menubar. </para>
 </term>
 <listitem>
 <para><action>Allows you to access your scanner for inserting pictures into your document.</action> For more information see 
-the section entitled <link linkend="scan-graphics">Useing a picture from a scanner</link>.</para>
+the section entitled <link linkend="scan-graphics">Using a picture from a scanner</link>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -1727,7 +1727,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Using 
 </menuchoice>
 </term>
 <listitem>
-<para><action>Lets you format the currently selected table using a preformatted template.</action>  You can
+<para><action>Lets you format the currently selected table using a table template.</action>  You can
 find more about tables in the section entitled <link linkend="tablestyle">Using Tablestyle</link>.</para>
 </listitem>
 </varlistentry>
@@ -1819,7 +1819,7 @@ Changing Font Case</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Alphabetizes the selected paragraphs.  You will be given the option to sort in ascending or decending order</action>.</para>
+<para><action>Alphabetizes the selected paragraphs.  You will be given the option to sort in ascending or descending order</action>.</para>
 </listitem>
 </varlistentry>
 
@@ -2393,25 +2393,25 @@ specify the amount of Red, Green and Blue to be mixed to form the current color.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term>Palattes</term>
-<listitem><para>A palate is a group of related colors.  These colors are all made available for easy selection according to a meaningful
+<term>Palettes</term>
+<listitem><para>A palette is a group of related colors.  These colors are all made available for easy selection according to a meaningful
 association.</para>
-<para>To select a new palate, click on the combo box at the top of the palate selection area.  
+<para>To select a new palette, click on the combo box at the top of the palette selection area.  
 You will be presented with several choices:</para>
-<para><guilabel>Recent Colors</guilabel> - This is a list of the most recently used colors in your document.  You can use this palate to
-maintain consistency.  As each new color is selected, it is automatically added to the recent colors palate.</para>
-<para><guilabel>Custom Colors</guilabel> - You can create your own custom palate.  This is done by selecting a 
+<para><guilabel>Recent Colors</guilabel> - This is a list of the most recently used colors in your document.  You can use this palette to
+maintain consistency.  As each new color is selected, it is automatically added to the recent colors palette.</para>
+<para><guilabel>Custom Colors</guilabel> - You can create your own custom palette.  This is done by selecting a 
 color using one of the other
 color selection options, and clicking on <guibutton>Add to Custom Colors</guibutton>.  
-That color is now added to your custom color palate.</para>
-<para><guilabel>40 Colors</guilabel> - This is a list of 40 commonly used colors.  This is a good palate to choose from if some of the people
+That color is now added to your custom color palette.</para>
+<para><guilabel>40 Colors</guilabel> - This is a list of 40 commonly used colors.  This is a good palette to choose from if some of the people
 viewing your document will be on machines with limited color capability.</para>
-<para><guilabel>Web Colors</guilabel> - This is a predefined palate of colors that you might find useful for designing web pages.</para>
-<para><guilabel>Royal Colors</guilabel> - This is a predefined palate of colors including numerous shades of purple and yellow.</para>
+<para><guilabel>Web Colors</guilabel> - This is a predefined palette of colors that you might find useful for designing web pages.</para>
+<para><guilabel>Royal Colors</guilabel> - This is a predefined palette of colors including numerous shades of purple and yellow.</para>
 <para><guilabel>Named Colors</guilabel> - This is a list of color names.  The names are based on standard X server color
 names.  The names are designed to give descriptive names to each color.  Simply select the name you want. </para>
-<para>Once you have selected a palate, you will be presented with a small square showing each color available in the palate. To 
-select a color from the palate, simply click on the square of the desired color.</para>
+<para>Once you have selected a palette, you will be presented with a small square showing each color available in the palette. To 
+select a color from the palette, simply click on the square of the desired color.</para>
 <para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
 </listitem>
 </varlistentry>
@@ -2504,7 +2504,7 @@ folders should be listed before files, or mixed within the files.</para>
 <varlistentry>
 <term><guimenuitem>Detailed View</guimenuitem></term>
 <listitem>
-<para>If tis option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
+<para>If this option is selected, the names, sizes, dates, permissions, file owners and group ownerships are shown.</para>
 <para>Compare this to short view.</para>
 </listitem>
 </varlistentry>
@@ -2520,7 +2520,7 @@ folders should be listed before files, or mixed within the files.</para>
 <term><guimenuitem>Show/Hide Quick Navigation Panel</guimenuitem></term>
 <listitem>
 <para>The tall box along the left side of the dialog with a dark grey backround is the Quick Navigation Panel.  You can use this option to toggle whether it is visible or not.</para>
-<para>More detailed information about hte Quick Navigation Panel is avialable further down this page.</para>
+<para>More detailed information about the Quick Navigation Panel is available further down this page.</para>
 </listitem>
 </varlistentry>
 
@@ -2532,7 +2532,7 @@ folders should be listed before files, or mixed within the files.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Seperate Folders</guimenuitem></term>
+<term><guimenuitem>Separate Folders</guimenuitem></term>
 <listitem>
 <para>Use this option to toggle between a 2 pane view of the filesystem and a one pane view of the filesystem.  
 Most people will not need to worry about this option as most people prefer the one pane view.</para>
