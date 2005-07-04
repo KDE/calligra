@@ -36,6 +36,16 @@ class FactoryPrivate;
 typedef Widget *(*createWidget) (Property*);
 typedef CustomProperty *(*createCustomProperty) (int);
 
+class CustomPropertyFactory
+{
+	public:
+		CustomPropertyFactory() {}
+		virtual ~CustomPropertyFactory() {}
+
+		virtual CustomProperty*  createCustomProperty(int type) = 0;
+		virtual Widget* createCustomWidget(Property *prop) = 0;
+};
+
 //! Factory class which loads custom editors and properties
 /*! This class is static, you don't need to create an instance of it. It's used to enable the
      custom property/editors system.
@@ -71,8 +81,10 @@ class KOPROPERTY_EXPORT Factory
 		/*! Registers property editor factory function for a type.
 		This factory functions are considered before defaults
 		when  widgetForProperty() is called.*/
-		void registerEditor(int type, createWidget creator);
-		void registerEditor(const QValueList<int> &types, createWidget creator);
+		//void registerEditor(int type, createWidget creator);
+		//void registerEditor(const QValueList<int> &types, createWidget creator);
+		void registerEditor(int type, CustomPropertyFactory *creator);
+		void registerEditor(const QValueList<int> &types, CustomPropertyFactory *creator);
 
 		/*! Creates and returns the editor for given property type.
 		Warning: editor and viewer widgets won't have parent widget. Property editor
@@ -82,8 +94,10 @@ class KOPROPERTY_EXPORT Factory
 
 		/*! Registers a function that creates a CustomProperty.
 		 This function will be called every time a property of \a type is created. */
-		void registerCustomProperty(int type, createCustomProperty creator);
-		void registerCustomProperty(const QValueList<int> &types, createCustomProperty creator);
+		//void registerCustomProperty(int type, createCustomProperty creator);
+		//void registerCustomProperty(const QValueList<int> &types, createCustomProperty creator);
+		void registerCustomProperty(int type, CustomPropertyFactory *creator);
+		void registerCustomProperty(const QValueList<int> &types, CustomPropertyFactory *creator);
 
 		/*! This function is called in Property::Property() to create (optionnal)
 		  custom property. It creates the custom property for built-in types, or

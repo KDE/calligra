@@ -61,8 +61,8 @@ class FactoryPrivate
 		~FactoryPrivate() {}
 
 		//registered widgets for property types
-		QMap<int, createWidget > registeredWidgets;
-		QMap<int, createCustomProperty > registeredCustomProperties;
+		QMap<int, CustomPropertyFactory* > registeredWidgets;
+		QMap<int, CustomPropertyFactory* > registeredCustomProperties;
 };
 }
 
@@ -89,7 +89,7 @@ Factory::getInstance()
 ///////////////////  Functions related to widgets /////////////////////////////////////
 
 void
-Factory::registerEditor(int type, createWidget creator)
+Factory::registerEditor(int type, CustomPropertyFactory *creator)
 {
 	if(d->registeredWidgets.contains(type))
 		kdDebug(100300) << "Type (" << type << ") already registered. Overriding actual createWidget function." << endl;
@@ -97,7 +97,7 @@ Factory::registerEditor(int type, createWidget creator)
 }
 
 void
-Factory::registerEditor(const QValueList<int> &types, createWidget creator)
+Factory::registerEditor(const QValueList<int> &types, CustomPropertyFactory *creator)
 {
 	QValueList<int>::ConstIterator endIt = types.constEnd();
 	for(QValueList<int>::ConstIterator it = types.constBegin(); it != endIt; ++it)
@@ -113,7 +113,7 @@ Factory::widgetForProperty(Property *property)
 	int type = property->type();
 
 	if (d->registeredWidgets.contains(type))
-		return (*d->registeredWidgets[type])(property);
+		return d->registeredWidgets[type]->createCustomWidget(property);
 
 	if(property->valueList())
 		return new ComboBox(property);
@@ -190,15 +190,17 @@ Factory::widgetForProperty(Property *property)
 ///////////////////  Functions related to custom properties /////////////////////////////////////
 
 void
-Factory::registerCustomProperty(int type, createCustomProperty creator)
+Factory::registerCustomProperty(int type, CustomPropertyFactory *creator)
 {
+	if(!creator)
+		return;
 	if(d->registeredCustomProperties.contains(type))
 		kdDebug(100300) << "Type (" << type << ") already registered. Overriding actual createCustomProperty function." << endl;
 	d->registeredCustomProperties.insert(type, creator);
 }
 
 void
-Factory::registerCustomProperty(const QValueList<int> &types, createCustomProperty creator)
+Factory::registerCustomProperty(const QValueList<int> &types, CustomPropertyFactory *creator)
 {
 	QValueList<int>::ConstIterator endIt = types.constEnd();
 	for(QValueList<int>::ConstIterator it = types.constBegin(); it != endIt; ++it)
@@ -210,7 +212,7 @@ Factory::customPropertyForProperty(Property *prop)
 {
 	int type = prop->type();
 	if (d->registeredCustomProperties.contains(type))
-		return (*d->registeredCustomProperties[type])(type);
+		return d->registeredCustomProperties[type]->createCustomProperty(type);
 
 	switch(type) {
 		case Size: case Size_Width: case Size_Height:

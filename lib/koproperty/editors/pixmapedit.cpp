@@ -43,14 +43,13 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
 	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 	m_edit = new QLabel(this);
 	m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-//	m_edit->resize(width(), height()-1);
+	m_edit->setMinimumHeight(5);
+	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setBackgroundMode(Qt::PaletteBase);
 	setBackgroundMode(Qt::PaletteBase);
 
 	m_button = new QPushButton(i18n("..."), this);
-	m_button->resize(height(), height()-8);
-	m_button->move(width() - m_button->width() -1, 0);
-	m_button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	m_button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 	m_button->setFocusPolicy(NoFocus);
 	l->addSpacing(2);
 	l->addWidget(m_edit);
@@ -86,7 +85,7 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 {
 	p->eraseRect(r);
 	QPixmap pix( value.toPixmap() );
-	p->drawPixmap(r.topLeft().x()+KPROPEDITOR_ITEM_MARGIN, 
+	p->drawPixmap(r.topLeft().x()+KPROPEDITOR_ITEM_MARGIN,
 		r.topLeft().y()+(r.height()-pix.height())/2, pix);
 }
 

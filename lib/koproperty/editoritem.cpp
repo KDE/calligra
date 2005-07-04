@@ -125,8 +125,11 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 #endif
 		Widget *widget = d->editor->createWidgetForProperty(d->property, false /*don't change Widget::property() */);
 		if(widget) {
-			QRect r(0, 0, d->editor->header()->sectionSize(1), height()-(widget->hasBorders()?0:1));
+			QRect r(0, 0, d->editor->header()->sectionSize(1), height() - (widget->hasBorders() ? 1 : 2));
+			p->setClipRect(r, QPainter::CoordPainter);
+			p->setClipping(true);
 			widget->drawViewer(p, icg, r, d->property->value());
+			p->setClipping(false);
 		}
 	}
 
@@ -213,8 +216,8 @@ EditorItem::compare( QListViewItem *i, int col, bool ascending ) const
 		return -QListViewItem::key( col, ascending ).localeAwareCompare( i->key( col, ascending ) );
 
 	if (d->property) {
-//		kdDebug() << d->property->name() << " " << d->property->sortingKey() << " | " 
-//			<< static_cast<EditorItem*>(i)->property()->name() << " " 
+//		kdDebug() << d->property->name() << " " << d->property->sortingKey() << " | "
+//			<< static_cast<EditorItem*>(i)->property()->name() << " "
 //			<< static_cast<EditorItem*>(i)->property()->sortingKey() << endl;
 		return d->property->sortingKey() - static_cast<EditorItem*>(i)->property()->sortingKey();
 	}

@@ -229,8 +229,11 @@ Editor::addItem(const QCString &name, EditorItem *parent)
 
 	last = 0;
 	QValueList<Property*>::ConstIterator endIt = property->children()->constEnd();
-	for(QValueList<Property*>::ConstIterator it = property->children()->constBegin(); it != endIt; ++it)
+	for(QValueList<Property*>::ConstIterator it = property->children()->constBegin(); it != endIt; ++it) {
+		//! \todo allow to have child prop with child items too
+		if( *it && (*it)->isVisible() )
 			last = new EditorItem(this, item, *it, last);
+	}
 }
 
 void

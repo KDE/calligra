@@ -44,7 +44,7 @@ class PixmapEdit : public Widget
 		bool  eventFilter(QObject *o, QEvent *ev);
 
 	protected slots:
-		void  selectPixmap();
+		virtual void selectPixmap();
 
 	private:
 		QLabel *m_edit;
