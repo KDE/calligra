@@ -35,7 +35,7 @@ using namespace KFormDesigner;
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, 
+ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget,
  Container *parentContainer, Container *container)
  : m_enabled(true), m_row(-1), m_col(-1), m_rowspan(-1), m_colspan(-1), m_span(false)
 {
@@ -89,7 +89,7 @@ ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 }
 
 void
-ObjectTreeItem::addPixmapName(const QCString &property, const QString &name)
+ObjectTreeItem::setPixmapName(const QCString &property, const QString &name)
 {
 	m_pixmapNames[property] = name;
 }

@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/kexi/widget \
   -I$(top_srcdir)/kexi/core \
   -I$(top_srcdir)/kexi \
   -I$(top_srcdir)/lib/kofficecore \
-  -I$(top_srcdir)/lib $(all_includes)
+  -I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty $(all_includes)
 
 lib_LTLIBRARIES =  libkformdesigner.la
 libkformdesigner_la_LDFLAGS = -no-undefined $(all_libraries) $(VER_INFO)
@@ -13,7 +13,8 @@ libkformdesigner_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp \
    widgetlibrary.cpp libactionwidget.cpp form.cpp \
   objecttree.cpp formIO.cpp formmanager.cpp objecttreeview.cpp spring.cpp \
   commands.cpp events.cpp connectiondialog.cpp richtextdialog.cpp \
-  tabstopdialog.cpp editlistviewdialog.cpp utils.cpp widgetpropertyset.cpp
+  tabstopdialog.cpp editlistviewdialog.cpp utils.cpp widgetpropertyset.cpp \
+  kfdpixmapedit.cpp
 
 METASOURCES = AUTO
 libkformdesigner_la_LIBADD = \

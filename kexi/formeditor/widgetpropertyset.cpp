@@ -286,6 +286,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			d->set.addProperty(newProp);
 			if(!isPropertyVisible(propertyName, isTopLevel))
 				newProp->setVisible(false);
+			//! TMP
+			if(newProp->type() == 0) // invalid type == null pixmap ?
+				newProp->setType(KoProperty::Pixmap);
 		}
 
 //		if(0==qstrcmp(propertyName, "name"))
@@ -619,7 +622,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
 		Property *p = new Property("hAlign", createValueList(0, list), value,
-			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Align."), 
+			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Align."),
 			i18n("Horizontal Alignment"));
 		d->set.addProperty(p);
 		if(!isPropertyVisible(p->name(), isTopLevel)) {
@@ -641,7 +644,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
 		Property *p = new Property("vAlign", createValueList(0, list), value,
-			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Align."), 
+			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Align."),
 			i18n("Vertical Alignment"));
 		d->set.addProperty(p);
 		if(!isPropertyVisible(p->name(), isTopLevel)) {
@@ -714,7 +717,7 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
-	Property *p = new Property("layout", createValueList(0, list), value, 
+	Property *p = new Property("layout", createValueList(0, list), value,
 		i18n("Container's Layout"), i18n("Container's Layout"));
 	p->setVisible( d->manager->lib()->advancedPropertiesVisible() );
 	d->set.addProperty(p);

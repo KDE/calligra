@@ -68,6 +68,7 @@
 #include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
+#include "kfdpixmapedit.h"
 #include <koproperty/editor.h>
 #include <koproperty/property.h>
 
@@ -97,18 +98,18 @@ FormManager::FormManager(QObject *parent,
 	m_drawingSlot = false;
 	m_collection = 0;
 	m_connection = 0;
-
-	m_domDoc.appendChild(m_domDoc.createElement("UI"));
-
 	m_popup = 0;
-
 	m_treeview = 0;
 	m_editor = 0;
+	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
 	connect( this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)),
 		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
+
+	// register kfd custom editors
+	Factory::getInstance()->registerEditor(KoProperty::Pixmap, this);
 }
 
 FormManager::~FormManager()
@@ -118,6 +119,12 @@ FormManager::~FormManager()
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
 	delete m_uiCodeDialog;
 #endif
+}
+
+KoProperty::Widget*
+FormManager::createCustomWidget(Property *prop)
+{
+	return new KFDPixmapEdit(this, prop);
 }
 
 void
@@ -550,7 +557,7 @@ FormManager::initForm(Form *form)
 		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	}
-	connect(m_propSet, SIGNAL(widgetNameChanged(const QCString&, const QCString&)), 
+	connect(m_propSet, SIGNAL(widgetNameChanged(const QCString&, const QCString&)),
 		form, SLOT(changeName(const QCString&, const QCString&)));
 
 	form->setSelectedWidget(form->widget());

@@ -28,6 +28,8 @@
 #include <qguardedptr.h>
 #include <qstringlist.h>
 
+#include <koproperty/factory.h>
+
 class QWidget;
 class QWorkspace;
 class KPopupMenu;
@@ -43,6 +45,7 @@ namespace KoProperty {
 	class Editor;
 	class Set;
 	class Property;
+	class Widget;
 }
 
 namespace KFormDesigner {
@@ -64,7 +67,7 @@ typedef QPtrList<KAction> ActionList;
    It holds the WidgetLibrary, the WidgetPropertySet, links to ObjectTreeView and PropertyEditor,
    as well as the copied widget and the insert state.
  **/
-class KFORMEDITOR_EXPORT FormManager : public QObject
+class KFORMEDITOR_EXPORT FormManager : public QObject, public KoProperty::CustomPropertyFactory
 {
 	Q_OBJECT
 
@@ -192,6 +195,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void emitFormWidgetSelected( KFormDesigner::Form* form );
 		//! @internal
 		void emitNoFormSelected();
+
+		//! Function used to create all kfd custom editors
+		KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
+		KoProperty::CustomProperty*  createCustomProperty(int type) {return 0;}
 
 	public slots:
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -402,6 +409,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void disableWidgetActions();
 		void emitUndoEnabled(bool enabled, const QString &text);
 		void emitRedoEnabled(bool enabled, const QString &text);
+
+		KoProperty::Widget* createPixmapEdit(KoProperty::Property *prop);
 
 	private:
 		//! Enum for menu items indexes

@@ -405,6 +405,20 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 		return;
 	}
 
+	if(value.type() == QVariant::Pixmap) {
+		QDomText valueE;
+		QDomElement type = parent.createElement("pixmap");
+		QCString property = propertyE.attribute("name").latin1();
+		if(m_savePixmapsInline || m_currentItem->pixmapName(property).isNull())
+			valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
+		else
+			valueE = parent.createTextNode(m_currentItem->pixmapName(property));
+		type.appendChild(valueE);
+		propertyE.appendChild(type);
+		parentNode.appendChild(propertyE);
+		return;
+	}
+
 	// Saving a "normal" property
 	writeVariant(parent, propertyE, value);
 	parentNode.appendChild(propertyE);
@@ -583,17 +597,6 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 			type.appendChild(v);
 			type.appendChild(hs);
 			type.appendChild(vs);
-			break;
-		}
-		case QVariant::Pixmap:
-		{
-			type = parent.createElement("pixmap");
-			QCString property = parentNode.attribute("name").latin1();
-			if(m_savePixmapsInline || m_currentItem->pixmapName(property).isNull())
-				valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
-			else
-				valueE = parent.createTextNode(m_currentItem->pixmapName(property));
-			type.appendChild(valueE);
 			break;
 		}
 		case QVariant::Time:
@@ -817,7 +820,7 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 			return loadImage(tag.ownerDocument(), text);
 		else
 		{
-			m_currentItem->addPixmapName(name.latin1(), text);
+			m_currentItem->setPixmapName(name.latin1(), text);
 			return m_currentForm->pixmapCollection()->getPixmap(text);
 		}
 		return QVariant(QPixmap());
@@ -1095,10 +1098,8 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			w = lib->createWidget(classname, parent, wname.latin1(), container);
 	}
 
-	if(!w)  {
-		kdDebug() << "fffffffffffffffffffffffffffffffffffffffff" << endl;
+	if(!w)
 		return;
-	}
 	w->setStyle(&(container->widget()->style()));
 	w->show();
 

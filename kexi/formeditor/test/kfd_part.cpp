@@ -182,6 +182,7 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 	setWidget(container);
 	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), m_manager, SLOT(windowChanged(QWidget*)));
 //	slotNoFormSelected();
+	m_manager->emitNoFormSelected();
 }
 
 KFormDesignerPart::~KFormDesignerPart()

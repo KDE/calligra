@@ -80,7 +80,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		void addModifiedProperty(const QCString &property, const QVariant &value);
 		void storeUnknownProperty(QDomElement &el);
 
-		void addPixmapName(const QCString &property, const QString &name);
+		void setPixmapName(const QCString &property, const QString &name);
 		QString pixmapName(const QCString &property);
 
 		void setEnabled(bool enabled)  { m_enabled = enabled; }
@@ -120,7 +120,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, 
+		ObjectTree(const QString &className=QString::null, const QString &name=QString::null,
 			QWidget *widget=0, Container *container=0);
 		virtual ~ObjectTree();
 
