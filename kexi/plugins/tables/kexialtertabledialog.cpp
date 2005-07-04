@@ -297,7 +297,7 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 	const QStringList nlist = KexiDB::typeNamesForGroup(field->typeGroup());
 	kdDebug() << "KexiAlterTableDialog::init(): subType strings: " << 
 		slist.join("|") << "\nnames: " << nlist.join("|") << endl;
-	set->addProperty(prop = new KoProperty::Property("subType", slist, nlist, field->typeString(), i18n("Subtype")));
+	set->addProperty(prop = new KoProperty::Property("subType", nlist, slist, field->typeString(), i18n("Subtype")));
 
 	set->addProperty( prop = new KoProperty::Property("caption", QVariant(field->caption()), i18n("Caption") ) );
 #ifdef KEXI_NO_UNFINISHED
@@ -582,7 +582,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KoProperty::Property *subTypeProperty = &set["subType"];
 
 		//update subtype list and value
-		subTypeProperty->setValueList( KoProperty::createValueListFromStringLists(slist, nlist) );
+		subTypeProperty->setValueList( nlist, slist );
 		if (set["primaryKey"].value().toBool()==true) //primary keys require big int
 			fieldType = KexiDB::Field::BigInteger;
 		subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
