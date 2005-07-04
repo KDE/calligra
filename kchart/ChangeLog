@@ -3,9 +3,7 @@
 	First steps for OASIS loading of charts.
 	Loads chart type, row and columns labels, and the data.
 	* kchart_part.{h,cc} (loadOasisData): New method
-	(loadOasis): Old contents integrated into loadOasisData, new
-	contents implemented.
-	(endOfLoading): New method
+	(loadOasis): New method
 	* kchart_params.{h,cc} (loadOasis): New method
 
 	Code cleaning.

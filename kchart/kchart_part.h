@@ -95,7 +95,6 @@ protected:
     bool  loadAuxiliary( const QDomDocument& doc );
     bool  loadData( const QDomDocument& doc, KoChart::Data& currentData );
     bool  loadOasisData( const QDomElement& tableElem );
-    void endOfLoading();
 
 private:
     QDomElement  createElement(const QString &tagName,
