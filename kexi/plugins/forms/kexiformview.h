@@ -34,6 +34,7 @@ class KexiDBForm;
 class KexiTableItem;
 class KexiTableViewData;
 class KexiFormScrollView;
+namespace KexiDB { class Cursor; }
 
 //! The KexiFormView lass provides a data-driven (record-based) form view .
 /*! The KexiFormView can display data provided "by hand"
