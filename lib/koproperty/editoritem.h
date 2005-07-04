@@ -68,7 +68,7 @@ class KOPROPERTY_EXPORT EditorItem : public KListViewItem
 		~EditorItem();
 
 		//! \return a pointer to the property associated to this item.
-		Property*	property();
+		Property* property();
 
 	protected:
 		/*! Reimplemented from KListViewItem to draw custom contents. Properties names are wriiten in bold if
@@ -86,7 +86,7 @@ class KOPROPERTY_EXPORT EditorItem : public KListViewItem
 		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
 	protected:
-		EditorItemPrivate  *d;
+		EditorItemPrivate *d;
 };
 
 class KOPROPERTY_EXPORT EditorGroupItem : public EditorItem

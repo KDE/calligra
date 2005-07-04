@@ -66,7 +66,7 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		/*! Creates an empty Editor with \a parent as parent widget.
 		If \a autoSync == true, properties values are automatically synced as
 		soon as editor contents change (eg the user types text, etc.)
-		and the values are written in the buffer. Otherwise, buffer
+		and the values are written in the property set. Otherwise, property set
 		is updated only when selected item changes or user presses Enter key.
 		Each property can overwrite this if its autoSync() == 0 or 1.
 		*/
@@ -93,7 +93,7 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		void acceptInput();
 
 	signals:
-		/*! Emitted when current buffer has been changed. May be 0. */
+		/*! Emitted when current property set has been changed. May be 0. */
 		void propertySetChanged(KoProperty::Set *set);
 
 	protected slots:
@@ -112,10 +112,10 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		/*! Called when the user presses Esc. Calls undo(). */
 		void slotWidgetRejectInput(Widget *widget);
 
-		/*! Called when current buffer is about to be cleared. */
+		/*! Called when current property set is about to be cleared. */
 		void slotSetWillBeCleared();
 
-		/*! Called when current buffer is about to be destroyed. */
+		/*! Called when current property set is about to be destroyed. */
 		void slotSetWillBeDeleted();
 
 		/*! This slot is called when the user clicks the list view.

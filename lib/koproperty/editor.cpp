@@ -237,7 +237,7 @@ void
 Editor::changeSet(Set *set, bool preservePrevSelection)
 {
 	if (d->insideSlotValueChanged) {
-		//setBuffer() called from inside of slotValueChanged()
+		//changeSet() called from inside of slotValueChanged()
 		//this is dangerous, because there can be pending events,
 		//especially for the GUI stuff, so let's do delayed work
 		d->setListLater_list = set;
@@ -252,7 +252,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 
 	if (d->set) {
 		slotWidgetAcceptInput(d->currentWidget);
-		//store prev. selection for this buffer
+		//store prev. selection for this prop set
 		if (d->currentItem)
 			d->set->setPrevSelection( d->currentItem->property()->name() );
 		d->set->disconnect(this);
@@ -284,9 +284,9 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 	if (d->set) {
 		//select prev. selecteed item
 		EditorItem * item = 0;
-		if (!selectedPropertyName2.isEmpty()) //try other one for old buffer
+		if (!selectedPropertyName2.isEmpty()) //try other one for old prop set
 			item = d->itemDict[selectedPropertyName2];
-		if (!item && !selectedPropertyName1.isEmpty()) //try old one for current buffer
+		if (!item && !selectedPropertyName1.isEmpty()) //try old one for current prop set
 			item = d->itemDict[selectedPropertyName1];
 		if (item) {
 			d->doNotSetFocusOnSelection = !hasParent(this, focusWidget());

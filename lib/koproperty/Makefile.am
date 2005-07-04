@@ -16,3 +16,7 @@ icondir = $(kde_datadir)/koffice/icons
 icon_ICON = button_no
 
 EXTRA_DIST = $(icon_ICON)
+
+messages:
+#	$(EXTRACTRC) */*.rc */*.ui > rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/koproperty.pot

@@ -41,7 +41,7 @@ class SetPrivate
 		~SetPrivate(){}
 
 	//dict of properties in form name: property
-	 Property::Dict dict;
+	Property::Dict dict;
 //	PropertyList properties;
 	//groups of properties:
 	// list of group name: (list of property names)
@@ -176,8 +176,8 @@ Set::addProperty(Property *property, QCString group)
 	if (property == 0)
 		return;
 
-	 if(d->dict.find(property->name())) {
-		 Property *p = d->dict[property->name()];
+	if(d->dict.find(property->name())) {
+		Property *p = d->dict[property->name()];
 		p->addRelatedProperty(property);
 	}
 	else {
@@ -186,6 +186,7 @@ Set::addProperty(Property *property, QCString group)
 	}
 
 	property->addSet(this);
+	property->setSortingKey( d->dict.count() );
 }
 
 void
@@ -194,7 +195,12 @@ Set::removeProperty(Property *property)
 	if(!property)
 		return;
 
-	removeProperty(property->name());
+	Property *p = d->dict.take(property->name());
+	removeFromGroup(p);
+	if(d->ownProperty) {
+		emit aboutToDeleteProperty(*this, *p);
+		delete p;
+	}
 }
 
 void
@@ -204,19 +210,16 @@ Set::removeProperty(const QCString &name)
 		return;
 
 	Property *p = d->dict.take(name);
-	removeFromGroup(p);
-	if(d->ownProperty) {
-		emit aboutToDeleteProperty(*this, *p);
-		delete p;
-	}
+	removeProperty(p);
 }
 
 void
 Set::clear()
 {
 	aboutToBeCleared();
-	for(Property::DictIterator it(d->dict); it.current(); ++it)
-		removeProperty( it.current()->name() );
+	Property::DictIterator it(d->dict);
+	while (it.current())
+		removeProperty( it.current() );
 }
 
 /////////////////////////////////////////////////////

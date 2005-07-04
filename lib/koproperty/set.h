@@ -91,7 +91,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		Emits aboutToDeleteProperty() before removing.*/
 		void removeProperty(const QCString &name);
 
-		/*! Removes all properties from the buffer and destroys them. */
+		/*! Removes all properties from the property set and destroys them. */
 		virtual void clear();
 
 		/*! Returns the number of items in the set. */

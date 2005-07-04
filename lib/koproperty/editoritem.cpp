@@ -47,7 +47,6 @@ class EditorItemPrivate
 
 		Property  *property;
 		Editor  *editor;
-		int  order;
 };
 }
 
@@ -59,7 +58,6 @@ EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q
 	d = new EditorItemPrivate();
 	d->property = property;
 	d->editor = editor;
-	d->order = parent->childCount();
 
 	setMultiLinesEnabled(true);
 	//setHeight(static_cast<Editor*>(listView())->baseRowHeight()*3);
@@ -71,7 +69,6 @@ EditorItem::EditorItem(KListView *parent)
 	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
-	d->order = parent->childCount();
 }
 
 EditorItem::EditorItem(EditorItem *parent, const QString &text)
@@ -80,7 +77,6 @@ EditorItem::EditorItem(EditorItem *parent, const QString &text)
 	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
-	d->order = parent->childCount();
 }
 
 EditorItem::~EditorItem()
@@ -216,7 +212,15 @@ EditorItem::compare( QListViewItem *i, int col, bool ascending ) const
 	if (!ascending)
 		return -QListViewItem::key( col, ascending ).localeAwareCompare( i->key( col, ascending ) );
 
-	return d->order - static_cast<EditorItem*>(i)->d->order;
+	if (d->property) {
+//		kdDebug() << d->property->name() << " " << d->property->sortingKey() << " | " 
+//			<< static_cast<EditorItem*>(i)->property()->name() << " " 
+//			<< static_cast<EditorItem*>(i)->property()->sortingKey() << endl;
+		return d->property->sortingKey() - static_cast<EditorItem*>(i)->property()->sortingKey();
+	}
+
+	return 0;
+//	return d->order - static_cast<EditorItem*>(i)->d->order;
 }
 
 //////////////////////////////////////////////////////

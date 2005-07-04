@@ -41,7 +41,8 @@ class PropertyPrivate
 		PropertyPrivate()
 		:  valueList(0), changed(false), storable(true), readOnly(false), visible(true),
 		 autosync(-1), custom(0), useCustomProperty(true),
-		 parent(0), children(0), relatedProperties(0)
+		 parent(0), children(0), relatedProperties(0),
+		 sortingKey(0)
 		{
 		}
 
@@ -78,6 +79,8 @@ class PropertyPrivate
 	QValueList<Property*>  *children;
 	//! list of properties with the same name (when intersecting buffers)
 	QValueList<Property*>  *relatedProperties;
+
+	int sortingKey;
 };
 }
 
@@ -330,6 +333,14 @@ Property::setValueList(const QMap<QString, QVariant> &list)
 	*(d->valueList) = list;
 }
 
+void
+Property::setValueList(const QStringList &keys, const QStringList &values)
+{
+	if(!d->valueList)
+		d->valueList = new QMap<QString, QVariant>();
+	*(d->valueList) = createValueListFromStringLists(keys, values);
+}
+
 ////////////////////////////////////////////////////////////////
 
 bool
@@ -531,8 +542,10 @@ Property::addChild(Property *prop)
 		d->children = new QValueList<Property*>();
 
 	QValueList<Property*>::ConstIterator it = qFind( d->children->begin(), d->children->end(), prop);
-	if(it == d->children->end()) // not in our list
+	if(it == d->children->end()) { // not in our list
 		d->children->append(prop);
+		prop->setSortingKey(d->children->count());
+	}
 	prop->d->parent = this;
 }
 
@@ -571,6 +584,16 @@ void
 Property::setCustomProperty(CustomProperty *prop)
 {
 	d->custom = prop;
+}
+
+int Property::sortingKey() const
+{
+	return d->sortingKey;
+}
+
+void Property::setSortingKey(int key)
+{
+	d->sortingKey = key;
 }
 
 /////////////////////////////////////////////////////////////////

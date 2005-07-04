@@ -212,6 +212,11 @@ class KOPROPERTY_EXPORT Property
 		This is used to create comboboxes-like property editors.*/
 		void setValueList(const QMap<QString, QVariant> &list);
 
+		/*! Sets the string-to-value correspondence list of the property.
+		 This is used to create comboboxes-like property editors.
+		 This is overload of the above ctor added for convenience. */
+		void setValueList(const QStringList &keys, const QStringList &values);
+
 		/*! Sets icon by \a name for this property. Icons are optional and are used e.g.
 		 in KexiPropertyEditor - displayed at the left hand. */
 		void setIcon(const QString &icon);
@@ -298,10 +303,19 @@ class KOPROPERTY_EXPORT Property
 		/*! Compares two properties.*/
 		bool operator ==(const Property &prop) const;
 
+		/*! \return a key used for sorting. 
+		 Usually it's set by Set::addProperty() and Property::addChild() t oa unique value,
+		 so that this property can be sorted in a property editor in original order. 
+		 \see EditorItem::compare() */
+		int sortingKey() const;
+
 	protected:
 		QValueList<Set*> sets() const;
 
 		void addSet(Set *set);
+
+		/*! Sets a key used for sorting. */
+		void setSortingKey(int key);
 
 		const QValueList<Property*>*  related() const;
 		void addRelatedProperty(Property *property);
