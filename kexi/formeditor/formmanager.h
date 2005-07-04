@@ -28,8 +28,6 @@
 #include <qguardedptr.h>
 #include <qstringlist.h>
 
-#include <koproperty/factory.h>
-
 class QWidget;
 class QWorkspace;
 class KPopupMenu;
@@ -56,6 +54,7 @@ class Container;
 class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
+class PropertyFactory;
 typedef QPtrList<KAction> ActionList;
 
 //! A class to manage (create/load/save) Forms
@@ -67,7 +66,7 @@ typedef QPtrList<KAction> ActionList;
    It holds the WidgetLibrary, the WidgetPropertySet, links to ObjectTreeView and PropertyEditor,
    as well as the copied widget and the insert state.
  **/
-class KFORMEDITOR_EXPORT FormManager : public QObject, public KoProperty::CustomPropertyFactory
+class KFORMEDITOR_EXPORT FormManager : public QObject
 {
 	Q_OBJECT
 
@@ -195,10 +194,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject, public KoProperty::Custom
 		void emitFormWidgetSelected( KFormDesigner::Form* form );
 		//! @internal
 		void emitNoFormSelected();
-
-		//! Function used to create all kfd custom editors
-		KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
-		KoProperty::CustomProperty*  createCustomProperty(int type) {return 0;}
 
 	public slots:
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -410,8 +405,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject, public KoProperty::Custom
 		void emitUndoEnabled(bool enabled, const QString &text);
 		void emitRedoEnabled(bool enabled, const QString &text);
 
-		KoProperty::Widget* createPixmapEdit(KoProperty::Property *prop);
-
 	private:
 		//! Enum for menu items indexes
 		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301,
@@ -456,7 +449,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject, public KoProperty::Custom
 #endif
 
 		int m_options; //!< @see Options enum
-		int m_contextMenuKey; //!< Id of context menu key (cached).
+		int m_contextMenuKey; //!< Id of context menu key (cached)
+
+		PropertyFactory *m_propFactory;
 
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;
