@@ -229,6 +229,15 @@ WidgetPropertySet::addWidget(QWidget *w)
 		if(!isPropertyVisible(it.currentKey(), isTopLevel, classname))
 			d->set[it.currentKey()].setVisible(false);
 	}
+
+	if (d->widgets.count()==2) {
+		//second widget, update metainfo
+		d->set["this:classString"].setValue(
+			i18n("Multiple Widgets") + QString(" (%1)").arg(d->widgets.count()) );
+		d->set["this:iconName"].setValue("multiple_obj");
+		//name doesn't make sense for now
+		d->set["name"].setValue("");
+	}
 }
 
 void
@@ -299,20 +308,10 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	if (winfo) {
 		d->manager->lib()->setPropertyOptions(*this, *winfo, w);
 		//add meta-information
-		if (d->widgets.count()>1) {
-//note: this doesn't work yet as multiselection isn't shown well in propeditor
-			d->set.addProperty( newProp = new Property("this:className", 
-				i18n("Multiple Widgets") + QString(" (%1)").arg(d->widgets.count())) );
-			newProp->setVisible(false);
-			d->set.addProperty( newProp = new Property("this:iconName", "multiple_obj") );
-			newProp->setVisible(false);
-		}
-		else {
-			d->set.addProperty( newProp = new Property("this:className", winfo->name()) );
-			newProp->setVisible(false);
-			d->set.addProperty( newProp = new Property("this:iconName", winfo->pixmap()) );
-			newProp->setVisible(false);
-		}
+		d->set.addProperty( newProp = new Property("this:classString", winfo->name()) );
+		newProp->setVisible(false);
+		d->set.addProperty( newProp = new Property("this:iconName", winfo->pixmap()) );
+		newProp->setVisible(false);
 	}
 
 	/*!  let's forget it for now, until we have new complete events editor
@@ -390,7 +389,9 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	QVariant value = p.value();
 
 	// check if the name is valid (ie is correct identifier) and there is no name conflict
-	if(property == "name" && d->widgets.first()) {
+	if(property == "name") {
+		if(d->widgets.count()!=1)
+			return;
 		if(!isNameValid(value.toString()))
 			return;
 	}

@@ -174,13 +174,6 @@ void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
 		if (set->contains("name"))
 			objectName = (*set)["name"].value().toCString();
 	}
-	if (d->objectInfoLabel->objectClassName() == className 
-		&& d->objectInfoLabel->objectClassIcon() == iconName
-		&& d->objectInfoLabel->objectName() == objectName)
-		return;
-	d->objectInfoLabel->setObjectClassIcon(iconName);
-	d->objectInfoLabel->setObjectClassName(className);
-	d->objectInfoLabel->setObjectName(objectName);
 
 	if (className.isEmpty()) {
 		d->objectInfoLabel->hide();
@@ -188,6 +181,16 @@ void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
 	else {
 		d->objectInfoLabel->show();
 	}
+
+	if (d->objectInfoLabel->objectClassName() == className 
+		&& d->objectInfoLabel->objectClassIcon() == iconName
+		&& d->objectInfoLabel->objectName() == objectName)
+		return;
+
+	d->objectInfoLabel->setObjectClassIcon(iconName);
+	d->objectInfoLabel->setObjectClassName(className);
+	d->objectInfoLabel->setObjectName(objectName);
+
 /*
 	if (className.isEmpty()) {
 		d->objectClassName->hide();

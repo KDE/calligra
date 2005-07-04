@@ -531,6 +531,14 @@ TODO:::::::
 
 TODO: query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
 
+2005-07-04
+Property Editor
+- properties now have 'sortingKey', so the order of properies is maintained
+- fixed bug in Set::clear()
+Form Designer's Property Editor
+- better handling multiple widget selection
+- fixes for widget info label
+
 2005-07-02
 Form Designer
 - fixed i18n for property captions
