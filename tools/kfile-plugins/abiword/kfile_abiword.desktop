@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Abiword Info
+Name[br]=Titouroù Abiword
 Name[da]=Abiword-info
 Name[es]=Info de Abiword
 Name[ga]=Eolas faoi Abiword
