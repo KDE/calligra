@@ -111,8 +111,8 @@ PointCustomProperty::PointCustomProperty(Property *property)
 {
 	if(property && (property->type() == Point) ) {
 		QPoint p = property->value().toPoint();
-		property->addChild(new Property("x", p.x(), i18n("X"), i18n("x"), Point_X));
-		property->addChild(new Property("y", p.y(), i18n("Y"), i18n("y"), Point_Y));
+		property->addChild(new Property("x", p.x(), i18n("X"), i18n("X"), Point_X));
+		property->addChild(new Property("y", p.y(), i18n("Y"), i18n("Y"), Point_Y));
 	}
 }
 
@@ -177,8 +177,8 @@ RectCustomProperty::RectCustomProperty(Property *property)
 {
 	if(property && (property->type() == Rect) ) {
 		QRect r = property->value().toRect();
-		property->addChild(new Property("x", r.x(), i18n("X"), i18n("x"), Rect_X));
-		property->addChild(new Property("y", r.y(), i18n("Y"), i18n("y"), Rect_Y));
+		property->addChild(new Property("x", r.x(), i18n("X"), i18n("X"), Rect_X));
+		property->addChild(new Property("y", r.y(), i18n("Y"), i18n("Y"), Rect_Y));
 		property->addChild(new Property("width", r.width(), i18n("Width"), i18n("Width"), Rect_Width));
 		property->addChild(new Property("height", r.height(), i18n("Height"), i18n("Height"), Rect_Height));
 	}
