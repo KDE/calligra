@@ -28,13 +28,16 @@
 #include <formeditor/objecttree.h>
 #include <formeditor/container.h>
 #include <formeditor/widgetpropertyset.h>
+#include <formeditor/commands.h>
 
 #include <kexi.h>
 #include <kexidialogbase.h>
 #include <kexidatasourcewizard.h>
+#include <kexidragobjects.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+#include <kexidb/utils.h>
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <widget/kexipropertyeditorview.h>
@@ -88,6 +91,11 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool)));
 		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
+
+		connect(m_dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)), 
+			this, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
+		connect(m_dbform, SIGNAL(handleDropEvent(QDropEvent*)), 
+			this, SLOT(slotHandleDropEvent(QDropEvent*)));
 
 		// action stuff
 //moved to formmanager		connect(formPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), this, SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
@@ -800,6 +808,72 @@ KexiFormView::updateDataSourcePage()
 			dataSource = (*set)["dataSource"].value().toCString();
 
 		formPart()->dataSourcePage()->setDataSource(dataSourceMimeType, dataSource);
+	}
+}
+
+void
+KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
+{
+	if (KexiFieldDrag::canDecodeMultiple( e )) {
+		e->accept(true);
+		//dirty:	drawRect(QRect( e->pos(), QSize(50, 20)), 2);
+	}
+}
+
+void
+KexiFormView::slotHandleDropEvent(QDropEvent* e)
+{
+	if (KexiFieldDrag::canDecodeMultiple( e )) {
+		QString sourceMimeType, sourceName;
+		QStringList fields;
+		if (!KexiFieldDrag::decodeMultiple( e, sourceMimeType, sourceName, fields ))
+			return;
+
+		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+		KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.latin1(), sourceMimeType=="kexi/table");
+		if (!tableOrQuery.table() && !tableOrQuery.query()) {
+			kdWarning() << "KexiFormView::slotHandleDropEvent(): no such table/query \""
+				<< sourceName << "\"" << endl;
+			return;
+		}
+
+		QPoint pos = e->pos();
+//! todo unnamed query colums are not supported
+
+		KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
+		foreach( QStringList::ConstIterator, it, fields ) {
+			KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
+			if (!column) {
+				kdWarning() << "KexiFormView::slotHandleDropEvent(): no such field \""
+					<< *it << "\" in table/query \"" << sourceName << "\"" << endl;
+				continue;
+			}
+	//! todo add autolabel using field's caption or name
+			KFormDesigner::InsertWidgetCommand *insertCmd;
+			form()->addCommand(
+				insertCmd = new KFormDesigner::InsertWidgetCommand(form()->toplevelContainer(),
+		//! todo this is hardcoded!
+					"KexiDBLineEdit", 
+		//! todo this name can be invalid for expressions: if so, fall back to a default class' prefix!
+					pos, column->aliasOrName()),
+				true/*exec*/);
+			KFormDesigner::ObjectTreeItem *newWidgetItem 
+				= form()->objectTree()->dict()->find(insertCmd->widgetName());
+			QWidget* newWidget = newWidgetItem ? newWidgetItem->widget() : 0;
+			KexiFormDataItemInterface *newWidgetIface = dynamic_cast<KexiFormDataItemInterface*>(newWidget);
+			if (newWidgetIface) {
+				newWidgetIface->setDataSourceMimeType( sourceMimeType.latin1() );
+				newWidgetIface->setDataSource( column->aliasOrName() );
+			}
+
+			if (newWidget) {//move position down for next widget
+				pos.setY( pos.y() + newWidget->height() + 4);
+			}
+		}
+		//restore prev. selection
+		form()->setSelectedWidget(0);
+		foreach_list (KFormDesigner::WidgetListIterator, it, *prevSelection)
+			form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
 	}
 }
 

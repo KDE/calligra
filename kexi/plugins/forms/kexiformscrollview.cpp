@@ -24,6 +24,7 @@
 #include <formeditor/form.h>
 #include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
+#include <formeditor/commands.h>
 #include <widget/utils/kexirecordmarker.h>
 
 #include <kpopupmenu.h>

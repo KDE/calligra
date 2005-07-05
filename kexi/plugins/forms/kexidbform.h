@@ -104,9 +104,16 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
+	signals:
+		void handleDragMoveEvent(QDragMoveEvent *e);
+		void handleDropEvent(QDropEvent *e);
+
 	protected:
 		//! no effect
 		virtual void setValueInternal(const QVariant&, bool) {}
+
+		virtual void dragMoveEvent( QDragMoveEvent *e );
+		virtual void dropEvent( QDropEvent *e );
 
 		//! Points to a currently edited data item. 
 		//! It is cleared when the focus is moved to other 

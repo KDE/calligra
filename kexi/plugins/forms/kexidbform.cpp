@@ -28,6 +28,7 @@
 #include <kdebug.h>
 
 #include "kexidbform.h"
+#include "kexiformscrollview.h"
 
 #include <formeditor/objecttree.h>
 #include <kexidataawareobjectiface.h>
@@ -73,6 +74,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
 	//m_conn = conn;
 	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;
 	setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
+	setAcceptDrops( true );
 }
 
 KexiDBForm::~KexiDBForm()
@@ -455,6 +457,14 @@ int KexiDBForm::indexForDataItem( KexiDataItemInterface* item ) const
 	return it.data();
 }
 
+void KexiDBForm::dragMoveEvent( QDragMoveEvent *e )
+{
+	emit handleDragMoveEvent(e);
+}
+
+void KexiDBForm::dropEvent( QDropEvent *e ) 
+{
+	emit handleDropEvent(e);
+}
 
 #include "kexidbform.moc"
-

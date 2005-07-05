@@ -531,6 +531,11 @@ TODO:::::::
 
 TODO: query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
 
+2005-07-05
+Form Designer
+- Data source fields can be dragged from Data Source Pane 
+  and dropped on the form's surface to create data-aware line edit widgets
+
 2005-07-04
 Property Editor
 - properties now have 'sortingKey', so the order of properies is maintained

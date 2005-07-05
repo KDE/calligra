@@ -80,6 +80,8 @@ class KexiFormView : public KexiDataAwareView
 		void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 		void slotFocus(bool in);
+		void slotHandleDragMoveEvent(QDragMoveEvent* e);
+		void slotHandleDropEvent(QDropEvent* e);
 
 //moved to formmanager		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
 //moved to formmanager		void slotFormWidgetSelected(KFormDesigner::Form *form);

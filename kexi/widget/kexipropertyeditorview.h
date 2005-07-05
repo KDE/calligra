@@ -23,6 +23,8 @@
 
 #include "kexiviewbase.h"
 
+class QLabel;
+
 namespace KoProperty {
 	class Editor;
 	class Set;
