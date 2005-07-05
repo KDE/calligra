@@ -326,7 +326,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		   will return the same pointer.
 		 - Calling field("T.A") will return the same pointer as field("A").
 		 */
-		Field* field(const QString& name);
+		virtual Field* field(const QString& name);
 
 		/* Like QuerySchema::field(const QString& name) but returns not only Field
 		 object for \a name but entire QueryColumnInfo object. */

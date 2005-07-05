@@ -135,14 +135,32 @@ namespace KexiDB
 	/*! Variant class providing a pointer to table or query. */
 	class KEXI_DB_EXPORT TableOrQuerySchema {
 		public:
+			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
+			//! using \a conn connection.
 			TableOrQuerySchema(Connection *conn, const QCString& name, bool table);
+
 			TableOrQuerySchema(TableSchema* table);
 			TableOrQuerySchema(QuerySchema* query);
 
+			//! \return a pointer to the query if it's provided
 			QuerySchema* query() const { return m_query; }
+
+			//! \return a pointer to the table if it's provided
 			TableSchema* table() const { return m_table; }
+
+			//! \return name of a query or table
 			QCString name() const;
+
+			//! \return all columns for the table or the query
 			const QueryColumnInfo::Vector columns();
+
+			/*! \return a field of the table or the query schema for name \a name
+			 or 0 if there is no such field. */
+			Field* field(const QString& name);
+
+			/*! Like Field* field(const QString& name);
+			 but returns all information associated with field/column \a name. */
+			QueryColumnInfo* columnInfo(const QString& name);
 
 		protected:
 			TableSchema* m_table;

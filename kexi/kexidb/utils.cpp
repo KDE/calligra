@@ -210,3 +210,24 @@ QCString TableOrQuerySchema::name() const
 		return m_query->name().latin1();
 	return QCString();
 }
+
+Field* TableOrQuerySchema::field(const QString& name)
+{
+	if (m_table)
+		return m_table->field(name);
+	if (m_query)
+		return m_query->field(name);
+
+	return 0;
+}
+
+QueryColumnInfo* TableOrQuerySchema::columnInfo(const QString& name)
+{
+	if (m_table)
+		return m_table->query()->columnInfo(name);
+	
+	if (m_query)
+		return m_query->columnInfo(name);
+
+	return 0;
+}
