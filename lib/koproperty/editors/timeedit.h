@@ -28,7 +28,7 @@ class QTimeEdit;
 
 namespace KoProperty {
 
-class TimeEdit : public Widget
+class KOPROPERTY_EXPORT TimeEdit : public Widget
 {
 	Q_OBJECT
 

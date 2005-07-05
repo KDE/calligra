@@ -30,7 +30,7 @@ namespace KoProperty {
 
 // Int Editor
 
-class IntSpinBox : public KIntSpinBox
+class KOPROPERTY_EXPORT IntSpinBox : public KIntSpinBox
 {
 	Q_OBJECT
 
@@ -42,7 +42,7 @@ class IntSpinBox : public KIntSpinBox
 		QLineEdit * editor () const { return KIntSpinBox::editor(); }
 };
 
-class IntEdit : public Widget
+class KOPROPERTY_EXPORT IntEdit : public Widget
 {
 	Q_OBJECT
 
@@ -63,7 +63,7 @@ class IntEdit : public Widget
 
 // Double editor
 
-class DoubleSpinBox : public KDoubleSpinBox
+class KOPROPERTY_EXPORT DoubleSpinBox : public KDoubleSpinBox
 {
 	Q_OBJECT
 
@@ -76,7 +76,7 @@ class DoubleSpinBox : public KDoubleSpinBox
 		QLineEdit * editor () const { return KDoubleSpinBox::editor(); }
 };
 
-class DoubleEdit : public Widget
+class KOPROPERTY_EXPORT DoubleEdit : public Widget
 {
 	Q_OBJECT
 

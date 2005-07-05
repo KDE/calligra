@@ -30,7 +30,7 @@ class QLabel;
 
 namespace KoProperty {
 
-class SizeEdit : public Widget
+class KOPROPERTY_EXPORT SizeEdit : public Widget
 {
 	Q_OBJECT
 

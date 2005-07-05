@@ -29,7 +29,7 @@ class QPushButton;
 
 namespace KoProperty {
 
-class SymbolCombo : public Widget
+class KOPROPERTY_EXPORT SymbolCombo : public Widget
 {
 	Q_OBJECT
 

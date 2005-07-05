@@ -30,7 +30,7 @@ class QLabel;
 
 namespace KoProperty {
 
-class RectEdit : public Widget
+class KOPROPERTY_EXPORT RectEdit : public Widget
 {
 	Q_OBJECT
 

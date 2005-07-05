@@ -36,7 +36,7 @@ class FactoryPrivate;
 typedef Widget *(*createWidget) (Property*);
 typedef CustomProperty *(*createCustomProperty) (int);
 
-class CustomPropertyFactory
+class KOPROPERTY_EXPORT CustomPropertyFactory
 {
 	public:
 		CustomPropertyFactory() {}

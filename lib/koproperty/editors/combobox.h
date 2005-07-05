@@ -32,7 +32,7 @@ class KComboBox;
 
 namespace KoProperty {
 
-class ComboBox : public Widget
+class KOPROPERTY_EXPORT ComboBox : public Widget
 {
 	Q_OBJECT
 

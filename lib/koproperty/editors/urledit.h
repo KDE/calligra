@@ -33,7 +33,7 @@ class QLineEdit;
 
 namespace KoProperty {
 
-class URLEdit : public Widget
+class KOPROPERTY_EXPORT URLEdit : public Widget
 {
 	Q_OBJECT
 

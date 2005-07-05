@@ -32,7 +32,7 @@ class KColorCombo;
 
 namespace KoProperty {
 
-class ColorButton : public Widget
+class KOPROPERTY_EXPORT ColorButton : public Widget
 {
 	Q_OBJECT
 

@@ -29,7 +29,7 @@ class QDate;
 
 namespace KoProperty {
 
-class DateEdit : public Widget
+class KOPROPERTY_EXPORT DateEdit : public Widget
 {
 	Q_OBJECT
 

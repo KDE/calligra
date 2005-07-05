@@ -28,7 +28,7 @@ class QLineEdit;
 
 namespace KoProperty {
 
-class StringEdit : public Widget
+class KOPROPERTY_EXPORT StringEdit : public Widget
 {
 	Q_OBJECT
 

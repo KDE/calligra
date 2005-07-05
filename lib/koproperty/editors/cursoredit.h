@@ -28,7 +28,7 @@ template<class U, class T> class QDict;
 
 namespace KoProperty {
 
-class CursorEdit : public ComboBox
+class KOPROPERTY_EXPORT CursorEdit : public ComboBox
 {
 	Q_OBJECT
 

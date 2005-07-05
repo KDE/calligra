@@ -28,7 +28,7 @@ class KFontRequester;
 
 namespace KoProperty {
 
-class FontEdit : public Widget
+class KOPROPERTY_EXPORT FontEdit : public Widget
 {
 	Q_OBJECT
 

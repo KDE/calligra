@@ -30,7 +30,7 @@ class QLineEdit;
 
 namespace KoProperty {
 
-class StringListEdit : public Widget
+class KOPROPERTY_EXPORT StringListEdit : public Widget
 {
 	Q_OBJECT
 
