@@ -122,12 +122,13 @@ QPair<int, int> KoTextFormatterCore::determineCharWidth()
 }
 
 
-int KoTextFormatterCore::leftMargin( bool firstLine ) const
+int KoTextFormatterCore::leftMargin( bool firstLine, bool includeFirstLineMargin /* = true */ ) const
 {
     int left = /*doc ?*/ parag->leftMargin() + doc->leftMargin() /*: 0*/;
     if ( firstLine && !parag->string()->isRightToLeft() )
     {
-        left += parag->firstLineMargin();
+        if ( includeFirstLineMargin )
+            left += parag->firstLineMargin();
         // Add the width of the paragraph counter - first line of parag only.
         if( parag->counter() &&
             ( parag->counter()->alignment() == Qt::AlignLeft ||
@@ -155,7 +156,7 @@ bool KoTextFormatterCore::format()
         c = 0;
 
     KoTextStringChar *firstChar = 0;
-    int left = doc ? leftMargin(true) : 0;
+    int left = doc ? leftMargin( true, false ) : 0;
     int initialLMargin = leftMargin( true );
 
     y = doc && doc->addMargins() ? parag->topMargin() : 0;

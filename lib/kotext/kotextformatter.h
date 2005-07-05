@@ -87,7 +87,7 @@ protected:
     // Total left margin for a given line
     // Takes into account parag's leftmargin, firstlinemargin and counter,
     // but not adjustMargins (application hook)
-    int leftMargin( bool firstLine ) const;
+    int leftMargin( bool firstLine, bool includeFirstLineMargin = true ) const;
     int rightMargin( bool firstLine ) const;
 
 
