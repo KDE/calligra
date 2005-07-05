@@ -52,3 +52,5 @@ KFDPixmapEdit::selectPixmap()
 		item->setPixmapName(property()->name(), dialog.pixmapName());
 	}
 }
+
+#include "kfdpixmapedit.moc"

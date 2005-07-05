@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef KFORMEDITOR_COMMANDS_H
+#define KFORMEDITOR_COMMANDS_H
 
 #include <qmap.h>
 #include <qdict.h>
@@ -156,11 +156,24 @@ the parent Container and the widget pos.
 class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 {
 	public:
-		InsertWidgetCommand(Container *container/*, QPoint point*/);
+		InsertWidgetCommand(Container *container);
+
+		/*! This ctor allows to set explicit class name and position.
+		 Used for dropping widgets on the form surface. 
+		 If \a namePrefix is empty, widget's unique name is constructed using 
+		 hint for \a className (WIdgetLibrary::namePrefix()),
+		 otherwise, \a namePrefix is used to generate widget's name.
+		 This allows e.g. inserting a widgets having name constructed using 
+		 */
+		InsertWidgetCommand(Container *container, const QCString& className, 
+			const QPoint& pos, const QCString& namePrefix = QCString());
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+
+		//! \return inserted widget's name
+		QCString widgetName() const { return m_name; }
 
 	protected:
 		Form *m_form;
@@ -277,5 +290,3 @@ class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 }
 
 #endif
-
-

@@ -271,7 +271,7 @@ FormManager::insertWidget(const QCString &classname)
 	}
 
 	m_inserting = true;
-	m_insertClass = classname;
+	m_selectedClass = classname;
 	m_pointer->setChecked(false);
 }
 

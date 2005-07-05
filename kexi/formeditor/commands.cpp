@@ -578,15 +578,35 @@ LayoutPropertyCommand::name() const
 
 // InsertWidgetCommand
 
-InsertWidgetCommand::InsertWidgetCommand(Container *container/*, QPoint p*/)
-  : KCommand()//, m_point(p)
+InsertWidgetCommand::InsertWidgetCommand(Container *container)
+  : KCommand()
 {
 	m_containername = container->widget()->name();
 	m_form = container->form();
-	m_class = container->form()->manager()->insertClass();
+	m_class = container->form()->manager()->selectedClass();
 	m_insertRect = container->m_insertRect;
 	m_point = container->m_insertBegin;
-	m_name = container->form()->objectTree()->genName(container->form()->manager()->lib()->namePrefix(m_class)).local8Bit();
+	m_name = container->form()->objectTree()->generateUniqueName(
+		container->form()->manager()->lib()->namePrefix(m_class).latin1());
+}
+
+InsertWidgetCommand::InsertWidgetCommand(Container *container,
+	const QCString& className, const QPoint& pos, const QCString& namePrefix)
+  : KCommand()
+{
+	m_containername = container->widget()->name();
+	m_form = container->form();
+	m_class = className;
+	//m_insertRect is null (default)
+	m_point = pos;
+	if (namePrefix.isEmpty()) {
+		m_name = container->form()->objectTree()->generateUniqueName(
+			container->form()->manager()->lib()->namePrefix(m_class).latin1() );
+	}
+	else {
+		m_name = container->form()->objectTree()->generateUniqueName(
+			namePrefix, false /*!numberSuffixRequired*/ );
+	}
 }
 
 void
@@ -751,7 +771,7 @@ CreateLayoutCommand::execute()
 	}
 
 	if(m_name.isEmpty())// the name must be generated only once
-		m_name = m_form->objectTree()->genName(classname);
+		m_name = m_form->objectTree()->generateUniqueName(classname);
 	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
 	ObjectTreeItem *tree = w ? m_form->objectTree()->lookup(w->name()) : 0;
 	if(!tree)

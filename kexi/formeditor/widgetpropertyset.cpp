@@ -389,6 +389,9 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		return;
 
 	QCString property = p.name();
+	if (0==property.find("this:"))
+		return; //starts with magical prefix: it's meta prop.
+
 	QVariant value = p.value();
 
 	// check if the name is valid (ie is correct identifier) and there is no name conflict

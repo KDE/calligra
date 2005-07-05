@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef KFORMEDITOR_PIXMAPEDIT_H
+#define KFORMEDITOR_PIXMAPEDIT_H
+
 #include <koproperty/editors/pixmapedit.h>
 
 namespace KFormDesigner {
@@ -28,8 +31,9 @@ class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
 	Q_OBJECT
 
 	public:
-		KFDPixmapEdit(FormManager *manager, KoProperty::Property *property, QWidget *parent=0, const char *name=0);
-		~KFDPixmapEdit();
+		KFDPixmapEdit(FormManager *manager, KoProperty::Property *property, 
+			QWidget *parent=0, const char *name=0);
+		virtual ~KFDPixmapEdit();
 
 	public slots:
 		virtual void selectPixmap();
@@ -40,3 +44,4 @@ class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
 
 }
 
+#endif

@@ -140,8 +140,14 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		void removeItem(const QString &name);
 		void removeItem(ObjectTreeItem *c);
 
-		/*! Generates a new name with \a base as beginning (eg if base is "QLineEdit", it returns "QLineEdit1"). */
-		QString genName(const QString &base);
+		/*! Generates a new, unique name for a new widget using prefix \a prefix 
+		 (e.g. if \a prefix is "lineEdit", "lineEdit1" is returned). 
+		 \a prefix must be a valid identifier.
+		 If \a numberSuffixRequired is true (the default) a number suffix is mandatory.
+		 If \a numberSuffixRequired is false and there's a widget prefix \a prefix,
+		 then \a prefix is returned (e.g. if \a prefix is "lineEdit", and "lineEdit" doesn't exist yet,
+		 "lineEdit" is returned). */
+		QCString generateUniqueName(const QCString &prefix, bool numberSuffixRequired = true);
 
 	private:
 		ObjectTreeDict	m_treeDict;

@@ -112,7 +112,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! \return The name of the class being inserted, corresponding
 		 to the menu item or the toolbar button clicked. */
-		QCString insertClass() const { return m_insertClass; }
+		QCString selectedClass() const { return m_selectedClass; }
 
 		/*! Sets the point where the pasted widget should be moved to. */
 		void setInsertPoint(const QPoint &p);
@@ -427,7 +427,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		// Insertion
 		bool			m_inserting;
-		QCString			m_insertClass;
+		QCString			m_selectedClass;
 
 		// Connection stuff
 		bool			m_drawingSlot;

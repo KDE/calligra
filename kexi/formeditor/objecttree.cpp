@@ -213,22 +213,21 @@ ObjectTree::removeItem(ObjectTreeItem *c)
 	delete c;
 }
 
-QString
-ObjectTree::genName(const QString &c)
+QCString
+ObjectTree::generateUniqueName(const QCString &prefix, bool numberSuffixRequired)
 {
 	/* old way of naming widgets
 	int appendix = m_names[c] + 1;
 	QString name(c);
 	name.append(QString::number(appendix));
 	m_names[c] = appendix;*/
-	QString name(c + "1");
+	if (!numberSuffixRequired && !lookup(prefix))
+		return prefix;
+	QString name( prefix );
 	int i = 1;
-
-	while(lookup(name)) {
+	while(lookup(name + QString::number(i)))
 		i++;
-		name = name.left(name.length()-1) + QString::number(i);
-	}
 
-	return name;
+	return (name + QString::number(i)).latin1();
 }
 

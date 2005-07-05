@@ -140,6 +140,7 @@ Container::setForm(Form *form)
 bool
 Container::eventFilter(QObject *s, QEvent *e)
 {
+//	kdDebug() << e->type() << endl;
 	switch(e->type())
 	{
 		case QEvent::MouseButtonPress:
@@ -488,9 +489,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::Leave:
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
-		case QEvent::DragEnter:
-		case QEvent::DragMove:
-		case QEvent::DragLeave:
+//		case QEvent::DragEnter:
+//		case QEvent::DragMove:
+//		case QEvent::DragLeave:
 			return true; // eat them
 
 		default:

@@ -148,8 +148,10 @@ InsertPageCommand::execute()
 {
 	KFormDesigner::Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
-	if(m_name.isEmpty())
-		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->displayName("QWidget"));
+	if(m_name.isEmpty()) {
+		m_name = m_container->form()->objectTree()->generateUniqueName(
+			m_container->form()->manager()->lib()->displayName("QWidget").latin1());
+	}
 
 	QWidget *page = new QWidget(parent, m_name.latin1());
 	new KFormDesigner::Container(m_container, page, parent);
