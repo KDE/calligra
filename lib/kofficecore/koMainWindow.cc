@@ -1033,6 +1033,13 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
     if ( !newdoc->initDoc( (KoDocument::InitDocFlags)initDocFlags, this ) )
     {
         delete newdoc;
+        // See cancelQuits() in KoTemplateChooseDia.
+        // The quit() must be done here so that the KoDocument got deleted already.
+        bool onlyDoc = !KoDocument::documentList() || KoDocument::documentList()->isEmpty();
+        bool onlyMainWindow = !KMainWindow::memberList || KMainWindow::memberList->count() <= 1;
+        if ( onlyDoc && onlyMainWindow && kapp->instanceName() != "koshell" ) {
+            kapp->quit();
+        }
         return;
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));

@@ -149,7 +149,10 @@ bool KoApplication::start()
             shell->setRootDocument( doc );
         }
         else
+        {
+            delete doc;
             return false;
+        }
 
 	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {

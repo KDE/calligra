@@ -1,6 +1,15 @@
+Changes after KOffice-1.4
+=========================
+KOfficeCore:
+- OASIS loading/saving fix for embedded objects
+- Fix crash when pressing Quit in the initial startup dialog (#107911)
+
+KoText:
+- Fix crash when updating a TOC with a table inside it (#107961)
+
 Changes after KOffice-1.4-beta1
 ===============================
-KForumula:
+KFormula:
 - Disable the matrix actions when the cursor isn't in a matrix element.
 - Do not crash when exporting to PNG.
 
