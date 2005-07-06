@@ -2488,7 +2488,9 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 	  else {
 	  // If the cell towards the top is part of a merged cell, get
 	  // the pointer to the master cell.
-	    cellUp = cellUp->ultimateObscuringCell();
+	    if (cellUp->ultimateObscuringCell())
+	      cellUp = cellUp->ultimateObscuringCell();
+	    
 	    topPen = cellUp->effBottomBorderPen( cellUp->column(),
 						 cellUp->row() );
 
