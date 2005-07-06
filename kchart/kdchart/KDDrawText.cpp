@@ -256,10 +256,12 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             painter->setPen( QColor( Qt::darkGreen ) );
             painter->drawRect(x,y,txtWidth,txtHeight);
         }else{
+#if 0
             // Working around a strange Qt bug: Rotated painter must be
             // initialized by drawing before text can be painted there.
             painter->setPen( QColor( Qt::white ) );
             painter->drawLine( 30000,0,30001,0 );
+#endif
         }
         painter->setPen( savePen );
     }
