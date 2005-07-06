@@ -210,6 +210,7 @@ KoTemplateChooseDia::~KoTemplateChooseDia()
     d=0L;
 }
 
+// Keep in sync with KoMainWindow::chooseNewDocument
 static bool cancelQuits() {
     bool onlyDoc = !KoDocument::documentList() || KoDocument::documentList()->count() <= 1;
     bool onlyMainWindow = !KMainWindow::memberList || KMainWindow::memberList->count() <= 1;
@@ -261,10 +262,6 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance,
     }
 
     delete dlg;
-    if ( rt == Cancel && dialogType == Everything && cancelQuits() )
-        // The button says quit, so let's quit
-        kapp->quit();
-
     return rt;
 }
 

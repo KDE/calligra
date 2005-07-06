@@ -1809,7 +1809,9 @@ bool KoDocument::loadOasisFromStore( KoStore* store )
     //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
     //    return false;
 
-    (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
+    if ( store->hasFile( "settings.xml" ) ) {
+        (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
+    }
     if ( !loadOasis( contentDoc, oasisStyles, settingsDoc, store ) )
         return false;
 
