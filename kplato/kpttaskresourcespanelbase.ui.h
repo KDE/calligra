@@ -32,8 +32,4 @@
 namespace KPlato
 {
 
-void KPTTaskResourcesPanelBase::init()
-{
-}
-
 }  //KPlato namespace

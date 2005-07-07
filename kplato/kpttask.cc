@@ -663,10 +663,6 @@ KPTDateTime KPTTask::calculateForward(int use) {
             case KPTNode::FixedInterval: {
                 KPTDateTime st = m_constraintStartTime;
                 KPTDateTime end = m_constraintEndTime;
-                if (useDateOnly())
-                {
-                    end = end.addDays(1);
-                }
                 m_earliestStartForward = st;
                 m_durationForward = end - st;
                 break;
@@ -789,10 +785,6 @@ KPTDateTime KPTTask::calculateBackward(int use) {
             case KPTNode::FixedInterval: {
                 KPTDateTime st = m_constraintStartTime;
                 KPTDateTime end = m_constraintEndTime;
-                if (useDateOnly())
-                {
-                    end = end.addDays(1);
-                }
                 m_latestFinishBackward = end;
                 m_durationBackward = end - st;
                 break;

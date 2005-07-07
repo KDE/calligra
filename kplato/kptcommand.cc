@@ -1025,24 +1025,6 @@ void KPTTaskModifyProgressCmd::unexecute() {
         m_part->setCommandType(0);
 }
 
-KPTProjectModifyUseDateOnlyCmd::KPTProjectModifyUseDateOnlyCmd(KPTPart *part, KPTProject &project, bool value, QString name)
-    : KNamedCommand(name),
-      m_part(part),
-      m_project(project),
-      m_newvalue(value) {
-    m_oldvalue = project.useDateOnly();
-}
-void KPTProjectModifyUseDateOnlyCmd::execute() {
-    m_project.setUseDateOnly(m_newvalue);
-    if (m_part)
-        m_part->setCommandType(0);
-}
-void KPTProjectModifyUseDateOnlyCmd::unexecute() {
-    m_project.setUseDateOnly(m_oldvalue);
-    if (m_part)
-        m_part->setCommandType(0);
-}
-
 KPTProjectModifyBaselineCmd::KPTProjectModifyBaselineCmd(KPTPart *part, KPTProject &project, bool value, QString name)
     : KNamedCommand(name),
       m_part(part),

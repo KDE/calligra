@@ -79,13 +79,6 @@ void KPTMainProjectPanelBase::enableDateTime()
         endTime->setEnabled(true);
         endDate->setEnabled(true);
     }
-    if (useDate->isChecked())
-    {
-        startTime->setTime(QTime());
-        endTime->setTime(QTime());
-        startTime->setEnabled(false);
-        endTime->setEnabled(false);
-    }
 }
 
 

@@ -53,7 +53,7 @@ class KPTTaskProgressPanel;
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false, bool useDateOnly=false, QWidget *parent=0, const char *name=0);
+    KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(KPTPart *part);
 

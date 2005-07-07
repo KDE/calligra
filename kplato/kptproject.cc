@@ -42,10 +42,9 @@ namespace KPlato
 {
 
 /// Use for main projects
-KPTProject::KPTProject(bool useDateOnly, KPTNode *parent)
+KPTProject::KPTProject(KPTNode *parent)
     : KPTNode(parent)
 {
-    m_useDateOnly = useDateOnly;
     m_constraint = KPTNode::MustStartOn;
     m_standardWorktime = new KPTStandardWorktime();
     m_defaultCalendar = new KPTCalendar(*m_standardWorktime);
@@ -53,29 +52,14 @@ KPTProject::KPTProject(bool useDateOnly, KPTNode *parent)
     init();
 }
 
-/// Use for subprojects
-KPTProject::KPTProject(KPTNode *parent)
-    : KPTNode(parent)
-
-{
-    init();
-}
-
 void KPTProject::init() {
     if (m_parent == 0) {
         // set sensible defaults for a project wo parent
-        if (m_useDateOnly) {
-            m_startTime = KPTDateTime(QDate::currentDate(),QTime());
-            m_endTime = m_startTime;
-            m_duration = KPTDuration::zeroDuration;
+        m_startTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->startOfDay(QDate::currentDate()));
+        m_endTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->endOfDay(QDate::currentDate()));
+        m_duration = m_endTime - m_startTime;
+        if (m_duration == KPTDuration::zeroDuration)
             m_duration.addDays(1);
-        } else {
-            m_startTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->startOfDay(QDate::currentDate()));
-            m_endTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->endOfDay(QDate::currentDate()));
-            m_duration = m_endTime - m_startTime;
-            if (m_duration == KPTDuration::zeroDuration)
-                m_duration.addDays(1);
-        }    
     }    
     m_calendars.setAutoDelete(true);
 }
@@ -256,8 +240,6 @@ bool KPTProject::load(QDomElement &element) {
         kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
         setConstraint(KPTNode::MustStartOn);
     }
-    m_useDateOnly = (bool)element.attribute("use-date-only","0").toInt(&ok);
-    
     KPTDateTime dt( QDateTime::currentDateTime() );
     dt = dt.fromString( element.attribute("project-start", dt.toString()) );
     //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
@@ -366,8 +348,6 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("project-start",startTime().toString());
     me.setAttribute("project-end",endTime().toString());
     me.setAttribute("scheduling",constraintToString());
-    
-    me.setAttribute("use-date-only",(int)m_useDateOnly);
     
     // save calendars
     QPtrListIterator<KPTCalendar> calit(m_calendars);

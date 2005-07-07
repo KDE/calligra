@@ -128,16 +128,7 @@
     </vbox>
 </widget>
 <includes>
-    <include location="local" impldecl="in implementation">kptdurationwidget.h</include>
+    <include location="local" impldecl="in implementation">kpttaskresourcespanelbase.ui.h</include>
 </includes>
-<forwards>
-    <forward>namespace KPlato { class KPTDurationWidget; } class ignore_fix_compile</forward>
-</forwards>
-<variables>
-    <variable access="public">KPlato::KPTDurationWidget *effort;</variable>
-</variables>
-<functions>
-    <function>init()</function>
-</functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

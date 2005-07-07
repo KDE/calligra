@@ -10,42 +10,16 @@
             <x>0</x>
             <y>0</y>
             <width>307</width>
-            <height>250</height>
+            <height>163</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KPTConfigBehaviorPanelBase</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>useDateTimeGroup</cstring>
-            </property>
-            <property name="title">
-                <string>Date/Time Usage</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useDateTime</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use date and time</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useDate</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use date only</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>calculationGroup</cstring>
@@ -99,18 +73,6 @@
     </vbox>
 </widget>
 <connections>
-    <connection>
-        <sender>useDateTime</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>KPTConfigBehaviorPanelBase</receiver>
-        <slot>slotChanged()</slot>
-    </connection>
-    <connection>
-        <sender>useDate</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>KPTConfigBehaviorPanelBase</receiver>
-        <slot>slotChanged()</slot>
-    </connection>
     <connection>
         <sender>calcManual</sender>
         <signal>toggled(bool)</signal>

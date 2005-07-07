@@ -372,8 +372,6 @@ public:
     virtual void addParentProxyRelation(KPTNode *, const KPTRelation *) {}
     virtual void addChildProxyRelation(KPTNode *, const KPTRelation *) {}
 
-    virtual bool useDateOnly();
-
     QPtrList<KPTAppointment> &appointments() { return m_appointments; }
 
     /// Return appointments this node have with resource

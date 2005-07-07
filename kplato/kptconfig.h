@@ -27,14 +27,11 @@ namespace KPlato
 
 class KPTBehavior {
 public:
-    enum DateTimeUsage { DateTime, Date };
     enum CalculationMode { Manual, OnChange };
     KPTBehavior() {
-        dateTimeUsage = DateTime;
         calculationMode = Manual;
         allowOverbooking = true;
     }
-    int dateTimeUsage;
     int calculationMode;
     bool allowOverbooking;
 };

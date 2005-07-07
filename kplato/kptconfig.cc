@@ -43,7 +43,6 @@ void KPTConfig::load() {
     if( config->hasGroup("Behavior"))
     {
         config->setGroup("Behavior");
-        m_behavior.dateTimeUsage = config->readNumEntry("UseDateTime",m_behavior.dateTimeUsage);
         m_behavior.calculationMode = config->readNumEntry("CalculationMode",m_behavior.calculationMode);
         m_behavior.allowOverbooking =  config->readBoolEntry("AllowOverbooking",m_behavior.allowOverbooking);
     }
@@ -70,7 +69,6 @@ void KPTConfig::save() {
     KConfig *config = KPTFactory::global()->config();
     
     config->setGroup( "Behavior" );
-    config->writeEntry("UseDateTime",m_behavior.dateTimeUsage);
     config->writeEntry("CalculationMode",m_behavior.calculationMode);
     config->writeEntry("AllowOverbooking",m_behavior.allowOverbooking);
 

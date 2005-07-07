@@ -52,7 +52,6 @@ KPTConfigBehaviorPanel::KPTConfigBehaviorPanel(KPTBehavior &behavior, QWidget *p
 }
 
 void KPTConfigBehaviorPanel::setStartValues() {
-    useDateTimeGroup->setButton(m_oldvalues.dateTimeUsage);
     calculationGroup->setButton(m_oldvalues.calculationMode);
     allowOverbooking->setChecked(m_oldvalues.allowOverbooking);
 }
@@ -62,7 +61,6 @@ bool KPTConfigBehaviorPanel::ok() {
 }
 
 bool KPTConfigBehaviorPanel::apply() {
-    m_behavior.dateTimeUsage = useDateTimeGroup->selectedId();
     m_behavior.calculationMode = calculationGroup->selectedId();
     m_behavior.allowOverbooking = allowOverbooking->isChecked();
     return true;

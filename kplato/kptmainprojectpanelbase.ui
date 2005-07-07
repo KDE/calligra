@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>490</width>
-            <height>431</height>
+            <width>471</width>
+            <height>410</height>
         </rect>
     </property>
     <property name="caption">
@@ -227,14 +227,6 @@
                         <property name="spacing">
                             <number>0</number>
                         </property>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>useDate</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Use date only</string>
-                            </property>
-                        </widget>
                     </hbox>
                 </widget>
             </vbox>
@@ -340,18 +332,6 @@
         <signal>valueChanged(const QTime&amp;)</signal>
         <receiver>KPTMainProjectPanelBase</receiver>
         <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>useDate</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>useDate</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>enableDateTime()</slot>
     </connection>
     <connection>
         <sender>baseline</sender>

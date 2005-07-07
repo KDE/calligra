@@ -629,20 +629,6 @@ private:
     struct KPTTask::Progress m_oldvalue;
 };
 
-class KPTProjectModifyUseDateOnlyCmd : public KNamedCommand
-{
-public:
-    KPTProjectModifyUseDateOnlyCmd(KPTPart *part, KPTProject &project, bool value, QString name=0);
-    void execute();
-    void unexecute();
-
-private:
-    KPTPart *m_part;
-    KPTProject &m_project;
-    bool m_newvalue;
-    bool m_oldvalue;
-};
-
 class KPTProjectModifyBaselineCmd : public KNamedCommand
 {
 public:

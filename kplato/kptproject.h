@@ -45,7 +45,6 @@ class KPTStandardWorktime;
  */
 class KPTProject : public KPTNode {
 public:
-    KPTProject(bool useDateOnly, KPTNode *parent = 0);
     KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
@@ -150,9 +149,6 @@ public:
     /// Check if node par can be linked to node child.
     bool legalToLink(KPTNode *par, KPTNode *child);
     
-    void setUseDateOnly(bool on) { m_useDateOnly = on; }
-    bool useDateOnly() { return m_useDateOnly; }
-
     /// Find the node with identity id
     virtual KPTNode *findNode(const QString &id) const 
         { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
@@ -221,7 +217,6 @@ private:
     QPtrList<KPTNode> m_endNodes;
     QPtrList<KPTNode> m_summarytasks;
     
-    bool m_useDateOnly;
     bool m_baselined;
     
     QDict<KPTResourceGroup> resourceGroupIdDict;

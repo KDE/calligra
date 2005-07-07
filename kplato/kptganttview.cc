@@ -399,13 +399,8 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
 
-    if (task->useDateOnly()) {
-        item->setStartTime(QDateTime(task->startDate(), QTime()));
-        item->setEndTime(QDateTime(task->endDate().addDays(1), QTime())); // hmmm
-    } else {
-        item->setStartTime(task->startTime());
-        item->setEndTime(task->endTime());
-    }
+    item->setStartTime(task->startTime());
+    item->setEndTime(task->endTime());
     //item->setOpen(true);
     QString text;
     if (m_showTaskName) {
@@ -439,13 +434,8 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     //TODO i18n
     QString w="Name: " + task->name();
     
-    if (task->useDateOnly()) {
-        w += "\n"; w += "Start: "  + task->startDate().toString();
-        w += "\n"; w += "End  : " + task->endDate().toString();
-    } else {
-        w += "\n"; w += "Start: "  + task->startTime().toString();
-        w += "\n"; w += "End  : " + task->endTime().toString();
-    }
+    w += "\n"; w += "Start: "  + task->startTime().toString();
+    w += "\n"; w += "End  : " + task->endTime().toString();
     if (m_showProgress) {
         w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
     }
@@ -502,10 +492,7 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
-    if (task->useDateOnly())
-        item->setStartTime(QDateTime(task->startDate(), QTime()));
-    else
-        item->setStartTime(task->startTime());
+    item->setStartTime(task->startTime());
     //item->setOpen(true);
     if (m_showTaskName) {
         item->setText(task->name());
@@ -527,11 +514,8 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
     //TODO i18n
     QString w="Name: " + task->name();
     w += "\n"; w += "Time: ";
-    if (task->useDateOnly()) {
-          w += task->startDate().toString();
-    } else {
-        w += task->startTime().toString();
-    }
+    w += task->startTime().toString();
+    
     w += "\n"; w += "Float: " + task->positiveFloat().toString(KPTDuration::Format_Hour);
 
     if (task->inCriticalPath()) {

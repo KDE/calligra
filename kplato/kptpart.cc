@@ -56,7 +56,7 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     m_config.setReadWrite(isReadWrite()|| !isEmbedded());
     m_config.load();
 
-    m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date); // after config is loaded
+    m_project = new KPTProject(); // after config is loaded
 
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
@@ -77,7 +77,7 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 
     if (flags==KoDocument::InitDocEmpty)
     {
-        m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
+        m_project = new KPTProject();
         setAutoSave(0); // disable
         setModified(false);
         return true;
@@ -106,7 +106,7 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
 	// Make a fresh project and let the user enter some info
-	m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
+	m_project = new KPTProject();
 	// an emty project should be empty
 	// m_projectDialog = new KPTProjectDialog(*m_project, m_view);
 	// m_projectDialog->exec();
@@ -201,7 +201,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
                 m_context = new KPTContext();
                 m_context->load(e);
             } else if (e.tagName() == "project") {
-                KPTProject *newProject = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
+                KPTProject *newProject = new KPTProject();
                 if (newProject->load(e)) {
                     // The load went fine. Throw out the old project
                     delete m_project;

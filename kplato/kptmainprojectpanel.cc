@@ -51,16 +51,8 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
 
     baseline->setChecked(project.isBaselined());
     
-    useDate->setChecked(project.useDateOnly());
-    if (project.numChildren() > 0) {
-        useDate->setEnabled(false);
-    }
     startDate->setDate(project.startTime().date());
     endDate->setDate(project.endTime().date());
-    if (!project.useDateOnly()) {
-        startTime->setTime(project.startTime().time());
-        endTime->setTime(project.endTime().time());
-    }
     if (project.constraint() == KPTNode::MustStartOn) {
         schedulingGroup->setButton(0);
     }
@@ -123,10 +115,6 @@ KCommand *KPTMainProjectPanel::buildCommand(KPTPart *part) {
     if (endDateTime() != project.endTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTNodeModifyEndTimeCmd(part, project, endDateTime()));
-    }
-    if (useDate->isChecked() != project.useDateOnly()) {
-        if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTProjectModifyUseDateOnlyCmd(part, project, useDate->isChecked()));    
     }
     return m;
 }
