@@ -104,7 +104,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \sa loadFormFromDom(), loadForm().
 		    \return true if loading succeeded.
 		 */
-		static bool loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, 
+		static bool loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src,
 			bool preview=false);
 
 		static bool loadFormFromString(Form *form, QWidget *container, QString &src, bool preview=false);
@@ -183,9 +183,6 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    Decoding code is taken from QT Designer.
 		*/
 		static QPixmap loadImage(QDomDocument domDoc, QString name);
-
-		/*! Creates a grid layout with the appropriate number of rows/cols.*/
-		static void createGridLayout(const QDomElement &el, ObjectTreeItem *tree);
 
 		/*! Reads the child nodes of a "widget" element. */
 		static void readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib,

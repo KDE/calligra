@@ -953,7 +953,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if(item->container() && item->container()->layoutType() != Container::NoLayout)
 	{
 		QString nodeName;
-		kdDebug() << "the type of the container layout is " << item->container()->layout() << endl;
 		switch(item->container()->layoutType())
 		{
 			case Container::HBox:
@@ -1295,8 +1294,11 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		}
 		else if((tag == "vbox") || (tag == "hbox") || (tag == "grid"))
 		{
-			if(tag == "grid")
-				createGridLayout(node, tree);
+			if(tag == "grid") {
+				tree->container()->m_layType = Container::Grid;
+				QGridLayout *layout = new QGridLayout(tree->widget(), 1, 1);
+				tree->container()->m_layout = (QLayout*)layout;
+			}
 			readChildNodes(tree, container, lib, node, w);
 			if(tag == "hbox")
 				tree->container()->setLayout(Container::HBox);
@@ -1328,33 +1330,6 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 /////////////////////////////////////////////////////////////////////////////
 ///////////// Helper functions //////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-
-void
-FormIO::createGridLayout(const QDomElement &el, ObjectTreeItem *tree)
-{
-	if(!tree->container())
-		return;
-
-	tree->container()->m_layType = Container::Grid;
-	int nrow = 1, ncol = 1;
-	// We go through the child widgets to see the number of columns and rows in the grid
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		if(n.toElement().tagName() == "widget")
-		{
-			int wrow = n.toElement().attribute("row").toInt() + 1;
-			if(wrow > nrow)
-				nrow = wrow;
-
-			int wcol = n.toElement().attribute("column").toInt() + 1;
-			if(wcol > ncol)
-				ncol = wcol;
-		}
-	}
-	kdDebug() << "FormIO:: the loaded grid will have " << nrow << " rows and " << ncol << " cols." << endl;
-	QGridLayout *layout = new QGridLayout(tree->widget(), nrow, ncol, 10, 2, "grid");
-	tree->container()->m_layout = (QLayout*)layout;
-}
 
 void
 FormIO::addIncludeFileName(const QString &include, QDomDocument &domDoc)
