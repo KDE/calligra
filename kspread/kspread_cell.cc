@@ -825,7 +825,12 @@ KSpreadCell *KSpreadCell::ultimateObscuringCell() const
   if (!d->hasExtra())
     return (KSpreadCell *) this;
 
-  return d->extra()->obscuringCells.first();
+  else if (d->extra()->obscuringCells.isEmpty())
+    return (KSpreadCell *) this;
+
+  else
+    return d->extra()->obscuringCells.first();
+
 #if 0
   QValueList<KSpreadCell*>::const_iterator it = d->extra()->obscuringCells.begin();
   QValueList<KSpreadCell*>::const_iterator end = d->extra()->obscuringCells.end();
@@ -2488,8 +2493,7 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 	  else {
 	  // If the cell towards the top is part of a merged cell, get
 	  // the pointer to the master cell.
-	    if (cellUp->ultimateObscuringCell())
-	      cellUp = cellUp->ultimateObscuringCell();
+	    cellUp = cellUp->ultimateObscuringCell();
 	    
 	    topPen = cellUp->effBottomBorderPen( cellUp->column(),
 						 cellUp->row() );

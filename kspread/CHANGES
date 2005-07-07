@@ -1,5 +1,9 @@
+since 1.4.0
+===========
+- Fix potential crash when rendering obscured cells (#108659)
+
 since 1.4-beta1
-=============================
+===============
 - Use General/Blank Worksheet as default template.
 - KSpread crashes on exit if there is a chart in the sheet (#101915).
 - The data editor is disabled for charts which has been loaded.
