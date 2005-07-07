@@ -77,7 +77,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		/*! Adds \a property in the list of the modified properties for this object.
 		    These modified properties are written in the .ui files when saving the form.
 		*/
-		void addModifiedProperty(const QCString &property, const QVariant &value);
+		void addModifiedProperty(const QCString &property, const QVariant &oldValue);
 		void storeUnknownProperty(QDomElement &el);
 
 		void setPixmapName(const QCString &property, const QString &name);

@@ -52,6 +52,7 @@ class WidgetPropertySetPrivate
 		WidgetPropertySetPrivate()
 		: manager(0), lastCommand(0), lastGeoCommand(0),
 		 isUndoing(false), slotPropertyChangedEnabled(true),
+		 slotPropertyChanged_addCommandEnabled(true),
 		 origActiveColors(0)
 		{}
 		~WidgetPropertySetPrivate()
@@ -70,7 +71,8 @@ class WidgetPropertySetPrivate
 		PropertyCommand  *lastCommand;
 		GeometryPropertyCommand  *lastGeoCommand;
 		bool isUndoing : 1;
-		bool slotPropertyChangedEnabled;
+		bool slotPropertyChangedEnabled : 1;
+		bool slotPropertyChanged_addCommandEnabled : 1;
 
 		// helper to change color palette when switching 'enabled' property
 		QColorGroup* origActiveColors;
@@ -152,11 +154,12 @@ WidgetPropertySet::clearSet(bool dontSignalShowPropertySet)
 void
 WidgetPropertySet::saveModifiedProperties()
 {
-	if(d->widgets.isEmpty() || d->widgets.count() > 1 || !d->manager->activeForm())
+	QWidget * w = d->widgets.first();
+	if(!w || d->widgets.count() > 1 || !d->manager->activeForm())
 			return;
-
-	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
-	if(!tree) return;
+	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
+	if(!tree)
+		return;
 
 	for(Set::Iterator it(d->set); it.current(); ++it) {
 		if(it.current()->isModified())
@@ -315,7 +318,11 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		newProp->setVisible(false);
 		d->set.addProperty( newProp = new Property("this:iconName", winfo->pixmap()) );
 		newProp->setVisible(false);
+		d->set.addProperty( newProp = new Property("this:iconName", winfo->pixmap()) );
+		newProp->setVisible(false);
 	}
+	d->set.addProperty( newProp = new Property("this:className", w->className()) ); 
+	newProp->setVisible(false);
 
 	/*!  let's forget it for now, until we have new complete events editor
 	if (m_manager->lib()->advancedPropertiesVisible()) {
@@ -402,12 +409,12 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 			return;
 	}
 	// a widget with a background pixmap should have its own origin
-	else if(property == "paletteBackgroundPixmap")
+	else if(property == "paletteBackgroundPixmap") {
 		d->set["backgroundOrigin"] = "WidgetOrigin";
 	//else if(property == "signals")
 	//	return;
 	// special types of properties handled separately
-	else if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak")) {
+	} else if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak")) {
 		saveAlignProperty(property);
 		return;
 	}
@@ -431,11 +438,12 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		if(d->lastCommand && d->lastCommand->property() == property)
 			d->lastCommand->setValue(value);
 		else  {
-			if(!d->widgets.first())  return;
 //			if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
-			d->lastCommand = new PropertyCommand(this, QString(d->widgets.first()->name()),
-					d->widgets.first()->property(property), value, property);
-			d->manager->activeForm()->addCommand(d->lastCommand, false);
+			if (d->slotPropertyChanged_addCommandEnabled) {
+				d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
+						d->widgets.first()->property(property), value, property);
+				d->manager->activeForm()->addCommand(d->lastCommand, false);
+			}
 
 			// If the property is changed, we add it in ObjectTreeItem modifProp
 			ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
@@ -453,14 +461,15 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		if(d->lastCommand && d->lastCommand->property() == property)
 			d->lastCommand->setValue(value);
 		else {
-			// We store old values for each widget
-			QMap<QString, QVariant> list;
-			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
-				list.insert(w->name(), w->property(property));
+			if (d->slotPropertyChanged_addCommandEnabled) {
+				// We store old values for each widget
+				QMap<QCString, QVariant> list;
+				for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
+					list.insert(w->name(), w->property(property));
 
-			d->lastCommand = new PropertyCommand(this, list, value, property);
-			d->manager->activeForm()->addCommand(d->lastCommand, false);
-
+				d->lastCommand = new PropertyCommand(this, list, value, property);
+				d->manager->activeForm()->addCommand(d->lastCommand, false);
+			}
 
 			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
 			{
@@ -473,7 +482,48 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 			}
 		}
 	}
+}
 
+//const QCString& propertyName, 
+//	const QVariant& propertyValue)
+
+void
+WidgetPropertySet::setPropertyValueInDesignMode(QWidget* widget, 
+	const QMap<QCString, QVariant> &propValues, const QString& commandName)
+{
+	if (!widget || propValues.isEmpty())
+		return;
+	
+	//is this widget is selected? (if so, use property system)
+	const bool widgetIsSelected = d->manager->activeForm()->selectedWidget() == widget;
+
+	d->slotPropertyChanged_addCommandEnabled = false;
+	QMap<QCString, QVariant>::ConstIterator endIt = propValues.constEnd();
+	CommandGroup *group = new CommandGroup(commandName);
+	for(QMap<QCString, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it)
+	{
+		if (!d->set.contains(it.key()))
+			continue;
+		PropertyCommand *subCommand = new PropertyCommand(this, widget->name(),
+					widget->property(it.key()), it.data(), it.key());
+		group->addCommand( subCommand );
+		if (widgetIsSelected) {
+			d->set[it.key()].setValue(it.data());
+		}
+		else {
+			if (-1!=widget->metaObject()->findProperty(it.key(), true) && widget->property(it.key())!=it.data()) {
+				ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(widget->name());
+				if (tree)
+					tree->addModifiedProperty(it.key(), widget->property(it.key()));
+				widget->setProperty(it.key(), it.data());
+				emit widgetPropertyChanged(widget, it.key(), it.data());
+			}
+		}
+	}
+	d->lastCommand = 0;
+	d->manager->activeForm()->addCommand(group, false/*no exec*/);
+	d->slotPropertyChanged_addCommandEnabled = true;
+//	}
 }
 
 //! \todo make it support undo
@@ -695,7 +745,7 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 	if(d->lastCommand && d->lastCommand->property() == "alignment")
 		d->lastCommand->setValue(meta->keysToValue(list));
 	else {
-		d->lastCommand = new PropertyCommand(this, QString(d->widgets.first()->name()),
+		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
 			d->widgets.first()->property("alignment"), meta->keysToValue(list), "alignment");
 		d->manager->activeForm()->addCommand(d->lastCommand, false);
 	}

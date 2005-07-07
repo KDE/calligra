@@ -239,9 +239,12 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ConnectionBuffer* connectionBuffer() const { return d->connBuffer; }
 		PixmapCollection* pixmapCollection() const { return d->pixcollection; }
 
-		/*! Adds a widget in the form CommandList. Please use it instead
+		/*! Adds a widget in the form's command history. Please use it instead
 		of calling directly actionCollection()->addCommand(). */
 		void addCommand(KCommand *command, bool execute);
+
+		/*! Clears form's command history. */
+		void clearCommandHistory();
 
 		/*! \return A pointer to this Form tabstops list : it contains all the widget
 		 that can have focus ( ie no labels, etc)

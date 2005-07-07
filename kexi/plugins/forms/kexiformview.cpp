@@ -204,6 +204,12 @@ KexiFormView::initForm()
 	setForm( new KFormDesigner::Form(formPart()->manager()) );
 	form()->createToplevel(m_dbform, m_dbform);
 
+	if (viewMode()==Kexi::DesignViewMode) {
+		//we want to be informed about executed commands
+		connect(form()->commandHistory(), SIGNAL(commandExecuted(KCommand*)),
+			formPart()->manager(), SLOT(slotHistoryCommandExecuted(KCommand*)));
+	}
+
 	const bool newForm = parentDialog()->id() < 0;
 
 	KexiDB::FieldList *fields = 0;
@@ -256,7 +262,12 @@ KexiFormView::initForm()
 	}
 
 	updateDataSourcePage();
+
+	if (!newForm && viewMode()==Kexi::DesignViewMode) {
+		form()->clearCommandHistory();
+	}
 }
+
 
 void
 KexiFormView::loadForm()
@@ -860,11 +871,19 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
 			KFormDesigner::ObjectTreeItem *newWidgetItem 
 				= form()->objectTree()->dict()->find(insertCmd->widgetName());
 			QWidget* newWidget = newWidgetItem ? newWidgetItem->widget() : 0;
-			KexiFormDataItemInterface *newWidgetIface = dynamic_cast<KexiFormDataItemInterface*>(newWidget);
-			if (newWidgetIface) {
-				newWidgetIface->setDataSourceMimeType( sourceMimeType.latin1() );
-				newWidgetIface->setDataSource( column->aliasOrName() );
-			}
+//			KexiFormDataItemInterface *newWidgetIface = dynamic_cast<KexiFormDataItemInterface*>(newWidget);
+//			if (newWidgetIface) {
+	//			newWidgetIface->setDataSourceMimeType( sourceMimeType.latin1() );
+		//		newWidgetIface->setDataSource( column->aliasOrName() );
+			//}
+//			if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
+			QMap<QCString, QVariant> propValues;
+			propValues.insert("dataSource", column->aliasOrName());
+			//propValues.insert("dataSourceMimeType", sourceMimeType.latin1());
+			formPart()->manager()->propertySet()->setPropertyValueInDesignMode(
+				newWidget, propValues, i18n("Set \"%1\" widget's data source to \"%1\"")
+				.arg(newWidget->name()).arg(column->aliasOrName()));
+	//		}
 
 			if (newWidget) {//move position down for next widget
 				pos.setY( pos.y() + newWidget->height() + 4);

@@ -25,6 +25,7 @@
 #include <qdict.h>
 #include <qptrlist.h>
 #include <qvariant.h>
+#include <qdom.h>
 
 #include <kcommand.h>
 
@@ -33,11 +34,12 @@ class QRect;
 class QPoint;
 class QStringList;
 class QCString;
-class QDomDocument;
 
 namespace KFormDesigner {
 
 typedef QPtrList<QWidget> WidgetList;
+class WidgetPropertySet;
+class ObjectTreeItem;
 class Container;
 class Form;
 
@@ -48,22 +50,23 @@ class Form;
 class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 {
 	public:
-		PropertyCommand(WidgetPropertySet *set, const QString &name, const QVariant &oldValue,
+		PropertyCommand(WidgetPropertySet *set, const QCString &wname, const QVariant &oldValue,
 			const QVariant &value, const QCString &property);
-		PropertyCommand(WidgetPropertySet *set, const QMap<QString, QVariant> &oldvalues,
+		PropertyCommand(WidgetPropertySet *set, const QMap<QCString, QVariant> &oldvalues,
 			 const QVariant &value, const QCString &property);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-		QCString property() { return m_property; }
+		QCString property() const { return m_property; }
 
 		void  setValue(const QVariant &value);
+		const QMap<QCString, QVariant>& oldValues() const { return m_oldvalues; }
 
 	protected:
 		WidgetPropertySet *m_propSet;
 		QVariant m_value;
-		QMap<QString, QVariant> m_oldvalues;
+		QMap<QCString, QVariant> m_oldvalues;
 		QCString m_property;
 };
 
@@ -73,13 +76,13 @@ class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 {
 	public:
-		GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, QPoint oldPos);
+		GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, const QPoint& oldPos);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
 
-		void setPos(QPoint pos);
+		void setPos(const QPoint& pos);
 
 	protected:
 		WidgetPropertySet *m_propSet;
@@ -105,7 +108,7 @@ class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
 	protected:
 		Form  *m_form;
 		int    m_type;
-		QMap<QString, QPoint>  m_pos;
+		QMap<QCString, QPoint>  m_pos;
 };
 
 /*! This command is used when an item in 'Adjust Widgets Size' is selected. You just need
@@ -129,8 +132,8 @@ class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
 	protected:
 		Form  *m_form;
 		int    m_type;
-		QMap<QString, QPoint>  m_pos;
-		QMap<QString, QSize>  m_sizes;
+		QMap<QCString, QPoint>  m_pos;
+		QMap<QCString, QSize>  m_sizes;
 };
 
 /*! This command is used when switching the layout of a Container. It remembers the old pos
@@ -138,7 +141,7 @@ class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 	public:
-		LayoutPropertyCommand(WidgetPropertySet *set, const QString &name,
+		LayoutPropertyCommand(WidgetPropertySet *set, const QCString &wname,
 			const QVariant &oldValue, const QVariant &value);
 
 		virtual void execute();
@@ -147,7 +150,7 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 
 	protected:
 		Form *m_form;
-		QMap<QString,QRect>  m_geometries;
+		QMap<QCString,QRect>  m_geometries;
 };
 
 /*! This command is used when inserting a widger using toolbar or menu. You only need to give
@@ -201,7 +204,7 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 		Form  *m_form;
 		QString  m_containername;
 		QString  m_name;
-		QMap<QString,QRect>  m_pos;
+		QMap<QCString,QRect>  m_pos;
 		int  m_type;
 };
 
@@ -222,7 +225,7 @@ the widget(s) to paste, and optionnally the point where to paste widgets. */
 class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 {
 	public:
-		PasteWidgetCommand(QDomDocument &domDoc, Container *container, QPoint p = QPoint());
+		PasteWidgetCommand(QDomDocument &domDoc, Container *container, const QPoint& p = QPoint());
 
 		virtual void execute();
 		virtual void unexecute();
@@ -266,10 +269,10 @@ class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 		virtual QString name() const;
 
 	protected:
-		QDomDocument  m_domDoc;
-		Form       *m_form;
-		QMap<QString, QString>  m_containers;
-		QMap<QString, QString>  m_parents;
+		QDomDocument m_domDoc;
+		Form *m_form;
+		QMap<QCString, QCString>  m_containers;
+		QMap<QCString, QCString>  m_parents;
 };
 
 /*! This command is used when cutting widgets. It is basically a DeleteWidgetCommand
@@ -285,6 +288,20 @@ class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 
 	protected:
 		QCString  m_data;
+};
+
+/*! A Command Group is a command that holds several sub-commands.
+ It will appear as one to the user and in the command history,
+ but it can use the implementation of multiple commands internally.
+ It extends KMacroCommand by providing the list of commands executed.
+ */
+class KFORMEDITOR_EXPORT CommandGroup : public KMacroCommand
+{
+	public:
+		CommandGroup( const QString & name );
+		virtual ~CommandGroup();
+
+		QPtrList<KCommand>& commands() { return m_commands; }
 };
 
 }

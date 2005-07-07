@@ -34,6 +34,7 @@
 #include <kexidataawareobjectiface.h>
 #include <kexiscrollview.h>
 
+//! @internal
 class KexiDBForm::Private
 {
 	public:

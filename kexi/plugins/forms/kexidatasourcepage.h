@@ -21,6 +21,7 @@
 
 #include <qwidget.h>
 
+class KCommand;
 class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
 class KexiFieldComboBox;

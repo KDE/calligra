@@ -44,7 +44,7 @@ class KexiDataSourcePage;
 
 //! Kexi Form Plugin
 /*! It just creates a \ref KexiFormView. See there for most of code. */
-class KexiFormPart : public KexiPart::Part
+class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 {
 	Q_OBJECT
 

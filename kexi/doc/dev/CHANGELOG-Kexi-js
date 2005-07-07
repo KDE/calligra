@@ -318,6 +318,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - update query after change in Connection cache
 - for queries like 'select * from a, b, c' allow to enter * in 'table' column
 --this should also work when we're recreating field rows on switching from SQL view to design view
+- query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
 
 ==== SQL Editor TODO: =====
 - intergrate editor's (KPart) actions with KexiMainWindow's Actions
@@ -529,12 +530,14 @@ TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 
-TODO: query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
-
-2005-07-05
+2005-07-05..07
 Form Designer
 - Data source fields can be dragged from Data Source Pane 
   and dropped on the form's surface to create data-aware line edit widgets
+- on new form empty creation, undo/redo history is cleared 
+  and undo/redo actions are not available
+- on design time, 'dataSource' properties for forms and dataaware widgets 
+  are synced with data source  combo boxes 
 
 2005-07-04
 Property Editor

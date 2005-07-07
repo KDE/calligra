@@ -47,7 +47,7 @@ namespace KexiDB { class Cursor; }
 
  @see KexiDataTable
 */
-class KexiFormView : public KexiDataAwareView
+class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 {
 	Q_OBJECT
 

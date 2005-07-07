@@ -56,7 +56,7 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 
 	public slots:
 		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
-		void refreshContentsSize();
+		virtual void refreshContentsSize();
 
 	signals:
 		void outerAreaClicked();

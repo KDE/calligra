@@ -472,4 +472,14 @@ void KexiFormScrollView::beforeSwitchView()
 	m_editor = 0;
 }
 
+void KexiFormScrollView::refreshContentsSize()
+{
+	KexiScrollView::refreshContentsSize();
+	//only clear cmd history when KexiScrollView::refreshContentsSizeLater() has been called
+	if (!m_preview && sender()==&m_delayedResize) {
+		if (m_form)
+			m_form->clearCommandHistory();
+	}
+}
+
 #include "kexiformscrollview.moc"

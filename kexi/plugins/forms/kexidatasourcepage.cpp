@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <ktoolbarbutton.h>
+#include <kdebug.h>
 
 #include <widget/kexipropertyeditorview.h>
 #include <widget/kexidatasourcecombobox.h>
@@ -35,6 +36,8 @@
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
 #include <kexiproject.h>
+
+#include <formeditor/commands.h>
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
@@ -273,6 +276,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 
 
 	const bool isForm = objectClassName=="KexiDBForm";
+	kdDebug() << "objectClassName=" << objectClassName << endl;
 //	{
 /*		//this is top level form's surface: data source means table or query
 		QCString dataSourceMimeType, dataSource;

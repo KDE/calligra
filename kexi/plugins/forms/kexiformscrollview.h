@@ -113,6 +113,10 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		/*! Reverts current editor's value to old one. */
 		virtual void cancelEditor();
 
+	public slots:
+		/*! Reimplemented to also clear command history right after final resize. */
+		virtual void refreshContentsSize();
+
 	signals:
 		virtual void itemChanged(KexiTableItem *, int row, int col);
 		virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);

@@ -106,7 +106,6 @@ Form::widget() const
 		return d->widget;
 }
 
-
 //////////////// Container -related functions ///////////////////////
 
 void
@@ -371,6 +370,14 @@ Form::addCommand(KCommand *command, bool execute)
 	d->history->addCommand(command, execute);
 	if(!execute) // simulate command to activate 'undo' menu
 		slotCommandExecuted();
+}
+
+void
+Form::clearCommandHistory()
+{
+	d->history->clear();
+	d->manager->emitUndoEnabled(false, QString::null); 
+	d->manager->emitRedoEnabled(false, QString::null); 
 }
 
 void

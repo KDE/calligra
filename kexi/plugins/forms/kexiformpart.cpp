@@ -52,6 +52,7 @@
 #include "kexiformpart.h"
 #include "kexidatasourcepage.h"
 
+//! @internal
 class KexiFormPart::Private
 {
 	public:
@@ -454,7 +455,4 @@ KexiFormPart::TempData::~TempData()
 {
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_form, KGenericFactory<KexiFormPart>("kexihandler_form") )
-
 #include "kexiformpart.moc"
-

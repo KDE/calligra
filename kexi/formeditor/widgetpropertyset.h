@@ -78,6 +78,9 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! This slot is called when the watched widget is destroyed. Resets the buffer.*/
 		void slotWidgetDestroyed();
 
+		void setPropertyValueInDesignMode(QWidget* widget, const QMap<QCString, QVariant> &propValues,
+			const QString& commandName);
+
 	signals:
 		/*! This signal is emitted when a property was changed.
 		  \a widg is the widget concerned, \a property

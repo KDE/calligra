@@ -41,19 +41,33 @@
 
 #include "commands.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 // PropertyCommand
 
-PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QString &wname, const QVariant &oldValue, const QVariant &value, const QCString &property)
+PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QCString &wname, 
+	const QVariant &oldValue, const QVariant &value, const QCString &property)
   : KCommand(), m_propSet(set), m_value(value), m_property(property)
 {
 	m_oldvalues.insert(wname, oldValue);
 }
 
-PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QCString &property)
+PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QMap<QCString, QVariant> &oldvalues, 
+	const QVariant &value, const QCString &property)
   : KCommand(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
-{}
+{
+}
+
+/*
+MultiCommand::MultiCommand()
+{
+}
+
+MultiCommandGroup::addSubCommand(PropertyCommand* subCommand)
+  : KCommand(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
+{
+}
+*/
 
 void
 PropertyCommand::setValue(const QVariant &value)
@@ -68,8 +82,8 @@ PropertyCommand::execute()
 	m_propSet->manager()->activeForm()->resetSelection();
 	m_propSet->setUndoing(true);
 
-	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
-	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
+	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
+	for(QMap<QCString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
 		QWidget *widg = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key())->widget();
 		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
@@ -85,8 +99,8 @@ PropertyCommand::unexecute()
 	m_propSet->manager()->activeForm()->resetSelection();
 	m_propSet->setUndoing(true);
 
-	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
-	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
+	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
+	for(QMap<QCString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key());
 		if (!item)
@@ -112,7 +126,7 @@ PropertyCommand::name() const
 
 // GeometryPropertyCommand (for multiples widgets)
 
-GeometryPropertyCommand::GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, QPoint oldPos)
+GeometryPropertyCommand::GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, const QPoint& oldPos)
  : KCommand(), m_propSet(set), m_names(names), m_oldPos(oldPos)
 {}
 
@@ -157,7 +171,7 @@ GeometryPropertyCommand::unexecute()
 }
 
 void
-GeometryPropertyCommand::setPos(QPoint pos)
+GeometryPropertyCommand::setPos(const QPoint& pos)
 {
 	m_pos = pos;
 	emit m_propSet->manager()->dirty(m_propSet->manager()->activeForm());
@@ -190,8 +204,8 @@ AlignWidgetsCommand::execute()
 	int tmpx, tmpy;
 
 	WidgetList list;
-	QMap<QString, QPoint>::ConstIterator endIt = m_pos.constEnd();
-	for(QMap<QString, QPoint>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
+	QMap<QCString, QPoint>::ConstIterator endIt = m_pos.constEnd();
+	for(QMap<QCString, QPoint>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
@@ -284,8 +298,8 @@ AlignWidgetsCommand::unexecute()
 	// To avoid creation of GeometryPropertyCommand
 	m_form->resetSelection();
 	// We move widgets to their original pos
-	QMap<QString, QPoint>::ConstIterator endIt = m_pos.constEnd();
-	for(QMap<QString, QPoint>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
+	QMap<QCString, QPoint>::ConstIterator endIt = m_pos.constEnd();
+	for(QMap<QCString, QPoint>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
@@ -345,8 +359,8 @@ AdjustSizeCommand::execute()
 	int tmpw=0, tmph=0;
 
 	WidgetList list;
-	QMap<QString, QSize>::ConstIterator endIt = m_sizes.constEnd();
-	for(QMap<QString, QSize>::ConstIterator it = m_sizes.constBegin(); it != endIt; ++it)
+	QMap<QCString, QSize>::ConstIterator endIt = m_sizes.constEnd();
+	for(QMap<QCString, QSize>::ConstIterator it = m_sizes.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
@@ -492,8 +506,8 @@ AdjustSizeCommand::unexecute()
 	// To avoid creation of GeometryPropertyCommand
 	m_form->resetSelection();
 	// We resize widgets to their original size
-	QMap<QString, QSize>::ConstIterator endIt = m_sizes.constEnd();
-	for(QMap<QString, QSize>::ConstIterator it = m_sizes.constBegin(); it != endIt; ++it)
+	QMap<QCString, QSize>::ConstIterator endIt = m_sizes.constEnd();
+	for(QMap<QCString, QSize>::ConstIterator it = m_sizes.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
@@ -530,17 +544,17 @@ AdjustSizeCommand::name() const
 
 // LayoutPropertyCommand
 
-LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const QString &name, const QVariant &oldValue, const QVariant &value)
- : PropertyCommand(buf, name, oldValue, value, "layout")
+LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const QCString &wname, const QVariant &oldValue, const QVariant &value)
+ : PropertyCommand(buf, wname, oldValue, value, "layout")
 {
 	m_form = buf->manager()->activeForm();
-	ObjectTreeItem* titem = m_form->objectTree()->lookup(name);
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(wname);
 	if (!titem)
 		return; //better this than a crash
 	Container *m_container = titem->container();
 	// We save the geometry of each wigdet
 	for(ObjectTreeItem *it = m_container->objectTree()->children()->first(); it; it = m_container->objectTree()->children()->next())
-		m_geometries.insert(it->name(), it->widget()->geometry());
+		m_geometries.insert(it->name().latin1(), it->widget()->geometry());
 }
 
 void
@@ -558,8 +572,8 @@ LayoutPropertyCommand::unexecute()
 	Container *m_container = titem->container();
 	m_container->setLayout(Container::NoLayout);
 	// We put every widget back in its old location
-	QMap<QString,QRect>::ConstIterator endIt = m_geometries.constEnd();
-	for(QMap<QString,QRect>::ConstIterator it = m_geometries.constBegin(); it != endIt; ++it)
+	QMap<QCString,QRect>::ConstIterator endIt = m_geometries.constEnd();
+	for(QMap<QCString,QRect>::ConstIterator it = m_geometries.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(it.key());
 		if(tree)
@@ -782,8 +796,8 @@ CreateLayoutCommand::execute()
 	w->show();
 
 	// We reparent every widget to the Layout and insert them into it
-	QMap<QString,QRect>::ConstIterator endIt = m_pos.constEnd();
-	for(QMap<QString,QRect>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
+	QMap<QCString,QRect>::ConstIterator endIt = m_pos.constEnd();
+	for(QMap<QCString,QRect>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
@@ -815,8 +829,8 @@ CreateLayoutCommand::unexecute()
 		parent = m_form->objectTree();
 
 	// We reparent every widget to the Container and take them out of the layout
-	QMap<QString,QRect>::ConstIterator endIt = m_pos.constEnd();
-	for(QMap<QString,QRect>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
+	QMap<QCString,QRect>::ConstIterator endIt = m_pos.constEnd();
+	for(QMap<QCString,QRect>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
@@ -896,7 +910,7 @@ BreakLayoutCommand::name() const
 
 // PasteWidgetCommand
 
-PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *container, QPoint p)
+PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *container, const QPoint& p)
  : m_point(p)
 {
 	m_data = domDoc.toCString();
@@ -1234,8 +1248,8 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 			return;
 
 		// We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
-		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
-		m_parents.insert(item->name(), item->parent()->name());
+		m_containers.insert(item->name().latin1(), m_form->parentContainer(item->widget())->widget()->name());
+		m_parents.insert(item->name().latin1(), item->parent()->name().latin1());
 		FormIO::saveWidget(item, parent, m_domDoc);
 		form->connectionBuffer()->saveAllConnectionsForWidget(item->widget()->name(), m_domDoc);
 	}
@@ -1246,8 +1260,8 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 void
 DeleteWidgetCommand::execute()
 {
-	QMap<QString,QString>::ConstIterator endIt = m_containers.constEnd();
-	for(QMap<QString,QString>::ConstIterator  it = m_containers.constBegin(); it != endIt; ++it)
+	QMap<QCString,QCString>::ConstIterator endIt = m_containers.constEnd();
+	for(QMap<QCString,QCString>::ConstIterator  it = m_containers.constBegin(); it != endIt; ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if (!item || !item->widget())
@@ -1261,7 +1275,7 @@ DeleteWidgetCommand::execute()
 void
 DeleteWidgetCommand::unexecute()
 {
-	QString wname;
+	QCString wname;
 	m_form->setInteractiveMode(false);
 	for(QDomNode n = m_domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
@@ -1274,7 +1288,7 @@ DeleteWidgetCommand::unexecute()
 		{
 			if((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name"))
 			{
-				wname = m.toElement().text();
+				wname = m.toElement().text().latin1();
 				break;
 			}
 		}
@@ -1326,5 +1340,14 @@ CutWidgetCommand::name() const
 	return i18n("Cut");
 }
 
+// CommandGroup
+
+CommandGroup::CommandGroup( const QString & name )
+	: KMacroCommand(name)
+{
+}
+
+CommandGroup::~CommandGroup()
+{
 }
 
