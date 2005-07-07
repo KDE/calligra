@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,19 +55,24 @@ DCOPObject* KPFreehandObject::dcopObject()
     return dcop;
 }
 
-bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
-    xmlWriter.startElement( "draw:path" );
-    //FIXME !!!!!!!!!!!!!!!!!!!!!
-//xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
-//call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    //save path I don't know how to do.
-    //add "svg:viewBox" add "svg:d"
-    xmlWriter.endElement();
+    kdDebug()<<"bool KPFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
     return true;
+}
+
+const char * KPFreehandObject::getOasisElementName() const
+{
+    return "draw:path";
+}
+
+void KPFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo* info )
+{
+    //todo
+    //we use draw:path
+
+    //load marker
+    loadOasisMarker( context );
 }
 
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -86,37 +87,35 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPPieObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
-
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
     switch( pieType )
     {
-    case PT_PIE:
-        xmlWriter.addAttribute( "draw:kind", "section" );
-        break;
-    case PT_CHORD:
-        xmlWriter.addAttribute( "draw:kind", "cut" );
-        break;
-    case PT_ARC:
-        xmlWriter.addAttribute( "draw:kind", "arc" );
-        break;
-    default:
-        kdDebug()<<" type of pie not supported\n";
+        case PT_PIE:
+            sc.xmlWriter.addAttribute( "draw:kind", "section" );
+            break;
+        case PT_CHORD:
+            sc.xmlWriter.addAttribute( "draw:kind", "cut" );
+            break;
+        case PT_ARC:
+            sc.xmlWriter.addAttribute( "draw:kind", "arc" );
+            break;
+        default:
+            kdDebug() << " type of pie not supported" << endl;
     }
-    int startangle = 45;
-    if ( p_angle != 0.0 )
-        startangle = ( ( int )p_angle )/16;
-    xmlWriter.addAttribute( "draw:start-angle", startangle );
-    int endangle = endangle = ( ( int ) p_len/16 )+startangle;
-    xmlWriter.addAttribute( "draw:end-angle", endangle );
 
-    //we don't have a simple object
-    xmlWriter.endElement();
+    int startangle = ( (int)p_angle / 16 );
+    sc.xmlWriter.addAttribute( "draw:start-angle", startangle );
+
+    int endangle = ( (int) p_len / 16 ) + startangle;
+    sc.xmlWriter.addAttribute( "draw:end-angle", endangle );
+
     return true;
+}
+
+const char * KPPieObject::getOasisElementName() const
+{
+    return ext.width() == ext.height() ? "draw:circle" : "draw:ellipse";
 }
 
 

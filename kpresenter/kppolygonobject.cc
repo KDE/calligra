@@ -68,35 +68,21 @@ DCOPObject* KPPolygonObject::dcopObject()
     return dcop;
 }
 
-bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
+bool KPPolygonObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    //FIXME me wait that it will define into oo spec
-    xmlWriter.startElement( "draw:regular-polygon" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
-
-    QString listOfPoint;
-    int maxX=0;
-    int maxY=0;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        int tmpX = 0;
-        int tmpY = 0;
-        tmpX = ( int ) ( KoUnit::toMM( ( *it ).x() )*100 );
-        tmpY = ( int ) ( KoUnit::toMM( ( *it ).y() )*100 );
-        if ( !listOfPoint.isEmpty() )
-            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-        else
-            listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-        maxX = QMAX( maxX, tmpX );
-        maxY = QMAX( maxY, tmpY );
+    sc.xmlWriter.addAttribute( "draw:corners", cornersValue );
+    sc.xmlWriter.addAttribute( "draw:concave", checkConcavePolygon ? "true" : "false" );
+    if ( checkConcavePolygon )
+    {
+        sc.xmlWriter.addAttribute( "draw:sharpness", QString( "%1%").arg( sharpnessValue ) );
     }
-    xmlWriter.addAttribute("draw:points", listOfPoint );
-    xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
 
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    xmlWriter.endElement();
     return true;
+}
+
+const char * KPPolygonObject::getOasisElementName() const
+{
+    return "draw:regular-polygon";
 }
 
 
@@ -133,26 +119,14 @@ void KPPolygonObject::loadOasis( const QDomElement &element, KoOasisContext & co
 {
     kdDebug()<<"void KPPolygonObject::loadOasis( const QDomElement &element )***********\n";
     KP2DObject::loadOasis( element,context, info );
-    //load point.
-    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
-
-    QString pt_x, pt_y;
-    double tmp_x, tmp_y;
-    unsigned int index = 0;
-    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+    cornersValue = element.attributeNS( KoXmlNS::draw, "corners", QString::null ).toInt();
+    checkConcavePolygon = element.attributeNS( KoXmlNS::draw, "concave", QString::null ) == "true";
+    sharpnessValue = 0;
+    if ( checkConcavePolygon )
     {
-        tmp_x = (*it).section(',',0,0).toInt() / 100;
-        tmp_y = (*it).section(',',1,1).toInt() / 100;
-
-        pt_x.setNum(tmp_x);
-        pt_x+="mm";
-
-        pt_y.setNum(tmp_y);
-        pt_y+="mm";
-
-        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
-        ++index;
+        sharpnessValue = element.attributeNS( KoXmlNS::draw, "sharpness", QString::null ).remove( '%').toInt();
     }
+    drawPolygon();
 }
 
 double KPPolygonObject::load( const QDomElement &element )
@@ -280,7 +254,8 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
 void KPPolygonObject::drawPolygon()
 {
-    KoRect _rect = points.boundingRect();
+    kdDebug()<<"void KPPolygonObject::drawPolygon()***********\n";
+    KoRect _rect( 0, 0, ext.width(), ext.height() );
     double angle = 2 * M_PI / cornersValue;
     double diameter = static_cast<double>( QMAX( _rect.width(), _rect.height() ) );
     double radius = diameter * 0.5;

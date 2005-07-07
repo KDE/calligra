@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,20 +65,22 @@ DCOPObject* KPLineObject::dcopObject()
 }
 
 
-QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles ) const
+void KPLineObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    KoGenStyle styleobjectauto( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
-    saveOasisMarkerElement( mainStyles, styleobjectauto );
-    KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
-    saveOasisShadowElement( styleobjectauto );
-    saveOasisObjectProtectStyle( styleobjectauto );
-    return mainStyles.lookup( styleobjectauto, "gr" );
+    KPShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    saveOasisMarkerElement( mainStyles, styleObjectAuto );
 }
 
-bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )  const
+
+bool KPLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:line" );
-    xmlWriter.addAttribute( "draw:style-name", saveOasisStrokeElement( context.mainStyles() ) );
+    // nothing to do
+    return true;
+}
+
+void KPLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
+{
+    xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
 
     float x1 = orig.x();
     float y1 = orig.y();
@@ -102,17 +105,24 @@ bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
         break;
     }
 
-    xmlWriter.addAttributePt( "svg:y1", y1 );
-    xmlWriter.addAttributePt( "svg:y2", y2 );
+    //save all into pt
     xmlWriter.addAttributePt( "svg:x1", x1 );
+    xmlWriter.addAttributePt( "svg:y1", y1 );
     xmlWriter.addAttributePt( "svg:x2", x2 );
+    xmlWriter.addAttributePt( "svg:y2", y2 );
 
-    if( !objectName.isEmpty())
-        xmlWriter.addAttribute( "draw:name", objectName );
-    xmlWriter.endElement();
-    return true;
+    if ( kAbs( angle ) > 1E-6 )
+    {
+        double value = -1 * ( ( double )angle* M_PI )/180.0;
+        QString str=QString( "rotate (%1)" ).arg( value );
+        xmlWriter.addAttribute( "draw:transform", str );
+    }
 }
 
+const char * KPLineObject::getOasisElementName() const
+{
+    return "draw:line";
+}
 
 QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 {
@@ -163,10 +173,10 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
 
     kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
 
-    QString attr = (x1 < x2) ?  "marker-start" : "marker-end";
+    QString attr = (x1 <= x2) ?  "marker-start" : "marker-end";
     loadOasisMarkerElement( context, attr, lineBegin );
 
-    attr = (x1 < x2) ?  "marker-end" : "marker-start";
+    attr = (x1 <= x2) ?  "marker-end" : "marker-start";
     loadOasisMarkerElement( context, attr, lineEnd );
 }
 

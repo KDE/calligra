@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2004 Thorsten Zachmann  <zachmann@kde.org>
+   Copyright (C) 2004-2005 Thorsten Zachmann  <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -83,37 +83,9 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles ) const
+const char * KPPointObject::getOasisElementName() const
 {
-    KoGenStyle styleobjectauto( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
-    saveOasisMarkerElement( mainStyles, styleobjectauto );
-    saveOasisObjectProtectStyle( styleobjectauto );
-    KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
-    return mainStyles.lookup( styleobjectauto, "gr" );
-}
-
-
-bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context ) const
-{
-    QString listOfPoint;
-    int maxX=0;
-    int maxY=0;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        int tmpX = 0;
-        int tmpY = 0;
-        tmpX = ( int ) ( KoUnit::toMM( ( *it ).x() )*100 );
-        tmpY = ( int ) ( KoUnit::toMM( ( *it ).y() )*100 );
-        if ( !listOfPoint.isEmpty() )
-            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-        else
-            listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-        maxX = QMAX( maxX, tmpX );
-        maxY = QMAX( maxY, tmpY );
-    }
-    xmlWriter.addAttribute("draw:points", listOfPoint );
-    xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
-    return true;
+    return "draw:custom-shape";
 }
 
 void KPPointObject::loadOasisMarker( KoOasisContext & context )
@@ -122,31 +94,12 @@ void KPPointObject::loadOasisMarker( KoOasisContext & context )
     loadOasisMarkerElement( context, "marker-end", lineEnd );
 }
 
-void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info )
+void KPPointObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    //kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
-    KPShadowObject::loadOasis( element, context, info );
-    //load point.
-    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
-    QString pt_x, pt_y;
-    double tmp_x, tmp_y;
-    unsigned int index = 0;
-    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
-    {
-        tmp_x = (*it).section(',',0,0).toInt() / 100;
-        tmp_y = (*it).section(',',1,1).toInt() / 100;
-
-        pt_x.setNum(tmp_x);
-        pt_x+="mm";
-
-        pt_y.setNum(tmp_y);
-        pt_y+="mm";
-
-        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
-        ++index;
-    }
-    loadOasisMarker( context );
+    KPShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    saveOasisMarkerElement( mainStyles, styleObjectAuto );
 }
+
 
 double KPPointObject::load( const QDomElement &element )
 {

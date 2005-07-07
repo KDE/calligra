@@ -344,7 +344,7 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
 
-    if ( angle!=0.0 )
+    if ( kAbs( angle ) > 1E-6 )
     {
         double value = -1 * ( ( double )angle* M_PI )/180.0;
         QString str=QString( "rotate (%1)" ).arg( value );
@@ -360,6 +360,39 @@ void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const
         styleobjectauto.addProperty( "draw:move-protect", "true" );
         styleobjectauto.addProperty( "draw:size-protect", "true" );
     }
+}
+
+QString KPObject::getStyle( KPOasisSaveContext &sc ) const
+{
+    kdDebug(33001) << "KPObject::getStyle" << endl;
+    KoGenStyle styleObjectAuto;
+    KoGenStyles &mainStyles( sc.context.mainStyles() );
+    if ( sc.onMaster )
+    {
+        styleObjectAuto = KoGenStyle( KPresenterDoc::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
+    }
+    else
+    {
+        styleObjectAuto = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+    }
+    fillStyle( styleObjectAuto, mainStyles );
+    if ( sc.onMaster )
+    {
+        return mainStyles.lookup( styleObjectAuto, "pr" );
+    }
+    return mainStyles.lookup( styleObjectAuto, "gr" );
+}
+
+void KPObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyles */ ) const
+{
+    kdDebug(33001) << "KPObject::fillStyle" << endl;
+    saveOasisObjectProtectStyle( styleObjectAuto ); 
+    saveOasisShadowElement( styleObjectAuto );
+}
+
+bool KPObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
+{
+    kdDebug()<<"bool saveOasisObjectAttributes not implemented";
 }
 
 bool KPObject::haveAnimation() const
@@ -847,6 +880,19 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
             shadowColor= QColor(styleStack.attributeNS( KoXmlNS::draw, "shadow-color" ) );
         kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
+}
+
+bool KPObject::saveOasisObject( KPOasisSaveContext &sc ) const
+{
+    sc.xmlWriter.startElement( getOasisElementName() );
+    sc.xmlWriter.addAttribute( "draw:style-name", getStyle( sc ) );
+    saveOasisPosObject( sc.xmlWriter, sc.indexObj );
+    saveOasisObjectAttributes( sc );
+    
+    if( !objectName.isEmpty())
+        sc.xmlWriter.addAttribute( "draw:name", objectName );
+
+    sc.xmlWriter.endElement();
 }
 
 void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto ) const
@@ -1628,6 +1674,99 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
 }
 
+bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSaveContext &sc )
+{
+    QString listOfPoint;
+    int maxX=0;
+    int maxY=0;
+    KoPointArray::ConstIterator it( points.begin() );
+    for ( ; it != points.end(); ++it ) 
+    {
+        int tmpX = int( ( *it ).x() * 10000 );
+        int tmpY = int( ( *it ).y() * 10000 );
+        //if ( !listOfPoint.isEmpty() )
+            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+        //else
+        //    listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+        maxX = QMAX( maxX, tmpX );
+        maxY = QMAX( maxY, tmpY );
+    }
+    sc.xmlWriter.addAttribute("draw:points", listOfPoint );
+    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+    return true;
+}
+
+bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element, 
+                                          KoOasisContext & context, KPRLoadingInfo *info )
+{
+    QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
+    QStringList viewBox = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+    //for ( QStringList::Iterator it = viewBox.begin(); it != viewBox.end(); ++it )
+    //{
+    //    kdDebug(33001) << "viewBox = " << *it << endl;
+    //}
+
+    int left = 0;
+    int top = 0;
+    int right = 0;
+    int bottom = 0;
+
+    if ( viewBox.size() == 4 )
+    {
+        QStringList::Iterator it = viewBox.begin();
+        left = ( *it++ ).toInt();
+        top = ( *it++ ).toInt();
+        right = ( *it++ ).toInt();
+        bottom = ( *it ).toInt();
+        //kdDebug(33001) << "left = " << left
+        //               << "top = " << top
+        //               << "right =" << right
+        //               << "bottom =" << bottom << endl;
+    }
+    else
+    {
+        //if no viewBox is found
+        for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+        {
+            right = QMAX( (*it).section( ',', 0, 0 ).toInt(), right );
+            bottom = QMAX( (*it).section( ',', 1, 1 ).toInt(), bottom );
+        }
+    }
+    
+    if ( right - left != 0 && bottom - top != 0 )
+    {
+        double tmp_x, tmp_y;
+        unsigned int index = 0;
+        for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+        {
+            tmp_x = double( (*it).section( ',', 0, 0 ).toInt() + left ) / ( right - left ) * ext.width();
+            tmp_y = double( (*it).section( ',', 1, 1 ).toInt() + top ) / ( bottom - top ) * ext.height();
+
+            //kdDebug(33001) << "p" << index << " x: " << tmp_x << endl;
+            //kdDebug(33001) << "p" << index << " y: " << tmp_y << endl;
+
+            points.putPoints( index, 1, tmp_x, tmp_y );
+            ++index;
+        }
+    }
+    else
+    {
+        kdDebug(33001) << "problem in viewBox values are: "
+                       << "left = " << left << ", "
+                       << "top = " << top << ", "
+                       << "right =" << right << ", "
+                       << "bottom =" << bottom << endl;
+    }
+    return true;
+}
+
+void KPShadowObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+{
+    kdDebug(33001) << "KPShadowObject::fillStyle" << endl;
+    KPObject::fillStyle( styleObjectAuto, mainStyles );
+    saveOasisStrokeElement( mainStyles, styleObjectAuto );
+}
+
 void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     //kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
@@ -1822,14 +1961,15 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) const
+void KP2DObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    saveOasisPosObject( xmlWriter,indexObj );
-    KoGenStyle styleobjectauto;
-    if ( sticky )
-        styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
-    else
-        styleobjectauto = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+    kdDebug(33001) << "KP2DObject::fillStyle" << endl;
+    KPShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    saveOasisBackgroundElement( styleObjectAuto, mainStyles );
+}
+
+void KP2DObject::saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+{
     switch ( getFillType() )
     {
         case FT_BRUSH:
@@ -1838,32 +1978,20 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
             //todo FIXME when text object doesn't have a background
             if( brush != QBrush() )
             {
-                KoOasisStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
+                KoOasisStyles::saveOasisFillStyle( styleObjectAuto, mainStyles, brush );
             }
             else
             {
-                styleobjectauto.addProperty( "draw:fill","none" );
+                styleObjectAuto.addProperty( "draw:fill","none" );
             }
             break;
         }
         case FT_GRADIENT:
-            styleobjectauto.addProperty( "draw:fill","gradient" );
-            styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
+            styleObjectAuto.addProperty( "draw:fill","gradient" );
+            styleObjectAuto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
             break;
     }
-    saveOasisObjectProtectStyle( styleobjectauto );
-
-    saveOasisStrokeElement( mainStyles, styleobjectauto );
-    saveOasisMarginElement( styleobjectauto );
-    saveOasisShadowElement( styleobjectauto );
-    saveOasisPictureElement( styleobjectauto );
-
-    if ( sticky )
-        return mainStyles.lookup( styleobjectauto, "pr" );
-    else
-        return mainStyles.lookup( styleobjectauto, "gr" );
 }
-
 
 
 QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const

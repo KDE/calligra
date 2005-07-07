@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,7 +71,6 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
     virtual void loadOasisGroupObject( KPresenterDoc *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
-    virtual bool saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj) const;
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
@@ -101,6 +101,9 @@ public:
     virtual void decCmdRef();
 
 protected:
+    virtual const char * getOasisElementName() const;
+    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+
     void updateSizes( double fx, double fy );
     void updateCoords( double dx, double dy );
 

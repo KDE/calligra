@@ -63,10 +63,12 @@ public:
         { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
-    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoSavingContext& context, int indexObj ) const;
 
     virtual double load(const QDomElement &element);
 protected:
+    virtual const char * getOasisElementName() const;
+    virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+
     virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
 

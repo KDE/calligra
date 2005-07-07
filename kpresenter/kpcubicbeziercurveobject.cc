@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,14 +61,15 @@ DCOPObject* KPCubicBezierCurveObject::dcopObject()
     return dcop;
 }
 
-bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
+bool KPCubicBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
-    //saveOasisShadowElement( styleobjectauto );
-    //KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles );
-//
-    //call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
+    kdDebug()<<"bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter & xmlWriter ) not implemented\n";
     return true;
+}
+
+const char * KPCubicBezierCurveObject::getOasisElementName() const
+{
+    return "draw:custom-shape"; 
 }
 
 void KPCubicBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo* info )

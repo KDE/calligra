@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -132,21 +133,20 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 }
 
 
-bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj) const
+bool KPGroupObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    xmlWriter.startElement( "draw:g" );
-
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-#if 0
-        if ( it.current()->getType() == OT_PART )
-            continue;
-#endif
-        it.current()->saveOasis( xmlWriter, context, indexObj );
+        //TODO what to do with parts?
+        it.current()->saveOasisObject( sc );
     }
-    xmlWriter.endElement();
     return true;
+}
+
+const char * KPGroupObject::getOasisElementName() const
+{
+    return "draw:g";
 }
 
 
