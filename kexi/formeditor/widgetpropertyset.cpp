@@ -769,7 +769,7 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 	QStringList list;
 	QString value = Container::layoutTypeToString(container->layoutType());
 
-	list << "NoLayout" << "HBox" << "VBox" << "Grid";
+	list << "NoLayout" << "HBox" << "VBox" << "Grid" << "HFlow" << "VFlow";
 
 	Property *p = new Property("layout", createValueList(0, list), value,
 		i18n("Container's Layout"), i18n("Container's Layout"));

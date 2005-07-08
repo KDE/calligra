@@ -32,6 +32,10 @@ class KEXIEXTWIDGETS_EXPORT KexiFlowLayout : public QLayout
 
 		~KexiFlowLayout();
 
+		/*! \return the widgets in the order of the layout,
+		 ie as it is stored in m_list. You must delete the list after using it. */
+		QPtrList<QWidget>*  widgetList();
+
 		void  setOrientation(Orientation orientation) { m_orientation = orientation; }
 		Qt::Orientation  orientation() { return m_orientation; }
 

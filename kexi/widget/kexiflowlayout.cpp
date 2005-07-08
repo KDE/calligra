@@ -107,6 +107,17 @@ KexiFlowLayout::iterator()
 	return QLayoutIterator( new KexiFlowLayoutIterator(&m_list) );
 }
 
+QPtrList<QWidget>*
+KexiFlowLayout::widgetList()
+{
+	QPtrList<QWidget> *list = new QPtrList<QWidget>();
+	for(QLayoutItem *item = m_list.first(); item; item = m_list.next()) {
+		if(item->widget())
+			list->append(item->widget());
+	}
+	return list;
+}
+
 void
 KexiFlowLayout::invalidate()
 {

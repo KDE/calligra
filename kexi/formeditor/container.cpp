@@ -40,6 +40,7 @@
 #include "formmanager.h"
 #include "commands.h"
 #include "events.h"
+#include "kexiflowlayout.h"
 
 using namespace KFormDesigner;
 
@@ -566,10 +567,6 @@ Container::setLayout(LayoutType type)
 
 	switch(type)
 	{
-		case NoLayout:
-		{
-			return;
-		}
 		case HBox:
 		{
 			m_layout = (QLayout*) new QHBoxLayout(m_container, m_margin, m_spacing);
@@ -587,12 +584,30 @@ Container::setLayout(LayoutType type)
 			createGridLayout();
 			break;
 		}
+		case  HFlow:
+		{
+			KexiFlowLayout *flow = new KexiFlowLayout(m_container,m_margin, m_spacing);
+			flow->setOrientation(Horizontal);
+			m_layout = (QLayout*)flow;
+			createFlowLayout();
+			break;
+		}
+		case VFlow:
+		{
+			KexiFlowLayout *flow = new KexiFlowLayout(m_container,m_margin, m_spacing);
+			flow->setOrientation(Vertical);
+			m_layout = (QLayout*)flow;
+			createFlowLayout();
+			break;
+		}
 		default:
 		{
-			kdDebug() << "WRONG LAYOUT TYPE " << endl;
+			m_layType = NoLayout;
 			return;
 		}
 	}
+	m_container->setGeometry(m_container->geometry()); // just update layout
+	m_layout->activate();
 }
 
 void
@@ -615,12 +630,71 @@ Container::createBoxLayout(WidgetList *list)
 	for(QWidget *obj = list->first(); obj; obj = list->next())
 		layout->addWidget(obj);
 	delete list;
-
-	layout->activate();
 }
 
 void
-Container::createGridLayout()
+Container::createFlowLayout()
+{
+	KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(m_layout);
+	if(!flow || m_tree->children()->isEmpty())
+		return;
+
+	const int offset = 15;
+	WidgetList *list=0, *list2=0;
+	if(flow->orientation() == Horizontal) {
+		list = new VerWidgetList();
+		list2 = new HorWidgetList();
+	}
+	else {
+		list = new HorWidgetList();
+		list2 = new VerWidgetList();
+	}
+
+	// fill the list
+	for(ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
+		list->append( tree->widget());
+	list->sort();
+
+	QWidget *lastWidget = list->getLast();
+	if(flow->orientation() == Horizontal) {
+		int y = list->first()->y();
+		for(QWidget *w = list->first(); w; w = list->next()) {
+			if( (w->y() <= y +offset) && w != lastWidget)
+				list2->append(w);
+			else {// start a new line
+				if(w == lastWidget)
+					list2->append(w);
+				list2->sort();
+				for(QWidget *obj = list2->first(); obj; obj = list2->next())
+					flow->add(obj);
+				list2->clear();
+				y = w->y();
+			}
+		}
+	}
+	else {
+		int x = list->first()->x();
+		for(QWidget *w = list->first(); w; w = list->next()) {
+			if( (w->x() <= x +offset) && w != lastWidget)
+				list2->append(w);
+			else {// start a new line
+				if(w == lastWidget)
+					list2->append(w);
+				list2->sort();
+				for(QWidget *obj = list2->first(); obj; obj = list2->next())
+					flow->add(obj);
+				list2->clear();
+				x = w->x();
+			}
+		}
+	}
+
+	delete list;
+	delete list2;
+}
+
+void
+Container::createGridLayout(bool testOnly)
 {
 	//Those lists sort widgets by y and x
 	VerWidgetList *vlist = new VerWidgetList();
@@ -641,26 +715,28 @@ Container::createGridLayout()
 
 	// First we need to make sure that two widgets won't be in the same row,
 	// ie that no widget overlap another one
-	for(WidgetListIterator it(*vlist); it.current() != 0; ++it)
-	{
-		QWidget *w = it.current();
-		WidgetListIterator it2 = it;
+	if(!testOnly) {
+		for(WidgetListIterator it(*vlist); it.current() != 0; ++it)
+		{
+			QWidget *w = it.current();
+			WidgetListIterator it2 = it;
 
-		for(; it2.current() != 0; ++it2) {
-			QWidget *nextw = it2.current();
-			if((w->y() >= nextw->y()) || (nextw->y() >= w->geometry().bottom()))
-				break;
+			for(; it2.current() != 0; ++it2) {
+				QWidget *nextw = it2.current();
+				if((w->y() >= nextw->y()) || (nextw->y() >= w->geometry().bottom()))
+					break;
 
-			if(!w->geometry().intersects(nextw->geometry()))
-				break;
-			// If the geometries of the two widgets intersect each other,
-			// we move one of the widget to the rght or bottom of the other
-			if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
-				nextw->move(nextw->x(), w->geometry().bottom()+1);
-			else if(nextw->x() >= w->x())
-				nextw->move(w->geometry().right()+1, nextw->y());
-			else
-				w->move(nextw->geometry().right()+1, nextw->y());
+				if(!w->geometry().intersects(nextw->geometry()))
+					break;
+				// If the geometries of the two widgets intersect each other,
+				// we move one of the widget to the rght or bottom of the other
+				if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
+					nextw->move(nextw->x(), w->geometry().bottom()+1);
+				else if(nextw->x() >= w->x())
+					nextw->move(w->geometry().right()+1, nextw->y());
+				else
+					w->move(nextw->geometry().right()+1, nextw->y());
+			}
 		}
 	}
 
@@ -719,8 +795,11 @@ Container::createGridLayout()
 	kdDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
 
 	// We create the layout ..
-	QGridLayout *layout = new QGridLayout(m_container, rows.size(), cols.size(), m_margin, m_spacing, "grid");
-	m_layout = (QLayout*)layout;
+	QGridLayout *layout=0;
+	if(!testOnly) {
+		layout = new QGridLayout(m_container, rows.size(), cols.size(), m_margin, m_spacing, "grid");
+		m_layout = (QLayout*)layout;
+	}
 
 	// .. and we fill it with widgets
 	for(WidgetListIterator it(*vlist); it.current() != 0; ++it)
@@ -784,20 +863,19 @@ Container::createGridLayout()
 		 // " and will go to the col " << endcol << endl;
 
 		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
-		if(!endrow && !endcol)
-		{
+		if(!endrow && !endcol) {
+			if(!testOnly)
+				layout->addWidget(w, wrow, wcol);
 			item->setGridPos(wrow, wcol, 0, 0);
-			layout->addWidget(w, wrow, wcol);
 		}
-		else
-		{
+		else {
 			if(!endcol)  endcol = wcol;
 			if(!endrow)  endrow = wrow;
-			layout->addMultiCellWidget(w, wrow, endrow, wcol, endcol);
+			if(!testOnly)
+				layout->addMultiCellWidget(w, wrow, endrow, wcol, endcol);
 			item->setGridPos(wrow, wcol, endrow-wrow+1, endcol-wcol+1);
 		}
 	}
-	layout->activate();
 }
 
 QString
@@ -808,6 +886,8 @@ Container::layoutTypeToString(int type)
 		case HBox: return "HBox";
 		case VBox: return "VBox";
 		case Grid: return "Grid";
+		case HFlow: return "HFlow";
+		case VFlow: return "VFlow";
 		default:   return "NoLayout";
 	}
 }
@@ -818,6 +898,8 @@ Container::stringToLayoutType(const QString &name)
 	if(name == "HBox") return HBox;
 	if(name == "VBox") return VBox;
 	if(name == "Grid") return Grid;
+	if(name == "HFlow")  return HFlow;
+	if(name == "VFlow")  return VFlow;
 	return NoLayout;
 }
 

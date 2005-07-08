@@ -74,7 +74,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 	Q_OBJECT
 
 	public:
-		enum LayoutType { NoLayout=0, HBox, VBox, Grid, /* special types */ HSplitter, VSplitter };
+		enum LayoutType { NoLayout=0, HBox, VBox, Grid, HFlow, VFlow, /* special types */ HSplitter, VSplitter };
 
 		/**
 		 * Creates a Container from the widget \a container, which have
@@ -165,9 +165,11 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
 		void		createBoxLayout(WidgetList *list);
-		/*! Internal function to create a GridLayout.
-		  */
-		void		createGridLayout();
+		/*! Internal function to create a KexiFlowLayout. */
+		void  createFlowLayout();
+		/*! Internal function to create a GridLayout. if \a testOnly is true, the layout
+		  is simulated, and only the widget's grid info aris filled. */
+		void		createGridLayout(bool testOnly=false);
 
 		void  drawConnection(QMouseEvent *mev);
 		void  drawSelectionRect(QMouseEvent *mev);
