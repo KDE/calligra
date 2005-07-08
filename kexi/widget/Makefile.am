@@ -9,7 +9,7 @@ libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexidbconnectionwidgetdetailsbase.ui kexidbdrivercombobox.cpp \
 	kexieditor.cpp \
 	kexifieldlistview.cpp kexifieldcombobox.cpp kexidatasourcecombobox.cpp \
-	kexipropertyeditorview.cpp kexiflowlayout.cpp
+	kexipropertyeditorview.cpp
 
 #TODO	kexidatasourcecombo.cpp kexidatasourcewizard.cpp kexidswelcome.cpp kexidssource.cpp kexidatasourcefields.cpp 
 

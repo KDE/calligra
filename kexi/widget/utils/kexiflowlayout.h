@@ -23,7 +23,7 @@
 #include <qlayout.h>
 #include <qptrlist.h>
 
-class KEXIEXTWIDGETS_EXPORT KexiFlowLayout : public QLayout
+class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
 	public:
 		KexiFlowLayout(QWidget *parent, int border=0, int space=-1, const char *name=0);

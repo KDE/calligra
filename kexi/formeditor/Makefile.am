@@ -19,6 +19,7 @@ libkformdesigner_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp \
 METASOURCES = AUTO
 libkformdesigner_la_LIBADD = \
   $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
+  $(top_builddir)/kexi/widget/utils/libkexiguiutils.la \
   $(top_builddir)/kexi/widget/tableview/libkexidatatable.la \
   $(top_builddir)/lib/koproperty/libkoproperty.la \
   $(LIB_KPARTS)
