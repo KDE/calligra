@@ -145,7 +145,7 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget( QWidget* parent, const cha
 {
 	mainWidget = new KexiDBConnectionWidget( this, "mainWidget" );
 	mainWidget->layout()->setMargin(KDialog::marginHint());
-	addTab( mainWidget, i18n("&Information") );
+	addTab( mainWidget, i18n("Information") );
 
 //	QVBox *page2 = new QVBox(this);
 //	page2->setMargin(KDialog::marginHint());
@@ -154,7 +154,7 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget( QWidget* parent, const cha
 //	m_descriptionEdit = new KTextEdit(page2);
 //	lbl->setBuddy(m_descriptionEdit);
 	detailsWidget = new KexiDBConnectionWidgetDetailsBase(this, "detailsWidget");
-	addTab( detailsWidget, i18n("&Details") );
+	addTab( detailsWidget, i18n("Details") );
 }
 
 KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
