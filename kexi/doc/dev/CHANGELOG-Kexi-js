@@ -530,6 +530,14 @@ TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 
+TODO: koproperty: us ListData-like struct instead of QMap, because data combo boxes should be sorted
+
+2005-07-08
+KoProperty
+- 'list data' introduced to clearly define 'keys' and 'strings' for combobox-like editors
+- cursor editor fixed
+- other minor fixes
+
 2005-07-05..07
 Form Designer
 - Data source fields can be dragged from Data Source Pane 

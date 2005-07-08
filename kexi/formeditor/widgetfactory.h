@@ -406,7 +406,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 	protected slots:
 		/*!
-		Default implementation will change property "text".
+		Default implementation changes "text" property.
 		You have to reimplement this function for editing inside the Form to work if your widget's
 		property you want to change isn't named "text".
 		This slot is called when the line edit text changes, and you have to make

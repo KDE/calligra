@@ -226,7 +226,7 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty
 	bool visible;
 	//if there is no more than 1 subType name or it's a PK: hide the property
 	prop = &set["subType"];
-	visible = prop->valueList() && prop->valueList()->count() > 1
+	visible = prop->listData() && prop->listData()->keys.count() > 1
 		&& set["primaryKey"].value().toBool()==false;
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
@@ -582,7 +582,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KoProperty::Property *subTypeProperty = &set["subType"];
 
 		//update subtype list and value
-		subTypeProperty->setValueList( nlist, slist );
+		subTypeProperty->setListData( nlist, slist );
 		if (set["primaryKey"].value().toBool()==true) //primary keys require big int
 			fieldType = KexiDB::Field::BigInteger;
 		subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );

@@ -24,13 +24,12 @@
 #include <qobject.h>
 #include <qstrlist.h>
 
+#include <koproperty/set.h>
+#include <koproperty/property.h>
+
 class QMetaObject;
 class QWidget;
 
-namespace KoProperty {
-	class Property;
-	class Set;
-}
 using namespace KoProperty;
 
 namespace KFormDesigner {
@@ -102,7 +101,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! Creates a map property description->prop. value from
 		 the list of keys \a list. */
-		QMap<QString, QVariant> createValueList(WidgetInfo *winfo, const QStringList &list);
+		Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
 
 		/*! Changes \a property old value and changed state, using the value
 		stored in \a tree. */

@@ -40,9 +40,6 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
 
-#include <koproperty/set.h>
-#include <koproperty/property.h>
-
 using namespace KFormDesigner;
 
 namespace KFormDesigner {
@@ -432,10 +429,12 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	if(d->isUndoing)
 		return;
 
+	const bool alterLastCommand = d->lastCommand && d->lastCommand->property() == property;
+
 	if(d->widgets.count() == 1) // one widget selected
 	{
 		// If the last command is the same, we just change its value
-		if(d->lastCommand && d->lastCommand->property() == property)
+		if(alterLastCommand)
 			d->lastCommand->setValue(value);
 		else  {
 //			if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
@@ -449,16 +448,16 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 			ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
 			if (tree && p.isModified())
 				tree->addModifiedProperty(property, d->widgets.first()->property(property));
+		}
 
 			if(property == "name")
 				emit widgetNameChanged(d->widgets.first()->name(), p.value().toCString());
 			d->widgets.first()->setProperty(property, value);
 			emit widgetPropertyChanged(d->widgets.first(), property, value);
-		}
 	}
 	else
 	{
-		if(d->lastCommand && d->lastCommand->property() == property)
+		if(alterLastCommand)
 			d->lastCommand->setValue(value);
 		else {
 			if (d->slotPropertyChanged_addCommandEnabled) {
@@ -470,17 +469,19 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 				d->lastCommand = new PropertyCommand(this, list, value, property);
 				d->manager->activeForm()->addCommand(d->lastCommand, false);
 			}
+		}
 
 			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
 			{
-				ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
-				if(tree && p.isModified())
-					tree->addModifiedProperty(property, w->property(property));
-
+				if (!alterLastCommand) {
+					ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
+					if(tree && p.isModified())
+						tree->addModifiedProperty(property, w->property(property));
+				}
 				w->setProperty(property, value);
 				emit widgetPropertyChanged(w, property, value);
 			}
-		}
+		
 	}
 }
 
@@ -942,10 +943,11 @@ WidgetPropertySet::valueCaption(const QCString &name)
 	return d->propValCaption[name];
 }
 
-QMap<QString, QVariant>
+KoProperty::Property::ListData*
 WidgetPropertySet::createValueList(WidgetInfo *winfo, const QStringList &list)
 {
-	QMap <QString, QVariant> map;
+//	QMap <QString, QVariant> map;
+	QStringList names;
 	QStringList::ConstIterator endIt = list.end();
 	for(QStringList::ConstIterator it = list.begin(); it != endIt; ++it) {
 		QString n( d->propValCaption[ (*it).latin1() ] );
@@ -953,14 +955,17 @@ WidgetPropertySet::createValueList(WidgetInfo *winfo, const QStringList &list)
 			if (winfo)
 				n = d->manager->lib()->propertyDescForValue( winfo, (*it).latin1() );
 			if (n.isEmpty())
-				map.insert(*it, (*it).latin1()); //untranslated
+				names.append( *it ); //untranslated
+//				map.insert(*it, (*it).latin1()); //untranslated
 			else
-				map.insert(*it, n);
+				names.append( n );
+//				map.insert(*it, n);
 		}
 		else
-			map.insert(*it, n);
+			names.append( n );
+//			map.insert(*it, n);
 	}
-	return map;
+	return new KoProperty::Property::ListData(list, names);
 }
 
 void
