@@ -27,20 +27,31 @@
 namespace KSpread
 {
 
-class Formula;
+class ValueCalc;
 
-typedef KSpreadValue (*FunctionPtr)( const Formula*, QValueVector<KSpreadValue> );
+typedef KSpreadValue (*FunctionPtr)(QValueVector<KSpreadValue>, ValueCalc *);
 
 class Function
 {
 public:
   Function( const QString& name, FunctionPtr ptr ); 
   ~Function();
+  /**
+  setParamCount sets allowed parameter count for a function.
+  if max=0, it means max=min. If max=-1, there is no upper limit.
+  */
+  void setParamCount (int min, int max = 0);
+  /** is it okay for the function to receive this many parameters ? */
+  bool paramCountOkay (int count);
+  /** when set to true, the function can receive arrays. When set to
+  false, the auto-array mechamism will be used for arrays (so the
+  fuction will receive simple values, not arrays). */
+  void setAcceptArray (bool accept = true);
   QString name() const;
   QString localizedName() const;
   QString helpText() const;
   void setHelpText( const QString& text );
-  KSpreadValue exec( const Formula* formula, QValueVector<KSpreadValue> args );
+  KSpreadValue exec (QValueVector<KSpreadValue> args, ValueCalc *calc);
   
 private:
   class Private;

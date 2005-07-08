@@ -57,6 +57,12 @@ class ValueCalc {
   KSpreadValue log (const KSpreadValue &number, double base = 10);
   KSpreadValue ln (const KSpreadValue &number);
 
+  /** goniometric functions */
+  KSpreadValue sin (const KSpreadValue &number);
+  KSpreadValue cos (const KSpreadValue &number);
+  KSpreadValue tg (const KSpreadValue &number);
+  KSpreadValue cotg (const KSpreadValue &number);
+
   /** basic range functions */
   KSpreadValue sum (const KSpreadValue &range);
   int count (const KSpreadValue &range);

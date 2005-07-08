@@ -196,6 +196,47 @@ KSpreadValue ValueCalc::log (const KSpreadValue &number, double base)
   return res;
 }
 
+KSpreadValue ValueCalc::sin (const KSpreadValue &number)
+{
+  KSpreadValue res = KSpreadValue (::sin (converter->asFloat (number).asFloat()));
+
+  if (number.isNumber())
+    res.setFormat (number.format());
+
+  return res;
+}
+
+KSpreadValue ValueCalc::cos (const KSpreadValue &number)
+{
+  KSpreadValue res = KSpreadValue (::cos (converter->asFloat (number).asFloat()));
+
+  if (number.isNumber())
+    res.setFormat (number.format());
+
+  return res;
+}
+
+KSpreadValue ValueCalc::tg (const KSpreadValue &number)
+{
+  KSpreadValue res = KSpreadValue (::tan (converter->asFloat (number).asFloat()));
+
+  if (number.isNumber())
+    res.setFormat (number.format());
+
+  return res;
+}
+
+KSpreadValue ValueCalc::cotg (const KSpreadValue &number)
+{
+  KSpreadValue res = KSpreadValue (div (1, ::tan (converter->asFloat (number).asFloat())));
+
+  if (number.isNumber())
+    res.setFormat (number.format());
+
+  return res;
+}
+
+
 // ------------------------------------------------------
 
 KSpreadValue ValueCalc::sum (const KSpreadValue &range)

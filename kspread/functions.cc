@@ -19,7 +19,7 @@
 
 #include "formula.h"
 #include "functions.h"
-#include "valueconverter.h"
+#include "valuecalc.h"
 
 #include <qdict.h>
 #include <qvaluevector.h>
@@ -36,6 +36,8 @@ class Function::Private
 public:
   QString name;
   FunctionPtr ptr;
+  int paramMin, paramMax;
+  bool acceptArray;
 };
 
 class FunctionRepository::Private
@@ -54,6 +56,9 @@ Function::Function( const QString& name, FunctionPtr ptr )
   d = new Private;
   d->name = name;
   d->ptr = ptr;
+  d->acceptArray = false;
+  d->paramMin = 1;
+  d->paramMax = 1;
 }
 
 Function::~Function()
@@ -66,10 +71,38 @@ QString Function::name() const
   return d->name;
 }
 
-KSpreadValue Function::exec( const Formula* formula, QValueVector<KSpreadValue> args )
+void Function::setParamCount (int min, int max)
 {
+  d->paramMin = min;
+  d->paramMax = (max == 0) ? min : max;
+}
+
+bool Function::paramCountOkay (int count)
+{
+  // less than needed
+  if (count < d->paramMin) return false;
+  // no upper limit
+  if (d->paramMax == -1) return true;
+  // more than needed
+  if (count > d->paramMax) return false;
+  // okay otherwise
+  return true;
+}
+
+void Function::setAcceptArray (bool accept) {
+  d->acceptArray = accept;
+}
+
+KSpreadValue Function::exec (QValueVector<KSpreadValue> args, ValueCalc *calc)
+{
+  // check number of parameters
+  if (!paramCountOkay (args.count()))
+    return KSpreadValue::errorVALUE();
+
+  // TODO: work on arrays if need be
+
   if( !d->ptr ) return KSpreadValue::errorVALUE();
-  return (*d->ptr)( formula, args );
+  return (*d->ptr) (args, calc);
 }
 
 static KStaticDeleter<FunctionRepository> fr_sd;
@@ -83,26 +116,9 @@ FunctionRepository* FunctionRepository::self()
   return s_self;
 }
 
-KSpreadValue function_sin( const Formula* formula, QValueVector<KSpreadValue> args )
+KSpreadValue function_sin (QValueVector<KSpreadValue> args, ValueCalc *calc)
 {
-/*
-  (Tomas:)
-  Commented out as we have no locale available. The way used to handle
-  locale pointers needs to be changed, we now have three zillions pointers
-  all pointing to the same object...
-  Also, we don't have the converter ready ... That should be done by the
-  repository, before giving the call to us
-  
-  KSpreadValue result;
-  if( args.count() != 1 )
-    return KSpreadValue::errorVALUE();
-    
-  KSpreadValue angle = converter()->asFloat( args[0] );
-  if( angle.isError() )
-    return KSpreadValue::errorVALUE();
-  
-  return KSpreadValue( sin( angle.asFloat() ) );
-*/
+  return calc->sin (args[0]);
 }
 
 FunctionRepository::FunctionRepository()
@@ -113,7 +129,10 @@ FunctionRepository::FunctionRepository()
   
   // registerMathFunction
   
-  add( new Function( "SIN", function_sin ) );
+  Function *fn;
+  
+  fn = new Function ("SIN", function_sin);
+  add (fn);
   
   // load desc/help from XML file
 }

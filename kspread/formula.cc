@@ -1311,7 +1311,7 @@ KSpreadValue Formula::eval() const
 
       // calling function
       case Opcode::Function:
-        return KSpreadValue::errorVALUE();
+        // return KSpreadValue::errorVALUE();
         
         if( stack.count() < index )
           // (Tomas) umm, how could that be ? I mean, the index value
@@ -1327,7 +1327,7 @@ KSpreadValue Formula::eval() const
         function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
-        stack.push( function->exec( this, args ) );
+        stack.push (function->exec (args, calc));
         
         break;
 
@@ -1336,6 +1336,12 @@ KSpreadValue Formula::eval() const
     }
   }
 
+  if (!d->cell) {
+    delete parser;
+    delete converter;
+    delete calc;
+  }
+  
   // more than one value in stack ? unsuccesful execution...
   if( stack.count() != 1 )
     return KSpreadValue::errorVALUE();

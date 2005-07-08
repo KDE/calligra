@@ -245,5 +245,9 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "(2*3)/(6-2*3)", KSpreadValue::errorDIV0() );
   CHECK_EVAL( "1e3+7/0", KSpreadValue::errorDIV0() );
   CHECK_EVAL( "2^(99/0)", KSpreadValue::errorDIV0() );
-  
+ 
+  //the built-in sine function
+  CHECK_EVAL ("SIN(0)", KSpreadValue(0));
+  CHECK_EVAL ("2+sin(\"2\"-\"2\")", KSpreadValue(2));
+  CHECK_EVAL ("\"1\"+sin(\"0\")", KSpreadValue(1));
 }
