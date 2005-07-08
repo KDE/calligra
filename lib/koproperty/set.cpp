@@ -34,6 +34,8 @@
 
 namespace KoProperty {
 
+static Property Set_nonConstNull;
+
 class SetPrivate
 {
 	public:
@@ -51,7 +53,7 @@ class SetPrivate
 	QMap<Property*, QCString> groupForProperty;
 
 	bool ownProperty : 1;
-	static Property nonConstNull;
+//	static Property nonConstNull;
 	QCString prevSelection;
 	QString typeName;
 /*
@@ -173,8 +175,14 @@ Set::~Set()
 void
 Set::addProperty(Property *property, QCString group)
 {
-	if (property == 0)
+	if (property == 0) {
+		kdWarning() << "Set::addProperty(): property == 0" << endl; 
 		return;
+	}
+	if (property->name().isEmpty()) {
+		kdWarning() << "Set::addProperty(): COULD NOT ADD NULL PROPERTY" << endl; 
+		return;
+	}
 
 	if(d->dict.find(property->name())) {
 		Property *p = d->dict[property->name()];
@@ -248,6 +256,8 @@ Set::addToGroup(const QCString &group, Property *property)
 void
 Set::removeFromGroup(Property *property)
 {
+	if(!property)
+		return;
 	QCString group = d->groupForProperty[property];
 	d->propertiesOfGroup[group].remove(property->name());
 	d->groupForProperty.remove(property);
@@ -297,12 +307,14 @@ Property&
 Set::property(const QCString &name)
 {
 	Property *p = d->dict[name];
-	if(!p) {
-		p = new Property();
-		//addProperty(p); // maybe just return a null property
-	}
-
-	return *p;
+	if (p)
+		return *p;
+//		p = new Property();
+//		//addProperty(p); // maybe just return a null property
+//	}
+	Set_nonConstNull.setName(0); //to ensure returned property is null
+	kdWarning() << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
+	return Set_nonConstNull;
 }
 
 Property&
@@ -376,6 +388,7 @@ Set::typeName() const
 	return d->typeName;
 }
 
+/////////////////////////////////////////////////////
 
 Buffer::Buffer()
 	:Set(false)

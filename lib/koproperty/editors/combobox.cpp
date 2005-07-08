@@ -33,7 +33,7 @@
 
 #include "property.h"
 
-namespace KoProperty {
+using namespace KoProperty;
 
 ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -69,20 +69,35 @@ ComboBox::~ComboBox()
 QVariant
 ComboBox::value() const
 {
-	if(property()->valueList() && property()->valueList()->contains(m_edit->currentText()))
-		return (*(property()->valueList()))[m_edit->currentText()];
-	return QVariant();
+	if (!property()->listData())
+		return QVariant();
+	const int idx = m_edit->currentItem();
+	if (idx<0 || idx>=(int)property()->listData()->keys.count())
+		return QVariant();
+	return QVariant( property()->listData()->keys[idx] );
+//	if(property()->listData() && property()->listData()->contains(m_edit->currentText()))
+//		return (*(property()->valueList()))[m_edit->currentText()];
+//	return QVariant();
 }
 
 void
 ComboBox::setValue(const QVariant &value, bool emitChange)
 {
+	int idx = property()->listData()->keys.findIndex( value );
+	if (idx>=0) {
+		m_edit->setCurrentItem(idx);
+	}
+	else {
+		kdWarning() << "PropertyEditorList::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
+		m_edit->setCurrentText(QString::null);
+	}
+
 	if(value.isNull())
 		return;
 
-	m_edit->blockSignals(true);
-	m_edit->setCurrentText(keyForValue(value));
-	m_edit->blockSignals(false);
+//	m_edit->blockSignals(true);
+//	m_edit->setCurrentText(keyForValue(value));
+//	m_edit->blockSignals(false);
 	if (emitChange)
 		emit valueChanged(this);
 }
@@ -90,7 +105,14 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 void
 ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	Widget::drawViewer(p, cg, r, keyForValue(value));
+	QString txt;
+	if (property()->listData()) {
+		const int idx = property()->listData()->keys.findIndex( value );
+		if (idx>=0)
+			txt = property()->listData()->names[ idx ];
+	}
+
+	Widget::drawViewer(p, cg, r, txt); //keyForValue(value));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, keyForValue(value));
 }
@@ -101,14 +123,13 @@ ComboBox::fillBox()
 	m_edit->clear();
 	//m_edit->clearContents();
 
-	if(!property() || !property()->valueList())
+	if(!property() || !property()->listData())
 		return;
 
-	QStringList keys = property()->valueList()->keys();
-	m_edit->insertStringList(keys);
+	m_edit->insertStringList(property()->listData()->names);
 #ifndef QT_ONLY
 	KCompletion *comp = m_edit->completionObject();
-	comp->insertItems(keys);
+	comp->insertItems(property()->listData()->names);
 	comp->setCompletionMode(KGlobalSettings::CompletionShell);
 #endif
 }
@@ -131,21 +152,25 @@ ComboBox::slotValueChanged(int)
 }
 
 
-QString
+/*QString
 ComboBox::keyForValue(const QVariant &value)
 {
 	const QMap<QString, QVariant> *list = property()->valueList();
+	Property::ListData *list = property()->listData();
+
 	if (!list)
 		return QString::null;
+	int idx = listData->keys.findIndex( value );
+
+
 	QMap<QString, QVariant>::ConstIterator endIt = list->constEnd();
 	for(QMap<QString, QVariant>::ConstIterator it = list->constBegin(); it != endIt; ++it) {
 		if(it.data() == value)
 			return it.key();
 	}
 	return QString::null;
-}
+}*/
 
-}
 
 #include "combobox.moc"
 

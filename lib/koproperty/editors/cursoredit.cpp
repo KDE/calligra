@@ -33,13 +33,16 @@
 
 #include "property.h"
 
-namespace KoProperty {
+using namespace KoProperty;
 
-QMap<QString, QVariant> *CursorEdit::m_spValues = 0;
+//QMap<QString, QVariant> *CursorEdit::m_spValues = 0;
+Property::ListData *m_cursorListData = 0;
+
 
 CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
 : ComboBox(property, parent, name)
 {
+	/*
 	if(!m_spValues) {
 		m_spValues = new QMap<QString, QVariant>();
 		(*m_spValues)[i18n("Arrow")] = Qt::ArrowCursor;
@@ -58,46 +61,83 @@ CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
 		(*m_spValues)[i18n("Pointing Hand")] = Qt::PointingHandCursor;
 		(*m_spValues)[i18n("Forbidden")] = Qt::ForbiddenCursor;
 		(*m_spValues)[i18n("What's this")] = Qt::WhatsThisCursor;
+	}*/
+
+//! @todo NOT THREAD-SAFE
+	if (!m_cursorListData) {
+		QValueList<QVariant> keys;
+		keys 
+			<< Qt::BlankCursor
+			<< Qt::ArrowCursor
+			<< Qt::UpArrowCursor
+			<< Qt::CrossCursor
+			<< Qt::WaitCursor
+			<< Qt::IbeamCursor
+			<< Qt::SizeVerCursor
+			<< Qt::SizeHorCursor
+			<< Qt::SizeBDiagCursor
+			<< Qt::SizeFDiagCursor
+			<< Qt::SizeAllCursor
+			<< Qt::SplitVCursor
+			<< Qt::SplitHCursor
+			<< Qt::PointingHandCursor
+			<< Qt::ForbiddenCursor
+			<< Qt::WhatsThisCursor;
+		QStringList strings;
+		strings << i18n("Mouse Cursor Shape", "No Cursor")
+			<< i18n("Mouse Cursor Shape", "Arrow")
+			<< i18n("Mouse Cursor Shape", "Up Arrow")
+			<< i18n("Mouse Cursor Shape", "Cross")
+			<< i18n("Mouse Cursor Shape", "Waiting")
+			<< i18n("Mouse Cursor Shape", "I")
+			<< i18n("Mouse Cursor Shape", "Size Vertical")
+			<< i18n("Mouse Cursor Shape", "Size Horizontal")
+			<< i18n("Mouse Cursor Shape", "Size Slash")
+			<< i18n("Mouse Cursor Shape", "Size Backslash")
+			<< i18n("Mouse Cursor Shape", "Size All")
+			<< i18n("Mouse Cursor Shape", "Split Vertical")
+			<< i18n("Mouse Cursor Shape", "Split Horizontal")
+			<< i18n("Mouse Cursor Shape", "Pointing Hand")
+			<< i18n("Mouse Cursor Shape", "Forbidden")
+			<< i18n("Mouse Cursor Shape", "What's this?");
+		m_cursorListData = new Property::ListData(keys, strings);
 	}
 
 	if(property)
-		property->setValueList(*m_spValues);
+		property->setListData(new Property::ListData(*m_cursorListData));
 }
 
 CursorEdit::~CursorEdit()
 {
-	delete m_spValues;
-	m_spValues = 0;
+	delete m_cursorListData;
+	m_cursorListData = 0;
 }
 
-QVariant
+/*QVariant
 CursorEdit::value() const
 {
 	kdDebug() << ComboBox::value().toInt() << endl;
 	return ComboBox::value().toInt();
-}
+}*/
 
-/*void
+void
 CursorEdit::setValue(const QVariant &value, bool emitChange)
 {
-	ComboBox::setValue(value.toCursor(), emitChange);
-}*/
+	ComboBox::setValue(value.toCursor().shape(), emitChange);
+}
 
-/*void
+void
 CursorEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	ComboBox::drawViewer(p, cg, r, keyForValue(value.toInt()));
-}*/
+	ComboBox::drawViewer(p, cg, r, value.toCursor().shape());
+}
 
 void
 CursorEdit::setProperty(Property *prop)
 {
 	if(prop && prop != property())
-		prop->setValueList(*m_spValues);
+		prop->setListData(new Property::ListData(*m_cursorListData));
 	ComboBox::setProperty(prop);
 }
 
-}
-
 #include "cursoredit.moc"
-

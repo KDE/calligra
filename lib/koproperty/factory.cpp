@@ -115,7 +115,7 @@ Factory::widgetForProperty(Property *property)
 	if (d->registeredWidgets.contains(type))
 		return d->registeredWidgets[type]->createCustomWidget(property);
 
-	if(property->valueList())
+	if(property->listData())
 		return new ComboBox(property);
 
 	switch(type)

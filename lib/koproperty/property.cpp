@@ -40,7 +40,7 @@ class PropertyPrivate
 {
 	public:
 		PropertyPrivate()
-		:  valueList(0), changed(false), storable(true), readOnly(false), visible(true),
+		:  listData(0), changed(false), storable(true), readOnly(false), visible(true),
 		 autosync(-1), custom(0), useCustomProperty(true),
 		 parent(0), children(0), relatedProperties(0),
 		 sortingKey(0)
@@ -61,7 +61,8 @@ class PropertyPrivate
 	QVariant value;
 	QVariant oldValue;
 	/*! The string-to-value correspondence list of the property.*/
-	QMap<QString, QVariant> *valueList;
+	Property::ListData* listData;
+//	QMap<QString, QVariant> *valueList;
 	QString icon;
 
 	bool changed : 1;
@@ -87,6 +88,50 @@ class PropertyPrivate
 
 using namespace KoProperty;
 
+/////////////////////////////////////////////////////////////////
+
+Property::ListData::ListData(const QStringList& keys_, const QStringList& names_)
+ : names(names_)
+// , fixed(true)
+{
+	setKeysAsStringList(keys_);
+}
+
+Property::ListData::ListData(const QValueList<QVariant> keys_, const QStringList& names_)
+ : keys(keys_), names(names_)
+// , fixed(true)
+{
+}
+
+Property::ListData::ListData()
+// : fixed(true)
+{
+}
+
+Property::ListData::~ListData()
+{
+}
+
+void Property::ListData::setKeysAsStringList(const QStringList& list)
+{
+	keys.clear();
+	for (QStringList::ConstIterator it = list.constBegin(); it!=list.constEnd(); ++it) {
+		keys.append(*it);
+	}
+}
+
+QStringList Property::ListData::keysAsStringList() const
+{
+	QStringList result;
+	for (QValueList<QVariant>::ConstIterator it = keys.constBegin(); it!=keys.constEnd(); ++it) {
+		result.append((*it).toString());
+	}
+	return result;
+}
+
+/////////////////////////////////////////////////////////////////
+
+/*
 KOPROPERTY_EXPORT QMap<QString, QVariant>
 KoProperty::createValueListFromStringLists(const QStringList &keys, const QStringList &values)
 {
@@ -101,7 +146,7 @@ KoProperty::createValueListFromStringLists(const QStringList &keys, const QStrin
 
 	return map;
 }
-
+*/
 
 
 Property::Property(const QCString &name, const QVariant &value,
@@ -122,7 +167,7 @@ Property::Property(const QCString &name, const QVariant &value,
 	d->custom = Factory::getInstance()->customPropertyForProperty(this);
 }
 
-Property::Property(const QCString &name, const QStringList &keys, const QStringList &values,
+Property::Property(const QCString &name, const QStringList &keys, const QStringList &strings,
 	const QVariant &value, const QString &caption, const QString &description, int type)
  : d( new PropertyPrivate() )
 {
@@ -131,13 +176,14 @@ Property::Property(const QCString &name, const QStringList &keys, const QStringL
 	d->description = description;
 	d->value = value;
 	d->type = type;
-	d->valueList = new QMap<QString, QVariant>();
-	*(d->valueList) = createValueListFromStringLists(keys, values);
+	setListData(keys, strings);
+//	d->valueList = new QMap<QString, QVariant>();
+//	*(d->valueList) = createValueListFromStringLists(keys, values);
 
 	d->custom = Factory::getInstance()->customPropertyForProperty(this);
 }
 
-Property::Property(const QCString &name, const QMap<QString, QVariant> &v_valueList,
+Property::Property(const QCString &name, ListData* listData, //const QMap<QString, QVariant> &v_valueList,
 	const QVariant &value, const QString &caption, const QString &description, int type)
  : d( new PropertyPrivate() )
 {
@@ -146,8 +192,9 @@ Property::Property(const QCString &name, const QMap<QString, QVariant> &v_valueL
 	d->description = description;
 	d->value = value;
 	d->type = type;
-	d->valueList = new QMap<QString, QVariant>();
-	*(d->valueList) = v_valueList;
+	d->listData = listData;
+//	d->valueList = new QMap<QString, QVariant>();
+//	*(d->valueList) = v_valueList;
 
 	d->custom = Factory::getInstance()->customPropertyForProperty(this);
 }
@@ -320,26 +367,33 @@ Property::resetValue()
 		emit (*it)->propertyReset(**it, *this);
 }
 
-const QMap<QString, QVariant>*
-Property::valueList() const
+//const QMap<QString, QVariant>*
+Property::ListData*
+Property::listData() const
 {
-	return d->valueList;
+	return d->listData;
 }
 
 void
-Property::setValueList(const QMap<QString, QVariant> &list)
+Property::setListData(ListData* list) //const QMap<QString, QVariant> &list)
 {
-	if(!d->valueList)
-		d->valueList = new QMap<QString, QVariant>();
-	*(d->valueList) = list;
+//	if(!d->valueList)
+//		d->valueList = new QMap<QString, QVariant>();
+	if (list == d->listData)
+		return;
+	delete d->listData;
+	d->listData = list;
 }
 
 void
-Property::setValueList(const QStringList &keys, const QStringList &values)
+Property::setListData(const QStringList &keys, const QStringList &names)
 {
-	if(!d->valueList)
-		d->valueList = new QMap<QString, QVariant>();
-	*(d->valueList) = createValueListFromStringLists(keys, values);
+	ListData* list = new ListData(keys, names);
+	setListData(list);
+
+//	if(!d->valueList)
+//		d->valueList = new QMap<QString, QVariant>();
+//	*(d->valueList) = createValueListFromStringLists(keys, values);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -444,9 +498,9 @@ Property::operator= (const Property &property)
 	if(&property == this)
 		return *this;
 
-	if(d->valueList) {
-		delete d->valueList;
-		d->valueList = 0;
+	if(d->listData) {
+		delete d->listData;
+		d->listData = 0;
 	}
 	if(d->children) {
 		delete d->children;
@@ -474,8 +528,8 @@ Property::operator= (const Property &property)
 	d->readOnly = property.d->readOnly;
 	d->options = property.d->options;
 
-	if(property.d->valueList) {
-		d->valueList = new QMap<QString, QVariant>(*(property.d->valueList));
+	if(property.d->listData) {
+		d->listData = new ListData(*property.d->listData); //QMap<QString, QVariant>(*(property.d->valueList));
 	}
 	if(property.d->children) {
 		if(property.d->custom) {

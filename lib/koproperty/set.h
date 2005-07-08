@@ -75,9 +75,11 @@ class KOPROPERTY_EXPORT Set : public QObject
 				friend class Set;
 		};
 
-
 		Set(QObject *parent=0, const QString &typeName=QString::null);
-		Set(const Set&);
+
+		/*! Constreucts a deep copy of \a set. */
+		Set(const Set& set);
+
 		~Set();
 
 		/*! Adds the property to the set, in the group. You can use any group name, except "common"
@@ -106,17 +108,24 @@ class KOPROPERTY_EXPORT Set : public QObject
 		 null property (KexiProperty::null) is returned. */
 		Property&  property( const QCString &name);
 
-		/*! Accesses a property by it's name. All property modifications are allowed
-		trough this method. For example, to set a value of a property, use:
+		/*! Accesses a property by it's name. 
+		Property reference is returned, so all property modifications are allowed.
+		If there is no such property, null property is returned, 
+		so it's good practice to use contains() is you're unsure if the property exists. 
+		For example, to set a value of a property, use:
 		/code
 		Set set;
 		...
+		if (!set.contains("myProperty")) {
+			dosomething;
+		}
 		set["myProperty"].setValue("My Value");
 		/endcode
-		\return \ref Property with given name.*/
+		\return \ref Property with given name. */
 		Property&  operator[](const QCString &name);
 
-		const Set& operator= (const Set &l);
+		/*! Creates a deep copy of \a set and assigns it to this property set. */
+		const Set& operator= (const Set &set);
 
 		/*! Change the value of property whose key is \a property to \a value.
 		By default, it only calls KexiProperty::setValue(). */

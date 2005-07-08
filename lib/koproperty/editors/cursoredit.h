@@ -36,11 +36,11 @@ class KOPROPERTY_EXPORT CursorEdit : public ComboBox
 		CursorEdit(Property *property, QWidget *parent=0, const char *name=0);
 		~CursorEdit();
 
-		virtual QVariant value() const;
-		//virtual void setValue(const QVariant &value, bool emitChange=true);
+		//virtual QVariant value() const;
+		virtual void setValue(const QVariant &value, bool emitChange=true);
 
 		virtual void setProperty(Property *property);
-		//virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 	private:
 		static QMap<QString, QVariant> *m_spValues;

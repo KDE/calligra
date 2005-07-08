@@ -255,21 +255,32 @@ SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 : CustomProperty(property)
 {
 	if(property && (property->type() == SizePolicy) ) {
-		QMap<QString, QVariant> spValues;
-		spValues[i18n("Fixed")] = QSizePolicy::Fixed;
-		spValues[i18n("Minimum")] = QSizePolicy::Minimum;
-		spValues[i18n("Maximum")] = QSizePolicy::Maximum;
-		spValues[i18n("Preferred")] = QSizePolicy::Preferred;
-		spValues[i18n("Expanding")] = QSizePolicy::Expanding;
-		spValues[i18n("Minimum Expanding")] = QSizePolicy::MinimumExpanding;
-		spValues[i18n("Ignored")] = QSizePolicy::Ignored;
+//		QMap<QString, QVariant> spValues;
+		QValueList<QVariant> keys;
+		keys << QSizePolicy::Fixed
+			<< QSizePolicy::Minimum
+			<< QSizePolicy::Maximum
+			<< QSizePolicy::Preferred
+			<< QSizePolicy::Expanding
+			<< QSizePolicy::MinimumExpanding
+			<< QSizePolicy::Ignored;
+		QStringList strings;
+		strings << i18n("Size Policy", "Fixed")
+			<< i18n("Size Policy", "Minimum")
+			<< i18n("Size Policy", "Maximum")
+			<< i18n("Size Policy", "Preferred")
+			<< i18n("Size Policy", "Expanding")
+			<< i18n("Size Policy", "Minimum Expanding")
+			<< i18n("Size Policy", "Ignored");
 
-		property->addChild(new Property("hSizeType", 
-			spValues, (int)property->value().toSizePolicy().horData(), 
+		property->addChild(new Property("hSizeType", new Property::ListData(keys, strings),
+//			spValues, 
+			(int)property->value().toSizePolicy().horData(), 
 			i18n("Hor. Size Type"),i18n("Horizontal Size Type"),
 			SizePolicy_HorData));
-		property->addChild(new Property("vSizeType", 
-			spValues, (int)property->value().toSizePolicy().verData(), 
+		property->addChild(new Property("vSizeType", new Property::ListData(keys, strings),
+//			spValues, 
+			(int)property->value().toSizePolicy().verData(), 
 			i18n("Ver. Size Type"), i18n("Vertical Size Type"),
 			SizePolicy_VerData));
 		property->addChild(new Property("hStretch", 

@@ -34,9 +34,9 @@ class PropertyPrivate;
 class CustomProperty;
 class Set;
 
-/*! Helper function to create a value list from two string lists. */
-KOPROPERTY_EXPORT QMap<QString, QVariant> createValueListFromStringLists(
-	const QStringList &keys, const QStringList &values);
+///*! Helper function to create a value list from two string lists. */
+//KOPROPERTY_EXPORT QMap<QString, QVariant> createValueListFromStringLists(
+//	const QStringList &keys, const QStringList &values);
 
 /*! PropertyType.
 Integers that represent the type of the property. */
@@ -144,7 +144,38 @@ class KOPROPERTY_EXPORT Property
 
 		typedef QAsciiDict<Property> Dict;
 		typedef QAsciiDictIterator<Property> DictIterator;
-		
+
+		/*! Data container for list type. */
+		class KOPROPERTY_EXPORT ListData
+		{
+		public:
+			/*! Data container for list-value property.
+			 We will be able to choose an item from this list. */
+			ListData(const QStringList& keys_, const QStringList& names_);
+			ListData(const QValueList<QVariant> keys_, const QStringList& names_);
+			ListData();
+			~ListData();
+
+			void setKeysAsStringList(const QStringList& list);
+			QStringList keysAsStringList() const;
+
+			/*! The string list containing all possible keys for this property
+			 or NULL if this is not a property of type 'list'. The values in this list are ordered,
+			 so the first key element is associated with first element from
+			 the 'names' list, and so on. */
+			QValueList<QVariant> keys;
+//			QStringList keys;
+
+//! @todo what about using QValueList<QVariant> here too?
+			/*! The list of i18n'ed names that will be visible on the screen.
+			 First value is referenced by first key, and so on. */
+			QStringList names;
+
+//unused for now			/*! True (the default), if the list has fixed number of possible
+//unused for now			 items (keys). If this is false, user can add or enter own values. */
+//unused for now			bool fixed : 1;
+		};
+
 		/*! Constructs a null property. */
 		Property();
 
@@ -154,14 +185,15 @@ class KOPROPERTY_EXPORT Property
 			int type = Auto);
 
 		/*! Constructs property of \ref ValueFromList type. */
-		Property::Property(const QCString &name, const QStringList &keys, const QStringList &values, 
+		Property::Property(const QCString &name, const QStringList &keys, const QStringList &strings, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList);
 
 		/*! Constructs property of \ref ValueFromList type.
 		 This is overload of the above ctor added for convenience. */
-		Property(const QCString &name, const QMap<QString, QVariant> &v_valueList, 
+		Property(const QCString &name, ListData* listData,
+//		Property(const QCString &name, const QMap<QString, QVariant> &v_valueList, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList);
@@ -206,16 +238,19 @@ class KOPROPERTY_EXPORT Property
 
 		void resetValue();
 
-		const QMap<QString, QVariant>* valueList() const;
+//		const QMap<QString, QVariant>* valueList() const;
+		ListData* listData() const;
 
-		/*! Sets the string-to-value correspondence list of the property.
+		/*! Sets the kstring-to-value correspondence list of the property.
 		This is used to create comboboxes-like property editors.*/
-		void setValueList(const QMap<QString, QVariant> &list);
+		void setListData(ListData* list);
+//		void setValueList(const QMap<QString, QVariant> &list);
 
 		/*! Sets the string-to-value correspondence list of the property.
 		 This is used to create comboboxes-like property editors.
 		 This is overload of the above ctor added for convenience. */
-		void setValueList(const QStringList &keys, const QStringList &values);
+		void setListData(const QStringList &keys, const QStringList &names);
+
 
 		/*! Sets icon by \a name for this property. Icons are optional and are used e.g.
 		 in KexiPropertyEditor - displayed at the left hand. */
