@@ -35,6 +35,7 @@ namespace KoProperty {
 
 QT_STATIC_CONST_IMPL Property Property::null;
 
+//! @internal
 class PropertyPrivate
 {
 	public:

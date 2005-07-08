@@ -339,7 +339,7 @@ Editor::undo()
 
 	int propertySync = d->currentWidget->property()->autoSync();
 	bool sync = (propertySync != 0 && propertySync != 1) ?
-				 d->sync : bool(propertySync);
+				 d->sync : (propertySync!=0);
 
 	if(sync)
 		d->currentItem->property()->resetValue();
@@ -402,12 +402,13 @@ Editor::slotWidgetValueChanged(Widget *widget)
 {
 	if(!widget || !d->set)
 		return;
+
 	d->insideSlotValueChanged = true;
 
 	QVariant value = widget->value();
 	int propertySync = widget->property()->autoSync();
 	bool sync = (propertySync != 0 && propertySync != 1) ?
-				 d->sync : bool(propertySync);
+				 d->sync : (propertySync!=0);
 
 	if(sync) {
 		widget->property()->setValue(value);
@@ -444,6 +445,8 @@ Editor::slotWidgetRejectInput(Widget *widget)
 void
 Editor::slotClicked(QListViewItem *it)
 {
+	acceptInput();
+
 	hideEditor();
 	if(!it)
 		return;
