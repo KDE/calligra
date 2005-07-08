@@ -238,6 +238,9 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 	// TODO : percentage?
 	double value = 0;
 	const char *start = unit.latin1();
+	if(!start) {
+		return 0;
+	}
 	const char *end = getNumber( start, value );
 
 	if( uint( end - start ) < unit.length() )
@@ -741,11 +744,11 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			points.remove( '\r' );
 			points.remove( '\n' );
 			QStringList pointList = QStringList::split( ' ', points );
-			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); )
+			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it)
 			{
 				KoPoint point;
-				point.setX( (*(it++)).toDouble() );
-				point.setY( (*(it++)).toDouble() );
+				point.setX( (*it).toDouble() );
+				point.setY( (*it).toDouble() );
 				if( bFirst )
 				{
 					path->moveTo( point );
