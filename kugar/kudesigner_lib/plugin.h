@@ -21,7 +21,7 @@
 #include <qobject.h>
 #include <koproperty/property.h>
 #include <koproperty/editor.h>
-#include <koproperty/box.h>
+#include <box.h>
 
 class QString;
 class QWidget;

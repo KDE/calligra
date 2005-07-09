@@ -63,8 +63,8 @@
 #include <detailfooter.h>
 #include <detail.h>
 
-#include <editor.h>
-#include <property.h>
+#include <koproperty/editor.h>
+#include <koproperty/property.h>
 
 using namespace Kudesigner;
 

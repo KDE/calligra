@@ -173,9 +173,9 @@ void StructureWidget::refreshSectionContents( Kudesigner::Band *section, Structu
             name = tr( "Calculated Field: %1" ).arg( box->props[ "Field" ].value().toString() );
             break;
         case Kudesigner::Rtti_Special:
-            idx = box->props[ "Type" ].valueList() ->values().findIndex(
+            idx = box->props[ "Type" ].listData()->keys.findIndex(
                       box->props[ "Type" ].value().toInt() );
-            name = tr( "Special Field: %1" ).arg( box->props[ "Type" ].valueList() ->keys() [ idx ] );
+            name = tr( "Special Field: %1" ).arg( box->props[ "Type" ].listData()->keys[ idx ].toString() );
             break;
         case Kudesigner::Rtti_Line:
             name = tr( "Line" );

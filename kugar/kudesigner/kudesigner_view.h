@@ -39,13 +39,13 @@ class KWidgetAction;
 
 class KudesignerDoc;
 
-using namespace KOProperty;
 
-namespace KOProperty
+namespace KoProperty
 {
 class Editor;
 class Buffer;
 }
+using namespace KoProperty;
 
 namespace Kudesigner
 {
@@ -102,8 +102,8 @@ protected:
 private:
     Kudesigner::View *m_view;
     Kudesigner::StructureWidget *m_structure;
-    KOProperty::Editor *m_propertyEditor;
-    KOProperty::Buffer *m_buffer;
+    KoProperty::Editor *m_propertyEditor;
+    KoProperty::Buffer *m_buffer;
 
     KudesignerDoc *m_doc;
 
