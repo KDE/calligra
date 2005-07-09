@@ -38,13 +38,9 @@ KexiMigrate::KexiMigrate(QObject *parent, const char *name,
 
 //=============================================================================
 // Migration parameters
-void KexiMigrate::setData(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
+void KexiMigrate::setData(KexiMigration::Data* migrateData)
 {
-	m_externalData = externalConnectionData;
-	m_kexiDB = kexiConnection;
-	m_keepData = keep_data;
-	m_dbName = dbname;
-	m_todbname = newdbname;
+	m_MigrateData = migrateData;
 }
 
 //=============================================================================
@@ -90,8 +86,8 @@ bool KexiMigrate::performImport()
 		}
 	}
 
-  // Step 4 - Create new database as we have all required info
-	if (!createDatabase(m_todbname)) {
+	// Step 4 - Create new database as we have all required info
+	if (!createDatabase(m_MigrateData->destName)) {
 		return false;
 	}
 
@@ -100,18 +96,22 @@ bool KexiMigrate::performImport()
 	}
 
 
-	for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
-	kdDebug() << "Copying ... " << ts << endl;
-		if(!copyData(ts.current()->name(), ts)) {
-			kdDebug() << "Failed to copy table " << ts << endl;
-			m_kexiDB->debugError();
-			drv_disconnect();
-			m_kexiDB->disconnect();
-			return false;
+	// Step 5 - Copy data if asked to
+	if (m_MigrateData->keepData)
+	{
+		for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
+		kdDebug() << "Copying ... " << ts << endl;
+			if(!copyData(ts.current()->name(), ts)) {
+				kdDebug() << "Failed to copy table " << ts << endl;
+				m_MigrateData->dest->debugError();
+				drv_disconnect();
+				m_MigrateData->dest->disconnect();
+				return false;
+			}
 		}
 	}
-
-	return drv_disconnect() && m_kexiDB->disconnect();
+	
+	return drv_disconnect() && m_MigrateData->dest->disconnect();
 }
 
 //=============================================================================
@@ -130,44 +130,44 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	bool failure = false;
 	
 	kdDebug() << "Creating database [" << dbname << "]" << endl;
-	if(!m_kexiDB->connect()) {
+	if(!m_MigrateData->dest->connect()) {
 		kdDebug() << "Couldnt connect to destination database" << endl;
 		return false;
 	}
 
 
-	if(m_kexiDB->databaseExists(dbname)) {
+	if(m_MigrateData->dest->databaseExists(dbname)) {
 		//drop before recreating (user confirmed overwriting)
 //! todo for file-based databases we can use tmp filename and rename later after success...
-		if (!m_kexiDB->dropDatabase(dbname)) {
+		if (!m_MigrateData->dest->dropDatabase(dbname)) {
 			return false;
 		}
 	}
 
-	if(!m_kexiDB->createDatabase(dbname)) {
+	if(!m_MigrateData->dest->createDatabase(dbname)) {
 		kdDebug() << "Couldnt create database at destination" << endl;
 		return false;
 	}
 	
-	if (!m_kexiDB->useDatabase(dbname)) {
+	if (!m_MigrateData->dest->useDatabase(dbname)) {
 		kdDebug() << "Couldnt use newly created database" << endl;
-		m_kexiDB->disconnect();
+		m_MigrateData->dest->disconnect();
 		return false;
 	}
 
 	//Right, were connected..create the tables
 	for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
 		/*! @todo check this earlier: on creating table list! */
-		if (m_kexiDB->driver()->isSystemObjectName( ts.current()->name() ))
+		if (m_MigrateData->dest->driver()->isSystemObjectName( ts.current()->name() ))
 			continue;
-		if(!m_kexiDB->createTable( ts.current() )) {
+		if(!m_MigrateData->dest->createTable( ts.current() )) {
 			kdDebug() << "Failed to create a table" << ts.current() << endl;
-			m_kexiDB->debugError();
+			m_MigrateData->dest->debugError();
 			failure = true;
 		}
 	}
 	if (failure)
-		m_kexiDB->disconnect();
+		m_MigrateData->dest->disconnect();
 	return !failure;
 }
 

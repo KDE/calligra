@@ -23,11 +23,10 @@
 #include "keximigrate.h"
 #include "migratemanager.h"
 
-#include <qhbox.h>
 #include <qlabel.h>
-#include <qvbox.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <qvbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kcombobox.h>
 #include <kmessagebox.h>
@@ -45,6 +44,7 @@
 #include <KexiOpenExistingFile.h>
 #include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
+
 
 using namespace KexiMigration;
 
@@ -90,27 +90,30 @@ importWizard::importWizard(QWidget *parent, const char *name)
     //============================================================
 
     setMinimumSize(400, 400);
-    introPage = new QVBox(this);
+    introPage = new QWidget(this);
     setupintro();
     this->addPage(introPage, i18n("Introduction"));
-    srcTypePage = new QVBox(this);
+    srcTypePage = new QWidget(this);
     setupsrcType();
     this->addPage(srcTypePage, i18n("Select Source Database Type"));
-    srcConnPage = new QVBox(this);
+    srcConnPage = new QWidget(this);
     setupsrcconn();
     this->addPage(srcConnPage, i18n("Select Source Connection"));
-    srcdbPage = new QVBox(this);
+    srcdbPage = new QWidget(this);
     setupsrcdb();
     this->addPage(srcdbPage, i18n("Select Source Database"));
-    dstTypePage = new QVBox(this);
+    dstTypePage = new QWidget(this);
     setupdstType();
     this->addPage(dstTypePage, i18n("Select Destination Database Type"));
     setupdstTitle();
     this->addPage(dstTitlePage, i18n("Select Destination Project's Caption"));
-    dstPage = new QVBox(this);
+    dstPage = new QWidget(this);
     setupdst();
     this->addPage(dstPage, i18n("Select Destination Database"));
-    finishPage = new QHBox(this);
+    importTypePage = new QWidget(this);
+    setupImportType();
+    this->addPage(importTypePage, i18n("Type Of Import"));
+    finishPage = new QWidget(this);
     setupfinish();
     this->addPage(finishPage, i18n("Finished"));
 
@@ -129,19 +132,22 @@ importWizard::~importWizard()
 //
 void importWizard::setupintro()
 {
+    QVBoxLayout *vbox = new QVBoxLayout(introPage);
+    
     QLabel *lblIntro = new QLabel(introPage);
     lblIntro->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
     lblIntro->setText(i18n("This wizard will guide you through the process of converting an existing data set into a Kexi database."));
+    vbox->addWidget( lblIntro );
 }
 
 //===========================================================
 //
 void importWizard::setupsrcType()
 {
-    QHBox *hb = new QHBox(srcTypePage);
-    srcTypeCombo = new KComboBox(hb);
-    hb->setStretchFactor(new QWidget(hb), 1);
-    srcTypePage->setStretchFactor(new QWidget(srcTypePage), 1);
+    QHBoxLayout *hbox = new QHBoxLayout(srcTypePage);
+
+    srcTypeCombo = new KComboBox(srcTypePage);
+    hbox->addWidget(srcTypeCombo);
 
     MigrateManager manager;
 
@@ -154,19 +160,19 @@ void importWizard::setupsrcType()
 //
 void importWizard::setupsrcconn()
 {
-   QVBox *srcconnControls = new QVBox(srcConnPage);
+   QVBoxLayout *vbox = new QVBoxLayout(srcConnPage);
 
-    srcConn = new KexiConnSelectorWidget(Kexi::connset(), srcconnControls, "SrcConnSelector");
+   srcConn = new KexiConnSelectorWidget(Kexi::connset(), srcConnPage, "SrcConnSelector");
 
-    srcConn->hideHelpers();
-
+   srcConn->hideHelpers();
+   vbox->addWidget(srcConn);
 }
 
 //===========================================================
 //
 void importWizard::setupsrcdb()
 {
-    srcdbControls = new QVBox(srcdbPage);
+    QVBoxLayout *vbox = new QVBoxLayout(srcdbPage);
 
     srcdbname = NULL;
 }
@@ -179,10 +185,10 @@ void importWizard::setupdstType()
 
     QStringList names = manager.driverNames();
 
-    QHBox *hb = new QHBox(dstTypePage);
-    dstTypeCombo = new KComboBox(hb);
-    hb->setStretchFactor(new QWidget(hb), 1);
-    dstTypePage->setStretchFactor(new QWidget(dstTypePage), 1);
+    QHBoxLayout *hbox = new QHBoxLayout(dstTypePage);
+    dstTypeCombo = new KComboBox(dstTypePage);
+
+    hbox->addWidget( dstTypeCombo );
 
     dstTypeCombo->insertStringList(names);
 //! @todo hardcoded: find a way to preselect default engine item
@@ -202,12 +208,13 @@ void importWizard::setupdstTitle()
 //
 void importWizard::setupdst()
 {
-    QVBox *dstControls = new QVBox(dstPage);
+    QVBoxLayout *vbox = new QVBoxLayout(dstPage);
 
-    dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "DstConnSelector");
+    dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstPage, "DstConnSelector");
     //me: Can't connect dstconn->m_fileDlg here, it doesn't exist yet
     //connect(this, SLOT(next()), dstConn->m_fileDlg, SIGNAL(accepted()));
 
+    vbox->addWidget( dstConn );
 	connect(dstConn,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(next()));
 
@@ -227,13 +234,31 @@ void importWizard::setupdst()
 
 //===========================================================
 //
+void importWizard::setupImportType()
+{
+QVBoxLayout *vbox = new QVBoxLayout(importTypePage);
+importTypeButtonGroup = new QVButtonGroup(importTypePage);
+vbox->addWidget( importTypeButtonGroup );
+
+(void)new QRadioButton(i18n("Structure and Data"), importTypeButtonGroup);
+(void)new QRadioButton(i18n("Structure Only"), importTypeButtonGroup);
+
+importTypeButtonGroup->setExclusive( true );
+importTypeButtonGroup->setButton( 0 );
+}
+//===========================================================
+//
 void importWizard::setupfinish()
 {
     finishPage->hide();
-    QVBox *vbox = new QVBox(finishPage);
-    QLabel *lblDone = new QLabel(vbox);
+    QHBoxLayout *hbox = new QHBoxLayout(finishPage);
+    QLabel *lblDone = new QLabel(finishPage);
+    
+    
     lblDone->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
-    lblfinishTxt = new QLabel(vbox);
+    lblfinishTxt = new QLabel(finishPage);
+    
+    
     lblfinishTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 
     lblDone->setText(i18n(
@@ -244,8 +269,13 @@ void importWizard::setupfinish()
                      "information such as field types if "
                      "the wizard could not automatically "
                      "determine this for you."));
-    progress = new KProgress(100, vbox);
+    progress = new KProgress(100, finishPage);
     progress->hide();
+    
+    hbox->addWidget( lblDone );
+    hbox->addWidget( lblfinishTxt );
+    hbox->addWidget( progress );
+    
     finishPage->show();
 }
 
@@ -324,12 +354,12 @@ void importWizard::arriveSrcDBPage()
   else {
     if (!srcdbname)
     {
-      srcdbControls->hide();
+      srcdbPage->hide();
       kdDebug() << "Looks like we need a project selector widget!" << endl;
       m_prjSet = new KexiProjectSet(*(srcConn->selectedConnectionData()));
-      srcdbname = new KexiProjectSelectorWidget(srcdbControls,
+      srcdbname = new KexiProjectSelectorWidget(srcdbPage,
           "KexiMigrationProjectSelector", m_prjSet);
-      srcdbControls->show();
+      srcdbPage->show();
     }
   }
 }
@@ -413,8 +443,13 @@ void importWizard::accept()
 {
     KexiUtils::WaitCursor wait;
     QGuardedPtr<KexiDB::Connection> kexi_conn;
+    KexiMigration::Data* md;
     KexiMigrate* import;
     KexiDB::ConnectionData *cdata;
+    bool kd;
+    
+    md = new KexiMigration::Data();
+    
     QString dbname;
 
     kdDebug() << "Creating managers..." << endl;
@@ -474,21 +509,41 @@ void importWizard::accept()
     }
 
     kdDebug() << "Setting import data.." << endl;
+    if (importTypeButtonGroup->selectedId() == 0)
+    {
+        kdDebug() << "Structure and data selected" << endl;
+        kd = true;
+    }
+    else if (importTypeButtonGroup->selectedId() == 1)
+    {
+        kdDebug() << "structure only selected" << endl;
+        kd = false;
+    }
+    else
+    {
+        kdDebug() << "Neither radio button is selected (not possible?) presume keep data" << endl;
+        kd = true;
+    }
+    
     if(fileBasedSrc) {
       KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
       conn_data->setFileName(srcConn->selectedFileName());
-      import->setData(conn_data,
-                      "",
-                      kexi_conn,
-                      dbname,
-                      false);
+      
+      md->source = conn_data;
+      md->sourceName = "";
+      md->dest = kexi_conn;
+      md->destName = dbname;
+      md->keepData = kd;
+      import->setData(md);
     }
-    else {
-      import->setData(srcConn->selectedConnectionData(),
-                      srcdbname->selectedProjectData()->databaseName(),
-                      kexi_conn,
-                      dbname,
-                      false);
+    else 
+    {
+      md->source = srcConn->selectedConnectionData();
+      md->sourceName = srcdbname->selectedProjectData()->databaseName();
+      md->dest = kexi_conn;
+      md->destName = dbname;
+      md->keepData = kd;
+      import->setData(md);
     }
     kdDebug() << "Performing import..." << endl;
     KexiUtils::removeWaitCursor();

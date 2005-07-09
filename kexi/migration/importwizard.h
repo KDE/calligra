@@ -27,8 +27,8 @@
 #include <kapplication.h>
 
 
-class QHBox;
-class QVBox;
+class QHBoxLayout;
+class QVBoxLayout;
 class KComboBox;
 class KListView;
 class KLineEdit;
@@ -37,6 +37,7 @@ class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
 class KexiDBTitlePage;
+class QVButtonGroup;
 
 namespace KexiMigration {
 
@@ -59,14 +60,16 @@ private slots:
     virtual void accept();
     void helpClicked();
 private:
-    QVBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, 
-     *dstPage, *srcdbControls;
+    QWidget *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *importTypePage, *finishPage;
+    
+    QVButtonGroup *importTypeButtonGroup ;
     KexiDBTitlePage* dstTitlePage;
-    QHBox *finishPage;
+    
     KComboBox *srcTypeCombo, *dstTypeCombo;
     KexiConnSelectorWidget *srcConn, *dstConn;
     KLineEdit *dstNewDBName;
     KexiProjectSelectorWidget *srcdbname;
+    
     QLabel *lblfinishTxt;
     bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented, setupFileBasedSrcNeeded;
     KexiProjectSet* m_prjSet;
@@ -80,6 +83,7 @@ private:
     void setupdstTitle();
     void setupdst();
     void setupfinish();
+    void setupImportType();
     bool checkUserInput();
 
     void checkIfSrcTypeFileBased(const QString& srcType);

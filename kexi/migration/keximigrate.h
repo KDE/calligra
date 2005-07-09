@@ -22,8 +22,10 @@
 #ifndef KEXI_MIGRATE_H
 #define KEXI_MIGRATE_H
 
-#include "kexidb/connection.h"
+
 #include "kexidb/tableschema.h"
+#include "keximigratedata.h"
+
 #include <qstringlist.h>
 
 /*!
@@ -56,9 +58,7 @@ namespace KexiMigration
 			virtual ~KexiMigrate();
 
 			//! Data Setup.  Requires two connection objects, a name and a bool
-			void setData(KexiDB::ConnectionData* externalConnectionData,
-			             QString dbFrom, KexiDB::Connection* kexiConnection,
-			             QString newdbname, bool keep_data);
+			void setData(KexiMigration::Data*);
 
 			//! Perform an import operation
 			bool performImport();
@@ -120,16 +120,8 @@ namespace KexiMigration
 			KexiDB::Field::Type userType(const QString& fname);
 
 			// Protected data members
-			//! Connection data for external (non Kexi) database.
-			KexiDB::ConnectionData* m_externalData;
-			//! Destination KexiDB database.
-			KexiDB::Connection* m_kexiDB;
-
-			//! Name of the source DB (server based DBs only)
-			QString m_dbName;
-			//! Name of the target DB
-			/*! Should be the same as m_kexiDB->filename() for file based projects. */
-			QString m_todbname;
+			//! Migrate Options
+			KexiMigration::Data* m_MigrateData;
 
 			// Temporary values used during import (set by driver specific methods)
 			KexiDB::TableSchema* m_table;
@@ -172,7 +164,6 @@ namespace KexiMigration
 
 
 	};
-
 } //namespace KexiMigration
 
 #include <kgenericfactory.h>
