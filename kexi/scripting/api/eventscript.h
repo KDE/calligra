@@ -1,5 +1,5 @@
 /***************************************************************************
- * eventsignal.cpp
+ * eventscript.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,37 +17,54 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "eventsignal.h"
+#ifndef KROSS_API_EVENTSCRIPT_H
+#define KROSS_API_EVENTSCRIPT_H
 
-//#include "interpreter.h"
-//#include "object.h"
-//#include "list.h"
-//#include "qtobject.h"
-//#include "variant.h"
-//#include "../main/scriptcontainer.h"
-//#include "eventmanager.h"
-//#include <qvaluelist.h>
+#include <qstring.h>
+#include <qobject.h>
+#include <kaction.h>
 
-using namespace Kross::Api;
+#include "event.h"
 
-EventSignal::EventSignal(QObject* sender, QCString signal)
-    : Event(signal) //QObject::normalizeSignalSlot(signal)
-    , m_sender(sender)
-    , m_signal(signal)
-{
-}
+namespace Kross { namespace Api {
 
-EventSignal::~EventSignal()
-{
-}
+    // Forward declarations.
+    //class Object;
+    //class Variant;
+    class ScriptContainer;
+    //class EventManager;
+    //class ScriptContrainer;
 
-const QString EventSignal::getClassName() const
-{
-    return "Kross::Api::EventSignal";
-}
+    /**
+     *
+     */
+    class EventScript : public Kross::Api::Event
+    {
 
-const QString EventSignal::getDescription() const
-{
-    return "";
-}
+        public:
+
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<EventScript> Ptr;
+
+            /**
+             * Constructor.
+             */
+            EventScript(const QString& name);
+
+            /**
+             * Destructor.
+             */
+            virtual ~EventScript();
+
+            virtual const QString getClassName() const;
+            virtual const QString getDescription() const;
+
+        private:
+            //ScriptContainer* m_scriptcontainer;
+            //KAction* m_action;
+    };
+
+}}
+
+#endif
 

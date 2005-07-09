@@ -26,8 +26,9 @@
 //#include <qvariant.h>
 //#include <qsignalmapper.h>
 //#include <qguardedptr.h>
-//#include <qobject.h>
+#include <qobject.h>
 //#include <kdebug.h>
+#include <ksharedptr.h>
 
 #include "event.h"
 
@@ -45,17 +46,20 @@ namespace Kross { namespace Api {
      * instance and a functionname is represented with
      * a EventSlot and handled by the \a EventManager.
      */
-    class EventSlot : protected Event
+    class EventSlot : public Event
     {
-            Q_OBJECT
+            //Q_OBJECT
             //friend class EventManager;
 
         public:
 
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<EventSlot> Ptr;
+
             /**
              * Constructor.
              */
-            explicit EventSlot();
+            explicit EventSlot(QObject* receiver, QCString slot);
 
             /**
              * Destructor.
@@ -120,7 +124,9 @@ namespace Kross { namespace Api {
             //void callback(Kross::Api::Object*);
             //void callback(Kross::Api::List*);
 */
-
+        private:
+            QObject* m_receiver;
+            QCString m_slot;
     };
 
 }}

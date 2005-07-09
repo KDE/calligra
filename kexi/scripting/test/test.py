@@ -1,6 +1,10 @@
-# This Python script demonstrates the usage of
-# the Kross python-interface to access KexiDB
-# functionality from within Python.
+#!/usr/bin/env python
+
+"""
+  This Python script demonstrates the usage of the Kross
+  python-interface to access KexiDB functionality from
+  within Python.
+"""
 
 # Class to test the KexiDB functionality.
 class KexiDBClass:

@@ -32,9 +32,10 @@
 
 using namespace Kross::Api;
 
-EventSlot::EventSlot()
-    : Event()
-    //, m_sender(0), m_signal(0), m_slot(0)
+EventSlot::EventSlot(QObject* receiver, QCString slot)
+    : Event(slot) //QObject::normalizeSignalSlot(slot)
+    , m_receiver(receiver)
+    , m_slot(slot)
 {
 }
 

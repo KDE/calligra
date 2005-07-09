@@ -106,12 +106,16 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         }
         kdDebug()<<"--------------------------"<<endl;
         */
-
+/*
         // Connect QObject signal with scriptfunction.
         scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
         scriptcontainer->connect(testobject, SIGNAL(testSignalString(const QString&)), "testobjectCallbackWithParams");
         // Call the testSlot to emit the testSignal.
         testobject->testSlot();
+*/
+std::string s;
+std::cin >> s;
+
     }
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
@@ -164,9 +168,6 @@ int main(int argc, char **argv)
         kdWarning() << "Failed to load scriptfile: " << filename << endl;
         result = -1;
     }
-
-    std::string s;
-    std::cin >> s;
 
     delete app;
     return result;

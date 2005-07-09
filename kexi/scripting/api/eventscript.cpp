@@ -1,5 +1,5 @@
 /***************************************************************************
- * event.cpp
+ * eventscript.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,54 +17,38 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "event.h"
+#include "eventscript.h"
 //#include "object.h"
 //#include "variant.h"
-#include "exception.h"
-#include "../main/scriptcontainer.h"
+//#include "eventmanager.h"
+//#include "../main/scriptcontainer.h"
 
 //#include <qobject.h>
 //#include <qsignal.h>
-#include <klocale.h>
+//#include <kaction.h>
+
 //#include <qglobal.h>
 //#include <qobjectdefs.h>
 //#include <qmetaobject.h>
 
 using namespace Kross::Api;
 
-Event::Event(const QString& name)
-    : Kross::Api::Class<Event>(name)
-{
-    if( name.isEmpty() )
-        throw AttributeException( i18n("The event has no valid name.") );
-}
-
-Event::~Event()
+EventScript::EventScript(const QString& name)
+    : Event(name)
 {
 }
 
-/*
-bool Event::attach(Event::Ptr event)
+EventScript::~EventScript()
 {
-    if(m_events.contains(event))
-        return false;
-    m_events.append(event);
-    connect(this, SIGNAL(executed(Event::Ptr)), event, SLOT(execute(Event::Ptr)));
-    //connect(event, SIGNAL(executeResult(Object*)), this, SIGNAL(executeResult(Object*)));
-    return true;
 }
 
-bool Event::detach(Event::Ptr event)
+const QString EventScript::getClassName() const
 {
-    if(! m_events.contains(event))
-        return false;
-    m_events.remove(event);
-    disconnect(this, SIGNAL(executed(Event::Ptr)), event, SLOT(execute(Event::Ptr)));
-    return true;
+    return "Kross::Api::EventScript";
 }
 
-void Event::execute(Event::Ptr event)
+const QString EventScript::getDescription() const
 {
-    emit executed(event);
+    return "";
 }
-*/
+

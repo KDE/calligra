@@ -21,7 +21,6 @@
 
 #include "../api/interpreter.h"
 #include "../kjs/kjsinterpreter.h"
-#include "../api/object.h"
 #include "../api/qtobject.h"
 #include "../api/eventslot.h"
 #include "../api/eventsignal.h"
@@ -29,6 +28,7 @@
 
 #include "krossconfig.h"
 #include "scriptcontainer.h"
+#include "eventcollection.h"
 
 #include <qobject.h>
 #include <kdebug.h>
@@ -51,17 +51,17 @@ namespace Kross { namespace Api {
             /// List of interpreter instances.
             QMap<QString, Interpreter*> m_interpreter;
             /// List of avaible modules.
-            QMap<QString, Object*> m_modules;
+            QMap<QString, Object::Ptr> m_modules;
 
             /// The buildin \a EventSlot for basic Qt slots.
-            EventSlot* m_buildin_slot;
+            //EventSlot* m_buildin_slot;
             /// List of additional \a EventSlot instances.
-            QValueList<EventSlot*> m_slots;
+            //QValueList<EventSlot*> m_slots;
 
             /// The buildin \a EventSignal for basic Qt signals.
-            EventSignal* m_buildin_signal;
+            //EventSignal* m_buildin_signal;
             /// List of additional \a EventSignal instances.
-            QValueList<EventSignal*> m_signals;
+            //QValueList<EventSignal*> m_signals;
 
             /// To dynamicly load libraries.
             KLibrary* m_library;
@@ -72,9 +72,10 @@ namespace Kross { namespace Api {
 Manager::Manager()
     : d( new ManagerPrivate() )
 {
+/*TODO
     d->m_buildin_slot = 0;
     d->m_buildin_signal = 0;
-/*TODO
+
     d->m_buildin_slot = new EventSlot();
     addEventSlot(d->m_buildin_slot);
 
@@ -93,11 +94,10 @@ Manager::~Manager()
 */
     for(QMap<QString, Interpreter*>::Iterator iit = d->m_interpreter.begin(); iit != d->m_interpreter.end(); ++iit)
         delete iit.data();
-    for(QMap<QString, Object*>::Iterator mit = d->m_modules.begin(); mit != d->m_modules.end(); ++mit)
-        delete mit.data();
-
+/*
     delete d->m_buildin_slot;
     delete d->m_buildin_signal;
+*/
 
     delete d;
 }
@@ -107,17 +107,17 @@ bool Manager::hasModule(const QString& name)
     return d->m_modules.contains(name);
 }
 
-Object* Manager::getModule(const QString& name)
+Object::Ptr Manager::getModule(const QString& name)
 {
     return d->m_modules[name];
 }
 
-QMap<QString, Object*> Manager::getModules()
+QMap<QString, Object::Ptr> Manager::getModules()
 {
     return d->m_modules;
 }
 
-bool Manager::addModule(Object* module)
+bool Manager::addModule(Object::Ptr module)
 {
     if(! module) {
         kdWarning() << "Interpreter->addModule(Module*) failed cause Module is NULL" << endl;
@@ -131,6 +131,7 @@ bool Manager::addModule(Object* module)
     return true;
 }
 
+/*
 QValueList<EventSlot*> Manager::getEventSlots()
 {
     return d->m_slots;
@@ -150,19 +151,28 @@ void Manager::addEventSignal(EventSignal* eventsignal)
 {
     d->m_signals.append( eventsignal );
 }
+*/
 
-KSharedPtr<Kross::Api::ScriptContainer> Manager::getScriptContainer(const QString& scriptname)
+KSharedPtr<ScriptContainer> Manager::getScriptContainer(const QString& scriptname)
 {
-    //TODO at the moment we don't share ScriptContainer ...
+    //TODO at the moment we don't share ScriptContainer instances.
 
     //if(d->m_scriptcontainers.contains(scriptname))
     //    return d->m_scriptcontainers[scriptname];
 
-    ScriptContainer* script = new ScriptContainer(this, scriptname);
+    ScriptContainer* scriptcontainer = new ScriptContainer(scriptname);
     //ScriptContainer script(this, scriptname);
-    //d->m_scriptcontainers.replace(scriptname, script);
+    //d->m_scriptcontainers.replace(scriptname, scriptcontainer);
 
-    return KSharedPtr<Kross::Api::ScriptContainer>(script);
+    return KSharedPtr<Kross::Api::ScriptContainer>(scriptcontainer);
+}
+
+KSharedPtr<EventCollection> Manager::getEventCollection(const QString& collectionname)
+{
+    //TODO at the moment we don't share EventCollection instances.
+
+    EventCollection* eventcollection = new EventCollection(collectionname);
+    return eventcollection;
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
@@ -181,12 +191,12 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         // known issue with imported libs that import other libs.
         // Till today QLibrary failed to spend the possibility to
         // load libs with RTLD_GLOBAL while KLibrary does the job
-        // great. So, at least on linux we have to stick with
+        // fine. So, at least on linux we have to stick with
         // KLibrary or go the hard and unportable dlopen() way.
         // And yes, I tried the at http://docs.python.org/ext/link-reqs.html
         // described ways as well, but they and -rdynamic doesn't
         // helped in that case.
-        // See http://mats.imk.fraunhofer.de/pipermail/pykde/2004-April/007645.html
+        // See also http://mats.imk.fraunhofer.de/pipermail/pykde/2004-April/007645.html
 
         if(d->m_library) {
             kdWarning() << "The krosspython library is already loaded." << endl;

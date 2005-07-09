@@ -28,6 +28,8 @@
 
 class QObject;
 
+#include "../api/object.h"
+
 namespace Kross { namespace Api {
 
     // Forward declarations.
@@ -36,6 +38,7 @@ namespace Kross { namespace Api {
     class EventSlot;
     class EventSignal;
     class ScriptContainer;
+    class EventCollection;
     class ManagerPrivate;
 
     /**
@@ -90,14 +93,14 @@ namespace Kross { namespace Api {
              * \return The \a Module if there is such a
              *         module avaible else NULL.
              */
-            Object* getModule(const QString& name);
+            Object::Ptr getModule(const QString& name);
 
             /**
              * Return all avaible \a Module objects.
              *
              * \return Map of modules.
              */
-            QMap<QString, Object*> getModules();
+            QMap<QString, Object::Ptr> getModules();
 
             /**
              * Add a new \a Module to the list of avaible
@@ -107,14 +110,14 @@ namespace Kross { namespace Api {
              * \return true if the module was added
              *         successfully else false.
              */
-            bool addModule(Object* module);
+            bool addModule(Object::Ptr module);
 
             /**
              * Return all \a EventSlot instances.
              *
              * \return List of \a EventSlot instances.
              */
-            QValueList<EventSlot*> getEventSlots();
+            //QValueList<EventSlot*> getEventSlots();
 
             /**
              * Add a from \a EventSlot inherited class
@@ -125,14 +128,14 @@ namespace Kross { namespace Api {
              *       slots to get Qt signals translated
              *       into a functioncall.
              */
-            void addEventSlot(EventSlot* eventslot);
+            //void addEventSlot(EventSlot* eventslot);
 
             /**
              * Return all \a EventSlot instances.
              *
              * \return List of \a EventSlot instances.
              */
-            QValueList<EventSignal*> getEventSignals();
+            //QValueList<EventSignal*> getEventSignals();
 
             /**
              * Add a from \a EventSlot inherited class
@@ -143,8 +146,7 @@ namespace Kross { namespace Api {
              *       slots to get Qt signals translated
              *       into a functioncall.
              */
-            void addEventSignal(EventSignal* eventsignal);
-
+            //void addEventSignal(EventSignal* eventsignal);
 
             /**
              * Return the existing \a ScriptContainer with scriptname
@@ -157,7 +159,18 @@ namespace Kross { namespace Api {
              * \return The \a ScriptContainer instance matching to
              *         scriptname.
              */
-            KSharedPtr<Kross::Api::ScriptContainer> getScriptContainer(const QString& scriptname);
+            KSharedPtr<ScriptContainer> getScriptContainer(const QString& scriptname);
+
+            /**
+             * Return the existing \a EventCollection with the defined name
+             * or create a new \a EventCollection instance and associate
+             * the passed name with it if there exists no such collection.
+             *
+             * \param collectionname The name of the \a EventCollection. This
+             *        should be an unique string to identify the instance.
+             * \return The \a EventCollection instance.
+             */
+            KSharedPtr<EventCollection> getEventCollection(const QString& collectionname);
 
             /**
              * Return the \a Interpreter instance defined by

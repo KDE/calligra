@@ -52,7 +52,7 @@ namespace Kross { namespace Api {
     {
         public:
 
-            /// Shared objects.
+            /// Shared pointer to implement reference-counting.
             typedef KSharedPtr<Object> Ptr;
 
             /**

@@ -34,51 +34,61 @@ namespace Kross { namespace Api {
     class ScriptContainer;
 
 /*
-    class Event{Translator|Attacher|Dispatcher}
-    {
-        public:
-            QCString getSignal(QCString slot);
-            QCString getSlot(QCString signal);
-    };
+- ScriptContainer has list of class ScriptEvent
+- so, fill up ScriptContainer before xml -> EventContainer ?
+  - could also be done on runtime <- better!
 */
 
     /**
      * Events are used for dynamic connections between
-     * objects and introduce an abstract Qt signals and
-     * slot chain functionality.
+     * \a Object instances and introduce an abstract Qt like
+     * signals and slot concept to chain events together.
      */
-    class Event
-        : public QObject
-        , public Kross::Api::Class<Event>
+    class Event : public Kross::Api::Class<Event>
     {
-            Q_OBJECT
-
         public:
+
+            /// Shared pointer to implement reference-counting.
             typedef KSharedPtr<Event> Ptr;
 
             /**
              * Constructor.
+             *
+             * \param name The unique name this \a Event has to
+             *       easy identify it.
              */
-            explicit Event(const QString& name = "Event" /*, QObject* object*/);
+            explicit Event(const QString& name);
 
             /**
              * Destructor.
              */
             virtual ~Event();
 
-            //ScriptContainer* getScriptContainer();
-            //void setScriptContainer(ScriptContainer* scriptcontainer);
-
             //bool attach(Event::Ptr event);
             //bool detach(Event::Ptr event);
+            /*
+            Object::Ptr getParent() const;
+            bool hasChild(const QString& name) const;
+            Object::Ptr getChild(const QString& name) const;
+            QMap<QString, Object::Ptr> getChildren() const;
+            bool addChild(const QString& name, Object::Ptr object, bool replace = false);
+            void removeChild(const QString& name);
+            void removeAllChildren();
+            */
 
-        signals:
-            void executed(Event::Ptr event);
+//Override call
+            //virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments) {}
+
+//Maybe move to Kross::Api::Object ?!
+            //bool connect(Event::Ptr event) { connect(event, SIGNAL(called(Event::Ptr)), SLOT(call(Event::Ptr))); }
+            //bool disconnect(Event::Ptr) {}
+
+        protected:
+            //void called(Event::Ptr event) {}
             //void executed(Event* sender, int execstate, Kross::Api::Object*);
 
-        public slots:
-            void execute(Event::Ptr event) {}
-            //void execute(Event* sender, const QString& name, Kross::Api::List*) {}
+            //void call(Event::Ptr event) {}
+            //void call(Event* sender, const QString& name, Kross::Api::List*) {}
 
         private:
             // QProperty's

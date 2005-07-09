@@ -316,10 +316,10 @@ Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
     }
 
     if(object->getClassName() == "Kross::Api::Variant") {
-#ifdef KROSS_PYTHON_EXTENSION_DEBUG
-        kdDebug() << "Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Variant" << endl;
-#endif
         QVariant v = static_cast<Kross::Api::Variant*>( object.data() )->getValue();
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Variant %1").arg(v.toString()) << endl;
+#endif
         return toPyObject(v);
     }
 

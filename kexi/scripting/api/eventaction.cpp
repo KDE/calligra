@@ -33,8 +33,9 @@
 
 using namespace Kross::Api;
 
-EventAction::EventAction()
-    : Event()
+EventAction::EventAction(KAction* action)
+    : Event(action->name())
+    , m_action(action)
 {
     /*
     m_eventmanager = new EventManager(scriptcontainer, this);
@@ -56,6 +57,6 @@ const QString EventAction::getClassName() const
 
 const QString EventAction::getDescription() const
 {
-    return "";
+    return ""; //TODO
 }
 

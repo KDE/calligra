@@ -26,8 +26,9 @@
 //#include <qvariant.h>
 //#include <qsignalmapper.h>
 //#include <qguardedptr.h>
-//#include <qobject.h>
+#include <qobject.h>
 //#include <kdebug.h>
+#include <ksharedptr.h>
 
 #include "event.h"
 
@@ -47,15 +48,18 @@ namespace Kross { namespace Api {
      */
     class EventSignal : public Event
     {
-            Q_OBJECT
+            //Q_OBJECT
             //friend class EventManager;
 
         public:
 
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<EventSignal> Ptr;
+
             /**
              * Constructor.
              */
-            explicit EventSignal();
+            explicit EventSignal(QObject* sender, QCString signal);
 
             /**
              * Destructor.
@@ -74,6 +78,9 @@ namespace Kross { namespace Api {
             void callback(int);
             void callback(bool);
 */
+        private:
+            QObject* m_sender;
+            QCString m_signal;
     };
 
 }}

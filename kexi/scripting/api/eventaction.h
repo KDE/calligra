@@ -21,8 +21,9 @@
 #define KROSS_API_EVENTACTION_H
 
 #include <qstring.h>
-#include <qobject.h>
+//#include <qobject.h>
 #include <kaction.h>
+#include <ksharedptr.h>
 
 #include "event.h"
 
@@ -43,10 +44,13 @@ namespace Kross { namespace Api {
 
         public:
 
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<EventAction> Ptr;
+
             /**
              * Constructor.
              */
-            EventAction();
+            EventAction(KAction* action);
 
             /**
              * Destructor.
@@ -58,7 +62,13 @@ namespace Kross { namespace Api {
 
         private:
             //ScriptContainer* m_scriptcontainer;
-            //KAction* m_action;
+            KAction* m_action;
+
+            //Kross::Api::Object::Ptr getText(Kross::Api::List::Ptr);
+            //Kross::Api::Object::Ptr setText(Kross::Api::List::Ptr);
+            //Kross::Api::Object::Ptr isEnabled(Kross::Api::List::Ptr);
+            //Kross::Api::Object::Ptr setEnabled(Kross::Api::List::Ptr);
+            //Kross::Api::Object::Ptr activate(Kross::Api::List::Ptr);
     };
 
 }}

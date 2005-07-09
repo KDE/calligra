@@ -20,7 +20,7 @@
 #include "qtobject.h"
 #include "object.h"
 #include "variant.h"
-#include "eventmanager.h"
+//#include "eventmanager.h"
 #include "../main/scriptcontainer.h"
 
 #include <qobject.h>

@@ -20,11 +20,12 @@
 #include "scriptcontainer.h"
 #include "../api/object.h"
 #include "../api/list.h"
-#include "../main/manager.h"
 #include "../api/qtobject.h"
 #include "../api/interpreter.h"
 #include "../api/script.h"
-#include "../api/eventmanager.h"
+//#include "../api/eventmanager.h"
+#include "../main/manager.h"
+#include "../main/eventcollection.h"
 
 using namespace Kross::Api;
 
@@ -33,10 +34,8 @@ namespace Kross { namespace Api {
     class ScriptContainerPrivate
     {
         public:
-            Manager* m_manager;
-
             Script* m_script;
-            EventManager* m_eventmanager;
+            //EventManager* m_eventmanager;
             QMap<QString, QtObject*> m_qtobjects;
 
             QString m_name;
@@ -46,30 +45,24 @@ namespace Kross { namespace Api {
 
 }}
 
-ScriptContainer::ScriptContainer(Manager* manager, const QString& name)
+ScriptContainer::ScriptContainer(const QString& name)
     : KShared() // initialize reference-counter
     , d( new ScriptContainerPrivate() )
 {
-    d->m_manager = manager;
     d->m_script = 0;
-    d->m_eventmanager = 0;
+    //d->m_eventmanager = 0;
     d->m_name = name;
 }
 
 ScriptContainer::~ScriptContainer()
 {
-    delete d->m_eventmanager; //d->m_eventmanager = 0;
+    //delete d->m_eventmanager; //d->m_eventmanager = 0;
     finalize();
 
     for(QMap<QString, QtObject*>::Iterator it = d->m_qtobjects.begin(); it != d->m_qtobjects.end(); ++it)
         delete it.data();
 
     delete d;
-}
-
-Manager* ScriptContainer::getManager()
-{
-    return d->m_manager;
 }
 
 const QString& ScriptContainer::getName()
@@ -111,9 +104,9 @@ bool ScriptContainer::addQObject(QObject* object, const QString& name)
 void ScriptContainer::initialize()
 {
     finalize();
-    Interpreter* interpreter = d->m_manager->getInterpreter(d->m_interpretername);
+    Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->m_interpretername);
     if(! interpreter)
-        throw Kross::Api::TypeException(i18n("Unknown interpreter on ScriptContainer::execute()."));
+        throw TypeException(i18n("Unknown interpreter on ScriptContainer::execute()."));
     d->m_script = interpreter->createScript(this);
 }
 
@@ -123,7 +116,7 @@ void ScriptContainer::finalize()
     d->m_script = 0;
 }
 
-Kross::Api::Object* ScriptContainer::execute()
+Object* ScriptContainer::execute()
 {
     if(! d->m_script)
         initialize();
@@ -135,10 +128,10 @@ const QStringList& ScriptContainer::getFunctionNames()
     return d->m_script ? d->m_script->getFunctionNames() : QStringList();
 }
 
-Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, Kross::Api::List* arguments)
+KSharedPtr<Object> ScriptContainer::callFunction(const QString& functionname, List* arguments)
 {
     if(functionname.isEmpty())
-        throw Kross::Api::RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
+        throw RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
 
     if(! d->m_script)
         initialize();
@@ -150,7 +143,7 @@ const QStringList& ScriptContainer::getClassNames()
     return d->m_script ? d->m_script->getClassNames() : QStringList();
 }
 
-Kross::Api::Object* ScriptContainer::classInstance(const QString& name)
+KSharedPtr<Object> ScriptContainer::classInstance(const QString& name)
 {
     if(! d->m_script)
         initialize();
@@ -159,9 +152,9 @@ Kross::Api::Object* ScriptContainer::classInstance(const QString& name)
 
 bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QString& functionname)
 {
+/*TODO
     if(! d->m_eventmanager) // create instance on demand
         d->m_eventmanager = new EventManager(this);
-/*TODO
     return d->m_eventmanager->connect(sender, signal, functionname);
 */
     return false;
@@ -169,9 +162,9 @@ bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QSt
 
 bool ScriptContainer::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
 {
+/*TODO
     if(! d->m_eventmanager)
         return false;
-/*TODO
     return d->m_eventmanager->disconnect(sender, signal, functionname);
 */
     return false;
@@ -179,9 +172,9 @@ bool ScriptContainer::disconnect(QObject *sender, const QCString& signal, const 
 
 bool ScriptContainer::connect(const QCString& signal, QObject *receiver, const QCString& slot)
 {
+/*TODO
     if(! d->m_eventmanager) // create instance on demand
         d->m_eventmanager = new EventManager(this);
-/*TODO
     return d->m_eventmanager->connect(signal, receiver, slot);
 */
     return false;
@@ -189,9 +182,9 @@ bool ScriptContainer::connect(const QCString& signal, QObject *receiver, const Q
 
 bool ScriptContainer::disconnect(const QCString& signal, QObject *receiver, const QCString& slot)
 {
+/*TODO
     if(! d->m_eventmanager)
         return false;
-/*TODO
     return d->m_eventmanager->disconnect(signal, receiver, slot);
 */
     return false;

@@ -12,9 +12,9 @@ libkrossapi_la_SOURCES = \
     qtobject.cpp \
     event.cpp \
     eventaction.cpp \
-    eventmanager.cpp \
     eventsignal.cpp \
     eventslot.cpp \
+    eventscript.cpp \
     script.cpp \
     interpreter.cpp
 

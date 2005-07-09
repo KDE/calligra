@@ -32,6 +32,7 @@ namespace Kross { namespace Api {
     // Forward declarations.
     class Object;
     class List;
+    class EventCollection;
     class ScriptContainerPrivate;
 
     /**
@@ -60,13 +61,11 @@ namespace Kross { namespace Api {
              * \a ScriptManager it's possible to access
              * \a ScriptContainer instances.
              *
-             * \param manager The \a Manager instance used to
-             *       create this ScriptContainer.
              * \param name The unique name this ScriptContainer
              *       has. It's used e.g. at the \a Manager to
              *       identify the ScriptContainer.
              */
-            ScriptContainer(Manager* manager, const QString& name);
+            ScriptContainer(const QString& name);
 
         public:
 
@@ -74,11 +73,6 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             virtual ~ScriptContainer();
-
-            /**
-             * Return the \a Manager this ScriptContainer belongs too.
-             */
-            Manager* getManager();
 
             /**
              * Return the name this ScriptContainer is reachable as.
@@ -126,7 +120,7 @@ namespace Kross { namespace Api {
             /**
              * Execute the script container.
              */
-            Kross::Api::Object* execute();
+            Object* execute();
 
             /**
              * Return a list of functionnames the with
@@ -141,10 +135,10 @@ namespace Kross { namespace Api {
              *       to call.
              * \param arguments Optional list of arguments
              *       passed to the function.
-             * \return \a Kross::Api::Object instance representing
+             * \return \a Object instance representing
              *        the functioncall returnvalue.
              */
-            Kross::Api::Object* callFunction(const QString& functionname, Kross::Api::List* arguments = 0);
+            KSharedPtr<Object> callFunction(const QString& functionname, List* arguments = 0);
 
             /**
              * Return a list of classes.
@@ -154,7 +148,13 @@ namespace Kross { namespace Api {
             /**
              * Create and return a new class instance.
              */
-            Kross::Api::Object* classInstance(const QString& name);
+            KSharedPtr<Object> classInstance(const QString& name);
+
+            /**
+             * Return the collection this @a EventContainer spends.
+             */
+//TODO
+KSharedPtr<EventCollection> getEventCollection() {}
 
             /**
              * Connect QObject signal with function. If the signal

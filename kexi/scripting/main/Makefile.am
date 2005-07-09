@@ -4,6 +4,7 @@ lib_LTLIBRARIES = libkrossmain.la
 
 libkrossmain_la_SOURCES = \
     scriptcontainer.cpp \
+    eventcollection.cpp \
     manager.cpp
 
 libkrossmain_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved

@@ -42,10 +42,7 @@ const QString Variant::getDescription() const
 
 const QVariant& Variant::toVariant(Object::Ptr object)
 {
-    Kross::Api::Variant* variant = (Kross::Api::Variant*)object.data();
-    if(! variant)
-        throw TypeException("Kross::Api::Variant expected.");
-    return variant->getValue();
+    return Object::fromObject<Variant>( object.data() )->getValue();
 }
 
 const QString Variant::toString(Object::Ptr object)
