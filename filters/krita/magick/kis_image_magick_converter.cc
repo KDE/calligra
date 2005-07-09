@@ -261,27 +261,25 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		return KisImageBuilder_RESULT_INTR;
 	}
 
-	kdDebug() << "1\n";
-
 	GetExceptionInfo(&ei);
 	ii = CloneImageInfo(0);
-	kdDebug() << "2\n";
+	
 	if (isBlob) {
-		kdDebug() << "3\n";
+		
 		// TODO : Test.  Does BlobToImage even work?
 		Q_ASSERT(uri.isEmpty());
 		images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
 	} else {
-		kdDebug() << "4\n";
+		
 		qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
 		if (ii -> filename[MaxTextExtent - 1]) {
 			emit notifyProgressError(this);
 			return KisImageBuilder_RESULT_PATH;
 		}
-		kdDebug() << "5\n";
+		
 		images = ReadImage(ii, &ei);
-		kdDebug() << "6\n";
+		
 	}
 
 	if (ei.severity != UndefinedException)
