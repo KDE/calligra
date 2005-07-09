@@ -172,41 +172,41 @@ KexiDB::Field::Type pqxxMigrate::type(int t, const QString& fname)
 //Connect to the db backend
 bool pqxxMigrate::drv_connect()
 {
-    kdDebug() << "drv_connect: " << m_dbName << endl;
+    kdDebug() << "drv_connect: " << m_MigrateData->sourceName << endl;
 
     QString conninfo;
     QString socket;
 
     //Setup local/remote connection
-    if (m_externalData->hostName.isEmpty())
+    if (m_MigrateData->source->hostName.isEmpty())
     {
-        if (m_externalData->fileName().isEmpty())
+        if (m_MigrateData->source->fileName().isEmpty())
         {
             socket="/tmp/.s.PGSQL.5432";
         }
         else
         {
-            socket=m_externalData->fileName();
+            socket=m_MigrateData->source->fileName();
         }
     }
     else
     {
-        conninfo = "host='" + m_externalData->hostName + "'";
+        conninfo = "host='" + m_MigrateData->source->hostName + "'";
     }
 
     //Build up the connection string
-    if (m_externalData->port == 0)
-        m_externalData->port = 5432;
+    if (m_MigrateData->source->port == 0)
+        m_MigrateData->source->port = 5432;
 
-    conninfo += QString::fromLatin1(" port='%1'").arg(m_externalData->port);
+    conninfo += QString::fromLatin1(" port='%1'").arg(m_MigrateData->source->port);
 
-    conninfo += QString::fromLatin1(" dbname='%1'").arg(m_dbName);
+    conninfo += QString::fromLatin1(" dbname='%1'").arg(m_MigrateData->sourceName);
 
-    if (!m_externalData->userName.isNull())
-        conninfo += QString::fromLatin1(" user='%1'").arg(m_externalData->userName);
+    if (!m_MigrateData->source->userName.isNull())
+        conninfo += QString::fromLatin1(" user='%1'").arg(m_MigrateData->source->userName);
 
-    if (!m_externalData->password.isNull())
-        conninfo += QString::fromLatin1(" password='%1'").arg(m_externalData->password);
+    if (!m_MigrateData->source->password.isNull())
+        conninfo += QString::fromLatin1(" password='%1'").arg(m_MigrateData->source->password);
 
     try
     {
@@ -417,42 +417,18 @@ bool pqxxMigrate::drv_copyTable(const QString& srcTable,
         QValueList<QVariant> vals = QValueList<QVariant>();
         for (std::vector<std::string>::const_iterator i = R.begin(); i != R.end(); ++i)
         {
-	    QVariant var = QVariant((*i).c_str());
-            vals << var;
+			QVariant var = QVariant((*i).c_str());
+				vals << var;
         }
 
-        m_kexiDB->insertRecord(*dstTable, vals);
+        m_MigrateData->dest->insertRecord(*dstTable, vals);
+        R.clear();
     }
 
     //This doesnt work in <libpqxx 2.2
     //stream.complete();
 
     return true;
-
-
-    //It could be done this way (with some altering):
-    /*
-    if(query("SELECT * FROM " + d->escapeIdentifier(srcTable)))
-      {
-
-          for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
-          {
-              int numFields = mysql_num_fields(res);
-              QValueList<QVariant> vals = QValueList<QVariant>();
-              for(int i = 0; i < numFields; i++)
-              {
-                  QVariant var = QVariant(row[i]);
-                  vals << var;
-              }
-              m_kexiDB->insertRecord(*dstTable, vals);
-          }
-          return true;
-      }
-      else
-      {
-          return false;
-      }
-    */
 }
 
 //=========================================================================
