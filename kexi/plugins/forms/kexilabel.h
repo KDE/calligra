@@ -33,25 +33,7 @@
 class QPainter;
 class QTimer;
 class KexiLabel;
-
-class KexiLabelPrivate : public QLabel {
-		friend class KexiLabel;
-	public:
-		KexiLabelPrivate( KexiLabel* );
-		virtual ~KexiLabelPrivate();
-
-	protected:
-		void updateFrame();
-
-		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
-		QRect getBounding( const QImage &image, const QRect& startRect );
-//		double defaultDecay( QImage& source, int i, int j );
-		KPixmap getShadowPixmap();
-
-		QRect p_shadowRect;
-		KexiLabel *p_parentLabel;
-};
-
+class KexiLabelPrivate;
 /**
  An extended, data-aware, read-only text label.
  It's text may have a drop-shadow.
@@ -131,7 +113,6 @@ class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public Kex
 		virtual void frameChanged();
 		virtual void showEvent( QShowEvent* e );
 
-	private:
 		void updatePixmapLater();
 
 		KPixmap p_shadowPixmap;
