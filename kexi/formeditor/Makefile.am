@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-INCLUDES = -I$(top_srcdir)/kexi/widget \
+INCLUDES = -I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/widget/utils \
   -I$(top_srcdir)/kexi/widget/tableview \
   -I$(top_srcdir)/kexi/core \
   -I$(top_srcdir)/kexi \
