@@ -33,6 +33,24 @@
 #define SHADOW_DIAGONAL_FACTOR 1.0
 #define SHADOW_THICKNESS 1
 
+class KexiLabelPrivate : public QLabel {
+		friend class KexiLabel;
+	public:
+		KexiLabelPrivate( KexiLabel* );
+		virtual ~KexiLabelPrivate();
+
+	protected:
+		void updateFrame();
+
+		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
+		QRect getBounding( const QImage &image, const QRect& startRect );
+//		double defaultDecay( QImage& source, int i, int j );
+		KPixmap getShadowPixmap();
+
+		QRect p_shadowRect;
+		KexiLabel *p_parentLabel;
+};
+
 KexiLabelPrivate::KexiLabelPrivate( KexiLabel* parent )
 	: QLabel( parent )
 {

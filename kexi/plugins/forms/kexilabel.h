@@ -173,7 +173,6 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 			QLabel::showEvent( e );
 		}
 
-	private:
 		void updatePixmapLater();
 
 		KPixmap p_shadowPixmap;
