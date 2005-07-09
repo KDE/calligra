@@ -655,38 +655,41 @@ Container::createFlowLayout()
 		list->append( tree->widget());
 	list->sort();
 
-	QWidget *lastWidget = list->getLast();
 	if(flow->orientation() == Horizontal) {
 		int y = list->first()->y();
 		for(QWidget *w = list->first(); w; w = list->next()) {
-			if( (w->y() <= y +offset) && w != lastWidget)
-				list2->append(w);
-			else {// start a new line
-				if(w == lastWidget)
-					list2->append(w);
+			if( (w->y() > y +offset)) {
+				// start a new line
 				list2->sort();
 				for(QWidget *obj = list2->first(); obj; obj = list2->next())
 					flow->add(obj);
 				list2->clear();
 				y = w->y();
 			}
+			list2->append(w);
 		}
+
+		list2->sort(); // don't forget the last line
+		for(QWidget *obj = list2->first(); obj; obj = list2->next())
+			flow->add(obj);
 	}
 	else {
 		int x = list->first()->x();
 		for(QWidget *w = list->first(); w; w = list->next()) {
-			if( (w->x() <= x +offset) && w != lastWidget)
-				list2->append(w);
-			else {// start a new line
-				if(w == lastWidget)
-					list2->append(w);
+			if( (w->x() > x +offset)) {
+				// start a new column
 				list2->sort();
 				for(QWidget *obj = list2->first(); obj; obj = list2->next())
 					flow->add(obj);
 				list2->clear();
 				x = w->x();
 			}
+			list2->append(w);
 		}
+
+		list2->sort(); // don't forget the last column
+		for(QWidget *obj = list2->first(); obj; obj = list2->next())
+			flow->add(obj);
 	}
 
 	delete list;
