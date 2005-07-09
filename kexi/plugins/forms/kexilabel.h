@@ -31,20 +31,7 @@
 class QPainter;
 class QTimer;
 class KexiLabel;
-
-class KexiLabelPrivate : public QLabel {
-		friend class KexiLabel;
-	public:
-		KexiLabelPrivate( KexiLabel* );
-		virtual ~KexiLabelPrivate();
-	private:
-		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
-		QRect getBounding( const QImage &image, const QRect& startRect );
-//		double defaultDecay( QImage& source, int i, int j );
-		KPixmap getShadowPixmap();
-
-		QRect p_shadowRect;
-};
+class KexiLabelPrivate;
 
 /**
 An extended, data-aware, read-only text label.
@@ -173,6 +160,7 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 			QLabel::showEvent( e );
 		}
 
+	private:
 		void updatePixmapLater();
 
 		KPixmap p_shadowPixmap;
