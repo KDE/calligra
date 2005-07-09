@@ -60,7 +60,7 @@ DriverBehaviour::DriverBehaviour()
 }
 
 //---------------------------------------------
-		
+
 Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	: QObject( parent, name )
 	, Object()
@@ -96,21 +96,21 @@ bool Driver::isValid()
 	if (KexiDB::versionMajor() != versionMajor()
 		|| KexiDB::versionMinor() != versionMinor())
 	{
-		setError(ERR_INCOMPAT_DRIVER_VERSION, 
+		setError(ERR_INCOMPAT_DRIVER_VERSION,
 		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.")
 		.arg(name())
 		.arg(QString("%1.%2").arg(versionMajor()).arg(versionMinor()))
 		.arg(QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor())));
 		return false;
 	}
-		
+
 	QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n").arg(name());
 	QString not_init = i18n("Value of \"%1\" is not initialized for the driver.");
 	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
 		setError(ERR_INVALID_DRIVER_IMPL, inv_impl + not_init.arg("DriverBehaviour::ROW_ID_FIELD_NAME"));
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -120,10 +120,10 @@ const QPtrList<Connection> Driver::connectionsList() const
 	QPtrDictIterator<Connection> it( d->connections );
 	for( ; it.current(); ++it )
 		clist.append( &(*it) );
-	return clist; 
+	return clist;
 }
 
-QString Driver::fileDBDriverMimeType() const 
+QString Driver::fileDBDriverMimeType() const
 { return d->fileDBDriverMimeType; }
 
 QString Driver::defaultFileBasedDriverMimeType()
@@ -135,7 +135,7 @@ QString Driver::defaultFileBasedDriverName()
 	return dm.lookupByMime(Driver::defaultFileBasedDriverMimeType()).lower();
 }
 
-const KService* Driver::service() const 
+const KService* Driver::service() const
 { return d->service; }
 
 bool Driver::isFileDriver() const
@@ -144,11 +144,11 @@ bool Driver::isFileDriver() const
 int Driver::features() const
 { return d->features; }
 
-bool Driver::transactionsSupported() const 
+bool Driver::transactionsSupported() const
 { return d->features & (SingleTransactions | MultipleTransactions); }
 
-QString Driver::sqlTypeName(int id_t, int p) const
-{ 
+QString Driver::sqlTypeName(int id_t, int /*p*/) const
+{
 	if (id_t==Field::Null)
 		return "Null";
 	return d->typeNames[id_t];
@@ -159,7 +159,7 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 	clearError();
 	if (!isValid())
 		return 0;
-	
+
 	if (d->isFileDriver) {
 		if (conn_data.fileName().isEmpty()) {
 			setError(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );
@@ -243,7 +243,7 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 		case Field::Text:
 		case Field::LongText: {
 			QString s = v.toString();
-			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'"; 
+			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
 		}
 		case Field::BLOB: {
 //TODO: here special encoding method needed

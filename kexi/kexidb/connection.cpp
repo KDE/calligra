@@ -104,7 +104,7 @@ class ConnectionPrivate
 		 True value means default transaction has been started inside connection object
 		 (by beginAutoCommitTransaction()), otherwise default transaction has been started outside
 		 of the object (e.g. before createTable()), so we shouldn't autocommit the transaction
-		 in commitAutoCommitTransaction(). Also, beginAutoCommitTransaction() doesn't restarts 
+		 in commitAutoCommitTransaction(). Also, beginAutoCommitTransaction() doesn't restarts
 		 transaction if m_default_trans_started_inside is false. Such behaviour allows user to
 		 execute a sequence of actions like CREATE TABLE...; INSERT DATA...; within a single transaction
 		 and commit it or rollback by hand. */
@@ -763,19 +763,19 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 				v += m_driver->beh->AUTO_INCREMENT_TYPE;
 			else
 				v += m_driver->sqlTypeName(field->type(), field->precision());
-				
+
 			if (field->isUnsigned())
 				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
-				
+
 			if (field->isFPNumericType() && field->precision()>0) {
 				if (field->scale()>0)
 					v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
-				else 
+				else
 					v += QString::fromLatin1("(%1)").arg(field->precision());
 			}
 			else if (field->type()==Field::Text && field->length()>0)
 				v += QString::fromLatin1("(%1)").arg(field->length());
-			
+
 			if (autoinc)
 				v += (" " +
 				(pk ? m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION : m_driver->beh->AUTO_INCREMENT_FIELD_OPTION));
@@ -1077,7 +1077,7 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 	return 0;
 }
 
-Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName, 
+Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName,
 	Q_ULLONG* ROWID)
 {
 	Q_ULLONG row_id = drv_lastInsertRowID();
@@ -1096,7 +1096,7 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 	return rdata[0].toULongLong();
 }
 
-Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, 
+Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName,
 	const KexiDB::TableSchema& table, Q_ULLONG* ROWID)
 {
 	return lastInsertedAutoIncValue(aiFieldName,table.name(), ROWID);
@@ -1326,7 +1326,7 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 
 	QString errmsg(i18n("Table \"%1\" cannot be removed.\n"));
 	//be sure that we handle the correct TableSchema object:
-	if (tableSchema->id() < 0 
+	if (tableSchema->id() < 0
 		|| this->tableSchema(tableSchema->name())!=tableSchema
 		|| this->tableSchema(tableSchema->id())!=tableSchema)
 	{
@@ -1409,7 +1409,7 @@ tristate Connection::alterTable( TableSchema& tableSchema, TableSchema& newTable
 	return ok;
 }
 
-bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
+bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool /*replace*/)
 {
 	clearError();
 	if (&tableSchema!=m_tables[tableSchema.id()]) {
@@ -1456,7 +1456,7 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 	TransactionGuard tg;
 //moved to beginAutoCommitTransaction()	if (skipTransactions)
 //		trans = d->m_default_trans;
-//	else 
+//	else
 	if (!beginAutoCommitTransaction(tg))
 		return false;
 
@@ -1931,7 +1931,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		if (querySingleNumber(QString::fromLatin1("select o_id from kexi__objects where o_type=%1 and lower(o_name)=%2")
 			.arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().lower())), existingID))
 		{
-			//we already have stored a schema data with the same name and type: 
+			//we already have stored a schema data with the same name and type:
 			//just update it's properties as it would be existing object
 			sdata.m_id = existingID;
 			newObject = false;
@@ -2432,14 +2432,14 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	TableSchema *mt = query.masterTable();
 	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
-		setError(ERR_UPDATE_NO_MASTER_TABLE, 
+		setError(ERR_UPDATE_NO_MASTER_TABLE,
 			i18n("Could not update row because there is no master table defined."));
 		return false;
 	}
 	IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
 	if (!useROWID && !pkey) {
 		KexiDBWarn << " -- NO MASTER TABLE's PKEY!" << endl;
-		setError(ERR_UPDATE_NO_MASTER_TABLES_PKEY, 
+		setError(ERR_UPDATE_NO_MASTER_TABLES_PKEY,
 			i18n("Could not update row because master table has no primary key defined."));
 //! @todo perhaps we can try to update without using PKEY?
 		return false;
@@ -2461,7 +2461,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
-			setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY, 
+			setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY,
 				i18n("Could not update row because it does not contain entire master table's primary key."));
 			return false;
 		}
@@ -2472,7 +2472,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 					sqlwhere+=" AND ";
 				QVariant val = data[ pkeyFieldsOrder[i] ];
 				if (val.isNull() || !val.isValid()) {
-					setError(ERR_UPDATE_NULL_PKEY_FIELD, 
+					setError(ERR_UPDATE_NULL_PKEY_FIELD,
 						i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
 	//js todo: pass the field's name somewhere!
 					return false;
@@ -2483,7 +2483,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		}
 	}
 	else {//use ROWID
-		sqlwhere = ( escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "=" 
+		sqlwhere = ( escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "="
 			+ m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
 	}
 	m_sql += (sqlset + " WHERE " + sqlwhere);
@@ -2514,7 +2514,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	TableSchema *mt = query.masterTable();
 	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
-		setError(ERR_INSERT_NO_MASTER_TABLE, 
+		setError(ERR_INSERT_NO_MASTER_TABLE,
 			i18n("Could not insert row because there is no master table defined."));
 		return false;
 	}
@@ -2533,7 +2533,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	if (buf.dbBuffer().isEmpty()) {
 		if (!getROWID && !pkey) {
 			KexiDBWarn << " -- WARNING: MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
-			setError(ERR_INSERT_NO_MASTER_TABLES_PKEY, 
+			setError(ERR_INSERT_NO_MASTER_TABLES_PKEY,
 				i18n("Could not insert row because master table has no primary key defined."));
 			return false;
 		}
@@ -2542,7 +2542,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
-				setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY, 
+				setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY,
 					i18n("Could not insert row because it does not contain entire master table's primary key.")
 					.arg(query.name()));
 				return false;
@@ -2592,7 +2592,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	QueryColumnInfo::List *aif_list = query.autoIncrementFields();
 	Q_ULLONG ROWID = 0;
 	if (pkey && !aif_list->isEmpty()) {
-		//! @todo now only if PKEY is present, this should also work when there's no PKEY 
+		//! @todo now only if PKEY is present, this should also work when there's no PKEY
 		QueryColumnInfo *id_fieldinfo = aif_list->first();
 //! @todo safe to cast it?
 		Q_ULLONG last_id = lastInsertedAutoIncValue(
@@ -2602,10 +2602,10 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		RowData aif_data;
-		QString getAutoIncForInsertedValue = QString::fromLatin1("SELECT ") 
-			+ query.autoIncrementSQLFieldsList(m_driver) 
+		QString getAutoIncForInsertedValue = QString::fromLatin1("SELECT ")
+			+ query.autoIncrementSQLFieldsList(m_driver)
 			+ QString::fromLatin1(" FROM ")
-			+ escapeIdentifier(id_fieldinfo->field->table()->name()) 
+			+ escapeIdentifier(id_fieldinfo->field->table()->name())
 			+ QString::fromLatin1(" WHERE ")
 			+ escapeIdentifier(id_fieldinfo->field->name()) + "="
 			+ QString::number(last_id);
@@ -2644,7 +2644,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 	TableSchema *mt = query.masterTable();
 	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
-		setError(ERR_DELETE_NO_MASTER_TABLE, 
+		setError(ERR_DELETE_NO_MASTER_TABLE,
 			i18n("Could not delete row because there is no master table defined.")
 			.arg(query.name()));
 		return false;
@@ -2654,7 +2654,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 //! @todo allow to delete from a table without pkey
 	if (!useROWID && !pkey) {
 		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
-		setError(ERR_DELETE_NO_MASTER_TABLES_PKEY, 
+		setError(ERR_DELETE_NO_MASTER_TABLES_PKEY,
 			i18n("Could not delete row because there is no primary key for master table defined."));
 		return false;
 	}
@@ -2669,7 +2669,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
-			setError(ERR_DELETE_NO_ENTIRE_MASTER_TABLES_PKEY, 
+			setError(ERR_DELETE_NO_ENTIRE_MASTER_TABLES_PKEY,
 				i18n("Could not delete row because it does not contain entire master table's primary key."));
 			return false;
 		}
@@ -2689,7 +2689,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 		}
 	}
 	else {//use ROWID
-		sqlwhere = ( escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "=" 
+		sqlwhere = ( escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "="
 			+ m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
 	}
 	m_sql += sqlwhere;
