@@ -85,7 +85,7 @@ namespace Kross { namespace Api {
              * Return the \a Event associtated with the name or
              * NULL if there is no such event in this collection.
              */
-            Event::Ptr getEvent(const QString& name);
+            //Event::Ptr getEvent(const QString& name);
 
             /**
              * Add a \a QObject to the eventcollection. All

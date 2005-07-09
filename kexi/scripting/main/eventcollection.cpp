@@ -58,11 +58,6 @@ const QString& EventCollection::getName()
     return d->m_name;
 }
 
-Event::Ptr EventCollection::getEvent(const QString& name)
-{
-    return m_events[name];
-}
-
 EventAction::Ptr EventCollection::addKAction(KAction* action)
 {
     EventAction* event = new EventAction(action);
