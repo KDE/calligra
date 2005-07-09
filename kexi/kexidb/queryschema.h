@@ -351,7 +351,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 by fieldsExpanded(). This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		QMap<QueryColumnInfo*,uint> fieldsOrder();
+		QMap<QueryColumnInfo*,int> fieldsOrder();
 
 		/*! \return table describing order of primary key (PKEY) fields within the query.
 		 Indexing is performed against vector returned by fieldsExpanded().
@@ -375,7 +375,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 @see example for pkeyFieldsCount().
 @todo js: UPDATE CACHE!
 		*/
-		QValueVector<uint> pkeyFieldsOrder();
+		QValueVector<int> pkeyFieldsOrder();
 
 		/*! \return number of master table's primary key fields included in this query.
 		 This method is useful to quickly check whether the vector returned by pkeyFieldsOrder()

@@ -153,8 +153,8 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	if (query) {
 		fieldsExpanded = query->fieldsExpanded();
 		dataFieldsCount = fieldsExpanded.count();
-		QMap<KexiDB::QueryColumnInfo*,uint> fieldsOrder( query->fieldsOrder() );
-		for (QMapConstIterator<KexiDB::QueryColumnInfo*,uint> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
+		QMap<KexiDB::QueryColumnInfo*,int> fieldsOrder( query->fieldsOrder() );
+		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
 			kdDebug() << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
 		}
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {

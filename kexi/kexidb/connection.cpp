@@ -2457,7 +2457,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			m_driver->valueToSQL(it.key()->field,it.data()));
 	}
 	if (pkey) {
-		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -2494,7 +2494,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
+	QMap<QueryColumnInfo*,int> fieldsOrder = query.fieldsOrder();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
@@ -2538,7 +2538,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		if (pkey) {
-			QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+			QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -2583,7 +2583,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
+	QMap<QueryColumnInfo*,int> fieldsOrder = query.fieldsOrder();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
@@ -2665,7 +2665,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 	sqlwhere.reserve(1024);
 
 	if (pkey) {
-		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;

@@ -206,12 +206,12 @@ class QuerySchemaPrivate
 		/*! A map for fast lookup of query fields' order.
 		 This is exactly opposite information compared to vector returned 
 		 by fieldsExpanded() */
-		QMap<QueryColumnInfo*,uint> *fieldsOrder;
+		QMap<QueryColumnInfo*,int> *fieldsOrder;
 
 //		QValueList<bool> detailedVisibility;
 
 		/*! order of PKEY fields (e.g. for updateRow() ) */
-		QValueVector<uint> *pkeyFieldsOrder;
+		QValueVector<int> *pkeyFieldsOrder;
 
 		/*! number of PKEY fields within the query */
 		uint pkeyFieldsCount;
@@ -837,7 +837,7 @@ void QuerySchema::computeFieldsExpanded()
 	if (!d->fieldsExpanded) {
 		d->fieldsExpanded = new QueryColumnInfo::Vector( list.count() );// Field::Vector( list.count() );
 		d->fieldsExpanded->setAutoDelete(true);
-		d->fieldsOrder = new QMap<QueryColumnInfo*,uint>();
+		d->fieldsOrder = new QMap<QueryColumnInfo*,int>();
 	}
 	else {//for future:
 		d->fieldsExpanded->clear();
@@ -875,32 +875,32 @@ void QuerySchema::computeFieldsExpanded()
 //		*detailedVisibility = d->detailedVisibility;
 }
 
-QMap<QueryColumnInfo*,uint> QuerySchema::fieldsOrder()
+QMap<QueryColumnInfo*,int> QuerySchema::fieldsOrder()
 {
 	if (!d->fieldsOrder)
 		computeFieldsExpanded();
 	return *d->fieldsOrder;
 }
 
-QValueVector<uint> QuerySchema::pkeyFieldsOrder()
+QValueVector<int> QuerySchema::pkeyFieldsOrder()
 {
 	if (d->pkeyFieldsOrder)
 		return *d->pkeyFieldsOrder;
 
 	TableSchema *tbl = masterTable();
 	if (!tbl || !tbl->primaryKey())
-		return QValueVector<uint>();
+		return QValueVector<int>();
 
 	//get order of PKEY fields (e.g. for rows updating or inserting )
 	IndexSchema *pkey = tbl->primaryKey();
-	d->pkeyFieldsOrder = new QValueVector<uint>( pkey->fieldCount(), -1 );
+	d->pkeyFieldsOrder = new QValueVector<int>( pkey->fieldCount(), -1 );
 
 	const uint fCount = fieldsExpanded().count();
 	d->pkeyFieldsCount = 0;
 	for (uint i = 0; i<fCount; i++) {
 		QueryColumnInfo *fi = d->fieldsExpanded->at(i);
 		const int fieldIndex = fi->field->table()==tbl ? pkey->indexOf(fi->field) : -1;
-		if (fieldIndex!=-1/* field foung in PK */ 
+		if (fieldIndex!=-1/* field found in PK */ 
 			&& d->pkeyFieldsOrder->at(fieldIndex)==-1 /* first time */)
 		{
 			KexiDBDbg << "QuerySchema::pkeyFieldsOrder(): FIELD " << fi->field->name() 
