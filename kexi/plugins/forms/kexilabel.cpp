@@ -418,6 +418,40 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 	QLabel::paintEvent( e );
 }
 
+void KexiLabel::fontChange( const QFont& font ) {
+	p_pixmapDirty = true;
+	p_privateLabel->setFont( font );
+	QLabel::fontChange( font );
+}
+
+void KexiLabel::styleChange( QStyle& style ) {
+	p_pixmapDirty = true;
+	QLabel::styleChange( style );
+}
+
+void KexiLabel::enabledChange( bool enabled ) {
+	p_pixmapDirty = true;
+	p_privateLabel->setEnabled( enabled );
+	QLabel::enabledChange( enabled );
+}
+
+void KexiLabel::paletteChange( const QPalette& pal ) {
+	p_pixmapDirty = true;
+	p_privateLabel->setPalette( pal );
+	QLabel::paletteChange( pal );
+}
+
+void KexiLabel::frameChanged() {
+	p_pixmapDirty = true;
+	p_privateLabel->frameChanged();
+	QFrame::frameChanged();
+}
+
+void KexiLabel::showEvent( QShowEvent* e ) {
+	p_pixmapDirty = true;
+	QLabel::showEvent( e );
+}
+
 void KexiLabel::setValueInternal( const QVariant& add, bool removeOld ) {
 	if (removeOld) 
 		setText(add.toString());

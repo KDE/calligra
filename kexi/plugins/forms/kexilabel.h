@@ -126,39 +126,13 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 		*/
 		virtual void setValueInternal( const QVariant& add, bool removeOld );
 
-		virtual void fontChange( const QFont& font ) {
-			p_pixmapDirty = true;
-			p_privateLabel->setFont( font );
-			QLabel::fontChange( font );
-		}
+		virtual void fontChange( const QFont& font );
+		virtual void styleChange( QStyle& style );
+		virtual void enabledChange( bool enabled );
 
-		virtual void styleChange( QStyle& style ) {
-			p_pixmapDirty = true;
-			QLabel::styleChange( style );
-		}
-
-		virtual void enabledChange( bool enabled ) {
-			p_pixmapDirty = true;
-			p_privateLabel->setEnabled( enabled );
-			QLabel::enabledChange( enabled );
-		}
-
-		virtual void paletteChange( const QPalette& pal ) {
-			p_pixmapDirty = true;
-			p_privateLabel->setPalette( pal );
-			QLabel::paletteChange( pal );
-		}
-
-		virtual void frameChanged() {
-			p_pixmapDirty = true;
-			p_privateLabel->frameChanged();
-			QFrame::frameChanged();
-		}
-
-		virtual void showEvent( QShowEvent* e ) {
-			p_pixmapDirty = true;
-			QLabel::showEvent( e );
-		}
+		virtual void paletteChange( const QPalette& pal );
+		virtual void frameChanged();
+		virtual void showEvent( QShowEvent* e );
 
 	private:
 		void updatePixmapLater();
