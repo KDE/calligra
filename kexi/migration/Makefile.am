@@ -13,11 +13,12 @@ if compile_mysql_plugin
 mysql_dir=mysql
 endif
 
-SUBDIRS = . $(pgsql_dir) $(mysql_dir)
+SUBDIRS = . $(pgsql_dir) #$(mysql_dir)
 
 libkeximigrate_la_METASOURCES = AUTO
 
-libkeximigrate_la_SOURCES = keximigrate.cpp importwizard.cpp migratemanager.cpp
+libkeximigrate_la_SOURCES = keximigrate.cpp importwizard.cpp migratemanager.cpp \
+	keximigratedata.cpp
 
 libkeximigrate_la_LIBADD = \
 	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \
