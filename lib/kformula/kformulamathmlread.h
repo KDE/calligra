@@ -44,9 +44,9 @@ public:
 
     /**
      * Build a MathML 2 KFormula converter.
-     * call @startConversion to convert and wait for
-     * a @conversionFinished signal, than call
-     * @getKFormulaDom to get the converted DOM
+     * call startConversion() to convert and wait for
+     * a conversionFinished() signal, then call
+     * getKFormulaDom() to get the converted DOM
      */
     MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool oasisFormat = false );
 

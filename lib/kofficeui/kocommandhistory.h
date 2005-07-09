@@ -69,6 +69,7 @@ public:
      * This also creates an undo and a redo action, in the @p actionCollection,
      * using the standard names ("edit_undo" and "edit_redo").
      *
+     * @param actionCollection the collection to put the history in.
      * @param withMenus if true, the actions will display a menu when plugged
      * into a toolbar.
      */

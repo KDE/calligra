@@ -70,14 +70,17 @@ public:
      * @param parentWidget the parent widget, in case we create a wrapper widget
      *        (in single view mode).
      *        Usually the first argument passed by KParts::Factory::createPart.
+     * @param widgetName name of the widget.
      * @param parent may be another KoDocument, or anything else.
      *        Usually the third argument of KParts::Factory::createPart.
      * @param name is used to identify this document via DCOP so you may want to
      *        pass a meaningful name here which matches the pattern [A-Za-z_][A-Za-z_0-9]*.
      * @param singleViewMode determines whether the document may only have one view. In this case
      *        the @p parent must be a QWidget derived class. KoDocument will then create a wrapper widget
-     *        (@ref KoViewWrapperWidget) which is a child of @p parentWidget.
-     *        This widget can be retrieved by calling @ref #widget.
+     *        (KoViewWrapperWidget) which is a child of @p parentWidget.
+     *        This widget can be retrieved by calling widget().
+     *
+     * @todo explain what the purpose of widgetName is.
      */
     KoDocument( QWidget* parentWidget,
                 const char* widgetName,
@@ -88,8 +91,8 @@ public:
     /**
      *  Destructor.
      *
-     * The destructor does not delete any attached @ref KoView objects and it does not
-     * delete the attached widget as returned by @ref #widget.
+     * The destructor does not delete any attached KoView objects and it does not
+     * delete the attached widget as returned by widget().
      */
     virtual ~KoDocument();
 
@@ -106,8 +109,8 @@ public:
 
     /**
      * Returns the action described action object. In fact only the "name" attribute
-     * of @ref #element is of interest here. The method searches first in the
-     * @ref KActionCollection of the first view and then in the KActionCollection of this
+     * of @p element is of interest here. The method searches first in the
+     * KActionCollection of the first view and then in the KActionCollection of this
      * document.
      * This allows %KOffice applications to define actions in both the view and the document.
      * They should only define view-actions (like zooming and stuff) in the view.
@@ -146,7 +149,7 @@ public:
      *
      * @note This will call openURL(). To differentiate this from an ordinary
      *       Open operation (in any reimplementation of openURL() or openFile())
-     *       call @ref isImporting().
+     *       call isImporting().
      */
     bool import( const KURL &url );
 
@@ -158,7 +161,7 @@ public:
      *
      * @note This will call KoDocument::saveAs(). To differentiate this
      *       from an ordinary Save operation (in any reimplementation of
-     *       saveFile()) call @ref isExporting().
+     *       saveFile()) call isExporting().
      */
     bool exp0rt( const KURL &url );
 
@@ -166,7 +169,7 @@ public:
      * @brief Sets whether the document can be edited or is read only.
      *
      * This recursively applied to all child documents and
-     * @ref KoView::updateReadWrite is called for every attached
+     * KoView::updateReadWrite is called for every attached
      * view.
      */
     virtual void setReadWrite( bool readwrite = true );
@@ -174,7 +177,7 @@ public:
     /**
      * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
      *
-     * With the help of @p instance or @ref KApplication::instance() this
+     * With the help of @p instance or KApplication::instance() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
      *
@@ -186,7 +189,7 @@ public:
     /**
      * Used by KoMainWindow, when no document exists yet.
      *
-     * With the help of @p instance or @ref KApplication::instance() this
+     * With the help of @p instance or KApplication::instance() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-ExtraNativeMimeTypes" entry and returns it.
      *
@@ -202,7 +205,7 @@ public:
 
     /**
      * To be preferred when a document exists. It is fast when calling
-     * it multiple times since it caches the result that @ref #readNativeFormatMimeType
+     * it multiple times since it caches the result that readNativeFormatMimeType()
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file
      * You do NOT have to reimplement this (it is only virtual for kounavail).
@@ -315,7 +318,7 @@ public:
     /**
      * Adds a view to the document.
      *
-     * This calls @ref KoView::updateReadWrite to tell the new view
+     * This calls KoView::updateReadWrite to tell the new view
      * whether the document is readonly or not.
      */
     virtual void addView( KoView *view );
@@ -336,7 +339,7 @@ public:
     int viewCount() const;
 
     /**
-     * Reimplemented from @ref KParts::Part
+     * Reimplemented from KParts::Part
      */
     virtual KParts::Part *hitTest( QWidget *widget, const QPoint &globalPos );
 
@@ -391,7 +394,7 @@ public:
     virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view, double zoomX = 1.0, double zoomY = 1.0 );
 
     /**
-     *  Paint a given child. Normally called by @ref paintChildren.
+     *  Paint a given child. Normally called by paintChildren().
      *
      *  @param child       The child to be painted.
      *  @param painter     The painter object into that should be drawn.
@@ -405,7 +408,7 @@ public:
                              double zoomX = 1.0, double zoomY = 1.0 );
 
     /**
-     *  Paints the data itself. Normally called by @ref paintEverthing. It does not
+     *  Paints the data itself. Normally called by paintEverthing(). It does not
      *  paint the children.
      *  It's this method that %KOffice Parts have to implement.
      *
@@ -438,6 +441,7 @@ public:
      * Initializes an empty document (display the template dialog!).
      * You have to overload this method to initialize all your document variables.
      * @param flags see InitDocFlags
+     * @param parentWidget the widget this document belongs with
      */
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0) = 0;
 
@@ -449,7 +453,7 @@ public:
 
     /**
      *  Tells the document that its title has been modified, either because
-     *  the modified status changes (this is done by @ref #setModified) or
+     *  the modified status changes (this is done by setModified() ) or
      *  because the URL or the document-info's title changed.
      */
     virtual void setTitleModified();
@@ -465,7 +469,7 @@ public:
      *  Used after loading a template
      *  (which is not empty, but not the user's input).
      *
-     *  @see #isEmpty
+     *  @see isEmpty()
      */
     virtual void setEmpty() { m_bEmpty = true; }
 
@@ -473,6 +477,8 @@ public:
      *  @brief Loads a document from a store.
      *
      *  You should never have to reimplement.
+     *
+     *  @param store The store to load from
      *  @param url An internal url, like tar:/1/2
      */
     virtual bool loadFromStore( KoStore* store, const QString& url );
@@ -486,7 +492,7 @@ public:
     /**
      *  @brief Saves a document to a store.
      *
-     *  You should not have to reimplement this - but call it in @ref #saveChildren.
+     *  You should not have to reimplement this - but call it in saveChildren().
      */
     virtual bool saveToStore( KoStore* store, const QString& path );
 
@@ -569,7 +575,7 @@ public:
 
     /**
      *  Save the document. The default implementation is to call
-     *  @ref #saveXML. This method exists only for applications that
+     *  saveXML(). This method exists only for applications that
      *  don't use QDomDocument for saving, i.e. kword and kpresenter.
      */
     virtual bool saveToStream( QIODevice * dev );
@@ -578,7 +584,7 @@ public:
      *  Loads a document in the native format from a given URL.
      *  Reimplement if your native format isn't XML.
      *
-     *  @param file the file to load - usually @ref KReadOnlyPart::m_file or the result of a filter
+     *  @param file the file to load - usually KReadOnlyPart::m_file or the result of a filter
      */
     virtual bool loadNativeFormat( const QString & file );
 
@@ -637,7 +643,7 @@ public:
      *         @p doc is a direct child of this document.
      *
      * This is a convenience function. You could get the same result
-     * by traversing the list returned by @ref #children.
+     * by traversing the list returned by children().
      */
     KoDocumentChild *child( KoDocument *doc );
 
@@ -654,7 +660,7 @@ public:
      * Appends the shell to the list of shells which show this
      * document as their root document.
      *
-     * This method is automatically called from @ref KoMainWindow::setRootDocument,
+     * This method is automatically called from KoMainWindow::setRootDocument,
      * so you dont need to call it.
      */
     virtual void addShell( KoMainWindow *shell );
@@ -868,17 +874,17 @@ protected:
     virtual KoView *createViewInstance( QWidget *parent, const char *name ) = 0;
 
     /**
-     *  Loads a document from @ref KReadOnlyPart::m_file (KParts takes care of downloading
+     *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
      *  remote documents).
      *  Applies a filter if necessary, and calls loadNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      *
-     * This method is called from the @ref KReadOnlyPart::openURL method.
+     * This method is called from the KReadOnlyPart::openURL method.
      */
     virtual bool openFile();
 
     /**
-     *  Saves a document to @ref KReadOnlyPart::m_file (KParts takes care of uploading
+     *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
      *  remote documents)
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
@@ -940,8 +946,8 @@ protected:
 
     /**
      *  Overload this function if you have to load additional files
-     *  from a store. This function is called after @ref #loadXML
-     *  and after @ref #loadChildren have been called.
+     *  from a store. This function is called after loadXML()
+     *  and after loadChildren() have been called.
      */
     virtual bool completeLoading( KoStore* store );
 
@@ -952,14 +958,14 @@ protected:
      *  url (using url().url()) before the filename, so that everything is kept relative
      *  to this document. For instance it will produce urls such as
      *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
-     *  But do this ONLY if the document is not stored extern (see @ref #isStoredExtern).
+     *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
      *  If it is, then the pictures should be saved to tar:/pictures.
      */
     virtual bool completeSaving( KoStore* store );
 
     /**
      * Inserts the new child in the list of children and emits the
-     * @ref #childChanged signal.
+     * childChanged() signal.
      *
      * At the same time this method marks this document as modified.
      *

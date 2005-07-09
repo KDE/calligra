@@ -37,7 +37,7 @@ class KoApplicationPrivate;
  *  can find their images etc.
  *
  *  If the last mainwindow becomes closed, KoApplication automatically
- *  calls @ref QApplication::quit.
+ *  calls QApplication::quit.
  */
 class KOFFICECORE_EXPORT KoApplication : public KApplication
 {
@@ -62,7 +62,7 @@ public:
      * Parses command line arguments and creates the initial shells and docs
      * from them (or an empty doc if no cmd-line argument is specified ).
      *
-     * You must call this method directly before calling @ref QApplication::exec.
+     * You must call this method directly before calling QApplication::exec.
      *
      * It is valid behaviour not to call this method at all. In this case you
      * have to process your command line parameters by yourself.

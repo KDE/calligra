@@ -159,6 +159,7 @@ public:
    * Sets the clip region of the painter, so that only pixels of the
    * child part can be drawn.
    *
+   * @param painter the painter do modify.
    * @param combine tells whether the new clip region is an intersection
    *        of the current region with the childs region or whether only
    *        the childs region is set.
