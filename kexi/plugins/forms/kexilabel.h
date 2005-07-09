@@ -31,7 +31,10 @@
 class QPainter;
 class QTimer;
 class KexiLabel;
+
 class KexiLabelPrivate;
+
+
 
 /**
 An extended, data-aware, read-only text label.
