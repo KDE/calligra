@@ -69,7 +69,7 @@ public:
      * Spellchecks a buffer of many words in plain text
      * format.
      *
-     * The @p _buffer is not modified.  The signal @ref done() will be
+     * The @p _buffer is not modified.  The signal done() will be
      * sent when @ref check() is finished.
      */
     virtual bool check( KoTextIterator *itr, bool dialog = false );

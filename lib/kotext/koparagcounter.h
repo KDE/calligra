@@ -75,6 +75,8 @@ public:
      * @param heading true if heading, false if normal list
      * @param level 1-based
      * @param loadingStyle true if loading a style, false if loading a paragraph
+     *
+     * @todo Document other parameters.
      */
     void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level, bool loadingStyle = false );
     /// Part of loadOasis that is shared with KWVariableSettings::loadOasis for footnotes/endnotes
