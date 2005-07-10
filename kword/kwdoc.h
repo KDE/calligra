@@ -829,7 +829,6 @@ public:
     KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 #endif
 signals:
-    void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
     /// This is emitted by setPageLayout if updateViews=true
     void pageLayoutChanged( const KoPageLayout& );

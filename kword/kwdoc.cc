@@ -1852,7 +1852,7 @@ void KWDocument::loadEmbedded( const QDomElement &embedded )
         }
         else
             kdError(32001) << "No <SETTINGS> tag in EMBEDDED" << endl;
-        emit sig_insertObject( ch, fs );
+        
     } else
         kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
 }
@@ -3615,8 +3615,6 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 
     KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Part Frame"), frame);
     addCommand(cmd);
-
-    emit sig_insertObject( ch, frameset );
 
     frameChanged( frame ); // repaint etc.
 }
