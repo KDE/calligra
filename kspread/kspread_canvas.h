@@ -195,7 +195,7 @@ public:
      */
     void scrollToCell(QPoint location);
     /**
-     * Chooses the correct @ref #EditorType by looking at
+     * Chooses the correct EditorType by looking at
      * the current cells value. By default CellEditor is chosen.
      */
     void createEditor();
@@ -221,7 +221,7 @@ public:
 
     /**
      * Switches to choose mode and sets the initial selection to the
-     * position returned by @ref #marker.
+     * position returned by marker().
      */
     void startChoose();
     /**

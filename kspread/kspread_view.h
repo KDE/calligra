@@ -58,9 +58,9 @@ namespace KSpread
 class Damage;
 }
 
-/**
- * \brief
- * The KSpreadView class displays a KSpread document.
+/** @class KSpreadView
+ *
+ * @brief The KSpreadView class displays a KSpread document.
  *
  *
  * KSpreadView is used to display a spreadsheet document and provide
