@@ -717,7 +717,7 @@ public:
 
     /**
      * Calculates the text parameters stored in cell
-     * Applies font to use to @param painter
+     * Applies font to use to @p painter
      */
     void calculateTextParameters( QPainter &painter, int _col, int _row );
 
@@ -829,7 +829,7 @@ protected:
     const KSpreadFormat* fallbackFormat( int col, int row ) const;
 
     /**
-     * Applies the font to use to @param painter
+     * Applies the font to use to @p painter
      */
     void applyZoomedFont( QPainter &painter, int _col, int _row );
 
