@@ -101,7 +101,8 @@ public:
      *  @param layout   The layout.
      *  @param headfoot The header and the footer.
      *  @param tabs     The number of tabs.
-     *  @param unit     The unit to use for displaying the values to the user
+     *  @param unit     The unit to use for displaying the values to the user.
+     *  @param modal    Whether the dialog is modal or not.
      */
     KoPageLayoutDia( QWidget* parent, const char* name,
 		     const KoPageLayout& layout,

@@ -42,7 +42,7 @@ namespace KOffice {
  * @brief This class represents a chain of plain @ref KoFilter instances.
  *
  * Instances of this class are shared, so please just hold
- * @ref KoFilterChain::Ptr pointers to it.
+ * KoFilterChain::Ptr pointers to it.
  *
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class

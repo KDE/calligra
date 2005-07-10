@@ -256,6 +256,8 @@ public:
      *
      * This is called on loading, and in "save as", so you shouldn't
      * have to call it.
+     *
+     * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
     void setOutputMimeType( const QCString & mimeType, int specialOutputFlag = 0 );

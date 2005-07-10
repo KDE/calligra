@@ -61,6 +61,7 @@ public:
      * Look up a style in the collection, inserting it if necessary.
      * This assigns a name to the style and returns it.
      *
+     * @param style the style to look up.
      * @param name proposed (base) name for the style. Note that with the OASIS format,
      * the style name is never shown to the user (there's a separate display-name
      * attribute for that). So there are little reasons to use named styles anyway.

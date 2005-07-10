@@ -91,9 +91,11 @@ public:
     KoFilter::ConversionStatus exp0rt( const QString& url, QCString& mimeType );
 
 
-    // === Static API ===
+
+    ///@name Static API
+    //@{
     /**
-     * Suitable for passing to @ref KFileDialog::setMimeFilter. The default mime
+     * Suitable for passing to KFileDialog::setMimeFilter. The default mime
      * gets set by the "users" of this method, as we do not have enough
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
@@ -115,6 +117,8 @@ public:
      * @note Slow, but cached
      */
     static bool filterAvailable( KoFilterEntry::Ptr entry );
+
+    //@}
 
     /**
      * Set the filter manager is batch mode (no dialog shown)

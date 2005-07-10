@@ -67,6 +67,7 @@ public:
    *
    * @param document is the document which should be displayed in this view. This pointer
    *                 must not be zero.
+   * @param parent   parent widget for this view.
    * @param name     Name of the view. The name is used in DCOP, so the name should
    *                 match the pattern [A-Za-z_][A-Za-z_0-9]*.
    *
@@ -98,8 +99,8 @@ public:
 
   /**
    * Returns the action described action object. In fact only the "name" attribute
-   * of @ref #element is of interest here. The method searches in the
-   * @ref KActionCollection of this view.
+   * of @p element is of interest here. The method searches in the
+   * KActionCollection of this view.
    *
    * Please notice that KoView indirectly inherits KXMLGUIClient.
    *
@@ -158,7 +159,7 @@ public:
    * data structures. You can use this mechanism to implement a zoom
    * for example.
    *
-   * The method calls @ref QWidget::update so that the scaled content
+   * The method calls QWidget::update so that the scaled content
    * is automatically displayed.
    *
    * The default scaling is 1.0 in both orientations.
@@ -260,7 +261,7 @@ public:
   virtual DCOPObject * dcopObject();
 
   /**
-   * Overload this method to setup @ref KPrinter before the actual printing.
+   * Overload this method to setup KPrinter before the actual printing.
    *
    * @see #print
    */
@@ -297,7 +298,7 @@ public:
    * If you use this method instead of using statusBar() directly,
    * KoView will take care of removing the items when the view GUI is deactivated
    * and readding them when it is reactivated.
-   * The parameters are the same as @ref QStatusBar::addWidget().
+   * The parameters are the same as QStatusBar::addWidget().
    *
    * Note that you can't use KStatusBar methods (inserting text items by id).
    * But you can create a KStatusBarLabel with a dummy id instead, and use
@@ -364,8 +365,8 @@ public slots:
 
 protected:
   /**
-   * This method handles three events: @ref KParts::PartActivateEvent, @ref KParts::PartSelectEvent
-   * and @ref KParts::GUIActivateEvent.
+   * This method handles three events: @ref KParts::PartActivateEvent, KParts::PartSelectEvent
+   * and KParts::GUIActivateEvent.
    * The respective handlers are called if such an event is found.
    */
   virtual void customEvent( QCustomEvent *ev );

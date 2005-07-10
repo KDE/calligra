@@ -79,7 +79,7 @@ k_dcop:
     int viewCount();
 
     /**
-     * @return a DCOP reference (@ref DCOPRef) to the view with index @p idx
+     * @return a DCOP reference (DCOPRef) to the view with index @p idx
      */
     DCOPRef view( int idx );
 

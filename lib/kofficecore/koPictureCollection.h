@@ -87,20 +87,26 @@ public:
 
     /**
      * Save the used picturess from the collection into the store
-     * Usually called from @ref #completeSaving.
+     * Usually called from completeSaving().
      *
+     * @param pictureType type for the stored picture
      * @param store the store in which to save the pictures
      * @param keys the list of keys corresponding to the pictures to save
      * @return true on success, false on failure (e.g. disk full)
+     *
+     * @todo Reduce lameness of dox for pictureType.
      */
     bool saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
      * Save the used pictures from the collection into the store, however in KOffice 1.1 format
      *
+     * @param pictureType type for the stored picture
      * @param store the store in which to save the pictures in KOffice 1.1 format
      * @param keys the list of keys corresponding to the pictures to save
      * @return true on success, false on failure (e.g. disk full)
+     *
+     * @todo Reduce lameness of dox for pictureType.
      */
     bool saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 

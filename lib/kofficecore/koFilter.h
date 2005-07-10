@@ -122,7 +122,7 @@ private:
  * To make use of embedding features you have to know that there are two kinds
  * of embedding for filters: embedding the output of a different filter (library)
  * or embedding the output of several internal filters (no separate library).
- * The first case is the simpler one. You just have to override @ref #savePartContents
+ * The first case is the simpler one. You just have to override savePartContents()
  * and call @ref #embedPart to trigger the embedding process. One example for such
  * a filter is Kontour's MSOD (MS Office Drawing) filter.
  *
@@ -178,7 +178,7 @@ protected:
     /**
      * Embed some document using an external filter (i.e. a different
      * filter library). This method works according to the template method
-     * pattern and calls @ref #savePartContents during execution.
+     * pattern and calls savePartContents() during execution.
      * Call this method when you want to convert some data using one or more
      * KOffice filters selected via the filter manager.
      * This is the way to go when it comes to embedding unless you have very

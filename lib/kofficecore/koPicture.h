@@ -100,6 +100,7 @@ public:
     /**
      * Create a dragobject containing this picture.
      * @param dragSource must be 0 when copying to the clipboard
+     * @param name name for the QDragObject
      * @return 0L if the picture is null, or if a dragobject for it isn't implemented [yet]
      */
     QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
