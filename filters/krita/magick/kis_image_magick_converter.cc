@@ -538,12 +538,12 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	image -> rows = img -> height();
 
 #ifdef HAVE_MAGICK6
-	if ( layer-> alpha() )
+	if ( layer-> hasAlpha() )
 		image -> matte = MagickTrue;
 	else
 		image -> matte = MagickFalse;
 #else
-	image -> matte = layer -> alpha();
+	image -> matte = layer -> hasAlpha();
 #endif
 
 
@@ -552,7 +552,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	height = img -> height();
 	width = img -> width();
 
-	bool alpha = layer -> alpha();
+	bool alpha = layer -> hasAlpha();
 	Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
 	for (y = 0; y < height; y++) {
@@ -658,12 +658,12 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	image -> rows = img -> height();
 
 #ifdef HAVE_MAGICK6
-	if ( layer-> alpha() )
+	if ( layer-> hasAlpha() )
 		image -> matte = MagickTrue;
 	else
 		image -> matte = MagickFalse;
 #else
-	image -> matte = layer -> alpha();
+	image -> matte = layer -> hasAlpha();
 #endif
 
 
@@ -672,7 +672,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	height = img -> height();
 	width = img -> width();
 
-	bool alpha = layer -> alpha();
+	bool alpha = layer -> hasAlpha();
 	Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
 	for (y = 0; y < height; y++) {
