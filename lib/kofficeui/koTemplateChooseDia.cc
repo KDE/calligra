@@ -637,10 +637,13 @@ void KoTemplateChooseDia::slotOk()
 	    {
 		// The checkbox m_nodiag is in tri-state mode for new documents
 		// fixes bug:77542
-		if (d->m_nodiag->isChecked())
+		
+		if (d->m_nodiag->state() == QButton::On) {
 		    grp.writeEntry( "NoStartDlg", "yes");
-		else if (!d->m_nodiag->isChecked())
+		}
+		else if (d->m_nodiag->state() == QButton::Off) {
 		    grp.writeEntry( "NoStartDlg", "no");
+		}
 	    }
 	}
 	else
