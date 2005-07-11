@@ -187,6 +187,3 @@ AM_CONDITIONAL(need_kde34_compatibility, test "$need_kde34_compat" = "yes")
 AM_CONDITIONAL(need_kde31_compatibility, test "supported" = "no")
 
 # --- End KDE 3.2 check ---
-
-# temporary
-DO_NOT_COMPILE="$DO_NOT_COMPILE kugar"
