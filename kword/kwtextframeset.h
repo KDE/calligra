@@ -69,7 +69,7 @@ public:
 /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
-    virtual FrameSetType type() { return FT_TEXT; }
+    virtual FrameSetType type() const { return FT_TEXT; }
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
 

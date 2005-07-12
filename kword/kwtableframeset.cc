@@ -511,6 +511,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
   } while( i<m_rowPositions.count());
 }
 #endif
+#if 0 // def SUPPORT_MULTI_PAGE_TABLES
 
     //double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
     unsigned int pageNumber=getCell(0,0)->frame(0)->pageNum() +1;
@@ -565,7 +566,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 if(getCell(breakRow+1,i) && getCell(breakRow+1,i)->frame(0)->height() > pageHeight)
                     hugeRow=true;
             }
-            //if((*pageBound) != breakRow) { // ik denk dat dit wel moet..
+            //if((*pageBound) != breakRow) { // I think that this has to be that way
                 // voeg top in in rowPositions
 #endif
 
@@ -611,6 +612,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 #endif
 
     }
+#endif
 #if 0
 { QValueList<unsigned int>::iterator pb = m_pageBoundaries.begin();
   unsigned int i=0;
@@ -634,6 +636,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     //Cell *cell;
     //bool setMinFrameSize= activeCell->frame(0)->isSelected();
 
+#if 0 // def SUPPORT_MULTI_PAGE_TABLES
     for(TableIter cell(this); cell; ++cell) {
         if((cell->rowAfter() > fromRow && cell->firstRow() < untilRow) || cell->colAfter() > m_redrawFromCol)
             position(cell, (cell==activeCell && cell->frame(0)->isSelected()));
@@ -679,6 +682,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             }
         }
     } while(counter!=0);
+#endif
 
 
     m_redrawFromCol = 0;

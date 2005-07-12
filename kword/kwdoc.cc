@@ -2749,71 +2749,12 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
 
     oasisStore.closeContentWriter();
 
-    // Done with content.xml, now prepare things for styles.xml
-
-    if ( saveFlag == SaveAll )
-    {
-        KoGenStyle pageLayout = m_pageLayout.saveOasis();
-        pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
-
-        //<style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="right" style:rel-width="1%" style:color="#000000"/>
-
-        QBuffer buffer;
-        buffer.open( IO_WriteOnly );
-        KoXmlWriter footnoteSepTmpWriter( &buffer );  // TODO pass indentation level
-        footnoteSepTmpWriter.startElement( "style:footnote-sep" );
-        QString tmp;
-        switch( m_footNoteSeparatorLinePos )
-        {
-        case SLP_CENTERED:
-            tmp = "centered";
-            break;
-        case SLP_RIGHT:
-            tmp = "right";
-            break;
-        case SLP_LEFT:
-            tmp = "left";
-            break;
-        }
-
-        footnoteSepTmpWriter.addAttribute( "style:adjustment", tmp );
-        footnoteSepTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth );
-        footnoteSepTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + "%" );
-        switch( m_footNoteSeparatorLineType )
-        {
-        case SLT_SOLID:
-            tmp = "solid";
-            break;
-        case SLT_DASH:
-            tmp = "dash";
-            break;
-        case SLT_DOT:
-            tmp = "dotted";
-            break;
-        case SLT_DASH_DOT:
-            tmp = "dot-dash";
-            break;
-        case SLT_DASH_DOT_DOT:
-            tmp = "dot-dot-dash";
-            break;
-        }
-
-        footnoteSepTmpWriter.addAttribute( "style:line-style", tmp );
-
-        footnoteSepTmpWriter.endElement();
-        const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-        pageLayout.addChildElement( "separator", elementContents );
-
-
-
-        // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
-        /*QString pageLayoutStyleName =*/ mainStyles.lookup( pageLayout, "pm" );
-    }
+    // Done with content.xml
 
     if ( !store->open( "styles.xml" ) )
         return false;
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    saveOasisDocumentStyles( store, mainStyles, saveFlag );
+    saveOasisDocumentStyles( store, mainStyles, savingContext, saveFlag );
     if ( !store->close() ) // done with styles.xml
         return false;
 
@@ -2992,9 +2933,8 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
     settingsWriter.endDocument();
 }
 
-void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, SaveFlag saveFlag ) const
+void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag ) const
 {
-    QString pageLayoutName;
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
@@ -3025,21 +2965,123 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->saveNoteConfiguration( *stylesWriter );
     stylesWriter->endElement(); // office:styles
 
+    QString pageLayoutName;
+    QByteArray headerFooters;
     if ( saveFlag == SaveAll )
     {
         stylesWriter->startElement( "office:automatic-styles" );
 
-        styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
-        Q_ASSERT( styles.count() == 1 );
-        it = styles.begin();
-        for ( ; it != styles.end() ; ++it ) {
-            (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-            //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
-            // which only works as long as we have only one page master
-            stylesWriter->endElement();
-            Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
-            pageLayoutName = (*it).name;
+        KoGenStyle pageLayout = m_pageLayout.saveOasis();
+        pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
+
+        // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
+
+        QBuffer buffer;
+        buffer.open( IO_WriteOnly );
+        KoXmlWriter footnoteSepTmpWriter( &buffer );  // TODO pass indentation level
+        footnoteSepTmpWriter.startElement( "style:footnote-sep" );
+        QString tmp;
+        switch( m_footNoteSeparatorLinePos )
+        {
+        case SLP_CENTERED:
+            tmp = "centered";
+            break;
+        case SLP_RIGHT:
+            tmp = "right";
+            break;
+        case SLP_LEFT:
+            tmp = "left";
+            break;
         }
+
+        footnoteSepTmpWriter.addAttribute( "style:adjustment", tmp );
+        footnoteSepTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth );
+        footnoteSepTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + "%" );
+        switch( m_footNoteSeparatorLineType )
+        {
+        case SLT_SOLID:
+            tmp = "solid";
+            break;
+        case SLT_DASH:
+            tmp = "dash";
+            break;
+        case SLT_DOT:
+            tmp = "dotted";
+            break;
+        case SLT_DASH_DOT:
+            tmp = "dot-dash";
+            break;
+        case SLT_DASH_DOT_DOT:
+            tmp = "dot-dot-dash";
+            break;
+        }
+
+        footnoteSepTmpWriter.addAttribute( "style:line-style", tmp );
+
+        footnoteSepTmpWriter.endElement();
+        const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+        pageLayout.addChildElement( "separator", elementContents );
+
+        // This is a bit of a hack, which only works as long as we have only one page master
+        // if there's more than one pagemaster we need to rethink all this
+
+        pageLayoutName = mainStyles.lookup( pageLayout, "pm" );
+        pageLayout.writeStyle( stylesWriter, mainStyles, "style:page-layout", pageLayoutName,
+                               "style:page-layout-properties", false /*don't close*/ );
+        //if ( m_pageLayout.columns > 1 ) TODO add columns element.
+
+        // Header and footers save their content into master-styles/master-page, but their
+        // styles into the page-layout automatic-style. To avoid splitting that code
+        // in two places (and inconsistent iteration), we save both here, the content
+        // going into
+        buffer.close();
+        buffer.setBuffer( headerFooters );
+        buffer.open( IO_WriteOnly );
+        // Ouch another problem: there is only one header style in oasis
+        // ##### can't have different borders for even/odd headers...
+        bool headerStyleSaved = false;
+        bool footerStyleSaved = false;
+        KoXmlWriter headerFooterTmpWriter( &buffer );  // TODO pass indentation level
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+        for ( ; fit.current() ; ++fit ) {
+            const KWFrameSet* fs = fit.current();
+            if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
+                 !fs->isFloating() &&
+                 !fs->isDeleted() &&
+                 fs->type() == FT_TEXT &&
+                 fs->isHeaderOrFooter() )
+            {
+                // Save content
+                headerFooterTmpWriter.startElement( fs->headerFooterTag() ); // e.g. style:header
+                static_cast<const KWTextFrameSet *>(fs)->saveOasisContent( headerFooterTmpWriter, savingContext );
+                headerFooterTmpWriter.endElement();
+                // Save style
+                KWFrame* frame = fs->frame(0);
+                if ( fs->isAHeader() ) {
+                    if ( headerStyleSaved )
+                        continue;
+                    stylesWriter->startElement( "style:header-style" );
+                } else {
+                    if ( footerStyleSaved )
+                        continue;
+                    stylesWriter->startElement( "style:footer-style" );
+                }
+#if 0 // more code reuse, but harder to integrate
+                KoGenStyle hfStyle;
+                hfStyle.addPropertyPt( "fo:min-height", frame->minFrameHeight() );
+                frame->saveBorderProperties( hfStyle );
+                frame->saveMarginProperties( hfStyle );
+                ...
+#endif
+                stylesWriter->startElement( "style:header-footer-properties" );
+                stylesWriter->addAttributePt( "fo:min-height", frame->minFrameHeight() );
+                // TODO frame->saveBorderAttributes( *stylesWriter );
+                frame->saveMarginAttributes( *stylesWriter );
+                stylesWriter->endElement(); // header-footer-properties
+                stylesWriter->endElement(); // header-style
+            }
+        }
+        stylesWriter->endElement(); // style:page-layout
         stylesWriter->endElement(); // office:automatic-styles
     }
 
@@ -3048,6 +3090,13 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter->startElement( "style:master-page" );
     stylesWriter->addAttribute( "style:name", "Standard" );
     stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
+
+    if ( isHeaderVisible() || isFooterVisible() ) { // ### TODO save them even when hidden (and not empty)?
+        headerFooters.resize( headerFooters.size() + 1 );
+        headerFooters[headerFooters.size()-1] = '\0';
+        stylesWriter->addCompleteElement( headerFooters.data() );
+    }
+
     stylesWriter->endElement();
     stylesWriter->endElement(); // office:master-styles
 
@@ -3095,10 +3144,10 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
         ++fit; // skip main text frameset
         for ( ; fit.current() ; ++fit ) {
             KWFrameSet* fs = fit.current();
-            if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
-                 !fs->isFloating() &&
+            if ( !fs->isFloating() &&
                  !fs->isDeleted() &&
-                 fs->frameSetInfo() != KWFrameSet::FI_FOOTNOTE ) // footnotes already saved inline
+                // footnotes already saved inline, header/footers elsewhere
+                 fs->frameSetInfo() == KWFrameSet::FI_BODY )
             {
                 fs->saveOasis( writer, context, true );
             }
@@ -3120,9 +3169,10 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
         QPtrListIterator<KWFrameSet> fit = framesetsIterator();
         for ( ; fit.current() ; ++fit ) {
             KWFrameSet* fs = fit.current();
-            if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
-                 !fs->isFloating() &&
-                 !fs->isDeleted() ) {
+            if ( !fs->isFloating() &&
+                 !fs->isDeleted() &&
+                 fs->frameSetInfo() == KWFrameSet::FI_BODY )
+            {
                 fs->saveOasis( writer, context, true );
             }
         }

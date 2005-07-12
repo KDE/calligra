@@ -23,13 +23,22 @@ followup, copy or none. Default value: copy for header/footers, none otherwise.
 KWord supports both the normal word processing (paragraphs directly inside the body)
 and the page-based DTP mode (page-sequence element).
 
+* Headers and footers
+OASIS supports odd/even headers and footers using "header" and "header-left".
+But for first page header/footer KWord should create a separate page layout,
+this is not done yet (it uses its own tag instead, as a temporary hack).
+Also OASIS doesn't allow a different style for header and header-left,
+so they must have the same min-size, border, margins...
+
 Notes about interoperability with OpenOffice.org-2.0:
 -----------------------------------------------------
 
 List of bugs in OOo-1.9.87 affecting interoperability:
  - <text:notes-configuration text:note-class="footnote"...> has text:start-value="0", and is ignored on loading (private mail sent)
- - style:text-underline-type="single" is missing for underlined text, only style is specified (mail sent to OASIS TC)
  - DTP mode not really supported; but even with single page, frames are misplaced (private mail sent)
+
+List of bugs in OOo-1.9.87 not affecting interoperability:
+ - style:text-underline-type="single" is missing for underlined text, only style is specified (code has workaround)
 
 List of features that KWord has, but OOo doesn't have, and which are in the OASIS standard:
  - OOo doesn't load nor save the cursor-position processing instruction 

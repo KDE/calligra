@@ -734,23 +734,20 @@ void KWFrame::saveBorderProperties( KoGenStyle& frameStyle ) const
     }
 }
 
-QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+void KWFrame::saveMarginAttributes( KoXmlWriter &writer ) const
 {
-    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
-    QString protect;
-    if ( frameSet()->protectContent() )
-        protect = "content";
-    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
-    {
-        if ( !protect.isEmpty() )
-            protect+=" ";
-        protect+="size";
-    }
-    if ( !protect.isEmpty() )
-        frameStyle.addProperty( "style:protect", protect );
+    if ( m_runAroundLeft != 0 )
+        writer.addAttributePt( "fo:margin-left", m_runAroundLeft );
+    if ( m_runAroundRight != 0 )
+        writer.addAttributePt( "fo:margin-right", m_runAroundRight );
+    if ( m_runAroundTop != 0 )
+        writer.addAttributePt( "fo:margin-top", m_runAroundTop );
+    if ( m_runAroundBottom != 0 )
+        writer.addAttributePt( "fo:margin-bottom", m_runAroundBottom );
+}
 
-    saveBorderProperties( frameStyle );
-
+void KWFrame::saveMarginProperties( KoGenStyle& frameStyle ) const
+{
 #if 0 // not allowed in the current OASIS spec
     if ( m_runAroundLeft != 0 && ( ( m_runAroundLeft == m_runAroundRight )
                                  && ( m_runAroundLeft == m_runAroundTop )
@@ -770,6 +767,25 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
 #if 0 // not allowed in the current OASIS spec
     }
 #endif
+}
+
+QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+{
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
+    QString protect;
+    if ( frameSet()->protectContent() )
+        protect = "content";
+    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
+    {
+        if ( !protect.isEmpty() )
+            protect+=" ";
+        protect+="size";
+    }
+    if ( !protect.isEmpty() )
+        frameStyle.addProperty( "style:protect", protect );
+
+    saveBorderProperties( frameStyle );
+    saveMarginProperties( frameStyle );
 
     if ( runAround() == KWFrame::RA_SKIP )
         frameStyle.addProperty( "style:wrap", "none" );
@@ -1896,6 +1912,26 @@ bool KWFrameSet::isMoveable() const
     return !isMainFrameset() && !isFloating();
 }
 
+const char* KWFrameSet::headerFooterTag() const
+{
+    switch ( m_info ) {
+    case KWFrameSet::FI_ODD_HEADER:
+        return "style:header";
+    case KWFrameSet::FI_EVEN_HEADER:
+        return "style:header-left";
+    case KWFrameSet::FI_ODD_FOOTER:
+        return "style:footer";
+    case KWFrameSet::FI_EVEN_FOOTER:
+        return "style:footer-left";
+    case KWFrameSet::FI_FIRST_HEADER:
+        return "style:header-first"; // NOT OASIS COMPLIANT
+    case KWFrameSet::FI_FIRST_FOOTER:
+        return "style:footer-first"; // NOT OASIS COMPLIANT
+    default: // shouldn't be called for body or footnote
+        return 0;
+    }
+}
+
 void KWFrameSet::finalize()
 {
     //kdDebug(32001) << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
@@ -2368,12 +2404,12 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }
 
-FrameSetType KWPictureFrameSet::type( void )
+FrameSetType KWPictureFrameSet::type() const
 {
     return FT_PICTURE;
 }
 
-FrameSetType KWPictureFrameSet::typeAsKOffice1Dot1( void )
+FrameSetType KWPictureFrameSet::typeAsKOffice1Dot1() const
 {
     return m_picture.isClipartAsKOffice1Dot1()?FT_CLIPART:FT_PICTURE;
 }
@@ -2418,7 +2454,7 @@ KWHorzLineFrameSet::~KWHorzLineFrameSet()
     //todo
 }
 
-FrameSetType KWHorzLineFrameSet::type( void )
+FrameSetType KWHorzLineFrameSet::type() const
 {
     return FT_HORZLINE;
 }

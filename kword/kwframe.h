@@ -303,6 +303,8 @@ public:
     void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, const QString& name,
                           const QString& lastFrameName = QString::null ) const;
     void saveBorderProperties( KoGenStyle& frameStyle ) const;
+    void saveMarginProperties( KoGenStyle& frameStyle ) const;
+    void saveMarginAttributes( KoXmlWriter &writer ) const;
 
     void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}
@@ -457,12 +459,12 @@ public:
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
-    virtual FrameSetType type() { return FT_BASE; }
+    virtual FrameSetType type() const { return FT_BASE; }
 
     /**
      *  Return the type of FrameSet that would have been used in KWord 1.1
      */
-    virtual FrameSetType typeAsKOffice1Dot1(void) { return type(); }
+    virtual FrameSetType typeAsKOffice1Dot1() const { return type(); }
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool /*onlyReadWrite*/ = false ) {};
     virtual bool ownLine() const { return FALSE;}
@@ -489,6 +491,7 @@ public:
     bool isAFooter() const;
     bool isHeaderOrFooter() const { return isAHeader() || isAFooter(); }
     bool isFootEndNote() const;
+    const char* headerFooterTag() const; // for OASIS saving
 
     virtual bool isFootNote() const { return false; }
     virtual bool isEndNote() const { return false; }
@@ -896,9 +899,9 @@ public:
      * The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
-    virtual FrameSetType type( void );
+    virtual FrameSetType type() const;
 
-    virtual FrameSetType typeAsKOffice1Dot1( void );
+    virtual FrameSetType typeAsKOffice1Dot1() const;
 
     void setPicture( const KoPicture &picture ) { m_picture = picture; }
     KoPicture picture() const { return m_picture; }
@@ -968,7 +971,7 @@ public:
      * The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
-    virtual FrameSetType type( void );
+    virtual FrameSetType type() const;
     virtual bool ownLine() const;
     void drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
                             const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * );
