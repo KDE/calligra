@@ -81,8 +81,9 @@ public:
   bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
 
   /**
-   * The sheet named @param _from is being moved to the sheet @param _to.
-   * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
+   * The sheet named @p _from is being moved to the sheet @p _to.
+   * If @p  _before is true @p _from is inserted before (after otherwise)   
+   * @p  _to.
    */
   void moveSheet( const QString & _from, const QString & _to, bool _before = true );
 
@@ -114,7 +115,7 @@ public:
   KSpreadSheet* firstSheet() { return m_lstSheets.first();  }
 
   /**
-   * Use the @ref #previousSheet function to get all the other sheets.
+   * Use the previousSheet() function to get all the other sheets.
    * Attention: Function is not reentrant.
    *
    * @return a pointer to the last sheet in this map.
