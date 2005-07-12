@@ -1808,33 +1808,35 @@ void KPresenterDoc::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoO
                 else
                     newpage->appendObject(kppixmapobject);
             }
-
-            QDomNode object = KoDom::namedItemNS( o, KoXmlNS::draw, "object" );
-            kdDebug()<<" object:"<<object.isNull()<<endl;
-            if ( !object.isNull() )
-            {
-                fillStyleStack( o, context );
-                KPresenterChild *ch = new KPresenterChild( this );
-                QRect r;
-                KPPartObject *kppartobject = new KPPartObject( ch );
-                kppartobject->loadOasis( o, context, m_loadingInfo );
-                r = ch->geometry();
-                if ( groupObject )
-                    groupObject->addObjects( kppartobject );
-                else
-                    newpage->appendObject(kppartobject);
-                insertChild( ch );
-                kppartobject->setOrig( r.x(), r.y() );
-                kppartobject->setSize( r.width(), r.height() );
-            }
             else
             {
-                KPTextObject *kptextobject = new KPTextObject( this );
-                kptextobject->loadOasis(o, context, m_loadingInfo);
-                if ( groupObject )
-                    groupObject->addObjects( kptextobject );
+                QDomNode object = KoDom::namedItemNS( o, KoXmlNS::draw, "object" );
+                kdDebug()<<" object:"<<object.isNull()<<endl;
+                if ( !object.isNull() )
+                {
+                    fillStyleStack( o, context );
+                    KPresenterChild *ch = new KPresenterChild( this );
+                    QRect r;
+                    KPPartObject *kppartobject = new KPPartObject( ch );
+                    kppartobject->loadOasis( o, context, m_loadingInfo );
+                    r = ch->geometry();
+                    if ( groupObject )
+                        groupObject->addObjects( kppartobject );
+                    else
+                        newpage->appendObject(kppartobject);
+                    insertChild( ch );
+                    kppartobject->setOrig( r.x(), r.y() );
+                    kppartobject->setSize( r.width(), r.height() );
+                }
                 else
-                    newpage->appendObject(kptextobject);
+                {
+                    KPTextObject *kptextobject = new KPTextObject( this );
+                    kptextobject->loadOasis(o, context, m_loadingInfo);
+                    if ( groupObject )
+                        groupObject->addObjects( kptextobject );
+                    else
+                        newpage->appendObject(kptextobject);
+                }
             }
         }
         else if ( name == "rect" && isDrawNS) // rectangle
@@ -1874,7 +1876,10 @@ void KPresenterDoc::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoO
             fillStyleStack( o, context );
             KPLineObject *kplineobject = new KPLineObject();
             kplineobject->loadOasis(o, context, m_loadingInfo);
-            newpage->appendObject(kplineobject);
+            if ( groupObject )
+                groupObject->addObjects( kplineobject );
+            else
+                newpage->appendObject( kplineobject );
         }
         else if (name=="polyline" && isDrawNS) { // polyline
             fillStyleStack( o, context );

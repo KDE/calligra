@@ -393,6 +393,7 @@ void KPObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyle
 bool KPObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
 {
     kdDebug()<<"bool saveOasisObjectAttributes not implemented";
+    return true;
 }
 
 bool KPObject::haveAnimation() const
@@ -887,12 +888,13 @@ bool KPObject::saveOasisObject( KPOasisSaveContext &sc ) const
     sc.xmlWriter.startElement( getOasisElementName() );
     sc.xmlWriter.addAttribute( "draw:style-name", getStyle( sc ) );
     saveOasisPosObject( sc.xmlWriter, sc.indexObj );
-    saveOasisObjectAttributes( sc );
-    
     if( !objectName.isEmpty())
         sc.xmlWriter.addAttribute( "draw:name", objectName );
 
+    saveOasisObjectAttributes( sc );
+    
     sc.xmlWriter.endElement();
+    return true;
 }
 
 void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto ) const
@@ -2296,6 +2298,56 @@ double KP2DObject::load(const QDomElement &element)
         setGYFactor( 100 );
     }
     return offset;
+}
+
+void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+                           int pageNum, SelectionMode selectionMode, bool drawContour )
+{
+    double ox = orig.x();
+    double oy = orig.y();
+    _painter->save();
+
+    // Draw the shadow if any
+    if ( shadowDistance > 0 && !drawContour )
+    {
+        _painter->save();
+        QPen tmpPen( pen );
+        pen.setColor( shadowColor );
+        QBrush tmpBrush( m_brush.getBrush() );
+        QBrush shadowBrush( tmpBrush );
+        shadowBrush.setColor( shadowColor );
+        m_brush.setBrush( shadowBrush );
+
+        if ( angle == 0 )
+        {
+            double sx = ox;
+            double sy = oy;
+            getShadowCoords( sx, sy );
+
+            _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
+            paint( _painter, _zoomHandler, pageNum, true, drawContour );
+        }
+        else
+        {
+            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
+            rotateObjectWithShadow(_painter, _zoomHandler);
+            paint( _painter, _zoomHandler, pageNum, true, drawContour );
+        }
+
+        pen = tmpPen;
+        m_brush.setBrush( tmpBrush );
+        _painter->restore();
+    }
+
+    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
+
+    if ( angle != 0 )
+        rotateObject(_painter,_zoomHandler);
+    paint( _painter, _zoomHandler, pageNum, false, drawContour );
+
+    _painter->restore();
+
+    KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
 void KP2DObject::flip( bool horizontal ) {
