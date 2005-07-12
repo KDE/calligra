@@ -158,7 +158,7 @@ KexiFlowLayout::sizeHint() const
 {
 	if(m_cached_sizeHint.isEmpty()) {
 		KexiFlowLayout *mthis = (KexiFlowLayout*)this;
-		QRect r = geometry().isValid() ? geometry() : QRect(0, 0, 400, 400);
+		QRect r = QRect(0, 0, 2000, 2000);
 		mthis->simulateLayout(r);
 	}
 	return m_cached_sizeHint;
@@ -169,7 +169,7 @@ KexiFlowLayout::minimumSize() const
 {
 	if(m_cached_minSize.isEmpty()) {
 		KexiFlowLayout *mthis = (KexiFlowLayout*)this;
-		QRect r = geometry().isValid() ? geometry() : QRect(0, 0, 400, 400);
+		QRect r = QRect(0, 0, 2000, 2000);
 		mthis->simulateLayout(r);
 	}
 	return m_cached_minSize;
@@ -223,12 +223,13 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 			continue;
 		}
 
-		if (x + o->sizeHint().width() > r.right() && h > 0) {
+		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
+		if (x + oSizeHint.width() > r.right() && h > 0) {
 			// do the layout of current line
 			QPtrListIterator<QLayoutItem> it2(currentLine);
 			QLayoutItem *item;
 			int wx = r.x();
-			int minSizeWidth=0 - spacing(), lineMinHeight=0;
+			int sizeHintWidth = 0 -spacing(), minSizeWidth=0 - spacing(), lineMinHeight=0;
 			while( (item = it2.current()) != 0 ) {
 				QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
 				QSize itemMinSize = item->minimumSize(); // a while to get them
@@ -250,11 +251,12 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 				if(!testOnly)
 					item->setGeometry( QRect(QPoint(wx, y), s) );
 				wx = wx + s.width() + spacing();
-				minSizeWidth = spacing() + itemMinSize.width();
+				minSizeWidth = minSizeWidth + spacing() + itemMinSize.width();
+				sizeHintWidth = sizeHintWidth + spacing() +  itemSizeHint.width();
 				lineMinHeight = QMAX( lineMinHeight, itemMinSize.height() );
 				++it2;
 			}
-			sizeHint = sizeHint.expandedTo( QSize(r.width() - availableSpace, 0) );
+			sizeHint = sizeHint.expandedTo( QSize(sizeHintWidth, 0) );
 			minSize = minSize.expandedTo( QSize(minSizeWidth, 0) );
 			minSizeHeight = minSizeHeight + spacing() + lineMinHeight;
 			// start a new line
@@ -266,7 +268,6 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 			availableSpace = r.width() + spacing();
 		}
 
-		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
 		x = x + spacing() + oSizeHint.width();
 		h = QMAX( h,  oSizeHint.height() );
 		currentLine.append(o);
@@ -280,7 +281,7 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 	QPtrListIterator<QLayoutItem> it2(currentLine);
 	QLayoutItem *item;
 	int wx = r.x();
-	int minSizeWidth=0 - spacing(), lineMinHeight=0;
+	int sizeHintWidth = 0 -spacing(), minSizeWidth=0 - spacing(), lineMinHeight=0;
 	while( (item = it2.current()) != 0 ) {
 		QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
 		QSize itemMinSize = item->minimumSize(); // a while to get them
@@ -302,17 +303,18 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 		if(!testOnly)
 			item->setGeometry( QRect(QPoint(wx, y), s) );
 		wx = wx + s.width() + spacing();
-		minSizeWidth = spacing() + itemMinSize.width();
+		minSizeWidth = minSizeWidth + spacing() + itemMinSize.width();
+		sizeHintWidth = sizeHintWidth + spacing() +  itemSizeHint.width();
 		lineMinHeight = QMAX( lineMinHeight, itemMinSize.height() );
 		++it2;
 	}
-	sizeHint = sizeHint.expandedTo( QSize(r.width() - availableSpace, y + spacing() + h) );
+	sizeHint = sizeHint.expandedTo( QSize(sizeHintWidth, y + spacing() + h) );
 	minSizeHeight = minSizeHeight + spacing() + lineMinHeight;
 	minSize = minSize.expandedTo( QSize(minSizeWidth, minSizeHeight) );
 
 	// store sizeHint() and minimumSize()
-	m_cached_sizeHint = sizeHint;
-	m_cached_minSize = minSize;
+	m_cached_sizeHint = sizeHint + QSize(2* margin(), 2*margin());
+	m_cached_minSize = minSize + QSize(2* margin() , 2*margin());
 	// return our height
 	return y + h - r.y();
 }
@@ -337,12 +339,13 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 			continue;
 		}
 
-		if (y + o->sizeHint().height() > r.bottom() && w > 0) {
+		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
+		if (y + oSizeHint.height() > r.bottom() && w > 0) {
 			// do the layout of current line
 			QPtrListIterator<QLayoutItem> it2(currentLine);
 			QLayoutItem *item;
 			int wy = r.y();
-			int minSizeHeight = 0 - spacing(), colMinWidth=0;
+			int sizeHintHeight = 0 - spacing(), minSizeHeight = 0 - spacing(), colMinWidth=0;
 			while( (item = it2.current()) != 0 ) {
 				QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
 				QSize itemMinSize = item->minimumSize(); // a while to get them
@@ -364,11 +367,12 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 				if(!testOnly)
 					item->setGeometry( QRect(QPoint(x, wy), s) );
 				wy = wy + s.height() + spacing();
-				minSizeHeight = spacing() + itemMinSize.height();
+				minSizeHeight = minSizeHeight + spacing() + itemMinSize.height();
+				sizeHintHeight = sizeHintHeight + spacing() + itemSizeHint.height();
 				colMinWidth = QMAX( colMinWidth, itemMinSize.width() );
 				++it2;
 			}
-			sizeHint = sizeHint.expandedTo( QSize(0, r.height() - availableSpace) );
+			sizeHint = sizeHint.expandedTo( QSize(0, sizeHintHeight) );
 			minSize = minSize.expandedTo( QSize(0, minSizeHeight) );
 			minSizeWidth = minSizeWidth + spacing() + colMinWidth;
 			// start a new column
@@ -380,7 +384,6 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 			availableSpace = r.height() + spacing();
 		}
 
-		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
 		y = y + spacing() + oSizeHint.height();
 		w = QMAX( w,  oSizeHint.width() );
 		currentLine.append(o);
@@ -394,7 +397,7 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 	QPtrListIterator<QLayoutItem> it2(currentLine);
 	QLayoutItem *item;
 	int wy = r.y();
-	int minSizeHeight = 0 - spacing(), colMinWidth=0;
+	int sizeHintHeight = 0 - spacing(), minSizeHeight = 0 - spacing(), colMinWidth=0;
 	while( (item = it2.current()) != 0 ) {
 		QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
 		QSize itemMinSize = item->minimumSize(); // a while to get them
@@ -416,17 +419,18 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 		if(!testOnly)
 			item->setGeometry( QRect(QPoint(x, wy), s) );
 		wy = wy + s.height() + spacing();
-		minSizeHeight = spacing() + itemMinSize.height();
+		minSizeHeight = minSizeHeight + spacing() + itemMinSize.height();
+		sizeHintHeight = sizeHintHeight + spacing() + itemSizeHint.height();
 		colMinWidth = QMAX( colMinWidth, itemMinSize.width() );
 		++it2;
 	}
-	sizeHint = sizeHint.expandedTo( QSize( x + spacing() + w, r.height() - availableSpace) );
+	sizeHint = sizeHint.expandedTo( QSize( x + spacing() + w, sizeHintHeight) );
 	minSizeWidth = minSizeWidth + spacing() + colMinWidth;
 	minSize = minSize.expandedTo( QSize(minSizeWidth, minSizeHeight) );
 
 	// store sizeHint() and minimumSize()
-	m_cached_sizeHint = sizeHint;
-	m_cached_minSize = minSize;
+	m_cached_sizeHint = sizeHint + QSize(2* margin(), 2*margin());
+	m_cached_minSize = minSize + QSize(2* margin(), 2*margin());
 	// return our width
 	return x + w - r.x();
 }

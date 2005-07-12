@@ -235,17 +235,18 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! Lay out selected widgets using HBox layout (calls \ref CreateLayoutCommand).
 		void layoutHBox();
-
 		//! Lay out selected widgets using VBox layout.
 		void layoutVBox();
-
 		//! Lay out selected widgets using Grid layout.
 		void layoutGrid();
-
 		//! Lay out selected widgets in an horizontal splitter
 		void  layoutHSplitter();
 		//! Lay out selected widgets in a verticak splitter
 		void  layoutVSplitter();
+		//! Lay out selected widgets using HFlow layout
+		void layoutHFlow();
+		//! Lay out selected widgets using VFlow layout.
+		void layoutVFlow();
 
 		//! Breaks selected layout(calls \ref BreakLayoutCommand).
 		void breakLayout();

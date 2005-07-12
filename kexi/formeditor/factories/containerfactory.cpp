@@ -25,6 +25,7 @@
 #include <qscrollview.h>
 #include <qtabbar.h>
 #include <qsplitter.h>
+#include <qlayout.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -42,6 +43,7 @@
 #include "commands.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
+#include "utils.h"
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
 # define KInputDialog QInputDialog
@@ -93,6 +95,19 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 		QGuardedPtr<QObject>   m_container;
 };*/
 
+QSize
+KFDTabWidget::sizeHint() const
+{
+	QSize s(30,30); // default min size
+	for(int i=0; i < count(); i++)
+		s = s.expandedTo( KFormDesigner::getSizeFromChildren(page(i)) );
+
+	return s + QSize(10/*margin*/, tabBar()->height() + 20/*margin*/);
+}
+
+
+/// Various layout widgets /////////////////:
+
 HBox::HBox(QWidget *parent, const char *name)
  : QFrame(parent, name), m_preview(false)
 {}
@@ -130,6 +145,41 @@ Grid::paintEvent(QPaintEvent *)
 	QPainter p(this);
 	p.setPen(QPen(darkGreen, 2, Qt::DashLine));
 	p.drawRect(1, 1, width()-1, height() - 1);
+}
+
+HFlow::HFlow(QWidget *parent, const char *name)
+ : QFrame(parent, name), m_preview(false)
+{}
+
+void
+HFlow::paintEvent(QPaintEvent *)
+{
+	if(m_preview) return;
+	QPainter p(this);
+	p.setPen(QPen(magenta, 2, Qt::DashLine));
+	p.drawRect(1, 1, width()-1, height() - 1);
+}
+
+VFlow::VFlow(QWidget *parent, const char *name)
+ : QFrame(parent, name), m_preview(false)
+{}
+
+void
+VFlow::paintEvent(QPaintEvent *)
+{
+	if(m_preview) return;
+	QPainter p(this);
+	p.setPen(QPen(cyan, 2, Qt::DashLine));
+	p.drawRect(1, 1, width()-1, height() - 1);
+}
+
+QSize
+VFlow::sizeHint() const
+{
+	if(layout())
+		return layout()->sizeHint();
+	else
+		return QSize(700, 50); // default
 }
 
 ///////  Tab related KCommand (to allow tab creation/deletion undoing)
@@ -355,6 +405,24 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSplitter->setDescription(i18n("A container that enables user to resize its children"));
 	addClass(wSplitter);
 
+	KFormDesigner::WidgetInfo *wHFlow = new KFormDesigner::WidgetInfo(this);
+	wHFlow->setPixmap("frame");
+	wHFlow->setClassName("HFlow");
+	wHFlow->setName(i18n("Lines Layout"));
+	wHFlow->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "lineLayout"));
+	wHFlow->setDescription(i18n("A simple container to group widgets by lines"));
+	addClass(wHFlow);
+
+	KFormDesigner::WidgetInfo *wVFlow = new KFormDesigner::WidgetInfo(this);
+	wVFlow->setPixmap("frame");
+	wVFlow->setClassName("VFlow");
+	wVFlow->setName(i18n("Column Layout"));
+	wVFlow->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "columnLayout"));
+	wVFlow->setDescription(i18n("A simple container to group widgets by columns"));
+	addClass(wVFlow);
+
 	KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("SubForm");
@@ -368,12 +436,12 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	//groupbox
 	m_propDesc["title"] = i18n("Title");
 	m_propDesc["flat"] = i18n("Flat");
-	
+
 	//tab widget
 	m_propDesc["tabPosition"] = i18n("Tab Position");
 	m_propDesc["currentPage"] = i18n("Current Page");
 	m_propDesc["tabShape"] = i18n("Tab Shape");
-	
+
 	m_propDesc["tabPosition"] = i18n("Tab Position");
 	m_propDesc["tabPosition"] = i18n("Tab Position");
 
@@ -468,6 +536,16 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
+	else if(c == "HFlow") {
+		HFlow *w = new HFlow(p, n);
+		new KFormDesigner::Container(container, w, container);
+		return w;
+	}
+	else if(c == "VFlow") {
+		VFlow *w = new VFlow(p, n);
+		new KFormDesigner::Container(container, w, container);
+		return w;
+	}
 	else if(c == "SubForm") {
 		SubForm *subform = new SubForm(container->form()->manager(), p, n);
 		return subform;
@@ -500,13 +578,17 @@ ContainerFactory::previewWidget(const QCString &classname, QWidget *widget, KFor
 		((VBox*)widget)->setPreviewMode();
 	else if(classname == "Grid")
 		((Grid*)widget)->setPreviewMode();
+	else if(classname == "HFlow")
+		((HFlow*)widget)->setPreviewMode();
+	else if(classname == "VFlow")
+		((VFlow*)widget)->setPreviewMode();
 	else
 		return false;
 	return true;
 }
 
 bool
-ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu, 
+ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 	KFormDesigner::Container *container)
 {
 	setWidget(w);
@@ -633,18 +715,19 @@ ContainerFactory::autoSaveProperties(const QCString &c)
 }
 
 bool
-ContainerFactory::isPropertyVisibleInternal(const QCString &classname, 
+ContainerFactory::isPropertyVisibleInternal(const QCString &classname,
 	QWidget *, const QCString &property)
 {
-	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid"))
+	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid") ||
+		(classname == "HFlow") || (classname == "VFlow"))
 	{
 		return property == "name" || property == "geometry";
 	}
 	else if (classname == "QGroupBox") {
-		return 
+		return
 #ifdef KEXI_NO_UNFINISHED
-/*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding 
-a fake properties which will allow to properly work in design mode, otherwise 
+/*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding
+a fake properties which will allow to properly work in design mode, otherwise
 child widgets become frozen when checked==true */
 			(m_showAdvancedProperties || (property != "checkable" && property != "checked")) &&
 #endif

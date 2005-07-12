@@ -1011,6 +1011,18 @@ FormManager::layoutVSplitter()
 }
 
 void
+FormManager::layoutHFlow()
+{
+	createLayout(Container::HFlow);
+}
+
+void
+FormManager::layoutVFlow()
+{
+	createLayout(Container::VFlow);
+}
+
+void
 FormManager::createLayout(int layoutType)
 {
 	WidgetList *list = m_active->selectedWidgets();

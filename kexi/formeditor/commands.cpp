@@ -45,14 +45,14 @@ using namespace KFormDesigner;
 
 // PropertyCommand
 
-PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QCString &wname, 
+PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QCString &wname,
 	const QVariant &oldValue, const QVariant &value, const QCString &property)
   : KCommand(), m_propSet(set), m_value(value), m_property(property)
 {
 	m_oldvalues.insert(wname, oldValue);
 }
 
-PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QMap<QCString, QVariant> &oldvalues, 
+PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QMap<QCString, QVariant> &oldvalues,
 	const QVariant &value, const QCString &property)
   : KCommand(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
 {
@@ -393,8 +393,23 @@ AdjustSizeCommand::execute()
 			for(QWidget *w = list.first(); w; w = list.next()) {
 				ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
 				if(item && !item->children()->isEmpty()) { // container
-					w->resize(getSizeFromChildren(item));
-					w->resize(w->sizeHint()); // eg tabwidget adds the size of tabbar
+					QSize s;
+					if(item->container() && item->container()->layout())
+						s = w->sizeHint();
+					else
+						s = getSizeFromChildren(item);
+					// minimum size for containers
+					if(s.width()  <  30)
+						s.setWidth(30);
+					if(s.height() < 30)
+						s.setHeight(30);
+					// small hack for flow layouts
+					int type = item->container() ? item->container()->layoutType() : Container::NoLayout;
+					if(type == Container::HFlow)
+						s.setWidth(s.width() + 5);
+					else if(type == Container::VFlow)
+						s.setHeight(s.height() + 5);
+					w->resize(s);
 				}
 				else if(item && item->container()) // empty container
 					w->resize(item->container()->form()->gridX() * 5, item->container()->form()->gridY() * 5); // basic size
@@ -649,7 +664,7 @@ InsertWidgetCommand::execute()
 				return; //cancelled
 		}
 	}
-	QWidget *w = manager->lib()->createWidget(m_class, m_container->m_container, m_name, 
+	QWidget *w = manager->lib()->createWidget(m_class, m_container->m_container, m_name,
 		m_container, ohint);
 
 	if(!w) {
@@ -742,9 +757,11 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, WidgetList &list, Form 
 		case Container::HBox:
 		case Container::Grid:
 		case Container::HSplitter:
+		case Container::HFlow:
 			m_list = new HorWidgetList(); break;
 		case Container::VBox:
 		case Container::VSplitter:
+		case Container::VFlow:
 			m_list = new VerWidgetList(); break;
 	}
 	for(QWidget *w = list.first(); w; w = list.next())
@@ -771,17 +788,11 @@ CreateLayoutCommand::execute()
 		container = m_form->toplevelContainer(); // use toplevelContainer by default
 
 	QCString classname;
-	switch(m_type)
-	{
-		case Container::HBox:
-			classname = "HBox"; break;
-		case Container::VBox:
-			classname = "VBox"; break;
-		case Container::Grid:
-			classname = "Grid"; break;
+	switch(m_type)  {
 		case Container::HSplitter: case Container::VSplitter:
 			classname = "QSplitter"; break;
-		default: break;
+		default:
+			classname = Container::layoutTypeToString(m_type).latin1();
 	}
 
 	if(m_name.isEmpty())// the name must be generated only once
@@ -793,6 +804,11 @@ CreateLayoutCommand::execute()
 
 	container->setSelectedWidget(0, false);
 	w->move(m_pos.begin().data().topLeft()); // we move the layout at the position of the topleft widget
+	// sizeHint of these widgets depends on geometry, so give them appropriate geometry
+	if(m_type == Container::HFlow)
+		w->resize( QSize(700, 20) );
+	else if(m_type == Container::VFlow)
+		w->resize( QSize(20, 700));
 	w->show();
 
 	// We reparent every widget to the Layout and insert them into it
@@ -859,17 +875,21 @@ CreateLayoutCommand::name() const
 	switch(m_type)
 	{
 		case Container::HBox:
-			return i18n("Lay Out Widgets Horizontally");
+			return i18n("Group Widgets Horizontally");
 		case Container::VBox:
-			return i18n("Lay Out Widgets Vertically");
+			return i18n("Group Widgets Vertically");
 		case Container::Grid:
-			return i18n("Lay Out Widgets in a Grid");
+			return i18n("Group Widgets in a Grid");
 		case Container::HSplitter:
-			return i18n("Lay Out Widgets Horizontally in a Splitter");
+			return i18n("Group Widgets Horizontally in a Splitter");
 		case Container::VSplitter:
-			return i18n("Lay Out Widgets Vertically in a Splitter");
+			return i18n("Group Widgets Vertically in a Splitter");
+		case Container::HFlow:
+			return i18n("Group Widgets By Lines");
+		case Container::VFlow:
+			return i18n("Group Widgets Vertically By Columns");
 		default:
-			return i18n("Create Layout");
+			return i18n("Group widgets");
 	}
 }
 

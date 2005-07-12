@@ -896,7 +896,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if(!item->parent()) // Toplevel widget
 		tclass.setAttribute("class", "QWidget");
 	// For compatibility, HBox, VBox and Grid are saved as "QLayoutWidget"
-	else if((item->widget()->isA("HBox")) || (item->widget()->isA("VBox")) || (item->widget()->isA("Grid")))
+	else if(item->widget()->isA("HBox") || item->widget()->isA("VBox") || item->widget()->isA("Grid")
+			|| item->widget()->isA("HFlow") || item->widget()->isA("VFlow"))
 		tclass.setAttribute("class", "QLayoutWidget");
 	else if(item->widget()->isA("CustomWidget"))
 		tclass.setAttribute("class", item->className());
@@ -1071,7 +1072,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	QWidget *w;
 	QCString classname, alternate;
-
 	// We translate some name (for compatibility)
 	if(el.tagName() == "spacer")
 		classname = "Spring";
@@ -1086,8 +1086,18 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 				classname = "HBox";
 			else if(tagName == "vbox")
 				classname = "VBox";
-			else if(tagName == "grid")
-				classname = "Grid";
+			else if(tagName == "grid") {
+				// first, see if it is flow layout
+				for(QDomNode child = n.firstChild(); !child.isNull(); child = child.nextSibling())  {
+					if((child.toElement().tagName() == "property") && (child.toElement().attribute("name") == "customLayout"))  {
+						classname = child.toElement().text().latin1();
+						break;
+					}
+				}
+
+				if(classname.isEmpty()) // normal grid
+					classname = "Grid";
+			}
 		}
 	}
 	else

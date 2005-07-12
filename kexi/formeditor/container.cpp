@@ -98,7 +98,8 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_state = DoingNothing;
 
 	QCString classname = container->className();
-	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
+	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox") ||
+		(classname == "HFlow")  || (classname == "VFlow"))
 		m_margin = 4; // those containers don't have frames, so little margin
 	else
 		m_margin = m_form ? m_form->defaultMargin() : 0;

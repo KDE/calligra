@@ -98,3 +98,18 @@ KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 	delete l;
 }
 
+QSize
+KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
+{
+	int tmpw = 0, tmph = 0;
+	QObjectList *list = w->queryList(inheritClass, 0, false, false);
+	for(QObject *o = list->first(); o; o = list->next()) {
+		QRect  r = ((QWidget*)o)->geometry();
+		tmpw = QMAX(tmpw, r.right());
+		tmph = QMAX(tmph, r.bottom());
+	}
+
+	delete list;
+	return QSize(tmpw, tmph) + QSize(10, 10);
+}
+

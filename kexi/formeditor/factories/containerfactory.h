@@ -104,6 +104,37 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 		bool  m_preview;
 };
 
+//! Helper widget (used when using 'Lay out with horizontal flow')
+class KFORMEDITOR_EXPORT HFlow : public QFrame
+{
+	Q_OBJECT
+
+	public:
+		HFlow(QWidget *parent, const char *name);
+		~HFlow(){;}
+		void setPreviewMode() {m_preview = true;}
+		void paintEvent(QPaintEvent *ev);
+
+	protected:
+		bool  m_preview;
+};
+
+//! Helper widget (used when using 'Lay out with horizontal flow')
+class KFORMEDITOR_EXPORT VFlow : public QFrame
+{
+	Q_OBJECT
+
+	public:
+		VFlow(QWidget *parent, const char *name);
+		~VFlow(){;}
+		void setPreviewMode() {m_preview = true;}
+		void paintEvent(QPaintEvent *ev);
+		QSize  sizeHint() const;
+
+	protected:
+		bool  m_preview;
+};
+
 class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
 {
 	Q_OBJECT
@@ -114,10 +145,7 @@ class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
 		{}
 		~KFDTabWidget() {;}
 
-		virtual QSize sizeHint() const
-		{
-			return size() + QSize(0, tabBar()->height());
-		}
+		virtual QSize sizeHint() const;
 };
 
 //! A form embedded as a widget inside other form
@@ -154,13 +182,13 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 			WidgetFactory::OrientationHint orientationHint = Any);
 		virtual bool createMenuActions(const QCString& classname, QWidget *w, QPopupMenu *menu,
 			KFormDesigner::Container *container);
-		virtual bool startEditing(const QCString &classname, QWidget *w, 
+		virtual bool startEditing(const QCString &classname, QWidget *w,
 			KFormDesigner::Container *container);
-		virtual bool previewWidget(const QCString &classname, QWidget *widget, 
+		virtual bool previewWidget(const QCString &classname, QWidget *widget,
 			KFormDesigner::Container *container);
-		virtual bool saveSpecialProperty(const QCString &classname, const QString &name, 
+		virtual bool saveSpecialProperty(const QCString &classname, const QString &name,
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, 
+		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
 			KFormDesigner::ObjectTreeItem *item);
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
