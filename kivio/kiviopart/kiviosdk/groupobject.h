@@ -16,38 +16,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef KIVIOPOLYLINEOBJECT_H
-#define KIVIOPOLYLINEOBJECT_H
+#ifndef KIVIOGROUPOBJECT_H
+#define KIVIOGROUPOBJECT_H
 
-#include <qvaluevector.h>
+#include <qvaluelist.h>
 
-#include <koPoint.h>
-
-#include "object.h"
+#include "rectangleobject.h"
 
 namespace Kivio {
 
 /**
- * Draws a polyline
+ * Object that can contain several other objects
  */
-class PolylineObject : public Object
+class GroupObject : public RectangleObject
 {
   public:
-    PolylineObject();
-    ~PolylineObject();
+    GroupObject();
+    ~GroupObject();
 
-    /// Duplicate the object
+    /// Duplicate the Object
     virtual Object* duplicate();
 
-    /// Type of object
+    /// Type of Object
     virtual ShapeType type();
-
-    /**
-     * Move the Object
-     * @param xOffset number of points to move the Object horizontaly
-     * @param yOffset number of points to move the Object verticaly
-     */
-    virtual void move(double xOffset, double yOffset);
 
     /**
      * Resize the Object
@@ -62,16 +53,21 @@ class PolylineObject : public Object
      */
     virtual void resizeInPercent(double percentWidth, double percentHeight);
 
-    /// Returns a vector containing the 4 control points of the bezier curve
-    QValueVector<KoPoint> pointVector() const;
-    /// Set a vector containing the control points of the polyline
-    void setPointVector(const QValueVector<KoPoint>& newVector);
+    /// Brush used to fill Object
+    virtual QBrush brush() const;
+    /// Set brush used to fill Object
+    virtual void setBrush(const QBrush& newBrush);
+    /// Pen used to draw Object
+    virtual Pen pen() const;
+    /// Set pen used to draw Object
+    virtual void setPen(const Pen& newPen);
 
-    /// Draws a polyline to the canvas
+    /// Reimplement this function to paint Object to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 
+    virtual void addObject(Object* newObject);
   private:
-    QValueVector<KoPoint> m_pointVector;
+    QValueList<Object*> m_objectList;
 };
 
 }

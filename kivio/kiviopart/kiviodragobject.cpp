@@ -91,18 +91,19 @@ bool KivioDragObject::decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPa
   bool ok = false;
 
   if(e->provides("application/vnd.kde.kivio")) {
-    QDomDocument doc("KivioSelection");
+    //FIXME Port to Object code
+/*    QDomDocument doc("KivioSelection");
     QByteArray data = e->encodedData("application/vnd.kde.kivio");
     doc.setContent( QCString( data, data.size()+1 ) );
     KivioLayer l(page);
     ok = l.loadXML(doc.documentElement());
-    KivioStencil* stencil = l.stencilList()->first();
+    KivioStencil* stencil = l.objectList()->first();
     sl.clear();
 
     while(stencil) {
       sl.append(stencil->duplicate());
-      stencil = l.stencilList()->next();
-    }
+      stencil = l.objectList()->next();
+    }*/
   } else if(e->provides("text/plain")) {
     QString str;
     ok = QTextDrag::decode(e, str);

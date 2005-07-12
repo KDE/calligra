@@ -57,6 +57,10 @@ class KoXmlWriter;
 class KoStore;
 class KoGenStyles;
 
+namespace Kivio {
+  class Object;
+}
+
 #define BORDER_SPACE 1
 
 struct AlignData
@@ -112,9 +116,9 @@ class KIVIO_EXPORT KivioPage : public QObject
     KoPageLayout paperLayout()const { return m_pPageLayout; }
     void setPaperLayout(const KoPageLayout&);
 
-    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
-    void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
-    void printSelected( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void paintContent( QPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
+    void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void printSelected( QPainter& painter, int xdpi = 0, int ydpi = 0 );
 
     bool isStencilSelected( KivioStencil * );
     void selectAllStencils();
@@ -152,7 +156,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     /*
     * Stencil routines
     */
-    bool addStencil( KivioStencil * );
+    bool addStencil( Kivio::Object* );
     void alignStencils( AlignData );
     void distributeStencils( DistributeData );
 

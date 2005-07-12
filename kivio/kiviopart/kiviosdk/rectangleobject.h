@@ -20,6 +20,7 @@
 #define KIVIORECTANGLEOBJECT_H
 
 #include <koSize.h>
+#include <koPoint.h>
 
 #include "object.h"
 
@@ -40,21 +41,39 @@ class RectangleObject : public Object
     /// Type of object
     virtual ShapeType type();
 
+    /// Position of Object
+    virtual KoPoint position() const;
+    /// Set the position of Object to @param newPosition
+    virtual void setPosition(const KoPoint& newPosition);
+    /**
+     * Move the Object
+     * @param xOffset number of points to move the Object horizontaly
+     * @param yOffset number of points to move the Object verticaly
+     */
+    virtual void move(double xOffset, double yOffset);
+
     /**
      * Resize the Object
      * @param xOffset number of points to resize the Object horizontaly
      * @param yOffset number of points to resize the Object horizontaly
      */
     virtual void resize(double xOffset, double yOffset);
+    /**
+     * Resize the object in percent of the current size
+     * @param percentWidth the percent the width have changed
+     * @param percentHeight the percent the height have changed
+     */
+    virtual void resizeInPercent(double percentWidth, double percentHeight);
     /// Size of the rectangle.
-    KoSize size() const;
+    virtual KoSize size() const;
     /// Set the size of the rectangle.
-    void setSize(const KoSize& newSize);
+    virtual void setSize(const KoSize& newSize);
 
     /// Draws a rectangle to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 
   private:
+    KoPoint m_position;
     KoSize m_size;
 };
 

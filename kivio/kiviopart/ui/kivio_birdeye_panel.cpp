@@ -178,20 +178,19 @@ void KivioBirdEyePanel::updateView()
 
   QRect rect(QPoint(0,0),s1);
 
-  KivioScreenPainter kpainter;
-  kpainter.start(m_buffer);
-  kpainter.painter()->fillRect(rect, QColor(120, 120, 120));
+  QPainter painter(m_buffer);
+  painter.fillRect(rect, QColor(120, 120, 120));
 
   if (m_bShowPageBorders) {
-    kpainter.painter()->fillRect(pcx0, pcy0, pcw, pch, QColor(200, 200, 200));
-    kpainter.painter()->fillRect(px0, py0, pw, ph, white);
+    painter.fillRect(pcx0, pcy0, pcw, pch, QColor(200, 200, 200));
+    painter.fillRect(px0, py0, pw, ph, white);
   } else {
-    kpainter.painter()->fillRect(pcx0, pcy0, pcw, pch, white);
+    painter.fillRect(pcx0, pcy0, pcw, pch, white);
   }
 
-  kpainter.painter()->translate(px0, py0);
-  m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, m_zoomHandler, false);
-  kpainter.stop();
+  painter.translate(px0, py0);
+  m_pDoc->paintContent(painter, rect, false, m_pView->activePage(), p0, m_zoomHandler, false);
+  painter.end();
 
   updateVisibleArea();
 }

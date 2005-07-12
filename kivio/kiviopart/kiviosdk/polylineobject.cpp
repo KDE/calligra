@@ -89,4 +89,18 @@ void PolylineObject::resize(double /*xOffset*/, double /*yOffset*/)
   // FIXME implement resizing
 }
 
+void PolylineObject::resizeInPercent(double percentWidth, double percentHeight)
+{
+  QValueVector<KoPoint>::iterator it;
+  QValueVector<KoPoint>::iterator itEnd = m_pointVector.end();
+  KoPoint newPoint;
+
+  for(it = m_pointVector.begin(); it != itEnd; ++it) {
+    newPoint = *it;
+    newPoint.setX(newPoint.x() * percentWidth);
+    newPoint.setY(newPoint.y() * percentHeight);
+    (*it) = newPoint;
+  }
+}
+
 }

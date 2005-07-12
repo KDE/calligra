@@ -23,6 +23,7 @@
 #include "kivio_map.h"
 #include "kivio_doc.h"
 #include "kivio_layer.h"
+#include "object.h"
 
 KivioChangePageNameCommand::KivioChangePageNameCommand(const QString &_name,  const QString & _oldPageName, const QString & _newPageName, KivioPage *_page)
     : KNamedCommand( _name ),
@@ -119,7 +120,7 @@ void KivioRemovePageCommand::unexecute()
 
 }
 
-KivioAddStencilCommand::KivioAddStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil )
+KivioAddStencilCommand::KivioAddStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil )
     : KNamedCommand( _name ),
       m_page( _page ),
       m_layer( _layer),
@@ -133,22 +134,24 @@ KivioAddStencilCommand::~KivioAddStencilCommand()
 
 void KivioAddStencilCommand::execute()
 {
-    m_layer->insertStencil( m_stencil );
+  //FIXME Port to Object code
+/*    m_layer->addStencil( m_stencil );
     m_page->doc()->updateView(m_page);
     m_stencil->unselect();
     m_stencil->searchForConnections(m_page, 4.0); //FIXME: The threshold should probably be zoomed....
-    m_page->doc()->slotSelectionChanged();
+    m_page->doc()->slotSelectionChanged();*/
 }
 
 void KivioAddStencilCommand::unexecute()
 {
-    m_layer->takeStencilFromList( m_stencil );
+  //FIXME Port to Object code
+/*    m_layer->takeStencil( m_stencil );
     m_page->doc()->updateView(m_page);
     m_stencil->unselect();
-    m_page->doc()->slotSelectionChanged();
+    m_page->doc()->slotSelectionChanged();*/
 }
 
-KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil )
+KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil )
     : KivioAddStencilCommand(_name, _page, _layer, _stencil )
 {
 }

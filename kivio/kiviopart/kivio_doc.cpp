@@ -640,8 +640,6 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
     return;
 
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
-    KoGlobal::dpiY());
   KoRect r = page->getRectForAllStencils();
 
   float zw = (float) rect.width() / (float)zoom.zoomItX(r.width());
@@ -651,13 +649,13 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
 
   zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(),
     KoGlobal::dpiY());
-  KivioScreenPainter ksp(&painter);
-  ksp.painter()->translate( - zoom.zoomItX(r.x()), - zoom.zoomItY(r.y()) );
-  paintContent(ksp,rect,transparent,page, QPoint(zoom.zoomItX(r.x()), zoom.zoomItY(r.y())), &zoom, false);
-  ksp.setPainter(0L); // Important! Don't delete the QPainter!!!
+  int x = zoom.zoomItX(r.x());
+  int y = zoom.zoomItY(r.y());
+  painter.translate(-x, -y);
+  paintContent(painter, rect, transparent, page, QPoint(x, y), &zoom, false);
 }
 
-void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
+void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
 {
   if ( isLoading() )
     return;
@@ -667,7 +665,7 @@ void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool tran
 
 void KivioDoc::printContent( KPrinter &prn )
 {
-  KivioScreenPainter p;
+  QPainter p;
   QValueList<int> pages = prn.pageList();
   KivioPage *pPage;
 
@@ -678,10 +676,10 @@ void KivioDoc::printContent( KPrinter &prn )
   int dpiX = doZoom ? 300 : KoGlobal::dpiX();
   int dpiY = doZoom ? 300 : KoGlobal::dpiY();
 
-  p.start(&prn);
+  p.begin(&prn);
 
   QPaintDeviceMetrics metrics( &prn );
-  p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
+  p.scale( (double)metrics.logicalDpiX() / (double)dpiX,
     (double)metrics.logicalDpiY() / (double)dpiY );
 
   QValueList<int>::iterator it;
@@ -695,7 +693,7 @@ void KivioDoc::printContent( KPrinter &prn )
     }
   }
 
-  p.stop();
+  p.end();
 }
 
 /* TODO:
@@ -728,17 +726,15 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
 
   kdDebug(43000) << "KivioDoc::exportCurPage() to " << fileName << "\n";
 
-  KivioScreenPainter p;
-
   buffer.fill(Qt::white);
 
-  p.start( &buffer );
-  p.setTranslation( dlg->border(), dlg->border() );
+  QPainter p( &buffer );
+  p.translate( dlg->border(), dlg->border() );
 
   if( dlg->fullPage()==true )
   {
     if(dlg->crop()) {
-      p.setTranslation(-zoom.zoomItX(pPage->getRectForAllStencils().x()),
+      p.translate(-zoom.zoomItX(pPage->getRectForAllStencils().x()),
         -zoom.zoomItY(pPage->getRectForAllStencils().y()));
     }
 
@@ -747,14 +743,14 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
   else
   {
     if(dlg->crop()) {
-      p.setTranslation(-zoom.zoomItX(pPage->getRectForAllSelectedStencils().x()),
+      p.translate(-zoom.zoomItX(pPage->getRectForAllSelectedStencils().x()),
         -zoom.zoomItY(pPage->getRectForAllSelectedStencils().y()));
     }
 
     pPage->printSelected(p);
   }
 
-  p.stop();
+  p.end();
 
 
   QFileInfo finfo(fileName);
@@ -918,37 +914,38 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
  */
 bool KivioDoc::checkStencilsForSpawner( KivioStencilSpawner *pSpawner )
 {
-    KivioPage *pPage;
-    KivioLayer *pLayer;
-    KivioStencil *pStencil;
-
-    // Iterate across all the pages
-    pPage = m_pMap->firstPage();
-    while( pPage )
-    {
-        pLayer = pPage->layers()->first();
-        while( pLayer )
-        {
-            pStencil = pLayer->stencilList()->first();
-            while( pStencil )
-            {
-                // If this is a group stencil, then we must check all child stencils
-                if( pStencil->groupList() && pStencil->groupList()->count() > 0 )
-                {
-                    if( checkGroupForSpawner( pStencil, pSpawner )==true )
-                        return true;
-                }
-                else if( pStencil->spawner() == pSpawner )
-                    return true;
-
-                pStencil = pLayer->stencilList()->next();
-            }
-
-            pLayer = pPage->layers()->next();
-        }
-
-        pPage = m_pMap->nextPage();
-    }
+  //FIXME Port to Object code
+//     KivioPage *pPage;
+//     KivioLayer *pLayer;
+//     KivioStencil *pStencil;
+// 
+//     // Iterate across all the pages
+//     pPage = m_pMap->firstPage();
+//     while( pPage )
+//     {
+//         pLayer = pPage->layers()->first();
+//         while( pLayer )
+//         {
+//             pStencil = pLayer->objectList()->first();
+//             while( pStencil )
+//             {
+//                 // If this is a group stencil, then we must check all child stencils
+//                 if( pStencil->groupList() && pStencil->groupList()->count() > 0 )
+//                 {
+//                     if( checkGroupForSpawner( pStencil, pSpawner )==true )
+//                         return true;
+//                 }
+//                 else if( pStencil->spawner() == pSpawner )
+//                     return true;
+// 
+//                 pStencil = pLayer->objectList()->next();
+//             }
+// 
+//             pLayer = pPage->layers()->next();
+//         }
+// 
+//         pPage = m_pMap->nextPage();
+//     }
 
     return false;
 }

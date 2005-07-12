@@ -38,6 +38,7 @@ class SmlObjectLoader{
     SmlObjectLoader();
     ~SmlObjectLoader();
 
+    Object* loadShape(const QDomElement& shapeElement);
     Object* loadObject(const QDomElement& shapeElement);
 
   protected:

@@ -47,6 +47,22 @@ ShapeType RectangleObject::type()
   return kstRectangle;
 }
 
+KoPoint RectangleObject::position() const
+{
+  return m_position;
+}
+
+void RectangleObject::setPosition(const KoPoint& newPosition)
+{
+  m_position = newPosition;
+}
+
+void RectangleObject::move(double xOffset, double yOffset)
+{
+  KoPoint offset(xOffset, yOffset);
+  setPosition(position() + offset);
+}
+
 KoSize RectangleObject::size() const
 {
   return m_size;
@@ -62,6 +78,19 @@ void RectangleObject::resize(double xOffset, double yOffset)
   KoSize offset(xOffset, yOffset);
 
   m_size += offset;
+}
+
+void RectangleObject::resizeInPercent(double percentWidth, double percentHeight)
+{
+  KoPoint newPosition;
+  newPosition.setX(m_position.x() * percentWidth);
+  newPosition.setY(m_position.y() * percentHeight);
+  setPosition(newPosition);
+
+  KoSize newSize;
+  newSize.setWidth(m_size.width() * percentWidth);
+  newSize.setHeight(m_size.height() * percentHeight);
+  setSize(newSize);
 }
 
 void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)

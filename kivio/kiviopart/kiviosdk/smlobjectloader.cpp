@@ -33,6 +33,7 @@
 #include "linearrayobject.h"
 #include "kivio_common.h"
 #include "pen.h"
+#include "groupobject.h"
 
 namespace Kivio {
 
@@ -54,6 +55,60 @@ SmlObjectLoader::SmlObjectLoader()
 
 SmlObjectLoader::~SmlObjectLoader()
 {
+}
+
+Object* SmlObjectLoader::loadShape(const QDomElement& shapeElement)
+{
+  GroupObject* object = new GroupObject;
+
+  QDomElement e;
+  QDomNode node = shapeElement.firstChild();
+  QString nodeName;
+
+  while(!node.isNull())
+  {
+    nodeName = node.nodeName();
+    e = node.toElement();
+
+    if(nodeName == "KivioSMLStencilSpawnerInfo")
+    {
+//       m_pInfo->loadXML( (const QDomElement)node.toElement() );
+    }
+    else if(nodeName == "KivioShape")
+    {
+      object->addObject(loadObject(e));
+    }
+    else if(nodeName == "Dimensions")
+    {
+      KoSize size;
+
+      size.setWidth(XmlReadFloat(e, "w", 72.0f));
+      size.setHeight(XmlReadFloat(e, "h", 72.0f));
+    }
+    else if( nodeName == "KivioConnectorTarget")
+    {
+/*      pTarget = new KivioConnectorTarget();
+      pTarget->loadXML( (const QDomElement)node.toElement() );
+
+      m_pStencil->m_pConnectorTargets->append( pTarget );*/
+    }
+    else
+    {
+      kdDebug(43000) << "Kivio::SmlObjectLoader::loadShape() - Unknown node " << nodeName << endl;
+    }
+
+    node = node.nextSibling();
+  }
+
+//   pTarget = m_pStencil->m_pConnectorTargets->first();
+// 
+//   while(pTarget) {
+//     pTarget->setOffsets(pTarget->x() / m_defWidth, pTarget->y() / m_defHeight);
+//     m_pTargets->append(pTarget->duplicate());
+//     pTarget = m_pStencil->m_pConnectorTargets->next();
+//   }
+
+  return object;
 }
 
 Object* SmlObjectLoader::loadObject(const QDomElement& shapeElement)
@@ -131,7 +186,7 @@ Object* SmlObjectLoader::loadRectangleObject(const QDomElement& shapeElement)
   RectangleObject* object = new RectangleObject();
 
   // Load the name and geometry properties
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
   object->setPosition(KoPoint(XmlReadFloat(shapeElement, "x", 0.0f), XmlReadFloat(shapeElement, "y", 0.0f)));
   object->setSize(KoSize(XmlReadFloat(shapeElement, "w", 72.0f), XmlReadFloat(shapeElement, "h", 72.0f)));
 
@@ -164,7 +219,7 @@ Object* SmlObjectLoader::loadRoundedRectangleObject(const QDomElement& shapeElem
   RoundedRectangleObject* object = new RoundedRectangleObject();
 
   // Load the name and geometry properties
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
   object->setPosition(KoPoint(XmlReadFloat(shapeElement, "x", 0.0f), XmlReadFloat(shapeElement, "y", 0.0f)));
   object->setSize(KoSize(XmlReadFloat(shapeElement, "w", 72.0f), XmlReadFloat(shapeElement, "h", 72.0f)));
 
@@ -201,7 +256,7 @@ Object* SmlObjectLoader::loadBezierObject(const QDomElement& shapeElement)
   BezierObject* object = new BezierObject();
 
   // Load the type, name, and lineWidth properties
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
 
   // Iterate through the nodes loading the various items
   QDomNode node = shapeElement.firstChild();
@@ -248,7 +303,7 @@ Object* SmlObjectLoader::loadEllipseObject(const QDomElement& shapeElement)
   EllipseObject* object = new EllipseObject();
 
   // Load the name and geometry properties
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
   object->setPosition(KoPoint(XmlReadFloat(shapeElement, "x", 0.0f), XmlReadFloat(shapeElement, "y", 0.0f)));
   object->setSize(KoSize(XmlReadFloat(shapeElement, "w", 72.0f), XmlReadFloat(shapeElement, "h", 72.0f)));
 
@@ -281,7 +336,7 @@ Object* SmlObjectLoader::loadPolygonObject(const QDomElement& shapeElement)
   PolygonObject* object = new PolygonObject;
 
   // Load the name
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
 
     // Iterate through the nodes loading the various items
   QDomNode node = shapeElement.firstChild();
@@ -325,7 +380,7 @@ Object* SmlObjectLoader::loadPolylineObject(const QDomElement& shapeElement)
   PolylineObject* object = new PolylineObject;
 
   // Load the name
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
 
     // Iterate through the nodes loading the various items
   QDomNode node = shapeElement.firstChild();
@@ -365,7 +420,7 @@ Object* SmlObjectLoader::loadLineArrayObject(const QDomElement& shapeElement)
   LineArrayObject* object = new LineArrayObject;
 
   // Load the name
-  object->setId(XmlReadString(shapeElement, "name", ""));
+  object->setName(XmlReadString(shapeElement, "name", ""));
 
     // Iterate through the nodes loading the various items
   QDomNode node = shapeElement.firstChild();

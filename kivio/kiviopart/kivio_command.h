@@ -31,6 +31,10 @@ class KivioLayer;
 class KivioStencil;
 struct KoPageLayout;
 
+namespace Kivio {
+  class Object;
+}
+
 class KivioChangePageNameCommand : public KNamedCommand
 {
 public:
@@ -97,24 +101,24 @@ protected:
 
 class KivioAddStencilCommand : public KNamedCommand
 {
-public:
-    KivioAddStencilCommand( const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil  );
+  public:
+    KivioAddStencilCommand( const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil  );
     ~KivioAddStencilCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
+  protected:
     KivioPage * m_page;
     KivioLayer * m_layer;
-    KivioStencil *m_stencil;
+    Kivio::Object* m_stencil;
 };
 
 
 class KivioRemoveStencilCommand : public KivioAddStencilCommand
 {
-public:
-    KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil );
+  public:
+    KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil );
     ~KivioRemoveStencilCommand() {}
 
     void execute() { KivioAddStencilCommand::unexecute(); }

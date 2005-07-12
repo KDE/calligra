@@ -22,8 +22,6 @@
 #include <qstring.h>
 #include <qbrush.h>
 
-#include <koPoint.h>
-
 #include "pen.h"
 
 class QPainter;
@@ -45,7 +43,10 @@ typedef enum {
   kstEllipse,
   kstOpenPath,
   kstClosedPath,
-  kstTextBox
+  kstTextBox,
+  kstGroup,
+  kstConnector,
+  kstCustomObject = 1000
 } ShapeType;
 
 /**
@@ -62,27 +63,29 @@ class Object{
     /// Type of Object
     virtual ShapeType type();
 
-    /// Id of Object
-    virtual QString id() const;
-    /// Set the id of Object to @param newId
-    virtual void setId(const QString& newId);
+    /// Name of Object
+    virtual QString name() const;
+    /// Set the name of Object to @param newName
+    virtual void setName(const QString& newName);
 
-    /// Position of Object
-    virtual KoPoint position() const;
-    /// Set the position of Object to @param newPosition
-    virtual void setPosition(const KoPoint& newPosition);
     /**
      * Move the Object
      * @param xOffset number of points to move the Object horizontaly
      * @param yOffset number of points to move the Object verticaly
      */
-    virtual void move(double xOffset, double yOffset);
+    virtual void move(double xOffset, double yOffset) = 0;
     /**
      * Resize the Object
      * @param xOffset number of points to resize the Object horizontaly
      * @param yOffset number of points to resize the Object horizontaly
      */
     virtual void resize(double xOffset, double yOffset) = 0;
+    /**
+     * Resize the object in percent of the current size
+     * @param percentWidth the percent the width have changed
+     * @param percentHeight the percent the height have changed
+     */
+    virtual void resizeInPercent(double percentWidth, double percentHeight) = 0;
 
     /// Brush used to fill Object
     virtual QBrush brush() const;
@@ -97,8 +100,7 @@ class Object{
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler) = 0;
 
   private:
-    QString m_id;
-    KoPoint m_position;
+    QString m_name;
 
     QBrush m_brush;
     Pen m_pen;

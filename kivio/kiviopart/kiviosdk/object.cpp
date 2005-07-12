@@ -33,30 +33,14 @@ ShapeType Object::type()
   return kstNone;
 }
 
-QString Object::id() const
+QString Object::name() const
 {
-  return m_id;
+  return m_name;
 }
 
-void Object::setId(const QString& newId)
+void Object::setName(const QString& newName)
 {
-  m_id = newId;
-}
-
-KoPoint Object::position() const
-{
-  return m_position;
-}
-
-void Object::setPosition(const KoPoint& newPosition)
-{
-  m_position = newPosition;
-}
-
-void Object::move(double xOffset, double yOffset)
-{
-  KoPoint offset(xOffset, yOffset);
-  setPosition(position() + offset);
+  m_name= newName;
 }
 
 QBrush Object::brush() const

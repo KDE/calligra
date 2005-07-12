@@ -826,13 +826,6 @@ void KivioView::slotUpdateView( KivioPage* page )
   hRuler->update();
 }
 
-void KivioView::paintContent( KivioPainter&, const QRect&, bool)
-{
-//  m_pDoc->paintContent( painter, rect, transparent, m_pActivePage );
-//  temporary
-  m_pCanvas->update();
-}
-
 QWidget *KivioView::canvas()
 {
   return canvasWidget();
@@ -1671,7 +1664,8 @@ void KivioView::slotChangeStencilRotation(int d)
 */
 void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, double y )
 {
-    KivioStencil *pStencil;
+  //FIXME Port to Object code
+/*    KivioStencil *pStencil;
 
     // Allocate the new stencil and set it's default size/style
     pStencil = pSpawner->newStencil();
@@ -1708,7 +1702,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
 
     // Mark the page as modified and repaint
     m_pDoc->updateView(m_pActivePage);
-    pluginManager()->activateDefaultTool();
+    pluginManager()->activateDefaultTool();*/
 }
 
 void KivioView::alignStencilsDlg()

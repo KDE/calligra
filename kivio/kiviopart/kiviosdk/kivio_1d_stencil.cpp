@@ -586,7 +586,8 @@ bool Kivio1DStencil::boolContainsFalse( bool *boolArray, int count )
 
 void Kivio1DStencil::searchForConnections( KivioPage *pPage )
 {
-  bool *done = new bool[ m_pConnectorPoints->count()];
+  //FIXME Clean this up and port to Object code
+/*  bool *done = new bool[ m_pConnectorPoints->count()];
   unsigned int i;
 
   for(i = 0; i < m_pConnectorPoints->count(); i++) {
@@ -652,12 +653,13 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
     pLayer = pPage->nextLayer();
   }
 
-  delete [] done;
+  delete [] done;*/
 }
 
 void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshold )
 {
-  bool *done = new bool[ m_pConnectorPoints->count()];
+  //FIXME Clean this up and port to Object code
+/*  bool *done = new bool[ m_pConnectorPoints->count()];
   int i;
 
   for( i=0; i<(int)m_pConnectorPoints->count(); i++ ) {
@@ -724,7 +726,7 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshold )
     pLayer = pPage->nextLayer();
   }
 
-  delete [] done;
+  delete [] done;*/
 }
 
 //////////////////////

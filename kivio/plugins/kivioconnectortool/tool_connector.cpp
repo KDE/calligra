@@ -197,7 +197,8 @@ void ConnectorTool::mousePress( QMouseEvent *e )
  */
 bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 {
-  KivioCanvas* canvas = view()->canvasWidget();
+  //FIXME Port to Object code
+/*  KivioCanvas* canvas = view()->canvasWidget();
   KivioDoc* doc = view()->doc();
   KivioPage* pPage = canvas->activePage();
   QString spawnerId;
@@ -259,7 +260,8 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 
   canvas->repaint();
   canvas->setCursor(*m_pConnectorCursor2);
-  return true;
+  return true;*/
+  return false;
 }
 
 void ConnectorTool::mouseMove( QMouseEvent * e )

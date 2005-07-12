@@ -111,7 +111,8 @@ void TextTool::setActivated(bool a)
 
 void TextTool::text(QRect r)
 {
-  // Calculate the start and end clicks in terms of page coordinates
+  //FIXME Port to Object code
+/*  // Calculate the start and end clicks in terms of page coordinates
   KoPoint startPoint = view()->canvasWidget()->mapFromScreen( QPoint( r.x(), r.y() ) );
   KoPoint releasePoint = view()->canvasWidget()->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
@@ -158,7 +159,7 @@ void TextTool::text(QRect r)
   if (stencil->text().isEmpty()) {
     page->deleteSelectedStencils();
     doc->updateView(page);
-  }
+  }*/
 }
 
 void TextTool::mousePress( QMouseEvent *e )

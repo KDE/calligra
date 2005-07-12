@@ -329,10 +329,8 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     int mr = m_pView->zoomHandler()->zoomItX(pl.ptRight);
     int mb = m_pView->zoomHandler()->zoomItY(pl.ptBottom);
 
-    painter.save();
-    painter.setPen(QPen(blue,1,DotLine));
-    painter.drawRect(ml,mt,pw-ml-mr,ph-mt-mb);
-    painter.restore();
+    painter.setPen(QPen(blue, 1, DotLine));
+    painter.drawRect(ml, mt, pw - ml - mr, ph - mt - mb);
   }
 
   // Draw page borders
@@ -342,11 +340,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   painter.drawRect(0, 0, pw, ph);
 
   // Draw content
-  KivioScreenPainter kpainter;
-  kpainter.start( m_buffer );
-  kpainter.translateBy( -m_iXOffset, -m_iYOffset );
-  m_pDoc->paintContent(kpainter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
-  kpainter.stop();
+  m_pDoc->paintContent(painter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
 
   paintGuides(false);
   painter.end();
