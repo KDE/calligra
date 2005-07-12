@@ -43,7 +43,7 @@
 #include "commands.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
-#include "utils.h"
+#include <formeditor/utils.h>
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
 # define KInputDialog QInputDialog

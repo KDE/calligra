@@ -243,7 +243,7 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 							s = QSize( QMIN(itemSizeHint.width(), r.width()), itemSizeHint.height() );
 					}
 					else
-						s = QSize( QMIN(itemSizeHint.width() + availableSpace / currentLine.count()
+						s = QSize( QMIN(itemSizeHint.width() + availableSpace / (int)currentLine.count()
 							, r.width()), itemSizeHint.height() );
 				}
 				else
@@ -295,7 +295,7 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 					s = QSize( QMIN(itemSizeHint.width(), r.width()), itemSizeHint.height() );
 			}
 			else
-				s = QSize( QMIN(itemSizeHint.width() + availableSpace / currentLine.count()
+				s = QSize( QMIN(itemSizeHint.width() + availableSpace / (int)currentLine.count()
 					, r.width()), itemSizeHint.height() );
 		}
 		else
@@ -359,7 +359,7 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 							s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height(), r.height()) );
 					}
 					else
-						s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / currentLine.count()
+						s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / (int)currentLine.count()
 							, r.height()) );
 				}
 				else
@@ -411,7 +411,7 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 					s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height(), r.height()) );
 			}
 			else
-				s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / currentLine.count()
+				s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / (int)currentLine.count()
 					, r.height()) );
 		}
 		else
