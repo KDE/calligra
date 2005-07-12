@@ -166,46 +166,51 @@ void KWOasisLoader::loadOasisSettings( const QDomDocument& settingsDoc )
     m_doc->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
-static QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
+static QString headerTypeToFramesetName( const QString& localName, bool hasEvenOdd )
 {
-    if ( tagName == "style:header" )
+    if ( localName == "header" )
         return hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
-    if ( tagName == "style:header-left" )
+    if ( localName == "header-left" )
         return i18n("Even Pages Header");
-    if ( tagName == "style:footer" )
+    if ( localName == "footer" )
         return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
-    if ( tagName == "style:footer-left" )
+    if ( localName == "footer-left" )
         return i18n("Even Pages Footer");
-    kdWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
-    // ######
-    //return i18n("First Page Header");
-    //return i18n("First Page Footer");
+    if ( localName == "header-first" ) // NOT OASIS COMPLIANT
+        return i18n("First Page Header");
+    if ( localName == "footer-first" ) // NOT OASIS COMPLIANT
+        return i18n("First Page Footer");
+    kdWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
     return QString::null;
 }
 
-static KWFrameSet::Info headerTypeToFrameInfo( const QString& tagName, bool /*hasEvenOdd*/ )
+static KWFrameSet::Info headerTypeToFrameInfo( const QString& localName, bool /*hasEvenOdd*/ )
 {
-    if ( tagName == "style:header" )
+    if ( localName == "header" )
         return KWFrameSet::FI_ODD_HEADER;
-    if ( tagName == "style:header-left" )
+    if ( localName == "header-left" )
         return KWFrameSet::FI_EVEN_HEADER;
-    if ( tagName == "style:footer" )
+    if ( localName == "footer" )
         return KWFrameSet::FI_ODD_FOOTER;
-    if ( tagName == "style:footer-left" )
+    if ( localName == "footer-left" )
         return KWFrameSet::FI_EVEN_FOOTER;
 
-    // ### return KWFrameSet::FI_FIRST_HEADER; TODO
-    // ### return KWFrameSet::FI_FIRST_FOOTER; TODO
+    // ######## KWord extension, because I'm too lazy.
+    // TODO: the real solution is a separate page layout for the first page.
+    if ( localName == "header-first" ) // NOT OASIS COMPLIANT
+        return KWFrameSet::FI_FIRST_HEADER;
+    if ( localName == "footer-first" ) // NOT OASIS COMPLIANT
+        return KWFrameSet::FI_FIRST_FOOTER;
     return KWFrameSet::FI_BODY;
 }
 
 void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context )
 {
-    const QString tagName = headerFooter.tagName();
-    bool isHeader = tagName.startsWith( "style:header" );
+    const QString localName = headerFooter.localName();
+    bool isHeader = localName.startsWith( "header" );
 
-    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( tagName, hasEvenOdd ) );
-    fs->setFrameSetInfo( headerTypeToFrameInfo( tagName, hasEvenOdd ) );
+    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
+    fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
     m_doc->m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
 
     if ( !style.isNull() )

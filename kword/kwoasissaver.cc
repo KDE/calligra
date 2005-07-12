@@ -87,7 +87,8 @@ bool KWOasisSaver::finish()
     if ( !m_store->open( "styles.xml" ) )
         return false;
     //manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    m_doc->saveOasisDocumentStyles( m_store, m_mainStyles, KWDocument::SaveSelected /* simply means not SaveAll */ );
+    m_doc->saveOasisDocumentStyles( m_store, m_mainStyles, *m_savingContext,
+                                    KWDocument::SaveSelected /* simply means not SaveAll */ );
     if ( !m_store->close() ) // done with styles.xml
         return false;
 
