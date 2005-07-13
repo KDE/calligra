@@ -18,7 +18,11 @@
 <surname>Drews</surname>
 <affiliation><address><email>j.e.drews@att.net</email></address></affiliation>
 </author>
-
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation><address><email>annma@kde.org</email></address></affiliation>
+</author>
 <othercredit role="developer">
 <firstname>Ulrich</firstname>
 <surname>K&uuml;ttler</surname>
@@ -27,11 +31,18 @@
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
-
+<copyright>
+<year>2002</year>
+<holder>Jonathan Drews</holder>
+</copyright>
+<copyright>
+<year>2005</year>
+<holder>Anne-Marie Mahfouf</holder>
+</copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-02-19</date>
-<releaseinfo>0.00.02</releaseinfo>
+<date>2005-07-13</date>
+<releaseinfo>1.4.88</releaseinfo>
 
 <abstract>
 <para>
