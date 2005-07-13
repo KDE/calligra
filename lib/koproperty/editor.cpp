@@ -47,9 +47,11 @@
 
 namespace KoProperty {
 
+//! @internal
 static bool kofficeAppDirAdded = false;
 
 //! \return true if \a o has parent \a par.
+//! @internal
 inline bool hasParent(QObject* par, QObject* o)
 {
     while (o && o != par)

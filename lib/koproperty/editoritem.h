@@ -41,7 +41,7 @@ class EditorItemPrivate;
 class Property;
 class Editor;
 
-/*! \brief
+/*! \brief Item for a single property displayed within Editor object.
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>

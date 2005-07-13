@@ -28,6 +28,22 @@
 template<class U> class QAsciiDict;
 template<class U> class QAsciiDictIterator;
 
+//! Namespace for a set of classes implementing generic properties framework.
+/*!
+ Main classes of this framework:
+  - Property, representing a single property with it's own type, value
+  - Set, a set of properties
+  - Editor, a widget for displaying and editing properies provided by a Set object. 
+    Every property has it's own row displayed using EditorItem object, within Editor widget. 
+    Widget class provides editing feature for EditorItem objects if a user selects a given item.
+
+ KoPropert framework also supports adding custom property types 
+ and custom property editor types using CustomPropertyFactory.
+
+ \author Cedric Pasteur <cedric.pasteur@free.fr>
+ \author Alexander Dymo <cloudtemple@mskat.net>
+ \author Jaroslaw Staniek <js@iidea.pl>
+*/
 namespace KoProperty {
 
 class PropertyPrivate;

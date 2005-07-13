@@ -34,8 +34,10 @@
 
 namespace KoProperty {
 
+//! @internal
 static Property Set_nonConstNull;
 
+//! @internal
 class SetPrivate
 {
 	public:

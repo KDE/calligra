@@ -29,7 +29,7 @@ namespace KoProperty {
 class WidgetPrivate;
 class Property;
 
-/*! \brief The base class for all editors used in Editor.
+/*! \brief The base class for all item editors used in Editor.
   \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
 */
@@ -41,9 +41,9 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		Widget(Property *property, QWidget *parent, const char *name="property_editor");
 		~Widget();
 
-		/*! \return the value currently entered in the editor widget.*/
+		/*! \return the value currently entered in the item editor widget.*/
 		virtual QVariant value() const = 0;
-		/*! Sets the value shown in the editor widget. Set emitChange to false
+		/*! Sets the value shown in the item editor widget. Set emitChange to false
 		if you don't want to emit propertyChanged signal.*/
 		virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
 
@@ -51,7 +51,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		/*! Sets the name of edited property.*/
 		virtual void setProperty(Property *property);
 
-		/*! Function to draw a property viewer when the editor isn't shown.*/
+		/*! Function to draw a property viewer when the item editor isn't shown.*/
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 		/*! Reverts the property value to previous setting.*/
