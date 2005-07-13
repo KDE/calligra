@@ -233,12 +233,15 @@ public:
 
     /**
      * Save this cell.
-     * @param _x_offset ...
-     * @param _y_offset ...
+     * @param doc document to save cell in
+     * @param _x_offset x offset
+     * @param _y_offset y offset
      * @param force if set to true, all the properties of the format are stored (used for "Copy")
      * @param era set this to true if you want to encode relative references as absolutely (they will be switched
      *            back to relative references during decoding) - is used for cutting to clipboard
      * Usually this is false, to only store the properties explicitly set.
+     *
+     * @todo So what does @p copy do?
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
@@ -271,7 +274,7 @@ public:
     void copyFormat( KSpreadCell *_cell );
     void copyContent( KSpreadCell *_cell );
     /**
-     * Copies the format and the content. It does not copy the @ref #m_row and @ref #m_column attributes.
+     * Copies the format and the content. It does not copy the #m_row and #m_column attributes.
      * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
      * content.
      *
@@ -284,13 +287,19 @@ public:
      *
      * @param rect the portion of the canvas that is actually in view
      * @param painter the painter object to paint on
-     * @param the view of this data.  This may be NULL, but no selection
+     * @param view the view of this data.  This may be NULL, but no selection
      *        will be included with the painting.
-     * @param coordinates coordinates on the painter where the top left corner
+     * @param coordinate coordinates on the painter where the top left corner
      *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
      * @param paintBorderRight whether to draw the right border too.
      * @param paintBorderBottom whether to draw the bottom border too.
+     * @param paintBorderLeft whether to draw the left border too.
+     * @param paintBorderTop whether to draw the top border too.
+     * @param rightPen pen to use to draw the right border if @p paintBorderRight is true
+     * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom is true
+     * @param leftPen pen to use to draw the left border if @p paintBorderLeft is true
+     * @param topPen pen to use to draw the top border if @p paintBorderTop is true
      * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const KoRect & rect, QPainter & painter,
@@ -309,6 +318,7 @@ public:
     /**
      * @param _col the column this cell is assumed to be in.
      *             This parameter defaults to the return value of @ref #column.
+     * @param _canvas the canvas this cell is assumed to be in.
      *
      * @return the width of this cell as int
      */
@@ -316,12 +326,14 @@ public:
 
     /**
      * @param _row the row this cell is assumed to be in.
+     * @param _canvas the canvas this cell is assumed to be in.
      *
      * @return the height of this cell as int
      */
     int height( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
+     * @param _canvas the canvas this cell is assumed to be in.
      * @param _col the column this cell is assumed to be in.
      *             This parameter defaults to the return value of @ref #column.
      *
@@ -331,6 +343,7 @@ public:
 
     /**
      * @param _row the row this cell is assumed to be in.
+     * @param _canvas the canvas this cell is assumed to be in.
      *
      * @return the height of this cell as double
      */
@@ -511,7 +524,7 @@ public:
 
     /**
     * Refreshing chart
-    * bool refresh is default true
+    * @param refresh is default true
     * when it's false it's just for test
     * it's used when you paste cell
     */
@@ -521,7 +534,9 @@ public:
 
     /**
      * Called if the user clicks on a cell. If the cell is for example a button, then
-     * @ref #m_strAction is executed.
+     * m_strAction is executed.
+     *
+     * @todo What m_strAction?
      */
     void clicked( KSpreadCanvas *_canvas );
 
@@ -653,6 +668,8 @@ public:
      * @param _era encode relative references absolutely (this is used for copying
      *             a cell to make the paste operation create a formula that points
      *             to the original cells, not the cells at the same relative position)
+     * @param _col row the formula is in
+     * @param _row column the formula is in
      */
     QString encodeFormula( bool _era = false, int _col = -1, int _row = -1 );
     QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 );
@@ -687,7 +704,7 @@ public:
 
     /**
      * Parses the formula.
-     * Fills @ref #dependList and @ref #formula.
+     * Fills #dependList and #formula.
      * @return FALSE on error.
      */
     bool makeFormula();
@@ -834,7 +851,7 @@ protected:
     void applyZoomedFont( QPainter &painter, int _col, int _row );
 
     /**
-     * Called from @ref #makeFormat to determine the space
+     * Called from makeFormat() to determine the space
      * needed for the text.
      */
     void textSize( QPainter &_paint );

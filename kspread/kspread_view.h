@@ -146,12 +146,18 @@ public:
      * Called by @ref KSpreadInsertHandler
      *
      * @param _geometry is the zoomed geometry of the new child.
+     * @param _entry is the entry to insert.
+     *
+     * @todo check validity of @p _entry docs.
      */
     void insertChart( const QRect& _geometry, KoDocumentEntry& _entry );
     /**
      * Called by @ref KSpreadInsertHandler
      *
      * @param _geometry is the geometry of the new child.
+     * @param _entry is the entry to insert.
+     *
+     * @todo check validity of @p _entry docs.
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
