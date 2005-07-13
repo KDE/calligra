@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003,2004 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -99,10 +100,49 @@ KSpreadValue Function::exec (QValueVector<KSpreadValue> args, ValueCalc *calc)
   if (!paramCountOkay (args.count()))
     return KSpreadValue::errorVALUE();
 
-  // TODO: work on arrays if need be
+  // do we need to perform array expansion ?
+  bool mustExpandArray = false;
+  if (!d->acceptArray)
+    for (unsigned int i = 0; i < args.count(); ++i) {
+      if (args[i].isArray())
+        mustExpandArray = true;
+    }
 
   if( !d->ptr ) return KSpreadValue::errorVALUE();
-  return (*d->ptr) (args, calc);
+  
+  // perform the actual array expansion if need be
+  
+  if (mustExpandArray) {
+    // compute number of rows/cols of the result
+    int rows = 0;
+    int cols = 0;
+    for (unsigned int i = 0; i < args.count(); ++i) {
+      int x = (args[i].type() == KSpreadValue::Array) ? args[i].rows() : 1;
+      if (x > rows) rows = x;
+      x = (args[i].type() == KSpreadValue::Array) ? args[i].columns() : 1;
+      if (x > cols) cols = x;
+    }
+    // allocate the resulting array
+    KSpreadValue res (cols, rows);
+    // perform the actual computation for each element of the array
+    for (int row = 0; row < rows; ++row)
+      for (int col = 0; col < cols; ++col) {
+        // fill in the parameter vector
+        QValueVector<KSpreadValue> vals (args.count());
+        for (unsigned int i = 0; i < args.count(); ++i) {
+          int r = args[i].rows();
+          int c = args[i].columns();
+          vals[i] = args[i].isArray() ?
+              args[i].element (col % c, row % r): args[i];
+        }
+        
+        res.setElement (col, row, exec (vals, calc));
+      }
+    return res;
+  }
+  else
+    // call the function
+    return (*d->ptr) (args, calc);
 }
 
 static KStaticDeleter<FunctionRepository> fr_sd;

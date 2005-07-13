@@ -506,8 +506,8 @@ void KSpreadValue::setFormat (KSpreadValue::Format fmt)
 
 KSpreadValue KSpreadValue::element( unsigned column, unsigned row ) const
 {
-  if( d->type != Array ) return empty();
-  if( !d->pa ) return empty();
+  if( d->type != Array ) return *this;
+  if( !d->pa ) return *this;
   KSpreadValue* v = d->pa->at( column, row );
   return v ? KSpreadValue( *v ) : empty();
 }
