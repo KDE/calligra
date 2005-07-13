@@ -1162,14 +1162,9 @@ screen:</para>
 
 <para>
 You will need to run the font installer with <systemitem
-class="username">root</systemitem> privileges. Click on the button
+class="username">root</systemitem> privileges in order to install the fonts system-wide. Click on the button
 <guibutton>Administrator Mode</guibutton> and enter your <systemitem 
-class="username">root</systemitem> password. Click on the button 
-<guibutton>Change Folder</guibutton>. 
-This should bring up a pane from where you can select the folder your fonts are 
-stored in. In
-this example they are stored in <filename
-class="directory">/home/poincare/esstix</filename>.</para>
+class="username">root</systemitem> password.</para> 
 
 <screenshot>
 <screeninfo>Picture of the &kde; font installer</screeninfo>
@@ -1181,10 +1176,13 @@ class="directory">/home/poincare/esstix</filename>.</para>
 	</mediaobject>
 </screenshot>
 
-<para>Click on the the folder <filename
-class="directory">esstix</filename> and then click on the
-<guibutton>OK</guibutton> button. You should obtain the following
-result.</para>
+<para>Click on the button 
+<guibutton>Add Fonts...</guibutton>. 
+This should bring up a pane from where you can select the folder your fonts are 
+stored in. In
+this example they are stored in <filename
+class="directory">/home/annma/esstix</filename>.</para>
+
 
 <screenshot>
 <screeninfo>Picture of font installer ready to install</screeninfo>
@@ -1197,10 +1195,9 @@ install</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
-<para>
-Click on the top font entry. Holding down the &Shift; key, click on
-the last esstix font, at the bottom. Your selection should look like
-this.</para>
+<para>Select all the fonts with  <keycombo
+action="simul">&Ctrl;<keycap>A</keycap></keycombo>.</para>
+
 
 <screenshot>
 <screeninfo>Picture of the font installer installing</screeninfo>
@@ -1213,27 +1210,8 @@ installing</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
-
-<para>You should use the native <acronym>AFM</acronym> files. Set up
-your 
-<menuchoice><guimenu>Settings</guimenu><guimenuitem>System</guimenuitem></menuchoice> as shown below. The <guilabel>Generate AFM's, with</guilabel> box 
-should be unchecked:</para>
-
-<screenshot>
-<screeninfo>Picture of settings tab</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst-right.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of settings tab</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>Return to the <menuchoice><guimenu>Fonts</guimenu></menuchoice>
-tab. Click on the <guibutton>Install</guibutton> button. The fonts
-will install. After this you must click on the
-<guibutton>Apply</guibutton> button. The following dialog will
-appear:</para>
+<para>
+Click on the <guibutton>Open</guibutton> button. You will then see a progress dialog telling you it is installing the fonts.</para>
 
 <screenshot>
 <screeninfo>Picture of &kcontrolcenter; applying the fonts</screeninfo>
@@ -1246,31 +1224,20 @@ fonts</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
-<para>Answer <guibutton>Yes</guibutton> to the <guilabel>Apply system
-changes now</guilabel> dialog. Installation of the Esstix fonts is complete.
-</para>
+<para>&kformula; will need to be restarted in order to use the newly installed fonts. To use the Esstix fonts, open
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kformula;...</guimenuitem></menuchoice> and select <guimenu>Esstix font style</guimenu> as shown below. </para>
 
-</sect1>
-
-<sect1 id="additional-fonts">
-<title>Additional Math Fonts</title>
-<para>Additional math fonts can be installed with <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure
-&kformula;...</guimenuitem></menuchoice><guilabel> Math Fonts </guilabel>
-</para>
 <screenshot>
-<screeninfo>Add math fonts;</screeninfo>
+<screeninfo>Picture of settings tab</screeninfo>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="additional_fonts1.png" format="PNG"/>
+	    <imagedata fileref="kfontinst6.png" format="PNG"/>
 	  </imageobject>
+<textobject><phrase>Picture of settings to select the Esstix fonts</phrase></textobject>
 	</mediaobject>
 </screenshot>
-<para>First install the desired fonts with the Font Installer, in
-&kcontrolcenter;. This will make them available to your computer. Next enter
-the <guilabel>Math Fonts</guilabel> section and add them using the 
-<keysym>Right arrow</keysym>, as shown above. The Euclid Symbol fonts,
-that were added above, are now available in the <guilabel>Insert Symbol</guilabel>combo box.
+
+<para>The <guilabel>Symbol font type</guilabel> are fonts named Symbol shipped with most distributions and the <guilabel>Computer modern (TeX) style</guilabel> fonts are the bakoma fonts mentionned above.
 </para>
 
 </sect1>
@@ -1286,6 +1253,8 @@ that were added above, are now available in the <guilabel>Insert Symbol</guilabe
 <para>Documentation copyright 2002 Jonathan Drews
 <email>j.e.drews@att.net</email></para>
 
+<para>Documentation copyright 2005 Anne-Marie Mahfouf
+<email>annma@kde.org</email></para>
 <!--TRANS:CREDIT_FOR_TRANSLATORS-->
 &underFDL;
 &underGPL;
