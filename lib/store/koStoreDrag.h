@@ -36,9 +36,10 @@
 class KOSTORE_EXPORT KoStoreDrag : public QStoredDrag
 {
 public:
-    /**
+    /** Constructor.
      * @param nativeMimeType the app's native mimetype.
-     * @param dragSource must be 0 when copying to the clipboard
+     * @param dragSource must be 0 when copying to the clipboard.
+     * @param name object name for this drag.
      */
     KoStoreDrag( const char* nativeMimeType, QWidget *dragSource = 0L, const char *name = 0L );
 

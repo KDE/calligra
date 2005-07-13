@@ -38,6 +38,8 @@ class KOTEXT_EXPORT KoTextIterator : public QObject
     Q_OBJECT
 public:
     /**
+     * @param lstObjects list of text objects to iterate over
+     * @param textView view in which the objects live
      * @param options see KFindDialog
      */
     KoTextIterator( const QValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options ) {

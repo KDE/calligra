@@ -60,6 +60,8 @@ public:
      * Interface for setting the modified format
      * @param format can be a temporary format
      * @param zoomFont set to true if the font size was used-specified (e.g. in KoFontDia)
+     *
+     * @todo Document mystic flags parameter.
      */
     virtual KCommand *setFormatCommand( const KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
 
@@ -67,6 +69,7 @@ public:
     virtual const KoParagLayout * currentParagLayoutFormat() const = 0;
 
     /** Interface for changing the paragraph layout.
+     * @param newLayout pointer to the new layout to apply
      * @param flags one of the KoParagLayout flags
      * @param marginIndex type of margin. Only used if flags==KoParagLayout::Margins
      */
@@ -178,24 +181,30 @@ class KOTEXT_EXPORT KoTextObject : public QObject, public KoTextFormatInterface
     Q_OBJECT
 public:
     /** Constructor.
-     * @param the zoom handler (to be passed to the KoTextDocument ctor)
+     * This constructor creates the contained KoTextDocument automatically.
+     *
+     * @param zh the zoom handler (to be passed to the KoTextDocument ctor)
      * @param defaultFont the font to use by default (see KoTextFormatCollection)
      * @param defaultLanguage the language to use by default (see KoTextFormatCollection)
      * @param defaultHyphenation the default setting for hyphenation (see KoTextFormatCollection)
      * @param defaultStyle the style to use by default (initial pararaph, and when deleting a used style)
      * @param tabStopWidth the global value for the tabstop width
+     * @param parent parent widget for this object
+     * @param name name for this object
      *
-     * This constructor creates the contained KoTextDocument automatically.
      */
     KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage,
                   bool defaultHyphenation, KoParagStyle* defaultStyle, int tabStopWidth = -1,
                   QObject* parent = 0, const char *name = 0 );
 
     /** Alternative constructor.
+     * This constructor allows to use a derived class from KoTextDocument.
+     *
      * @param textdoc the text document to use in this text object. Ownership is transferred
      * to the text object.
      * @param defaultStyle the style to use by default (initial pararaph, and when deleting a used style)
-     * This constructor allows to use a derived class from KoTextDocument.
+     * @param parent parent widget for this object
+     * @param name name for this object
      */
     KoTextObject( KoTextDocument *textdoc, KoParagStyle* defaultStyle,
                   QObject* parent = 0, const char *name = 0 );
@@ -239,11 +248,13 @@ public:
      * @param cursor the insertion point
      * @param currentFormat the current textformat, to apply to the inserted text
      * @param text the text to be inserted
-     * @param checkNewLine if true, @p text is checked for '\n' (as a paragraph delimiter)
+     * @param checkNewLine if true, @p text is checked for '\\n' (as a paragraph delimiter)
      * @param removeSelected whether to remove selected text before - deprecated, better
-     * use @ref replaceSelectionCommand instead, to get a single undo/redo command
+     * use replaceSelectionCommand() instead, to get a single undo/redo command
      * @param commandName the name to give the undo/redo command if we haven't created it already
      * @param customItemsMap the map of custom items to include in the new text
+     * @param selectionId which selection to use (See KOTextDocument::SelectionIds)
+     * @param repaint force repaint after insert
      */
     void insert( KoTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
@@ -255,6 +266,7 @@ public:
      * @param cursor the caret position
      * @param selectionId which selection to remove (usually Standard)
      * @param cmdName the name to give the undo/redo command, if we haven't created it already
+     * @param createUndoRedo create an undo history entry for this removal
      */
     void removeSelectedText( KoTextCursor * cursor, int selectionId = KoTextDocument::Standard,
                              const QString & cmdName = QString::null, bool createUndoRedo=true  );
@@ -335,8 +347,7 @@ public:
 
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
-     *  @param paragLayoutChanged paragraph flags
-     *  @param formatChanged format flags
+     *  @param changed map of styles that have changed
      */
     void applyStyleChange( KoStyleChangeDefMap changed );
     /** Set format changes on selection or current cursor.
@@ -505,7 +516,7 @@ public: // made public for KWTextFrameSet...
      * If this does too much, we could pass an enum flag to it.
      * But the main point is to avoid too much duplicated code */
     void storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionId = KoTextDocument::Standard );
-    /** Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position <index>. */
+    /** Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position @p index. */
     void copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
     void readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
 

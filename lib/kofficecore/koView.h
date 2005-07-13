@@ -365,7 +365,7 @@ public slots:
 
 protected:
   /**
-   * This method handles three events: @ref KParts::PartActivateEvent, KParts::PartSelectEvent
+   * This method handles three events: KParts::PartActivateEvent, KParts::PartSelectEvent
    * and KParts::GUIActivateEvent.
    * The respective handlers are called if such an event is found.
    */

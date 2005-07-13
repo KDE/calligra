@@ -55,7 +55,7 @@ public:
     virtual bool eval( KSContext& );
 
     /**
-     * If @ref KSContext::leftExpr returns TRUE for the given context,
+     * If KSContext::leftExpr returns TRUE for the given context,
      * then a new member is added to the object if it did not exist.
      * Otherwise 0 is returned for a non existing member.
      * This function may nevertheless set an exception if a member is known but if

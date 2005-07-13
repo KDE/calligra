@@ -55,10 +55,10 @@ public:
     TokenType getTokenType() const { return type; }
 
     /**
-     * Tells the element about its new token.
+     * Tells the element about its new type.
      *
      * @param pos the position of the element
-     * @param token the new token
+     * @param type the new type
      */
     void setElementType(uint pos, ElementType* type);
 

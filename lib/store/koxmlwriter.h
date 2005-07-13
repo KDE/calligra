@@ -208,6 +208,7 @@ public:
     void addTextSpan( const QString& text );
     /**
      * Overloaded version of addTextSpan which takes an additional tabCache map.
+     * @param text the text to write
      * @param tabCache optional map allowing to find a tab for a given character index
      * @note OASIS-specific
      */

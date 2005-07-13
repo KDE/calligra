@@ -165,7 +165,7 @@ public:
      * @param dialogType the type of the dialog
      * @param templateType the template type of your application (see kword or
      *        kpresenter for details)
-     * @param widget pointer to parent widget
+     * @param parent pointer to parent widget
      * @return The return type (see above)
      */
     static ReturnType choose(KInstance* instance, QString &file,

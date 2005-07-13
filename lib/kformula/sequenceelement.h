@@ -400,6 +400,7 @@ protected:
     /**
      * @returns the position where the child starts.
      *
+     * @param context the context the child is in
      * @param child the child's number
      */
     luPixel getChildPosition( const ContextStyle& context, uint child );

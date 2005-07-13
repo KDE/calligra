@@ -43,10 +43,10 @@ KFORMULA_NAMESPACE_BEGIN
  * two different things.
  *
  * If the command execution fails or has nothing to do in the first place
- * you must not put it in the command history. @ref isSenseless
+ * you must not put it in the command history. isSenseless()
  * will return true then.
  *
- * If you don't like what you've done feel free to @ref unexecute .
+ * If you don't like what you've done feel free to unexecute() .
  */
 class PlainCommand : public KNamedCommand
 {

@@ -59,6 +59,7 @@ class QDomElement;
 class KOFFICECORE_EXPORT KoUnit
 {
 public:
+    /** Length units supported by KOffice. */
     enum Unit {
         U_MM = 0,
         U_PT = 1,
@@ -144,12 +145,15 @@ public:
     static double fromUserValue( double value, Unit unit );
 
     /// This method is the one to use to read a value from a dialog
+    /// @param value value entered by the user
+    /// @param unit unit type selected by the user
     /// @param ok if set, the pointed bool is set to true if the value could be
     /// converted to a double, and to false otherwise.
     /// @return the value in @p unit, converted to points for internal use
     static double fromUserValue( const QString& value, Unit unit, bool* ok = 0 );
 
     /// Convert a unit name into a Unit enum
+    /// @param _unitName name to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
     static Unit unit( const QString &_unitName, bool* ok = 0 );
     /// Get the name of a unit

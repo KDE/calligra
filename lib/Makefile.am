@@ -15,5 +15,5 @@ messages:
 #	$(XGETTEXT) kotext/kohyphen/*.cpp */*.cc */*.cpp -o $(podir)/koffice.pot
 #	rm -f kformula/symbolnames.cc
 
-DOXYGEN_REFERENCES = dcop kprint kdeui
+DOXYGEN_REFERENCES = dcop kprint kdeui kparts
 include ../admin/Doxyfile.am

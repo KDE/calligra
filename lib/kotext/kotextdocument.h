@@ -50,6 +50,7 @@ class KOTEXT_EXPORT KoTextDocument : public QObject
     friend class KoTextParag;
 
 public:
+    /** Identifiers for possible selections. */
     enum SelectionIds {
 	Standard = 0,
         InputMethodPreedit = 1,
