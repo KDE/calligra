@@ -961,8 +961,7 @@ the path integral about a closed contour. Below is the result of
 <guimenu>Edit</guimenu>
 <guimenuitem>Edit Formula String</guimenuitem>
 </menuchoice> allows the user to edit the <acronym>ASCII</acronym> formulas that have been copied from other applications,
-such as Scilab, and  transform them directly into mathematical type. An example will make this clear. Below 
-is a screenshot of <literal>INRIA</literal> Scilab.
+such as <ulink url="http://scilabsoft.inria.fr/">Scilab</ulink>, and  transform them directly into mathematical type. An example will make this clear. Below is a screenshot of <literal>INRIA</literal> Scilab.
 </para>
 
 <screenshot>
