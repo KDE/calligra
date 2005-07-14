@@ -6,6 +6,7 @@ ServiceTypes=Kexi/Handler
 Name=Kexi CSV Data Import
 Name[da]=Kexi CSV dataimport
 Name[es]=Importar datos CSV en Kexi
+Name[et]=Kexi CSV-andmete import
 Name[pl]=Import danych CSV programu Kexi
 Name[ru]=Импорт в CSV из Kexi
 Name[sv]=Kexi import av CSV-data
