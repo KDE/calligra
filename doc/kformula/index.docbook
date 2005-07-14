@@ -562,7 +562,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guisubmenu>Add...</guisubmenu>
 <guimenuitem>Add Multiline</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts a new line.</action></para></listitem>
+<listitem><para><action>Inserts a new line each time you type Enter in the square.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
