@@ -963,7 +963,7 @@ additional fonts. </para>
 
 <sect2>
 <title>The <guimenu>Help</guimenu> Menu</title>
-
+ <variablelist>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Help</guimenu>
@@ -971,7 +971,7 @@ additional fonts. </para>
 </menuchoice></term>
 <listitem><para><action>Opens the Tip of the Day dialog which displays a random tip about &kformula;.</action></para></listitem>
 </varlistentry>
-
+ </variablelist>
 &help.menu.documentation;
 
 </sect2>
