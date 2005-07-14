@@ -596,12 +596,22 @@ Indices</link> section for details about indices.</para></note></listitem>
 </varlistentry>
 
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add Negative Thin Space</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a small reduced space, here between the o and the e:</action><inlinemediaobject><imageobject>
+	    <imagedata fileref="negative_thin_space.png" format="PNG"/>
+	  </imageobject></inlinemediaobject></para></listitem>
+</varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add thin space</guimenuitem>
+<guimenuitem>Add Thin Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a small space.</action></para></listitem>
 </varlistentry>
@@ -610,7 +620,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <term><menuchoice>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add medium space</guimenuitem>
+<guimenuitem>Add Medium Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a space that is one and a half times wider.</action></para></listitem>
 </varlistentry>
@@ -620,7 +630,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <term><menuchoice>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add thick space</guimenuitem>
+<guimenuitem>Add Thick Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a double space.</action></para></listitem>
 </varlistentry>
@@ -629,7 +639,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <term><menuchoice>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add quad space</guimenuitem>
+<guimenuitem>Add Quad Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a quadruple wide space.</action></para></listitem>
 </varlistentry>
@@ -691,7 +701,15 @@ Indices</link> section for details about indices.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guimenuitem>Left delimiter</guimenuitem>
+<guimenuitem>Size</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Allows to set the size of the font (from 6 to 72)</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guimenuitem>Left Delimiter</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Allows insertion of various delimiters &ie; (, {, and 
 [.</action></para></listitem>
@@ -700,7 +718,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guimenuitem>Right delimiter</guimenuitem>
+<guimenuitem>Right Delimiter</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Allows insertion of various delimiters &ie; ), }, and 
 ].</action></para></listitem>
@@ -712,7 +730,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guimenuitem>Insert symbol</guimenuitem>
+<guimenuitem>Insert Symbol</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts the symbol, selected in the symbol 
 toolbar.</action></para></listitem>
@@ -732,16 +750,8 @@ used.</para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Syntax highlighting</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Checking this item determines if the numbers will be 
-displayed in color</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show file toolbar</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>File (KFormula)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggles the toolbar that contains clickable icons for 
 new, open and save files.
@@ -751,7 +761,8 @@ Print and print preview are here also.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show edit toolbar</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Edit (KFormula)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggles the edit toolbar.Here are clickable icons for 
 cut and paste as well as Undo and Redo.</action></para></listitem>
@@ -760,7 +771,8 @@ cut and paste as well as Undo and Redo.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show add toolbar</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Add (KFormula)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>This toolbar contains all the mathematical elements such 
 as Sum, Integral, Exponent &etc;.</action></para></listitem>
@@ -769,7 +781,17 @@ as Sum, Integral, Exponent &etc;.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show symbol toolbar</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Font (KFormula)</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>This toolbar contains the font settings (size, bold, italic,etc.).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Symbol (KFormula)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>This toggles the combo box that contains Del, the 
 partial derivative symbol, limit arrows, 
@@ -780,11 +802,23 @@ boolean operators and other mathematical symbols.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show matrix toolbar</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Matrix (KFormula)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>This toggles the matrix toolbar. It contains clickable 
 icons that pertain to matrix creation and editing.</action></para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Syntax highlighting</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Checking this item determines if the numbers will be 
+displayed in color</action></para></listitem>
+</varlistentry>
+
+
 
 </variablelist>
 
@@ -929,6 +963,14 @@ additional fonts. </para>
 
 <sect2>
 <title>The <guimenu>Help</guimenu> Menu</title>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>Tip of the Day</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the Tip of the Day dialog which displays a random tip about &kformula;.</action></para></listitem>
+</varlistentry>
 
 &help.menu.documentation;
 
