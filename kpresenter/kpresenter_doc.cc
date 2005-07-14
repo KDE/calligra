@@ -2307,16 +2307,13 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 {
                     m_masterPage->insertObject( kppartobject, pos );
                 }
-                kppartobject->setOrig(r.x(), offset);
-                kppartobject->setSize( r.width(), r.height() );
+                kppartobject->setOrig(kppartobject->getOrig().x(), offset);
                 kppartobject->setSticky(sticky);
             }
             else if ( kppartobject ) {
-                kppartobject->setOrig( r.x(), 0 );
-                kppartobject->setSize( r.width(), r.height() );
                 if ( m_pageWhereLoadObject )
                 {
-                    kppartobject->setOrig( r.x(), offset );
+                    kppartobject->setOrig(kppartobject->getOrig().x(), offset);
                     m_pageWhereLoadObject->insertObject( kppartobject, pos );
                 }
                 else
