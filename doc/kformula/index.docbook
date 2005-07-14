@@ -245,6 +245,30 @@ document</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the more recently opened document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Imports formulas from other formats</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Exports the current document in another format</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
@@ -274,9 +298,9 @@ email address and a short description about the document</action></para></listit
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Send File...</guimenuitem>
+<guimenuitem>Mail...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Invokes Kmail so you can email the file.
+<listitem><para><action>Invokes &kmail; so you can email the file.
 Note: You still have to attach the file to the email</action></para></listitem>
 </varlistentry>
 
@@ -350,7 +374,7 @@ you originally made</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Cut</guimenuitem>
+<guimenuitem>Copy</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Copies a highlighted piece of text from the &kformula; screen.</action></para></listitem>
 </varlistentry>
@@ -428,7 +452,7 @@ section for details.</para>
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add root</guimenuitem>
+<guimenuitem>Add Root</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts the square root.</action></para></listitem>
 </varlistentry>
@@ -440,7 +464,7 @@ section for details.</para>
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add fraction</guimenuitem>
+<guimenuitem>Add Fraction</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a fraction.</action></para></listitem>
 </varlistentry>
@@ -449,7 +473,7 @@ section for details.</para>
 <term><menuchoice>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add bracket</guimenuitem>
+<guimenuitem>Add Bracket</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a pair of brackets, &ie; ( ). You can also just 
 type ( to insert a pair of brackets.</action></para></listitem>
@@ -462,21 +486,9 @@ type ( to insert a pair of brackets.</action></para></listitem>
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add fraction</guimenuitem>
+<guimenuitem>Add Integral</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts a fraction.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>6</keycap></keycombo>
-</shortcut>
-<guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add integral</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Inserts the integral sign.</action></para></listitem>
+<listitem><para><action>Inserts the integral sign</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -486,7 +498,7 @@ type ( to insert a pair of brackets.</action></para></listitem>
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add sum</guimenuitem>
+<guimenuitem>Add Sum</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts the summation sign 
 (sigma).</action></para></listitem>
@@ -499,7 +511,7 @@ type ( to insert a pair of brackets.</action></para></listitem>
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add prod</guimenuitem>
+<guimenuitem>Add Product</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts the product sign.</action></para></listitem>
 </varlistentry>
@@ -511,7 +523,7 @@ type ( to insert a pair of brackets.</action></para></listitem>
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add matrix</guimenuitem>
+<guimenuitem>Add Matrix...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a matrix. A dialog box pops up, with the default size being 3x3.
 You can specify the number of rows and columns in this box.</action></para></listitem>
@@ -521,9 +533,36 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <term><menuchoice>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add 1x2 matrix</guimenuitem>
+<guimenuitem>Add 1x2 Matrix</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a two rowed column vector.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add Overline</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts an overline in this box.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add Underline</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts an underline in this box.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add Multiline</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a new line.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -533,7 +572,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add upper index</guimenuitem>
+<guimenuitem>Add Upper Index</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Adds an upper index like so:         </action><inlinemediaobject><imageobject>
 	    <imagedata fileref="upper-index.png" format="PNG"/>
@@ -547,7 +586,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 </shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add...</guisubmenu>
-<guimenuitem>Add lower index</guimenuitem>
+<guimenuitem>Add Lower Index</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Adds a lower index:  </action><inlinemediaobject><imageobject>
 	    <imagedata fileref="lower-index.png" format="PNG"/>
@@ -880,9 +919,8 @@ and font highlight colors.</para>
 </listitem>
 <listitem>
 
-<para>The <guilabel>Fonts</guilabel> section allows you to install
-additional fonts. See the <link linkend="additional-fonts">Additional
-Math Fonts</link> section.</para>
+<para>The <link linkend="fonts"><guilabel>Fonts</guilabel></link> section allows you to install
+additional fonts. </para>
 </listitem>
 </itemizedlist>
 </sect2>
