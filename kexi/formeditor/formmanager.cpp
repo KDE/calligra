@@ -1062,7 +1062,7 @@ FormManager::breakLayout()
 	Container *container = activeForm()->activeContainer();
 	QCString c( container->widget()->className() );
 
-	if((c == "Grid") || (c == "VBox") || (c == "HBox"))
+	if((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow"))
 	{
 		KCommand *com = new BreakLayoutCommand(container);
 		m_active->addCommand(com, true);

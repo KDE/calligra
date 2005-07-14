@@ -962,7 +962,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 				saveProperty(layout, domDoc, "property", "margin", item->container()->layoutMargin());
 			if(item->modifiedProperties()->contains("layoutSpacing"))
 				saveProperty(layout, domDoc, "property", "spacing", item->container()->layoutSpacing());
-			//! \todo save ''jusity" property and 'orientation"
 			tclass.appendChild(layout);
 		}
 	}
