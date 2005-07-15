@@ -51,9 +51,9 @@ public:
     KPTResourceGroup *group;
 };
 
-class ResourceItemPrivate : public QListViewItem {
+class ResourceItemUseViewPrivate : public QListViewItem {
 public:
-    ResourceItemPrivate(KPTResource *r, QListViewItem *parent)
+    ResourceItemUseViewPrivate(KPTResource *r, QListViewItem *parent)
         : QListViewItem(parent, r->name()),
         resource(r) {}
 
@@ -112,7 +112,7 @@ void KPTResourceUseView::drawResources(ResourceGroupItemPrivate *parent)
     QPtrListIterator<KPTResource> it(parent->group->resources());
     for (; it.current(); ++it) {
         KPTResource *r = it.current();
-        ResourceItemPrivate *item = new ResourceItemPrivate(r, parent);
+        ResourceItemUseViewPrivate *item = new ResourceItemUseViewPrivate(r, parent);
         if (!m_selectedItem) {
             m_selectedItem = item;
         }
@@ -138,7 +138,7 @@ void KPTResourceUseView::drawChart() {
         drawLineAccumulated(gi->group);
         return;
     }
-    ResourceItemPrivate *ri = dynamic_cast<ResourceItemPrivate*>(m_selectedItem);
+    ResourceItemUseViewPrivate *ri = dynamic_cast<ResourceItemUseViewPrivate*>(m_selectedItem);
     if (ri) {
         drawBarLoad(ri->resource);
         //drawBarPeekLoad(ri->resource);
@@ -585,7 +585,7 @@ void KPTResourceUseView::initMenu(KActionCollection *collection) {
 }
 
 KPTResource *KPTResourceUseView::currentResource() {
-    ResourceItemPrivate *r = dynamic_cast<ResourceItemPrivate*>(m_selectedItem);
+    ResourceItemUseViewPrivate *r = dynamic_cast<ResourceItemUseViewPrivate*>(m_selectedItem);
     return r == 0 ? 0 : r->resource;
 }
 
