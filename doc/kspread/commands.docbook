@@ -1327,8 +1327,8 @@ that do not appear in any of the menus.</para>
 <keycombo action="simul">&Ctrl;<keysym>Arrow keys</keysym></keycombo>
 </term>
 <listitem><para><action>If the selected cell is occupied then move the 
-selection to the start or end of the occupied block in the current row or 
-column. If the selected cell is not occupied then move the selection to 
+cell cursor to the start or end of the occupied block in the current row or 
+column. If the selected cell is not occupied then move the cell cursor to 
 the start or end of the block of unoccupied cells in the current row or column.
 </action>
 </para></listitem>
@@ -1351,7 +1351,7 @@ start or end of that block of unoccupied cells in the current row or column.
 <term>
 <keysym>Page Down</keysym>
 </term>
-<listitem><para><action>Move the selection 10 cells down.</action>
+<listitem><para><action>Move the cell cursor 10 cells down.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1359,7 +1359,7 @@ start or end of that block of unoccupied cells in the current row or column.
 <term>
 <keysym>Page Up</keysym>
 </term>
-<listitem><para><action>Move the selection 10 cells up.</action>
+<listitem><para><action>Move the cell cursor 10 cells up.</action>
 </para></listitem>
 </varlistentry>
 

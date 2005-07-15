@@ -170,7 +170,7 @@ HH:MIN:SS am|pm format such as <userinput>9:42 am</userinput> or <userinput>
 </para></listitem>
 <listitem><para>
 &kspread; defines any input data as <quote>text</quote> if it cannot 
-recognize as being a number, date or time.
+recognize the data as being a number, date or time.
 </para></listitem>
 </itemizedlist>
 <note><para>By default, &kspread; right justifies numbers, dates and times 
@@ -184,6 +184,20 @@ editing the contents of a selected cell. Press <keycap>Enter</keycap> or
 <mousebutton>left</mousebutton> click on the green tick mark when you are 
 happy with what you have entered, or click on the red cross to cancel your 
 edits.</para>
+
+<sect2 id="genericformat">
+<title>Generic Cell Format</title>
+<para>
+&kspread; uses the <quote>Generic</quote> cell format as default. As long
+as this format is used, &kspread; autodetects the actual data type depending
+on the current cell data. For example if you enter some text into a cell and
+later enter a number into the same cell, &kspread; automatically interprets
+the new data as a number. If you want to define the type of data yourself, you
+can explicitely set it in the <link linkend="formatdata">cell format</link>.
+You can change the format back to <quote>Generic</quote> at any time.
+</para>
+</sect2>
+
 </sect1>
 
 <sect1 id="copypaste">
