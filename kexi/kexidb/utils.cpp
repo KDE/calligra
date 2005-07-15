@@ -23,74 +23,78 @@
 #include <qmap.h>
 
 #include <klocale.h>
+#include <kstaticdeleter.h>
 
 using namespace KexiDB;
 
 //! Cache
-QMap< uint, TypeGroupList > tlist;
-QMap< uint, QStringList > nlist;
-QMap< uint, QStringList > slist;
+struct TypeCache
+{
+	QMap< uint, TypeGroupList > tlist;
+	QMap< uint, QStringList > nlist;
+	QMap< uint, QStringList > slist;
+	QMap< uint, Field::Type > def_tlist;
+};
+
+static KStaticDeleter<TypeCache> KexiDB_typeCacheDeleter;
+TypeCache *KexiDB_typeCache = 0;
 
 static void initList()
 {
-	if (!tlist.isEmpty())
-		return;
+	KexiDB_typeCacheDeleter.setObject( KexiDB_typeCache, new TypeCache() );
 
 	for (uint t=0; t<=KexiDB::Field::LastType; t++) {
 		const uint tg = KexiDB::Field::typeGroup( t );
 		TypeGroupList list;
 		QStringList name_list, str_list;
-		if (tlist.find( tg )!=tlist.end()) {
-			list = tlist[ tg ];
-			name_list = nlist[ tg ];
-			str_list = slist[ tg ];
+		if (KexiDB_typeCache->tlist.find( tg )!=KexiDB_typeCache->tlist.end()) {
+			list = KexiDB_typeCache->tlist[ tg ];
+			name_list = KexiDB_typeCache->nlist[ tg ];
+			str_list = KexiDB_typeCache->slist[ tg ];
 		}
 		list+= t;
 		name_list += KexiDB::Field::typeName( t );
 		str_list += KexiDB::Field::typeString( t );
-		tlist[ tg ] = list;
-		nlist[ tg ] = name_list;
-		slist[ tg ] = str_list;
+		KexiDB_typeCache->tlist[ tg ] = list;
+		KexiDB_typeCache->nlist[ tg ] = name_list;
+		KexiDB_typeCache->slist[ tg ] = str_list;
 	}
+
+	KexiDB_typeCache->def_tlist[ Field::InvalidGroup ] = Field::InvalidType;
+	KexiDB_typeCache->def_tlist[ Field::TextGroup ] = Field::Text;
+	KexiDB_typeCache->def_tlist[ Field::IntegerGroup ] = Field::Integer;
+	KexiDB_typeCache->def_tlist[ Field::FloatGroup ] = Field::Float;
+	KexiDB_typeCache->def_tlist[ Field::BooleanGroup ] = Field::Boolean;
+	KexiDB_typeCache->def_tlist[ Field::DateTimeGroup ] = Field::Date;
+	KexiDB_typeCache->def_tlist[ Field::BLOBGroup ] = Field::BLOB;
 }
 
 const TypeGroupList KexiDB::typesForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	initList();
-	return tlist[ typeGroup ];
+	if (!KexiDB_typeCache)
+		initList();
+	return KexiDB_typeCache->tlist[ typeGroup ];
 }
 
 QStringList KexiDB::typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	initList();
-	return nlist[ typeGroup ];
+	if (!KexiDB_typeCache)
+		initList();
+	return KexiDB_typeCache->nlist[ typeGroup ];
 }
 
 QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	initList();
-	return slist[ typeGroup ];
-}
-
-QMap< uint, Field::Type > def_tlist;
-
-static void initDefList()
-{
-	if (!def_tlist.isEmpty())
-		return;
-	def_tlist[ Field::InvalidGroup ] = Field::InvalidType;
-	def_tlist[ Field::TextGroup ] = Field::Text;
-	def_tlist[ Field::IntegerGroup ] = Field::Integer;
-	def_tlist[ Field::FloatGroup ] = Field::Float;
-	def_tlist[ Field::BooleanGroup ] = Field::Boolean;
-	def_tlist[ Field::DateTimeGroup ] = Field::Date;
-	def_tlist[ Field::BLOBGroup ] = Field::BLOB;
+	if (!KexiDB_typeCache)
+		initList();
+	return KexiDB_typeCache->slist[ typeGroup ];
 }
 
 KexiDB::Field::Type KexiDB::defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	initDefList();
-	return (typeGroup <= Field::LastTypeGroup) ?  def_tlist[ typeGroup ] : Field::InvalidType;
+	if (!KexiDB_typeCache)
+		initList();
+	return (typeGroup <= Field::LastTypeGroup) ? KexiDB_typeCache->def_tlist[ typeGroup ] : Field::InvalidType;
 }
 
 void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
