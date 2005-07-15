@@ -172,41 +172,41 @@ KexiDB::Field::Type pqxxMigrate::type(int t, const QString& fname)
 //Connect to the db backend
 bool pqxxMigrate::drv_connect()
 {
-    kdDebug() << "drv_connect: " << m_MigrateData->sourceName << endl;
+    kdDebug() << "drv_connect: " << m_migrateData->sourceName << endl;
 
     QString conninfo;
     QString socket;
 
     //Setup local/remote connection
-    if (m_MigrateData->source->hostName.isEmpty())
+    if (m_migrateData->source->hostName.isEmpty())
     {
-        if (m_MigrateData->source->fileName().isEmpty())
+        if (m_migrateData->source->fileName().isEmpty())
         {
             socket="/tmp/.s.PGSQL.5432";
         }
         else
         {
-            socket=m_MigrateData->source->fileName();
+            socket=m_migrateData->source->fileName();
         }
     }
     else
     {
-        conninfo = "host='" + m_MigrateData->source->hostName + "'";
+        conninfo = "host='" + m_migrateData->source->hostName + "'";
     }
 
     //Build up the connection string
-    if (m_MigrateData->source->port == 0)
-        m_MigrateData->source->port = 5432;
+    if (m_migrateData->source->port == 0)
+        m_migrateData->source->port = 5432;
 
-    conninfo += QString::fromLatin1(" port='%1'").arg(m_MigrateData->source->port);
+    conninfo += QString::fromLatin1(" port='%1'").arg(m_migrateData->source->port);
 
-    conninfo += QString::fromLatin1(" dbname='%1'").arg(m_MigrateData->sourceName);
+    conninfo += QString::fromLatin1(" dbname='%1'").arg(m_migrateData->sourceName);
 
-    if (!m_MigrateData->source->userName.isNull())
-        conninfo += QString::fromLatin1(" user='%1'").arg(m_MigrateData->source->userName);
+    if (!m_migrateData->source->userName.isNull())
+        conninfo += QString::fromLatin1(" user='%1'").arg(m_migrateData->source->userName);
 
-    if (!m_MigrateData->source->password.isNull())
-        conninfo += QString::fromLatin1(" password='%1'").arg(m_MigrateData->source->password);
+    if (!m_migrateData->source->password.isNull())
+        conninfo += QString::fromLatin1(" password='%1'").arg(m_migrateData->source->password);
 
     try
     {
@@ -421,7 +421,7 @@ bool pqxxMigrate::drv_copyTable(const QString& srcTable,
 				vals << var;
         }
 
-        m_MigrateData->dest->insertRecord(*dstTable, vals);
+        m_migrateData->dest->insertRecord(*dstTable, vals);
         R.clear();
     }
 

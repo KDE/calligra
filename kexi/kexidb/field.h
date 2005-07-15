@@ -27,7 +27,7 @@
 #include <qpair.h>
 #include <qvaluevector.h>
 #include <qptrvector.h>
-
+#include "kexidb/kexidb_export.h"
 namespace KexiDB {
 
 class TableSchema;

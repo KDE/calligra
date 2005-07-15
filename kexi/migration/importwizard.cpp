@@ -271,11 +271,11 @@ void importWizard::setupfinish()
                      "determine this for you."));
     progress = new KProgress(100, finishPage);
     progress->hide();
-    
+
     hbox->addWidget( lblDone );
     hbox->addWidget( lblfinishTxt );
     hbox->addWidget( progress );
-    
+
     finishPage->show();
 }
 
@@ -296,15 +296,18 @@ bool importWizard::checkUserInput()
 
     if (problem)
     {
-        finishtxt = i18n("Following problems were found with the data you entered:") + "\n\n"+ finishtxt;
-        finishtxt = finishtxt + "\n\n" + i18n("Please click 'Back' button and correct these errors.");
+        finishtxt = i18n("Following problems were found with the data you entered:") +
+                    "\n\n" +
+                    finishtxt +
+                    "\n\n" +
+                    i18n("Please click 'Back' button and correct these errors.");
     }
     else
     {
         finishtxt = i18n("No problems were found with the data you entered.");
     }
     lblfinishTxt->setText(finishtxt);
-    
+
     return !problem;
 }
 

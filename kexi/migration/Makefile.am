@@ -32,7 +32,7 @@ libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO) \
 noinst_HEADERS = importwizard.h migratemanager_p.h
 
 keximigrateincludedir=$(includedir)/kexidb
-keximigrateinclude_HEADERS=keximigrate.h migratemanager.h
+keximigrateinclude_HEADERS=keximigrate.h keximigratedata.h migratemanager.h
 
 kde_servicetypes_DATA = keximigration_driver.desktop
 

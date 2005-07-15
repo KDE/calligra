@@ -121,7 +121,7 @@ namespace KexiMigration
 
 			// Protected data members
 			//! Migrate Options
-			KexiMigration::Data* m_MigrateData;
+			KexiMigration::Data* m_migrateData;
 
 			// Temporary values used during import (set by driver specific methods)
 			KexiDB::TableSchema* m_table;
