@@ -253,14 +253,6 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             textObject()->removeSelectedText( m_cursor );
             break;
         }
-	if ( !m_cursor->parag()->prev() &&
-		     -             m_cursor->atParagStart() )
-	{
-	  KoTextParag * parag = m_cursor->parag();
-	  if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
-	    textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
-	  break;
-	}
 	textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
 
         clearUndoRedoInfo = FALSE;

@@ -964,7 +964,9 @@ KoParagCounter *KoTextParag::counter()
         return 0L;
 
     // Garbage collect un-needed counters.
-    if ( m_layout.counter->numbering() == KoParagCounter::NUM_NONE )
+    if ( m_layout.counter->numbering() == KoParagCounter::NUM_NONE
+        // [keep it for unnumbered outlines (the depth is useful)]
+         && ( !m_layout.style || !m_layout.style->isOutline() ) )
         setNoCounter();
     return m_layout.counter;
 }
@@ -1039,7 +1041,9 @@ void KoTextParag::setNoCounter()
 void KoTextParag::setCounter( const KoParagCounter & counter )
 {
     // Garbage collect unnneeded counters.
-    if ( counter.numbering() == KoParagCounter::NUM_NONE )
+    if ( counter.numbering() == KoParagCounter::NUM_NONE
+         // [keep it for unnumbered outlines (the depth is useful)]
+         && ( !m_layout.style || !m_layout.style->isOutline() ) )
     {
         setNoCounter();
     }
@@ -1088,11 +1092,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         return;
 
     if ( m_layout.counter->numbering() == KoParagCounter::NUM_NONE )
-    {   // Garbage collect unnneeded counter.
-        delete m_layout.counter;
-        m_layout.counter = 0L;
         return;
-    }
 
     int counterWidthLU = m_layout.counter->width( this );
 
@@ -2787,9 +2787,9 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 
-    bool outline = m_layout.style && m_layout.style->isOutline();
-
-    KoParagCounter* paragCounter = const_cast<KoTextParag *>( this )->counter(); // should be const!
+    KoParagCounter* paragCounter = m_layout.counter;
+    // outline (text:h) assumes paragCounter != 0 (because depth is mandatory)
+    bool outline = m_layout.style && m_layout.style->isOutline() && paragCounter;
     bool normalList = paragCounter && paragCounter->style() != KoParagCounter::STYLE_NONE && !outline;
     if ( normalList ) // non-heading list
     {
@@ -2804,22 +2804,27 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
         writer.addAttribute( "text:style-name", autoListStyleName );
 
-        // This is to help export filters
-        writer.startElement( "text:number" );
-        writer.addTextNode( m_layout.counter->text( this ) );
-        writer.endElement();
+        QString textNumber = m_layout.counter->text( this );
+        if ( !textNumber.isEmpty() )
+        {
+            // This is to help export filters
+            writer.startElement( "text:number" );
+            writer.addTextNode( textNumber );
+            writer.endElement();
+        }
     }
     else if ( outline ) // heading
     {
         writer.startElement( "text:h", false /*no indent inside this tag*/ );
-        if ( paragCounter )
-        {
-            writer.addAttribute( "text:outline-level", (int)m_layout.counter->depth() + 1 );
-            writer.addAttribute( "text:style-name", autoParagStyleName );
+        writer.addAttribute( "text:style-name", autoParagStyleName );
+        writer.addAttribute( "text:outline-level", (int)paragCounter->depth() + 1 );
 
+        QString textNumber = paragCounter->text( this );
+        if ( !textNumber.isEmpty() )
+        {
             // This is to help export filters
             writer.startElement( "text:number" );
-            writer.addTextNode( m_layout.counter->text( this ) );
+            writer.addTextNode( textNumber );
             writer.endElement();
         }
     }
@@ -2853,14 +2858,26 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     }
 
     KoTextFormat *curFormat = 0;
+    KoTextFormat *lastFormatRaw = 0; // this is for speeding up "removing misspelled" from each char
+    KoTextFormat *lastFormatFixed = 0; // raw = as stored in the chars; fixed = after removing misspelled
     int startPos = from;
-    // Once we have a span, we need to keep using them. Otherwise we might generate
-    // <text:span>foo</text:span> <text:span>bar</text:span> and lose the space between
-    // the two spans.
-    // ###### The above isn't true anymore, with the report-whitespace-only setting...
     for ( int i = from; i <= to; ++i ) {
         KoTextStringChar & ch = string()->at(i);
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
+        if ( newFormat->isMisspelled() ) {
+            if ( newFormat == lastFormatRaw )
+                newFormat = lastFormatFixed; // the fast way
+            else
+            {
+                lastFormatRaw = newFormat;
+                // Remove isMisspelled from format, to avoid useless derived styles
+                // (which would be indentical to their parent style)
+                KoTextFormat tmpFormat( *newFormat );
+                tmpFormat.setMisspelled( false );
+                newFormat = formatCollection()->format( &tmpFormat );
+                lastFormatFixed = newFormat;
+            }
+        }
         if ( !curFormat )
             curFormat = newFormat;
         if ( newFormat != curFormat || ch.isCustom() || cursorIndex == i ) { // Format changed, save previous one.
