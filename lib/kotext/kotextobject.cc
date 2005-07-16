@@ -460,6 +460,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             // parag->decDepth(); // We don't have support for nested lists at the moment
                                   // (only in titles, but you don't want Backspace to move it up)
             KoParagCounter c;
+            c.setDepth( parag->counter()->depth() );
             KCommand *cmd=setCounterCommand( cursor, c );
             if(cmd)
                 emit newCommand(cmd);
