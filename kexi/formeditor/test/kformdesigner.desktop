@@ -6,7 +6,6 @@ Name[cy]=DylunyddKForm
 Name[sv]=Kformdesigner
 Name[ta]=படிவம் வடிவமைப்பவர் 
 Name[tg]=KДизайнгари шакл
-Name[tr]=KFormTasarımcısı
 Name[xx]=xxKFormDesignerxx
 Name[zh_CN]=KForm 设计器
 Exec=kformdesigner %i %m -caption "%c"

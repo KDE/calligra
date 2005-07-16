@@ -10,6 +10,7 @@ Name[et]=Kexi CSV-andmete import
 Name[pl]=Import danych CSV programu Kexi
 Name[ru]=Импорт в CSV из Kexi
 Name[sv]=Kexi import av CSV-data
+Name[tr]=Kexi CSV Veri İçeri Alma
 
 X-KDE-Library=kexihandler_csv_import
 X-KDE-ParentApp=kexi

@@ -9,6 +9,7 @@ Name[et]=Gnumerici info
 Name[ga]=Ginearálta
 Name[ru]=Информация Gnumeric
 Name[sv]=Gnumeric-information
+Name[tr]=Gnumeric Bilgisi
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric
 MimeType=application/x-gnumeric

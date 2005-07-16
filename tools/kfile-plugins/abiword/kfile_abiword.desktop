@@ -9,6 +9,7 @@ Name[et]=Abiwordi info
 Name[ga]=Eolas faoi Abiword
 Name[ru]=Информация Abiword
 Name[sv]=Abiword-information
+Name[tr]=Abiword Bilgisi
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_abiword
 MimeType=application/x-abiword
