@@ -1,0 +1,62 @@
+/* libppt - library to read PowerPoint presentation
+   Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+   
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, US
+*/
+
+#ifndef LIBPPT_PRESENTATION
+#define LIBPPT_PRESENTATION
+
+namespace Libppt
+{
+
+class Presentation
+{
+public:
+
+  /*
+   * Constructs a new presentation.
+   */  
+  Presentation();
+  
+  /*
+   * Destroys the presentation.
+   */  
+  ~Presentation();
+  
+  /*
+   * Clears the presentation, i.e. makes it as if it is just constructed.
+   */  
+  void clear();
+  
+  /*
+   * Loads the presentation file. Returns false if error occurred.
+   */
+  bool load( const char* filename );
+
+private:
+  // no copy or assign
+  Presentation( const Presentation& );
+  Presentation& operator=( const Presentation& );
+  
+  class Private;
+  Private* d;
+};
+
+
+};
+
+#endif /* LIBPPT_PRESENTATION */
