@@ -27,6 +27,7 @@
 #include <kdebug.h>
 
 #include <mysql.h>
+#include "keximigratedata.h"
 #include "kexidb/cursor.h"
 #include "kexidb/field.h"
 #include "kexidb/drivers/mySQL/mysqlconnection_p.cpp"
@@ -60,8 +61,8 @@ MySQLMigrate::~MySQLMigrate() {
 /* ************************************************************************** */
 /*! Connect to the db backend */
 bool MySQLMigrate::drv_connect() {
-  if(d->db_connect(*m_externalData)) {
-		return d->useDatabase(m_dbName);
+  if(d->db_connect(*m_migrateData->source)) {
+		return d->useDatabase(m_migrateData->sourceName);
 	} else {
 	  return false;
 	}
@@ -154,7 +155,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable,
 					QVariant var = QVariant(row[i]);
 					vals << var;
 				}
-				m_kexiDB->insertRecord(*dstTable, vals);
+				m_migrateData->dest->insertRecord(*dstTable, vals);
 				progressDoneRow();
 			}
 			/*! @todo Check that wasn't an error, rather than end of result set */
