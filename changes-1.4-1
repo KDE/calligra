@@ -1,9 +1,15 @@
 Krita
 
 * Fix bug 108398 (Guides don't do anything useful & don't get painted often enough)
-* Fix bug 107939 (crash on opening a certain image file)
 * Move the layers palette to the control box docker, so there's one docker less on screen
 * Add shortcut keys for many more actions (Thanks to Alan)
 * Various performance optimizations
 * On selecting the crop tool when there is a selections present, crop
 * Crop layer on double click
+* Fix bug 108704: Crash when copying with ctrl+c
+* Fix bug 108397: crashing on (external) clipboard change
+* Fix Bug 107994: Moving a detached docker resizes it to a minimum
+* Fix Bug 107938: Select all and cut/copy makes Krita hang
+* Improved .psd loading (subbug of: Bug 107122: Layers box behaves strangely)
+
+
