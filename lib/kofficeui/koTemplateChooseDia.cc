@@ -69,6 +69,8 @@ class MyFileDialog : public KFileDialog
 
         KURL currentURL()
         {
+            // FIXME bug #109000 this does not work with URLs like http://dot.kde.org
+            //       to test enter this url into the filename field and click(!!) ok
             setResult( QDialog::Accepted ); // selectedURL tests for it
             return KFileDialog::selectedURL();
         }
