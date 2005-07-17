@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 #include <mysql.h>
-#include "keximigratedata.h"
+#include "migration/keximigratedata.h"
 #include "kexidb/cursor.h"
 #include "kexidb/field.h"
 #include "kexidb/drivers/mySQL/mysqlconnection_p.cpp"
