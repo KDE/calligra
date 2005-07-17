@@ -21,6 +21,7 @@
 #include <koOasisStyles.h>
 #include <koOasisStore.h>
 #include <koxmlns.h>
+#include <koxmlwriter.h>
 #include <kdebug.h>
 #include <kodom.h>
 
@@ -144,9 +145,34 @@ KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode
 {
 }
 
+
+KoSavingContext::~KoSavingContext()
+{
+}
+
 void KoSavingContext::setCursorPosition( KoTextParag* cursorTextParagraph,
                                          int cursorTextIndex )
 {
     m_cursorTextParagraph = cursorTextParagraph;
     m_cursorTextIndex = cursorTextIndex;
+}
+
+void KoSavingContext::addFontFace( const QString& fontName )
+{
+    m_fontFaces[fontName] = true;
+}
+
+void KoSavingContext::writeFontFaces( KoXmlWriter& writer )
+{
+    writer.startElement( "office:font-face-decls" );
+    const QStringList fontFaces = m_fontFaces.keys();
+    for ( QStringList::const_iterator ffit = fontFaces.begin(), ffend = fontFaces.end() ; ffit != ffend ; ++ffit ) {
+        writer.startElement( "style:font-face" );
+        writer.addAttribute( "style:name", *ffit );
+        writer.addAttribute( "svg:font-family", *ffit );
+        // TODO style:font-family-generic
+        // TODO style:font-pitch
+        writer.endElement(); // style:font-face
+    }
+    writer.endElement(); // office:font-face-decls
 }

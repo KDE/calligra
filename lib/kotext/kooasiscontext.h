@@ -20,6 +20,7 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
+class KoXmlWriter;
 class KoTextParag;
 class KoParagStyle;
 class KoGenStyles;
@@ -34,6 +35,7 @@ class KoVariableCollection;
 #include "koliststylestack.h"
 #include <qmap.h>
 #include <koffice_export.h>
+#include <qstringlist.h>
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
@@ -117,6 +119,9 @@ private:
 /**
  * Used during saving to Oasis format (and discarded at the end of the saving).
  *
+ * Among other things, this class acts as a repository of fonts used by a
+ * document during saving, in order to create the office:font-face-decls element.
+ *
  * @author David Faure <faure@kde.org>
  */
 class KOTEXT_EXPORT KoSavingContext
@@ -128,6 +133,8 @@ public:
     /// @param mainStyles
     /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
     KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode = Store );
+
+    ~KoSavingContext();
 
 
     KoGenStyles& mainStyles() { return m_mainStyles; }
@@ -156,6 +163,10 @@ public:
     KoTextParag* cursorTextParagraph() const { return m_cursorTextParagraph; }
     int cursorTextIndex() const { return m_cursorTextIndex; }
 
+    void addFontFace( const QString& fontName );
+    typedef QMap<QString, bool> FontFaces;
+    void writeFontFaces( KoXmlWriter& writer );
+
 private:
     KoGenStyles& m_mainStyles;
     StyleNameMap m_styleNameMap;
@@ -163,6 +174,7 @@ private:
 
     KoTextParag* m_cursorTextParagraph;
     int m_cursorTextIndex;
+    FontFaces m_fontFaces;
 
     class Private;
     Private *d;

@@ -1,3 +1,12 @@
+Changes after KWord-1.4 (in the branch)
+=======================
+- OASIS OpenDocument support:
+   Fixed loading of headers and footers (#107424)
+   Implemented saving of headers and footers
+   Fix for text:h without outline-level
+   Simplified the XML by removing spurious <span> tags due to misspelled words
+   Save office:font-face-decls tag so that OOo loads the fonts
+
 Changes after KWord-1.4-beta1
 =============================
 - Fixed crash when editing a cell on loading (#104982).

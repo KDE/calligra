@@ -525,7 +525,7 @@ public slots:
 
     void slotRepaintVariable();
 
-    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles );
+    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context );
 
 
 signals:

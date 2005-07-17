@@ -38,6 +38,7 @@ class KoZoomHandler;
 class KoTextStringChar;
 class KoTextParag;
 class KoOasisContext;
+class KoSavingContext;
 
 /**
  * Each character (KoTextStringChar) points to a KoTextFormat that defines the
@@ -355,7 +356,7 @@ public:
     /// Load a text format from OASIS XML
     void load( KoOasisContext& context );
     /// Save a text format to OASIS XML
-    void save( KoGenStyle& gs ) const;
+    void save( KoGenStyle& gs, KoSavingContext& context ) const;
 
 #ifndef NDEBUG
     void printDebug();

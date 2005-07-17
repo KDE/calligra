@@ -2668,7 +2668,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
-    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
     savingContext.setStyleNameMap( map );
 
     if ( saveFlag == SaveAll )
@@ -2745,7 +2745,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
 
-    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles );
+    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles, savingContext );
 
     oasisStore.closeContentWriter();
 
