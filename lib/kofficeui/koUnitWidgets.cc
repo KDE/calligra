@@ -112,7 +112,18 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 // ----------------------------------------------------------------
 
 
-KoBuggyUnitDoubleSpinBox::KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit,       unsigned int precision, const char *name )
+KoBuggyUnitDoubleSpinBox::KoBuggyUnitDoubleSpinBox( QWidget *parent, const char *name )
+    : KDoubleSpinBox( parent, name ), KoUnitDoubleBase( KoUnit::U_PT, 2 ),
+    m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 ), m_stepInPoints( 1.0 )
+{
+    m_validator = new KoUnitDoubleValidator( this, this );
+    QSpinBox::setValidator( m_validator );
+    setAcceptLocalizedNumbers( true );
+    setUnit( KoUnit::U_PT );
+    changeValue( KoUnit::ptToUnit( 0.0, KoUnit::U_PT ) );
+}
+
+KoBuggyUnitDoubleSpinBox::KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
     : KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision ),
     m_lowerInPoints( lower ), m_upperInPoints( upper ), m_stepInPoints( step )
 {
@@ -171,6 +182,16 @@ void KoBuggyUnitDoubleSpinBox::setLineStep( double step )
 // ----------------------------------------------------------------
 
 
+KoUnitDoubleSpinBox2::KoUnitDoubleSpinBox2( QWidget *parent, const char *name )
+    : KoBuggyUnitDoubleSpinBox( parent, name )
+{
+    m_validator = new KoUnitDoubleValidator( this, this );
+    QSpinBox::setValidator( m_validator );
+    setAcceptLocalizedNumbers( true );
+    setUnit( KoUnit::U_PT );
+    changeValue( 0.0 );
+}
+
 KoUnitDoubleSpinBox2::KoUnitDoubleSpinBox2( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit,       unsigned int precision, const char *name )
     : KoBuggyUnitDoubleSpinBox( parent, lower, upper, step, value, unit, precision, name )
 {
@@ -190,6 +211,17 @@ KoUnitDoubleSpinBox2::changeValue( double val )
 
 // ----------------------------------------------------------------
 
+
+KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, const char *name )
+    : KLineEdit( parent, name ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ),
+    m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
+{
+    setAlignment( Qt::AlignRight );
+    m_validator = new KoUnitDoubleValidator( this, this );
+    setValidator( m_validator );
+    setUnit( KoUnit::U_PT );
+    changeValue(  KoUnit::ptToUnit( 0.0, KoUnit::U_PT ) );
+}
 
 KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
     unsigned int precision, const char *name )
@@ -241,6 +273,20 @@ double KoUnitDoubleLineEdit::value( void ) const
     return KoUnit::fromUserValue( m_value, m_unit );
 }
 
+
+// ----------------------------------------------------------------
+
+
+KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, const char *name )
+     : KComboBox( true, parent, name ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ), m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
+{
+    lineEdit()->setAlignment( Qt::AlignRight );
+    m_validator = new KoUnitDoubleValidator( this, this );
+    lineEdit()->setValidator( m_validator );
+    setUnit( KoUnit::U_PT );
+    changeValue(  KoUnit::ptToUnit( 0.0, KoUnit::U_PT ) );
+    connect( this, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
+}
 
 KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
      unsigned int precision, const char *name )
@@ -319,6 +365,32 @@ double KoUnitDoubleComboBox::value( void ) const
     return KoUnit::fromUserValue( m_value, m_unit );
 }
 
+
+// ----------------------------------------------------------------
+
+
+KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, const char *name )
+    : QWidget( parent ), m_step( 1.0 )
+{
+    QGridLayout *layout = new QGridLayout( this, 2, 3 );
+    //layout->setMargin( 2 );
+    QPushButton *up = new QPushButton( "+", this );
+    //up->setFlat( true );
+    up->setMaximumHeight( 15 );
+    up->setMaximumWidth( 15 );
+    layout->addWidget( up, 0, 0 );
+    connect( up, SIGNAL( clicked() ), this, SLOT( slotUpClicked() ) );
+
+    QPushButton *down = new QPushButton( "-", this );
+    down->setMaximumHeight( 15 );
+    down->setMaximumWidth( 15 );
+    layout->addWidget( down, 1, 0 );
+    connect( down, SIGNAL( clicked() ), this, SLOT( slotDownClicked() ) );
+
+    m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( 0.0, KoUnit::U_PT ), KoUnit::ptToUnit( 9999.99, KoUnit::U_PT ), 0.0, KoUnit::U_PT, 2, name );
+    connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
+    layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
+}
 
 KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value,
                                                     KoUnit::Unit unit, unsigned int precision, const char *name )

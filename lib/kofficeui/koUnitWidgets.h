@@ -96,7 +96,9 @@ protected:
  */
 class KOFFICEUI_EXPORT KoBuggyUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
+    Q_OBJECT
 public:
+    KoBuggyUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
     // lower, upper, step and value are in pt
     KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
@@ -129,7 +131,9 @@ private:
  */
 class KOFFICEUI_EXPORT KoUnitDoubleSpinBox2 : public KoBuggyUnitDoubleSpinBox
 {
+    Q_OBJECT
 public:
+    KoUnitDoubleSpinBox2( QWidget *parent = 0L, const char *name = 0L );
     // lower, upper, step and value are in pt
     KoUnitDoubleSpinBox2( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
@@ -144,7 +148,9 @@ public:
  */
 class KOFFICEUI_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
+    Q_OBJECT
 public:
+    KoUnitDoubleLineEdit( QWidget *parent = 0L, const char *name = 0L );
     KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -172,6 +178,7 @@ class KOFFICEUI_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDou
 {
     Q_OBJECT
 public:
+    KoUnitDoubleComboBox( QWidget *parent = 0L, const char *name = 0L );
     KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -207,6 +214,7 @@ class KOFFICEUI_EXPORT KoUnitDoubleSpinComboBox : public QWidget
 {
     Q_OBJECT
 public:
+    KoUnitDoubleSpinComboBox( QWidget *parent = 0L, const char *name = 0L );
     KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
     void insertItem( double, int index = -1 );
