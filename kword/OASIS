@@ -30,6 +30,10 @@ this is not done yet (it uses its own tag instead, as a temporary hack).
 Also OASIS doesn't allow a different style for header and header-left,
 so they must have the same min-size, border, margins...
 
+* Columns
+OASIS OpenDocument has "number of columns" and "space between columns", so it's OK for kword.
+OOo however also supports columns of different sizes and with different spaces, we can't load that.
+
 Notes about interoperability with OpenOffice.org-2.0:
 -----------------------------------------------------
 

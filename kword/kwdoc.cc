@@ -1156,10 +1156,22 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
 
-        // TODO columns  (style:columns, attribute fo:column-count)
-        __columns.columns = 1; // TODO
-        // TODO columnspacing (style:column-sep ?)
-        __columns.ptColumnSpacing = 2; // TODO
+        __columns.columns = 1;
+        __columns.ptColumnSpacing = m_defaultColumnSpacing;
+
+        const QDomElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
+        if ( !columnsElem.isNull() )
+        {
+            __columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
+            if ( __columns.columns == 0 )
+                __columns.columns = 1;
+            // TODO OASIS OpenDocument supports columns of different sizes, using <style:column style:rel-width="...">
+            // (with fo:start-indent/fo:end-indent for per-column spacing)
+            // But well, it also allows us to specify a single gap.
+            if ( columnsElem.hasAttributeNS( KoXmlNS::fo, "column-gap" ) )
+                __columns.ptColumnSpacing = KoUnit::parseValue( columnsElem.attributeNS( KoXmlNS::fo, "column-gap", QString::null ) );
+            // It also supports drawing a vertical line as a separator...
+        }
 
         m_headerVisible = false;
         m_footerVisible = false;
@@ -3021,6 +3033,20 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         footnoteSepTmpWriter.endElement();
         const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
         pageLayout.addChildElement( "separator", elementContents );
+        buffer.close();
+
+        if ( m_pageColumns.columns > 1 ) {
+            buffer.setBuffer( QByteArray() ); // clear data
+            buffer.open( IO_WriteOnly );
+            KoXmlWriter columnsTmpWriter( &buffer );  // TODO pass indentation level
+            columnsTmpWriter.startElement( "style:columns" );
+            columnsTmpWriter.addAttribute( "fo:column-count", m_pageColumns.columns );
+            columnsTmpWriter.addAttributePt( "fo:column-gap", m_pageColumns.ptColumnSpacing );
+            columnsTmpWriter.endElement(); // style:columns
+            buffer.close();
+            const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+            pageLayout.addChildElement( "columns", elementContents );
+        }
 
         // This is a bit of a hack, which only works as long as we have only one page master
         // if there's more than one pagemaster we need to rethink all this
@@ -3028,13 +3054,11 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         pageLayoutName = mainStyles.lookup( pageLayout, "pm" );
         pageLayout.writeStyle( stylesWriter, mainStyles, "style:page-layout", pageLayoutName,
                                "style:page-layout-properties", false /*don't close*/ );
-        //if ( m_pageLayout.columns > 1 ) TODO add columns element.
 
         // Header and footers save their content into master-styles/master-page, but their
         // styles into the page-layout automatic-style. To avoid splitting that code
         // in two places (and inconsistent iteration), we save both here, the content
         // going into
-        buffer.close();
         buffer.setBuffer( headerFooters );
         buffer.open( IO_WriteOnly );
         // Ouch another problem: there is only one header style in oasis
