@@ -3,6 +3,7 @@ Changes after KOffice-1.4
 KOfficeCore:
 - OASIS loading/saving fix for embedded objects
 - Fix crash when pressing Quit in the initial startup dialog (#107911)
+- Fix the handling of Automatically select filename extention when directory was selected
 
 KoText:
 - Fix crash when updating a TOC with a table inside it (#107961)

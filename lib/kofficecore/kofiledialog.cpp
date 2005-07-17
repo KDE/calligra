@@ -41,6 +41,7 @@ void KoFileDialog::slotChangedfilter( int index )
     } else {
         ops->setMode(KFile::File);
     }
+    updateAutoSelectExtension();
 }
 
 void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
