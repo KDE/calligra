@@ -80,7 +80,7 @@ bool KWOasisSaver::finish()
     KoXmlWriter* contentWriter = m_oasisStore->contentWriter();
     Q_ASSERT( contentWriter );
 
-    writeAutomaticStyles( *contentWriter, m_mainStyles );
+    writeAutomaticStyles( *contentWriter, m_mainStyles, *m_savingContext );
 
     m_oasisStore->closeContentWriter();
 
@@ -98,8 +98,9 @@ bool KWOasisSaver::finish()
     return true;
 }
 
-void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
+void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context )
 {
+    context.writeFontFaces( contentWriter );
     contentWriter.startElement( "office:automatic-styles" );
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();

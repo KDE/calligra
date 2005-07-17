@@ -1034,7 +1034,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
-    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
     savingContext.setStyleNameMap( map );
 
     KTempFile contentTmpFile;
@@ -1086,7 +1086,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.endElement(); //office:presentation
     contentTmpWriter.endElement(); //office:body
 
-    writeAutomaticStyles( *contentWriter, mainStyles );
+    writeAutomaticStyles( *contentWriter, mainStyles, savingContext );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
@@ -1210,8 +1210,9 @@ void KPresenterDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
     }
 }
 
-void KPresenterDoc::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
+void KPresenterDoc::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context )
 {
+    context.writeFontFaces( contentWriter );
     contentWriter.startElement( "office:automatic-styles" );
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();

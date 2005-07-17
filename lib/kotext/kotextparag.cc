@@ -2782,7 +2782,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         parentStyleName = context.styleAutoName( m_layout.style );
 
     KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
-    paragFormat()->save( autoStyle );
+    paragFormat()->save( autoStyle, context );
     m_layout.saveOasis( autoStyle, false );
 
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
@@ -2848,8 +2848,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
             writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
         } else {                                                        \
             KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
-            curFormat->save( gs );                                      \
-            const QString autoStyleName = mainStyles.lookup( gs, "T" );       \
+            curFormat->save( gs, context );                             \
+            const QString autoStyleName = mainStyles.lookup( gs, "T" ); \
             writer.startElement( "text:span" );                         \
             writer.addAttribute( "text:style-name", autoStyleName );    \
             writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \

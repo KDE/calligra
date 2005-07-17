@@ -1,3 +1,6 @@
+Changes after KWord-1.4
+=======================
+
 Changes after KWord-1.4-beta1
 =============================
 - Fixed crash when editing a cell on loading (#104982).

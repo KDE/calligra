@@ -530,12 +530,12 @@ void KoTextFormat::load( KoOasisContext& context )
     addRef();
 }
 
-void KoTextFormat::save( KoGenStyle& gs ) const
+void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context ) const
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
-    // TODO declare svg font faces stuff according to the OASIS format;
-    gs.addProperty( "style:font-name", fn.family(), tt ); // hack
+    gs.addProperty( "style:font-name", fn.family(), tt );
+    context.addFontFace( fn.family() );
     gs.addPropertyPt( "fo:font-size", fn.pointSize(), tt );
     int w = fn.weight();
     gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound( w / 10 ) * 100 ), tt );

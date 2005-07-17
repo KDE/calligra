@@ -29,6 +29,7 @@
 class KoGenStyles;
 class KoParagStyle;
 class KoOasisContext;
+class KoSavingContext;
 
 struct KoStyleChangeDef {
     KoStyleChangeDef() {
@@ -84,7 +85,7 @@ public:
     /// Save the entire style collection to OASIS
     /// @p styleType is the STYLE_* value for this style.
     /// Return a the auto-name for each style, to be used when saving the document.
-    QMap<KoParagStyle*, QString> saveOasis( KoGenStyles& styles, int styleType ) const;
+    QMap<KoParagStyle*, QString> saveOasis( KoGenStyles& styles, int styleType, KoSavingContext& context ) const;
 
     /// Save the text:outline-style element, mostly for OOo.
     void saveOasisOutlineStyles( KoXmlWriter& writer ) const;
@@ -197,7 +198,7 @@ public:
     void loadStyle( QDomElement & styleElem, KoOasisContext& context );
     /// Save the style to OASIS
     /// Don't use, use the method in KoStyleCollection instead
-    QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName ) const;
+    QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoSavingContext& context ) const;
 
     KoParagStyle * parentStyle() const {return m_parentStyle;}
     void setParentStyle( KoParagStyle *_style){ m_parentStyle = _style;}
