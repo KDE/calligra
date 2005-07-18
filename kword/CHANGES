@@ -1,5 +1,7 @@
 Changes after KWord-1.4
 =======================
+   Fixed loading of font sizes specified as a percentage
+   Implemented loading of list indentation (space-before) (#109223)
 
 Changes after KWord-1.4-beta1
 =============================

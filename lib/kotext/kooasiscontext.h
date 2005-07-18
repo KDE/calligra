@@ -132,7 +132,7 @@ public:
     /// Constructor
     /// @param mainStyles
     /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
-    KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode = Store );
+    KoSavingContext( KoGenStyles& mainStyles, bool hasColumns = false, SavingMode savingMode = Store );
 
     ~KoSavingContext();
 
@@ -167,6 +167,9 @@ public:
     typedef QMap<QString, bool> FontFaces;
     void writeFontFaces( KoXmlWriter& writer );
 
+    // See KoParagLayout::saveOasis
+    bool hasColumns() const { return m_hasColumns; }
+
 private:
     KoGenStyles& m_mainStyles;
     StyleNameMap m_styleNameMap;
@@ -175,6 +178,7 @@ private:
     KoTextParag* m_cursorTextParagraph;
     int m_cursorTextIndex;
     FontFaces m_fontFaces;
+    bool m_hasColumns;
 
     class Private;
     Private *d;

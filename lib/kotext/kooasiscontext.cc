@@ -138,10 +138,11 @@ KoOasisContext::~KoOasisContext()
 
 ////
 
-KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode )
+KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, bool hasColumns, SavingMode savingMode )
     : m_mainStyles( mainStyles ),
       m_savingMode( savingMode ),
-      m_cursorTextParagraph( 0 )
+      m_cursorTextParagraph( 0 ),
+      m_hasColumns( hasColumns )
 {
 }
 

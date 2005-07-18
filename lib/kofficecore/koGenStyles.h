@@ -276,6 +276,8 @@ public:
      * QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
      * gs.addChildElement( "...", elementContents );
      * @endcode
+     *
+     * The value of @p elementName isn't used, except that it must be unique.
      */
     void addChildElement( const QString& elementName, const QString& elementContents ) {
         m_properties[ChildElement].insert( elementName, elementContents );

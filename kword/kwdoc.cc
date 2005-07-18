@@ -2683,7 +2683,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     m_syntaxVersion = CURRENT_SYNTAX_VERSION; // ### clean this up once we remove the old format
 
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
+    KoSavingContext savingContext( mainStyles, m_pageColumns.columns > 1, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
     KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
@@ -2991,8 +2991,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 
         KoGenStyle pageLayout = m_pageLayout.saveOasis();
         pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
-
-        // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
+        pageLayout.addProperty( "style:first-page-number", m_varColl->variableSetting()->startingPage() );
 
         QBuffer buffer;
         buffer.open( IO_WriteOnly );

@@ -782,7 +782,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     }
 }
 
-void KoParagLayout::saveOasis( KoGenStyle& gs, bool savingStyle ) const
+void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const
 {
     gs.addProperty( "fo:text-align", saveOasisAlignment( (Qt::AlignmentFlags)alignment ).data() );
     // Don't save the direction for a style, if "auto", so that the
@@ -910,9 +910,9 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, bool savingStyle ) const
     }
 
     if ( pageBreaking & KoParagLayout::HardFrameBreakBefore )
-        gs.addProperty( "fo:break-before", "column" );
+        gs.addProperty( "fo:break-before", context.hasColumns() ? "column" : "page" );
     else if ( pageBreaking & KoParagLayout::HardFrameBreakAfter )
-        gs.addProperty( "fo:break-after", "column" );
+        gs.addProperty( "fo:break-after", context.hasColumns() ? "column" : "page" );
     if ( pageBreaking & KoParagLayout::KeepLinesTogether )
         gs.addProperty( "fo:keep-together", "always" );
     if ( pageBreaking & KoParagLayout::KeepWithNext )
