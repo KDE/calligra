@@ -7,6 +7,7 @@ KOfficeCore:
 
 Startup dialog:
 - Fix typing a URL in startup dialog and clicking OK; the URL wasn't loaded (#109000)
+- Fix recent tab showing broken icons with no text, when using kdelibs from SVN trunk (future 3.5).
 
 KoText:
 - Fix crash when updating a TOC with a table inside it (#107961)
