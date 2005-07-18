@@ -37,11 +37,12 @@ OOo however also supports columns of different sizes and with different spaces, 
 Notes about interoperability with OpenOffice.org-2.0:
 -----------------------------------------------------
 
-List of bugs in OOo-1.9.87 affecting interoperability:
- - <text:notes-configuration text:note-class="footnote"...> has text:start-value="0", and is ignored on loading (private mail sent)
+List of bugs in OOo-1.9.113 affecting interoperability:
+ - <text:notes-configuration text:note-class="footnote"...> uses 0-based values for text:start-value instead of 1-based (private mail sent)
  - DTP mode not really supported; but even with single page, frames are misplaced (private mail sent)
+ - <text:numbered-paragraph> isn't loaded!!! http://www.openoffice.org/issues/show_bug.cgi?id=52127
 
-List of bugs in OOo-1.9.87 not affecting interoperability:
+List of bugs in OOo-1.9.113 not affecting interoperability:
  - style:text-underline-type="single" is missing for underlined text, only style is specified (code has workaround)
 
 List of features that KWord has, but OOo doesn't have, and which are in the OASIS standard:

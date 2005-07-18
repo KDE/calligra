@@ -68,8 +68,10 @@ void KoOasisContext::addStyles( const QDomElement* style )
         QString family = style->attributeNS( KoXmlNS::style, "family", QString::null );
         if ( !family.isEmpty() ) {
             QDomElement* def = m_styles.defaultStyle( family );
-            if ( def ) // on top of all, the default style for this family
+            if ( def ) { // on top of all, the default style for this family
+                //kdDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
                 m_styleStack.push( *def );
+            }
         }
     }
 
@@ -138,10 +140,11 @@ KoOasisContext::~KoOasisContext()
 
 ////
 
-KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, bool hasColumns, SavingMode savingMode )
+KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, KoVariableSettings* settings, bool hasColumns, SavingMode savingMode )
     : m_mainStyles( mainStyles ),
       m_savingMode( savingMode ),
       m_cursorTextParagraph( 0 ),
+      m_variableSettings( settings ),
       m_hasColumns( hasColumns )
 {
 }

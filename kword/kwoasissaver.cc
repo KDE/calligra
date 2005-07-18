@@ -35,7 +35,7 @@ KWOasisSaver::KWOasisSaver( KWDocument* doc )
 
     //KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
 
-    m_savingContext = new KoSavingContext( m_mainStyles, KoSavingContext::Store );
+    m_savingContext = new KoSavingContext( m_mainStyles, 0, false, KoSavingContext::Store );
 
     KoXmlWriter* bodyWriter = m_oasisStore->bodyWriter();
     bodyWriter->startElement( "office:body" );

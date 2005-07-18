@@ -805,6 +805,14 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
         // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
         if ( currentMasterPageRef.isEmpty() ) {
             currentMasterPageRef = masterPageName; // do this first to avoid recursion
+            context.styleStack().save();
+            context.styleStack().setTypeProperties( "paragraph" );
+            context.addStyles( paragraphStyle );
+            // This is quite ugly... OOo stores the starting page-number in the first paragraph style...
+            QString pageNumber = context.styleStack().attributeNS( KoXmlNS::style, "page-number" );
+            if ( !pageNumber.isEmpty() )
+                doc->variableCollection()->variableSetting()->setStartingPageNumber( pageNumber.toInt() );
+            context.styleStack().restore();
             // Disabled. See loadOasis, we do this up front.
             //doc->loadOasisPageLayout( masterPageName, context );
         }
