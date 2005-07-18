@@ -65,12 +65,11 @@ class MyFileDialog : public KFileDialog
                 QWidget *parent=0,
                 const char *name=0,
                 bool modal=0)
-            :  KFileDialog (startDir, filter, parent, name, modal) {}
+            :  KFileDialog (startDir, filter, parent, name, modal),
+        m_slotOkCalled( false ) {}
 
         KURL currentURL()
         {
-            // FIXME bug #109000 this does not work with URLs like http://dot.kde.org
-            //       to test enter this url into the filename field and click(!!) ok
             setResult( QDialog::Accepted ); // selectedURL tests for it
             return KFileDialog::selectedURL();
         }
@@ -90,6 +89,14 @@ class MyFileDialog : public KFileDialog
             }
             return ok;
         }
+        // Called directly by pressing Return in the location combo
+        // (so we need to remember that it got called, to avoid calling it twice)
+        // Called "by hand" when clicking on our OK button
+        void slotOk() {
+            m_slotOkCalled = true;
+            KFileDialog::slotOk();
+        }
+        bool slotOkCalled() const { return m_slotOkCalled; }
     protected:
     // Typing a file that doesn't exist closes the file dialog, we have to
     // handle this case better here.
@@ -102,7 +109,8 @@ class MyFileDialog : public KFileDialog
 		KFileDialog::reject();
 		emit cancelClicked();
         }
-
+private:
+        bool m_slotOkCalled;
 };
 
 /*================================================================*/
@@ -700,10 +708,12 @@ bool KoTemplateChooseDia::collectInfo()
 	else
 	{
 		// Existing file from file dialog
+	        if ( !d->m_filedialog->slotOkCalled() )
+	            d->m_filedialog->slotOk();
 		KURL url = d->m_filedialog->currentURL();
 		d->m_fullTemplateName = url.url();
-		d->m_returnType = File;
-                return d->m_filedialog->checkURL();
+	        d->m_returnType = File;
+	        return d->m_filedialog->checkURL();
 	}
 	return true;
     }
