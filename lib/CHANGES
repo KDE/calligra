@@ -5,6 +5,9 @@ KOfficeCore:
 - Fix crash when pressing Quit in the initial startup dialog (#107911)
 - Fix the handling of Automatically select filename extention when directory was selected
 
+Startup dialog:
+- Fix typing a URL in startup dialog and clicking OK; the URL wasn't loaded (#109000)
+
 KoText:
 - Fix crash when updating a TOC with a table inside it (#107961)
 
