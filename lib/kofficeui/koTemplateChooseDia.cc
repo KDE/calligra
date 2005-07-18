@@ -315,12 +315,19 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                 QString key=QString( "File%1" ).arg( i );
                 value=d->m_instance->config()->readPathEntry( key );
                 if ( !value.isEmpty() ) {
-                        KURL url(value);
+                    // Support for kdelibs-3.5's new RecentFiles format: name[url]
+                    QString s = value;
+                    if ( s.endsWith("]") )
+                    {
+                        int pos = s.find("[");
+                        s = s.mid( pos + 1, s.length() - pos - 2);
+                    }
+                    KURL url(s);
 
-                        if(!url.isLocalFile() || QFile::exists(url.path())) {
-                                KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
-                                d->m_recent->insertItem(item);
-                        }
+                    if(!url.isLocalFile() || QFile::exists(url.path())) {
+                        KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
+                        d->m_recent->insertItem(item);
+                    }
                 }
                 i++;
         } while ( !value.isEmpty() || i<=10 );
