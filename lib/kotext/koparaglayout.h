@@ -24,6 +24,7 @@
 #include <qdom.h>
 #include "koborder.h"
 #include <koffice_export.h>
+class KoSavingContext;
 class KoGenStyle;
 class KoParagCounter;
 class KoParagStyle;
@@ -126,7 +127,7 @@ public:
     /// Save this parag layout to Oasis XML
     /// @param savingStyle true if this is saved as part of a user style,
     /// false when saving a paragraph
-    void saveOasis( KoGenStyle& gs, bool savingStyle ) const;
+    void saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const;
 
     /// Convert an alignment string into an alignment flag (load)
     static Qt::AlignmentFlags loadOasisAlignment( const QCString& str );

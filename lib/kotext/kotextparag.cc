@@ -2762,7 +2762,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
     paragFormat()->save( autoStyle, context );
-    m_layout.saveOasis( autoStyle, false );
+    m_layout.saveOasis( autoStyle, context, false );
 
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 
@@ -2894,6 +2894,13 @@ void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering,
     delete m_layout.counter;
     m_layout.counter = new KoParagCounter;
     m_layout.counter->loadOasis( context, restartNumbering, orderedList, heading, level );
+    // We emulate space-before with a left paragraph indent (#109223)
+    const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
+    if ( listStyleProperties.hasAttributeNS( KoXmlNS::text, "space-before" ) )
+    {
+        double spaceBefore = KoUnit::parseValue( listStyleProperties.attributeNS( KoXmlNS::text, "space-before", QString::null ) );
+        m_layout.margins[ QStyleSheetItem::MarginLeft ] += spaceBefore;
+    }
     // need to call invalidateCounters() ? Not during the initial loading at least.
 }
 

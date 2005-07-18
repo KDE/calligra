@@ -594,7 +594,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
         }
     }
 
-    m_paragLayout.saveOasis( gs, true );
+    m_paragLayout.saveOasis( gs, context, true );
 
     m_format.save( gs, context );
 

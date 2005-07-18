@@ -178,7 +178,7 @@ double KoStyleStack::fontSize() const
 {
     const QString name = "font-size";
     double percent = 1;
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    QValueList<QDomElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
     while ( it != m_stack.begin() )
     {
@@ -187,7 +187,7 @@ double KoStyleStack::fontSize() const
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
             const QString value = properties.attributeNS( m_foNSURI, name, QString::null );
             if ( value.endsWith( "%" ) )
-                percent *= value.toDouble() / 100.0;
+                percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
             else
                 return percent * KoUnit::parseValue( value ); // e.g. 12pt
         }

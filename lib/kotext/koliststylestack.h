@@ -55,7 +55,7 @@ public:
     QDomElement currentListStyle() const;
 
     /**
-     * @return the style:properties for the currenty applicable list style.
+     * @return the style:list-level-properties for the currenty applicable list style.
      * The list-level properties that are only "style" information,
      * like text:min-label-width, text:space-before, and style:font-name
      * are the attributes of that element.
