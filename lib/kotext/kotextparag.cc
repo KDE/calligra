@@ -2785,6 +2785,15 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     paragFormat()->save( autoStyle, context );
     m_layout.saveOasis( autoStyle, context, false );
 
+    // First paragraph is special, it includes page-layout info (for word-processing at least)
+    if ( !prev() ) {
+        if ( context.variableSettings() )
+            autoStyle.addProperty( "style:page-number", context.variableSettings()->startingPageNumber() );
+        // Well we support only one page layout, so the first parag always points to "Standard".
+        autoStyle.addAttribute( "style:master-page-name", "Standard" );
+    }
+
+
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 
     KoParagCounter* paragCounter = m_layout.counter;

@@ -1,7 +1,15 @@
 Changes after KWord-1.4
 =======================
+- OASIS OpenDocument support:
+   Fixed loading of headers and footers (#107424)
+   Implemented saving of headers and footers
+   Fix for text:h without outline-level
+   Simplified the XML by removing spurious <span> tags due to misspelled words
+   Save office:font-face-decls tag so that OOo loads the fonts
    Fixed loading of font sizes specified as a percentage
    Implemented loading of list indentation (space-before) (#109223)
+   Improved OOo compatibility when saving page breaks
+   Save first page number the right way so that OOo can load it
 
 Changes after KWord-1.4-beta1
 =============================

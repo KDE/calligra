@@ -119,10 +119,9 @@ void KoVariableSettings::saveOasis( KoXmlWriter &settingsWriter ) const
     settingsWriter.addConfigItem( "underlinelink", m_underlineLink);
     settingsWriter.addConfigItem( "displaycomment", m_displayComment);
     settingsWriter.addConfigItem( "displayfieldcode", m_displayFieldCode);
-    if(m_startingPageNumber!=1)
-    {
-        settingsWriter.addConfigItem( "startingPageNumber", m_startingPageNumber);
-    }
+    // m_startingPageNumber isn't saved to OASIS. Applications must use either
+    // style:page-number in the first parag of a page (see KoTextParag), or
+    // style:first-page-number in style:page-layout, for spreadsheets etc.
     if ( d->m_lastPrintingDate.isValid())
         settingsWriter.addConfigItem("lastPrintingDate", d->m_lastPrintingDate.toString(Qt::ISODate));
 
@@ -145,7 +144,6 @@ void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
         m_underlineLink = configurationSettings.parseConfigItemBool( "underlinelink", true );
         m_displayComment = configurationSettings.parseConfigItemBool( "displaycomment", true );
         m_displayFieldCode = configurationSettings.parseConfigItemBool( "displayfieldcode", false );
-        m_startingPageNumber = configurationSettings.parseConfigItemInt( "startingPageNumber",  1 );
 
         QString str = configurationSettings.parseConfigItemString( "lastPrintingDate" );
         if ( !str.isEmpty() )
@@ -160,6 +158,8 @@ void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
         str = configurationSettings.parseConfigItemString( "modificationDate" );
         if ( !str.isEmpty() )
             d->m_modificationDate = QDateTime::fromString( str, Qt::ISODate );
+
+        // m_startingPageNumber isn't loaded from OASIS here. KWTextParag::loadOasis does it.
     }
 }
 

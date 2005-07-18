@@ -20,6 +20,7 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
+class KoVariableSettings;
 class KoXmlWriter;
 class KoTextParag;
 class KoParagStyle;
@@ -131,8 +132,10 @@ public:
 
     /// Constructor
     /// @param mainStyles
+    /// @param settings optional, used for saving the page-number in the first paragraph
+    /// @param hasColumns optional, used by KoParagLayout for the type of page breaks
     /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
-    KoSavingContext( KoGenStyles& mainStyles, bool hasColumns = false, SavingMode savingMode = Store );
+    KoSavingContext( KoGenStyles& mainStyles, KoVariableSettings* settings = 0, bool hasColumns = false, SavingMode savingMode = Store );
 
     ~KoSavingContext();
 
@@ -170,6 +173,9 @@ public:
     // See KoParagLayout::saveOasis
     bool hasColumns() const { return m_hasColumns; }
 
+    // See KoTextParag::saveOasis
+    KoVariableSettings* variableSettings() const { return m_variableSettings; }
+
 private:
     KoGenStyles& m_mainStyles;
     StyleNameMap m_styleNameMap;
@@ -178,6 +184,7 @@ private:
     KoTextParag* m_cursorTextParagraph;
     int m_cursorTextIndex;
     FontFaces m_fontFaces;
+    KoVariableSettings* m_variableSettings;
     bool m_hasColumns;
 
     class Private;
