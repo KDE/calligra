@@ -3,11 +3,12 @@ Changes after KOffice-1.4
 KOfficeCore:
 - OASIS loading/saving fix for embedded objects
 - Fix crash when pressing Quit in the initial startup dialog (#107911)
-- Fix the handling of Automatically select filename extention when directory was selected
+- Fix the handling of Automatically select filename extension when directory was selected
 
 Startup dialog:
 - Fix typing a URL in startup dialog and clicking OK; the URL wasn't loaded (#109000)
 - Fix recent tab showing broken icons with no text, when using kdelibs from SVN trunk (future 3.5).
+- Fix "Always start X with this template" behaving as if it was checked when it wasn't (#108843)
 
 KoText:
 - Fix crash when updating a TOC with a table inside it (#107961)
