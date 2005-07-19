@@ -1,0 +1,737 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>itemAttributeDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>itemAttributeDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>744</width>
+            <height>319</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Item Attributes</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Item name:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>itemName</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>Spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>0</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout5</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>TextLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>ShapeType:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>TextLabel8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Highlight color:</string>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="4" column="5">
+                    <property name="name">
+                        <cstring>TimeEdit5</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Lead</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>TextLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>ShapeColor:</string>
+                    </property>
+                </widget>
+                <widget class="QDateEdit" row="3" column="2">
+                    <property name="name">
+                        <cstring>DateEdit1</cstring>
+                    </property>
+                    <property name="autoAdvance">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="3">
+                    <item>
+                        <property name="text">
+                            <string>TriangleDown</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>TriangleUp</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Diamond</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Square</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Circle</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>MiddleBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QDateEdit" row="3" column="3">
+                    <property name="name">
+                        <cstring>DateEdit2</cstring>
+                    </property>
+                    <property name="autoAdvance">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>StartShape</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Start</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="2">
+                    <property name="name">
+                        <cstring>ChangeStart</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Change</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="3">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Middle</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="2">
+                    <item>
+                        <property name="text">
+                            <string>TriangleDown</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>TriangleUp</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Diamond</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Square</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Circle</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>StartBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="4">
+                    <property name="name">
+                        <cstring>TextLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>End</string>
+                    </property>
+                </widget>
+                <widget class="QDateEdit" row="3" column="1">
+                    <property name="name">
+                        <cstring>DateEdit4</cstring>
+                    </property>
+                </widget>
+                <widget class="QDateEdit" row="3" column="4">
+                    <property name="name">
+                        <cstring>DateEdit3</cstring>
+                    </property>
+                    <property name="autoAdvance">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="5">
+                    <property name="name">
+                        <cstring>TextLabel2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Actual End</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="5" column="3">
+                    <property name="name">
+                        <cstring>HighMiddle</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Change</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="5" column="2">
+                    <property name="name">
+                        <cstring>HighStart</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Change</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="3">
+                    <property name="name">
+                        <cstring>ChangeMiddle</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Change</string>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="4" column="4">
+                    <property name="name">
+                        <cstring>TimeEdit3</cstring>
+                    </property>
+                    <property name="autoAdvance">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="4">
+                    <property name="name">
+                        <cstring>ChangeEnd</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Change</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>TextLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Date:</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="5" column="4">
+                    <property name="name">
+                        <cstring>HighEnd</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Change</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="4">
+                    <item>
+                        <property name="text">
+                            <string>TriangleDown</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>TriangleUp</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Diamond</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Square</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Circle</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>EndBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="4" column="1">
+                    <property name="name">
+                        <cstring>TimeEdit4</cstring>
+                    </property>
+                </widget>
+                <widget class="QDateEdit" row="3" column="5">
+                    <property name="name">
+                        <cstring>DateEdit5</cstring>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="4" column="2">
+                    <property name="name">
+                        <cstring>TimeEdit1</cstring>
+                    </property>
+                    <property name="autoAdvance">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="4" column="3">
+                    <property name="name">
+                        <cstring>TimeEdit2</cstring>
+                    </property>
+                    <property name="autoAdvance">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>TextLabel10</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Time:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>Spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>0</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel7</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Displayed text:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>LineEdit1</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel9</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Text color:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>ChangeText</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Change</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>PrioLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Priority:</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>PrioSpinBox</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>199</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>PrioSlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>199</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>CalBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Display subitems as group</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>ChangeText</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>ChangeText_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>ChangeStart</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>ChangeStart_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>ChangeMiddle</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>ChangeMiddle_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>ChangeEnd</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>ChangeEnd_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>HighStart</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>HighStart_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>HighMiddle</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>HighMiddle_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>HighEnd</sender>
+        <signal>clicked()</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>HighEnd_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>DateEdit1</sender>
+        <signal>valueChanged(const QDate&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>DateEdit1_valueChanged(const QDate&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>TimeEdit1</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>TimeEdit1_valueChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>DateEdit2</sender>
+        <signal>valueChanged(const QDate&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>DateEdit2_valueChanged(const QDate&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>TimeEdit2</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>TimeEdit2_valueChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>DateEdit3</sender>
+        <signal>valueChanged(const QDate&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>DateEdit3_valueChanged(const QDate&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>TimeEdit3</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>TimeEdit3_valueChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>LineEdit1</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>LineEdit1_textChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>StartBox</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>StartBox_activated(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>MiddleBox</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>MiddleBox_activated(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>EndBox</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>EndBox_activated(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>DateEdit4</sender>
+        <signal>valueChanged(const QDate&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>DateEdit4_valueChanged(const QDate&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>TimeEdit4</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>TimeEdit4_valueChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>DateEdit5</sender>
+        <signal>valueChanged(const QDate&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>DateEdit5_valueChanged(const QDate&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>TimeEdit5</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>TimeEdit5_valueChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>itemName</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>itemName_textChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>PrioSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>PrioSpinBox_valueChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>CalBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>CalBox_toggled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>PrioSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>itemAttributeDialog</receiver>
+        <slot>PrioSlider_valueChanged(int)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in declaration">KDGanttViewSummaryItem.h</include>
+    <include location="local" impldecl="in declaration">KDGanttViewItem.h</include>
+    <include location="local" impldecl="in declaration">KDGanttView.h</include>
+    <include location="local" impldecl="in declaration">KDGanttViewEventItem.h</include>
+    <include location="local" impldecl="in implementation">KDGanttViewEventItem.h</include>
+    <include location="local" impldecl="in implementation">KDGanttViewItem.h</include>
+    <include location="local" impldecl="in implementation">KDGanttViewSummaryItem.h</include>
+    <include location="local" impldecl="in implementation">itemAttributeDialog.ui.h</include>
+</includes>
+<variables>
+    <variable>KDGanttViewItem * myItem</variable>
+</variables>
+<slots>
+    <slot>init()</slot>
+    <slot>ChangeText_clicked()</slot>
+    <slot>ChangeStart_clicked()</slot>
+    <slot>ChangeMiddle_clicked()</slot>
+    <slot>ChangeEnd_clicked()</slot>
+    <slot>resetTime( KDGanttViewItem * item )</slot>
+    <slot>reset( KDGanttViewItem * item )</slot>
+    <slot>HighStart_clicked()</slot>
+    <slot>HighMiddle_clicked()</slot>
+    <slot>HighEnd_clicked()</slot>
+    <slot>DateEdit1_valueChanged( const QDate &amp; )</slot>
+    <slot>TimeEdit1_valueChanged( const QTime &amp; )</slot>
+    <slot>DateEdit2_valueChanged( const QDate &amp; )</slot>
+    <slot>TimeEdit2_valueChanged( const QTime &amp; )</slot>
+    <slot>DateEdit3_valueChanged( const QDate &amp; )</slot>
+    <slot>TimeEdit3_valueChanged( const QTime &amp; )</slot>
+    <slot>LineEdit1_textChanged( const QString &amp; )</slot>
+    <slot>StartBox_activated( const QString &amp; s )</slot>
+    <slot>MiddleBox_activated( const QString &amp; s )</slot>
+    <slot>EndBox_activated( const QString &amp; s )</slot>
+    <slot>DateEdit4_valueChanged( const QDate &amp; )</slot>
+    <slot>TimeEdit4_valueChanged( const QTime &amp; )</slot>
+    <slot>DateEdit5_valueChanged( const QDate &amp; )</slot>
+    <slot>TimeEdit5_valueChanged( const QTime &amp; )</slot>
+    <slot>itemName_textChanged( const QString &amp; )</slot>
+    <slot>PrioSpinBox_valueChanged( int val )</slot>
+    <slot>CalBox_toggled( bool mode )</slot>
+    <slot>PrioSlider_valueChanged( int val )</slot>
+    <slot returnType="KDGanttViewItem *">getItem()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
