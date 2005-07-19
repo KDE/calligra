@@ -27,8 +27,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <knumvalidator.h>
-#include <kdatetbl.h>
 
 #include <container.h>
 #include <form.h>
@@ -41,20 +39,18 @@
 #include <kexipart.h>
 #include <widgetlibrary.h>
 #include <kexigradientwidget.h>
-#include <kexiutils/utils.h>
 #include <keximainwindow.h>
+#include <kexiutils/utils.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
 #include "kexilabel.h"
-#include "kexidbinputwidget.h"
+#include "kexidbwidgets.h"
+#include "kexidbfieldedit.h"
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
 #include <core/kexi.h>
-
-#define KEXI_NO_KexiDBInputWidget //temp. for 0.1
-
 
 KexiSubForm::KexiSubForm(Form *parentForm, QWidget *parent, const char *name)
 : QScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
@@ -155,321 +151,6 @@ KexiSubForm::setFormName(const QString &name)
 	KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 }
 
-
-
-//////////////////////////////////////////
-
-KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
- : KLineEdit(parent, name)
- , KexiDBTextWidgetInterface()
- , KexiFormDataItemInterface()
-// , m_autonumberDisplayParameters(0)
-{
-	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
-}
-
-KexiDBLineEdit::~KexiDBLineEdit()
-{
-//	delete m_autonumberDisplayParameters;
-}
-
-void KexiDBLineEdit::setInvalidState( const QString& displayText )
-{
-	setReadOnly(true);
-//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
-	setText(displayText);
-}
-
-void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
-{
-	if (m_field && m_field->type()==KexiDB::Field::Boolean) {
-//! @todo temporary solution for booleans!
-		setText( add.toBool() ? "1" : "0" );
-	}
-	else {
-		if (removeOld)
-			setText( add.toString() );
-		else
-			setText( m_origValue.toString() + add.toString() );
-	}
-}
-
-QVariant KexiDBLineEdit::value()
-{
-	return text();
-}
-
-void KexiDBLineEdit::slotTextChanged(const QString&)
-{
-	signalValueChanged();
-}
-
-bool KexiDBLineEdit::valueIsNull()
-{
-	return text().isNull();
-}
-
-bool KexiDBLineEdit::valueIsEmpty()
-{
-	return text().isEmpty();
-}
-
-bool KexiDBLineEdit::isReadOnly() const
-{
-	return KLineEdit::isReadOnly();
-}
-
-QWidget* KexiDBLineEdit::widget()
-{
-	return this;
-}
-
-bool KexiDBLineEdit::cursorAtStart()
-{
-	return cursorPosition()==0;
-}
-
-bool KexiDBLineEdit::cursorAtEnd()
-{
-	return cursorPosition()==(int)text().length();
-}
-
-void KexiDBLineEdit::clear()
-{
-	setText(QString::null);
-}
-
-void KexiDBLineEdit::setField(KexiDB::Field* field)
-{
-	KexiFormDataItemInterface::setField(field);
-	if (!field)
-		return;
-//! @todo merge this code with KexiTableEdit code!
-//! @todo set maximum length validator
-//! @todo handle input mask (via QLineEdit::setInputMask()
-	const KexiDB::Field::Type t = field->type();
-	if (field->isIntegerType()) {
-		QValidator *validator = 0;
-		const bool u = field->isUnsigned();
-		int bottom, top;
-		if (t==KexiDB::Field::Byte) {
-			bottom = u ? 0 : -0x80;
-			top = u ? 0xff : 0x7f;
-		}
-		else if (t==KexiDB::Field::ShortInteger) {
-			bottom = u ? 0 : -0x8000;
-			top = u ? 0xffff : 0x7fff;
-		}
-		else if (t==KexiDB::Field::Integer) {
-			bottom = u ? 0 : -0x7fffffff-1;
-			top = u ? 0xffffffff : 0x7fffffff;
-		}
-		else if (t==KexiDB::Field::BigInteger) {
-/*! @todo couldn't work with KIntValidator: implement lonlong validator!
-			bottom = u ? 0 : -0x7fffffffffffffff;
-			top = u ? 0xffffffffffffffff : 127;*/
-			validator = new KIntValidator(this);
-		}
-
-		if (!validator)
-			validator = new KIntValidator(bottom, top, this);
-		setValidator( validator );
-	}
-	else if (field->isFPNumericType()) {
-		QValidator *validator;
-		if (t==KexiDB::Field::Float) {
-			if (field->isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 3.4e+38, field->scale(), this);
-			else
-				validator = new KDoubleValidator(this);
-		}
-		else {//double
-			if (field->isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 1.7e+308, field->scale(), this);
-			else
-				validator = new KDoubleValidator(this);
-		}
-		setValidator( validator );
-	}
-	else if (t==KexiDB::Field::Date) {
-//! @todo use KDateWidget
-		QValidator *validator = new KDateValidator(this);
-		setValidator( validator );
-	}
-	else if (t==KexiDB::Field::Time) {
-//! @todo use KTimeWidget
-		setInputMask("00:00:00");
-	}
-	else if (t==KexiDB::Field::Boolean) {
-//! @todo temporary solution for booleans!
-		QValidator *validator = new KIntValidator(0, 1, this);
-		setValidator( validator );
-	}
-
-	KexiDBTextWidgetInterface::setField(m_field, this);
-}
-
-void KexiDBLineEdit::paintEvent ( QPaintEvent *pe )
-{
-	KLineEdit::paintEvent( pe );
-	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), hasFocus() );
-}
-
-bool KexiDBLineEdit::event( QEvent * e )
-{
-	const bool ret = KLineEdit::event( e );
-	KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
-	return ret;
-}
-
-//////////////////////////////////////////
-
-void KexiDBTextWidgetInterface::setField(KexiDB::Field* field, QWidget *w)
-{
-	if (field->isAutoIncrement()) {
-		if (!m_autonumberDisplayParameters)
-			m_autonumberDisplayParameters = new KexiDisplayUtils::DisplayParameters();
-		KexiDisplayUtils::initDisplayForAutonumberSign(*m_autonumberDisplayParameters, w);
-	}
-}
-
-void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus  )
-{
-	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
-	if (dataItemIface && dataItemIface->field() && dataItemIface->field()->isAutoIncrement() 
-		&& m_autonumberDisplayParameters && dataItemIface->cursorAtNewRow() && textIsEmpty)
-	{
-		QPainter p(w);
-		if (w->hasFocus()) {
-			p.setPen(KexiUtils::blendColors(m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
-		}
-		const int m = w->lineWidth()+w->midLineWidth();
-		KexiDisplayUtils::drawAutonumberSign(*m_autonumberDisplayParameters, &p, 
-			2+m+w->margin(), m, w->width()-m*2 -2-2, w->height()-m*2 -2, alignment, hasFocus);
-	}
-}
-
-void KexiDBTextWidgetInterface::event( QEvent * e, QWidget *w, bool textIsEmpty )
-{
-	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
-		if (m_autonumberDisplayParameters && textIsEmpty)
-			w->repaint();
-	}
-}
-
-//////////////////////////////////////////
-
-KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
- : KTextEdit(parent, name)
- , KexiDBTextWidgetInterface()
- , KexiFormDataItemInterface()
-{
-	connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-}
-
-KexiDBTextEdit::~KexiDBTextEdit()
-{
-}
-
-void KexiDBTextEdit::setInvalidState( const QString& displayText )
-{
-	setReadOnly(true);
-//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
-	setText(displayText);
-}
-
-void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
-{
-	if (m_field && m_field->type()==KexiDB::Field::Boolean) {
-//! @todo temporary solution for booleans!
-		setText( add.toBool() ? "1" : "0" );
-	}
-	else {
-		if (removeOld)
-			setText( add.toString() );
-		else
-			setText( m_origValue.toString() + add.toString() );
-	}
-}
-
-QVariant KexiDBTextEdit::value()
-{
-	return text();
-}
-
-void KexiDBTextEdit::slotTextChanged()
-{
-	signalValueChanged();
-}
-
-bool KexiDBTextEdit::valueIsNull()
-{
-	return text().isNull();
-}
-
-bool KexiDBTextEdit::valueIsEmpty()
-{
-	return text().isEmpty();
-}
-
-bool KexiDBTextEdit::isReadOnly() const
-{
-	return KTextEdit::isReadOnly();
-}
-
-QWidget* KexiDBTextEdit::widget()
-{
-	return this;
-}
-
-bool KexiDBTextEdit::cursorAtStart()
-{
-	int para, index;
-	getCursorPosition ( &para, &index );
-	return para==0 && index==0;
-}
-
-bool KexiDBTextEdit::cursorAtEnd()
-{
-	int para, index;
-	getCursorPosition ( &para, &index );
-	return (paragraphs()-1)==para && (paragraphLength(paragraphs()-1)-1)==index;
-}
-
-void KexiDBTextEdit::clear()
-{
-	setText(QString::null);
-}
-
-void KexiDBTextEdit::setField(KexiDB::Field* field)
-{
-	KexiFormDataItemInterface::setField(field);
-	if (!field)
-		return;
-	KexiDBTextWidgetInterface::setField(m_field, this);
-}
-
-void KexiDBTextEdit::paintEvent ( QPaintEvent *pe )
-{
-	KTextEdit::paintEvent( pe );
-	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), hasFocus() );
-}
-
-//////////////////////////////////////////
-
-KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const char * name )
-: KPushButton(text, parent, name)
-{
-}
-
-KexiPushButton::~KexiPushButton()
-{
-}
-
 //////////////////////////////////////////
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
@@ -484,7 +165,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "form"));
 	wView->setDescription(i18n("A data-aware form widget"));
 	addClass(wView);
-	
+
 #ifndef KEXI_NO_SUBFORM
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("subform");
@@ -531,29 +212,30 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setPixmap("label");
 	wi->setClassName("KexiLabel");
 	wi->addAlternateClassName("QLabel", true/*override*/);
-	wi->setIncludeFileName("qlabel.h");
 	wi->setName(i18n("Label"));
 	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
 	wi->setDescription(i18n("A widget for displaying text"));
 	addClass(wi);
 
-#ifndef KEXI_NO_KexiDBInputWidget
-/*avoid i18n 
-	KexiDataAwareWidgetInfo *wInput = new KexiDataAwareWidgetInfo(this);
-	wInput->setPixmap("edit");
-	wInput->setClassName("KexiDBInputWidget");
-	wInput->addAlternateClassName("QLabel", true);
-//todo	wInput->addAlternateClassName("QLineEdit", true);
-//todo	wInput->addAlternateClassName("KLineEdit", true);
-//todo	wInput->addAlternateClassName("KexiDBLineEdit", true); //for compat.
-	wInput->setIncludeFileName("qlabel.h");
-	wInput->setName(i18n("Input Widget"));
-	wInput->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "inputWidget"));
-//	wInput->setDescription(i18n("A super-duper widget"));
-	addClass(wInput);*/
-#endif
+	wi = new KFormDesigner::WidgetInfo(this, "stdwidgets", "QCheckBox");
+	wi->setPixmap("check");
+	wi->setClassName("KexiDBCheckBox");
+	wi->addAlternateClassName("QCheckBox", true/*override*/);
+	wi->setName(i18n("Check Box"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "checkBox"));
+	wi->setDescription(i18n("A check box with text label"));
+	addClass(wi);
+
+	KexiDataAwareWidgetInfo *wFieldEdit = new KexiDataAwareWidgetInfo(this);
+	wFieldEdit->setPixmap("edit");
+	wFieldEdit->setClassName("KexiDBFieldEdit");
+	wFieldEdit->setName(i18n("Auto Field"));
+	wFieldEdit->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "autoField"));
+	wFieldEdit->setDescription(i18n("A widget containing an automatically chosed editor and a label to edit any database field."));
+	addClass(wFieldEdit);
 
 	// inherited
 	wi = new KFormDesigner::WidgetInfo(
@@ -610,9 +292,13 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	{
 		w = new KexiLabel(text, p, n);
 	}
-	else if(c == "KexiDBInputWidget") //todo: || c == "KexiDBLineEdit"/*for compatibility*/)
+	else if(c == "KexiDBFieldEdit")
 	{
-		w = new KexiDBInputWidget(p, n);
+		w = new KexiDBFieldEdit(p, n);
+	}
+	else if(c == "KexiDBCheckBox")
+	{
+		w = new KexiDBCheckBox(text, p, n);
 	}
 	else if(c == "KPushButton" || c == "KexiPushButton")
 		w = new KexiPushButton(text, p, n);
@@ -658,7 +344,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
-		createEditor(classname, lineedit->text(), lineedit, container, 
+		createEditor(classname, lineedit->text(), lineedit, container,
 			lineedit->geometry(), lineedit->alignment(), true);
 		return true;
 	}
@@ -667,7 +353,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
 		KTextEdit *textedit = static_cast<KTextEdit*>(w);
-		createEditor(classname, textedit->text(), textedit, container, 
+		createEditor(classname, textedit->text(), textedit, container,
 			textedit->geometry(), textedit->alignment(), true, true);
 		//copy a few properties
 		KTextEdit *ed = dynamic_cast<KTextEdit *>( editor(w) );
@@ -698,7 +384,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		}
 		else
 		{
-			createEditor(classname, label->text(), label, container, 
+			createEditor(classname, label->text(), label, container,
 				label->geometry(), label->alignment());
 		}
 		return true;
@@ -731,6 +417,8 @@ KexiDBFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 		static_cast<KTextEdit*>(w)->clear();
 	else if(classname == "KexiLabel")
 		static_cast<QLabel*>(w)->clear();
+	else if(classname == "KexiDBFieldEdit")
+		static_cast<KexiDBFieldEdit*>(w)->clear();
 	else
 		return false;
 	return true;
@@ -747,8 +435,8 @@ KexiDBFactory::autoSaveProperties(const QCString &classname)
 	return lst;
 }
 
-bool 
-KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *, 
+bool
+KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 	const QCString& property)
 {
 	//general
@@ -756,7 +444,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 		return false;
 
 	if(classname == "KexiPushButton") {
-		return property!="isDragEnabled" 
+		return property!="isDragEnabled"
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="onClickAction" /*! @todo reenable */
 			&& property!="iconSet" /*! @todo reenable */
@@ -777,7 +465,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 			&& property!="undoRedoEnabled" //always true!
 			&& property!="dragAutoScroll" //always true!
 			&& property!="overwriteMode" //always false!
-			&& property!="resizePolicy" 
+			&& property!="resizePolicy"
 			&& property!="autoFormatting" //too complex
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="paper"

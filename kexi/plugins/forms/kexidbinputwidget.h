@@ -43,9 +43,9 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 	Q_ENUMS( WidgetType )
 
 	public:
-	
+
 		enum WidgetType {
-			Undefined,
+			Undefined = 100,
 			Date,
 			DateTime,
 			Decimal,
@@ -54,7 +54,7 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 			Text,
 			Time
 		};
-	
+
 		KexiDBInputWidget( WidgetType type, QWidget *parent = 0, const char *name = 0 );
 		KexiDBInputWidget( QWidget *parent = 0, const char *name = 0 );
 
@@ -96,7 +96,7 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 				reinit();
 			}
 		}
-		
+
 		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
@@ -109,7 +109,7 @@ class KexiDBInputWidget : public QWidget, public KexiFormDataItemInterface
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-	
+
 	protected slots:
 		void slotValueChanged( const QString& );
 		void slotValueChanged();

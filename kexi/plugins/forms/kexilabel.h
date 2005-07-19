@@ -27,7 +27,7 @@
 #include <kpixmap.h>
 
 #include "kexiformdataiteminterface.h"
-#include "kexidbfactory.h"
+#include "kexidbwidgets.h"
 #include <widget/utils/kexidisplayutils.h>
 
 class QPainter;

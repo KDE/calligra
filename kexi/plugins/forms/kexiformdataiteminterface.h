@@ -54,15 +54,15 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 @see dataSourceMimeType() */
 		inline void setDataSourceMimeType(const QCString &ds) { m_dataSourceMimeType = ds; }
 
-		/*! Convenience function: casts this item to a QWidget. 
+		/*! Convenience function: casts this item to a QWidget.
 		 Can return 0 if the item is not a QWidget-derived object. */
 		virtual QWidget* widget() { return dynamic_cast<QWidget*>(this); }
 
 		/*! Sets 'invalid' state, e.g. a text editor widget should display
-		 text \a displayText and become read only to prevent entering data, 
+		 text \a displayText and become read only to prevent entering data,
 		 because updating at the database backend is not available.
-		 \a displayText is usually set to something i18n'd like "#NAME?". 
-		 Note: that even widgets that usualy do not display texts (e.g. pixmaps) 
+		 \a displayText is usually set to something i18n'd like "#NAME?".
+		 Note: that even widgets that usualy do not display texts (e.g. pixmaps)
 		 should display \a displayText too.
 		*/
 		virtual void setInvalidState( const QString& displayText ) = 0;
@@ -71,11 +71,11 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		virtual KexiDB::Field* field() const { return m_field; }
 
 		/*! Used internally to set field information.
-		 Reimplement if you need to do additional actions, 
-		 e.g. set data validator based on field type. Don't forget about 
+		 Reimplement if you need to do additional actions,
+		 e.g. set data validator based on field type. Don't forget about
 		 calling superclass implementation. */
 		virtual void setField(KexiDB::Field* field) { m_field = field; }
-		
+
 		/*! Does nothing, because within forms, widgets are always visible. */
 		virtual void hideWidget() { }
 
@@ -89,6 +89,8 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		QString m_dataSource;
 		QCString m_dataSourceMimeType;
 		KexiDB::Field *m_field;
+
+	friend class KexiDBFieldEdit;
 };
 
 #endif
