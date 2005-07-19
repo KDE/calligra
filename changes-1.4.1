@@ -1,5 +1,43 @@
-Krita
+KOfficeCore
+* OASIS loading/saving fix for embedded objects
+* Fix crash when pressing Quit in the initial startup dialog (#107911)
+* Fix the handling of Automatically select filename extension when directory was selected
 
+Startup dialog
+* Fix typing a URL in startup dialog and clicking OK; the URL wasn't loaded (#109000)
+* Fix "Always start X with this template" behaving as if it was checked when it wasn't (#108843)
+
+KOffice Workspace
+* Has an icon, finally :)
+
+KWord
+* Fix crash when updating a TOC with a table inside it (#107961)
+* OASIS OpenDocument support:
+ - Fixed loading of headers and footers (#107424)
+ - Implemented saving of headers and footers
+ - Implemented saving and loading columns (count and spacing)
+ - Fix for text:h without outline-level
+ - Simplified the XML by removing spurious <span> tags due to misspelled words
+ - Save office:font-face-decls tag so that OOo loads the fonts
+ - Fixed loading of font sizes specified as a percentage
+ - Implemented loading of list indentation (space-before) (#109223)
+ - Improved OOo compatibility when saving page breaks
+ - Save first page number the right way so that OOo can load it
+
+KPresenter
+* Fix saving and loading in OASIS OpenDocument format for polyline, polygon and regular-polygon:
+ - use the viewBox in saving and loading of draw:points
+ - be more precise when saving draw:points
+ - use the attributes for regular polygons as defined in the standard
+ - save the object name in the tag as attribute
+ - load lines part of a group, as part of the group
+* Fix painting shadows of all 2D shapes
+* Fixed "copy-page has a little offset for embedded objects" (#105878)
+
+KSpread
+* Fix crash related to obscured cells in rendering code (#108659)
+
+Krita
 * Fix bug 108398 (Guides don't do anything useful & don't get painted often enough)
 * Move the layers palette to the control box docker, so there's one docker less on screen
 * Add shortcut keys for many more actions (Thanks to Alan)
@@ -12,4 +50,6 @@ Krita
 * Fix Bug 107938: Select all and cut/copy makes Krita hang
 * Improved .psd loading (subbug of: Bug 107122: Layers box behaves strangely)
 
-
+Kexi
+* Fix compilation on FreeBSD's version of gcc
+* Fix crash on startup on FreeBSD (#109025)
