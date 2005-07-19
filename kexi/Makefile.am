@@ -73,7 +73,7 @@ messages: rc.cpp
 	rm -f tips.cpp
 
 #uncomment this if you like doxygen docs for Kexi
-#include $(top_srcdir)/../admin/Doxyfile.am
+include $(top_srcdir)/admin/Doxyfile.am
 
 #obsolete:
 #kde_services_DATA = kexipart.desktop

@@ -164,7 +164,7 @@ KSharedPtr<EventCollection> getEventCollection() {}
              *       of the signal.
              * \param signal The SIGNAL to connect the scriptfunction
              * \     with.
-             * \param function The name of the scriptfunction to
+             * \param functionname The name of the scriptfunction to
              *       call if the signal got emitted.
              * \return If connection was done successfully true else
              *        false.
