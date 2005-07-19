@@ -205,11 +205,11 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
         return;
     QDomElement tabStops = styleStack.childNodeNS( ooNS::style, "tab-stops" );
     //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
-    for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
+    QDomElement tabStop;
+    forEachElement( tabStop, tabStops )
     {
-        QDomElement tabStop = it.toElement();
-        Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
-        QString type = tabStop.attributeNS( ooNS::style, "type", QString::null ); // left, right, center or char
+        Q_ASSERT( tabStop.localName() == "tab-stop" );
+        const QString type = tabStop.attributeNS( ooNS::style, "type", QString::null ); // left, right, center or char
 
         QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );
         int kOfficeType = 0;
