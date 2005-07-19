@@ -220,7 +220,7 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
 void DependencyList::addDependency (const KSpreadPoint &cell1,
     const KSpreadPoint &cell2)
 {
-  kdDebug(36001) << "Dep. manager: added a dependency" << endl;
+  //kdDebug(36001) << "Dep. manager: added a dependency" << endl;
   
   //cell2 can be in another sheet (inter-sheet dependency)
   KSpreadSheet *sh = cell2.sheet;
@@ -552,23 +552,23 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
     return RangeList();   //not a formula -> no dependencies
 
   QString expr = c->text();
-  kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<
-    expr << "\"" << endl;
 
   //TODO: when the new parser is in use, KSpreadCell will hold a Formula
   //instance, hence we'll be able to use that one directly
-  Tokens tokens = Formula::scan( expr );  
+  Tokens tokens = Formula::scan( expr );
 
   //return empty list if the tokens aren't valid
   if (!tokens.valid())
-    return RangeList();   
-  
+    return RangeList();
+
+  kdDebug(36001) << "Retrieving dependencies for cell with text \"" << expr << "\"" << endl;
+
   RangeList rl;
   for( unsigned i = 0; i < tokens.count(); i++ )
   {
     Token token = tokens[i];
     Token::Type tokenType = token.type();
-    
+
     //parse each cell/range and put it to our RangeList
     if (tokenType == Token::Cell)
     {
