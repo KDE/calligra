@@ -201,7 +201,7 @@ class KOPROPERTY_EXPORT Property
 			int type = Auto);
 
 		/*! Constructs property of \ref ValueFromList type. */
-		Property::Property(const QCString &name, const QStringList &keys, const QStringList &strings, 
+		Property(const QCString &name, const QStringList &keys, const QStringList &strings, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList);
