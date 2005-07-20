@@ -133,18 +133,12 @@ namespace Kross { namespace Api {
             /**
              * Add a new Child.
              *
-             * \param name The name of the new child. Each child
-             *        should have an unique name compared to other
-             *        children of this object to be direct
-             *        accessible by this name.
              * \param object The Object to add.
-             * \param replace Replace an already existing Object
-             *        with same name (default is false)?
              * \return true if the Object was added successfully
              *         else (e.g. if there exists already another
              *         childobject with same name) false.
              */
-            bool addChild(const QString& name, Object::Ptr object, bool replace = false);
+            bool addChild(Object::Ptr object);
 
             /**
              * Remove an existing child.
@@ -201,7 +195,14 @@ namespace Kross { namespace Api {
 //bool hasSignal(const QString&);
 //bool hasSlot(const QString&);
 
-bool connect(Object::Ptr sender, const QString& signal, const QString& slot);
+/*
+bool attachEvent(KSharedPtr<Event> event) {}
+bool detachEvent(KSharedPtr<Event> event) {}
+QMap<QString, QValueList< KSharedPtr<Event> > > getEvents() {}
+QValueList< KSharedPtr<Event> > getEvents(const QString&) {}
+QMap<QString, QValueList< KSharedPtr<Event> > > m_events;
+*/
+//bool connect(KSharedPtr<Event> sender, KSharedPtr<Event> receiver) {}
 //bool connect(const QString& signal, Object::Ptr receiver, const QString& slot);
 
 

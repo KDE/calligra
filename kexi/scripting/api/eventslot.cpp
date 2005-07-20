@@ -33,7 +33,7 @@
 using namespace Kross::Api;
 
 EventSlot::EventSlot(QObject* receiver, QCString slot)
-    : Event(slot) //QObject::normalizeSignalSlot(slot)
+    : Event<EventSlot>(slot) //QObject::normalizeSignalSlot(slot)
     , m_receiver(receiver)
     , m_slot(slot)
 {
@@ -48,9 +48,10 @@ const QString EventSlot::getClassName() const
     return "Kross::Api::EventSlot";
 }
 
-const QString EventSlot::getDescription() const
+Object::Ptr EventSlot::call(const QString& name, KSharedPtr<List> arguments)
 {
-    return "";
+    //TODO
+    return 0;
 }
 
 /*

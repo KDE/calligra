@@ -34,7 +34,7 @@
 using namespace Kross::Api;
 
 EventAction::EventAction(KAction* action)
-    : Event(action->name())
+    : Event<EventAction>(action->name())
     , m_action(action)
 {
     /*
@@ -55,8 +55,9 @@ const QString EventAction::getClassName() const
     return "Kross::Api::EventAction";
 }
 
-const QString EventAction::getDescription() const
+Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 {
-    return ""; //TODO
+    //TODO
+    return 0;
 }
 

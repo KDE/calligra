@@ -31,7 +31,7 @@
 using namespace Kross::Api;
 
 EventSignal::EventSignal(QObject* sender, QCString signal)
-    : Event(signal) //QObject::normalizeSignalSlot(signal)
+    : Event<EventSignal>(signal) //QObject::normalizeSignalSlot(signal)
     , m_sender(sender)
     , m_signal(signal)
 {
@@ -46,8 +46,8 @@ const QString EventSignal::getClassName() const
     return "Kross::Api::EventSignal";
 }
 
-const QString EventSignal::getDescription() const
+Object::Ptr EventSignal::call(const QString& name, KSharedPtr<List> arguments)
 {
-    return "";
+    //TODO
+    return 0;
 }
-

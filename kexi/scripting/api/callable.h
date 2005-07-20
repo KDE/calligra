@@ -1,5 +1,5 @@
 /***************************************************************************
- * function.h
+ * callable.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -22,13 +22,11 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
-#include <qmap.h>
-#include <qobject.h>
-#include <klocale.h>
-#include <kdebug.h>
+//#include <qmap.h>
+//#include <qobject.h>
+//#include <ksharedptr.h>
 
 #include "object.h"
-//#include "classbase.h"
 #include "list.h"
 //#include "exception.h"
 #include "argument.h"
@@ -38,25 +36,30 @@ namespace Kross { namespace Api {
     /**
      * Base class for a callable function. A function always
      * implements the \a Object::call() method to handle
-     * the call. For example the \a ClassFunction class
-     * is used to implement methods in classes.
+     * the call.
      */
-    class Function : public Object
+    class Callable : public Object
     {
         public:
-            Function(const QString& name, ArgumentList arglist, const QString& documentation);
-            virtual ~Function();
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<Callable> Ptr;
+
+            Callable(const QString& name, Object::Ptr parent, ArgumentList arglist, const QString& documentation);
+            virtual ~Callable();
 
             virtual const QString getClassName() const;
             virtual const QString getDescription() const;
 
-            virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments) = 0;
+            virtual Object::Ptr call(const QString& name, List::Ptr arguments) = 0;
 
         protected:
-            /// List of arguments this function supports.
+            /// List of arguments this callable object supports.
             ArgumentList m_arglist;
-            /// Some documentation to describe the function.
+            /// Some documentation to describe the callable object.
             QString m_documentation;
+
+            /// Check the passed arguments against the \a m_arglist and throws an exception if failed.
+            void checkArguments(KSharedPtr<List> arguments);
     };
 
 }}

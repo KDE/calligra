@@ -29,10 +29,8 @@ namespace Kross { namespace Api {
     /**
      * The Module template class.
      *
-     * Modules got managed with the \a Interpreter
-     * instance. That way the decission what
-     * modules are avaible could be done in the
-     * application using Kross.
+     * Modules got managed in the \a Manager singleton
+     * instance.
      */
     template<class T>
     class Module : public Class<T>

@@ -39,7 +39,7 @@ namespace Kross { namespace Api {
     /**
      *
      */
-    class EventAction : public Kross::Api::Event
+    class EventAction : public Event<EventAction>
     {
 
         public:
@@ -58,7 +58,8 @@ namespace Kross { namespace Api {
             virtual ~EventAction();
 
             virtual const QString getClassName() const;
-            virtual const QString getDescription() const;
+
+            virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
         private:
             //ScriptContainer* m_scriptcontainer;

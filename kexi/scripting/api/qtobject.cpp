@@ -20,7 +20,10 @@
 #include "qtobject.h"
 #include "object.h"
 #include "variant.h"
+#include "event.h"
+
 //#include "eventmanager.h"
+#include "../main/manager.h"
 #include "../main/scriptcontainer.h"
 
 #include <qobject.h>
@@ -38,7 +41,13 @@ QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QStr
     , m_scriptcontainer(scriptcontainer)
     , m_object(object)
 {
+
+//TODO: we need namespaces here!
+Manager::scriptManager()->addModule( this );
+
 /*TODO
+parent->addChild(this);
+
     m_eventmanager = new EventManager(scriptcontainer, this);
 */
     addFunction("propertyNames", &QtObject::propertyNames,

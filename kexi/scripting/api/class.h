@@ -30,108 +30,34 @@
 #include "object.h"
 #include "classbase.h"
 #include "list.h"
-#include "function.h"
+#include "event.h"
 #include "exception.h"
 #include "argument.h"
 
 namespace Kross { namespace Api {
 
     /**
-     * From \a Function inherited class that implements
-     * a methodfunction for a \a Class implementation.
-     */
-    template<class T>
-    class ClassFunction : Function
-    {
-        private:
-            /// The \a ClassBase this function belongs to.
-            ClassBase* m_class;
-            /// Definition of funtion-pointers.
-            typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
-            /// Pointer to the memberfunction.
-            FunctionPtr m_function;
-
-        public:
-            ClassFunction(ClassBase* clazz, const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
-                : Function(name, arglist, documentation)
-                , m_class(clazz)
-                , m_function(function) {}
-
-            virtual ~ClassFunction() {}
-
-            virtual const QString getClassName() const { return "Kross::Api::ClassFunction"; }
-
-            virtual Object::Ptr call(const QString& name, List::Ptr arguments)
-            {
-                kdDebug() << QString("ClassFunction::call() name='%1'").arg(getName()) << endl;
-
-                if(! name.isEmpty()) {
-                    // If the name isn't empty this function shouldn't be executed. But
-                    // does it really make sense to redirect the call to a child object
-                    // of this function? Just let's throw an exception as long as we
-                    // don't need this functionality :-)
-                    throw RuntimeException(i18n("ClassFunction::call() name='%1': Invalid functionname '%2'.").arg(getName()).arg(name));
-                    //return Object::call(name, arguments);
-                }
-
-                T *self = static_cast<T*>(m_class);
-                if(! self)
-                    throw RuntimeException(i18n("The classfunction '%1' points to an invalid classinstance.").arg(getName()));
-
-                QValueList<Object::Ptr>& arglist = arguments->getValue();
-                uint fmax = m_arglist.getMaxParams();
-                uint fmin = m_arglist.getMinParams();
-
-                // check the number of parameters passed.
-                if(arglist.size() < fmin)
-                    throw AttributeException(i18n("Too few parameters for method '%1'.").arg(getName()));
-                if(arglist.size() > fmax)
-                    throw AttributeException(i18n("Too many parameters for method '%1'.").arg(getName()));
-
-                // check type of passed parameters.
-                QValueList<Argument> farglist = m_arglist.getArguments();
-                for(uint i = 0; i < fmax; i++) {
-                    if(i >= arglist.count()) { // handle default arguments
-                        arglist.append( farglist[i].getObject() );
-                        continue;
-                    }
-                    Object::Ptr o = arguments->item(i);
-                    QString fcn = farglist[i].getClassName();
-                    QString ocn = o->getClassName();
-
-                    //FIXME
-                    //e.g. on 'Kross::Api::Variant::String' vs. 'Kross::Api::Variant'
-                    //We should add those ::String part even to the arguments in Kross::KexiDB::*
-
-                    if(fcn.find(ocn) != 0)
-                        throw AttributeException(i18n("Method '%1' expected parameter of type '%1', but got '%2'.").arg(name).arg(fcn).arg(ocn));
-                }
-
-                // Finally call the classfunction via our remembered method-pointer.
-                return (self->*m_function)(arguments);
-            }
-
-    };
-
-    /**
-     * From \a Object inherited template-class to represent
+     * From \a ClassBase inherited template-class to represent
      * class-structures. Classes implemetating this template
-     * are able to dynamicly define callable functions
+     * are able to dynamicly define \a Callable methodfunctions
      * accessible from within scripts.
      */
     template<class T>
     class Class : public ClassBase
     {
         private:
+            /// Definition of funtion-pointers.
             typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
-            QMap<QString, ClassFunction<T> * > m_functions;
+            /// List of memberfunctions.
+            QMap<QString, Event<T> * > m_functions;
+            /// List of memberfunction names.
             QStringList m_functionnames;
 
         protected:
 
             /**
-             * Add a callable function to the list of functions this
-             * Object supports.
+             * Add a \a Callable methodfunction to the list of functions
+             * this Object supports.
              *
              * \param name The functionname. Each function this object
              *        holds should have an unique name to be
@@ -144,9 +70,9 @@ namespace Kross { namespace Api {
             void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
             {
                 //if(m_functions.contains(name)) throw... needed?
-                //FIXME pass this instance as parent to ClassFunction ?!
-                ClassFunction<T> *f = new ClassFunction<T>(this, name, function, arglist, documentation);
-                m_functions.replace(name, f);
+                //FIXME pass this instance as parent to Event ?!
+                Event<T> *event = new Event<T>(name, this, function, arglist, documentation);
+                m_functions.replace(name, event);
                 m_functionnames.append(name);
             }
 
@@ -196,7 +122,7 @@ namespace Kross { namespace Api {
             {
                 kdDebug() << QString("Class::call(%1)").arg(name) << endl;
 
-                ClassFunction<T> *f = m_functions[name];
+                Event<T> *f = m_functions[name];
                 if(! f) // no function with that name, pass call to super class
                     return Object::call(name, arguments);
 

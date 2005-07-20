@@ -68,7 +68,7 @@ namespace Kross { namespace Api {
 
             /**
              * Return the Manager instance. Always use this
-             * function to work with Kross.
+             * function to access the Manager singleton.
              */
             static Manager* scriptManager() {
                 static Manager m_manager = Manager();

@@ -19,6 +19,7 @@
 
 #include "object.h"
 #include "list.h"
+#include "event.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -68,14 +69,15 @@ QMap<QString, Object::Ptr> Object::getChildren() const
     return m_children;
 }
 
-bool Object::addChild(const QString& name, Object::Ptr object, bool replace)
+bool Object::addChild(Object::Ptr object)
 {
+    QString name = object->getName();
 #ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
-    kdDebug() << QString("Kross::Api::Object::addChild() name='%1' object.name='%2' object.classname='%3' replace='%4'")
-        .arg(name).arg(object->getName()).arg(object->getClassName()).arg(replace) << endl;
+    kdDebug() << QString("Kross::Api::Object::addChild() object.name='%2' object.classname='%3'")
+        .arg(name).arg(object->getClassName()) << endl;
 #endif
 
-    if(! replace && m_children.contains(name))
+    if(m_children.contains(name))
         return false;
     object->m_parent = this;
     m_children.replace(name, object);
@@ -116,17 +118,5 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
 
     // If there exists no such object throw an exception.
     throw TypeException(i18n("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
-}
-
-bool Object::connect(Object::Ptr sender, const QString& signal, const QString& slot)
-{
-
-/*TODO
-- class Connection {
-    Object::Ptr sender, receiver;
-    QString signal, slot;
-  }
-- if sender.signal got called() just this->call(slot)
-*/
 }
 

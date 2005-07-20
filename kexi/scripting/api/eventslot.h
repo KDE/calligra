@@ -46,7 +46,7 @@ namespace Kross { namespace Api {
      * instance and a functionname is represented with
      * a EventSlot and handled by the \a EventManager.
      */
-    class EventSlot : public Event
+    class EventSlot : public Event<EventSlot>
     {
             //Q_OBJECT
             //friend class EventManager;
@@ -67,7 +67,8 @@ namespace Kross { namespace Api {
             virtual ~EventSlot();
 
             virtual const QString getClassName() const;
-            virtual const QString getDescription() const;
+
+            virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
             //virtual EventSlot* create(EventManager* eventmanager);
             //virtual QCString getSlot(const QCString& signal);

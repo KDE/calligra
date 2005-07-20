@@ -7,15 +7,14 @@ libkrossapi_la_SOURCES = \
     object.cpp \
     variant.cpp \
     list.cpp \
-    function.cpp \
+    callable.cpp \
     classbase.cpp \
     argument.cpp \
-    qtobject.cpp \
-    event.cpp \
     eventaction.cpp \
     eventsignal.cpp \
     eventslot.cpp \
     eventscript.cpp \
+    qtobject.cpp \
     script.cpp \
     interpreter.cpp
 

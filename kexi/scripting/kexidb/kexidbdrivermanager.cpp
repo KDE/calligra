@@ -38,7 +38,7 @@
 using namespace Kross::KexiDB;
 
 KexiDBDriverManager::KexiDBDriverManager()
-    : Kross::Api::Class<KexiDBDriverManager>("KexiDBDriverManager")
+    : Kross::Api::Class<KexiDBDriverManager>("DriverManager")
 {
     addFunction("driverNames", &KexiDBDriverManager::driverNames,
         Kross::Api::ArgumentList(),

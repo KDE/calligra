@@ -72,6 +72,8 @@ namespace Kross { namespace Api {
 Manager::Manager()
     : d( new ManagerPrivate() )
 {
+    //addModule( new MainModule() );
+
 /*TODO
     d->m_buildin_slot = 0;
     d->m_buildin_signal = 0;

@@ -27,7 +27,7 @@
 //#include "object.h"
 #include <ksharedptr.h>
 
-#include "../api/event.h"
+//#include "../api/event.h"
 #include "../api/eventaction.h"
 #include "../api/eventsignal.h"
 #include "../api/eventslot.h"
@@ -36,7 +36,7 @@ namespace Kross { namespace Api {
 
     // Forward declarations.
     //class Object;
-    //class List;
+    class Callable;
     class EventCollectionPrivate;
 
     /**
@@ -72,7 +72,7 @@ namespace Kross { namespace Api {
             typedef KSharedPtr<EventCollection> Ptr;
 
             /// List of events.
-            typedef QValueList<Event::Ptr> EventList;
+            typedef QValueList<Callable::Ptr> EventList;
 
             /**
              * Destructor.

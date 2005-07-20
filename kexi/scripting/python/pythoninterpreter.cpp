@@ -47,6 +47,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     : Kross::Api::Interpreter(manager, interpretername)
     , m_globalthreadstate(0)
 {
+    // Options the python interpreter spends.
     m_options.replace(
         "restricted",
         new Option(i18n("Restricted"), i18n("Enable RestrictedPython module."), QVariant((bool)false))

@@ -27,8 +27,7 @@ using namespace Kross::KexiDB;
 KexiDBModule::KexiDBModule()
     : Kross::Api::Module<KexiDBModule>("KexiDB")
 {
-    KexiDBDriverManager* drivermanager = new KexiDBDriverManager();
-    addChild("DriverManager", drivermanager);
+    addChild( new KexiDBDriverManager() );
 }
 
 KexiDBModule::~KexiDBModule()

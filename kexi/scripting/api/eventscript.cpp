@@ -34,7 +34,7 @@
 using namespace Kross::Api;
 
 EventScript::EventScript(const QString& name)
-    : Event(name)
+    : Event<EventScript>(name)
 {
 }
 
@@ -47,8 +47,9 @@ const QString EventScript::getClassName() const
     return "Kross::Api::EventScript";
 }
 
-const QString EventScript::getDescription() const
+Object::Ptr EventScript::call(const QString& name, KSharedPtr<List> arguments)
 {
-    return "";
+    //TODO
+    return 0;
 }
 

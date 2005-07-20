@@ -31,7 +31,7 @@ namespace Kross { namespace Api {
     class Object;
     class Variant;
     class ScriptContainer;
-    class EventManager;
+    //class EventManager;
     class ScriptContrainer;
 
     /**

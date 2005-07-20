@@ -25,6 +25,7 @@
 //#include "../api/interpreter.h"
 //#include "../api/script.h"
 //#include "../api/eventmanager.h"
+#include "../api/callable.h"
 
 using namespace Kross::Api;
 

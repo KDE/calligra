@@ -46,7 +46,7 @@ namespace Kross { namespace Api {
      * instance and a functionname is represented with
      * a EventSignal and handled by \a EventManager.
      */
-    class EventSignal : public Event
+    class EventSignal : public Event<EventSignal>
     {
             //Q_OBJECT
             //friend class EventManager;
@@ -67,7 +67,9 @@ namespace Kross { namespace Api {
             virtual ~EventSignal();
 
             virtual const QString getClassName() const;
-            virtual const QString getDescription() const;
+
+            virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
+
             //virtual QCString getSignal(const QCString& signal);
             //virtual bool connect(EventManager* eventmanager, const QCString& signal, QObject* receiverobj, const QCString& slot);
             //virtual bool disconnect();

@@ -233,14 +233,16 @@ def testobjectCallbackWithParams(argument):
     print "testobjectCallbackWithParams() argument = %s" % str(argument)
     return "this is the __main__.testobjectCallbackWithParams() returnvalue!"
 
-print "########## BEGIN ##########"
+print "########## BEGIN TEST: KexiDB ##########"
 testKexiDB()
+print "########## END TEST: KexiDB ##########"
 
 #testfunc("from __main__")
 #maintestfunc()
 #print __name__
 #print mymodule.exttest()
 
+print "########## BEGIN TEST: QObject ##########"
 try:
     testobject = get("TestObject")
     print "testobject = %s %s" % (str(testobject),dir(testobject))
@@ -251,7 +253,7 @@ try:
     #testobject.signal("testSignal()")
     #testobject.slot("testSlot()")
     #testobject.disconnect("testSignal()")
-except:
-    print "EXCEPTION on TestObject"
+except Exception, e:
+    print "EXCEPTION on TestObject: %s" % e
+print "########## END TEST: QObject ##########"
 
-print "########## END ##########"

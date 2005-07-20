@@ -20,75 +20,63 @@
 #ifndef KROSS_API_EVENT_H
 #define KROSS_API_EVENT_H
 
-#include <qstring.h>
-#include <qobject.h>
-//#include <kaction.h>
-#include <ksharedptr.h>
+#include "object.h"
+#include "argument.h"
+#include "callable.h"
 
-//#include "class.h"
-#include "function.h"
-#include "qtobject.h"
+#include <qstring.h>
+#include <kdebug.h>
 
 namespace Kross { namespace Api {
 
-    // Forward declarations.
-    //class ScriptContainer;
-
     /**
-     * Events are used for dynamic connections between
-     * \a Object instances and introduce an abstract Qt like
-     * signals and slot concept to chain events together.
+     * Template class for all kinds of callable events. An
+     * event is the abstract base for callable objects like
+     * methodfunctions in \a Class instances or \a EventSlot
+     * and \a EventSignal to access Qt signals and slots.
      */
-    class Event : public Kross::Api::Function
+    template<class T>
+    class Event : public Callable
     {
-        public:
-
-            /// Shared pointer to implement reference-counting.
-            typedef KSharedPtr<Event> Ptr;
-
-            /**
-             * Constructor.
-             *
-             * \param name The unique name this \a Event has to
-             *       easy identify it.
-             */
-            Event(const QString& name, ArgumentList arglist = ArgumentList(), const QString& documentation = QString::null);
-
-            /**
-             * Destructor.
-             */
-            virtual ~Event();
-
-/*
-            //virtual void connect(Event::Ptr) {}
-            //virtual void disconnect(Event::Ptr) {}
-            //bool attach(Event::Ptr event);
-            //bool detach(Event::Ptr event);
-
-            Object::Ptr getParent() const;
-            bool hasChild(const QString& name) const;
-            Object::Ptr getChild(const QString& name) const;
-            QMap<QString, Object::Ptr> getChildren() const;
-            bool addChild(const QString& name, Object::Ptr object, bool replace = false);
-            void removeChild(const QString& name);
-            void removeAllChildren();
-            //virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments) {}
-
-        protected:
-            //void called(Event::Ptr event) {}
-            //void executed(Event* sender, int execstate, Kross::Api::Object*);
-            //void call(Event::Ptr event) {}
-            //void call(Event* sender, const QString& name, Kross::Api::List*) {}
         private:
-            // QProperty's
-            //Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr hasProperty(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr);
-*/
-    };
 
-    //class EventCondition : public Event {};
+            /// Definition of funtion-pointers.
+            typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
+            /// Pointer to the memberfunction.
+            FunctionPtr m_function;
+
+        public:
+            Event(const QString& name) //FIXME
+                : Callable(name, 0, ArgumentList(), "TODO: Documentation"), m_function(0) {}
+            Event(const QString& name, Object::Ptr parent, FunctionPtr function, ArgumentList arglist, const QString& documentation)
+                : Callable(name, parent, arglist, documentation), m_function(function) {}
+            virtual ~Event() {}
+
+            virtual Object::Ptr call(const QString& name, List::Ptr arguments)
+            {
+                kdDebug() << QString("Event::call() name='%1'").arg(getName()) << endl;
+
+                if(! name.isEmpty()) {
+                    // If the name isn't empty this function shouldn't be executed. But
+                    // does it really make sense to redirect the call to a child object
+                    // of this function? Just let's throw an exception as long as we
+                    // don't need this functionality :-)
+                    throw RuntimeException(QString("Event::call() name='%1': Invalid functionname '%2'.").arg(getName()).arg(name));
+                }
+
+                // Check the arguments. Throws an exception if failed.
+                checkArguments(arguments);
+
+                //T *self = static_cast<T*>( getParent() ); //FIXME don't refcount parent's
+                T *self = static_cast<T*>( getParent().data() );
+                if(! self)
+                    throw RuntimeException(QString("The event '%1' points to an invalid instance.").arg(getName()));
+
+                // Call the classfunction via our remembered method-pointer.
+                return (self->*m_function)(arguments);
+            }
+
+    };
 
 }}
 

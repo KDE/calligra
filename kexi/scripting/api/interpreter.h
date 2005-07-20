@@ -82,22 +82,20 @@ namespace Kross { namespace Api {
             };
 
             /**
-             * Return the value of the \a Restriction instance
-             * defined with name. If there doesn't exists
-             * a Restriction which such a name, the defaultvalue
-             * is returned.
+             * Return the value of the \a Interpreter::Option instance
+             * defined with name. If there doesn't exists an option
+             * with such a name, the defaultvalue is returned.
              */
             const QVariant& getOption(const QString name, const QVariant& defaultvalue = QVariant());
 
             /**
-             * Return a \a RestrictionMap of \a Restriction avaible
-             * instances.
+             * Return a \a Interpreter::Option::Map of avaible
+             * \a Interpreter::Option  instances.
              */
             Option::Map getOptions();
 
             /**
-             * Set if the scripting code should be executed in a
-             * secure environment.
+             * Set the \a Interpreter::Option value.
              */
             bool setOption(const QString name, const QVariant& value);
 
