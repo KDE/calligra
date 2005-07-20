@@ -33,7 +33,7 @@ using namespace Kross::Python;
 
 namespace Kross { namespace Python {
 
-    //! @internal
+    /// @internal
     class PythonScriptPrivate
     {
         public:

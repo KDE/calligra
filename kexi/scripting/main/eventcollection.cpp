@@ -30,6 +30,7 @@ using namespace Kross::Api;
 
 namespace Kross { namespace Api {
 
+    /// @internal
     class EventCollectionPrivate
     {
         public:
