@@ -31,7 +31,7 @@
    <Action name="pointer"/>
    <!-- Action name="drag_connection"/ -->
    <Separator/>
-   <Action name="library_widget_KexiDBInputWidget"/>
+   <Action name="library_widget_KexiDBFieldEdit"/>
    <Action name="library_widget_KexiLabel"/>
    <Action name="library_widget_KexiPictureLabel"/>
    <Action name="library_widget_KexiDBLineEdit"/>
@@ -40,7 +40,7 @@
    <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_KComboBox"/>
    <Action name="library_widget_QRadioButton"/>
-   <Action name="library_widget_QCheckBox"/>
+   <Action name="library_widget_KexiDBCheckBox"/>
    <Action name="library_widget_Spacer"/>
    <Action name="library_widget_Line"/>
    <Separator/>
