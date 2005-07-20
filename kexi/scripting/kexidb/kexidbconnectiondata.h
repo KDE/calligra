@@ -65,8 +65,8 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::ConnectionData* m_data;
 
-            Kross::Api::Object::Ptr connName(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr setConnName(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
 
             Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
