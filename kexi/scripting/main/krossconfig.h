@@ -62,9 +62,23 @@ namespace Kross {
      */
     namespace Api {
 
-        // Enable kdDebug()-debugging for Kross::Api::Object
-        //#define KROSS_API_OBJECT_DEBUG
+        // Enable kdDebug()-debugging for Kross::Api::Object constructor.
+        //#define KROSS_API_OBJECT_CTOR_DEBUG
 
+        // Enable kdDebug()-debugging for Kross::Api::Object destructor.
+        //#define KROSS_API_OBJECT_DTOR_DEBUG
+
+        // Enable kdDebug()-debugging for Kross::Api::Object addChild() function..
+        #define KROSS_API_OBJECT_ADDCHILD_DEBUG
+
+        // Enable kdDebug()-debugging for Kross::Api::Object removeChild() / removeAllChildren() functions.
+        #define KROSS_API_OBJECT_REMCHILD_DEBUG
+
+        // Enable kdDebug()-debugging for Kross::Api::Object call() function.
+        #define KROSS_API_OBJECT_CALL_DEBUG
+
+        // Enable kdDebug()-debugging for Kross::Api::Object called() function.
+        #define KROSS_API_OBJECT_CALLED_DEBUG
     }
 
     /**
@@ -109,14 +123,20 @@ namespace Kross {
         //#define KROSS_PYTHON_MODULE_DEBUG
 
         // Enable kdDebug()-debugging for Kross::Python::PythonExtension
-        //#define KROSS_PYTHON_EXTENSION_DEBUG
+        //#define KROSS_PYTHON_EXTENSION_CTOR_DEBUG
+        //#define KROSS_PYTHON_EXTENSION_DTOR_DEBUG
+        //#define KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+        //#define KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
+        #define KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
+        #define KROSS_PYTHON_EXTENSION_GETATTRMETHOD_DEBUG
+        #define KROSS_PYTHON_EXTENSION_CALL_DEBUG
 
         // The name of the global krosspyhon library. Loaded dynamicly
         // during runtime. Comment out to disable the usage or for
         // developing refer to your not jet installed lib like I did at
         // the following line.
-        //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
-        #define KROSS_PYTHON_LIBRARY "krosspython"
+        #define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
+        //#define KROSS_PYTHON_LIBRARY "krosspython"
 
     }
 

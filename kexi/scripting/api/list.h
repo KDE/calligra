@@ -41,7 +41,7 @@ namespace Kross { namespace Api {
             typedef KSharedPtr<List> Ptr;
 
             /// Constructor.
-            List(QValueList<Object::Ptr> value, const QString& name = "list");
+            explicit List(QValueList<Object::Ptr> value, const QString& name = "list");
 
             /// Destructor.
             virtual ~List();
@@ -69,6 +69,14 @@ namespace Kross { namespace Api {
              * \return The number of items.
              */
             uint count();
+
+            /**
+             * Append an \a Kross::Api::Object to the list.
+             *
+             * \param object The \a Kross::Api::Object instance to
+             *       append to this list.
+             */
+            void append(Object::Ptr object);
     };
 
 }}

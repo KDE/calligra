@@ -30,10 +30,88 @@
 #include "object.h"
 #include "classbase.h"
 #include "list.h"
+#include "function.h"
 #include "exception.h"
 #include "argument.h"
 
 namespace Kross { namespace Api {
+
+    /**
+     * From \a Function inherited class that implements
+     * a methodfunction for a \a Class implementation.
+     */
+    template<class T>
+    class ClassFunction : Function
+    {
+        private:
+            /// The \a ClassBase this function belongs to.
+            ClassBase* m_class;
+            /// Definition of funtion-pointers.
+            typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
+            /// Pointer to the memberfunction.
+            FunctionPtr m_function;
+
+        public:
+            ClassFunction(ClassBase* clazz, const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
+                : Function(name, arglist, documentation)
+                , m_class(clazz)
+                , m_function(function) {}
+
+            virtual ~ClassFunction() {}
+
+            virtual const QString getClassName() const { return "Kross::Api::ClassFunction"; }
+
+            virtual Object::Ptr call(const QString& name, List::Ptr arguments)
+            {
+                kdDebug() << QString("ClassFunction::call() name='%1'").arg(getName()) << endl;
+
+                if(! name.isEmpty()) {
+                    // If the name isn't empty this function shouldn't be executed. But
+                    // does it really make sense to redirect the call to a child object
+                    // of this function? Just let's throw an exception as long as we
+                    // don't need this functionality :-)
+                    throw RuntimeException(i18n("ClassFunction::call() name='%1': Invalid functionname '%2'.").arg(getName()).arg(name));
+                    //return Object::call(name, arguments);
+                }
+
+                T *self = static_cast<T*>(m_class);
+                if(! self)
+                    throw RuntimeException(i18n("The classfunction '%1' points to an invalid classinstance.").arg(getName()));
+
+                QValueList<Object::Ptr>& arglist = arguments->getValue();
+                uint fmax = m_arglist.getMaxParams();
+                uint fmin = m_arglist.getMinParams();
+
+                // check the number of parameters passed.
+                if(arglist.size() < fmin)
+                    throw AttributeException(i18n("Too few parameters for method '%1'.").arg(getName()));
+                if(arglist.size() > fmax)
+                    throw AttributeException(i18n("Too many parameters for method '%1'.").arg(getName()));
+
+                // check type of passed parameters.
+                QValueList<Argument> farglist = m_arglist.getArguments();
+                for(uint i = 0; i < fmax; i++) {
+                    if(i >= arglist.count()) { // handle default arguments
+                        arglist.append( farglist[i].getObject() );
+                        continue;
+                    }
+                    Object::Ptr o = arguments->item(i);
+                    QString fcn = farglist[i].getClassName();
+                    QString ocn = o->getClassName();
+
+                    //FIXME
+                    //e.g. on 'Kross::Api::Variant::String' vs. 'Kross::Api::Variant'
+                    //We should add those ::String part even to the arguments in Kross::KexiDB::*
+
+                    if(fcn.find(ocn) != 0)
+                        throw AttributeException(i18n("Method '%1' expected parameter of type '%1', but got '%2'.").arg(name).arg(fcn).arg(ocn));
+                }
+
+                // Finally call the classfunction via our remembered method-pointer.
+                return (self->*m_function)(arguments);
+            }
+
+    };
 
     /**
      * From \a Object inherited template-class to represent
@@ -45,27 +123,8 @@ namespace Kross { namespace Api {
     class Class : public ClassBase
     {
         private:
-
-            /// Definition of funtion-pointers.
             typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
-
-            /**
-             * The Function class is an internal container
-             * for callable functions.
-             */
-            class Function
-            {
-                public:
-                    /// Pointer to the memberfunction.
-                    FunctionPtr function;
-                    /// List of arguments this function supports.
-                    ArgumentList arglist;
-                    /// Some documentation to describe the function.
-                    QString documentation;
-            };
-
-            /// List of callable functions this instance spends.
-            QMap<QString, Function*> m_functions;
+            QMap<QString, ClassFunction<T> * > m_functions;
             QStringList m_functionnames;
 
         protected:
@@ -75,7 +134,7 @@ namespace Kross { namespace Api {
              * Object supports.
              *
              * \param name The functionname. Each function this object
-             *        holds shgould have an unique name to be
+             *        holds should have an unique name to be
              *        still accessable.
              * \param function A pointer to the methodfunction that
              *        should handle calls.
@@ -84,10 +143,9 @@ namespace Kross { namespace Api {
              */
             void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
             {
-                Function* f = new Function();
-                f->function = function;
-                f->arglist = arglist;
-                f->documentation = documentation;
+                //if(m_functions.contains(name)) throw... needed?
+                //FIXME pass this instance as parent to ClassFunction ?!
+                ClassFunction<T> *f = new ClassFunction<T>(this, name, function, arglist, documentation);
                 m_functions.replace(name, f);
                 m_functionnames.append(name);
             }
@@ -111,9 +169,11 @@ namespace Kross { namespace Api {
              */
             virtual ~Class()
             {
+                /*FIXME maybe we should't trust the reference counter here?
                 typename QMap<QString, Class<T>::Function* >::Iterator it = m_functions.begin();
                 for(; it != m_functions.end(); ++it)
                     delete it.data();
+                */
             }
 
             /**
@@ -134,41 +194,14 @@ namespace Kross { namespace Api {
              */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
-                Function* f = m_functions[name];
+                kdDebug() << QString("Class::call(%1)").arg(name) << endl;
+
+                ClassFunction<T> *f = m_functions[name];
                 if(! f) // no function with that name, pass call to super class
                     return Object::call(name, arguments);
-                T *self = static_cast<T*>(this);
 
-                QValueList<Object::Ptr>& arglist = arguments->getValue();
-                uint fmax = f->arglist.getMaxParams();
-                uint fmin = f->arglist.getMinParams();
-
-                // check the number of parameters passed.
-                if(arglist.size() < fmin)
-                    throw AttributeException(i18n("Too few parameters for method '%1'.").arg(name));
-                if(arglist.size() > fmax)
-                    throw AttributeException(i18n("Too many parameters for method '%1'.").arg(name));
-
-                // check type of passed parameters.
-                QValueList<Argument> farglist = f->arglist.getArguments();
-                for(uint i = 0; i < fmax; i++) {
-                    if(i >= arglist.count()) { // handle default arguments
-                        arglist.append( farglist[i].getObject() );
-                        continue;
-                    }
-                    Object::Ptr o = arguments->item(i);
-                    QString fcn = farglist[i].getClassName();
-                    QString ocn = o->getClassName();
-
-                    /*TODO
-                    e.g. on 'Kross::Api::Variant::String' vs. 'Kross::Api::Variant'
-                    We should add those ::String part even to the arguments in Kross::KexiDB::*
-                    */
-                    if(fcn.find(ocn) != 0)
-                        throw AttributeException(i18n("Method '%1' expected parameter of type '%1', but got '%2'.").arg(name).arg(fcn).arg(ocn));
-                }
-                FunctionPtr function = f->function;
-                return (self->*function)(arguments);
+                QString s = ""; //FIXME implement namespace/url resolution?!
+                return f->call(s, arguments);
             }
 
             /**

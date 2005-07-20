@@ -31,7 +31,7 @@ using namespace Kross::Api;
 
 namespace Kross { namespace Api {
 
-    //! @internal
+    /// @internal
     class ScriptContainerPrivate
     {
         public:

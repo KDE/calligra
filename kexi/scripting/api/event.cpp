@@ -32,8 +32,8 @@
 
 using namespace Kross::Api;
 
-Event::Event(const QString& name)
-    : Kross::Api::Class<Event>(name)
+Event::Event(const QString& name, ArgumentList arglist, const QString& documentation)
+    : Kross::Api::Function(name, arglist, documentation)
 {
     if( name.isEmpty() )
         throw AttributeException( i18n("The event has no valid name.") );

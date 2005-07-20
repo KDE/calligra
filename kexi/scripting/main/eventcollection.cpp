@@ -36,7 +36,7 @@ namespace Kross { namespace Api {
             /// The name the collection has.
             QString m_name;
             /// List of \a Event instances this collection has.
-            QValueList<Event::Ptr> m_events;
+            EventCollection::EventList m_events;
     };
 
 }}
@@ -58,23 +58,34 @@ const QString& EventCollection::getName()
     return d->m_name;
 }
 
+EventCollection::EventList EventCollection::getEvents()
+{
+    return d->m_events;
+}
+
 EventAction::Ptr EventCollection::addKAction(KAction* action)
 {
+/*TODO
     EventAction* event = new EventAction(action);
     d->m_events.append(event);
     return event;
+*/
 }
 
 EventSignal::Ptr EventCollection::addSignal(QObject* sender, QCString signal)
 {
+/*TODO
     EventSignal* event = new EventSignal(sender, signal);
     d->m_events.append(event);
     return event;
+*/
 }
 
 EventSlot::Ptr EventCollection::addSlot(QObject* receiver, QCString slot)
 {
+/*TODO
     EventSlot* event = new EventSlot(receiver, slot);
     d->m_events.append(event);
     return event;
+*/
 }

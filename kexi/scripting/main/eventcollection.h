@@ -71,6 +71,9 @@ namespace Kross { namespace Api {
             /// Shared pointer to implement reference-counting.
             typedef KSharedPtr<EventCollection> Ptr;
 
+            /// List of events.
+            typedef QValueList<Event::Ptr> EventList;
+
             /**
              * Destructor.
              */
@@ -85,7 +88,7 @@ namespace Kross { namespace Api {
              * Return the \a Event associtated with the name or
              * NULL if there is no such event in this collection.
              */
-            //Event::Ptr getEvent(const QString& name);
+            EventList getEvents();
 
             /**
              * Add a \a QObject to the eventcollection. All

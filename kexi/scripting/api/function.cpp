@@ -1,5 +1,5 @@
 /***************************************************************************
- * list.cpp
+ * function.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,52 +17,28 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "list.h"
-#include "exception.h"
-
-#include <klocale.h>
-#include <kdebug.h>
+#include "function.h"
 
 using namespace Kross::Api;
 
-List::List(QValueList<Object::Ptr> value, const QString& name)
-    : Value< List, QValueList<Object::Ptr> >(value, name)
+Function::Function(const QString& name, ArgumentList arglist, const QString& documentation)
+    : Object(name)
+    , m_arglist(arglist)
+    , m_documentation(documentation)
 {
 }
 
-List::~List()
+Function::~Function()
 {
 }
 
-const QString List::getClassName() const
+const QString Function::getClassName() const
 {
-    return "Kross::Api::List";
+    return "Kross::Api::Function";
 }
 
-const QString List::getDescription() const
+const QString Function::getDescription() const
 {
-    return i18n("Object to handle QValueList collections.");
+    return m_documentation;
 }
 
-Object::Ptr List::item(uint idx)
-{
-    QValueList<Object::Ptr> list = getValue();
-    if(idx >= list.count()) {
-        kdDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
-        throw TypeException(i18n("List-index %1 out of bounds.").arg(idx));
-    }
-    Object::Ptr obj = list[idx];
-    return obj;
-}
-
-uint List::count()
-{
-    QValueList<Object::Ptr> list = getValue();
-    return list.count();
-}
-
-void List::append(Object::Ptr object)
-{
-    QValueList<Object::Ptr> list = getValue();
-    list.append(object);
-}

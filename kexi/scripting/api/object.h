@@ -161,9 +161,11 @@ namespace Kross { namespace Api {
             void removeAllChildren();
 
             /**
-             * Pass a call to the object. Objects like \a Class
-             * are able to handle call's by just implementating
-             * this function.
+             * Pass a call to the object and evaluated it resursive
+             * down the object-hierachy. Objects like \a Class are able
+             * to handle call's by just implementating this function.
+             * If the call is done the \a called() method will be
+             * executed recursive from bottom up the call hierachy.
              *
              * \throws TypeException if the object or the name
              *         is not callable.
@@ -182,7 +184,26 @@ namespace Kross { namespace Api {
              *
              * \return List of supported calls.
              */
+//TODO: replace function with getChildren()
+//We need methods like
+//- QStringList() getSignalsNames
+//- QStringList() getSlotsNames
+//=> to connect(signal,slot) ...
+//=> define addChild(EnumObjectType, ...)
+//   => instanceof {EventSlot|EventSignal|...}
+
             virtual QStringList getCalls() { return QStringList(); }
+
+//TODO
+//bool attach(Function::Ptr) {}
+//bool attach(Signal::Ptr) {}
+
+//bool hasSignal(const QString&);
+//bool hasSlot(const QString&);
+
+bool connect(Object::Ptr sender, const QString& signal, const QString& slot);
+//bool connect(const QString& signal, Object::Ptr receiver, const QString& slot);
+
 
             /**
              * Try to convert the \a Object instance to the
@@ -208,6 +229,12 @@ namespace Kross { namespace Api {
             Object::Ptr m_parent;
             /// A list of childobjects.
             QMap<QString, Object::Ptr> m_children;
+
+
+
+
+
+//QStringList m_callable, m_classes, m_properties, ...; => QMap<QString, QStringList> m_types;
     };
 
 }}

@@ -30,14 +30,14 @@ Object::Object(const QString& name, Object::Ptr parent)
     , m_name(name)
     , m_parent(parent)
 {
-#ifdef KROSS_API_OBJECT_DEBUG
+#ifdef KROSS_API_OBJECT_CTOR_DEBUG
     kdDebug() << QString("Kross::Api::Object::Constructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) << endl;
 #endif
 }
 
 Object::~Object()
 {
-#ifdef KROSS_API_OBJECT_DEBUG
+#ifdef KROSS_API_OBJECT_DTOR_DEBUG
     kdDebug() << QString("Kross::Api::Object::Destructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) << endl;
 #endif
     //removeAllChildren(); // not needed cause we use KShared to handle ref-couting and freeing.
@@ -70,13 +70,13 @@ QMap<QString, Object::Ptr> Object::getChildren() const
 
 bool Object::addChild(const QString& name, Object::Ptr object, bool replace)
 {
-#ifdef KROSS_API_OBJECT_DEBUG
+#ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
     kdDebug() << QString("Kross::Api::Object::addChild() name='%1' object.name='%2' object.classname='%3' replace='%4'")
         .arg(name).arg(object->getName()).arg(object->getClassName()).arg(replace) << endl;
 #endif
 
-    //if(! method) return false;
-    if(! replace && m_children.contains(name)) return false;
+    if(! replace && m_children.contains(name))
+        return false;
     object->m_parent = this;
     m_children.replace(name, object);
     return true;
@@ -84,7 +84,7 @@ bool Object::addChild(const QString& name, Object::Ptr object, bool replace)
 
 void Object::removeChild(const QString& name)
 {
-#ifdef KROSS_API_OBJECT_DEBUG
+#ifdef KROSS_API_OBJECT_REMCHILD_DEBUG
     kdDebug() << QString("Kross::Api::Object::removeChild() name='%1'").arg(name) << endl;
 #endif
     m_children.remove(name);
@@ -92,16 +92,41 @@ void Object::removeChild(const QString& name)
 
 void Object::removeAllChildren()
 {
-#ifdef KROSS_API_OBJECT_DEBUG
+#ifdef KROSS_API_OBJECT_REMCHILD_DEBUG
     kdDebug() << "Kross::Api::Object::removeAllChildren()" << endl;
 #endif
     m_children.clear();
 }
 
-Object::Ptr Object::call(const QString& name, List::Ptr)
+Object::Ptr Object::call(const QString& name, List::Ptr arguments)
 {
-    if(name.isEmpty()) // return a self-reference if no functionname is defined
+#ifdef KROSS_API_OBJECT_CALL_DEBUG
+    kdDebug() << QString("Kross::Api::Object::call(%1) name=%2 class=%3").arg(name).arg(getName()).arg(getClassName()) << endl;
+#endif
+
+    if(name.isEmpty()) // return a self-reference if no functionname is defined.
         return this;
+
+    // if name is defined try to get the matching child and pass the call to it.
+    Object::Ptr object = getChild(name);
+    if(object) {
+        //FIXME namespace, e.g. "mychild1.mychild2.myfunction"
+        return object->call(name, arguments);
+    }
+
+    // If there exists no such object throw an exception.
     throw TypeException(i18n("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
+}
+
+bool Object::connect(Object::Ptr sender, const QString& signal, const QString& slot)
+{
+
+/*TODO
+- class Connection {
+    Object::Ptr sender, receiver;
+    QString signal, slot;
+  }
+- if sender.signal got called() just this->call(slot)
+*/
 }
 

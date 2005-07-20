@@ -43,39 +43,39 @@ QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QStr
 */
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
-        ""
+        "Return a list of property names."
     );
     addFunction("hasProperty", &QtObject::hasProperty,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Return true if the property exists else false."
     );
     addFunction("getProperty", &QtObject::getProperty,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Return the property."
     );
     addFunction("setProperty", &QtObject::setProperty,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
             << Kross::Api::Argument("Kross::Api::Variant"),
-        ""
+        "Set the property."
     );
 
     addFunction("slotNames", &QtObject::slotNames,
         Kross::Api::ArgumentList(),
-        ""
+        "Return a list of slot names."
     );
     addFunction("hasSlot", &QtObject::hasSlot,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Return true if the slot exists else false."
     );
 
     addFunction("signalNames", &QtObject::signalNames,
         Kross::Api::ArgumentList(),
-        ""
+        "Return a list of signal names."
     );
     addFunction("hasSignal", &QtObject::hasSignal,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Return true if the signal exists else false."
     );
 
     addFunction("connect", &QtObject::connectSignal,
@@ -92,12 +92,12 @@ QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QStr
 
     addFunction("signal", &QtObject::emitSignal,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Emit a signal."
     );
 
     addFunction("slot", &QtObject::callSlot,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Call a slot."
     );
 }
 
@@ -188,6 +188,7 @@ Kross::Api::Object::Ptr QtObject::hasSignal(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
 {
+/*TODO
     QString signalname = Kross::Api::Variant::toString(args->item(0));
     const char* signalnamec = signalname.latin1();
     QString signalsignatur = QString("2%1").arg(signalname);
@@ -200,6 +201,7 @@ Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
     QString functionname = Kross::Api::Variant::toString(args->item(1));
 
     //m_eventmanager->connect(m_object, signalsignaturc, functionname);
+*/
     return 0;
 }
 

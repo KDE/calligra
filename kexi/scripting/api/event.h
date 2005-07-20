@@ -26,25 +26,20 @@
 #include <ksharedptr.h>
 
 //#include "class.h"
+#include "function.h"
 #include "qtobject.h"
 
 namespace Kross { namespace Api {
 
     // Forward declarations.
-    class ScriptContainer;
-
-/*
-- ScriptContainer has list of class ScriptEvent
-- so, fill up ScriptContainer before xml -> EventContainer ?
-  - could also be done on runtime <- better!
-*/
+    //class ScriptContainer;
 
     /**
      * Events are used for dynamic connections between
      * \a Object instances and introduce an abstract Qt like
      * signals and slot concept to chain events together.
      */
-    class Event : public Kross::Api::Class<Event>
+    class Event : public Kross::Api::Function
     {
         public:
 
@@ -57,16 +52,19 @@ namespace Kross { namespace Api {
              * \param name The unique name this \a Event has to
              *       easy identify it.
              */
-            explicit Event(const QString& name);
+            Event(const QString& name, ArgumentList arglist = ArgumentList(), const QString& documentation = QString::null);
 
             /**
              * Destructor.
              */
             virtual ~Event();
 
+/*
+            //virtual void connect(Event::Ptr) {}
+            //virtual void disconnect(Event::Ptr) {}
             //bool attach(Event::Ptr event);
             //bool detach(Event::Ptr event);
-            /*
+
             Object::Ptr getParent() const;
             bool hasChild(const QString& name) const;
             Object::Ptr getChild(const QString& name) const;
@@ -74,28 +72,20 @@ namespace Kross { namespace Api {
             bool addChild(const QString& name, Object::Ptr object, bool replace = false);
             void removeChild(const QString& name);
             void removeAllChildren();
-            */
-
-//Override call
             //virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments) {}
-
-//Maybe move to Kross::Api::Object ?!
-            //bool connect(Event::Ptr event) { connect(event, SIGNAL(called(Event::Ptr)), SLOT(call(Event::Ptr))); }
-            //bool disconnect(Event::Ptr) {}
 
         protected:
             //void called(Event::Ptr event) {}
             //void executed(Event* sender, int execstate, Kross::Api::Object*);
-
             //void call(Event::Ptr event) {}
             //void call(Event* sender, const QString& name, Kross::Api::List*) {}
-
         private:
             // QProperty's
             //Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);
             //Kross::Api::Object::Ptr hasProperty(Kross::Api::List::Ptr);
             //Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr);
             //Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr);
+*/
     };
 
     //class EventCondition : public Event {};

@@ -112,40 +112,9 @@ namespace Kross { namespace Api {
              */
             bool addModule(Object::Ptr module);
 
-            /**
-             * Return all \a EventSlot instances.
-             *
-             * \return List of \a EventSlot instances.
-             */
             //QValueList<EventSlot*> getEventSlots();
-
-            /**
-             * Add a from \a EventSlot inherited class
-             * that implements handling of additional
-             * Qt slot macros.
-             *
-             * \param eventslot The \a EventSlot that spends
-             *       slots to get Qt signals translated
-             *       into a functioncall.
-             */
             //void addEventSlot(EventSlot* eventslot);
-
-            /**
-             * Return all \a EventSlot instances.
-             *
-             * \return List of \a EventSlot instances.
-             */
             //QValueList<EventSignal*> getEventSignals();
-
-            /**
-             * Add a from \a EventSlot inherited class
-             * that implements handling of additional
-             * Qt slot macros.
-             *
-             * \param eventslot The \a EventSlot that spends
-             *       slots to get Qt signals translated
-             *       into a functioncall.
-             */
             //void addEventSignal(EventSignal* eventsignal);
 
             /**

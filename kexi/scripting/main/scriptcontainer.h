@@ -69,6 +69,9 @@ namespace Kross { namespace Api {
 
         public:
 
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<ScriptContainer> Ptr;
+
             /**
              * Destructor.
              */
@@ -154,7 +157,7 @@ namespace Kross { namespace Api {
              * Return the collection this @a EventContainer spends.
              */
 //TODO
-KSharedPtr<EventCollection> getEventCollection() {}
+//KSharedPtr<EventCollection> getEventCollection() {}
 
             /**
              * Connect QObject signal with function. If the signal
