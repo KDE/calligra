@@ -20,9 +20,11 @@
 #ifndef KROSS_PYTHON_INTERPRETER_H
 #define KROSS_PYTHON_INTERPRETER_H
 
-#include <Python.h>
-#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
+#include "pythonconfig.h"
+
+//#include <Python.h>
+//#include "CXX/Objects.hxx"
+////#include "CXX/Extensions.hxx"
 
 #include <qstring.h>
 #include <kdebug.h>

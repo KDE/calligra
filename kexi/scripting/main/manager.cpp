@@ -20,7 +20,6 @@
 #include "manager.h"
 
 #include "../api/interpreter.h"
-#include "../kjs/kjsinterpreter.h"
 #include "../api/qtobject.h"
 #include "../api/eventslot.h"
 #include "../api/eventsignal.h"
@@ -245,6 +244,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
 
     if(interpreter)
         d->m_interpreter.replace(interpretername, interpreter);
+
     return interpreter;
 }
 

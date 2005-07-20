@@ -20,18 +20,18 @@
 #ifndef KROSS_PYTHON_OBJECT_H
 #define KROSS_PYTHON_OBJECT_H
 
-#include <Python.h>
-//#include "CXX/Config.hxx"
-#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
+#include "pythonconfig.h"
+
+//#include <Python.h>
+////#include "CXX/Config.hxx"
+//#include "CXX/Objects.hxx"
+////#include "CXX/Extensions.hxx"
 
 #include <qstring.h>
 #include <qstringlist.h>
 
-//#include "../main/krossconfig.h"
 #include "../api/object.h"
 #include "../api/list.h"
-//#include "../api/script.h"
 #include "pythonextension.h"
 
 namespace Kross { namespace Python {

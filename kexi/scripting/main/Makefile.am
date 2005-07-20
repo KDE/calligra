@@ -12,8 +12,7 @@ libkrossmain_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkrossmain_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
-    ../api/libkrossapi.la \
-    ../kjs/libkrosskjs.la
+    ../api/libkrossapi.la
 
 libkrossmain_la_METASOURCES = AUTO
 SUBDIRS = .

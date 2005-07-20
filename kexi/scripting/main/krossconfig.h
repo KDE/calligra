@@ -69,16 +69,16 @@ namespace Kross {
         //#define KROSS_API_OBJECT_DTOR_DEBUG
 
         // Enable kdDebug()-debugging for Kross::Api::Object addChild() function..
-        #define KROSS_API_OBJECT_ADDCHILD_DEBUG
+        //#define KROSS_API_OBJECT_ADDCHILD_DEBUG
 
         // Enable kdDebug()-debugging for Kross::Api::Object removeChild() / removeAllChildren() functions.
-        #define KROSS_API_OBJECT_REMCHILD_DEBUG
+        //#define KROSS_API_OBJECT_REMCHILD_DEBUG
 
         // Enable kdDebug()-debugging for Kross::Api::Object call() function.
-        #define KROSS_API_OBJECT_CALL_DEBUG
+        //#define KROSS_API_OBJECT_CALL_DEBUG
 
         // Enable kdDebug()-debugging for Kross::Api::Object called() function.
-        #define KROSS_API_OBJECT_CALLED_DEBUG
+        //#define KROSS_API_OBJECT_CALLED_DEBUG
     }
 
     /**
@@ -94,51 +94,12 @@ namespace Kross {
     namespace KexiDB {
     }
 
-    /**
-     * Code to manage the embedded python interpreter and
-     * python-scripts.
-     *
-     * There is no dependency to e.g. the \a Kross::KexiDB
-     * wrapper. Everything is handled through the common
-     * \a Kross::Api bridge. Therefore this interpreter-
-     * implementation should be able to make all defined
-     * wrappers accessible by the python scripting
-     * language.
-     *
-     * Internaly we use PyCXX - a set of classes to help
-     * create extensions of python in the C++ language - to
-     * access the python c api. Any python version since
-     * 2.0 is supported.
-     *
-     * \author Sebastian Sauer
-     * \sa http://www.python.org
-     * \sa http://cxx.sourceforge.net
-     */
-    namespace Python {
-
-        // Enable kdDebug()-debugging for Kross::Python::PythonScript
-        //#define KROSS_PYTHON_SCRIPT_DEBUG
-
-        // Enable kdDebug()-debugging for Kross::Python::PythonModule
-        //#define KROSS_PYTHON_MODULE_DEBUG
-
-        // Enable kdDebug()-debugging for Kross::Python::PythonExtension
-        //#define KROSS_PYTHON_EXTENSION_CTOR_DEBUG
-        //#define KROSS_PYTHON_EXTENSION_DTOR_DEBUG
-        //#define KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        //#define KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-        #define KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-        #define KROSS_PYTHON_EXTENSION_GETATTRMETHOD_DEBUG
-        #define KROSS_PYTHON_EXTENSION_CALL_DEBUG
-
-        // The name of the global krosspyhon library. Loaded dynamicly
-        // during runtime. Comment out to disable the usage or for
-        // developing refer to your not jet installed lib like I did at
-        // the following line.
-        #define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
-        //#define KROSS_PYTHON_LIBRARY "krosspython"
-
-    }
+    // The name of the global krosspyhon library. Loaded dynamicly
+    // during runtime. Comment out to disable the usage or for
+    // developing refer to your not jet installed lib like I did at
+    // the following line.
+    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
+    #define KROSS_PYTHON_LIBRARY "krosspython"
 
 }
 

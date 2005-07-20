@@ -20,14 +20,15 @@
 #ifndef KROSS_PYTHON_MODULE_H
 #define KROSS_PYTHON_MODULE_H
 
-#include <Python.h>
-#include "CXX/Config.hxx"
-#include "CXX/Objects.hxx"
-#include "CXX/Extensions.hxx"
+#include "pythonconfig.h"
+
+//#include <Python.h>
+//#include "CXX/Config.hxx"
+//#include "CXX/Objects.hxx"
+//#include "CXX/Extensions.hxx"
 
 #include <qstring.h>
 
-#include "../main/krossconfig.h"
 #include "../api/object.h"
 #include "../api/script.h"
 #include "pythonextension.h"

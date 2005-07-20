@@ -20,10 +20,16 @@
 #ifndef KROSS_PYTHON_EXTENSION_H
 #define KROSS_PYTHON_EXTENSION_H
 
-#include <Python.h>
-//#include "CXX/Config.hxx"
-#include "CXX/Objects.hxx"
-#include "CXX/Extensions.hxx"
+#include "pythonconfig.h"
+
+//#include <Python.h>
+////#include "CXX/Config.hxx"
+//#include "CXX/Objects.hxx"
+//#include "CXX/Extensions.hxx"
+
+#include "../api/object.h"
+#include "../api/list.h"
+#include "../api/class.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -31,11 +37,6 @@
 #include <qvaluevector.h>
 #include <qmap.h>
 #include <qvariant.h>
-
-#include "../main/krossconfig.h"
-#include "../api/object.h"
-#include "../api/list.h"
-#include "../api/class.h"
 
 namespace Kross { namespace Python {
 

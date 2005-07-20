@@ -20,14 +20,16 @@
 #ifndef KROSS_PYTHON_SECURITY_H
 #define KROSS_PYTHON_SECURITY_H
 
-#include <Python.h>
-//#include <object.h>
-#include <compile.h>
-#include <eval.h>
+#include "pythonconfig.h"
 
-//#include "CXX/Config.hxx"
-#include "CXX/Objects.hxx"
-#include "CXX/Extensions.hxx"
+//#include <Python.h>
+////#include <object.h>
+//#include <compile.h>
+//#include <eval.h>
+
+////#include "CXX/Config.hxx"
+//#include "CXX/Objects.hxx"
+//#include "CXX/Extensions.hxx"
 
 #include <qstring.h>
 //#include "../api/module.h"
