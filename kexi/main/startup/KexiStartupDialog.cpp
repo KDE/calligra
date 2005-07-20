@@ -497,7 +497,7 @@ void KexiStartupDialog::updateDialogOKButton(QWidget *w)
 		enable = 
 			(d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased)
 			? !d->openExistingFileDlg->currentFileName().isEmpty()
-			: d->openExistingConnWidget->selectedConnectionData();
+			: (bool)d->openExistingConnWidget->selectedConnectionData();
 	}
 	else if (w==d->pageOpenRecent) {
 		enable = (d->prj_selector->selectedProjectData()!=0);
