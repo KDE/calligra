@@ -47,6 +47,7 @@
 namespace KexiDB {
 
 //================================================
+//! @internal
 class ConnectionPrivate
 {
 	public:

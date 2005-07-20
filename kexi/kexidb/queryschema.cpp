@@ -37,6 +37,7 @@ using namespace KexiDB;
 
 //=======================================
 namespace KexiDB {
+//! @internal
 class QuerySchemaPrivate
 {
 	public:

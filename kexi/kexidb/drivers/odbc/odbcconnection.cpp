@@ -40,6 +40,7 @@
 
 using namespace KexiDB;
 
+//! @internal
 class ODBCConnectionPrivate
 {
 	public:

@@ -166,6 +166,13 @@ namespace KexiDB
 			TableSchema* m_table;
 			QuerySchema* m_query;
 	};
+
+	/*! shows connection test dialog with a progress bar indicating connection testing 
+	 (within a second thread).
+	 \a data is used to perform a (temporary) test connection. \a msgHandler is used to display errors.
+	 On successful connecting, a message is displayed. After testing, temporary connection is closed. */
+	KEXI_DB_EXPORT void connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData& data, 
+		KexiDB::MessageHandler& msgHandler);
 }
 
 #endif

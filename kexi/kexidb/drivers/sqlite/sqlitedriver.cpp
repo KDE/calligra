@@ -37,6 +37,7 @@ KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite3 )
 #endif
 
 //! driver specific private data
+//! @internal
 class KexiDB::SQLiteDriverPrivate 
 {
 	public:

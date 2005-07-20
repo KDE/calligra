@@ -39,12 +39,12 @@ class ConnectionDataBase
 		ConnectionDataBase();
 
 		/*! 
-		\brief The name of the connection
+		\brief The caption of the connection.
 		
-		Name is optional for identyfying given connection
+		Captions are optional for identyfying given connection
 		by name eg. for users. 
 		*/
-		QString connName;
+		QString caption;
 
 		/*! 
 		\brief The additional description for the connection
@@ -104,9 +104,18 @@ class ConnectionDataBase
 		
 		/*!
 		\brief Password used for the connection.
-		 
+
 		Can be empty. */
 		QString password;
+
+		/*!
+		\brief True if password should be saved to a file for the connection.
+
+		False by default, in most cases can be set to true when nonempty 
+		password has been loaded from a file. 
+		For instance, this flag can be then shown for a user as a checkbox.
+		*/
+		bool savePassword;
 
 		/*!
 		\brief Username used for the connection.
@@ -145,6 +154,7 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 {
 	public:
 		typedef QPtrList<ConnectionData> List;
+		typedef QPtrListIterator<ConnectionData> ListIterator;
 
 		ConnectionData();
 

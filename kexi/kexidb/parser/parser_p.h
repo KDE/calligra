@@ -33,6 +33,7 @@
 
 namespace KexiDB {
 
+//! @internal
 class ParserPrivate
 {
 	public:

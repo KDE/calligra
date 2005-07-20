@@ -27,6 +27,7 @@
 #include <kdebug.h>
 
 namespace KexiDB {
+//! @internal
 class TableSchema::Private
 {
 public:

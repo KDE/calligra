@@ -29,7 +29,7 @@
 using namespace KexiDB;
 
 namespace KexiDB {
-
+//! @internal
 class ConnectionData::Private {
 public:
 	Private() { 
@@ -43,7 +43,7 @@ public:
 /*================================================================*/
 
 ConnectionDataBase::ConnectionDataBase()
-	: id(-1), port(0), useLocalSocketFile(false)
+	: id(-1), port(0), useLocalSocketFile(false), savePassword(false)
 {
 }
 
@@ -72,6 +72,7 @@ ConnectionData::ConnectionData(const ConnectionData& cd)
 ConnectionData::~ConnectionData()
 {
 	delete priv;
+	priv = 0;
 }
 
 ConnectionData& ConnectionData::operator=(const ConnectionData& cd)

@@ -15,7 +15,7 @@ libkexidb_la_SOURCES = drivermanager.cpp driver.cpp driver_p.cpp connection.cpp 
  roweditbuffer.cpp msghandler.cpp \
  dbobjectnamevalidator.cpp
 
-noinst_HEADERS = drivermanager_p.h
+noinst_HEADERS = drivermanager_p.h utils_p.h
 
 kexidbincludedir=$(includedir)/kexidb
 kexidbinclude_HEADERS=connection.h connectiondata.h cursor.h \

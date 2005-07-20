@@ -19,12 +19,17 @@
 
 #include <kexidb/utils.h>
 #include <kexidb/cursor.h>
+#include <kexidb/drivermanager.h>
 
 #include <qmap.h>
+#include <qthread.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstaticdeleter.h>
+#include <kmessagebox.h>
+
+#include "utils_p.h"
 
 using namespace KexiDB;
 
@@ -235,3 +240,156 @@ QueryColumnInfo* TableOrQuerySchema::columnInfo(const QString& name)
 
 	return 0;
 }
+
+//------------------------------------------
+
+class ConnectionTestThread : public QThread {
+	public:
+		ConnectionTestThread(ConnectionTestDialog *dlg, const KexiDB::ConnectionData& connData);
+		virtual void run();
+	protected:
+		ConnectionTestDialog* m_dlg;
+		KexiDB::ConnectionData m_connData;
+};
+
+ConnectionTestThread::ConnectionTestThread(ConnectionTestDialog* dlg, const KexiDB::ConnectionData& connData)
+ : m_dlg(dlg), m_connData(connData)
+{
+}
+
+void ConnectionTestThread::run()
+{
+	KexiDB::DriverManager manager;
+	KexiDB::Driver* drv = manager.driver(m_connData.driverName);
+//	KexiGUIMessageHandler msghdr;
+	if (!drv || manager.error()) {
+//move		msghdr.showErrorMessage(&Kexi::driverManager());
+		m_dlg->error(&manager);
+		return;
+	}
+	KexiDB::Connection * conn = drv->createConnection(m_connData);
+	if (!conn || drv->error()) {
+//move		msghdr.showErrorMessage(drv);
+		delete conn;
+		m_dlg->error(drv);
+		return;
+	}
+	if (!conn->connect() || conn->error()) {
+//move		msghdr.showErrorMessage(conn);
+		m_dlg->error(conn);
+		delete conn;
+		return;
+	}
+	delete conn;
+	m_dlg->error(0);
+}
+
+ConnectionTestDialog::ConnectionTestDialog(QWidget* parent, 
+	const KexiDB::ConnectionData& data,
+	KexiDB::MessageHandler& msgHandler)
+ : KProgressDialog(parent, "testconn_dlg",
+	i18n("Test Connection"), i18n("<qt>Testing connection to <b>%1</b> database server...</qt>")
+	.arg(data.serverInfoString(true)), true /*modal*/)
+ , m_thread(new ConnectionTestThread(this, data))
+ , m_connData(data)
+ , m_msgHandler(&msgHandler)
+ , m_elapsedTime(0)
+ , m_errorObj(0)
+ , m_stopWaiting(false)
+{
+	showCancelButton(true);
+	progressBar()->setPercentageVisible(false);
+	progressBar()->setTotalSteps(0);
+	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+	adjustSize();
+	resize(250, height());
+}
+
+ConnectionTestDialog::~ConnectionTestDialog()
+{
+	m_wait.wakeAll();
+	m_thread->terminate();
+	delete m_thread;
+}
+
+int ConnectionTestDialog::exec()
+{
+	m_timer.start(20);
+	m_thread->start();
+	const int res = KProgressDialog::exec();
+	m_thread->wait();
+	m_timer.stop();
+	return res;
+}
+
+void ConnectionTestDialog::slotTimeout()
+{
+//	KexiDBDbg << "ConnectionTestDialog::slotTimeout() " << m_errorObj << endl;
+	bool notResponding = false;
+	if (m_elapsedTime >= 1000*5) {//5 seconds
+		m_stopWaiting = true;
+		notResponding = true;
+	}
+	if (m_stopWaiting) {
+		m_timer.disconnect(this);
+		m_timer.stop();
+		slotCancel();
+//		reject();
+//		close();
+		if (m_errorObj) {
+			m_msgHandler->showErrorMessage(m_errorObj);
+			m_errorObj = 0;
+		}
+		else if (notResponding) {
+			KMessageBox::sorry(0, 
+				i18n("<qt>Test connection to <b>%1</b> database server failed. The server is not responding.</qt>")
+					.arg(m_connData.serverInfoString(true)),
+				i18n("Test Connection"));
+		}
+		else {
+			KMessageBox::information(0, 
+				i18n("<qt>Test connection to <b>%1</b> database server established successfully.</qt>")
+					.arg(m_connData.serverInfoString(true)),
+				i18n("Test Connection"));
+		}
+//		slotCancel();
+//		reject();
+		m_wait.wakeAll();
+		return;
+	}
+	m_elapsedTime += 20;
+	progressBar()->setProgress( m_elapsedTime );
+}
+
+void ConnectionTestDialog::error(KexiDB::Object *obj)
+{
+	KexiDBDbg << "ConnectionTestDialog::error()" << endl;
+	m_stopWaiting = true;
+	m_errorObj = obj;
+/*		reject();
+		m_msgHandler->showErrorMessage(obj);
+	if (obj) {
+	}
+	else {
+		accept();
+	}*/
+	m_wait.wait();
+}
+
+void ConnectionTestDialog::slotCancel()
+{
+//	m_wait.wakeAll();
+	m_thread->terminate();
+	m_timer.disconnect(this);
+	m_timer.stop();
+	KProgressDialog::slotCancel();
+}
+
+void KexiDB::connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData& data, 
+	KexiDB::MessageHandler& msgHandler)
+{
+	ConnectionTestDialog dlg(parent, data, msgHandler);
+	dlg.exec();
+}
+
+#include "utils_p.moc"
