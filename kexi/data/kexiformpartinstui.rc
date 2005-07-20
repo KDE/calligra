@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="7">
+<kpartgui name="kexiformpartinst" version="8">
 
 <MenuBar>
   <Menu name="edit">
