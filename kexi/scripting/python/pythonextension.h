@@ -21,12 +21,6 @@
 #define KROSS_PYTHON_EXTENSION_H
 
 #include "pythonconfig.h"
-
-//#include <Python.h>
-////#include "CXX/Config.hxx"
-//#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
-
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/class.h"

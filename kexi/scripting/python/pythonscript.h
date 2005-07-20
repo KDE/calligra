@@ -21,13 +21,6 @@
 #define KROSS_PYTHON_PYTHONSCRIPT_H
 
 #include "pythonconfig.h"
-
-//#include <Python.h>
-//#include "CXX/Objects.hxx"
-//#include <compile.h>
-//#include <eval.h>
-////#include "CXX/Extensions.hxx"
-
 #include "../api/script.h"
 
 namespace Kross { namespace Python {

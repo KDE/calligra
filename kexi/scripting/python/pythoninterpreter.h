@@ -21,19 +21,14 @@
 #define KROSS_PYTHON_INTERPRETER_H
 
 #include "pythonconfig.h"
-
-//#include <Python.h>
-//#include "CXX/Objects.hxx"
-////#include "CXX/Extensions.hxx"
-
-#include <qstring.h>
-#include <kdebug.h>
-
 #include "../api/object.h"
 #include "../api/interpreter.h"
 #include "../main/manager.h"
 //#include "../api/script.h"
 #include "../main/scriptcontainer.h"
+
+#include <qstring.h>
+#include <kdebug.h>
 
 namespace Kross { namespace Python {
 

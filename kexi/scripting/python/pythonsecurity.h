@@ -21,18 +21,9 @@
 #define KROSS_PYTHON_SECURITY_H
 
 #include "pythonconfig.h"
-
-//#include <Python.h>
-////#include <object.h>
-//#include <compile.h>
-//#include <eval.h>
-
-////#include "CXX/Config.hxx"
-//#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
+//#include "../api/module.h"
 
 #include <qstring.h>
-//#include "../api/module.h"
 
 namespace Kross { namespace Python {
 

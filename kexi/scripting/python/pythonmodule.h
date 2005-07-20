@@ -21,17 +21,11 @@
 #define KROSS_PYTHON_MODULE_H
 
 #include "pythonconfig.h"
-
-//#include <Python.h>
-//#include "CXX/Config.hxx"
-//#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
-
-#include <qstring.h>
-
 #include "../api/object.h"
 #include "../api/script.h"
 #include "pythonextension.h"
+
+#include <qstring.h>
 
 namespace Kross { namespace Python {
 
