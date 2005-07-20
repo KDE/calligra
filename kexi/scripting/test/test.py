@@ -61,7 +61,7 @@ class KexiDBClass:
         # First we need a new connectiondata object.
         connectiondata = self.getConnectionData()
         # Fill the new connectiondata object with what we need to connect.
-        connectiondata.setConnName("myFileConnection")
+        connectiondata.setCaption("myFileConnection")
         connectiondata.setFileName(filename)
         print "connectiondata.serverInfoString = %s" % connectiondata.serverInfoString()
         # Create the connection now.
@@ -241,14 +241,17 @@ testKexiDB()
 #print __name__
 #print mymodule.exttest()
 
-#testobject = get("TestObject")
-#print "testobject = %s %s" % (str(testobject),dir(testobject))
-#print "propertyNames = %s" % testobject.propertyNames()
-#print "slotNames = %s" % testobject.slotNames()
-#print "signalNames = %s" % testobject.signalNames()
-#testobject.connect("testSignal()","testobjectCallback")
-#testobject.signal("testSignal()")
-#testobject.slot("testSlot()")
-#testobject.disconnect("testSignal()")
+try:
+    testobject = get("TestObject")
+    print "testobject = %s %s" % (str(testobject),dir(testobject))
+    print "propertyNames = %s" % testobject.propertyNames()
+    print "slotNames = %s" % testobject.slotNames()
+    print "signalNames = %s" % testobject.signalNames()
+    #testobject.connect("testSignal()","testobjectCallback")
+    #testobject.signal("testSignal()")
+    #testobject.slot("testSlot()")
+    #testobject.disconnect("testSignal()")
+except:
+    print "EXCEPTION on TestObject"
 
 print "########## END ##########"

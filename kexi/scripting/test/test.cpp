@@ -76,24 +76,24 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     manager->addModule( new Kross::KexiDB::KexiDBModule() );
     manager->addModule( new Kross::KexiDB::TestModule() ); //testcase
 
-    // To represent a script that shgould be executed Kross uses
+    // To represent a script that should be executed Kross uses
     // the Script container class. You are able to fill them with
     // what is needed and just execute them.
-    KSharedPtr<Kross::Api::ScriptContainer> scriptcontainer = manager->getScriptContainer("MyScriptName");
-    //Kross::Api::ScriptContainer scriptcontainer = manager->getScriptContainer("MyScriptName");
-    //Kross::Api::ScriptContainer scriptcontainer = manager->getScriptContainer("MyScriptName");
+    Kross::Api::ScriptContainer::Ptr scriptcontainer = manager->getScriptContainer("MyScriptName");
 
     //scriptcontainer->enableModule("KexiDB");
-    scriptcontainer->setInterpreterName(interpretername);
 
+    scriptcontainer->setInterpreterName(interpretername);
     scriptcontainer->setCode(scriptcode);
-    scriptcontainer->addQObject(testobject);
+
+scriptcontainer->addQObject(testobject);
 
     try {
         Kross::Api::Object* o = scriptcontainer->execute();
 
         // Call a function.
-        //scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
+        kdDebug()<<"--------------------------"<<endl;
+        scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
 
         // Call a class.
         /*
