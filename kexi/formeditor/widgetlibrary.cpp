@@ -35,6 +35,7 @@
 #include "form.h"
 
 namespace KFormDesigner {
+//! @internal
 class WidgetLibraryPrivate
 {
 	public:

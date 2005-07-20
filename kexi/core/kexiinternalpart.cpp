@@ -34,6 +34,7 @@
 #include <kparts/componentfactory.h>
 #include <kexidb/msghandler.h>
 
+//! @internal
 class KexiInternalPartManager
 {
 	public:

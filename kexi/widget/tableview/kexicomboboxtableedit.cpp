@@ -85,6 +85,7 @@ class KDownArrowPushButton : public KPushButton
 
 //======================================================
 
+//! @internal
 class KexiComboBoxTableEdit::Private
 {
 public:

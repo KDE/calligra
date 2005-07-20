@@ -79,9 +79,11 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 			const QString &dbFileName, QWidget *parent = 0, int options = 0 );
 
 		/*! Allows user to select a project with KexiProjectSelectorDialog.
-			\return selected project's data or NULL if dialog was cancelled.
+			\return selected project's data
+			Returns NULL and sets cancelled to true if the dialog was cancelled.
+			Returns NULL and sets cancelled to false if there was an error.
 		*/
-		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
+		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
 
 	protected slots:
 		void slotSaveShortcutFileChanges();

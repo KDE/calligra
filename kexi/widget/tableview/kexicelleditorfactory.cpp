@@ -38,6 +38,7 @@ KexiCellEditorFactoryItem::~KexiCellEditorFactoryItem()
 
 //============= KexiCellEditorFactoryPrivate ============
 
+//! @internal
 class KexiCellEditorFactoryPrivate
 {
 	public:

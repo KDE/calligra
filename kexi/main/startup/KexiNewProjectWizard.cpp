@@ -30,6 +30,8 @@
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
+#include <kexiguimsghandler.h>
+
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
@@ -48,6 +50,7 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 
+//! @internal
 class KexiNewProjectWizardPrivate
 {
 	public:
@@ -62,6 +65,7 @@ class KexiNewProjectWizardPrivate
 	{
 //		delete conndata_to_show;
 //		delete project_set_to_show;
+		delete msgHandler;
 	}
 	KIconView *lv_types;
 	KIconViewItem *lvi_file, *lvi_server;
@@ -73,15 +77,18 @@ class KexiNewProjectWizardPrivate
 	QGuardedPtr<KexiDB::ConnectionData> conndata_to_show;
 	KexiProjectSet *project_set_to_show;
 
+	KexiGUIMessageHandler* msgHandler;
+
 	bool le_dbname_txtchanged_disable : 1;
 	bool le_dbname_autofill : 1;
 };
 
-KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
+KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	QWidget *parent, const char *name, bool modal, WFlags f)
 : KWizard(parent, name, modal, f)
 , d(new KexiNewProjectWizardPrivate() )
 {
+	d->msgHandler = new KexiGUIMessageHandler(this);
 	setIcon( DesktopIcon("filenew") );
 	setCaption( i18n("Creating New Project") );
 	finishButton()->setText(i18n("Create"));
@@ -143,7 +150,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 
 	//page: server db name
 	m_server_db_name = new KexiServerDBNamePage(this, "KexiServerDBNamePage");
-	d->server_db_name_dblist_lbl_txt = i18n("Existing project databases on server <b>%1</b>:");
+	d->server_db_name_dblist_lbl_txt = i18n("Existing project databases on <b>%1</b> database server:");
 	connect(m_server_db_name->le_caption, SIGNAL(textChanged(const QString&)),
 		this,SLOT(slotServerDBCaptionTxtChanged(const QString&)));
 	connect(m_server_db_name->le_dbname, SIGNAL(textChanged(const QString&)),
@@ -249,10 +256,16 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 	} else if (page==m_server_db_name) {
 		if (m_conn_sel->selectedConnectionData()
 		 && (static_cast<KexiDB::ConnectionData*>(d->conndata_to_show) != m_conn_sel->selectedConnectionData())) {
-			d->conndata_to_show = m_conn_sel->selectedConnectionData();
 			m_project_selector->setProjectSet(0);
 //			delete d->project_set_to_show;
-			d->project_set_to_show = new KexiProjectSet(*d->conndata_to_show);
+			d->conndata_to_show = 0;
+			d->project_set_to_show = new KexiProjectSet(*m_conn_sel->selectedConnectionData(), d->msgHandler);
+			if (d->project_set_to_show->error()) {
+				delete d->project_set_to_show;
+				d->project_set_to_show = 0;
+				return;
+			}
+			d->conndata_to_show = m_conn_sel->selectedConnectionData();
 			//-refresh projects list
 			m_project_selector->setProjectSet( d->project_set_to_show );
 		}

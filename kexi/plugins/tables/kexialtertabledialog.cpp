@@ -57,6 +57,7 @@
 #define COLUMN_ID_TYPE 2
 #define COLUMN_ID_DESC 3
 
+//! @internal
 class KexiAlterTableDialogPrivate
 {
 	public:

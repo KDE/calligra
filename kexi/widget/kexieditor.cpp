@@ -78,6 +78,7 @@ public:
 
 #endif
 
+//! @internal
 class KexiEditorPrivate {
 	public:
 		KexiEditorPrivate()

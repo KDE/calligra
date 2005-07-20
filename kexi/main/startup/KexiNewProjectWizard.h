@@ -37,7 +37,8 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
 {
 	Q_OBJECT
 	public:
-		KexiNewProjectWizard(const KexiDBConnectionSet& conn_set, QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
+		KexiNewProjectWizard(KexiDBConnectionSet& conn_set, QWidget *parent=0, 
+			const char *name=0, bool modal=false, WFlags f=0);
 		~KexiNewProjectWizard();
 	
 		/*! \return name for a new project's database if server-based project 

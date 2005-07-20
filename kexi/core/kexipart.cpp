@@ -39,6 +39,7 @@
 #include <kmessagebox.h>
 
 namespace KexiPart {
+//! @internal
 class PartPrivate
 {
 public:

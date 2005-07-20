@@ -43,6 +43,7 @@
 using namespace KFormDesigner;
 
 namespace KFormDesigner {
+//! @internal
 class WidgetPropertySetPrivate
 {
 	public:

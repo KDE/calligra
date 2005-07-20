@@ -32,6 +32,7 @@
 
 #include <win/win32_utils.h>
 
+//! @internal
 class KexiStartupFileDialogBasePrivate
 {
 	public:

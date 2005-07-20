@@ -127,6 +127,7 @@
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
+//! @internal
 class KexiMainWindowImpl::Private
 {
 	public:
@@ -168,8 +169,11 @@ class KexiMainWindowImpl::Private
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties, *action_open_recent_more,
 		 *action_project_relations, *action_project_import_data_table;
+//		KRecentFilesAction *action_open_recent;
 		KActionMenu *action_open_recent, *action_show_other;
-		int action_open_recent_more_id;
+//		int action_open_recent_more_id;
+		int action_open_recent_projects_title_id,
+			action_open_recent_connections_title_id;
 
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
@@ -269,6 +273,8 @@ class KexiMainWindowImpl::Private
 		privateIDCounter=0;
 		action_view_nav=0;
 		action_view_propeditor=0;
+		action_open_recent_projects_title_id = -1;
+		action_open_recent_connections_title_id = -1;
 		forceDialogClosing=false;
 		insideCloseDialog=false;
 		createMenu=0;
@@ -602,17 +608,25 @@ void KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Downloads example databases from the Internet"));
 #endif
 
-#ifdef KEXI_SHOW_UNIMPLEMENTED
+//	d->action_open_recent = KStdAction::openRecent( this, SLOT(slotProjectOpenRecent(const KURL&)), actionCollection(), "project_open_recent" );
+
+//#ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"),
 		actionCollection(), "project_open_recent");
-	connect(d->action_open_recent->popupMenu(),SIGNAL(activated(int)),this,SLOT(slotProjectOpenRecent(int)));
-	connect(d->action_open_recent->popupMenu(), SIGNAL(aboutToShow()),this,SLOT(slotProjectOpenRecentAboutToShow()));
-	d->action_open_recent->popupMenu()->insertSeparator();
-	d->action_open_recent_more_id = d->action_open_recent->popupMenu()
-		->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
-#else
-	d->action_open_recent = d->dummy_action;
-#endif
+	connect(d->action_open_recent->popupMenu(),SIGNAL(activated(int)),
+		this,SLOT(slotProjectOpenRecent(int)));
+	connect(d->action_open_recent->popupMenu(), SIGNAL(aboutToShow()),
+		this,SLOT(slotProjectOpenRecentAboutToShow()));
+//moved down		d->action_open_recent_projects_title_id = 
+//		d->action_open_recent->popupMenu()->insertTitle(i18n("Recently Opened Databases"));
+//moved down	d->action_open_recent_connections_title_id = 
+//		d->action_open_recent->popupMenu()->insertTitle(i18n("Recently Connected Database Servers"));
+//	d->action_open_recent->popupMenu()->insertSeparator();
+//	d->action_open_recent_more_id = d->action_open_recent->popupMenu()
+//		->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
+//#else
+//	d->action_open_recent = d->dummy_action;
+//#endif
 
 	d->action_save = KStdAction::save( this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
 //	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
@@ -2078,7 +2092,7 @@ KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrit
 	else if (!wiz.projectDBName().isEmpty()) {
 		//file-based project
 		KexiDB::ConnectionData cdata;
-		cdata.connName = wiz.projectCaption();
+		cdata.caption = wiz.projectCaption();
 		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
 		cdata.setFileName( wiz.projectDBName() );
 		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
@@ -2213,10 +2227,11 @@ KexiMainWindowImpl::slotProjectOpen()
 	KexiProjectData* projectData = 0;
 	KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
 	if (cdata) {
-		projectData = Kexi::startupHandler().selectProject( cdata, this );
-		if (!projectData && Kexi::startupHandler().error()) {
-			showErrorMessage(&Kexi::startupHandler());
-		}
+		bool cancelled;
+		projectData = Kexi::startupHandler().selectProject( cdata, cancelled, this );
+//		if (!projectData && !Kexi::startupHandler().error()) {
+//			showErrorMessage(&Kexi::startupHandler());
+//		}
 	}
 	else {
 		QString selFile = dlg.selectedExistingFile();
@@ -2240,6 +2255,7 @@ KexiMainWindowImpl::slotProjectOpen()
 void
 KexiMainWindowImpl::slotProjectOpenRecentAboutToShow()
 {
+	/*
 	//setup
 	KPopupMenu *popup = d->action_open_recent->popupMenu();
 	const int cnt = popup->count();
@@ -2258,12 +2274,48 @@ KexiMainWindowImpl::slotProjectOpenRecentAboutToShow()
 	cur_id = popup->insertItem("My example project 1", ++cur_id, cur_idx++);
 	cur_id = popup->insertItem("My example project 2", ++cur_id, cur_idx++);
 	cur_id = popup->insertItem("My example project 3", ++cur_id, cur_idx++);
+	*/
+
+	//show recent databases
+	KPopupMenu *popup = d->action_open_recent->popupMenu();
+	popup->clear();
+#if 0
+	d->action_open_recent_projects_title_id = popup->insertTitle(i18n("Recently Opened Databases"));
+#endif
+//	int action_open_recent_projects_title_index = popup->indexOf(d->action_open_recent_projects_title_id);
+//	int count = popup->count();
+//	int action_open_recent_connections_title_index = popup->indexOf(d->action_open_recent_connections_title_id);
+//	for (int i=action_open_recent_projects_title_index+1; 
+//		i<action_open_recent_connections_title_index; i++)
+//	{
+//		popup->removeItemAt(action_open_recent_projects_title_index+1);
+//	}
+
+//	int cur_idx = action_open_recent_projects_title_index+1;
+	popup->insertItem(SmallIconSet("kexiproject_sqlite"), "My project 1");
+	popup->insertItem(SmallIconSet("kexiproject_sqlite"), "My project 2");
+	popup->insertItem(SmallIconSet("kexiproject_sqlite"), "My project 3");
+
+#if 0
+	//show recent connections
+	d->action_open_recent_connections_title_id = 
+		d->action_open_recent->popupMenu()->insertTitle(i18n("Recently Connected Database Servers"));
+	
+//	cur_idx = popup->indexOf(d->action_open_recent_connections_title_id) + 1;
+//	for (int i=cur_idx; i<count; i++) {
+//		popup->removeItemAt(cur_idx);
+//	}
+	popup->insertItem(SmallIconSet("socket"), "My connection 1");
+	popup->insertItem(SmallIconSet("socket"), "My connection 2");
+	popup->insertItem(SmallIconSet("socket"), "My connection 3");
+	popup->insertItem(SmallIconSet("socket"), "My connection 4");
+#endif
 }
 
 void
 KexiMainWindowImpl::slotProjectOpenRecent(int id)
 {
-	if (id<0 || id==d->action_open_recent_more_id)
+	if (id<0) // || id==d->action_open_recent_more_id)
 		return;
 	kdDebug() << "KexiMainWindowImpl::slotProjectOpenRecent("<<id<<")"<<endl;
 }

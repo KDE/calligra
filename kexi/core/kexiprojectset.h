@@ -39,14 +39,14 @@ class KEXICORE_EXPORT KexiProjectSet : public KexiDB::Object
 	
 		/*! Creates empty project set. Use addProjectData to add a project data.
 			\a handler can be provided to receive error messages. */
-			KexiProjectSet(KexiDB::MessageHandler* handler = 0);
+		KexiProjectSet(KexiDB::MessageHandler* handler = 0);
 			
 		/*! Creates project set filled with all projects found using \a conndata. 
 		There may be error during project list retrieving - use appropriate 
 		KexiDB::Object::error(), and similar methods to get error message.
 		\a handler can be provided to receive error messages. */
-			KexiProjectSet(KexiDB::ConnectionData &conndata, 
-				KexiDB::MessageHandler* handler = 0);
+		KexiProjectSet(KexiDB::ConnectionData &conndata, 
+			KexiDB::MessageHandler* handler = 0);
 		
 		~KexiProjectSet();
 	

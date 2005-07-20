@@ -56,23 +56,23 @@ importWizard::importWizard(QWidget *parent, const char *name)
     m_prjSet = 0;
     fileBasedDstWasPresented = false;
     setupFileBasedSrcNeeded = true;
+#if 0
     //=========================Temporary===================================
     Kexi::connset().clear();
     KexiDB::ConnectionData *conndata;
-
 #ifdef KEXI_CUSTOM_HARDCODED_CONNDATA
 #include <custom_connectiondata.h>
 #endif
 
     conndata = new KexiDB::ConnectionData();
-    conndata->connName = "Local pgsql connection";
+    conndata->caption = "Local pgsql connection";
     conndata->driverName = "postgresql";
     conndata->hostName = "localhost"; // -- default //"host.net";
     conndata->port = 5432;
     Kexi::connset().addConnectionData(conndata);
 
     conndata = new KexiDB::ConnectionData();
-    conndata->connName = "SSH Postgresql Connection";
+    conndata->caption = "SSH Postgresql Connection";
     conndata->driverName = "postgresql";
     conndata->hostName = "localhost"; // -- default //"host.net";
     conndata->userName = "piggz"; //-- temporary e.g."jarek"
@@ -82,10 +82,11 @@ importWizard::importWizard(QWidget *parent, const char *name)
     Kexi::connset().addConnectionData(conndata);
 
     conndata = new KexiDB::ConnectionData();
-    conndata->connName = "Local MySQL connection";
+    conndata->caption = "Local MySQL connection";
     conndata->driverName = "mysql";
     conndata->hostName = "localhost"; // -- default //"host.net";
     Kexi::connset().addConnectionData(conndata);
+#endif
 
     //============================================================
 
@@ -484,7 +485,7 @@ void importWizard::accept()
         //file-based project
         kdDebug() << "File Destination..." << endl;
         cdata = new KexiDB::ConnectionData;
-        cdata->connName = dstNewDBName->text();
+        cdata->caption = dstNewDBName->text();
         cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
         dbname = dstConn->selectedFileName();
         cdata->setFileName( dbname );

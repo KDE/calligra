@@ -33,6 +33,7 @@
 # include "api/exception.h"
 #endif
 
+//! @internal
 class KexiScriptContainerPrivate
 {
     public:

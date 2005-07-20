@@ -75,11 +75,6 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
  , m_tempPartItemID_Counter(-1)
  , m_sqlParser(0)
 {
-//	m_msgHandler = handler;
-//	m_drvManager = new KexiDB::DriverManager();
-//	m_connData = new KexiProjectConnectionData();
-//js	m_partManager = new KexiPart::Manager(this);
-
 //TODO: partmanager is outside project, so can be initialised just once:
 
 	m_itemDictsCache.setAutoDelete(true);

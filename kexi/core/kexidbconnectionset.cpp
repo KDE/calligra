@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003,2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,18 +18,26 @@
  */
 
 #include "kexidbconnectionset.h"
+#include "kexidbshortcutfile.h"
 
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
+#include <qfile.h>
+
+//! @internal
 class KexiDBConnectionSetPrivate
 {
 public:
 	KexiDBConnectionSetPrivate()
+	 : dataForFilenames(101)
 	{
 		list.setAutoDelete(true);
 		maxid=-1;
 	}
 	KexiDB::ConnectionData::List list;
+	QMap<KexiDB::ConnectionData*, QString> filenamesForData;
+	QDict<KexiDB::ConnectionData> dataForFilenames;
 	int maxid;
 };
 
@@ -44,17 +52,89 @@ KexiDBConnectionSet::~KexiDBConnectionSet()
 	delete d;
 }
 
-void KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data)
+bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const QString& _filename)
 {
+	if (!data)
+		return false;
 	if (data->id<0)
 		data->id = d->maxid+1;
 	//TODO: 	check for id-duplicates
 	
 	d->maxid = QMAX(d->maxid,data->id);
+//	d->list.append(data);
+
+	QString filename( _filename );
+	bool generateUniqueFilename = filename.isEmpty() 
+		|| !filename.isEmpty() && data==d->dataForFilenames[filename];
+
+	if (generateUniqueFilename) {
+		QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
+		if (dir.isEmpty())
+			return false;
+		QString baseFilename( dir + (data->hostName.isEmpty() ? "localhost" : data->hostName) );
+		int i = 0;
+		while (KStandardDirs::exists(baseFilename+(i>0 ? QString::number(i) : QString::null)+".kexic"))
+			i++;
+		if (!KStandardDirs::exists(dir)) {
+			//make 'connections' dir and protect it
+			if (!KStandardDirs::makeDir(dir, 0700))
+				return false;
+		}
+		filename = baseFilename+(i>0 ? QString::number(i) : QString::null)+".kexic";
+	}
+	addConnectionDataInternal(data, filename);
+	bool result = saveConnectionData(data, data);
+	if (!result)
+		removeConnectionDataInternal(data);
+	return result;
+}
+
+void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename)
+{
+	d->filenamesForData.insert(data, filename);
+	d->dataForFilenames.insert(filename, data);
 	d->list.append(data);
 }
 
-KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
+bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData, 
+	KexiDB::ConnectionData *newData)
+{
+	if (!oldData || !newData)
+		return false;
+	QString filename( d->filenamesForData[oldData] );
+	if (filename.isEmpty())
+		return false;
+	KexiDBConnShortcutFile shortcutFile(filename);
+	if (!shortcutFile.saveConnectionData(*newData, true/*savePassword*/))
+		return false;
+	if (oldData!=newData)
+		*oldData = *newData;
+	return true;
+}
+
+void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *data)
+{
+	QString filename( d->filenamesForData[data] );
+	d->filenamesForData.remove(data);
+	d->dataForFilenames.remove(filename);
+	d->list.removeRef(data);
+}
+
+bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
+{
+	if (!data)
+		return false;
+	QString filename( d->filenamesForData[data] );
+	if (filename.isEmpty())
+		return false;
+	QFile file(filename);
+	if (!file.remove())
+		return false;
+	removeConnectionDataInternal(data);
+	return true;
+}
+
+const KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
 {
 	return d->list;
 }
@@ -62,4 +142,28 @@ KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
 void KexiDBConnectionSet::clear()
 {
 	d->list.clear();
+	d->filenamesForData.clear();
+	d->dataForFilenames.clear();
 }
+
+void KexiDBConnectionSet::load()
+{
+	clear();
+//	QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
+//	kexidbg << dirs << endl;
+	QStringList files( KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic") );
+//	//also try for capital file extension
+//	files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
+	kexidbg << files << endl;
+
+	foreach(QStringList::ConstIterator, it, files) {
+		KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
+		KexiDBConnShortcutFile shortcutFile( *it );
+		if (!shortcutFile.loadConnectionData(*data)) {
+			delete data;
+			continue;
+		}
+		addConnectionDataInternal(data, *it);
+	}
+}
+

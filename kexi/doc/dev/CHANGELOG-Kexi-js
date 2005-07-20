@@ -144,6 +144,10 @@ TODO: add support for PRAGMA page_size on new db creation,
 			http://www.sqlite.org/cvstrac/wiki?p=PerformanceTuningWindows
 			(see also other optimization mentioned here)
 
+TODO: In Memory database/tables: how to load an sqlite file to be entirely fit in the memory?
+   clever solution: "You could set the cache size as big as your database file (via pragma). 
+   This should load all (used) data into memory. This is probably not a good solution 
+   if your application does not run for a longer time. "
 </SQLITE>
 
 <RENAME_PROPOSALS>
@@ -403,6 +407,8 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 	jstaniek	this option doesn't offer you atomic changes to database schema, by definition, because two database conenctions are started concurrently.
 	jstaniek	So we'll need to behave with care...
 	jstaniek	ruurd: of course this is easier to do with read only databases or even databases where you don't plan to change schema (but just process db records)
+- add Connection::ping() or so, using http://dev.mysql.com/doc/mysql/en/mysql-ping.html
+  and use it after being idle for a while (eg. call it every minute; also add an option for the delay)
 
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
@@ -411,6 +417,14 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 - add flexible support for date/time constants
 - store text position information (line, column) for every token so it can be used 
    in SQL editor to place cursor in case of errors
+
+=== MDB import TODO ===
+crash:
+	keximigrate_mdb_d.dll!mdb_crack_row(MdbTableDef * table=0x01397830, int row_start=1862, int row_end=-30802, MdbField * fields=0x0012c630)  Line 228	C
+ 	keximigrate_mdb_d.dll!mdb_read_row(MdbTableDef * table=0x01397830, unsigned int row=22)  Line 265	C
+ 	keximigrate_mdb_d.dll!mdb_fetch_row(MdbTableDef * table=0x01397830)  Line 398	C
+ 	keximigrate_mdb_d.dll!mdb_read_catalog(MdbHandle * mdb=0x01394ff8, int objtype=-1)  Line 96	C
+ 	keximigrate_mdb_d.dll!KexiMigration::MDBMigrate::drv_tableNames(QStringList & tableNames={...})  Line 186	C++
 
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
@@ -465,8 +479,6 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 --connection creator
 --fix permission problems
 
-
-CCMAIL: dkite@shaw.ca
 
 === after-0.9 TODO ===
 TODO: add time zones support: 1994-11-05T08:15:30-05:00
@@ -526,11 +538,30 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 - (1.0) add "skip empty columns" and "skip empty rows" option
 - add option for adding explicit primary key column with autonumber
 
+CCMAIL: dkite@shaw.ca
+
+
+2005-07-13..20
+General
+- @internal added for private classes to make api docs more readable
+Startup / Server Support
+- connection data editor improved
+- connection data is now storable
+- added support for adding/deleting/editing connection data
+KexiDB
+- BIC CHANGE (witin v1.7): bool ConnectionData::savePassword flag added
+- KexiDB::connectionTestDialog() added for performing test connections
+
 TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 
 TODO: koproperty: us ListData-like struct instead of QMap, because data combo boxes should be sorted
+
+2005-07-10
+KexiDB
+- BIC CHANGE TO v1.7: (portability fix) pkeyfieldsorder and fieldsorder mapping 
+  now use int instead of uint
 
 2005-07-08
 KoProperty

@@ -38,7 +38,7 @@ class KexiVolatileActionData
 		bool plugged : 1;
 };
 
-//! internal class
+//! @internal
 class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 {
 	Q_OBJECT

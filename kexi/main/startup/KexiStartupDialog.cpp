@@ -111,6 +111,7 @@ void TemplatesPage::itemClicked(QIconViewItem *item) {
 
 /*================================================================*/
 
+//! @internal
 class KexiStartupDialogPrivate {
 public:
 	KexiStartupDialogPrivate()
@@ -350,7 +351,7 @@ void KexiStartupDialog::setupPageTemplates()
 
 	//- page "blank db"
 	templPageFrame = d->templatesWidget->addPage (
-		i18n("Blank Databases"), i18n("New Blank Database Project"), DesktopIcon("empty") );
+		i18n("Blank Database"), i18n("New Blank Database Project"), DesktopIcon("empty") );
 
 	QVBoxLayout *tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 
@@ -487,12 +488,16 @@ void KexiStartupDialog::updateDialogOKButton(QWidget *w)
 #ifdef NO_DB_TEMPLATES
 		enable = (t_id==0);
 #else
-		enable = (t_id==0 || (t_id==1 && d->viewPersonalTempl->templates->currentItem()!=0) || (t_id==2 && d->viewBusinessTempl->templates->currentItem()!=0));
+		enable = (t_id==0 || (t_id==1 && d->viewPersonalTempl->templates->currentItem()!=0) 
+			|| (t_id==2 && d->viewBusinessTempl->templates->currentItem()!=0));
 #endif
 	}
 	else if (w==d->pageOpenExisting) {
 //		enable = !d->openExistingFileDlg->currentURL().path().isEmpty();
-		enable = !d->openExistingFileDlg->currentFileName().isEmpty();
+		enable = 
+			(d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased)
+			? !d->openExistingFileDlg->currentFileName().isEmpty()
+			: d->openExistingConnWidget->selectedConnectionData();
 	}
 	else if (w==d->pageOpenRecent) {
 		enable = (d->prj_selector->selectedProjectData()!=0);
@@ -513,7 +518,8 @@ void KexiStartupDialog::setupPageOpenExisting()
 		d->pageOpenExisting = addPage( i18n("Open &Existing Project") );
 	QVBoxLayout *lyr = new QVBoxLayout( d->pageOpenExisting, 0, KDialogBase::spacingHint() );
 
-	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, d->pageOpenExisting, "KexiConnSelectorWidget");
+	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, d->pageOpenExisting, 
+		"KexiConnSelectorWidget");
 	lyr->addWidget( d->openExistingConnWidget );
 	if (KGlobal::config()->readEntry("OpenExistingType","File")=="File")
 		d->openExistingConnWidget->showSimpleConn();
@@ -525,6 +531,8 @@ void KexiStartupDialog::setupPageOpenExisting()
 	connect(d->openExistingFileDlg,SIGNAL(accepted()),this,SLOT(accept()));
 	connect(d->openExistingConnWidget,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(connectionItemForOpenExistingExecuted(ConnectionDataLVItem*)));
+	connect(d->openExistingConnWidget,SIGNAL(connectionItemHighlighted(ConnectionDataLVItem*)),
+		this,SLOT(connectionItemForOpenExistingHighlighted(ConnectionDataLVItem*)));
 }
 
 void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item)
@@ -534,6 +542,10 @@ void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVIt
 	accept();
 }
 
+void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataLVItem *item)
+{
+	actionButton(KDialogBase::Ok)->setEnabled(item);
+}
 
 void KexiStartupDialog::slotOk() {
 	kdDebug()<<"KexiStartupDialog::slotOk()"<<endl;

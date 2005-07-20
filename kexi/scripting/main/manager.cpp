@@ -43,6 +43,7 @@ extern "C"
 
 namespace Kross { namespace Api {
 
+    //! @internal
     class ManagerPrivate
     {
         public:

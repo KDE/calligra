@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003,2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,12 +35,16 @@ class KexiConnSelectorBase;
 //! helper class
 class ConnectionDataLVItem : public QListViewItem
 {
-public:
-	ConnectionDataLVItem(KexiDB::ConnectionData *d, 
-		const KexiDB::Driver::Info& info, QListView *list);
-	~ConnectionDataLVItem();
+	public:
+		ConnectionDataLVItem(KexiDB::ConnectionData *data, 
+			const KexiDB::Driver::Info& info, QListView *list);
+		~ConnectionDataLVItem();
+
+		void update(const KexiDB::Driver::Info& info);
+		KexiDB::ConnectionData *data() const { return m_data; }
 	
-	KexiDB::ConnectionData *data;
+	protected:
+		KexiDB::ConnectionData *m_data;
 };
 
 
@@ -53,75 +57,78 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
 {
 	Q_OBJECT
 
-public:
-	enum ConnType { FileBased=1, ServerBased=2 };
-    
-	/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. */
-	KexiConnSelectorWidget( const KexiDBConnectionSet& conn_set, QWidget* parent = 0, 
-		const char* name = 0 );
-    ~KexiConnSelectorWidget();
-	
-	/*! After accepting this dialog this method returns wherher user selected
-	 file- or server- based connection (ConnType enum). */
-	int selectedConnectionType() const;
+	public:
+		enum ConnType { FileBased=1, ServerBased=2 };
 
-	/*! \return data of selected connection, if server-based connection was selected.
-	 Returns NULL if no selection has been made or file-based connection 
-	 has been selected. 
-	 @see selectedConnectionType()
-	*/
-	KexiDB::ConnectionData* selectedConnectionData() const;
+		/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. 
+		 \a conn_set can be altered, because Add/Edit/Remove buttons are available 
+		 to users. */
+		KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, QWidget* parent = 0, 
+			const char* name = 0 );
 
-	/*! \return the name of database file, if server-based connection was selected.
-	 Returns null string if no selection has been made or server-based connection 
-	 has been selected.
-	 @see selectedConnectionType()
-	*/
-	QString selectedFileName();
+		~KexiConnSelectorWidget();
+		
+		/*! After accepting this dialog this method returns wherher user selected
+		 file- or server- based connection (ConnType enum). */
+		int selectedConnectionType() const;
 
-	//! Usable when we want to do other things for "back" button
-	void disconnectShowSimpleConnButton();
+		/*! \return data of selected connection, if server-based connection was selected.
+		 Returns NULL if no selection has been made or file-based connection 
+		 has been selected. 
+		 @see selectedConnectionType()
+		*/
+		KexiDB::ConnectionData* selectedConnectionData() const;
 
-	QListView* connectionsList() const;
-	
-	KexiConnSelectorBase *m_remote;
-	KexiOpenExistingFile *m_file;
-	KexiStartupFileDialog *m_fileDlg;
+		/*! \return the name of database file, if server-based connection was selected.
+		 Returns null string if no selection has been made or server-based connection 
+		 has been selected.
+		 @see selectedConnectionType()
+		*/
+		QString selectedFileName();
 
-	/*! If true, user will be asked to accept overwriting existing project. 
-	 This is true by default. */
-	void setConfirmOverwrites(bool set);
+		//! Usable when we want to do other things for "back" button
+		void disconnectShowSimpleConnButton();
 
-	bool confirmOverwrites() const;
+		QListView* connectionsList() const;
+		
+		KexiConnSelectorBase *m_remote;
+		KexiOpenExistingFile *m_file;
+		KexiStartupFileDialog *m_fileDlg;
 
-signals:
-	void connectionItemExecuted( ConnectionDataLVItem *item );
+		/*! If true, user will be asked to accept overwriting existing project. 
+		 This is true by default. */
+		void setConfirmOverwrites(bool set);
 
-public slots:
-	void showSimpleConn();
-	void showAdvancedConn();
-	virtual void setFocus();
-	
-	/*! Hides helpers on the server based connection page
-	  (sometimes it's convenient not to have these):
-	- "Select existing database server's connection..." (label at the top)
-	- "Click "Back" button" (label at the bottom)
-	- "Back" button itself */
-	void hideHelpers();
+		bool confirmOverwrites() const;
 
-protected slots:
-	void slotConnectionItemExecuted(QListViewItem *item);
-	void slotRemoteAddBtnClicked();
-	void slotRemoteEditBtnClicked();
-	void slotRemoteRemoveBtnClicked();
+	signals:
+		void connectionItemExecuted(ConnectionDataLVItem *item);
+		void connectionItemHighlighted(ConnectionDataLVItem *item);
 
-protected:
-	QGuardedPtr<const KexiDBConnectionSet> m_conn_set;
-	
-	KexiConnSelectorWidgetPrivate *d;
-	
+	public slots:
+		void showSimpleConn();
+		void showAdvancedConn();
+		virtual void setFocus();
+		
+		/*! Hides helpers on the server based connection page
+		  (sometimes it's convenient not to have these):
+		- "Select existing database server's connection..." (label at the top)
+		- "Click "Back" button" (label at the bottom)
+		- "Back" button itself */
+		void hideHelpers();
+
+	protected slots:
+		void slotConnectionItemExecuted(QListViewItem *item);
+		void slotRemoteAddBtnClicked();
+		void slotRemoteEditBtnClicked();
+		void slotRemoteRemoveBtnClicked();
+		void slotConnectionSelectionChanged();
+
+	private:
+		ConnectionDataLVItem* addConnectionData( KexiDB::ConnectionData* data );
+		ConnectionDataLVItem* selectedConnectionDataItem() const;
+		
+		KexiConnSelectorWidgetPrivate *d;
 };
 
-
 #endif // KEXICONNSELECTOR_H
-

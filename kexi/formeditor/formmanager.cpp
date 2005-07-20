@@ -77,6 +77,7 @@
 
 namespace KFormDesigner {
 
+//! @internal
 class PropertyFactory : public KoProperty::CustomPropertyFactory
 {
 	public:

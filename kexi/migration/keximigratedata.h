@@ -29,7 +29,7 @@ namespace KexiMigration
         //Use this class to store all possible options that could be used by keximigrate.
         //The current members are not meant to be a definite set, for example, i envisage
         //adding table/field lists if we allow only importing certain tables/fields
-	class Data
+	class KEXIMIGR_EXPORT Data
 	{
 		public:
 			Data();

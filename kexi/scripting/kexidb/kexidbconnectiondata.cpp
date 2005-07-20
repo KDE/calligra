@@ -32,11 +32,11 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
     : Kross::Api::Class<KexiDBConnectionData>("KexiDBConnectionData")
     , m_data(data)
 {
-    addFunction("connName", &KexiDBConnectionData::connName,
+    addFunction("caption", &KexiDBConnectionData::caption,
         Kross::Api::ArgumentList(),
         i18n("Return connection name.")
     );
-    addFunction("setConnName", &KexiDBConnectionData::setConnName,
+    addFunction("setCaption", &KexiDBConnectionData::setCaption,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
         i18n("Set connection name.")
     );
@@ -135,15 +135,15 @@ const QString KexiDBConnectionData::getDescription() const
     return m_data;
 }
 
-Kross::Api::Object::Ptr KexiDBConnectionData::connName(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr KexiDBConnectionData::caption(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_data->connName,
-           "Kross::KexiDB::Connection::connName::String");
+    return new Kross::Api::Variant(m_data->caption,
+           "Kross::KexiDB::Connection::caption::String");
 }
 
-Kross::Api::Object::Ptr KexiDBConnectionData::setConnName(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr KexiDBConnectionData::setCaption(Kross::Api::List::Ptr args)
 {
-    m_data->connName = Kross::Api::Variant::toString(args->item(0));
+    m_data->caption = Kross::Api::Variant::toString(args->item(0));
     return 0;
 }
 

@@ -28,7 +28,6 @@
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
-#include "KexiDBShortcutFile.h"
 
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
@@ -38,6 +37,7 @@
 #include "KexiProjectSelector.h"
 #include "KexiNewProjectWizard.h"
 #include <kexidbconnectionwidget.h>
+#include <kexidbshortcutfile.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -59,6 +59,9 @@
 #include <qapplication.h>
 #include <qlayout.h>
 
+//undef this for hardcoded conn. data
+//#define KEXI_HARDCODED_CONNDATA
+
 namespace Kexi {
 	static KexiStartupHandler _startupHandler;
 	
@@ -67,11 +70,13 @@ namespace Kexi {
 
 //---------------------------------
 
+//! @internal
 class KexiStartupHandlerPrivate
 {
 	public:
 		KexiStartupHandlerPrivate()
-		 : passwordDialog(0), showConnectionDetailsExecuted(false), shortcutFile(0), connDialog(0)
+		 : passwordDialog(0), showConnectionDetailsExecuted(false)
+			, shortcutFile(0), connDialog(0), startupDialog(0)
 		{
 		}
 
@@ -79,6 +84,7 @@ class KexiStartupHandlerPrivate
 		{
 			delete passwordDialog;
 			delete connDialog;
+			delete startupDialog;
 		}
 
 		KPasswordDialog* passwordDialog;
@@ -86,6 +92,7 @@ class KexiStartupHandlerPrivate
 		KexiDBShortcutFile *shortcutFile;
 		KexiDBConnectionDialog *connDialog;
 		QString shortcutFileGroupKey;
+		KexiStartupDialog *startupDialog;
 };
 
 //---------------------------------
@@ -393,7 +400,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 					//get information for a shortcut file
 					d->shortcutFile = new KexiDBShortcutFile(cdata.fileName());
 					m_projectData = new KexiProjectData();
-					if (!d->shortcutFile->loadConnectionData(*m_projectData, &d->shortcutFileGroupKey)) {
+					if (!d->shortcutFile->loadProjectData(*m_projectData, &d->shortcutFileGroupKey)) {
 						KMessageBox::sorry(0, i18n("Could not open shortcut file\n\"%1\".")
 							.arg(cdata.fileName()));
 						delete m_projectData;
@@ -403,13 +410,12 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 						return false;
 					}
 					d->connDialog = new KexiDBConnectionDialog(*m_projectData, d->shortcutFile->fileName());
-					connect(d->connDialog->tabWidget->mainWidget, SIGNAL(saveChanges()), 
-						this, SLOT(slotSaveShortcutFileChanges()));
+					connect(d->connDialog, SIGNAL(saveChanges()), this, SLOT(slotSaveShortcutFileChanges()));
 					int res = d->connDialog->exec();
 
 					if (res == QDialog::Accepted) {
 						//get (possibly changed) prj data
-						*m_projectData = d->connDialog->currentData();
+						*m_projectData = d->connDialog->currentProjectData();
 					}
 
 					delete d->connDialog;
@@ -446,7 +452,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 		if (res == QDialog::Accepted) {
 			//get (possibly changed) prj data
-			*m_projectData = d->connDialog->currentData();
+			*m_projectData = d->connDialog->currentProjectData();
 		}
 
 		delete d->connDialog;
@@ -509,6 +515,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	if (!m_projectData) {
 		cdata = KexiDB::ConnectionData(); //clear
 //		importantInfo(true);
+
+#ifdef KEXI_HARDCODED_CONNDATA
 //<TEMP>
 		//some connection data
 		Kexi::connset().clear();
@@ -519,14 +527,14 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 #endif
 
 		conndata = new KexiDB::ConnectionData();
-			conndata->connName = "Local MySQL Connection";
+			conndata->caption = "Local MySQL Connection";
 			conndata->driverName = "mysql";
 			conndata->hostName = "localhost";
 //			conndata->userName = "otheruser";
 //			conndata->port = 53121;
 		Kexi::connset().addConnectionData(conndata);
 		conndata = new KexiDB::ConnectionData();
-			conndata->connName = "Local Pgsql Connection";
+			conndata->caption = "Local Pgsql Connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
 #if !KDE_IS_VERSION(3,1,9)
@@ -542,19 +550,22 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		projectData->setDescription("This is my first biger project started yesterday. Have fun!");
 		Kexi::recentProjects().addProjectData(projectData);
 //</TEMP>
+#endif //KEXI_HARDCODED_CONNDATA
 
 		if (!KexiStartupDialog::shouldBeShown())
 			return true;
 
-		KexiStartupDialog dlg(KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-			Kexi::connset(), Kexi::recentProjects(), 0, "dlg");
-		if (dlg.exec()!=QDialog::Accepted)
+		if (!d->startupDialog) //create d->startupDialog for reuse because it can be used again after conn err.
+			d->startupDialog = new KexiStartupDialog(
+				KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
+				Kexi::connset(), Kexi::recentProjects(), 0, "KexiStartupDialog");
+		if (d->startupDialog->exec()!=QDialog::Accepted)
 			return true;
 
-		int r = dlg.result();
+		int r = d->startupDialog->result();
 		if (r==KexiStartupDialog::TemplateResult) {
-			kdDebug() << "Template key == " << dlg.selectedTemplateKey() << endl;
-			if (dlg.selectedTemplateKey()=="blank") {
+			kdDebug() << "Template key == " << d->startupDialog->selectedTemplateKey() << endl;
+			if (d->startupDialog->selectedTemplateKey()=="blank") {
 				m_action = CreateBlankProject;
 				//createBlankDatabase();
 				return true;
@@ -564,7 +575,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		}
 		else if (r==KexiStartupDialog::OpenExistingResult) {
 			kdDebug() << "Existing project --------" << endl;
-			QString selFile = dlg.selectedExistingFile();
+			QString selFile = d->startupDialog->selectedExistingFile();
 			if (!selFile.isEmpty()) {
 				//file-based project
 				kdDebug() << "Project File: " << selFile << endl;
@@ -574,16 +585,26 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 					return false;
 				m_projectData = new KexiProjectData(cdata, selFile);
 			}
-			else if (dlg.selectedExistingConnection()) {
-				kdDebug() << "Existing connection: " << dlg.selectedExistingConnection()->serverInfoString() << endl;
-				KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
+			else if (d->startupDialog->selectedExistingConnection()) {
+				kdDebug() << "Existing connection: " << d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
+				KexiDB::ConnectionData *cdata = d->startupDialog->selectedExistingConnection();
 				//ok, now we will try to show projects for this connection to the user
-				m_projectData = selectProject( cdata );
+				bool cancelled;
+				m_projectData = selectProject( cdata, cancelled );
+				if (!m_projectData && !cancelled) {
+						//try again
+						return init(0, 0);
+//						m_action = Exit;
+//						return false;
+				}
+				//not needed anymore
+				delete d->startupDialog;
+				d->startupDialog = 0;
 			}
 		}
 		else if (r==KexiStartupDialog::OpenRecentResult) {
 			kdDebug() << "Recent project --------" << endl;
-			const KexiProjectData *data = dlg.selectedProjectData();
+			const KexiProjectData *data = d->startupDialog->selectedProjectData();
 			if (data) {
 				kdDebug() << "Selected project: database=" << data->databaseName()
 					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
@@ -626,7 +647,7 @@ QString KexiStartupHandler::detectDriverForFile(
 		//try this detection if "project file" mode is forced or no type is forced:
 		ptr = KMimeType::findByFileContent(dbFileName);
 		mimename = ptr.data()->name();
-		kdDebug() << "KexiStartupHandler::detectProjectData(): found mime is: " 
+		kdDebug() << "KexiStartupHandler::detectDriverForFile(): found mime is: " 
 			<< mimename << endl;
 		if (mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain") {
 			//try by URL:
@@ -650,7 +671,7 @@ QString KexiStartupHandler::detectDriverForFile(
 	{
 		ret = detectedDriverName;
 	}
-	kdDebug() << "KexiStartupHandler::detectProjectData(): driver name: " << ret << endl;
+	kdDebug() << "KexiStartupHandler::detectDriverForFile(): driver name: " << ret << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
 	if (!(options & DontConvert) 
@@ -695,21 +716,33 @@ QString KexiStartupHandler::detectDriverForFile(
 }
 
 KexiProjectData*
-KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, QWidget *parent)
+KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent)
 {
 	clearStatus();
+	cancelled = false;
 	if (!cdata)
 		return 0;
 	KexiProjectData* projectData = 0;
 	//dialog for selecting a project
 	KexiProjectSelectorDialog prjdlg( parent, "prjdlg", cdata, true, false );
 	if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
-		setStatus(i18n("Could not load list of available projects for connection \"%1\"")
-		.arg(cdata->serverInfoString()), prjdlg.projectSet()->errorMsg());
+		KexiGUIMessageHandler msgh;
+		if (prjdlg.projectSet())
+			msgh.showErrorMessage(prjdlg.projectSet(), 
+				i18n("Could not load list of available projects for <b>%1</b> database server.")
+				.arg(cdata->serverInfoString(true)));
+		else
+			msgh.showErrorMessage(
+				i18n("Could not load list of available projects for <b>%1</b> database server.")
+				.arg(cdata->serverInfoString(true)));
+//		setStatus(i18n("Could not load list of available projects for database server \"%1\"")
+//		.arg(cdata->serverInfoString(true)), prjdlg.projectSet()->errorMsg());
 		return 0;
 	}
-	if (prjdlg.exec()!=QDialog::Accepted)
+	if (prjdlg.exec()!=QDialog::Accepted) {
+		cancelled = true;
 		return 0;
+	}
 	if (prjdlg.selectedProjectData()) {
 		//deep copy
 		projectData = new KexiProjectData(*prjdlg.selectedProjectData());
@@ -719,8 +752,8 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, QWidget *parent
 
 void KexiStartupHandler::slotSaveShortcutFileChanges()
 {
-	if (!d->shortcutFile->saveConnectionData(d->connDialog->currentData(), 
-		d->connDialog->savePasswordSelected(), 
+	if (!d->shortcutFile->saveProjectData(d->connDialog->currentProjectData(), 
+		d->connDialog->savePasswordOptionSelected(), 
 		&d->shortcutFileGroupKey ))
 	{
 		KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.")

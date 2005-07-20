@@ -26,9 +26,10 @@
 
 #include <kdebug.h>
 
-#define ERRMSG(a1, a2) \
-	{ if (m_msgHandler) m_msgHandler->showErrorMessage(a1, a2); }
+//#define ERRMSG(a1, a2) \
+//	{ if (m_msgHandler) m_msgHandler->showErrorMessage(a1, a2); }
 
+//! @internal
 class KexiProjectSetPrivate
 {
 public:
@@ -37,20 +38,20 @@ public:
 //		list.setAutoDelete(true);
 	}
 	KexiProjectData::List list;
-	KexiDB::MessageHandler* msgHandler;
+//	KexiDB::MessageHandler* msgHandler;
 };
 
 KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
-: d(new KexiProjectSetPrivate())
+: KexiDB::Object(handler) 
+, d(new KexiProjectSetPrivate())
 {
-	d->msgHandler = handler;
 }
 
 KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata,
 	KexiDB::MessageHandler* handler)
-: d(new KexiProjectSetPrivate())
+: KexiDB::Object(handler) 
+, d(new KexiProjectSetPrivate())
 {
-	d->msgHandler = handler;
 	KexiDB::Driver *drv = Kexi::driverManager().driver(conndata.driverName);
 	if (!drv) {
 		setError(&Kexi::driverManager());

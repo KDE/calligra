@@ -75,6 +75,7 @@ class KFORMEDITOR_EXPORT FormWidget
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
 };
 
+//! @internal
 class FormPrivate
 {
 	public:

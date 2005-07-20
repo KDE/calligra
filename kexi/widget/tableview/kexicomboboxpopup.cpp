@@ -29,6 +29,7 @@
 #include <qlayout.h>
 #include <qevent.h>
 
+//! @internal
 class KexiComboBoxPopupPrivate
 {
 	public:

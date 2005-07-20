@@ -19,6 +19,8 @@
 
 #include "kexidbdrivercombobox.h"
 
+#include <qlistbox.h>
+
 #include <kiconloader.h>
 
 KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driversInfo, 
@@ -28,19 +30,40 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driver
 	foreach(KexiDB::Driver::InfoMap::ConstIterator, it, driversInfo) {
 		if (!includeFileBasedDrivers && it.data().fileBased)
 			continue;
-		m_driverNames += it.data().name;
 		insertItem( SmallIcon("kservices"), it.data().caption );
+		m_driversMap.insert(it.data().caption, it.data().name.lower());
 	}
+	listBox()->sort();
+	//build the names list after sorting
+	for (int i=0; i<count(); i++)
+		m_driverNames += m_driversMap[ text(i) ];
 }
 
 KexiDBDriverComboBox::~KexiDBDriverComboBox()
 {
 }
 
-QString KexiDBDriverComboBox::selectedDriverName() const
+/*QString KexiDBDriverComboBox::selectedDriverName() const
 {
 	return m_driverNames[currentItem()];
+}*/
+
+QString KexiDBDriverComboBox::selectedDriverName() const
+{
+	QMapConstIterator<QString,QString> it( m_driversMap.find( text( currentItem() ) ) );
+	if (it==m_driversMap.constEnd())
+		return QString::null;
+	return it.data();
+}
+
+void KexiDBDriverComboBox::setDriverName(const QString& driverName)
+{
+	int index = m_driverNames.findIndex( driverName.lower() );
+	if (index==-1) {
+//		setCurrentText(QString::null);
+		return;
+	}
+	setCurrentItem(index);
 }
 
 #include "kexidbdrivercombobox.moc"
-

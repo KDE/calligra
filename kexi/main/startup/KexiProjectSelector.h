@@ -116,6 +116,8 @@ public:
 	/*! \return currently assigned project set or NULL if no project set is assigned. */
 	inline KexiProjectSet *projectSet() { return m_sel->projectSet(); }
 
+	virtual void show();
+
 protected slots:
 	void slotProjectExecuted(KexiProjectData*);
 

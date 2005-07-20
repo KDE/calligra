@@ -21,6 +21,9 @@
 #include "kexidbconnectionwidgetdetailsbase.h"
 
 #include <kexi.h>
+#include <kexiguimsghandler.h>
+#include <kexidb/connection.h>
+#include <kexidb/utils.h>
 #include "kexidbdrivercombobox.h"
 
 #include <kdebug.h>
@@ -30,6 +33,7 @@
 #include <kpassdlg.h>
 #include <kurlrequester.h>
 #include <ktextedit.h>
+#include <kprogress.h>
 
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -37,15 +41,22 @@
 #include <qwidgetstack.h>
 #include <qlayout.h>
 #include <qvbox.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+#include <qthread.h>
+#include <qradiobutton.h>
 
+// @internal
 class KexiDBConnectionWidget::Private
 {
 	public:
 		Private()
+		 : connectionOnly(false)
 		{
 		}
 
-		KPushButton *btnSaveChanges;
+		KPushButton *btnSaveChanges, *btnTestConnection;
+		bool connectionOnly : 1;
 };
 
 //---------
@@ -57,21 +68,38 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 	iconLabel->setPixmap(DesktopIcon("socket"));
 
 	QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
-	driversCombo = new KexiDBDriverComboBox(Kexi::driverManager().driversInfo(), false,
+	m_driversCombo = new KexiDBDriverComboBox(Kexi::driverManager().driversInfo(), false,
 		frmEngine, "drivers combo");
-	lblEngine->setBuddy( driversCombo );
-	lblEngine->setFocusProxy( driversCombo );
-	driversComboLyr->addWidget( driversCombo );
+	lblEngine->setBuddy( m_driversCombo );
+	lblEngine->setFocusProxy( m_driversCombo );
+	driversComboLyr->addWidget( m_driversCombo );
+
+	btnLoadDBList->setIconSet(SmallIconSet("reload"));
+	QToolTip::add(btnLoadDBList, i18n("Load databases list from the server"));
+	QWhatsThis::add(btnLoadDBList, 
+		i18n("Loads databases list from the server, so you can select one using the \"Name\" combo box."));
 
 	QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
 	hbox->addStretch(2);
 	d->btnSaveChanges = new KPushButton(KGuiItem(i18n("Save Changes"), "filesave", 
-		i18n("Save all changes made to this connection")), frmBottom, "savechanges");
+		i18n("Save all changes made to this connection information"),
+		i18n("Save all changes made to this connection information. You can later reuse this information.")), 
+		frmBottom, "savechanges");
 	hbox->addWidget( d->btnSaveChanges );
-	d->btnSaveChanges->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+	QWidget::setTabOrder(titleEdit, d->btnSaveChanges);
+	d->btnSaveChanges->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 
-	connect(locationBGrp, SIGNAL(clicked(int)), this, SLOT(slotLocationBGrpClicked(int)));
+	d->btnTestConnection = new KPushButton(KGuiItem(i18n("&Test Connection..."), "", 
+		i18n("Test database connection"), 
+		i18n("Tests database connection. You can to ensure that a valid connection information is provided.")), 
+		frmBottom, "testConnection");
+	hbox->addWidget( d->btnTestConnection );
+	QWidget::setTabOrder(d->btnSaveChanges, d->btnTestConnection);
+	d->btnTestConnection->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+
+	connect( locationBGrp, SIGNAL(clicked(int)), this, SLOT(slotLocationBGrpClicked(int)) );
 	connect( chkPortDefault, SIGNAL(toggled(bool)), this , SLOT(slotCBToggled(bool)) );
+	connect( btnLoadDBList, SIGNAL(clicked()), this, SIGNAL(loadDBList()) );
 	connect( d->btnSaveChanges, SIGNAL(clicked()), this, SIGNAL(saveChanges()) );
 }
 
@@ -80,10 +108,30 @@ KexiDBConnectionWidget::~KexiDBConnectionWidget()
 	delete d;
 }
 
-void KexiDBConnectionWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
+bool KexiDBConnectionWidget::connectionOnly() const
+{ return d->connectionOnly; }
+
+void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool connectionOnly, 
+	const QString& shortcutFileName)
 {
 	m_data = data;
-	nameEdit->setText(m_data.databaseName());
+	d->connectionOnly = connectionOnly;
+
+	if (d->connectionOnly) {
+		nameLabel->hide();
+		nameCombo->hide();
+		btnLoadDBList->hide();
+		dbGroupBox->setTitle(i18n("Database connection"));
+	}
+	else {
+		nameLabel->show();
+		nameCombo->show();
+		btnLoadDBList->show();
+		nameCombo->setCurrentText(m_data.databaseName());
+		dbGroupBox->setTitle(i18n("Database"));
+	}
+//! @todo what if there's no such driver name?
+	m_driversCombo->setDriverName(m_data.connectionData()->driverName);
 	hostEdit->setText(m_data.connectionData()->hostName);
 	locationBGrp->setButton( m_data.connectionData()->hostName.isEmpty() ? 0 : 1 );
 	slotLocationBGrpClicked( locationBGrp->selectedId() );
@@ -98,23 +146,44 @@ void KexiDBConnectionWidget::setData(const KexiProjectData& data, const QString&
 	}
 	userEdit->setText(m_data.connectionData()->userName);
 	passwordEdit->setText(m_data.connectionData()->password);
-	titleEdit->setText(m_data.caption());
+	if (d->connectionOnly)
+		titleEdit->setText(m_data.connectionData()->caption);
+	else
+		titleEdit->setText(m_data.caption());
 
 	if (shortcutFileName.isEmpty()) {
 		d->btnSaveChanges->hide();
-		chkSavePassword->hide();
+//		chkSavePassword->hide();
 	}
 	else {
-		chkSavePassword->setChecked(!m_data.connectionData()->password.isEmpty());
 		if (!QFileInfo(shortcutFileName).isWritable()) {
 			d->btnSaveChanges->setEnabled(false);
 		}
 	}
+//	chkSavePassword->setChecked(!m_data.connectionData()->password.isEmpty());
+	chkSavePassword->setChecked(m_data.connectionData()->savePassword);
+	adjustSize();
+}
+
+void KexiDBConnectionWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
+{
+	setDataInternal(data, false /*!connectionOnly*/, shortcutFileName);
+}
+
+void KexiDBConnectionWidget::setData(const KexiDB::ConnectionData& data, const QString& shortcutFileName)
+{
+	KexiProjectData pdata(data);
+	setDataInternal(pdata, true /*connectionOnly*/, shortcutFileName);
 }
 
 KPushButton* KexiDBConnectionWidget::saveChangesButton() const
 {
 	return d->btnSaveChanges;
+}
+
+KPushButton* KexiDBConnectionWidget::testConnectionButton() const
+{
+	return d->btnTestConnection;
 }
 
 KexiProjectData KexiDBConnectionWidget::data()
@@ -145,7 +214,7 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget( QWidget* parent, const cha
 {
 	mainWidget = new KexiDBConnectionWidget( this, "mainWidget" );
 	mainWidget->layout()->setMargin(KDialog::marginHint());
-	addTab( mainWidget, i18n("Information") );
+	addTab( mainWidget, i18n("Parameters") );
 
 //	QVBox *page2 = new QVBox(this);
 //	page2->setMargin(KDialog::marginHint());
@@ -155,6 +224,8 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget( QWidget* parent, const cha
 //	lbl->setBuddy(m_descriptionEdit);
 	detailsWidget = new KexiDBConnectionWidgetDetailsBase(this, "detailsWidget");
 	addTab( detailsWidget, i18n("Details") );
+
+	connect( mainWidget->testConnectionButton(), SIGNAL(clicked()), this, SLOT(slotTestConnection()) );
 }
 
 KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
@@ -165,12 +236,22 @@ void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QStri
 {
 	mainWidget->setData( data, shortcutFileName );
 	detailsWidget->chkUseSocket->setChecked( data.constConnectionData()->useLocalSocketFile );
-	detailsWidget->customSocketEdit->setURL(data.constConnectionData()->localSocketFileName);
-	detailsWidget->chkSocketDefault->setChecked(data.constConnectionData()->localSocketFileName.isEmpty());
+	detailsWidget->customSocketEdit->setURL( data.constConnectionData()->localSocketFileName );
+	detailsWidget->chkSocketDefault->setChecked( data.constConnectionData()->localSocketFileName.isEmpty() );
 	detailsWidget->descriptionEdit->setText( data.description() );
 }
 
-KexiProjectData KexiDBConnectionTabWidget::currentData()
+void KexiDBConnectionTabWidget::setData(const KexiDB::ConnectionData& data, 
+	const QString& shortcutFileName)
+{
+	mainWidget->setData( data, shortcutFileName );
+	detailsWidget->chkUseSocket->setChecked( data.useLocalSocketFile );
+	detailsWidget->customSocketEdit->setURL( data.localSocketFileName );
+	detailsWidget->chkSocketDefault->setChecked( data.localSocketFileName.isEmpty() );
+	detailsWidget->descriptionEdit->setText( data.description );
+}
+
+KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
 {
 	KexiProjectData data;
 
@@ -178,11 +259,18 @@ KexiProjectData KexiDBConnectionTabWidget::currentData()
 
 	// collect data from the form's fields
 //	if (d->isDatabaseShortcut) {
-		data.setCaption( mainWidget->titleEdit->text() );
-		data.setDescription( detailsWidget->descriptionEdit->text() );
-		data.connectionData()->description = QString::null;
-		data.connectionData()->connName = QString::null; /* connection name is not specified... */
-		data.setDatabaseName( mainWidget->nameEdit->text() );
+		if (mainWidget->connectionOnly()) {
+			data.connectionData()->caption = mainWidget->titleEdit->text();
+			data.setCaption( QString::null );
+			data.connectionData()->description = detailsWidget->descriptionEdit->text();
+			data.setDatabaseName( QString::null );
+		}
+		else {
+			data.connectionData()->caption = QString::null; /* connection name is not specified... */
+			data.setCaption( mainWidget->titleEdit->text() );
+			data.setDescription( detailsWidget->descriptionEdit->text() );
+			data.setDatabaseName( mainWidget->nameCombo->currentText() );
+		}
 //	}
 /*	else {
 		data.setCaption( QString::null );
@@ -191,14 +279,14 @@ KexiProjectData KexiDBConnectionTabWidget::currentData()
 		data.connectionData()->description = config.readEntry("comment");
 		data.setDatabaseName( QString::null );
 	}*/
-	data.connectionData()->driverName = mainWidget->driversCombo->selectedDriverName();
+	data.connectionData()->driverName = mainWidget->driversCombo()->selectedDriverName();
 
 /*	if (data.connectionData()->driverName.isEmpty()) {
 		//ERR: "No valid "engine" field specified for %1 section" group
 		return false;
 	}*/
 	data.connectionData()->hostName = 
-		(mainWidget->locationBGrp->selectedId()==1/*remote*/) ? mainWidget->hostEdit->text()
+		(mainWidget->remotehostRBtn->isChecked()/*remote*/) ? mainWidget->hostEdit->text()
 		: QString::null;
 	data.connectionData()->port = mainWidget->chkPortDefault->isChecked() 
 		? 0 : mainWidget->customPortEdit->value();
@@ -208,45 +296,96 @@ KexiProjectData KexiDBConnectionTabWidget::currentData()
 //UNSAFE!!!!
 	data.connectionData()->userName = mainWidget->userEdit->text();
 	data.connectionData()->password = mainWidget->passwordEdit->text();
+	data.connectionData()->savePassword = mainWidget->chkSavePassword->isChecked();
 /* @todo add "options=", eg. as string list? */
 	return data;
 }
 
-bool KexiDBConnectionTabWidget::savePasswordSelected() const
+bool KexiDBConnectionTabWidget::savePasswordOptionSelected() const
 {
 	return mainWidget->chkSavePassword->isChecked();
+}
+
+
+
+
+void KexiDBConnectionTabWidget::slotTestConnection()
+{
+	KexiGUIMessageHandler msgHandler;
+	KexiDB::connectionTestDialog(this, *currentProjectData().connectionData(), 
+		msgHandler);
 }
 
 //--------
 
 //! @todo set proper help ctxt ID
 
-KexiDBConnectionDialog::KexiDBConnectionDialog(const KexiProjectData& data, const QString& shortcutFileName)
+KexiDBConnectionDialog::KexiDBConnectionDialog(const KexiProjectData& data, 
+	const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
  : KDialogBase(0, "dlg", true, i18n("Open Database"), 
 	KDialogBase::User1|KDialogBase::Cancel|KDialogBase::Help,
-	KDialogBase::User1, false, KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")))
+	KDialogBase::User1, false, 
+	acceptButtonGuiItem.text().isEmpty() 
+		? KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")) 
+		: acceptButtonGuiItem
+	)
 {
-	connect( this, SIGNAL(user1Clicked()), this, SLOT(accept()));
-
 	tabWidget = new KexiDBConnectionTabWidget(this, "tabWidget");
 	tabWidget->setData(data, shortcutFileName);
-	setMainWidget(tabWidget);
+	init();
+}
 
-	adjustSize();
-	resize(width(), tabWidget->height());
-	if (tabWidget->mainWidget->nameEdit->text().isEmpty())
-		tabWidget->mainWidget->nameEdit->setFocus();
-	else if (tabWidget->mainWidget->userEdit->text().isEmpty())
-		tabWidget->mainWidget->userEdit->setFocus();
-	else if (tabWidget->mainWidget->passwordEdit->text().isEmpty())
-		tabWidget->mainWidget->passwordEdit->setFocus();
-	else //back
-		tabWidget->mainWidget->nameEdit->setFocus();
+KexiDBConnectionDialog::KexiDBConnectionDialog(const KexiDB::ConnectionData& data, 
+	const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
+ : KDialogBase(0, "dlg", true, i18n("Connect to a Database Server"), 
+	KDialogBase::User1|KDialogBase::Cancel|KDialogBase::Help,
+	KDialogBase::User1, false, 
+	acceptButtonGuiItem.text().isEmpty() 
+		? KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection"))
+		: acceptButtonGuiItem
+	)
+{
+	tabWidget = new KexiDBConnectionTabWidget(this, "tabWidget");
+	tabWidget->setData(data, shortcutFileName);
+	init();
 }
 
 KexiDBConnectionDialog::~KexiDBConnectionDialog()
 {
 }
+
+void KexiDBConnectionDialog::init()
+{
+	connect( this, SIGNAL(user1Clicked()), this, SLOT(accept()));
+	setMainWidget(tabWidget);
+	connect(tabWidget->mainWidget, SIGNAL(saveChanges()), this, SIGNAL(saveChanges()));
+	connect(tabWidget, SIGNAL(testConnection()), this, SIGNAL(testConnection()));
+
+	adjustSize();
+	resize(width(), tabWidget->height());
+	if (tabWidget->mainWidget->connectionOnly())
+		tabWidget->mainWidget->driversCombo()->setFocus();
+	else if (tabWidget->mainWidget->nameCombo->currentText().isEmpty())
+		tabWidget->mainWidget->nameCombo->setFocus();
+	else if (tabWidget->mainWidget->userEdit->text().isEmpty())
+		tabWidget->mainWidget->userEdit->setFocus();
+	else if (tabWidget->mainWidget->passwordEdit->text().isEmpty())
+		tabWidget->mainWidget->passwordEdit->setFocus();
+	else //back
+		tabWidget->mainWidget->nameCombo->setFocus();
+}
+
+KexiProjectData KexiDBConnectionDialog::currentProjectData()
+{ return tabWidget->currentProjectData(); }
+
+bool KexiDBConnectionDialog::savePasswordOptionSelected() const
+{ return tabWidget->savePasswordOptionSelected(); }
+
+KexiDBConnectionWidget* KexiDBConnectionDialog::mainWidget() const
+{ return tabWidget->mainWidget; }
+
+KexiDBConnectionWidgetDetailsBase* KexiDBConnectionDialog::detailsWidget() const
+{ return tabWidget->detailsWidget; }
 
 #include "kexidbconnectionwidget.moc"
 

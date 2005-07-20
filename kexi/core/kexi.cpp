@@ -41,11 +41,16 @@ class KexiInternal : public KShared
 {
 	public:
 		KexiInternal() : KShared()
-		{}
+		 , connset(0)
+		{
+		}
 		~KexiInternal()
-		{}
-		KexiDBConnectionSet connset;
+		{
+			delete connset;
+		}
+		KexiDBConnectionSet* connset;
 		KexiProjectSet recentProjects;
+		KexiDBConnectionSet recentConnections;
 		KexiDB::DriverManager driverManager;
 		KexiPart::Manager partManager;
 };
@@ -57,7 +62,13 @@ KSharedPtr<KexiInternal> _int;
 KexiDBConnectionSet& Kexi::connset()
 {
 	_INIT_SHARED;
-	return _int->connset;
+	//delayed
+	if (!_int->connset) {
+		//load stored set data, OK?
+		_int->connset = new KexiDBConnectionSet();
+		_int->connset->load();
+	}
+	return *_int->connset;
 }
 
 KexiProjectSet& Kexi::recentProjects() { 

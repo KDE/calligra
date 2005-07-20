@@ -37,6 +37,7 @@
 #define SHADOW_DIAGONAL_FACTOR 1.0
 #define SHADOW_THICKNESS 1
 
+//! @internal
 class KexiLabelPrivate : public QLabel {
 		friend class KexiLabel;
 	public:

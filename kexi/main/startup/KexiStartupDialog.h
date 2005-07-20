@@ -167,6 +167,7 @@ protected slots:
 	void showSimpleConnForOpenExisting();
 	void showAdvancedConnForOpenExisting();
 	void connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item);
+	void connectionItemForOpenExistingHighlighted(ConnectionDataLVItem *item);
 
 protected:
 	virtual bool eventFilter( QObject *o, QEvent *e );

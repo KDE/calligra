@@ -32,6 +32,7 @@
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
 
+//! @internal
 class KexiRecordNavigatorPrivate
 {
 	public:

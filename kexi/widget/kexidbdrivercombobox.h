@@ -21,6 +21,7 @@
 #define KEXIDBDRIVERCOMBOBOX_H
 
 #include <qwidget.h>
+#include <qmap.h>
 
 #include <kcombobox.h>
 
@@ -38,8 +39,10 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 
 		QStringList driverNames() const { return m_driverNames; }
 		QString selectedDriverName() const;
+		void setDriverName(const QString& driverName);
 
 	protected:
+		QMap<QString,QString> m_driversMap;
 		QStringList m_driverNames;
 };
 

@@ -36,6 +36,7 @@
 
 #include <assert.h>
 
+//! @internal
 class KexiProjectSelectorWidgetPrivate
 {
 public:
@@ -76,8 +77,8 @@ public:
 			}
 		
 			QString conn;
-			if (!cdata->connName.isEmpty())
-				conn = cdata->connName + ": ";
+			if (!cdata->caption.isEmpty())
+				conn = cdata->caption + ": ";
 			conn += cdata->serverInfoString();
 			setText(3, conn + "  ");
 		}
@@ -178,7 +179,8 @@ void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
 				item->setPixmap( 0, d->dbicon );
 		}
 		else {
-			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" << data->constConnectionData()->driverName << "'!" << endl;
+			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" 
+				<< data->constConnectionData()->driverName << "'!" << endl;
 		}
 		data=prjlist.next();
 	}
@@ -216,34 +218,39 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const cha
 KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
 	KexiDB::ConnectionData* cdata, 
 	bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialogBase( Plain, i18n("Open Project"), Help | Ok | Cancel, Ok, parent, name )
+	: KDialogBase( 
+		Plain, i18n("Open Project"), Help | Ok | Cancel, Ok, parent, name, true/*modal*/,
+		false/*sep*/ )
 {
+	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")));
 	assert(cdata);
 	if (!cdata)
 		return;
 	KexiProjectSet *prj_set = new KexiProjectSet( *cdata );
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
 	
-	m_sel->label->setText( i18n("Select one of these existing projects on server <b>%1</b>:")
-		.arg(cdata->serverInfoString(false)) );
+	m_sel->label->setText( i18n("Select a project on <b>%1</b> database server to open:")
+		.arg(cdata->serverInfoString(true)) );
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
 {
 }
 
-void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
+void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNameColumn, 
+	bool showConnectionColumns)
 {
 	setSizeGripEnabled(true);
 	
 	QVBoxLayout *lyr = new QVBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
-	m_sel = new KexiProjectSelectorWidget(plainPage(), "sel", prj_set, showProjectNameColumn, showConnectionColumns);
+	m_sel = new KexiProjectSelectorWidget(plainPage(), "sel", 
+		prj_set, showProjectNameColumn, showConnectionColumns);
 	lyr->addWidget(m_sel);
 	setIcon(*m_sel->icon());
 	m_sel->setFocus();
 	
-	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),this,SLOT(slotProjectExecuted(KexiProjectData*)));
-	KDialog::centerOnScreen(this);
+	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),
+		this,SLOT(slotProjectExecuted(KexiProjectData*)));
 }
 
 KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const
@@ -255,7 +262,11 @@ void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
 {
 	accept();
 }
- 
+
+void KexiProjectSelectorDialog::show()
+{
+	KDialogBase::show();
+	KDialog::centerOnScreen(this);
+}
 
 #include "KexiProjectSelector.moc"
-

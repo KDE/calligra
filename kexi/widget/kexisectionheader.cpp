@@ -40,6 +40,7 @@ class BoxLayout : public QBoxLayout
 
 //==========================
 
+//! @internal
 class KexiSectionHeaderPrivate
 {
 	public:

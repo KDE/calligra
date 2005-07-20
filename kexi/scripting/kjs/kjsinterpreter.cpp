@@ -26,6 +26,7 @@ using namespace Kross::Kjs;
 
 namespace Kross { namespace Kjs {
 
+    //! @internal
     class KjsInterpreterPrivate
     {
         public:

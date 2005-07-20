@@ -77,18 +77,6 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		 It's public for convenience */
 		QValueList<ObjectInfo> autoopenObjects;
 
-/*		static const QString &generateTmpName();
-
-		static KexiProjectConnectionData* loadInfo(QDomElement &e);
-		void	writeInfo(QDomDocument &doc);
-
-		void	flush(KoStore *store);
-		void	provide(KoStore *store);
-		void	clean();
-		void    setDriverName(const QString &driverName);
- 		void    setDatabaseName(const QString &databaseName);
-		QString driverName() const;
-		QString databaseName() const;*/
 	private:
 		KexiProjectDataPrivate *d;
 };

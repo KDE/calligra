@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KexiProjectSelectorBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,6 +19,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>KexiProjectSelectorBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -114,6 +117,9 @@
             </property>
             <property name="showSortIndicator">
                 <bool>true</bool>
+            </property>
+            <property name="resizeMode">
+                <enum>LastColumn</enum>
             </property>
         </widget>
     </vbox>

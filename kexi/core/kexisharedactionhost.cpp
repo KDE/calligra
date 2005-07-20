@@ -27,7 +27,6 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-//! internal class
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
 : QObject(0,"KexiSharedActionHostPrivate")
 , actionProxies(401)

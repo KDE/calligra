@@ -80,6 +80,7 @@ void KexiObjectInfoLabel::updateName()
 
 //------------------------------
 
+//! @internal
 class KexiPropertyEditorView::Private
 {
 	public:

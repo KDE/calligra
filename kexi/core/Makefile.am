@@ -11,7 +11,8 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexidragobjects.cpp \
 	kexiuseraction.cpp kexiuseractionmethod.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp \
-	kexidataiteminterface.cpp kexievents.cpp
+	kexidataiteminterface.cpp kexievents.cpp \
+	kexidbshortcutfile.cpp
 
 #kexipartdatasource.cpp
 
