@@ -264,7 +264,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 * \param classname the classname of the widget, which should get created
 		 * \param parent the parent for the created widget
 		 * \param name the name of the created widget
-		 * \param toplevel the toplevel Container (if a container should get created)
+		 * \param container the toplevel Container (if a container should get created)
+		 * \param orientationHint preferred orientation
 		 */
 		virtual QWidget* create(const QCString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container, OrientationHint orientationHint = Any) = 0;

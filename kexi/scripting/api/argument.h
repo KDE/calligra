@@ -76,9 +76,10 @@ namespace Kross { namespace Api {
              *
              * \param arglist The \a ArgumentList the
              *        operator is applied on.
-             * \param arg The \a Argument to add to the
-             *        passed \a ArgumentList.
              * \return The changed \a ArgumentList.
+	     *
+	     * \todo Document where this argument is added in the list
+	     *       and add a brief code example.
              */
             ArgumentList& operator << (ArgumentList& arglist);
 

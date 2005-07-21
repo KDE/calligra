@@ -64,8 +64,11 @@ namespace Kross { namespace Api {
              *        still accessable.
              * \param function A pointer to the methodfunction that
              *        should handle calls.
+	     * \param arglist A list of arguments for the function.
              * \param documentation Some documentation used to describe
              *        what the function does.
+	     *
+	     * \todo Is that template arguments or concrete arguments?
              */
             void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
             {

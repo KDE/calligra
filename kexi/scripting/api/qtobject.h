@@ -49,7 +49,6 @@ namespace Kross { namespace Api {
              *
              * \param object The \a QObject instance this
              *        class wraps.
-             * \param name The name this QtObject has.
              */
             QtObject(QObject* object);
 
