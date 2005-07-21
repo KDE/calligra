@@ -37,6 +37,7 @@ using namespace KoProperty;
 
 ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
+ , m_setValueEnabled(true)
 {
 	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 #ifdef QT_ONLY
@@ -83,12 +84,25 @@ ComboBox::value() const
 void
 ComboBox::setValue(const QVariant &value, bool emitChange)
 {
+	if (!m_setValueEnabled)
+		return;
 	int idx = property()->listData()->keys.findIndex( value );
-	if (idx>=0) {
+	if (idx>=0 && idx<m_edit->count()) {
 		m_edit->setCurrentItem(idx);
 	}
 	else {
-		kopropertywarn << "ComboBox::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
+		if (idx<0) {
+			kopropertywarn << "ComboBox::setValue(): NO SUCH KEY '" << value.toString() 
+				<< "' (property '" << property()->name() << "')" << endl;
+		} else {
+			QStringList list;
+			for (int i=0; i<m_edit->count(); i++)
+				list += m_edit->text(i);
+			kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx 
+				<< " value=" << value.toString() 
+				<< "' (property '" << property()->name() << "')\nActual combobox contents: "
+				<< list << endl;
+		}
 		m_edit->setCurrentText(QString::null);
 	}
 
@@ -137,12 +151,14 @@ ComboBox::fillBox()
 void
 ComboBox::setProperty(Property *prop)
 {
-	bool b = (property() == prop);
+	const bool b = (property() == prop);
+	m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
 	Widget::setProperty(prop);
+	m_setValueEnabled = true;
 	if(!b)
 		fillBox();
 	if(prop)
-		setValue(prop->value(), false);
+		setValue(prop->value(), false); //not the value can be set
 }
 
 void
