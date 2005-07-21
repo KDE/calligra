@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Kivio
+Name[hi]=किवियो
 Name[lo]=ແຜນຜັງໄດອະແກຣມ
 Name[th]=แผนผังไดอะแกรม K
 Exec=kivio %u

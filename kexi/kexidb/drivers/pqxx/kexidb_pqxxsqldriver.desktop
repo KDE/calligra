@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
+Name[hi]=पोस्टग्रे-एसक्यूएल
 Comment=With a 16 year development history, one of the strongest development communities in the world, and a global reputation for high quality software engineering, PostgreSQL is the world's most advanced Open Source Database for large corporations and individual users.
 Comment[bg]=PostgreSQL е солидна релационна СУБД, неотстъпваща по функционалност на комерсиалните системи. Проектът е с отворен код и има една от най-големите общности и групи зад себе си. Проектът има над 16 годишна история и е отговаря на всички съвременни изисквания за СУБД.
 Comment[ca]=Amb 16 anys d'història de desenvolupament, una de les comunitats de desenvolupament més fortes del món i una reputació global per una alta qualitat en enginyeria del software, PostgreSQL és la base de dades de codi obert més avançada del món per a corporacions i usuaris individuals.

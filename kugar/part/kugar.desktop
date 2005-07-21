@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Kugar
 Name[eo]=Raportilo
+Name[hi]=कुगर
 Name[lo]=ຄູການ 
 Name[th]=คูการ์
 Exec=kugar %u
@@ -28,6 +29,7 @@ GenericName[fa]=مولد گزارش
 GenericName[fi]=Raporttigeneraattori
 GenericName[fr]=Générateur de rapports
 GenericName[he]=יוצר דו"חות
+GenericName[hi]=रपट सृजक
 GenericName[hr]=Program za stvaranje izvještaja
 GenericName[hu]=Jelentéskészítő
 GenericName[is]=SkÃ½rsluskrifari

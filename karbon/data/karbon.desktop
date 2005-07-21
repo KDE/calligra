@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Karbon14
 Name[eo]=Karbono14
+Name[hi]=कार्बन 14
 Name[lo]=ຄາຣ໌ບອບ14
 Name[th]=คาร์บอน14
 Exec=karbon %u
@@ -22,6 +23,7 @@ GenericName[et]=Vektorgraafika
 GenericName[fi]=Skaalattava grafiikka
 GenericName[fr]=Graphiques vectoriels
 GenericName[he]=גרפיקה מדורגת
+GenericName[hi]=स्केलेबल ग्राफिक्स
 GenericName[hr]=Skalabilna Grafika
 GenericName[hu]=Vektoros rajzoló
 GenericName[it]=Grafica vettoriale
