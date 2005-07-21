@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_DUMMYWIDGET_H
 #define KPROPERTY_DUMMYWIDGET_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>

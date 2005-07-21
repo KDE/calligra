@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_CURSOREDIT_H
 #define KPROPERTY_CURSOREDIT_H
 
-#include <koffice_export.h>
 #include "combobox.h"
 
 template<class U, class T> class QDict;

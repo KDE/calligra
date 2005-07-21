@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,33 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPROPERTY_STRINGEDIT_H
-#define KPROPERTY_STRINGEDIT_H
+#ifndef KPROPERTY_GLOBAL_H
+#define KPROPERTY_GLOBAL_H
 
-#include "widget.h"
+#include <koffice_export.h>
 
-class QLineEdit;
-
-namespace KoProperty {
-
-class KOPROPERTY_EXPORT StringEdit : public Widget
-{
-	Q_OBJECT
-
-	public:
-		StringEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~StringEdit();
-
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
-
-	protected slots:
-		void slotValueChanged(const QString&);
-
-	private:
-		QLineEdit   *m_edit;
-};
-
-}
+//convenience defines
+#define kopropertydbg  kdDebug(30007)
+#define kopropertywarn kdWarning(30007)
 
 #endif

@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_TIMEEDIT_H
 #define KPROPERTY_TIMEEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 class QTimeEdit;

@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_PROPERTYEDITORITEM_H
 #define KPROPERTY_PROPERTYEDITORITEM_H
 
-#include <koffice_export.h>
+#include "koproperty_global.h"
 #ifdef QT_ONLY
 #include <qlistview.h>
 #else

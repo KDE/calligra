@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_COMBOBOX_H
 #define KPROPERTY_COMBOBOX_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 #ifdef QT_ONLY

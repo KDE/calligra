@@ -92,7 +92,7 @@ void
 Factory::registerEditor(int type, CustomPropertyFactory *creator)
 {
 	if(d->registeredWidgets.contains(type))
-		kdDebug(100300) << "Type (" << type << ") already registered. Overriding actual createWidget function." << endl;
+		kopropertywarn << "Type (" << type << ") already registered. Overriding actual createWidget function." << endl;
 	d->registeredWidgets.insert(type, creator);
 }
 
@@ -181,7 +181,7 @@ Factory::widgetForProperty(Property *property)
 		case List:
 		case Map:
 		default:
-			kdDebug(100300) << "No editor for property " << property->name() << " of type " << property->type() << endl;
+			kopropertywarn << "No editor for property " << property->name() << " of type " << property->type() << endl;
 			return new DummyWidget(property);
 	}
 
@@ -195,7 +195,7 @@ Factory::registerCustomProperty(int type, CustomPropertyFactory *creator)
 	if(!creator)
 		return;
 	if(d->registeredCustomProperties.contains(type))
-		kdDebug(100300) << "Type (" << type << ") already registered. Overriding actual createCustomProperty function." << endl;
+		kopropertywarn << "Type (" << type << ") already registered. Overriding actual createCustomProperty function." << endl;
 	d->registeredCustomProperties.insert(type, creator);
 }
 

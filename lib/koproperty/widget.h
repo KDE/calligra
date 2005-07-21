@@ -22,7 +22,7 @@
 #define KPROPERTY_PROPERTYWIDGET_H
 
 #include <qwidget.h>
-#include <koffice_export.h>
+#include "koproperty_global.h"
 
 namespace KoProperty {
 

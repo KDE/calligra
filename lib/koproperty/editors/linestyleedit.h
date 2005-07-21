@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_LINESTYLEEDIT_H
 #define KPROPERTY_LINESTYLEEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 class QComboBox;

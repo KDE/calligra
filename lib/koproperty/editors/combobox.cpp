@@ -88,7 +88,7 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 		m_edit->setCurrentItem(idx);
 	}
 	else {
-		kdWarning() << "PropertyEditorList::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
+		kopropertywarn << "ComboBox::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
 		m_edit->setCurrentText(QString::null);
 	}
 

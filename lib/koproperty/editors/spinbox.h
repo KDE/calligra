@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
-#include <koffice_export.h>
 #include <knuminput.h>
 
 #include "widget.h"

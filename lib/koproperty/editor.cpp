@@ -210,7 +210,7 @@ Editor::addItem(const QCString &name, EditorItem *parent)
 
 	Property *property = &(d->set->property(name));
 	if(!property || !property->isVisible()) {
-		kdDebug() << "Property is not visible " << name << property->name() << endl;
+//		kopropertydbg << "Property is not visible: " << name << endl;
 		return;
 	}
 	QListViewItem *last = parent ? parent->firstChild() : d->topItem->firstChild();

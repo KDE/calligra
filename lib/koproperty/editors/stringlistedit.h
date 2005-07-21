@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_STRINGLISTEDIT_H
 #define KPROPERTY_STRINGLISTEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 #include <qstringlist.h>

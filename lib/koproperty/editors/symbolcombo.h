@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_SYMBOLCOMBO_H
 #define KPROPERTY_SYMBOLCOMBO_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 class QLineEdit;

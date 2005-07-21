@@ -23,7 +23,7 @@
 #define KPROPERTY_PROPERTYEDITOR_H
 
 #include <qguardedptr.h>
-#include <koffice_export.h>
+#include "koproperty_global.h"
 
 #ifdef QT_ONLY
 #include <qlistview.h>

@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_URLEDIT_H
 #define KPROPERTY_URLEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 #ifndef QT_ONLY

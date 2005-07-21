@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_SIZEEDIT_H
 #define KPROPERTY_SIZEEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>

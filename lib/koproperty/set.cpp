@@ -178,11 +178,11 @@ void
 Set::addProperty(Property *property, QCString group)
 {
 	if (property == 0) {
-		kdWarning() << "Set::addProperty(): property == 0" << endl; 
+		kopropertywarn << "Set::addProperty(): property == 0" << endl; 
 		return;
 	}
 	if (property->name().isEmpty()) {
-		kdWarning() << "Set::addProperty(): COULD NOT ADD NULL PROPERTY" << endl; 
+		kopropertywarn << "Set::addProperty(): COULD NOT ADD NULL PROPERTY" << endl; 
 		return;
 	}
 
@@ -315,7 +315,7 @@ Set::property(const QCString &name)
 //		//addProperty(p); // maybe just return a null property
 //	}
 	Set_nonConstNull.setName(0); //to ensure returned property is null
-	kdWarning() << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
+	kopropertywarn << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
 	return Set_nonConstNull;
 }
 
@@ -361,12 +361,12 @@ Set::changeProperty(const QCString &property, const QVariant &value)
 void
 Set::debug()
 {
-	//kdDebug(45000) << "List: typeName='" << m_typeName << "'" << endl;
+	//kopropertydbg << "List: typeName='" << m_typeName << "'" << endl;
 	if(d->dict.isEmpty()) {
-		kdDebug(100300) << "<EMPTY>" << endl;
+		kopropertydbg << "<EMPTY>" << endl;
 		return;
 	}
-	kdDebug(100300) << d->dict.count() << " properties:" << endl;
+	kopropertydbg << d->dict.count() << " properties:" << endl;
 
    for(Property::DictIterator it(d->dict); it.current(); ++it)
 		it.current()->debug();

@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_CUSTOMPROPERTY_H
 #define KPROPERTY_CUSTOMPROPERTY_H
 
-#include <koffice_export.h>
+#include "koproperty_global.h"
 
 class QVariant;
 

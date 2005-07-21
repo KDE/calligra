@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 class KFontRequester;

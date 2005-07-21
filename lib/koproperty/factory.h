@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_FACTORY_H
 #define KPROPERTY_FACTORY_H
 
-#include <koffice_export.h>
+#include "koproperty_global.h"
 
 template<class U> class QValueList;
 

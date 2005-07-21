@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_DATETIMEEDIT_H
 #define KPROPERTY_DATETIMEEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 class QDateTimeEdit;

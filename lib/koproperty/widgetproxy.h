@@ -22,7 +22,7 @@
 #define KPROPERTY_PROPERTYWIDGETPROXY_H
 
 #include <qwidget.h>
-#include <koffice_export.h>
+#include "koproperty_global.h"
 
 class QVariant;
 

@@ -216,7 +216,7 @@ EditorItem::compare( QListViewItem *i, int col, bool ascending ) const
 		return -QListViewItem::key( col, ascending ).localeAwareCompare( i->key( col, ascending ) );
 
 	if (d->property) {
-//		kdDebug() << d->property->name() << " " << d->property->sortingKey() << " | "
+//		kopropertydbg << d->property->name() << " " << d->property->sortingKey() << " | "
 //			<< static_cast<EditorItem*>(i)->property()->name() << " "
 //			<< static_cast<EditorItem*>(i)->property()->sortingKey() << endl;
 		return d->property->sortingKey() - static_cast<EditorItem*>(i)->property()->sortingKey();

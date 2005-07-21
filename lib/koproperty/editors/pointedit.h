@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_POINTEDIT_H
 #define KPROPERTY_POINTEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 #include <qvariant.h>

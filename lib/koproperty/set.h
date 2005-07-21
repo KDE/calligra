@@ -22,8 +22,8 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
+#include "koproperty_global.h"
 #include <qobject.h>
-#include <koffice_export.h>
 #include <qasciidict.h>
 
 /*! \brief
@@ -105,7 +105,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		bool contains(const QCString &name);
 
 		/*! \return property named with \a name. If no such property is found,
-		 null property (KexiProperty::null) is returned. */
+		 null property (Property::null) is returned. */
 		Property&  property( const QCString &name);
 
 		/*! Accesses a property by it's name. 
@@ -128,7 +128,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		const Set& operator= (const Set &set);
 
 		/*! Change the value of property whose key is \a property to \a value.
-		By default, it only calls KexiProperty::setValue(). */
+		By default, it only calls Property::setValue(). */
 		void changeProperty(const QCString &property, const QVariant &value);
 
 		/*! Sets the i18n'ed string that will be shown in Editor to represent this group. */

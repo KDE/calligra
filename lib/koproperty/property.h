@@ -23,7 +23,7 @@
 #define KPROPERTY_PROPERTY_H
 
 #include <qvariant.h>
-#include <koffice_export.h>
+#include "koproperty_global.h"
 
 template<class U> class QAsciiDict;
 template<class U> class QAsciiDictIterator;
@@ -31,13 +31,13 @@ template<class U> class QAsciiDictIterator;
 //! Namespace for a set of classes implementing generic properties framework.
 /*!
  Main classes of this framework:
-  - Property, representing a single property with it's own type, value
+  - Property, representing a single property with it's own type and value
   - Set, a set of properties
   - Editor, a widget for displaying and editing properies provided by a Set object. 
     Every property has it's own row displayed using EditorItem object, within Editor widget. 
     Widget class provides editing feature for EditorItem objects if a user selects a given item.
 
- KoPropert framework also supports adding custom property types 
+ KoProperty framework also supports adding custom property types 
  and custom property editor types using CustomPropertyFactory.
 
  \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -269,7 +269,7 @@ class KOPROPERTY_EXPORT Property
 
 
 		/*! Sets icon by \a name for this property. Icons are optional and are used e.g.
-		 in KexiPropertyEditor - displayed at the left hand. */
+		 in property editor - displayed at the left hand. */
 		void setIcon(const QString &icon);
 
 		/*! \return property icon. Can be empty. */

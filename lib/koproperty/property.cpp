@@ -297,18 +297,18 @@ void
 Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomProperty)
 {
 	if (d->name.isEmpty()) {
-		kdWarning(100300) << "Property::setValue(): COULD NOT SET value to a null property" << endl;
+		kopropertywarn << "Property::setValue(): COULD NOT SET value to a null property" << endl;
 		return;
 	}
 
-	kdDebug(100300) << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
+	kopropertydbg << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
 	if (d->value.type() != value.type() && !d->value.isNull() && !value.isNull()
 		 && !( (d->value.type()==QVariant::Int && value.type()==QVariant::UInt)
 			   || (d->value.type()==QVariant::UInt && value.type()==QVariant::Int)
 			   || (d->value.type()==QVariant::CString && value.type()==QVariant::String)
 			   || (d->value.type()==QVariant::String && value.type()==QVariant::CString)
 		 )) {
-		kdWarning(100300) << "Property::setValue(): INCOMPAT TYPES! " << d->value.typeName() << " and " << value.typeName() << endl;
+		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << d->value.typeName() << " and " << value.typeName() << endl;
 	}
 
 	//1. Check if the value should be changed
@@ -656,7 +656,7 @@ void Property::setSortingKey(int key)
 void
 Property::debug()
 {
-	QString dbg = "KexiProperty( name='" + QString(d->name) + "' desc='" + d->description
+	QString dbg = "Property( name='" + QString(d->name) + "' desc='" + d->description
 		+ "' val=" + (d->value.isValid() ? d->value.toString() : "<INVALID>");
 	if (!d->oldValue.isValid())
 		dbg += (", oldVal='" + d->oldValue.toString() + "'");
@@ -664,5 +664,5 @@ Property::debug()
 	dbg += (d->visible ? " visible" : " hidden");
 	dbg+=" )";
 
-	kdDebug(100300) << dbg << endl;
+	kopropertydbg << dbg << endl;
 }

@@ -116,7 +116,7 @@ CursorEdit::~CursorEdit()
 /*QVariant
 CursorEdit::value() const
 {
-	kdDebug() << ComboBox::value().toInt() << endl;
+	kopropertydbg << ComboBox::value().toInt() << endl;
 	return ComboBox::value().toInt();
 }*/
 

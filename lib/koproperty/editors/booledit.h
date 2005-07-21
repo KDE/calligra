@@ -21,7 +21,6 @@
 #ifndef KPROPERTY_BOOLEDIT_H
 #define KPROPERTY_BOOLEDIT_H
 
-#include <koffice_export.h>
 #include "widget.h"
 
 class QToolButton;
