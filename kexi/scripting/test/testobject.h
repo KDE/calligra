@@ -42,6 +42,7 @@ class TestObject : public QObject
         void testSignalString(const QString&);
     public slots:
         void testSlot();
+        void testSlot2();
     private slots:
         void testSignalSlot();
 };

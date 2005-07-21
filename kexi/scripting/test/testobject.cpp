@@ -24,13 +24,13 @@
 TestObject::TestObject(QObject* parent)
     : QObject(parent, "TestObject")
 {
-    //kdDebug() << "TestObject::TestObject called" << endl;
+    //kdDebug() << "TestObject::TestObject Constructor." << endl;
     connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
 }
 
 TestObject::~TestObject()
 {
-    //kdDebug() << "TestObject::~TestObject called" << endl;
+    //kdDebug() << "TestObject::~TestObject Destructor." << endl;
 }
 
 void TestObject::testSlot()
@@ -38,6 +38,11 @@ void TestObject::testSlot()
     kdDebug() << "TestObject::testSlot called" << endl;
     emit testSignal();
     emit testSignalString("This is the emitted TestObject::testSignalString(const QString&)");
+}
+
+void TestObject::testSlot2()
+{
+    kdDebug() << "TestObject::testSlot2 called" << endl;
 }
 
 void TestObject::testSignalSlot()

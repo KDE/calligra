@@ -29,6 +29,8 @@
 class KexiScriptManager;
 class KexiScriptContainer;
 class KexiScriptEditor;
+class KexiScriptDesignViewPrivate;
+namespace KoProperty { class Set; }
 
 /**
  * The KexiScriptDesignView class provides the \a KexiViewBase to
@@ -52,6 +54,11 @@ class KexiScriptDesignView : public KexiViewBase
         virtual ~KexiScriptDesignView();
 
         /**
+         * \return a property set for this view.
+         */
+        virtual KoProperty::Set* propertySet();
+
+        /**
          * Try to call \a storeData with new data we like to store. On
          * success the matching
          *
@@ -70,9 +77,7 @@ class KexiScriptDesignView : public KexiViewBase
         virtual tristate storeData();
 
     private:
-        KexiScriptManager* m_manager;
-        KexiScriptContainer* m_scriptcontainer;
-        KexiScriptEditor* m_editor;
+        KexiScriptDesignViewPrivate* d;
 
         /**
          * Load the data from XML source and fill the internally

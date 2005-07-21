@@ -245,12 +245,14 @@ print "########## END TEST: KexiDB ##########"
 print "########## BEGIN TEST: QObject ##########"
 try:
     testobject = get("TestObject")
-    print "testobject = %s %s" % (str(testobject),dir(testobject))
-    print "propertyNames = %s" % testobject.propertyNames()
-    print "slotNames = %s" % testobject.slotNames()
-    print "signalNames = %s" % testobject.signalNames()
-    #testobject.connect("testSignal()","testobjectCallback")
-    #testobject.signal("testSignal()")
+    #print "testobject = %s %s" % (str(testobject),dir(testobject))
+    #print "propertyNames = %s" % testobject.propertyNames()
+    #print "slotNames = %s" % testobject.slotNames()
+    #print "signalNames = %s" % testobject.signalNames()
+    #print "########## 2"
+
+    testobject.connect("testSignal()",testobject,"testSlot2()")
+    testobject.signal("testSignal()")
     #testobject.slot("testSlot()")
     #testobject.disconnect("testSignal()")
 except Exception, e:

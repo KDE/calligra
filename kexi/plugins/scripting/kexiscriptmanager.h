@@ -21,6 +21,7 @@
 #define KEXISCRIPTMANAGER_H
 
 #include <qobject.h>
+#include <qstringlist.h>
 
 // Forward declarations.
 class KexiScriptPart;
@@ -105,6 +106,11 @@ class KexiScriptManager : public QObject
          * The KexiScriptContainer's are cached.
          */
         KexiScriptContainer* getScriptContainer(const QString& name);
+
+        /**
+         * Return a list of interpreter names.
+         */
+        const QStringList getInterpreters();
 
     private:
         QMap<QString, KexiScriptContainer*> m_scriptcontainers;

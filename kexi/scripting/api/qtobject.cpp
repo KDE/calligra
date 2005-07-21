@@ -24,7 +24,7 @@
 
 //#include "eventmanager.h"
 #include "../main/manager.h"
-#include "../main/scriptcontainer.h"
+//#include "../main/scriptcontainer.h"
 
 #include <qobject.h>
 #include <qsignal.h>
@@ -36,20 +36,18 @@
 
 using namespace Kross::Api;
 
-QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QString& name)
-    : Kross::Api::Class<QtObject>(name)
-    , m_scriptcontainer(scriptcontainer)
+QtObject::QtObject(QObject* object)
+    : Kross::Api::Class<QtObject>(object->name())
     , m_object(object)
 {
 
 //TODO: we need namespaces here!
 Manager::scriptManager()->addModule( this );
-
 /*TODO
 parent->addChild(this);
-
     m_eventmanager = new EventManager(scriptcontainer, this);
 */
+
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
         "Return a list of property names."
@@ -90,6 +88,7 @@ parent->addChild(this);
     addFunction("connect", &QtObject::connectSignal,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
+            << Kross::Api::Argument("Kross::Api::QtObject")
             << Kross::Api::Argument("Kross::Api::Variant::String"),
         ""
     );
@@ -197,21 +196,22 @@ Kross::Api::Object::Ptr QtObject::hasSignal(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
 {
-/*TODO
     QString signalname = Kross::Api::Variant::toString(args->item(0));
-    const char* signalnamec = signalname.latin1();
     QString signalsignatur = QString("2%1").arg(signalname);
-    const char* signalsignaturc = signalsignatur.latin1();
+    const char* signalsig = signalsignatur.latin1();
 
-    int signalid = m_object->metaObject()->findSignal(signalnamec, false);
-    if(signalid < 0)
-        throw TypeException(i18n("No such signal '%1'.").arg(signalname));
+    QtObject* obj = Kross::Api::Object::fromObject<Kross::Api::QtObject>(args->item(1));
+    QObject* o = obj->getObject();
+    if(! o)
+        throw TypeException(i18n("No such QObject receiver in '%1'.").arg(obj->getName()));
 
-    QString functionname = Kross::Api::Variant::toString(args->item(1));
+    QString slotname = Kross::Api::Variant::toString(args->item(2));
+    QString slotsignatur = QString("1%1").arg(slotname);
+    const char* slotsig = slotsignatur.latin1();
 
-    //m_eventmanager->connect(m_object, signalsignaturc, functionname);
-*/
-    return 0;
+    return new Kross::Api::Variant(
+           QObject::connect(m_object, signalsig, o, slotsig),
+           "Kross::Api::QtObject::connect::Bool");
 }
 
 Kross::Api::Object::Ptr QtObject::disconnectSignal(Kross::Api::List::Ptr)

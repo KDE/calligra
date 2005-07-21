@@ -47,14 +47,11 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param scriptcontrainer The \a ScriptContrainer
-             *       instance this QObject should be
-             *       wrapped for.
              * \param object The \a QObject instance this
              *        class wraps.
              * \param name The name this QtObject has.
              */
-            QtObject(ScriptContainer* scriptcontainer, QObject* object, const QString& name = "qtobject");
+            QtObject(QObject* object);
 
             /**
              * Destructor.
@@ -75,7 +72,6 @@ namespace Kross { namespace Api {
             QObject* getObject();
 
         private:
-            ScriptContainer* m_scriptcontainer;
             QObject* m_object;
             //EventManager* m_eventmanager;
 

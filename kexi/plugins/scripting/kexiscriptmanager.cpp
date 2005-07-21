@@ -141,5 +141,14 @@ KexiScriptContainer* KexiScriptManager::getScriptContainer(const QString& name)
     return sc;
 }
 
+const QStringList KexiScriptManager::getInterpreters()
+{
+#ifdef KEXI_KROSS_SUPPORT
+    return Kross::Api::Manager::scriptManager()->getInterpreters();
+#else
+    return QStringList();
+#endif
+}
+
 #include "kexiscriptmanager.moc"
 

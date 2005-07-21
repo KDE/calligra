@@ -60,8 +60,10 @@ ScriptContainer::~ScriptContainer()
     //delete d->m_eventmanager; //d->m_eventmanager = 0;
     finalize();
 
+/*
     for(QMap<QString, QtObject*>::Iterator it = d->m_qtobjects.begin(); it != d->m_qtobjects.end(); ++it)
         delete it.data();
+*/
 
     delete d;
 }
@@ -98,7 +100,9 @@ bool ScriptContainer::addQObject(QObject* object, const QString& name)
     QString n = name.isEmpty() ? object->name() : name;
     if(d->m_qtobjects.contains(n))
         return false;
-    d->m_qtobjects.replace(n, new QtObject(this, object, n));
+    QtObject* qtobject = new QtObject(object);
+//FIXME Manager::scriptManager()->addModule(qtobject);
+    d->m_qtobjects.replace(n, qtobject);
     return true;
 }
 

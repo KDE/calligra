@@ -46,12 +46,42 @@ namespace Kross { namespace Api {
             FunctionPtr m_function;
 
         public:
-            Event(const QString& name) //FIXME
+
+            /**
+             * Constructor.
+             */
+            explicit Event(const QString& name) //FIXME
                 : Callable(name, 0, ArgumentList(), "TODO: Documentation"), m_function(0) {}
+
+            /**
+             * Constructor.
+             */
             Event(const QString& name, Object::Ptr parent, FunctionPtr function, ArgumentList arglist, const QString& documentation)
                 : Callable(name, parent, arglist, documentation), m_function(function) {}
+
+            /**
+             * Destructor.
+             */
             virtual ~Event() {}
 
+            /**
+             * Overloaded method to handle function-calls.
+             *
+             * \throw AttributeException if argumentparameters
+             *        arn't valid.
+             * \throw RuntimeException if the functionname isn't
+             *        valid.
+             * \param name The functionname. Each function this
+             *        Object holds should have a different
+             *        name cause they are access by they name.
+             *        If name is QString::null or empty, a
+             *        self-reference to this instance is
+             *        returned.
+             * \param arguments The list of arguments.
+             * \return An Object representing the call result
+             *         or NULL if there doesn't exists such a
+             *         function with defined name.
+             */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
                 kdDebug() << QString("Event::call() name='%1'").arg(getName()) << endl;

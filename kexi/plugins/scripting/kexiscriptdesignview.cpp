@@ -31,25 +31,68 @@
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
+#include <koproperty/set.h>
+#include <koproperty/property.h>
+
+/// @internal
+class KexiScriptDesignViewPrivate
+{
+    public:
+        /// The \a KexiScriptManager instance the view belongs to.
+        KexiScriptManager* manager;
+        /// The \a KexiScriptContainer used as facade for the Kross functionality.
+        KexiScriptContainer* scriptcontainer;
+        /// The \a KoProperty::Set used in the propertyeditor.
+        KoProperty::Set* propertyset;
+        /// The \a KexiScriptEditor to edit the scripting code.
+        KexiScriptEditor* editor;
+};
+
 KexiScriptDesignView::KexiScriptDesignView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiViewBase(mainWin, parent, name)
-    , m_manager(manager)
+    , d( new KexiScriptDesignViewPrivate() )
 {
-    m_scriptcontainer = m_manager->getScriptContainer( parentDialog()->partItem()->name() );
-    plugSharedAction( "script_execute", m_scriptcontainer, SLOT(execute()) );
+    d->manager = manager;
+
+    d->scriptcontainer = d->manager->getScriptContainer( parentDialog()->partItem()->name() );
+    plugSharedAction( "script_execute", d->scriptcontainer, SLOT(execute()) );
+
+    d->propertyset = new KoProperty::Set(this, "KexiScripting");
+/*
+//KoProperty::Set *set = new KoProperty::Set();
+//  connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
+//          this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
+
+//KexiViewBase::propertySetSwitched();
+    KoProperty::Property *prop = new KoProperty::Property(
+        "language", // name
+        manager->getInterpreters(), // value
+        i18n("Interpreter"), // caption
+        i18n("The used scripting interpreter."), // description
+        KoProperty::StringList //List //ValueFromList // type
+    );
+    //prop->setVisible(false);
+    d->propertyset->addProperty(prop);
+*/
 
     QBoxLayout* layout = new QVBoxLayout(this);
-    m_editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
-    addChildView((KexiViewBase*)m_editor);
-    setViewWidget((KexiViewBase*)m_editor);
-    layout->addWidget((KexiViewBase*)m_editor);
+    d->editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
+    addChildView((KexiViewBase*)d->editor);
+    setViewWidget((KexiViewBase*)d->editor);
+    layout->addWidget((KexiViewBase*)d->editor);
 
     loadData();
-    m_editor->initialize(m_scriptcontainer);
+    d->editor->initialize(d->scriptcontainer);
 }
 
 KexiScriptDesignView::~KexiScriptDesignView()
 {
+    delete d;
+}
+
+KoProperty::Set* KexiScriptDesignView::propertySet()
+{
+    return d->propertyset;
 }
 
 bool KexiScriptDesignView::loadData()
@@ -78,9 +121,9 @@ bool KexiScriptDesignView::loadData()
         return false;
     }
 
-    m_scriptcontainer->setInterpreterName( scriptelem.attribute("language") );
-    m_scriptcontainer->setCode( scriptelem.text() );
-    //m_editor->initialize(m_scriptcontainer); //FIXME clear prev states...
+    d->scriptcontainer->setInterpreterName( scriptelem.attribute("language") );
+    d->scriptcontainer->setCode( scriptelem.text() );
+    //d->editor->initialize(d->scriptcontainer); //FIXME clear prev states...
 
     return true;
 }
@@ -114,9 +157,9 @@ tristate KexiScriptDesignView::storeData()
     QDomElement scriptelem = domdoc.createElement("script");
     domdoc.appendChild(scriptelem);
 
-    scriptelem.setAttribute("language", m_scriptcontainer->getInterpreterName());
+    scriptelem.setAttribute("language", d->scriptcontainer->getInterpreterName());
 
-    QDomText scriptcode = domdoc.createTextNode(m_scriptcontainer->getCode());
+    QDomText scriptcode = domdoc.createTextNode(d->scriptcontainer->getCode());
     scriptelem.appendChild(scriptcode);
 
     return storeDataBlock( domdoc.toString() );

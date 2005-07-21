@@ -20,7 +20,7 @@
 #include "manager.h"
 
 #include "../api/interpreter.h"
-#include "../api/qtobject.h"
+//#include "../api/qtobject.h"
 #include "../api/eventslot.h"
 #include "../api/eventsignal.h"
 //#include "../api/script.h"
@@ -250,3 +250,11 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     return interpreter;
 }
 
+const QStringList Manager::getInterpreters()
+{
+    QStringList list;
+#ifdef KROSS_PYTHON_LIBRARY
+    list << "python";
+#endif
+    return  list;
+}

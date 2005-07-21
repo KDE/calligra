@@ -21,6 +21,7 @@
 #define KROSS_API_MANAGER_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qmap.h>
 //#include <qvariant.h>
 //#include <kdebug.h>
@@ -112,10 +113,11 @@ namespace Kross { namespace Api {
              */
             bool addModule(Object::Ptr module);
 
-            //QValueList<EventSlot*> getEventSlots();
-            //void addEventSlot(EventSlot* eventslot);
-            //QValueList<EventSignal*> getEventSignals();
-            //void addEventSignal(EventSignal* eventsignal);
+//QValueList<> getSlots();
+//EventSlot::Ptr addSlot(QObject* sender, const QCString& slot);
+
+//QValueList<EventSignal*> getEventSignals();
+//void addSignal(EventSignal* eventsignal);
 
             /**
              * Return the existing \a ScriptContainer with scriptname
@@ -152,6 +154,12 @@ namespace Kross { namespace Api {
              *         an interpretername.
              */
             Interpreter* getInterpreter(const QString& interpretername);
+
+            /**
+             * Return a list of names of the at the backend
+             * supported interpreters.
+             */
+            const QStringList getInterpreters();
 
         private:
             /// Private d-pointer class.
