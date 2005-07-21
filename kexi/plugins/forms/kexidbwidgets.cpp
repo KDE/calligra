@@ -18,7 +18,6 @@
 */
 
 #include "kexidbwidgets.h"
-#include "kexidatetimeeditor_p.h"
 
 #include <qpainter.h>
 #include <qfontmetrics.h>
@@ -34,6 +33,12 @@
 
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
+
+#ifdef Q_WS_WIN
+#define KEXIDATETIMEEDITOR_P_IMPL
+#endif
+
+#include <widget/tableview/kexidatetimeeditor_p.h>
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
@@ -1114,6 +1119,5 @@ KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const ch
 KexiPushButton::~KexiPushButton()
 {
 }
-
 
 #include "kexidbwidgets.moc"

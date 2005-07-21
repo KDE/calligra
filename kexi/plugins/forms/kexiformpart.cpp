@@ -168,6 +168,8 @@ void KexiFormPart::initInstanceActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), "raise", 0, "formpart_format_raise");
 	createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), "lower", 0, "formpart_format_lower");
 
+	action = createSharedAction(Kexi::DesignViewMode, i18n("Other widgets"), "", 0, "other_widgets_menu", "KActionMenu");
+
 	action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"), "aoleft", 0, "formpart_align_menu", "KActionMenu");
 	menu = static_cast<KActionMenu*>(action);
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Left"), "aoleft", 0, "formpart_align_to_left") );

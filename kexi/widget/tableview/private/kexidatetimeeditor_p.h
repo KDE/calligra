@@ -25,6 +25,7 @@ class QDateTimeEditBase;
 class QNumberSection;
 class QDateTimeEditorPrivate;
 
+//! @internal
 class QDateTimeEditor : public QWidget
 {
 	Q_OBJECT
@@ -39,6 +40,7 @@ private:
 };
 
 
+//! @internal
 class QNumberSection
 {
 public:
@@ -53,6 +55,7 @@ private:
 };
 
 //! needed for focusSection() and setFocusSection()
+//! @internal
 class QDateTimeEditorPrivate
 {
 public:

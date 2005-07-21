@@ -695,7 +695,8 @@ InsertWidgetCommand::execute()
 			x = m_point.x();
 			y = m_point.y();
 		}
-		m_insertRect = QRect(x, y, s.width(), s.height());
+		m_insertRect = QRect(x, y, s.width() + 16/* add some space so more text can be entered*/,
+			s.height());
 	}
 	w->move(m_insertRect.x(), m_insertRect.y());
 	w->resize(m_insertRect.width()-1, m_insertRect.height()-1); // -1 is not to hide dots
@@ -723,6 +724,7 @@ InsertWidgetCommand::execute()
 
 	m_container->setSelectedWidget(w, false);
 	m_form->manager()->lib()->startEditing(w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
+//! @todo update widget's width for entered text's metrics
 	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
 }
 

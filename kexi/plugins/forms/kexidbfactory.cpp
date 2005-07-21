@@ -22,6 +22,7 @@
 #include <qscrollview.h>
 #include <qcursor.h>
 #include <qpainter.h>
+#include <qstyle.h>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -210,13 +211,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setPixmap("label");
 	wi->setClassName("KexiLabel");
 	wi->addAlternateClassName("QLabel", true/*override*/);
-	wi->setName(i18n("Label"));
+	wi->setName(i18n("Text Label", "Label"));
 	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
 	wi->setDescription(i18n("A widget for displaying text"));
 	addClass(wi);
 
-	wi = new KFormDesigner::WidgetInfo(this, "stdwidgets", "QCheckBox");
+	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
 	wi->setPixmap("check");
 	wi->setClassName("KexiDBCheckBox");
 	wi->addAlternateClassName("QCheckBox", true/*override*/);
@@ -467,7 +468,12 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		disableFilter(w, container);
 		return true;
 	}
-
+	else if (classname == "KexiDBCheckBox") {
+		KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
+		QRect r( cb->geometry() );
+		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
+		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
+	}
 	return false;
 }
 

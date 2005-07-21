@@ -67,6 +67,7 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 		LabelPosition labelPosition() const { return m_lblPosition; }
 		void setLabelPosition(LabelPosition position);
 		QWidget* editor() const { return m_editor; }
+		QLabel* label() const { return m_label; }
 
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();

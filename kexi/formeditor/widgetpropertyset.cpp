@@ -342,8 +342,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 void
 WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *property)
 {
+	if (!d->set.contains(property))
+		return;
 	Property p = d->set[property];
-	if(p.isNull())  return;
 
 //! \todo what about set properties, and lists properties
 	QMap<QString, QVariant>::ConstIterator it( tree->modifiedProperties()->find(property) );

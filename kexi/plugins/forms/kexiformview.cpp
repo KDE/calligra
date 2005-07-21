@@ -128,6 +128,9 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 		plugSharedAction("formpart_format_raise", formPart()->manager(), SLOT(bringWidgetToFront()) );
 		plugSharedAction("formpart_format_lower", formPart()->manager(), SLOT(sendWidgetToBack()) );
 
+		plugSharedAction("other_widgets_menu", formPart()->manager(), 0 );
+		setAvailable("other_widgets_menu", true);
+
 		plugSharedAction("formpart_align_menu", formPart()->manager(), 0 );
 		plugSharedAction("formpart_align_to_left", formPart()->manager(),SLOT(alignWidgetsToLeft()) );
 		plugSharedAction("formpart_align_to_right", formPart()->manager(), SLOT(alignWidgetsToRight()) );
