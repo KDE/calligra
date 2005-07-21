@@ -74,12 +74,15 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Constructs FormManager object.
 		 See WidgetLibrary's constructor documentation for information about
 		 \a supportedFactoryGroups parameter.
-		 Using \a options you can control manager's behaviour, see \ref Options. */
+		 Using \a options you can control manager's behaviour, see Options. */
 		FormManager(QObject *parent = 0, const QStringList& supportedFactoryGroups = QStringList(),
 			int options = 0, const char *name = 0);
 
 		virtual ~FormManager();
 
+		/*! Options for creating FormManager objects.
+		*   These are really bit-flags and may be or-ed together.
+		*/
 		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2,
 			HideSignalSlotConnections = 4 }; //todo
 
@@ -120,7 +123,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! \return If we are creating a Connection by drag-and-drop or not.
 		bool isCreatingConnection() { return m_drawingSlot; }
 
-		//! \return the \ref Connection being created.
+		//! \return the Connection being created.
 		Connection* createdConnection() { return m_connection; }
 
 		/*! Resets the Connection being created. We stay in Connection creation mode,
@@ -134,7 +137,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Creates and display a menu with all the slots of widget \a w.
 		void createSlotMenu(QWidget *w);
 
-		//! Emits the signal \ref createFormSlot(). Used by \ref WidgetPropertySet.
+		//! Emits the signal \ref createFormSlot(). Used by WidgetPropertySet.
 		void  emitCreateSlot(const QString &widget, const QString &value)
 			{ emit createFormSlot(m_active, widget, value); }
 
