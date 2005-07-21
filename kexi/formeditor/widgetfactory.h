@@ -98,7 +98,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		void setDescription(const QString &desc) { m_desc = desc;}
 
 		/*! Sets the C++ include file corresponding to this class,
-		 that uic will need to add when creating the file. */
+		 that uic will need to add when creating the file. You don't have to set this for Qt std widgets.*/
 		void setIncludeFileName(const QString &name) { m_include = name;}
 
 		/*! Sets alternate names for this class.

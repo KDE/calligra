@@ -48,6 +48,7 @@
 #include <kpassdlg.h>
 #include <kprogress.h>
 #include <ktextedit.h>
+#include <kstaticdeleter.h>
 
 #include <unistd.h>
 
@@ -63,9 +64,15 @@
 //#define KEXI_HARDCODED_CONNDATA
 
 namespace Kexi {
-	static KexiStartupHandler _startupHandler;
-	
-	KexiStartupHandler& startupHandler() { return _startupHandler; }
+	static KStaticDeleter<KexiStartupHandler> Kexi_startupHandlerDeleter;
+	KexiStartupHandler* _startupHandler = 0;
+
+	KexiStartupHandler& startupHandler()
+	{
+		if (!_startupHandler)
+			Kexi_startupHandlerDeleter.setObject( _startupHandler, new KexiStartupHandler() );
+		return *_startupHandler; 
+	}
 }
 
 //---------------------------------

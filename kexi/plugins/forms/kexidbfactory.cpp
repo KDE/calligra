@@ -180,8 +180,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	KFormDesigner::WidgetInfo *wi;
 
 	// inherited
-	wi = new KFormDesigner::WidgetInfo(
-		this, "stdwidgets", "KLineEdit");
+	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KLineEdit");
 	wi->setPixmap("lineedit");
 	wi->setClassName("KexiDBLineEdit");
 	wi->addAlternateClassName("QLineEdit", true/*override*/);
@@ -194,8 +193,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wi);
 
 	// inherited
-	wi = new KFormDesigner::WidgetInfo(
-		this, "stdwidgets", "KTextEdit");
+	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KTextEdit");
 	wi->setPixmap("textedit");
 	wi->setClassName("KexiDBTextEdit");
 	wi->addAlternateClassName("QTextEdit", true/*override*/);
@@ -208,7 +206,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wi);
 
 	wi = new KexiDataAwareWidgetInfo(
-		this, "stdwidgets" /*we're inheriting to get i18n'd strings already translated there*/);
+		this, "stdwidgets", "QLabel" /*we're inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("label");
 	wi->setClassName("KexiLabel");
 	wi->addAlternateClassName("QLabel", true/*override*/);
@@ -237,6 +235,72 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wFieldEdit->setDescription(i18n("A widget containing an automatically chosed editor and a label to edit any database field."));
 	addClass(wFieldEdit);
 
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+	KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateWidget");
+#else
+	KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QDateEdit");
+#endif
+	wDate->setPixmap("dateedit");
+	wDate->setClassName("KexiDBDateEdit");
+	wDate->addAlternateClassName("QDateEdit", true/*override*/);
+	wDate->addAlternateClassName("KDateWidget", true/*override*/);
+	wDate->setName(i18n("Date Widget"));
+	wDate->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateWidget"));
+	wDate->setDescription(i18n("A widget to input and display a date"));
+	addClass(wDate);
+
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+	KexiDataAwareWidgetInfo *wTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KTimeWidget");
+#else
+	KexiDataAwareWidgetInfo *wTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QTimeEdit");
+#endif
+	wTime->setPixmap("timeedit");
+	wTime->setClassName("KexiDBTimeEdit");
+	wTime->addAlternateClassName("QTimeEdit", true/*override*/);
+	wTime->addAlternateClassName("KTimeWidget", true/*override*/);
+	wTime->setName(i18n("Time Widget"));
+	wTime->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "timeWidget"));
+	wTime->setDescription(i18n("A widget to input and display a time"));
+	addClass(wTime);
+
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+	KexiDataAwareWidgetInfo *wDateTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateTimeWidget");
+#else
+	KexiDataAwareWidgetInfo *wDateTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateTimeWidget");
+#endif
+	wDateTime->setPixmap("datetimeedit");
+	wDateTime->setClassName("KexiDBDateTimeEdit");
+	wDateTime->addAlternateClassName("QDateTimeEdit", true/*override*/);
+	wDateTime->addAlternateClassName("KDateTimeWidget", true/*override*/);
+	wDateTime->setName(i18n("Date/Time Widget"));
+	wDateTime->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
+	wDateTime->setDescription(i18n("A widget to input and display a time and a date"));
+	addClass(wDateTime);
+
+	KexiDataAwareWidgetInfo *wIntSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KIntSpinBox");
+	wIntSpinBox->setPixmap("spin");
+	wIntSpinBox->setClassName("KexiDBIntSpinBox");
+	wIntSpinBox->addAlternateClassName("QSpinBox", true);
+	wIntSpinBox->addAlternateClassName("KIntSpinBox", true);
+	wIntSpinBox->setName(i18n("Integer Spin Box"));
+	wIntSpinBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "intSpinBox"));
+	wIntSpinBox->setDescription(i18n("A spin box widget to enter integers"));
+	addClass(wIntSpinBox);
+
+	KexiDataAwareWidgetInfo *wDoubleSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets");
+	wDoubleSpinBox->setPixmap("spin");
+	wDoubleSpinBox->setClassName("KexiDBDoubleSpinBox");
+	wDoubleSpinBox->addAlternateClassName("KDoubleSpinBox", true);
+	wDoubleSpinBox->setName(i18n("Decimal Spin Box"));
+	wDoubleSpinBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dblSpinBox"));
+	wDoubleSpinBox->setDescription(i18n("A spin box widget to enter decimals"));
+	addClass(wDoubleSpinBox);
+
 	// inherited
 	wi = new KFormDesigner::WidgetInfo(
 		this, "stdwidgets", "KPushButton");
@@ -256,7 +320,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #ifdef KEXI_NO_UNFINISHED
 	//we don't want not-fully implemented/usable classes:
 	hideClass("KexiPictureLabel");
-	hideClass("KIntSpinBox");
+	//hideClass("KIntSpinBox");
 	hideClass("KComboBox");
 #endif
 }
@@ -275,9 +339,7 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
 
 	if(c == "KexiSubForm")
-	{
 		w = new KexiSubForm(container->form(), p, n);
-	}
 	else if(c == "KexiDBLineEdit")
 	{
 		w = new KexiDBLineEdit(p, n);
@@ -289,17 +351,21 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 		w->setCursor(QCursor(Qt::ArrowCursor));
 	}
 	else if(c == "KexiLabel")
-	{
 		w = new KexiLabel(text, p, n);
-	}
 	else if(c == "KexiDBFieldEdit")
-	{
 		w = new KexiDBFieldEdit(p, n);
-	}
 	else if(c == "KexiDBCheckBox")
-	{
 		w = new KexiDBCheckBox(text, p, n);
-	}
+	else if(c == "KexiDBTimeEdit")
+		w = new KexiDBTimeEdit(QTime::currentTime(), p, n);
+	else if(c == "KexiDBDateEdit")
+		w = new KexiDBDateEdit(QDate::currentDate(), p, n);
+	else if(c == "KexiDBDateTimeEdit")
+		w = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), p, n);
+	else if(c == "KexiDBIntSpinBox")
+		w = new KexiDBIntSpinBox(p, n);
+	else if(c == "KexiDBDoubleSpinBox")
+		w = new KexiDBDoubleSpinBox(p, n);
 	else if(c == "KPushButton" || c == "KexiPushButton")
 		w = new KexiPushButton(text, p, n);
 
@@ -396,6 +462,11 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		if(mainWin)
 			mainWin->openObject("kexi/form", subform->formName(), Kexi::DesignViewMode);
 	}
+	else if( (classname == "KexiDBDateEdit") || (classname == "KexiDBDateTimeEdit") || (classname == "KexiDBTimeEdit")
+			|| (classname == "KexiDBIntSpinBox") || (classname == "KexiDBDoubleSpinBox") ) {
+		disableFilter(w, container);
+		return true;
+	}
 
 	return false;
 }
@@ -411,16 +482,9 @@ KexiDBFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
-	if(classname == "KexiDBLineEdit")
-		static_cast<KLineEdit*>(w)->clear();
-	else if(classname == "KexiDBTextEdit")
-		static_cast<KTextEdit*>(w)->clear();
-	else if(classname == "KexiLabel")
-		static_cast<QLabel*>(w)->clear();
-	else if(classname == "KexiDBFieldEdit")
-		static_cast<KexiDBFieldEdit*>(w)->clear();
-	else
-		return false;
+	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(w);
+	if(iface)
+		iface->clear();
 	return true;
 }
 

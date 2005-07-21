@@ -52,7 +52,7 @@ KexiDBFieldEdit::init(WidgetType type, LabelPosition pos)
 	m_editor = 0;
 	m_label = new QLabel(i18n("Please select valid data source"), this);
 	QFontMetrics fm( font() );
-	m_label->setFixedWidth( fm.width("This is a test string length") );
+	//m_label->setFixedWidth( fm.width("This is a test string length") );
 	m_widgetType_property = Auto;
 	m_widgetType = Auto;
 	setWidgetType(type);
@@ -80,7 +80,7 @@ KexiDBFieldEdit::createEditor()
 		delete m_editor;
 
 	switch( m_widgetType ) {
-		case Text: case Integer: case Time: case Date: case DateTime: case Double:
+		case Text: case Enum: //! \todo using kexitableview combo box editor when it's ready
 			m_editor = new KexiDBLineEdit( this );
 			connect( m_editor, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
@@ -93,27 +93,26 @@ KexiDBFieldEdit::createEditor()
 			connect( m_editor, SIGNAL(stateChanged()), this, SLOT(slotValueChanged()));
 			break;
 		//! \todo create db-aware spinboxes, date, time edit, etc
-		/*case Date:
-			m_editor = new KDateWidget( this );
-			connect( m_editor, SIGNAL( valueChanged( const QDate& ) ), this, SLOT( slotValueChanged() ) );
+		case Date:
+			m_editor = new KexiDBDateEdit(QDate::currentDate(), this);
+			connect( m_editor, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case DateTime:
-			m_editor = new KDateTimeWidget( this );
-			connect( m_editor, SIGNAL( valueChanged( const QDateTime& ) ), this, SLOT( slotValueChanged() ) );
-			break;
-		case Double:
-			m_editor = new KDoubleSpinBox( m_doubleMin, m_doubleMax, 1.0, 0.0, 2, this );
-			connect( m_editor, SIGNAL( valueChanged( double ) ), this, SLOT( slotValueChanged() ) );
-			break;
-		case Integer:
-			m_editor = new KIntSpinBox( m_intMin, m_intMax, 1, 0, 10, this );
-			connect( m_editor, SIGNAL( valueChanged( int ) ), this, SLOT( slotValueChanged() ) );
+			m_editor = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), this);
+			connect( m_editor, SIGNAL(dateTimeChanged()), this, SLOT( slotValueChanged() ) );
 			break;
 		case Time:
-			m_editor = new KTimeWidget( this );
+			m_editor = new KexiDBTimeEdit(QTime::currentTime(), this);
 			connect( m_editor, SIGNAL( valueChanged( const QTime& ) ), this, SLOT( slotValueChanged() ) );
-			break;*/
-		case Enum: //! \todo using kexitableview combo box editor when it's ready
+			break;
+		case Double:
+			m_editor = new KexiDBDoubleSpinBox(this);
+			connect( m_editor, SIGNAL( valueChanged(double) ), this, SLOT( slotValueChanged() ) );
+			break;
+		case Integer:
+			m_editor = new KexiDBIntSpinBox(this);
+			connect( m_editor, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
+			break;
 		default:
 			m_editor = 0;
 			m_label->setText( m_dataSource.isEmpty() ? "<datasource>" : m_dataSource );
@@ -125,9 +124,7 @@ KexiDBFieldEdit::createEditor()
 		m_label->setBuddy(m_editor);
 	}
 
-	LabelPosition pos = labelPosition();
-	//setLabelPosition(NoLabel); // force reloading internal layout
-	setLabelPosition(pos);
+	setLabelPosition(labelPosition());
 }
 
 void

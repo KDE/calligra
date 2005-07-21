@@ -37,6 +37,7 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 		-I$(top_srcdir)/kexi/widget \
 		-I$(top_srcdir)/kexi/formeditor \
 		-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
+		-I$(top_srcdir)/kexi/widget/tableview/private \
 		-I$(top_srcdir)/kexi/widget/tableview $(all_includes)
 
 METASOURCES = AUTO

@@ -33,10 +33,12 @@
 #include <kiconeffect.h>
 #include <ksharedptr.h>
 #include <kmimetype.h>
+#include <kstaticdeleter.h>
 
 using namespace Kexi;
 
-//used for speedup
+//! used for speedup
+//! @internal
 class KexiInternal : public KShared
 {
 	public:
@@ -55,9 +57,10 @@ class KexiInternal : public KShared
 		KexiPart::Manager partManager;
 };
 
-KSharedPtr<KexiInternal> _int;
+static KStaticDeleter<KexiInternal> Kexi_intDeleter;
+KexiInternal* _int = 0;
 
-#define _INIT_SHARED if (!_int) _int = new KexiInternal()
+#define _INIT_SHARED { if (!_int) Kexi_intDeleter.setObject( _int, new KexiInternal() ); }
 
 KexiDBConnectionSet& Kexi::connset()
 {

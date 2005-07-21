@@ -18,11 +18,18 @@
 */
 
 #include "kexidbwidgets.h"
+#include "kexidatetimeeditor_p.h"
 
 #include <qpainter.h>
+#include <qfontmetrics.h>
+#include <qdatetime.h>
+#include <qlayout.h>
+#include <qtoolbutton.h>
 
 #include <knumvalidator.h>
 #include <kdatetbl.h>
+#include <kdatepicker.h>
+#include <kpopupmenu.h>
 #include <kdebug.h>
 
 #include <kexiutils/utils.h>
@@ -361,7 +368,7 @@ KexiDBCheckBox::setEnabled(bool enabled)
 	QCheckBox::setEnabled(enabled);
 }
 
-void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
+void KexiDBCheckBox::setValueInternal(const QVariant &add, bool )
 {
 	setState( add.isNull() ? NoChange : (add.toBool() ? On : Off) );
 }
@@ -372,7 +379,7 @@ KexiDBCheckBox::value()
 	return QVariant( isChecked(), 3 );
 }
 
-void KexiDBCheckBox::slotStateChanged(int state)
+void KexiDBCheckBox::slotStateChanged(int )
 {
 	signalValueChanged();
 }
@@ -389,7 +396,7 @@ bool KexiDBCheckBox::valueIsEmpty()
 
 bool KexiDBCheckBox::isReadOnly() const
 {
-	return isEnabled();
+	return !isEnabled();
 }
 
 QWidget*
@@ -415,101 +422,688 @@ void KexiDBCheckBox::clear()
 
 //////////////////////////////////////////
 
-/*
-KexiFormTableEdit::KexiFormTableEdit(QWidget *parent, const char *name)
- : QWidget(parent, name), KexiFormDataItemInterface()
+KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent, const char *name)
+ : QTimeEdit(time, parent, name), KexiFormDataItemInterface()
 {
-	m_editor = 0;
-	QHBoxLayout *layout = new QHBoxLayout(this);
-	layout->setAutoAdd(true);
+	m_invalidState = false;
+	setAutoAdvance(true);
+	m_cleared = false;
+
+#ifdef QDateTimeEditor_HACK
+	m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(this, "QDateTimeEditor");
+#else
+	m_dte_time = 0;
+#endif
+
+	connect(this, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
 }
 
-KexiFormTableEdit::~KexiFormTableEdit()
+KexiDBTimeEdit::~KexiDBTimeEdit()
 {
+}
+
+void KexiDBTimeEdit::setInvalidState( const QString&)
+{
+	setEnabled(false);
+	m_invalidState = true;
+//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
+	if (focusPolicy() & TabFocus)
+		setFocusPolicy(QWidget::ClickFocus);
 }
 
 void
-KexiFormTableEdit::setTableEdit(KexiTableEdit *editor)
+KexiDBTimeEdit::setEnabled(bool enabled)
 {
-	m_editor = editor;
+	 // prevent the user from reenabling the widget when it is in invalid state
+	if(enabled && m_invalidState)
+		return;
+	QTimeEdit::setEnabled(enabled);
 }
 
-void KexiFormTableEdit::setInvalidState( const QString& displayText )
+void KexiDBTimeEdit::setValueInternal(const QVariant &add, bool removeOld)
 {
-	if(m_editor)
-		m_editor->setInvalidState(displayText);
-}
+	m_cleared = !m_origValue.isValid();
 
-void KexiFormTableEdit::setValueInternal(const QVariant &add, bool removeOld)
-{
-	if(m_editor)
-		m_editor->setValueInternal(add, removeOld);
+	int setNumberOnFocus = -1;
+	QTime t;
+	QString addString(add.toString());
+	if (removeOld) {
+		if (!addString.isEmpty() && addString[0].latin1()>='0' && addString[0].latin1() <='9') {
+			setNumberOnFocus = addString[0].latin1()-'0';
+			t = QTime(setNumberOnFocus, 0, 0);
+		}
+	}
+	else
+		t = m_origValue.toTime();
+
+	setTime(t);
 }
 
 QVariant
-KexiFormTableEdit::value()
+KexiDBTimeEdit::value()
 {
-	if(m_editor)
-		return m_editor->value();
-	else
-		return QVariant();
+	//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, time()));
 }
 
-bool KexiFormTableEdit::valueIsNull()
+bool KexiDBTimeEdit::valueIsNull()
 {
-	if(m_editor)
-		return m_editor->valueIsNull();
-	else
-		return false;
+	return !time().isValid() || time().isNull();
 }
 
-bool KexiFormTableEdit::valueIsEmpty()
+bool KexiDBTimeEdit::valueIsEmpty()
 {
-	if(m_editor)
-		return m_editor->valueIsEmpty();
-	else
-		return false;
+	return m_cleared;
 }
 
-bool KexiFormTableEdit::isReadOnly() const
+bool KexiDBTimeEdit::isReadOnly() const
 {
-	if(m_editor)
-		return m_editor->isReadOnly();
-	else
-		return false;
+	return !isEnabled();
 }
 
 QWidget*
-KexiFormTableEdit::widget()
+KexiDBTimeEdit::widget()
 {
-	if(m_editor)
-		return m_editor->widget();
-	else
-		return this;
+	return this;
 }
 
-bool KexiFormTableEdit::cursorAtStart()
+bool KexiDBTimeEdit::cursorAtStart()
 {
-	if(m_editor)
-		return m_editor->cursorAtStart();
+#ifdef QDateTimeEditor_HACK
+	return m_dte_time && hasFocus() && m_dte_time->focusSection()==0;
+#else
+	return false;
+#endif
+}
+
+bool KexiDBTimeEdit::cursorAtEnd()
+{
+#ifdef QDateTimeEditor_HACK
+	return m_dte_time && hasFocus()
+		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
+#else
+	return false;
+#endif
+}
+
+void KexiDBTimeEdit::clear()
+{
+	setTime(QTime());
+	m_cleared = true;
+}
+
+void
+KexiDBTimeEdit::slotValueChanged(const QTime&)
+{
+	m_cleared = false;
+}
+
+//////////////////////////////////////////
+
+KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent, const char *name)
+ : QWidget(parent, name), KexiFormDataItemInterface()
+{
+	m_invalidState = false;
+	m_cleared = false;
+
+	m_edit = new QDateEdit(date, this);
+	m_edit->setAutoAdvance(true);
+	m_edit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+	connect( m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged(const QDate&)) );
+	connect( m_edit, SIGNAL(valueChanged(const QDate&)), this, SIGNAL(dateChanged(const QDate&)) );
+
+	QToolButton* btn = new QToolButton(this);
+	btn->setText("...");
+	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
+	btn->setPopupDelay(1); //1 ms
+
+#ifdef QDateTimeEditor_HACK
+	m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_edit, "QDateTimeEditor");
+#else
+	m_dte_date = 0;
+#endif
+
+	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
+	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
+	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
+
+	KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
+	if (dt)
+		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
+	m_datePicker->setCloseButton(true);
+	m_datePicker->installEventFilter(this);
+	m_datePickerPopupMenu->insertItem(m_datePicker);
+	btn->setPopup(m_datePickerPopupMenu);
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->addWidget(m_edit, 1);
+	layout->addWidget(btn, 0);
+
+	setFocusProxy(m_edit);
+}
+
+KexiDBDateEdit::~KexiDBDateEdit()
+{
+}
+
+void KexiDBDateEdit::setInvalidState( const QString& )
+{
+	setEnabled(false);
+	m_invalidState = true;
+//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
+	if (focusPolicy() & TabFocus)
+		setFocusPolicy(QWidget::ClickFocus);
+}
+
+void
+KexiDBDateEdit::setEnabled(bool enabled)
+{
+	 // prevent the user from reenabling the widget when it is in invalid state
+	if(enabled && m_invalidState)
+		return;
+	QWidget::setEnabled(enabled);
+}
+
+void KexiDBDateEdit::setValueInternal(const QVariant &add, bool removeOld)
+{
+	int setNumberOnFocus = -1;
+	QDate d;
+	QString addString(add.toString());
+	if (removeOld) {
+		if (!addString.isEmpty() && addString[0].latin1()>='0' && addString[0].latin1() <='9') {
+			setNumberOnFocus = addString[0].latin1()-'0';
+			d = QDate(setNumberOnFocus*1000, 1, 1);
+		}
+	}
 	else
+		d = m_origValue.toDate();
+
+	m_edit->setDate(d);
+}
+
+QVariant
+KexiDBDateEdit::value()
+{
+	return QVariant(m_edit->date());
+}
+
+bool KexiDBDateEdit::valueIsNull()
+{
+	return !m_edit->date().isValid() || m_edit->date().isNull();
+}
+
+bool KexiDBDateEdit::valueIsEmpty()
+{
+	return m_cleared;
+}
+
+bool KexiDBDateEdit::isReadOnly() const
+{
+	return !isEnabled();
+}
+
+QWidget*
+KexiDBDateEdit::widget()
+{
+	return this;
+}
+
+bool KexiDBDateEdit::cursorAtStart()
+{
+#ifdef QDateTimeEditor_HACK
+	return m_dte_date && m_edit->hasFocus() && m_dte_date->focusSection()==0;
+#else
+	return false;
+#endif
+}
+
+bool KexiDBDateEdit::cursorAtEnd()
+{
+#ifdef QDateTimeEditor_HACK
+	return m_dte_date && m_edit->hasFocus()
+		&& m_dte_date->focusSection()==int(m_dte_date->sectionCount()-1);
+#else
+	return false;
+#endif
+}
+
+void KexiDBDateEdit::clear()
+{
+	m_edit->setDate(QDate());
+	m_cleared = true;
+}
+
+void
+KexiDBDateEdit::slotValueChanged(const QDate&)
+{
+	m_cleared = false;
+}
+
+void
+KexiDBDateEdit::slotShowDatePicker()
+{
+	QDate date = m_edit->date();
+
+	m_datePicker->setDate(date);
+	m_datePicker->setFocus();
+	m_datePicker->show();
+	m_datePicker->setFocus();
+}
+
+void
+KexiDBDateEdit::acceptDate()
+{
+	m_edit->setDate(m_datePicker->date());
+	m_datePickerPopupMenu->hide();
+}
+
+bool
+KexiDBDateEdit::eventFilter(QObject *o, QEvent *e)
+{
+	if (o != m_datePicker)
 		return false;
+
+	switch (e->type()) {
+		case QEvent::Hide:
+			m_datePickerPopupMenu->hide();
+			break;
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease: {
+			QKeyEvent *ke = (QKeyEvent *)e;
+			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+				//accepting picker
+				acceptDate();
+				return true;
+			}
+			else if (ke->key()==Key_Escape) {
+				//cancelling picker
+				m_datePickerPopupMenu->hide();
+				return true;
+			}
+			else
+				 m_datePickerPopupMenu->setFocus();
+			break;
+		}
+		default:
+			break;
+	}
+	return false;
 }
 
-bool KexiFormTableEdit::cursorAtEnd()
+//////////////////////////////////////////
+
+KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent, const char *name)
+ : QWidget(parent, name), KexiFormDataItemInterface()
 {
-	if(m_editor)
-		return m_editor->cursorAtEnd();
-	else
+	m_invalidState = false;
+	m_cleared = false;
+
+	m_dateEdit = new QDateEdit(datetime.date(), this);
+	m_dateEdit->setAutoAdvance(true);
+	m_dateEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+//	m_dateEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("8888-88-88___") );
+	connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged()));
+	connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SIGNAL(dateTimeChanged()));
+
+	QToolButton* btn = new QToolButton(this);
+	btn->setText("...");
+	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
+	btn->setPopupDelay(1); //1 ms
+
+	m_timeEdit = new QTimeEdit(datetime.time(), this);;
+	m_timeEdit->setAutoAdvance(true);
+	m_timeEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+	connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged()));
+	connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SIGNAL(dateTimeChanged()));
+
+#ifdef QDateTimeEditor_HACK
+	m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
+	m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
+#else
+	m_dte_date = 0;
+#endif
+
+	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
+	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
+	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
+
+	KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
+	if (dt)
+		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
+	m_datePicker->setCloseButton(true);
+	m_datePicker->installEventFilter(this);
+	m_datePickerPopupMenu->insertItem(m_datePicker);
+	btn->setPopup(m_datePickerPopupMenu);
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->addWidget(m_dateEdit, 0);
+	layout->addWidget(btn, 0);
+	layout->addWidget(m_timeEdit, 0);
+	//layout->addStretch(1);
+
+	setFocusProxy(m_dateEdit);
+}
+
+KexiDBDateTimeEdit::~KexiDBDateTimeEdit()
+{
+}
+
+void KexiDBDateTimeEdit::setInvalidState(const QString &text)
+{
+	setEnabled(false);
+	m_invalidState = true;
+//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
+	if (focusPolicy() & TabFocus)
+		setFocusPolicy(QWidget::ClickFocus);
+}
+
+void
+KexiDBDateTimeEdit::setEnabled(bool enabled)
+{
+	 // prevent the user from reenabling the widget when it is in invalid state
+	if(enabled && m_invalidState)
+		return;
+	QWidget::setEnabled(enabled);
+}
+
+void KexiDBDateTimeEdit::setValueInternal(const QVariant &, bool )
+{
+	m_dateEdit->setDate(m_origValue.toDate());
+	m_timeEdit->setTime(m_origValue.toTime());
+}
+
+QVariant
+KexiDBDateTimeEdit::value()
+{
+	return QDateTime(m_dateEdit->date(), m_timeEdit->time());
+}
+
+bool KexiDBDateTimeEdit::valueIsNull()
+{
+	return !m_dateEdit->date().isValid() || m_dateEdit->date().isNull()
+		|| !m_timeEdit->time().isValid() || m_timeEdit->time().isNull();
+}
+
+bool KexiDBDateTimeEdit::valueIsEmpty()
+{
+	return m_cleared;
+}
+
+bool KexiDBDateTimeEdit::isReadOnly() const
+{
+	return !isEnabled();
+}
+
+QWidget*
+KexiDBDateTimeEdit::widget()
+{
+	return m_dateEdit;
+}
+
+bool KexiDBDateTimeEdit::cursorAtStart()
+{
+#ifdef QDateTimeEditor_HACK
+	return m_dte_date && m_dateEdit->hasFocus() && m_dte_date->focusSection()==0;
+#else
+	return false;
+#endif
+}
+
+bool KexiDBDateTimeEdit::cursorAtEnd()
+{
+#ifdef QDateTimeEditor_HACK
+	return m_dte_time && m_timeEdit->hasFocus()
+		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
+#else
+	return false;
+#endif
+}
+
+void KexiDBDateTimeEdit::clear()
+{
+	m_dateEdit->setDate(QDate());
+	m_timeEdit->setTime(QTime());
+	m_cleared = true;
+}
+
+void
+KexiDBDateTimeEdit::slotValueChanged()
+{
+	m_cleared = false;
+}
+
+void
+KexiDBDateTimeEdit::slotShowDatePicker()
+{
+	QDate date = m_dateEdit->date();
+
+	m_datePicker->setDate(date);
+	m_datePicker->setFocus();
+	m_datePicker->show();
+	m_datePicker->setFocus();
+}
+
+void
+KexiDBDateTimeEdit::acceptDate()
+{
+	m_dateEdit->setDate(m_datePicker->date());
+	m_datePickerPopupMenu->hide();
+}
+
+bool
+KexiDBDateTimeEdit::eventFilter(QObject *o, QEvent *e)
+{
+	if (o != m_datePicker)
 		return false;
+
+	switch (e->type()) {
+		case QEvent::Hide:
+			m_datePickerPopupMenu->hide();
+			break;
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease: {
+			QKeyEvent *ke = (QKeyEvent *)e;
+			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+				//accepting picker
+				acceptDate();
+				return true;
+			}
+			else if (ke->key()==Key_Escape) {
+				//cancelling picker
+				m_datePickerPopupMenu->hide();
+				return true;
+			}
+			else
+				 m_datePickerPopupMenu->setFocus();
+			break;
+		}
+		default:
+			break;
+	}
+	return false;
 }
 
-void KexiFormTableEdit::clear()
+QDateTime
+KexiDBDateTimeEdit::dateTime() const
 {
-	if(m_editor)
-		m_editor->clear();
+	return QDateTime(m_dateEdit->date(), m_timeEdit->time());
 }
-*/
+
+void
+KexiDBDateTimeEdit::setDateTime(const QDateTime &dt)
+{
+	m_dateEdit->setDate(dt.date());
+	m_timeEdit->setTime(dt.time());
+}
+
+//////////////////////////////////////////
+
+KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent, const char *name)
+ : KIntSpinBox(parent, name) , KexiFormDataItemInterface()
+{
+	connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged()));
+}
+
+KexiDBIntSpinBox::~KexiDBIntSpinBox()
+{
+}
+
+void KexiDBIntSpinBox::setInvalidState( const QString& displayText )
+{
+	m_invalidState = true;
+	setEnabled(false);
+//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
+	if (focusPolicy() & TabFocus)
+		setFocusPolicy(QWidget::ClickFocus);
+	setSpecialValueText(displayText);
+	KIntSpinBox::setValue(minValue());
+}
+
+void
+KexiDBIntSpinBox::setEnabled(bool enabled)
+{
+	 // prevent the user from reenabling the widget when it is in invalid state
+	if(enabled && m_invalidState)
+		return;
+	KIntSpinBox::setEnabled(enabled);
+}
+
+void KexiDBIntSpinBox::setValueInternal(const QVariant&, bool)
+{
+	KIntSpinBox::setValue(m_origValue.toInt());
+}
+
+QVariant
+KexiDBIntSpinBox::value()
+{
+	return KIntSpinBox::value();
+}
+
+void KexiDBIntSpinBox::slotValueChanged()
+{
+	signalValueChanged();
+}
+
+bool KexiDBIntSpinBox::valueIsNull()
+{
+	return cleanText().isEmpty();
+}
+
+bool KexiDBIntSpinBox::valueIsEmpty()
+{
+	return false;
+}
+
+bool KexiDBIntSpinBox::isReadOnly() const
+{
+	return !isEnabled();
+}
+
+QWidget*
+KexiDBIntSpinBox::widget()
+{
+	return this;
+}
+
+bool KexiDBIntSpinBox::cursorAtStart()
+{
+	return false; //! \todo ?
+}
+
+bool KexiDBIntSpinBox::cursorAtEnd()
+{
+	return false; //! \todo ?
+}
+
+void KexiDBIntSpinBox::clear()
+{
+	KIntSpinBox::setValue(minValue()); //! \todo ?
+}
+
+//////////////////////////////////////////
+
+KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent, const char *name)
+ : KDoubleSpinBox(parent, name) , KexiFormDataItemInterface()
+{
+	connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged()));
+}
+
+KexiDBDoubleSpinBox::~KexiDBDoubleSpinBox()
+{
+}
+
+void KexiDBDoubleSpinBox::setInvalidState( const QString& displayText )
+{
+	m_invalidState = true;
+	setEnabled(false);
+//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
+	if (focusPolicy() & TabFocus)
+		setFocusPolicy(QWidget::ClickFocus);
+	setSpecialValueText(displayText);
+	KDoubleSpinBox::setValue(minValue());
+}
+
+void
+KexiDBDoubleSpinBox::setEnabled(bool enabled)
+{
+	 // prevent the user from reenabling the widget when it is in invalid state
+	if(enabled && m_invalidState)
+		return;
+	KDoubleSpinBox::setEnabled(enabled);
+}
+
+void KexiDBDoubleSpinBox::setValueInternal(const QVariant&, bool )
+{
+	KDoubleSpinBox::setValue(m_origValue.toDouble());
+}
+
+QVariant
+KexiDBDoubleSpinBox::value()
+{
+	return KDoubleSpinBox::value();
+}
+
+void KexiDBDoubleSpinBox::slotValueChanged()
+{
+	signalValueChanged();
+}
+
+bool KexiDBDoubleSpinBox::valueIsNull()
+{
+	return cleanText().isEmpty();
+}
+
+bool KexiDBDoubleSpinBox::valueIsEmpty()
+{
+	return false;
+}
+
+bool KexiDBDoubleSpinBox::isReadOnly() const
+{
+	return !isEnabled();
+}
+
+QWidget*
+KexiDBDoubleSpinBox::widget()
+{
+	return this;
+}
+
+bool KexiDBDoubleSpinBox::cursorAtStart()
+{
+	return false; //! \todo ?
+}
+
+bool KexiDBDoubleSpinBox::cursorAtEnd()
+{
+	return false; //! \todo ?
+}
+
+void KexiDBDoubleSpinBox::clear()
+{
+	KDoubleSpinBox::setValue(minValue());
+}
+
 //////////////////////////////////////////
 
 KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const char * name )
