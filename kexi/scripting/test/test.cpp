@@ -86,7 +86,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     scriptcontainer->setInterpreterName(interpretername);
     scriptcontainer->setCode(scriptcode);
 
-scriptcontainer->addQObject(testobject);
+    scriptcontainer->addQObject(testobject);
 
     try {
         Kross::Api::Object* o = scriptcontainer->execute();

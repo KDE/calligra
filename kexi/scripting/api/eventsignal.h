@@ -48,9 +48,6 @@ namespace Kross { namespace Api {
      */
     class EventSignal : public Event<EventSignal>
     {
-            //Q_OBJECT
-            //friend class EventManager;
-
         public:
 
             /// Shared pointer to implement reference-counting.
@@ -70,9 +67,6 @@ namespace Kross { namespace Api {
 
             virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
-            //virtual QCString getSignal(const QCString& signal);
-            //virtual bool connect(EventManager* eventmanager, const QCString& signal, QObject* receiverobj, const QCString& slot);
-            //virtual bool disconnect();
 /*
         signals:
             void callback();

@@ -43,10 +43,7 @@ QtObject::QtObject(QObject* object)
 
 //TODO: we need namespaces here!
 Manager::scriptManager()->addModule( this );
-/*TODO
-parent->addChild(this);
-    m_eventmanager = new EventManager(scriptcontainer, this);
-*/
+//parent->addChild(this);
 
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
@@ -90,12 +87,12 @@ parent->addChild(this);
             << Kross::Api::Argument("Kross::Api::Variant::String")
             << Kross::Api::Argument("Kross::Api::QtObject")
             << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Connect signal with a QObject slot."
     );
 
     addFunction("disconnect", &QtObject::disconnectSignal,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        ""
+        "Disconnect signal from QObject slot."
     );
 
     addFunction("signal", &QtObject::emitSignal,
@@ -111,7 +108,6 @@ parent->addChild(this);
 
 QtObject::~QtObject()
 {
-    //delete m_eventmanager;
 }
 
 const QString QtObject::getClassName() const

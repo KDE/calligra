@@ -18,18 +18,9 @@
  ***************************************************************************/
 
 #include "eventaction.h"
-//#include "object.h"
-//#include "variant.h"
-//#include "eventmanager.h"
-//#include "../main/scriptcontainer.h"
 
 //#include <qobject.h>
-//#include <qsignal.h>
 //#include <kaction.h>
-
-//#include <qglobal.h>
-//#include <qobjectdefs.h>
-//#include <qmetaobject.h>
 
 using namespace Kross::Api;
 
@@ -37,13 +28,6 @@ EventAction::EventAction(KAction* action)
     : Event<EventAction>(action->name())
     , m_action(action)
 {
-    /*
-    m_eventmanager = new EventManager(scriptcontainer, this);
-    addFunction("propertyNames", &QtObject::propertyNames,
-        Kross::Api::ArgumentList(),
-        ""
-    );
-    */
 }
 
 EventAction::~EventAction()

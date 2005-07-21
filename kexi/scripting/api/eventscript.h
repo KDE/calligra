@@ -22,18 +22,10 @@
 
 #include <qstring.h>
 #include <qobject.h>
-#include <kaction.h>
 
 #include "event.h"
 
 namespace Kross { namespace Api {
-
-    // Forward declarations.
-    //class Object;
-    //class Variant;
-    class ScriptContainer;
-    //class EventManager;
-    //class ScriptContrainer;
 
     /**
      *
@@ -62,7 +54,7 @@ namespace Kross { namespace Api {
 
         private:
             //ScriptContainer* m_scriptcontainer;
-            //KAction* m_action;
+            //Callable* m_callable;
     };
 
 }}

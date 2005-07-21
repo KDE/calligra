@@ -20,16 +20,14 @@
 #ifndef KROSS_API_FUNCTION_H
 #define KROSS_API_FUNCTION_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
-//#include <qmap.h>
-//#include <qobject.h>
-//#include <ksharedptr.h>
-
 #include "object.h"
 #include "list.h"
 //#include "exception.h"
 #include "argument.h"
+
+#include <qstring.h>
+#include <qvaluelist.h>
+#include <ksharedptr.h>
 
 namespace Kross { namespace Api {
 
@@ -44,12 +42,29 @@ namespace Kross { namespace Api {
             /// Shared pointer to implement reference-counting.
             typedef KSharedPtr<Callable> Ptr;
 
+            /**
+             * Constructor.
+             */
             Callable(const QString& name, Object::Ptr parent, ArgumentList arglist, const QString& documentation);
+
+            /**
+             * Destructor.
+             */
             virtual ~Callable();
 
+            /**
+             * \return the classname.
+             */
             virtual const QString getClassName() const;
+
+            /**
+             * \return a description.
+             */
             virtual const QString getDescription() const;
 
+            /**
+             * Call the object.
+             */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments) = 0;
 
         protected:

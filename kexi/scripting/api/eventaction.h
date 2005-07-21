@@ -30,11 +30,7 @@
 namespace Kross { namespace Api {
 
     // Forward declarations.
-    //class Object;
-    //class Variant;
     class ScriptContainer;
-    //class EventManager;
-    //class ScriptContrainer;
 
     /**
      *
@@ -62,7 +58,6 @@ namespace Kross { namespace Api {
             virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
         private:
-            //ScriptContainer* m_scriptcontainer;
             KAction* m_action;
 
             //Kross::Api::Object::Ptr getText(Kross::Api::List::Ptr);
