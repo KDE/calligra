@@ -153,7 +153,7 @@ void
 WidgetPropertySet::saveModifiedProperties()
 {
 	QWidget * w = d->widgets.first();
-	if(!w || d->widgets.count() > 1 || !d->manager->activeForm())
+	if(!w || d->widgets.count() > 1 || !d->manager->activeForm() || !d->manager->activeForm()->objectTree())
 			return;
 	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
 	if(!tree)
