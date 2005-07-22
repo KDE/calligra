@@ -30,7 +30,8 @@ class QLabel;
 class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 {
 	Q_OBJECT
-	//Q_OVERRIDE(QString caption READ caption WRITE setCaption DESIGNABLE true)
+	Q_PROPERTY(QString lblCaption READ caption WRITE setCaption DESIGNABLE true)
+	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
@@ -42,8 +43,8 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 			Integer,  MultiLineText,  Text, Enum };
 		enum LabelPosition { Top = 300, Left, NoLabel };
 
-		KexiDBFieldEdit( WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0 );
-		KexiDBFieldEdit( QWidget *parent = 0, const char *name = 0 );
+		KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0 );
+		KexiDBFieldEdit(QWidget *parent = 0, const char *name = 0);
 
 		virtual ~KexiDBFieldEdit();
 
@@ -66,16 +67,26 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 
 		LabelPosition labelPosition() const { return m_lblPosition; }
 		void setLabelPosition(LabelPosition position);
+
+		QString  caption() const { return m_caption; }
+		void  setCaption(const QString &caption);
+
+		bool  hasAutoCaption() const { return m_autoCaption; }
+		void  setAutoCaption(bool autoCaption);
+
 		QWidget* editor() const { return m_editor; }
 		QLabel* label() const { return m_label; }
 
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
 
+		QLabel*  label()  { return m_label; }
+
 	protected:
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
-		void init(WidgetType type, LabelPosition pos);
+		void init(const QString &text, WidgetType type, LabelPosition pos);
 		void createEditor();
+		void  changeText(const QString &text);
 		WidgetType  widgetTypeFromFieldType();
 
 	protected slots:
@@ -88,6 +99,8 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 		QBoxLayout  *m_layout;
 		QLabel  *m_label;
 		QWidget *m_editor;
+		QString  m_caption;
+		bool  m_autoCaption;
 };
 
 #endif

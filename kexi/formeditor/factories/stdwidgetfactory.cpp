@@ -637,7 +637,6 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget, const QCString 
 	QSize s = widget->size();
 	QPoint p = widget->pos();
 	QRect r;
-	//if((classname == "QLabel") || (classname == "KPushButton") || (classname == "KLineEdit") || (classname == "QLabel"))
 
 	if(classname == "QRadioButton")
 	{

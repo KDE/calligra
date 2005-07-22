@@ -83,9 +83,9 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		//virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
-	/*protected:
-		virtual void  changeText(const QString &newText);
-		virtual void   resizeEditor(QWidget *widget, const QString &classname);*/
+	protected:
+		virtual bool  changeText(const QString &newText);
+		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 
 	protected:
 		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &);

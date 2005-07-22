@@ -468,6 +468,13 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		disableFilter(w, container);
 		return true;
 	}
+	else if(classname == "KexiDBFieldEdit") {
+		if(static_cast<KexiDBFieldEdit*>(w)->hasAutoCaption())
+			return false; // caption is auto, abort editing
+		QLabel *label = static_cast<KexiDBFieldEdit*>(w)->label();
+		createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
+		return true;
+	}
 	else if (classname == "KexiDBCheckBox") {
 		KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
 		QRect r( cb->geometry() );
@@ -552,6 +559,28 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 	return true;
 }
 
+bool
+KexiDBFactory::changeText(const QString &text)
+{
+	QCString n = WidgetFactory::widget()->className();
+//	QWidget *w = WidgetFactory::widget();
+	if(n == "KexiDBFieldEdit") {
+		changeProperty("caption", text, m_container);
+		return true;
+	}
+	//! \todo check field's geometry
+	return false;
+}
+
+void
+KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QCString &classname)
+{
+	//QSize s = widget->size();
+	//QPoint p = widget->pos();
+
+	if(classname == "KexiDBFieldEdit")
+		editor->setGeometry( static_cast<KexiDBFieldEdit*>(w)->label()->geometry() );
+}
 
 K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>("kexidbwidgets"))
 

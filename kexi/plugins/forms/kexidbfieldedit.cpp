@@ -30,29 +30,30 @@
 #include "kexidbwidgets.h"
 
 
-KexiDBFieldEdit::KexiDBFieldEdit(WidgetType type, LabelPosition pos, QWidget *parent, const char *name)
+KexiDBFieldEdit::KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
-	init(type, pos);
+	init(text, type, pos);
 }
 
 KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
-	init(Auto, Left);
+	init(i18n("Auto Field"), Auto, Left);
 }
 
 KexiDBFieldEdit::~KexiDBFieldEdit()
 {}
 
 void
-KexiDBFieldEdit::init(WidgetType type, LabelPosition pos)
+KexiDBFieldEdit::init(const QString &text, WidgetType type, LabelPosition pos)
 {
 	m_layout = 0;
 	m_editor = 0;
-	m_label = new QLabel(i18n("Please select valid data source"), this);
+	m_label = new QLabel(text, this);
 	QFontMetrics fm( font() );
 	//m_label->setFixedWidth( fm.width("This is a test string length") );
+	m_autoCaption = true;
 	m_widgetType_property = Auto;
 	m_widgetType = Auto;
 	setWidgetType(type);
@@ -150,6 +151,7 @@ KexiDBFieldEdit::setLabelPosition(LabelPosition position)
 			else
 				m_label->show();
 			m_layout->addWidget(m_label);
+			m_layout->addSpacing(10);
 			m_layout->addWidget(m_editor);
 			break;
 
@@ -260,11 +262,8 @@ KexiDBFieldEdit::setField(KexiDB::Field* field)
 {
 	KexiFormDataItemInterface::setField(field);
 	// first, update label's text
-	QString text = field ? field->captionOrName() : i18n("Please select valid data source");
-	if(m_widgetType == Bool)
-		static_cast<QCheckBox*>(m_editor)->setText(text);
-	else
-		m_label->setText(text);
+	if(field && m_autoCaption)
+		changeText(field->captionOrName());
 
 	// change widget type depending on field type
 	WidgetType type;
@@ -285,9 +284,9 @@ KexiDBFieldEdit::WidgetType
 KexiDBFieldEdit::widgetTypeFromFieldType()
 {
 	if(!field())
-		return Auto;
+		return Text;
 
-	WidgetType type = Auto;
+	WidgetType type = Text;
 	switch(field()->type()) {
 		case KexiDB::Field::Integer: case KexiDB::Field::ShortInteger: case KexiDB::Field::BigInteger:
 			type = Integer; break;
@@ -312,6 +311,31 @@ KexiDBFieldEdit::widgetTypeFromFieldType()
 			break;
 	}
 	return type;
+}
+
+void
+KexiDBFieldEdit::changeText(const QString &text)
+{
+	if(m_widgetType == Bool)
+		static_cast<QCheckBox*>(m_editor)->setText(text);
+	else
+		m_label->setText(text);
+}
+
+void
+KexiDBFieldEdit::setCaption(const QString &caption)
+{
+	m_caption = caption;
+	if(!m_autoCaption && !caption.isEmpty())
+		changeText(caption);
+}
+
+void
+KexiDBFieldEdit::setAutoCaption(bool autoCaption)
+{
+	m_autoCaption = autoCaption;
+	if(!m_autoCaption && !m_caption.isEmpty())
+		changeText(m_caption);
 }
 
 #include "kexidbfieldedit.moc"
