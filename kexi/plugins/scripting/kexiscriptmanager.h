@@ -102,7 +102,7 @@ class KexiScriptManager : public QObject
         virtual ~KexiScriptManager();
 
         /**
-         * \return the \a KexiScriptContainer defined with \param name.
+         * \return the \a KexiScriptContainer defined with \p name .
          * The KexiScriptContainer's are cached.
          */
         KexiScriptContainer* getScriptContainer(const QString& name);
