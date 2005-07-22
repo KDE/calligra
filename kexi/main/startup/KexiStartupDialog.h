@@ -94,10 +94,12 @@ public:
 	
 	/*! Creates a dialog.
 	 @param dialogType see DialogType description
-	 $param dialogOptions see dialogOptions description
+	 @param dialogOptions see dialogOptions description
 	 @param recentProjects a set of recent projects' info, used for "Open recent" tab
 	 @param connSet conenction set used to present available conenctions
 	  in "Open Existing" tab. Pass an empty object is this tab is not used.
+	 @param parent parent widget, if any.
+	 @param name name of this object.
 	 */
 	KexiStartupDialog(
 		int dialogType, 
