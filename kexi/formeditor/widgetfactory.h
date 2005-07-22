@@ -428,7 +428,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		void setEditorText(const QString& text);
 		void setEditor(QWidget *widget, QWidget *editor);
 		QWidget *editor(QWidget *widget) const;
-		void setWidget(QWidget *widget);
+		void setWidget(QWidget *widget, Container *container);
 		QWidget *widget() const;
 
 		/*! Assigns \a value for internal property \a property for a class \a classname.

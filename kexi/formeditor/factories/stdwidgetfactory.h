@@ -92,7 +92,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		void readListItem(QDomElement &node, QListViewItem *parent, KListView *listview);
 
 	private:
-		KFormDesigner::Container *m_container;
+//		KFormDesigner::Container *m_container;
 //		QWidget *m_widget;
 };
 

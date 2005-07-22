@@ -485,7 +485,8 @@ StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *, QPopup
 bool
 StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
 {
-	m_container = container;
+	setWidget(w, container);
+//	m_container = container;
 	if(classname == "KLineEdit")
 	{
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
@@ -498,7 +499,7 @@ StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 		if(label->textFormat() == RichText)
 		{
 			//m_widget = w;
-			setWidget(w);
+//			setWidget(w, container);
 			editText();
 		}
 		else

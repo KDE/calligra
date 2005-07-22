@@ -233,10 +233,10 @@ WidgetFactory::createEditor(const QCString &classname, const QString &text,
 	tree->eventEater()->setContainer(this);
 
 	//m_widget = w;
-	setWidget(w);
+	setWidget(w, container);
 	m_editedWidgetClass = classname;
 	m_firstText = text;
-	m_container = container;
+//	m_container = container;
 
 	changeTextInternal(text); // to update size of the widget
 }
@@ -258,8 +258,8 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 	}
 
 	//m_widget = w;
-	setWidget(w);
-	m_container = container;
+	setWidget(w, container);
+//	m_container = container;
 	setEditor(w, 0);
 //	m_editor = 0;
 
@@ -429,10 +429,10 @@ WidgetFactory::resetEditor()
 	}
 	setEditor(m_widget, 0);
 //	m_editor = 0;
-	setWidget(0);
+	setWidget(0, 0);
 	//m_widget = 0;
 	m_handles = 0;
-	m_container = 0;
+//	m_container = 0;
 }
 
 void
@@ -462,10 +462,10 @@ WidgetFactory::editorDeleted()
 		m_handles->setEditingMode(false);
 	}
 	setEditor(m_widget, 0);
-	setWidget(0);
+	setWidget(0, 0);
 //	m_widget = 0;
 	m_handles = 0;
-	m_container = 0;
+//	m_container = 0;
 }
 
 void
@@ -535,8 +535,10 @@ WidgetFactory::changeTextInternal(const QString& text)
 	//try in inherited
 	if (!m_editedWidgetClass.isEmpty()) {
 		WidgetInfo *wi = m_classesByName[ m_editedWidgetClass ];
-		if (wi && wi->inheritedClass())
+		if (wi && wi->inheritedClass()) {
+//			wi->inheritedClass()->factory()->m_container = m_container;
 			wi->inheritedClass()->factory()->changeText( text );
+		}
 	}
 }
 
@@ -613,18 +615,16 @@ QWidget *WidgetFactory::editor(QWidget *widget) const
 	}
 }
 
-void WidgetFactory::setWidget(QWidget *widget)
+void WidgetFactory::setWidget(QWidget *widget, Container* container)
 {
 	WidgetInfo *winfo = widget ? m_classesByName[widget->className()] : 0;
-	if (!winfo || winfo->parentFactoryName().isEmpty()) {
-		m_widget = widget;
-	}
-	else {
+	if (winfo && !winfo->parentFactoryName().isEmpty()) {
 		WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
 		if (f!=this)
-			f->setWidget(widget);
-		m_widget = widget; //keep a copy
+			f->setWidget(widget, container);
 	}
+	m_widget = widget; //keep a copy
+	m_container = container;
 }
 
 QWidget *WidgetFactory::widget() const

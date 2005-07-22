@@ -209,7 +209,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 
 	private:
 //		QWidget *m_widget;
-		KFormDesigner::Container *m_container;
+//		KFormDesigner::Container *m_container;
 		KFormDesigner::FormManager  *m_manager;
 };
 

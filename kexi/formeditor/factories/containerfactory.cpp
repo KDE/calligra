@@ -476,8 +476,8 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		if(container->form()->interactiveMode())
 		{
 			//m_widget=tab;
-			setWidget(tab);
-			m_container=container;
+			setWidget(tab, container);
+//			m_container=container;
 			addTabPage();
 		}
 
@@ -515,8 +515,8 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		if(container->form()->interactiveMode())
 		{
 			//m_widget = stack;
-			setWidget(stack);
-			m_container = container;
+			setWidget(stack, container);
+//			m_container = container;
 			addStackPage();
 		}
 		return stack;
@@ -591,17 +591,17 @@ bool
 ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 	KFormDesigner::Container *container)
 {
-	setWidget(w);
+	setWidget(w, container);
 	//m_widget = w;
-	m_container = container;
+//	m_container = container;
 
 	if((classname == "KFDTabWidget") || (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
 		if(w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 		{
 			//m_widget = w->parentWidget()->parentWidget();
-			setWidget(w->parentWidget()->parentWidget());
-			m_container = m_container->toplevel();
+			setWidget(w->parentWidget()->parentWidget(), m_container->toplevel());
+//			m_container = m_container->toplevel();
 		}
 
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(addTabPage()) );
@@ -615,10 +615,13 @@ ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopu
 	else if(w->parentWidget()->isA("QWidgetStack") && !w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 	{
 		//m_widget = w->parentWidget();
-		setWidget(w->parentWidget());
 		QWidgetStack *stack = (QWidgetStack*)w->parentWidget(); //m_widget;
+		setWidget(
+			w->parentWidget(), 
+			container->form()->objectTree()->lookup(stack->name())->parent()->container()
+		);
 //		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
-		m_container = container->form()->objectTree()->lookup(stack->name())->parent()->container();
+//		m_container = container->form()->objectTree()->lookup(stack->name())->parent()->container();
 
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(addStackPage()) );
 
