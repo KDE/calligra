@@ -45,7 +45,7 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 		};
 
 		/*! constructs an action
-		    \note methods are assosiated using \r setMethod() 
+		    \note methods are associated using setMethod() 
 		    */
 		KexiUserAction(KexiMainWindow *context, KActionCollection *parent, const QString &name, const QString &text, const QString &pixmap);
 		~KexiUserAction();

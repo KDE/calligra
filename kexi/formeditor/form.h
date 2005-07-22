@@ -288,7 +288,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ResizeHandleSet* resizeHandlesForWidget(QWidget* w);
 
 		/*! A set of value/key pairs provided to be stored as attributes in 
-		 <kfd:customHeader/> XML element (saved as a first child of <UI> element). */
+		 <kfd:customHeader/> XML element (saved as a first child of \<UI> element). */
 		QMap<QCString,QString>* customHeader() const { return &d->customHeader; }
 
 	public slots:

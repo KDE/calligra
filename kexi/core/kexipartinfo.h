@@ -102,7 +102,7 @@ class KEXICORE_EXPORT Info
 		friend class ::KexiMainWindowImpl;
 
 		/**
-		 * @sets the project-part-id
+		 * sets the project-part-id
 		 */
 		void 			setProjectPartID(int id) { m_projectPartID=id; }
 

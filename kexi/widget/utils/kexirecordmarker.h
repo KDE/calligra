@@ -59,7 +59,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 		void addLabel(bool upd=true);
 		void removeLabel(bool upd=true);
 
-		/*! Adds \num labels */
+		/*! Adds \a num labels */
 		void addLabels(int num, bool upd=true);
 
 		void clear(bool upd=true);

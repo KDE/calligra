@@ -51,7 +51,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		ConnectionDialog(QWidget *parent);
 		~ConnectionDialog() {;}
 
-		/*! Displays as modal dialog, to edit connections in \ref Form::connectionBuffer(). */
+		/*! Displays as modal dialog, to edit connections in Form::connectionBuffer(). */
 		void exec(Form *form);
 
 	protected:
@@ -94,7 +94,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		void slotCellSelected(int col, int row);
 		void slotRowInserted(KexiTableItem*,bool);
 
-		/*! Slot called when the user presses 'Ok' button. The \ref Form::connectionBuffer() is deleted, created again and filled with Connection.
+		/*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.
 		 If the user presses 'Cancel', nothing happens. */
 		virtual void slotOk();
 
