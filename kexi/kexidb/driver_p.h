@@ -82,7 +82,7 @@ class KEXI_DB_EXPORT DriverBehaviour
 	QString ROW_ID_FIELD_NAME;
 	
 	/*! True if the value (fetched from field or function,
-	 defined by ROW_ID_FIELD_NAME member) is EXACTLY the value if autoincremented field,
+	 defined by ROW_ID_FIELD_NAME member) is EXACTLY the value of autoincremented field,
 	 not an implicit (internal) row number. Default value is false.
 	 
 	 Examples:

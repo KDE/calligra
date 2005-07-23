@@ -37,6 +37,7 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 {
 	d->isFileDriver = false;
 	d->features = SingleTransactions | CursorForward | CursorBackward;
+//! @todo enable this when kexidb supports multiple: d->features = MultipleTransactions | CursorForward | CursorBackward;
 
 	beh->UNSIGNED_TYPE_KEYWORD = "";
 	beh->ROW_ID_FIELD_NAME = "oid";

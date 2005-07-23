@@ -22,6 +22,15 @@
 namespace KexiDB
 {
 
+//! @internal
+class pqxxTransactionData : public TransactionData
+{
+	public:
+		pqxxTransactionData(Connection *conn, bool nontransaction);
+		~pqxxTransactionData();
+		pqxx::transaction_base *data;
+};
+
 /**
 @author Adam Pigg
 */
@@ -55,16 +64,23 @@ class pqxxSqlConnection : public Connection
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_containsTable( const QString &tableName );
 
+		virtual TransactionData* drv_beginTransaction();
+		virtual bool drv_commitTransaction(TransactionData *);
+		virtual bool drv_rollbackTransaction(TransactionData *);
+
 		pqxx::connection* m_pqxxsql;
 	private:
 		void clearResultInfo();
 		QString escapeName(const QString &tn) const;
 
 		pqxx::result* m_res;
-  		pqxx::transaction_base* m_trans;
+//  		pqxx::transaction_base* m_trans;
+		//! temporary solution for executeSQL()...
+		pqxxTransactionData *m_trans;
 
 	friend class pqxxSqlDriver;
 	friend class pqxxSqlCursor;
+	friend class pqxxTransactionData;
 };
 }
 #endif

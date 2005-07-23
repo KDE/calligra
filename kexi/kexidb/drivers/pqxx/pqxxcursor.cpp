@@ -28,11 +28,12 @@ unsigned int pqxxSqlCursor_trans_num=0; //!< debug helper
 pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement, uint options):
 	Cursor(conn,statement, options)
 {
-KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query statement" << endl;
-my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
-m_options = Buffered;
-m_res = 0;
-m_tran = 0;
+	KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query statement" << endl;
+	my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
+	m_options = Buffered;
+	m_res = 0;
+//	m_tran = 0;
+	m_implicityStarted = false;
 }
 
 //==================================================================================
@@ -40,11 +41,12 @@ m_tran = 0;
 pqxxSqlCursor::pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
 {
-KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query schema" << endl;
-my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
-m_options = Buffered;
-m_res = 0;
-m_tran = 0;
+	KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query schema" << endl;
+	my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
+	m_options = Buffered;
+	m_res = 0;
+//	m_tran = 0;
+	m_implicityStarted = false;
 }
 
 //==================================================================================
@@ -74,14 +76,22 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		//m_tran = new pqxx::work(*my_conn, "cursor_open");
 		cur_name.sprintf("cursor_transaction%d", pqxxSqlCursor_trans_num++);
 		
-		m_tran = new pqxx::nontransaction(*my_conn, (const char*)cur_name);
+//		m_tran = new pqxx::nontransaction(*my_conn, (const char*)cur_name);
+		if (!((pqxxSqlConnection*)connection())->m_trans) {
+//			my_conn->drv_beginTransaction();
+//		if (implicityStarted)
+			(void)new pqxxTransactionData((pqxxSqlConnection*)connection(), true);
+			m_implicityStarted = true;
+		}
 
-		m_res = new pqxx::result(m_tran->exec(statement.utf8()));
-		m_tran->commit();
+		m_res = new pqxx::result(((pqxxSqlConnection*)connection())->m_trans->data->exec(statement.utf8()));
+		((pqxxSqlConnection*)connection())
+			->drv_commitTransaction(((pqxxSqlConnection*)connection())->m_trans);
+//		my_conn->m_trans->commit();
 		KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. commited: " << cur_name <<endl;
 
 		//We should now be placed before the first row, if any
-		m_fieldCount = m_res->columns();
+		m_fieldCount = m_res->columns() - (m_containsROWIDInfo ? 1 : 0);
 //js		m_opened=true;
 		m_afterLast=false;
 		m_records_in_buf = m_res->size();
@@ -89,17 +99,21 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		return true;
 	}
 	catch (const std::exception &e)
-    	{
-			setError(ERR_DB_SPECIFIC,e.what());
-			KexiDBDrvDbg << "pqxxSqlCursor::drv_open:exception - " << e.what() << endl;
-    	}
+	{
+		setError(ERR_DB_SPECIFIC,e.what());
+		KexiDBDrvDbg << "pqxxSqlCursor::drv_open:exception - " << e.what() << endl;
+	}
 	catch(...)
-    	{
-    		setError();
-    	}
-	delete m_tran;
-	m_tran = 0;
-	KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. rolled back! - " << cur_name <<endl;
+	{
+		setError();
+	}
+//	delete m_tran;
+//	m_tran = 0;
+	if (m_implicityStarted) {
+		delete ((pqxxSqlConnection*)connection())->m_trans;
+		m_implicityStarted = false;
+	}
+//	KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. rolled back! - " << cur_name <<endl;
 	return false;
 }
 
@@ -111,9 +125,12 @@ bool pqxxSqlCursor::drv_close()
 
 	delete m_res;
 	m_res = 0;
-		
-	delete m_tran;
-	m_tran = 0;
+
+//	if (m_implicityStarted) {
+//		delete m_tran;
+//		m_tran = 0;
+//		m_implicityStarted = false;
+//	}
 
 	return true;
 }
@@ -122,39 +139,39 @@ bool pqxxSqlCursor::drv_close()
 //Gets the next record...doesnt need to do much, just return fetchend if at end of result set
 void pqxxSqlCursor::drv_getNextRecord()
 {
-KexiDBDrvDbg << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)at() << endl;
-if(at() < m_res->size() && at() >=0)
-{	
-	m_result = FetchOK;
-}
-else if (at() >= m_res->size())
-{
-	m_result = FetchEnd;
-}
-else
-{
-	m_result = FetchError;
-}
+	KexiDBDrvDbg << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)at() << endl;
+	if(at() < m_res->size() && at() >=0)
+	{	
+		m_result = FetchOK;
+	}
+	else if (at() >= m_res->size())
+	{
+		m_result = FetchEnd;
+	}
+	else
+	{
+		m_result = FetchError;
+	}
 }
 
 //==================================================================================
 //Check the current position is within boundaries
 void pqxxSqlCursor::drv_getPrevRecord()
 {
-KexiDBDrvDbg << "pqxxSqlCursor::drv_getPrevRecord" << endl;
+	KexiDBDrvDbg << "pqxxSqlCursor::drv_getPrevRecord" << endl;
 
-if(at() < m_res->size() && at() >=0)
-{	
-	m_result = FetchOK;
-}
-else if (at() >= m_res->size())
-{
-	m_result = FetchEnd;
-}
-else
-{
-	m_result = FetchError;
-}
+	if(at() < m_res->size() && at() >=0)
+	{	
+		m_result = FetchOK;
+	}
+	else if (at() >= m_res->size())
+	{
+		m_result = FetchEnd;
+	}
+	else
+	{
+		m_result = FetchError;
+	}
 }
 
 //==================================================================================
@@ -171,27 +188,27 @@ QVariant pqxxSqlCursor::value(uint pos)
 //Return the value for a given column for the current record - Private const version
 QVariant pqxxSqlCursor::pValue(uint pos) const
 {
-	if (!m_res->size() > 0)
+	if (m_res->size() <= 0)
 	{
 		KexiDBDrvDbg << "pqxxSqlCursor::value - ERROR: result size not greater than 0" << endl;
 		return QVariant();
 	}
 
-	if (pos>=m_fieldCount)
+	if (pos>=(m_fieldCount+(m_containsROWIDInfo ? 1 : 0)))
 	{
 		KexiDBDrvDbg << "pqxxSqlCursor::value - ERROR: requested position is greater than the number of fields" << endl;
 		return QVariant();
 	}
 
-	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(pos)->field : 0;
+	KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldCount) ? m_fieldsExpanded->at(pos)->field : 0;
 	//from most to least frequently used types:
-	if (!f || f->isTextType())
-	{
-		return QVariant((*m_res)[at()][pos].c_str());
-	}
-	else if (f->isIntegerType())
+	if ((f && f->isIntegerType()) || (/*ROWID*/!f && m_containsROWIDInfo && pos==m_fieldCount))
 	{
 		return QVariant((*m_res)[at()][pos].as(int()));
+	}
+	else if (!f || f->isTextType())
+	{
+		return QVariant((*m_res)[at()][pos].c_str());
 	}
 	else if (f->isFPNumericType())
 	{
@@ -214,7 +231,7 @@ const char** pqxxSqlCursor::rowData() const
 	row[m_res->columns()] = NULL;
 	if (at() >= 0 && at() < m_res->size())
 	{
-		for(int i = 0; i < m_res->columns(); i++)
+		for(int i = 0; i < (int)m_res->columns(); i++)
 		{
 			row[i] = (char*)malloc(strlen((*m_res)[at()][i].c_str())+1);
 			strcpy((char*)(*m_res)[at()][i].c_str(), row[i]);
@@ -232,24 +249,27 @@ const char** pqxxSqlCursor::rowData() const
 //Store the current record in [data]
 void pqxxSqlCursor::storeCurrentRow(RowData &data) const
 {
-KexiDBDrvDbg << "pqxxSqlCursor::storeCurrentRow: POSITION IS " << (long)m_at<< endl;
+	KexiDBDrvDbg << "pqxxSqlCursor::storeCurrentRow: POSITION IS " << (long)m_at<< endl;
 
-if (!m_res->size()>0)
-	return;
+	if (m_res->size()<=0)
+		return;
 
-data.reserve(m_fieldCount);
+	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
+	data.reserve(realCount);
 
-for( uint i=0; i<m_fieldCount; i++)
-{
-	data[i] = pValue(i);
-}
+	for( uint i=0; i<realCount; i++)
+	{
+		data[i] = pValue(i);
+	}
 }
 
 //==================================================================================
 //
 void pqxxSqlCursor::drv_clearServerResult()
 {
+#ifdef __GNUC__
 #warning TODO: stuff with server results
+#endif
 }
 
 //==================================================================================

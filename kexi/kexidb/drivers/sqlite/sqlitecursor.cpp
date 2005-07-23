@@ -418,9 +418,10 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 #ifdef SQLITE2
 	const char **col = d->curr_coldata;
 #endif
-	data.reserve(m_fieldCount + (m_containsROWIDInfo ? 1 : 0));
+	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
+	data.reserve(realCount);
 	if (!m_fieldsExpanded) {//simple version: without types
-		for( uint i=0; i<(m_fieldCount + (m_containsROWIDInfo ? 1 : 0)); i++ ) {
+		for( uint i=0; i<realCount; i++ ) {
 #ifdef SQLITE2
 			data[i] = QVariant( *col );
 			col++;
@@ -432,7 +433,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 	}
 
 	const uint fieldsExpandedCount = m_fieldsExpanded->count();
-	for( uint i=0, j=0; i<(m_fieldCount+(m_containsROWIDInfo ? 1 : 0)); i++, j++ ) {
+	for( uint i=0, j=0; i<realCount; i++, j++ ) {
 //		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
 //			j++;
 		while (j < fieldsExpandedCount && !m_fieldsExpanded->at(j)->visible)

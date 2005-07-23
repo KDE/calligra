@@ -69,8 +69,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			MultipleTransactions = 2, 
 //(js) NOT YET IN USE:
 			/*! if nested trasactions are supported
-			 (this implies !SingleTransactions and MultipleTransactions) */
-			NestedTransactions = (MultipleTransactions+4),
+			 (this should imply !SingleTransactions and MultipleTransactions) */
+			NestedTransactions = 4,
 			/*! if forward moving is supported for cursors
 			 (if not available, no cursors available at all) */
 			CursorForward = 8, 

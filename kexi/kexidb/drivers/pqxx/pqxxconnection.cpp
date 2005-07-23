@@ -19,6 +19,29 @@
 
 using namespace KexiDB;
 
+pqxxTransactionData::pqxxTransactionData(Connection *conn, bool nontransaction)
+ : TransactionData(conn)
+{
+	if (nontransaction)
+		data = new pqxx::nontransaction(*static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql /* todo: add name? */);
+	else
+		data = new pqxx::transaction<>(*static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql /* todo: add name? */);
+	if (!static_cast<pqxxSqlConnection*>(conn)->m_trans) {
+		static_cast<pqxxSqlConnection*>(conn)->m_trans = this;
+	}
+}
+
+pqxxTransactionData::~pqxxTransactionData()
+{
+	if (static_cast<pqxxSqlConnection*>(m_conn)->m_trans == this) {
+		static_cast<pqxxSqlConnection*>(m_conn)->m_trans = 0;
+	}
+	delete data;
+	data = 0;
+}
+
+//==================================================================================
+
 pqxxSqlConnection::pqxxSqlConnection(Driver *driver, ConnectionData &conn_data)
         :Connection(driver,conn_data)
         ,m_pqxxsql(0), m_res(0), m_trans(0)
@@ -28,6 +51,8 @@ pqxxSqlConnection::pqxxSqlConnection(Driver *driver, ConnectionData &conn_data)
 //Do any tidying up before the object is deleted
 pqxxSqlConnection::~pqxxSqlConnection()
 {
+		delete m_trans;
+		m_trans = 0;
     destroy();
 }
 
@@ -216,13 +241,22 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
     try
     {
         //Create a transaction
-        m_trans = new pqxx::nontransaction(*m_pqxxsql);
+		const bool implicityStarted = !m_trans;
+		if (implicityStarted)
+			(void)new pqxxTransactionData(this, true);
+
+		//        m_trans = new pqxx::nontransaction(*m_pqxxsql);
 
         //Create a result object through the transaction
-        m_res = new pqxx::result(m_trans->exec(statement.utf8()));
+        m_res = new pqxx::result(m_trans->data->exec(statement.utf8()));
 
-        //Commit the transaction
-        m_trans->commit();
+		//Commit the transaction
+		if (implicityStarted) {
+			pqxxTransactionData *t = m_trans;
+			drv_commitTransaction(t);
+			delete t;
+//			m_trans = 0;
+		}
 
         //If all went well then return true, errors picked up by the catch block
         ok = true;
@@ -260,8 +294,8 @@ void pqxxSqlConnection::clearResultInfo ()
     delete m_res;
     m_res = 0;
 
-    delete m_trans;
-    m_trans = 0;
+//??    delete m_trans;
+//??    m_trans = 0;
 }
 
 //==================================================================================
@@ -313,5 +347,54 @@ bool pqxxSqlConnection::drv_getTablesList( QStringList &list )
 	return deleteCursor(cursor);
 }
 //</taken from pqxxMigrate>
+
+TransactionData* pqxxSqlConnection::drv_beginTransaction()
+{
+	return new pqxxTransactionData(this, false);
+}
+
+bool pqxxSqlConnection::drv_commitTransaction(TransactionData *tdata)
+{
+	bool result = true;
+	try {
+		static_cast<pqxxTransactionData*>(tdata)->data->commit();
+	}
+	catch (const std::exception &e)
+	{
+		//If an error ocurred then put the error description into _dbError
+		setError(ERR_DB_SPECIFIC,e.what());
+		result = false;
+	}
+	catch (...) {
+		//! @todo
+		setError();
+		result = false;
+	}
+	if (m_trans == tdata)
+		m_trans = 0;
+	return result;
+}
+
+bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
+{
+	bool result = true;
+	try {
+		static_cast<pqxxTransactionData*>(tdata)->data->abort();
+	}
+	catch (const std::exception &e)
+	{
+		//If an error ocurred then put the error description into _dbError
+		setError(ERR_DB_SPECIFIC,e.what());
+		result = false;
+	}
+	catch (...) {
+		//! @todo
+		setError();
+		result = false;
+	}
+	if (m_trans == tdata)
+		m_trans = 0;
+	return result;
+}
 
 #include "pqxxconnection.moc"

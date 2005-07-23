@@ -50,9 +50,10 @@ protected:
 			
 private:
 	pqxx::result* m_res;
-	pqxx::nontransaction* m_tran;
+//	pqxx::nontransaction* m_tran;
 	pqxx::connection* my_conn;
 	QVariant pValue(uint pos) const;
+	bool m_implicityStarted : 1;
 	
 	friend class pqxxSqlConnection;
 };
