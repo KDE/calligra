@@ -38,6 +38,21 @@ S	Involves string changes.  Must be done before the freeze.
 
 
 
+Things to do before the release of KOffice 1.5
+==============================================
+
+Item                                                               Prio Status
+------------------------------------------------------------------------------
+
+General bugs
+------------
+
+* Miscellaneous
+  + Format->"Increase indent" sets cell alignment to left	      2	----
+
+
+
+
 Things to do before the release of KOffice 1.4
 ==============================================
 
