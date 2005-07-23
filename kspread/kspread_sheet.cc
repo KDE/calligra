@@ -4928,25 +4928,30 @@ void KSpreadSheet::setSelectionMoneyFormat( KSpreadSelection* selectionInfo,
 
 
 struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
-    double tmpIndent, valIndent;
-    IncreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
-    QString getUndoTitle() { return i18n("Increase Indent"); }
-    bool testCondition( RowFormat* rw ) {
+    double   tmpIndent;
+    double   valIndent;
+
+    IncreaseIndentWorker( double _tmpIndent, double _valIndent )
+	: tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
+
+    QString  getUndoTitle() { return i18n("Increase Indent"); }
+    bool     testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
+
     void doWork( RowFormat* rw ) {
 	rw->setIndent( tmpIndent+valIndent );
-	rw->setAlign( KSpreadCell::Left );
+	//rw->setAlign( KSpreadCell::Left );
     }
     void doWork( ColumnFormat* cl ) {
 	cl->setIndent( tmpIndent+valIndent );
-	cl->setAlign( KSpreadCell::Left );
+	//cl->setAlign( KSpreadCell::Left );
     }
     void prepareCell( KSpreadCell* c ) {
 	c->clearProperty( KSpreadCell::PIndent );
 	c->clearNoFallBackProperties( KSpreadCell::PIndent );
-	c->clearProperty( KSpreadCell::PAlign );
-	c->clearNoFallBackProperties( KSpreadCell::PAlign );
+	//c->clearProperty( KSpreadCell::PAlign );
+	//c->clearNoFallBackProperties( KSpreadCell::PAlign );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -4955,15 +4960,15 @@ struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
 	if ( cellRegion ) {
 	    if(cell->align(x,y)!=KSpreadCell::Left)
 	    {
-		cell->setAlign(KSpreadCell::Left);
-		cell->setIndent( 0.0 );
+		//cell->setAlign(KSpreadCell::Left);
+		//cell->setIndent( 0.0 );
 	    }
 	    cell->setDisplayDirtyFlag();
 	    cell->setIndent( /* ### ??? --> */ cell->getIndent(x,y) /* <-- */ +valIndent );
 	    cell->clearDisplayDirtyFlag();
 	} else {
 	    cell->setIndent( tmpIndent+valIndent);
-	    cell->setAlign( KSpreadCell::Left);
+	    //cell->setAlign( KSpreadCell::Left);
 	}
     }
 };
@@ -4971,12 +4976,12 @@ struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
 
 void KSpreadSheet::increaseIndent(KSpreadSelection* selectionInfo)
 {
-    double valIndent = doc()->getIndentValue();
-    QPoint marker(selectionInfo->marker());
-    KSpreadCell* c = cellAt( marker );
-    double tmpIndent = c->getIndent( marker.x(), marker.y() );
+    QPoint       marker(selectionInfo->marker());
+    double       valIndent = doc()->getIndentValue();
+    KSpreadCell *c         = cellAt( marker );
+    double       tmpIndent = c->getIndent( marker.x(), marker.y() );
 
-    IncreaseIndentWorker w( tmpIndent, valIndent );
+    IncreaseIndentWorker  w( tmpIndent, valIndent );
     workOnCells( selectionInfo, w );
 }
 
