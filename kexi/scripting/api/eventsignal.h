@@ -34,13 +34,6 @@
 
 namespace Kross { namespace Api {
 
-    // Forward declarations.
-    //class ScriptContainer;
-    //class Object;
-    //class List;
-    //class QtObject;
-    //class EventManager;
-
     /**
      * Each Qt signal and slot connection between a QObject
      * instance and a functionname is represented with

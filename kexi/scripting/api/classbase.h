@@ -24,17 +24,18 @@
 //#include <qvaluelist.h>
 
 #include "object.h"
+#include "callable.h"
 
 namespace Kross { namespace Api {
 
-    class ClassBase : public Object
+    class ClassBase : public Callable
     {
         public:
 
             /**
              * Constructor.
              */
-            explicit ClassBase(const QString& name, Object* parentmodule = 0);
+            explicit ClassBase(const QString& name, Object::Ptr parentmodule);
 
             /**
              * Destructor.

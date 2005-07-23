@@ -19,14 +19,11 @@
 
 #include "eventsignal.h"
 
-//#include "interpreter.h"
 //#include "object.h"
 //#include "list.h"
 //#include "qtobject.h"
 //#include "variant.h"
 //#include "../main/scriptcontainer.h"
-//#include "eventmanager.h"
-//#include <qvaluelist.h>
 
 using namespace Kross::Api;
 

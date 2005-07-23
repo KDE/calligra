@@ -23,12 +23,12 @@
 //#include "object.h"
 //#include "list.h"
 //#include "qtobject.h"
-//#include "variant.h"
+#include "variant.h"
 //#include "../main/scriptcontainer.h"
 //#include "eventmanager.h"
 
 //#include <qvaluelist.h>
-//#include <qmetaobject.h>
+#include <qmetaobject.h>
 
 using namespace Kross::Api;
 
@@ -50,16 +50,23 @@ const QString EventSlot::getClassName() const
 
 Object::Ptr EventSlot::call(const QString& name, KSharedPtr<List> arguments)
 {
-    //TODO
+    kdDebug() << QString("EventSlot::call(%1)").arg(name) << endl;
+
+/*TODO convert arguments
+    QUObject uo[12] = { QUObject(), QUObject(), QUObject(),
+                        QUObject(), QUObject(), QUObject(),
+                        QUObject(), QUObject(), QUObject(),
+                        QUObject(), QUObject(), QUObject() };
+*/
+    QString n = name; //Variant::toString(args->item(0));
+    int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
+    if(slotid < 0)
+        throw TypeException(i18n("No such slot '%1'.").arg(n));
+    m_receiver->qt_invoke(slotid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
     return 0;
 }
 
 /*
-EventSlot* EventSlot::create(EventManager* eventmanager)
-{
-    return new EventSlot(eventmanager);
-}
-
 QCString EventSlot::getSlot(const QCString& signal)
 {
     QString signature = QString(signal).mid(1);
@@ -120,7 +127,6 @@ bool EventSlot::connect(EventManager* eventmanager, QObject* senderobj, const QC
         }
         kdDebug() << QString("EventSlot::connect(%1, %2, %3) successfully connected.").arg(senderobj->name()).arg(signal).arg(function) << endl;
     }
-
     return true;
 }
 

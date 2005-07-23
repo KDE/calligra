@@ -39,11 +39,21 @@ namespace Kross { namespace Api {
     class Callable : public Object
     {
         public:
+
             /// Shared pointer to implement reference-counting.
             typedef KSharedPtr<Callable> Ptr;
 
             /**
              * Constructor.
+             *
+             * \param name The name this callable object has and
+             *       it is reachable as via \a Object::getChild() .
+             * \param parent The parent \a Object this instance is
+             *       child of.
+             * \param arglist A list of arguments the callable
+             *       object expects if it got called.
+             * \param documentation The documentation to describe
+             *       the callable object.
              */
             Callable(const QString& name, Object::Ptr parent, ArgumentList arglist, const QString& documentation);
 
@@ -75,6 +85,16 @@ namespace Kross { namespace Api {
 
             /// Check the passed arguments against the \a m_arglist and throws an exception if failed.
             void checkArguments(KSharedPtr<List> arguments);
+
+            /// \see Kross::Api::Object::hasChild()
+            Object::Ptr hasChild(List::Ptr args);
+            /// \see Kross::Api::Object::getChild()
+            Object::Ptr getChild(List::Ptr args);
+//TODO? Object::Ptr setChild(List::Ptr args);
+            /// \see Kross::Api::Object::getChildren()
+            Object::Ptr childNames(List::Ptr args);
+            /// \see Kross::Api::Object::call()
+            Object::Ptr callChild(List::Ptr args);
     };
 
 }}

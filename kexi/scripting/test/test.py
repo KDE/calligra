@@ -244,15 +244,41 @@ print "########## END TEST: KexiDB ##########"
 
 print "########## BEGIN TEST: QObject ##########"
 try:
+    # Get the QtObject instance to access the QObject.
     testobject = get("TestObject")
+
+    # We could just call a slot or a signal.
+    print testobject.call("testSlot2()");
+    print testobject.call("testSignal()");
+
+    #print testobject.call()
+
+    # Each slot a QObject spends is a object itself.
+    myslot = testobject.get("testSlot()")
+    print "myslotevent = %s" % str(myslot)
+    print myslot.call()
+
+
     #print "testobject = %s %s" % (str(testobject),dir(testobject))
     #print "propertyNames = %s" % testobject.propertyNames()
     #print "slotNames = %s" % testobject.slotNames()
     #print "signalNames = %s" % testobject.signalNames()
     #print "########## 2"
 
-    testobject.connect("testSignal()",testobject,"testSlot2()")
-    testobject.signal("testSignal()")
+    #testobject.connect("testSignal()",testobject,"testSlot2()")
+    #testobject.signal("testSignal()")
+
+    #testobject.call("testSlot()")
+
+
+
+    #myslotevent.call("muh")
+    #myslotevent.testSlot()
+    #print testobject.call("testSlot()")
+
+    #myslotevent.call();
+
+    #testobject.testSlot()
     #testobject.slot("testSlot()")
     #testobject.disconnect("testSignal()")
 except Exception, e:

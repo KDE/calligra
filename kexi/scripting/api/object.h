@@ -188,23 +188,17 @@ namespace Kross { namespace Api {
 
             virtual QStringList getCalls() { return QStringList(); }
 
-//TODO
-//bool attach(Function::Ptr) {}
-//bool attach(Signal::Ptr) {}
-
-//bool hasSignal(const QString&);
-//bool hasSlot(const QString&);
-
-/*
+/*TODO
+bool hasSignal(const QString&);
+bool hasSlot(const QString&);
 bool attachEvent(KSharedPtr<Event> event) {}
 bool detachEvent(KSharedPtr<Event> event) {}
 QMap<QString, QValueList< KSharedPtr<Event> > > getEvents() {}
 QValueList< KSharedPtr<Event> > getEvents(const QString&) {}
 QMap<QString, QValueList< KSharedPtr<Event> > > m_events;
-*/
 //bool connect(KSharedPtr<Event> sender, KSharedPtr<Event> receiver) {}
 //bool connect(const QString& signal, Object::Ptr receiver, const QString& slot);
-
+*/
 
             /**
              * Try to convert the \a Object instance to the
@@ -223,6 +217,7 @@ QMap<QString, QValueList< KSharedPtr<Event> > > m_events;
                 return t;
             }
 
+
         private:
             /// Name of this object.
             QString m_name;
@@ -230,12 +225,6 @@ QMap<QString, QValueList< KSharedPtr<Event> > > m_events;
             Object::Ptr m_parent;
             /// A list of childobjects.
             QMap<QString, Object::Ptr> m_children;
-
-
-
-
-
-//QStringList m_callable, m_classes, m_properties, ...; => QMap<QString, QStringList> m_types;
     };
 
 }}

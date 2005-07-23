@@ -27,12 +27,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "../main/krossconfig.h"
 #include "object.h"
 #include "classbase.h"
 #include "list.h"
 #include "event.h"
 #include "exception.h"
 #include "argument.h"
+#include "variant.h"
 
 namespace Kross { namespace Api {
 
@@ -91,6 +93,14 @@ namespace Kross { namespace Api {
             explicit Class(const QString& name, Object::Ptr parentmodule = 0)
                 : ClassBase(name, parentmodule)
             {
+//TODO
+                addFunction("get", &Callable::getChild,
+                    ArgumentList() << Argument("Kross::Api::Variant::String"),
+                    "TODO: Documentation");
+
+                addFunction("call", &Callable::callChild,
+                    ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )),
+                    "TODO: Documentation");
             }
 
             /**
@@ -123,7 +133,9 @@ namespace Kross { namespace Api {
              */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
+#ifdef KROSS_API_CLASS_CALL_DEBUG
                 kdDebug() << QString("Class::call(%1)").arg(name) << endl;
+#endif
 
                 Event<T> *f = m_functions[name];
                 if(! f) // no function with that name, pass call to super class

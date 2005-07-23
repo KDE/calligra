@@ -25,13 +25,13 @@
 //#include "eventmanager.h"
 #include "../main/manager.h"
 //#include "../main/scriptcontainer.h"
+#include "eventslot.h"
+#include "eventsignal.h"
 
 #include <qobject.h>
 #include <qsignal.h>
-
 //#include <qglobal.h>
 //#include <qobjectdefs.h>
-
 #include <qmetaobject.h>
 
 using namespace Kross::Api;
@@ -44,6 +44,26 @@ QtObject::QtObject(QObject* object)
 //TODO: we need namespaces here!
 Manager::scriptManager()->addModule( this );
 //parent->addChild(this);
+
+
+
+    QStrList slotnames = m_object->metaObject()->slotNames(false);
+    for(char* c = slotnames.first(); c; c = slotnames.next()) {
+        QCString s = c;
+        kdDebug()<<"SLOT =====================================> "<< s <<endl;
+        addChild( new EventSlot(object, s) );
+    }
+
+    QStrList signalnames = m_object->metaObject()->signalNames(false);
+    for(char* c = signalnames.first(); c; c = signalnames.next()) {
+        QCString s = c;
+        kdDebug()<<"SIGNAL =====================================> "<< s <<endl;
+        addChild( new EventSignal(object, s) );
+    }
+
+
+
+
 
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),

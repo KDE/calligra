@@ -18,11 +18,12 @@
  ***************************************************************************/
 
 #include "classbase.h"
+#include "argument.h"
 
 using namespace Kross::Api;
 
-ClassBase::ClassBase(const QString& name, Object* parentmodule)
-    : Object(name, parentmodule)
+ClassBase::ClassBase(const QString& name, Object::Ptr parentmodule)
+    : Callable(name, parentmodule, ArgumentList(), "TODO: Documentation")
 {
 }
 

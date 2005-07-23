@@ -20,26 +20,13 @@
 #ifndef KROSS_API_EVENTSLOT_H
 #define KROSS_API_EVENTSLOT_H
 
-//#include <qstring.h>
-//#include <qvaluelist.h>
-//#include <qmap.h>
-//#include <qvariant.h>
-//#include <qsignalmapper.h>
-//#include <qguardedptr.h>
+#include <qstring.h>
 #include <qobject.h>
-//#include <kdebug.h>
 #include <ksharedptr.h>
 
 #include "event.h"
 
 namespace Kross { namespace Api {
-
-    // Forward declarations.
-    //class ScriptContainer;
-    //class Object;
-    //class List;
-    //class QtObject;
-    //class EventManager;
 
     /**
      * Each Qt signal and slot connection between a QObject
@@ -75,10 +62,8 @@ namespace Kross { namespace Api {
             QCString m_slot;
             QString m_function;
             QValueList<EventSlot*> m_slots;
-
         protected:
             void call(const QVariant&);
-
         public slots:
             // Stupid signals and slots. To get the passed
             // arguments we need to have all cases of slots

@@ -18,9 +18,10 @@
  ***************************************************************************/
 
 #include "callable.h"
+#include "variant.h"
 
 #include <klocale.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 
 using namespace Kross::Api;
 
@@ -76,3 +77,28 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
             throw AttributeException(i18n("Callable object '%1' expected parameter of type '%1', but got '%2'.").arg(getName()).arg(fcn).arg(ocn));
     }
 }
+
+Object::Ptr Callable::hasChild(List::Ptr args)
+{
+    //TODO
+    kdDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO"<<endl;
+    return 0;
+}
+
+Object::Ptr Callable::getChild(List::Ptr args)
+{
+    return Object::getChild( Variant::toString(args->item(0)) );
+}
+
+Object::Ptr Callable::childNames(List::Ptr args)
+{
+    //TODO
+    kdDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO"<<endl;
+    return 0;
+}
+
+Object::Ptr Callable::callChild(List::Ptr args)
+{
+    return Object::call(Variant::toString(args->item(0)), args);
+}
+

@@ -77,8 +77,8 @@ namespace Kross {
         // Enable kdDebug()-debugging for Kross::Api::Object call() function.
         //#define KROSS_API_OBJECT_CALL_DEBUG
 
-        // Enable kdDebug()-debugging for Kross::Api::Object called() function.
-        //#define KROSS_API_OBJECT_CALLED_DEBUG
+        // Enable kdDebug()-debugging for Kross::Api::Class call() function.
+        //#define KROSS_API_CLASS_CALL_DEBUG
     }
 
     /**

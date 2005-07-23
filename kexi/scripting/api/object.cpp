@@ -19,6 +19,7 @@
 
 #include "object.h"
 #include "list.h"
+#include "variant.h"
 #include "event.h"
 
 #include <klocale.h>
