@@ -896,7 +896,7 @@ KarbonView::initActions()
 		SLOT( selectionAlignVerticalTop() ),
 		actionCollection(), "object_align_vertical_top" );
 	new KAction(
-		i18n( "Align Center (Vertical)" ), "aocenterv", 0, this,
+		i18n( "Align Middle (Vertical)" ), "aocenterv", 0, this,
 		SLOT( selectionAlignVerticalCenter() ),
 		actionCollection(), "object_align_vertical_center" );
 	new KAction(

@@ -58,6 +58,7 @@
 			<Action name="object_align_horizontal_left"/>
 			<Action name="object_align_horizontal_center"/>
 			<Action name="object_align_horizontal_right"/>
+			<Separator/>
 			<Action name="object_align_vertical_top"/>
 			<Action name="object_align_vertical_center"/>
 			<Action name="object_align_vertical_bottom"/>
@@ -135,6 +136,7 @@
 			<Action name="object_align_horizontal_left"/>
 			<Action name="object_align_horizontal_center"/>
 			<Action name="object_align_horizontal_right"/>
+			<Separator/>
 			<Action name="object_align_vertical_top"/>
 			<Action name="object_align_vertical_center"/>
 			<Action name="object_align_vertical_bottom"/>
