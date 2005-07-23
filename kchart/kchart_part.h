@@ -74,12 +74,11 @@ public:
 				     KoStore *store );
     virtual bool          saveOasis(KoStore*, KoXmlWriter*);
 
-    bool  m_bLoading; // FIXME: Kalle: get rid of that one :)
-    bool  isLoading()        const             { return m_bLoading;        }
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
     virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
     void  initNullChart();
+
     // Functions that generate templates (not used yet):
     void  generateBarChartTemplate();
 
@@ -115,7 +114,7 @@ private:
     // be included in saved files.
     KChartAuxiliary  m_auxiliary;
 
-    // Auxiliary values
+    // Other auxiliary values
     bool           m_bCanChangeValue;
 
     // Graphics

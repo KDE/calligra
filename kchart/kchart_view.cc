@@ -4,23 +4,13 @@
  */
 
 
-#include "kdchart/KDChart.h"
-#include "kchart_view.h"
-#include "kchart_factory.h"
-#include "kchart_part.h"
-#include "kchartWizard.h"
-#include "kchartDataEditor.h"
-#include "kchartConfigDialog.h"
-#include "KChartViewIface.h"
-#include "kchartPageLayout.h"
-#include "kchart_params.h"
-#include "kchartPrinterDlg.h"
-#include "csvimportdialog.h"
-
 #include <qfile.h>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qpopupmenu.h>
+#include <qpaintdevicemetrics.h>
+#include <qcstring.h> // For QByteArray
+
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -31,12 +21,24 @@
 #include <ktempfile.h>
 #include <dcopobject.h>
 #include <kxmlguifactory.h>
-#include <qpaintdevicemetrics.h>
-#include <qcstring.h> // For QByteArray
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
 #include <koTemplateCreateDia.h>
+
+#include "kdchart/KDChart.h"
+#include "kchart_view.h"
+#include "kchart_factory.h"
+#include "kchart_part.h"
+#include "kchart_params.h"
+#include "kchartWizard.h"
+#include "kchartDataEditor.h"
+#include "kchartConfigDialog.h"
+#include "KChartViewIface.h"
+#include "kchartPageLayout.h"
+#include "kchartPrinterDlg.h"
+#include "csvimportdialog.h"
+
 
 using namespace std;
 
@@ -228,6 +230,7 @@ void KChartView::edit()
     ed.setRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.setColLabels(((KChartPart*)koDocument())->colLabelTexts());
 
+    // Activate the Apply button in the editor.
     connect(&ed,  SIGNAL(applyClicked(kchartDataEditor *)),
 	    this, SLOT(applyEdit(kchartDataEditor *)));
 
@@ -620,27 +623,35 @@ void KChartView::setupPrinter( KPrinter &printer )
 
 void KChartView::print(KPrinter &printer)
 {
-  printer.setFullPage( false );
-  QPainter painter;
-  painter.begin(&printer);
-  QPaintDeviceMetrics pdm( &printer );
-  int height, width;
-  if ( !printer.previewOnly() )
-  {
-    	int const scalex = printer.option("kde-kchart-printsizex").toInt();
-	int const scaley = printer.option("kde-kchart-printsizey").toInt();
-	// FIXME: Losing precision here.  First multiply, then divide.
-	width = (double)pdm.width()/100*scalex;
-	height = (double)pdm.height()/100*scaley;
-  }
-  else
-  { //fill the whole page
-	width = pdm.width();
-	height = pdm.height();
-  }
+    printer.setFullPage( false );
 
-  KDChart::print(&painter,((KChartPart*)koDocument())->params(),((KChartPart*)koDocument())->data(),0, new QRect(0,0, width, height));
-  painter.end();
+    QPainter painter;
+    painter.begin(&printer);
+    QPaintDeviceMetrics  pdm( &printer );
+
+    int  height;
+    int  width;
+    if ( !printer.previewOnly() ) {
+	int const scalex = printer.option("kde-kchart-printsizex").toInt();
+	int const scaley = printer.option("kde-kchart-printsizey").toInt();
+
+	width  = pdm.width()  * scalex / 100;
+	height = pdm.height() * scaley / 100;
+    }
+    else {
+	// Fill the whole page.
+	width  = pdm.width();
+	height = pdm.height();
+    }
+
+    QRect  rect(0, 0, width, height);
+    KDChart::print(&painter, 
+		   ((KChartPart*)koDocument())->params(),
+		   ((KChartPart*)koDocument())->data(), 
+		   0, 		// regions
+		   &rect);
+
+    painter.end();
 }
 
 
@@ -691,31 +702,31 @@ void KChartView::importData()
     data.setUsedRows( rows );
     data.setUsedCols( cols );
     for (uint row = 0; row < rows; row++) {
-      for (uint col = 0; col < cols; col++) {
-	bool     ok;
-	QString  tmp;
-	double   val;
+	for (uint col = 0; col < cols; col++) {
+	    bool     ok;
+	    QString  tmp;
+	    double   val;
 
-	// Get the text and convert to double unless in the headers.
-	tmp = dialog->text( row, col );
-	if ( ( row == 0 && hasRowHeaders )
-	     || ( col == 0 && hasColHeaders ) ) {
-	  kdDebug(35001) << "Setting header (" << row << "," << col
-			 << ") to value " << tmp << endl;
-	  data.setCell( row, col, KoChart::Value( tmp ) );
+	    // Get the text and convert to double unless in the headers.
+	    tmp = dialog->text( row, col );
+	    if ( ( row == 0 && hasRowHeaders )
+		 || ( col == 0 && hasColHeaders ) ) {
+		kdDebug(35001) << "Setting header (" << row << "," << col
+			       << ") to value " << tmp << endl;
+		data.setCell( row, col, KoChart::Value( tmp ) );
+	    }
+	    else {
+		val = tmp.toDouble(&ok);
+		if (!ok)
+		    val = 0.0;
+
+		kdDebug(35001) << "Setting (" << row << "," << col
+			       << ") to value " << val << endl;
+
+		// and do the actual setting.
+		data.setCell( row, col, KoChart::Value( val ) );
+	    }
 	}
-	else {
-	  val = tmp.toDouble(&ok);
-	  if (!ok)
-	    val = 0.0;
-
-	  kdDebug(35001) << "Setting (" << row << "," << col
-			 << ") to value " << val << endl;
-
-	  // and do the actual setting.
-	  data.setCell( row, col, KoChart::Value( val ) );
-	}
-      }
     }
 
     ((KChartPart*)koDocument())->doSetData( data, 

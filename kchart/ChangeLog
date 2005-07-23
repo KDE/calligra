@@ -1,4 +1,17 @@
-2007-07-03  David Faure
+2005-07-23  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix an old FIXME: Get rid of KChartPart::m_bLoading;
+	* kchart_part.{h,cc} (m_bLoading): removed
+	(isLoading): removed
+
+	Some code cleaning (improved comments).
+
+2005-07-??  David Faure
+
+	Fix bug 10xxxx: 
+	* ??
+	
+2005-07-03  David Faure
 
 	First steps for OASIS loading of charts.
 	Loads chart type, row and columns labels, and the data.

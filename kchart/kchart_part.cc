@@ -49,7 +49,6 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     m_params( 0 ),
     m_parentWidget( parentWidget )
 {
-    m_bLoading = false;
     kdDebug(35001) << "Constructor started!" << endl;
 
     setInstance( KChartFactory::global(), false );
@@ -97,19 +96,21 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	return true;
     }
 
-    // Mark the document as empty.
+    // If we are supposed to create a new, empty document, then do so.
     if (flags == KoDocument::InitDocEmpty) {
 	initNullChart();
 
 	resetURL();
 	setEmpty();
-	//initConfig();
-        //d->styleManager->createBuiltinStyles();
 	return true;
     }
 
-    KoTemplateChooseDia::ReturnType ret;
-    KoTemplateChooseDia::DialogType dlgtype;
+    KoTemplateChooseDia::ReturnType  ret;
+    KoTemplateChooseDia::DialogType  dlgtype;
+
+    // If we must create a new document, then only present templates
+    // to the user, otherwise also present existing documents and
+    // recent documents.
     if (flags == KoDocument::InitDocFileNew )
 	dlgtype = KoTemplateChooseDia::OnlyTemplates;
     else
@@ -127,8 +128,6 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 	resetURL();
 	setEmpty();
-	//initConfig();
-        //d->styleManager->createBuiltinStyles();
 	return true;
     }
     else if ( ret == KoTemplateChooseDia::Template ) {
@@ -162,7 +161,9 @@ void KChartPart::initNullChart()
     // Fill cells with data if there is none.
     kdDebug(35001) << "Initialize null chart." << endl;
 
-    m_currentData.expand(0,0);
+    // Empty data.
+    m_currentData.expand(0, 0);
+
     // Fill column and row labels.
     m_colLabels << QString("");
     m_rowLabels << QString("");
@@ -218,11 +219,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 			       bool transparent,
 			       double /*zoomX*/, double /*zoomY*/ )
 {
-    if (isLoading()) {
-        kdDebug(35001) << "Loading... Do not paint!!!..." << endl;
-        return;
-    }
-
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
@@ -309,20 +305,21 @@ void KChartPart::setData( const KoChart::Data& data )
     // FIXME(khz): replace this when automatic string detection works in KDChart
     //m_currentData = data;
 
-    //Does the top/left cell contain a string?
+    // Does the top/left cell contain a string?
     bool isStringTopLeft = data.cell( 0, 0 ).isString();
 
-    //Does the first row (without first cell) contain only strings
+    // Does the first row (without first cell) contain only strings?
     bool isStringFirstRow = TRUE;
     for ( uint col = 1; isStringFirstRow && col < data.cols(); col++ ) {
         isStringFirstRow = data.cell( 0, col ).isString();
     }
 
-    // Just in case, we only have 1 row, we never use it for label text => prevents crash
+    // Just in case, we only have 1 row, we never use it for label text.
+    // This prevents a crash.
     if ( data.rows() == 1 )
         isStringFirstRow = FALSE;
 
-    // Does the first column (without first cell) contain only strings
+    // Does the first column (without first cell) contain only strings?
     bool isStringFirstCol = TRUE;
     for ( uint row = 1; isStringFirstCol && row < data.rows(); row++ ) {
         isStringFirstCol = data.cell( row, 0 ).isString();
@@ -423,8 +420,15 @@ void KChartPart::initLabelAndLegend()
 }
 
 
+// Set up some values for the chart Axis, that are not well chosen by
+// default by KDChart.
+//
+// FIXME: This function should maybe change name since it does things
+//        that are not only for axis.
+//
 void KChartPart::setAxisDefaults()
 {
+  //
   // Settings for the Y axis.
   //
   KDChartAxisParams  yAxis
@@ -700,7 +704,8 @@ QDomDocument KChartPart::saveXML()
             }
 
             e.setAttribute( "valType", valType );
-            kdDebug(35001) << "      cell " << i << "," << j << " saved with type '" << valType << "'." << endl;
+            //kdDebug(35001) << "      cell " << i << "," << j
+	    //	   << " saved with type '" << valType << "'." << endl;
             switch ( cell.valueType() ) {
                 case KoChart::Value::String:  e.setAttribute( "value", cell.stringValue() );
                               break;
@@ -720,6 +725,71 @@ QDomDocument KChartPart::saveXML()
 
     return doc;
 }
+
+
+bool KChartPart::loadOasis( const QDomDocument& doc,
+			    KoOasisStyles&      oasisStyles,
+			    const QDomDocument& /*settings*/,
+			    KoStore* )
+{
+    kdDebug(35001) << "kchart loadOasis called" << endl;
+    QDomElement  content = doc.documentElement();
+    QDomElement  bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office, 
+						"body" ) );
+    if ( bodyElem.isNull() ) {
+        kdError(32001) << "No office:body found!" << endl;
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
+        return false;
+    }
+
+    QDomElement officeChartElem = KoDom::namedItemNS( bodyElem, 
+						      KoXmlNS::office, "chart" );
+    if ( officeChartElem.isNull() ) {
+        kdError(32001) << "No office:chart found!" << endl;
+        QDomElement childElem;
+        QString localName;
+        forEachElement( childElem, bodyElem ) {
+            localName = childElem.localName();
+        }
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+        return false;
+    }
+
+    QDomElement chartElem = KoDom::namedItemNS( officeChartElem, KoXmlNS::chart, "chart" );
+    if ( chartElem.isNull() )
+    {
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
+        return false;
+    }
+
+    // Load parameters
+    QString errorMessage;
+    bool ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage );
+    if ( !ok ) {
+        setErrorMessage( errorMessage );
+        return false;
+    }
+
+    // TODO Load data direction (see loadAuxiliary)
+
+    // Load data
+    QDomElement tableElem = KoDom::namedItemNS( chartElem, KoXmlNS::table, "table" );
+    if ( !tableElem.isNull() ) {
+        ok = loadOasisData( tableElem );
+        if ( !ok )
+            return false; // TODO setErrorMessage
+    }
+
+    // FIXME: Shouldn't this be done first of all, so it could be
+    //        overrided from the file?  /ingwa
+    setAxisDefaults();
+
+    return true;
+}
+
 
 bool KChartPart::loadOasisData( const QDomElement& tableElem )
 {
@@ -822,70 +892,10 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
     return true;
 }
 
-bool KChartPart::loadOasis( const QDomDocument& doc,
-			    KoOasisStyles&      oasisStyles,
-			    const QDomDocument& /*settings*/,
-			    KoStore* )
-{
-    kdDebug(35001) << "kchart loadOasis called" << endl;
-    QDomElement content = doc.documentElement();
-    QDomElement bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( bodyElem.isNull() )
-    {
-        kdError(32001) << "No office:body found!" << endl;
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
-        return false;
-    }
-    QDomElement officeChartElem = KoDom::namedItemNS( bodyElem, KoXmlNS::office, "chart" );
-    if ( officeChartElem.isNull() )
-    {
-        kdError(32001) << "No office:chart found!" << endl;
-        QDomElement childElem;
-        QString localName;
-        forEachElement( childElem, bodyElem ) {
-            localName = childElem.localName();
-        }
-        if ( localName.isEmpty() )
-            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
-        else
-            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
-        return false;
-    }
-
-    QDomElement chartElem = KoDom::namedItemNS( officeChartElem, KoXmlNS::chart, "chart" );
-    if ( chartElem.isNull() )
-    {
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
-        return false;
-    }
-
-    // Load parameters
-    QString errorMessage;
-    bool ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage );
-    if ( !ok ) {
-        setErrorMessage( errorMessage );
-        return false;
-    }
-
-    // TODO Load data direction (see loadAuxiliary)
-
-    // Load data
-    QDomElement tableElem = KoDom::namedItemNS( chartElem, KoXmlNS::table, "table" );
-    if ( !tableElem.isNull() ) {
-        ok = loadOasisData( tableElem );
-        if ( !ok )
-            return false; // TODO setErrorMessage
-    }
-
-    setAxisDefaults();
-
-    return true;
-}
-
 
 bool KChartPart::saveOasis(KoStore*, KoXmlWriter*)
 {
-    //todo
+    // TODO
     return false;
 }
 
@@ -1087,12 +1097,8 @@ bool KChartPart::loadData( const QDomDocument& doc,
 bool KChartPart::loadOldXML( const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadOldXML called" << endl;
-    // <spreadsheet>
-    //  m_bLoading = true;
-    if ( doc.doctype().name() != "chart" ) {
-        //m_bLoading = false;
+    if ( doc.doctype().name() != "chart" )
         return false;
-    }
 
     kdDebug(35001) << "Ok, it is a chart" << endl;
 
