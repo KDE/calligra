@@ -41,6 +41,9 @@
 KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
+	// REGISTERED ID:
+	m_registeredPartID = (int)KexiPart::ReportObjectType;
+
 	kexipluginsdbg << "KexiReportPart::KexiReportPart()" << endl;
 	m_names["instance"] = i18n("Report");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;

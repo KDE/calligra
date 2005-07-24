@@ -460,6 +460,56 @@ tristate KexiDialogBase::storeNewData()
 		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's definition failed."),"");
 		return false;
 	}
+
+	if (!part()->info()->m_idStoredInPartDatabase) {
+		//this part's ID is not stored within kexi__parts:
+		KexiDB::TableSchema *ts = m_parentWindow->project()->dbConnection()->tableSchema("kexi__parts");
+		kdDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
+		if (!ts)
+			return false;
+
+		//temp. hack: avoid problems with autonumber
+		// see http://bugs.kde.org/show_bug.cgi?id=89381
+		int p_id = part()->info()->projectPartID(); 
+		// = KexiPart::LastObjectType+1; //min is == 3+1
+		if (p_id<0) {
+			//find 1st maximum custom id
+			if (m_parentWindow->project()->dbConnection()->querySingleNumber(
+				"SELECT max(p_id) FROM kexi__parts", p_id))
+			{
+				p_id = QMAX(++p_id, (int)KexiPart::UserObjectType);
+			}
+			else
+				return false;
+		}
+
+//		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");
+		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+		kexidbg << "KexiMainWindowImpl::newObject(): fieldlist: " 
+			<< (fl ? fl->debugString() : QString::null) << endl;
+		if (!fl)
+			return false;
+
+		kexidbg << part()->info()->ptr()->untranslatedGenericName() << endl;
+//		QStringList sl = part()->info()->ptr()->propertyNames();
+//		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
+//			kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString() <<  endl;
+		if (!m_parentWindow->project()->dbConnection()->insertRecord(
+				*fl,
+				QVariant(p_id),
+				QVariant(part()->info()->ptr()->untranslatedGenericName()),
+				QVariant(part()->info()->mime()), QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
+			return false;
+
+		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
+		part()->info()->setProjectPartID( p_id );
+			//(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
+		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " 
+			<< part()->info()->projectPartID()  << endl;
+
+		part()->info()->m_idStoredInPartDatabase = true;
+	}
+
 	/* Sets 'dirty' flag on every dialog's view. */
 	setDirty(false);
 //	v->setDirty(false);
@@ -467,6 +517,7 @@ tristate KexiDialogBase::storeNewData()
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
 	m_parentWindow->project()->addStoredItem( part()->info(), m_item );
+
 	return true;
 }
 

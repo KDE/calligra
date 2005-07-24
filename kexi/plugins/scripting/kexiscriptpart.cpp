@@ -36,10 +36,13 @@
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
-    m_names["instance"] = i18n("Script");
-    m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
+	// REGISTERED ID:
+	m_registeredPartID = (int)KexiPart::ScriptObjectType;
 
-    m_manager = new KexiScriptManager(this);
+	m_names["instance"] = i18n("Script");
+	m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
+
+	m_manager = new KexiScriptManager(this);
 }
 
 KexiScriptPart::~KexiScriptPart()

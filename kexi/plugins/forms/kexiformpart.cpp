@@ -74,6 +74,9 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
  : KexiPart::Part(parent, name, l)
  , d(new Private())
 {
+	// REGISTERED ID:
+	m_registeredPartID = (int)KexiPart::FormObjectType;
+
 	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
 	m_names["instance"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;

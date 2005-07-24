@@ -41,6 +41,7 @@ Manager::Manager(QObject *parent)
 	m_partlist.setAutoDelete(true);
 	m_partsByMime.setAutoDelete(false);
 	m_parts.setAutoDelete(false);//KApp will remove parts
+	m_nextTempProjectPartID = -1;
 }
 
 void
@@ -87,6 +88,7 @@ Manager::lookup()
 		KService::Ptr ptr = ordered[i];
 		if (ptr) {
 			Info *info = new Info(ptr);
+			info->setProjectPartID(m_nextTempProjectPartID--); //temp. part id are -1, -2, and so on, to avoid duplicates
 			if (!info->mime().isEmpty()) {
 				m_partsByMime.insert(info->mime(), info);
 				kdDebug() << "Manager::lookup(): inserting info to " << info->mime() << endl;
@@ -125,9 +127,12 @@ Manager::part(Info *i)
 		if(!p) {
 			kdDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kdDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
-			i->setBroken(true, i18n("Error during loading part module \"%1\"").arg(i->objectName()));
+			i->setBroken(true, i18n("Error during loading plugin \"%1\"").arg(i->objectName()));
 			setError(i->errorMessage());
 			return 0;
+		}
+		if (p->m_registeredPartID>0) {
+			i->setProjectPartID( p->m_registeredPartID );
 		}
 
 #if 0
@@ -203,7 +208,7 @@ Manager::info(const QCString &mime)
 	Info *i = m_partsByMime[mime];
 	if (i)
 		return i;
-	setError(i18n("No parts module for mime type \"%1\"").arg(mime));
+	setError(i18n("No plugin for mime type \"%1\"").arg(mime));
 	return 0;
 }
 
@@ -225,11 +230,11 @@ Manager::checkProject(KexiDB::Connection *conn)
 		return false;
 	}
 
-	int id=0;
+//	int id=0;
 //	QStringList parts_found;
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
-		id++;
+//		id++;
 		Info *i = info(cursor->value(2).toCString());
 		if(!i)
 		{
@@ -243,6 +248,7 @@ Manager::checkProject(KexiDB::Connection *conn)
 		else
 		{
 			i->setProjectPartID(cursor->value(0).toInt());
+			i->m_idStoredInPartDatabase = true;
 //			parts_found+=cursor->value(2).toString();
 		}
 	}

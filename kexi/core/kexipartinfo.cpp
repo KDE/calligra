@@ -26,6 +26,7 @@ using namespace KexiPart;
 Info::Info(KService::Ptr ptr) //, Manager *manager)
 {
 	m_ptr = ptr;
+	m_idStoredInPartDatabase = false;
 
 	m_groupName = m_ptr->name();
 	m_mime = m_ptr->property("X-Kexi-TypeMime").toCString();

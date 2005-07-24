@@ -541,6 +541,25 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 CCMAIL: dkite@shaw.ca
 
 
+TODO: in KexiMainWindowImpl::slotProjectOpen() add support for starting new kexi instance for selected conn data
+      (we need to remember from what filename has been a conndata loaded)
+TODO: move ConnectionData::savePassword to QMap<ConnectionData*,bool> KexiDBConnectionSet::savePasswordMap or so
+TODO: Forms: fix label width resizing when enteing text within inline editor
+
+2005-07-23
+Core
+- management related to Part's ID improved; fixed related bug
+
+2005-07-22
+KexiDB
+- support for PostgreSQL on win32
+- PostgreSQL driver's transactions handling improved
+
+2005-07-21
+Form Designer
+- checkbox inline editing enabled
+- width of inserted widgets' size hint increased a bit to for better usability
+
 2005-07-13..20
 General
 - @internal added for private classes to make api docs more readable

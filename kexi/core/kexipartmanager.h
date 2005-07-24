@@ -96,7 +96,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		Info *info(const QCString &mime);
 
 		/**
-		 * checks project's kexi__part table, creates one if nessesary
+		 * checks project's kexi__part table
 		 * and checks if all parts used in a project are available locally
 		 *
 		 * use @ref missingParts() to get a list of missing parts
@@ -130,7 +130,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 #if 0
 		DataSourceList m_datasources;
 #endif
-
+		int m_nextTempProjectPartID;
 		bool m_lookupDone : 1;
 };
 

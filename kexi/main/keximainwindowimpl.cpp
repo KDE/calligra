@@ -3173,7 +3173,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	if(!part)
 		return false;
 
-//js TODO: move this code
+#if 0 //moved to KexiDialogBase::storeNewData()
 	if(info->projectPartID() == -1)
 	{
 		KexiDB::TableSchema *ts = project()->dbConnection()->tableSchema("kexi__parts");
@@ -3208,6 +3208,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 		info->setProjectPartID( (int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
 		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " << info->projectPartID()  << endl;
 	}
+#endif
 
 #ifdef KEXI_ADD_CUSTOM_OBJECT_CREATION
 # include "keximainwindowimpl_customobjcreation.h"

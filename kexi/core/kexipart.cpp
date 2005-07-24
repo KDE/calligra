@@ -58,6 +58,7 @@ using namespace KexiPart;
 Part::Part(QObject *parent, const char *name, const QStringList &)
 : QObject(parent, name)
 , m_guiClient(0)
+, m_registeredPartID(-1) //no registered ID by default
 , d(new PartPrivate())
 {
 	m_info = 0;

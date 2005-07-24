@@ -41,6 +41,9 @@
 KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
+	// REGISTERED ID:
+	m_registeredPartID = (int)KexiPart::TableObjectType;
+
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 	m_names["instance"] = i18n("Table");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;

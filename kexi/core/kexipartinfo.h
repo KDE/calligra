@@ -25,6 +25,7 @@
 
 class KexiMainWindowImpl;
 class KexiProject;
+class KexiDialogBase;
 
 namespace KexiPart
 {
@@ -87,24 +88,18 @@ class KEXICORE_EXPORT Info
 		 */
 		bool broken() const { return m_broken; }
 
-		bool			addTree() { return m_addTree; }
+		bool addTree() { return m_addTree; }
 
-#if 0
-		/**
-		 * returns the instance of this @ref KexiProjectPart
-		 * dlopens it if needed
-		 */
-		Part 			*instance();
-#endif
 	protected:
 		friend class Manager;
 		friend class ::KexiProject;
 		friend class ::KexiMainWindowImpl;
+		friend class ::KexiDialogBase;
 
 		/**
 		 * sets the project-part-id
 		 */
-		void 			setProjectPartID(int id) { m_projectPartID=id; }
+		void setProjectPartID(int id) { m_projectPartID=id; }
 
 		/**
 		 * Sets the broken flag and error message. 
@@ -118,9 +113,17 @@ class KEXICORE_EXPORT Info
 		 */
 		QString errorMessage() const { return m_errorMessage; }
 
+		/**
+		 * true if ID of the part is stored in project's database
+		 * false by default. This flag is updated in Manager::checkProject()
+		 * and set to true on first successful execution of KexiDialogBase::storeNewData()
+		 * @internal
+		 */
+		bool m_idStoredInPartDatabase : 1;
+
 	private:
-		KService::Ptr 		m_ptr;
-		bool 			m_broken;
+		KService::Ptr m_ptr;
+		bool m_broken;
 		QString m_errorMessage;
 //		Part 			*m_instance;
 
@@ -129,9 +132,10 @@ class KEXICORE_EXPORT Info
 //		QString m_groupIcon;
 		QString m_itemIcon;
 		QString m_objectName;
-		int 			m_projectPartID;
-		bool			m_addTree;
+		int m_projectPartID;
+		bool m_addTree;
 //		Manager 		*m_manager;
+
 };
 
 }

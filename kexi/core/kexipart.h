@@ -42,7 +42,6 @@ namespace KexiPart
 	class Info;
 	class Item;
 	class GUIClient;
-//	class DataSource;
 	class PartPrivate;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
@@ -51,7 +50,8 @@ enum ObjectTypes {
 	QueryObjectType = 2, //like in KexiDB::ObjectTypes
 	FormObjectType = 3,
 	ReportObjectType = 4,
-	LastObjectType = 4, //ALWAYS UPDATE THIS
+	ScriptObjectType = 5,
+	LastObjectType = 5, //ALWAYS UPDATE THIS
 
 	UserObjectType = 100 //external types
 };
@@ -257,10 +257,18 @@ class KEXICORE_EXPORT Part : public QObject
 		QIntDict<GUIClient> m_instanceGuiClients;
 		KexiMainWindow* m_mainWin;
 		Kexi::ObjectStatus m_status;
-		PartPrivate *d;
+
+		/*! If you're implementing a new part, set this to value >0 in your ctor 
+		 if you have well known (ie registered ID) for your part.
+		 So far, table, query, form, report and script part have defined their IDs 
+		 (see KexiPart::ObjectTypes). */
+		int m_registeredPartID;
+
 		/*! True if newwly created, unsaved objects are dirty. False by default.
 		 You can change it in your subclass' constructor.	*/
 		bool m_newObjectsAreDirty : 1;
+
+		PartPrivate *d;
 
 	friend class Manager;
 	friend class ::KexiMainWindow;
@@ -271,4 +279,3 @@ class KEXICORE_EXPORT Part : public QObject
 }
 
 #endif
-

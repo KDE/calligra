@@ -38,6 +38,9 @@
 KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
+	// REGISTERED ID:
+	m_registeredPartID = (int)KexiPart::QueryObjectType;
+
 	m_names["instance"] = i18n("Query");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
 }
