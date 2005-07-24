@@ -1,0 +1,27 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Krita OpenEXR Export Filter
+Name[ca]=Filtre d'exportació Magick per a Krita
+Name[da]=Krita Magick-eksportfilter
+Name[de]=Magick-Exportfilter für Krita
+Name[el]=Φίλτρο εξαγωγής Magick του Krita
+Name[es]=Filtro de exportación a Magick de Krita
+Name[et]=Krita Magick ekspordifilter
+Name[fr]=Filtre d'exportation Magick de Krita
+Name[he]=מסנן ייצוא מ־Krita ל־Magick
+Name[hu]=Krita Magick exportszűrő
+Name[it]=Filtro di esportazione Magick per Krita
+Name[nl]=Krita Magick Exportfilter
+Name[pt]=Filtro de Exportação de Magick para o Krita
+Name[pt_BR]=Filtro de exportação Magick para o Krita
+Name[ru]=Фльтр экспорта документов Krita в Magick
+Name[sr]=Krita-ин филтер за извоз у Magick
+Name[sr@Latn]=Krita-in filter za izvoz u Magick
+Name[sv]=Krita Magick-exportfilter
+Name[zh_CN]=Krita Magick 导出过滤器
+X-KDE-Export=image/x-exr
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Import=application/x-krita
+X-KDE-Weight=1
+X-KDE-Library=libkrita_openexr_export

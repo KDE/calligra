@@ -1,0 +1,9 @@
+if test -z "$OPENEXR_LIBS"; then
+  echo ""
+  echo "You're missing the OpenEXR library. Krita's OpenEXR import/export filter will "
+  echo "not be compiled. You can download OpenEXR from http://www.openexr.com or "
+  echo "install it from an appropriate binary package."
+  echo ""
+  all_tests=bad
+fi
+
