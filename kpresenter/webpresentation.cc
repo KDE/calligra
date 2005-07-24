@@ -330,7 +330,7 @@ QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& str
     return EscapeSgmlText( codec, strText, true, false );
 }
 
-void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle, const QString& dest, const QString& next)
+void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle, const QString& next)
 {
     QString mimeName ( codec->mimeName() );
     if ( isXML() )
@@ -372,7 +372,7 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
               << ">\n";
 
     // Load the next slide after time elapsed
-    if ( (timeBetweenSlides > 0) && ( QString::compare(dest,next) !=0 ) )
+    if ( (timeBetweenSlides > 0) && ( ! next.isNull() ) )
     {
         streamOut << "<meta http-equiv=\"refresh\" content=\""
                   << timeBetweenSlides
@@ -396,14 +396,14 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         unsigned int pgNum = i + 1; // pgquiles # elpauer . org - I think this is a bug, seems to be an overflow if we have max_unsigned_int slides
         KTempFile tmp;
         QString dest= QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum );
-        QString next= QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum<slideInfos.count() ? pgNum+1 : (m_bLoopSlides ? 1 : pgNum ) ); // Ugly, but it works
+        QString next= QString( "slide_%2.html" ).arg( pgNum<slideInfos.count() ? pgNum+1 : (m_bLoopSlides ? 1 : pgNum ) ); // Ugly, but it works
 
         QFile file( tmp.name() );
         file.open( IO_WriteOnly );
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
-        writeStartOfHeader( streamOut, codec, slideInfos[ i ].slideTitle, dest, next ); // It would be probably better to pass pgNum instead of dest, next
+        writeStartOfHeader( streamOut, codec, slideInfos[ i ].slideTitle, next );
 
         // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
@@ -538,7 +538,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
 
-    writeStartOfHeader( streamOut, codec, i18n("Table of Contents"), dest, dest );
+    writeStartOfHeader( streamOut, codec, i18n("Table of Contents"), QString() );
     streamOut << "</head>\n";
 
     streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
