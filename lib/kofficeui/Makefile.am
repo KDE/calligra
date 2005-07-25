@@ -38,15 +38,18 @@ include_HEADERS = \
 	koselectaction.h kolinewidthaction.h kolinestyleaction.h \
 	kotooldockbase.h kotooldockmanager.h kotooldockmovemanager.h
 
-AM_CXXFLAGS = -DQT_PLUGIN
-kde_widget_LTLIBRARIES = kofficewidgets.la
-kofficewidgets_la_LDFLAGS = $(KDE_PLUGIN) -module $(all_libraries)
-kofficewidgets_la_LIBADD = $(LIB_KIO) libkofficeui.la
-kofficewidgets_la_SOURCES =  kofficewidgets.cpp
+# FIXME: Disabled for now as it breaks the installation process if
+# KOffice is not installed in $KDEDIR
+# 
+#AM_CXXFLAGS = -DQT_PLUGIN
+#kde_widget_LTLIBRARIES = kofficewidgets.la
+#kofficewidgets_la_LDFLAGS = $(KDE_PLUGIN) -module $(all_libraries)
+#kofficewidgets_la_LIBADD = $(LIB_KIO) libkofficeui.la
+#kofficewidgets_la_SOURCES =  kofficewidgets.cpp
 
-kofficewidgets.cpp: $(srcdir)/koffice.widgets
-	$(MAKEKDEWIDGETS) -o kofficewidgets.cpp $(srcdir)/koffice.widgets
+#kofficewidgets.cpp: $(srcdir)/koffice.widgets
+#	$(MAKEKDEWIDGETS) -o kofficewidgets.cpp $(srcdir)/koffice.widgets
 
-CLEANFILES = kofficewidgets.cpp
+#CLEANFILES = kofficewidgets.cpp
 
 METASOURCES = AUTO
