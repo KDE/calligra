@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = keximigrate_mysql.la
 
-INCLUDES = -I$(srcdir)/../../.. -I$(top_srcdir)/kexi $(all_includes) -I$(MYSQL_INC) #
+INCLUDES = -I$(srcdir)/../../.. -I$(top_srcdir)/kexi $(all_includes) -I$(MYSQL_INC)
 
 keximigrate_mysql_la_METASOURCES = AUTO
 
