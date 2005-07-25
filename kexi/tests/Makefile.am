@@ -1,5 +1,5 @@
 
-SUBDIRS = newapi 
+SUBDIRS = newapi widgets
 
 # unused: parser tableview
 # startup

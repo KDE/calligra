@@ -168,7 +168,7 @@ public:
 	QVariant value;
 };
 
-//! variables like <fieldname> or <tablename>.<fieldname>
+//! variables like <i>fieldname</i> or <i>tablename</i>.<i>fieldname</i>
 class KEXI_DB_EXPORT VariableExpr : public BaseExpr
 {
 public:

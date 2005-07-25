@@ -34,7 +34,8 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driver
 		m_driversMap.insert(it.data().caption, it.data().name.lower());
 	}
 	listBox()->sort();
-	//build the names list after sorting
+
+	// Build the names list after sorting
 	for (int i=0; i<count(); i++)
 		m_driverNames += m_driversMap[ text(i) ];
 }
@@ -42,11 +43,6 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driver
 KexiDBDriverComboBox::~KexiDBDriverComboBox()
 {
 }
-
-/*QString KexiDBDriverComboBox::selectedDriverName() const
-{
-	return m_driverNames[currentItem()];
-}*/
 
 QString KexiDBDriverComboBox::selectedDriverName() const
 {
@@ -60,7 +56,6 @@ void KexiDBDriverComboBox::setDriverName(const QString& driverName)
 {
 	int index = m_driverNames.findIndex( driverName.lower() );
 	if (index==-1) {
-//		setCurrentText(QString::null);
 		return;
 	}
 	setCurrentItem(index);
