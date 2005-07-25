@@ -217,7 +217,6 @@ QMap<QString, QValueList< KSharedPtr<Event> > > m_events;
                 return t;
             }
 
-
         private:
             /// Name of this object.
             QString m_name;

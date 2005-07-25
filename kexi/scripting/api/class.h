@@ -21,17 +21,16 @@
 #define KROSS_API_CLASS_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
-#include <qmap.h>
+//#include <qvaluelist.h>
+//#include <qmap.h>
 #include <qobject.h>
-#include <klocale.h>
+//#include <klocale.h>
 #include <kdebug.h>
 
-#include "../main/krossconfig.h"
+//#include "../main/krossconfig.h"
 #include "object.h"
-#include "classbase.h"
-#include "list.h"
 #include "event.h"
+#include "list.h"
 #include "exception.h"
 #include "argument.h"
 #include "variant.h"
@@ -39,68 +38,26 @@
 namespace Kross { namespace Api {
 
     /**
-     * From \a ClassBase inherited template-class to represent
+     * From \a Event inherited template-class to represent
      * class-structures. Classes implemetating this template
-     * are able to dynamicly define \a Callable methodfunctions
+     * are able to dynamicly define \a Event methodfunctions
      * accessible from within scripts.
      */
     template<class T>
-    class Class : public ClassBase
+    class Class : public Event<T>
     {
-        private:
-            /// Definition of funtion-pointers.
-            typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
-            /// List of memberfunctions.
-            QMap<QString, Event<T> * > m_functions;
-            /// List of memberfunction names.
-            QStringList m_functionnames;
-
-        protected:
-
-            /**
-             * Add a \a Callable methodfunction to the list of functions
-             * this Object supports.
-             *
-             * \param name The functionname. Each function this object
-             *        holds should have an unique name to be
-             *        still accessable.
-             * \param function A pointer to the methodfunction that
-             *        should handle calls.
-	     * \param arglist A list of arguments for the function.
-             * \param documentation Some documentation used to describe
-             *        what the function does.
-	     *
-	     * \todo Is that template arguments or concrete arguments?
-             */
-            void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
-            {
-                //if(m_functions.contains(name)) throw... needed?
-                //FIXME pass this instance as parent to Event ?!
-                Event<T> *event = new Event<T>(name, this, function, arglist, documentation);
-                m_functions.replace(name, event);
-                m_functionnames.append(name);
-            }
-
         public:
 
             /**
              * Constructor.
              *
              * \param name The name this class has.
-             * \param parentmodule The parent \a Module object
+             * \param parent The parent this class is child of
              *        or NULL if this class has no parent.
              */
-            explicit Class(const QString& name, Object::Ptr parentmodule = 0)
-                : ClassBase(name, parentmodule)
+            explicit Class(const QString& name, Object::Ptr parent = 0, const QString& documentation = QString::null)
+                : Event<T>(name, parent, documentation)
             {
-//TODO
-                addFunction("get", &Callable::getChild,
-                    ArgumentList() << Argument("Kross::Api::Variant::String"),
-                    "TODO: Documentation");
-
-                addFunction("call", &Callable::callChild,
-                    ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )),
-                    "TODO: Documentation");
             }
 
             /**
@@ -108,52 +65,16 @@ namespace Kross { namespace Api {
              */
             virtual ~Class()
             {
-                /*FIXME maybe we should't trust the reference counter here?
-                typename QMap<QString, Class<T>::Function* >::Iterator it = m_functions.begin();
-                for(; it != m_functions.end(); ++it)
-                    delete it.data();
-                */
             }
 
-            /**
-             * Overloaded method to handle function-calls.
-             *
-             * \throw AttributeException if argumentparameters
-             *        arn't valid.
-             * \param name The functionname. Each function this
-             *        Object holds should have a different
-             *        name cause they are access by they name.
-             *        If name is QString::null or empty, a
-             *        self-reference to this instance is
-             *        returned.
-             * \param arguments The list of arguments.
-             * \return An Object representing the call result
-             *         or NULL if there doesn't exists such a
-             *         function with defined name.
-             */
+            /*
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
-#ifdef KROSS_API_CLASS_CALL_DEBUG
                 kdDebug() << QString("Class::call(%1)").arg(name) << endl;
-#endif
-
-                Event<T> *f = m_functions[name];
-                if(! f) // no function with that name, pass call to super class
-                    return Object::call(name, arguments);
-
-                QString s = ""; //FIXME implement namespace/url resolution?!
-                return f->call(s, arguments);
+                return Event<T>::call(name, arguments);
             }
+            */
 
-            /**
-             * Return a list of avaible functionnames.
-             *
-             * \return List of avaible functionnames.
-             */
-            QStringList getCalls()
-            {
-                return m_functionnames;
-            }
     };
 
 }}

@@ -46,7 +46,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            EventAction(KAction* action);
+            EventAction(const QString& name, Object::Ptr parent, KAction* action);
 
             /**
              * Destructor.

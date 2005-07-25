@@ -44,13 +44,16 @@ namespace Kross { namespace Api {
     {
         public:
 
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<QtObject> Ptr;
+
             /**
              * Constructor.
              *
              * \param object The \a QObject instance this
              *        class wraps.
              */
-            QtObject(QObject* object);
+            QtObject(Object::Ptr parent, QObject* object);
 
             /**
              * Destructor.

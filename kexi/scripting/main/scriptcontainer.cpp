@@ -20,12 +20,10 @@
 #include "scriptcontainer.h"
 #include "../api/object.h"
 #include "../api/list.h"
-#include "../api/qtobject.h"
 #include "../api/interpreter.h"
 #include "../api/script.h"
 //#include "../api/eventmanager.h"
 #include "../main/manager.h"
-#include "../main/eventcollection.h"
 
 using namespace Kross::Api;
 
@@ -36,9 +34,6 @@ namespace Kross { namespace Api {
     {
         public:
             Script* m_script;
-            //EventManager* m_eventmanager;
-            QMap<QString, QtObject*> m_qtobjects;
-
             QString m_name;
             QString m_code;
             QString m_interpretername;
@@ -57,14 +52,7 @@ ScriptContainer::ScriptContainer(const QString& name)
 
 ScriptContainer::~ScriptContainer()
 {
-    //delete d->m_eventmanager; //d->m_eventmanager = 0;
     finalize();
-
-/*
-    for(QMap<QString, QtObject*>::Iterator it = d->m_qtobjects.begin(); it != d->m_qtobjects.end(); ++it)
-        delete it.data();
-*/
-
     delete d;
 }
 
@@ -93,17 +81,6 @@ void ScriptContainer::setInterpreterName(const QString& name)
 {
     finalize();
     d->m_interpretername = name;
-}
-
-bool ScriptContainer::addQObject(QObject* object, const QString& name)
-{
-    QString n = name.isEmpty() ? object->name() : name;
-    if(d->m_qtobjects.contains(n))
-        return false;
-    QtObject* qtobject = new QtObject(object);
-//FIXME Manager::scriptManager()->addModule(qtobject);
-    d->m_qtobjects.replace(n, qtobject);
-    return true;
 }
 
 void ScriptContainer::initialize()

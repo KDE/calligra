@@ -27,7 +27,7 @@
 
 #include "krossconfig.h"
 #include "scriptcontainer.h"
-#include "eventcollection.h"
+#include "mainmodule.h"
 
 #include <qobject.h>
 #include <kdebug.h>
@@ -48,20 +48,15 @@ namespace Kross { namespace Api {
         public:
             /// List of script instances.
             QMap<QString, KSharedPtr<ScriptContainer> > m_scriptcontainers;
+
             /// List of interpreter instances.
             QMap<QString, Interpreter*> m_interpreter;
+
+            /// The \a MainModule globaly avaiable.
+            MainModule* m_mainmodule;
+
             /// List of avaible modules.
             QMap<QString, Object::Ptr> m_modules;
-
-            /// The buildin \a EventSlot for basic Qt slots.
-            //EventSlot* m_buildin_slot;
-            /// List of additional \a EventSlot instances.
-            //QValueList<EventSlot*> m_slots;
-
-            /// The buildin \a EventSignal for basic Qt signals.
-            //EventSignal* m_buildin_signal;
-            /// List of additional \a EventSignal instances.
-            //QValueList<EventSignal*> m_signals;
 
             /// To dynamicly load libraries.
             KLibrary* m_library;
@@ -72,36 +67,24 @@ namespace Kross { namespace Api {
 Manager::Manager()
     : d( new ManagerPrivate() )
 {
-    //addModule( new MainModule() );
-
-/*TODO
-    d->m_buildin_slot = 0;
-    d->m_buildin_signal = 0;
-
-    d->m_buildin_slot = new EventSlot();
-    addEventSlot(d->m_buildin_slot);
-
-    d->m_buildin_signal = new EventSignal();
-    addEventSignal(d->m_buildin_signal);
-*/
+    // Create the global avaiable MainModule.
+    d->m_mainmodule = new MainModule(); // KShared takes care of removing our MainModule.
+    addModule( d->m_mainmodule ); // Add the MainModule to the list of avaiable modules.
 
     d->m_library = 0;
 }
 
 Manager::~Manager()
 {
-/*
-    for(QMap<QString, ScriptContainer*>::Iterator sit = m_scriptcontainers.begin(); sit != m_scriptcontainers.end(); ++sit)
-        delete sit.data();
-*/
     for(QMap<QString, Interpreter*>::Iterator iit = d->m_interpreter.begin(); iit != d->m_interpreter.end(); ++iit)
         delete iit.data();
-/*
-    delete d->m_buildin_slot;
-    delete d->m_buildin_signal;
-*/
 
     delete d;
+}
+
+MainModule* Manager::getMainModule()
+{
+    return d->m_mainmodule;
 }
 
 bool Manager::hasModule(const QString& name)
@@ -133,28 +116,6 @@ bool Manager::addModule(Object::Ptr module)
     return true;
 }
 
-/*
-QValueList<EventSlot*> Manager::getEventSlots()
-{
-    return d->m_slots;
-}
-
-void Manager::addEventSlot(EventSlot* eventslot)
-{
-    d->m_slots.append( eventslot );
-}
-
-QValueList<EventSignal*> Manager::getEventSignals()
-{
-    return d->m_signals;
-}
-
-void Manager::addEventSignal(EventSignal* eventsignal)
-{
-    d->m_signals.append( eventsignal );
-}
-*/
-
 KSharedPtr<ScriptContainer> Manager::getScriptContainer(const QString& scriptname)
 {
     //TODO at the moment we don't share ScriptContainer instances.
@@ -167,14 +128,6 @@ KSharedPtr<ScriptContainer> Manager::getScriptContainer(const QString& scriptnam
     //d->m_scriptcontainers.replace(scriptname, scriptcontainer);
 
     return KSharedPtr<Kross::Api::ScriptContainer>(scriptcontainer);
-}
-
-KSharedPtr<EventCollection> Manager::getEventCollection(const QString& collectionname)
-{
-    //TODO at the moment we don't share EventCollection instances.
-
-    EventCollection* eventcollection = new EventCollection(collectionname);
-    return eventcollection;
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)

@@ -62,23 +62,16 @@ namespace Kross {
      */
     namespace Api {
 
-        // Enable kdDebug()-debugging for Kross::Api::Object constructor.
         //#define KROSS_API_OBJECT_CTOR_DEBUG
-
-        // Enable kdDebug()-debugging for Kross::Api::Object destructor.
         //#define KROSS_API_OBJECT_DTOR_DEBUG
-
-        // Enable kdDebug()-debugging for Kross::Api::Object addChild() function..
         //#define KROSS_API_OBJECT_ADDCHILD_DEBUG
-
-        // Enable kdDebug()-debugging for Kross::Api::Object removeChild() / removeAllChildren() functions.
         //#define KROSS_API_OBJECT_REMCHILD_DEBUG
-
-        // Enable kdDebug()-debugging for Kross::Api::Object call() function.
         //#define KROSS_API_OBJECT_CALL_DEBUG
 
-        // Enable kdDebug()-debugging for Kross::Api::Class call() function.
-        //#define KROSS_API_CLASS_CALL_DEBUG
+        //#define KROSS_API_EVENT_CALL_DEBUG
+
+        //#define KROSS_API_CALLABLE_CALL_DEBUG
+        //#define KROSS_API_CALLABLE_CHECKARG_DEBUG
     }
 
     /**
@@ -98,8 +91,8 @@ namespace Kross {
     // during runtime. Comment out to disable the usage or for
     // developing refer to your not jet installed lib like I did at
     // the following line.
-    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
-    #define KROSS_PYTHON_LIBRARY "krosspython"
+    #define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
+    //#define KROSS_PYTHON_LIBRARY "krosspython"
 
 }
 

@@ -20,9 +20,11 @@
 #ifndef KROSS_API_EVENT_H
 #define KROSS_API_EVENT_H
 
+#include "../main/krossconfig.h"
 #include "object.h"
 #include "argument.h"
 #include "callable.h"
+#include "list.h"
 
 #include <qstring.h>
 #include <kdebug.h>
@@ -42,22 +44,54 @@ namespace Kross { namespace Api {
 
             /// Definition of funtion-pointers.
             typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
-            /// Pointer to the memberfunction.
+
+            /// The function-pointer this event points too.
             FunctionPtr m_function;
 
+            /// List of memberfunctions.
+            QMap<QString, Event<T> * > m_functions;
+
+        protected:
+
+            /**
+             * Add a \a Callable methodfunction to the list of functions
+             * this Object supports.
+             *
+             * \param name The functionname. Each function this object
+             *        holds should have an unique name to be
+             *        still accessable.
+             * \param function A pointer to the methodfunction that
+             *        should handle calls.
+             * \param arglist A list of arguments for the function.
+             * \param documentation Some documentation used to describe
+             *        what the function does.
+             *
+             * \todo Is that template arguments or concrete arguments?
+             */
+            void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
+            {
+                if(m_functions.contains(name))
+                    throw RuntimeException( QString("Class::addFunction(%1 failed cause there exists already a function with such name.)").arg(name) );
+                Event<T> *event = new Event<T>(name, this, function, arglist, documentation);
+                m_functions.replace(name, event);
+            }
+
         public:
+
 
             /**
              * Constructor.
              */
-            explicit Event(const QString& name) //FIXME
-                : Callable(name, 0, ArgumentList(), "TODO: Documentation"), m_function(0) {}
+            Event(const QString& name, Object::Ptr parent, const QString& documentation = QString::null)
+                : Callable(name, parent, ArgumentList(), documentation) //FIXME: documentation
+                , m_function(0) {}
 
             /**
              * Constructor.
              */
             Event(const QString& name, Object::Ptr parent, FunctionPtr function, ArgumentList arglist, const QString& documentation)
-                : Callable(name, parent, arglist, documentation), m_function(function) {}
+                : Callable(name, parent, arglist, documentation)
+                , m_function(function) {}
 
             /**
              * Destructor.
@@ -84,26 +118,38 @@ namespace Kross { namespace Api {
              */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
-                kdDebug() << QString("Event::call() name='%1'").arg(getName()) << endl;
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+                kdDebug() << QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) << endl;
+#endif
 
-                if(! name.isEmpty()) {
-                    // If the name isn't empty this function shouldn't be executed. But
-                    // does it really make sense to redirect the call to a child object
-                    // of this function? Just let's throw an exception as long as we
-                    // don't need this functionality :-)
-                    throw RuntimeException(QString("Event::call() name='%1': Invalid functionname '%2'.").arg(getName()).arg(name));
+                if(name.isEmpty() && m_function) {
+
+                    // Check the arguments. Throws an exception if failed.
+                    checkArguments(arguments);
+
+                    // We try to redirect the call to the m_function of
+                    // the parent event.
+                    Object::Ptr parent = getParent();
+                    if(parent) {
+                        T *self = static_cast<T*>( parent.data() );
+                        if(self)
+                            return (self->*m_function)(arguments);
+                    }
+
+                    // Something went wrong.
+                    throw RuntimeException(QString("The event '%1' points to an invalid instance.").arg(getName()));
                 }
 
-                // Check the arguments. Throws an exception if failed.
-                checkArguments(arguments);
+                // Check if we've a registered event with that name and
+                // if that's the case, just redirect the call to the event.
+                Event<T> *event = m_functions[name];
+                if(event) {
+                    QString s = ""; // empty string cause we like to execute the event itself.
+                    return event->call(s, arguments);
+                }
 
-                //T *self = static_cast<T*>( getParent() ); //FIXME don't refcount parent's
-                T *self = static_cast<T*>( getParent().data() );
-                if(! self)
-                    throw RuntimeException(QString("The event '%1' points to an invalid instance.").arg(getName()));
-
-                // Call the classfunction via our remembered method-pointer.
-                return (self->*m_function)(arguments);
+                // Redirect the call to Kross::Api::Object
+                return Callable::call(name, arguments); //Callable::call(name, arguments);
             }
 
     };

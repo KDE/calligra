@@ -32,7 +32,6 @@ namespace Kross { namespace Api {
     // Forward declarations.
     class Object;
     class List;
-    class EventCollection;
     class ScriptContainerPrivate;
 
     /**
@@ -105,22 +104,6 @@ namespace Kross { namespace Api {
             void setInterpreterName(const QString&);
 
             /**
-             * Add a QObject to publish it's slots, signals
-             * and properties by using \a Kross::Api::QtObject
-             * as QObject-wrapper.
-             *
-             * \param object The QObject to wrap and publish.
-             * \param name The name the QObject should be
-             *        accessible as. If QString::null, then
-             *        the QObject's name() will be used.
-             *        Note that each QObject needs it's unique
-             *        name to be easy accessible per script.
-             * \return true if the QObject was successfully
-             *         added else false.
-             */
-            bool addQObject(QObject* object, const QString& name = QString::null);
-
-            /**
              * Execute the script container.
              */
             Object* execute();
@@ -152,12 +135,6 @@ namespace Kross { namespace Api {
              * Create and return a new class instance.
              */
             KSharedPtr<Object> classInstance(const QString& name);
-
-            /**
-             * Return the collection this @a EventContainer spends.
-             */
-//TODO
-//KSharedPtr<EventCollection> getEventCollection() {}
 
             /**
              * Connect QObject signal with function. If the signal

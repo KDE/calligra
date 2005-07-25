@@ -39,7 +39,7 @@ namespace Kross { namespace Api {
     class EventSlot;
     class EventSignal;
     class ScriptContainer;
-    class EventCollection;
+    class MainModule;
     class ManagerPrivate;
 
     /**
@@ -56,7 +56,8 @@ namespace Kross { namespace Api {
         protected:
 
             /**
-             * Constructor.
+             * Constructor. Use \a scriptManager() to access
+             * the Manager singleton instance.
              */
             Manager();
 
@@ -75,6 +76,12 @@ namespace Kross { namespace Api {
                 static Manager m_manager = Manager();
                 return &m_manager;
             }
+
+            /**
+             * \return the global avaiable and within Kross
+             * shared \a MainModule .
+             */
+            MainModule* getMainModule();
 
             /**
              * Check if a \a Module with the defined
@@ -113,12 +120,6 @@ namespace Kross { namespace Api {
              */
             bool addModule(Object::Ptr module);
 
-//QValueList<> getSlots();
-//EventSlot::Ptr addSlot(QObject* sender, const QCString& slot);
-
-//QValueList<EventSignal*> getEventSignals();
-//void addSignal(EventSignal* eventsignal);
-
             /**
              * Return the existing \a ScriptContainer with scriptname
              * or create a new \a ScriptContainer instance and associate
@@ -131,17 +132,6 @@ namespace Kross { namespace Api {
              *         scriptname.
              */
             KSharedPtr<ScriptContainer> getScriptContainer(const QString& scriptname);
-
-            /**
-             * Return the existing \a EventCollection with the defined name
-             * or create a new \a EventCollection instance and associate
-             * the passed name with it if there exists no such collection.
-             *
-             * \param collectionname The name of the \a EventCollection. This
-             *        should be an unique string to identify the instance.
-             * \return The \a EventCollection instance.
-             */
-            KSharedPtr<EventCollection> getEventCollection(const QString& collectionname);
 
             /**
              * Return the \a Interpreter instance defined by

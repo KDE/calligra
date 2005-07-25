@@ -43,7 +43,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            EventSlot(QObject* receiver, QCString slot);
+            EventSlot(const QString& name, Object::Ptr parent, QObject* receiver, QCString slot);
 
             /**
              * Destructor.

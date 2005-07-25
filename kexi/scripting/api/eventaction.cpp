@@ -24,8 +24,8 @@
 
 using namespace Kross::Api;
 
-EventAction::EventAction(KAction* action)
-    : Event<EventAction>(action->name())
+EventAction::EventAction(const QString& name, Object::Ptr parent, KAction* action)
+    : Event<EventAction>(name, parent)
     , m_action(action)
 {
 }

@@ -18,21 +18,25 @@
  ***************************************************************************/
 
 #include "../main/manager.h"
-#include "../main/scriptcontainer.h"
 
 #include "../api/object.h"
 #include "../api/class.h"
-//#include "../api/module.h"
-
+#include "../api/module.h"
 //#include "../api/script.h"
 #include "../api/interpreter.h"
+
+#include "../main/scriptcontainer.h"
+#include "../main/mainmodule.h"
+
 #include "../kexidb/kexidbmodule.h"
 
 #include "testobject.h"
 
+// Qt
 #include <qstring.h>
 #include <qfile.h>
 
+// KDE
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kapplication.h>
@@ -65,15 +69,20 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         return;
     }
 
+    // Get the global main module.
+    Kross::Api::MainModule* mainmodule = manager->getMainModule();
+
     //TESTCASE
     TestObject* testobject = new TestObject(app);
+    mainmodule->addQObject( testobject );
 
     // Add modules that should be accessible by scripting. Those
     // modules are wrappers around functionality you want to be
     // able to access from within scripts. You don't need to take
     // care of freeing them cause that will be done by Kross.
     // Modules are shared between the ScriptContainer instances.
-    manager->addModule( new Kross::KexiDB::KexiDBModule() );
+    Kross::KexiDB::KexiDBModule* kdbm = new Kross::KexiDB::KexiDBModule();
+    manager->addModule(kdbm);
     manager->addModule( new Kross::KexiDB::TestModule() ); //testcase
 
     // To represent a script that should be executed Kross uses
@@ -86,10 +95,8 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     scriptcontainer->setInterpreterName(interpretername);
     scriptcontainer->setCode(scriptcode);
 
-    scriptcontainer->addQObject(testobject);
-
     try {
-        Kross::Api::Object* o = scriptcontainer->execute();
+        /*Kross::Api::Object* o =*/ scriptcontainer->execute();
 
         // Call a function.
         kdDebug()<<"--------------------------"<<endl;

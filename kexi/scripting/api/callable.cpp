@@ -46,8 +46,34 @@ const QString Callable::getDescription() const
     return m_documentation;
 }
 
+Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
+{
+#ifdef KROSS_API_CALLABLE_CALL_DEBUG
+    kdDebug() << QString("Kross::Api::Callable::call() name=%1 getName()=%2").arg(name).arg(getName()) << endl;
+#endif
+
+    if(name == "get") {
+        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") );
+        return getChild(arguments);
+    }
+    else if(name == "has") {
+        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") );
+        return hasChild(arguments);
+    }
+    else if(name == "call") {
+        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
+        return callChild(arguments);
+    }
+    return Object::call(name, arguments);
+}
+
+
 void Callable::checkArguments(KSharedPtr<List> arguments)
 {
+#ifdef KROSS_API_CALLABLE_CHECKARG_DEBUG
+    kdDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1").arg(getName()) << endl;
+#endif
+
     QValueList<Object::Ptr>& arglist = arguments->getValue();
     uint fmax = m_arglist.getMaxParams();
     uint fmin = m_arglist.getMinParams();
@@ -65,6 +91,7 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
             arglist.append( farglist[i].getObject() );
             continue;
         }
+
         Object::Ptr o = arguments->item(i);
         QString fcn = farglist[i].getClassName();
         QString ocn = o->getClassName();
@@ -80,25 +107,26 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
 
 Object::Ptr Callable::hasChild(List::Ptr args)
 {
-    //TODO
-    kdDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO"<<endl;
-    return 0;
+    return new Variant( Object::hasChild( Variant::toString(args->item(0)) ),
+                        "Kross::Api::Callable::hasChild::Bool" );
 }
 
 Object::Ptr Callable::getChild(List::Ptr args)
 {
-    return Object::getChild( Variant::toString(args->item(0)) );
+    //kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1").arg(getName()) << endl;
+    return Object::getChild(Variant::toString(args->item(0)));
 }
 
-Object::Ptr Callable::childNames(List::Ptr args)
+/*TODO
+Object::Ptr Callable::getChildren(List::Ptr args)
 {
-    //TODO
-    kdDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO"<<endl;
-    return 0;
+    kdDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! => Callable::getChildren"<<endl;
+    return new Dict(Object::getChildren());
 }
+*/
 
 Object::Ptr Callable::callChild(List::Ptr args)
 {
+    //kdDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
     return Object::call(Variant::toString(args->item(0)), args);
 }
-

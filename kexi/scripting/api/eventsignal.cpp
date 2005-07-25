@@ -27,10 +27,10 @@
 
 using namespace Kross::Api;
 
-EventSignal::EventSignal(QObject* sender, QCString signal)
-    : Event<EventSignal>(signal) //QObject::normalizeSignalSlot(signal)
+EventSignal::EventSignal(const QString& name, Object::Ptr parent, QObject* sender, QCString signal)
+    : Event<EventSignal>(name, parent)
     , m_sender(sender)
-    , m_signal(signal)
+    , m_signal(signal) //QObject::normalizeSignalSlot(signal)
 {
 }
 

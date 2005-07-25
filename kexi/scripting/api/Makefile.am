@@ -8,7 +8,6 @@ libkrossapi_la_SOURCES = \
     variant.cpp \
     list.cpp \
     callable.cpp \
-    classbase.cpp \
     argument.cpp \
     eventaction.cpp \
     eventsignal.cpp \

@@ -28,12 +28,14 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <ksharedptr.h>
+#include <kdebug.h>
 
 namespace Kross { namespace Api {
 
     /**
-     * Base class for a callable function. A function always
-     * implements the \a Object::call() method to handle
+     * Base class for callable objects. Classes like
+     * \a Event or \a Class are inherited from this class
+     * and implement the \a Object::call() method to handle
      * the call.
      */
     class Callable : public Object
@@ -63,19 +65,28 @@ namespace Kross { namespace Api {
             virtual ~Callable();
 
             /**
-             * \return the classname.
+             * Return the class name. This could be something
+             * like "Kross::Api::Callable" for this object. The
+             * value is mainly used for display purposes.
+             *
+             * \return The name of this class.
              */
             virtual const QString getClassName() const;
 
             /**
-             * \return a description.
+             * Return a detailed description about this object.
+             * Each object should describe itself a bit about
+             * what it is designed for, how to use it and
+             * such stuff.
+             *
+             * \return The description of this class.
              */
             virtual const QString getDescription() const;
 
             /**
              * Call the object.
              */
-            virtual Object::Ptr call(const QString& name, List::Ptr arguments) = 0;
+            virtual Object::Ptr call(const QString& name, List::Ptr arguments);
 
         protected:
             /// List of arguments this callable object supports.
@@ -90,9 +101,9 @@ namespace Kross { namespace Api {
             Object::Ptr hasChild(List::Ptr args);
             /// \see Kross::Api::Object::getChild()
             Object::Ptr getChild(List::Ptr args);
-//TODO? Object::Ptr setChild(List::Ptr args);
+//Object::Ptr setChild(List::Ptr args);
             /// \see Kross::Api::Object::getChildren()
-            Object::Ptr childNames(List::Ptr args);
+//Object::Ptr getChildren(List::Ptr args);
             /// \see Kross::Api::Object::call()
             Object::Ptr callChild(List::Ptr args);
     };

@@ -6,6 +6,9 @@
   within Python.
 """
 
+muha = get("Kross")
+print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! => %s" % muha
+
 # Class to test the KexiDB functionality.
 class KexiDBClass:
 
@@ -246,24 +249,26 @@ print "########## BEGIN TEST: QObject ##########"
 try:
     # Get the QtObject instance to access the QObject.
     testobject = get("TestObject")
-
-    # We could just call a slot or a signal.
-    print testobject.call("testSlot2()");
-    print testobject.call("testSignal()");
-
-    #print testobject.call()
-
-    # Each slot a QObject spends is a object itself.
-    myslot = testobject.get("testSlot()")
-    print "myslotevent = %s" % str(myslot)
-    print myslot.call()
-
-
     #print "testobject = %s %s" % (str(testobject),dir(testobject))
     #print "propertyNames = %s" % testobject.propertyNames()
     #print "slotNames = %s" % testobject.slotNames()
     #print "signalNames = %s" % testobject.signalNames()
-    #print "########## 2"
+
+    # We could just call a slot or a signal.
+    print "################################### 1"
+    print testobject.call("testSlot2()");
+    print testobject.call("testSignal()");
+    #print testobject.call()
+
+    # Each slot a QObject spends is a object itself.
+    print "################################### 2"
+    myslot = testobject.get("testSlot()")
+    print "myslotevent = %s" % str(myslot)
+
+    print myslot.call()
+
+
+
 
     #testobject.connect("testSignal()",testobject,"testSlot2()")
     #testobject.signal("testSignal()")
