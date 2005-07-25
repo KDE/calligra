@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 kexidbdrivercombotest_SOURCES = kexidbdrivercombotest.cpp
 kexidbdrivercombotest_LDADD = $(LIB_QT) $(LIB_KDECORE) \
  $(top_builddir)/kexi/widget/libkexiextendedwidgets.la
-kexidbdrivercombotest_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO)
+kexidbdrivercombotest_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 METASOURCES = AUTO
 

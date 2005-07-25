@@ -1,4 +1,5 @@
-/*   This file is part of the KDE project                                  *
+/***************************************************************************
+ *   This file is part of the KDE project                                  *
  *   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>            *
  *                                                                         *
  *   Permission is hereby granted, free of charge, to any person obtaining *
