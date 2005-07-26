@@ -61,6 +61,24 @@ namespace Kivio {
     delete m_endArrow;
   }
 
+  KivioStencil* PolyLineConnector::duplicate()
+  {
+    PolyLineConnector* connector = new PolyLineConnector();
+    copyBasicInto(connector);
+    connector->m_points = m_points;
+
+    // Copy the arrow head information
+    connector->setStartAHType( m_startArrow->type() );
+    connector->setStartAHWidth( m_startArrow->width() );
+    connector->setStartAHLength( m_startArrow->length() );
+
+    connector->setEndAHType( m_endArrow->type() );
+    connector->setEndAHWidth( m_endArrow->width() );
+    connector->setEndAHLength( m_endArrow->length() );
+
+    return connector;
+  }
+
   bool PolyLineConnector::loadCustom(const QDomElement& e)
   {
     QDomNode node = e.firstChild();
