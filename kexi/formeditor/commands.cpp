@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qsplitter.h>
+#include <qmetaobject.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -108,7 +109,8 @@ PropertyCommand::unexecute()
 		QWidget *widg = item->widget();
 		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
 		//m_propSet->setSelectedWidget(widg, true);
-		widg->setProperty(m_property, it.data());
+    if (-1!=widg->metaObject()->findProperty( m_property, TRUE ))
+			widg->setProperty(m_property, it.data());
 	}
 
 	(*m_propSet)[m_property] = m_oldvalues.begin().data();
@@ -706,14 +708,21 @@ InsertWidgetCommand::execute()
 
 	manager->stopInsert();
 
-	if (!m_container->form()->objectTree()->lookup(m_name))
-	{
+	// ObjectTreeItem object already exists for widgets which corresponds to a Container
+	// it's already created in Container's constructor
+	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
+	if (!item) { //not yet created...
 		m_container->form()->objectTree()->addItem(m_container->m_tree,
-		   new ObjectTreeItem(manager->lib()->displayName(m_class), m_name, w, m_container));
+			item = new ObjectTreeItem(manager->lib()->displayName(m_class), m_name, w, m_container)
+		);
+	}
+	//assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
+	//(e.g. KexiDBFieldEdit)
+	if (dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
+		dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)->assignItem(item);
 	}
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
 	QValueList<QCString> list(manager->lib()->autoSaveProperties(w->className()));
 
 	QValueList<QCString>::ConstIterator endIt = list.constEnd();

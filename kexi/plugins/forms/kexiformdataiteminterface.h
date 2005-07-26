@@ -67,14 +67,14 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		*/
 		virtual void setInvalidState( const QString& displayText ) = 0;
 
-		//! \return field information for this item
-		virtual KexiDB::Field* field() const { return m_field; }
+		//! \return database column information for this item
+		virtual KexiDB::QueryColumnInfo* columnInfo() const { return m_columnInfo; }
 
-		/*! Used internally to set field information.
+		/*! Used internally to set database column information.
 		 Reimplement if you need to do additional actions,
 		 e.g. set data validator based on field type. Don't forget about
 		 calling superclass implementation. */
-		virtual void setField(KexiDB::Field* field) { m_field = field; }
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) { m_columnInfo = cinfo; }
 
 		/*! Does nothing, because within forms, widgets are always visible. */
 		virtual void hideWidget() { }
@@ -88,7 +88,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 	protected:
 		QString m_dataSource;
 		QCString m_dataSourceMimeType;
-		KexiDB::Field *m_field;
+		KexiDB::QueryColumnInfo* m_columnInfo;
 
 	friend class KexiDBFieldEdit;
 };

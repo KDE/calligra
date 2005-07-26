@@ -32,6 +32,7 @@
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
 #include "libactionwidget.h"
+#include "container.h"
 #include "form.h"
 
 namespace KFormDesigner {
@@ -325,12 +326,12 @@ WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const ch
 		return 0;
 
 	QWidget *widget = wclass->factory()->create(wclass->className(), parent, name, c, orientationHint);
-	if (widget)
-		return widget;
-	//try to instantiate from inherited class
-	if (wclass->inheritedClass())
-		return wclass->inheritedClass()->factory()->create(wclass->className(), parent, name, c);
-	return 0;
+	if (!widget) {
+		//try to instantiate from inherited class
+		if (wclass->inheritedClass())
+			widget = wclass->inheritedClass()->factory()->create(wclass->className(), parent, name, c);
+	}
+	return widget;
 }
 
 bool
@@ -687,10 +688,10 @@ WidgetFactory::OrientationHint WidgetLibrary::showOrientationSelectionPopup(
 
 	KPopupMenu* popup = new KPopupMenu(parent, "orientationSelectionPopup");
 	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert widget: %1").arg(wclass->name()));
-	popup->insertItem(iconHorizontal, textHorizontal, 0, 0, 0, 1);
-	popup->insertItem(iconVertical, textVertical, 0, 0, 0, 2);
+	popup->insertItem(iconHorizontal, textHorizontal, 1);
+	popup->insertItem(iconVertical, textVertical, 2);
 	popup->insertSeparator();
-	popup->insertItem(SmallIcon("button_cancel"), i18n("Cancel"), 0, 0, 0, 3);
+	popup->insertItem(SmallIcon("button_cancel"), i18n("Cancel"), 3);
 	WidgetFactory::OrientationHint result;
 	switch (popup->exec(pos)) {
 	case 1:

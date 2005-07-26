@@ -526,10 +526,10 @@ bool KexiLabel::setProperty( const char * name, const QVariant & value )
 	return ret;
 }
 
-void KexiLabel::setField(KexiDB::Field* field)
+void KexiLabel::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
-	KexiFormDataItemInterface::setField(field);
-	KexiDBTextWidgetInterface::setField(m_field, this);
+	KexiFormDataItemInterface::setColumnInfo(cinfo);
+	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
 void KexiLabel::setShadowEnabled( bool state ) {

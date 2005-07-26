@@ -233,7 +233,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wFieldEdit->setName(i18n("Auto Field"));
 	wFieldEdit->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "autoField"));
-	wFieldEdit->setDescription(i18n("A widget containing an automatically chosed editor and a label to edit any database field."));
+	wFieldEdit->setDescription(i18n("A widget containing an automatically chosen editor and a label to edit value database field of any type."));
 	addClass(wFieldEdit);
 
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)

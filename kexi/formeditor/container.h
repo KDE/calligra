@@ -211,5 +211,24 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		friend class FormIO;
 };
 
+//! Interface for adding dynamically created (at design time) widget to event eater.
+/*! This is currently used by KexiDBFieldEdit from Kexi forms. */
+class KFORMEDITOR_EXPORT DesignTimeDynamicChildWidgetHandler
+{
+	public:
+		DesignTimeDynamicChildWidgetHandler();
+		~DesignTimeDynamicChildWidgetHandler();
+
+	protected:
+		void childWidgetAdded(QWidget* w);
+		void assignItem(ObjectTreeItem* item) { m_item = item; }
+
+	private:
+		ObjectTreeItem* m_item;
+		friend class InsertWidgetCommand;
+		friend class FormIO;
+};
+
 }
+
 #endif

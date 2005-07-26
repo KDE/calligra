@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-  Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-  Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
+   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,28 +27,36 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kexidb/field.h>
 #include "kexidbwidgets.h"
+#include <kexidb/queryschema.h>
+#include <formeditor/utils.h>
 
+#define KexiDBFieldEdit_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
 KexiDBFieldEdit::KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent, const char *name)
  : QWidget(parent, name)
+ , KexiFormDataItemInterface()
+ , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
 {
 	init(text, type, pos);
 }
 
 KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name)
  : QWidget(parent, name)
+ , KexiFormDataItemInterface()
+ , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
 {
 	init(i18n("Auto Field"), Auto, Left);
 }
 
 KexiDBFieldEdit::~KexiDBFieldEdit()
-{}
+{
+}
 
 void
 KexiDBFieldEdit::init(const QString &text, WidgetType type, LabelPosition pos)
 {
+	m_fieldTypeInternal = KexiDB::Field::InvalidType;
 	m_layout = 0;
 	m_editor = 0;
 	m_label = new QLabel(text, this);
@@ -67,7 +76,7 @@ KexiDBFieldEdit::setWidgetType(WidgetType type)
 	m_widgetType_property = type;
 	if(differ) {
 		if(type == Auto) // try to guess type from data source type
-			m_widgetType = widgetTypeFromFieldType();
+			m_widgetType = widgetTypeForFieldType(columnInfo() ? columnInfo()->field->type() : KexiDB::Field::Text);
 		else
 			m_widgetType = m_widgetType_property;
 		createEditor();
@@ -123,6 +132,9 @@ KexiDBFieldEdit::createEditor()
 	if(m_editor) {
 		m_editor->show();
 		m_label->setBuddy(m_editor);
+		m_editor->setFocusPolicy(focusPolicy());
+		KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
+//		KFormDesigner::installRecursiveEventFilter(m_editor, this);
 	}
 
 	setLabelPosition(labelPosition());
@@ -151,7 +163,7 @@ KexiDBFieldEdit::setLabelPosition(LabelPosition position)
 			else
 				m_label->show();
 			m_layout->addWidget(m_label);
-			m_layout->addSpacing(10);
+			m_layout->addSpacing(KexiDBFieldEdit_SPACING);
 			m_layout->addWidget(m_editor);
 			break;
 
@@ -169,6 +181,8 @@ KexiDBFieldEdit::setInvalidState( const QString &text )
 	m_widgetType = Auto;
 	createEditor();
 	setFocusPolicy(QWidget::NoFocus);
+	m_editor->setFocusPolicy(QWidget::NoFocus);
+//! @todo or set this to editor's text?
 	m_label->setText( text );
 }
 
@@ -258,17 +272,30 @@ KexiDBFieldEdit::clear()
 }
 
 void
-KexiDBFieldEdit::setField(KexiDB::Field* field)
+KexiDBFieldEdit::setFieldTypeInternal(int kexiDBFieldType)
 {
-	KexiFormDataItemInterface::setField(field);
+	m_fieldTypeInternal = (KexiDB::Field::Type)kexiDBFieldType;
+	WidgetType type = KexiDBFieldEdit::widgetTypeForFieldType(
+		m_fieldTypeInternal==KexiDB::Field::InvalidType ? KexiDB::Field::Text : m_fieldTypeInternal);
+
+	if(m_widgetType != type) {
+		m_widgetType = type;
+		createEditor();
+	}
+}
+
+void
+KexiDBFieldEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+{
+	KexiFormDataItemInterface::setColumnInfo(cinfo);
 	// first, update label's text
-	if(field && m_autoCaption)
-		changeText(field->captionOrName());
+	if(cinfo && m_autoCaption)
+		changeText(cinfo->captionOrAliasOrName());
 
 	// change widget type depending on field type
 	WidgetType type;
 	if(m_widgetType_property == Auto) {
-		type = widgetTypeFromFieldType();
+		type = KexiDBFieldEdit::widgetTypeForFieldType(cinfo ? cinfo->field->type() : KexiDB::Field::Text);
 		if(m_widgetType != type) {
 			m_widgetType = type;
 			createEditor();
@@ -277,40 +304,40 @@ KexiDBFieldEdit::setField(KexiDB::Field* field)
 
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
-		iface->setField(field);
+		iface->setColumnInfo(cinfo);
 }
 
+//static
 KexiDBFieldEdit::WidgetType
-KexiDBFieldEdit::widgetTypeFromFieldType()
+KexiDBFieldEdit::widgetTypeForFieldType(KexiDB::Field::Type type)
 {
-	if(!field())
-		return Text;
-
-	WidgetType type = Text;
-	switch(field()->type()) {
-		case KexiDB::Field::Integer: case KexiDB::Field::ShortInteger: case KexiDB::Field::BigInteger:
-			type = Integer; break;
+	switch(type) {
+		case KexiDB::Field::Integer:
+		case KexiDB::Field::ShortInteger:
+		case KexiDB::Field::BigInteger:
+			return Integer;
 		case  KexiDB::Field::Boolean:
-			type = Bool; break;
-		case KexiDB::Field::Float: case KexiDB::Field::Double:
-			type = Double; break;
+			return Bool;
+		case KexiDB::Field::Float:
+		case KexiDB::Field::Double:
+			return Double;
 		case KexiDB::Field::Date:
-			type = Date; break;
+			return Date;
 		case KexiDB::Field::DateTime:
-			type = DateTime; break;
+			return DateTime;
 		case KexiDB::Field::Time:
-			type = Time; break;
+			return Time;
 		case KexiDB::Field::Text:
-			type = Text; break;
+			return Text;
 		case KexiDB::Field::LongText:
-			type = MultiLineText; break;
+			return MultiLineText;
 		case KexiDB::Field::Enum:
-			type = Enum; break;
+			return Enum;
 		case KexiDB::Field::BLOB:
 		default:
 			break;
 	}
-	return type;
+	return Text;
 }
 
 void
@@ -327,16 +354,64 @@ KexiDBFieldEdit::setCaption(const QString &caption)
 {
 	m_caption = caption;
 	if(!m_autoCaption && !caption.isEmpty())
-		changeText(caption);
+		changeText(m_caption);
 }
+
+/*void
+KexiDBFieldEdit::setCaptionInternal(const QString& text)
+{
+	if(!m_autoCaption && !caption.isEmpty())
+}*/
 
 void
 KexiDBFieldEdit::setAutoCaption(bool autoCaption)
 {
 	m_autoCaption = autoCaption;
-	if(!m_autoCaption && !m_caption.isEmpty())
+	if(m_autoCaption) {
+		m_caption = QString::null;
+		if(columnInfo()) {
+			changeText(columnInfo()->captionOrAliasOrName());
+		}
+		else {
+			changeText(m_captionOrAliasOrNameInternal);
+		}
+	}
+	else
 		changeText(m_caption);
+
+//	if(!m_autoCaption && !m_caption.isEmpty())
+//		changeText(m_caption);
+}
+
+void
+KexiDBFieldEdit::setDataSource( const QString &ds ) {
+	KexiFormDataItemInterface::setDataSource(ds);
+}
+
+QSize
+KexiDBFieldEdit::sizeHint() const
+{
+	if (m_lblPosition == NoLabel)
+		return m_editor ? m_editor->sizeHint() : QWidget::sizeHint();
+
+	QSize s1;
+	if (m_editor)
+		s1 = m_editor->sizeHint();
+	QSize s2(m_label->sizeHint());
+	if (m_lblPosition == Top)
+		return QSize(QMAX(s1.width(), s2.width()), s1.height()+KexiDBFieldEdit_SPACING+s2.height());
+
+	if (m_lblPosition == Left) 
+		return QSize(s1.width()+KexiDBFieldEdit_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
+}
+
+void
+KexiDBFieldEdit::setFocusPolicy ( FocusPolicy policy )
+{
+	QWidget::setFocusPolicy(policy);
+	m_label->setFocusPolicy(policy);
+	if (m_editor)
+		m_editor->setFocusPolicy(policy);
 }
 
 #include "kexidbfieldedit.moc"
-

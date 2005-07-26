@@ -1028,6 +1028,10 @@ FormManager::createLayout(int layoutType)
 {
 	WidgetList *list = m_active->selectedWidgets();
 	// if only one widget is selected (a container), we modify its layout
+	if (list->isEmpty()) {//sanity check
+		kdWarning() << "FormManager::createLayout(): list is empty!" << endl;
+		return;
+	}
 	if(list->count() == 1)
 	{
 		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->name());

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-  Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@
 
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
+#include <kexidb/queryschema.h>
 
 #ifdef Q_WS_WIN
 #define KEXIDATETIMEEDITOR_P_IMPL
@@ -65,7 +67,7 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (m_field && m_field->type()==KexiDB::Field::Boolean) {
+	if (m_columnInfo && m_columnInfo->field->type()==KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
 		setText( add.toBool() ? "1" : "0" );
 	}
@@ -122,18 +124,18 @@ void KexiDBLineEdit::clear()
 	setText(QString::null);
 }
 
-void KexiDBLineEdit::setField(KexiDB::Field* field)
+void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
-	KexiFormDataItemInterface::setField(field);
-	if (!field)
+	KexiFormDataItemInterface::setColumnInfo(cinfo);
+	if (!cinfo)
 		return;
 //! @todo merge this code with KexiTableEdit code!
 //! @todo set maximum length validator
 //! @todo handle input mask (via QLineEdit::setInputMask()
-	const KexiDB::Field::Type t = field->type();
-	if (field->isIntegerType()) {
+	const KexiDB::Field::Type t = cinfo->field->type();
+	if (cinfo->field->isIntegerType()) {
 		QValidator *validator = 0;
-		const bool u = field->isUnsigned();
+		const bool u = cinfo->field->isUnsigned();
 		int bottom, top;
 		if (t==KexiDB::Field::Byte) {
 			bottom = u ? 0 : -0x80;
@@ -158,17 +160,17 @@ void KexiDBLineEdit::setField(KexiDB::Field* field)
 			validator = new KIntValidator(bottom, top, this);
 		setValidator( validator );
 	}
-	else if (field->isFPNumericType()) {
+	else if (cinfo->field->isFPNumericType()) {
 		QValidator *validator;
 		if (t==KexiDB::Field::Float) {
-			if (field->isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 3.4e+38, field->scale(), this);
+			if (cinfo->field->isUnsigned()) //ok?
+				validator = new KDoubleValidator(0, 3.4e+38, cinfo->field->scale(), this);
 			else
 				validator = new KDoubleValidator(this);
 		}
 		else {//double
-			if (field->isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 1.7e+308, field->scale(), this);
+			if (cinfo->field->isUnsigned()) //ok?
+				validator = new KDoubleValidator(0, 1.7e+308, cinfo->field->scale(), this);
 			else
 				validator = new KDoubleValidator(this);
 		}
@@ -189,7 +191,7 @@ void KexiDBLineEdit::setField(KexiDB::Field* field)
 		setValidator( validator );
 	}
 
-	KexiDBTextWidgetInterface::setField(m_field, this);
+	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
 void KexiDBLineEdit::paintEvent ( QPaintEvent *pe )
@@ -207,9 +209,9 @@ bool KexiDBLineEdit::event( QEvent * e )
 
 //////////////////////////////////////////
 
-void KexiDBTextWidgetInterface::setField(KexiDB::Field* field, QWidget *w)
+void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w)
 {
-	if (field->isAutoIncrement()) {
+	if (cinfo->field->isAutoIncrement()) {
 		if (!m_autonumberDisplayParameters)
 			m_autonumberDisplayParameters = new KexiDisplayUtils::DisplayParameters();
 		KexiDisplayUtils::initDisplayForAutonumberSign(*m_autonumberDisplayParameters, w);
@@ -219,7 +221,7 @@ void KexiDBTextWidgetInterface::setField(KexiDB::Field* field, QWidget *w)
 void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus  )
 {
 	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
-	if (dataItemIface && dataItemIface->field() && dataItemIface->field()->isAutoIncrement()
+	if (dataItemIface && dataItemIface->columnInfo() && dataItemIface->columnInfo()->field->isAutoIncrement()
 		&& m_autonumberDisplayParameters && dataItemIface->cursorAtNewRow() && textIsEmpty)
 	{
 		QPainter p(w);
@@ -265,7 +267,7 @@ void KexiDBTextEdit::setInvalidState( const QString& displayText )
 
 void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (m_field && m_field->type()==KexiDB::Field::Boolean) {
+	if (m_columnInfo && m_columnInfo->field->type()==KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
 		setText( add.toBool() ? "1" : "0" );
 	}
@@ -326,12 +328,12 @@ void KexiDBTextEdit::clear()
 	setText(QString::null);
 }
 
-void KexiDBTextEdit::setField(KexiDB::Field* field)
+void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
-	KexiFormDataItemInterface::setField(field);
-	if (!field)
+	KexiFormDataItemInterface::setColumnInfo(cinfo);
+	if (!cinfo)
 		return;
-	KexiDBTextWidgetInterface::setField(m_field, this);
+	KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
 }
 
 void KexiDBTextEdit::paintEvent ( QPaintEvent *pe )

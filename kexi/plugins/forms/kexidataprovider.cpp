@@ -106,13 +106,13 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
 		QMapIterator<KexiDB::Field*,int> it_dup;
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			it_dup = tmpDuplicatedItems.find( it.current()->field() );
+			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
 			uint count;
 			if (it_dup==tmpDuplicatedItems.end())
 				count = 0;
 			else
 				count = it_dup.data();
-			tmpDuplicatedItems.insert( it.current()->field(), ++count );
+			tmpDuplicatedItems.insert( it.current()->columnInfo()->field, ++count );
 		}
 		m_duplicatedItems = new QPtrDict<char>(101);
 		for (it_dup = tmpDuplicatedItems.begin(); it_dup!=tmpDuplicatedItems.end(); ++it_dup) {
@@ -123,9 +123,9 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 			}
 		}
 	}
-	if (m_duplicatedItems->find( item->field() )) {
+	if (m_duplicatedItems->find( item->columnInfo()->field )) {
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			if (it.current()!=item && item->field() == it.current()->field()) {
+			if (it.current()!=item && item->columnInfo()->field == it.current()->columnInfo()->field) {
 				kdDebug() << "- setting value for item '" 
 					<< dynamic_cast<QObject*>(it.current())->name() << " == " << value.toString() << endl;
 				it.current()->setValue( value );
@@ -232,12 +232,11 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
 		if (query) {
 			KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
-//! @todo what about using QueryColumnInfo here?
-			KexiDB::Field *f = ci->field;
-			it.current()->setField(f);
+//			KexiDB::Field *f = ci->field;
+			it.current()->setColumnInfo(ci);
 			kdDebug() << "- item=" << dynamic_cast<QObject*>(it.current())->name() 
 				<< " dataSource=" << it.current()->dataSource()
-				<< " field=" << f->name() << endl;
+				<< " field=" << ci->field->name() << endl;
 		}
 		tmpUsedDataSources.replace( it.current()->dataSource().lower(), (char*)1 );
 	}

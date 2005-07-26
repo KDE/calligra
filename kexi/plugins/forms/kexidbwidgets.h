@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-  Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +37,7 @@ class KDatePicker;
 class KPopupMenu;
 
 //! Interface for a few text editor's features
-class KexiDBTextWidgetInterface
+class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 {
 	public:
 		KexiDBTextWidgetInterface()
@@ -46,7 +47,7 @@ class KexiDBTextWidgetInterface
 		~KexiDBTextWidgetInterface() {
 			delete m_autonumberDisplayParameters;
 		}
-		void setField(KexiDB::Field* field, QWidget *w);
+		void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
 		void paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus );
 		void event( QEvent * e, QWidget *w, bool textIsEmpty );
 
@@ -55,7 +56,7 @@ class KexiDBTextWidgetInterface
 };
 
 //! Line edit widget for Kexi forms
-class KexiDBLineEdit :
+class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 	public KLineEdit,
 	protected KexiDBTextWidgetInterface,
 	public KexiFormDataItemInterface
@@ -95,7 +96,7 @@ class KexiDBLineEdit :
 		virtual bool cursorAtEnd();
 		virtual void clear();
 
-		virtual void setField(KexiDB::Field* field);
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
@@ -111,7 +112,7 @@ class KexiDBLineEdit :
 };
 
 //! Multi line edit widget for Kexi forms
-class KexiDBTextEdit :
+class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 	public KTextEdit,
 	protected KexiDBTextWidgetInterface,
 	public KexiFormDataItemInterface
@@ -151,7 +152,7 @@ class KexiDBTextEdit :
 		virtual bool cursorAtEnd();
 		virtual void clear();
 
-		virtual void setField(KexiDB::Field* field);
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
@@ -166,7 +167,7 @@ class KexiDBTextEdit :
 };
 
 //! A db-aware check box
-class KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -218,7 +219,7 @@ class KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
 };
 
 //! A db-aware time editor
-class KexiDBTimeEdit : public QTimeEdit, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public QTimeEdit, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -274,7 +275,7 @@ class KexiDBTimeEdit : public QTimeEdit, public KexiFormDataItemInterface
 };
 
 //! A db-aware date editor
-class KexiDBDateEdit : public QWidget, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -360,7 +361,7 @@ class KexiDBDateEdit : public QWidget, public KexiFormDataItemInterface
 };
 
 //! A db-aware datetime editor
-class KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -434,7 +435,7 @@ class KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
 };
 
 //! A db-aware int spin box
-class KexiDBIntSpinBox : public KIntSpinBox, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -486,7 +487,7 @@ class KexiDBIntSpinBox : public KIntSpinBox, public KexiFormDataItemInterface
 };
 
 //! A db-aware int spin box
-class KexiDBDoubleSpinBox : public KDoubleSpinBox, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -538,7 +539,7 @@ class KexiDBDoubleSpinBox : public KDoubleSpinBox, public KexiFormDataItemInterf
 };
 
 //! Push Button widget for Kexi forms
-class KexiPushButton : public KPushButton
+class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 {
 	Q_OBJECT
 	Q_PROPERTY(QCString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)

@@ -26,7 +26,7 @@
 
 class KexiDataItemInterface;
 namespace KexiDB {
-	class Field;
+	class QueryColumnInfo;
 }
 
 //! An helper class used to react on KexiDataItemInterface objects' changes.
@@ -62,21 +62,12 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 Called by KexiTableView and others. */
 		void setValue(const QVariant& value, const QVariant& add = QVariant(), bool removeOld = false);
 
-		//! \return field information for this item
-		virtual KexiDB::Field* field() const = 0;
+		//! \return column information for this item
+		virtual KexiDB::QueryColumnInfo* columnInfo() const = 0;
 
-		//! Used internally to set field information.
-		virtual void setField(KexiDB::Field* field) = 0;
+		//! Used internally to set column information.
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) = 0;
 
-#if 0 //moved to KexiFormDataItemInterface
-		//! \return the name of the data source for this widget
-		//! Data source usually means here a table or query or field name name.
-		QString dataSource() const { return m_dataSource; }
-
-		//! Sets the name of the data source for this widget
-		//! Data source usually means here a table or query or field name name.
-		inline void setDataSource(const QString &ds) { m_dataSource = ds; }
-#endif
 		//! Sets listener 
 		void installListener(KexiDataItemChangesListener* listener);
 

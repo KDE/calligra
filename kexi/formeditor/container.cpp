@@ -72,6 +72,10 @@ EventEater::eventFilter(QObject *, QEvent *ev)
 			//return true;
 		}
 	}
+//	else if(ev->type() == QEvent::ChildInserted) {
+		// widget's children have changed, we need to reinstall filter
+//		installRecursiveEventFilter(m_widget, this);
+//	}
 
 	return m_container->eventFilter(m_widget, ev);
 }
@@ -1116,6 +1120,25 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 
 		if((tmpx != w->x()) || (tmpy != w->y()))
 			w->move(tmpx,tmpy);
+	}
+}
+
+////////////
+
+DesignTimeDynamicChildWidgetHandler::DesignTimeDynamicChildWidgetHandler()
+ : m_item(0)
+{
+}
+
+DesignTimeDynamicChildWidgetHandler::~DesignTimeDynamicChildWidgetHandler()
+{
+}
+
+void
+DesignTimeDynamicChildWidgetHandler::childWidgetAdded(QWidget* w)
+{
+	if (m_item) {
+		installRecursiveEventFilter(w, m_item->eventEater());
 	}
 }
 

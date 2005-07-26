@@ -45,9 +45,12 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 
+#include <kexidb/field.h>
+
 #include "kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexidatasourcepage.h"
+#include "kexidbfieldedit.h"
 
 #define NO_DSWIZARD
 
@@ -409,10 +412,10 @@ KexiFormView::afterSwitchFrom(int mode)
 				KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(it.current());
 				if (iface)
 					kdDebug() << iface->dataSource() << endl;
-				if (iface && iface->field() && !iface->isReadOnly()
+				if (iface && iface->columnInfo() && !iface->isReadOnly()
 /*! @todo add option for skipping autoincremented fields */
 					/* also skip autoincremented fields:*/
-					&& !iface->field()->isAutoIncrement()) //!iface->dataSource().isEmpty()
+					&& !iface->columnInfo()->field->isAutoIncrement()) //!iface->dataSource().isEmpty()
 					break;
 			}
 			if (!it.current()) //eventually, focus first available widget if nothing other is available
@@ -854,7 +857,8 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
 		QPoint pos = e->pos();
 //! todo unnamed query colums are not supported
 
-		KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
+//		KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
+		KFormDesigner::WidgetList widgetsToSelect;
 		foreach( QStringList::ConstIterator, it, fields ) {
 			KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
 			if (!column) {
@@ -867,13 +871,14 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
 			form()->addCommand(
 				insertCmd = new KFormDesigner::InsertWidgetCommand(form()->toplevelContainer(),
 		//! todo this is hardcoded!
-					"KexiDBLineEdit", 
+					"KexiDBFieldEdit", //"KexiDBLineEdit", 
 		//! todo this name can be invalid for expressions: if so, fall back to a default class' prefix!
 					pos, column->aliasOrName()),
 				true/*exec*/);
 			KFormDesigner::ObjectTreeItem *newWidgetItem 
 				= form()->objectTree()->dict()->find(insertCmd->widgetName());
 			QWidget* newWidget = newWidgetItem ? newWidgetItem->widget() : 0;
+			widgetsToSelect.append(newWidget);
 //			KexiFormDataItemInterface *newWidgetIface = dynamic_cast<KexiFormDataItemInterface*>(newWidget);
 //			if (newWidgetIface) {
 	//			newWidgetIface->setDataSourceMimeType( sourceMimeType.latin1() );
@@ -882,20 +887,28 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
 //			if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
 			QMap<QCString, QVariant> propValues;
 			propValues.insert("dataSource", column->aliasOrName());
+			propValues.insert("fieldTypeInternal", (int)column->field->type());
+//			propValues.insert("labelCaption", column->captionOrAliasOrName());
+//			propValues.insert("widgetType", 
+//				(int)KexiDBFieldEdit::widgetTypeForFieldType(column->field->type()));
 			//propValues.insert("dataSourceMimeType", sourceMimeType.latin1());
 			formPart()->manager()->propertySet()->setPropertyValueInDesignMode(
 				newWidget, propValues, i18n("Set \"%1\" widget's data source to \"%1\"")
 				.arg(newWidget->name()).arg(column->aliasOrName()));
 	//		}
+			//resize again because when autofield's type changed what can lead to changed sizeHint() 
+			newWidget->resize(newWidget->sizeHint());
 
 			if (newWidget) {//move position down for next widget
 				pos.setY( pos.y() + newWidget->height() + 4);
 			}
 		}
-		//restore prev. selection
-		form()->setSelectedWidget(0);
-		foreach_list (KFormDesigner::WidgetListIterator, it, *prevSelection)
-			form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+		//select all inserted widgets, if multiple
+		if (widgetsToSelect.count()>1) {
+			form()->setSelectedWidget(0);
+			foreach_list (KFormDesigner::WidgetListIterator, it, widgetsToSelect)
+				form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+		}
 	}
 }
 

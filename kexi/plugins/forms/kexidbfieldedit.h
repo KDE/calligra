@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-  Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-  Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
+   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,20 +23,28 @@
 #define KEXIDBINPUTWIDGET_H
 
 #include <qwidget.h>
+#include <kexidb/field.h>
+#include <formeditor/container.h>
 #include "kexiformdataiteminterface.h"
 
 class QBoxLayout;
 class QLabel;
 
-class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
+//! Universal "Auto Field" widget for Kexi forms
+class KEXIFORMUTILS_EXPORT KexiDBFieldEdit : 
+	public QWidget,
+	public KexiFormDataItemInterface,
+	public KFormDesigner::DesignTimeDynamicChildWidgetHandler
 {
 	Q_OBJECT
-	Q_PROPERTY(QString lblCaption READ caption WRITE setCaption DESIGNABLE true)
+	Q_PROPERTY(QString labelCaption READ caption WRITE setCaption DESIGNABLE true)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
+	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
+	/*internal, for design time only*/
+	Q_PROPERTY(int fieldTypeInternal READ fieldTypeInternal WRITE setFieldTypeInternal DESIGNABLE true)
 	Q_ENUMS( WidgetType LabelPosition )
 
 	public:
@@ -50,9 +59,9 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
-		virtual void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource(ds); }
+		virtual void setDataSource( const QString &ds );
 		virtual void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		virtual void setField(KexiDB::Field* field);
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
 		virtual void setInvalidState(const QString& text);
 		virtual bool isReadOnly() const;
@@ -68,11 +77,11 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 		LabelPosition labelPosition() const { return m_lblPosition; }
 		void setLabelPosition(LabelPosition position);
 
-		QString  caption() const { return m_caption; }
-		void  setCaption(const QString &caption);
+		QString caption() const { return m_caption; }
+		void setCaption(const QString &caption);
 
-		bool  hasAutoCaption() const { return m_autoCaption; }
-		void  setAutoCaption(bool autoCaption);
+		bool hasAutoCaption() const { return m_autoCaption; }
+		void setAutoCaption(bool autoCaption);
 
 		QWidget* editor() const { return m_editor; }
 		QLabel* label() const { return m_label; }
@@ -80,14 +89,26 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
 
-		QLabel*  label()  { return m_label; }
+		static WidgetType widgetTypeForFieldType(KexiDB::Field::Type type);
+
+		/*! On design time we're unable to pass a reference to KexiDB::Field object
+		 so we're just providing field type. 
+		 @internal */
+		void setFieldTypeInternal(int kexiDBFieldType);
+
+//		void setCaptionInternal(const QString& text);
+
+		/*! @internal */
+		int fieldTypeInternal() const { return m_fieldTypeInternal; }
+
+		virtual QSize sizeHint() const;
+		virtual void setFocusPolicy ( FocusPolicy policy );
 
 	protected:
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
 		void init(const QString &text, WidgetType type, LabelPosition pos);
 		void createEditor();
-		void  changeText(const QString &text);
-		WidgetType  widgetTypeFromFieldType();
+		void changeText(const QString &text);
 
 	protected slots:
 		void slotValueChanged();
@@ -100,8 +121,9 @@ class KexiDBFieldEdit : public QWidget, public KexiFormDataItemInterface
 		QLabel  *m_label;
 		QWidget *m_editor;
 		QString  m_caption;
-		bool  m_autoCaption;
+		KexiDB::Field::Type m_fieldTypeInternal;
+		QString m_captionOrAliasOrNameInternal;
+		bool  m_autoCaption : 1;
 };
 
 #endif
-

@@ -30,6 +30,7 @@
 
 namespace KexiDB {
 	class Field;
+	class QueryColumnInfo;
 }
 
 /*! @short Abstract class for a cell editor.
@@ -74,9 +75,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		//! \return field information for this item
 		virtual KexiDB::Field *field() const { return m_column->field(); }
 
+		virtual KexiDB::QueryColumnInfo *columnInfo() const { return m_column->fieldinfo; }
+
 		//! Implemented for KexiDataItemInterface.
 		//! Does nothing because instead KexiTableViewColumn is used to get field's schema.
-		virtual void setField(KexiDB::Field *field) { }
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo *) { }
 
 		//! \return column information for this item 
 		//! (extended information, comparing to field()).

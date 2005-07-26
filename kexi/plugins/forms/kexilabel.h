@@ -40,7 +40,7 @@ class KexiLabelPrivate;
 
  @author Christian Nitschkowski, Jaroslaw Staniek
 */
-class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
+class KEXIFORMUTILS_EXPORT KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
 		Q_OBJECT
 		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
 		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
@@ -98,7 +98,7 @@ class KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public Kex
 		void updatePixmap();
 
 	protected:
-		virtual void setField(KexiDB::Field* field);
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 		virtual void paintEvent( QPaintEvent* );
 		virtual void resizeEvent( QResizeEvent* e );
 

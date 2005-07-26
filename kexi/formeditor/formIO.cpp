@@ -993,9 +993,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			list->sort();
 
 			for(QWidget *obj = list->first(); obj; obj = list->next()) {
-				ObjectTreeItem *tree = item->container()->form()->objectTree()->lookup(obj->name());
-				if(tree)
-					saveWidget(tree, layout, domDoc);
+				ObjectTreeItem *item = item->container()->form()->objectTree()->lookup(obj->name());
+				if(item)
+					saveWidget(item, layout, domDoc);
 			}
 			delete list;
 			break;
@@ -1014,9 +1014,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			// fill the widget's grid info, ie just simulate grid layout
 			item->container()->createGridLayout(true);
 			for(QWidget *obj = list->first(); obj; obj = list->next()) {
-				ObjectTreeItem *tree = item->container()->form()->objectTree()->lookup(obj->name());
-				if(tree)
-					saveWidget(tree, layout, domDoc, true); // save grid info for compatibility with QtDesigner
+				ObjectTreeItem *item = item->container()->form()->objectTree()->lookup(obj->name());
+				if(item)
+					saveWidget(item, layout, domDoc, true); // save grid info for compatibility with QtDesigner
 			}
 			delete list;
 			break;
@@ -1124,22 +1124,27 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	w->show();
 
 	// We create and insert the ObjectTreeItem at the good place in the ObjectTree
-	ObjectTreeItem *tree = container->form()->objectTree()->lookup(wname);
-	if (!tree)  {
+	ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
+	if (!item)  {
 		// not yet created
-		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w, container);
+		item =  new ObjectTreeItem(lib->displayName(classname), wname, w, container);
 		if(parent)  {
 			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());
 			if(pItem)
-				container->form()->objectTree()->addItem(pItem, tree);
+				container->form()->objectTree()->addItem(pItem, item);
 			else
 				kdDebug() << "FORMIO :: ERROR no parent widget "  << endl;
 		}
 		else
-			container->form()->objectTree()->addItem(container->objectTree(), tree);
+			container->form()->objectTree()->addItem(container->objectTree(), item);
+	}
+	//assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
+	//(e.g. KexiDBFieldEdit)
+	if (dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
+		dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)->assignItem(item);
 	}
 
-	m_currentItem = tree;
+	m_currentItem = item;
 	// if we are inside a Grid, we need to insert the widget in the good cell
 	if(container->layoutType() == Container::Grid)  {
 		QGridLayout *layout = (QGridLayout*)container->layout();
@@ -1147,29 +1152,29 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			if(layout)
 				layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt()-1,
 					 el.attribute("column").toInt(),  el.attribute("column").toInt() + el.attribute("colspan").toInt()-1);
-			 tree->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), el.attribute("rowspan").toInt(),
+			 item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), el.attribute("rowspan").toInt(),
 			   el.attribute("colspan").toInt());
 		}
 		else  {
 			if(layout)
 				layout->addWidget(w, el.attribute("row").toInt(), el.attribute("column").toInt());
-			tree->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), 0, 0);
+			item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), 0, 0);
 		}
 	}
 	else if(container->layout())
 		container->layout()->add(w);
 
-	readChildNodes(tree, container, lib, el, w);
+	readChildNodes(item, container, lib, el, w);
 
-	if(tree->container() && tree->container()->layout())
-		tree->container()->layout()->activate();
+	if(item->container() && item->container()->layout())
+		item->container()->layout()->activate();
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	QValueList<QCString> list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	QValueList<QCString>::ConstIterator endIt = list.constEnd();
 	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		if(w->metaObject()->findProperty(*it, true) != -1)
-			tree->addModifiedProperty(*it, w->property(*it));
+			item->addModifiedProperty(*it, w->property(*it));
 	}
 
 	if(resetCurrentForm)
@@ -1226,7 +1231,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 }
 
 void
-FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w)
+FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w)
 {
 	QString eltag = el.tagName();
 
@@ -1248,22 +1253,22 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			if(name == "buddy")
 				m_buddies->insert(readProp(node.firstChild(), w, name).toString(), (QLabel*)w);
 			else if(((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
-			  tree->container() && tree->container()->layout()) {
+			  item->container() && item->container()->layout()) {
 			  	// We load the margin of a Layout
 				 if(name == "margin")  {
 					int margin = readProp(node.firstChild(), w, name).toInt();
-					tree->container()->setLayoutMargin(margin);
-					tree->container()->layout()->setMargin(margin);
+					item->container()->setLayoutMargin(margin);
+					item->container()->layout()->setMargin(margin);
 				}
 				// We load the spacing of a Layout
 				else if(name == "spacing")  {
 					int spacing = readProp(node.firstChild(), w, name).toInt();
-					tree->container()->setLayoutSpacing(spacing);
-					tree->container()->layout()->setSpacing(spacing);
+					item->container()->setLayoutSpacing(spacing);
+					item->container()->layout()->setSpacing(spacing);
 				}
 				else if((name == "justify")){
 					bool justify = readProp(node.firstChild(), w, name).toBool();
-					KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(tree->container()->layout());
+					KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
 					if(flow)
 						flow->setJustified(justify);
 				}
@@ -1272,11 +1277,11 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			else if(w->metaObject()->findProperty(name.latin1(), true) == -1)
 			{
 				if(w->className() == QString("CustomWidget"))
-					tree->storeUnknownProperty(node);
+					item->storeUnknownProperty(node);
 				else {
-					bool read = lib->readSpecialProperty(w->className(), node, w, tree);
+					bool read = lib->readSpecialProperty(w->className(), node, w, item);
 					if(!read) // the factory doesn't support this property neither
-						tree->storeUnknownProperty(node);
+						item->storeUnknownProperty(node);
 				}
 			}
 			else // we have a normal property, let's load it
@@ -1297,13 +1302,13 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 //				if(meta && meta->isEnumType()) {
 //					val = w->property(name.latin1()); //update: we want a numeric value of enum
 //				}
-				tree->addModifiedProperty(name.latin1(), val);
+				item->addModifiedProperty(name.latin1(), val);
 			}
 		}
 		else if(tag == "widget") // a child widget
 		{
-			if(tree->container()) // we are a Container
-				loadWidget(tree->container(), lib, node);
+			if(item->container()) // we are a Container
+				loadWidget(item->container(), lib, node);
 			else
 				loadWidget(container, lib, node, w);
 		}
@@ -1321,43 +1326,43 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			}
 
 			 if(layoutName == "HFlow") {
-				tree->container()->m_layType = Container::HFlow;
-				KexiFlowLayout *layout = new KexiFlowLayout(tree->widget());
+				item->container()->m_layType = Container::HFlow;
+				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
 				layout->setOrientation(Horizontal);
-				tree->container()->m_layout = (QLayout*)layout;
+				item->container()->m_layout = (QLayout*)layout;
 			}
 			else if(layoutName == "VFlow") {
-				tree->container()->m_layType = Container::VFlow;
-				KexiFlowLayout *layout = new KexiFlowLayout(tree->widget());
+				item->container()->m_layType = Container::VFlow;
+				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
 				layout->setOrientation(Vertical);
-				tree->container()->m_layout = (QLayout*)layout;
+				item->container()->m_layout = (QLayout*)layout;
 			}
 			else { // grid layout
-				tree->container()->m_layType = Container::Grid;
-				QGridLayout *layout = new QGridLayout(tree->widget(), 1, 1);
-				tree->container()->m_layout = (QLayout*)layout;
+				item->container()->m_layType = Container::Grid;
+				QGridLayout *layout = new QGridLayout(item->widget(), 1, 1);
+				item->container()->m_layout = (QLayout*)layout;
 			}
-			readChildNodes(tree, container, lib, node, w);
+			readChildNodes(item, container, lib, node, w);
 		}
 		else if(tag == "vbox")  {
-			tree->container()->m_layType = Container::VBox;
-			QVBoxLayout *layout = new QVBoxLayout(tree->widget());
-			tree->container()->m_layout = (QLayout*)layout;
-			readChildNodes(tree, container, lib, node, w);
+			item->container()->m_layType = Container::VBox;
+			QVBoxLayout *layout = new QVBoxLayout(item->widget());
+			item->container()->m_layout = (QLayout*)layout;
+			readChildNodes(item, container, lib, node, w);
 		}
 		else if(tag == "hbox") {
-			tree->container()->m_layType = Container::HBox;
-			QHBoxLayout *layout = new QHBoxLayout(tree->widget());
-			tree->container()->m_layout = (QLayout*)layout;
-			readChildNodes(tree, container, lib, node, w);
+			item->container()->m_layType = Container::HBox;
+			QHBoxLayout *layout = new QHBoxLayout(item->widget());
+			item->container()->m_layout = (QLayout*)layout;
+			readChildNodes(item, container, lib, node, w);
 		}
 		else {// unknown tag, we let the Factory handle it
 			if(w->className() == QString("CustomWidget"))
-				tree->storeUnknownProperty(node);
+				item->storeUnknownProperty(node);
 			else {
-				bool read = lib->readSpecialProperty(w->className(), node, w, tree);
+				bool read = lib->readSpecialProperty(w->className(), node, w, item);
 				if(!read) // the factory doesn't suport this property neither
-					tree->storeUnknownProperty(node);
+					item->storeUnknownProperty(node);
 			}
 		}
 	}
