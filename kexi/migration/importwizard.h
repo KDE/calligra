@@ -37,6 +37,7 @@ class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
 class KexiDBTitlePage;
+class KexiDBDriverComboBox;
 class QVButtonGroup;
 
 namespace KexiMigration {
@@ -61,15 +62,17 @@ private slots:
     void helpClicked();
 private:
     QWidget *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *importTypePage, *finishPage;
-    
+
     QVButtonGroup *importTypeButtonGroup ;
     KexiDBTitlePage* dstTitlePage;
-    
-    KComboBox *srcTypeCombo, *dstTypeCombo;
+
+    KComboBox *srcTypeCombo;
+    KexiDBDriverComboBox *dstTypeCombo;
+
     KexiConnSelectorWidget *srcConn, *dstConn;
     KLineEdit *dstNewDBName;
     KexiProjectSelectorWidget *srcdbname;
-    
+
     QLabel *lblfinishTxt;
     bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented, setupFileBasedSrcNeeded;
     KexiProjectSet* m_prjSet;

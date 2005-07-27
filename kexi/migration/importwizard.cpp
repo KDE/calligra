@@ -44,7 +44,7 @@
 #include <KexiOpenExistingFile.h>
 #include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
-
+#include <kexidbdrivercombobox.h>
 
 using namespace KexiMigration;
 
@@ -145,6 +145,7 @@ void importWizard::setupintro()
 //
 void importWizard::setupsrcType()
 {
+/*! @todo Would be good if KexiDBDriverComboBox worked for migration drivers */
     QHBoxLayout *hbox = new QHBoxLayout(srcTypePage);
 
     srcTypeCombo = new KComboBox(srcTypePage);
@@ -174,7 +175,7 @@ void importWizard::setupsrcconn()
 void importWizard::setupsrcdb()
 {
     QVBoxLayout *vbox = new QVBoxLayout(srcdbPage);
-
+    Q_UNUSED(vbox);  // arriveSrcDBPage creates widgets on that page
     srcdbname = NULL;
 }
 
@@ -183,15 +184,13 @@ void importWizard::setupsrcdb()
 void importWizard::setupdstType()
 {
     KexiDB::DriverManager manager;
-
-    QStringList names = manager.driverNames();
+    KexiDB::Driver::InfoMap drvs = manager.driversInfo();
 
     QHBoxLayout *hbox = new QHBoxLayout(dstTypePage);
-    dstTypeCombo = new KComboBox(dstTypePage);
+    dstTypeCombo = new KexiDBDriverComboBox(drvs, true, dstTypePage);
 
     hbox->addWidget( dstTypeCombo );
 
-    dstTypeCombo->insertStringList(names);
 //! @todo hardcoded: find a way to preselect default engine item
     dstTypeCombo->setCurrentText("SQLite3");
 }
