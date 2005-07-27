@@ -301,7 +301,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public KMacroCommand
 		CommandGroup( const QString & name );
 		virtual ~CommandGroup();
 
-		QPtrList<KCommand>& commands() { return m_commands; }
+		const QPtrList<KCommand>& commands() const { return m_commands; }
 };
 
 }

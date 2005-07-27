@@ -164,16 +164,18 @@ void KexiFormManager::setDataSourceFieldOrExpression(const QString& string)
 	}*/
 }
 
-void KexiFormManager::slotHistoryCommandExecuted(KCommand* command)
+void KexiFormManager::slotHistoryCommandExecuted()
 {
-	KFormDesigner::CommandGroup *group = dynamic_cast<KFormDesigner::CommandGroup*>(command);
+	const KFormDesigner::CommandGroup *group = dynamic_cast<const KFormDesigner::CommandGroup*>(sender());
 	if (group) {
 		if (group->commands().count()==2) {
 			KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(activeForm()->widget());
 			if (!formWidget)
 				return;
-			const KFormDesigner::PropertyCommand* pc1 = dynamic_cast<const KFormDesigner::PropertyCommand*>(group->commands().at(0));
-			const KFormDesigner::PropertyCommand* pc2 = dynamic_cast<const KFormDesigner::PropertyCommand*>(group->commands().at(1));
+			QPtrListIterator<KCommand> it(group->commands());
+			const KFormDesigner::PropertyCommand* pc1 = dynamic_cast<const KFormDesigner::PropertyCommand*>(it.current());
+			++it;
+			const KFormDesigner::PropertyCommand* pc2 = dynamic_cast<const KFormDesigner::PropertyCommand*>(it.current());
 			if (pc1 && pc2 && pc1->property()=="dataSource" && pc2->property()=="dataSourceMimeType") {
 				const QMap<QCString, QVariant>::const_iterator it1( pc1->oldValues().constBegin() );
 				const QMap<QCString, QVariant>::const_iterator it2( pc2->oldValues().constBegin() );

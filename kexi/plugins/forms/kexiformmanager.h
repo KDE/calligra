@@ -46,7 +46,8 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 		//! Receives signal from KexiDataSourcePage about changed widget's data source
 		void setDataSourceFieldOrExpression(const QString& string);
 
-		void slotHistoryCommandExecuted(KCommand* command);
+	protected slots:
+		void slotHistoryCommandExecuted();
 
 	protected:
 		inline QString translateName( const char* name ) const;

@@ -116,8 +116,10 @@ class FormPrivate
 		//! This includes KFD format version.
 		QMap<QCString,QString> headerProperties;
 
-		//! Format version, set by FormIO.  or on creating a new form.
+		//! Format version, set by FormIO or on creating a new form.
 		uint formatVersion;
+		//! Format version, set by FormIO's loader or on creating a new form.
+		uint originalFormatVersion;
 };
 
 /*!

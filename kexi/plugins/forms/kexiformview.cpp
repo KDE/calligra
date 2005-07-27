@@ -212,8 +212,8 @@ KexiFormView::initForm()
 
 	if (viewMode()==Kexi::DesignViewMode) {
 		//we want to be informed about executed commands
-		connect(form()->commandHistory(), SIGNAL(commandExecuted(KCommand*)),
-			formPart()->manager(), SLOT(slotHistoryCommandExecuted(KCommand*)));
+		connect(form()->commandHistory(), SIGNAL(commandExecuted()),
+			formPart()->manager(), SLOT(slotHistoryCommandExecuted()));
 	}
 
 	const bool newForm = parentDialog()->id() < 0;
