@@ -17,7 +17,6 @@
 	<Example>BOOL2STRING(true) returns "True"</Example>
 	<Example>BOOL2STRING(false) returns "False"</Example>
         <Example>upper(BOOL2STRING(find("nan";"banana"))) returns TRUE</Example>
-        <Related>STRING2BOOL</Related>
       </Help>
     </Function>
 

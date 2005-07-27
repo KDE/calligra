@@ -448,7 +448,7 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
-	<Text>The DIV() function divides the first value by the other values in turn. You can calculate using a range: DIV(A1:B5) or a list of values like DIV(12;5;12.5).</Text>
+	<Text>The DIV() function divides the first value by the other values in turn.</Text>
 	<Syntax>DIV(value;value;...)</Syntax>
 	<Example>DIV(20;2;2) returns 5</Example>
 	<Example>DIV(25;2.5) returns 10</Example>
@@ -482,31 +482,12 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
-	<Text>The MAX() function returns the largest value given in the parameters.</Text>
+	<Text>The MAX() function returns the largest value given in the parameters. TRUE evaluates to 1, FALSE evaluates to 0.</Text>
 	<Syntax>MAX(value;value;...)</Syntax>
-	<Example>MAX(12;5;7) returns 12</Example>
-	<Example>MAX(12.5;2) returns 12.5</Example>
+	<Example>MAX(12;5; 7) returns 12</Example>
+	<Example>MAX(12.5; 2) returns 12.5</Example>
+	<Example>MAX(0.5; 0.4; TRUE; 0.2) returns 1</Example>
 	<Related>COUNT</Related>
-	<Related>MAXA</Related>
-	<Related>MIN</Related>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>MAXA</Name>
-      <Type>Float</Type>
-      <Parameter>
-        <Comment>Values</Comment>
-        <Type range="true">FLOAT</Type>
-      </Parameter>
-      <Help>
-	<Text>The MAXA() function returns the largest value given in the parameters without ignoring boolean values. TRUE evaluates to 1, FALSE evaluates to 0.</Text>
-	<Syntax>MAXA(value;value;...)</Syntax>
-	<Example>MAXA(12;5; 7) returns 12</Example>
-	<Example>MAXA(12.5; 2) returns 12.5</Example>
-	<Example>MAXA(0.5; 0.4; TRUE; 0.2) returns 1</Example>
-	<Related>COUNT</Related>
-	<Related>MAX</Related>
 	<Related>MIN</Related>
       </Help>
     </Function>
@@ -519,32 +500,13 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
-	<Text>The MIN() function returns the smallest value given in the parameters.</Text>
+	<Text>The MIN() function returns the smallest value given in the parameters. TRUE evaluates to 1, FALSE to 0.</Text>
 	<Syntax>MIN(value;value;...)</Syntax>
-	<Example>MIN(12;5;7) returns 5</Example>
-	<Example>MIN(12.5;2) returns 2</Example>
+	<Example>MIN(12;5; 7) returns 5</Example>
+	<Example>MIN(12.5; 2) returns 2</Example>
+	<Example>MIN(0.4; 2; FALSE; 0.7) returns 0</Example>
 	<Related>COUNT</Related>
 	<Related>MAX</Related>
-	<Related>MINA</Related>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>MINA</Name>
-      <Type>Float</Type>
-      <Parameter>
-        <Comment>Values</Comment>
-        <Type range="true">FLOAT</Type>
-      </Parameter>
-      <Help>
-	<Text>The MINA() function returns the smallest value given in the parameters without ignoring boolean values: TRUE evaluates to 1, FALSE to 0.</Text>
-	<Syntax>MINA(value;value;...)</Syntax>
-	<Example>MINA(12;5; 7) returns 5</Example>
-	<Example>MINA(12.5; 2) returns 2</Example>
-	<Example>MINA(0.4; 2; FALSE; 0.7) returns 0</Example>
-	<Related>COUNT</Related>
-	<Related>MAX</Related>
-	<Related>MIN</Related>
       </Help>
     </Function>
 
@@ -556,11 +518,13 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
-	<Text>The MULTIPLY() function multiplies all the values given in the parameters. You can multiply values given by a range MULTIPLY(A1:B5) or a list of values like MULTIPLY(12;5;12.5).</Text>
+	<Text>The MULTIPLY() function multiplies all the values given in the parameters. You can multiply values given by a range MULTIPLY(A1:B5) or a list of values like MULTIPLY(12;5;12.5). It's equivalent to PRODUCT.</Text>
 	<Syntax>MULTIPLY(value;value;...)</Syntax>
 	<Example>MULTIPLY(12;5;7) equals 420</Example>
 	<Example>MULTIPLY(12.5;2) equals 25</Example>
 	<Related>DIV</Related>
+	<Related>PRODUCT</Related>
+	<Related>KPRODUCT</Related>
       </Help>
     </Function>
 

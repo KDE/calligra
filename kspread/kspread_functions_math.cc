@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,2118 +21,765 @@
 
 // built-in math functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
-
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
+#include "functions.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
-#include "kspread_cell.h"
-#include "kspread_sheet.h"
-#include "kspread_interpreter.h"
-#include "kspread_doc.h"
-#include "kspread_functions.h"
-#include "kspread_functions_helper.h"
-#include "kspread_util.h"
+// needed for RANDBINOM and so
+#include <math.h>
 
-namespace math_local
-{
-  KSpreadCell * gCell = 0;
-}
+using namespace KSpread;
 
-using namespace math_local;
+// RANDBINOM and RANDNEGBINOM won't support arbitrary precision
 
 // prototypes
-bool kspreadfunc_abs( KSContext& context );
-bool kspreadfunc_ceil( KSContext& context );
-bool kspreadfunc_ceiling( KSContext& context );
-bool kspreadfunc_count( KSContext& context );
-bool kspreadfunc_counta( KSContext& context );
-bool kspreadfunc_countblank( KSContext& context );
-bool kspreadfunc_countif( KSContext& context );
-bool kspreadfunc_cur( KSContext& context );
-bool kspreadfunc_div( KSContext& context );
-bool kspreadfunc_eps( KSContext& context );
-bool kspreadfunc_even( KSContext& context );
-bool kspreadfunc_exp( KSContext& context );
-bool kspreadfunc_fact( KSContext& context );
-bool kspreadfunc_factdouble( KSContext& context );
-bool kspreadfunc_fib( KSContext& context );
-bool kspreadfunc_floor( KSContext& context );
-bool kspreadfunc_gcd( KSContext & context );
-bool kspreadfunc_int( KSContext& context );
-bool kspreadfunc_inv( KSContext& context );
-bool kspreadfunc_kproduct( KSContext& context );
-bool kspreadfunc_lcm( KSContext & context );
-bool kspreadfunc_ln( KSContext& context );
-bool kspreadfunc_log( KSContext& context );
-bool kspreadfunc_log2( KSContext& context );
-bool kspreadfunc_log10( KSContext& context );
-bool kspreadfunc_logn( KSContext& context );
-bool kspreadfunc_max( KSContext& context );
-bool kspreadfunc_maxa( KSContext& context );
-bool kspreadfunc_min( KSContext& context );
-bool kspreadfunc_mina( KSContext& context );
-bool kspreadfunc_mod( KSContext& context );
-bool kspreadfunc_mround( KSContext& context );
-bool kspreadfunc_mult( KSContext& context );
-bool kspreadfunc_multinomial( KSContext& context );
-bool kspreadfunc_odd( KSContext& context );
-bool kspreadfunc_pow( KSContext& context );
-bool kspreadfunc_quotient( KSContext& context );
-bool kspreadfunc_product( KSContext& context );
-bool kspreadfunc_rand( KSContext& context );
-bool kspreadfunc_randbetween( KSContext& context );
-bool kspreadfunc_randbernoulli( KSContext & context );
-bool kspreadfunc_randbinom( KSContext & context );
-bool kspreadfunc_randexp( KSContext & context );
-bool kspreadfunc_randnegbinom( KSContext & context );
-bool kspreadfunc_randnorm( KSContext & context );
-bool kspreadfunc_randpoisson( KSContext & context );
-bool kspreadfunc_rootn( KSContext& context );
-bool kspreadfunc_round( KSContext& context );
-bool kspreadfunc_rounddown( KSContext& context );
-bool kspreadfunc_roundup( KSContext& context );
-bool kspreadfunc_sign( KSContext& context );
-bool kspreadfunc_sqrt( KSContext& context );
-bool kspreadfunc_sqrtpi( KSContext& context );
-bool kspreadfunc_subtotal( KSContext& context );
-bool kspreadfunc_sum( KSContext& context );
-bool kspreadfunc_sumif( KSContext& context );
-bool kspreadfunc_suma( KSContext& context );
-bool kspreadfunc_sumsq( KSContext& context );
-bool kspreadfunc_trunc( KSContext& context );
+KSpreadValue func_abs (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_ceil (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_ceiling (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_count (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_counta (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_countblank (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_countif (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_cur (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_div (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_eps (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_even (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_exp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_fact (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_factdouble (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_fib (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_floor (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_gcd (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_int (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_inv (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_kproduct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_ln (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_log2 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_logn (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mod (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mult (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_multinomial (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_odd (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_pow (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_quotient (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_product (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_rand (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randbetween (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randbernoulli (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randbinom (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randexp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randnorm (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_rootn (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_round (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_rounddown (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_roundup (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sign (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sqrt (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-bool kspreadfunc_multipleOP( KSContext& context );
+// KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all math functions
 void KSpreadRegisterMathFunctions()
 {
-  gCell = 0;
-  KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "MULTIPLEOPERATIONS", kspreadfunc_multipleOP );
+/*
+  f = new Function ("MULTIPLEOPERATIONS", func_multipleOP);
+  repo->add (f);
+*/
 
-  repo->registerFunction( "ABS",           kspreadfunc_abs );
-  repo->registerFunction( "CEIL",          kspreadfunc_ceil );
-  repo->registerFunction( "CEILING",       kspreadfunc_ceiling );
-  repo->registerFunction( "COUNT",         kspreadfunc_count );
-  repo->registerFunction( "COUNTA",        kspreadfunc_counta );
-  repo->registerFunction( "COUNTBLANK",    kspreadfunc_countblank );
-  repo->registerFunction( "COUNTIF",       kspreadfunc_countif );
-  repo->registerFunction( "CUR",           kspreadfunc_cur );
-  repo->registerFunction( "DIV",           kspreadfunc_div );
-  repo->registerFunction( "EPS",           kspreadfunc_eps );
-  repo->registerFunction( "EVEN",          kspreadfunc_even );
-  repo->registerFunction( "EXP",           kspreadfunc_exp );
-  repo->registerFunction( "FACT",          kspreadfunc_fact );
-  repo->registerFunction( "FACTDOUBLE",    kspreadfunc_factdouble );
-  repo->registerFunction( "FIB",           kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
-  repo->registerFunction( "FLOOR",         kspreadfunc_floor );
-  repo->registerFunction( "G_PRODUCT",     kspreadfunc_kproduct ); // Gnumeric compatibility
-  repo->registerFunction( "GCD",           kspreadfunc_gcd );
-  repo->registerFunction( "INT",           kspreadfunc_int );
-  repo->registerFunction( "INV",           kspreadfunc_inv );
-  repo->registerFunction( "KPRODUCT",      kspreadfunc_kproduct );
-  repo->registerFunction( "LCD",           kspreadfunc_gcd ); // obsolete, use GCD instead, remove in 1.4
-  repo->registerFunction( "LCM",           kspreadfunc_lcm );
-  repo->registerFunction( "LN",            kspreadfunc_ln );
-  repo->registerFunction( "LOG",           kspreadfunc_log );
-  repo->registerFunction( "LOG2",          kspreadfunc_log2 );
-  repo->registerFunction( "LOG10",         kspreadfunc_log10 );
-  repo->registerFunction( "LOGN",          kspreadfunc_logn );
-  repo->registerFunction( "MAX",           kspreadfunc_max );
-  repo->registerFunction( "MAXA",          kspreadfunc_maxa );
-  repo->registerFunction( "MIN",           kspreadfunc_min );
-  repo->registerFunction( "MINA",          kspreadfunc_mina );
-  repo->registerFunction( "MOD",           kspreadfunc_mod );
-  repo->registerFunction( "MROUND",        kspreadfunc_mround );
-  repo->registerFunction( "MULTIPLY",      kspreadfunc_mult );
-  repo->registerFunction( "MULTINOMIAL",   kspreadfunc_multinomial );
-  repo->registerFunction( "ODD",           kspreadfunc_odd );
-  repo->registerFunction( "POW",           kspreadfunc_pow ); // remove in 1.5
-  repo->registerFunction( "POWER",         kspreadfunc_pow );
-  repo->registerFunction( "QUOTIENT",      kspreadfunc_quotient );
-  repo->registerFunction( "PRODUCT",       kspreadfunc_product );
-  repo->registerFunction( "RAND",          kspreadfunc_rand );
-  repo->registerFunction( "RANDBERNOULLI", kspreadfunc_randbernoulli );
-  repo->registerFunction( "RANDBETWEEN",   kspreadfunc_randbetween );
-  repo->registerFunction( "RANDBINOM",     kspreadfunc_randbinom );
-  repo->registerFunction( "RANDEXP",       kspreadfunc_randexp );
-  repo->registerFunction( "RANDNEGBINOM",  kspreadfunc_randnegbinom );
-  repo->registerFunction( "RANDNORM",      kspreadfunc_randnorm );
-  repo->registerFunction( "RANDPOISSON",   kspreadfunc_randpoisson );
-  repo->registerFunction( "ROOTN",         kspreadfunc_rootn );
-  repo->registerFunction( "ROUND",         kspreadfunc_round );
-  repo->registerFunction( "ROUNDDOWN",     kspreadfunc_rounddown );
-  repo->registerFunction( "ROUNDUP",       kspreadfunc_roundup );
-  repo->registerFunction( "SIGN",          kspreadfunc_sign );
-  repo->registerFunction( "SQRT",          kspreadfunc_sqrt );
-  repo->registerFunction( "SQRTPI",        kspreadfunc_sqrtpi );
-  repo->registerFunction( "SUBTOTAL",      kspreadfunc_subtotal );
-  repo->registerFunction( "SUM",           kspreadfunc_sum );
-  repo->registerFunction( "SUMIF",         kspreadfunc_sumif );
-  repo->registerFunction( "SUMA",          kspreadfunc_suma );
-  repo->registerFunction( "SUMSQ",         kspreadfunc_sumsq );
-  repo->registerFunction( "TRUNC",         kspreadfunc_trunc );
+  // functions that don't take array parameters
+  f = new Function ("ABS",           func_abs);
+  repo->add (f);
+  f = new Function ("CEIL",          func_ceil);
+  repo->add (f);
+  f = new Function ("CEILING",       func_ceiling);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("CUR",           func_cur);
+  repo->add (f);
+  f = new Function ("EPS",           func_eps);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("EVEN",          func_even);
+  repo->add (f);
+  f = new Function ("EXP",           func_exp);
+  repo->add (f);
+  f = new Function ("FACT",          func_fact);
+  repo->add (f);
+  f = new Function ("FACTDOUBLE",    func_factdouble);
+  repo->add (f);
+  f = new Function ("FIB",           func_fib); // KSpread-specific, like Quattro-Pro's FIB
+  repo->add (f);
+  f = new Function ("FLOOR",         func_floor);
+  repo->add (f);
+  f = new Function ("INT",           func_int);
+  repo->add (f);
+  f = new Function ("INV",           func_inv);
+  repo->add (f);
+  f = new Function ("LN",            func_ln);
+  repo->add (f);
+  f = new Function ("LOG",           func_log10);
+  repo->add (f);
+  f = new Function ("LOG2",          func_log2);
+  repo->add (f);
+  f = new Function ("LOG10",         func_log10);   // same as LOG
+  repo->add (f);
+  f = new Function ("LOGN",          func_logn);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("MOD",           func_mod);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("MROUND",        func_mround);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("MULTINOMIAL",   func_multinomial);
+  f->setParamCount (1, -1);
+  repo->add (f);
+  f = new Function ("ODD",           func_odd);
+  repo->add (f);
+  f = new Function ("POW",           func_pow); // remove in 1.5
+  repo->add (f);
+  f = new Function ("POWER",         func_pow);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("QUOTIENT",      func_quotient);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("RAND",          func_rand);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("RANDBERNOULLI", func_randbernoulli);
+  repo->add (f);
+  f = new Function ("RANDBETWEEN",   func_randbetween);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("RANDBINOM",     func_randbinom);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("RANDEXP",       func_randexp);
+  repo->add (f);
+  f = new Function ("RANDNEGBINOM",  func_randnegbinom);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("RANDNORM",      func_randnorm);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("RANDPOISSON",   func_randpoisson);
+  repo->add (f);
+  f = new Function ("ROOTN",         func_rootn);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("ROUND",         func_round);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("ROUNDDOWN",     func_rounddown);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("ROUNDUP",       func_roundup);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("SIGN",          func_sign);
+  repo->add (f);
+  f = new Function ("SQRT",          func_sqrt);
+  repo->add (f);
+  f = new Function ("SQRTPI",        func_sqrtpi);
+  repo->add (f);
+  f = new Function ("TRUNC",         func_trunc);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  
+  // functions that operate over arrays
+  f = new Function ("COUNT",         func_count);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("COUNTA",        func_counta);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("COUNTBLANK",    func_countblank);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("COUNTIF",       func_countif);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DIV",           func_div);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("G_PRODUCT",     func_kproduct); // Gnumeric compatibility
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("GCD",           func_gcd);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("KPRODUCT",      func_kproduct);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("LCM",           func_lcm);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MAX",           func_max);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MAXA",          func_max);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MIN",           func_min);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MINA",          func_min);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MULTIPLY",      func_product);  // same as PRODUCT
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("PRODUCT",       func_product);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUM",           func_sum);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMA",          func_sum);   // same as SUM
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUBTOTAL",      func_subtotal);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMIF",         func_sumif);
+  f->setParamCount (2, 3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMSQ",         func_sumsq);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
 }
 
 // Function: SQRT
-bool kspreadfunc_sqrt( KSContext& context )
+KSpreadValue func_sqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "sqrt", true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( sqrt( val ) ) );
-
-  return true;
+  return calc->sqrt (args[0]);
 }
 
 // Function: SQRTPI
-bool kspreadfunc_sqrtpi( KSContext& context )
+KSpreadValue func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "SQRTPI", true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  if( val < 0 ) return false;
-
-  context.setValue( new KSValue( sqrt( val * M_PI ) ) );
-  return true;
+  // sqrt (val * PI)
+  return calc->sqrt (calc->mul (args[0], calc->pi()));
 }
 
-
-
-
-
 // Function: ROOTN
-bool kspreadfunc_rootn( KSContext& context )
+KSpreadValue func_rootn (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SQRTn", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  context.setValue( new KSValue( exp( log(args[0]->doubleValue())/args[1]->intValue() ) ) );
-
-  return true;
+  return calc->pow (args[0], calc->div (1, args[1]));
 }
 
 // Function: CUR
-bool kspreadfunc_cur( KSContext& context )
+KSpreadValue func_cur (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "CUR", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  context.setValue( new KSValue( exp( log(args[0]->doubleValue())/3)) );
-
-  return true;
+  return calc->pow (args[0], 1.0/3.0);
 }
 
 // Function: ABS
-bool kspreadfunc_abs( KSContext& context )
+KSpreadValue func_abs (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ABS", true ) || !KSUtil::checkArgumentsCount( context, 1, "ABS", true ))
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( fabs(val ) ) );
-
-  return true;
+  return calc->abs (args[0]);
 }
 
 // Function: exp
-bool kspreadfunc_exp( KSContext& context )
+KSpreadValue func_exp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "exp",true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( exp( val ) ) );
-
-  return true;
+  return calc->exp (args[0]);
 }
 
 // Function: ceil
-bool kspreadfunc_ceil( KSContext& context )
+KSpreadValue func_ceil (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "CEIL", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( approx_equal( floor( args[0]->doubleValue() ), args[0]->doubleValue() ) )
-    context.setValue( new KSValue( args[0]->doubleValue() ) );
-  else
-    context.setValue( new KSValue( ceil( args[0]->doubleValue() ) ) );
-
-  return true;
+  return calc->roundUp (args[0], 0);
 }
 
 // Function: ceiling
-bool kspreadfunc_ceiling( KSContext& context )
+KSpreadValue func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  double res;
-  double number;
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "CEILING", true ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "CEILING", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-      return false;
-
-    number = args[0]->doubleValue();
-
-    if ( number >= 0 )
-      res = 1.0;
-    else
-      res = -1.0;
-  }
+  KSpreadValue number = args[0];
+  KSpreadValue res;
+  if (args.count() == 2)
+    res = args[1];
   else
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-      return false;
+    res = calc->gequal (number, 0.0) ? 1.0 : -1.0;
+  
+  if (calc->isZero(res))
+    return KSpreadValue::errorDIV0();
 
-    if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-      return false;
+  KSpreadValue d = calc->div (number, res);
+  if (calc->greater (0, d))
+    return KSpreadValue::errorVALUE();
 
-    number = args[0]->doubleValue();
-
-    res = args[1]->doubleValue();
-  }
-
-  if ( res == 0 )
-    return false;
-
-  double d = number / res;
-
-  if ( d < 0 )
-    return false;
-
-  if ( approx_equal( floor( d ), d ) )
-    context.setValue( new KSValue( d * res ) );
+  KSpreadValue rud = calc->roundDown (d);
+  if (calc->approxEqual (rud, d))
+    d = calc->mul (rud, res);
   else
-    context.setValue( new KSValue( ceil( d ) * res ) );
+    d = calc->mul (calc->roundUp (d), res);
 
-  return true;
+  return d;
 }
 
 // Function: floor
-bool kspreadfunc_floor( KSContext& context )
+KSpreadValue func_floor (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "floor", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( floor( val ) ) );
-
-  return true;
+  return calc->roundDown (args[0], 0);
 }
 
 // Function: ln
-bool kspreadfunc_ln( KSContext& context )
+KSpreadValue func_ln (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ln", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( log( val ) ) );
-
-  return true;
+  return calc->ln (args[0]);
 }
 
 // Function: LOGn
-bool kspreadfunc_logn( KSContext& context )
+KSpreadValue func_logn (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "LOGn", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  context.setValue( new KSValue( log( args[0]->doubleValue() ) /log( args[1]->doubleValue() )) );
-
-  return true;
+  return calc->log (args[0], args[1]);
 }
 
 // Function: LOG2
-bool kspreadfunc_log2( KSContext& context )
+KSpreadValue func_log2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "LOG2", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-
-  if ( d <= 0 )
-    return false;
-
-  context.setValue( new KSValue( log( d ) /log( 2.0 ) ) );
-  return true;
+  return calc->log (args[0], 2.0);
 }
 
 // Function: LOG10
-bool kspreadfunc_log10( KSContext& context )
+KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "LOG10", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-
-  if ( d <= 0 )
-    return false;
-
-  context.setValue( new KSValue( log10( d ) ) );
-  return true;
-}
-
-// Function: log
-bool kspreadfunc_log( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "log", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( log10( val ) ) );
-
-  return true;
-}
-
-static bool kspreadfunc_sum_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
-                                    double & result, bool aMode )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result, aMode ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      result += (*it)->doubleValue();
-    }
-    else if ( aMode )
-    {
-      if ( KSUtil::checkType( context, *it, KSValue::StringType, false ) )
-      {
-        // TODO: needed?
-      }
-      else
-      if ( KSUtil::checkType( context, *it, KSValue::BoolType, false ) )
-      {
-        result += ( (*it)->boolValue() ? 1.0 : 0.0 );
-      }
-    }
-  }
-
-  return true;
+  return calc->log (args[0]);
 }
 
 // Function: sum
-bool kspreadfunc_sum( KSContext & context )
+KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-  bool b = kspreadfunc_sum_helper( context, context.value()->listValue(), result, false );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
+  KSpreadValue res = 0;
+  calc->arrayWalk (args, res, calc->awFunc ("sum"), 0);
+  return res;
 }
 
-static bool kspreadfunc_sumif_helper( KSContext & context, KSValue *value,
-                                      QValueList<KSValue::Ptr> &args,
-                                      KSpreadDB::Condition &cond,
-                                      double & result, int &vpos, int &hpos )
+KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  if ( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
-  {
-    if ( conditionMatches( cond, value->doubleValue() ) ) {
-      if( hpos == -1 )
-        result += value->doubleValue();
-      else {
-        result += (args[2]->listValue()[vpos])-> listValue()[hpos]->doubleValue();
-        ++hpos;
-      }
-    }
-    return true;
-  }
+  KSpreadValue sumRange = args[0];
+  QString condition = calc->conv()->asString (args[1]).asString();
+  KSpreadValue checkRange = sumRange;
+  if (args.count() == 3)
+    checkRange = args[2];
 
-  if ( KSUtil::checkType( context, value, KSValue::ListType, false ) ) {
-    QValueList<KSValue::Ptr> values = value->listValue();
-    QValueList<KSValue::Ptr>::Iterator it = values.begin();
-    QValueList<KSValue::Ptr>::Iterator end = values.end();
+  Condition cond;
+  calc->getCond (cond, condition);
 
-    for( ; it != end; ++it ) {
-      if( !kspreadfunc_sumif_helper( context, *it, args, cond, result, vpos, hpos ) )
-        return false;
-      if ( vpos != -1 && KSUtil::checkType( context, *it, KSValue::ListType, false ) ){
-        ++vpos;
-        hpos = 0;
-      }
-    }
-    return true;
-  }
-  return false;
-}
-
-bool kspreadfunc_sumif( KSContext & context )
-{
-  double result = 0.0;
-  int hpos = -1; int vpos = -1; // these values become >=0 if there's a seperate sumrange
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  // starting sanity checks
-  if( KSUtil::checkArgumentsCount( context, 3, "SUMIF", true ) ) {
-  
-    QValueList<KSValue::Ptr> checkRange = args[0]->listValue();
-    QValueList<KSValue::Ptr> sumRange   = args[2]->listValue();
-
-    if( checkRange.count() <= sumRange.count() ) {
-      for( uint i = 0 ; i < checkRange.count() ; ++i ) {
-        if ( checkRange[i]->listValue().count() > sumRange[i]->listValue().count() )
-          return false;
-      }
-      // the ranges do match, make hpos and vpos > -1
-      hpos = 0;
-      vpos = 0;
-    } else return false;
-
-  } else if ( !KSUtil::checkArgumentsCount( context, 2, "SUMIF", false ) )
-      return false;
-    
-  if( !KSUtil::checkType( context, args[1], KSValue::StringType ) )
-    return false;
-  // end of sanity checks
-
-  KSValue *value = args[0];
-  KSpreadDB::Condition cond;
-  getCond( cond, args[1]->stringValue() );
-
-  bool b = kspreadfunc_sumif_helper( context, value, args, cond, result, vpos, hpos );
-
-  if ( b ) {
-    context.setValue( new KSValue( result ) );
-  }
-  return b;
-}
-
-// Function: suma
-bool kspreadfunc_suma( KSContext & context )
-{
-  double result = 0.0;
-  bool b = kspreadfunc_sum_helper( context, context.value()->listValue(), result, true );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_product_helper( KSContext & context,
-                                        QValueList<KSValue::Ptr> & args,
-                                        double & result, int & number )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result, number ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      ++number;
-      result *= (*it)->doubleValue();
-    }
-  }
-
-  return true;
+  return calc->sumIf (sumRange, checkRange, cond);
 }
 
 // Function: product
-bool kspreadfunc_product( KSContext& context )
+KSpreadValue func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 1.0;
-  int number = 0;
-  bool b = kspreadfunc_product_helper( context,
-                                       context.value()->listValue(),
-                                       result, number );
-
-  if ( number == 0 )
-    result = 0.0; // Excel specific
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
+  return calc->product (args[0], 0.0);
 }
 
-// Function: product
-bool kspreadfunc_kproduct( KSContext& context )
+// Function: kproduct
+KSpreadValue func_kproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 1.0;
-  int number = 0;
-  bool b = kspreadfunc_product_helper( context,
-                                       context.value()->listValue(),
-                                       result, number );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static int kspreadfunc_div_helper( KSContext & context,
-                                   QValueList<KSValue::Ptr> & args,
-                                   double & result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  result = (*it)->doubleValue();
-  ++it;
-  int number = 0;
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result, number ) )
-        return 0;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double val =(*it)->doubleValue();
-
-      if (val == 0)
-        return -1;
-
-      result /= val;
-    }
-  }
-
-  return 1;
+  return calc->product (args[0], 1.0);
 }
 
 // Function: DIV
-bool kspreadfunc_div( KSContext& context )
+KSpreadValue func_div (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-  int b = kspreadfunc_div_helper( context,
-                                  context.value()->listValue(),
-                                  result );
-
-  if ( b == 1 )
-    context.setValue( new KSValue( result ) );
-  else if ( b == -1 )
-    context.setValue( new KSValue( i18n("#DIV/0") ) );
-  else
-    return false;
-
-  return true;
-}
-
-static bool kspreadfunc_sumsq_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
+  KSpreadValue val = args[0];
+  for (unsigned int i = 1; i < args.count(); ++i)
   {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result, false ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      result += ((*it)->doubleValue()*(*it)->doubleValue());
-    }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
+    val = calc->div (val, args[i]);
+    if (val.isError())
+      return val;
   }
-
-  return true;
+  return val;
 }
 
 // Function: SUMSQ
-bool kspreadfunc_sumsq( KSContext& context )
+KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-  bool b = kspreadfunc_sumsq_helper( context, context.value()->listValue(), result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_max_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
-                                    double & result, int & inter, int mode )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-
-      if ( !kspreadfunc_max_helper( context, (*it)->listValue(), result, inter, mode ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      if ( inter == 0 )
-      {
-        result = (*it)->doubleValue();
-        inter  = 1;
-      }
-      if ( result < (*it)->doubleValue() )
-        result = (*it)->doubleValue();
-    }
-    else if ( mode == 1 && KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
-    {
-      double n = ( (*it)->boolValue() ? 1.0 : 0.0 );
-      if ( inter == 0 )
-      {
-        result = n;
-        inter = 1;
-      }
-      if ( result < n )
-        result = n;
-    }
-  }
-
-  return true;
+  KSpreadValue res = 0;
+  calc->arrayWalk (args, res, calc->awFunc ("sumsq"), 0);
+  return res;
 }
 
 // Function: MAX
-bool kspreadfunc_max( KSContext& context )
+KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-
-  //init first element
-  int inter=0;
-
-  bool b = kspreadfunc_max_helper( context, context.value()->listValue(), result, inter, 0 );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-// Function: MAXA
-bool kspreadfunc_maxa( KSContext & context )
-{
-  double result = 0.0;
-
-  //init first element
-  int inter = 0;
-
-  bool b = kspreadfunc_max_helper( context, context.value()->listValue(), result, inter, 1 );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static int kspreadfunc_gcd_gcd(int value1, int value2)
-{
-  // start with the lower value.
-  int n = (value1 <= value2 ? value1 : value2);
-
-  // check if this is already the result
-  if ((value1 % n == 0) && (value2 % n == 0))
-  {
-    return n;
-  }
-  // to save time: start with n = n / 2
-  n = (int) (n / 2);
-
-  while ((value1 % n != 0) || (value2 % n != 0))
-  {
-    --n;
-  }
-
-  return n;
-}
-
-static bool kspreadfunc_gcd_helper( KSContext & context,
-                                    QValueList<KSValue::Ptr>& args,
-                                    int & result)
-{
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  // at first get the smallest value to start with
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_gcd_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
-    {
-      int val = (*it)->intValue();
-
-      if (val == 0)
-      {
-        result = 0;
-        return true;
-      }
-
-      if ((result == 0) || (val < result))
-        result = val;
-    }
-  }
-
-  it = args.begin();
-
-  // calculate the LCD:
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_gcd_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
-    {
-      int n = kspreadfunc_gcd_gcd(result, (*it)->intValue());
-
-      if (n != result)
-      {
-        result = n;
-        it = args.begin();
-
-        continue;
-      }
-    }
-  }
-
-  if (result < 0)
-    result *= -1;
-
-  context.setValue(new KSValue(result));
-
-  return true;
-}
-
-// Function: GCD
-bool kspreadfunc_gcd( KSContext & context )
-{
-  int result = 0;
-
-  bool b = kspreadfunc_gcd_helper(context, context.value()->listValue(),
-				  result);
-
-  if (b)
-    context.setValue(new KSValue(result));
-
-  return b;
-}
-
-static bool kspreadfunc_lcm_helper( KSContext & context,
-				    QValueList<KSValue::Ptr> & args,
-				    double & result,
-				    double & max,
-				    double & inter,
-				    int & signs)
-{
-  // calculating the LCM:
-  // algorithm: choose the biggest value in the list
-  // take this as interval for increasing the numbers you check with
-  // go through the list, check every value if your proposal is a multiple
-  // if not, increase your proposal value and start again.
-
-  // when you have found your LCM: check if it has the right sign:
-  // if the number of (-) signs in the list is , the result is positive
-  // otherwise negative.
-
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  // first loop: check for the biggest value
-  // and count number of (-) signs:
-  for (; it != end; ++it)
-  {
-    if (KSUtil::checkType(context, *it, KSValue::ListType, false))
-    {
-      if (!kspreadfunc_lcm_helper(context, (*it)->listValue(), result, max, inter, signs))
-        return false;
-    }
-    else if (KSUtil::checkType(context, *it, KSValue::DoubleType, true))
-    {
-      double d = (double) (*it)->doubleValue();
-
-      if (d < 0)
-	++signs;
-
-      if (result < d)
-	result = d;
-    }
-  }
-
-  inter = result;
-  it    = args.begin();
-
-  while (true)
-  {
-    if (KSUtil::checkType(context, *it, KSValue::ListType, false))
-    {
-      if (!kspreadfunc_lcm_helper( context, (*it)->listValue(), result, max, inter, signs))
-	return false;
-    }
-    else if (KSUtil::checkType(context, *it, KSValue::DoubleType, true))
-    {
-      double d = inter / (*it)->doubleValue();
-
-      // if it is not a multiple, increase you proposal value and start again
-      if (!approx_equal(d, floor(d)))
-      {
-	inter += result;
-
-	it = args.begin();
-	continue;
-      }
-    } // end else if
-
-    // ... otherwise check the next value if any
-    ++it;
-
-    if (it == end)
-      break;
-  }
-
-  result = inter;
-
-  // check if we have the correct sign (-/+)
-  if (signs > 0)
-  {
-    if ((result < 0) && (signs % 2 == 0))
-      result *= -1;
-    else if ((result > 0) && (signs % 2 != 0))
-      result *= -1;
-  }
-
-  return true;
-}
-
-// Function: lcm
-bool kspreadfunc_lcm( KSContext & context )
-{
-  double result = 0.0;
-  double max    = 1.0;
-  double inter  = 0.0;
-  int    signs  = 0;
-
-  bool b = kspreadfunc_lcm_helper(context, context.value()->listValue(),
-				  result, max, inter, signs);
-
-  if (b)
-    context.setValue(new KSValue(result));
-
-  return b;
-
-}
-
-static bool kspreadfunc_min_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
-                                    double & result, int & inter, int mode )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for ( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-
-      if ( !kspreadfunc_min_helper( context, (*it)->listValue(), result, inter, mode ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      if ( inter == 0 )
-      {
-        result = (*it)->doubleValue();
-        inter  = 1;
-      }
-      if ( result > (*it)->doubleValue() )
-        result = (*it)->doubleValue();
-    }
-    else if ( mode == 1 && KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
-    {
-      double n = ( (*it)->boolValue() ? 1.0 : 0.0 );
-      if ( inter == 0 )
-      {
-        result = n;
-        inter  = 1;
-      }
-      if ( result > n )
-        result = n;
-    }
-  }
-
-  return true;
+  KSpreadValue res = args[0];
+  while (res.isArray()) res = res.element (0,0);
+  calc->arrayWalk (args, res, calc->awFunc ("max"), 0);
+  return res;
 }
 
 // Function: MIN
-bool kspreadfunc_min( KSContext& context )
+KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-
-  //init first element
-  int inter = 0;
-
-  bool b = kspreadfunc_min_helper( context, context.value()->listValue(), result, inter, 0 );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-// Function: MINA
-bool kspreadfunc_mina( KSContext& context )
-{
-  double result = 0.0;
-
-  //init first element
-  int inter = 0;
-
-  bool b = kspreadfunc_min_helper( context, context.value()->listValue(), result, inter, 1 );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_mult_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_mult_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      result *= (*it)->doubleValue();
-  }
-
-  return true;
-}
-
-// Function: MULT
-bool kspreadfunc_mult( KSContext& context )
-{
-  double result = 1.0;
-  bool b = kspreadfunc_mult_helper( context, context.value()->listValue(), result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
+  KSpreadValue res = args[0];
+  while (res.isArray()) res = res.element (0,0);
+  calc->arrayWalk (args, res, calc->awFunc ("min"), 0);
+  return res;
 }
 
 // Function: INT
-bool kspreadfunc_int( KSContext& context )
+KSpreadValue func_int (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "INT", true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-    if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
-      return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( floor( val ) ) );
-  return true;
+  return calc->conv()->asInteger (args[0]);
 }
 
 // Function: QUOTIENT
-bool kspreadfunc_quotient( KSContext& context )
+KSpreadValue func_quotient (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "QUOTIENT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double num = args[0]->doubleValue();
-  double den = args[1]->doubleValue();
-
-  if( den == 0 ) return false;
-
-  context.setValue( new KSValue( (int)(num/den) ) );
-  return true;
+  if (calc->isZero (args[1]))
+    return KSpreadValue::errorDIV0();
+  return calc->conv()->asInteger (calc->div (args[0], args[1]));
 }
 
 
 // Function: eps
-bool kspreadfunc_eps( KSContext& context )
+KSpreadValue func_eps (valVector, ValueCalc *calc, FuncExtra *)
 {
-// #### This should adjust according to the actual number system used (float, double, long double, ...)
-    if( !KSUtil::checkArgumentsCount( context, 0, "eps", true ) )
-      return false;
-
-    context.setValue( new KSValue(DBL_EPSILON));
-    return true;
+  return calc->eps ();
 }
 
-bool kspreadfunc_randexp( KSContext & context )
+KSpreadValue func_randexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "RANDEXP", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-
-  d = -1 * d * log( (double) rand() / ( RAND_MAX + 1.0 ) );
-
-  context.setValue( new KSValue( d ) );
-  return true;
+  // -1 * d * log (random)
+  return calc->mul (calc->mul (args[0], -1), calc->random());
 }
 
-bool kspreadfunc_randbinom( KSContext & context )
+KSpreadValue func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "RANDBINOM", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  double d  = args[0]->doubleValue();
-  int    tr = args[1]->intValue();
+  // this function will not support arbitrary precision
+  
+  double d  = calc->conv()->asFloat (args[0]).asFloat();
+  int    tr = calc->conv()->asInteger (args[1]).asInteger();
 
   if ( d < 0 || d > 1 )
-    return false;
+    return KSpreadValue::errorVALUE();
 
   if ( tr < 0 )
-    return false;
+    return KSpreadValue::errorVALUE();
 
   // taken from gnumeric
   double x = pow(1 - d, tr);
   double r = (double) rand() / ( RAND_MAX + 1.0 );
   double t = x;
-  double i = 0;
+  int i = 0;
 
   while (r > t)
   {
     x *= (((tr - i) * d) / ((1 + i) * (1 - d)));
-    i += 1;
+    i++;
     t += x;
   }
 
-  context.setValue( new KSValue( i ) );
-  return true;
+  return KSpreadValue (i);
 }
 
-bool kspreadfunc_randnegbinom( KSContext & context )
+KSpreadValue func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "RANDNEGBINOM", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-  int    f = args[1]->intValue();
+  // this function will not support arbitrary precision
+  
+  double d  = calc->conv()->asFloat (args[0]).asFloat();
+  int    f = calc->conv()->asInteger (args[1]).asInteger();
 
   if ( d < 0 || d > 1 )
-    return false;
+    return KSpreadValue::errorVALUE();
 
   if ( f < 0 )
-    return false;
+    return KSpreadValue::errorVALUE();
+
 
   // taken from Gnumeric
   double x = pow(d, f);
   double r = (double) rand() / ( RAND_MAX + 1.0 );
   double t = x;
-  double i = 0;
+  int i = 0;
 
   while (r > t)
   {
     x *= ( ( ( f + i ) * ( 1 - d ) ) / (1 + i) ) ;
-    i += 1;
+    i++;
     t += x;
   }
 
-  context.setValue( new KSValue( i ) );
-  return true;
+  return KSpreadValue (i);
 }
 
-bool kspreadfunc_randbernoulli( KSContext & context )
+KSpreadValue func_randbernoulli (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "RANDBERNOULLI", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-  if ( d < 0 || d > 1 )
-    return false;
-
-  // taken from Gnumeric
-  double r = (double) rand() / ( RAND_MAX + 1.0 );
-
-  context.setValue( new KSValue( ( r <= d ) ? 1.0 : 0.0 ) );
-  return true;
+  KSpreadValue rnd = calc->random ();
+  return KSpreadValue (calc->greater (rnd, args[0]) ? 1.0 : 0.0);
 }
 
-bool kspreadfunc_randnorm( KSContext & context )
+KSpreadValue func_randnorm (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "RANDNORM", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double mu = args[0]->doubleValue();
-  double sigma = args[1]->doubleValue();
+  KSpreadValue mu = args[0];
+  KSpreadValue sigma = args[1];
 
   //using polar form of the Box-Muller transformation
   //refer to http://www.taygeta.com/random/gaussian.html for more info
 
-  double x1, x2, w;
+  KSpreadValue x1, x2, w;
   do {
-    x1 = (double) rand() / (RAND_MAX + 1.0);
-    x2 = (double) rand() / (RAND_MAX + 1.0);
-    x1 = 2.0 * x1 - 1.0;
-    x2 = 2.0 * x2 - 1.0;
-    w = x1 * x1 + x2 * x2;
-  } while (w >= 1.0);
+    // x1,x2 = 2 * random() - 1
+    x1 = calc->random (2.0);
+    x2 = calc->random (2.0);
+    x1 = calc->sub (x1, 1);
+    x1 = calc->sub (x2, 1);
+    w = calc->add (calc->sqr(x1), calc->sqr (x2));
+  } while (calc->gequal (w, 1.0));   // w >= 1.0
 
-  w = sqrt ((-2.0 * log (w)) / w);
-  double res = x1 * w;
+  //sqrt ((-2.0 * log (w)) / w) :
+  w = calc->sqrt (calc->div (calc->mul (-2.0, calc->ln (w)), w));
+  KSpreadValue res = calc->mul (x1, w);
 
-  res = res * sigma + mu;
-  context.setValue( new KSValue( res ) );
-  return true;
+  res = calc->add (calc->mul (res, sigma), mu);  // res*sigma + mu
+  return res;
 }
 
-bool kspreadfunc_randpoisson( KSContext & context )
+KSpreadValue func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "RANDPOISSON", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-  if ( d < 0 )
-    return false;
+  if (calc->lower (args[0], 0))
+    return KSpreadValue::errorVALUE();
 
   // taken from Gnumeric...
-  double x = exp( -1 * d );
-  double r = ( double ) rand() / ( RAND_MAX + 1.0 );
-  double t = x;
-  double i = 0;
+  KSpreadValue x = calc->exp (calc->mul (-1, args[0]));   // e^(-A)
+  KSpreadValue r = calc->random ();
+  KSpreadValue t = x;
+  int i = 0;
 
-  while ( r > t )
-  {
-    x *= d / ( i + 1 );
-    i += 1;
-    t += x;
+  while (calc->greater (r, t)) {   // r > t
+    x = calc->mul (x, calc->div (args[0], i + 1));  // x *= (A/(i+1))
+    t = calc->add (t, x);    //t += x
+    i++;
   }
 
-  context.setValue( new KSValue( i ) );
-  return true;
+  return KSpreadValue (i);
 }
 
 // Function: rand
-bool kspreadfunc_rand( KSContext& context )
+KSpreadValue func_rand (valVector, ValueCalc *calc, FuncExtra *)
 {
-    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 0, "rand", true ) )
-      return false;
-
-    context.setValue( new KSValue((double) rand()/(RAND_MAX + 1.0)));
-    return true;
+  return calc->random ();
 }
 
 // Function: RANDBETWEEN
-bool kspreadfunc_randbetween( KSContext& context )
+KSpreadValue func_randbetween (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 2, "RANDBETWEEN", true ) )
-      return false;
-    if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-        return false;
-    if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-        return false;
-    if(args[0]->intValue()>args[1]->intValue())
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return true;
-        }
-
-    context.setValue( new KSValue((double)(((double)args[1]->intValue()-(double)args[0]->intValue())*rand()/RAND_MAX+((double)args[0]->intValue()))));
-
-    return true;
+  KSpreadValue v1 = args[0];
+  KSpreadValue v2 = args[1];
+  if (calc->greater (v2, v1)) {
+    v1 = args[1];
+    v2 = args[0];
+  }
+  return calc->add (v1, calc->random (calc->sub (v2, v1)));
 }
 
 // Function: POW
-bool kspreadfunc_pow( KSContext& context )
+KSpreadValue func_pow (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "pow",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  context.setValue( new KSValue( pow( args[0]->doubleValue(),args[1]->doubleValue() ) ) );
-
-  return true;
+  return calc->pow (args[0], args[1]);
 }
 
 // Function: MOD
-bool kspreadfunc_mod( KSContext& context )
+KSpreadValue func_mod (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result=0;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "MOD",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if( (int)args[1]->doubleValue()!=0)
-  {
-        result=(int)args[0]->doubleValue() % (int)args[1]->doubleValue();
-        if( result < 0 ) result += (int)args[1]->doubleValue();
-        context.setValue( new KSValue(  result  ) );
-  }
-  else
-  {
-        context.setValue( new KSValue( i18n("#DIV/0") ) );
-
-  }
-  return true;
+  return calc->mod (args[0], args[1]);
 }
 
 // Function: fact
-bool kspreadfunc_fact( KSContext& context )
+KSpreadValue func_fact (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result;
-  QString tmp;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "fact",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  result=util_fact((double)args[0]->intValue(),0);
-  //In util_fact function val must be positive
-  tmp=i18n("Err");
-  if(result==-1)
-        context.setValue( new KSValue(tmp));
-  else
-        context.setValue( new KSValue(result ));
-
-  return true;
+  return calc->fact (args[0]);
 }
 
 // Function: FACTDOUBLE
-bool kspreadfunc_factdouble( KSContext& context )
+KSpreadValue func_factdouble (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "FACTDOUBLE",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  int number = args[0]->intValue();
-  if( number < 0 )
-    return false;
-
-  double result = 1;
-  for( int n = number; n > 0; n -= 2 )
-    result *= n;
-
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  return calc->factDouble (args[0]);
 }
 
 // Function: MULTINOMIAL
-bool kspreadfunc_multinomial( KSContext& context )
+KSpreadValue func_multinomial (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  double num = 0, den = 1;
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::IntType, false ) )
-    {
-      int val = (*it)->intValue();
-      if( val < 0 ) return false;
-      num += val;
-      den *= util_fact( val, 0 );
-    }
+  // (a+b+c)! / a!b!c!  (any number of params possible)
+  KSpreadValue num = 0, den = 1;
+  for (unsigned int i = 0; i < args.count(); ++i) {
+    num = calc->add (num, args[i]);
+    den = calc->mul (den, calc->fact (args[i]));
   }
-
-  num = util_fact( num, 0 );
-  double result = num / den;
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  num = calc->fact (num);
+  return calc->div (num, den);
 }
 
 // Function: sign
-bool kspreadfunc_sign( KSContext& context )
+KSpreadValue func_sign (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int value=0;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "sign", true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if ( !KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
-	return false;
-    }
-  val=args[0]->doubleValue();
-
-  if(val>0)
-    value=1;
-  else if(val<0)
-    value=-1;
-  else if(val==0)
-    value=0;
-
-  context.setValue( new KSValue( value ) );
-
-  return true;
+  return KSpreadValue (calc->sign (args[0]));
 }
 
 // Function: INV
-bool kspreadfunc_inv( KSContext& context )
+KSpreadValue func_inv (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "INV",true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if ( !KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
-	return false;
-    }
-  val=args[0]->doubleValue();
-
-
-  context.setValue( new KSValue( val*(-1) ) );
-
-  return true;
+  return calc->mul (args[0], -1);
 }
 
-bool kspreadfunc_mround( KSContext& context )
+KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  KSpreadValue d = args[0];
+  KSpreadValue m = args[1];
 
-  if ( !KSUtil::checkArgumentsCount( context, 2, "MROUND", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double d = args[0]->doubleValue();
-  double m = args[1]->doubleValue();
-
-  if ( ( d > 0 && m < 0 )
-      || ( d < 0 && m > 0 ) )
-    return false;
+  // signs must be the same
+  if ((calc->greater (d, 0) && calc->lower (m, 0))
+      || (calc->lower (d, 0) && calc->greater (m, 0)))
+    return KSpreadValue::errorVALUE();
 
   int sign = 1;
 
-  if ( d < 0 )
+  if (calc->lower (d, 0))
   {
     sign = -1;
-    d = -d;
-    m = -m;
+    d = calc->mul (d, -1);
+    m = calc->mul (m, -1);
   }
 
   // from gnumeric:
-  double mod = fmod( d, m );
-  double div = d - mod;
+  KSpreadValue mod = calc->mod (d, m);
+  KSpreadValue div = calc->sub (d, mod);
 
-  double accuracyLimit = 0.0000003;
-  double result = sign * ( div + ( ( mod + accuracyLimit >= m / 2 ) ? m : 0 ) );
+  KSpreadValue result = div;
+  if (calc->greater (mod, calc->div (m, 2)))  // mod > m/2
+    result = calc->add (result, m);     // result += m
+  result = calc->mul (result, sign);    // add the sign
 
-  context.setValue( new KSValue( result ) );
-  return true;
+  return result;
 }
 
 // Function: ROUNDDOWN
-bool kspreadfunc_rounddown( KSContext& context )
+KSpreadValue func_rounddown (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  double result=0;
-  int digits=0;
-  if ( !KSUtil::checkArgumentsCount( context, 2, "ROUNDDOWN", true ) )
-  {
-        //just 1 argument => number of decimal =0 by default
-        if ( !KSUtil::checkArgumentsCount( context, 1, "ROUNDDOWN", true ) )
-                return false;
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-            return false;
-        digits=0;
-  }
-  else
-  {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-                return false;
-        digits=args[1]->intValue();
-  }
-  result=args[0]->doubleValue()*pow(10.0, digits);
-  context.setValue( new KSValue( floor( result )/pow(10.0, digits) ) );
-
-  return true;
+  if (args.count() == 2)
+    return calc->roundDown (args[0], args[1]);
+  return calc->roundDown (args[0], 0);
 }
 
 // Function: ROUNDUP
-bool kspreadfunc_roundup( KSContext& context )
+KSpreadValue func_roundup (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  double result=0;
-  int digits=0;
-  if ( !KSUtil::checkArgumentsCount( context, 2, "ROUNDUP", true ) )
-  {
-        //just 1 argument => number of decimal =0 by default
-        if ( !KSUtil::checkArgumentsCount( context, 1, "ROUNDUP", true ) )
-                return false;
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-            return false;
-        digits=0;
-  }
-  else
-  {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-                return false;
-        digits=args[1]->intValue();
-  }
-  // This is not correct solution for problem with floating point numbers and probably
-  // will fail in platforms where float and double lenghts are same.
-  if (approx_equal(floor(args[0]->doubleValue()*::pow(10,digits)), args[0]->doubleValue()*::pow(10,digits)))
-      result = args[0]->doubleValue();
-  else
-      result=floor(args[0]->doubleValue()*::pow(10,digits)+1)/::pow(10,digits);
-  context.setValue( new KSValue( result) );
-
-  return true;
+  if (args.count() == 2)
+    return calc->roundUp (args[0], args[1]);
+  return calc->roundUp (args[0], 0);
 }
 
 // Function: ROUND
-bool kspreadfunc_round( KSContext& context )
+KSpreadValue func_round (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  double result=0;
-  int digits=0;
-  if ( !KSUtil::checkArgumentsCount( context, 2, "ROUND", true ) )
-        {
-        //just 1 argument => number of decimal =0 by default
-        if ( !KSUtil::checkArgumentsCount( context, 1, "ROUND", true ) )
-                return false;
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-            return false;
-        digits=0;
-        }
-  else
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-                return false;
-        digits=args[1]->intValue();
-        }
-  result=floor(args[0]->doubleValue()*pow(10.0,digits)+0.5)/pow(10.0,digits);
-  context.setValue( new KSValue( result) );
-
-  return true;
+  if (args.count() == 2)
+    return calc->round (args[0], args[1]);
+  return calc->round (args[0], 0);
 }
 
 // Function: EVEN
-bool kspreadfunc_even( KSContext& context )
+KSpreadValue func_even (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "EVEN",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  double result;
-  double val=args[0]->doubleValue();
-  int sign=1;
-  if(val<0)
-        {
-        sign=-1;
-        val=-val;
-        }
-  if (approx_equal(val, floor(val)))
-    val = floor(val);
- double valsup=ceil( val );
- if(fmod(valsup,2.0)==0)
-        {
-        if(val>valsup)
-                result=(int)(sign*(valsup+2));
-        else
-                result=(int)(sign*valsup);
-        }
- else
-        {
-        result=(int)(sign*(valsup+1));
-        }
-  context.setValue( new KSValue(result));
-
-  return true;
+  return calc->isEven (args[0]);
 }
 
 // Function: ODD
-bool kspreadfunc_odd( KSContext& context )
+KSpreadValue func_odd (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "ODD",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  double result;
-  double valsup;
-  int sign=1;
-  double val= args[0]->doubleValue();
-  if (val < 0)
-        {
-        sign = -1;
-        val = -val;
-        }
-  if (approx_equal(val, floor(val)))
-    val = floor(val);
-  valsup = ceil(val);
-  if (fmod(valsup, 2.0) == 1)
-        {
-        if (val > valsup)
-                result=(int) (sign * (valsup + 2));
-        else
-                result=(int) (sign * valsup);
-        }
-  else
-        result=(int) (sign * (valsup + 1));
-
- context.setValue( new KSValue(result));
-
-  return true;
+  return (!calc->isEven (args[0]));
 }
 
-static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr> & args, double & result )
+KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-	++result;
-    }
-  }
-
-  return true;
-}
-
-bool kspreadfunc_trunc( KSContext & context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  int precision = 0;
-
-  if( KSUtil::checkArgumentsCount( context, 2, "TRUNC", false ) )
-  {
-    if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-      return false;
-
-    precision = args[1]->intValue();
-  }
-  else
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "TRUNC", true ) )
-      return false;
-  }
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double result = args[0]->doubleValue();
-
-  // TRUNC(254;-2) is 200
-  if( precision < 0 )
-  {
-      precision = -precision;
-      result = floor( result/pow(10.0,precision) ) * pow(10.0,precision);
-      precision = 0;
-  }
-
-  int factor = (int) pow( 10.0, precision );
-
-  result = floor( result * factor ) / factor;
-
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  if (args.count() == 1)
+    return calc->roundDown (args[0]);
+  return calc->roundDown (args[0], args[1]);
 }
 
 // Function: COUNT
-bool kspreadfunc_count( KSContext& context )
+KSpreadValue func_count (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-
-  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::Ptr> & args,
-                                       QValueList<KSValue::Ptr> & extra, int & resultA )
-{
-  QValueList<KSValue::Ptr>::Iterator eit  = extra.begin();
-  QValueList<KSValue::Ptr>::Iterator eend = extra.end();
-
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-
-  KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
-  KSpreadSheet * t = 0;
-  KSpreadCell * cell = 0;
-
-  for ( ; eit != eend; ++eit )
-  {
-    int right = 0;
-    int left = 0;
-    int bottom = 0;
-    int top = 0;
-    if ( KSUtil::checkType( context, *eit, KSValue::StringType, true ) )
-    {
-      KSpreadRange range( (*eit)->stringValue(), map );
-      if ( range.range.left() <= 0 || range.range.right() <= 0 )
-      {
-        KSpreadPoint point( (*eit)->stringValue(), map );
-        if ( point.pos.x() <= 0 || point.pos.y() <= 0 )
-          return false;
-
-        right  = point.pos.x();
-        bottom = point.pos.y();
-        left   = right;
-        top    = bottom;
-
-        if ( !point.isSheetKnown() )
-          t = sheet;
-        else
-          t = point.sheet;
-      }
-      else
-      {
-        right  = range.range.right();
-        bottom = range.range.bottom();
-        left   = range.range.left();
-        top    = range.range.top();
-
-        if ( !range.isSheetKnown() )
-          t = sheet;
-        else
-          t = range.sheet;
-      }
-
-      for ( int x = left; x <= right; ++x )
-      {
-        for ( int y = top; y <= bottom; ++y )
-        {
-          kdDebug() << "Cell: " << x << ", " << y << endl;
-          cell = t->cellAt( x, y );
-          if ( !cell->isDefault() && !cell->isEmpty() )
-          {
-            if ( !cell->strOutText().isEmpty() )
-              ++resultA;
-          }
-        }
-      }
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-    {
-      kdDebug() << "String value" << endl;
-      if ( !(*it)->stringValue().isEmpty() )
-        ++resultA;
-    }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-    {
-      kdDebug() << "Empty" << endl;
-      ++resultA;
-    }
-
-    ++it;
-  }
-
-  return true;
+  KSpreadValue res = 0;
+  calc->arrayWalk (args, res, calc->awFunc ("count"), 0);
+  return res;
 }
 
 // Function: COUNTA
-bool kspreadfunc_counta( KSContext& context )
+KSpreadValue func_counta (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int resultA = 0;
-
-  bool b = kspreadfunc_counta_helper( context, context.value()->listValue(),
-                                      context.extraData()->listValue(), resultA );
-
-  if ( b )
-    context.setValue( new KSValue( resultA ) );
-
-  return b;
-}
-
-static bool kspreadfunc_countblank_helper( KSContext& context, QValueList<KSValue::Ptr> & args,
-                                           int & result )
-{
-  KSpreadMap   * map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
-  KSpreadCell  * cell  = 0;
-  KSpreadSheet * t     = 0;
-
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  kdDebug() << "Result: " << result << endl;
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::StringType, false ) )
-    {
-      kdDebug() << "S:" << (*it)->stringValue() << endl;
-      int right = 0;
-      int left = 0;
-      int bottom = 0;
-      int top = 0;
-
-      KSpreadRange range( (*it)->stringValue(), map );
-      if ( range.range.left() <= 0 || range.range.right() <= 0 )
-      {
-        KSpreadPoint point( (*it)->stringValue(), map );
-
-        if ( point.pos.x() <= 0 || point.pos.y() <= 0 )
-          continue; // not blank, whatever it is...
-
-        right  = point.pos.x();
-        bottom = point.pos.y();
-        left   = right;
-        top    = bottom;
-
-        if ( !point.isSheetKnown() )
-          t = sheet;
-        else
-          t = point.sheet;
-      }
-      else
-      {
-        right  = range.range.right();
-        bottom = range.range.bottom();
-        left   = range.range.left();
-        top    = range.range.top();
-
-        if ( !range.isSheetKnown() )
-          t = sheet;
-        else
-          t = range.sheet;
-      }
-
-      for ( int x = left; x <= right; ++x )
-      {
-        for ( int y = top; y <= bottom; ++y )
-        {
-          kdDebug() << "Cell: " << x << ", " << y << endl;
-          cell = t->cellAt( x, y );
-          if ( cell->isDefault() || cell->isEmpty() || cell->strOutText().isEmpty() )
-          {
-            ++result;
-          }
-        }
-      }
-    }
-  }
-
-  kdDebug() << "Result 2: " << result << endl;
-
-  return true;
+  KSpreadValue res = 0;
+  calc->arrayWalk (args, res, calc->awFunc ("counta"), 0);
+  return res;
 }
 
 // Function: COUNTBLANK
-bool kspreadfunc_countblank( KSContext& context )
+KSpreadValue func_countblank (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int result = 0;
-
-  kdDebug() << "Countblank: " << endl;
-
-  bool b = kspreadfunc_countblank_helper( context, context.extraData()->listValue(), result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static int kspreadfunc_countif_helper( KSContext& context, KSValue *value,
-                                       const QString &criteria )
-{
-  if( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
-  {
-    KSpreadDB::Condition cond;
-    getCond( cond, criteria );
-
-    return conditionMatches( cond, value->doubleValue() ) ? 1 : 0;
-  }
-
-  if( KSUtil::checkType( context, value, KSValue::StringType, false ) )
-  {
-    KSpreadDB::Condition cond;
-    getCond( cond, criteria );
-
-    return conditionMatches( cond, value->stringValue() ) ? 1 : 0;
-  }
-
-  if( KSUtil::checkType( context, value, KSValue::BoolType, false ) )
-  {
-    bool criteria_bool = criteria.lower() == "true";
-    if( !value && (criteria.lower() != "false") ) return 0;
-    return criteria_bool == value->boolValue() ? 1 : 0;
-  }
-
-  if( KSUtil::checkType( context, value, KSValue::ListType, false ) )
-  {
-    QValueList<KSValue::Ptr>& args = value->listValue();
-    QValueList<KSValue::Ptr>::Iterator it = args.begin();
-    QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-    int count = 0;
-    for( ; it != end; ++it )
-       if ( !kspreadfunc_countif_helper( context, *it, criteria ) ) count++;
-
-    return count;
-  }
-
-  return 0;
+  // all without non-empty = empty
+  return calc->sub (func_count (args, calc, 0), func_counta (args, calc, 0));
 }
 
 // Function: COUNTIF
-bool kspreadfunc_countif( KSContext& context )
+KSpreadValue func_countif (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  KSpreadValue range = args[0];
+  QString condition = calc->conv()->asString (args[1]).asString();
 
-  if ( !KSUtil::checkArgumentsCount( context, 2, "COUNTIF", true ) )
-    return false;
+  Condition cond;
+  calc->getCond (cond, condition);
 
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-    return false;
-
-  KSValue* value = args[0];
-  QString criteria = args[1]->stringValue();
-
-  int result = kspreadfunc_countif_helper( context, value, criteria );
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  return calc->countIf (range, cond);
 }
 
 // Function: FIB
-bool kspreadfunc_fib( KSContext& context )
+KSpreadValue func_fib (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context, 1, "FIB", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
 /*
 Lucas' formula for the nth Fibonacci number F(n) is given by
 
@@ -2140,101 +788,81 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
                          sqrt(5)
 
 */
-  double n = args[0]->doubleValue();
-
-  double s = sqrt(5.0);
-  double result = ( pow((1+s)/2,n) - pow((1-s)/2,n) ) / s;
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  KSpreadValue n = args[0];
+  KSpreadValue s = calc->sqrt (5.0);
+  // u1 = ((1+sqrt(5))/2)^n
+  KSpreadValue u1 = calc->pow (calc->div (calc->add (1, s), 2), n);
+  // u2 = ((1-sqrt(5))/2)^n
+  KSpreadValue u2 = calc->pow (calc->div (calc->sub (1, s), 2), n);
+  
+  KSpreadValue result = calc->div (calc->sub (u1, u2), s);
+  return result;
 }
 
-// Function: MULTIPLEOPERATIONS
-bool kspreadfunc_multipleOP( KSContext& context )
+static KSpreadValue func_gcd_helper(const KSpreadValue &val, ValueCalc *calc)
 {
-  if (gCell)
-  {
-    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->value().asFloat() ) );
-    return true;
-  }
-
-  gCell = ((KSpreadInterpreter *) context.interpreter() )->cell();
-
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 5, "MULTIPLEOPERATIONS", true ) )
-  {
-    gCell = 0;
-    return false;
-  }
-
-  // 0: cell must contain formula with double/int result
-  // 0, 1, 2, 3, 4: must contain integer/double
-  for (int i = 0; i < 5; ++i)
-  {
-    if ( !KSUtil::checkType( context, args[i], KSValue::DoubleType, true ) )
+  KSpreadValue res = 0;
+  if (!val.isArray ())
+    return val;
+  for (unsigned int row = 0; row < val.rows(); ++row)
+    for (unsigned int col = 0; col < val.columns(); ++col)
     {
-      gCell = 0;
-      return false;
+      KSpreadValue v = val.element (col, row);
+      if (v.isArray ())
+        v = func_gcd_helper (v, calc);
+      res = calc->gcd (res, v);
     }
-  }
-
-  //  ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
-
-  double oldCol = args[1]->doubleValue();
-  double oldRow = args[3]->doubleValue();
-  kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
-
-  KSpreadCell * cell;
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
-
-  KSpreadPoint point( extra[1]->stringValue() );
-  KSpreadPoint point2( extra[3]->stringValue() );
-  KSpreadPoint point3( extra[0]->stringValue() );
-
-  if ( ( args[1]->doubleValue() != args[2]->doubleValue() )
-       || ( args[3]->doubleValue() != args[4]->doubleValue() ) )
-  {
-    cell = sheet->cellAt( point.pos.x(), point.pos.y() );
-    cell->setValue( args[2]->doubleValue() );
-    kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
-              << ", " << point.pos.y() << endl;
-
-    cell = sheet->cellAt( point2.pos.x(), point.pos.y() );
-    cell->setValue( args[4]->doubleValue() );
-    kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
-              << ", " << point2.pos.y() << endl;
-  }
-
-  KSpreadCell * cell1 = sheet->cellAt( point3.pos.x(), point3.pos.y() );
-  cell1->calc( false );
-
-  double d = cell1->value().asFloat();
-  kdDebug() << "Cell: " << point3.pos.x() << "; " << point3.pos.y() << " with value "
-            << d << endl;
-
-  kdDebug() << "Resetting old values" << endl;
-
-  cell = sheet->cellAt( point.pos.x(), point.pos.y() );
-  cell->setValue( oldCol );
-
-  cell = sheet->cellAt( point2.pos.x(), point2.pos.y() );
-  cell->setValue( oldRow );
-
-  cell1->calc( false );
-
-  // ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
-
-  context.setValue( new KSValue( (double) d ) );
-
-  gCell = 0;
-  return true;
 }
 
-// Function: SUBTOTAL:
-bool kspreadfunc_subtotal( KSContext & context )
+// Function: GCD
+KSpreadValue func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  KSpreadValue result = 0;
+  for (unsigned int i = 0; i < args.count(); ++i)
+    if (args[i].isArray())
+      result = calc->gcd (result, func_gcd_helper (args[i], calc));
+    else
+      result = calc->gcd (result, args[i]);
+}
+
+static KSpreadValue func_lcm_helper(const KSpreadValue &val, ValueCalc *calc)
+{
+  KSpreadValue res = 0;
+  if (!val.isArray ())
+    return val;
+  for (unsigned int row = 0; row < val.rows(); ++row)
+    for (unsigned int col = 0; col < val.columns(); ++col)
+    {
+      KSpreadValue v = val.element (col, row);
+      if (v.isArray ())
+        v = func_lcm_helper (v, calc);
+      res = calc->lcm (res, v);
+    }
+}
+
+// Function: lcm
+KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue result = 0;
+  for (unsigned int i = 0; i < args.count(); ++i)
+    if (args[i].isArray())
+      result = calc->lcm (result, func_lcm_helper (args[i], calc));
+    else
+      result = calc->lcm (result, args[i]);
+}
+
+
+/** TODO continue here TODO **/
+/** SUBTOTAL **/
+#warning SUBTOTAL commented out
+
+// Function: SUBTOTAL
+// This function requires access to the KSpreadSheet and so on, because
+// it needs to check whether cells contain the SUBTOTAL formula or not ...
+// Cells containing a SUBTOTAL formula must be ignored.
+KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *)
+{
+/*
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
   QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
 
@@ -2347,22 +975,22 @@ bool kspreadfunc_subtotal( KSContext & context )
     context.setValue( new KSValue( sum ) );
     break;
    case 7: // StDev
-    kspreadfunc_stddev_helper( context, *list, result, average, false );
+    func_stddev_helper( context, *list, result, average, false );
     context.setValue( new KSValue( sqrt( result / ((double) (countA - 1) ) ) ) );
     break;
    case 8: // StDevP
-    kspreadfunc_stddev_helper( context, *list, result, average, false );
+    func_stddev_helper( context, *list, result, average, false );
     context.setValue( new KSValue( sqrt( result / countA ) ) );
     break;
    case 9: // Sum
     context.setValue( new KSValue( sum ) );
     break;
    case 10: // Var
-    kspreadfunc_variance_helper( context, *list, result, average, false );
+    func_variance_helper( context, *list, result, average, false );
     context.setValue( new KSValue( (double)(result / (countA - 1)) ) );
     break;
    case 11: // VarP
-    kspreadfunc_variance_helper( context, *list, result, average, false );
+    func_variance_helper( context, *list, result, average, false );
     context.setValue( new KSValue( (double)(result / countA) ) );
     break;
    default:
@@ -2370,5 +998,97 @@ bool kspreadfunc_subtotal( KSContext & context )
   }
 
   return true;
+
+*/
 }
 
+/*
+Commented out.
+Absolutely no idea what this thing is supposed to do.
+To anyone who would enable this code: it still uses koscript calls - you need
+to convert it to the new style prior to uncommenting.
+
+// Function: MULTIPLEOPERATIONS
+KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  if (gCell)
+  {
+    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->value().asFloat() ) );
+    return true;
+  }
+
+  gCell = ((KSpreadInterpreter *) context.interpreter() )->cell();
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 5, "MULTIPLEOPERATIONS", true ) )
+  {
+    gCell = 0;
+    return false;
+  }
+
+  // 0: cell must contain formula with double/int result
+  // 0, 1, 2, 3, 4: must contain integer/double
+  for (int i = 0; i < 5; ++i)
+  {
+    if ( !KSUtil::checkType( context, args[i], KSValue::DoubleType, true ) )
+    {
+      gCell = 0;
+      return false;
+    }
+  }
+
+  //  ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
+
+  double oldCol = args[1]->doubleValue();
+  double oldRow = args[3]->doubleValue();
+  kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
+
+  KSpreadCell * cell;
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
+
+  KSpreadPoint point( extra[1]->stringValue() );
+  KSpreadPoint point2( extra[3]->stringValue() );
+  KSpreadPoint point3( extra[0]->stringValue() );
+
+  if ( ( args[1]->doubleValue() != args[2]->doubleValue() )
+       || ( args[3]->doubleValue() != args[4]->doubleValue() ) )
+  {
+    cell = sheet->cellAt( point.pos.x(), point.pos.y() );
+    cell->setValue( args[2]->doubleValue() );
+    kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
+              << ", " << point.pos.y() << endl;
+
+    cell = sheet->cellAt( point2.pos.x(), point.pos.y() );
+    cell->setValue( args[4]->doubleValue() );
+    kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
+              << ", " << point2.pos.y() << endl;
+  }
+
+  KSpreadCell * cell1 = sheet->cellAt( point3.pos.x(), point3.pos.y() );
+  cell1->calc( false );
+
+  double d = cell1->value().asFloat();
+  kdDebug() << "Cell: " << point3.pos.x() << "; " << point3.pos.y() << " with value "
+            << d << endl;
+
+  kdDebug() << "Resetting old values" << endl;
+
+  cell = sheet->cellAt( point.pos.x(), point.pos.y() );
+  cell->setValue( oldCol );
+
+  cell = sheet->cellAt( point2.pos.x(), point2.pos.y() );
+  cell->setValue( oldRow );
+
+  cell1->calc( false );
+
+  // ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
+
+  context.setValue( new KSValue( (double) d ) );
+
+  gCell = 0;
+  return true;
+}
+
+*/

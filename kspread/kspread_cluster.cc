@@ -630,6 +630,9 @@ void KSpreadCluster::clearRow( int row )
 KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
     int col2, int row2) const
 {
+  // TODO: two-level hierarchy should be moved to KSpreadValue, no need to
+  // handle it here ... KSpreadValue needs transparent flattener ...
+  
   KSpreadValue empty;
   
   //swap first/second values if needed

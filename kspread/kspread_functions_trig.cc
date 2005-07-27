@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,422 +21,173 @@
 
 // built-in trigonometric functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include "functions.h"
+#include "valuecalc.h"
 
-#include <kdebug.h>
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_util.h"
-
+using namespace KSpread;
 
 // prototypes (sort alphabetically)
-bool kspreadfunc_acos( KSContext& context );
-bool kspreadfunc_acosh( KSContext& context );
-bool kspreadfunc_acot( KSContext& context );
-bool kspreadfunc_asinh( KSContext& context );
-bool kspreadfunc_asin( KSContext& context );
-bool kspreadfunc_atan( KSContext& context );
-bool kspreadfunc_atan2( KSContext& context );
-bool kspreadfunc_atanh( KSContext& context );
-bool kspreadfunc_cos( KSContext& context );
-bool kspreadfunc_cosh( KSContext& context );
-bool kspreadfunc_degrees( KSContext& context );
-bool kspreadfunc_radians( KSContext& context );
-bool kspreadfunc_sin( KSContext& context );
-bool kspreadfunc_sinh( KSContext& context );
-bool kspreadfunc_tan( KSContext& context );
-bool kspreadfunc_tanh( KSContext& context );
-bool kspreadfunc_pi( KSContext& context );
+KSpreadValue func_acos (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_acosh (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_acot (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_asinh (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_asin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_atan (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_atan2 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_atanh (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_cos (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_cosh (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_degrees (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_radians (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sinh (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_tan (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_tanh (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_pi (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all trigonometric functions
 void KSpreadRegisterTrigFunctions()
 {
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "ACOS",   kspreadfunc_acos );
-  repo->registerFunction( "ACOSH",  kspreadfunc_acosh );
-  repo->registerFunction( "ACOT",  kspreadfunc_acot );
-  repo->registerFunction( "ASIN",   kspreadfunc_asin );
-  repo->registerFunction( "ASINH",  kspreadfunc_asinh );
-  repo->registerFunction( "ATAN",   kspreadfunc_atan );
-  repo->registerFunction( "ATAN2",  kspreadfunc_atan2 );
-  repo->registerFunction( "ATANH",  kspreadfunc_atanh );
-  repo->registerFunction( "COS",    kspreadfunc_cos );
-  repo->registerFunction( "COSH",   kspreadfunc_cosh );
-  repo->registerFunction( "DEGREE", kspreadfunc_degrees );  // backward-compatible, remove in 1.4
-  repo->registerFunction( "DEGREES",kspreadfunc_degrees );
-  repo->registerFunction( "RADIAN", kspreadfunc_radians ); // backwared-compatible, remove in 1.4
-  repo->registerFunction( "RADIANS",kspreadfunc_radians );
-  repo->registerFunction( "SIN",    kspreadfunc_sin );
-  repo->registerFunction( "SINH",   kspreadfunc_sinh );
-  repo->registerFunction( "TAN",    kspreadfunc_tan );
-  repo->registerFunction( "TANH",   kspreadfunc_tanh );
-  repo->registerFunction( "PI",     kspreadfunc_pi );
+  f = new Function ("ACOS",   func_acos);
+  repo->add (f);
+  f = new Function ("ACOSH",  func_acosh);
+  repo->add (f);
+  f = new Function ("ACOT",   func_acot);
+  repo->add (f);
+  f = new Function ("ASIN",   func_asin);
+  repo->add (f);
+  f = new Function ("ASINH",  func_asinh);
+  repo->add (f);
+  f = new Function ("ATAN",   func_atan);
+  repo->add (f);
+  f = new Function ("ATAN2",  func_atan2);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("ATANH",  func_atanh);
+  repo->add (f);
+  f = new Function ("COS",    func_cos);
+  repo->add (f);
+  f = new Function ("COSH",   func_cosh);
+  repo->add (f);
+  f = new Function ("DEGREES",func_degrees);
+  repo->add (f);
+  f = new Function ("RADIANS",func_radians);
+  repo->add (f);
+  f = new Function ("SIN",    func_sin);
+  repo->add (f);
+  f = new Function ("SINH",   func_sinh);
+  repo->add (f);
+  f = new Function ("TAN",    func_tan);
+  repo->add (f);
+  f = new Function ("TANH",   func_tanh);
+  repo->add (f);
+  f = new Function ("PI",     func_pi);
+  repo->add (f);
 }
 
-
 // Function: sin
-bool kspreadfunc_sin( KSContext& context )
+KSpreadValue func_sin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "sin", true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if( !KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
-	return false;
-    }
-  val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( sin( val ) ) );
-
-  return true;
+  return calc->sin (args[0]);
 }
 
 // Function: cos
-bool kspreadfunc_cos( KSContext& context )
+KSpreadValue func_cos (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "cos", true ) )
-    return false;
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( cos( val ) ) );
-
-  return true;
+  return calc->cos (args[0]);
 }
 
 // Function: tan
-bool kspreadfunc_tan( KSContext& context )
+KSpreadValue func_tan (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "tan", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-  context.setValue( new KSValue( tan(val) ) );
-
-  return true;
+  return calc->tg (args[0]);
 }
 
 // Function: atan
-bool kspreadfunc_atan( KSContext& context )
+KSpreadValue func_atan (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "atan", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( atan( val ) ) );
-
-  return true;
+  return calc->atg (args[0]);
 }
 
 // Function: asin
-bool kspreadfunc_asin( KSContext& context )
+KSpreadValue func_asin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "asin", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( asin( val ) ) );
-
-  return true;
+  return calc->asin (args[0]);
 }
 
 // Function: acos
-bool kspreadfunc_acos( KSContext& context )
+KSpreadValue func_acos (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "acos", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-
-  context.setValue( new KSValue( acos( val ) ) );
-
-  return true;
+  return calc->acos (args[0]);
 }
 
-bool kspreadfunc_acot( KSContext& context )
+KSpreadValue func_acot (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "acot", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-
-  context.setValue( new KSValue( M_PI/2 - atan( val ) ) );
-
-  return true;
+  // PI/2 - atg (val)
+  return calc->sub (calc->div (calc->pi(), 2), calc->atg (args[0]));
 }
-
 
 // Function: asinh
-bool kspreadfunc_asinh( KSContext& context )
+KSpreadValue func_asinh (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "asinh", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( asinh( val ) ) );
-
-  return true;
+  return calc->asinh (args[0]);
 }
 
 // Function: acosh
-bool kspreadfunc_acosh( KSContext& context )
+KSpreadValue func_acosh (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "acosh", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( acosh( val ) ) );
-
-  return true;
+  return calc->acosh (args[0]);
 }
 
 // Function: atanh
-bool kspreadfunc_atanh( KSContext& context )
+KSpreadValue func_atanh (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "atanh", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-
-  context.setValue( new KSValue( atanh( val ) ) );
-
-  return true;
+  return calc->atgh (args[0]);
 }
 
 // Function: tanh
-bool kspreadfunc_tanh( KSContext& context )
+KSpreadValue func_tanh (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "tanh", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( tanh( val ) ) );
-
-  return true;
+  return calc->tgh (args[0]);
 }
 
 // Function: sinh
-bool kspreadfunc_sinh( KSContext& context )
+KSpreadValue func_sinh (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "sinh", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( sinh( val ) ) );
-
-  return true;
+  return calc->sinh (args[0]);
 }
 
 // Function: cosh
-bool kspreadfunc_cosh( KSContext& context )
+KSpreadValue func_cosh (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "cosh", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( cosh( val ) ) );
-
-  return true;
+  return calc->cosh (args[0]);
 }
 
 // Function: DEGREES
-bool kspreadfunc_degrees( KSContext& context )
+KSpreadValue func_degrees (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "degrees", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-  context.setValue( new KSValue( (val*180)/M_PI  ));
-
-  return true;
+  // val * 180 / pi
+  return calc->div (calc->mul (args[0], 180.0), calc->pi());
 }
 
 // Function: RADIANS
-bool kspreadfunc_radians( KSContext& context )
+KSpreadValue func_radians (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "radians", true ) )
-    return false;
-
-  double val=0.0;
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
-	return false;
-    }
-  else
-    val=args[0]->doubleValue();
-
-
-  context.setValue( new KSValue( (val*M_PI )/180  ));
-
-  return true;
+  // val * pi / 180
+  return calc->mul (calc->div (args[0], 180.0), calc->pi());
 }
 
 // Function: PI
-bool kspreadfunc_pi( KSContext& context )
+KSpreadValue func_pi (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 0, "PI", true ) )
-      return false;
-
-    context.setValue( new KSValue(M_PI));
-    return true;
+  return calc->pi();
 }
 
 // Function: atan2
-bool kspreadfunc_atan2( KSContext& context )
+KSpreadValue func_atan2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "atan2", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  context.setValue( new KSValue( atan2( args[1]->doubleValue(),args[0]->doubleValue() ) ) );
-
-  return true;
+  return calc->atan2 (args[1], args[0]);
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 2004 Tomas Mecir <mecirt@gmail.com>
+   Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004,2005 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -58,10 +58,10 @@
 #include "kspread_util.h"
 #include "ksploadinginfo.h"
 #include "kspread_genvalidationstyle.h"
-#include "kspread_interpreter.h"
 #include "kspread_locale.h"
 #include "kspread_view.h"
 #include "kspread_value.h"
+#include "formula.h"
 #include "valueformatter.h"
 #include "valueparser.h"
 
@@ -187,8 +187,8 @@ public:
   // strFormulaOut
   QString  strOutText;
 
-  // The parse tree of the real formula (e.g: "=A1*A2").
-  KSParseNode  *code;
+  // the Formula object for the cell
+  KSpread::Formula *formula;
 
   // Position and dimension of displayed text.
   // FIXME (comment): Which coordinate system?  pixels?  mm/cm?  zoom?
@@ -217,10 +217,10 @@ private:
 CellPrivate::CellPrivate()
 {
   // Some basic data.
-  row    = 0;
-  column = 0;
-  value  = KSpreadValue::empty();
-  code   = 0;
+  row     = 0;
+  column  = 0;
+  value   = KSpreadValue::empty();
+  formula = 0;
 
   // Formatting
   textX      = 0.0;
@@ -239,7 +239,8 @@ CellPrivate::CellPrivate()
 
 CellPrivate::~CellPrivate()
 {
-    delete cellExtra;
+  delete cellExtra;
+  delete formula;
 }
 
 
@@ -1920,56 +1921,25 @@ void KSpreadCell::calculateTextParameters( QPainter &_painter,
 
 bool KSpreadCell::makeFormula()
 {
-  clearFormula();
+  clearFormula ();
 
-  KSContext context;
-
-  // We have to transform the numerical values back into a non-localized form,
-  // so that they can be parsed by kscript (David)
-  // To be moved to a separate function when it is properly implemented...
-  // or should we use strtod on each number found ? Impossible since kscript
-  // would have to parse the localized version...
-  // HACK (only handles decimal point)
-  // ############# Torben: Incredible HACK. Separating parameters in a function call
-  // will be horribly broken since "," -> "." :-((
-  // ### David: Ouch ! Argl.
-  //
-  // ############# Torben: Do not replace stuff in strings.
-  //
-  // ###### David: we should use KLocale's conversion (there is a method there
-  // for understanding numbers typed the localised way) for each number the
-  // user enters, not once the full formula is set up, then ?
-  // I don't see how we can do that...
-  // Or do you see kscript parsing localized values ?
-  //
-  // Oh, Excel uses ';' to separate function arguments (at least when
-  // the decimal separator is ','), so that it can process a formula with numbers
-  // using ',' as a decimal separator...
-  // Sounds like kscript should have configurable argument separator...
-  //
-  /*QString sDelocalizedText ( d->strText );
-    int pos=0;
-    while ( ( pos = sDelocalizedText.find( decimal_point, pos ) ) >= 0 )
-    sDelocalizedText.replace( pos++, 1, "." );
-    // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
-  */
-  d->code = m_pSheet->doc()->interpreter()->parse( context, m_pSheet, /*sDelocalizedText*/d->strText );
+  d->formula = new KSpread::Formula (sheet(), this);
+  d->formula->setExpression (d->strText);
+  
+  if (!d->formula->isValid ()) {
   // Did a syntax error occur ?
-  if ( context.exception() )
-  {
     clearFormula();
 
-    setFlag(Flag_ParseError);
-    KSpreadValue v;
-    v.setError ( "####" );
-    setValue (v);
     if (m_pSheet->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
       tmp = tmp.arg( fullName() );
-      tmp += context.exception()->toString( context );
       KMessageBox::error( (QWidget*)0L, tmp);
     }
+    setFlag(Flag_ParseError);
+    KSpreadValue v;
+    v.setError ( "####" );
+    setValue (v);
     return false;
   }
 
@@ -1982,8 +1952,8 @@ bool KSpreadCell::makeFormula()
 
 void KSpreadCell::clearFormula()
 {
-  delete d->code;
-  d->code = 0L;
+  delete d->formula;
+  d->formula = 0L;
 }
 
 bool KSpreadCell::calc(bool delay)
@@ -1991,7 +1961,7 @@ bool KSpreadCell::calc(bool delay)
   if ( !isFormula() )
     return true;
 
-  if ( d->code == 0 )
+  if (d->formula == 0)
   {
     if ( testFlag( Flag_ParseError ) )  // there was a parse error
       return false;
@@ -2000,9 +1970,9 @@ bool KSpreadCell::calc(bool delay)
       /* we were probably at a "isLoading() = true" state when we originally
        * parsed
        */
-      makeFormula();
+      makeFormula ();
 
-      if ( d->code == 0 ) // there was a parse error
+      if ( d->formula == 0 ) // there was a parse error
         return false;
     }
   }
@@ -2020,63 +1990,10 @@ bool KSpreadCell::calc(bool delay)
   setFlag(Flag_TextFormatDirty);
   clearFlag(Flag_CalcDirty);
 
-  KSContext& context = m_pSheet->doc()->context();
-  if ( !m_pSheet->doc()->interpreter()->evaluate( context, d->code, m_pSheet, this ) )
-  {
-    // If we got an error during evaluation ...
-    setFlag(Flag_ParseError);
-    setFlag(Flag_LayoutDirty);
-    KSpreadValue v;
-    v.setError( "####" );
-    setValue (v);
-    // Print out exception if any
-    if ( context.exception() && m_pSheet->doc()->getShowMessageError())
-    {
-      QString tmp(i18n("Error in cell %1\n\n"));
-      tmp = tmp.arg( fullName() );
-      tmp += context.exception()->toString( context );
-      KMessageBox::error( (QWidget*)0L, tmp);
-    }
-
-    // setFlag(Flag_LayoutDirty);
-    clearFlag(Flag_CalcDirty);
-
-    return false;
-  }
-  //d->strOutText will be set in setOutputText (called by makeLayout),
-  //so we needn't worry about that here
-  else if ( context.value()->type() == KSValue::DoubleType )
-  {
-    setValue ( KSpreadValue( context.value()->doubleValue() ) );
+  KSpreadValue result = d->formula->eval ();
+  setValue (result);
+  if (result.isNumber())
     checkNumberFormat(); // auto-chooses number or scientific
-  }
-  else if ( context.value()->type() == KSValue::IntType )
-  {
-    setValue ( KSpreadValue( (int)context.value()->intValue() ) );
-    checkNumberFormat(); // auto-chooses number or scientific
-  }
-  else if ( context.value()->type() == KSValue::BoolType )
-  {
-    setValue ( KSpreadValue( context.value()->boolValue() ) );
-  }
-  else if ( context.value()->type() == KSValue::TimeType )
-  {
-    setValue( KSpreadValue( context.value()->timeValue() ) );
-  }
-  else if ( context.value()->type() == KSValue::DateType)
-  {
-    setValue ( KSpreadValue( context.value()->dateValue() ) );
-  }
-  else if ( context.value()->type() == KSValue::Empty )
-  {
-    setValue (KSpreadValue::empty());
-  }
-  else
-  {
-//FIXME    m_dataType = StringData;
-    QString str = context.value()->toString( context );
-    setValue (KSpreadValue (str));
-  }
 
   clearFlag(Flag_CalcDirty);
   setFlag(Flag_LayoutDirty);
@@ -6676,7 +6593,6 @@ KSpreadCell::~KSpreadCell()
     {
       delete d->extra()->validity;
     }
-    delete d->code;
 
     // Unobscure cells.
     int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;

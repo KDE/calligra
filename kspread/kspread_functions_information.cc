@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,507 +23,232 @@
 
 
 #include <config.h>
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
 #include <sys/utsname.h>
 
 #include <qdir.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
-#include "kspread_interpreter.h"
-#include "kspread_value.h"
-#include "valueparser.h"
+#include "functions.h"
+#include "valuecalc.h"
 #include "valueconverter.h"
 
-// prototypes (sort alphabetically)
-//bool kspreadfunc_countblank( KSContext & context );
-bool kspreadfunc_filename( KSContext & context );
-bool kspreadfunc_info( KSContext& context );
-bool kspreadfunc_isblank( KSContext& context );
-bool kspreadfunc_isdate( KSContext& context );
-bool kspreadfunc_iseven( KSContext& context );
-bool kspreadfunc_islogical( KSContext& context );
-bool kspreadfunc_isnottext( KSContext& context );
-bool kspreadfunc_isnum( KSContext& context );
-bool kspreadfunc_isodd( KSContext& context );
-bool kspreadfunc_isref( KSContext& context );
-bool kspreadfunc_istext( KSContext& context );
-bool kspreadfunc_istime( KSContext& context );
-bool kspreadfunc_n( KSContext & context );
-bool kspreadfunc_type( KSContext & context );
-bool kspreadfunc_version( KSContext & context );
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
+
+using namespace KSpread;
+
+// prototypes (sorted alphabetically)
+KSpreadValue func_filename (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_info (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isblank (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isdate (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_iseven (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_islogical (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isnottext (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isnum (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isodd (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isref (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_istext (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_istime (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_n (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_type (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_version (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all information functions
 void KSpreadRegisterInformationFunctions()
 {
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "FILENAME",   kspreadfunc_filename );
-  repo->registerFunction( "INFO",       kspreadfunc_info );
-  repo->registerFunction( "ISBLANK",    kspreadfunc_isblank );
-  repo->registerFunction( "ISDATE",     kspreadfunc_isdate );
-  repo->registerFunction( "ISEVEN",     kspreadfunc_iseven );
-  repo->registerFunction( "ISLOGICAL",  kspreadfunc_islogical );
-  repo->registerFunction( "ISNONTEXT",  kspreadfunc_isnottext );
-  repo->registerFunction( "ISNOTTEXT",  kspreadfunc_isnottext );
-  repo->registerFunction( "ISNUM",      kspreadfunc_isnum );
-  repo->registerFunction( "ISNUMBER",   kspreadfunc_isnum );
-  repo->registerFunction( "ISODD",      kspreadfunc_isodd );
-  repo->registerFunction( "ISREF",      kspreadfunc_isref );
-  repo->registerFunction( "ISTEXT",     kspreadfunc_istext );
-  repo->registerFunction( "ISTIME",     kspreadfunc_istime );
-  repo->registerFunction( "N",          kspreadfunc_n );
-  repo->registerFunction( "TYPE",       kspreadfunc_type );
+  f = new Function ("FILENAME", func_filename);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("INFO", func_info);
+  repo->add (f);
+  f = new Function ("ISBLANK", func_isblank);
+  repo->add (f);
+  f = new Function ("ISDATE", func_isdate);
+  repo->add (f);
+  f = new Function ("ISEVEN", func_iseven);
+  repo->add (f);
+  f = new Function ("ISLOGICAL", func_islogical);
+  repo->add (f);
+  f = new Function ("ISNONTEXT", func_isnottext);
+  repo->add (f);
+  f = new Function ("ISNOTTEXT", func_isnottext);
+  repo->add (f);
+  f = new Function ("ISNUM", func_isnum);
+  repo->add (f);
+  f = new Function ("ISNUMBER", func_isnum);
+  repo->add (f);
+  f = new Function ("ISODD", func_isodd);
+  repo->add (f);
+  f = new Function ("ISREF", func_isref);
+  repo->add (f);
+  f = new Function ("ISTEXT", func_istext);
+  repo->add (f);
+  f = new Function ("ISTIME", func_istime);
+  repo->add (f);
+  f = new Function ("N", func_n);
+  repo->add (f);
+  f = new Function ("TYPE", func_type);
+  f->setAcceptArray ();
+  repo->add (f);
 }
 
 // Function: INFO
-bool kspreadfunc_info( KSContext& context )
+KSpreadValue func_info (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString type = calc->conv()->asString (args[0]).asString().lower();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "INFO", true ) )
-    return false;
+  if (type == "directory")
+    return KSpreadValue (QDir::currentDirPath());
 
-  if( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
+  if (type == "release")
+    return KSpreadValue (QString (VERSION));
 
-  QString type = args[0]->stringValue().lower();
+  if ( type == "numfile" )
+    return KSpreadValue ((int) KSpreadDoc::documents().count());
 
-  if ( type == "directory" )
-  {
-    context.setValue( new KSValue( QDir::currentDirPath() ) );
-    return true;
-  }
-
-  else if ( type == "release" )
-  {
-    context.setValue( new KSValue( QString( VERSION ) ) );
-    return true;
-  }
-
-  else if ( type == "numfile" )
-  {
-    context.setValue( new KSValue( (int)KSpreadDoc::documents().count() ) );
-    return true;
-  }
-
-  else if ( type == "recalc" )
+  if (type == "recalc")
   {
     QString result;
-    if ( ( (KSpreadInterpreter *) context.interpreter() )->document()->delayCalculation() )
-      result = i18n( "Manual" );
-    else
-      result = i18n( "Automatic" );
-    context.setValue( new KSValue( result ) );
-    return true;
-  }
-
-  else if (type == "memavail")
-  {
-  }
-
-  else if (type == "memused")
-  {
-  }
-
-  else if (type == "origin")
-  {
-  }
-
-  else if (type == "system")
-  {
-    struct utsname name;
-    if( uname( &name ) >= 0 )
-    {
-       context.setValue( new KSValue( QString( name.sysname ) ) );
-       return true;
+    if (calc->doc()) {
+      if (calc->doc()->delayCalculation())
+        result = i18n ("Manual");
+      else
+        result = i18n ("Automatic");
     }
+    return KSpreadValue (result);
   }
 
-  else if (type == "totmem")
-  {
+  if (type == "memavail")
+    // not supported
+    return KSpreadValue::errorVALUE();
+  if (type == "memused")
+    // not supported
+    return KSpreadValue::errorVALUE();
+  if (type == "origin")
+    // not supported
+    return KSpreadValue::errorVALUE();
+
+  if (type == "system") {
+    struct utsname name;
+    if (uname (&name) >= 0)
+      return KSpreadValue (QString (name.sysname));
   }
 
-  else if (type == "osversion")
+  if (type == "totmem")
+    // not supported
+    return KSpreadValue::errorVALUE();
+
+  if (type == "osversion")
   {
     struct utsname name;
-    if( uname( &name ) >= 0 )
+    if (uname (&name) >= 0)
     {
        QString os = QString("%1 %2 (%3)").arg( name.sysname ).
          arg( name.release ).arg( name.machine );
-       context.setValue( new KSValue( os ) );
-       return true;
+       return KSpreadValue (os);
     }
   }
 
-  return false;
+  return KSpreadValue::errorVALUE();
 }
 
 // Function: ISBLANK
-bool kspreadfunc_isblank( KSContext& context )
+KSpreadValue func_isblank (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISBLANK", true ) )
-    return false;
-
-  bool result = false;
-
-  if ( KSUtil::checkType( context, args[0], KSValue::Empty, false ) )
-    result = true;
-
-  // the following part is needed becase empty cell returns 0.0 instead
-  // of KSValue::Empty. this is due to bug in many function implementation
-  // until someone can fix this, leave it as it is (ariya, 16.05.2002)
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    result = args[0]->doubleValue() == 0.0;
-
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    result = args[0]->stringValue().isEmpty();
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  return KSpreadValue (args[0].isEmpty());
 }
 
 // Function: ISLOGICAL
-bool kspreadfunc_islogical( KSContext& context )
+KSpreadValue func_islogical (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISLOGICAL", true ) )
-    return false;
-
-  bool logic = KSUtil::checkType( context, args[0], KSValue::BoolType, true );
-  context.setValue( new KSValue(logic));
-  return true;
+  return KSpreadValue (args[0].isBoolean());
 }
 
 // Function: ISTEXT
-bool kspreadfunc_istext( KSContext& context )
+KSpreadValue func_istext (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISTEXT", true ) )
-    return false;
-
-  bool logic = KSUtil::checkType( context, args[0], KSValue::StringType, true );
-  context.setValue( new KSValue(logic));
-  return true;
+  return KSpreadValue (args[0].isString());
 }
 
 // Function: ISREF
-bool kspreadfunc_isref( KSContext& context )
+KSpreadValue func_isref (valVector /*args*/, ValueCalc */*calc*/, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISREF", true ) )
-    return false;
-
-  bool ref;
-
-  if ( !KSUtil::checkType( context, extra[0], KSValue::StringType, true ) )
-    ref = false;
-  else
-    ref = true;
-
-  context.setValue( new KSValue( ref ) );
-  return true;
+  // TODO: figure out how this thingie could be done
+  // (Tomas) Do we need this at all ? I can't see any reason for it.
+  kdDebug() << "ISREF is only a stub implementation !!!" << endl;
+  return KSpreadValue (false);
 }
 
 // Function: ISNOTTEXT
-bool kspreadfunc_isnottext( KSContext& context )
+KSpreadValue func_isnottext (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISNOTTEXT", true ) )
-    return false;
-
-  bool logic = !KSUtil::checkType( context, args[0], KSValue::StringType, true );
-  context.setValue( new KSValue(logic));
-  return true;
+  return KSpreadValue (args[0].isString() ? false : true);
 }
 
 // Function: ISNUM
-bool kspreadfunc_isnum( KSContext& context )
+KSpreadValue func_isnum (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISNUM", true ) )
-    return false;
-
-  bool logic = KSUtil::checkType( context, args[0], KSValue::DoubleType, true );
-  context.setValue( new KSValue(logic));
-  return true;
+  return KSpreadValue (args[0].isNumber());
 }
 
 // Function: ISTIME
-bool kspreadfunc_istime( KSContext& context )
+KSpreadValue func_istime (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISTIME", true ) )
-    return false;
-  bool logic = false;
-
-  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ))
-  {
-      if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ))
-          KGlobal::locale()->readTime(args[0]->stringValue(), &logic);
-      else
-          return false;
-  }
-  else
-      logic = true;
-  context.setValue( new KSValue(logic));
-  return true;
+  return KSpreadValue ((args[0].format() == KSpreadValue::fmt_Time)
+      || (args[0].format() == KSpreadValue::fmt_DateTime));
 }
 
 // Function: ISDATE
-bool kspreadfunc_isdate( KSContext& context )
+KSpreadValue func_isdate (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISDATE", true ) )
-    return false;
-
-  bool logic = false;
-  if (!KSUtil::checkType( context, args[0], KSValue::DateType, true ))
-  {
-      if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ))
-          KGlobal::locale()->readDate(args[0]->stringValue(), &logic);
-      else
-          return false;
-  }
-  else
-      logic = true;
-
-  context.setValue( new KSValue(logic));
-  return true;
+  return KSpreadValue ((args[0].format() == KSpreadValue::fmt_Date)
+      || (args[0].format() == KSpreadValue::fmt_DateTime));
 }
 
 // Function: ISODD
-bool kspreadfunc_isodd( KSContext& context )
+KSpreadValue func_isodd (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "ISODD",true ) )
-    return false;
-  bool result=true;
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-        result= false;
-  if(result)
-        {
-        //it's a integer => test if it's an odd integer
-        if(args[0]->intValue() & 1)
-                result=true;
-        else
-                result=false;
-        }
-
-  context.setValue( new KSValue(result));
-
-  return true;
+  return KSpreadValue (calc->isEven(args[0]) ? false : true);
 }
 
 // Function: ISEVEN
-bool kspreadfunc_iseven( KSContext& context )
+KSpreadValue func_iseven (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "ISEVEN",true ) )
-    return false;
-  bool result=true;
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-        result= false;
-  if(result)
-        {
-        //it's a integer => test if it's an even integer
-        if(args[0]->intValue() & 1)
-                result=false;
-        else
-                result=true;
-        }
-
-  context.setValue( new KSValue(result));
-
-  return true;
+  return KSpreadValue (calc->isEven(args[0]));
 }
-
-/*
-static bool kspreadfunc_countblank_helper( KSContext & context,
-                                           QValueList<KSValue::Ptr> & args,
-                                           int & result)
-{
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-
-      if ( !kspreadfunc_countblank_helper( context, (*it)->listValue(), result) )
-        return false;
-    }
-    else
-    if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
-    {
-      ++result;
-    }
-    else
-    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    {
-      KScript::Double d = args[0]->doubleValue();
-      if (d == 0.0)
-        ++result;
-    }
-    else
-    if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    {
-      QString s = args[0]->stringValue();
-      if ( s.isEmpty() || s.stripWhiteSpace().isEmpty() )
-        ++result;
-    }
-  }
-
-  return true;
-}
-
-bool kspreadfunc_countblank( KSContext & context )
-{
-  int result = 0;
-
-  bool b = kspreadfunc_countblank_helper( context, context.value()->listValue(), result);
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-*/
 
 // Function: TYPE
-bool kspreadfunc_type( KSContext & context )
+KSpreadValue func_type (valVector args, ValueCalc *, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
-  kdDebug() << "Here " << endl;
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "TYPE", true ) )
-    return false;
-
-  kdDebug() << "Here0 " << endl;
-
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-  {
-    context.setValue( new KSValue( 1 ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false )
-       || KSUtil::checkType( context, args[0], KSValue::IntType, false )
-       || KSUtil::checkType( context, args[0], KSValue::DateType, false )
-       || KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-  {
-    context.setValue( new KSValue( 2 ) );
-    return true;
-  }
-  kdDebug() << "Here1 " << endl;
-
-  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-  {
-    context.setValue( new KSValue( 4 ) );
-    return true;
-  }
-
-  kdDebug() << "Here2 " << endl;
-
-  if ( KSUtil::checkType( context, args[0], KSValue::ListType, false ) )
-  {
-    context.setValue( new KSValue( 64 ) );
-    return true;
-  }
-
-  kdDebug() << "Here3 " << endl;
-
-  QString p( extra[0]->stringValue() );
-  if ( !p.isEmpty() )
-  {
-    KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-    KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
-
-    KSpreadPoint point( p, map, sheet );
-    if ( point.isValid() )
-    {
-      KSpreadCell * cell = point.sheet->cellAt( point.pos.x(), point.pos.y() );
-
-      if ( cell->hasError() )
-      {
-        context.setValue( new KSValue( 16 ) );
-        return true;
-      }
-    }
-  }
-
-  context.setValue( new KSValue( 0 ) );
-
-  return true;
+  // Returns 1 for numbers, 2 for text, 4 for boolean, 16 for error,
+  // 64 for arrays
+  if (args[0].isArray())
+    return KSpreadValue (64);
+  if (args[0].isNumber())
+    return KSpreadValue (1);
+  if (args[0].isString())
+    return KSpreadValue (2);
+  if (args[0].isBoolean())
+    return KSpreadValue (4);
+  if (args[0].isError())
+    return KSpreadValue (16);
+  
+  // something else ?
+  return KSpreadValue (0);
 }
 
-bool kspreadfunc_filename( KSContext & context )
+KSpreadValue func_filename (valVector, ValueCalc *calc, FuncExtra *)
 {
-  context.setValue( new KSValue( ( (KSpreadInterpreter *) context.interpreter() )->document()->url().prettyURL() ) );
-
-  return true;
+  return KSpreadValue (calc->doc()->url().prettyURL());
 }
 
 // Function: N
-bool kspreadfunc_n( KSContext & context )
+KSpreadValue func_n (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  //currently the same as the VALUE function
-  
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "N", true ) )
-    return false;
-
-  KSpreadValue val;
-  
-  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    val.setValue (args[0]->stringValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    val.setValue (args[0]->doubleValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-    val.setValue (args[0]->timeValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-    val.setValue (args[0]->dateValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    val.setValue (args[0]->intValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    val.setValue (args[0]->boolValue());
-    
-  // temporary ugly hack, yay!
-  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
-  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
-  val = converter->asFloat (val);
-  delete converter;
-  delete parser;
-  
-  context.setValue( new KSValue( val.asFloat() ));
-  return true;
-
+  return calc->conv()->asFloat (args[0]);
 }

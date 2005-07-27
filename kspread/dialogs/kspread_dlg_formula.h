@@ -38,13 +38,16 @@ class QTabWidget;
 class KSpreadView;
 class KSpreadSheet;
 class KSpreadCell;
-class KSpreadFunctionDescription;
 class QLineEdit;
 class QLabel;
 class QListBox;
 class QComboBox;
 class QPushButton;
 class KLineEdit;
+
+namespace KSpread {
+  class FunctionDescription;
+};
 
 class KSpreadDlgFormula : public KDialogBase
 {
@@ -170,7 +173,7 @@ private:
      */
     bool refresh_result;
 
-    KSpreadFunctionDescription* m_desc;
+    KSpread::FunctionDescription* m_desc;
 };
 
 #endif

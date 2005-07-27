@@ -51,9 +51,9 @@
 #include <koStoreDevice.h>
 #include <koOasisSettings.h>
 
-#include "kspread_canvas.h"
 #include "kspread_doc.h"
-#include "kspread_interpreter.h"
+
+#include "kspread_canvas.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
 #include "kspread_selection.h"
@@ -65,6 +65,7 @@
 #include "commands.h"
 #include "ksploadinginfo.h"
 #include "damages.h"
+#include "functions.h"
 
 #include "valuecalc.h"
 #include "valueconverter.h"
@@ -106,19 +107,6 @@ public:
   // URL of the this part. This variable is only set if the load() function
   // had been called with an URL as argument.
   QString fileURL;
-
-  KSpreadInterpreter::Ptr interpreter;
-  KSModule::Ptr module;
-  KSContext context;
-  /**
-   * This list contains the logical names of all modules
-   * which contains KSpread extensions. These modules are
-   * located in the apps/kspread directory in the global
-   * and the users environment. If a module of the same name
-   * exists in both environments, then the most specific one
-   * is in this list and the other one is dropped.
-   */
-  QStringList kscriptModules;
 
   // for undo/redo
   bool undoLocked;
@@ -186,6 +174,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->parser = new KSpread::ValueParser( d->locale );
   d->converter = new KSpread::ValueConverter ( d->parser );
   d->calc = new KSpread::ValueCalc( d->converter );
+  d->calc->setDoc (this);
   d->formatter = new KSpread::ValueFormatter( d->converter );
 
   d->activeSheet = 0;
@@ -208,8 +197,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->dcop = 0;
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
-
-  initInterpreter();
 
   d->undoLocked = false;
   d->commandHistory = new KoCommandHistory( actionCollection() );
@@ -260,7 +247,6 @@ KSpreadDoc::~KSpreadDoc()
   //don't save config when kword is embedded into konqueror
   if(isReadWrite())
     saveConfig();
-  destroyInterpreter();
 
   delete d->dcop;
   d->s_docs.remove( this );
@@ -448,11 +434,6 @@ int KSpreadDoc::syntaxVersion() const
   return d->syntaxVersion;
 }
 
-KSpreadInterpreter* KSpreadDoc::interpreter() const
-{
-  return d->interpreter;
-}
-
 bool KSpreadDoc::isLoading() const
 {
   return d->isLoading;
@@ -466,12 +447,6 @@ QColor KSpreadDoc::pageBorderColor() const
 void KSpreadDoc::changePageBorderColor( const QColor  & _color)
 {
   d->pageBorderColor = _color;
-}
-
-KSContext& KSpreadDoc::context()
-{
-  d->context.setException( 0 );
-  return d->context;
 }
 
 const QValueList<Reference>  &KSpreadDoc::listArea()
@@ -1450,21 +1425,6 @@ QStringList KSpreadDoc::spellListIgnoreAll() const
   return d->spellListIgnoreAll;
 }
 
-void KSpreadDoc::resetInterpreter()
-{
-  destroyInterpreter();
-  initInterpreter();
-
-  // Update the cell content
-  // TODO
-  /* KSpreadSheet *t;
-  for ( t = map()->firstSheet(); t != 0L; t = map()->nextSheet() )
-  t->initInterpreter(); */
-
-  // Perhaps something changed. Lets repaint
-  emit sig_updateView();
-}
-
 void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
     KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
@@ -1478,59 +1438,6 @@ void KSpreadDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     {
         emit sig_refreshView();
     }
-}
-
-void KSpreadDoc::initInterpreter()
-{
-  d->interpreter = new KSpreadInterpreter( this );
-
-  // Create the module which is used to evaluate all formulas
-  d->module = d->interpreter->module( "kspread" );
-  d->context.setScope( new KSScope( d->interpreter->globalNamespace(), d->module ) );
-
-  // Find all scripts
-  d->kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.ks", TRUE );
-
-  // Remove dupes
-  QMap<QString,QString> m;
-  for( QStringList::Iterator it = d->kscriptModules.begin(); it != d->kscriptModules.end(); ++it )
-  {
-    int pos = (*it).findRev( '/' );
-    if ( pos != -1 )
-    {
-      QString name = (*it).mid( pos + 1 );
-      pos = name.find( '.' );
-      if ( pos != -1 )
-        name = name.left( pos );
-      m[ name ] = *it;
-    }
-  }
-
-  // Load and execute the scripts
-  QMap<QString,QString>::Iterator mip = m.begin();
-  for( ; mip != m.end(); ++mip )
-  {
-    kdDebug(36001) << "SCRIPT="<<  mip.key() << ", " << mip.data() << endl;
-    KSContext context;
-    QStringList args;
-    if ( !d->interpreter->runModule( context, mip.key(), mip.data(), args ) )
-    {
-        if ( context.exception() )
-            KMessageBox::error( 0L, context.exception()->toString( context ) );
-        // else ... well, nothing to show...
-    }
-  }
-}
-
-void KSpreadDoc::destroyInterpreter()
-{
-    d->context.setValue( 0 );
-    d->context.setScope( 0 );
-    d->context.setException( 0 );
-
-    d->module = 0;
-
-    d->interpreter = 0;
 }
 
 void KSpreadDoc::addCommand( KCommand* command )

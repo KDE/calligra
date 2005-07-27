@@ -504,6 +504,8 @@ void KSpreadValue::setFormat (KSpreadValue::Format fmt)
   d->format = fmt;
 }
 
+// TODO: element and setElement need flattening support !!!
+// It is necessary for range functions to work correctly !!!
 KSpreadValue KSpreadValue::element( unsigned column, unsigned row ) const
 {
   if( d->type != Array ) return *this;

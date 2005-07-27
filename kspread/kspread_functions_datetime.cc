@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2003 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,57 +21,51 @@
 
 // built-in date/time functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include "functions.h"
+#include "kspread_functions_helper.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
-#include <kdebug.h>
+#include <kcalendarsystem.h>
 #include <klocale.h>
 
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_functions_helper.h"
-#include "kspread_interpreter.h"
+using namespace KSpread;
 
 // prototypes, sorted
-bool kspreadfunc_currentDate( KSContext& context );
-bool kspreadfunc_currentDateTime( KSContext& context );
-bool kspreadfunc_currentTime( KSContext& context );
-bool kspreadfunc_date( KSContext& context );
-bool kspreadfunc_datevalue( KSContext& context );
-bool kspreadfunc_day( KSContext& context );
-bool kspreadfunc_dayname( KSContext& context );
-bool kspreadfunc_dayOfYear( KSContext& context );
-bool kspreadfunc_days( KSContext& context );
-bool kspreadfunc_days360( KSContext& context );
-bool kspreadfunc_daysInMonth( KSContext& context );
-bool kspreadfunc_daysInYear ( KSContext& context );
-bool kspreadfunc_easterSunday( KSContext& context );
-bool kspreadfunc_edate( KSContext& context );
-bool kspreadfunc_eomonth( KSContext& context );
-bool kspreadfunc_hour( KSContext& context );
-bool kspreadfunc_hours( KSContext& context );
-bool kspreadfunc_isLeapYear ( KSContext& context );
-bool kspreadfunc_isoWeekNum( KSContext& context );
-bool kspreadfunc_minute( KSContext& context );
-bool kspreadfunc_minutes( KSContext& context );
-bool kspreadfunc_month( KSContext& context );
-bool kspreadfunc_monthname( KSContext& context );
-bool kspreadfunc_months( KSContext& context );
-bool kspreadfunc_second( KSContext& context );
-bool kspreadfunc_seconds( KSContext& context );
-bool kspreadfunc_time( KSContext& context );
-bool kspreadfunc_timevalue( KSContext& context );
-bool kspreadfunc_today( KSContext& context );
-bool kspreadfunc_weekday( KSContext& context );
-bool kspreadfunc_weeks( KSContext& context );
-bool kspreadfunc_weeksInYear( KSContext& context );
-bool kspreadfunc_year( KSContext& context );
-bool kspreadfunc_years( KSContext& context );
+KSpreadValue func_currentDate (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_currentDateTime (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_currentTime (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_date (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_datevalue (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_day (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dayname (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_days (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_days360 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_edate (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_eomonth (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_hour (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_hours (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_minute (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_minutes (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_month (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_monthname (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_months (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_second (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_seconds (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_time (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_timevalue (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_today (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_weekday (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_year (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_years (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all date/time functions
 // sadly, many of these functions aren't Excel compatible
@@ -79,156 +74,148 @@ void KSpreadRegisterDateTimeFunctions()
   // missing: Excel:    WORKDAY, NETWORKDAYS, WEEKNUM, DATEDIF
   //          Gnumeric: UNIX2DATE, DATE2UNIX
   // TODO: do we really need DATEVALUE and TIMEVALUE ?
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
-  repo->registerFunction( "CURRENTDATE",  kspreadfunc_currentDate );
-  repo->registerFunction( "CURRENTDATETIME",  kspreadfunc_currentDateTime );
-  repo->registerFunction( "CURRENTTIME",  kspreadfunc_currentTime );
-  repo->registerFunction( "DATE",  kspreadfunc_date );
-  repo->registerFunction( "DATEVALUE",  kspreadfunc_datevalue );
-  repo->registerFunction( "DAY",  kspreadfunc_day );
-  repo->registerFunction( "DAYNAME",  kspreadfunc_dayname );
-  repo->registerFunction( "DAYOFYEAR",  kspreadfunc_dayOfYear );
-  repo->registerFunction( "DAYS",  kspreadfunc_days );
-  repo->registerFunction( "DAYS360",  kspreadfunc_days360 );
-  repo->registerFunction( "DAYSINMONTH",  kspreadfunc_daysInMonth );
-  repo->registerFunction( "DAYSINYEAR",  kspreadfunc_daysInYear );
-  repo->registerFunction( "EASTERSUNDAY",  kspreadfunc_easterSunday );
-  repo->registerFunction( "EDATE",  kspreadfunc_edate );
-  repo->registerFunction( "EOMONTH",  kspreadfunc_eomonth );
-  repo->registerFunction( "HOUR",  kspreadfunc_hour );
-  repo->registerFunction( "HOURS",  kspreadfunc_hours );
-  repo->registerFunction( "ISLEAPYEAR",  kspreadfunc_isLeapYear );
-  repo->registerFunction( "ISOWEEKNUM",  kspreadfunc_isoWeekNum );
-  repo->registerFunction( "MINUTE",  kspreadfunc_minute );
-  repo->registerFunction( "MINUTES",  kspreadfunc_minutes );
-  repo->registerFunction( "MONTH",  kspreadfunc_month );
-  repo->registerFunction( "MONTHNAME",  kspreadfunc_monthname );
-  repo->registerFunction( "MONTHS",  kspreadfunc_months );
-  repo->registerFunction( "NOW",  kspreadfunc_currentDateTime );
-  repo->registerFunction( "SECOND",  kspreadfunc_second );
-  repo->registerFunction( "SECONDS",  kspreadfunc_seconds );
-  repo->registerFunction( "TIME",  kspreadfunc_time );
-  repo->registerFunction( "TIMEVALUE",  kspreadfunc_timevalue );
-  repo->registerFunction( "TODAY",  kspreadfunc_today );
-  repo->registerFunction( "WEEKDAY",  kspreadfunc_weekday );
-  repo->registerFunction( "WEEKS",  kspreadfunc_weeks );
-  repo->registerFunction( "WEEKSINYEAR",  kspreadfunc_weeksInYear );
-  repo->registerFunction( "YEAR",   kspreadfunc_year );
-  repo->registerFunction( "YEARS",  kspreadfunc_years );
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
+  
+  f = new Function ("CURRENTDATE",  func_currentDate);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("CURRENTDATETIME",  func_currentDateTime);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("CURRENTTIME",  func_currentTime);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("DATE",  func_date);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("DATEVALUE",  func_datevalue);
+  repo->add (f);
+  f = new Function ("DAY",  func_day);
+  repo->add (f);
+  f = new Function ("DAYNAME",  func_dayname);
+  repo->add (f);
+  f = new Function ("DAYOFYEAR",  func_dayOfYear);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("DAYS",  func_days);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("DAYS360",  func_days360);
+  f->setParamCount (2, 3);
+  repo->add (f);
+  f = new Function ("DAYSINMONTH",  func_daysInMonth);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("DAYSINYEAR",  func_daysInYear);
+  repo->add (f);
+  f = new Function ("EASTERSUNDAY",  func_easterSunday);
+  repo->add (f);
+  f = new Function ("EDATE",  func_edate);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("EOMONTH",  func_eomonth);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("HOUR",  func_hour);
+  f->setParamCount (0, 1);
+  repo->add (f);
+  f = new Function ("HOURS",  func_hour);  // same as HOUR
+  f->setParamCount (0, 1);
+  repo->add (f);
+  f = new Function ("ISLEAPYEAR",  func_isLeapYear);
+  repo->add (f);
+  f = new Function ("ISOWEEKNUM",  func_isoWeekNum);
+  repo->add (f);
+  f = new Function ("MINUTE",  func_minute);
+  f->setParamCount (0, 1);
+  repo->add (f);
+  f = new Function ("MINUTES",  func_minute);  // same as MINUTE
+  f->setParamCount (0, 1);
+  repo->add (f);
+  f = new Function ("MONTH",  func_month);
+  repo->add (f);
+  f = new Function ("MONTHNAME",  func_monthname);
+  repo->add (f);
+  f = new Function ("MONTHS",  func_months);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("NOW",  func_currentDateTime);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("SECOND",  func_second);
+  f->setParamCount (0, 1);
+  repo->add (f);
+  f = new Function ("SECONDS",  func_second);  // same as SECOND
+  f->setParamCount (0, 1);
+  repo->add (f);
+  f = new Function ("TIME",  func_time);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("TIMEVALUE",  func_timevalue);
+  repo->add (f);
+  f = new Function ("TODAY",  func_currentDate);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("WEEKDAY",  func_weekday);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("WEEKS",  func_weeks);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("WEEKSINYEAR",  func_weeksInYear);
+  repo->add (f);
+  f = new Function ("YEAR",   func_year);
+  repo->add (f);
+  f = new Function ("YEARS",  func_years);
+  f->setParamCount (3);
+  repo->add (f);
 }
 
 // Function: EDATE
-bool kspreadfunc_edate( KSContext & context )
+KSpreadValue func_edate (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  QDate date = calc->conv()->asDate (args[0]).asDate();
+  int months = calc->conv()->asInteger (args[1]).asInteger();
+  
+  date = calc->conv()->locale()->calendar()->addMonths (date, months);
 
-  if ( !KSUtil::checkArgumentsCount( context, 2, "EDATE", true ) )
-    return false;
+  if (!date.isValid())
+    return KSpreadValue::errorVALUE();
 
-  QDate date;
-
-  if ( !getDate( context, args[0], date ) )
-    return false;
-
-  int months;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-      return false;
-
-    months = (int) args[1]->doubleValue();
-  }
-
-  months = args[1]->intValue();
-
-  if ( months > 0 )
-    addMonths( date, months );
-  else
-    subMonths( date, -months );
-
-  if ( !date.isValid() )
-    return false;
-
-  context.setValue( new KSValue( date ) );
-  return true;
+  return KSpreadValue (date);
 }
 
 // Function: EOMONTH
-bool kspreadfunc_eomonth( KSContext & context )
+KSpreadValue func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  // add months to date using EDATE
+  KSpreadValue modDate = func_edate (args, calc, 0);
+  if (modDate.isError()) return modDate;
+  
+  // modDate is currently in Date format
+  QDate date = modDate.asDate();
+  date.setYMD (date.year(), date.month(), date.daysInMonth());
 
-  QDate date;
-  int months = 0;
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "EOMONTH", true ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "EOMONTH", true ) )
-      return false;
-
-    months = 0;
-  }
-  else
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-      return false;
-
-    months = (int) args[1]->doubleValue();
-  }
-
-  if ( !getDate( context, args[0], date ) )
-    return false;
-
-  if ( months > 0 )
-    addMonths( date, months );
-  else
-    subMonths( date, -months );
-
-  if ( !date.isValid() )
-    return false;
-
-  date.setYMD( date.year(), date.month(), date.daysInMonth() );
-
-  context.setValue( new KSValue( date ) );
-  return true;
+  return KSpreadValue (date);
 }
 
 // Function: DAYS360
 // algorithm adapted from gnumeric
-bool kspreadfunc_days360( KSContext & context )
+KSpreadValue func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  QDate date1;
-  QDate date2;
+  QDate date1 = calc->conv()->asDate (args[0]).asDate();
+  QDate date2 = calc->conv()->asDate (args[1]).asDate();
   bool european = false;
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "DAYS360", true ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 2, "DAYS360", true ) )
-      return false;
-  }
-  else
-  {
-    if ( !KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
-      return false;
-
-    european = args[2]->boolValue();
-  }
-
-  if ( !getDate( context, args[0], date1 ) )
-    return false;
-
-  if ( !getDate( context, args[1], date2 ) )
-    return false;
+  if (args.count() == 3)
+    european = calc->conv()->asBoolean (args[2]).asBoolean();
 
   int day1, day2;
   int month1, month2;
   int year1, year2;
   bool negative = false;
 
-  if ( date1.daysTo( date2 ) < 0 )
+  if (date1.daysTo( date2 ) < 0)
   {
     QDate tmp( date1 );
     date1 = date2;
@@ -271,916 +258,363 @@ bool kspreadfunc_days360( KSContext & context )
   int result = ( ( year2 - year1 ) * 12 + ( month2 - month1 ) ) * 30
     + ( day2 - day1 );
 
-  context.setValue( new KSValue( ( negative ? -result : result ) ) );
-  return true;
+  return KSpreadValue (result);
 }
 
 // Function: YEAR
-bool kspreadfunc_year( KSContext & context )
+KSpreadValue func_year (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "YEAR", false ) )
-  {
-    context.setValue( new KSValue( QDate::currentDate().year() ) );
-    return true;
-  }
-
-  QDate date;
-  if ( !getDate( context, args[0], date ) )
-    return false;
-
-  context.setValue( new KSValue( date.year() ) );
-  return true;
+  QDate date = calc->conv()->asDate (args[0]).asDate();
+  return KSpreadValue (date.year ());
 }
 
 // Function: MONTH
-bool kspreadfunc_month( KSContext & context )
+KSpreadValue func_month (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "MONTH", false ) )
-  {
-    context.setValue( new KSValue( QDate::currentDate().month() ) );
-    return true;
-  }
-
-  QDate date;
-  if ( !getDate( context, args[0], date ) )
-    return false;
-
-  context.setValue( new KSValue( date.month() ) );
-  return true;
+  QDate date = calc->conv()->asDate (args[0]).asDate();
+  return KSpreadValue (date.month ());
 }
 
 // Function: DAY
-bool kspreadfunc_day( KSContext & context )
+KSpreadValue func_day (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DAY", false ) )
-  {
-    context.setValue( new KSValue( QDate::currentDate().day() ) );
-    return true;
-  }
-
-  QDate date;
-  if ( !getDate( context, args[0], date ) )
-    return false;
-
-  context.setValue( new KSValue( date.day() ) );
-  return true;
+  QDate date = calc->conv()->asDate (args[0]).asDate();
+  return KSpreadValue (date.day ());
 }
 
 // Function: HOUR
-bool kspreadfunc_hour( KSContext & context )
+KSpreadValue func_hour (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  int hour;
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "HOUR", false ) )
-  {
-    context.setValue( new KSValue( QTime::currentTime().hour() ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-  {
-    hour = args[0]->timeValue().hour();
-  }
-  else if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-  {
-    double d = args[0]->doubleValue() + HALFSEC;
-
-    uint secs = (uint) ( ( d - floor( d ) ) * SECSPERDAY );
-
-    hour = secs / 3600;
-  }
-  else if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-  {
-    QString s = args[0]->stringValue();
-    bool valid = false;
-    QTime tmpTime = KGlobal::locale()->readTime( s, &valid );
-    if ( !valid )
-      return false;
-
-    hour = tmpTime.hour();
-  }
+  QTime time;
+  if (args.count() == 1)
+    time = calc->conv()->asTime (args[0]).asTime();
   else
-    return false;
-
-  context.setValue( new KSValue( hour ) );
-  return true;
+    time = QTime::currentTime ();
+  return KSpreadValue (time.hour ());
 }
 
 // Function: MINUTE
-bool kspreadfunc_minute( KSContext & context )
+KSpreadValue func_minute (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  int minute;
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "MINUTE", false ) )
-  {
-    context.setValue( new KSValue( QTime::currentTime().minute() ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-  {
-    minute = args[0]->timeValue().minute();
-  }
-  else if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-  {
-    double d = args[0]->doubleValue() + HALFSEC;
-
-    uint secs = (uint) ( ( d - floor( d ) ) * SECSPERDAY );
-    minute = ( secs / 60 ) % 60;
-  }
-  else if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-  {
-    QString s = args[0]->stringValue();
-    bool valid = false;
-    QTime tmpTime = KGlobal::locale()->readTime( s, &valid );
-    if ( !valid )
-      return false;
-
-    minute = tmpTime.minute();
-  }
+  QTime time;
+  if (args.count() == 1)
+    time = calc->conv()->asTime (args[0]).asTime();
   else
-    return false;
-
-  context.setValue( new KSValue( minute ) );
-  return true;
+    time = QTime::currentTime ();
+  return KSpreadValue (time.minute ());
 }
 
 // Function: SECOND
-bool kspreadfunc_second( KSContext & context )
+KSpreadValue func_second (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  int second;
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "SECOND", true ) )
-  {
-    context.setValue( new KSValue( QTime::currentTime().second() ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-  {
-    second = args[0]->timeValue().second();
-  }
-  else if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-  {
-    double d = args[0]->doubleValue() + HALFSEC;
-
-    uint secs = (uint) ( ( d - floor( d ) ) * SECSPERDAY );
-    second = secs % 60;
-  }
-  else if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-  {
-    QString s = args[0]->stringValue();
-    bool valid = false;
-    QTime tmpTime = KGlobal::locale()->readTime( s, &valid );
-    if ( !valid )
-      return false;
-
-    second = tmpTime.second();
-  }
+  QTime time;
+  if (args.count() == 1)
+    time = calc->conv()->asTime (args[0]).asTime();
   else
-    return false;
-
-  context.setValue( new KSValue( second ) );
-  return true;
+    time = QTime::currentTime ();
+  return KSpreadValue (time.second ());
 }
 
 // Function: weekday
-bool kspreadfunc_weekday( KSContext & context )
+KSpreadValue func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
+  QDate date = calc->conv()->asDate (args[0]).asDate();
   int method = 1;
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "WEEKDAY", true ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "WEEKDAY", false ) )
-      return false;
-
-    method = 1;
-  }
-  else
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-      return false;
-
-    method = args[1]->intValue();
-
-    if ( method < 1 || method > 3 )
-      return false;
-  }
-
-  QDate date;
-
-  if ( !getDate( context, args[0], date ) )
-    return false;
+  if (args.count() == 2)
+    method = calc->conv()->asInteger (args[1]).asInteger();
+  
+  if ( method < 1 || method > 3 )
+    return KSpreadValue::errorVALUE();
 
   int result = date.dayOfWeek();
 
-  if ( method == 3 )
+  if (method == 3)
     --result;
-  else if ( method == 1 )
+  else if (method == 1)
   {
     ++result;
     result = result % 7;
   }
 
-  context.setValue( new KSValue( result ) );
-  return true;
+  return KSpreadValue (result);
 }
 
 // Function: datevalue
-// TODO: do we really need this function ? One can get the same result
-// by using the numeric format on a cell with a date/time ...
-bool kspreadfunc_datevalue( KSContext & context )
+// same result would be obtained by applying number format on a date value
+KSpreadValue func_datevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DATEVALUE", true ) )
-    return false;
-
-  QDate date;
-
-  if ( !getDate( context, args[0], date ) )
-    return false;
-
-  long int result = (long int) EDate::greg2jul( date );
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  return calc->conv()->asFloat (calc->conv()->asDate (args[0]));
 }
 
 // Function: timevalue
-// TODO: do we really need this function ? One can get the same result
-// by using the numeric format on a cell with a date/time ...
-bool kspreadfunc_timevalue( KSContext & context )
+// same result would be obtained by applying number format on a time value
+KSpreadValue func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "TIMEVALUE", true ) )
-    return false;
-
-  QTime time;
-
-  if ( !getTime( context, args[0], time ) )
-    return false;
-
-  double result = time.hour() * 3600 + time.minute() * 60 + time.second();
-  result = result / (double) SECSPERDAY;
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  return calc->conv()->asFloat (calc->conv()->asTime (args[0]));
 }
 
 // Function: years
-bool kspreadfunc_years( KSContext& context )
+KSpreadValue func_years (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate();
+  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  if (!date1.isValid() || !date2.isValid())
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "YEARS", true ) )
-    return false;
-
-  // date1 is supposed to be the smaller one
-  QDate date1;
-  QDate date2;
-
-  if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
-    return false;
-
-  if ( !getDate( context, args[0], date1 ) )
-    return false;
-
-  if ( !getDate( context, args[1], date2 ) )
-    return false;
-
-  if (!date1.isValid())
-    return false;
-
-  if (!date2.isValid())
-    return false;
-
-  int type  = args[2]->intValue();
-  int years = 0;
-
+  int type = calc->conv()->asInteger (args[2]).asInteger();
   if (type == 0)
   {
     // max. possible years between both dates
-
-    years  = date2.year() - date1.year();
+    int years = date2.year() - date1.year();
 
     if (date2.month() < date1.month())
-    {
       --years;
-    }
     else if ( (date2.month() == date1.month()) && (date2.day() < date1.day()) )
-    {
       --years;
-    }
 
-    context.setValue( new KSValue( years ) );
+    return KSpreadValue (years);
   }
-  else
-    //  if (type == 1)
-  {
-    // the number of full years in between, starting on 1/1/XXXX
-    if ( date1.year() == date2.year() )
-    {
-      context.setValue( new KSValue( 0 ) );
+    
+  // type is non-zero now
+  // the number of full years in between, starting on 1/1/XXXX
+  if ( date1.year() == date2.year() )
+    return KSpreadValue (0);
 
-      return true;
-    }
+  if ( (date1.month() != 1) || (date1.day() != 1) )
+    date1.setYMD(date1.year() + 1, 1, 1);
+  date2.setYMD(date2.year(), 1, 1);
 
-    if ( (date1.month() != 1) || (date1.day() != 1) )
-      date1.setYMD(date1.year() + 1, 1, 1);
-
-    date2.setYMD(date2.year(), 1, 1);
-
-    context.setValue( new KSValue( date2.year() - date1.year() ) );
-  }
-
-  return true;
+  return KSpreadValue (date2.year() - date1.year());
 }
 
 // Function: months
-bool kspreadfunc_months( KSContext& context )
+KSpreadValue func_months (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate();
+  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  if (!date1.isValid() || !date2.isValid())
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "WEEKS", true ) )
-    return false;
-
-  // date1 is supposed to be the smaller one
-  QDate date1;
-  QDate date2;
-
-  if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
-    return false;
-
-  if ( !getDate( context, args[0], date1 ) )
-    return false;
-
-  if ( !getDate( context, args[1], date2 ) )
-    return false;
-
-  if (!date1.isValid())
-    return false;
-
-  if (!date2.isValid())
-    return false;
-
-  int type   = args[2]->intValue();
-  int months = 0;
-
+  int type = calc->conv()->asInteger (args[2]).asInteger();
   if (type == 0)
   {
-    months  = (date2.year() - date1.year()) * 12;
+    int months  = (date2.year() - date1.year()) * 12;
     months += date2.month() - date1.month();
 
     if (date2.day() < date1.day())
-    {
       if (date2.day() != date2.daysInMonth())
         --months;
-    }
 
-    context.setValue( new KSValue( months ) );
+    return KSpreadValue (months);
   }
+  
+  // type is now non-zero
+  // the number of full months in between, starting on 1/XX/XXXX
+  if (date1.month() == 12)
+    date1.setYMD(date1.year() + 1, 1, 1);
   else
-  //  if (type == 1)
-  {
-    // the number of full months in between, starting on 1/XX/XXXX
-    if (date1.month() == 12)
-      date1.setYMD(date1.year() + 1, 1, 1);
-    else
-      date1.setYMD(date1.year(), date1.month() + 1, 1);
-    date2.setYMD(date2.year(), date2.month(), 1);
+    date1.setYMD(date1.year(), date1.month() + 1, 1);
+  date2.setYMD(date2.year(), date2.month(), 1);
 
-    months  = (date2.year() - date1.year()) * 12;
-    months += date2.month() - date1.month();
+  int months = (date2.year() - date1.year()) * 12;
+  months += date2.month() - date1.month();
 
-    context.setValue( new KSValue( months ) );
-  }
-
-  return true;
+  return KSpreadValue (months);
 }
 
 // Function: weeks
-bool kspreadfunc_weeks( KSContext& context )
+KSpreadValue func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate();
+  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  if (!date1.isValid() || !date2.isValid())
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "WEEKS", true ) )
-    return false;
-
-  // date1 is supposed to be the smaller one
-  QDate date1;
-  QDate date2;
-
-  if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
-    return false;
-
-  if ( !getDate( context, args[0], date1 ) )
-    return false;
-
-  if ( !getDate( context, args[1], date2 ) )
-    return false;
-
-  if (!date1.isValid())
-    return false;
-
-  if (!date2.isValid())
-    return false;
-
-  int type = args[2]->intValue();
-
-  int days = date1.daysTo(date2);
-
+  int type = calc->conv()->asInteger (args[2]).asInteger();
+  int days = date1.daysTo (date2);
   if (type == 0)
-  {
     // just the number of full weeks between
-    context.setValue( new KSValue( (int)(days / 7) ) );
-    return true;
-  }
-  else
-    //  if (type == 1)
-  {
-    // the number of full weeks between starting on mondays
-    bool mondayFirstDay = KGlobal::locale()->weekStartsMonday();
+    return KSpreadValue ((int) (days / 7));
+    
+  // the number of full weeks between starting on mondays
+  int weekStartDay = calc->conv()->locale()->weekStartDay();
+  
+  int dow1 = date1.dayOfWeek();
+  int dow2 = date2.dayOfWeek();
 
-    int dow1 = date1.dayOfWeek();
-    int dow2 = date2.dayOfWeek();
+  days -= (7 + (weekStartDay % 7) - dow1);
+  days -= ((dow2 - weekStartDay) % 7);
 
-    if (mondayFirstDay)
-    {
-      days -= (8 - dow1);
-      days -= (dow2 - 1);
-    }
-    else
-    {
-      days -= (7 - dow1);
-      days -= dow2;
-    }
-
-    context.setValue( new KSValue( (int) (days / 7) ) );
-  }
-
-  return true;
+  return KSpreadValue ((int) (days / 7));
 }
 
 // Function: days
-bool kspreadfunc_days( KSContext& context )
+KSpreadValue func_days (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate();
+  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  if (!date1.isValid() || !date2.isValid())
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context, 2, "DAYS", true ) )
-    return false;
-
-  QDate date1;
-  QDate date2;
-
-  if ( !getDate( context, args[0], date1 ) )
-    return false;
-
-  if ( !getDate( context, args[1], date2 ) )
-    return false;
-
-  if (!date1.isValid())
-    return false;
-
-  if (!date2.isValid())
-    return false;
-
-  int result = date1.daysTo(date2);
-
-  context.setValue( new KSValue(result));
-  return true;
-}
-
-// Function: hours
-bool kspreadfunc_hours( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "hours", true ) )
-    return false;
-
-  QTime tmpTime;
-
-  if (!getTime(context, args[0], tmpTime))
-    return false;
-
-  context.setValue( new KSValue( tmpTime.hour() ) );
-
-  return true;
-}
-
-// Function: minutes
-bool kspreadfunc_minutes( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "minutes", true ) )
-    return false;
-
-  QTime tmpTime;
-
-  if (!getTime(context, args[0], tmpTime))
-    return false;
-
-  context.setValue( new KSValue( tmpTime.minute() ) );
-
-  return true;
-}
-
-// Function: seconds
-bool kspreadfunc_seconds( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "seconds", true ) )
-    return false;
-
-  QTime tmpTime;
-
-  if (!getTime(context, args[0], tmpTime))
-    return false;
-
-  context.setValue( new KSValue( tmpTime.second() ) );
-
-  return true;
+  return KSpreadValue (date1.daysTo (date2));
 }
 
 // Function: date
-bool kspreadfunc_date( KSContext& context )
+KSpreadValue func_date (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,3, "date",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
+  int y = calc->conv()->asInteger (args[0]).asInteger();
+  int m = calc->conv()->asInteger (args[1]).asInteger();
+  int d = calc->conv()->asInteger (args[2]).asInteger();
+  
   QDate _date;
-  if( _date.setYMD(args[0]->intValue(), args[1]->intValue(), args[2]->intValue()) )
-    context.setValue( new KSValue(_date));
-  else
-    context.setValue( new KSValue(i18n("Err")) );
-
-  return true;
+  if( _date.setYMD (y, m, d))
+    return KSpreadValue (_date);
+  return KSpreadValue::errorVALUE();
 }
 
 // Function: day
-bool kspreadfunc_dayname( KSContext& context )
+KSpreadValue func_dayname (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  QString tmp;
-  if ( !KSUtil::checkArgumentsCount( context,1, "DAYNAME", true ) )
-    return false;
+  int number = calc->conv()->asInteger (args[0]).asInteger();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( KGlobal::locale()->weekDayName( args[0]->intValue() ).isNull() )
-    tmp = i18n( "Err" );
-  else
-    tmp = KGlobal::locale()->weekDayName( args[0]->intValue() );
-
-  context.setValue( new KSValue( tmp ) );
-  return true;
+  QString weekName = calc->conv()->locale()->calendar()->weekDayName (number);
+  if (weekName.isNull())
+    return KSpreadValue::errorVALUE();
+  return KSpreadValue (weekName);
 }
 
 // Function: monthname
-bool kspreadfunc_monthname( KSContext& context )
+KSpreadValue func_monthname (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  QString tmp;
-  if ( !KSUtil::checkArgumentsCount( context, 1, "MONTHNAME", true ) )
-    return false;
+  int number = calc->conv()->asInteger (args[0]).asInteger();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( KGlobal::locale()->monthName( args[0]->intValue()).isNull() )
-    tmp = i18n( "Err" );
-  else
-    tmp = KGlobal::locale()->monthName( args[0]->intValue() );
-
-  context.setValue( new KSValue( tmp ) );
-  return true;
+  QString monthName = calc->conv()->locale()->calendar()->monthName (number,
+      QDate::currentDate().year());
+  if (monthName.isNull())
+    return KSpreadValue::errorVALUE();
+  return KSpreadValue (monthName);
 }
 
 // Function: time
-bool kspreadfunc_time( KSContext& context )
+KSpreadValue func_time (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int hour;
-  int minute;
-  int second;
-
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,3, "time",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  hour = args[0]->intValue();
-  minute = args[1]->intValue();
-  second = args[2]->intValue();
-
+  int h = calc->conv()->asInteger (args[0]).asInteger();
+  int m = calc->conv()->asInteger (args[1]).asInteger();
+  int s = calc->conv()->asInteger (args[2]).asInteger();
+  
   /* normalize the data */
-  minute += second / 60;
-  second = second % 60;
-  hour += minute / 60;
-  minute = minute % 60;
+  m += s / 60;
+  s = s % 60;
+  h += m / 60;
+  m = m % 60;
+  // we'll lose hours data that carries over into days
+  h = h % 24;
 
-  /* we'll lose hours data that carries over into days */
-  hour = hour % 24;
-
-  /* now carry down hours/minutes for negative minutes/seconds */
-
-  if (second < 0)
-  {
-    second += 60;
-    minute -= 1;
+  // now carry down hours/minutes for negative minutes/seconds
+  if (s < 0) {
+    s += 60;
+    m -= 1;
   }
-
-  if (minute < 0)
-  {
-    minute += 60;
-    hour -= 1;
+  if (m < 0) {
+    m += 60;
+    h -= 1;
   }
+  if (h < 0)
+    h += 24;
 
-  if (hour < 0)
-  {
-    hour += 24;
-  }
-
-  context.setValue( new KSValue(QTime(hour, minute, second)));
-
-  return true;
+  return KSpreadValue (QTime (h, m, s));
 }
 
 // Function: currentDate
-bool kspreadfunc_currentDate( KSContext& context )
+KSpreadValue func_currentDate (valVector, ValueCalc *, FuncExtra *)
 {
-    if ( !KSUtil::checkArgumentsCount( context,0, "currentDate",true ) )
-      return false;
-
-    context.setValue( new KSValue(QDate::currentDate()));
-
-    return true;
-}
-
-// Function: today
-// same as currentDate - merge maybe ?
-bool kspreadfunc_today( KSContext& context )
-{
-    if ( !KSUtil::checkArgumentsCount( context,0, "today",true ) )
-      return false;
-
-    context.setValue( new KSValue(QDate::currentDate()) );
-
-    return true;
+  return KSpreadValue (QDate::currentDate ());
 }
 
 // Function: currentTime
-bool kspreadfunc_currentTime( KSContext& context )
+KSpreadValue func_currentTime (valVector, ValueCalc *, FuncExtra *)
 {
-    if ( !KSUtil::checkArgumentsCount( context,0, "currentTime",true ) )
-      return false;
-
-    context.setValue( new KSValue(QTime::currentTime()));
-
-    return true;
+  return KSpreadValue (QTime::currentTime ());
 }
 
 // Function: currentDateTime
-bool kspreadfunc_currentDateTime( KSContext& context )
+KSpreadValue func_currentDateTime (valVector, ValueCalc *, FuncExtra *)
 {
-    if ( !KSUtil::checkArgumentsCount( context,0, "currentDateTime",true ) )
-      return false;
-// TODO: do NOT format the date here with the new parser (old one doesn't
-// support QDateTime, so I cannot do it here, sorry)
-    context.setValue( new KSValue(KGlobal::locale()->formatDateTime(QDateTime::currentDateTime(), false)));
-
-    return true;
+  return KSpreadValue (QDateTime::currentDateTime ());
 }
 
 // Function: dayOfYear
-bool kspreadfunc_dayOfYear( KSContext& context )
+KSpreadValue func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,3, "dayOfYear",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  context.setValue( new KSValue(QDate(args[0]->intValue(),
-                                      args[1]->intValue(),args[2]->intValue()).dayOfYear() ));
-
-  return true;
-}
-
-bool isLeapYear_helper(int _year)
-{
-    return (((_year % 4) == 0) && ((_year % 100) != 0) || ((_year % 400) == 0));
+  KSpreadValue date = func_date (args, calc, 0);
+  if (date.isError()) return date;
+  return KSpreadValue (date.asDate().dayOfYear());
 }
 
 // Function: daysInMonth
-bool kspreadfunc_daysInMonth( KSContext& context )
+KSpreadValue func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,2,"daysInMonth",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-  {
-    context.setValue( new KSValue( i18n("Err") ) );
-    return true;
-  }
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-  {
-    context.setValue( new KSValue( i18n("Err") ) );
-    return true;
-  }
-
-  static uint aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-  int nYear = args[0]->intValue();
-  int nMonth = args[1]->intValue();
-  int result;
-
-  if ( nMonth != 2)
-    result = aDaysInMonth[nMonth-1];
-  else
-  {
-    if (isLeapYear_helper(nYear))
-        result = aDaysInMonth[nMonth-1] + 1;
-    else
-        result = aDaysInMonth[nMonth-1];
-  }
-
-  context.setValue( new KSValue(result));
-
-  return true;
+  int y = calc->conv()->asInteger (args[0]).asInteger();
+  int m = calc->conv()->asInteger (args[1]).asInteger();
+  QDate date (y, m, 1);
+  return KSpreadValue (date.daysInMonth());
 }
 
 // Function: isLeapYear
-bool kspreadfunc_isLeapYear ( KSContext& context )
+KSpreadValue func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1,"isLeapYear",true ) )
-    return false;
-  bool result=true;
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if(result)
-  {
-    int nYear = args[0]->intValue();
-    result = isLeapYear_helper(nYear);
-  }
-
-  context.setValue( new KSValue(result));
-
-  return true;
+  int y = calc->conv()->asInteger (args[0]).asInteger();
+  return KSpreadValue (QDate::leapYear (y));
 }
 
 // Function: daysInYear
-bool kspreadfunc_daysInYear ( KSContext& context )
+KSpreadValue func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1,"daysInYear",true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  int nYear = args[0]->intValue();
-  bool leap = isLeapYear_helper(nYear);
-  int result;
-
-  if (leap)
-    result = 366;
-  else
-    result = 365;
-
-  context.setValue( new KSValue(result));
-
-  return true;
+  int y = calc->conv()->asInteger (args[0]).asInteger();
+  return KSpreadValue (QDate::leapYear (y) ? 366 : 365);
 }
 
 // Function: weeksInYear
-bool kspreadfunc_weeksInYear( KSContext& context )
+KSpreadValue func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1,"weeksInYear",true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  int nYear = args[0]->intValue();
-  int result;
-  QDate _date(nYear, 1, 1);
-  int nJan1DayOfWeek = _date.dayOfWeek();   //first day of the year
-
-  if ( nJan1DayOfWeek == 4 ) { // Thursday
-        result = 53;
-  } else if ( nJan1DayOfWeek == 3 ) { // Wednesday
-        result = isLeapYear_helper(nYear) ? 53 : 52 ;
-  } else {
-        result = 52;
-  }
-
-  context.setValue( new KSValue(result));
-
-  return true;
+  int y = calc->conv()->asInteger (args[0]).asInteger();
+  QDate date (y, 12, 31);  // last day of the year
+  return KSpreadValue (date.weekNumber ());
 }
 
 // Function: easterSunday
-bool kspreadfunc_easterSunday( KSContext& context )
+KSpreadValue func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    if ( !KSUtil::checkArgumentsCount( context,1,"easterSunday",true ) )
-        return false;
-    if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-        return false;
+  int nDay, nMonth;
+  int nYear = calc->conv()->asInteger (args[0]).asInteger();
 
-    int nDay, nMonth;
-    int nYear = args[0]->intValue();
+  // (Tomas) the person who wrote this should be hanged :>
+  int B,C,D,E,F,G,H,I,K,L,M,N,O;
+  N = nYear % 19;
+  B = int(nYear / 100);
+  C = nYear % 100;
+  D = int(B / 4);
+  E = B % 4;
+  F = int((B + 8) / 25);
+  G = int((B - F + 1) / 3);
+  H = (19 * N + B - D - G + 15) % 30;
+  I = int(C / 4);
+  K = C % 4;
+  L = (32 + 2 * E + 2 * I - H - K) % 7;
+  M = int((N + 11 * H + 22 * L) / 451);
+  O = H + L - 7 * M + 114;
+  nDay = O % 31 + 1;
+  nMonth = int(O / 31);
 
-    int B,C,D,E,F,G,H,I,K,L,M,N,O;
-    N = nYear % 19;
-    B = int(nYear / 100);
-    C = nYear % 100;
-    D = int(B / 4);
-    E = B % 4;
-    F = int((B + 8) / 25);
-    G = int((B - F + 1) / 3);
-    H = (19 * N + B - D - G + 15) % 30;
-    I = int(C / 4);
-    K = C % 4;
-    L = (32 + 2 * E + 2 * I - H - K) % 7;
-    M = int((N + 11 * H + 22 * L) / 451);
-    O = H + L - 7 * M + 114;
-    nDay = O % 31 + 1;
-    nMonth = int(O / 31);
-
-    context.setValue( new KSValue(QDate(nYear, nMonth, nDay)));
-
-    return true;
+  return KSpreadValue (QDate (nYear, nMonth, nDay));
 }
 
 // Function: isoWeekNum
-bool kspreadfunc_isoWeekNum( KSContext& context )
+KSpreadValue func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    if ( !KSUtil::checkArgumentsCount( context,1,"isoWeekNum",true ) )
-        return false;
+  QDate date = calc->conv()->asDate (args[0]).asDate();
+  if (!date.isValid())
+      return KSpreadValue::errorVALUE();
 
-    QDate tmpDate;
-
-    if (!getDate(context, args[0], tmpDate))
-        return false;
-
-    if (!tmpDate.isValid())
-        return false;
-
-    int result = tmpDate.weekNumber();
-
-    if (result==0)
-        return false;
-
-    context.setValue( new KSValue(result) );
-    return true;
+  return KSpreadValue (date.weekNumber());
 }

@@ -32,7 +32,6 @@ class KoOasisSettings;
 class KCommand;
 
 class KSpreadDoc;
-class KSpreadInterpreter;
 class KSpreadView;
 class KSpreadMap;
 class KSpreadSheet;
@@ -67,8 +66,6 @@ class KSpellConfig;
 
 #include <kspread_global.h>
 
-#include <koscript_context.h>
-
 #define MIME_TYPE "application/x-kspread"
 
 struct Reference
@@ -93,7 +90,7 @@ class ValueParser;
 class ValueConverter;
 class ValueFormatter;
 class ValueCalc;
-}
+};
 
 
 class DocPrivate;
@@ -471,24 +468,6 @@ public:
    */
   void newZoomAndResolution( bool updateViews, bool forPrint );
 
-  /**
-   * @return the KScript Interpreter used by this document.
-   */
-  KSpreadInterpreter* interpreter()const;
-
-  /**
-   * Kills the interpreter and creates a new one and
-   * reloads all scripts. This is useful if they have been
-   * edited and the changes should take effect.
-   */
-  void resetInterpreter();
-
-  /**
-   * @return a context that can be used for evaluating formulas.
-   *         This function does remove any exception from the context.
-   */
-  KSContext & context();
-
   // virtual void printMap( QPainter & _painter );
 
   void enableUndo( bool _b );
@@ -684,15 +663,6 @@ protected:
    * Overloaded function of @ref KoDocument.
    */
   virtual bool saveChildren( KoStore* _store );
-
-  /**
-   * Initializes the KScript Interpreter.
-   */
-  void initInterpreter();
-  /**
-   * Destroys the interpreter.
-   */
-  void destroyInterpreter();
 
   class SavedDocParts : public QMap<QString, QDomElement> {};
   SavedDocParts m_savedDocParts;

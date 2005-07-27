@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,260 +21,165 @@
 
 // built-in conversion functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include "functions.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_util.h"
-
+using namespace KSpread;
 
 // prototypes
-bool kspreadfunc_arabic( KSContext& context );
-bool kspreadfunc_carx( KSContext& context );
-bool kspreadfunc_cary( KSContext& context );
-bool kspreadfunc_decsex( KSContext& context );
-bool kspreadfunc_polr( KSContext& context );
-bool kspreadfunc_pola( KSContext& context );
-bool kspreadfunc_roman( KSContext& context );
-bool kspreadfunc_sexdec( KSContext& context );
-bool kspreadfunc_AsciiToChar( KSContext& context );
-bool kspreadfunc_CharToAscii( KSContext& context );
-bool kspreadfunc_inttobool( KSContext & context );
-bool kspreadfunc_booltoint( KSContext & context );
-bool kspreadfunc_BoolToString( KSContext& context );
-bool kspreadfunc_NumberToString( KSContext& context );
+KSpreadValue func_arabic (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_carx (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_cary (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_decsex (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_polr (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_pola (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_roman (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sexdec (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_inttobool (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_booltoint (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_ToString (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all conversion functions
 void KSpreadRegisterConversionFunctions()
 {
-   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
-   repo->registerFunction( "ARABIC",  kspreadfunc_arabic );
-   repo->registerFunction( "CARX",    kspreadfunc_carx );
-   repo->registerFunction( "CARY",    kspreadfunc_cary );
-   repo->registerFunction( "DECSEX",  kspreadfunc_decsex );
-   repo->registerFunction( "POLR",    kspreadfunc_polr );
-   repo->registerFunction( "POLA",    kspreadfunc_pola );
-   repo->registerFunction( "ROMAN",   kspreadfunc_roman );
-   repo->registerFunction( "SEXDEC",  kspreadfunc_sexdec );
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
+  
+  f = new Function ("ARABIC", func_arabic);
+  repo->add (f);
+  f = new Function ("CARX", func_carx);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("CARY", func_cary);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("DECSEX", func_decsex);
+  repo->add (f);
+  f = new Function ("POLR", func_polr);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("POLA", func_pola);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("ROMAN", func_roman);
+  repo->add (f);
+  f = new Function ("SEXDEC", func_sexdec);
+  f->setParamCount (1, 3);
+  repo->add (f);
+  f = new Function ("ASCIITOCHAR", func_AsciiToChar);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("CHARTOASCII", func_CharToAscii);
+  repo->add (f);
+  f = new Function ("BOOL2INT", func_booltoint);
+  repo->add (f);
+  f = new Function ("INT2BOOL", func_inttobool);
+  repo->add (f);
+  f = new Function ("BOOL2STRING", func_ToString);
+  repo->add (f);
+  f = new Function ("NUM2STRING", func_ToString);
+  repo->add (f);
+  f = new Function ("STRING", func_ToString);
+  repo->add (f);
 }
 
 // Function: POLR
-bool kspreadfunc_polr( KSContext& context )
+KSpreadValue func_polr (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "POLR",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  double result=sqrt(pow(args[0]->doubleValue(),2)+pow(args[1]->doubleValue(),2));
-  context.setValue( new KSValue(result));
-
-  return true;
+  // sqrt (a^2 + b^2)
+  KSpreadValue a = args[0];
+  KSpreadValue b = args[1];
+  KSpreadValue res = calc->sqrt (calc->add (calc->sqr (a), calc->sqr (b)));
+  return res;
 }
 
 // Function: POLA
-bool kspreadfunc_pola( KSContext& context )
+KSpreadValue func_pola (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "POLA",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  double result=acos(args[0]->doubleValue()/(sqrt(pow(args[0]->doubleValue(),2)+pow(args[1]->doubleValue(),2))));
-  context.setValue( new KSValue(result));
-
-  return true;
+  // acos (a / polr(a,b))
+  KSpreadValue polr = func_polr (args, calc, 0);
+  if (calc->isZero (polr))
+    return KSpreadValue::errorDIV0();
+  KSpreadValue res = calc->acos (calc->div (args[0], polr));
+  return res;
 }
 
 // Function: CARX
-bool kspreadfunc_carx( KSContext& context )
+KSpreadValue func_carx (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "CARX",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  double result=args[0]->doubleValue()*cos(args[1]->doubleValue());
-  context.setValue( new KSValue(result));
-
-  return true;
+  // a * cos(b)
+  KSpreadValue res = calc->mul (args[0], calc->cos (args[1]));
+  return res;
 }
 
 // Function: CARY
-bool kspreadfunc_cary( KSContext& context )
+KSpreadValue func_cary (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "CARY",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  double result=args[0]->doubleValue()*sin(args[1]->doubleValue());
-  context.setValue( new KSValue(result));
-
-  return true;
+  // a * sin(b)
+  KSpreadValue res = calc->mul (args[0], calc->sin (args[1]));
+  return res;
 }
 
 // Function: DECSEX
-bool kspreadfunc_decsex( KSContext& context )
+KSpreadValue func_decsex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "DECSEX",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  int inter;
-  double val=args[0]->doubleValue();
-  int hours,minutes,seconds;
-  if(val>0)
-    inter=1;
-  else
-    inter=-1;
-  hours=inter*(int)(fabs(val));
-
-  double workingVal = (val - (double)hours) * inter;
-
-  /* try to do this without rounding errors */
-  workingVal *= 60.0;
-  minutes = (int)(floor(workingVal));
-
-  workingVal -= minutes;
-  workingVal *= 60;
-
-  seconds = (int)(floor(workingVal));
-  workingVal -= seconds;
-
-  /* now we need to try to round up the seconds if that makes sense */
-  if (workingVal >= 0.5)
-  {
-    seconds++;
-    while (seconds >= 60)
-    {
-      minutes++;
-      seconds -= 60;
-    }
-
-    while (minutes >= 60)
-    {
-      hours++;
-      minutes -= 60;
-    }
-  }
-
-  QTime _time(hours,minutes,seconds);
-  context.setValue( new KSValue(_time));
-
-  return true;
+  // original function was very compicated, but I see no reason for that,
+  // when it can be done as simply as this ...
+  // maybe it was due to all the infrastructure not being ready back then
+  return calc->conv()->asTime (calc->div (args[0], 24));
 }
 
 // Function: SEXDEC
-bool kspreadfunc_sexdec( KSContext& context )
+KSpreadValue func_sexdec (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  double result;
-  if ( !KSUtil::checkArgumentsCount( context,3, "SEXDEC",true ) )
-    {
-      if ( !KSUtil::checkArgumentsCount( context,1, "SEXDEC",true ) )
-	return false;
-      if ( !KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-	return false;
+  if (args.count() == 1)
+  {
+    // convert given value to number
+    KSpreadValue time = calc->conv()->asTime (args[0]);
+    return calc->mul (calc->conv()->asFloat (time), 24);
+  }
+  
+  // convert h/m/s to number of hours
+  KSpreadValue h = args[0];
+  KSpreadValue m = args[1];
 
-      result=args[0]->timeValue().hour()+(double)args[0]->timeValue().minute()/60.0+(double)args[0]->timeValue().second()/3600.0;
-
-      context.setValue( new KSValue(result));
-    }
-  else
-    {
-      if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-	return false;
-      if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-	return false;
-      if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-	return false;
-      result=args[0]->intValue()+(double)args[1]->intValue()/60.0+(double)args[2]->intValue()/3600.0;
-
-      context.setValue( new KSValue(result));
-    }
-
-  return true;
+  KSpreadValue res = calc->add (h, calc->div (m, 60));
+  if (args.count() == 3) {
+    KSpreadValue s = args[2];
+    res = calc->add (res, calc->div (s, 3600));
+  }
+  return res;
 }
 
 // Function: ROMAN
-bool kspreadfunc_roman( KSContext& context )
+KSpreadValue func_roman (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    const QCString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-    const QCString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-    const QCString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-    const QCString RNThousands[] = {"", "M", "MM", "MMM"};
+  const QCString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+  const QCString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+  const QCString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+  const QCString RNThousands[] = {"", "M", "MM", "MMM"};
 
-
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    if ( !KSUtil::checkArgumentsCount( context,1, "ROMAN",true ) )
-        return false;
-    int value;
-    if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-            return false;
-        else
-            value=(int)args[0]->doubleValue();
-    }
-    else
-    	value=(int)args[0]->intValue();
-    if(value<0)
-    {
-        context.setValue( new KSValue(i18n("Err")));
-        return true;
-    }
-    if(value>3999)
-    {
-        context.setValue( new KSValue(i18n("Value too big")));
-        return true;
-    }
-    QString result;
-
-    result= QString::fromLatin1( RNThousands[ ( value / 1000 ) ] +
-                                 RNHundreds[ ( value / 100 ) % 10 ] +
-                                 RNTens[ ( value / 10 ) % 10 ] +
-                                 RNUnits[ ( value ) % 10 ] );
-    context.setValue( new KSValue(result));
-    return true;
+  // precision loss is not a problem here, as we only use the 0-3999 range
+  long value = calc->conv()->asInteger (args[0]).asInteger ();
+  if ((value < 0) || (value > 3999))
+    return KSpreadValue::errorNA();
+  QString result;
+  result = QString::fromLatin1 (RNThousands[(value / 1000)] +
+                                RNHundreds[(value / 100) % 10] +
+                                RNTens[(value / 10 ) % 10] +
+                                RNUnits[(value) % 10]);
+  return KSpreadValue (result);
 }
 
-// convert single roman character to deciman
+// convert single roman character to decimal
 // return < 0 if invalid
-int kspreadfunc_arabic_helper( QChar c )
+int func_arabic_helper (QChar c)
 {
-  switch( c.upper().unicode() )
+  switch (c.upper().unicode())
   {
     case 'M': return 1000;
     case 'D': return 500;
@@ -287,28 +193,16 @@ int kspreadfunc_arabic_helper( QChar c )
 }
 
 // Function: ARABIC
-bool kspreadfunc_arabic( KSContext& context )
+KSpreadValue func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString roman = calc->conv()->asString (args[0]).asString();
+  if( roman.isEmpty() ) return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context,1, "ARABIC", true ) )
-    return false;
+  int val = 0, lastd = 0, d = 0;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString roman = args[0]->stringValue();
-  if( roman.isEmpty() ) return false;
-
-  int val = 0;
-  int lastd = 0;
-  int d = 0;
-
-  for( unsigned i=0; i < roman.length(); i++ )
-  {
-    d = kspreadfunc_arabic_helper( roman[i] );
-
-    if( d < 0 )  return false;
+  for (unsigned i = 0; i < roman.length(); i++) {
+    d = func_arabic_helper( roman[i] );
+    if( d < 0 ) return KSpreadValue::errorVALUE();
 
     if( lastd < d ) val -= lastd;
       else val += lastd;
@@ -317,133 +211,56 @@ bool kspreadfunc_arabic( KSContext& context )
   if( lastd < d ) val -= lastd;
     else val += lastd;
 
-  context.setValue( new KSValue( val ) );
-  return true;
+  return KSpreadValue (val);
 }
 
+// helper for AsciiToChar
+void func_a2c_helper (ValueCalc *calc, QString &s, KSpreadValue val)
+{
+  if (val.isArray()) {
+    for (unsigned int row = 0; row < val.rows(); ++row)
+      for (unsigned int col = 0; col < val.columns(); ++col)
+        func_a2c_helper (calc, s, val.element (col, row));
+  } else {
+    int v = calc->conv()->asInteger (val).asInteger();
+    if (v == 0) return;
+    QChar c (v);
+    s = s + c;
+  }
+}
 
 // Function: AsciiToChar
-bool kspreadfunc_AsciiToChar( KSContext& context )
+KSpreadValue func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  int val = -1;
   QString str;
-
   for (unsigned int i = 0; i < args.count(); i++)
-  {
-    if ( KSUtil::checkType( context, args[i], KSValue::IntType, false ) )
-    {
-      val = (int)args[i]->intValue();
-      QChar c(val);
-      str = str + c;
-    }
-    else return false;
-  }
-
-  context.setValue( new KSValue(str));
-  return true;
+    func_a2c_helper (calc, str, args[i]);
+  return KSpreadValue (str);
 }
 
 // Function: CharToAscii
-bool kspreadfunc_CharToAscii( KSContext& context )
+KSpreadValue func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if (args.count() == 1)
-  {
-    if ( KSUtil::checkType( context, args.first(), KSValue::StringType, false ) )
-    {
-      QString val = args[0]->stringValue();
-      if (val.length() == 1)
-      {
-	QChar c = val[0];
-	context.setValue( new KSValue(c.unicode() ));
-	return true;
-      }
-    }
-  }
-  return false;
+  QString val = calc->conv()->asString (args[0]).asString ();
+  if (val.length() == 1)
+    return KSpreadValue (QString (val[0]));
+  return KSpreadValue::errorVALUE();
 }
 
 // Function: inttobool
-bool kspreadfunc_inttobool( KSContext & context )
+KSpreadValue func_inttobool (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if (args.count() == 1)
-  {
-    if (KSUtil::checkType(context, args[0],
-                          KSValue::IntType, true))
-    {
-      bool result = (args[0]->intValue() == 1 ? true : false);
-
-      context.setValue( new KSValue(result) );
-
-      return true;
-    }
-  }
-
-  return false;
+  return calc->conv()->asBoolean (args[0]);
 }
 
 // Function: booltoint
-bool kspreadfunc_booltoint( KSContext & context )
+KSpreadValue func_booltoint (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if (args.count() == 1)
-  {
-    if (KSUtil::checkType(context, args[0],
-                          KSValue::BoolType, true))
-    {
-      int val = (args[0]->boolValue() ? 1 : 0);
-
-      context.setValue( new KSValue(val));
-
-      return true;
-    }
-  }
-
-  return false;
+  return calc->conv()->asInteger (args[0]);
 }
 
-// Function: BoolToString
-bool kspreadfunc_BoolToString( KSContext& context )
+// Function: BoolToString, NumberToString, String
+KSpreadValue func_ToString (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if (args.count() == 1)
-  {
-    if ( KSUtil::checkType( context, args.first(), KSValue::BoolType, false ) )
-    {
-      QString val((args[0]->boolValue() ? "True" : "False"));
-
-      context.setValue( new KSValue(val));
-
-      return true;
-    }
-  }
-
-  return false;
-}
-
-// Function: NumberToString
-bool kspreadfunc_NumberToString( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if (args.count() == 1)
-  {
-    if ( KSUtil::checkType( context, args.first(), KSValue::DoubleType, false ) )
-    {
-      QString val;
-      val.setNum(args[0]->doubleValue(), 'g', 8);
-
-      context.setValue( new KSValue(val));
-
-      return true;
-    }
-  }
-
-  return false;
+  return calc->conv()->asString (args[0]);
 }

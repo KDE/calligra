@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,214 +21,150 @@
 
 // built-in logical functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include "functions.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_util.h"
+using namespace KSpread;
 
 // prototypes (sorted alphabetically)
-bool kspreadfunc_and( KSContext& context );
-bool kspreadfunc_false( KSContext& context );
-bool kspreadfunc_if( KSContext& context );
-bool kspreadfunc_nand( KSContext& context );
-bool kspreadfunc_nor( KSContext& context );
-bool kspreadfunc_not( KSContext& context );
-bool kspreadfunc_or( KSContext& context );
-bool kspreadfunc_true( KSContext& context );
-bool kspreadfunc_xor( KSContext& context );
+KSpreadValue func_and (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_false (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_if (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_nand (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_nor (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_not (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_or (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_true (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_xor (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all logic functions
 void KSpreadRegisterLogicFunctions()
 {
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "AND",   kspreadfunc_and );
-  repo->registerFunction( "FALSE", kspreadfunc_false );
-  repo->registerFunction( "IF",    kspreadfunc_if );
-  repo->registerFunction( "NAND",  kspreadfunc_nand );  // KSpread-specific
-  repo->registerFunction( "NOR",   kspreadfunc_nor );   // KSpread-specific
-  repo->registerFunction( "NOT",   kspreadfunc_not );
-  repo->registerFunction( "OR",    kspreadfunc_or );
-  repo->registerFunction( "TRUE",  kspreadfunc_true );
-  repo->registerFunction( "XOR",   kspreadfunc_xor );   // KSpread-specific
+  f = new Function ("FALSE", func_false);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("TRUE", func_true);
+  f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("NOT", func_not);
+  f->setParamCount (1);
+  repo->add (f);
+  f = new Function ("AND", func_and);
+  f->setParamCount (2, -1);
+  repo->add (f);
+  f = new Function ("NAND", func_nand);
+  f->setParamCount (2, -1);
+  repo->add (f);
+  f = new Function ("NOR", func_nor);
+  f->setParamCount (2, -1);
+  repo->add (f);
+  f = new Function ("OR", func_or);
+  f->setParamCount (2, -1);
+  repo->add (f);
+  f = new Function ("XOR", func_xor);
+  f->setParamCount (2, -1);
+  repo->add (f);
+  f = new Function ("IF", func_if);
+  f->setParamCount (3);
+  repo->add (f);
 }
 
 // Function: FALSE
-bool kspreadfunc_false( KSContext & context )
+KSpreadValue func_false (valVector, ValueCalc *, FuncExtra *)
 {
-  context.setValue( new KSValue( FALSE ) );
-  return true;
+  return KSpreadValue (false);
 }
 
 // Function: TRUE
-bool kspreadfunc_true( KSContext & context )
+KSpreadValue func_true (valVector, ValueCalc *, FuncExtra *)
 {
-  context.setValue( new KSValue( TRUE ) );
-  return true;
+  return KSpreadValue (true);
+}
+
+// helper for most logical functions
+bool asBool (KSpreadValue val, ValueCalc *calc)
+{
+  return calc->conv()->asBoolean (val).asBoolean ();
 }
 
 // Function: NOT
-bool kspreadfunc_not( KSContext& context )
+KSpreadValue func_not (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "NOT", true ) || !KSUtil::checkArgumentsCount( context, 1, "not", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-    return false;
-
-  bool toto = !args[0]->boolValue();
-  context.setValue( new KSValue(toto));
-  return true;
-}
-
-bool kspreadfunc_or_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_or_helper( context, (*it)->listValue(), first ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
-      first = (first || (*it)->boolValue());
-    else
-      return false;
-  }
-
-  return true;
+  bool val = asBool (args[0], calc) ? false : true;
+  return KSpreadValue (val);
 }
 
 // Function: OR
-bool kspreadfunc_or( KSContext& context )
+KSpreadValue func_or (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  bool first = false;
-  bool b = kspreadfunc_or_helper( context, context.value()->listValue(), first );
-
-  if ( b )
-    context.setValue( new KSValue( first ) );
-
-  return b;
+  int cnt = args.count();
+  for (int i = 0; i < cnt; ++i)
+    if (asBool (args[i], calc))
+      // if any value is true, return true
+      return KSpreadValue (true);
+  // nothing is true -> return false
+  return KSpreadValue (false);
 }
 
 // Function: NOR
-bool kspreadfunc_nor( KSContext& context )
+KSpreadValue func_nor (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  bool first = false;
-  bool b = kspreadfunc_or_helper( context, context.value()->listValue(), first );
-
-  if ( b )
-    context.setValue( new KSValue( !first ) );
-
-  return b;
-}
-
-
-bool kspreadfunc_and_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_and_helper( context, (*it)->listValue(), first ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
-      first = first && (*it)->boolValue();
-    else
-      return false;
-  }
-
-  return true;
+  // OR in reverse
+  int cnt = args.count();
+  for (int i = 0; i < cnt; ++i)
+    if (asBool (args[i], calc))
+      // if any value is true, return false
+      return KSpreadValue (false);
+  // nothing is true -> return true
+  return KSpreadValue (true);
 }
 
 // Function: AND
-bool kspreadfunc_and( KSContext& context )
+KSpreadValue func_and (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  bool first = true;
-  bool b = kspreadfunc_and_helper( context, context.value()->listValue(), first );
-
-  if ( b )
-    context.setValue( new KSValue( first ) );
-
-  return b;
+  int cnt = args.count();
+  for (int i = 0; i < cnt; ++i)
+    if (!asBool (args[i], calc))
+      // if any value is false, return false
+      return KSpreadValue (false);
+  // nothing is false -> return true
+  return KSpreadValue (true);
 }
 
 // Function: NAND
-bool kspreadfunc_nand( KSContext& context )
+KSpreadValue func_nand (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  bool first = true;
-  bool b = kspreadfunc_and_helper( context, context.value()->listValue(), first );
-
-  if ( b )
-    context.setValue( new KSValue( !first ) );
-
-  return b;
-}
-
-static bool kspreadfunc_xor_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_xor_helper( context, (*it)->listValue(), first ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
-      first = first ^ (*it)->boolValue();
-    else
-      return false;
-  }
-
-  return true;
+  // AND in reverse
+  int cnt = args.count();
+  for (int i = 0; i < cnt; ++i)
+    if (!asBool (args[i], calc))
+      // if any value is false, return true
+      return KSpreadValue (true);
+  // nothing is false -> return false
+  return KSpreadValue (false);
 }
 
 // Function: XOR
-bool kspreadfunc_xor( KSContext& context )
+KSpreadValue func_xor (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  bool first = false;
-  bool b = kspreadfunc_xor_helper( context, context.value()->listValue(), first );
-
-  if ( b )
-    context.setValue( new KSValue( first ) );
-
-  return b;
+  // exclusive OR - exactly one value must be true
+  int cnt = args.count();
+  int count = 0;
+  for (int i = 0; i < cnt; ++i)
+    if (asBool (args[i], calc))
+      count++;
+  return KSpreadValue (count == 1);
 }
 
 // Function: IF
-bool kspreadfunc_if( KSContext& context )
+KSpreadValue func_if (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 3, "if", true ) || !KSUtil::checkArgumentsCount( context, 3, "IF", true ))
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-      return false;
-
-    if (  args[0]->boolValue() == true )
-      context.setValue( new KSValue( *(args[1]) ) );
-    else
-      context.setValue( new KSValue( *(args[2]) ) );
-
-    return true;
+  if (asBool (args[0], calc))
+    return args[1];
+  else
+    return args[2];
 }

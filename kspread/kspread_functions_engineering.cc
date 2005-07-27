@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,685 +21,283 @@
 
 // built-in engineering functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include "functions.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
+// used by the CONVERT function
 #include <qmap.h>
 
-#include <kdebug.h>
+// these are needed for complex functions, while we handle them in the old way
+#include <kglobal.h>
 #include <klocale.h>
+#include <math.h>
 
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_util.h"
-
+using namespace KSpread;
 
 // prototypes (sort alphabetically)
-bool kspreadfunc_base( KSContext& context );
-bool kspreadfunc_besseli( KSContext& context );
-bool kspreadfunc_besselj( KSContext& context );
-bool kspreadfunc_besselk( KSContext& context );
-bool kspreadfunc_bessely( KSContext& context );
-bool kspreadfunc_bin2dec( KSContext& context );
-bool kspreadfunc_bin2oct( KSContext& context );
-bool kspreadfunc_bin2hex( KSContext& context );
-bool kspreadfunc_complex( KSContext& context );
-bool kspreadfunc_complex_imag( KSContext& context );
-bool kspreadfunc_complex_real( KSContext& context );
-bool kspreadfunc_convert( KSContext& context );
-bool kspreadfunc_dec2hex( KSContext& context );
-bool kspreadfunc_dec2oct( KSContext& context );
-bool kspreadfunc_dec2bin( KSContext& context );
-bool kspreadfunc_delta( KSContext& context );
-bool kspreadfunc_erf( KSContext& context );
-bool kspreadfunc_erfc( KSContext& context );
-bool kspreadfunc_gestep( KSContext& context );
-bool kspreadfunc_hex2dec( KSContext& context );
-bool kspreadfunc_hex2bin( KSContext& context );
-bool kspreadfunc_hex2oct( KSContext& context );
-bool kspreadfunc_imabs( KSContext& context );
-bool kspreadfunc_imargument( KSContext& context );
-bool kspreadfunc_imconjugate( KSContext& context );
-bool kspreadfunc_imcos( KSContext& context );
-bool kspreadfunc_imdiv( KSContext& context );
-bool kspreadfunc_imexp( KSContext& context );
-bool kspreadfunc_imln( KSContext& context );
-bool kspreadfunc_impower( KSContext& context );
-bool kspreadfunc_improduct( KSContext& context );
-bool kspreadfunc_imsin( KSContext& context );
-bool kspreadfunc_imsqrt( KSContext& context );
-bool kspreadfunc_imsub( KSContext& context );
-bool kspreadfunc_imsum( KSContext& context );
-bool kspreadfunc_oct2dec( KSContext& context );
-bool kspreadfunc_oct2bin( KSContext& context );
-bool kspreadfunc_oct2hex( KSContext& context );
+KSpreadValue func_base (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_besseli (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_besselj (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_besselk (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_bessely (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_complex (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_complex_real (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_convert (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_delta (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_erf (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_erfc (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_gestep (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imabs (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imargument (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imcos (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imdiv (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imexp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imln (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_impower (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_improduct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imsin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imsub (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_imsum (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all engineering functions
 void KSpreadRegisterEngineeringFunctions()
 {
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "BASE",        kspreadfunc_base );    // KSpread-specific, like in Quattro-Pro
-  repo->registerFunction( "BESSELI",     kspreadfunc_besseli );
-  repo->registerFunction( "BESSELJ",     kspreadfunc_besselj );
-  repo->registerFunction( "BESSELK",     kspreadfunc_besselk );
-  repo->registerFunction( "BESSELY",     kspreadfunc_bessely );
-  repo->registerFunction( "BIN2DEC",     kspreadfunc_bin2dec );
-  repo->registerFunction( "BIN2OCT",     kspreadfunc_bin2oct );
-  repo->registerFunction( "BIN2HEX",     kspreadfunc_bin2hex );
-  repo->registerFunction( "COMPLEX",     kspreadfunc_complex );
-  repo->registerFunction( "CONVERT",     kspreadfunc_convert );
-  repo->registerFunction( "DEC2HEX",     kspreadfunc_dec2hex );
-  repo->registerFunction( "DEC2BIN",     kspreadfunc_dec2bin );
-  repo->registerFunction( "DEC2OCT",     kspreadfunc_dec2oct );
-  repo->registerFunction( "DELTA",       kspreadfunc_delta );
-  repo->registerFunction( "ERF",         kspreadfunc_erf );
-  repo->registerFunction( "ERFC",        kspreadfunc_erfc );
-  repo->registerFunction( "GESTEP",      kspreadfunc_gestep );
-  repo->registerFunction( "HEX2BIN",     kspreadfunc_hex2bin );
-  repo->registerFunction( "HEX2DEC",     kspreadfunc_hex2dec );
-  repo->registerFunction( "HEX2OCT",     kspreadfunc_hex2oct );
-  repo->registerFunction( "IMABS",       kspreadfunc_imabs );
-  repo->registerFunction( "IMAGINARY",   kspreadfunc_complex_imag );
-  repo->registerFunction( "IMARGUMENT",  kspreadfunc_imargument );
-  repo->registerFunction( "IMCONJUGATE", kspreadfunc_imconjugate );
-  repo->registerFunction( "IMCOS",       kspreadfunc_imcos );
-  repo->registerFunction( "IMDIV",       kspreadfunc_imdiv );
-  repo->registerFunction( "IMEXP",       kspreadfunc_imexp );
-  repo->registerFunction( "IMLN",        kspreadfunc_imln );
-  repo->registerFunction( "IMPOWER",     kspreadfunc_impower );
-  repo->registerFunction( "IMPRODUCT",   kspreadfunc_improduct );
-  repo->registerFunction( "IMREAL",      kspreadfunc_complex_real );
-  repo->registerFunction( "IMSIN",       kspreadfunc_imsin );
-  repo->registerFunction( "IMSQRT",      kspreadfunc_imsqrt );
-  repo->registerFunction( "IMSUB",       kspreadfunc_imsub );
-  repo->registerFunction( "IMSUM",       kspreadfunc_imsum );
-  repo->registerFunction( "OCT2BIN",     kspreadfunc_oct2bin );
-  repo->registerFunction( "OCT2DEC",     kspreadfunc_oct2dec );
-  repo->registerFunction( "OCT2HEX",     kspreadfunc_oct2hex );
+  f = new Function ("BASE",        func_base);    // KSpread-specific, like in Quattro-Pro
+  f->setParamCount (1, 3);
+  repo->add (f);
+  f = new Function ("BESSELI",     func_besseli);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("BESSELJ",     func_besselj);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("BESSELK",     func_besselk);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("BESSELY",     func_bessely);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("BIN2DEC",     func_bin2dec);
+  repo->add (f);
+  f = new Function ("BIN2OCT",     func_bin2oct);
+  repo->add (f);
+  f = new Function ("BIN2HEX",     func_bin2hex);
+  repo->add (f);
+  f = new Function ("COMPLEX",     func_complex);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("CONVERT",     func_convert);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("DEC2HEX",     func_dec2hex);
+  repo->add (f);
+  f = new Function ("DEC2BIN",     func_dec2bin);
+  repo->add (f);
+  f = new Function ("DEC2OCT",     func_dec2oct);
+  repo->add (f);
+  f = new Function ("DELTA",       func_delta);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("ERF",         func_erf);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("ERFC",        func_erfc);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("GESTEP",      func_gestep);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("HEX2BIN",     func_hex2bin);
+  repo->add (f);
+  f = new Function ("HEX2DEC",     func_hex2dec);
+  repo->add (f);
+  f = new Function ("HEX2OCT",     func_hex2oct);
+  repo->add (f);
+  f = new Function ("IMABS",       func_imabs);
+  repo->add (f);
+  f = new Function ("IMAGINARY",   func_complex_imag);
+  repo->add (f);
+  f = new Function ("IMARGUMENT",  func_imargument);
+  repo->add (f);
+  f = new Function ("IMCONJUGATE", func_imconjugate);
+  repo->add (f);
+  f = new Function ("IMCOS",       func_imcos);
+  repo->add (f);
+  f = new Function ("IMDIV",       func_imdiv);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("IMEXP",       func_imexp);
+  repo->add (f);
+  f = new Function ("IMLN",        func_imln);
+  repo->add (f);
+  f = new Function ("IMPOWER",     func_impower);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("IMPRODUCT",   func_improduct);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("IMREAL",      func_complex_real);
+  repo->add (f);
+  f = new Function ("IMSIN",       func_imsin);
+  repo->add (f);
+  f = new Function ("IMSQRT",      func_imsqrt);
+  repo->add (f);
+  f = new Function ("IMSUB",       func_imsub);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("IMSUM",       func_imsum);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("OCT2BIN",     func_oct2bin);
+  repo->add (f);
+  f = new Function ("OCT2DEC",     func_oct2dec);
+  repo->add (f);
+  f = new Function ("OCT2HEX",     func_oct2hex);
+  repo->add (f);
 }
 
 // Function: BASE
-bool kspreadfunc_base( KSContext& context )
+KSpreadValue func_base (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
   int base = 10;
   int prec = 0;
+  if (args.count() > 1)
+    base = calc->conv()->asInteger (args[1]).asInteger();
+  if (args.count() == 3)
+    prec = calc->conv()->asInteger (args[2]).asInteger();
+    
+  if ((base < 2) || (base > 36))
+    return KSpreadValue::errorVALUE();
+  if (prec < 0) prec = 2;
 
-  if ( KSUtil::checkArgumentsCount( context, 3, "BASE", false ) )
-  {
-    if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) ) return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
-    base = args[1]->intValue();
-    prec = args[2]->intValue();
-  }
-  else
-  if ( KSUtil::checkArgumentsCount( context, 2, "BASE", false ) )
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
-    base = args[1]->intValue();
-  }
-  else
-  if ( !KSUtil::checkArgumentsCount( context, 1, "BASE", true ) )
-    return false;
-
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) return false;
-
-  if( ( base < 2 ) || ( base > 36 ) ) return false;
-  if( prec < 0 ) prec = 2;
-
-  double value = args[0]->doubleValue();
-  QString result = QString::number( (int)value, base );
-
-  if( prec > 0 )
-  {
-    result += "."; value = value - (int)value;
-
-    int ix;
-    for( int i = 0; i < prec; i++ )
-    {
-      ix = (int) value * base;
-
-kdDebug() << "value " << value << "  ix " << ix << endl;
-
-      result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
-      value = base * (value - (double)ix/base);
-    }
-  }
-
-  context.setValue( new KSValue( result.upper() ) );
-
-  return true;
+  return calc->base (args[0], base, prec);
 }
-
-/*
- *
- * The code for calculating Bessel functions is taken
- * from CCMATH, a mathematics library source.code.
- *
- * Original copyright follows:
- *
- *  Copyright (C)  2000   Daniel A. Atkinson    All rights reserved.
- *  This code may be redistributed under the terms of the GNU library
- *  public license (LGPL).
- */
-
-static double ccmath_gaml(double x)
-{ double g,h;
-  for(g=1.; x<30. ;g*=x,x+=1.); h=x*x;
-  g=(x-.5)*log(x)-x+.918938533204672-log(g);
-  g+=(1.-(1./6.-(1./3.-1./(4.*h))/(7.*h))/(5.*h))/(12.*x);
-  return g;
-}
-
-static double ccmath_psi(int m)
-{ double s= -.577215664901533; int k;
-  for(k=1; k<m ;++k) s+=1./k;
-  return s;
-}
-
-static double ccmath_ibes(double v,double x)
-{ double y,s,t,tp; int p,m;
-  y=x-9.; if(y>0.) y*=y; tp=v*v*.2+25.;
-  if(y<tp){ x/=2.; m=x;
-    if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
-    else{ if(v>0.) return 0.; else if(v==0.) return 1.;}
-    for(p=1,x*=x;;++p){ t*=x/(p*(v+=1.)); s+=t;
-      if(p>m && t<1.e-13*s) break;
-     }
-   }
-  else{ double u,a0=1.57079632679490;
-    s=t=1./sqrt(x*a0); x*=2.; u=0.;
-    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
-      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>=tp) break;
-      if(!(p&1)) s+=t; else u-=t;
-     }
-    x/=2.; s=cosh(x)*s+sinh(x)*u;
-   }
-  return s;
-}
-
-static double ccmath_kbes(double v,double x)
-{ double y,s,t,tp,f,a0=1.57079632679490;
-  int p,k,m;
-  if(x==0.) return HUGE_VAL;
-  y=x-10.5; if(y>0.) y*=y; tp=25.+.185*v*v;
-  if(y<tp && modf(v+.5,&t)!=0.){ y=1.5+.5*v;
-    if(x<y){ x/=2.; m=x; tp=t=exp(v*log(x)-ccmath_gaml(v+1.));
-      if(modf(v,&y)==0.){ k=y; tp*=v;
-        f=2.*log(x)-ccmath_psi(1)-ccmath_psi(k+1);
-        t/=2.; if(!(k&1)) t= -t; s=f*t;
-        for(p=1,x*=x;;++p){ f-=1./p+1./(v+=1.);
-          t*=x/(p*v); s+=(y=t*f);
-          if(p>m && fabs(y)<1.e-14) break; }
-        if(k>0){ x= -x; s+=(t=1./(tp*2.));
-          for(p=1,--k; k>0 ;++p,--k) s+=(t*=x/(p*k)); }
-       }
-      else{ f=1./(t*v*2.); t*=a0/sin(2.*a0*v); s=f-t;
-        for(p=1,x*=x,tp=v;;++p){
-          t*=x/(p*(v+=1.)); f*= -x/(p*(tp-=1.));
-          s+=(y=f-t); if(p>m && fabs(y)<1.e-14) break; }
-       }
-     }
-    else{ double tq,h,w,z,r;
-      t=12./pow(x,.333); k=t*t; y=2.*(x+k);
-      m=v; v-=m; tp=v*v-.25; v+=1.; tq=v*v-.25;
-      for(s=h=1.,r=f=z=w=0.; k>0 ;--k,y-=2.){
-        t=(y*h-(k+1)*z)/(k-1-tp/k); z=h; f+=(h=t);
-        t=(y*s-(k+1)*w)/(k-1-tq/k); w=s; r+=(s=t);  }
-      t=sqrt(a0/x)*exp(-x); s*=t/r; h*=t/f; x/=2.; if(m==0) s=h;
-      for(k=1; k<m ;++k){ t=v*s/x+h; h=s; s=t; v+=1.;}
-     }
-   }
-  else{ s=t=sqrt(a0/x); x*=2.;
-    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
-      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>=tp) break; s+=t; }
-    s*=exp(-x/2.);
-   }
-  return s;
-}
-
-static double ccmath_jbes(double v,double x)
-{ double y,s,t,tp; int p,m;
-  y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
-  if(y<tp){ x/=2.; m=x;
-    if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
-    else{ if(v>0.) return 0.; else if(v==0.) return 1.;}
-    for(p=1,x*= -x;;++p){ t*=x/(p*(v+=1.)); s+=t;
-      if(p>m && fabs(t)<1.e-13) break;
-     }
-   }
-  else{ double u,a0=1.57079632679490;
-    s=t=1./sqrt(x*a0); x*=2.; u=0.;
-    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
-      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>=tp) break;
-      if(!(p&1)){ t= -t; s+=t;} else u-=t;
-     }
-    y=x/2.-(v+.5)*a0; s=cos(y)*s+sin(y)*u;
-   }
-  return s;
-}
-
-static double ccmath_nbes(double v,double x)
-{ double y,s,t,tp,u,f,a0=3.14159265358979;
-  int p,k,m;
-  y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
-  if(y<tp){ if(x==0.) return HUGE_VAL;
-    x/=2.; m=x; u=t=exp(v*log(x)-ccmath_gaml(v+1.));
-    if(modf(v,&y)==0.){ k=y; u*=v;
-      f=2.*log(x)-ccmath_psi(1)-ccmath_psi(k+1);
-      t/=a0; x*= -x; s=f*t;
-      for(p=1;;++p){ f-=1./p+1./(v+=1.);
-        t*=x/(p*v); s+=(y=t*f); if(p>m && fabs(y)<1.e-13) break; }
-      if(k>0){ x= -x; s-=(t=1./(u*a0));
-        for(p=1,--k; k>0 ;++p,--k) s-=(t*=x/(p*k)); }
-     }
-    else{ f=1./(t*v*a0); t/=tan(a0*v); s=t-f;
-      for(p=1,x*=x,u=v;;++p){
-        t*= -x/(p*(v+=1.)); f*=x/(p*(u-=1.));
-        s+=(y=t-f); if(p>m && fabs(y)<1.e-13) break; }
-     }
-   }
-  else{ x*=2.; s=t=2./sqrt(x*a0); u=0.;
-    for(p=1,y=.5; (tp=fabs(t))>1.e-14 ;++p,y+=1.){
-      t*=(v+y)*(v-y)/(p*x); if(y>v && fabs(t)>tp) break;
-      if(!(p&1)){ t= -t; s+=t;} else u+=t;
-     }
-    y=(x-(v+.5)*a0)/2.; s=sin(y)*s+cos(y)*u;
-   }
-  return s;
-}
-
-
-/* ---------- end of CCMATH code ---------- */
 
 // Function: BESSELI
-bool kspreadfunc_besseli( KSContext& context )
+KSpreadValue func_besseli (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELI",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double y = args[1]->doubleValue();
-
-  context.setValue( new KSValue( ccmath_ibes( y, x ) ) );
-
-  return true;
+  KSpreadValue x = args[0];
+  KSpreadValue y = args[1];
+  return calc->besseli (y, x);
 }
 
 // Function: BESSELJ
-bool kspreadfunc_besselj( KSContext& context )
+KSpreadValue func_besselj (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELJ",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double y = args[1]->doubleValue();
-
-  context.setValue( new KSValue( ccmath_jbes( y, x ) ) );
-
-  return true;
+  KSpreadValue x = args[0];
+  KSpreadValue y = args[1];
+  return calc->besselj (y, x);
 }
 
 // Function: BESSELK
-bool kspreadfunc_besselk( KSContext& context )
+KSpreadValue func_besselk (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELK",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double y = args[1]->doubleValue();
-
-  context.setValue( new KSValue( ccmath_kbes( y, x ) ) );
-
-  return true;
+  KSpreadValue x = args[0];
+  KSpreadValue y = args[1];
+  return calc->besselk (y, x);
 }
 
 // Function: BESSELY
-bool kspreadfunc_bessely( KSContext& context )
+KSpreadValue func_bessely (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "BESSELY",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double y = args[1]->doubleValue();
-
-  context.setValue( new KSValue( ccmath_nbes( y, x ) ) );
-
-  return true;
+  KSpreadValue x = args[0];
+  KSpreadValue y = args[1];
+  return calc->besseln (y, x);
 }
 
 // Function: DEC2HEX
-bool kspreadfunc_dec2hex( KSContext& context )
+KSpreadValue func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DECHEX", true ) ||!KSUtil::checkArgumentsCount( context, 1, "DEC2HEX", true ))
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  QString tmp;
-  tmp=tmp.setNum( args[0]->intValue(),16);
-  context.setValue( new KSValue( tmp ));
-
-  return true;
+  return calc->base (args[0], 16);
 }
 
 // Function: DEC2OCT
-bool kspreadfunc_dec2oct( KSContext& context )
+KSpreadValue func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DEC2OCT", true )  || !KSUtil::checkArgumentsCount( context, 1, "DECOCT", true ))
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  QString tmp;
-  tmp=tmp.setNum( args[0]->intValue(),8);
-  context.setValue( new KSValue( tmp ));
-
-  return true;
+  return calc->base (args[0], 8);
 }
 
 // Function: DEC2BIN
-bool kspreadfunc_dec2bin( KSContext& context )
+KSpreadValue func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DEC2BIN", true )  || !KSUtil::checkArgumentsCount( context, 1, "DECBIN", true ))
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  QString tmp;
-  tmp=tmp.setNum( args[0]->intValue(),2);
-  context.setValue( new KSValue( tmp ));
-
-  return true;
+  return calc->base (args[0], 2);
 }
 
 // Function: BIN2DEC
-bool kspreadfunc_bin2dec( KSContext& context )
+KSpreadValue func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "BIN2DEC", true ) )
-    return false;
-
-  QString str;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    str = args[0]->stringValue();
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else
-    return false;
-
-  bool ok = true;
-  long val = str.toLong( &ok, 2 );
-  if( !ok )
-    context.setValue( new KSValue( i18n("Err") ));
-  else
-    context.setValue( new KSValue( val ) );
-
-  return true;
+  return calc->fromBase (args[0], 2);
 }
 
 // Function: BIN2OCT
-bool kspreadfunc_bin2oct( KSContext& context )
+KSpreadValue func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "BIN2OCT", true ) )
-    return false;
-
-  QString str;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    str = args[0]->stringValue();
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else
-    return false;
-
-  bool ok = true;
-  long val = str.toLong( &ok, 2 );
-  if( !ok )
-    context.setValue( new KSValue( i18n("Err") ));
-  else
-    context.setValue( new KSValue( QString::number( val, 8 ) ) );
-
-  return true;
+  return calc->base (calc->fromBase (args[0], 2), 8);
 }
 
 // Function: BIN2HEX
-bool kspreadfunc_bin2hex( KSContext& context )
+KSpreadValue func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "BIN2HEX", true ) )
-    return false;
-
-  QString str;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    str = args[0]->stringValue();
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else
-    return false;
-
-  bool ok = true;
-  long val = str.toLong( &ok, 2 );
-  if( !ok )
-    context.setValue( new KSValue( i18n("Err") ));
-  else
-    context.setValue( new KSValue( QString::number( val, 16 ).upper() ) );
-
-  return true;
+  return calc->base (calc->fromBase (args[0], 2), 16);
 }
 
 // Function: OCT2DEC
-bool kspreadfunc_oct2dec( KSContext& context )
+KSpreadValue func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2DEC", true ) )
-    return false;
-
-  QString str;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    str = args[0]->stringValue();
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else
-    return false;
-
-  bool ok = true;
-  long val = str.toLong( &ok, 8 );
-  if( !ok )
-    context.setValue( new KSValue( i18n("Err") ));
-  else
-    context.setValue( new KSValue( val ) );
-
-  return true;
+  return calc->fromBase (args[0], 8);
 }
 
 // Function: OCT2BIN
-bool kspreadfunc_oct2bin( KSContext& context )
+KSpreadValue func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2BIN", true ) )
-    return false;
-
-  QString str;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    str = args[0]->stringValue();
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else
-    return false;
-
-  bool ok = true;
-  long val = str.toLong( &ok, 8 );
-  if( !ok )
-    context.setValue( new KSValue( i18n("Err") ));
-  else
-    context.setValue( new KSValue( QString::number( val, 2 ) ) );
-
-  return true;
+  return calc->base (calc->fromBase (args[0], 8), 2);
 }
 
 // Function: OCT2HEX
-bool kspreadfunc_oct2hex( KSContext& context )
+KSpreadValue func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2HEX", true ) )
-    return false;
-
-  QString str;
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    str = args[0]->stringValue();
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    str = QString::number( args[0]->intValue() );
-  else
-    return false;
-
-  bool ok = true;
-  long val = str.toLong( &ok, 8 );
-  if( !ok )
-    context.setValue( new KSValue( i18n("Err") ));
-  else
-    context.setValue( new KSValue( QString::number( val, 16 ).upper() ) );
-
-  return true;
+  return calc->base (calc->fromBase (args[0], 8), 16);
 }
 
 // Function: HEX2DEC
-bool kspreadfunc_hex2dec( KSContext& context )
+KSpreadValue func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "HEX2DEC", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString tmp=args[0]->stringValue();
-  bool ok;
-  long val=tmp.toLong(&ok,16);
-  if(!ok)
-        context.setValue( new KSValue( i18n("Err") ));
-  else
-        context.setValue( new KSValue(val));
-
-  return true;
+  return calc->fromBase (args[0], 16);
 }
 
 // Function: HEX2BIN
-bool kspreadfunc_hex2bin( KSContext& context )
+KSpreadValue func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "HEX2BIN", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString tmp=args[0]->stringValue();
-  bool ok;
-  long val=tmp.toLong(&ok,16);
-  if(!ok)
-        context.setValue( new KSValue( i18n("Err") ));
-  else
-        {
-        tmp=tmp.setNum(val,2);
-        context.setValue( new KSValue(tmp));
-        }
-
-  return true;
+  return calc->base (calc->fromBase (args[0], 16), 2);
 }
 
 // Function: HEX2OCT
-bool kspreadfunc_hex2oct( KSContext& context )
+KSpreadValue func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "HEX2OCT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString tmp=args[0]->stringValue();
-  bool ok;
-  long val=tmp.toLong(&ok,16);
-  if(!ok)
-        context.setValue( new KSValue( i18n("Err") ));
-  else
-        {
-        tmp=tmp.setNum(val,8);
-        context.setValue( new KSValue(tmp));
-        }
-
-  return true;
+  return calc->base (calc->fromBase (args[0], 16), 8);
 }
 
 
@@ -1083,25 +682,13 @@ static bool kspread_convert_speed( const QString& fromUnit,
 
 
 // Function: CONVERT
-bool kspreadfunc_convert( KSContext& context )
+KSpreadValue func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  // This function won't support arbitrary precision.
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "CONVERT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
-    return false;
-
-  double value = args[0]->doubleValue();
-  QString fromUnit = args[1]->stringValue();
-  QString toUnit = args[2]->stringValue();
+  double value = calc->conv()->asFloat (args[0]).asFloat ();
+  QString fromUnit = calc->conv()->asString (args[1]).asString();
+  QString toUnit = calc->conv()->asString (args[2]).asString();
 
   double result = value;
 
@@ -1116,16 +703,17 @@ bool kspreadfunc_convert( KSContext& context )
                   if( !kspread_convert_volume( fromUnit, toUnit, value, result ) )
                     if( !kspread_convert_area( fromUnit, toUnit, value, result ) )
                       if( !kspread_convert_speed( fromUnit, toUnit, value, result ) )
-                        return false;
+                        return KSpreadValue::errorNA();
 
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  return KSpreadValue (result);
 }
 
 
+// functions operating over complex numbers ...
+// these may eventually end up being merged into ValueCalc and friends
+// then complex numbers will be handled transparently in most functions
 
-static QString kspreadfunc_create_complex( double real,double imag )
+static QString func_create_complex( double real,double imag )
 {
   QString tmp,tmp2;
   if(imag ==0)
@@ -1135,7 +723,7 @@ static QString kspreadfunc_create_complex( double real,double imag )
   if(real!=0)
         tmp=KGlobal::locale()->formatNumber(real);
   else
-	return KGlobal::locale()->formatNumber(imag)+"i";
+    return KGlobal::locale()->formatNumber(imag)+"i";
   if (imag >0)
         tmp=tmp+"+"+KGlobal::locale()->formatNumber(imag)+"i";
   else
@@ -1145,34 +733,18 @@ static QString kspreadfunc_create_complex( double real,double imag )
 }
 
 // Function: COMPLEX
-bool kspreadfunc_complex( KSContext& context )
+KSpreadValue func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "COMPLEX",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if(args[1]->doubleValue() ==0)
-        {
-        context.setValue( new KSValue(args[0]->doubleValue()));
-        return true;
-        }
-  QString tmp=kspreadfunc_create_complex(args[0]->doubleValue(),args[1]->doubleValue());
+  if (calc->isZero (args[1]))
+    return args[0];
+  double re = calc->conv()->asFloat (args[0]).asFloat ();
+  double im = calc->conv()->asFloat (args[1]).asFloat ();
+  QString tmp=func_create_complex (re, im);
   bool ok;
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
+  double result = KGlobal::locale()->readNumber(tmp, &ok);
+  if (ok)
+    return KSpreadValue (result);
+  return KSpreadValue (tmp);
 }
 
 
@@ -1270,31 +842,14 @@ return 0;
 }
 
 // Function: IMAGINARY
-bool kspreadfunc_complex_imag( KSContext& context )
+KSpreadValue func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMAGINARY",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString ();
   bool good;
   double result=imag_complexe(tmp, good);
-  if(good)
-        context.setValue( new KSValue(result));
-  else
-        context.setValue( new KSValue(i18n("Err")));
-
-  return true;
+  if (good)
+    return KSpreadValue (result);
+  return KSpreadValue::errorVALUE();
 }
 
 
@@ -1341,867 +896,361 @@ return 0;
 }
 
 // Function: IMREAL
-bool kspreadfunc_complex_real( KSContext& context )
+KSpreadValue func_complex_real (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMREAL",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        tmp=args[0]->stringValue();
+  QString tmp = calc->conv()->asString (args[0]).asString ();
   bool good;
   double result=real_complexe(tmp, good);
-  if(good)
-        context.setValue( new KSValue(result));
-  else
-        context.setValue( new KSValue(i18n("Err")));
-
-  return true;
+  if (good)
+    return KSpreadValue (result);
+  return KSpreadValue::errorVALUE();
 }
 
-
-static bool kspreadfunc_imsum_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
+void ImHelper (ValueCalc *c, KSpreadValue res, KSpreadValue val,
+    double &imag, double &real, double &imag1, double &real1)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
+  bool ok;
+  imag=imag_complexe(res.asString(), ok);
+  real=real_complexe(res.asString(), ok);
+  if (val.isString())
   {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_imsum_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      imag=imag_complexe(result, ok);
-      real=real_complexe(result,  ok);
-      imag1=imag_complexe((*it)->stringValue(), ok);
-      real1=real_complexe((*it)->stringValue(), ok);
-      result=kspreadfunc_create_complex(real+real1,imag+imag1);
-      }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      imag=imag_complexe(result, ok);
-      real=real_complexe(result,  ok);
-      imag1=0;
-      real1=(*it)->doubleValue();
-      result=kspreadfunc_create_complex(real+real1,imag+imag1);
-      }
-    else
-      return false;
+    imag1 = imag_complexe (val.asString(), ok);
+    real1 = real_complexe (val.asString(), ok);
+  } else {
+    imag1=0;
+    real1=c->conv()->asFloat (val).asFloat();
   }
+}
 
-  return true;
+void awImSum (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  double imag,real,imag1,real1;
+  ImHelper (c, res, val, imag, real, imag1, real1);
+  res=func_create_complex(real+real1,imag+imag1);
+}
+
+void awImSub (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  double imag,real,imag1,real1;
+  ImHelper (c, res, val, imag, real, imag1, real1);
+  res=func_create_complex(real-real1,imag-imag1);
+}
+
+void awImMul (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  double imag,real,imag1,real1;
+  ImHelper (c, res, val, imag, real, imag1, real1);
+  res=func_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
+}
+
+void awImDiv (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  double imag,real,imag1,real1;
+  ImHelper (c, res, val, imag, real, imag1, real1);
+  res=func_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),
+      (real1*imag-real*imag1)/(real1*real1+imag1*imag1));
 }
 
 // Function: IMSUM
-bool kspreadfunc_imsum( KSContext& context )
+KSpreadValue func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString result ;
-  bool b = kspreadfunc_imsum_helper( context, context.value()->listValue(), result );
+  KSpreadValue result;
+  calc->arrayWalk (args, result, awImSum, 0);
+  
   bool ok;
-  QString tmp;
-  double val=KGlobal::locale()->readNumber(result, &ok);
-  if(ok&&b)
-        context.setValue( new KSValue( val ) );
-  else if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_imsub_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_imsub_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      if(!result.isEmpty())
-        {
-        imag=imag_complexe(result, ok);
-        real=real_complexe(result,  ok);
-        imag1=imag_complexe((*it)->stringValue(), ok);
-        real1=real_complexe((*it)->stringValue(), ok);
-        result=kspreadfunc_create_complex(real-real1,imag-imag1);
-        }
-      else
-        {
-        imag1=imag_complexe((*it)->stringValue(), ok);
-        real1=real_complexe((*it)->stringValue(), ok);
-        result=kspreadfunc_create_complex(real1,imag1);
-        }
-      }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      imag=imag_complexe(result, ok);
-      real=real_complexe(result,  ok);
-      imag1=0;
-      real1=(*it)->doubleValue();
-      if(!result.isEmpty())
-        result=kspreadfunc_create_complex(real-real1,imag-imag1);
-      else
-        result=kspreadfunc_create_complex(real1,imag1);
-      }
-    else
-      return false;
-  }
-
-  return true;
+  QString res = calc->conv()->asString (result).asString();
+  double val=KGlobal::locale()->readNumber(res, &ok);
+  if (ok)
+    return KSpreadValue (val);
+  return KSpreadValue (result);
 }
 
 // Function: IMSUB
-bool kspreadfunc_imsub( KSContext& context )
+KSpreadValue func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString result ;
-  bool b = kspreadfunc_imsub_helper( context, context.value()->listValue(), result );
+  KSpreadValue result;
+  calc->arrayWalk (args, result, awImSub, 0);
+  
   bool ok;
-  QString tmp;
-  double val=KGlobal::locale()->readNumber(result, &ok);
-  if(ok&&b)
-        context.setValue( new KSValue( val ) );
-  else if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-
-static bool kspreadfunc_improduct_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_improduct_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      if(!result.isEmpty())
-        {
-        imag=imag_complexe(result, ok);
-        real=real_complexe(result,  ok);
-        imag1=imag_complexe((*it)->stringValue(), ok);
-        real1=real_complexe((*it)->stringValue(), ok);
-        result=kspreadfunc_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
-        }
-      else
-        {
-        imag1=imag_complexe((*it)->stringValue(), ok);
-        real1=real_complexe((*it)->stringValue(), ok);
-        result=kspreadfunc_create_complex(real1,imag1);
-        }
-      }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      imag=imag_complexe(result, ok);
-      real=real_complexe(result,  ok);
-      imag1=0;
-      real1=(*it)->doubleValue();
-      if(!result.isEmpty())
-        result=kspreadfunc_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
-      else
-        result=kspreadfunc_create_complex(real1,imag1);
-      }
-    else
-      return false;
-  }
-
-  return true;
+  QString res = calc->conv()->asString (result).asString();
+  double val=KGlobal::locale()->readNumber(res, &ok);
+  if (ok)
+    return KSpreadValue (val);
+  return KSpreadValue (result);
 }
 
 // Function: IMPRODUCT
-bool kspreadfunc_improduct( KSContext& context )
+KSpreadValue func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString result ;
-  bool b = kspreadfunc_improduct_helper( context, context.value()->listValue(), result );
+  KSpreadValue result;
+  calc->arrayWalk (args, result, awImMul, 0);
+  
   bool ok;
-  QString tmp;
-  double val=KGlobal::locale()->readNumber(result, &ok);
-  if(ok&&b)
-        context.setValue( new KSValue( val ) );
-  else if ( b )
-    context.setValue( new KSValue( result ) );
+  QString res = calc->conv()->asString (result).asString();
+  double val=KGlobal::locale()->readNumber(res, &ok);
+  if (ok)
+    return KSpreadValue (val);
+  return KSpreadValue (result);
+}
 
-  return b;
+// Function: IMDIV
+KSpreadValue func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue result;
+  calc->arrayWalk (args, result, awImDiv, 0);
+  
+  bool ok;
+  QString res = calc->conv()->asString (result).asString();
+  double val=KGlobal::locale()->readNumber(res, &ok);
+  if (ok)
+    return KSpreadValue (val);
+  return KSpreadValue (result);
 }
 
 // Function: IMCONJUGATE
-bool kspreadfunc_imconjugate( KSContext& context )
+KSpreadValue func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMCONJUGATE",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
-  if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+  if (!ok)
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
-  tmp=kspreadfunc_create_complex(real,-imag);
+    return KSpreadValue::errorVALUE();
+
+  tmp=func_create_complex(real,-imag);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: IMARGUMENT
-bool kspreadfunc_imargument( KSContext& context )
+KSpreadValue func_imargument (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMARGUMENT",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
-  if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+  if (!ok)
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
-  if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+  if (!ok)
+    return KSpreadValue::errorVALUE();
   if(imag==0)
-        {
-        context.setValue( new KSValue(i18n("#Div/0")));
-        return true;
-        }
+    return KSpreadValue::errorDIV0();
   double arg=atan2(imag,real);
 
-  context.setValue( new KSValue(arg));
-
-  return true;
+  return KSpreadValue (arg);
 }
 
 // Function: IMABS
-bool kspreadfunc_imabs( KSContext& context )
+KSpreadValue func_imabs (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMABS",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double arg=sqrt(pow(imag,2)+pow(real,2));
 
-  context.setValue( new KSValue(arg));
-
-  return true;
+  return KSpreadValue (arg);
 }
 
 // Function: IMCOS
-bool kspreadfunc_imcos( KSContext& context )
+KSpreadValue func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMCOS",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag_res=sin(real)*sinh(imag);
   double real_res=cos(real)*cosh(imag);
 
 
-  tmp=kspreadfunc_create_complex(real_res,-imag_res);
+  tmp=func_create_complex(real_res,-imag_res);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: IMSIN
-bool kspreadfunc_imsin( KSContext& context )
+KSpreadValue func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMSIN",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag_res=cos(real)*sinh(imag);
   double real_res=sin(real)*cosh(imag);
 
 
-  tmp=kspreadfunc_create_complex(real_res,imag_res);
+  tmp=func_create_complex(real_res,imag_res);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: IMLN
-bool kspreadfunc_imln( KSContext& context )
+KSpreadValue func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMLN",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
-
+    return KSpreadValue::errorVALUE();
 
   double arg=sqrt(pow(imag,2)+pow(real,2));
   double real_res=log(arg);
   double imag_res=atan(imag/real);
-  tmp=kspreadfunc_create_complex(real_res,imag_res);
+  tmp=func_create_complex(real_res,imag_res);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-  return true;
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: IMEXP
-bool kspreadfunc_imexp( KSContext& context )
+KSpreadValue func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMEXP",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag_res=exp(real)*sin(imag);
   double real_res=exp(real)*cos(imag);
 
 
-  tmp=kspreadfunc_create_complex(real_res,imag_res);
+  tmp=func_create_complex(real_res,imag_res);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: IMSQRT
-bool kspreadfunc_imsqrt( KSContext& context )
+KSpreadValue func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,1, "IMSQRT",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
+  QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double arg=sqrt(sqrt(pow(imag,2)+pow(real,2)));
   double angle=atan(imag/real);
 
   double real_res=arg*cos((angle/2));
   double imag_res=arg*sin((angle/2));
 
-  tmp=kspreadfunc_create_complex(real_res,imag_res);
+  tmp=func_create_complex(real_res,imag_res);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: IMPOWER
-bool kspreadfunc_impower( KSContext& context )
+KSpreadValue func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "IMPOWER",true ) )
-    return false;
-  QString tmp;
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        {
-        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-                return false;
-        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
-        }
-  else
-        {
-        tmp=args[0]->stringValue();
-        }
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-        return false;
-
+  QString tmp = calc->conv()->asString (args[0]).asString();
+  double val2 = calc->conv()->asFloat (args[1]).asFloat();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-        {
-        context.setValue( new KSValue(i18n("Err")));
-        return false;
-        }
+    return KSpreadValue::errorVALUE();
 
-  double arg=::pow(sqrt(pow(imag,2)+pow(real,2)),args[1]->intValue());
+  double arg=::pow(sqrt(pow(imag,2)+pow(real,2)),val2);
   double angle=atan(imag/real);
 
-  double real_res=arg*cos(angle*args[1]->intValue());
-  double imag_res=arg*sin(angle*args[1]->intValue());
+  double real_res=arg*cos(angle*val2);
+  double imag_res=arg*sin(angle*val2);
 
-  tmp=kspreadfunc_create_complex(real_res,imag_res);
+  tmp=func_create_complex(real_res,imag_res);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-        {
-        context.setValue( new KSValue(result));
-        return true;
-        }
-  context.setValue( new KSValue(tmp));
-
-  return true;
-}
-
-
-static bool kspreadfunc_imdiv_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_imdiv_helper( context, (*it)->listValue(), result ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      if(!result.isEmpty())
-        {
-        imag=imag_complexe(result, ok);
-        real=real_complexe(result,  ok);
-        imag1=imag_complexe((*it)->stringValue(), ok);
-        real1=real_complexe((*it)->stringValue(), ok);
-        result=kspreadfunc_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),(real1*imag-real*imag1)/(real1*real1+imag1*imag1));
-        }
-      else
-        {
-        imag1=imag_complexe((*it)->stringValue(), ok);
-        real1=real_complexe((*it)->stringValue(), ok);
-        result=kspreadfunc_create_complex(real1,imag1);
-        }
-      }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-      double imag,real,imag1,real1;
-      bool ok;
-      imag=imag_complexe(result, ok);
-      real=real_complexe(result,  ok);
-      imag1=0;
-      real1=(*it)->doubleValue();
-      if(!result.isEmpty())
-        result=kspreadfunc_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),(real1*imag-real*imag1)/(real1*real1+imag1*imag1));
-      else
-        result=kspreadfunc_create_complex(real1,imag1);
-      }
-    else
-      return false;
-  }
-
-  return true;
-}
-
-// Function: IMDIV
-bool kspreadfunc_imdiv( KSContext& context )
-{
-  QString result ;
-  bool b = kspreadfunc_imdiv_helper( context, context.value()->listValue(), result );
-  bool ok;
-  QString tmp;
-  double val=KGlobal::locale()->readNumber(result, &ok);
-  if(ok&&b)
-        context.setValue( new KSValue( val ) );
-  else if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool approx_equal_delta (double a, double b)
-{
-  if ( a == b )
-    return TRUE;
-  double x = a - b;
-  return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
+    return KSpreadValue (result);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: DELTA
-bool kspreadfunc_delta( KSContext& context )
+KSpreadValue func_delta (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  short result;
-  double val1 = 0.0;
-  double val2 = 0.0;
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "DELTA", false ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "DELTA", true ) )
-      return false;
-  }
-  else
-  {
-    kdDebug() << "Here2" << endl;
-
-    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-    {
-      if ( !KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
-        return false;
-      val2 = ( args[1]->boolValue() ? 1.0 : 0.0 );
-    }
-    else
-      val2 = args[1]->doubleValue();
-  }
-
-  kdDebug() << "Here1" << endl;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-  {
-    if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-      return false;
-    val1 = ( args[0]->boolValue() ? 1.0 : 0.0 );
-  }
-  else
-    val1 = args[0]->doubleValue();
-
-  kdDebug() << "Here3" << endl;
-
-  if ( approx_equal_delta( val1, val2 ) )
-    result = 1;
-  else
-    result = 0;
-
-  kdDebug() << "Here4" << endl;
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  KSpreadValue val1 = args[0];
+  KSpreadValue val2 = 0.0;
+  if (args.count() == 2)
+    val2 = args[1];
+  
+  return KSpreadValue (calc->approxEqual (val1, val2) ? 1 : 0);
 }
 
 // Function: ERF
-bool kspreadfunc_erf( KSContext & context )
+KSpreadValue func_erf (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  double result = 0.0;
-
-  if ( KSUtil::checkArgumentsCount( context, 2, "ERF", false ) )
-  {
-    double lower_limit = args[0]->doubleValue();
-    double upper_limit = args[1]->doubleValue();
-    result = erf( upper_limit ) - erf( lower_limit );
-  }
-  else
-  if ( KSUtil::checkArgumentsCount( context, 1, "ERF", false ) )
-  {
-    double limit = args[0]->doubleValue();
-    result = erf( limit );
-  }
-  else
-    return false;
-
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  if (args.count() == 2)
+    return calc->sub (calc->erf (args[1]), calc->erf (args[0]));
+  return calc->erf (args[0]);
 }
 
 // Function: ERFC
-bool kspreadfunc_erfc( KSContext & context )
+KSpreadValue func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  double result = 0.0;
-
-  if ( KSUtil::checkArgumentsCount( context, 2, "ERFC", false ) )
-  {
-    double lower_limit = args[0]->doubleValue();
-    double upper_limit = args[1]->doubleValue();
-    result = erfc( upper_limit ) - erfc( lower_limit );
-  }
-  else
-  if ( KSUtil::checkArgumentsCount( context, 1, "ERFC", false ) )
-  {
-    double limit = args[0]->doubleValue();
-    result = erfc( limit );
-  }
-  else
-    return false;
-
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  if (args.count() == 2)
+    return calc->sub (calc->erfc (args[1]), calc->erfc (args[0]));
+  return calc->erfc (args[0]);
 }
 
 // Function: GESTEP
-bool kspreadfunc_gestep( KSContext & context )
+KSpreadValue func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  short result;
-  double val1 = 0.0;
-  double val2 = 0.0;
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "GESTEP", false ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "GESTEP", true ) )
-      return false;
-  }
-  else
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-    {
-      if ( !KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
-        return false;
-      val2 = ( args[1]->boolValue() ? 1.0 : 0.0 );
-    }
-    else
-      val2 = args[1]->doubleValue();
-  }
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-  {
-    if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-      return false;
-    val1 = ( args[0]->boolValue() ? 1.0 : 0.0 );
-  }
-  else
-    val1 = args[0]->doubleValue();
-
-  if ( ( val1 > val2 ) || approx_equal_delta( val1, val2 ) )
+  KSpreadValue x = args[0];
+  KSpreadValue y = 0.0;
+  if (args.count() == 2)
+    y = args[1];
+  
+  int result = 0;
+  if (calc->greater (x, y) || calc->approxEqual (x, y))
     result = 1;
-  else
-    result = 0;
 
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  return KSpreadValue (result);
 }
 

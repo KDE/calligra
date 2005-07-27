@@ -28,6 +28,7 @@
 
 class KLocale;
 class KSpreadCell;
+class KSpreadSheet;
 
 namespace KSpread
 {
@@ -233,12 +234,12 @@ class Formula
   public:
   
     /*
-     * Creates a formula. It must be owned by a cell.
+     * Creates a formula. It must be owned by a sheet, and optionally sheet.
      */
-    Formula( KSpreadCell *cell );
+    Formula (KSpreadSheet *sheet,  KSpreadCell *cell = 0);
     
     /*
-     * Creates a formula that is not owned by any cell.
+     * Creates a formula that is not owned by any sheet.
      * This might be useful in some cases.
      */
     Formula();
@@ -248,6 +249,10 @@ class Formula
      */
     ~Formula();
     
+    /*
+     * Returns the cell which owns this formula.
+     */
+    KSpreadSheet* sheet();
     /*
      * Returns the cell which owns this formula.
      */

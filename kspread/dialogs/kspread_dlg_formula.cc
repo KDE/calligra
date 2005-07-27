@@ -36,7 +36,7 @@
 #include "kspread_map.h"
 #include "kspread_selection.h"
 #include "kspread_view.h"
-#include "kspread_functions.h"
+#include "functions.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -49,6 +49,8 @@
 #include <qpushbutton.h>
 #include <klineedit.h>
 #include <qlayout.h>
+
+using namespace KSpread;
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
     : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )
@@ -89,7 +91,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid1->addWidget( searchFunct, 0, 0 );
 
     typeFunction = new QComboBox(page);
-    QStringList cats = KSpreadFunctionRepository::self()->groups();
+    QStringList cats = FunctionRepository::self()->groups();
     cats.prepend( i18n("All") );
     typeFunction->insertStringList( cats  );
     grid1->addWidget( typeFunction, 1, 0 );
@@ -447,7 +449,7 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 
     QString text;
 
-    KSpreadParameterType elementType = m_desc->param( param ).type();
+    ParameterType elementType = m_desc->param( param ).type();
 
     switch( elementType )
     {
@@ -524,12 +526,13 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
     return text;
 }
 
-static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescription* desc, int param )
+static void showEntry( QLineEdit* edit, QLabel* label,
+    FunctionDescription* desc, int param )
 {
     edit->show();
     label->setText( desc->param( param ).helpText()+":" );
     label->show();
-    KSpreadParameterType elementType = desc->param( param ).type();
+    ParameterType elementType = desc->param( param ).type();
     KFloatValidator *validate=0L;
     switch( elementType )
     {
@@ -667,32 +670,32 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 
 void KSpreadDlgFormula::slotSelected( const QString& function )
 {
-    KSpreadFunctionDescription* desc =
-       KSpreadFunctionRepository::self()->functionInfo( function );
+    FunctionDescription* desc =
+        FunctionRepository::self()->functionInfo (function);
     if ( !desc )
     {
-	m_browser->setText( "" );
-	return;
+      m_browser->setText (i18n ("Description is not available."));
+      return;
     }
-
+  
     if( functions->currentItem() !=- 1 )
         selectFunction->setEnabled( TRUE );
-
+  
     // Lock
     refresh_result = false;
-
+  
     m_funcName = function;
     m_desc = desc;
-
+  
     // Set the help text
     m_browser->setText( m_desc->toQML() );
     m_browser->setContentsPos( 0, 0 );
-
+  
     m_focus=0;
-
+  
     m_tabwidget->setCurrentPage( 0 );
     m_tabwidget->setTabEnabled( m_input, FALSE );
-
+  
     // Unlock
     refresh_result=true;
 }
@@ -700,8 +703,8 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 // from hyperlink in the "Related Function"
 void KSpreadDlgFormula::slotShowFunction( const QString& function )
 {
-    KSpreadFunctionDescription* desc =
-       KSpreadFunctionRepository::self()->functionInfo( function );
+    FunctionDescription* desc =
+       FunctionRepository::self()->functionInfo( function );
     if ( !desc ) return;
 
     // select the category
@@ -745,9 +748,9 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
 {
     QStringList lst;
     if ( category == i18n("All") )
-	lst = KSpreadFunctionRepository::self()->functionNames();
+      lst = FunctionRepository::self()->functionNames();
     else
-	lst = KSpreadFunctionRepository::self()->functionNames( category );
+      lst = FunctionRepository::self()->functionNames( category );
 
     kdDebug(36001)<<"category: "<<category<<" ("<<lst.count()<<"functions)" << endl;
 

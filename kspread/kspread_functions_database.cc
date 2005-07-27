@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,83 +21,99 @@
 
 // built-in database functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
-
-#include <kdebug.h>
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
+/*
+All database functions are temporarily disabled - we need to change the
+function parser to that it gives up range information. We also need a working
+flattening support.
+*/
 
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
-#include "kspread_interpreter.h"
 #include "kspread_doc.h"
-#include "kspread_functions.h"
-#include "kspread_functions_helper.h"
-#include "kspread_util.h"
 
-#include <qmemarray.h>
-#include <qptrlist.h>
-#include <qrect.h>
-#include <qvaluelist.h>
+#include "functions.h"
+#include "valuecalc.h"
+
+using namespace KSpread;
 
 // prototypes
-bool kspreadfunc_daverage( KSContext & context );
-bool kspreadfunc_dcount( KSContext & context );
-bool kspreadfunc_dcounta( KSContext & context );
-bool kspreadfunc_dget( KSContext & context );
-bool kspreadfunc_dmax( KSContext & context );
-bool kspreadfunc_dmin( KSContext & context );
-bool kspreadfunc_dproduct( KSContext & context );
-bool kspreadfunc_dstdev( KSContext & context );
-bool kspreadfunc_dstdevp( KSContext & context );
-bool kspreadfunc_dsum( KSContext & context );
-bool kspreadfunc_dvar( KSContext & context );
-bool kspreadfunc_dvarp( KSContext & context );
-bool kspreadfunc_getpivotdata( KSContext & context );
+KSpreadValue func_daverage (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dcount (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dcounta (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dget (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dmax (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dmin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dproduct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dstdev (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dstdevp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dsum (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dvar (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dvarp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all database functions
 void KSpreadRegisterDatabaseFunctions()
 {
-  KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
+#if 0
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "DAVERAGE",     kspreadfunc_daverage );
-  repo->registerFunction( "DCOUNT",       kspreadfunc_dcount );
-  repo->registerFunction( "DCOUNTA",      kspreadfunc_dcounta );
-  repo->registerFunction( "DGET",         kspreadfunc_dget );
-  repo->registerFunction( "DMAX",         kspreadfunc_dmax );
-  repo->registerFunction( "DMIN",         kspreadfunc_dmin );
-  repo->registerFunction( "DPRODUCT",     kspreadfunc_dproduct );
-  repo->registerFunction( "DSTDEV",       kspreadfunc_dstdev );
-  repo->registerFunction( "DSTDEVP",      kspreadfunc_dstdevp );
-  repo->registerFunction( "DSUM",         kspreadfunc_dsum );
-  repo->registerFunction( "DVAR",         kspreadfunc_dvar );
-  repo->registerFunction( "DVARP",        kspreadfunc_dvarp );
-  repo->registerFunction( "GETPIVOTDATA", kspreadfunc_getpivotdata ); // partially Excel-compatible
+  f = new Function ("DAVERAGE",     func_daverage);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DCOUNT",       func_dcount);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DCOUNTA",      func_dcounta);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DGET",         func_dget);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DMAX",         func_dmax);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DMIN",         func_dmin);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DPRODUCT",     func_dproduct);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DSTDEV",       func_dstdev);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DSTDEVP",      func_dstdevp);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DSUM",         func_dsum);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DVAR",         func_dvar);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DVARP",        func_dvarp);
+  f->setParamCount (3);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("GETPIVOTDATA", func_getpivotdata); // partially Excel-compatible
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+#endif
 }
 
-/*********************************************************************
- *
- * Helper function to avoid problems with rounding floating point
- * values. Idea for this kind of solution taken from Openoffice.
- *
- *********************************************************************/
-
-/**
- * Use the implementation from kspread_functions_helper.cc instead.
- *
-static bool approx_equal (double a, double b)
-{
-  if ( a == b )
-    return TRUE;
-  double x = a - b;
-  return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
-}
- */
+#if 0
 
 bool conditionMatches( KSpreadDB::Condition &cond, KSpreadCell * cell )
 {
@@ -257,7 +274,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * sheet, int
 
 
 // Function: DSUM
-bool kspreadfunc_dsum( KSContext & context )
+KSpreadValue func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -307,7 +324,7 @@ bool kspreadfunc_dsum( KSContext & context )
 }
 
 // Function: DAVERAGE
-bool kspreadfunc_daverage( KSContext & context )
+KSpreadValue func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -361,7 +378,7 @@ bool kspreadfunc_daverage( KSContext & context )
 }
 
 // Function: DCOUNT
-bool kspreadfunc_dcount( KSContext & context )
+KSpreadValue func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -413,7 +430,7 @@ bool kspreadfunc_dcount( KSContext & context )
 }
 
 // Function: DCOUNTA
-bool kspreadfunc_dcounta( KSContext & context )
+KSpreadValue func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -463,7 +480,7 @@ bool kspreadfunc_dcounta( KSContext & context )
 }
 
 // Function: DGET
-bool kspreadfunc_dget( KSContext & context )
+KSpreadValue func_dget (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -529,7 +546,7 @@ bool kspreadfunc_dget( KSContext & context )
 }
 
 // Function: DMAX
-bool kspreadfunc_dmax( KSContext & context )
+KSpreadValue func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -585,7 +602,7 @@ bool kspreadfunc_dmax( KSContext & context )
 }
 
 // Function: DMIN
-bool kspreadfunc_dmin( KSContext & context )
+KSpreadValue func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -641,7 +658,7 @@ bool kspreadfunc_dmin( KSContext & context )
 }
 
 // Function: DPRODUCT
-bool kspreadfunc_dproduct( KSContext & context )
+KSpreadValue func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -699,7 +716,7 @@ bool kspreadfunc_dproduct( KSContext & context )
 }
 
 // Function: DSTDEV
-bool kspreadfunc_dstdev( KSContext & context )
+KSpreadValue func_dstdev (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -773,7 +790,7 @@ bool kspreadfunc_dstdev( KSContext & context )
 }
 
 // Function: DSTDEVP
-bool kspreadfunc_dstdevp( KSContext & context )
+KSpreadValue func_dstdevp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -846,7 +863,7 @@ bool kspreadfunc_dstdevp( KSContext & context )
 }
 
 // Function: DVAR
-bool kspreadfunc_dvar( KSContext & context )
+KSpreadValue func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -919,7 +936,7 @@ bool kspreadfunc_dvar( KSContext & context )
 }
 
 // Function: DVARP
-bool kspreadfunc_dvarp( KSContext & context )
+KSpreadValue func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -993,7 +1010,7 @@ bool kspreadfunc_dvarp( KSContext & context )
 
 // Function: GETPIVOTDATA
 // FIXME implement more things with this, see Excel !
-bool kspreadfunc_getpivotdata( KSContext & context )
+KSpreadValue func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -1032,3 +1049,5 @@ bool kspreadfunc_getpivotdata( KSContext & context )
 
   return true;
 }
+
+#endif

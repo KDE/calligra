@@ -200,11 +200,6 @@ KSPREAD_EXPORT int util_decodeColumnLabelText( const QString &_col );
 */
 KSPREAD_EXPORT QString util_encodeColumnLabelText( int column );
 
-QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
-                      KLocale const * const locale, bool insert );
-
-double util_fact( double val, double end );
-
 bool util_isAllSelected(const QRect &selection);
 bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,52 +21,64 @@
 
 // built-in reference functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
-
-#include <kdebug.h>
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
+/*
+All these functions are temporarily disabled.
+Reasons are the same as with the database functions.
+Not all of these functions require range info, but almost all do.
+*/
 
 #include "kspread_doc.h"
-#include "kspread_functions.h"
-#include "kspread_interpreter.h"
 #include "kspread_sheet.h"
 #include "kspread_util.h"
 #include "kspread_value.h"
 
+#include "functions.h"
+#include "valuecalc.h"
+
+using namespace KSpread;
+
 // prototypes (sorted alphabetically)
-bool kspreadfunc_address( KSContext & context );
-bool kspreadfunc_areas( KSContext & context );
-bool kspreadfunc_choose( KSContext & context );
-bool kspreadfunc_column( KSContext & context );
-bool kspreadfunc_columns( KSContext & context );
-bool kspreadfunc_indirect( KSContext & context );
-bool kspreadfunc_lookup( KSContext & context );
-bool kspreadfunc_row( KSContext & context );
-bool kspreadfunc_rows( KSContext & context );
+KSpreadValue func_address (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_choose (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_column (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_columns (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_lookup (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_row (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_rows (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all reference functions
 void KSpreadRegisterReferenceFunctions()
 {
-  KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
-  repo->registerFunction( "ADDRESS",  kspreadfunc_address );
-  repo->registerFunction( "AREAS",    kspreadfunc_areas );
-  repo->registerFunction( "CHOOSE",   kspreadfunc_choose );
-  repo->registerFunction( "COLUMN",   kspreadfunc_column );
-  repo->registerFunction( "COLUMNS",  kspreadfunc_columns );
-  repo->registerFunction( "INDIRECT", kspreadfunc_indirect );
-  repo->registerFunction( "LOOKUP",   kspreadfunc_lookup );
-  repo->registerFunction( "ROW",      kspreadfunc_row );
-  repo->registerFunction( "ROWS",     kspreadfunc_rows );
+#if 0
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
+  
+  f = new Function ("ADDRESS",  func_address);
+  repo->add (f);
+  f = new Function ("AREAS",    func_areas);
+  repo->add (f);
+  f = new Function ("CHOOSE",   func_choose);
+  repo->add (f);
+  f = new Function ("COLUMN",   func_column);
+  repo->add (f);
+  f = new Function ("COLUMNS",  func_columns);
+  repo->add (f);
+  f = new Function ("INDIRECT", func_indirect);
+  repo->add (f);
+  f = new Function ("LOOKUP",   func_lookup);
+  repo->add (f);
+  f = new Function ("ROW",      func_row);
+  repo->add (f);
+  f = new Function ("ROWS",     func_rows);
+  repo->add (f);
+#endif
 }
 
+#if 0
 // Function: ADDRESS
-bool kspreadfunc_address( KSContext & context )
+KSpreadValue func_address (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
   bool r1c1 = false;
@@ -203,7 +216,7 @@ bool checkRef( QString const & ref )
 }
 
 // Function: AREAS
-bool kspreadfunc_areas( KSContext & context )
+KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -246,7 +259,7 @@ bool kspreadfunc_areas( KSContext & context )
 }
 
 // Function: CHOOSE
-bool kspreadfunc_choose( KSContext & context )
+KSpreadValue func_choose (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
 
@@ -339,7 +352,7 @@ bool kspreadfunc_choose( KSContext & context )
 }
 
 // Function: COLUMN
-bool kspreadfunc_column( KSContext & context )
+KSpreadValue func_column (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
@@ -400,7 +413,7 @@ bool kspreadfunc_column( KSContext & context )
 }
 
 // Function: COLUMNS
-bool kspreadfunc_columns( KSContext & context )
+KSpreadValue func_columns (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -462,7 +475,7 @@ bool kspreadfunc_columns( KSContext & context )
 
 
 // Function: INDIRECT
-bool kspreadfunc_indirect( KSContext & context )
+KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -570,7 +583,7 @@ static bool isEqualLess( KSContext & context, KSpreadValue::Type type, KSValue::
   return false;
 }
 
-bool kspreadfunc_lookup( KSContext & context )
+KSpreadValue func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
 {
   /* As soon as it works correctly: here is the doc
     <Function>
@@ -705,7 +718,7 @@ bool kspreadfunc_lookup( KSContext & context )
 }
 
 // Function: ROW
-bool kspreadfunc_row( KSContext & context )
+KSpreadValue func_row (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
@@ -761,7 +774,7 @@ bool kspreadfunc_row( KSContext & context )
 }
 
 // Function: ROWS
-bool kspreadfunc_rows( KSContext & context )
+KSpreadValue func_rows (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
@@ -813,3 +826,4 @@ bool kspreadfunc_rows( KSContext & context )
   return false;
 }
 
+#endif

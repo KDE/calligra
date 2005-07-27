@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003,2004 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,6 +96,7 @@ class Formula::Private
 public:
   Formula *formula;
   KSpreadCell *cell;
+  KSpreadSheet *sheet;
   bool dirty;
   bool valid;
   QString expression;
@@ -371,10 +373,11 @@ static bool isIdentifier( QChar ch )
 
 // Constructor
 
-Formula::Formula( KSpreadCell *cell )
+Formula::Formula (KSpreadSheet *sheet, KSpreadCell *cell)
 {
   d = new Private;
   d->cell = cell;
+  d->sheet = sheet;
   clear();
 }
 
@@ -395,6 +398,11 @@ Formula::~Formula()
 KSpreadCell* Formula::cell()
 {
   return d->cell;
+}  
+
+KSpreadSheet* Formula::sheet()
+{
+  return d->sheet;
 }  
 
 // Sets a new expression for this formula.
@@ -423,6 +431,8 @@ bool Formula::isValid() const
   if( d->dirty )
   {
     KLocale* locale = d->cell ? d->cell->locale() : 0;
+    if ((!locale) && d->sheet)
+      locale = d->sheet->doc()->locale();
     Tokens tokens = scan( d->expression, locale );
     if( tokens.valid() )
       compile( tokens );
@@ -451,6 +461,8 @@ void Formula::clear()
 Tokens Formula::tokens() const
 {
   KLocale* locale = d->cell ? d->cell->locale() : 0;
+  if ((!locale) && d->sheet)
+    locale = d->sheet->doc()->locale();
   return scan( d->expression, locale );
 }
 
@@ -1125,9 +1137,9 @@ KSpreadValue Formula::eval() const
   ValueConverter* converter = 0;
   ValueCalc* calc = 0;
   
-  if( d->cell )
+  if (d->sheet)
   {
-    sheet = d->cell->sheet();
+    sheet = d->sheet;
     converter = sheet->doc()->converter();
     calc = sheet->doc()->calc();
   }
@@ -1154,6 +1166,7 @@ KSpreadValue Formula::eval() const
 
   for( unsigned pc = 0; pc < d->codes.count(); pc++ )
   {
+    KSpreadValue ret;   // for the function caller
     Opcode& opcode = d->codes[pc];
     index = opcode.index;
     switch( opcode.type )
@@ -1311,8 +1324,6 @@ KSpreadValue Formula::eval() const
 
       // calling function
       case Opcode::Function:
-        // return KSpreadValue::errorVALUE();
-        
         if( stack.count() < index )
           // (Tomas) umm, how could that be ? I mean, the index value
           //  is computed from the stack *confused*
@@ -1327,7 +1338,11 @@ KSpreadValue Formula::eval() const
         function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
-        stack.push (function->exec (args, calc));
+        // TODO: create and fill a FunctionExtra object, if needed
+        ret = function->exec (args, calc, 0);
+        if (ret.isError ())
+          return ret;    // error in the function
+        stack.push (ret);
         
         break;
 
@@ -1336,7 +1351,7 @@ KSpreadValue Formula::eval() const
     }
   }
 
-  if (!d->cell) {
+  if (!d->sheet) {
     delete parser;
     delete converter;
     delete calc;

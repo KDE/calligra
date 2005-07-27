@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,2455 +21,1171 @@
 
 // built-in statistical functions
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include "functions.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
-#include <qvaluelist.h>
+// needed for MODE
+#include <qmap.h>
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_functions_helper.h"
-#include "kspread_util.h"
+using namespace KSpread;
 
 // prototypes (sorted!)
-bool kspreadfunc_arrang( KSContext& context );
-bool kspreadfunc_average( KSContext& context );
-bool kspreadfunc_averagea( KSContext& context );
-bool kspreadfunc_avedev( KSContext& context );
-bool kspreadfunc_betadist( KSContext& context );
-bool kspreadfunc_bino( KSContext& context );
-bool kspreadfunc_bino_inv( KSContext& context );
-bool kspreadfunc_chidist( KSContext& context );
-bool kspreadfunc_combin( KSContext& context );
-bool kspreadfunc_confidence( KSContext& context );
-bool kspreadfunc_correl_pop( KSContext & context );
-bool kspreadfunc_covar( KSContext & context );
-bool kspreadfunc_devsq( KSContext & context );
-bool kspreadfunc_expondist(KSContext& context );
-bool kspreadfunc_fdist( KSContext& context );
-bool kspreadfunc_fisher( KSContext& context );
-bool kspreadfunc_fisherinv( KSContext& context );
-bool kspreadfunc_gammadist( KSContext& context );
-bool kspreadfunc_gammaln( KSContext& context );
-bool kspreadfunc_gauss(KSContext& context);
-bool kspreadfunc_geomean( KSContext & context );
-bool kspreadfunc_harmean( KSContext & context );
-bool kspreadfunc_hypgeomdist( KSContext & context );
-bool kspreadfunc_kurtosis_est( KSContext & context );
-bool kspreadfunc_kurtosis_pop( KSContext & context );
-bool kspreadfunc_large(KSContext& context );
-bool kspreadfunc_loginv(KSContext& context );
-bool kspreadfunc_lognormdist(KSContext& context );
-bool kspreadfunc_median( KSContext& context );
-bool kspreadfunc_mode( KSContext& context );
-bool kspreadfunc_negbinomdist( KSContext & context );
-bool kspreadfunc_normdist(KSContext& context );
-bool kspreadfunc_norminv( KSContext& context );
-bool kspreadfunc_normsinv( KSContext& context );
-bool kspreadfunc_phi(KSContext& context);
-bool kspreadfunc_poisson( KSContext& context );
-bool kspreadfunc_skew_est(KSContext& context );
-bool kspreadfunc_skew_pop(KSContext& context );
-bool kspreadfunc_small(KSContext& context );
-bool kspreadfunc_standardize( KSContext & context );
-bool kspreadfunc_stddev( KSContext& context );
-bool kspreadfunc_stddeva( KSContext& context );
-bool kspreadfunc_stddevp( KSContext& context );
-bool kspreadfunc_stddevpa( KSContext& context );
-bool kspreadfunc_stdnormdist(KSContext& context );
-bool kspreadfunc_sumproduct( KSContext& context );
-bool kspreadfunc_sumx2py2( KSContext& context );
-bool kspreadfunc_sumx2my2( KSContext& context );
-bool kspreadfunc_sumxmy2( KSContext& context );
-bool kspreadfunc_tdist( KSContext& context );
-bool kspreadfunc_variance( KSContext& context );
-bool kspreadfunc_variancea( KSContext& context );
-bool kspreadfunc_variancep( KSContext& context );
-bool kspreadfunc_variancepa( KSContext& context );
-bool kspreadfunc_weibull( KSContext& context );
+KSpreadValue func_arrang (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_average (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_averagea (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_avedev (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_bino (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_chidist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_combin (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_confidence (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_correl_pop (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_covar (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_devsq (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_expondist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_fdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_gammadist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_gammaln (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_gauss (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_geomean (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_harmean (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_hypgeomdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_large (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_loginv (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_median (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mode (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_negbinomdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_normdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_norminv (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_normsinv (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_phi (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_poisson (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_skew_est (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_small (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_standardize (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_stddev (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_stddeva (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_stddevp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_stddevpa (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_stdnormdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sumproduct (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_tdist (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_variance (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_variancea (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_variancep (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_variancepa (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_weibull (valVector args, ValueCalc *calc, FuncExtra *);
 
 typedef QValueList<double> List;
 
 // registers all statistical functions
 void KSpreadRegisterStatisticalFunctions()
 {
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  // insert them sorted please
-  repo->registerFunction( "AVEDEV", kspreadfunc_avedev );
-  repo->registerFunction( "AVERAGE", kspreadfunc_average );
-  repo->registerFunction( "AVERAGEA", kspreadfunc_averagea );
-  repo->registerFunction( "BETADIST", kspreadfunc_betadist );
-  repo->registerFunction( "BINO", kspreadfunc_bino );
-  repo->registerFunction( "CHIDIST", kspreadfunc_chidist );
-  repo->registerFunction( "COMBIN", kspreadfunc_combin );
-  repo->registerFunction( "CONFIDENCE", kspreadfunc_confidence );
-  repo->registerFunction( "CORREL", kspreadfunc_correl_pop );
-  repo->registerFunction( "COVAR", kspreadfunc_covar );
-  repo->registerFunction( "DEVSQ", kspreadfunc_devsq );
-  repo->registerFunction( "EXPONDIST", kspreadfunc_expondist );
-  repo->registerFunction( "FDIST", kspreadfunc_fdist );
-  repo->registerFunction( "FISHER", kspreadfunc_fisher );
-  repo->registerFunction( "FISHERINV", kspreadfunc_fisherinv );
-  repo->registerFunction( "GAMMADIST", kspreadfunc_gammadist );
-  repo->registerFunction( "GAMMALN", kspreadfunc_gammaln );
-  repo->registerFunction( "GAUSS", kspreadfunc_gauss );
-  repo->registerFunction( "GEOMEAN", kspreadfunc_geomean );
-  repo->registerFunction( "HARMEAN", kspreadfunc_harmean );
-  repo->registerFunction( "HYPGEOMDIST", kspreadfunc_hypgeomdist );
-  repo->registerFunction( "INVBINO", kspreadfunc_bino_inv );
-  repo->registerFunction( "LARGE", kspreadfunc_large );
-  repo->registerFunction( "LOGINV", kspreadfunc_loginv );
-  repo->registerFunction( "LOGNORMDIST", kspreadfunc_lognormdist );
-  repo->registerFunction( "KURT", kspreadfunc_kurtosis_est );
-  repo->registerFunction( "KURTP", kspreadfunc_kurtosis_pop );
-  repo->registerFunction( "MEDIAN", kspreadfunc_median );
-  repo->registerFunction( "MODE", kspreadfunc_mode );
-  repo->registerFunction( "NEGBINOMDIST", kspreadfunc_negbinomdist );
-  repo->registerFunction( "NORMDIST", kspreadfunc_normdist );
-  repo->registerFunction( "NORMINV", kspreadfunc_norminv );
-  repo->registerFunction( "NORMSDIST", kspreadfunc_stdnormdist );
-  repo->registerFunction( "NORMSINV", kspreadfunc_normsinv );
-  repo->registerFunction( "PEARSON", kspreadfunc_correl_pop );
-  repo->registerFunction( "PERMUT", kspreadfunc_arrang );
-  repo->registerFunction( "PHI", kspreadfunc_phi );
-  repo->registerFunction( "POISSON", kspreadfunc_poisson );
-  repo->registerFunction( "SKEW", kspreadfunc_skew_est );
-  repo->registerFunction( "SKEWP", kspreadfunc_skew_pop );
-  repo->registerFunction( "SMALL", kspreadfunc_small );
-  repo->registerFunction( "STANDARDIZE", kspreadfunc_standardize );
-  repo->registerFunction( "STDEV", kspreadfunc_stddev );
-  repo->registerFunction( "STDEVA", kspreadfunc_stddeva );
-  repo->registerFunction( "STDEVP", kspreadfunc_stddevp );
-  repo->registerFunction( "STDEVPA", kspreadfunc_stddevpa );
-  repo->registerFunction( "SUM2XMY", kspreadfunc_sumxmy2 );
-  repo->registerFunction( "SUMPRODUCT", kspreadfunc_sumproduct );
-  repo->registerFunction( "SUMX2PY2", kspreadfunc_sumx2py2 );
-  repo->registerFunction( "SUMX2MY2", kspreadfunc_sumx2my2 );
-  repo->registerFunction( "TDIST", kspreadfunc_tdist );
-  repo->registerFunction( "VARIANCE", kspreadfunc_variance );
-  repo->registerFunction( "VAR", kspreadfunc_variance );
-  repo->registerFunction( "VARP", kspreadfunc_variancep );
-  repo->registerFunction( "VARA", kspreadfunc_variancea );
-  repo->registerFunction( "VARPA", kspreadfunc_variancepa );
-  repo->registerFunction( "WEIBULL", kspreadfunc_weibull );
+  f = new Function ("AVEDEV", func_avedev);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("AVERAGE", func_average);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("AVERAGEA", func_average);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("BETADIST", func_betadist);
+  f->setParamCount (3, 5);
+  repo->add (f);
+  f = new Function ("BINO", func_bino);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("CHIDIST", func_chidist);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("COMBIN", func_combin);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("CONFIDENCE", func_confidence);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("CORREL", func_correl_pop);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("COVAR", func_covar);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DEVSQ", func_devsq);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("EXPONDIST", func_expondist);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("FDIST", func_fdist);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("FISHER", func_fisher);
+  repo->add (f);
+  f = new Function ("FISHERINV", func_fisherinv);
+  repo->add (f);
+  f = new Function ("GAMMADIST", func_gammadist);
+  f->setParamCount (4);
+  repo->add (f);
+  f = new Function ("GAMMALN", func_gammaln);
+  repo->add (f);
+  f = new Function ("GAUSS", func_gauss);
+  repo->add (f);
+  f = new Function ("GEOMEAN", func_geomean);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("HARMEAN", func_harmean);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("HYPGEOMDIST", func_hypgeomdist);
+  f->setParamCount (4);
+  repo->add (f);
+  f = new Function ("INVBINO", func_bino);  // same as BINO, for 1.4 compat
+  repo->add (f);
+  f = new Function ("KURT", func_kurtosis_est);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("KURTP", func_kurtosis_pop);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("LARGE", func_large);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("LOGINV", func_loginv);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("LOGNORMDIST", func_lognormdist);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("MEDIAN", func_median);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MODE", func_mode);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("NEGBINOMDIST", func_negbinomdist);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("NORMDIST", func_normdist);
+  f->setParamCount (4);
+  repo->add (f);
+  f = new Function ("NORMINV", func_norminv);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("NORMSDIST", func_stdnormdist);
+  repo->add (f);
+  f = new Function ("NORMSINV", func_normsinv);
+  repo->add (f);
+  f = new Function ("PEARSON", func_correl_pop);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("PERMUT", func_arrang);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("PHI", func_phi);
+  repo->add (f);
+  f = new Function ("POISSON", func_poisson);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("SKEW", func_skew_est);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SKEWP", func_skew_pop);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SMALL", func_small);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("STANDARDIZE", func_standardize);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("STDEV", func_stddev);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("STDEVA", func_stddev);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("STDEVP", func_stddevp);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("STDEVPA", func_stddevp);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUM2XMY", func_sumxmy2);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMPRODUCT", func_sumproduct);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMX2PY2", func_sumx2py2);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMX2MY2", func_sumx2my2);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("TDIST", func_tdist);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("VARIANCE", func_variance);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("VAR", func_variance);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("VARP", func_variancep);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("VARA", func_variance);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("VARPA", func_variancep);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("WEIBULL", func_weibull);
+  f->setParamCount (4);
+  repo->add (f);
 }
 
-bool kspreadfunc_skew_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result,
-                              double avg, double stdev )
+// array-walk functions used in this file
+
+void awSkew (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue p)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_skew_helper( context, (*it)->listValue(), result, avg, stdev ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double d = ( (*it)->doubleValue() - avg ) / stdev;
-      result += d * d * d;
-    }
-  }
-
-  return true;
+  KSpreadValue avg = p.element (0, 0);
+  KSpreadValue stdev = p.element (1, 0);
+  // (val - avg) / stddev
+  KSpreadValue d = c->div (c->sub (val, avg), stdev);
+  // res += d*d*d
+  res = c->add (res, c->mul (d, c->mul (d, d)));
 }
 
-bool kspreadfunc_skew_est( KSContext & context )
+void awSumInv (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  double tskew = 0.0;
-
-  int number = 0;
-  double res = 0.0;
-
-  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
-    return false;
-
-  if ( number < 3 )
-    return false;
-
-  double avg = res / (double) number;
-
-  res = 0.0;
-
-  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
-    return false;
-
-  res = sqrt( res / ((double)(number - 1) ) );
-
-  if ( res == 0.0 )
-    return false;
-
-  if ( !kspreadfunc_skew_helper( context, args, tskew, avg, res ) )
-    return false;
-
-  res = ( ( tskew * number ) / ( number - 1 ) ) / ( number - 2 );
-
-  context.setValue( new KSValue( res ) );
-  return true;
+  // res += 1/value
+  res = c->add (res, c->div (1.0, val));
 }
 
-bool kspreadfunc_skew_pop( KSContext & context )
+void awAveDev (ValueCalc *c, KSpreadValue &res, KSpreadValue val,
+    KSpreadValue p)
 {
-  // from gnumeric, thanks to the gnumeric developers!
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  // res += abs (val - p)
+  res = c->add (res, c->abs (c->sub (val, p)));
+}
 
-  double tskew = 0.0;
+void awKurtosis (ValueCalc *c, KSpreadValue &res, KSpreadValue val,
+    KSpreadValue p)
+{
+  KSpreadValue avg = p.element (0, 0);
+  KSpreadValue stdev = p.element (1, 0);
+  //d = (val - avg ) / stdev
+  KSpreadValue d = c->div (c->sub (val, avg), stdev);
+  // res += d^4
+  res = c->add (res, c->pow (d, 4));
+}
 
-  int number = 0;
-  double res = 0.0;
 
-  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
-    return false;
+KSpreadValue func_skew_est (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  int number = calc->countA (args);
+  KSpreadValue avg = calc->avg (args);
+  if (number < 3)
+    return KSpreadValue::errorVALUE();
 
-  if ( number < 1 )
-    return false;
+  KSpreadValue res = calc->stddev (args, avg);
+  if (res.isZero())
+    return KSpreadValue::errorVALUE();
+  
+  KSpreadValue params (2, 1);
+  params.setElement (0, 0, avg);
+  params.setElement (1, 0, res);
+  KSpreadValue tskew;
+  calc->arrayWalk (args, tskew, awSkew, params);
 
-  double avg = res / (double) number;
+  // ((tskew * number) / (number-1)) / (number-2)
+  return calc->div (calc->div (calc->mul (tskew, number), number-1), number-2);
+}
 
-  res = 0.0;
-
-  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
-    return false;
-
-  res = sqrt( res / number );
-
-  if ( res == 0.0 )
-    return false;
-
-  if ( !kspreadfunc_skew_helper( context, args, tskew, avg, res ) )
-    return false;
-
-  res = tskew / number;
-
-  context.setValue( new KSValue( res ) );
-  return true;
+KSpreadValue func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  int number = calc->countA (args);
+  KSpreadValue avg = calc->avg (args);
+  if (number < 1)
+    return KSpreadValue::errorVALUE();
+  
+  KSpreadValue res = calc->stddevP (args, avg);
+  if (res.isZero())
+    return KSpreadValue::errorVALUE();
+  
+  KSpreadValue params (2, 1);
+  params.setElement (0, 0, avg);
+  params.setElement (1, 0, res);
+  KSpreadValue tskew;
+  calc->arrayWalk (args, tskew, awSkew, params);
+  
+  // tskew / number
+  return calc->div (tskew, number);
 }
 
 class ContentSheet : public QMap<double, int> {};
 
-bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
-                              ContentSheet & sheet, double & number, int & value )
+void func_mode_helper (KSpreadValue range, ValueCalc *calc, ContentSheet &sh)
 {
-  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  ContentSheet::Iterator iter;
-
-  for ( ; it != end; ++it )
+  if (!range.isArray())
   {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
-    {
-      if ( !kspreadfunc_mode_helper( context, (*it)->listValue(), sheet, number, value ) )
-        return false;
+    double d = calc->conv()->asFloat (range).asFloat();
+    sh[d]++;
+    return;
+  }
+  
+  for (unsigned int row = 0; row < range.rows(); ++row)
+    for (unsigned int col = 0; col < range.columns(); ++col) {
+      KSpreadValue v = range.element (col, row);
+      if (v.isArray())
+        func_mode_helper (v, calc, sh);
+      else {
+        double d = calc->conv()->asFloat (v).asFloat();
+        sh[d]++;
+      }
     }
-    else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double d = (*it)->doubleValue();
+}
 
-      iter = sheet.find( d );
-      if ( iter != sheet.end() )
-        sheet[d] = ++(iter.data());
+KSpreadValue func_mode (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  // does NOT support anything other than doubles !!!
+  ContentSheet sh;
+  for (unsigned int i = 0; i < args.count(); ++i)
+    func_mode_helper (args[i], calc, sh);
+  
+  // retrieve value with max.count
+  int maxcount = 0;
+  double max = 0.0;
+  ContentSheet::iterator it;
+  for (it = sh.begin(); it != sh.end(); ++it)
+    if (it.data() > maxcount) {
+      max = it.key();
+      maxcount = it.data();
+    }
+  return KSpreadValue (max);
+}
+
+KSpreadValue func_covar_helper (KSpreadValue range1, KSpreadValue range2,
+    ValueCalc *calc, KSpreadValue avg1, KSpreadValue avg2)
+{
+  // two arrays -> cannot use arrayWalk
+  if ((!range1.isArray()) && (!range2.isArray()))
+    // (v1-E1)*(v2-E2)
+    return calc->mul (calc->sub (range1, avg1), calc->sub (range2, avg2));
+  
+  int rows = range1.rows();
+  int cols = range1.columns();
+  int rows2 = range2.rows();
+  int cols2 = range2.columns();
+  if ((rows != rows2) || (cols != cols2))
+    return KSpreadValue::errorVALUE();
+    
+  KSpreadValue result = 0.0;
+  for (int row = 0; row < rows; ++row)
+    for (int col = 0; col < cols; ++col) {
+      KSpreadValue v1 = range1.element (col, row);
+      KSpreadValue v2 = range2.element (col, row);
+      if (v1.isArray() || v2.isArray())
+        result = calc->add (result,
+            func_covar_helper (v1, v2, calc, avg1, avg2));
       else
-      {
-        sheet[d] = 1;
-        iter = sheet.find( d );
+        // result += (v1-E1)*(v2-E2)
+        result = calc->add (result, calc->mul (calc->sub (v1, avg1),
+            calc->sub (v2, avg2)));
+    }
+
+  return result;
+}
+
+KSpreadValue func_covar (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue avg1 = calc->avg (args[0]);
+  KSpreadValue avg2 = calc->avg (args[1]);
+  int number = calc->count (args[0]);
+  int number2 = calc->count (args[1]);
+  
+  if (number2 <= 0 || number2 != number)
+    return KSpreadValue::errorVALUE();
+
+  KSpreadValue covar = func_covar_helper (args[0], args[1], calc, avg1, avg2);
+  return calc->div (covar, number);
+}
+
+KSpreadValue func_correl_pop (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue covar = func_covar (args, calc, 0);
+  KSpreadValue stdevp1 = calc->stddevP (args[0]);
+  KSpreadValue stdevp2 = calc->stddevP (args[1]);
+  
+  if (calc->isZero (stdevp1) || calc->isZero (stdevp2))
+    return KSpreadValue::errorDIV0();
+
+  // covar / (stdevp1 * stdevp2)
+  return calc->div (covar, calc->mul (stdevp1, stdevp2));
+}
+
+void func_array_helper (KSpreadValue range, ValueCalc *calc,
+    List &array, int &number)
+{
+  if (!range.isArray())
+  {
+    array << calc->conv()->asFloat (range).asFloat();
+    ++number;
+    return;
+  }
+  
+  for (unsigned int row = 0; row < range.rows(); ++row)
+    for (unsigned int col = 0; col < range.columns(); ++col) {
+      KSpreadValue v = range.element (col, row);
+      if (v.isArray ())
+        func_array_helper (v, calc, array, number);
+      else {
+        array << calc->conv()->asFloat (v).asFloat();
+        ++number;
       }
-
-      if ( iter.data() > value )
-      {
-        value  = iter.data();
-        number = d;
-      }
     }
-  }
-
-  return true;
 }
 
-bool kspreadfunc_mode( KSContext & context )
+KSpreadValue func_large (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  double number = 0.0;
-  int    value  = 1;
-  ContentSheet sheet;
-
-  if ( !kspreadfunc_mode_helper( context, args, sheet, number, value ) )
-    return false;
-
-  context.setValue( new KSValue( number ) );
-  return true;
-}
-
-bool kspreadfunc_covar_helper( KSContext & context, QValueList<KSValue::Ptr> & args1,
-                               QValueList<KSValue::Ptr> & args2,
-                               double & result, double avg1, double avg2 )
-{
-  QValueList<KSValue::Ptr>::Iterator it1 = args1.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args1.end();
-  QValueList<KSValue::Ptr>::Iterator it2 = args2.begin();
-
-  for( ; it1 != end; ++it1 )
-  {
-    if ( ( KSUtil::checkType( context, *it1, KSValue::ListType, false ) )
-         && ( KSUtil::checkType( context, *it2, KSValue::ListType, false ) ) )
-    {
-      if ( !kspreadfunc_covar_helper( context, (*it1)->listValue(), (*it2)->listValue(), result, avg1, avg2 ) )
-        return false;
-    }
-    else
-    {
-      if ( !KSUtil::checkType( context, *it1, KSValue::DoubleType, true ) )
-        return false;
-      if ( !KSUtil::checkType( context, *it2, KSValue::DoubleType, true ) )
-        return false;
-
-      result += ( (*it1)->doubleValue() - avg1 ) * ( (*it2)->doubleValue() - avg2 );
-    }
-    ++it2;
-  }
-
-  return true;
-}
-
-bool kspreadfunc_correl_pop( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "CORREL",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
-    return false;
-
-  double res1 = 0.0;
-  double stdevp1 = 0.0;
-  double res2 = 0.0;
-  double stdevp2 = 0.0;
-  int number = 0;
-  int number2 = 0;
-
-  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number, false ) )
-    return false;
-
-  if ( number <= 0 )
-    return false;
-
-  double avg1 = res1 / (double) number;
-
-  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2, false ) )
-    return false;
-
-  if ( number2 <= 0 || number2 != number )
-    return false;
-
-  double avg2 = res2 / (double) number;
-
-  if ( !kspreadfunc_stddev_helper( context, args[0]->listValue(), stdevp1, avg1, false ) )
-    return false;
-  if ( !kspreadfunc_stddev_helper( context, args[1]->listValue(), stdevp2, avg2, false ) )
-    return false;
-
-  stdevp1 = sqrt( stdevp1 / number );
-  stdevp2 = sqrt( stdevp2 / number );
-
-  if ( stdevp1 == 0 || stdevp2 == 0 )
-    return false;
-
-  double covar = 0.0;
-
-  if ( !kspreadfunc_covar_helper( context, args[0]->listValue(), args[1]->listValue(),
-                                  covar, avg1, avg2 ) )
-    return false;
-
-  covar = covar / number;
-
-  context.setValue( new KSValue( covar / ( stdevp1 * stdevp2 ) ) );
-  return true;
-}
-
-bool kspreadfunc_covar( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "COVAR",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
-    return false;
-
-  double res1 = 0.0;
-  double res2 = 0.0;
-  int number = 0;
-  int number2 = 0;
-
-  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number, false ) )
-    return false;
-
-  if ( number <= 0 )
-    return false;
-
-  double avg1 = res1 / (double) number;
-
-  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2, false ) )
-    return false;
-
-  if ( number2 <= 0 || number2 != number )
-    return false;
-
-  double avg2 = res2 / (double) number;
-
-  double covar = 0.0;
-
-  if ( !kspreadfunc_covar_helper( context, args[0]->listValue(), args[1]->listValue(),
-                                  covar, avg1, avg2 ) )
-    return false;
-
-  covar = covar / number;
-
-  context.setValue( new KSValue( covar ) );
-  return true;
-}
-
-bool kspreadfunc_array_helper( KSContext & context, QValueList<KSValue::Ptr> & args, List & array, int & number )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for ( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
-    {
-      if ( !kspreadfunc_array_helper( context, (*it)->listValue(), array, number ) )
-        return false;
-    }
-    else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      array << (*it)->doubleValue();
-      ++number;
-    }
-  }
-
-  return true;
-}
-
-bool kspreadfunc_large( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "LARGE", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  int k = args[1]->intValue();
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-  {
-    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true )  && k == 1 )
-    {
-      context.setValue( new KSValue( args[0]->doubleValue() ) );
-      return true;
-    }
-    return false;
-  }
-
+  // does NOT support anything other than doubles !!!
+  int k = calc->conv()->asInteger (args[1]).asInteger();
   if ( k < 1 )
     return false;
 
-  QValueList<KSValue::Ptr>::Iterator it  = args[0]->listValue().begin();
-  QValueList<KSValue::Ptr>::Iterator end = args[0]->listValue().end();
-
   List array;
   int number = 1;
-
-  for ( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
-    {
-      if ( !kspreadfunc_array_helper( context, (*it)->listValue(), array, number ) )
-        return false;
-    }
-    else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      array << (*it)->doubleValue();
-      ++number;
-    }
-  }
+  
+  func_array_helper (args[0], calc, array, number);
 
   if ( k > number )
-    return false;
+    return KSpreadValue::errorVALUE();
 
-  qHeapSort( array );
-
-  double d = *array.at( number - k - 1 );
-
-  context.setValue( new KSValue( d ) );
-  return true;
+  qHeapSort (array);
+  double d = *array.at (number - k - 1);
+  return KSpreadValue (d);
 }
 
-bool kspreadfunc_small( KSContext & context )
+KSpreadValue func_small (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SMALL", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  int k = args[1]->intValue();
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-  {
-    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true )  && k == 1 )
-    {
-      context.setValue( new KSValue( args[0]->doubleValue() ) );
-      return true;
-    }
-    return false;
-  }
-
+  // does NOT support anything other than doubles !!!
+  int k = calc->conv()->asInteger (args[1]).asInteger();
   if ( k < 1 )
     return false;
 
-  QValueList<KSValue::Ptr>::Iterator it  = args[0]->listValue().begin();
-  QValueList<KSValue::Ptr>::Iterator end = args[0]->listValue().end();
-
-  typedef QValueList<double> List;
-
   List array;
-
   int number = 1;
-
-  for ( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
-    {
-      if ( !kspreadfunc_array_helper( context, (*it)->listValue(), array, number ) )
-        return false;
-    }
-    else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      array << (*it)->doubleValue();
-      ++number;
-    }
-  }
+  
+  func_array_helper (args[0], calc, array, number);
 
   if ( k > number )
-    return false;
+    return KSpreadValue::errorVALUE();
 
-  qHeapSort( array );
-
-  context.setValue( new KSValue( (double) (*array.at( k - 1 )) ) );
-  return true;
+  qHeapSort (array);
+  double d = *array.at (k - 1);
+  return KSpreadValue (d);
 }
 
-bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
-                                 double & result, int & number)
+KSpreadValue func_geomean (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
+  KSpreadValue count = calc->countA (args);
+  KSpreadValue prod = calc->product (args, 1.0);
+  if (calc->isZero (count))
+    return KSpreadValue::errorDIV0();
+  return calc->pow (prod, calc->div (1.0, count));
+}
 
-  for ( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_geomean_helper( context, (*it)->listValue(), result, number) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double d = (*it)->doubleValue();
+KSpreadValue func_harmean (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue count = calc->countA (args);
+  if (calc->isZero (count))
+    return KSpreadValue::errorDIV0();
+  KSpreadValue suminv = 0.0;
+  calc->arrayWalk (args, suminv, awSumInv, 0);
+  return calc->div (suminv, count);
+}
 
-      if ( d <= 0 )
-        return false;
+KSpreadValue func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue p = args[0];
+  KSpreadValue m = args[1];
+  KSpreadValue s = args[2];
 
-      result *= d;
-      ++number;
-    }
+  if (calc->lower (p, 0) || calc->greater (p, 1))
+    return KSpreadValue::errorVALUE();
+  
+  if (!calc->greater (s, 0))
+    return KSpreadValue::errorVALUE();
+
+  KSpreadValue result = 0.0;
+  if (calc->equal (p, 1))   //p==1
+    result = KSpreadValue::errorVALUE();
+  else if (calc->greater (p, 0)) {   //p>0
+    KSpreadValue gaussInv = calc->gaussinv (p);
+    // exp (gaussInv * s + m)
+    result = calc->exp (calc->add (calc->mul (s, gaussInv), m));
   }
 
-  return true;
+  return result;
 }
 
-bool kspreadfunc_geomean( KSContext & context )
+KSpreadValue func_devsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  int number = 0;
-  double result = 1.0;
-
-  if ( !kspreadfunc_geomean_helper( context, args, result, number ) )
-    return false;
-
-  if ( number == 0 )
-    return false;
-
-  result = pow( result, 1.0 / number);
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  KSpreadValue res = 0.0;
+  calc->arrayWalk (args, res, calc->awFunc ("devsq"), calc->avg (args));
+  return res;
 }
 
-bool kspreadfunc_harmean_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, int & number)
+KSpreadValue func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
+  int count = calc->countA (args);
+  if (count < 4)
+    return KSpreadValue::errorVALUE();
 
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_harmean_helper( context, (*it)->listValue(), result, number) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double d = (*it)->doubleValue();
+  KSpreadValue avg = calc->avg (args);
+  KSpreadValue devsq = 0.0;
+  calc->arrayWalk (args, devsq, calc->awFunc ("devsq"), avg);
 
-      if ( d <= 0 )
-        return false;
+  if (devsq.isZero ())
+    return KSpreadValue::errorDIV0();
 
-      result += 1 / d;
-      ++number;
-    }
-  }
+  KSpreadValue params (2, 1);
+  params.setElement (0, 0, avg);
+  params.setElement (1, 0, devsq);
+  KSpreadValue x4;
+  calc->arrayWalk (args, x4, awKurtosis, params);
 
-  return true;
+  double den = (double) (count - 2) * (count - 3);
+  double nth = (double) count * (count + 1) / ((count - 1) * den);
+  double t = 3.0 * (count - 1) * (count - 1) / den;
+
+  // res = x4 * nth - t
+  return calc->sub (calc->mul (x4, nth), t);
 }
 
-
-bool kspreadfunc_harmean( KSContext & context )
+KSpreadValue func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  int count = calc->countA (args);
+  if (count < 4)
+    return KSpreadValue::errorVALUE();
 
-  int number = 0;
-  double result = 0.0;
+  KSpreadValue avg = calc->avg (args);
+  KSpreadValue devsq = 0.0;
+  calc->arrayWalk (args, devsq, calc->awFunc ("devsq"), avg);
 
-  if ( !kspreadfunc_harmean_helper( context, args, result, number ) )
-    return false;
+  if (devsq.isZero ())
+    return KSpreadValue::errorDIV0();
 
-  if ( number == 0 )
-    return false;
-
-  result = number / result;
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  KSpreadValue params (2, 1);
+  params.setElement (0, 0, avg);
+  params.setElement (1, 0, devsq);
+  KSpreadValue x4;
+  calc->arrayWalk (args, x4, awKurtosis, params);
+  
+  // x4 / count - 3
+  return calc->sub (calc->div (x4, count), 3);
 }
 
-bool kspreadfunc_loginv( KSContext & context )
+KSpreadValue func_standardize (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  KSpreadValue x = args[0];
+  KSpreadValue m = args[1];
+  KSpreadValue s = args[2];
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "LOGINV",true ) )
-    return false;
+  if (!calc->greater (s, 0))  // s must be >0
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-  double p = args[0]->doubleValue();
-  double m = args[1]->doubleValue();
-  double s = args[2]->doubleValue();
-
-  if ( p < 0 || p > 1 )
-    return false;
-  if ( s <= 0 )
-    return false;
-
-  double result;
-
-  if ( p == 1 )
-    result = HUGE_VAL;
-  else
-  if ( p > 0 )
-    result = exp( gaussinv_helper( p ) * s + m );
-  else
-    result = 0.0;
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  // (x - m) / s
+  return calc->div (calc->sub (x, m), s);
 }
 
-bool kspreadfunc_devsq_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, double avg )
+KSpreadValue func_hypgeomdist (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_devsq_helper( context, (*it)->listValue(), result, avg ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double d = (*it)->doubleValue() - avg;
-      result += d * d;
-    }
-  }
-
-  return true;
-}
-
-bool kspreadfunc_devsq( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  double res = 0.0;
-  int number = 0;
-
-  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
-    return false;
-
-  if ( number == 0 )
-  {
-    context.setValue( new KSValue( 0.0 ) );
-    return true;
-  }
-
-  double avg = res / (double) number;
-
-  res = 0.0;
-
-  if ( !kspreadfunc_devsq_helper( context, args, res, avg ) )
-    return false;
-
-  context.setValue( new KSValue( res ) );
-  return true;
-}
-
-bool kspreadfunc_kurt_est_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result,
-                                  double avg, double stdev )
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_kurt_est_helper( context, (*it)->listValue(), result, avg, stdev ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      double d = ( (*it)->doubleValue() - avg ) / stdev;
-      result += d * d * d * d;
-    }
-  }
-
-  return true;
-}
-
-bool kspreadfunc_kurtosis_est( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  double x4 = 0.0;
-
-  int number = 0;
-  double res = 0.0;
-
-  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
-    return false;
-
-  if ( number < 4 )
-    return false;
-
-  double avg = res / (double) number;
-
-  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
-    return false;
-
-  if ( res == 0.0 )
-    return false;
-
-  if ( !kspreadfunc_kurt_est_helper( context, args, x4, avg, res ) )
-    return false;
-
-  double den = ( double )( number - 2 ) * ( number - 3 );
-  double nth = ( double ) number * ( number + 1 ) / ( ( number - 1 ) * den );
-  double t = 3.0 * ( number - 1 ) * ( number - 1 ) / den;
-
-  context.setValue( new KSValue( x4 * nth - t ) );
-  return true;
-}
-
-bool kspreadfunc_kurtosis_pop( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  double x4 = 0.0;
-
-  int number = 0;
-  double res = 0.0;
-
-  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
-    return false;
-
-  if ( number < 1 )
-    return false;
-
-  double avg = res / (double) number;
-
-  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
-    return false;
-
-  if ( res == 0.0 )
-    return false;
-
-  if ( !kspreadfunc_kurt_est_helper( context, args, x4, avg, res ) )
-    return false;
-
-  context.setValue( new KSValue( x4 / number - 3 ) );
-  return true;
-}
-
-bool kspreadfunc_standardize( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,3, "STANDARDIZE",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-
-  double x = args[0]->doubleValue();
-  double m = args[1]->doubleValue();
-  double s = args[2]->doubleValue();
-
-  if ( s <= 0 )
-    return false;
-
-  context.setValue( new KSValue( ( x - m ) / s ) );
-  return true;
-}
-
-
-bool kspreadfunc_hypgeomdist( KSContext & context )
-{
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,4, "HYPGEOMDIST",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
-    return false;
-
-  int x = args[0]->intValue();
-  int n = args[1]->intValue();
-  int M = args[2]->intValue();
-  int N = args[3]->intValue();
+  int x = calc->conv()->asInteger (args[0]).asInteger();
+  int n = calc->conv()->asInteger (args[1]).asInteger();
+  int M = calc->conv()->asInteger (args[2]).asInteger();
+  int N = calc->conv()->asInteger (args[3]).asInteger();
 
   if ( x < 0 || n < 0 || M < 0 || N < 0 )
-    return false;
+    return KSpreadValue::errorVALUE();
 
   if ( x > M || n > N )
-    return false;
+    return KSpreadValue::errorVALUE();
 
-  double d1 = combin( M, x );
-  double d2 = combin( N - M, n - x );
-  double d3 = combin( N, n );
+  KSpreadValue d1 = calc->combin (M, x);
+  KSpreadValue d2 = calc->combin (N - M, n - x);
+  KSpreadValue d3 = calc->combin (N, n);
 
-  context.setValue( new KSValue( d1 * d2 / d3 ) );
-  return true;
+  // d1 * d2 / d3
+  return calc->div (calc->mul (d1, d2), d3);
 }
 
-bool kspreadfunc_negbinomdist( KSContext & context )
+KSpreadValue func_negbinomdist (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  int x = calc->conv()->asInteger (args[0]).asInteger();
+  int r = calc->conv()->asInteger (args[1]).asInteger();
+  KSpreadValue p = args[2];
 
-  if ( !KSUtil::checkArgumentsCount( context,3, "NEGBINOMDIST",true ) )
-    return false;
+  if ((x + r - 1) <= 0)
+    return KSpreadValue::errorVALUE();
+  if (calc->lower (p, 0) || calc->greater (p, 1))
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
+  KSpreadValue d1 = calc->combin (x + r - 1, r - 1);
+  // d2 = pow (p, r) * pow (1 - p, x)
+  KSpreadValue d2 = calc->mul (calc->pow (p, r),
+      calc->pow (calc->sub (1, p), x));
 
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-  int    x = args[0]->intValue();
-  int    r = args[1]->intValue();
-  double p = args[2]->doubleValue();
-
-  if ( ( x + r - 1 ) <= 0 )
-    return false;
-  if ( p < 0 || p > 1 )
-    return false;
-
-  double d1 = combin( x + r - 1, r - 1 );
-  double d2 = pow( p, r ) * pow( 1 - p, x );
-
-  context.setValue( new KSValue( d1 * d2 ) );
-  return true;
+  return calc->mul (d1, d2);
 }
 
 // Function: permut
-bool kspreadfunc_arrang( KSContext& context )
-{ /* arrang : util_fact(n)/(util_fact(n-m) */
-  double result;
-  QString tmp;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+KSpreadValue func_arrang (valVector args, ValueCalc *calc, FuncExtra *)
+{ 
+  KSpreadValue n = args[0];
+  KSpreadValue m = args[1];
+  if (calc->lower (n, m))  // problem if n<m
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context,2, "PERMUT",true ) )
-    return false;
+  if (calc->lower (m, 0))  // problem if m<0  (n>=m so that's okay)
+    return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  tmp=i18n("Err");
-  if((double)args[0]->intValue()<(double)args[1]->intValue())
-          context.setValue( new KSValue(tmp ));
-
-  else if((double)args[1]->intValue()<0)
-          context.setValue( new KSValue(tmp ));
-
-  else
-        {
-        result=util_fact((double)args[0]->intValue(),
-        ((double)args[0]->intValue()-(double)args[1]->intValue()));
-        //In util_fact function val must be positive
-
-        if(result==-1)
-                context.setValue( new KSValue(tmp));
-        else
-                context.setValue( new KSValue(result ));
-        }
-  return true;
+  // fact(n) / (fact(n-m)
+  return calc->fact (n, calc->sub (n, m));
 }
 
 // Function: average
-bool kspreadfunc_average( KSContext & context )
+KSpreadValue func_average (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
-
-  int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
-
-  if ( number == 0 )
-  {
-    context.setValue( new KSValue( i18n("#DIV/0") ) );
-    return true;
-  }
-
-  if ( b )
-    context.setValue( new KSValue( result / (double) number ) );
-
-  return b;
-}
-
-static bool kspreadfunc_median_helper
-  (KSContext& context, QValueList<KSValue::Ptr>& args,
-   QValueList<KSValue::Ptr>& sortedList)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-  bool returnVal = true;
-
-  /* loop through each value, adding it to the sorted list (recursing
-     whenever necessary */
-  while(it != end && returnVal)
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      /* try to recurse */
-      returnVal = kspreadfunc_median_helper(context, (*it)->listValue(),
-                                            sortedList);
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      /* insert it properly into the list */
-      QValueList<KSValue::Ptr>::Iterator ptr = sortedList.begin();
-      QValueList<KSValue::Ptr>::Iterator endPtr = sortedList.end();
-
-      /* find the proper place */
-      while (ptr != endPtr && (*it)->doubleValue() > (*ptr)->doubleValue())
-      {
-        ++ptr;
-      }
-      sortedList.insert(ptr, *it);
-    }
-    ++it;
-  }
-
-  return returnVal;
-}
-
-// Function: median
-bool kspreadfunc_median( KSContext& context )
-{
-  double result = 0.0;
-  bool worked;
-
-  /* need a list to hold all the values in sorted order so we can pick out the
-     median one */
-  QValueList<KSValue::Ptr> sortedValues;
-
-  worked = kspreadfunc_median_helper(context, context.value()->listValue(),
-                                     sortedValues);
-
-  if (worked && sortedValues.size() > 0)
-  {
-    /* get the median value */
-    QValueList<KSValue::Ptr>::Iterator ptr =
-      sortedValues.at((sortedValues.size() - 1) / 2);
-
-    /* now we're halfway through the list, or if there is an even number of
-       items, we're on the 'first' of the 2 in the middle */
-
-    result = (*ptr)->doubleValue();
-    if (sortedValues.size() % 2 == 0)
-    {
-      ++ptr;
-      result = (result + (*ptr)->doubleValue()) / 2;
-    }
-
-  }
-
-  context.setValue( new KSValue(result));
-
-  return worked;
-}
-
-// Function: variance
-bool kspreadfunc_variance( KSContext& context )
-{
-  double result = 0.0;
-  double avera = 0.0;
-  int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera = result / (double)number;
-    result = 0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, false );
-    if(b)
-      context.setValue( new KSValue(result / (double)(number - 1) ) );
-  }
-
-  return b;
-}
-
-// Function: varp
-bool kspreadfunc_variancep( KSContext& context )
-{
-  double result = 0.0;
-  double avera = 0.0;
-  int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera = result / (double)number;
-    result = 0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, false );
-    if(b)
-      context.setValue( new KSValue(result / (double)number ) );
-  }
-
-  return b;
-}
-
-// Function: vara
-bool kspreadfunc_variancea( KSContext& context )
-{
-  double result = 0.0;
-  double avera = 0.0;
-  int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera = result / (double) number;
-    result = 0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, true );
-    if(b)
-      context.setValue( new KSValue( result / (double)(number - 1) ) );
-  }
-
-  return b;
-}
-
-// Function: varpa
-bool kspreadfunc_variancepa( KSContext& context )
-{
-  double result = 0.0;
-  double avera = 0.0;
-  int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera = result / (double)number;
-    result = 0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, true );
-    if(b)
-      context.setValue( new KSValue(result / (double)number ) );
-  }
-
-  return b;
-}
-
-// Function: stddev
-bool kspreadfunc_stddev( KSContext& context )
-{
-  double result = 0.0;
-  double avera  = 0.0;
-  int number    = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera  = result / number;
-    result = 0.0;
-    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, false );
-
-    if (b)
-      context.setValue( new KSValue(sqrt(result / ((double)(number - 1)) )) );
-  }
-
-  return b;
-}
-
-// Function: stdeva
-bool kspreadfunc_stddeva( KSContext & context )
-{
-  double result = 0.0;
-  double avera  = 0.0;
-  int number    = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera  = result / number;
-    result = 0.0;
-    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, true );
-
-    if (b)
-      context.setValue( new KSValue(sqrt(result / ((double)(number - 1)) )) );
-  }
-
-  return b;
-}
-
-// Function: stddevp
-bool kspreadfunc_stddevp( KSContext& context )
-{
-  double result = 0.0;
-  double avera  = 0.0;
-  int number    = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera  = result / number;
-    result = 0.0;
-    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, false );
-    if ( b )
-      context.setValue( new KSValue( sqrt(result / number) ) );
-  }
-
-  return b;
-}
-
-// Function: stdevpa
-bool kspreadfunc_stddevpa( KSContext& context )
-{
-  double result = 0.0;
-  double avera  = 0.0;
-  int number    = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
-
-  if ( number == 0 )
-      return false;
-
-  if ( b )
-  {
-    avera = result / number;
-    result = 0.0;
-    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, true );
-    if ( b )
-      context.setValue( new KSValue( sqrt(result / number) ) );
-  }
-
-  return b;
-}
-
-// Function: combin
-bool kspreadfunc_combin( KSContext& context )
-{ /*combin : util_fact(n)/(util_fact(n-m)*util_fact(m)) */
-  double result;
-  QString tmp;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,2, "COMBIN",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  tmp=i18n("Err");
-  if((double)args[0]->intValue()<(double)args[1]->intValue())
-          context.setValue( new KSValue(tmp ));
-
-  else if((double)args[1]->intValue()<0)
-          context.setValue( new KSValue(tmp ));
-
-  else
-        {
-        result=(util_fact((double)args[0]->intValue(),
-        ((double)args[0]->intValue()-(double)args[1]->intValue()))
-        /util_fact((double)args[1]->intValue(),0));
-        //In util_fact function val must be positive
-
-        if(result==-1)
-                context.setValue( new KSValue(tmp));
-        else
-                context.setValue( new KSValue(result ));
-        }
-  return true;
-}
-
-// Function: bino
-bool kspreadfunc_bino( KSContext& context )
-{
-  double result=0;
-  QString tmp;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,3, "BINO",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-  tmp=i18n("Err");
-  if(args[0]->doubleValue()<args[1]->doubleValue())
-    context.setValue( new KSValue(tmp ));
-
-  else if(args[1]->doubleValue()<0)
-    context.setValue( new KSValue(tmp ));
-
-  // 0<proba<1
-  else if((args[2]->doubleValue()<0)||(args[2]->doubleValue()>1))
-    context.setValue( new KSValue(tmp ));
-  else
-  {
-    result=(util_fact(args[0]->doubleValue(),
-                 (args[0]->doubleValue()-args[1]->doubleValue()))
-            /util_fact(args[1]->doubleValue(),0));
-    //In util_fact function val must be positive
-
-    if(result==-1)
-      context.setValue( new KSValue(tmp));
-    else
-    {
-      result=result*pow(args[2]->doubleValue(),(int)args[1]->doubleValue())*
-        pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
-                                        ((int)args[1]->doubleValue())));
-      context.setValue( new KSValue(result ));
-    }
-  }
-  return true;
-
-
-}
-
-// Function: bino_inv
-bool kspreadfunc_bino_inv( KSContext& context )
-{
-  double result=0;
-  QString tmp;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context,3, "INVBINO",true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-  tmp=i18n("Err");
-  if(args[0]->doubleValue()<args[1]->doubleValue())
-          context.setValue( new KSValue(tmp ));
-
-  else if(args[1]->doubleValue()<0)
-          context.setValue( new KSValue(tmp ));
-
-  // 0<proba<1
-  else if((args[2]->doubleValue()<0)||(args[2]->doubleValue()>1))
-    context.setValue( new KSValue(tmp ));
-  else
-  {
-        result=(util_fact(args[0]->doubleValue(),
-        (args[0]->doubleValue()-args[1]->doubleValue()))
-        /util_fact(args[1]->doubleValue(),0));
-        //In util_fact function val must be positive
-
-        if(result==-1)
-          context.setValue( new KSValue(tmp));
-        else
-        {
-          result=result*pow((1-args[2]->doubleValue()),((int)args[0]->doubleValue()-
-                                                        (int)args[1]->doubleValue()))*pow(args[2]->doubleValue(),(
-                                                          (int)args[1]->doubleValue()));
-          context.setValue( new KSValue(result ));
-        }
-  }
-  return true;
-}
-
-static double phi_helper(double x)
-{
-  return 0.39894228040143268 * exp(-(x * x) / 2.0);
-}
-
-// Function: phi
-bool kspreadfunc_phi(KSContext& context)
-{
-  //distribution function for a standard normal distribution
-
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "PHI", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-
-  context.setValue( new KSValue(phi_helper(x)) );
-
-  return true;
-}
-
-static double taylor_helper (double* pPolynom, uint nMax, double x)
-{
-  double nVal = pPolynom[nMax];
-  for (int i = nMax-1; i >= 0; i--) {
-    nVal = pPolynom[i] + (nVal * x);
-  }
-  return nVal;
-}
-
-static double gauss_helper( double x )
-{
-  double t0[] =
-    { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
-     -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
-      0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
-      0.00000000011301172,  0.00000000000511243, -0.00000000000021218 };
-  double t2[] =
-    { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
-      0.02699548325659403, -0.00449924720943234, -0.00224962360471617,
-      0.00134977416282970, -0.00011783742691370, -0.00011515930357476,
-      0.00003704737285544,  0.00000282690796889, -0.00000354513195524,
-      0.00000037669563126,  0.00000019202407921, -0.00000005226908590,
-     -0.00000000491799345,  0.00000000366377919, -0.00000000015981997,
-     -0.00000000017381238,  0.00000000002624031,  0.00000000000560919,
-     -0.00000000000172127, -0.00000000000008634,  0.00000000000007894 };
-  double t4[] =
-    { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
-      0.00033457556441221, -0.00028996548915725,  0.00018178605666397,
-     -0.00008252863922168,  0.00002551802519049, -0.00000391665839292,
-     -0.00000074018205222,  0.00000064422023359, -0.00000017370155340,
-      0.00000000909595465,  0.00000000944943118, -0.00000000329957075,
-      0.00000000029492075,  0.00000000011874477, -0.00000000004420396,
-      0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
-  double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
-
-  double xAbs = fabs(x);
-  uint xShort = static_cast<uint>(floor(xAbs));
-  double nVal = 0.0;
-  if (xShort == 0)
-    nVal = taylor_helper(t0, 11, (xAbs * xAbs)) * xAbs;
-  else if ((xShort >= 1) && (xShort <= 2))
-    nVal = taylor_helper(t2, 23, (xAbs - 2.0));
-  else if ((xShort >= 3) && (xShort <= 4))
-    nVal = taylor_helper(t4, 20, (xAbs - 4.0));
-  else
-    nVal = 0.5 + phi_helper(xAbs) * taylor_helper(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
-  if (x < 0.0)
-    return -nVal;
-  else
-    return nVal;
-}
-
-// Function: gauss
-bool kspreadfunc_gauss(KSContext& context)
-{
-  //returns the integral values of the standard normal cumulative distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "GAUSS", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-
-  double tmp = gauss_helper(x);
-
-  context.setValue( new KSValue(tmp) );
-
-  return true;
-}
-
-//helper for kspreadfunc_gammadist
-static double GammaHelp(double& x, bool& bReflect)
-{
-  double c[6] = {76.18009173, -86.50532033, 24.01409822,
-                 -1.231739516, 0.120858003E-2, -0.536382E-5};
-  if (x >= 1.0)
-    {
-      bReflect = FALSE;
-      x -= 1.0;
-    }
-  else
-    {
-      bReflect = TRUE;
-      x = 1.0 - x;
-    }
-  double s, anum;
-  s = 1.0;
-  anum = x;
-  for (uint i = 0; i < 6; i++)
-    {
-      anum += 1.0;
-      s += c[i]/anum;
-    }
-  s *= 2.506628275;   // sqrt(2*PI)
-  return s;
-}
-
-//helper for kspreadfunc_gammadist
-static double GetGamma(double x)
-{
-  bool bReflect;
-  double G = GammaHelp(x, bReflect);
-  G = pow(x+5.5,x+0.5)*G/exp(x+5.5);
-  if (bReflect)
-    G = M_PI*x/(G*sin(M_PI*x));
-  return G;
-}
-
-//helper for kspreadfunc_gammadist and others
-static double GetGammaDist(double x, double alpha, double beta)
-{
-  if (x == 0.0)
-    return 0.0;
-
-  x /= beta;
-  double gamma = alpha;
-
-  double c = 0.918938533204672741;
-  double d[10] = {
-    0.833333333333333333E-1,
-    -0.277777777777777778E-2,
-    0.793650793650793651E-3,
-    -0.595238095238095238E-3,
-    0.841750841750841751E-3,
-    -0.191752691752691753E-2,
-    0.641025641025641025E-2,
-    -0.295506535947712418E-1,
-    0.179644372368830573,
-    -0.139243221690590111E1
-  };
-
-  double dx = x;
-  double dgamma = gamma;
-  int maxit = 10000;
-
-  double z = dgamma;
-  double den = 1.0;
-  while ( z < 10.0 ) {
-    den *= z;
-    z += 1.0;
-  }
-
-  double z2 = z*z;
-  double z3 = z*z2;
-  double z4 = z2*z2;
-  double z5 = z2*z3;
-  double a = ( z - 0.5 ) * log(z) - z + c;
-  double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
-    d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
-  // double g = exp(a+b) / den;
-
-  double sum = 1.0 / dgamma;
-  double term = 1.0 / dgamma;
-  double cut1 = dx - dgamma;
-  double cut2 = dx * 10000000000.0;
-
-  for ( int i=1; i<=maxit; i++ ) {
-    double ai = i;
-    term = dx * term / ( dgamma + ai );
-    sum += term;
-    double cutoff = cut1 + ( cut2 * term / sum );
-    if ( ai > cutoff ) {
-      double t = sum;
-      // return pow( dx, dgamma ) * exp( -dx ) * t / g;
-      return exp( dgamma * log(dx) - dx - a - b ) * t * den;
-    }
-  }
-
-  return 1.0;             // should not happen ...
-}
-
-// Function: gammadist
-bool kspreadfunc_gammadist( KSContext& context )
-{
-  //returns the gamma distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 4, "GAMMADIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double alpha = args[1]->doubleValue();
-  double beta = args[2]->doubleValue();
-  int kum = args[3]->intValue();  // 0 or 1
-  double result;
-
-  if (x < 0.0  || alpha <= 0.0 || beta <= 0.0)
-    //SetIllegalArgument();
-    //TODO error?
-    return false;
-  else if (kum == 0) {  //density
-    double G = GetGamma(alpha);
-    result = pow(x,alpha-1.0)/exp(x/beta)/pow(beta,alpha)/G;
-  }
-  else
-    result = GetGammaDist(x, alpha, beta);
-
-  context.setValue( new KSValue(result) );
-  return true;
-}
-
-static double GetLogGamma(double x)
-{
-  bool bReflect;
-  double G = GammaHelp(x, bReflect);
-  G = (x+0.5)*log(x+5.5)+log(G)-(x+5.5);
-  if (bReflect)
-    G = log(M_PI*x)-G-log(sin(M_PI*x));
-  return G;
-}
-
-
-static double beta_helper(double x, double alpha, double beta) {
-  if (beta == 1.0)
-    return pow(x, alpha);
-  else if (alpha == 1.0)
-    return 1.0 - pow(1.0-x,beta);
-
-  double fEps = 1.0E-8;
-  bool bReflect;
-  double cf, fA, fB;
-
-  if (x < (alpha+1.0)/(alpha+beta+1.0)) {
-    bReflect = FALSE;
-    fA = alpha;
-    fB = beta;
-  }
-  else {
-    bReflect = TRUE;
-    fA = beta;
-    fB = alpha;
-    x = 1.0 - x;
-  }
-  if (x < fEps)
-    cf = 0.0;
-  else {
-    double a1, b1, a2, b2, fnorm, rm, apl2m, d2m, d2m1, cfnew;
-    a1 = 1.0; b1 = 1.0;
-    b2 = 1.0 - (fA+fB)*x/(fA+1.0);
-    if (b2 == 0.0) {
-      a2 = b2;
-      fnorm = 1.0;
-      cf = 1.0;
-    }
-    else {
-      a2 = 1.0;
-      fnorm = 1.0/b2;
-      cf = a2*fnorm;
-    }
-    cfnew = 1.0;
-    for (uint j = 1; j <= 100; j++) {
-      rm = (double) j;
-      apl2m = fA + 2.0*rm;
-      d2m = rm*(fB-rm)*x/((apl2m-1.0)*apl2m);
-      d2m1 = -(fA+rm)*(fA+fB+rm)*x/(apl2m*(apl2m+1.0));
-      a1 = (a2+d2m*a1)*fnorm;
-      b1 = (b2+d2m*b1)*fnorm;
-      a2 = a1 + d2m1*a2*fnorm;
-      b2 = b1 + d2m1*b2*fnorm;
-      if (b2 != 0.0) {
-        fnorm = 1.0/b2;
-        cfnew = a2*fnorm;
-        if (fabs(cf-cfnew)/cf < fEps)
-          j = 101;
-        else
-          cf = cfnew;
-      }
-    }
-    if (fB < fEps)
-      b1 = 1.0E30;
-    else
-      b1 = exp(GetLogGamma(fA)+GetLogGamma(fB)-GetLogGamma(fA+fB));
-
-    cf *= pow(x, fA)*pow(1.0-x,fB)/(fA*b1);
-  }
-  if (bReflect)
-    return 1.0-cf;
-  else
-    return cf;
-}
-
-// Function: betadist
-bool kspreadfunc_betadist( KSContext& context ) {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  double fA, fB;  //lower, upper bound
-  fA = 0.0;
-  fB = 1.0;
-
-  if ( KSUtil::checkArgumentsCount( context, 5, "BETADIST", false ) ) {
-    if( KSUtil::checkType( context, args[3], KSValue::DoubleType, false ) )
-      fA = args[3]->doubleValue();
-    if( KSUtil::checkType( context, args[4], KSValue::DoubleType, false ) )
-      fB = args[4]->doubleValue();
-  }
-  else if ( KSUtil::checkArgumentsCount( context, 4, "BETADIST", false ) ) {
-    if( KSUtil::checkType( context, args[3], KSValue::DoubleType, false ) )
-      fA = args[3]->doubleValue();
-  }
-  else if (!KSUtil::checkArgumentsCount( context, 3, "BETADIST", false ) )
-    return false;
-
-  double x, alpha, beta;
-  x = args[0]->doubleValue();
-  alpha = args[1]->doubleValue();
-  beta = args[2]->doubleValue();
-
-  if (x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0) { //checks
-    return false;
-  }
-  x = (x-fA)/(fB-fA); //scaling
-
-  context.setValue( new KSValue( beta_helper(x, alpha, beta) ));
-  return true;
-}
-
-// Function: fisher
-bool kspreadfunc_fisher( KSContext& context ) {
-  //returns the Fisher transformation for x
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "FISHER", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double fVal = args[0]->doubleValue();
-
-  context.setValue( new KSValue(0.5*log((1.0+fVal)/(1.0-fVal))));
-  return true;
-}
-
-// Function: fisherinv
-bool kspreadfunc_fisherinv( KSContext& context ) {
-  //returns the inverse of the Fisher transformation for x
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "FISHERINV", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double fVal = args[0]->doubleValue();
-
-  context.setValue( new KSValue((exp(2.0*fVal)-1.0)/(exp(2.0*fVal)+1.0)));
-  return true;
-}
-
-// Function: normdist
-bool kspreadfunc_normdist(KSContext& context ) {
-  //returns the normal cumulative distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 4, "NORMDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double mue = args[1]->doubleValue();
-  double sigma = args[2]->doubleValue();
-  double k = args[3]->intValue();
-
-  if (sigma <= 0.0)
-    return false;
-  else if (k == 0)	// density
-    context.setValue( new KSValue(phi_helper((x-mue)/sigma)/sigma));
-  else			// distribution
-    context.setValue( new KSValue(0.5 + gauss_helper((x-mue)/sigma)));
-
-  return true;
-}
-
-// Function: lognormdist
-bool kspreadfunc_lognormdist(KSContext& context ) {
-  //returns the cumulative lognormal distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "LOGNORMDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double mue = args[1]->doubleValue();
-  double sigma = args[2]->doubleValue();
-
-  if (sigma <= 0.0 || x <= 0.0)
-    return false;
-  else
-    context.setValue( new KSValue(0.5 + gauss_helper((log(x)-mue)/sigma)));
-
-  return true;
-}
-
-// Function: normsdist
-bool kspreadfunc_stdnormdist(KSContext& context )
-{
-  //returns the cumulative lognormal distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "NORMSDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-
-  context.setValue( new KSValue(0.5 + gauss_helper(x)));
-  return true;
-}
-
-// Function: expondist
-bool kspreadfunc_expondist(KSContext& context ) {
-  //returns the exponential distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "EXPONDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double lambda = args[1]->doubleValue();
-  double kum = args[2]->intValue();
-
-  double result;
-
-  if (lambda <= 0.0)
-    return false;
-  else if (kum == 0) {	//density
-    if (x >= 0.0)
-      result = lambda * exp(-lambda*x);
-    else
-      result = 0;
-  }
-  else {  //distribution
-    if (x > 0.0)
-      result = 1.0 - exp(-lambda*x);
-    else
-      result = 0;
-  }
-
-  context.setValue( new KSValue(result));
-  return true;
-}
-
-// Function: weibull
-bool kspreadfunc_weibull( KSContext& context ) {
-  //returns the Weibull distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 4, "WEIBULL", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double alpha = args[1]->doubleValue();
-  double beta = args[2]->doubleValue();
-  double kum = args[3]->intValue();
-
-  double result;
-
-  if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
-    return false;
-  else if (kum == 0)  // density
-    result = alpha / pow(beta,alpha) * pow(x,alpha-1.0) * exp(-pow(x/beta,alpha));
-  else	// distribution
-    result = 1.0 - exp(-pow(x/beta,alpha));
-
-  context.setValue( new KSValue(result));
-  return true;
-}
-
-// Function: normsinv
-bool kspreadfunc_normsinv( KSContext& context ) {
-  //returns the inverse of the standard normal cumulative distribution
-
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "NORMSINV", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-
-  if (x <= 0.0 || x >= 1.0)
-    return false;
-  else
-    context.setValue( new KSValue(gaussinv_helper(x)));
-
-  return true;
-}
-
-// Function: norminv
-bool kspreadfunc_norminv( KSContext& context ) {
-  //returns the inverse of the normal cumulative distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "NORMINV", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double mue = args[1]->doubleValue();
-  double sigma = args[2]->doubleValue();
-
-  if (sigma <= 0.0 || x <= 0.0 || x >= 1.0)
-    return false;
-  else
-    context.setValue( new KSValue((gaussinv_helper(x)*sigma + mue)));
-
-  return true;
-}
-
-// Function: gammaln
-bool kspreadfunc_gammaln( KSContext& context ) {
-  //returns the natural logarithm of the gamma function
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "GAMMALN", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-
-  if (x > 0.0)
-    context.setValue( new KSValue(GetLogGamma(x)));
-  else
-    return false;
-
-  return true;
-}
-
-// Function: poisson
-bool kspreadfunc_poisson( KSContext& context ) {
-  //returns the Poisson distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "POISSON", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-  double lambda = args[1]->doubleValue();
-  double kum = args[2]->intValue();
-
-  double result;
-
-  if (lambda < 0.0 || x < 0.0)
-    return false;
-  else if (kum == 0)
-  { // density
-    if (lambda == 0.0)
-      result = 0;
-    else
-      result = exp(-lambda) * pow(lambda,x) / util_fact(x,0);
-  }
-  else
-  { // distribution
-    if (lambda == 0.0)
-      result = 1;
-    else
-    {
-      double sum = 1.0;
-      double fFak = 1.0;
-      unsigned long nEnd = static_cast<unsigned long > (x);
-      for (unsigned long i = 1; i <= nEnd; i++)
-      {
-        fFak *= static_cast<double>(i);
-        sum += pow( lambda, static_cast<double>(i) ) / fFak;
-      }
-      sum *= exp(-lambda);
-      result = sum;
-    }
-  }
-
-  context.setValue( new KSValue(result));
-  return true;
-}
-
-// Function: confidence
-bool kspreadfunc_confidence( KSContext& context ) {
-  //returns the confidence interval for a population mean
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "CONFIDENCE", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  double alpha = args[0]->doubleValue();
-  double sigma = args[1]->doubleValue();
-  double n = args[2]->intValue();
-
-  if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1)
-    return false;
-  else
-    context.setValue( new KSValue(gaussinv_helper(1.0-alpha/2.0) * sigma/sqrt(n)));
-
-  return true;
-}
-
-static double GetFDist(double x, double fF1, double fF2) {
-  double arg = fF2/(fF2+fF1*x);
-  double alpha = fF2/2.0;
-  double beta = fF1/2.0;
-  return beta_helper(arg, alpha, beta);
-}
-
-static double GetTDist(double T, double fDF) {
-  return 0.5 * beta_helper(fDF/(fDF+T*T), fDF/2.0, 0.5);
-}
-
-static double GetChiDist(double fChi, double fDF) {
-  return 1.0 - GetGammaDist(fChi/2.0, fDF/2.0, 1.0);
-}
-
-// Function: tdist
-bool kspreadfunc_tdist( KSContext& context ) {
-  //returns the t-distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "TDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  double T = args[0]->doubleValue();
-  double deg = args[1]->intValue();
-  double flag = args[2]->intValue();
-
-  if (deg < 1 || T < 0.0 || (flag != 1 && flag != 2) )
-    return false;
-
-  double R = GetTDist(T, deg);
-  if (flag == 1)
-    context.setValue( new KSValue(R));
-  else
-    context.setValue( new KSValue(2.0*R));
-
-  return true;
-}
-
-// Function: fdist
-bool kspreadfunc_fdist( KSContext& context ) {
-  //returns the f-distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "FDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  double fF = args[0]->doubleValue();
-  double fF1 = args[1]->intValue();
-  double fF2 = args[2]->intValue();
-
-  if (fF < 0.0 || fF1 < 1 || fF2 < 1 || fF1 >= 1.0E10 || fF2 >= 1.0E10) {
-    return false;
-  }
-
-  context.setValue( new KSValue(GetFDist(fF, fF1, fF2)));
-
-  return true;
-}
-
-// Function: chidist
-bool kspreadfunc_chidist( KSContext& context ) {
-  //returns the chi-distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "CHIDIST", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  double fChi = args[0]->doubleValue();
-  double fDF = args[1]->intValue();
-
-  if (fDF < 1 || fDF >= 1.0E5 || fChi < 0.0 )
-    return false;
-
-  context.setValue( new KSValue(GetChiDist(fChi, fDF)));
-
-  return true;
-}
-
-static bool kspreadfunc_sumproduct_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = list.begin();
-  QValueList<KSValue::Ptr>::Iterator end = list.end();
-  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
-  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
-
-  for( ; it != end,it2!=end2; ++it,++it2 )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_sumproduct_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
-      {
-      result +=( (*it)->doubleValue()*(*it2)->doubleValue());
-      }
-    else if (!( KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
-      return false;
-  }
-
-  return true;
-}
-
-// Function: sumproduct
-bool kspreadfunc_sumproduct( KSContext& context )
-{
-  double result = 0.0;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SUMPRODUCT", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-      return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
-      return false;
-    if(args[0]->listValue().count() !=args[1]->listValue() .count())
-        {
-        context.setValue( new KSValue( i18n("Err") ) );
-        return true;
-        }
-  bool b = kspreadfunc_sumproduct_helper( context,args[0]->listValue(),args[1]->listValue() , result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_sumx2py2_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = list.begin();
-  QValueList<KSValue::Ptr>::Iterator end = list.end();
-  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
-  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
-
-  for( ; it != end,it2!=end2; ++it,++it2 )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_sumx2py2_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
-      {
-      result +=( pow((*it)->doubleValue(),2)+pow((*it2)->doubleValue(),2));
-      }
-    else if(!(KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
-      return false;
-  }
-
-  return true;
-}
-
-// Function: sumx2py2
-bool kspreadfunc_sumx2py2( KSContext& context )
-{
-  double result = 0.0;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SUMX2PY2", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-      return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
-      return false;
-    if(args[0]->listValue().count() !=args[1]->listValue() .count())
-        {
-        context.setValue( new KSValue( i18n("Err") ) );
-        return true;
-        }
-  bool b = kspreadfunc_sumx2py2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-
-static bool kspreadfunc_sumx2my2_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = list.begin();
-  QValueList<KSValue::Ptr>::Iterator end = list.end();
-  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
-  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
-
-  for( ; it != end,it2!=end2; ++it,++it2 )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_sumx2my2_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
-      {
-      result +=( pow((*it)->doubleValue(),2)-pow((*it2)->doubleValue(),2));
-      }
-    else if(!(KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
-      return false;
-  }
-
-  return true;
-}
-
-// Function: sumx2my2
-bool kspreadfunc_sumx2my2( KSContext& context )
-{
-  double result = 0.0;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SUMX2MY2", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-      return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
-      return false;
-    if(args[0]->listValue().count() !=args[1]->listValue() .count())
-        {
-        context.setValue( new KSValue( i18n("Err") ) );
-        return true;
-        }
-  bool b = kspreadfunc_sumx2my2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_sumxmy2_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
-{
-  QValueList<KSValue::Ptr>::Iterator it = list.begin();
-  QValueList<KSValue::Ptr>::Iterator end = list.end();
-  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
-  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
-
-  for( ; it != end,it2!=end2; ++it,++it2 )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_sumxmy2_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
-      {
-      result +=pow(( (*it)->doubleValue()-(*it2)->doubleValue()),2);
-      }
-    else if(!(KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
-      return false;
-  }
-
-  return true;
-}
-
-// Function: sum2xmy
-bool kspreadfunc_sumxmy2( KSContext& context )
-{
-  double result = 0.0;
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SUM2XMY", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
-      return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
-      return false;
-    if(args[0]->listValue().count() !=args[1]->listValue() .count())
-        {
-        context.setValue( new KSValue( i18n("Err") ) );
-        return true;
-        }
-  bool b = kspreadfunc_sumxmy2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
-
-  if ( b )
-    context.setValue( new KSValue( result ) );
-
-  return b;
-}
-
-static bool kspreadfunc_avedev_helper(KSContext &context, QValueList<KSValue::Ptr> &args, double &result, double temp)
-{
-	QValueList<KSValue::Ptr>::Iterator it = args.begin();
-	QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-	for(; it != end; ++it)
-	{
-		if(KSUtil::checkType(context, *it, KSValue::ListType, false))
-		{
-			if(!kspreadfunc_avedev_helper(context, (*it)->listValue(), result, temp))
-				return false;
-		}
-		else if(KSUtil::checkType(context, *it, KSValue::DoubleType, true))
-			result += fabs((*it)->doubleValue() - temp);
-	}
-
-	return true;
+  return calc->avg (args);
 }
 
 // Function: avedev
-bool kspreadfunc_avedev(KSContext &context)
+KSpreadValue func_avedev (valVector args, ValueCalc *calc, FuncExtra *)
 {
-	double temp = 0.0, result = 0.0;
-	int number = 0;
-
-	// First sum the range into one double
-	bool b = kspreadfunc_average_helper(context, context.value()->listValue(), temp, number, false );
-
-	if(number == 0)
-	{
-		context.setValue(new KSValue(i18n("#DIV/0")));
-		return true;
-	}
-
-	if(!b)
-		return false;
-
-	// Devide by the number of values
-	temp /= number;
-
-	bool finish = kspreadfunc_avedev_helper(context, context.value()->listValue(), result, temp);
-
-	if(!finish)
-		return false;
-
-	// Devide by the number of values
-	result /= number;
-
-	context.setValue(new KSValue(result));
-
-	return b;
+  KSpreadValue result = 0;
+  calc->arrayWalk (args, result, awAveDev, calc->avg (args));
+  return result;
 }
 
-// Function: averagea
-bool kspreadfunc_averagea( KSContext & context )
+// Function: median
+KSpreadValue func_median (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double result = 0.0;
+  // does NOT support anything other than doubles !!!
+  List array;
+  int number = 1;
+  
+  for (unsigned int i = 0; i < args.count(); ++i)
+    func_array_helper (args[i], calc, array, number);
 
-  int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
+  qHeapSort (array);
+  double d = *array.at (number / 2 + number % 2);
+  return KSpreadValue (d);
+}
 
-  if ( number == 0 )
+// Function: variance
+KSpreadValue func_variance (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  int count = calc->count (args);
+  if (count < 2)
+    return KSpreadValue::errorVALUE();
+
+  KSpreadValue result = func_devsq (args, calc, 0);
+  return calc->div (result, count-1);
+}
+
+// Function: varp
+KSpreadValue func_variancep (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  int count = calc->count (args);
+  if (count == 0)
+    return KSpreadValue::errorVALUE();
+
+  KSpreadValue result = func_devsq (args, calc, 0);
+  return calc->div (result, count);
+}
+
+// Function: stddev
+KSpreadValue func_stddev (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->stddev (args);
+}
+
+// Function: stddevp
+KSpreadValue func_stddevp (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->stddevP (args);
+}
+
+// Function: combin
+KSpreadValue func_combin (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->combin (args[0], args[1]);
+}
+
+// Function: bino
+KSpreadValue func_bino (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue n = args[0];
+  KSpreadValue m = args[1];
+  KSpreadValue comb = calc->combin (n, m);
+  KSpreadValue prob = args[2];
+  
+  if (calc->lower (prob,0) || calc->greater (prob,1))
+    return KSpreadValue::errorVALUE();
+    
+  // result = comb * pow (prob, m) * pow (1 - prob, n - m)
+  KSpreadValue pow1 = calc->pow (prob, m);
+  KSpreadValue pow2 = calc->pow (calc->sub (1, prob), calc->sub (n, m));
+  return calc->mul (comb, calc->mul (pow1, pow2));
+}
+
+// Function: phi
+KSpreadValue func_phi (valVector args, ValueCalc *calc, FuncExtra *)
+//distribution function for a standard normal distribution
+{
+  return calc->phi (args[0]);
+}
+
+// Function: gauss
+KSpreadValue func_gauss (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  //returns the integral values of the standard normal cumulative distribution
+  return calc->gauss (args[0]);
+}
+
+// Function: gammadist
+KSpreadValue func_gammadist (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue x = args[0];
+  KSpreadValue alpha = args[1];
+  KSpreadValue beta = args[2];
+  int kum = calc->conv()->asInteger (args[3]).asInteger();  // 0 or 1
+  
+  KSpreadValue result;
+
+  if (calc->lower (x, 0.0) || (!calc->greater (alpha, 0.0)) ||
+      (!calc->greater (beta, 0.0)))
+    return KSpreadValue::errorVALUE();
+  
+  if (kum == 0) {  //density
+    KSpreadValue G = calc->GetGamma (alpha);
+    // result = pow (x, alpha - 1.0) / exp (x / beta) / pow (beta, alpha) / G
+    KSpreadValue pow1 = calc->pow (x, calc->sub (alpha, 1.0));
+    KSpreadValue pow2 = calc->exp (calc->div (x, beta));
+    KSpreadValue pow3 = calc->pow (beta, alpha);
+    result = calc->div (calc->div (calc->div (pow1, pow2), pow3), G);
+  }
+  else
+    result = calc->GetGammaDist (x, alpha, beta);
+
+  return KSpreadValue (result);
+}
+
+// Function: betadist
+KSpreadValue func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue x = args[0];
+  KSpreadValue alpha = args[1];
+  KSpreadValue beta = args[2];
+  
+  KSpreadValue fA = 0.0;
+  KSpreadValue fB = 1.0;
+  if (args.count() > 3) fA = args[3];
+  if (args.count() == 5) fB = args[4];
+
+  //x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0
+  if (calc->lower (x, fA) || calc->greater (x, fB) || calc->equal (fA, fB) ||
+      (!calc->greater (alpha, 0.0)) || (!calc->greater (beta, 0.0)))
+    return KSpreadValue::errorVALUE();
+  
+  // xx = (x - fA) / (fB - fA)  // scaling
+  KSpreadValue xx = calc->div (calc->sub (x, fA), calc->sub (fB, fA));
+
+  return calc->GetBeta (xx, alpha, beta);
+}
+
+// Function: fisher
+KSpreadValue func_fisher (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the Fisher transformation for x
+
+  // 0.5 * ln ((1.0 + fVal) / (1.0 - fVal))
+  KSpreadValue fVal = args[0];
+  KSpreadValue num = calc->div (calc->add (fVal, 1.0), calc->sub (1.0, fVal));
+  return calc->mul (calc->ln (num), 0.5);
+}
+
+// Function: fisherinv
+KSpreadValue func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse of the Fisher transformation for x
+  
+  KSpreadValue fVal = args[0];
+  // (exp (2.0 * fVal) - 1.0) / (exp (2.0 * fVal) + 1.0)
+  KSpreadValue ex = calc->exp (calc->mul (fVal, 2.0));
+  return calc->div (calc->sub (ex, 1.0), calc->add (ex, 1.0));
+}
+
+// Function: normdist
+KSpreadValue func_normdist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the normal cumulative distribution
+  KSpreadValue x = args[0];
+  KSpreadValue mue = args[1];
+  KSpreadValue sigma = args[2];
+  KSpreadValue k = args[3];
+
+  if (!calc->greater (sigma, 0.0))
+    return KSpreadValue::errorVALUE();
+
+  // (x - mue) / sigma
+  KSpreadValue Y = calc->div (calc->sub (x, mue), sigma);
+  if (calc->isZero (k))   // density
+    return calc->div (calc->phi (Y), sigma);
+  else          // distribution
+    return calc->add (calc->gauss (Y), 0.5);
+}
+
+// Function: lognormdist
+KSpreadValue func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the cumulative lognormal distribution
+  KSpreadValue x = args[0];
+  KSpreadValue mue = args[1];
+  KSpreadValue sigma = args[2];
+
+  if (!calc->greater (sigma, 0.0) || (!calc->greater (x, 0.0)))
+    return KSpreadValue::errorVALUE();
+  
+  // (ln(x) - mue) / sigma
+  KSpreadValue Y = calc->div (calc->sub (calc->ln (x), mue), sigma);
+  return calc->add (calc->gauss (Y), 0.5);
+}
+
+// Function: normsdist
+KSpreadValue func_stdnormdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  //returns the cumulative lognormal distribution, mue=0, sigma=1
+  return calc->add (calc->gauss (args[0]), 0.5);
+}
+
+// Function: expondist
+KSpreadValue func_expondist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the exponential distribution
+  KSpreadValue x = args[0];
+  KSpreadValue lambda = args[1];
+  KSpreadValue kum = args[2];
+
+  KSpreadValue result = 0.0;
+
+  if (!calc->greater (lambda, 0.0))
+    return KSpreadValue::errorVALUE();
+  
+  // ex = exp (-lambda * x)
+  KSpreadValue ex = calc->exp (calc->mul (calc->mul (lambda, -1), x));
+  if (calc->isZero (kum)) {  //density
+    if (!calc->lower (x, 0.0))
+      // lambda * ex
+      result = calc->mul (lambda, ex);
+  }
+  else {  //distribution
+    if (calc->greater (x, 0.0))
+      // 1.0 - ex
+      result = calc->sub (1.0, ex);
+  }
+  return result;
+}
+
+// Function: weibull
+KSpreadValue func_weibull (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the Weibull distribution
+
+  KSpreadValue x = args[0];
+  KSpreadValue alpha = args[1];
+  KSpreadValue beta = args[2];
+  KSpreadValue kum = args[3];
+
+  KSpreadValue result;
+
+  if ((!calc->greater (alpha, 0.0)) || (!calc->greater (beta, 0.0)) ||
+      calc->lower (x, 0.0))
+    return KSpreadValue::errorVALUE();
+  
+  // ex = exp (-pow (x / beta, alpha))
+  KSpreadValue ex;
+  ex = calc->exp (calc->mul (calc->pow (calc->div (x, beta), alpha), -1));
+  if (calc->isZero (kum))    // density
   {
-    context.setValue( new KSValue( i18n("#DIV/0") ) );
-    return true;
+    // result = alpha / pow(beta,alpha) * pow(x,alpha-1.0) * ex
+    result = calc->div (alpha, calc->pow (beta, alpha));
+    result = calc->mul (result, calc->mul (calc->pow (x,
+        calc->sub (alpha, 1)), ex));
+  }
+  else    // distribution
+    result = calc->sub (1.0, ex);
+
+  return result;
+}
+
+// Function: normsinv
+KSpreadValue func_normsinv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse of the standard normal cumulative distribution
+  
+  KSpreadValue x = args[0];
+  if (!(calc->greater (x, 0.0) && calc->lower (x, 1.0)))
+    return KSpreadValue::errorVALUE();
+  
+  return calc->gaussinv (x);
+}
+
+// Function: norminv
+KSpreadValue func_norminv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse of the normal cumulative distribution
+  KSpreadValue x = args[0];
+  KSpreadValue mue = args[1];
+  KSpreadValue sigma = args[2];
+
+  if (!calc->greater (sigma, 0.0))
+    return KSpreadValue::errorVALUE();
+  if (!(calc->greater (x, 0.0) && calc->lower (x, 1.0)))
+    return KSpreadValue::errorVALUE();
+
+  // gaussinv (x)*sigma + mue
+  return calc->add (calc->mul (calc->gaussinv (x), sigma), mue);
+}
+
+// Function: gammaln
+KSpreadValue func_gammaln (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the natural logarithm of the gamma function
+  
+  if (calc->greater (args[0], 0.0))
+    return calc->GetLogGamma (args[0]);
+  return KSpreadValue::errorVALUE();
+}
+
+// Function: poisson
+KSpreadValue func_poisson (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the Poisson distribution
+
+  KSpreadValue x = args[0];
+  KSpreadValue lambda = args[1];
+  KSpreadValue kum = args[2];
+
+  // lambda < 0.0 || x < 0.0
+  if (calc->lower (lambda, 0.0) || calc->lower (x, 0.0))
+    return KSpreadValue::errorVALUE();
+  
+  KSpreadValue result;
+
+  // ex = exp (-lambda)
+  KSpreadValue ex = calc->exp (calc->mul (lambda, -1));
+
+  if (calc->isZero (kum)) {   // density
+    if (calc->isZero (lambda))
+      result = 0;
+    else
+      // ex * pow (lambda, x) / fact (x)
+    result = calc->div (calc->mul (ex, calc->pow (lambda, x)), calc->fact (x));
+  }
+  else {   // distribution
+    if (calc->isZero (lambda))
+      result = 1;
+    else
+    {
+      result = 1.0;
+      KSpreadValue fFak = 1.0;
+      unsigned long nEnd = calc->conv()->asInteger (x).asInteger();
+      for (unsigned long i = 1; i <= nEnd; i++)
+      {
+        // fFak *= i
+        fFak = calc->mul (fFak, i);
+        // result += pow (lambda, i) / fFak
+        result = calc->add (result, calc->div (calc->pow (lambda, i), fFak));
+      }
+      result = calc->mul (result, ex);
+    }
   }
 
-  if ( b )
-    context.setValue( new KSValue( result / (double) number ) );
-
-  return b;
+  return result;
 }
 
+// Function: confidence
+KSpreadValue func_confidence (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the confidence interval for a population mean
+  KSpreadValue alpha = args[0];
+  KSpreadValue sigma = args[1];
+  KSpreadValue n = args[2];
+
+  // sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1
+  if ((!calc->greater (sigma, 0.0)) || (!calc->greater (alpha, 0.0)) ||
+      (!calc->lower (alpha, 1.0)) || calc->lower (n, 1))
+    return KSpreadValue::errorVALUE();
+    
+  // g = gaussinv (1.0 - alpha / 2.0)
+  KSpreadValue g = calc->gaussinv (calc->sub (1.0, calc->div (alpha, 2.0)));
+  // g * sigma / sqrt (n)
+  return calc->div (calc->mul (g, sigma), calc->sqrt (n));
+}
+
+// Function: tdist
+KSpreadValue func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the t-distribution
+  
+  KSpreadValue T = args[0];
+  KSpreadValue fDF = args[1];
+  int flag = calc->conv()->asInteger (args[2]).asInteger();
+
+  if (calc->lower (fDF, 1) || calc->lower (T, 0.0) || (flag != 1 && flag != 2))
+    return KSpreadValue::errorVALUE();
+
+  // arg = fDF / (fDF + T * T)
+  KSpreadValue arg = calc->div (fDF, calc->add (fDF, calc->sqr (T)));
+  
+  KSpreadValue R;
+  R = calc->mul (calc->GetBeta (arg, calc->div (fDF, 2.0), 0.5), 0.5);
+  
+  if (flag == 1)
+    return R;
+  return calc->mul (R, 2);   // flag is 2 here
+}
+
+// Function: fdist
+KSpreadValue func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the f-distribution
+
+  KSpreadValue x = args[0];
+  KSpreadValue fF1 = args[1];
+  KSpreadValue fF2 = args[2];
+
+  // x < 0.0 || fF1 < 1 || fF2 < 1 || fF1 >= 1.0E10 || fF2 >= 1.0E10
+  if (calc->lower (x, 0.0) || calc->lower (fF1, 1) || calc->lower (fF2, 1) ||
+      (!calc->lower (fF1, 1.0E10)) || (!calc->lower (fF2, 1.0E10)))
+    return KSpreadValue::errorVALUE();
+
+  // arg = fF2 / (fF2 + fF1 * x)
+  KSpreadValue arg = calc->div (fF2, calc->add (fF2, calc->mul (fF1, x)));
+  // alpha = fF2/2.0
+  KSpreadValue alpha = calc->div (fF2, 2.0);
+  // beta = fF1/2.0
+  KSpreadValue beta = calc->div (fF1, 2.0);
+  return calc->GetBeta (arg, alpha, beta);
+}
+
+// Function: chidist
+KSpreadValue func_chidist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the chi-distribution
+  
+  KSpreadValue fChi = args[0];
+  KSpreadValue fDF = args[1];
+
+  // fDF < 1 || fDF >= 1.0E5 || fChi < 0.0
+  if (calc->lower (fDF, 1) || (!calc->lower (fDF, 1.0E5)) ||
+      calc->lower (fChi, 0.0))
+    return KSpreadValue::errorVALUE();
+
+  // 1.0 - GetGammaDist (fChi / 2.0, fDF / 2.0, 1.0)
+  return calc->sub (1.0, calc->GetGammaDist (calc->div (fChi, 2.0),
+      calc->div (fDF, 2.0), 1.0));
+}
+
+
+// two-array-walk functions used in the two-sum functions
+
+void tawSumproduct (ValueCalc *c, KSpreadValue &res, KSpreadValue v1,
+    KSpreadValue v2) {
+  // res += v1*v2
+  res = c->add (res, c->mul (v1, v2));  
+}
+
+void tawSumx2py2 (ValueCalc *c, KSpreadValue &res, KSpreadValue v1,
+    KSpreadValue v2) {
+  // res += sqr(v1)+sqr(v2)
+  res = c->add (res, c->add (c->sqr (v1), c->sqr (v2)));
+}
+
+void tawSumx2my2 (ValueCalc *c, KSpreadValue &res, KSpreadValue v1,
+    KSpreadValue v2) {
+  // res += sqr(v1)-sqr(v2)
+  res = c->add (res, c->sub (c->sqr (v1), c->sqr (v2)));
+}
+
+void tawSumxmy2 (ValueCalc *c, KSpreadValue &res, KSpreadValue v1,
+    KSpreadValue v2) {
+  // res += sqr(v1-v2)
+  res = c->add (res, c->sqr (c->sub (v1, v2)));
+  
+}
+
+// Function: sumproduct
+KSpreadValue func_sumproduct (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue result = 0.0;
+  calc->twoArrayWalk (args[0], args[1], result, tawSumproduct);
+  return result;
+}
+
+// Function: sumx2py2
+KSpreadValue func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue result = 0.0;
+  calc->twoArrayWalk (args[0], args[1], result, tawSumx2py2);
+  return result;
+}
+
+// Function: sumx2my2
+KSpreadValue func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue result = 0.0;
+  calc->twoArrayWalk (args[0], args[1], result, tawSumx2my2);
+  return result;
+}
+
+// Function: sum2xmy
+KSpreadValue func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue result = 0.0;
+  calc->twoArrayWalk (args[0], args[1], result, tawSumxmy2);
+  return result;
+}

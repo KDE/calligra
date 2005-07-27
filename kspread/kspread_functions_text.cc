@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team
                            www.koffice.org/kspread
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,184 +23,182 @@
 // built-in text functions
 // please keep it in alphabetical order
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
-
 #include <qregexp.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <math.h>
 
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
-#include "kspread_functions.h"
-#include "kspread_util.h"
-#include "kspread_value.h"
-#include "valueparser.h"
+#include "functions.h"
+#include "valuecalc.h"
 #include "valueconverter.h"
 
+using namespace KSpread;
+
+// Functions DOLLAR and FIXED convert data to double, hence they will not
+// support arbitrary precision, when it will be introduced.
+
 // prototypes
-bool kspreadfunc_char( KSContext& context );
-bool kspreadfunc_clean( KSContext& context );
-bool kspreadfunc_code( KSContext& context );
-bool kspreadfunc_compare( KSContext& context );
-bool kspreadfunc_concatenate( KSContext& context );
-bool kspreadfunc_dollar( KSContext& context );
-bool kspreadfunc_exact( KSContext& context );
-bool kspreadfunc_find( KSContext& context );
-bool kspreadfunc_fixed( KSContext& context );
-bool kspreadfunc_join( KSContext& context );
-bool kspreadfunc_left( KSContext& context );
-bool kspreadfunc_len( KSContext& context );
-bool kspreadfunc_lower( KSContext& context );
-bool kspreadfunc_mid( KSContext& context );
-bool kspreadfunc_proper(KSContext & context);
-bool kspreadfunc_regexp(KSContext & context);
-bool kspreadfunc_regexpre(KSContext & context);
-bool kspreadfunc_replace( KSContext& context );
-bool kspreadfunc_rept( KSContext& context );
-bool kspreadfunc_rot( KSContext& context );
-bool kspreadfunc_right( KSContext& context );
-bool kspreadfunc_search( KSContext& context );
-bool kspreadfunc_sleek( KSContext& context );
-bool kspreadfunc_substitute( KSContext& context );
-bool kspreadfunc_t( KSContext& context );
-bool kspreadfunc_text( KSContext& context );
-bool kspreadfunc_toggle( KSContext& context );
-bool kspreadfunc_trim(KSContext& context );
-bool kspreadfunc_upper( KSContext& context );
-bool kspreadfunc_value( KSContext& context );
+KSpreadValue func_char (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_clean (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_code (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_compare (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_concatenate (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_dollar (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_exact (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_find (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_fixed (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_left (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_len (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_lower (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mid (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_proper (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_regexp (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_regexpre (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_replace (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_rept (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_rot (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_right (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_search (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_sleek (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_substitute (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_t (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_text (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_toggle (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_trim (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_upper (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_value (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all text functions
 void KSpreadRegisterTextFunctions()
 {
-  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  FunctionRepository* repo = FunctionRepository::self();
+  Function *f;
 
-  repo->registerFunction( "CHAR",        kspreadfunc_char );
-  repo->registerFunction( "CLEAN",       kspreadfunc_clean );
-  repo->registerFunction( "CODE",        kspreadfunc_code );
-  repo->registerFunction( "COMPARE",     kspreadfunc_compare ); // KSpread-specific
-  repo->registerFunction( "CONCATENATE", kspreadfunc_concatenate );
-  repo->registerFunction( "DOLLAR",      kspreadfunc_dollar );
-  repo->registerFunction( "EXACT",       kspreadfunc_exact );
-  repo->registerFunction( "FIND",        kspreadfunc_find );
-  repo->registerFunction( "FIXED",       kspreadfunc_fixed );
-  repo->registerFunction( "LEFT",        kspreadfunc_left );
-  repo->registerFunction( "LEN",         kspreadfunc_len );
-  repo->registerFunction( "LOWER",       kspreadfunc_lower );
-  repo->registerFunction( "MID",         kspreadfunc_mid );
-  repo->registerFunction( "PROPER",      kspreadfunc_proper );
-  repo->registerFunction( "REGEXP",      kspreadfunc_regexp );
-  repo->registerFunction( "REGEXPRE",    kspreadfunc_regexpre );
-  repo->registerFunction( "REPLACE",     kspreadfunc_replace );
-  repo->registerFunction( "REPT",        kspreadfunc_rept );
-  repo->registerFunction( "ROT",         kspreadfunc_rot ); // KSpread-specific, like OpenOffice's ROT13
-  repo->registerFunction( "RIGHT",       kspreadfunc_right );
-  repo->registerFunction( "SEARCH",      kspreadfunc_search );
-  repo->registerFunction( "SLEEK",       kspreadfunc_sleek );  // KSpread-specific
-  repo->registerFunction( "SUBSTITUTE",  kspreadfunc_substitute );
-  repo->registerFunction( "T",           kspreadfunc_t );
-  repo->registerFunction( "TEXT",        kspreadfunc_text );
-  repo->registerFunction( "TOGGLE",      kspreadfunc_toggle ); // KSpread-specific
-  repo->registerFunction( "TRIM",        kspreadfunc_trim );
-  repo->registerFunction( "UPPER",       kspreadfunc_upper );
-  repo->registerFunction( "VALUE",       kspreadfunc_value );
+  // one-parameter functions
+  f = new Function ("CHAR", func_char);
+  repo->add (f);
+  f = new Function ("CLEAN", func_clean);
+  repo->add (f);
+  f = new Function ("CODE", func_code);
+  repo->add (f);
+  f = new Function ("LEN", func_len);
+  repo->add (f);
+  f = new Function ("LOWER", func_lower);
+  repo->add (f);
+  f = new Function ("PROPER", func_proper);
+  repo->add (f);
+  f = new Function ("ROT", func_rot);
+  repo->add (f);
+  f = new Function ("SLEEK", func_sleek);
+  repo->add (f);
+  f = new Function ("T", func_t);
+  repo->add (f);
+  f = new Function ("TOGGLE", func_toggle);
+  repo->add (f);
+  f = new Function ("TRIM", func_trim);
+  repo->add (f);
+  f = new Function ("UPPER", func_upper);
+  repo->add (f);
+  f = new Function ("VALUE", func_value);
+  repo->add (f);
+  
+  // other functions
+  f = new Function ("COMPARE", func_compare);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("CONCATENATE", func_concatenate);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DOLLAR", func_dollar);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("EXACT", func_exact);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("FIND", func_find);
+  f->setParamCount (2, 3);
+  repo->add (f);
+  f = new Function ("FIXED", func_fixed);
+  f->setParamCount (1, 3);
+  repo->add (f);
+  f = new Function ("LEFT", func_left);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("MID", func_mid);
+  f->setParamCount (2, 3);
+  repo->add (f);
+  f = new Function ("REGEXP", func_regexp);
+  f->setParamCount (2, 4);
+  repo->add (f);
+  f = new Function ("REGEXPRE", func_regexpre);
+  f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("REPLACE", func_replace);
+  f->setParamCount (4);
+  repo->add (f);
+  f = new Function ("REPT", func_rept);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("RIGHT", func_right);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("SEARCH", func_search);
+  f->setParamCount (2, 3);
+  repo->add (f);
+  f = new Function ("SUBSTITUTE", func_substitute);
+  f->setParamCount (3, 4);
+  repo->add (f);
+  f = new Function ("TEXT", func_text);
+  f->setParamCount (1, 2);
+  repo->add (f);
 }
 
 
 // Function: CHAR
-bool kspreadfunc_char( KSContext& context )
+KSpreadValue func_char (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "CHAR", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) &&
-       !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-        return false;
-
-  args[0]->cast( KSValue::IntType );
-  int val = args[0]->intValue();
-  QString str = QChar( val );
-
-  context.setValue( new KSValue( str ) );
-  return true;
+  int val = calc->conv()->asInteger (args[0]).asInteger ();
+  return KSpreadValue (QString (QChar (val)));
 }
 
 // Function: CLEAN
-bool kspreadfunc_clean( KSContext& context )
+KSpreadValue func_clean (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 1, "CLEAN", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    QString str(args[0]->stringValue());
-    QString result;
-    QChar   c;
-    int     i;
-    int     l = str.length();
-
-    for (i = 0; i < l; ++i)
-    {
-      c = str[i];
-      if (c.isPrint())
-        result += c;
-    }
-
-    context.setValue(new KSValue(result));
-
-    return true;
+  QString str (calc->conv()->asString (args[0]).asString());
+  QString result;
+  QChar   c;
+  int     i;
+  int     l = str.length();
+  
+  for (i = 0; i < l; ++i)
+  {
+    c = str[i];
+    if (c.isPrint())
+      result += c;
+  }
+  
+  return KSpreadValue (result);
 }
 
 // Function: CODE
-bool kspreadfunc_code( KSContext& context )
+KSpreadValue func_code (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString str (calc->conv()->asString (args[0]).asString());
+  if (str.length() <= 0)
+     return KSpreadValue::errorVALUE();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "CODE", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString str = args[0]->stringValue();
-  if( str.length() <= 0 )
-     return false;
-
-  context.setValue( new KSValue( str[0].unicode() ) );
-  return true;
+  return KSpreadValue (str[0].unicode());
 }
 
 // Function: COMPARE
-bool kspreadfunc_compare( KSContext& context )
+KSpreadValue func_compare (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 3, "COMPARE", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
-    return false;
-
   int  result = 0;
-  bool exact = args[2]->boolValue();
+  bool exact = calc->conv()->asBoolean (args[2]).asBoolean();
 
-  QString s1 = args[0]->stringValue();
-  QString s2 = args[1]->stringValue();
+  QString s1 = calc->conv()->asString (args[0]).asString();
+  QString s2 = calc->conv()->asString (args[1]).asString();
 
   if (!exact)
     result = s1.lower().localeAwareCompare(s2.lower());
@@ -211,165 +210,100 @@ bool kspreadfunc_compare( KSContext& context )
   else if (result > 0)
     result = 1;
 
-  context.setValue( new KSValue(result) );
-  return true;
+  return KSpreadValue (result);
 }
 
-static bool kspreadfunc_concatenate_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& tmp )
+void func_concatenate_helper (KSpreadValue val, ValueCalc *calc,
+    QString& tmp)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-  QString tmp2;
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_concatenate_helper( context, (*it)->listValue(), tmp ) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-      tmp+= (*it)->stringValue();
-    else if( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      tmp+= KGlobal::locale()->formatNumber((*it)->doubleValue());
-    else
-      return false;
-  }
-  return true;
+  if (val.isArray()) {
+    for (unsigned int row = 0; row < val.rows(); ++row)
+      for (unsigned int col = 0; col < val.columns(); ++col)
+        func_concatenate_helper (val.element (col, row), calc, tmp);
+  } else
+    tmp += calc->conv()->asString (val).asString();
 }
 
 // Function: CONCATENATE
-bool kspreadfunc_concatenate( KSContext& context )
+KSpreadValue func_concatenate (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp;
-  bool b = kspreadfunc_concatenate_helper( context, context.value()->listValue(), tmp );
-
-  if ( b )
-    context.setValue( new KSValue( tmp ) );
-
-  return b;
+  for (unsigned int i = 0; i < args.count(); ++i)
+    func_concatenate_helper (args[i], calc, tmp);
+  
+  return KSpreadValue (tmp);
 }
 
 // Function: DOLLAR
-bool kspreadfunc_dollar( KSContext& context )
+KSpreadValue func_dollar (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DOLLAR", true ) &&
-       !KSUtil::checkArgumentsCount( context, 2, "DOLLAR", true ) )
-         return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double value = args[0]->doubleValue();
-  int decimals = 2;
-
-  if( KSUtil::checkArgumentsCount( context, 2, "DOLLAR", false ) )
-    if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-      decimals = args[1]->intValue();
-
-  // if decimals < 0, number is rounded
-  if( decimals < 0 )
-  {
-    decimals = -decimals;
-    value = floor( value/pow(10.0,decimals)+0.5 ) * pow(10.0,decimals);
-    decimals = 0;
-  }
+  // ValueConverter doesn't support money directly, hence we need to
+  // use the locale. This code has the same effect as the output
+  // of ValueFormatter for money format.
+  
+  // This function converts data to double/int, hence it won't support
+  // larger precision.
+  
+  double value = calc->conv()->asFloat (args[0]).asFloat();
+  int precision = 2;
+  if (args.count() == 2)
+    precision = calc->conv()->asInteger (args[1]).asInteger();
 
   // do round, because formatMoney doesn't
-  value = floor( value * pow(10.0,decimals)+0.5) / pow(10.0,decimals) ;
-
-  // -30 should be displayed as (30)
-  QString result = KGlobal::locale()->formatMoney( fabs( value ),
-    QString::null, decimals );
-  if( value < 0 )
-    result = "(" + result + ")";
-
-  context.setValue( new KSValue( result ) );
-  return true;
+  value = floor (value * pow (10.0, precision) + 0.5) / pow (10.0, precision);
+  
+  KLocale *locale = calc->conv()->locale();
+  QString s = locale->formatMoney (value, locale->currencySymbol(), precision);
+  
+  return KSpreadValue (s);
 }
 
 // Function: EXACT
-bool kspreadfunc_exact( KSContext& context )
+KSpreadValue func_exact (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "EXACT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-    return false;
-  bool exact = args[1]->stringValue() == args[0]->stringValue();
-  context.setValue( new KSValue(exact) );
-  return true;
+  QString s1 = calc->conv()->asString (args[0]).asString();
+  QString s2 = calc->conv()->asString (args[1]).asString();
+  bool exact = (s1 == s2);
+  return KSpreadValue (exact);
 }
 
 // Function: FIND
-bool kspreadfunc_find( KSContext& context )
+KSpreadValue func_find (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QString find_text, within_text;
-    int start_num = 1;
+  QString find_text, within_text;
+  int start_num = 1;
 
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  find_text = calc->conv()->asString (args[0]).asString();
+  within_text = calc->conv()->asString (args[1]).asString();
+  if (args.count() == 3)
+    start_num = calc->conv()->asInteger (args[2]).asInteger();
 
-    if ( !KSUtil::checkArgumentsCount( context, 2, "FIND", true ) &&
-         !KSUtil::checkArgumentsCount( context, 3, "FIND", true ) )
-           return false;
+  // conforms to Excel behaviour
+  if (start_num <= 0) return KSpreadValue::errorVALUE();
+  if (start_num > (int)within_text.length()) return KSpreadValue::errorVALUE();
 
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
+  int pos = within_text.find (find_text, start_num - 1);
+  if( pos < 0 ) return KSpreadValue::errorNA();
 
-    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-      return false;
-
-    if ( KSUtil::checkArgumentsCount( context, 3, "FIND", false ) )
-      if ( KSUtil::checkType( context, args[2], KSValue::IntType, false ) )
-         start_num = args[2]->intValue();
-
-    find_text = args[0]->stringValue();
-    within_text = args[1]->stringValue();
-
-    // conforms to Excel behaviour
-    if( start_num <= 0 ) return false;
-    if( start_num > (int)within_text.length() ) return false;
-
-    int pos = within_text.find( find_text, start_num-1 );
-    if( pos < 0 ) return false;
-
-    context.setValue( new KSValue( pos + 1 ) );
-    return true;
+  return KSpreadValue (pos + 1);
 }
 
 // Function: FIXED
-bool kspreadfunc_fixed( KSContext& context )
+KSpreadValue func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  // uses double, hence won't support big precision
+
   int decimals = 2;
   bool no_commas = FALSE;
 
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "FIXED", true ) &&
-       !KSUtil::checkArgumentsCount( context, 2, "FIXED", true ) &&
-       !KSUtil::checkArgumentsCount( context, 3, "FIXED", true ) )
-         return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  if ( KSUtil::checkArgumentsCount( context, 2, "FIXED", false ) ||
-       KSUtil::checkArgumentsCount( context, 3, "FIXED", false ) )
-    if ( KSUtil::checkType( context, args[1], KSValue::IntType, false ) )
-      decimals = args[1]->intValue();
-
-  if ( KSUtil::checkArgumentsCount( context, 3, "FIXED", false ) )
-    if ( KSUtil::checkType( context, args[2], KSValue::BoolType, false ) )
-       no_commas = args[2]->boolValue();
-
-  double number = args[0]->doubleValue();
+  double number = calc->conv()->asFloat (args[0]).asFloat();
+  if (args.count() > 1)
+    decimals = calc->conv()->asInteger (args[1]).asInteger();
+  if (args.count() == 3)
+    no_commas = calc->conv()->asBoolean (args[2]).asBoolean();
 
   QString result;
+  KLocale *locale = calc->conv()->locale();
 
   // unfortunately, we can't just use KLocale::formatNumber because
   // * if decimals < 0, number is rounded
@@ -387,363 +321,178 @@ bool kspreadfunc_fixed( KSContext& context )
 
   int pos = result.find('.');
   if (pos == -1) pos = result.length();
-    else result.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+    else result.replace(pos, 1, locale->decimalSymbol());
   if( !no_commas )
     while (0 < (pos -= 3))
-      result.insert(pos, KGlobal::locale()->thousandsSeparator());
+      result.insert(pos, locale->thousandsSeparator());
 
-  result.prepend( neg ? KGlobal::locale()->negativeSign():
-    KGlobal::locale()->positiveSign() );
+  result.prepend( neg ? locale->negativeSign():
+    locale->positiveSign() );
 
-  context.setValue( new KSValue( result ) );
-  return true;
+  return KSpreadValue (result);
 }
 
 // Function: LEFT
-bool kspreadfunc_left( KSContext& context )
+KSpreadValue func_left (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    bool hasNoSecondParam = KSUtil::checkArgumentsCount( context, 1, "left", false );
-
-    if ( !KSUtil::checkArgumentsCount( context, 2, "left", false ) &&
-		 !hasNoSecondParam)
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-	int nb;
-
-	if(hasNoSecondParam)
-		nb = 1;
-	else
-	{
-	    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-	      nb = (int) args[1]->doubleValue();
-    	else if( KSUtil::checkType( context, args[1], KSValue::IntType, false ) )
-	      nb = args[1]->intValue();
-	    else
-		  return false;
-	}
-
-    QString tmp = args[0]->stringValue().left(nb);
-    context.setValue( new KSValue( tmp ) );
-    return true;
+  QString str = calc->conv()->asString (args[0]).asString();
+  int nb = 1;
+  if (args.count() == 2)
+    nb = calc->conv()->asInteger (args[1]).asInteger();
+  
+  return KSpreadValue (str.left (nb));
 }
 
 // Function: LEN
-bool kspreadfunc_len( KSContext& context )
+KSpreadValue func_len (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "len", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  int nb=args[0]->stringValue().length();
-  context.setValue( new KSValue(nb));
-  return true;
+  int nb = calc->conv()->asString (args[0]).asString().length();
+  return KSpreadValue (nb);
 }
 
 // Function: LOWER
-bool kspreadfunc_lower( KSContext& context )
+KSpreadValue func_lower (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 1, "lower", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    QString tmp = args[0]->stringValue().lower();
-    context.setValue( new KSValue( tmp ) );
-    return true;
+  return KSpreadValue (calc->conv()->asString (args[0]).asString().lower());
 }
 
 // Function: MID
-bool kspreadfunc_mid( KSContext& context )
+KSpreadValue func_mid (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString str = calc->conv()->asString (args[0]).asString();
+  int pos = calc->conv()->asInteger (args[1]).asInteger();
+  uint len = 0xffffffff;
+  if (args.count() == 3)
+    len = (uint) calc->conv()->asInteger (args[2]).asInteger();
+  
+  // Excel compatible
+  pos--;
 
-    uint len = 0xffffffff;
-    if ( KSUtil::checkArgumentsCount( context, 3, "mid", false ) )
-    {
-      if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
-        len = (uint) args[2]->doubleValue();
-      else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-        len = (uint) args[2]->intValue();
-      else
-        return false;
-    }
-    else if ( !KSUtil::checkArgumentsCount( context, 2, "mid", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-    int pos;
-    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-      pos = (int) args[1]->doubleValue();
-    else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-      pos = args[1]->intValue();
-    else
-      return false;
-
-	// Excel compatible
-	pos--;
-
-    QString tmp = args[0]->stringValue().mid( pos, len );
-    context.setValue( new KSValue(tmp));
-    return true;
+  return KSpreadValue (str.mid (pos, len));
 }
 
 // Function: PROPER
-bool kspreadfunc_proper(KSContext & context)
+KSpreadValue func_proper (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString str = calc->conv()->asString (args[0]).asString().lower();
+    
+  QChar f;
+  bool  first = true;
 
-  if (args.count() != 1)
-    return false;
-
-  QString str;
-
-  if (KSUtil::checkType(context, args[0],
-                        KSValue::StringType, true))
+  for (unsigned int i = 0; i < str.length(); ++i)
   {
-    unsigned int i;
-    str = args[0]->stringValue().lower();
-    QChar f;
-    bool  first = true;
-
-    for (i = 0; i < str.length(); ++i)
+    if (first)
     {
-      if (first)
-      {
-        f = str[i];
-        if (f.isNumber())
-          continue;
-
-        f = f.upper();
-
-        str[i] = f;
-        first = false;
-
+      f = str[i];
+      if (f.isNumber())
         continue;
-      }
 
-      if (str[i] == ' ' || str[i] == '-')
-        first = true;
+      f = f.upper();
+
+      str[i] = f;
+      first = false;
+
+      continue;
     }
+
+    if (str[i] == ' ' || str[i] == '-')
+      first = true;
   }
 
-  context.setValue(new KSValue(str));
-
-  return true;
+  return KSpreadValue (str);
 }
 
 // Function: REGEXP
-bool kspreadfunc_regexp(KSContext & context)
+KSpreadValue func_regexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  int ac = args.count ();
-  if ((ac < 2) || (ac > 4))
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-    return false;
-  if ( (ac >= 3) && ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) ))
-    return false;
-  if ( (ac == 4) && (!KSUtil::checkType( context, args[3], KSValue::IntType, true ) ) )
-    return false;
-
-  QRegExp exp( args[1]->stringValue() );
-  if ( !exp.isValid() )
-    return false;
-
-  QString s( args[0]->stringValue() );
-  QString defText( (ac >= 3) ? args[2]->stringValue() : QString::null );
-
-  int bkref = (ac == 4) ? args[3]->intValue() : 0;
-  if (bkref < 0)
-    return false;  //strange back-reference
+  // ensure that we got a valid regular expression
+  QRegExp exp (calc->conv()->asString (args[1]).asString());
+  if (!exp.isValid ())
+    return KSpreadValue::errorVALUE();
   
+  QString s = calc->conv()->asString (args[0]).asString();
+  QString defText;
+  if (args.count() > 2)
+    defText = calc->conv()->asString (args[2]).asString();
+  int bkref = 0;
+  if (args.count() == 4)
+    bkref = calc->conv()->asInteger (args[3]).asInteger();
+  if (bkref < 0)   // strange back-reference
+    return KSpreadValue::errorVALUE();
+
   QString returnValue;
   
-  int pos = exp.search( s );
+  int pos = exp.search (s);
   if (pos == -1)
     returnValue = defText;
   else
     returnValue = exp.cap (bkref);
 
-  context.setValue( new KSValue( returnValue ) );
-  return true;
+  return KSpreadValue (returnValue);
 }
 
 // Function: REGEXPRE
-bool kspreadfunc_regexpre(KSContext & context)
+KSpreadValue func_regexpre (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if (args.count() != 3)
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
-    return false;
-
-  kdDebug() << "Got parameter" << endl;
-
-  QRegExp exp( args[1]->stringValue() );
-  //  exp.setWildcard( true );
-  if ( !exp.isValid() )
-    return false;
-
-  QString s( args[0]->stringValue() );
-  QString str( args[2]->stringValue() );
-
-  kdDebug() << "Search: " << args[1]->stringValue() << " in " << s
-            << ", Result: " << exp.search( s ) << endl;
+  // ensure that we got a valid regular expression
+  QRegExp exp (calc->conv()->asString (args[1]).asString());
+  if (!exp.isValid ())
+    return KSpreadValue::errorVALUE();
+  
+  QString s = calc->conv()->asString (args[0]).asString();
+  QString str = calc->conv()->asString (args[2]).asString();
 
   int pos = 0;
-  while ( ( pos = exp.search( s, pos ) ) != -1 )
+  while ((pos = exp.search (s, pos)) != -1)
   {
     int i = exp.matchedLength();
-    s = s.replace( pos, i, str );
+    s = s.replace (pos, i, str);
     pos += str.length();
   }
 
-  context.setValue( new KSValue( s ) );
-  return true;
+  return KSpreadValue (s);
 }
 
 // Function: REPLACE
-bool kspreadfunc_replace( KSContext& context )
+KSpreadValue func_replace (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 4, "REPLACE", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[3], KSValue::StringType, true ) )
-    return false;
-
-  QString text = args[0]->stringValue();
-  int pos = args[1]->intValue();
-  int len = args[2]->intValue();
-  QString new_text = args[3]->stringValue();
-
-  if( pos < 0 ) pos = 0;
-
-  QString result = text.replace( pos-1, len, new_text );
-  context.setValue( new KSValue( result ) );
-
-  return true;
+  QString text = calc->conv()->asString (args[0]).asString();
+  int pos = calc->conv()->asInteger (args[1]).asInteger();
+  int len = calc->conv()->asInteger (args[2]).asInteger();
+  QString new_text = calc->conv()->asString (args[3]).asString();
+  
+  if (pos < 0) pos = 0;
+  
+  QString result = text.replace (pos-1, len, new_text);
+  return KSpreadValue (result);
 }
 
 // Function: REPT
-bool kspreadfunc_rept( KSContext& context )
+KSpreadValue func_rept (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "REPT", true ) )
-    return false;
-
-  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  QString s;
-
-  // this is code duplication, can be rewritten once we have KSpreadFormat
-  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    s = args[0]->stringValue();
-
-  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    s = args[0]->boolValue() ? i18n("True") : i18n("False");
-
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    s = KGlobal::locale()->formatNumber( args[0]->doubleValue() );
-
-  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-    s = KGlobal::locale()->formatTime( args[0]->timeValue() );
-
-  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-    s = KGlobal::locale()->formatDate( args[0]->dateValue() );
-
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    s = KGlobal::locale()->formatNumber( args[0]->intValue() );
-
-  else return false;
-
-  int nb=(int) args[1]->doubleValue();
+  QString s = calc->conv()->asString (args[0]).asString();
+  int nb = calc->conv()->asInteger (args[1]).asInteger();
+  
   QString result;
-  for (int i=0 ;i<nb;i++) result += s;
-  context.setValue( new KSValue( result ) );
-  return true;
+  for (int i = 0; i < nb; i++) result += s;
+  return KSpreadValue (result);
 }
 
 // Function: RIGHT
-bool kspreadfunc_right( KSContext& context )
+KSpreadValue func_right (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-	bool hasNoSecondParam = KSUtil::checkArgumentsCount( context, 1, "right", false );
-
-    if ( !KSUtil::checkArgumentsCount( context, 2, "right", false ) &&
-		 !hasNoSecondParam)
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    int nb;
-
-	if(hasNoSecondParam)
-		nb = 1;
-	else
-	{
-	    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-    	  nb = (int) args[1]->doubleValue();
-	    else if( KSUtil::checkType( context, args[1], KSValue::IntType, false ) )
-    	  nb = args[1]->intValue();
-	    else
-		  return false;
-	}
-
-    QString tmp = args[0]->stringValue().right(nb);
-    context.setValue( new KSValue(tmp));
-    return true;
+  QString str = calc->conv()->asString (args[0]).asString();
+  int nb = 1;
+  if (args.count() == 2)
+    nb = calc->conv()->asInteger (args[1]).asInteger();
+  
+  return KSpreadValue (str.right (nb));
 }
 
 // Function: ROT
-bool kspreadfunc_rot( KSContext& context )
+KSpreadValue func_rot (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ROT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString text = args[0]->stringValue();
+  QString text = calc->conv()->asString (args[0]).asString();
 
   for( unsigned i=0; i<text.length(); i++ )
   {
@@ -754,325 +503,132 @@ bool kspreadfunc_rot( KSContext& context )
       text[i] = QChar( text[i].unicode() - 13);
   }
 
-  context.setValue( new KSValue( text ) );
-  return true;
+  return KSpreadValue (text);
 }
 
 // Function: SEARCH
-bool kspreadfunc_search( KSContext& context )
+KSpreadValue func_search (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QString find_text, within_text;
-    int start_num = 1;
+  QString find_text = calc->conv()->asString (args[0]).asString();
+  QString within_text = calc->conv()->asString (args[1]).asString();
+  int start_num = 1;
+  if (args.count() == 3)
+    start_num = calc->conv()->asInteger (args[2]).asInteger();
 
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  // conforms to Excel behaviour
+  if (start_num <= 0) return KSpreadValue::errorVALUE();
+  if (start_num > (int)within_text.length()) return KSpreadValue::errorVALUE();
 
-    if ( KSUtil::checkArgumentsCount( context, 3, "SEARCH", false ) )
-    {
-      if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-        return false;
-      start_num = args[2]->intValue();
-    }
-    else if ( !KSUtil::checkArgumentsCount( context, 2, "SEARCH", true ) )
-      return false;
+  // use globbing feature of QRegExp
+  QRegExp regex( find_text, false, true );
+  int pos = within_text.find( regex, start_num-1 );
+  if( pos < 0 ) return KSpreadValue::errorNA();
 
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-      return false;
-
-    find_text = args[0]->stringValue();
-    within_text = args[1]->stringValue();
-
-    // conforms to Excel behaviour
-    if( start_num <= 0 ) return false;
-    if( start_num > (int)within_text.length() ) return false;
-
-    // use globbing feature of QRegExp
-    QRegExp regex( find_text, false, true );
-    int pos = within_text.find( regex, start_num-1 );
-    if( pos < 0 ) return false;
-
-    context.setValue( new KSValue( pos + 1 ) );
-    return true;
+  return KSpreadValue (pos + 1);
 }
 
 // Function: SLEEK
-bool kspreadfunc_sleek( KSContext& context )
+KSpreadValue func_sleek (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString str = calc->conv()->asString (args[0]).asString();
+  QString result;
+  QChar   c;
+  int     i;
+  int     l = str.length();
 
-    if ( !KSUtil::checkArgumentsCount( context, 1, "SLEEK", true ) )
-      return false;
+  for (i = 0; i < l; ++i)
+  {
+    c = str[i];
+    if (!c.isSpace())
+      result += c;
+  }
 
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    QString str(args[0]->stringValue());
-    QString result;
-    QChar   c;
-    int     i;
-    int     l = str.length();
-
-    for (i = 0; i < l; ++i)
-    {
-      c = str[i];
-      if (!c.isSpace())
-        result += c;
-    }
-
-    context.setValue(new KSValue(result));
-
-    return true;
+  return KSpreadValue (result);
 }
 
 // Function: SUBSTITUTE
-bool kspreadfunc_substitute( KSContext& context )
+KSpreadValue func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
   int num = 1;
   bool all = true;
 
-  if ( KSUtil::checkArgumentsCount( context, 4, "SUBSTITUTE", false ) )
+  if (args.count() == 4)
   {
-    if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
-      return false;
-    num = args[3]->intValue();
+    num = calc->conv()->asInteger (args[3]).asInteger();
     all = false;
   }
-  else
-  if ( !KSUtil::checkArgumentsCount( context, 3, "SUBSTITUTE", true ) )
-    return false;
+  
+  QString text = calc->conv()->asString (args[0]).asString();
+  QString old_text = calc->conv()->asString (args[1]).asString();
+  QString new_text = calc->conv()->asString (args[2]).asString();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-      return false;
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
-      return false;
-
-  QString text = args[0]->stringValue();
-  QString old_text = args[1]->stringValue();
-  QString new_text = args[2]->stringValue();
-
-  if( num <= 0 ) return false;
+  if( num <= 0 ) return KSpreadValue::errorVALUE();
 
   QString result = text;
 
-  int p = result.find( old_text );
-  while ( ( p != -1 ) && ( num > 0 ) )
+  int p = result.find (old_text);
+  while ((p != -1) && (num > 0))
   {
     result.replace( p, old_text.length(), new_text );
     p = result.find( old_text );
     if( !all ) num--;
   }
 
-  context.setValue( new KSValue( result ) );
-
-  return true;
-
-
-  context.setValue( new KSValue( result ));
-  return true;
+  return KSpreadValue (result);
 }
 
 // Function: T
-bool kspreadfunc_t( KSContext& context )
+KSpreadValue func_t (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  // almost identical with the TEXT funcion
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "T", true ) )
-    return false;
-
-  KSpreadValue val;
-  
-  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    val.setValue (args[0]->stringValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-    val.setValue (args[0]->timeValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-    val.setValue (args[0]->dateValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    val.setValue (args[0]->doubleValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    val.setValue (args[0]->intValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    val.setValue (args[0]->boolValue());
-  
-  // temporary hack for value conversion  
-  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
-  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
-  val = converter->asString (val);
-  delete converter;
-  delete parser;
-
-  context.setValue( new KSValue( val.asString() ));
-  return true;
+  return calc->conv()->asString (args[0]);
 }
 
 // Function: TEXT
-bool kspreadfunc_text( KSContext& context )
+KSpreadValue func_text (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  //currently the same as the T function. Well, almost...
-  
-  QString format_text;
-
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( KSUtil::checkArgumentsCount( context, 2, "TEXT", false ) )
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-      return false;
-    format_text = args[1]->stringValue();
-  }
-  else if ( !KSUtil::checkArgumentsCount( context, 1, "TEXT", true ) )
-    return false;
-
-  // not yet Excel-compatible because format_text is omitted
-
-  // currently the same as T
-  
-  KSpreadValue val;
-  
-  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    val.setValue (args[0]->stringValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    val.setValue (args[0]->doubleValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-    val.setValue (args[0]->timeValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-    val.setValue (args[0]->dateValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    val.setValue (args[0]->intValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    val.setValue (args[0]->boolValue());
-    
-  // temporary hack for value conversion  
-  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
-  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
-  val = converter->asString (val);
-  delete converter;
-  delete parser;
-
-  context.setValue( new KSValue( val.asString() ));
-  return true;
+  //Currently the same as the T function ...
+  //Second parameter is format_text. It is currently ignored.
+  return calc->conv()->asString (args[0]);
 }
 
 // Function: TOGGLE
-bool kspreadfunc_toggle( KSContext& context )
+KSpreadValue func_toggle (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QString str = calc->conv()->asString (args[0]).asString();
+  int i;
+  int l = str.length();
 
-    if ( !KSUtil::checkArgumentsCount( context, 1, "TOGGLE", true ) )
-      return false;
+  for (i = 0; i < l; ++i)
+  {
+    QChar c = str[i];
+    QChar lc = c.lower();
+    QChar uc = c.upper();
 
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
+    if (c == lc) // it is in lowercase
+      str[i] = c.upper();
+    else if (c == uc) // it is in uppercase
+      str[i] = c.lower();
+  }
 
-    QString str(args[0]->stringValue());
-    int i;
-    int l = str.length();
-
-    for (i = 0; i < l; ++i)
-    {
-      QChar c = str[i];
-      QChar lc = c.lower();
-      QChar uc = c.upper();
-
-      if (c == lc) // it is in lowercase
-        str[i] = c.upper();
-      else if (c == uc) // it is in uppercase
-        str[i] = c.lower();
-    }
-
-    context.setValue( new KSValue( str ) );
-
-    return true;
+  return KSpreadValue (str);
 }
 
 // Function: TRIM
-bool kspreadfunc_trim(KSContext& context )
+KSpreadValue func_trim (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 1, "trim", true ) )
-        return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-        return false;
-    QString text=args[0]->stringValue().simplifyWhiteSpace();
-    context.setValue( new KSValue(text));
-    return true;
+  return KSpreadValue (
+      calc->conv()->asString (args[0]).asString().simplifyWhiteSpace());
 }
 
 // Function: UPPER
-bool kspreadfunc_upper( KSContext& context )
+KSpreadValue func_upper (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-    if ( !KSUtil::checkArgumentsCount( context, 1, "upper", true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    QString tmp = args[0]->stringValue().upper();
-    context.setValue( new KSValue( tmp ) );
-    return true;
+  return KSpreadValue (calc->conv()->asString (args[0]).asString().upper());
 }
 
 // Function: VALUE
-bool kspreadfunc_value( KSContext& context )
+KSpreadValue func_value (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  //currently the same as the N function
-  
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "VALUE", true ) )
-    return false;
-
-  KSpreadValue val;
-  
-  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    val.setValue (args[0]->stringValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    val.setValue (args[0]->doubleValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-    val.setValue (args[0]->timeValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-    val.setValue (args[0]->dateValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    val.setValue (args[0]->intValue());
-  
-  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    val.setValue (args[0]->boolValue());
-    
-  // temporary hack for value conversion  
-  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
-  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
-  val = converter->asString (val);
-  delete converter;
-  delete parser;
-
-  context.setValue( new KSValue( val.asFloat() ));
-  
-  return true;
+  // same as the N function
+  return calc->conv()->asFloat (args[0]);
 }

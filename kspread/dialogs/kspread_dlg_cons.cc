@@ -45,13 +45,16 @@
 #include <kspread_canvas.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
-#include <kspread_interpreter.h>
 #include <kspread_locale.h>
 #include <kspread_selection.h>
 #include <kspread_sheet.h>
 #include <kspread_util.h>
 #include <kspread_view.h>
 
+#include <formula.h>
+#include <valueconverter.h>
+
+using namespace KSpread;
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 	: KDialogBase( parent, name, false, i18n("Consolidate"), Ok|Cancel )
@@ -662,26 +665,16 @@ void KSpreadConsolidate::closeEvent ( QCloseEvent * )
 QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* sheet )
 {
   QString result = "###";
-
-  kdDebug(36001)<<"KSpreadConsolidate::evaluate " << formula << endl;
-
-  KSContext context;
-
-  // parse and evaluate formula
-  KSParseNode* code = sheet->doc()->interpreter()->parse( context,
-    sheet, formula );
-  if( !code ) return result;
-
-  context = sheet->doc()->context();
-  if ( !sheet->doc()->interpreter()->evaluate( context, code, sheet, 0 ) )
+  Formula *f = new Formula (sheet);
+  f->setExpression (formula);
+  if (!f->isValid()) {
+    delete f;
     return result;
+  }
 
-  if ( context.value()->type() == KSValue::DoubleType )
-     return QString::number( context.value()->doubleValue() );
-
-  if ( context.value()->type() == KSValue::IntType )
-     return QString::number( context.value()->intValue() );
-
+  KSpreadValue res = f->eval ();
+  delete f;
+  result = sheet->doc()->converter()->asString (res).asString ();
   return result;
 }
 
