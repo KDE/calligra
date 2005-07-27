@@ -112,7 +112,12 @@ class FormPrivate
 
 		FormWidget  *formWidget;
 
-		QMap<QCString,QString> customHeader;
+		//! A set of head properties to be stored in a .ui file.
+		//! This includes KFD format version.
+		QMap<QCString,QString> headerProperties;
+
+		//! Format version, set by FormIO.  or on creating a new form.
+		uint formatVersion;
 };
 
 /*!
@@ -289,7 +294,17 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		/*! A set of value/key pairs provided to be stored as attributes in 
 		 <kfd:customHeader/> XML element (saved as a first child of \<UI> element). */
-		QMap<QCString,QString>* customHeader() const { return &d->customHeader; }
+		QMap<QCString,QString>* headerProperties() const { return &d->headerProperties; }
+
+		//! \return format version number for this form. 
+		//! For new forms it is equal to KFormDesigner::version().
+		uint formatVersion() const;
+		void setFormatVersion(uint ver);
+
+		//! \return original format version number for this form (as loaded from .ui XML string)
+		//! For new forms it is equal to KFormDesigner::version().
+		uint originalFormatVersion() const;
+		void setOriginalFormatVersion(uint ver);
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor.

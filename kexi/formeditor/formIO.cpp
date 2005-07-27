@@ -62,6 +62,10 @@ CustomWidget::CustomWidget(const QCString &className, QWidget *parent, const cha
 	setFont(f);
 }
 
+CustomWidget::~CustomWidget()
+{
+}
+
 void
 CustomWidget::paintEvent(QPaintEvent *)
 {
@@ -71,19 +75,27 @@ CustomWidget::paintEvent(QPaintEvent *)
 
 using namespace KFormDesigner;
 
-QDict<QLabel>  *FormIO::m_buddies = 0;
-ObjectTreeItem   *FormIO::m_currentItem = 0;
-Form    *FormIO::m_currentForm = 0;
-bool    FormIO::m_savePixmapsInline = false;
+QDict<QLabel> *FormIO::m_buddies = 0;
+ObjectTreeItem *FormIO::m_currentItem = 0;
+Form *FormIO::m_currentForm = 0;
+bool FormIO::m_savePixmapsInline = false;
 
 // FormIO itself
+
+KFORMEDITOR_EXPORT uint KFormDesigner::version()
+{
+	return KFORMDESIGNER_VERSION;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 ///////////// Saving/loading functions //////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-FormIO::FormIO(QObject *parent, const char *name=0)
-   : QObject(parent, name)
+FormIO::FormIO()
+{
+}
+
+FormIO::~FormIO()
 {
 }
 
@@ -150,14 +162,14 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	uiElement.setAttribute("version", "3.1");
 	uiElement.setAttribute("stdsetdef", 1);
 
+	//update format version information
+	form->headerProperties()->insert("version", QString::number(form->formatVersion()));
 	//custom properties
-	if (!form->customHeader()->isEmpty()) {
-		QDomElement customHeaderEl = domDoc.createElement("kfd:customHeader");
-		for (QMapConstIterator<QCString,QString> it=form->customHeader()->constBegin(); it!=form->customHeader()->constEnd(); ++it) {
-			customHeaderEl.setAttribute(it.key(), it.data());
-		}
-		uiElement.appendChild(customHeaderEl);
+	QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
+	for (QMapConstIterator<QCString,QString> it=form->headerProperties()->constBegin(); it!=form->headerProperties()->constEnd(); ++it) {
+		headerPropertiesEl.setAttribute(it.key(), it.data());
 	}
+	uiElement.appendChild(headerPropertiesEl);
 
 	/// We save the savePixmapsInline property in the Form
 	QDomElement inlinePix = domDoc.createElement("pixmapinproject");
@@ -304,12 +316,35 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	QDomElement ui = inBuf.namedItem("UI").toElement();
 
 	//custom properties
-	form->customHeader()->clear();
-	QDomElement customHeaderEl = ui.namedItem("kfd:customHeader").toElement();
-	QDomAttr attr = customHeaderEl.firstChild().toAttr();
+	form->headerProperties()->clear();
+	QDomElement headerPropertiesEl = ui.namedItem("kfd:customHeader").toElement();
+	QDomAttr attr = headerPropertiesEl.firstChild().toAttr();
 	while (!attr.isNull() && attr.isAttr()) {
-		form->customHeader()->insert(attr.name().latin1(), attr.value());
+		form->headerProperties()->insert(attr.name().latin1(), attr.value());
 		attr = attr.nextSibling().toAttr();
+	}
+	//update format version information
+	uint ver = 1; //the default
+	if (form->headerProperties()->contains("version")) {
+		bool ok;
+		uint v = (*form->headerProperties())["version"].toUInt(&ok);
+		if (ok)
+			ver = v;
+	}
+	kdDebug() << "FormIO::loadFormFromDom(): original format version: " << ver << endl;
+	form->setOriginalFormatVersion( ver );
+	if (ver < KFormDesigner::version()) {
+//! @todo We can either 1) convert from old format and later save in a new one or 2) keep old format.
+//!     To do this we may need to look at the original format version number.
+		kdDebug() << "FormIO::loadFormFromDom(): original format is older than current: " << KFormDesigner::version() << endl;
+		form->setFormatVersion( KFormDesigner::version() );
+	}
+	else
+		form->setFormatVersion( ver );
+
+	if (ver > KFormDesigner::version()) {
+//! @todo display information about too new format and that "some information will not be available".
+		kdDebug() << "FormIO::loadFormFromDom(): original format is newer than current: " << KFormDesigner::version() << endl;
 	}
 
 	// Load the pixmap collection
@@ -993,9 +1028,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			list->sort();
 
 			for(QWidget *obj = list->first(); obj; obj = list->next()) {
-				ObjectTreeItem *item = item->container()->form()->objectTree()->lookup(obj->name());
+				ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(obj->name());
 				if(item)
-					saveWidget(item, layout, domDoc);
+					saveWidget(titem, layout, domDoc);
 			}
 			delete list;
 			break;
@@ -1014,9 +1049,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			// fill the widget's grid info, ie just simulate grid layout
 			item->container()->createGridLayout(true);
 			for(QWidget *obj = list->first(); obj; obj = list->next()) {
-				ObjectTreeItem *item = item->container()->form()->objectTree()->lookup(obj->name());
+				ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(obj->name());
 				if(item)
-					saveWidget(item, layout, domDoc, true); // save grid info for compatibility with QtDesigner
+					saveWidget(titem, layout, domDoc, true); // save grid info for compatibility with QtDesigner
 			}
 			delete list;
 			break;

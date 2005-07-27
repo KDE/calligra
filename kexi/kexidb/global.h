@@ -97,10 +97,10 @@ namespace KexiDB {
 #define KexiDBWarn  kdWarning(44000)
 #define KexiDBDrvWarn kdWarning(44001)
 
-//! returns KexiDB version info (most significant part)
+//! \return KexiDB version info (most significant part)
 KEXI_DB_EXPORT int versionMajor();
 
-//! returns KexiDB version info (least significant part)
+//! \return KexiDB version info (least significant part)
 KEXI_DB_EXPORT int versionMinor();
 
 /*! Object types set like table or query. */

@@ -56,8 +56,8 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 		~EventEater();
 
 		//! Sets the object which will receive the events
-		void  setContainer(QObject *container)  { m_container = container; }
-		bool  eventFilter(QObject *o, QEvent *ev);
+		void setContainer(QObject *container)  { m_container = container; }
+		bool eventFilter(QObject *o, QEvent *ev);
 
 	private:
 		QGuardedPtr<QWidget>  m_widget;
@@ -78,48 +78,55 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		/**
 		 * Creates a Container from the widget \a container, which have
-		 \a toplevel as parent Container.
-		 */
-
+		 \a toplevel as parent Container. */
 		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
-		~Container();
+		virtual ~Container();
 
 		//! \return a pointer to the toplevel Container, or 0 if this Container is toplevel
-		Container*	toplevel();
+		Container* toplevel();
+
 		//! \return The form this Container belongs to.
-		Form*		form() const { return m_form; }
+		Form* form() const { return m_form; }
+
 		//! \return The watched widget.
-		QWidget*	widget() { return m_container; }
+		QWidget* widget() const { return m_container; }
+
 		//! \return The ObjectTreeItem assosiated with this Container's widget.
-		ObjectTreeItem*	objectTree() const { return m_tree; }
+		ObjectTreeItem* objectTree() const { return m_tree; }
 
 		//! Sets the Form which this Container belongs to.
-		void		setForm(Form *form);
-		/*!  Sets the ObjectTree of this Container.\n
+		void setForm(Form *form);
+
+		/*! Sets the ObjectTree of this Container.\n
 		 * NOTE: this is needed only if we are toplevel. */
-		void		setObjectTree(ObjectTreeItem *t) { m_tree = t; }
+		void setObjectTree(ObjectTreeItem *t) { m_tree = t; }
 
 		//! \return a pointer to the QLayout of this Container, or 0 if there is not.
-		QLayout*        layout() const { return m_layout; }
+		QLayout* layout() const { return m_layout; }
+
 		//! \return the type of the layout associated to this Container's widget (see LayoutType enum).
-		LayoutType      layoutType() const { return m_layType; }
+		LayoutType layoutType() const { return m_layType; }
+
 		//! \return the margin of this Container.
-		int             layoutMargin() { return m_margin; }
+		int layoutMargin() { return m_margin; }
+
 		//! \return the spacing of this Container.
-		int             layoutSpacing() { return m_spacing; }
+		int layoutSpacing() { return m_spacing; }
 
 		/*! Sets this Container to use \a type of layout. The widget are inserted
 		 automatically in the layout following their positions.
-		  \sa createBoxLayout(), createGridLayout()
-		 */
-		void            setLayout(LayoutType type);
+		  \sa createBoxLayout(), createGridLayout() */
+		void setLayout(LayoutType type);
+
 		//! Sets the spacing of this Container.
-		void            setLayoutSpacing(int spacing) { m_spacing = spacing;}
+		void setLayoutSpacing(int spacing) { m_spacing = spacing;}
+
 		//! Sets the margin of this Container.
-		void            setLayoutMargin(int margin) { m_margin = margin;}
+		void setLayoutMargin(int margin) { m_margin = margin;}
 
 		//! \return the string representing the layoutType \a type.
-		static QString  layoutTypeToString(int type);
+		static QString layoutTypeToString(int type);
+
 		//! \return the LayoutType (an int) for a given layout name.
 		static LayoutType stringToLayoutType(const QString &name);
 
@@ -130,9 +137,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/*! This is the main function of Container, which filters the event sent
 		   to the watched widget.\n It takes care of drawing the background and
 		   the insert rect, of creating the new child widgets, of moving the widgets
-		    and pop up a menu when right-clicking.
-		  */
-		virtual bool	eventFilter(QObject *o, QEvent *e);
+		    and pop up a menu when right-clicking. */
+		virtual bool eventFilter(QObject *o, QEvent *e);
 
 	public slots:
 		/*! Sets \a selected to be the selected widget of this container
@@ -141,67 +147,69 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		   replace the actually selected widget. If \a dontRaise is true, then
 		  the widget \a selected (and its parent) won't be raised (eg when you
 		   select widget in ObjectTreeView).
-		  \sa Form::setSelectedWidget()
-		 */
-		void		setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false);
+		  \sa Form::setSelectedWidget() */
+		void setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false);
+
 		/*! Unselects the widget \a w. The widget is removed from the Form's list
 		 and its resizeHandles are removed. */
-		void		unSelectWidget(QWidget *w);
+		void unSelectWidget(QWidget *w);
+
 		/*! Deletes the widget \a w. Removes it from ObjectTree, and sets selection
 		 to Container's widget. */
-		void		deleteWidget(QWidget *w);
+		void deleteWidget(QWidget *w);
 
 		/*! Recreates the Container layout. Calls this when a widget has been moved
 		 or added to update the layout. */
-		void		reloadLayout();
+		void reloadLayout();
 
 	protected slots:
 		/*! This slot is called when the watched widget is deleted. Deletes the Container too. */
-		void		widgetDeleted();
+		void widgetDeleted();
 
 	protected:
 		/*! Internal function to create a HBoxLayout or VBoxLayout for this container.
 		 \a list is a subclass of QObjectList that can sort widgets
-		   following their position (such as HorWidgetList or VerWidgetList).
-		  */
-		void		createBoxLayout(WidgetList *list);
+		   following their position (such as HorWidgetList or VerWidgetList). */
+		void createBoxLayout(WidgetList *list);
+
 		/*! Internal function to create a KexiFlowLayout. */
-		void  createFlowLayout();
+		void createFlowLayout();
+
 		/*! Internal function to create a GridLayout. if \a testOnly is true, the layout
 		  is simulated, and only the widget's grid info aris filled. */
-		void		createGridLayout(bool testOnly=false);
+		void createGridLayout(bool testOnly=false);
 
-		void  drawConnection(QMouseEvent *mev);
-		void  drawSelectionRect(QMouseEvent *mev);
-		void  drawInsertRect(QMouseEvent *mev, QObject *s);
-		void  drawCopiedWidgetRect(QMouseEvent *mev);
+		void drawConnection(QMouseEvent *mev);
+		void drawSelectionRect(QMouseEvent *mev);
+		void drawInsertRect(QMouseEvent *mev, QObject *s);
+		void drawCopiedWidgetRect(QMouseEvent *mev);
 
-		void  moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev=0);
+		void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev=0);
 
 	private:
 		// the watched container and it's toplevel one...
 		QGuardedPtr<QWidget> m_container;
 		QGuardedPtr<Container> m_toplevel;
 
-		int		m_state;
+		int m_state;
 		enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget,
 			MovingWidget, InlineEditing };
 
 		// Layout
-		QLayout		*m_layout;
-		LayoutType	m_layType;
-		int		m_margin, m_spacing;
+		QLayout *m_layout;
+		LayoutType m_layType;
+		int m_margin, m_spacing;
 
 		// moving etc.
-		QPoint		m_grab;
+		QPoint m_grab;
 		//QPoint		m_initialPos;
-		QGuardedPtr<QWidget>	m_moving;
+		QGuardedPtr<QWidget> m_moving;
 		//QRect		m_copyRect;
 
 		//inserting
-		QPoint		m_insertBegin;
-		QRect		m_insertRect;
-		ObjectTreeItem	*m_tree;
+		QPoint m_insertBegin;
+		QRect m_insertRect;
+		ObjectTreeItem *m_tree;
 
 		QGuardedPtr<Form> m_form;
 

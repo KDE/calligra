@@ -290,6 +290,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - fix spring behaviour: it cannot be shrinked if its inside a layout
 - KTextEdit doesn't allow to set custom cursor (also in Qt Designer)
 - support for multiple widgets selection in the property editor (requires changes to kexiproperty)
+- handle older and newer formats in FormIO::loadFormFromDom()
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor

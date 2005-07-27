@@ -22,6 +22,7 @@ Form Designer
   -> more information can be now reused for visual field (i.e. query alias)
 - dbwidgets moved to libformutils as we're reusing many 
   of them outside of dbwidgets factory
+- version information is loaded/saved within form's UI string
 
 2005-07-23
 Core

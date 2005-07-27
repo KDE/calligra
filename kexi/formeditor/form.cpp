@@ -57,6 +57,8 @@ FormPrivate::FormPrivate()
 	autoTabstops = false;
 	tabstops.setAutoDelete(false);
 	connBuffer = new ConnectionBuffer();
+	formatVersion = KFormDesigner::version();
+	originalFormatVersion = KFormDesigner::version();
 }
 
 FormPrivate::~FormPrivate()
@@ -500,13 +502,23 @@ Form::autoAssignTabStops()
 	}
 }
 
-/*void
-Form::resizeHandleDraggingStarted(QWidget *draggedWidget)
+uint Form::formatVersion() const
 {
-	WidgetFactory *wfactory = d->manager->lib()->factoryForClassName(draggedWidget->className());
-	wfactory->resetEditor();
-	draggedWidget
-}*/
+	return d->formatVersion;
+}
+
+void Form::setFormatVersion(uint ver)
+{
+	d->formatVersion = ver;
+}
+uint Form::originalFormatVersion() const
+{
+	return d->originalFormatVersion;
+}
+
+void Form::setOriginalFormatVersion(uint ver)
+{
+	d->originalFormatVersion = ver;
+}
 
 #include "form.moc"
-

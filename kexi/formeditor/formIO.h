@@ -42,7 +42,7 @@ class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 
 	public:
 		CustomWidget(const QCString &className, QWidget *parent, const char *name);
-		~CustomWidget() {;}
+		virtual ~CustomWidget();
 
 		virtual void paintEvent(QPaintEvent *ev);
 
@@ -58,6 +58,13 @@ class ObjectTreeItem;
 class Container;
 class WidgetLibrary;
 
+//! KFormDesigner API version number. Increased on every breaking of backward compatibility.
+//! Use KFormDesigner::version() to get real version number of the library.
+#define KFORMDESIGNER_VERSION 2
+
+//! \return KFormDesigner API version number for this library. This information is stored
+KFORMEDITOR_EXPORT uint version();
+
 /** This class act as a namespace for all .ui files related functions, ie saving/loading .ui files.
     You don't need to create a FormIO object, as all methods are static.\n
     This class is able to read and write Forms to .ui files, and to save each type of properties, including set and enum
@@ -69,8 +76,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 	Q_OBJECT
 
 	public:
-		FormIO(QObject *parent, const char *name);
-		~FormIO(){;}
+		FormIO();
+		~FormIO();
 
 		/*! Save the Form in the \a domDoc QDomDocument. Called by saveForm().
 		    \return true if saving succeeded.
@@ -199,12 +206,10 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		/// Instead of having to pass these for every functions, we just store them in the class
 		//static QWidgdet  *m_currentWidget;
 		static ObjectTreeItem   *m_currentItem;
-		static Form    *m_currentForm;
-		static bool    m_savePixmapsInline;
+		static Form *m_currentForm;
+		static bool m_savePixmapsInline;
 };
 
 }
 
 #endif
-
-
