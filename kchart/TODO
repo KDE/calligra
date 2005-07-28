@@ -14,7 +14,7 @@ inge	Inge has taken this subtask
 RAPH	Raphael has taken this task
 
 
-Before release of KOffice 1.4.1
+Before release of KOffice 1.4.2
 ===============================
 
 
@@ -29,11 +29,10 @@ Item								   Prio Status
      - Do it in the wizard as well					done
   + 101490: Error in drawing charts with logarithmic scale.	      1	----
        Fixed by new KDChart version (hopefully)
-  + 102414: A chart in a spreadsheet opens the template dialog 	      1 DONE
-	    before the wizard appears.
-  + 105356: Lines in a line chart are all black			      1 DONE
 
 * Wishes
+  + Give KChart the same page layout dialog as KSpread.		     1 ----
+       (Kivio has a simpler variation with only one page.)
 
 * Issues with KSpread
 
