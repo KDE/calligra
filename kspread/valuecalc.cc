@@ -105,7 +105,7 @@ KSpreadValue ValueCalc::add (const KSpreadValue &a, const KSpreadValue &b)
   bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (aa + bb);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
 
   return res;
@@ -118,7 +118,7 @@ KSpreadValue ValueCalc::sub (const KSpreadValue &a, const KSpreadValue &b)
   bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (aa - bb);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
 
   return res;
@@ -131,7 +131,7 @@ KSpreadValue ValueCalc::mul (const KSpreadValue &a, const KSpreadValue &b)
   bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (aa * bb);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
 
   return res;
@@ -148,7 +148,7 @@ KSpreadValue ValueCalc::div (const KSpreadValue &a, const KSpreadValue &b)
   else
     res = KSpreadValue (aa / bb);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
 
   return res;
@@ -165,7 +165,7 @@ KSpreadValue ValueCalc::mod (const KSpreadValue &a, const KSpreadValue &b)
   else
     res = KSpreadValue (fmod (aa, bb));
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
 
   return res;
@@ -178,7 +178,7 @@ KSpreadValue ValueCalc::pow (const KSpreadValue &a, const KSpreadValue &b)
   bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (::pow (aa, bb));
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
 
   return res;
@@ -192,7 +192,7 @@ KSpreadValue ValueCalc::sqr (const KSpreadValue &a)
 KSpreadValue ValueCalc::sqrt (const KSpreadValue &a)
 {
   KSpreadValue res = KSpreadValue (::sqrt (converter->asFloat(a).asFloat()));
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
   return res;
@@ -202,7 +202,7 @@ KSpreadValue ValueCalc::add (const KSpreadValue &a, double b)
 {
   KSpreadValue res = KSpreadValue (converter->asFloat(a).asFloat() + b);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
   return res;
@@ -212,7 +212,7 @@ KSpreadValue ValueCalc::sub (const KSpreadValue &a, double b)
 {
   KSpreadValue res = KSpreadValue (converter->asFloat(a).asFloat() - b);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
   return res;
@@ -222,7 +222,7 @@ KSpreadValue ValueCalc::mul (const KSpreadValue &a, double b)
 {
   KSpreadValue res = KSpreadValue (converter->asFloat(a).asFloat() * b);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
   return res;
@@ -236,7 +236,7 @@ KSpreadValue ValueCalc::div (const KSpreadValue &a, double b)
 
   res = KSpreadValue (converter->asFloat(a).asFloat() / b);
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
   return res;
@@ -246,7 +246,7 @@ KSpreadValue ValueCalc::pow (const KSpreadValue &a, double b)
 {
   KSpreadValue res = KSpreadValue (::pow (converter->asFloat(a).asFloat(), b));
 
-  if (a.isNumber())
+  if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
   return res;
@@ -344,6 +344,7 @@ KSpreadValue ValueCalc::roundDown (const KSpreadValue &a, int digits)
   if (digits < 0)
     for (int i = 0; i < digits; ++i)
       val = mul (val, 10);
+  return val;
 }
 
 KSpreadValue ValueCalc::roundUp (const KSpreadValue &a, int digits)
@@ -365,6 +366,7 @@ KSpreadValue ValueCalc::roundUp (const KSpreadValue &a, int digits)
   if (digits < 0)
     for (int i = 0; i < digits; ++i)
       val = mul (val, 10);
+  return val;
 }
 
 KSpreadValue ValueCalc::round (const KSpreadValue &a, int digits)
@@ -386,6 +388,7 @@ KSpreadValue ValueCalc::round (const KSpreadValue &a, int digits)
   if (digits < 0)
     for (int i = 0; i < digits; ++i)
       val = mul (val, 10);
+  return val;
 }
 
 int ValueCalc::sign (const KSpreadValue &a)
@@ -409,7 +412,7 @@ KSpreadValue ValueCalc::log (const KSpreadValue &number,
   logbase = log10 (logbase);
   KSpreadValue res = KSpreadValue (log10 (converter->asFloat (number).asFloat()) / logbase);
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -419,7 +422,7 @@ KSpreadValue ValueCalc::ln (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::log (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -435,7 +438,7 @@ KSpreadValue ValueCalc::log (const KSpreadValue &number, double base)
   double num = converter->asFloat (number).asFloat();
   KSpreadValue res = KSpreadValue (log10 (num) / log10 (base));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -608,7 +611,7 @@ KSpreadValue ValueCalc::sin (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::sin (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -618,7 +621,7 @@ KSpreadValue ValueCalc::cos (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::cos (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -628,7 +631,7 @@ KSpreadValue ValueCalc::tg (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::tan (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -638,7 +641,7 @@ KSpreadValue ValueCalc::cotg (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (div (1, ::tan (converter->asFloat (number).asFloat())));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -651,7 +654,7 @@ KSpreadValue ValueCalc::asin (const KSpreadValue &number)
   if (errno)
     return KSpreadValue::errorVALUE();
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -664,7 +667,7 @@ KSpreadValue ValueCalc::acos (const KSpreadValue &number)
   if (errno)
     return KSpreadValue::errorVALUE();
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -677,7 +680,7 @@ KSpreadValue ValueCalc::atg (const KSpreadValue &number)
   if (errno)
     return KSpreadValue::errorVALUE();
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -694,7 +697,7 @@ KSpreadValue ValueCalc::sinh (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::sinh (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -704,7 +707,7 @@ KSpreadValue ValueCalc::cosh (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::cosh (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -714,7 +717,7 @@ KSpreadValue ValueCalc::tgh (const KSpreadValue &number)
 {
   KSpreadValue res = KSpreadValue (::tanh (converter->asFloat (number).asFloat()));
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -727,7 +730,7 @@ KSpreadValue ValueCalc::asinh (const KSpreadValue &number)
   if (errno)
     return KSpreadValue::errorVALUE();
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -740,7 +743,7 @@ KSpreadValue ValueCalc::acosh (const KSpreadValue &number)
   if (errno)
     return KSpreadValue::errorVALUE();
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -753,7 +756,7 @@ KSpreadValue ValueCalc::atgh (const KSpreadValue &number)
   if (errno)
     return KSpreadValue::errorVALUE();
 
-  if (number.isNumber())
+  if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
 
   return res;
@@ -1478,14 +1481,14 @@ void ValueCalc::registerAwFunc (const QString &name, arrayWalkFunc func)
 
 KSpreadValue ValueCalc::sum (const KSpreadValue &range)
 {
-  KSpreadValue res = 0;
+  KSpreadValue res;
   arrayWalk (range, res, awFunc ("sum"), 0);
   return res;
 }
 
 KSpreadValue ValueCalc::sum (QValueVector<KSpreadValue> range)
 {
-  KSpreadValue res = 0;
+  KSpreadValue res;
   arrayWalk (range, res, awFunc ("sum"), 0);
   return converter->asInteger (res).asInteger ();
 }
@@ -1493,7 +1496,7 @@ KSpreadValue ValueCalc::sum (QValueVector<KSpreadValue> range)
 // sum of squares
 KSpreadValue ValueCalc::sumsq (const KSpreadValue &range)
 {
-  KSpreadValue res = 0;
+  KSpreadValue res;
   arrayWalk (range, res, awFunc ("sumsq"), 0);
   return res;
 }
@@ -1510,7 +1513,6 @@ KSpreadValue ValueCalc::sumIf (const KSpreadValue &range,
 
   //if we are here, we have an array
   KSpreadValue res;
-  KSpreadValue::Format fmt = KSpreadValue::fmt_None;
 
   unsigned int rows = range.rows ();
   unsigned int cols = range.columns ();
@@ -1527,11 +1529,8 @@ KSpreadValue ValueCalc::sumIf (const KSpreadValue &range,
       else
         if (matches (cond, newcheck))
           res = add (res, v);
-      if (fmt == KSpreadValue::fmt_None)
-        fmt = range.element (c, r).format ();
     }
 
-  res.setFormat (fmt);
   return res;
 }
 
@@ -1791,8 +1790,6 @@ bool ValueCalc::matches (const Condition &cond, KSpreadValue val)
       case notEqual:
       if (d != cond.value) return true;
       break;
-  
-      default: return false;
     }
   } else {
     QString d = converter->asString (val).asString();
@@ -1821,9 +1818,8 @@ bool ValueCalc::matches (const Condition &cond, KSpreadValue val)
       case notEqual:
       if (d != cond.stringValue) return true;
       break;
-  
-      default: return false;
     }
   }
+  return false;
 }
 

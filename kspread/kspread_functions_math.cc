@@ -393,7 +393,7 @@ KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: sum
 KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = 0;
+  KSpreadValue res;
   calc->arrayWalk (args, res, calc->awFunc ("sum"), 0);
   return res;
 }
@@ -440,7 +440,7 @@ KSpreadValue func_div (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: SUMSQ
 KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = 0;
+  KSpreadValue res;
   calc->arrayWalk (args, res, calc->awFunc ("sumsq"), 0);
   return res;
 }

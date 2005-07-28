@@ -182,10 +182,10 @@ FunctionRepository* FunctionRepository::s_self = 0;
 
 FunctionRepository* FunctionRepository::self()
 {
-  kdDebug() << "Creating function repository" << endl;
-  
   if( !s_self )
   {
+    kdDebug() << "Creating function repository" << endl;
+  
     fr_sd.setObject( s_self, new FunctionRepository() );
   
     kdDebug() << "Registering functions" << endl;

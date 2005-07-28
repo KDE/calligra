@@ -544,7 +544,7 @@ KSpreadValue func_harmean (valVector args, ValueCalc *calc, FuncExtra *)
   KSpreadValue count = calc->countA (args);
   if (calc->isZero (count))
     return KSpreadValue::errorDIV0();
-  KSpreadValue suminv = 0.0;
+  KSpreadValue suminv;
   calc->arrayWalk (args, suminv, awSumInv, 0);
   return calc->div (suminv, count);
 }
@@ -575,7 +575,7 @@ KSpreadValue func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
 
 KSpreadValue func_devsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = 0.0;
+  KSpreadValue res;
   calc->arrayWalk (args, res, calc->awFunc ("devsq"), calc->avg (args));
   return res;
 }
@@ -587,7 +587,7 @@ KSpreadValue func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *)
     return KSpreadValue::errorVALUE();
 
   KSpreadValue avg = calc->avg (args);
-  KSpreadValue devsq = 0.0;
+  KSpreadValue devsq;
   calc->arrayWalk (args, devsq, calc->awFunc ("devsq"), avg);
 
   if (devsq.isZero ())
@@ -614,7 +614,7 @@ KSpreadValue func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *)
     return KSpreadValue::errorVALUE();
 
   KSpreadValue avg = calc->avg (args);
-  KSpreadValue devsq = 0.0;
+  KSpreadValue devsq;
   calc->arrayWalk (args, devsq, calc->awFunc ("devsq"), avg);
 
   if (devsq.isZero ())
@@ -707,7 +707,7 @@ KSpreadValue func_average (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: avedev
 KSpreadValue func_avedev (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0;
+  KSpreadValue result;
   calc->arrayWalk (args, result, awAveDev, calc->avg (args));
   return result;
 }
@@ -1160,7 +1160,7 @@ void tawSumxmy2 (ValueCalc *c, KSpreadValue &res, KSpreadValue v1,
 // Function: sumproduct
 KSpreadValue func_sumproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0.0;
+  KSpreadValue result;
   calc->twoArrayWalk (args[0], args[1], result, tawSumproduct);
   return result;
 }
@@ -1168,7 +1168,7 @@ KSpreadValue func_sumproduct (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: sumx2py2
 KSpreadValue func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0.0;
+  KSpreadValue result;
   calc->twoArrayWalk (args[0], args[1], result, tawSumx2py2);
   return result;
 }
@@ -1176,7 +1176,7 @@ KSpreadValue func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: sumx2my2
 KSpreadValue func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0.0;
+  KSpreadValue result;
   calc->twoArrayWalk (args[0], args[1], result, tawSumx2my2);
   return result;
 }
@@ -1184,7 +1184,7 @@ KSpreadValue func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: sum2xmy
 KSpreadValue func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0.0;
+  KSpreadValue result;
   calc->twoArrayWalk (args[0], args[1], result, tawSumxmy2);
   return result;
 }
