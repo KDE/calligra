@@ -140,7 +140,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
 
-    m_subTypeChartConfig = new KAction( i18n( "&Configure Sub Type Chart..." ), 0,
+    m_subTypeChartConfig = new KAction( i18n( "&Configure Chart Subtype..." ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
 
@@ -605,21 +605,24 @@ void KChartView::updateButton()
 
 void KChartView::slotConfigPageLayout()
 {
-    KChartParams* params = ((KChartPart*)koDocument())->params();
-    KChartPageLayout *dialog=new KChartPageLayout(params,this,"Page Layout");
+    KChartParams      *params = ((KChartPart*)koDocument())->params();
+    KChartPageLayout  *dialog = new KChartPageLayout(params, this,
+						     "Page Layout");
 
     connect( dialog, SIGNAL( dataChanged() ),
-             this, SLOT( slotRepaint() ) );
+             this,   SLOT( slotRepaint() ) );
 
     dialog->exec();
     delete dialog;
 }
+
 
 void KChartView::setupPrinter( KPrinter &printer )
 {
   if ( !printer.previewOnly() )
     printer.addDialogPage( new KChartPrinterDlg( 0, "KChart page" ) );
 }
+
 
 void KChartView::print(KPrinter &printer)
 {

@@ -280,13 +280,14 @@ void kchartDataEditor::setData( KoChart::Data* dat )
         colsCount = dat->usedCols();
     }
 
-	// Empty table
-	if ( rowsCount==0 && colsCount==0 ) {
-		m_table->setNumRows(1);
-		m_table->setNumCols(1);
-		resize(600, 300);
-		return;
-	}
+    // Empty table
+    if ( rowsCount==0 && colsCount==0 ) {
+	m_table->setNumRows(1);
+	m_table->setNumCols(1);
+	resize(600, 300);
+	return;
+    }
+
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);

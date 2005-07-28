@@ -1,3 +1,12 @@
+2005-07-28  Inge Wallin  <ingwa@dhcp-254-153.lkpg.cendio.se>
+
+	Fix error in creating HiLo charts
+	(Bug number will be created)
+	* kchart_part.cc (paintContent): Add code to handle HiLo chart
+	separately.
+
+	General code cleaning.
+	
 2005-07-23  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix an old FIXME: Get rid of KChartPart::m_bLoading;
