@@ -782,7 +782,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 
 		/*! \return "SELECT ..." statement's string needed for executing query 
-		 defined by "select * from <table_name>" where <table_name> is \a tableSchema's name.
+		 defined by "select * from table_name" where <i>table_name</i> is \a tableSchema's name.
 		 This method's variant can be useful when there is no appropriate QuerySchema defined.
 
 		 Note: The statement string can be specific for this connection's driver database, 
