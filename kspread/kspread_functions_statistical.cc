@@ -33,7 +33,6 @@ using namespace KSpread;
 // prototypes (sorted!)
 KSpreadValue func_arrang (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_average (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_averagea (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_avedev (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_bino (valVector args, ValueCalc *calc, FuncExtra *);
@@ -102,7 +101,7 @@ void KSpreadRegisterStatisticalFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("AVERAGEA", func_average);
+  f = new Function ("AVERAGEA", func_average);  // same as AVERAGE
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);

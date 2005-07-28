@@ -1545,7 +1545,7 @@ int ValueCalc::count (const KSpreadValue &range)
 int ValueCalc::count (QValueVector<KSpreadValue> range)
 {
   KSpreadValue res = 0;
-  arrayWalk (range, res, awFunc ("counta"), 0);
+  arrayWalk (range, res, awFunc ("count"), 0);
   return converter->asInteger (res).asInteger ();
 }
 
@@ -1587,7 +1587,7 @@ int ValueCalc::countA (const KSpreadValue &range)
 int ValueCalc::countA (QValueVector<KSpreadValue> range)
 {
   KSpreadValue res = 0;
-  arrayWalk (range, res, awFunc ("count"), 0);
+  arrayWalk (range, res, awFunc ("counta"), 0);
   return converter->asInteger (res).asInteger ();
 }
 
