@@ -6,9 +6,6 @@
   within Python.
 """
 
-muha = get("Kross")
-print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! => %s" % muha
-
 # Class to test the KexiDB functionality.
 class KexiDBClass:
 
@@ -247,8 +244,10 @@ print "########## END TEST: KexiDB ##########"
 
 print "########## BEGIN TEST: QObject ##########"
 try:
+    kross = get("Kross")
+
     # Get the QtObject instance to access the QObject.
-    testobject = get("TestObject")
+    testobject = kross.get("TestObject")
     #print "testobject = %s %s" % (str(testobject),dir(testobject))
     #print "propertyNames = %s" % testobject.propertyNames()
     #print "slotNames = %s" % testobject.slotNames()
@@ -288,5 +287,6 @@ try:
     #testobject.disconnect("testSignal()")
 except Exception, e:
     print "EXCEPTION on TestObject: %s" % e
-print "########## END TEST: QObject ##########"
 
+print "__name = %s" % __name__
+print "########## END TEST: QObject ##########"

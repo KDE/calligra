@@ -103,6 +103,16 @@ namespace Kross { namespace Api {
              */
             void setInterpreterName(const QString&);
 
+#if 0
+            /**
+             * \return the local \a MainModule of this
+             * ScriptContainer. Each ScriptContainer
+             * instance has it's own module that
+             * represents the local context.
+             */
+            MainModule* getLocalModule();
+#endif
+
             /**
              * Execute the script container.
              */

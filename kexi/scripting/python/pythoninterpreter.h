@@ -74,7 +74,7 @@ namespace Kross { namespace Python {
 
         private:
             /// The __main__ python module.
-            PythonModule* m_module;
+            PythonModule* m_mainmodule;
             /// The \a PythonSecurity python module to wrap the RestrictedPython functionality.
             PythonSecurity* m_security;
 

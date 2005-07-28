@@ -62,7 +62,11 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     Py_Initialize();
 
     // Set arguments.
-    //PySys_SetArgv(argc, argv);
+    char* comm[0];
+    comm[0] = const_cast<char*>("kross"); // name.
+    PySys_SetArgv(1, comm);
+
+    // Set the python path.
     //PySys_SetPath(Py_GetPath());
 
     // First we have to initialize threading if python supports it.
@@ -79,23 +83,29 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     PyEval_ReleaseLock();
 
     // Initialize the main module.
-    m_module = new PythonModule(this);
+    m_mainmodule = new PythonModule(this);
 
-    // Prepare the global scope accessible by all PythonScript
-    // instances. We import the global accessible Kross module.
-    Py::Dict moduledict = m_module->getDict();
-    QString s = "globalvar = 0\n"
+    // Prepare the interpreter.
+    Py::Dict moduledict = m_mainmodule->getDict();
+    QString s =
+                //"globalvar = 0\n"
                 //"import sys\n"
                 //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
-                "def maintestfunc():\n"
-                "    print \"this is maintestfunc!\"\n"
-                "    return \"this is the maintestfunc return value!\"\n";
+                //"sys.stdout = scribus._bu\n"
+                //"sys.stderr = scribus._bu\n"
+
+                "import cStringIO\n"
+                "sys.stdin = cStringIO.StringIO()\n"
+                //"def maintestfunc():\n"
+                //"    print \"this is maintestfunc!\"\n"
+                //"    return \"this is the maintestfunc return value!\"\n"
+                ;
     PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
         throw Kross::Api::RuntimeException(i18n("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()));
     }
-    Py::Object run(pyrun, true);
+    Py_XDECREF(pyrun); // free the reference.
 
     // Initialize the RestrictedPython module.
     m_security = new PythonSecurity(this);
@@ -107,7 +117,7 @@ PythonInterpreter::~PythonInterpreter()
     delete m_security; m_security = 0;
 
     // Free the main module.
-    delete m_module; m_module = 0;
+    delete m_mainmodule; m_mainmodule = 0;
 
     // Lock threads.
     PyEval_AcquireLock();

@@ -50,7 +50,9 @@ const QString EventSlot::getClassName() const
 
 Object::Ptr EventSlot::call(const QString& name, KSharedPtr<List> arguments)
 {
+//TODO addFunction("call", );
     kdDebug() << QString("EventSlot::call(%1)").arg(name) << endl;
+    QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
 
 /*TODO convert arguments
     QUObject uo[12] = { QUObject(), QUObject(), QUObject(),
@@ -58,7 +60,7 @@ Object::Ptr EventSlot::call(const QString& name, KSharedPtr<List> arguments)
                         QUObject(), QUObject(), QUObject(),
                         QUObject(), QUObject(), QUObject() };
 */
-    QString n = name; //Variant::toString(args->item(0));
+
     int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
     if(slotid < 0)
         throw TypeException(i18n("No such slot '%1'.").arg(n));

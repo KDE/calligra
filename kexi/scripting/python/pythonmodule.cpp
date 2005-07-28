@@ -24,13 +24,38 @@
 
 using namespace Kross::Python;
 
+namespace Kross { namespace Python {
+
+    /// @internal
+    class PythonModulePrivate
+    {
+        public:
+
+            /**
+             * The \a PythonInterpreter instance this module is
+             * part of.
+             */
+            PythonInterpreter* m_interpreter;
+
+            /**
+             * List of \a PythonExtension instances accessible
+             * via this \a PythonModule instance.
+             */
+            QMap<QString, PythonExtension*> m_modules;
+
+    };
+
+}}
+
 PythonModule::PythonModule(PythonInterpreter* interpreter)
-    : Py::ExtensionModule<PythonModule>("__main__")
-    , m_interpreter(interpreter)
+    : Py::ExtensionModule<PythonModule>("Kross") //("__main__")
+    , d(new PythonModulePrivate())
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
     kdDebug() << QString("Kross::Python::PythonModule::Constructor") << endl;
 #endif
+
+    d->m_interpreter = interpreter;
 
     add_varargs_method("get", &PythonModule::get, "FIXME: Documentation");
     initialize("FIXME: Documentation"); //TODO initialize( object->getDescription().latin1() );
@@ -53,10 +78,15 @@ PythonModule::~PythonModule()
     kdDebug() << QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) << endl;
 #endif
 
-    /*
-    for(QMap<QString, PythonExtension*>::Iterator it = m_modules.begin(); it != m_modules.end(); ++it)
+    for(QMap<QString, PythonExtension*>::Iterator it = d->m_modules.begin(); it != d->m_modules.end(); ++it)
         delete it.data();
-    */
+
+    delete d;
+}
+
+Py::Dict PythonModule::getDict()
+{
+    return moduleDictionary();
 }
 
 Py::Object PythonModule::get(const Py::Tuple& args)
@@ -70,16 +100,15 @@ Py::Object PythonModule::get(const Py::Tuple& args)
 
     QString name = args[0].as_string().c_str();
 
-    Kross::Api::Object::Ptr module = m_interpreter->m_manager->getModule(name);
+    Kross::Api::Object::Ptr module = d->m_interpreter->m_manager->getModule(name);
     if(! module)
         throw Py::TypeError(QString("Unknown module '%1'.").arg(name).latin1());
 
-    if(m_modules.contains(name))
-        return Py::asObject(m_modules[name]);
+    if(d->m_modules.contains(name))
+        return Py::asObject(d->m_modules[name]);
 
     PythonExtension* pythonmodule = new PythonExtension(module);
-    m_modules.replace(name, pythonmodule);
+    d->m_modules.replace(name, pythonmodule);
     return Py::asObject(pythonmodule);
 }
-
 

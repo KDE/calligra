@@ -58,7 +58,7 @@ PythonSecurity::~PythonSecurity()
 void PythonSecurity::initRestrictedPython()
 {
     try {
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_module->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
         PyObject* pymodule = PyImport_ImportModuleEx(
             "RestrictedPython", // name of the module being imported (may be a dotted name)
             mainmoduledict.ptr(), // reference to the current global namespace
@@ -111,7 +111,7 @@ Py::Object PythonSecurity::_getattr_(const Py::Tuple& args)
 void PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
 {
     try {
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_module->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
 
         PyObject* func = PyDict_GetItemString(m_pymodule->getDict().ptr(), "compile_restricted");
         if(! func)
@@ -163,17 +163,17 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
     }
 }
 
-void PythonSecurity::compile_restricted_function(const Py::Tuple& args, const QString& body, const QString& name, const QString& filename, const Py::Object& globalize)
+void PythonSecurity::compile_restricted_function(const Py::Tuple& /*args*/, const QString& /*body*/, const QString& /*name*/, const QString& /*filename*/, const Py::Object& /*globalize*/)
 {
     //TODO
 }
 
-void PythonSecurity::compile_restricted_exec(const QString& source, const QString& filename)
+void PythonSecurity::compile_restricted_exec(const QString& /*source*/, const QString& /*filename*/)
 {
     //TODO
 }
 
-void PythonSecurity::compile_restricted_eval(const QString& source, const QString& filename)
+void PythonSecurity::compile_restricted_eval(const QString& /*source*/, const QString& /*filename*/)
 {
     //TODO
 }

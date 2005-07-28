@@ -152,7 +152,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
 #endif
 
     try {
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_module->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
         PyObject* pyresult = PyEval_EvalCode(
             (PyCodeObject*)d->m_code->ptr(),
             mainmoduledict.ptr(),
@@ -250,17 +250,6 @@ Kross::Api::Object::Ptr PythonScript::execute()
                 }
             }
             */
-/*
-        }
-        //kdDebug() << QString("PythonScript::execute --------------------------- 2") << endl;
-        //kdDebug() << QString("PythonScript::execute() PyRun_String='%1'").arg(run.str().as_string().c_str()) << endl;
-        return PythonExtension::toObject(run);
-    }
-    catch(Py::Exception& e) {
-        Py::Object errobj = Py::value(e);
-        throw Kross::Api::RuntimeException(i18n("Python Exception: %1").arg(errobj.as_string().c_str()));
-    }
-*/
 }
 
 Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::Api::List::Ptr args)

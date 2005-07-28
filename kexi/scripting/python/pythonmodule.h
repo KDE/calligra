@@ -31,6 +31,7 @@ namespace Kross { namespace Python {
 
     // Forward declaration.
     class PythonInterpreter;
+    class PythonModulePrivate;
 
     /**
      * The PythonModule is the __main__ python environment
@@ -57,13 +58,13 @@ namespace Kross { namespace Python {
              */
             virtual ~PythonModule();
 
-            Py::Dict getDict() {
-                return moduleDictionary();
-            }
+            /**
+             * \return the dictonary this PythonModule has.
+             */
+            Py::Dict getDict();
 
         private:
-            PythonInterpreter* m_interpreter;
-            QMap<QString, PythonExtension*> m_modules;
+            PythonModulePrivate* d;
 
             Py::Object get(const Py::Tuple&);
     };

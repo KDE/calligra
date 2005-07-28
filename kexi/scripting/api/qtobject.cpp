@@ -40,31 +40,19 @@ QtObject::QtObject(Object::Ptr parent, QObject* object)
     : Kross::Api::Class<QtObject>(object->name(), parent)
     , m_object(object)
 {
-
-//TODO: we need namespaces here!
-//TODO: move addChild() to parent!
-//parent->addChild( this );
-Manager::scriptManager()->addModule( this );
-
-
-
     QStrList slotnames = m_object->metaObject()->slotNames(false);
     for(char* c = slotnames.first(); c; c = slotnames.next()) {
         QCString s = c;
-        kdDebug()<<"SLOT =====================================> "<< s <<endl;
         addChild( new EventSlot(s, this, object, s) );
     }
 
     QStrList signalnames = m_object->metaObject()->signalNames(false);
     for(char* c = signalnames.first(); c; c = signalnames.next()) {
         QCString s = c;
-        kdDebug()<<"SIGNAL =====================================> "<< s <<endl;
         addChild( new EventSignal(s, this, object, s) );
     }
 
-
-
-
+//TODO port functions to the new event-framework.
 
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
