@@ -595,8 +595,8 @@ Editor::showUndoButton( bool show )
 				geometry.setWidth(geometry.width()-d->undoButton->width());
 			}
 			d->currentWidget->resize(geometry.width(), geometry.height());
-		}
-		d->undoButton->hide();*/
+		}*/
+		d->undoButton->hide();
 		return;
 	}
 

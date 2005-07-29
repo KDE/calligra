@@ -113,12 +113,11 @@ CursorEdit::~CursorEdit()
 	m_cursorListData = 0;
 }
 
-/*QVariant
+QVariant
 CursorEdit::value() const
 {
-	kopropertydbg << ComboBox::value().toInt() << endl;
-	return ComboBox::value().toInt();
-}*/
+	return QCursor(ComboBox::value().toInt());
+}
 
 void
 CursorEdit::setValue(const QVariant &value, bool emitChange)

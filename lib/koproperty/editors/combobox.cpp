@@ -158,7 +158,7 @@ ComboBox::setProperty(Property *prop)
 	if(!b)
 		fillBox();
 	if(prop)
-		setValue(prop->value(), false); //not the value can be set
+		setValue(prop->value(), false); //now the value can be set
 }
 
 void
