@@ -304,7 +304,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		kdDebug() << "Image depth: " << imageDepth << "\n";
 
 		// Determine image type -- rgb, grayscale or cmyk
+		ColorspaceType colorspaceType = image->colorspace;
+		
 		KisStrategyColorSpaceSP cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
+
 		if (cs == 0) {
 			kdDebug() << "Krita does not suport colorspace " << image -> colorspace << "\n";
 			CloseCacheView(vi);
@@ -372,8 +375,6 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
 			m_img->add(layer, 0);
 
-			Q_UINT32 layerBytesPerChannel = cs -> pixelSize() / cs -> nChannels();
-
 			for (Q_UINT32 y = 0; y < image->rows; y ++)
 			{
 				const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
@@ -390,31 +391,61 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
 				KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
 
-				if (layerBytesPerChannel == 2) {
-					while(! hiter.isDone())
-					{
-						Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
-						// XXX: not colorstrategy independent
-						*(ptr++) = ScaleQuantumToShort(pp->blue);
-						*(ptr++) = ScaleQuantumToShort(pp->green);
-						*(ptr++) = ScaleQuantumToShort(pp->red);
-						*(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
+				if (colorspaceType== CMYKColorspace) {
+					if (imageDepth == 8) {
 
-						pp++;
-						++hiter;
+						while (!hiter.isDone())
+						{
+							Q_UINT8 *ptr= hiter.rawData();
+							*(ptr++) = Downscale(pp->red); // cyan
+							*(ptr++) = Downscale(pp->green); // magenta
+							*(ptr++) = Downscale(pp->blue); // yellow
+							if (image->matte == 0) {
+								*(ptr++) = Downscale(pp->opacity); // black
+								*(ptr++) = OPACITY_OPAQUE; // That's not in ImageMagick...
+							}
+							else {
+								//*(ptr++) = Downscale(pp->index);
+								*(ptr++) = Downscale(pp->opacity);
+							}
+	
+							pp++;
+							++hiter;
+						}
 					}
-				} else {
-					while(! hiter.isDone())
-					{
-						Q_UINT8 *ptr= hiter.rawData();
-						// XXX: not colorstrategy and bitdepth independent
-						*(ptr++) = Downscale(pp->blue);
-						*(ptr++) = Downscale(pp->green);
-						*(ptr++) = Downscale(pp->red);
-						*(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
+				}
+				else if (colorspaceType== RGBColorspace ||
+					 colorspaceType == sRGBColorspace ||
+					 colorspaceType == TransparentColorspace ||
+					 colorspaceType == GRAYColorspace)
+				{
+					if (imageDepth == 8) {
+						while(! hiter.isDone())
+						{
+							Q_UINT8 *ptr= hiter.rawData();
+							// XXX: not colorstrategy and bitdepth independent
+							*(ptr++) = Downscale(pp->blue);
+							*(ptr++) = Downscale(pp->green);
+							*(ptr++) = Downscale(pp->red);
+							*(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
 
-						pp++;
-						++hiter;
+							pp++;
+							++hiter;
+						}
+					}
+					else if (imageDepth == 16) {
+						while(! hiter.isDone())
+						{
+							Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+							// XXX: not colorstrategy independent
+							*(ptr++) = ScaleQuantumToShort(pp->blue);
+							*(ptr++) = ScaleQuantumToShort(pp->green);
+							*(ptr++) = ScaleQuantumToShort(pp->red);
+							*(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
+	
+							pp++;
+							++hiter;
+						}
 					}
 				}
 
