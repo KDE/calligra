@@ -75,7 +75,6 @@ namespace Kross { namespace Api {
 
         private:
             QObject* m_object;
-            //EventManager* m_eventmanager;
 
             // QProperty's
             Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);

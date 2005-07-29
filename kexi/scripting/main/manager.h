@@ -30,6 +30,7 @@
 class QObject;
 
 #include "../api/object.h"
+#include "mainmodule.h"
 
 namespace Kross { namespace Api {
 
@@ -39,7 +40,6 @@ namespace Kross { namespace Api {
     class EventSlot;
     class EventSignal;
     class ScriptContainer;
-    class MainModule;
     class ManagerPrivate;
 
     /**
@@ -51,7 +51,7 @@ namespace Kross { namespace Api {
      * interpreter like python. While \a Script spends a more
      * flexible container.
      */
-    class KROSS_MAIN_EXPORT Manager
+    class KROSS_MAIN_EXPORT Manager : public MainModule
     {
         protected:
 
@@ -76,49 +76,6 @@ namespace Kross { namespace Api {
                 static Manager m_manager = Manager();
                 return &m_manager;
             }
-
-            /**
-             * \return the global avaiable and within Kross
-             * shared \a MainModule .
-             */
-            MainModule* getMainModule();
-
-            /**
-             * Check if a \a Module with the defined
-             * name is avaible.
-             *
-             * \param name The name of the module.
-             * \return true if the module is avaible
-             *         else false.
-             */
-            bool hasModule(const QString& name);
-
-            /**
-             * Return the \a Module with the defined
-             * name.
-             *
-             * \param name The name of the module.
-             * \return The \a Module if there is such a
-             *         module avaible else NULL.
-             */
-            Object::Ptr getModule(const QString& name);
-
-            /**
-             * Return all avaible \a Module objects.
-             *
-             * \return Map of modules.
-             */
-            QMap<QString, Object::Ptr> getModules();
-
-            /**
-             * Add a new \a Module to the list of avaible
-             * modules.
-             *
-             * \param module The \a Module to add.
-             * \return true if the module was added
-             *         successfully else false.
-             */
-            bool addModule(Object::Ptr module);
 
             /**
              * Return the existing \a ScriptContainer with scriptname

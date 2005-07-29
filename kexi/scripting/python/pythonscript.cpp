@@ -37,11 +37,31 @@ namespace Kross { namespace Python {
     class PythonScriptPrivate
     {
         public:
+
+            /**
+            * The \a Py::Module instance this \a PythonScript
+            * has as local context.
+            */
             Py::Module* m_module;
+
+            /**
+            * The PyCodeObject object representing the
+            * compiled python code. Internaly we first
+            * compile the python code and later execute
+            * it.
+            */
             Py::Object* m_code;
 
+            /**
+            * A list of functionnames.
+            */
             QStringList m_functions;
+
+            /**
+            * A list of classnames.
+            */
             QStringList m_classes;
+
             //QMap<QString, Kross::Api::Object::Ptr> m_functions;
             //QMap<QString, Kross::Api::Object::Ptr> m_classes;
             //QValueList<Kross::Api::Object::Ptr> m_classinstances;
@@ -76,11 +96,19 @@ void PythonScript::initialize()
     try {
         PyObject* pymod = PyModule_New((char*)m_scriptcontainer->getName().latin1());
         d->m_module = new Py::Module(pymod, true);
+        if(! d->m_module)
+            throw Kross::Api::RuntimeException(i18n("Failed to initialize local module context for script '%1'").arg( m_scriptcontainer->getName() ));
 
 #ifdef KROSS_PYTHON_SCRIPT_INIT_DEBUG
-        if(d->m_module)
-            kdDebug() << QString("PythonScript::initialize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
+        kdDebug() << QString("PythonScript::initialize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
 #endif
+
+        // Set the "self" variable to point to the ScriptContainer
+        // we are using for the script. That way we are able to
+        // simply access the ScriptContainer itself from within
+        // python scripting code.
+        Py::Dict moduledict = d->m_module->getDict();
+        moduledict["self"] = PythonExtension::toPyObject( m_scriptcontainer );
 
         // Compile the python script code. It will be later on request
         // executed. That way we cache the compiled code.

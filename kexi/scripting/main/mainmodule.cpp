@@ -23,8 +23,8 @@
 
 using namespace Kross::Api;
 
-MainModule::MainModule()
-    : Module<MainModule>("Kross")
+MainModule::MainModule(const QString& name)
+    : Module<MainModule>(name)
 {
 }
 

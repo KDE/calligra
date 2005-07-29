@@ -62,7 +62,7 @@ namespace Kross { namespace Api {
              *        it via \a getName() and set a new
              *        name via \a setName().
              * \param parent The parent Object or NULL if
-             *        this object doesn't has an object.
+             *        this object doesn't has an parent.
              */
             explicit Object(const QString& name, Object::Ptr parent = 0);
 
@@ -178,27 +178,8 @@ namespace Kross { namespace Api {
              *
              * \return List of supported calls.
              */
-//TODO: replace function with getChildren()
-//We need methods like
-//- QStringList() getSignalsNames
-//- QStringList() getSlotsNames
-//=> to connect(signal,slot) ...
-//=> define addChild(EnumObjectType, ...)
-//   => instanceof {EventSlot|EventSignal|...}
-
+//TODO: replace function with getChildren() functionality
             virtual QStringList getCalls() { return QStringList(); }
-
-/*TODO
-bool hasSignal(const QString&);
-bool hasSlot(const QString&);
-bool attachEvent(KSharedPtr<Event> event) {}
-bool detachEvent(KSharedPtr<Event> event) {}
-QMap<QString, QValueList< KSharedPtr<Event> > > getEvents() {}
-QValueList< KSharedPtr<Event> > getEvents(const QString&) {}
-QMap<QString, QValueList< KSharedPtr<Event> > > m_events;
-//bool connect(KSharedPtr<Event> sender, KSharedPtr<Event> receiver) {}
-//bool connect(const QString& signal, Object::Ptr receiver, const QString& slot);
-*/
 
             /**
              * Try to convert the \a Object instance to the

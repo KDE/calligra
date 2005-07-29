@@ -26,7 +26,6 @@
 #include "../api/interpreter.h"
 
 #include "../main/scriptcontainer.h"
-#include "../main/mainmodule.h"
 
 #include "../kexidb/kexidbmodule.h"
 
@@ -69,12 +68,9 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         return;
     }
 
-    // Get the global main module.
-    Kross::Api::MainModule* mainmodule = manager->getMainModule();
-
     //TESTCASE
     TestObject* testobject = new TestObject(app);
-    mainmodule->addQObject( testobject );
+    manager->addQObject( testobject );
 
     // Add modules that should be accessible by scripting. Those
     // modules are wrappers around functionality you want to be
@@ -82,8 +78,8 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     // care of freeing them cause that will be done by Kross.
     // Modules are shared between the ScriptContainer instances.
     Kross::KexiDB::KexiDBModule* kdbm = new Kross::KexiDB::KexiDBModule();
-    manager->addModule(kdbm);
-    manager->addModule( new Kross::KexiDB::TestModule() ); //testcase
+    manager->addChild(kdbm);
+    manager->addChild( new Kross::KexiDB::TestModule() ); //testcase
 
     // To represent a script that should be executed Kross uses
     // the Script container class. You are able to fill them with
@@ -113,6 +109,11 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         }
         kdDebug()<<"--------------------------"<<endl;
         */
+
+scriptcontainer->addQObject( testobject );
+scriptcontainer->addSignal("myTestSignal", testobject, SIGNAL(testSignal()));
+scriptcontainer->addSlot("myTestSlot", testobject, SLOT(testSlot()));
+
 /*
         // Connect QObject signal with scriptfunction.
         scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
@@ -140,9 +141,6 @@ std::cin >> s;
     }
     //delete sc2;
 */
-
-    // Finally free our manager.
-    //delete manager;
 }
 
 int main(int argc, char **argv)

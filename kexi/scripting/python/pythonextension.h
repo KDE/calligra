@@ -47,6 +47,7 @@ namespace Kross { namespace Python {
     {
             friend class PythonScript;
             friend class PythonObject;
+            friend class PythonModule;
 
         public:
 

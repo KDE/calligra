@@ -244,11 +244,12 @@ print "########## END TEST: KexiDB ##########"
 
 print "########## BEGIN TEST: QObject ##########"
 try:
-    kross = get("Kross")
-
     # Get the QtObject instance to access the QObject.
-    testobject = kross.get("TestObject")
-    #print "testobject = %s %s" % (str(testobject),dir(testobject))
+    testobject = get("TestObject")
+    if testobject == None:
+        raise "Object 'TestObject' undefined !!!"
+
+    print "testobject = %s %s" % (str(testobject),dir(testobject))
     #print "propertyNames = %s" % testobject.propertyNames()
     #print "slotNames = %s" % testobject.slotNames()
     #print "signalNames = %s" % testobject.signalNames()
@@ -257,13 +258,13 @@ try:
     print "################################### 1"
     print testobject.call("testSlot2()");
     print testobject.call("testSignal()");
-    #print testobject.call()
+    #print testobject.call() #KrossTest: List::item index=0 is out of bounds. Raising TypeException.
 
     # Each slot a QObject spends is a object itself.
     print "################################### 2"
     myslot = testobject.get("testSlot()")
     print "myslotevent = %s" % str(myslot)
-
+    print "################################### 3"
     print myslot.call()
 
 
@@ -271,22 +272,33 @@ try:
 
     #testobject.connect("testSignal()",testobject,"testSlot2()")
     #testobject.signal("testSignal()")
-
     #testobject.call("testSlot()")
-
-
-
     #myslotevent.call("muh")
     #myslotevent.testSlot()
     #print testobject.call("testSlot()")
-
     #myslotevent.call();
 
     #testobject.testSlot()
     #testobject.slot("testSlot()")
     #testobject.disconnect("testSignal()")
+
+    print "################################### 4"
+    print "__name__ = %s" % __name__
+    print "__dir__ = %s" % dir()
+    #print "__builtin__ = %s" % __builtin__
+    print "self = %s %s" % (str(self),dir(self))
+    #print "TestCase = %s" % str(TestCase)
+
+    print "################################### 5"
+    testobject22 = self.get("TestObject")
+    print "testobject22 = %s" % str(testobject22)
+
+    #mts = self.get("myTestSlot")
+    #print str(mts)
+
+    print "################################### 9"
+
 except Exception, e:
     print "EXCEPTION on TestObject: %s" % e
 
-print "__name = %s" % __name__
 print "########## END TEST: QObject ##########"

@@ -22,8 +22,8 @@
 #include "../api/list.h"
 #include "../api/interpreter.h"
 #include "../api/script.h"
-//#include "../api/eventmanager.h"
 #include "../main/manager.h"
+#include "mainmodule.h"
 
 using namespace Kross::Api;
 
@@ -33,20 +33,43 @@ namespace Kross { namespace Api {
     class ScriptContainerPrivate
     {
         public:
+
+            /**
+            * The \a Script instance the \a ScriptContainer uses
+            * if initialized. It will be NULL as long as we
+            * didn't initialized it what will be done on
+            * demand.
+            */
             Script* m_script;
+
+            /**
+            * The unique name the \a ScriptContainer is
+            * reachable as.
+            */
             QString m_name;
+
+            /**
+            * The scripting code.
+            */
             QString m_code;
+
+            /**
+            * The name of the interpreter. This could be
+            * something like "python" for the python
+            * binding.
+            */
             QString m_interpretername;
     };
 
 }}
 
 ScriptContainer::ScriptContainer(const QString& name)
-    : KShared() // initialize reference-counter
-    , d( new ScriptContainerPrivate() )
+    : MainModule(name)
+    , d( new ScriptContainerPrivate() ) // initialize d-pointer class
 {
+    kdDebug() << QString("ScriptContainer::ScriptContainer() name='%1'").arg(name) << endl;
+
     d->m_script = 0;
-    //d->m_eventmanager = 0;
     d->m_name = name;
 }
 
@@ -83,6 +106,40 @@ void ScriptContainer::setInterpreterName(const QString& name)
     d->m_interpretername = name;
 }
 
+Object::Ptr ScriptContainer::execute()
+{
+    if(! d->m_script)
+        initialize();
+    return d->m_script->execute();
+}
+
+const QStringList& ScriptContainer::getFunctionNames()
+{
+    return d->m_script ? d->m_script->getFunctionNames() : QStringList();
+}
+
+Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr arguments)
+{
+    if(functionname.isEmpty())
+        throw RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
+
+    if(! d->m_script)
+        initialize();
+    return d->m_script->callFunction(functionname, arguments);
+}
+
+const QStringList& ScriptContainer::getClassNames()
+{
+    return d->m_script ? d->m_script->getClassNames() : QStringList();
+}
+
+Object::Ptr ScriptContainer::classInstance(const QString& name)
+{
+    if(! d->m_script)
+        initialize();
+    return d->m_script->classInstance(name);
+}
+
 void ScriptContainer::initialize()
 {
     finalize();
@@ -98,77 +155,4 @@ void ScriptContainer::finalize()
     d->m_script = 0;
 }
 
-Object* ScriptContainer::execute()
-{
-    if(! d->m_script)
-        initialize();
-    return d->m_script->execute();
-}
-
-const QStringList& ScriptContainer::getFunctionNames()
-{
-    return d->m_script ? d->m_script->getFunctionNames() : QStringList();
-}
-
-KSharedPtr<Object> ScriptContainer::callFunction(const QString& functionname, List* arguments)
-{
-    if(functionname.isEmpty())
-        throw RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
-
-    if(! d->m_script)
-        initialize();
-    return d->m_script->callFunction(functionname, arguments);
-}
-
-const QStringList& ScriptContainer::getClassNames()
-{
-    return d->m_script ? d->m_script->getClassNames() : QStringList();
-}
-
-KSharedPtr<Object> ScriptContainer::classInstance(const QString& name)
-{
-    if(! d->m_script)
-        initialize();
-    return d->m_script->classInstance(name);
-}
-
-bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QString& functionname)
-{
-/*TODO
-    if(! d->m_eventmanager) // create instance on demand
-        d->m_eventmanager = new EventManager(this);
-    return d->m_eventmanager->connect(sender, signal, functionname);
-*/
-    return false;
-}
-
-bool ScriptContainer::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
-{
-/*TODO
-    if(! d->m_eventmanager)
-        return false;
-    return d->m_eventmanager->disconnect(sender, signal, functionname);
-*/
-    return false;
-}
-
-bool ScriptContainer::connect(const QCString& signal, QObject *receiver, const QCString& slot)
-{
-/*TODO
-    if(! d->m_eventmanager) // create instance on demand
-        d->m_eventmanager = new EventManager(this);
-    return d->m_eventmanager->connect(signal, receiver, slot);
-*/
-    return false;
-}
-
-bool ScriptContainer::disconnect(const QCString& signal, QObject *receiver, const QCString& slot)
-{
-/*TODO
-    if(! d->m_eventmanager)
-        return false;
-    return d->m_eventmanager->disconnect(signal, receiver, slot);
-*/
-    return false;
-}
 

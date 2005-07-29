@@ -88,6 +88,27 @@ namespace Kross { namespace Api {
              */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments);
 
+            /**
+             * Wrapper for the \a Kross::Api::Object::hasChild() method
+             * to check if this object has a children.
+             */
+            Object::Ptr hasChild(List::Ptr args);
+
+            /**
+             * Wrapper for the \a Kross::Api::Object::getChild() method
+             * to return a children this object has.
+             */
+            Object::Ptr getChild(List::Ptr args);
+
+            //Object::Ptr setChild(List::Ptr args);
+            //Object::Ptr getChildren(List::Ptr args);
+
+            /**
+             * Wrapper for the \a Kross::Api::Object::call() method
+             * to call a children.
+             */
+            Object::Ptr callChild(List::Ptr args);
+
         protected:
             /// List of arguments this callable object supports.
             ArgumentList m_arglist;
@@ -96,16 +117,6 @@ namespace Kross { namespace Api {
 
             /// Check the passed arguments against the \a m_arglist and throws an exception if failed.
             void checkArguments(KSharedPtr<List> arguments);
-
-            /// \see Kross::Api::Object::hasChild()
-            Object::Ptr hasChild(List::Ptr args);
-            /// \see Kross::Api::Object::getChild()
-            Object::Ptr getChild(List::Ptr args);
-//Object::Ptr setChild(List::Ptr args);
-            /// \see Kross::Api::Object::getChildren()
-//Object::Ptr getChildren(List::Ptr args);
-            /// \see Kross::Api::Object::call()
-            Object::Ptr callChild(List::Ptr args);
     };
 
 }}

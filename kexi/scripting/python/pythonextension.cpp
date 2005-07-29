@@ -93,8 +93,8 @@ Py::Object PythonExtension::getattr(const char* n)
         return members;
     }
 
-    //if(name == "__dict__") { return kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; Py::None(); }
-    //if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
+    if(name == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; return Py::None(); }
+    if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
 
     if(name.startsWith("__")) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG

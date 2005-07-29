@@ -64,6 +64,7 @@ namespace Kross { namespace Python {
             Py::Dict getDict();
 
         private:
+            /// Internal d-pointer class.
             PythonModulePrivate* d;
 
             Py::Object get(const Py::Tuple&);

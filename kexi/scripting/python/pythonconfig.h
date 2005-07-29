@@ -58,6 +58,13 @@
  */
 namespace Kross { namespace Python {
 
+    // The version of this python plugin. This will be exported
+    // to the scripting code. That way we're able to write
+    // scripting code for different incompatible Kross python
+    // bindings by checking the version. You should increment
+    // this number only if you really know what you're doing.
+    #define KROSS_PYTHON_VERSION 1
+
     // Enable kdDebug()-debugging for Kross::Python::PythonScript
     //#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG

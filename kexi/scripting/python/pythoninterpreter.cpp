@@ -85,21 +85,19 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     // Initialize the main module.
     m_mainmodule = new PythonModule(this);
 
-    // Prepare the interpreter.
+    // The main dictonary.
     Py::Dict moduledict = m_mainmodule->getDict();
-    QString s =
-                //"globalvar = 0\n"
-                //"import sys\n"
-                //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
-                //"sys.stdout = scribus._bu\n"
-                //"sys.stderr = scribus._bu\n"
+    //TODO moduledict["KrossPythonVersion"] = Py::Int(KROSS_PYTHON_VERSION);
 
+    // Prepare the interpreter.
+    QString s = "import sys\n"
+                //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
+                //"sys.stdout = kross._bu\n"
+                //"sys.stderr = kross._bu\n"
                 "import cStringIO\n"
                 "sys.stdin = cStringIO.StringIO()\n"
-                //"def maintestfunc():\n"
-                //"    print \"this is maintestfunc!\"\n"
-                //"    return \"this is the maintestfunc return value!\"\n"
                 ;
+
     PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error

@@ -55,16 +55,16 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
     d->manager = Kross::Api::Manager::scriptManager();
     d->scriptcontainer = d->manager->getScriptContainer(name);
 
-    d->scriptcontainer->connect(SIGNAL(stdOut(const QString&)), this, SIGNAL(stdOut(const QString&)));
-    d->scriptcontainer->connect(SIGNAL(stdErr(const QString&)), this, SIGNAL(stdErr(const QString&)));
+    //d->scriptcontainer->connect(SIGNAL(stdOut(const QString&)), this, SIGNAL(stdOut(const QString&)));
+    //d->scriptcontainer->connect(SIGNAL(stdErr(const QString&)), this, SIGNAL(stdErr(const QString&)));
 #endif
 }
 
 KexiScriptContainer::~KexiScriptContainer()
 {
 #ifdef KEXI_KROSS_SUPPORT
-    d->scriptcontainer->disconnect(SIGNAL(stdOut(const QString&)), this, SLOT(stdOut(const QString&)));
-    d->scriptcontainer->disconnect(SIGNAL(stdErr(const QString&)), this, SLOT(stdErr(const QString&)));
+    //d->scriptcontainer->disconnect(SIGNAL(stdOut(const QString&)), this, SLOT(stdOut(const QString&)));
+    //d->scriptcontainer->disconnect(SIGNAL(stdErr(const QString&)), this, SLOT(stdErr(const QString&)));
 #endif
     delete d;
 }

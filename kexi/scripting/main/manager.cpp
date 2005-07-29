@@ -27,7 +27,6 @@
 
 #include "krossconfig.h"
 #include "scriptcontainer.h"
-#include "mainmodule.h"
 
 #include <qobject.h>
 #include <kdebug.h>
@@ -47,16 +46,10 @@ namespace Kross { namespace Api {
     {
         public:
             /// List of script instances.
-            QMap<QString, KSharedPtr<ScriptContainer> > m_scriptcontainers;
+            //QMap<QString, ScriptContainer* > m_scriptcontainers;
 
             /// List of interpreter instances.
             QMap<QString, Interpreter*> m_interpreter;
-
-            /// The \a MainModule globaly avaiable.
-            MainModule* m_mainmodule;
-
-            /// List of avaible modules.
-            QMap<QString, Object::Ptr> m_modules;
 
             /// To dynamicly load libraries.
             KLibrary* m_library;
@@ -65,12 +58,9 @@ namespace Kross { namespace Api {
 }}
 
 Manager::Manager()
-    : d( new ManagerPrivate() )
+    : MainModule("Kross") // the manager has the name "Kross"
+    , d( new ManagerPrivate() )
 {
-    // Create the global avaiable MainModule.
-    d->m_mainmodule = new MainModule(); // KShared takes care of removing our MainModule.
-    addModule( d->m_mainmodule ); // Add the MainModule to the list of avaiable modules.
-
     d->m_library = 0;
 }
 
@@ -82,52 +72,17 @@ Manager::~Manager()
     delete d;
 }
 
-MainModule* Manager::getMainModule()
-{
-    return d->m_mainmodule;
-}
-
-bool Manager::hasModule(const QString& name)
-{
-    return d->m_modules.contains(name);
-}
-
-Object::Ptr Manager::getModule(const QString& name)
-{
-    return d->m_modules[name];
-}
-
-QMap<QString, Object::Ptr> Manager::getModules()
-{
-    return d->m_modules;
-}
-
-bool Manager::addModule(Object::Ptr module)
-{
-    if(! module) {
-        kdWarning() << "Interpreter->addModule(Module*) failed cause Module is NULL" << endl;
-        return false;
-    }
-    if(d->m_modules.contains(module->getName())) {
-        kdWarning() << QString("Interpreter->addModule(Module*) failed cause there exists already a Module with name '%1'").arg(module->getName()) << endl;
-        return false;
-    }
-    d->m_modules.replace(module->getName(), module);
-    return true;
-}
-
-KSharedPtr<ScriptContainer> Manager::getScriptContainer(const QString& scriptname)
+ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 {
     //TODO at the moment we don't share ScriptContainer instances.
 
     //if(d->m_scriptcontainers.contains(scriptname))
     //    return d->m_scriptcontainers[scriptname];
-
     ScriptContainer* scriptcontainer = new ScriptContainer(scriptname);
     //ScriptContainer script(this, scriptname);
     //d->m_scriptcontainers.replace(scriptname, scriptcontainer);
 
-    return KSharedPtr<Kross::Api::ScriptContainer>(scriptcontainer);
+    return scriptcontainer;
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
@@ -192,10 +147,12 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
 #endif
     }
 
-    /*
+/*
+#ifdef KROSS_KJS_LIBRARY
     else if(interpretername == "kjs")
         interpreter = new Kross::Kjs::KjsInterpreter(this, "kjs");
-    */
+#endif
+*/
 
     if(interpreter)
         d->m_interpreter.replace(interpretername, interpreter);
@@ -206,8 +163,16 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
 const QStringList Manager::getInterpreters()
 {
     QStringList list;
+
 #ifdef KROSS_PYTHON_LIBRARY
     list << "python";
 #endif
+
+/*
+#ifdef KROSS_KJS_LIBRARY
+    list << "kjs";
+#endif
+*/
+
     return  list;
 }

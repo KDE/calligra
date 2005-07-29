@@ -39,8 +39,13 @@
 namespace Kross { namespace Api {
 
     /**
-     * This class implements a global shared \a Module
-     * singleton.
+     * This class implements \a Module for the global
+     * \a Manager singleton and local \a ScriptContainer
+     * instances.
+     *
+     * The MainModule class provides base functionality
+     * for a root node in a tree of \a Kross::Api::Object
+     * instances.
      */
     class MainModule : public Module<MainModule>
     {
@@ -51,8 +56,13 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
+             *
+             * \param name the name of the \a Module . While the
+             *       global manager module has the name "Kross"
+             *       the \a ScriptContainer instances are accessible
+             *       by there \a ScriptContainer::getName() name.
              */
-            explicit MainModule();
+            explicit MainModule(const QString& name);
 
             /**
              * Destructor.
@@ -66,14 +76,32 @@ namespace Kross { namespace Api {
             virtual const QString getDescription() const;
 
             /**
-             * Add a Qt signal to the \a Module by
-             * creating an \a EventSignal for it.
+             * Add a Qt signal to the \a Module by creating
+             * an \a EventSignal for it.
+             *
+             * \param name the name the \a EventSignal is
+             *       reachable as
+             * \param sender the QObject instance which
+             *       is the sender of the \p signal
+             * \param signal the Qt signal macro the \p sender
+             *       emits to call the \a EventSignal
+             * \return the newly added \a EventSignal instance
+             *       which is now a child of this \a MainModule
              */
             EventSignal::Ptr addSignal(const QString& name, QObject* sender, QCString signal);
 
             /**
-             * Add a Qt slot to the \a Module by
-             * creating an \a EventSlot for it.
+             * Add a Qt slot to the \a Module by creating
+             * an \a EventSlot for it.
+             *
+             * \param name the name the \a EventSlot is
+             *       reachable as
+             * \param receiver the QObject instance which
+             *       is the receiver of the \p signal
+             * \param slot the Qt slot macro of the \p receiver
+             *       to invoke if the \a EventSlot got called.
+             * \return the newly added \a EventSlot instance
+             *       which is now a child of this \a MainModule
              */
             EventSlot::Ptr addSlot(const QString& name, QObject* receiver, QCString slot);
 
@@ -83,6 +111,11 @@ namespace Kross { namespace Api {
              * added to a new \a EventCollection instance
              * which is child of this \a EventCollection
              * instance.
+             *
+             * \param object the QObject instance that should
+             *       be added to this \a MainModule
+             * \return the newly added \a QtObject instance
+             *       which is now a child of this \a MainModule
              */
             QtObject::Ptr addQObject(QObject* object);
 
@@ -90,6 +123,11 @@ namespace Kross { namespace Api {
              * Add a \a KAction to the eventcollection. The
              * KAction will be wrapped by a \a EventAction
              * and will be added to this collection.
+             *
+             * \param object the KAction instance that should
+             *       be added to this \a MainModule
+             * \return the newly added \a EventAction instance
+             *       which is now a child of this \a MainModule
              */
             EventAction::Ptr addKAction(const QString& name, KAction* action);
 
