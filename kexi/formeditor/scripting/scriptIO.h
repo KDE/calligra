@@ -40,10 +40,10 @@ class ScriptIO
 {
 	public:
 		/*! Save the evnts of a form.
-		 Creates an <events> tag, and then one <event> tag for each event.
-		 Each event contains <sender> and <receiver> tags, with attributes depending on event type. */
+		 Creates an \<events\> tag, and then one \<event\> tag for each event.
+		 Each event contains \<sender\> and \<receiver\> tags, with attributes depending on event type. */
 		static bool  saveFormEvents(QDomNode &parentNode, FormScript *script);
-		/*! Reads the <events> tag (\a parentNode), then creates and fills a FormScript object linked to this \a form.
+		/*! Reads the \<events\> tag (\a parentNode), then creates and fills a FormScript object linked to this \a form.
 		 The new FormScript object is then added  to ScriptManager list.*/
 		static bool  loadFormEvents(QDomNode &parentNode, Form *form, ScriptManager *manager);
 
