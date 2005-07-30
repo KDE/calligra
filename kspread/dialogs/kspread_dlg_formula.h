@@ -47,7 +47,7 @@ class KLineEdit;
 
 namespace KSpread {
   class FunctionDescription;
-};
+}
 
 class KSpreadDlgFormula : public KDialogBase
 {

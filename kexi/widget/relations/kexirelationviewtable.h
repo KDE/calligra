@@ -43,7 +43,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 
 	public:
 //		KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t);
-		KexiRelationViewTableContainer::KexiRelationViewTableContainer(
+		KexiRelationViewTableContainer(
 			KexiRelationView *parent, KexiDB::TableOrQuerySchema *schema);
 
 		virtual ~KexiRelationViewTableContainer();
