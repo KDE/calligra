@@ -90,7 +90,7 @@ class ValueParser;
 class ValueConverter;
 class ValueFormatter;
 class ValueCalc;
-};
+}
 
 
 class DocPrivate;
