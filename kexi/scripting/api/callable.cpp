@@ -49,7 +49,7 @@ const QString Callable::getDescription() const
 Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
 {
 #ifdef KROSS_API_CALLABLE_CALL_DEBUG
-    kdDebug() << QString("Kross::Api::Callable::call() name=%1 getName()=%2").arg(name).arg(getName()) << endl;
+    kdDebug() << QString("Kross::Api::Callable::call() name=%1 getName()=%2 arguments=%3").arg(name).arg(getName()).arg(arguments ? arguments->toString() : QString("")) << endl;
 #endif
 
     if(name == "get") {
@@ -64,6 +64,11 @@ Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
         //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
         return callChild(arguments);
     }
+    else if(name == "list") {
+        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
+        return getChildrenList(arguments);
+    }
+
     return Object::call(name, arguments);
 }
 
@@ -101,20 +106,35 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
         //We should add those ::String part even to the arguments in Kross::KexiDB::*
 
         if(fcn.find(ocn) != 0)
-            throw AttributeException(i18n("Callable object '%1' expected parameter of type '%1', but got '%2'.").arg(getName()).arg(fcn).arg(ocn));
+            throw AttributeException(i18n("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn));
     }
 }
 
 Object::Ptr Callable::hasChild(List::Ptr args)
 {
+    kdDebug() << QString("Kross::Api::Callable::hasChild() getName()=%1").arg(getName()) << endl;
     return new Variant( Object::hasChild( Variant::toString(args->item(0)) ),
                         "Kross::Api::Callable::hasChild::Bool" );
 }
 
 Object::Ptr Callable::getChild(List::Ptr args)
 {
-    //kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1").arg(getName()) << endl;
-    return Object::getChild(Variant::toString(args->item(0)));
+    QString s = Variant::toString(args->item(0));
+    kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1 childName=%2").arg(getName()).arg(s) << endl;
+    Object::Ptr obj = Object::getChild(s);
+    if(! obj)
+        throw AttributeException(i18n("The object '%1' has no child object '%2'").arg(getName()).arg(s));
+    return obj;
+}
+
+Object::Ptr Callable::getChildrenList(List::Ptr args)
+{
+    QStringList list;
+    QMap<QString, Object::Ptr> children = getChildren();
+    QMap<QString, Object::Ptr>::Iterator it( children.begin() );
+    for(; it != children.end(); ++it)
+        list.append( it.key() );
+    return new Variant(list);
 }
 
 /*TODO
@@ -127,6 +147,7 @@ Object::Ptr Callable::getChildren(List::Ptr args)
 
 Object::Ptr Callable::callChild(List::Ptr args)
 {
+    kdDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
     //kdDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
     return Object::call(Variant::toString(args->item(0)), args);
 }

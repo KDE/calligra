@@ -92,6 +92,12 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     scriptcontainer->setCode(scriptcode);
 
     try {
+        scriptcontainer->addSlot("stdout", testobject, SLOT(stdoutSlot(const QString&)));
+        scriptcontainer->addSlot("stderr", testobject, SLOT(stderrSlot(const QString&)));
+        scriptcontainer->addQObject( testobject );
+        //scriptcontainer->addSignal("myTestSignal", testobject, SIGNAL(testSignal()));
+        //scriptcontainer->addSlot("myTestSlot", testobject, SLOT(testSlot()));
+
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
 
         // Call a function.
@@ -110,9 +116,6 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         kdDebug()<<"--------------------------"<<endl;
         */
 
-scriptcontainer->addQObject( testobject );
-scriptcontainer->addSignal("myTestSignal", testobject, SIGNAL(testSignal()));
-scriptcontainer->addSlot("myTestSlot", testobject, SLOT(testSlot()));
 
 /*
         // Connect QObject signal with scriptfunction.
@@ -121,12 +124,11 @@ scriptcontainer->addSlot("myTestSlot", testobject, SLOT(testSlot()));
         // Call the testSlot to emit the testSignal.
         testobject->testSlot();
 */
-std::string s;
-std::cin >> s;
+std::string s; std::cin >> s; // just wait.
 
     }
     catch(Kross::Api::Exception& e) {
-        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+        std::cout << QString("EXCEPTION type=%1 description=%2").arg(e.type()).arg(e.description()).latin1() << std::endl;
     }
 
 /*TESTCASE

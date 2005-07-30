@@ -109,6 +109,40 @@ void PythonScript::initialize()
         // python scripting code.
         Py::Dict moduledict = d->m_module->getDict();
         moduledict["self"] = PythonExtension::toPyObject( m_scriptcontainer );
+        //moduledict["parent"] = PythonExtension::toPyObject( m_manager );
+
+
+
+// Prepare local context.
+QString s =
+    "import sys\n"
+
+    //"class Redirect:\n"
+    //"  def __init__(self, target):\n"
+    //"    self.target = target\n"
+    //"  def write(self, s):\n"
+    //"    self.target(s)\n"
+    //"    sys.stderr.write( \"=====> %s\" % s)\n"
+
+    //"if self.has(\"stdout\"):\n"
+    //"sys.stdout = Redirect( self.stdout )\n"
+
+    //"if self.has(\"stderr\"):\n"
+    //"  sys.stderr = Redirect( self.stderr )\n"
+
+    "import cStringIO\n"
+    "sys.stdin = cStringIO.StringIO()\n"
+    ;
+Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
+PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
+if(! pyrun) {
+    Py::Object errobj = Py::value(Py::Exception()); // get last error
+    throw Kross::Api::RuntimeException(i18n("Failed to prepare the ScriptContainer module: %1").arg(errobj.as_string().c_str()));
+}
+Py_XDECREF(pyrun); // free the reference.
+
+
+
 
         // Compile the python script code. It will be later on request
         // executed. That way we cache the compiled code.

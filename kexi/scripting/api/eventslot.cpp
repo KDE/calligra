@@ -22,13 +22,13 @@
 //#include "interpreter.h"
 //#include "object.h"
 //#include "list.h"
-//#include "qtobject.h"
 #include "variant.h"
+#include "qtobject.h"
 //#include "../main/scriptcontainer.h"
 //#include "eventmanager.h"
 
-//#include <qvaluelist.h>
 #include <qmetaobject.h>
+#include <private/qucom_p.h>
 
 using namespace Kross::Api;
 
@@ -48,23 +48,64 @@ const QString EventSlot::getClassName() const
     return "Kross::Api::EventSlot";
 }
 
-Object::Ptr EventSlot::call(const QString& name, KSharedPtr<List> arguments)
+QUObject* EventSlot::toQUObject(const QString& signature, List::Ptr arguments)
 {
-//TODO addFunction("call", );
-    kdDebug() << QString("EventSlot::call(%1)").arg(name) << endl;
-    QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
+    int startpos = signature.find("(");
+    int endpos = signature.findRev(")");
+    if(startpos < 0 || startpos > endpos)
+        throw RuntimeException(QString("Invalid Qt signal or slot signature '%1'").arg(signature));
 
-/*TODO convert arguments
-    QUObject uo[12] = { QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject() };
-*/
+    QString signalname = signature.left(startpos);
+    QString params = signature.mid(startpos + 1, endpos - startpos - 1);
+    QStringList paramlist = QStringList::split(",", params); // this will fail on something like myslot(QMap<QString,QString> arg), but we don't care jet.
+    uint paramcount = paramlist.size();
+
+    uint argcount = arguments ? arguments->count() : 0;
+    //uint mincount = (argcount < paramcount) ? argcount : paramcount;
+
+    // The first item in the QUObject-array is for the returnvalue
+    // while everything >=1 are the passed parameters.
+    QUObject* uo = new QUObject[ paramcount + 1 ];
+    uo[0] = QUObject(); // empty placeholder for the returnvalue.
+
+//QString t;
+//for(int j=0; j<argcount; j++) t += "'" + Variant::toString(arguments->item(j)) + "' ";
+//kdDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
+
+    // Fill parameters.
+    for(uint i = 0; i < paramcount; i++) {
+        if(paramlist[i].find("QString") >= 0) {
+            //QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString("<<<<<<NO>>>>>>>");//QString::null;
+            const QString s = Variant::toString(arguments->item(i));
+//kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
+            static_QUType_QString.set( &(uo[i + 1]), s );
+        }
+        //TODO handle int, long, char*, QStringList, etc.
+        else {
+            throw RuntimeException(QString("Unknown Qt signal or slot argument '%1' in signature '%2'.").arg(paramlist[i]).arg(signature));
+        }
+    }
+
+//kdDebug()<<"2 --------------------- "<<endl;
+    return uo;
+}
+
+Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
+{
+    kdDebug() << QString("EventSlot::call(%1) m_slot=%2").arg(name).arg(m_slot) << endl;
+
+    QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
+    if(n.startsWith("1"))
+        n.remove(0,1);
 
     int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
     if(slotid < 0)
         throw TypeException(i18n("No such slot '%1'.").arg(n));
-    m_receiver->qt_invoke(slotid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
+
+    QUObject* uo = toQUObject(n, arguments);
+    m_receiver->qt_invoke(slotid, uo);
+    delete uo;
+
     return 0;
 }
 

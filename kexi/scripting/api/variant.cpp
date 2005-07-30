@@ -19,6 +19,8 @@
 
 #include "variant.h"
 
+#include <kdebug.h>
+
 using namespace Kross::Api;
 
 Variant::Variant(const QVariant& value, const QString& name)
@@ -40,6 +42,11 @@ const QString Variant::getDescription() const
     return i18n("Object to handle QVariant values.");
 }
 
+const QString Variant::toString()
+{
+    return getValue().toString();
+}
+
 const QVariant& Variant::toVariant(Object::Ptr object)
 {
     return Object::fromObject<Variant>( object.data() )->getValue();
@@ -48,8 +55,7 @@ const QVariant& Variant::toVariant(Object::Ptr object)
 const QString Variant::toString(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
-    if(variant.type() != QVariant::String &&
-       variant.type() != QVariant::CString)
+    if(variant.type() != QVariant::String && variant.type() != QVariant::CString)
         throw TypeException(QString("Kross::Api::Variant::String expected, but got %1.").arg(variant.typeName()).latin1());
     return variant.toString();
 }

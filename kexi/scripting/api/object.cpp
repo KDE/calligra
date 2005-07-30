@@ -50,6 +50,11 @@ const QString& Object::getName() const
     return m_name;
 }
 
+const QString Object::toString()
+{
+    return QString("%1 (%2)").arg(m_name).arg(getClassName());
+}
+
 Object::Ptr Object::getParent() const
 {
     return m_parent;

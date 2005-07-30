@@ -19,6 +19,8 @@
 
 #include "testobject.h"
 
+#include <iostream> // for std::out
+
 #include <kdebug.h>
 
 TestObject::TestObject(QObject* parent)
@@ -50,4 +52,16 @@ void TestObject::testSignalSlot()
     kdDebug() << "TestObject::testSignalSlot called" << endl;
 }
 
+void TestObject::stdoutSlot(const QString& s)
+{
+    kdDebug() << "<stdout> " << s << endl;
+    //std::cout << "<stdout> " << s.latin1() << std::endl;
+}
 
+void TestObject::stderrSlot(const QString& s)
+{
+    kdDebug() << "<stderr> " << s << endl;
+    //std::cout << "<stderr> " << s.latin1() << std::endl;
+}
+
+//#include "testobject.moc"

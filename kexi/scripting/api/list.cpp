@@ -44,6 +44,15 @@ const QString List::getDescription() const
     return i18n("Object to handle QValueList collections.");
 }
 
+const QString List::toString()
+{
+    QString s = "[";
+    QValueList<Object::Ptr> list = getValue();
+    for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+        s += "'" + (*it)->toString() + "', ";
+    return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
+}
+
 Object::Ptr List::item(uint idx)
 {
     QValueList<Object::Ptr> list = getValue();
@@ -66,3 +75,4 @@ void List::append(Object::Ptr object)
     QValueList<Object::Ptr> list = getValue();
     list.append(object);
 }
+

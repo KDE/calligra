@@ -46,11 +46,18 @@ namespace Kross { namespace Api {
             /// Destructor.
             virtual ~List();
 
-            /// See \see Kross::Api::Object::getClassName
+            /// See \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
+            /// See \see Kross::Api::Object::getDescription()
             virtual const QString getDescription() const;
+
+            /**
+             * \return a string representation of the whole list.
+             *
+             * \see Kross::Api::Object::toString()
+             */
+            virtual const QString toString();
 
             /**
              * Return the \a Object with defined index from the
@@ -77,6 +84,7 @@ namespace Kross { namespace Api {
              *       append to this list.
              */
             void append(Object::Ptr object);
+
     };
 
 }}

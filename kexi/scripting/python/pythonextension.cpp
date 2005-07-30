@@ -93,8 +93,8 @@ Py::Object PythonExtension::getattr(const char* n)
         return members;
     }
 
-    if(name == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; return Py::None(); }
-    if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
+    //if(name == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; return Py::None(); }
+    //if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
 
     if(name.startsWith("__")) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
@@ -182,7 +182,7 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
 
     if(object.isString()) {
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isString") << endl;
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isString='%1'").arg(object.as_string().c_str()) << endl;
 #endif
         return new Kross::Api::Variant(object.as_string().c_str());
     }
@@ -357,12 +357,12 @@ Py::Tuple PythonExtension::toPyTuple(Kross::Api::List::Ptr list)
 
 Py::Object PythonExtension::_call_(const Py::Tuple& args)
 {
-#ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-    kdDebug() << QString("Kross::Python::PythonExtension::_call_(Py::Tuple) m_methodname='%1'").arg(m_methodname) << endl;
-#endif
-
     Kross::Api::List::Ptr arguments = toObject(args);
     Kross::Api::Object::Ptr obj;
+
+#ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+    kdDebug() << QString("Kross::Python::PythonExtension::_call_(Py::Tuple) m_methodname='%1' arguments='%2'").arg(m_methodname).arg(arguments->toString()) << endl;
+#endif
 
     try {
         if(m_object->hasChild(m_methodname)) {

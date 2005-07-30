@@ -290,14 +290,15 @@ try:
     #print "TestCase = %s" % str(TestCase)
 
     print "################################### 5"
+    print "self.list = %s" % self.list()
+    print "################################### 6"
     testobject22 = self.get("TestObject")
-    print "testobject22 = %s" % str(testobject22)
+    print "testobject22 = %s" % testobject22
 
     #mts = self.get("myTestSlot")
     #print str(mts)
 
     print "################################### 9"
-
 except Exception, e:
     print "EXCEPTION on TestObject: %s" % e
 

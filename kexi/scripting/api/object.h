@@ -98,6 +98,13 @@ namespace Kross { namespace Api {
             virtual const QString getDescription() const = 0;
 
             /**
+             * \return a string representation of the object or
+             * it's content. This method is mainly used for
+             * debugging and testing purposes.
+             */
+            virtual const QString toString();
+
+            /**
              * Return the parent object or NULL if this object
              * doesn't has a parent.
              *

@@ -43,6 +43,8 @@ class TestObject : public QObject
     public slots:
         void testSlot();
         void testSlot2();
+        void stdoutSlot(const QString&);
+        void stderrSlot(const QString&);
     private slots:
         void testSignalSlot();
 };

@@ -124,13 +124,13 @@ namespace Kross { namespace Api {
              * KAction will be wrapped by a \a EventAction
              * and will be added to this collection.
              *
-	     * \param name name to identify the \a action by
+             * \param name name to identify the \a action by
              * \param action the KAction instance that should
              *       be added to this \a MainModule
              * \return the newly added \a EventAction instance
              *       which is now a child of this \a MainModule
-	     *
-	     * \todo check \a name dox.
+             *
+             * \todo check \a name dox.
              */
             EventAction::Ptr addKAction(const QString& name, KAction* action);
 

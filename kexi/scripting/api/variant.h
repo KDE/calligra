@@ -64,6 +64,13 @@ namespace Kross { namespace Api {
             virtual const QString getDescription() const;
 
             /**
+             * \return a string representation of the variant.
+             *
+             * \see Kross::Api::Object::toString()
+             */
+            virtual const QString toString();
+
+            /**
              * Try to convert the given \a Object into
              * a QVariant.
              *
@@ -132,6 +139,7 @@ namespace Kross { namespace Api {
              * \return The to a QValueList converted object.
              */
             static QValueList<QVariant> toList(Object::Ptr object);
+
     };
 
 }}

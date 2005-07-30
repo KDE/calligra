@@ -40,6 +40,9 @@ QtObject::QtObject(Object::Ptr parent, QObject* object)
     : Kross::Api::Class<QtObject>(object->name(), parent)
     , m_object(object)
 {
+kdDebug() << QString("================================================================================0") << endl;
+    kdDebug() << QString("QtObject::QtObject(%1) Constructor").arg(object->name()) << endl;
+
     QStrList slotnames = m_object->metaObject()->slotNames(false);
     for(char* c = slotnames.first(); c; c = slotnames.next()) {
         QCString s = c;

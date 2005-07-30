@@ -45,28 +45,32 @@ const QString MainModule::getDescription() const
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)
 {
     EventSignal* event = new EventSignal(name, this, sender, signal);
-    addChild(event); //TODO || throw RuntimeException( QString("Failed to add signal name='%1' signal='%2'").arg(name).arg(signal) );
+    if(! addChild(event))
+        throw RuntimeException( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
     return event;
 }
 
 EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCString slot)
 {
     EventSlot* event = new EventSlot(name, this, receiver, slot);
-    addChild(event);
+    if(! addChild(event))
+        throw RuntimeException( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
     return event;
 }
 
 QtObject::Ptr MainModule::addQObject(QObject* object)
 {
     QtObject* qtobject = new QtObject(this, object);
-    addChild(qtobject);
+    if(! addChild(qtobject))
+        throw RuntimeException( QString("Failed to add QObject name='%1'").arg(object->name()) );
     return qtobject;
 }
 
 EventAction::Ptr MainModule::addKAction(const QString& name, KAction* action)
 {
     EventAction* event = new EventAction(name, this, action);
-    addChild(event);
+    if(! addChild(event))
+        throw RuntimeException( QString("Failed to add KAction name='%1'").arg(action->name()) );
     return event;
 }
 

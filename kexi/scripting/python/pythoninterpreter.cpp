@@ -92,8 +92,8 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     // Prepare the interpreter.
     QString s = "import sys\n"
                 //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
-                //"sys.stdout = kross._bu\n"
-                //"sys.stderr = kross._bu\n"
+                //"sys.stdout = self._bu\n"
+                //"sys.stderr = self._bu\n"
                 "import cStringIO\n"
                 "sys.stdin = cStringIO.StringIO()\n"
                 ;

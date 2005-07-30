@@ -101,7 +101,7 @@ namespace Kross { namespace Api {
             Object::Ptr getChild(List::Ptr args);
 
             //Object::Ptr setChild(List::Ptr args);
-            //Object::Ptr getChildren(List::Ptr args);
+            Object::Ptr getChildrenList(List::Ptr args);
 
             /**
              * Wrapper for the \a Kross::Api::Object::call() method
