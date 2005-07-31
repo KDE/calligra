@@ -72,11 +72,13 @@ protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
+	VObject* createObject( const QDomElement & );
 
 private:
 	VDocument						m_document;
 	QPtrStack<SvgGraphicsContext>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
+	QMap<QString, QDomElement>		m_paths;
 	KoRect							m_outerRect;
 };
 

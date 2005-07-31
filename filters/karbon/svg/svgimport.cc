@@ -654,6 +654,10 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 void
 SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 {
+	bool isDef = false;
+	if( e.tagName() == "defs" )
+		isDef = true;
+
 	for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
 	{
 		QDomElement b = n.toElement();
@@ -688,93 +692,19 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			parseGradient( b );
 			continue;
 		}
-		else if( b.tagName() == "rect" )
+		else if( b.tagName() == "rect" ||
+				 b.tagName() == "ellipse" ||
+				 b.tagName() == "circle" ||
+				 b.tagName() == "line" ||
+				 b.tagName() == "polyline" ||
+				 b.tagName() == "polygon" ||
+				 b.tagName() == "path" ||
+				 b.tagName() == "image" )
 		{
-			addGraphicContext();
-			double x		= parseUnit( b.attribute( "x" ), true, false, m_outerRect );
-			double y		= parseUnit( b.attribute( "y" ), false, true, m_outerRect );
-			double width	= parseUnit( b.attribute( "width" ), true, false, m_outerRect );
-			double height	= parseUnit( b.attribute( "height" ), false, true, m_outerRect );
-			setupTransform( b );
-			obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
-		}
-		else if( b.tagName() == "ellipse" )
-		{
-			addGraphicContext();
-			setupTransform( b );
-			double rx		= parseUnit( b.attribute( "rx" ) );
-			double ry		= parseUnit( b.attribute( "ry" ) );
-			double left		= parseUnit( b.attribute( "cx" ) ) - rx;
-			double top		= parseUnit( b.attribute( "cy" ) ) - ry;
-			// Append the ellipse to the document
-			obj = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
-		}
-		else if( b.tagName() == "circle" )
-		{
-			addGraphicContext();
-			setupTransform( b );
-			double r		= parseUnit( b.attribute( "r" ) );
-			double left		= parseUnit( b.attribute( "cx" ) ) - r;
-			double top		= parseUnit( b.attribute( "cy" ) ) - r;
-			// Append the ellipse to the document
-			obj = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
-		}
-		else if( b.tagName() == "line" )
-		{
-			addGraphicContext();
-			setupTransform( b );
-			VPath *path = new VPath( &m_document );
-			double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
-			double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
-			double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
-			double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
-			path->moveTo( KoPoint( x1, y1 ) );
-			path->lineTo( KoPoint( x2, y2 ) );
-			obj = path;
-		}
-		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
-		{
-			addGraphicContext();
-			setupTransform( b );
-			VPath *path = new VPath( &m_document );
-			bool bFirst = true;
-
-			QString points = b.attribute( "points" ).simplifyWhiteSpace();
-			points.replace( ',', ' ' );
-			points.remove( '\r' );
-			points.remove( '\n' );
-			QStringList pointList = QStringList::split( ' ', points );
-			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it)
-			{
-				KoPoint point;
-				point.setX( (*it).toDouble() );
-				point.setY( (*it).toDouble() );
-				if( bFirst )
-				{
-					path->moveTo( point );
-					bFirst = false;
-				}
-				else
-					path->lineTo( point );
-			}
-			if( b.tagName() == "polygon" ) path->close();
-			obj = path;
-		}
-		else if( b.tagName() == "path" )
-		{
-			addGraphicContext();
-			setupTransform( b );
-			VPath *path = new VPath( &m_document );
-			path->loadSvgPath( b.attribute( "d" ) );
-			obj = path;
-		}
-		else if( b.tagName() == "image" )
-		{
-			addGraphicContext();
-			setupTransform( b );
-			QString fname = b.attribute("xlink:href");
-			VImage *image = new VImage( 0L, fname );
-			obj = image;
+			if (!isDef)
+				obj = createObject( b );
+			else
+				m_paths.insert( b.attribute( "id" ), b );
 		}
 		else if( b.tagName() == "text" )
 		{
@@ -798,6 +728,26 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			delete( m_gc.pop() );
 			continue;*/
 		}
+		else if( b.tagName() == "use" )
+		{
+			double tx = b.attribute( "x" ).toDouble();
+			double ty = b.attribute( "y" ).toDouble();
+
+			if( !b.attribute( "xlink:href" ).isEmpty() )
+			{
+				QString params = b.attribute( "xlink:href" );
+				unsigned int start = params.find("#") + 1;
+				unsigned int end = params.findRev(")");
+				QString key = params.mid( start, end - start );
+				if(m_paths.contains(key))
+				{
+					QDomElement a = m_paths[key];
+					obj = createObject( a );
+					m_gc.current()->matrix.translate(tx,ty);
+					parsePA( grp, m_gc.current(), "fill", b.attribute( "fill" ) );
+				}
+			}
+		}
 		if( !obj ) continue;
 		VTransformCmd trafo( 0L, m_gc.current()->matrix );
 		trafo.visit( *obj );
@@ -811,6 +761,97 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			m_document.append( obj );
 		delete( m_gc.pop() );
 	}
+}
+
+VObject* SvgImport::createObject( const QDomElement &b )
+{
+	if( b.tagName() == "rect" )
+	{
+		addGraphicContext();
+		double x		= parseUnit( b.attribute( "x" ), true, false, m_outerRect );
+		double y		= parseUnit( b.attribute( "y" ), false, true, m_outerRect );
+		double width	= parseUnit( b.attribute( "width" ), true, false, m_outerRect );
+		double height	= parseUnit( b.attribute( "height" ), false, true, m_outerRect );
+		setupTransform( b );
+		return new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
+	}
+	else if( b.tagName() == "ellipse" )
+	{
+		addGraphicContext();
+		setupTransform( b );
+		double rx		= parseUnit( b.attribute( "rx" ) );
+		double ry		= parseUnit( b.attribute( "ry" ) );
+		double left		= parseUnit( b.attribute( "cx" ) ) - rx;
+		double top		= parseUnit( b.attribute( "cy" ) ) - ry;
+		return new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
+	}
+	else if( b.tagName() == "circle" )
+	{
+		addGraphicContext();
+		setupTransform( b );
+		double r		= parseUnit( b.attribute( "r" ) );
+		double left		= parseUnit( b.attribute( "cx" ) ) - r;
+		double top		= parseUnit( b.attribute( "cy" ) ) - r;
+		return new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
+	}
+	else if( b.tagName() == "line" )
+	{
+		addGraphicContext();
+		setupTransform( b );
+		VPath *path = new VPath( &m_document );
+		double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
+		double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
+		double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
+		double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
+		path->moveTo( KoPoint( x1, y1 ) );
+		path->lineTo( KoPoint( x2, y2 ) );
+		return path;
+	}
+	else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
+	{
+		addGraphicContext();
+		setupTransform( b );
+		VPath *path = new VPath( &m_document );
+		bool bFirst = true;
+
+		QString points = b.attribute( "points" ).simplifyWhiteSpace();
+		points.replace( ',', ' ' );
+		points.remove( '\r' );
+		points.remove( '\n' );
+		QStringList pointList = QStringList::split( ' ', points );
+		for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it)
+		{
+			KoPoint point;
+			point.setX( (*it).toDouble() );
+			point.setY( (*it).toDouble() );
+			if( bFirst )
+			{
+				path->moveTo( point );
+				bFirst = false;
+			}
+			else
+				path->lineTo( point );
+		}
+		if( b.tagName() == "polygon" ) path->close();
+		return path;
+	}
+	else if( b.tagName() == "path" )
+	{
+		addGraphicContext();
+		setupTransform( b );
+		VPath *path = new VPath( &m_document );
+		path->loadSvgPath( b.attribute( "d" ) );
+		return path;
+	}
+	else if( b.tagName() == "image" )
+	{
+		addGraphicContext();
+		setupTransform( b );
+		QString fname = b.attribute("xlink:href");
+		return new VImage( 0L, fname );
+	}
+
+	return 0L;
 }
 
 #include <svgimport.moc>
