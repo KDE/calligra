@@ -153,19 +153,19 @@ SvgImport::convert()
 #define DPI 90
 
 double
-SvgImport::toPercentage( const QString &s )
+SvgImport::toPercentage( QString s )
 {
 	if( s.endsWith( "%" ) )
-		return s.toDouble();
+		return s.remove( '%' ).toDouble();
 	else
 		return s.toDouble() * 100.0;
 }
 
 double
-SvgImport::fromPercentage( const QString &s )
+SvgImport::fromPercentage( QString s )
 {
 	if( s.endsWith( "%" ) )
-		return s.toDouble() / 100.0;
+		return s.remove( '%' ).toDouble() / 100.0;
 	else
 		return s.toDouble();
 }
