@@ -33,6 +33,7 @@
 #include <qpicture.h>
 #include <qdom.h>
 #include <qpainter.h>
+#include <qbitmap.h>
 using namespace std;
 
 KPPieObject::KPPieObject()
@@ -232,7 +233,7 @@ double KPPieObject::load(const QDomElement &element)
 }
 
 void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-                         int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
+                         int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();
@@ -247,7 +248,51 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         QPen pen2( pen );
         pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
         _painter->setPen( pen2 );
-        _painter->setBrush( getBrush() );
+        if ( drawingShadow || getFillType() == FT_BRUSH || !gradient )
+        {
+            _painter->setBrush( getBrush() );
+        }
+        else
+        {
+            if ( pieType != PT_ARC )
+            {
+                QSize size( _zoomHandler->zoomSize( ext ) );
+
+                if ( m_redrawGradientPix || gradient->size() != size )
+                {
+                    m_redrawGradientPix = false;
+                    gradient->setSize( size );
+
+                    m_gradientPix.resize ( size );
+                    m_gradientPix.fill( Qt::white );
+                    QPainter p;
+                    p.begin( &m_gradientPix );
+                    p.drawPixmap( 0, 0, gradient->pixmap() );
+                    p.end();
+
+                    QBitmap mask( size, true );
+                    p.begin( &mask );
+                    p.setPen( QPen( Qt::color1 ) );
+                    p.setBrush( QBrush( Qt::color1 ) );
+                    if ( pieType == PT_CHORD )
+                    {
+                        p.drawChord( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+                                     _zoomHandler->zoomItX(ow - 2 * pw),
+                                     _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
+                    }
+                    else
+                    {
+                        p.drawPie( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+                                   _zoomHandler->zoomItX( ow - 2 * pw),
+                                   _zoomHandler->zoomItY( oh - 2 * pw), p_angle, p_len );
+                    }
+                    p.end();
+                    m_gradientPix.setMask( mask );
+                }
+                _painter->drawPixmap( 0, 0, m_gradientPix, 0, 0, size.width(), size.height() );
+                _painter->setBrush( Qt::NoBrush );
+            }
+        }
     }
     switch ( pieType )
     {

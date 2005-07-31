@@ -40,11 +40,11 @@ public:
     KPPieObject &operator=( const KPPieObject & );
 
     virtual void setPieType( PieType _pieType )
-        { pieType = _pieType; }
+        { pieType = _pieType; m_redrawGradientPix = true; }
     virtual void setPieAngle( int _p_angle )
-        { p_angle = _p_angle; }
+        { p_angle = _p_angle; m_redrawGradientPix = true; }
     virtual void setPieLength( int _p_len )
-        { p_len = _p_len; }
+        { p_len = _p_len; m_redrawGradientPix = true; }
     virtual void setLineBegin( LineEnd _lineBegin )
         { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
