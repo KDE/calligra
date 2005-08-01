@@ -69,10 +69,10 @@ namespace Kross { namespace Api {
              */
             virtual ~MainModule();
 
-            /// \see Kross::Api::Object::getClassName
+            /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Object::getDescription
+            /// \see Kross::Api::Object::getDescription()
             virtual const QString getDescription() const;
 
             /**

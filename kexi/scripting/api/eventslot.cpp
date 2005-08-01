@@ -92,7 +92,9 @@ QUObject* EventSlot::toQUObject(const QString& signature, List::Ptr arguments)
 
 Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
 {
-    kdDebug() << QString("EventSlot::call(%1) m_slot=%2").arg(name).arg(m_slot) << endl;
+#ifdef KROSS_API_EVENTSLOT_CALL_DEBUG
+    kdDebug() << QString("EventSlot::call(%1) m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) << endl;
+#endif
 
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
     if(n.startsWith("1"))

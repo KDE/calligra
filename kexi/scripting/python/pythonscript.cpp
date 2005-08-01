@@ -117,18 +117,16 @@ void PythonScript::initialize()
 QString s =
     "import sys\n"
 
-    //"class Redirect:\n"
-    //"  def __init__(self, target):\n"
-    //"    self.target = target\n"
-    //"  def write(self, s):\n"
-    //"    self.target(s)\n"
-    //"    sys.stderr.write( \"=====> %s\" % s)\n"
+    "class Redirect:\n"
+    "  def __init__(self, target):\n"
+    "    self.target = target\n"
+    "  def write(self, s):\n"
+    "    self.target.call(s)\n"
 
-    //"if self.has(\"stdout\"):\n"
-    //"sys.stdout = Redirect( self.stdout )\n"
-
-    //"if self.has(\"stderr\"):\n"
-    //"  sys.stderr = Redirect( self.stderr )\n"
+    "if self.has(\"stdout\"):\n"
+    "  sys.stdout = Redirect( self.get(\"stdout\") )\n"
+    "if self.has(\"stderr\"):\n"
+    "  sys.stderr = Redirect( self.get(\"stderr\") )\n"
 
     "import cStringIO\n"
     "sys.stdin = cStringIO.StringIO()\n"
