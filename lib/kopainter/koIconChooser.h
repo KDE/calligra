@@ -78,6 +78,9 @@ public:
 
   void setDragEnabled(bool allow) { mDragEnabled = allow; }
   bool dragEnabled() const { return mDragEnabled; }
+  
+  KoIconItem *itemAt(int row, int col);
+  KoIconItem *itemAt(int index);
 
 signals:
   void  selected(KoIconItem *item);
@@ -92,8 +95,6 @@ protected:
   virtual void startDrag();
 
 private:
-  KoIconItem *itemAt(int row, int col);
-  KoIconItem *itemAt(int index);
   int cellIndex(int row, int col);
   void calculateCells();
   void showFullPixmap(const QPixmap &pix, const QPoint &p);
