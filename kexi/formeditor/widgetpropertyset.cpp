@@ -244,12 +244,16 @@ WidgetPropertySet::addWidget(QWidget *w)
 void
 WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 {
-	if (!d->manager || !d->manager->activeForm() || !d->manager->activeForm()->objectTree())
+	if (!d->manager || !d->manager->activeForm() || !d->manager->activeForm()->objectTree()) {
+		kdWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!" << endl;
 		return;
+	}
 	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
 	if(!tree)
 		return;
 
+	const QVariantMap* modifiedProperties = tree->modifiedProperties();
+	QVariantMapConstIterator modifiedPropertiesIt;
 	bool isTopLevel = d->manager->isTopLevel(w);
 	int count = 0;
 	Property *newProp = 0;
@@ -271,7 +275,10 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			if (desc.isEmpty())  //try to get property description from factory
 				desc = d->manager->lib()->propertyDescForName(winfo, propertyName);
 
-			if(meta->isEnumType())  {
+			modifiedPropertiesIt = modifiedProperties->find(propertyName);
+			const bool oldValueExists = modifiedPropertiesIt!=modifiedProperties->constEnd();
+
+			if(meta->isEnumType()) {
 				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
 				if(qstrcmp(propertyName, "alignment") == 0)  {
 					createAlignProperty(meta, w);
@@ -279,10 +286,25 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 				}
 
 				newProp = new Property(propertyName, createValueList(winfo, keys),
-					meta->valueToKey( w->property(propertyName).toInt() ), desc, desc );
+					/* assign current or older value */
+					oldValueExists ? modifiedPropertiesIt.data() : 
+						meta->valueToKey( w->property(propertyName).toInt() ), 
+					desc, desc );
+				//now set current value, so the old one is stored as old
+				if (oldValueExists) {
+					newProp->setValue( meta->valueToKey( w->property(propertyName).toInt() ) );
+				}
 			}
-			else
-				newProp = new Property(propertyName, w->property(propertyName), desc, desc);
+			else {
+				newProp = new Property(propertyName, 
+					/* assign current or older value */
+					oldValueExists ? modifiedPropertiesIt.data() : w->property(propertyName), 
+					desc, desc);
+				//now set current value, so the old one is stored as old
+				if (oldValueExists) {
+					newProp->setValue( w->property(propertyName) );
+				}
+			}
 
 			d->set.addProperty(newProp);
 			if(!isPropertyVisible(propertyName, isTopLevel))
@@ -359,6 +381,10 @@ WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *propert
 bool
 WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, const QCString &classname)
 {
+	const bool multiple = d->widgets.count() >= 2;
+	if(multiple && classname.isEmpty())
+		return false;
+/* moved to WidgetLibrary::isPropertyVisible()
 	if(d->widgets.count() < 2)
 	{
 		if(d->properties.isEmpty() && !isTopLevel)
@@ -380,9 +406,11 @@ WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, 
 		if(! (d->properties.grep(property)).isEmpty() )
 			return true;
 	}
+*/
 
+//	return d->manager->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
 	return d->manager->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
-		 property, d->widgets.count() > 1);
+		 property, multiple, isTopLevel);
 }
 
 ////////////////  Slots called when properties are modified ///////////////
@@ -678,7 +706,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
 		Property *p = new Property("hAlign", createValueList(0, list), value,
-			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Align."),
+			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
 			i18n("Horizontal Alignment"));
 		d->set.addProperty(p);
 		if(!isPropertyVisible(p->name(), isTopLevel)) {
@@ -700,7 +728,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
 		Property *p = new Property("vAlign", createValueList(0, list), value,
-			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Align."),
+			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
 			i18n("Vertical Alignment"));
 		d->set.addProperty(p);
 		if(!isPropertyVisible(p->name(), isTopLevel)) {

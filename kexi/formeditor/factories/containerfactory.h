@@ -193,7 +193,8 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	protected:
-		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, const QCString &property);
+		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, 
+			const QCString &property, bool isTopLevel);
 		virtual bool changeText(const QString &newText);
 		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 

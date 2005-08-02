@@ -504,10 +504,34 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 }*/
 
 bool
-WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w,
-	const QCString &property, bool multiple)
+WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w, 
+	const QCString &property, bool multiple, bool isTopLevel)
 {
-	return !multiple && isPropertyVisibleInternal(classname, w, property);
+	if (multiple)
+	{
+		return property=="font" || property=="paletteBackgroundColor" || property=="enabled" 
+			|| property=="paletteForegroundColor" || property=="cursor" || property=="paletteBackgroundPixmap";
+	}
+
+//	if(d->properties.isEmpty() && !isTopLevel)
+//		d->properties << "caption" << "icon" << "sizeIncrement" << "iconText";
+//	if(! (d->properties.grep(property)).isEmpty() )
+//		return false;
+
+	return isPropertyVisibleInternal(classname, w, property, isTopLevel);
+//	return !multiple && isPropertyVisibleInternal(classname, w, property);
+}
+
+bool
+WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *,
+	const QCString &property, bool isTopLevel)
+{
+	if (!isTopLevel 
+		&& (property=="caption" || property=="icon" || property=="sizeIncrement" || property=="iconText")) {
+		// don't show these properties for a non-toplevel widget
+		return false;
+	}
+	return true;
 }
 
 void

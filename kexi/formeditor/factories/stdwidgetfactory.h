@@ -85,7 +85,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 
 	protected:
 		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w,
-			const QCString &property);
+			const QCString &property, bool isTopLevel);
 		virtual bool changeText(const QString &newText);
 		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 		void saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc);

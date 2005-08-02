@@ -182,9 +182,10 @@ class KFORMEDITOR_EXPORT WidgetInfo
   You can use createMenuActions() to add custom items in widget's context menu. The previewWidget()
   is called when the Form gets in Preview mode, and you have a last opportunity to remove all editing-related
   stuff (see eg \ref Spring class).\n
-  You can also choose which properties to show in the Property Editor. By default, all properties are shown,
-  but you can hide some using isPropertyVisible(). To add new properties, just define new Q_PROPERTY
-  in widget class definition.\n \n
+  You can also choose which properties to show in the Property Editor. 
+  By default, most all properties are shown (see implementation for details),
+  but you can hide some reimplementing isPropertyVisibleInternal() (don't forget to call superclass' method)
+  To add new properties, just define new Q_PROPERTY in widget class definition.\n \n
 
   <b>Inline editing</b>\n
   KFormDesigner allow you to edit the widget's contents inside Form, without using a dialog.
@@ -313,7 +314,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		only show properties shared by widgets (eg font, color). By default,
 		all properties are shown if multiple == true, and none if multiple == false. */
 		bool isPropertyVisible(const QCString &classname, QWidget *w,
-			const QCString &property, bool multiple);
+			const QCString &property, bool multiple, bool isTopLevel);
 
 		/*! You need to return here a list of the properties that should automatically be saved
 		for a widget belonging to \a classname, and your custom properties (eg "text"
@@ -342,7 +343,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 	protected:
 		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w,
-			const QCString &property) { return false; }
+			const QCString &property, bool isTopLevel);
 
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents.
 		 This can be used in startEditing(). \a text is the text to display by default

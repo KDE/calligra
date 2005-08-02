@@ -1164,9 +1164,9 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		// not yet created
 		item =  new ObjectTreeItem(lib->displayName(classname), wname, w, container);
 		if(parent)  {
-			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());
-			if(pItem)
-				container->form()->objectTree()->addItem(pItem, item);
+			ObjectTreeItem *titem = container->form()->objectTree()->lookup(parent->name());
+			if(titem)
+				container->form()->objectTree()->addItem(titem, item);
 			else
 				kdDebug() << "FORMIO :: ERROR no parent widget "  << endl;
 		}

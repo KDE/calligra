@@ -124,7 +124,8 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QCString 
 	d->pixcollection = new PixmapCollection(container->name(), this);
 
 	d->topTree->setWidget(container);
-	d->topTree->addModifiedProperty("caption", name());
+//! todo: copy caption in Kexi from object's caption
+//	d->topTree->addModifiedProperty("caption", name());
 	//m_topTree->addModifiedProperty("icon");
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));

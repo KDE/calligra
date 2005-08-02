@@ -117,7 +117,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
 			ObjectTreeItem *item);
 		bool isPropertyVisible(const QCString &classname, QWidget *w,
-			const QCString &property, bool multiple = false);
+			const QCString &property, bool multiple = false, bool isTopLevel = false);
 
 		QValueList<QCString> autoSaveProperties(const QCString &classname);
 

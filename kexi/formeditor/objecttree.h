@@ -41,6 +41,7 @@ typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
 typedef QDict<ObjectTreeItem> ObjectTreeDict;
 typedef QDictIterator<ObjectTreeItem> ObjectTreeDictIterator;
 typedef QMap<QString, QVariant> QVariantMap;
+typedef QMapConstIterator<QString, QVariant> QVariantMapConstIterator;
 
 /*! This class holds the properties of a widget (classname, name, parent, children ..).
     \author Lucijan Busch <lucijan@kde.org>
@@ -59,11 +60,13 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		EventEater* eventEater() const { return m_eater; }
 		ObjectTreeItem* parent() const { return m_parent; }
 		ObjectTreeList* children() { return &m_children; }
+
 		/*! \return a QMap<QString, QVariant> of all modified properties for this widget.
 		  The QVariant is the old value (ie first value) of the property whose name is the QString. */
-		const QVariantMap* modifiedProperties() { return &m_props;}
+		const QVariantMap* modifiedProperties() const { return &m_props;}
+
 		//! \return the widget's Container, or 0if the widget is not a Container.
-		Container*	container() const { return m_container;}
+		Container* container() const { return m_container;}
 
 		void setWidget(QWidget *w) { m_widget = w; }
 		void setParent(ObjectTreeItem *parent)  { m_parent = parent;}

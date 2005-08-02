@@ -837,7 +837,8 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListVi
 }
 
 bool
-StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *, const QCString &property)
+StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, 
+	QWidget *w, const QCString &property, bool isTopLevel)
 {
 	if(classname == "FormWidgetBase")
 	{
@@ -896,7 +897,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *
 //! @todo reenable autoDefault / default if the top level window is dialog...
 		return m_showAdvancedProperties || (property != "autoDefault" && property != "default");
 	}
-	return true;
+	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 QValueList<QCString>

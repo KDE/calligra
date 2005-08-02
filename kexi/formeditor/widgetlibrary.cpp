@@ -533,9 +533,9 @@ bool WidgetLibrary::advancedPropertiesVisible() const
 
 bool
 WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
-	const QCString &property, bool multiple)
+	const QCString &property, bool multiple, bool isTopLevel)
 {
-	if (dynamic_cast<FormWidget*>(w)) {
+	if (isTopLevel) {
 		// no focus policy for top-level form widget...
 		if (!d->showAdvancedProperties && property == "focusPolicy")
 			return false;
@@ -547,11 +547,11 @@ WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
 	WidgetInfo *wi = d->widgets.find(classname);
 	if (!wi)
 		return false;
-	if (!wi->factory()->isPropertyVisible(classname, w, property, multiple))
+	if (!wi->factory()->isPropertyVisible(classname, w, property, multiple, isTopLevel))
 		return false;
 	//try from inherited class
 	if (wi->inheritedClass()
-		&& !wi->inheritedClass()->factory()->isPropertyVisible(wi->className(), w, property, multiple))
+		&& !wi->inheritedClass()->factory()->isPropertyVisible(wi->className(), w, property, multiple, isTopLevel))
 		return false;
 
 	return true;

@@ -74,7 +74,7 @@ ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &ol
 
 	if(!m_props.contains(property)) {
 		m_props.insert(property, oldValue);
-		//kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << endl;
+		kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " value: " << oldValue << endl;
 	}
 }
 
@@ -223,7 +223,7 @@ ObjectTree::generateUniqueName(const QCString &prefix, bool numberSuffixRequired
 	if (!numberSuffixRequired && !lookup(prefix))
 		return prefix;
 	QString name( prefix );
-	int i = 1;
+	int i = 2; //start from 2, i.e. we have: "widget", "widget2", etc.
 	while(lookup(name + QString::number(i)))
 		i++;
 

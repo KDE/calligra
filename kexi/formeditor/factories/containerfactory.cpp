@@ -719,7 +719,7 @@ ContainerFactory::autoSaveProperties(const QCString &c)
 
 bool
 ContainerFactory::isPropertyVisibleInternal(const QCString &classname,
-	QWidget *, const QCString &property)
+	QWidget *w, const QCString &property, bool isTopLevel)
 {
 	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid") ||
 		(classname == "HFlow") || (classname == "VFlow"))
@@ -741,7 +741,7 @@ child widgets become frozen when checked==true */
 		return (m_showAdvancedProperties || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"));
 	}
 
-	return true;
+	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 bool
