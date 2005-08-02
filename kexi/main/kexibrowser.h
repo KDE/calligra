@@ -50,6 +50,8 @@ class KexiBrowserListView : public KListView
 	Q_OBJECT
 	public:
 		KexiBrowserListView(QWidget *parent);
+
+		bool nameEndsWithAsterisk : 1;
 	public slots:
 		virtual void rename(QListViewItem *item, int c);
 	protected:
@@ -126,6 +128,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		KToolBar *m_toolbar;
 		KexiBrowserListView *m_list;
 		bool m_singleClick : 1;
+		bool m_nameEndsWithAsterisk : 1;
 };
 
 #endif

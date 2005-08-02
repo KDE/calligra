@@ -48,6 +48,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  , m_baseItems(199, false)
  , m_normalItems(199)
  , m_prevSelectedPart(0)
+ , m_singleClick(false)
 {
 	QVBoxLayout *lyr = new QVBoxLayout(this);
 	m_toolbar = new KToolBar(this, "kexibrowser_toolbar", false);
@@ -417,7 +418,11 @@ void KexiBrowser::itemRenameDone()
 	if (!ok) {
 		txt = it->item()->name(); //revert
 	}
-//	it->setText(0, QString(" ") + txt + " ");
+	//"modified" flag has been removed before editing: readd it
+	if (m_list->nameEndsWithAsterisk) {
+		txt += "*";
+		m_list->nameEndsWithAsterisk = false;
+	}
 	it->setText(0, txt);
 	it->parent()->sort();
 	m_list->setFocus();
@@ -466,6 +471,7 @@ void KexiBrowser::highlightItem(KexiPart::Item& item)
 
 KexiBrowserListView::KexiBrowserListView(QWidget *parent)
  : KListView(parent, "KexiBrowserListView")
+ , nameEndsWithAsterisk(false)
 {
 }
 
@@ -478,6 +484,10 @@ void KexiBrowserListView::rename(QListViewItem *item, int c)
 		//only edit 1st column for items, not item groups
 //TODO: also check it this item is not read-only
 //		item->setText(0, item->text(0).mid(1,item->text(0).length()-2));
+		//remove "modified" flag for editing
+		nameEndsWithAsterisk = item->text(0).endsWith("*");
+		if (nameEndsWithAsterisk)
+			item->setText(0, item->text(0).left(item->text(0).length()-1));
 		KListView::rename(item, c);
 		adjustColumn(0);
 	}
