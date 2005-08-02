@@ -32,9 +32,17 @@
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 
+//! @internal
+class KexiScrollViewData
+{
+	public:
+		QPixmap horizontalOuterAreaPixmapBuffer;
+		QPixmap verticalOuterAreaPixmapBuffer;
+};
+
 // @todo warning: not reentrant!
-static KStaticDeleter<QPixmap> KexiScrollView_bufferPm_deleter;
-QPixmap* KexiScrollView_bufferPm = 0;
+static KStaticDeleter<KexiScrollViewData> KexiScrollView_data_deleter;
+KexiScrollViewData* KexiScrollView_data = 0;
 
 KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
  : QScrollView(parent, "kexiscrollview", WStaticContents)
@@ -143,8 +151,10 @@ KexiScrollView::refreshContentsSize()
 		// Ensure there is always space to resize Form
 		int w = contentsWidth(), h = contentsHeight();
 		bool change = false;
-		const int delta_x = QMAX( (KexiScrollView_bufferPm ? KexiScrollView_bufferPm->width() : 0), 300);
-		const int delta_y = QMAX( (KexiScrollView_bufferPm ? KexiScrollView_bufferPm->height() : 0), 300);
+		const int delta_x = QMAX( (KexiScrollView_data ? 
+			KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() : 0), 300);
+		const int delta_y = QMAX( (KexiScrollView_data ? 
+			KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() : 0), 300);
 		if((m_widget->width() + delta_x * 2 / 3) > w) {
 			w = m_widget->width() + delta_x;
 			change = true;
@@ -296,6 +306,24 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 	}
 }
 
+void 
+KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int lines)
+{
+	QFontMetrics fm(m_helpFont);
+	const int flags = Qt::AlignCenter|Qt::AlignTop;
+	QRect rect(fm.boundingRect(0,0,1000,1000,flags,text));
+	const int txtw = rect.width(), txth = rect.height();//fm.width(text), txth = fm.height()*lines;
+	pixmap = QPixmap(txtw, txth);
+	if (!pixmap.isNull()) {
+		//create pixmap once
+		pixmap.fill( viewport()->paletteBackgroundColor() );
+		QPainter pb(&pixmap, this);
+		pb.setPen(m_helpColor);
+		pb.setFont(m_helpFont);
+		pb.drawText(0, 0, txtw, txth, Qt::AlignCenter|Qt::AlignTop, text);
+	}
+}
+
 void
 KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph ) 
 {
@@ -312,32 +340,27 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
 
 
-		if (!KexiScrollView_bufferPm) {
+		if (!KexiScrollView_data) {
+			KexiScrollView_data_deleter.setObject( KexiScrollView_data, new KexiScrollViewData() );
+
 			//create flicker-less buffer
-			QString txt(i18n("Outer Area"));
-			QFontMetrics fm(m_helpFont);
-			const int txtw = fm.width(txt), txth = fm.height();
-			KexiScrollView_bufferPm_deleter.setObject( KexiScrollView_bufferPm, 
-				new QPixmap(txtw, txth) );
-			if (!KexiScrollView_bufferPm->isNull()) {
-				//create pixmap once
-				KexiScrollView_bufferPm->fill( viewport()->paletteBackgroundColor() );
-				QPainter *pb = new QPainter(KexiScrollView_bufferPm, this);
-				pb->setPen(m_helpColor);
-				pb->setFont(m_helpFont);
-				pb->drawText(0, 0, txtw, txth, Qt::AlignLeft|Qt::AlignTop, txt);
-				delete pb;
-			}
+			setupPixmapBuffer( KexiScrollView_data->horizontalOuterAreaPixmapBuffer, i18n("Outer Area"), 1 );
+			setupPixmapBuffer( KexiScrollView_data->verticalOuterAreaPixmapBuffer, i18n("Outer\nArea"), 2 );
 		}
-		if (!KexiScrollView_bufferPm->isNull() 
+		if (!KexiScrollView_data->horizontalOuterAreaPixmapBuffer.isNull() 
+			&& !KexiScrollView_data->verticalOuterAreaPixmapBuffer.isNull() 
 			&& !m_delayedResize.isActive() /* only draw text if there's not pending delayed resize*/)
 		{
-			p->drawPixmap( QMAX( m_widget->width(), KexiScrollView_bufferPm->width() + 20 ) + 20,
-				QMAX( (m_widget->height()-KexiScrollView_bufferPm->height())/2, 20 ),
-				*KexiScrollView_bufferPm);
-			p->drawPixmap( QMAX( (m_widget->width() - KexiScrollView_bufferPm->width())/2, 20 ),
-				QMAX( m_widget->height(), KexiScrollView_bufferPm->height() + 20 ) + 20,
-				*KexiScrollView_bufferPm);
+			p->drawPixmap( 
+				QMAX( m_widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20 ) + 20,
+				QMAX( (m_widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height())/2, 20 ),
+				KexiScrollView_data->verticalOuterAreaPixmapBuffer
+			);
+			p->drawPixmap( 
+				QMAX( (m_widget->width() - KexiScrollView_data->horizontalOuterAreaPixmapBuffer.width())/2, 20 ),
+				QMAX( m_widget->height(), KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() + 20 ) + 20,
+				KexiScrollView_data->horizontalOuterAreaPixmapBuffer
+			);
 		}
 	}
 }

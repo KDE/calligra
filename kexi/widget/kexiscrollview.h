@@ -70,6 +70,7 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 		virtual void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
 		virtual void leaveEvent( QEvent *e );
 		virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
+		void setupPixmapBuffer(QPixmap& pixmap, const QString& text, int lines);
 
 		bool m_resizing;
 		bool m_enableResizing;

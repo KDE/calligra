@@ -56,7 +56,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public KexiViewBase
 	Q_OBJECT
 
 	public:
-		KexiPropertyEditorView(KexiMainWindow *mainWin);
+		KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent);
 		~KexiPropertyEditorView();
 
 		virtual QSize sizeHint() const;

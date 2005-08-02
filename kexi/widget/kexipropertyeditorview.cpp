@@ -96,8 +96,8 @@ class KexiPropertyEditorView::Private
 
 //------------------------------
 
-KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin)
-	: KexiViewBase(mainWin, mainWin, "KexiPropertyEditorView")
+KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent)
+	: KexiViewBase(mainWin, parent, "KexiPropertyEditorView")
 	, d(new Private())
 {
 	setCaption(i18n("Properties"));

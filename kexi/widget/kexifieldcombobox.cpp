@@ -61,6 +61,7 @@ class KexiFieldComboBox::Private
 		QPixmap keyIcon, noIcon;
 		QCString tableOrQueryName;
 		QString fieldOrExpression;
+		QMap<QCString, QString> captions;
 		bool table;
 };
 
@@ -103,6 +104,7 @@ void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
 	d->tableOrQueryName = name;
 	d->table = table;
 	clear();
+	d->captions.clear();
 	insertItem("");
 //	delete d->schema;
 	if (d->tableOrQueryName.isEmpty() || !d->prj)
@@ -117,14 +119,15 @@ void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
 	const int count = columns.count();
 	for(int i=0; i < count; i++)
 	{
-		KexiDB::QueryColumnInfo *colinfo = 0;
-		colinfo = columns[i];
+		KexiDB::QueryColumnInfo *colinfo = columns[i];
 		insertItem(
 			(colinfo && (colinfo->field->isPrimaryKey() || colinfo->field->isUniqueKey()))
 			? d->keyIcon
 			: d->noIcon
 			, colinfo->aliasOrName());
 		completionObject()->addItem(colinfo->aliasOrName());
+		//store user-friendly caption (used by fieldOrExpressionCaption())
+		d->captions.insert( colinfo->aliasOrName(), colinfo->captionOrAliasOrName() );
 	}
 
 	//update selection
@@ -168,6 +171,11 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 QString KexiFieldComboBox::fieldOrExpression() const
 {
 	return d->fieldOrExpression;
+}
+
+QString KexiFieldComboBox::fieldOrExpressionCaption() const
+{
+	return d->captions[ d->fieldOrExpression.latin1() ];
 }
 
 void KexiFieldComboBox::slotActivated(int i)

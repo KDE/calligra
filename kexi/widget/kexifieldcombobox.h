@@ -51,6 +51,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 		QCString setTableOrQueryName() const;
 		void setFieldOrExpression(const QString& string);
 		QString fieldOrExpression() const;
+		QString fieldOrExpressionCaption() const;
 
 	signals:
 		void selected();
