@@ -49,7 +49,7 @@ class KexiReportFactory : public KFormDesigner::WidgetFactory
 		void editText();
 
 	protected:
-		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &);
+		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &, bool isTopLevel);
 //		virtual void changeText(const QString &newText);
 //		virtual void resizeEditor(QWidget *widget, const QCString &classname);
 

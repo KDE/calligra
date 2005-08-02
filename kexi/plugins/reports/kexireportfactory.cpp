@@ -143,7 +143,7 @@ KexiReportFactory::startEditing(const QCString &c, QWidget *w, KFormDesigner::Co
 }
 
 bool
-KexiReportFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *, const QCString &property)
+KexiReportFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *w, const QCString &property, bool isTopLevel)
 {
 	if(classname == "Label") {
 		if(property == "pixmap")
@@ -154,7 +154,7 @@ KexiReportFactory::isPropertyVisibleInternal(const QCString &classname, QWidget 
 			return false;
 	}
 
-	return true;
+	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 QValueList<QCString>
