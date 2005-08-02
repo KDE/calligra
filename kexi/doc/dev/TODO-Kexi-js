@@ -393,6 +393,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
        ** possible problems with transactions and user access rights
        ** custom table names can look weird outside Kexi
        ** the feature adds another level of complexity to KexiDB
+-define "login timeout" setting (in seconds) so connecting can rely on this value.
+ The setting could be assigned to a given connection data, 
+ but could be also defined globally for the application. 
+ (note: db:login-timeout is defined by opendocument spec.)
 
 ?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
 	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
@@ -539,3 +543,7 @@ TODO: in KexiMainWindowImpl::slotProjectOpen() add support for starting new kexi
       (we need to remember from what filename has been a conndata loaded)
 TODO: move ConnectionData::savePassword to QMap<ConnectionData*,bool> KexiDBConnectionSet::savePasswordMap or so
 TODO: Forms: fix label width resizing when enteing text within inline editor
+TODO: Forms copy more properties (like palette) to inline editor from e.g. text label
+TODO: Forms: fix: double clicking unselected widget doesn't swithc us to inline editing mode
+TODO: Forms: object tree: enable sorting by name after clicking "name" header; 
+             enable sorting by class,name by clicking "class" header

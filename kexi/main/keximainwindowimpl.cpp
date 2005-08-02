@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE projec
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
@@ -1333,7 +1333,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 //TODO: FIX LAYOUT PROBLEMS
 		d->propEditorTabWidget = new KTabWidget(this);
 		d->propEditorTabWidget->hide();
-		d->propEditor = new KexiPropertyEditorView(this);
+		d->propEditor = new KexiPropertyEditorView(this, d->propEditorTabWidget);
 		d->propEditorTabWidget->setCaption(d->propEditor->caption());
 		d->propEditorTabWidget->addTab(d->propEditor, i18n("Properties"));
 		d->propEditor->installEventFilter(this);

@@ -12,6 +12,28 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-07-29
+Form Designer
+- field editor's types list reuses KexiDB::fieldName() for i18n
+- autocaption is set properly for field editor on design time
+- field editor's labelCaption is no longer needed
+
+- propeditor: preserve "changed" flags (marked with BOLD) between property set switching
+
+KoProperty library
+- fix for spin box editor's width
+- better display for composed editors for types like Rect
+- fixed undo button's size in Editor
+- font editor fixed
+- Editor: expand/collapse boxes painted using styles; whitespace added on the left hand
+
+Table Designer
+- a fix for 'subType' combo
+
+2005-07-28
+Form Designer
+- field editor's default focus policy is now inherited from internal editor
+
 2005-07-25..27
 Form Designer
 - better support for Auto Fields, including drag&drop
