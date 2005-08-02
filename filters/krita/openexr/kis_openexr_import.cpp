@@ -95,7 +95,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
 	int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
 	int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-	KisStrategyColorSpaceRGBF32SP cs = static_cast<KisStrategyColorSpaceRGBF32 *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))).data());
+	KisStrategyColorSpaceRGBF32SP cs = static_cast<KisStrategyColorSpaceRGBF32 *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
 	     
 	if (cs == 0) {
 		return KoFilter::InternalError;
@@ -103,7 +103,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
 
 	doc -> undoAdapter() -> setUndo(false);
 
-	KisImageSP image = new KisImage(doc, imageWidth, imageHeight, cs.data(), imageName);
+	KisImageSP image = new KisImage(doc, imageWidth, imageHeight, cs, imageName);
 
 	if (image == 0) {
 		return KoFilter::CreationError;
