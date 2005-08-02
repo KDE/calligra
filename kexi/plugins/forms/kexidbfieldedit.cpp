@@ -46,7 +46,7 @@ KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
 {
-	init(i18n("Auto Field"), Auto, Left);
+	init(QString::null/*i18n("Auto Field")*/, Auto, Left);
 }
 
 KexiDBFieldEdit::~KexiDBFieldEdit()
@@ -63,6 +63,7 @@ KexiDBFieldEdit::init(const QString &text, WidgetType type, LabelPosition pos)
 	QFontMetrics fm( font() );
 	//m_label->setFixedWidth( fm.width("This is a test string length") );
 	m_autoCaption = true;
+	m_focusPolicyChanged = false;
 	m_widgetType_property = Auto;
 	m_widgetType = Auto;
 	setWidgetType(type);
@@ -98,7 +99,7 @@ KexiDBFieldEdit::createEditor()
 			m_editor = new KexiDBTextEdit( this );
 			connect( m_editor, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
-		case Bool:
+		case Boolean:
 			m_editor = new KexiDBCheckBox(m_dataSource, this);
 			connect( m_editor, SIGNAL(stateChanged()), this, SLOT(slotValueChanged()));
 			break;
@@ -130,10 +131,15 @@ KexiDBFieldEdit::createEditor()
 	}
 
 	if(m_editor) {
+		KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
 		m_editor->show();
 		m_label->setBuddy(m_editor);
-		m_editor->setFocusPolicy(focusPolicy());
-		KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
+		if (m_focusPolicyChanged) {//if focusPolicy is changed at top level, editor inherits it
+			m_editor->setFocusPolicy(focusPolicy());
+		}
+		else {//if focusPolicy is not changed at top level, inherit it from editor
+			QWidget::setFocusPolicy(m_editor->focusPolicy());
+		}
 //		KFormDesigner::installRecursiveEventFilter(m_editor, this);
 	}
 
@@ -158,7 +164,7 @@ KexiDBFieldEdit::setLabelPosition(LabelPosition position)
 				m_layout = (QBoxLayout*) new QVBoxLayout(this);
 			else
 				m_layout = (QBoxLayout*) new QHBoxLayout(this);
-			if(m_widgetType == Bool)
+			if(m_widgetType == Boolean)
 				m_label->hide();
 			else
 				m_label->show();
@@ -285,6 +291,16 @@ KexiDBFieldEdit::setFieldTypeInternal(int kexiDBFieldType)
 }
 
 void
+KexiDBFieldEdit::setFieldCaptionInternal(const QString& text)
+{
+	m_fieldCaptionInternal = text;
+	//chang etext only if autocaption is set and no columnInfo is available
+	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
+	if((!iface || !iface->columnInfo()) && m_autoCaption)
+		changeText(m_fieldCaptionInternal);
+}
+
+void
 KexiDBFieldEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
@@ -317,7 +333,7 @@ KexiDBFieldEdit::widgetTypeForFieldType(KexiDB::Field::Type type)
 		case KexiDB::Field::BigInteger:
 			return Integer;
 		case  KexiDB::Field::Boolean:
-			return Bool;
+			return Boolean;
 		case KexiDB::Field::Float:
 		case KexiDB::Field::Double:
 			return Double;
@@ -343,7 +359,7 @@ KexiDBFieldEdit::widgetTypeForFieldType(KexiDB::Field::Type type)
 void
 KexiDBFieldEdit::changeText(const QString &text)
 {
-	if(m_widgetType == Bool)
+	if(m_widgetType == Boolean)
 		static_cast<QCheckBox*>(m_editor)->setText(text);
 	else
 		m_label->setText(text);
@@ -373,7 +389,7 @@ KexiDBFieldEdit::setAutoCaption(bool autoCaption)
 			changeText(columnInfo()->captionOrAliasOrName());
 		}
 		else {
-			changeText(m_captionOrAliasOrNameInternal);
+			changeText(m_fieldCaptionInternal);
 		}
 	}
 	else
@@ -406,8 +422,9 @@ KexiDBFieldEdit::sizeHint() const
 }
 
 void
-KexiDBFieldEdit::setFocusPolicy ( FocusPolicy policy )
+KexiDBFieldEdit::setFocusPolicy( FocusPolicy policy )
 {
+	m_focusPolicyChanged = true;
 	QWidget::setFocusPolicy(policy);
 	m_label->setFocusPolicy(policy);
 	if (m_editor)

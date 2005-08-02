@@ -888,6 +888,7 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
 			QMap<QCString, QVariant> propValues;
 			propValues.insert("dataSource", column->aliasOrName());
 			propValues.insert("fieldTypeInternal", (int)column->field->type());
+			propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
 //			propValues.insert("labelCaption", column->captionOrAliasOrName());
 //			propValues.insert("widgetType", 
 //				(int)KexiDBFieldEdit::widgetTypeForFieldType(column->field->type()));

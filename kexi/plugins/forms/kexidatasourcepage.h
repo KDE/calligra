@@ -65,9 +65,10 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		//! Signal emitted when form's data source has been changed. It's connected to the Form Manager.
 		void formDataSourceChanged(const QCString& mime, const QCString& name);
 
-		//! Signal emitted when current widget's data source (field/expression)
-		//! has been changed. It's connected to the Form Manager.
-		void dataSourceFieldOrExpressionChanged(const QString& string);
+		/*! Signal emitted when current widget's data source (field/expression)
+		 has been changed. It's connected to the Form Manager. 
+		 \a caption for this field is also provided (e.g. AutoField form widget use it) */
+		void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption);
 
 	protected slots:
 		void slotDataSourceTextChanged(const QString & string);

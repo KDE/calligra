@@ -141,7 +141,7 @@ void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& na
  	}*/
 }
 
-void KexiFormManager::setDataSourceFieldOrExpression(const QString& string)
+void KexiFormManager::setDataSourceFieldOrExpression(const QString& string, const QString& caption)
 {
 	if (!activeForm())
 		return;
@@ -154,6 +154,9 @@ void KexiFormManager::setDataSourceFieldOrExpression(const QString& string)
 		return;
 
 	(*set)["dataSource"].setValue(string);
+
+	if (set->contains("fieldCaptionInternal"))
+		(*set)["fieldCaptionInternal"].setValue(caption);
 
 /*	QString oldDataSource( dataWidget->dataSource() );
 	if (string!=oldDataSource) {

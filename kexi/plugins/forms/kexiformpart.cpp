@@ -435,8 +435,8 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 			mainWin, SLOT(highlightObject(const QCString&, const QCString&)));
 		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
 			d->manager, SLOT(setFormDataSource(const QCString&, const QCString&)));
-		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&)),
-			d->manager, SLOT(setDataSourceFieldOrExpression(const QString&)));
+		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&)),
+			d->manager, SLOT(setDataSourceFieldOrExpression(const QString&, const QString&)));
 	}
 
 	KexiProject *prj = mainWin->project();

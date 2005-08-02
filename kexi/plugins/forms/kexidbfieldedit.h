@@ -37,7 +37,7 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 	public KFormDesigner::DesignTimeDynamicChildWidgetHandler
 {
 	Q_OBJECT
-	Q_PROPERTY(QString labelCaption READ caption WRITE setCaption DESIGNABLE true)
+//'caption' is uncovered now	Q_PROPERTY(QString labelCaption READ caption WRITE setCaption DESIGNABLE true)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
@@ -45,12 +45,13 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	/*internal, for design time only*/
 	Q_PROPERTY(int fieldTypeInternal READ fieldTypeInternal WRITE setFieldTypeInternal DESIGNABLE true)
+	Q_PROPERTY(QString fieldCaptionInternal READ fieldCaptionInternal WRITE setFieldCaptionInternal DESIGNABLE true)
 	Q_ENUMS( WidgetType LabelPosition )
 
 	public:
-		enum WidgetType { Auto = 100, Bool, Date, Time, DateTime, Double,
-			Integer,  MultiLineText,  Text, Enum };
-		enum LabelPosition { Top = 300, Left, NoLabel };
+		enum WidgetType { Auto = 100, Text, Integer, Double, Boolean, Date, Time, DateTime,
+			MultiLineText, Enum };
+		enum LabelPosition { Left = 300, Top, NoLabel };
 
 		KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0 );
 		KexiDBFieldEdit(QWidget *parent = 0, const char *name = 0);
@@ -92,14 +93,20 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 		static WidgetType widgetTypeForFieldType(KexiDB::Field::Type type);
 
 		/*! On design time we're unable to pass a reference to KexiDB::Field object
-		 so we're just providing field type. 
+		 so we're just providing field type. Only used for widget type set to Auto.
 		 @internal */
 		void setFieldTypeInternal(int kexiDBFieldType);
 
-//		void setCaptionInternal(const QString& text);
+		/*! On design time we're unable to pass a reference to KexiDB::Field object
+		 so we're just providing field caption. Only used for widget type set to Auto.
+		 @internal */
+		void setFieldCaptionInternal(const QString& text);
 
 		/*! @internal */
 		int fieldTypeInternal() const { return m_fieldTypeInternal; }
+
+		/*! @internal */
+		QString fieldCaptionInternal() const { return m_fieldCaptionInternal; }
 
 		virtual QSize sizeHint() const;
 		virtual void setFocusPolicy ( FocusPolicy policy );
@@ -122,8 +129,9 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 		QWidget *m_editor;
 		QString  m_caption;
 		KexiDB::Field::Type m_fieldTypeInternal;
-		QString m_captionOrAliasOrNameInternal;
+		QString m_fieldCaptionInternal;
 		bool  m_autoCaption : 1;
+		bool m_focusPolicyChanged : 1;
 };
 
 #endif

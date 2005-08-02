@@ -84,11 +84,10 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	protected:
-		virtual bool  changeText(const QString &newText);
+		virtual bool changeText(const QString &newText);
 		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 
-	protected:
-		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &);
+		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &, bool isTopLevel);
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
 

@@ -318,6 +318,27 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["autoTabStops"] = i18n("Auto Tab Stops");
 	m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
 
+	m_propDesc["widgetType"] = i18n("Editor Type");
+	//for autofield's type: inherit i18n from KexiDB
+	m_propValDesc["Auto"] = i18n("AutoField editor's type", "Auto"); 
+	m_propValDesc["Text"] = KexiDB::Field::typeName(KexiDB::Field::Text);
+	m_propValDesc["Integer"] = KexiDB::Field::typeName(KexiDB::Field::Integer);
+	m_propValDesc["Double"] = KexiDB::Field::typeName(KexiDB::Field::Double);
+	m_propValDesc["Boolean"] = KexiDB::Field::typeName(KexiDB::Field::Boolean);
+	m_propValDesc["Date"] = KexiDB::Field::typeName(KexiDB::Field::Date);
+	m_propValDesc["Time"] = KexiDB::Field::typeName(KexiDB::Field::Time);
+	m_propValDesc["DateTime"] = KexiDB::Field::typeName(KexiDB::Field::DateTime);
+	m_propValDesc["MultiLineText"] = i18n("AutoField editor's type", "Multiline Text");
+	m_propValDesc["Enum"] = i18n("AutoField editor's type", "List of Values"); 
+
+//	m_propDesc["labelCaption"] = i18n("Label Text");
+	m_propDesc["autoCaption"] = i18n("Auto Label");
+
+	m_propDesc["labelPosition"] = i18n("Label Position");
+	m_propValDesc["Left"] = i18n("Label Position", "Left");
+	m_propValDesc["Top"] = i18n("Label Position", "Top");
+	m_propValDesc["NoLabel"] = i18n("Label Position", "No Label");
+
 #ifdef KEXI_NO_UNFINISHED
 	//we don't want not-fully implemented/usable classes:
 	hideClass("KexiPictureLabel");
@@ -509,12 +530,14 @@ KexiDBFactory::autoSaveProperties(const QCString &classname)
 		//lst << "formName";
 //	if(classname == "KexiDBLineEdit")
 //	lst += "dataSource";
+//	if(classname == "KexiDBFieldEdit")
+//		lst << "labelCaption";
 	return lst;
 }
 
 bool
-KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
-	const QCString& property)
+KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
+	const QCString& property, bool isTopLevel)
 {
 	//general
 	if (property=="dataSource" || property=="dataSourceMimeType")
@@ -556,7 +579,12 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 		return property!="iconText";
 	else if(classname == "KexiLabel")
 		return property!="focusPolicy";
-	return true;
+	else if(classname == "KexiDBFieldEdit") {
+		if (!isTopLevel && property=="caption")
+			return true;
+	}
+
+	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 bool

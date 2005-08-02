@@ -43,8 +43,10 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 		//! Receives signal from KexiDataSourcePage about changed form's data source
 		void setFormDataSource(const QCString& mime, const QCString& name);
 
-		//! Receives signal from KexiDataSourcePage about changed widget's data source
-		void setDataSourceFieldOrExpression(const QString& string);
+		/*! Receives signal from KexiDataSourcePage about changed widget's data source
+		 Also sets caption related to the source (because we couldn't pass objects 
+		 like KexiDB::QueryColumnInfo */
+		void setDataSourceFieldOrExpression(const QString& string, const QString& caption);
 
 	protected slots:
 		void slotHistoryCommandExecuted();

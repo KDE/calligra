@@ -247,7 +247,8 @@ void KexiDataSourcePage::slotDataSourceSelected()
 
 void KexiDataSourcePage::slotFieldSelected()
 {
-	emit dataSourceFieldOrExpressionChanged(m_sourceFieldCombo->fieldOrExpression());
+	emit dataSourceFieldOrExpressionChanged(
+		m_sourceFieldCombo->fieldOrExpression(), m_sourceFieldCombo->fieldOrExpressionCaption());
 }
 
 void KexiDataSourcePage::setDataSource(const QCString& mimeType, const QCString& name)
