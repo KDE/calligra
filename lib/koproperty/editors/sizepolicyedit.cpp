@@ -26,6 +26,7 @@
 #include <qpainter.h>
 #include <qsizepolicy.h>
 #include <qmap.h>
+#include <qtooltip.h>
 
 #ifdef QT_ONLY
 // \todo
@@ -41,13 +42,14 @@ SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent, const char *
  : Widget(property, parent, name)
 {
 	setHasBorders(false);
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+//	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 	m_edit = new QLabel(this);
 	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	m_edit->setBackgroundMode(Qt::PaletteBase);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+	setEditor(m_edit);
+//	l->addWidget(m_edit);
 	setFocusWidget(m_edit);
 
 
@@ -82,6 +84,7 @@ SizePolicyEdit::setValue(const QVariant &value, bool emitChange)
 	m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.toSizePolicy().horData())).
 		arg(findDescription(value.toSizePolicy().verData())).
 		arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
+	QToolTip::add(this, m_edit->text());
 
 	if (emitChange)
 		emit valueChanged(this);

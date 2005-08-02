@@ -24,20 +24,28 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qtooltip.h>
 
-namespace KoProperty {
+#include <kactivelabel.h>
+#include <klocale.h>
+
+//"[ %1, %2 ]"
+#define POINTEDIT_MASK "%1,%2"
+
+using namespace KoProperty;
 
 PointEdit::PointEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
 	setHasBorders(false);
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-	m_edit = new QLabel(this);
-	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-	m_edit->setBackgroundMode(Qt::PaletteBase);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_edit = new KActiveLabel(this);
+//	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
+	m_edit->setPaletteBackgroundColor(palette().active().base());
+	m_edit->setWordWrap( QTextEdit::NoWrap );
+//	m_edit->setBackgroundMode(Qt::PaletteBase);
+//	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+	setEditor(m_edit);
 
 	setFocusWidget(m_edit);
 }
@@ -55,7 +63,9 @@ void
 PointEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->setText(QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
+	m_edit->selectAll(false);
+	m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
+	QToolTip::add(this, QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
 
 	if (emitChange)
 		emit valueChanged(this);
@@ -64,13 +74,10 @@ PointEdit::setValue(const QVariant &value, bool emitChange)
 void
 PointEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	Widget::drawViewer(p, cg, r, QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
+	Widget::drawViewer(p, cg, r, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
 //		QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
 }
 
-}
-
 #include "pointedit.moc"
-

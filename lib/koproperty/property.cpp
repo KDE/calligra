@@ -342,12 +342,18 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		d->oldValue = QVariant(); // clear old value
 		d->changed = false;
 	}
-	if(d->custom && useCustomProperty)
+	QVariant prevValue;
+	if(d->custom && useCustomProperty) {
 		d->custom->setValue(value, rememberOldValue);
+		prevValue = d->custom->value();
+	}
+	else
+		prevValue = d->value;
 	d->value = value;
 
 	QValueList<Set*>::ConstIterator endIt = d->sets.constEnd();
 	for(QValueList<Set*>::ConstIterator it = d->sets.constBegin(); it != endIt; ++it) {
+		emit (*it)->propertyChanged(**it, *this, prevValue);
 		emit (*it)->propertyChanged(**it, *this);
 		emit (*it)->propertyChanged();
 	}

@@ -25,7 +25,7 @@
 
 #include <qvariant.h>
 
-class QLabel;
+class KActiveLabel;
 
 namespace KoProperty {
 
@@ -43,7 +43,7 @@ class KOPROPERTY_EXPORT RectEdit : public Widget
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 	private:
-		QLabel   *m_edit;
+		KActiveLabel   *m_edit;
 		QVariant   m_value;
 };
 

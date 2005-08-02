@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004  Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -98,9 +98,9 @@ class KOPROPERTY_EXPORT Editor : public QListView
 
 	protected slots:
 		/*! Updates property widget in the editor.*/
-		void  slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-		void  slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
+		void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
 		/*! Updates property in the list when new value is selected in the editor.*/
 		void slotWidgetValueChanged(Widget *widget);
@@ -134,6 +134,7 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		void  slotColumnSizeChanged(int section);
 		void  slotColumnSizeChanged(int section, int, int newS);
 		void  slotCurrentChanged(QListViewItem *item);
+		void  changeSetLater();
 
 	protected:
 		/*! \return \ref Widget for given property.
@@ -145,13 +146,18 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		void clearWidgetCache();
 
 		void fill();
-		void changeSetLater();
 		void addItem(const QCString &name, EditorItem *parent);
 
 		void showUndoButton( bool show );
 
 		virtual void resizeEvent(QResizeEvent *ev);
 		bool handleKeyPress(QKeyEvent* ev);
+
+		//! reaction on font change ('undo button' will be resized)
+//		virtual void fontChange( const QFont & oldFont );
+		virtual bool event( QEvent * e );
+		void updateFont();
+		bool insideFill() const;
 
 	private:
 		EditorPrivate *d;

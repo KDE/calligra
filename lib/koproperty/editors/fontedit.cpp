@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,33 +23,61 @@
 #include "editoritem.h"
 
 #include <qpushbutton.h>
-#include<qpainter.h>
-#include <kfontrequester.h>
+#include <qpainter.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qfont.h>
+#include <qfontmetrics.h>
+#include <qlabel.h>
+
+#include <kfontrequester.h>
 
 #ifdef QT_ONLY
-// \todo
+//! \todo
 #else
 #include <klocale.h>
 #endif
 
-namespace KoProperty {
+//! @internal
+//! reimplemented to better button and label's positioning
+class FontEditRequester : public KFontRequester
+{
+	public:
+		FontEditRequester(QWidget* parent)
+			: KFontRequester(parent)
+		{
+			label()->setPaletteBackgroundColor(palette().active().base());
+			label()->setMinimumWidth(0);
+			label()->setFrameShape(QFrame::Box);
+			label()->setIndent(-1);
+			layout()->remove(label());
+			layout()->remove(button());//->reparent(this, 0, QPoint(0,0));
+			delete layout();
+			button()->setText(i18n("..."));
+			button()->setFocusPolicy(NoFocus);
+			button()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+			QFontMetrics fm(button()->font());
+			button()->setFixedWidth(fm.width(button()->text()+" "));
+		}
+		virtual void resizeEvent(QResizeEvent *e)
+		{
+			KFontRequester::resizeEvent(e);
+			label()->move(0,0);
+			label()->resize(e->size()-QSize(button()->width(),-1));
+			button()->move(label()->width(),0);
+			button()->setFixedSize(button()->width(), height());
+		}
+};
+
+using namespace KoProperty;
 
 FontEdit::FontEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-	m_edit = new KFontRequester(this);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_edit = new FontEditRequester(this);
 	m_edit->setMinimumHeight(5);
-#ifndef QT_ONLY
-	m_edit->button()->setText(i18n("..."));
-#endif
-	l->addWidget(m_edit);
-
-	setFocusWidget(m_edit);
+	setEditor(m_edit);
+//	setFocusWidget(m_edit);
 	connect(m_edit, SIGNAL(fontSelected(const QFont& )), this, SLOT(slotValueChanged(const QFont&)));
 }
 
@@ -61,12 +90,21 @@ FontEdit::value() const
 	return m_edit->font();
 }
 
+static QString sampleText(const QVariant &value)
+{
+	QFontInfo fi(value.toFont());
+	return fi.family() + (fi.bold() ? " " + i18n("Bold") : QString("")) +
+		(fi.italic() ? " " + i18n("Italic") : QString::null) +
+		" " + QString::number(fi.pointSize());
+}
+
 void
 FontEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_edit->blockSignals(true);
 	m_edit->setFont(value.toFont());
 	m_edit->blockSignals(false);
+	m_edit->setSampleText(sampleText(value));
 	if (emitChange)
 		emit valueChanged(this);
 }
@@ -76,13 +114,10 @@ FontEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVa
 {
 	p->eraseRect(r);
 	p->setFont(value.toFont());
-	QFontInfo fi(value.toFont());
 	QRect r2(r);
 	r2.setLeft(r2.left()+KPROPEDITOR_ITEM_MARGIN);
-	p->drawText(r2, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
-		fi.family() + (fi.bold() ? i18n(" Bold") : QString("")) +
-		(fi.italic() ? i18n(" Italic") : QString("")) +
-		" " + QString("%1").arg(fi.pointSize()) );
+	r2.setBottom(r2.bottom()+1);
+	p->drawText(r2, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, sampleText(value));
 }
 
 void
@@ -104,7 +139,4 @@ FontEdit::eventFilter(QObject* watched, QEvent* e)
 	return Widget::eventFilter(watched, e);
 }
 
-}
-
 #include "fontedit.moc"
-

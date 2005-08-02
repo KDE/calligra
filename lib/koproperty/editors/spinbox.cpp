@@ -33,7 +33,7 @@
 #include <qlineedit.h>
 #endif
 
-namespace KoProperty {
+using namespace KoProperty;
 
 IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, QWidget *parent, const char *name)
 : KIntSpinBox(lower, upper, step, value, base, parent, name)
@@ -65,8 +65,6 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 IntEdit::IntEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-
 	QVariant minVal( property ? property->option("min") : 0 );
 	QVariant maxVal( property ? property->option("max") : QVariant() );
 	QVariant minValueText( property ? property->option("minValueText") : QVariant() );
@@ -78,9 +76,8 @@ IntEdit::IntEdit(Property *property, QWidget *parent, const char *name)
 	m_edit = new IntSpinBox(minVal.toInt(), maxVal.toInt(), 1, 0, 10, this);
 	if (!minValueText.isNull())
 		m_edit->setSpecialValueText(minValueText.toString());
-	m_edit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+	setEditor(m_edit);
 
 	setLeavesTheSpaceForRevertButton(true);
 	setFocusWidget(m_edit);
@@ -164,8 +161,6 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 DoubleEdit::DoubleEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-
 	QVariant minVal( property ? property->option("min") : 0 );
 	QVariant maxVal( property ? property->option("max") : QVariant() );
 	QVariant step( property ? property->option("step") : QVariant());
@@ -186,7 +181,7 @@ DoubleEdit::DoubleEdit(Property *property, QWidget *parent, const char *name)
 		m_edit->setSpecialValueText(minValueText.toString());
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+	setEditor(m_edit);
 
 	setLeavesTheSpaceForRevertButton(true);
 	setFocusWidget(m_edit);
@@ -237,8 +232,4 @@ DoubleEdit::slotValueChanged(int)
 	emit valueChanged(this);
 }
 
-
-}
-
 #include "spinbox.moc"
-

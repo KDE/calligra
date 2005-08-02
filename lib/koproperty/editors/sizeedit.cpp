@@ -24,20 +24,27 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qtooltip.h>
 
-namespace KoProperty {
+#include <kactivelabel.h>
+#include <klocale.h>
+
+//"[ %1, %2 ]"
+#define SIZEEDIT_MASK "%1x%2"
+
+using namespace KoProperty;
 
 SizeEdit::SizeEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
 	setHasBorders(false);
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-	m_edit = new QLabel(this);
-	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-	m_edit->setBackgroundMode(Qt::PaletteBase);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_edit = new KActiveLabel(this);
+//	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
+	m_edit->setPaletteBackgroundColor(palette().active().base());
+//	m_edit->setBackgroundMode(Qt::PaletteBase);
+//	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+	setEditor(m_edit);
 
 	setFocusWidget(m_edit);
 }
@@ -55,7 +62,9 @@ void
 SizeEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	 m_edit->setText(QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
+	m_edit->selectAll(false);
+	m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
+	QToolTip::add(this, QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
 
 	if (emitChange)
 		emit valueChanged(this);
@@ -65,13 +74,10 @@ void
 SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 	Widget::drawViewer(p, cg, r, 
-		QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
+		QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
 //		QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
 }
 
-}
-
 #include "sizeedit.moc"
-

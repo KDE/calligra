@@ -22,22 +22,26 @@
 
 #include <qvariant.h>
 #include <qlayout.h>
-#include <qlabel.h>
 #include <qpainter.h>
+#include <qtooltip.h>
 
-namespace KoProperty {
+#include <kactivelabel.h>
+#include <klocale.h>
+
+//	"[ %1, %2, %3, %4 ]"
+#define RECTEDIT_MASK "%1,%2 %3x%4"
+
+using namespace KoProperty;
 
 RectEdit::RectEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
 	setHasBorders(false);
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-	m_edit = new QLabel(this);
-	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-	m_edit->setBackgroundMode(Qt::PaletteBase);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_edit = new KActiveLabel(this);
+	m_edit->setPaletteBackgroundColor(palette().active().base());
+	m_edit->setWordWrap( QTextEdit::NoWrap );
 	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+	setEditor(m_edit);
 	setFocusWidget(m_edit);
 }
 
@@ -54,7 +58,10 @@ void
 RectEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->setText(QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).
+	m_edit->selectAll(false);
+	m_edit->setText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
+		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
+	QToolTip::add(this, i18n("Position: %1, %2\nSize: %3 x %4").arg(value.toRect().x()).
 		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 
 	if (emitChange)
@@ -65,7 +72,7 @@ void
 RectEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 	Widget::drawViewer(p, cg, r, 
-		QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y())
+		QString(RECTEDIT_MASK).arg(value.toRect().x()).arg(value.toRect().y())
 	 	.arg(value.toRect().width()).arg(value.toRect().height()));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
@@ -73,7 +80,4 @@ RectEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 //	 	.arg(value.toRect().width()).arg(value.toRect().height()));
 }
 
-}
-
 #include "rectedit.moc"
-

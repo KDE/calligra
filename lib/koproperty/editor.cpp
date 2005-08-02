@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004  Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,6 +72,7 @@ class EditorPrivate
 				kofficeAppDirAdded = true;
 				KGlobal::iconLoader()->addAppDir("koffice");
 			}
+			insideFill = false;
 		}
 		~EditorPrivate()
 		{
@@ -96,6 +97,8 @@ class EditorPrivate
 		bool doNotSetFocusOnSelection : 1;
 		//! Used in setFocus() to prevent scrolling to previously selected item on mouse click
 		bool justClickedItem : 1;
+		//! paint optim.
+		bool insideFill : 1;
 		//! Helper for changeSet()
 		Set* setListLater_list;
 };
@@ -142,7 +145,8 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	header()->setMovingEnabled( false );
 	setTreeStepSize(16 + 2/*left*/ + 1/*right*/);
 
-	d->baseRowHeight = QFontMetrics(font()).height() + itemMargin()*2;
+	updateFont();
+//	d->baseRowHeight = QFontMetrics(font()).height() + itemMargin()*2;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(this, SIGNAL(currentChanged(QListViewItem *)), this, SLOT(slotCurrentChanged(QListViewItem *)));
@@ -162,6 +166,7 @@ Editor::~Editor()
 void
 Editor::fill()
 {
+	d->insideFill = true;
 	hideEditor();
 	KListView::clear();
 	d->itemDict.clear();
@@ -200,6 +205,7 @@ Editor::fill()
 		setSelected(firstChild(), true);
 		slotClicked(firstChild());
 	}
+	d->insideFill = false;
 }
 
 void
@@ -277,7 +283,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 	d->set = set;
 	if (d->set) {
 		//receive property changes
-		connect(d->set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+		connect(d->set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&, const QVariant&)),
 			this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 		connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
 			this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
@@ -361,8 +367,8 @@ Editor::slotPropertyChanged(Set& set, Property& property)
 			repaintItem(item);
 	}
 	else  {
+		// prop not in the dict, might be a child property:
 		EditorItem *item = d->itemDict[property.name()];
-		// prop not in the dict, might be a child prop.
 		if(!item && property.parent())
 			item = d->itemDict[property.parent()->name()];
 		if (item) {
@@ -372,6 +378,28 @@ Editor::slotPropertyChanged(Set& set, Property& property)
 		}
 	}
 
+//! @todo should we move this somewhere?
+#if 0
+	if (property.parent() && property.parent()->type()==Rect) {
+		const int delta = property.value().toInt()-previousValue.toInt();
+		if (property.type()==Rect_X) { //|| property.type()==Rect_Y)
+			property.parent()->child("width")->setValue(delta, false);
+		}
+
+/*	if (widget->property() && (QWidget*)d->currentWidget==widget && d->currentItem->parent()) {
+		EditorItem *parentItem = static_cast<EditorItem*>(d->currentItem->parent());
+		const int thisType = ;
+			&& parentItem->property()->type()==Rect) {
+			//changing x or y components of Rect type shouldn't change width or height, respectively
+			if (thisType==Rect_X) {
+				EditorItem *rectWidthItem = static_cast<EditorItem*>(d->currentItem->nextSibling()->nextSibling());
+				if (delta!=0) {
+					rectWidthItem->property()->setValue(rectWidthItem->property()->value().toInt()+delta, false);
+				}
+			}
+		}*/
+	}
+#endif
 	showUndoButton( property.isModified() );
 }
 
@@ -758,5 +786,45 @@ Editor::handleKeyPress(QKeyEvent* ev)
 	return false;
 }
 
-#include "editor.moc"
+/*void
+Editor::fontChange( const QFont & )
+{
+	d->baseRowHeight = QFontMetrics(parentWidget()->font()).height() + itemMargin() * 2;
+	if (!d->currentItem)
+		d->undoButton->resize(d->baseRowHeight, d->baseRowHeight);
+	else {
+		showUndoButton(d->undoButton->isVisible());
+		updateEditorGeometry();
+	}
+}*/
 
+void
+Editor::updateFont()
+{
+	setFont(parentWidget()->font());
+//		fontChange( font() );
+	d->baseRowHeight = QFontMetrics(parentWidget()->font()).height() + itemMargin() * 2;
+	if (!d->currentItem)
+		d->undoButton->resize(d->baseRowHeight, d->baseRowHeight);
+	else {
+		showUndoButton(d->undoButton->isVisible());
+		updateEditorGeometry();
+	}
+}
+
+bool
+Editor::event( QEvent * e )
+{
+	if (e->type()==QEvent::ParentFontChange) {
+		updateFont();
+	}
+	return QListView::event(e);
+}
+
+bool
+Editor::insideFill() const
+{
+	return d->insideFill;
+}
+
+#include "editor.moc"

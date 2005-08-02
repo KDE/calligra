@@ -70,8 +70,11 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		void rejectInput(Widget *widget);
 
 	protected:
+		void setEditor(QWidget* editor);
+
 		/*! Filters some event for main widget, eg Enter or Esc key presses. */
-		virtual bool  eventFilter(QObject* watched, QEvent* e);
+		virtual bool eventFilter(QObject* watched, QEvent* e);
+		virtual void resizeEvent(QResizeEvent *e);
 
 		void setLeavesTheSpaceForRevertButton(bool set);
 		void setHasBorders(bool set);

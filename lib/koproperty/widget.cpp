@@ -41,12 +41,15 @@ class WidgetPrivate
 	public:
 		WidgetPrivate()
 		: property(0)
+		, editor(0)
 		, leaveTheSpaceForRevertButton(false)
 		, hasBorders(true)
-		{}
+		{
+		}
 		~WidgetPrivate() {}
 
-		Property    *property;
+		Property *property;
+		QWidget *editor;
 		bool  leaveTheSpaceForRevertButton;
 		bool  hasBorders;
 };
@@ -175,6 +178,24 @@ bool
 Widget::hasBorders() const
 {
 	return d->hasBorders;
+}
+
+void
+Widget::setEditor(QWidget* editor)
+{
+	d->editor = editor;
+	if (!d->editor)
+		return;
+	d->editor->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	d->editor->move(0,0);
+}
+
+void
+Widget::resizeEvent(QResizeEvent *e)
+{
+	QWidget::resizeEvent(e);
+	if (d->editor)
+		d->editor->resize(size());
 }
 
 #include "widget.moc"

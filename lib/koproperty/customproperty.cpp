@@ -210,10 +210,18 @@ RectCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 	if(m_property->parent()) {
 		QRect r = m_property->parent()->value().toRect();
 
-		if(m_property->type() == Rect_X)
+		if(m_property->type() == Rect_X) {
+			//changing x component of Rect shouldn't change width
+			const int delta = value.toInt() - r.x();
 			r.setX(value.toInt());
-		else if(m_property->type() == Rect_Y)
+			r.setWidth(r.width()+delta);
+		}
+		else if(m_property->type() == Rect_Y) {
+			//changing y component of Rect shouldn't change height
+			const int delta = value.toInt() - r.y();
 			r.setY(value.toInt());
+			r.setHeight(r.width()+delta);
+		}
 		else if(m_property->type() == Rect_Width)
 			r.setWidth(value.toInt());
 		else if(m_property->type() == Rect_Height)
