@@ -60,7 +60,7 @@ KugarTemplate::KugarTemplate( int x, int y, int width, int height, Canvas *canva
 
     props.setGroupDescription( "DocumentSettings", i18n( "Document Settings" ) );
 
-    QMap<QString, QVariant> m;
+    QMap<QString, QString> m;
     m[ "A4" ] = "0";
     m[ "B5" ] = "1";
     m[ "Letter" ] = "2";
@@ -92,18 +92,18 @@ KugarTemplate::KugarTemplate( int x, int y, int width, int height, Canvas *canva
     m[ "Ledger" ] = "28";
     m[ "Tabloid" ] = "29";
     m[ "NPageSize" ] = "30";
-    props.addProperty( new Property( "PageSize", i18n( "Page Size" ), i18n( "Page Size" ), m, "0" ), "DocumentSettings" );
+    props.addProperty( new Property( "PageSize", m.values(), m.keys(), "0", i18n( "Page Size" ), i18n( "Page Size" ) ), "DocumentSettings" );
     m.clear();
 
     m[ i18n( "Portrait" ) ] = "0";
     m[ i18n( "Landscape" ) ] = "1";
-    props.addProperty( new Property( "PageOrientation", i18n( "Page Orientation" ), i18n( "Page Orientation" ), m, "0" ), "DocumentSettings" );
+    props.addProperty( new Property( "PageOrientation", m.values(), m.keys(), "0", i18n( "Page Orientation" ), i18n( "Page Orientation" ) ), "DocumentSettings" );
     m.clear();
 
-    props.addProperty( new Property( "TopMargin", i18n( "Top Margin" ), i18n( "Top Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
-    props.addProperty( new Property( "BottomMargin", i18n( "Bottom Margin" ), i18n( "Bottom Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
-    props.addProperty( new Property( "LeftMargin", i18n( "Left Margin" ), i18n( "Left Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
-    props.addProperty( new Property( "RightMargin", i18n( "Right Margin" ), i18n( "Right Margin" ), 0, KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "TopMargin", 0, i18n( "Top Margin" ), i18n( "Top Margin" ), KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "BottomMargin", 0, i18n( "Bottom Margin" ), i18n( "Bottom Margin" ), KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "LeftMargin", 0, i18n( "Left Margin" ), i18n( "Left Margin" ), KoProperty::Integer ), "DocumentSettings" );
+    props.addProperty( new Property( "RightMargin", 0, i18n( "Right Margin" ), i18n( "Right Margin" ), KoProperty::Integer ), "DocumentSettings" );
 }
 
 KugarTemplate::~KugarTemplate()
