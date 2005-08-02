@@ -619,6 +619,9 @@ void KoParagCounter::setRestartCounter( bool restart )
 // Return the text for that level only
 QString KoParagCounter::levelText( const KoTextParag *paragraph )
 {
+    if ( m_numbering == NUM_NONE )
+        return "";
+
     bool bullet = isBullet( m_style );
 
     if ( bullet && m_numbering == NUM_CHAPTER ) {
@@ -696,7 +699,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         return m_cache.text;
 
     // If necessary, grab the text of the preceding levels.
-    if ( m_displayLevels > 1 )
+    if ( m_displayLevels > 1 && m_numbering != NUM_NONE )
     {
         KoTextParag* p = parent( paragraph );
         int displayLevels = QMIN( m_displayLevels, m_depth+1 ); // can't be >depth+1
@@ -768,17 +771,20 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     m_cache.counterFormat = counterFormat( paragraph );
     m_cache.counterFormat->addRef();
     m_cache.width = 0;
-    QString text = m_cache.text;
-    if ( m_style == STYLE_CUSTOMBULLET && !text.isEmpty() )
+    if ( m_style != NUM_NONE )
     {
-        text.append( "  " ); // append a trailing space, see KoTextParag::drawLabel
+        QString text = m_cache.text;
+        if ( m_style == STYLE_CUSTOMBULLET && !text.isEmpty() )
+        {
+            text.append( "  " ); // append two trailing spaces, see KoTextParag::drawLabel
+        }
+        else if ( !text.isEmpty() )
+            text.append( ' ' ); // append a trailing space, see KoTextParag::drawLabel
+        QFontMetrics fm = m_cache.counterFormat->refFontMetrics();
+        for ( unsigned int i = 0; i < text.length(); i++ )
+            //m_cache.width += m_cache.counterFormat->width( text, i );
+            m_cache.width += fm.width( text[i] );
     }
-    else if ( !text.isEmpty() )
-        text.append( ' ' ); // append a trailing space, see KoTextParag::drawLabel
-    QFontMetrics fm = m_cache.counterFormat->refFontMetrics();
-    for ( unsigned int i = 0; i < text.length(); i++ )
-        //m_cache.width += m_cache.counterFormat->width( text, i );
-        m_cache.width += fm.width( text[i] );
     // Now go from 100%-zoom to LU
     m_cache.width = KoTextZoomHandler::ptToLayoutUnitPt( m_cache.width );
 
