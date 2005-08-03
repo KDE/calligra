@@ -28,13 +28,13 @@ namespace Kudesigner
 SpecialField::SpecialField( int x, int y, int width, int height, Canvas *canvas )
         : Label( x, y, width, height, canvas )
 {
-    QMap<QString, QVariant> m;
+    QMap<QString, QString> m;
 
     props.setGroupDescription( "SpecialField", i18n( "Special Field" ) );
 
     m[ i18n( "Date" ) ] = "0";
     m[ i18n( "PageNumber" ) ] = "1";
-    props.addProperty( new Property( "Type", i18n( "Type" ), i18n( "Special Field Type" ), m, "0" ), "SpecialField" );
+    props.addProperty( new Property( "Type", m.values(), m.keys(), "0", i18n( "Type" ), i18n( "Special Field Type" ) ), "SpecialField" );
     m.clear();
 
     m[ i18n( "m/d/y" ) ] = "0";
@@ -50,7 +50,7 @@ SpecialField::SpecialField( int x, int y, int width, int height, Canvas *canvas 
     m[ i18n( "dd.mm.yy" ) ] = "10";
     m[ i18n( "dd.mm.yyyy" ) ] = "11";
     //TODO: make date format not hard-coded, use locale settings
-    props.addProperty( new Property( "DateFormat", i18n( "Date Format" ), i18n( "Date Format" ), m, "11" ), "SpecialField" );
+    props.addProperty( new Property( "DateFormat", m.values(), m.keys(), "11", i18n( "Date Format" ), i18n( "Date Format" ) ), "SpecialField" );
 }
 
 void SpecialField::draw( QPainter &painter )

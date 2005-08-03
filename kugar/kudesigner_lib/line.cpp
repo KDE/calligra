@@ -32,23 +32,20 @@ namespace Kudesigner
 Line::Line( int x, int y, int width, int height, Canvas *canvas ) :
         ReportItem( x, y, width, height, canvas )
 {
-#warning TODO PORT to new Property API
-#if 0
     props.setGroupDescription( "Line", i18n( "Line" ) );
-    props.addProperty( new Property( "X1", i18n( "X1" ), i18n( "X1" ), x, KoProperty::Integer ), "Line" );
+    props.addProperty( new Property( "X1", x, i18n( "X1" ), i18n( "X1" ), KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Y1", i18n( "Y1" ), i18n( "Y1" ), y, KoProperty::Integer ), "Line" );
+    props.addProperty( new Property( "Y1", y, i18n( "Y1" ), i18n( "Y1" ), KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "X2", i18n( "X2" ), i18n( "X2" ), x + width, KoProperty::Integer ), "Line" );
+    props.addProperty( new Property( "X2", x + width, i18n( "X2" ), i18n( "X2" ), KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Y2", i18n( "Y2" ), i18n( "Y2" ), y + height, KoProperty::Integer ), "Line" );
+    props.addProperty( new Property( "Y2", y + height, i18n( "Y2" ), i18n( "Y2" ), KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Color", i18n( "Color" ), i18n( "Color" ), QColor( 0, 0, 0 ), KoProperty::Color ), "Line" );
+    props.addProperty( new Property( "Color", QColor( 0, 0, 0 ), i18n( "Color" ), i18n( "Color" ), KoProperty::Color ), "Line" );
 
-    props.addProperty( new Property( "Width", i18n( "Width" ), i18n( "Width" ), 1, KoProperty::Integer ), "Line" );
+    props.addProperty( new Property( "Width", 1, i18n( "Width" ), i18n( "Width" ), KoProperty::Integer ), "Line" );
 
-    props.addProperty( new Property( "Style", i18n( "Line Style" ), i18n( "Line Style" ), 1, KoProperty::LineStyle ), "Line" );
-#endif
+    props.addProperty( new Property( "Style", 1, i18n( "Line Style" ), i18n( "Line Style" ), KoProperty::LineStyle ), "Line" );
 }
 
 QString Line::getXml()

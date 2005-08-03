@@ -30,11 +30,8 @@ namespace Kudesigner
 DetailFooter::DetailFooter( int x, int y, int width, int height, int level, Canvas *canvas ) :
         DetailBase( x, y, width, height, level, canvas )
 {
-#warning TODO port this to new Property API !!!!!
-#if 0
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KoProperty::Integer ), "Detail" );
-    props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KoProperty::Integer ), "Detail" );
-#endif
+    props.addProperty( new Property( "Height", 50, i18n( "Height" ), i18n( "Height" ), KoProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Level", 0, i18n( "Level" ), i18n( "Detail Level" ), KoProperty::Integer ), "Detail" );
 }
 
 void DetailFooter::draw( QPainter &painter )

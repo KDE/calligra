@@ -30,18 +30,15 @@ namespace Kudesigner
 ReportFooter::ReportFooter( int x, int y, int width, int height, Canvas *canvas ) :
         Band( x, y, width, height, canvas )
 {
-#warning TODO port
-#if 0
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KoProperty::Integer ), "Section" );
+    props.addProperty( new Property( "Height", 50, i18n( "Height" ), i18n( "Height" ), KoProperty::Integer ), "Section" );
 
-    QMap<QString, QVariant> m;
+    QMap<QString, QString> m;
 
     m[ i18n( "First Page" ) ] = "0";
     m[ i18n( "Every Page" ) ] = "1";
     m[ i18n( "Last Page" ) ] = "2";
 
-    props.addProperty( new Property( "PrintFrequency", i18n( "Print Frequency" ), i18n( "Print Frequency" ), m, "2" ), "Section" );
-#endif
+    props.addProperty( new Property( "PrintFrequency", m.values(), m.keys(), "2", i18n( "Print Frequency" ), i18n( "Print Frequency" ) ), "Section" );
 }
 
 void ReportFooter::draw( QPainter &painter )

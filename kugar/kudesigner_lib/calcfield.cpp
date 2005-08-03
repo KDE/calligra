@@ -30,7 +30,7 @@ namespace Kudesigner
 CalculatedField::CalculatedField( int x, int y, int width, int height, Canvas *canvas ) :
         Field( x, y, width, height, canvas, false )
 {
-    QMap<QString, QVariant> m;
+    QMap<QString, QString> m;
 
     props.setGroupDescription( "Calculation", i18n( "Calculation" ) );
     m[ i18n( "Count" ) ] = "0";
@@ -38,7 +38,7 @@ CalculatedField::CalculatedField( int x, int y, int width, int height, Canvas *c
     m[ i18n( "Average" ) ] = "2";
     m[ i18n( "Variance" ) ] = "3";
     m[ i18n( "StandardDeviation" ) ] = "4";
-    props.addProperty( new Property( "CalculationType", i18n( "Type" ), i18n( "Calculation Type" ), m, "1" ), "Calculation" );
+    props.addProperty( new Property( "CalculationType", m.values(), m.keys(), "1", i18n( "Type" ), i18n( "Calculation Type" ) ), "Calculation" );
 
     registerAs( Rtti_Calculated );
 }

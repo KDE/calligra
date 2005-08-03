@@ -37,74 +37,71 @@ namespace Kudesigner
 Label::Label( int x, int y, int width, int height, Canvas *canvas )
         : ReportItem( x, y, width, height, canvas )
 {
-    QMap<QString, QVariant> m;
-#warning TODO
-#if 0
+    QMap<QString, QString> m;
 
     props.addProperty( new Property( "Text", i18n( "Text" ), i18n( "Text to Display" ), i18n( "Text" ), KoProperty::String ) );
 
     props.setGroupDescription( "Geometry", i18n( "Geometry" ) );
-    props.addProperty( new Property( "X", i18n( "X" ), i18n( "X value" ), x, KoProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "X", x, i18n( "X" ), i18n( "X value" ), KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "Y", i18n( "Y" ), i18n( "Y value" ), y, KoProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "Y", y, i18n( "Y" ), i18n( "Y value" ), KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "Width", i18n( "Width" ), i18n( "Width" ), width, KoProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "Width", width, i18n( "Width" ), i18n( "Width" ), KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), height, KoProperty::Integer ), "Geometry" );
+    props.addProperty( new Property( "Height", height, i18n( "Height" ), i18n( "Height" ), KoProperty::Integer ), "Geometry" );
 
-    props.addProperty( new Property( "BackgroundColor", i18n( "Background Color" ), i18n( "Background Color" ), QColor( 255, 255, 255 ), KoProperty::Color ) );
+    props.addProperty( new Property( "BackgroundColor", QColor( 255, 255, 255 ), i18n( "Background Color" ), i18n( "Background Color" ), KoProperty::Color ) );
 
-    props.addProperty( new Property( "ForegroundColor", i18n( "Foreground Color" ), i18n( "Foreground Color" ), QColor( 0, 0, 0 ), KoProperty::Color ) );
+    props.addProperty( new Property( "ForegroundColor", QColor( 0, 0, 0 ), i18n( "Foreground Color" ), i18n( "Foreground Color" ), KoProperty::Color ) );
 
     props.setGroupDescription( "BorderStyle", i18n( "Border Style" ) );
-    props.addProperty( new Property( "BorderColor", i18n( "Color" ), i18n( "Border Color" ), QColor( 0, 0, 0 ), KoProperty::Color ), "BorderStyle" );
+    props.addProperty( new Property( "BorderColor", QColor( 0, 0, 0 ), i18n( "Color" ), i18n( "Border Color" ), KoProperty::Color ), "BorderStyle" );
 
-    props.addProperty( new Property( "BorderWidth", i18n( "Width" ), i18n( "Border Width" ), 1, KoProperty::Integer ), "BorderStyle" );
+    props.addProperty( new Property( "BorderWidth", 1, i18n( "Width" ), i18n( "Border Width" ), KoProperty::Integer ), "BorderStyle" );
 
-    props.addProperty( new Property( "BorderStyle", i18n( "Line" ), i18n( "Border Style" ), 1, KoProperty::LineStyle ), "BorderStyle" );
+    props.addProperty( new Property( "BorderStyle", 1, i18n( "Line" ), i18n( "Border Style" ), KoProperty::LineStyle ), "BorderStyle" );
 
     props.setGroupDescription( "DrawBorder", i18n( "Border" ) );
-    props.addProperty( new Property( "DrawTop", i18n( "Top" ), i18n( "Draw Top Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
-    props.addProperty( new Property( "DrawBottom", i18n( "Bottom" ), i18n( "Draw Bottom Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
-    props.addProperty( new Property( "DrawLeft", i18n( "Left" ), i18n( "Draw Left Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
-    props.addProperty( new Property( "DrawRight", i18n( "Right" ), i18n( "Draw Right Border" ), QVariant( false, 3 ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawTop", QVariant( false, 3 ), i18n( "Top" ), i18n( "Draw Top Border" ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawBottom", QVariant( false, 3 ), i18n( "Bottom" ), i18n( "Draw Bottom Border" ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawLeft", QVariant( false, 3 ), i18n( "Left" ), i18n( "Draw Left Border" ), KoProperty::Boolean ), "DrawBorder" );
+    props.addProperty( new Property( "DrawRight", QVariant( false, 3 ), i18n( "Right" ), i18n( "Draw Right Border" ), KoProperty::Boolean ), "DrawBorder" );
 
 
     props.setGroupDescription( "Font", i18n( "Font" ) );
-    props.addProperty( new Property( "FontFamily", i18n( "Family" ), i18n( "Font Family" ), QFont( "Times New Roman" ), KoProperty::Font ), "Font" );
+    props.addProperty( new Property( "FontFamily", QFont( "Times New Roman" ), i18n( "Family" ), i18n( "Font Family" ), KoProperty::Font ), "Font" );
 
-    props.addProperty( new Property( "FontSize", i18n( "Size" ), i18n( "Font Size" ), 12, KoProperty::Integer ), "Font" );
+    props.addProperty( new Property( "FontSize", 12, i18n( "Size" ), i18n( "Font Size" ), KoProperty::Integer ), "Font" );
 
     m[ i18n( "Light" ) ] = "25";
     m[ i18n( "Normal" ) ] = "50";
     m[ i18n( "DemiBold" ) ] = "63";
     m[ i18n( "Bold" ) ] = "75";
     m[ i18n( "Black" ) ] = "87";
-    props.addProperty( new Property( "FontWeight", i18n( "Weight" ), i18n( "Weight" ), m, "50" ), "Font" );
+    props.addProperty( new Property( "FontWeight", m.values(), m.keys(), "50", i18n( "Weight" ), i18n( "Weight" ) ), "Font" );
     m.clear();
 
     m[ i18n( "Regular" ) ] = "0";
     m[ i18n( "Italic" ) ] = "1";
-    props.addProperty( new Property( "FontItalic", i18n( "Italic" ), i18n( "Italic" ), m, "0" ), "Font" );
+    props.addProperty( new Property( "FontItalic", m.values(), m.keys(), "0", i18n( "Italic" ), i18n( "Italic" ) ), "Font" );
     m.clear();
 
     m[ i18n( "Left" ) ] = "0";
     m[ i18n( "Center" ) ] = "1";
     m[ i18n( "Right" ) ] = "2";
-    props.addProperty( new Property( "HAlignment", i18n( "HAlignment" ), i18n( "HAlignment" ), m,
-                                     QString( "" ).isRightToLeft() ? "2" : "0" ) );
+    props.addProperty( new Property( "HAlignment", m.values(), m.keys(),
+                                     QString( "" ).isRightToLeft() ? "2" : "0", i18n( "HAlignment" ), i18n( "HAlignment" ) ) );
     m.clear();
 
     m[ i18n( "Top" ) ] = "0";
     m[ i18n( "Middle" ) ] = "1";
     m[ i18n( "Bottom" ) ] = "2";
-    props.addProperty( new Property( "VAlignment", i18n( "VAlignment" ), i18n( "VAlignment" ), m, "1" ) );
+    props.addProperty( new Property( "VAlignment", m.values(), m.keys(), "1", i18n( "VAlignment" ), i18n( "VAlignment" ) ) );
     m.clear();
 
     m[ i18n( "False" ) ] = "0";
     m[ i18n( "True" ) ] = "1";
-    props.addProperty( new Property( "WordWrap", i18n( "Word wrap" ), i18n( "Word wrap" ), m, "0" ) );
-#endif
+    props.addProperty( new Property( "WordWrap", m.values(), m.keys(), "0", i18n( "Word wrap" ), i18n( "Word wrap" ) ) );
 }
 
 int Label::getTextAlignment()

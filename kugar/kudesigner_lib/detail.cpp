@@ -30,12 +30,9 @@ namespace Kudesigner
 Detail::Detail( int x, int y, int width, int height, int level, Canvas *canvas )
         : DetailBase( x, y, width, height, level, canvas )
 {
-#warning TODO port this to new Property API!!!!!
-#if 0
-    props.addProperty( new Property( "Height", i18n( "Height" ), i18n( "Height" ), 50, KoProperty::Integer ), "Detail" );
-    props.addProperty( new Property( "Level", i18n( "Level" ), i18n( "Detail Level" ), 0, KoProperty::Integer ), "Detail" );
-    props.addProperty( new Property( "Repeat", i18n( "Repeat" ), i18n( "Repeat After Page Break" ), QVariant( false, 3 ), KoProperty::Boolean ), "Detail" );
-#endif
+    props.addProperty( new Property( "Height", 50, i18n( "Height" ), i18n( "Height" ), KoProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Level", 0, i18n( "Level" ), i18n( "Detail Level" ), KoProperty::Integer ), "Detail" );
+    props.addProperty( new Property( "Repeat", QVariant( false, 3 ), i18n( "Repeat" ), i18n( "Repeat After Page Break" ), KoProperty::Boolean ), "Detail" );
 
     registerAs( Rtti_Detail );
 }
