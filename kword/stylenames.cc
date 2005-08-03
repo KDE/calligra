@@ -60,6 +60,8 @@ i18n( "Style name", "Header 3" );
 i18n( "Style name", "Header 4" );
 
 // Translations for the standard tabletemplate names
+i18n( "Style name", "Columns 1" );
+i18n( "Style name", "Columns 2" );
 i18n( "Style name", "Grid 1" );
 i18n( "Style name", "Grid 2" );
 i18n( "Style name", "Grid 3" );
