@@ -20,6 +20,9 @@
 #include "propertyserializer.h"
 
 #include <qcolor.h>
+#include <qfont.h>
+
+#include <kdebug.h>
 
 namespace Kudesigner
 {
@@ -39,6 +42,8 @@ QString PropertySerializer::toString( Property *prop )
         return QString( "%1,%2,%3" ).arg( val.toColor().red() ).arg( val.toColor().green() ).arg( val.toColor().blue() );
     case KoProperty::Boolean:
         return val.toBool() ? "true" : "false";
+    case KoProperty::Font:
+        return val.toFont().family();
     default:
         return val.toString();
     }
@@ -52,6 +57,16 @@ QVariant PropertySerializer::fromString( Property *prop, const QString &str )
         return QVariant( QColor( str.section( ',', 0, 0 ).toInt(),
                                  str.section( ',', 1, 1 ).toInt(),
                                  str.section( ',', 2, 2 ).toInt() ) );
+    case KoProperty::Integer:
+        return QVariant( str.toInt() );
+    case KoProperty::Boolean:
+        return QVariant( str == "true", 3 );
+    case KoProperty::Font:
+        return QVariant( QFont( str ) );
+    case KoProperty::LineStyle:
+        return QVariant( str.toInt() );
+    case KoProperty::Symbol:
+        return QVariant( str.at( 0 ).latin1() );
     default:
         return QVariant( str );
     }

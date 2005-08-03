@@ -156,10 +156,10 @@ bool Canvas::loadXML( const QDomNode &report )
     templ->show();
     templ->props[ "PageSize" ].setValue( attributes.namedItem( "PageSize" ).nodeValue() );
     templ->props[ "PageOrientation" ].setValue( attributes.namedItem( "PageOrientation" ).nodeValue() );
-    templ->props[ "TopMargin" ].setValue( attributes.namedItem( "TopMargin" ).nodeValue() );
-    templ->props[ "BottomMargin" ].setValue( attributes.namedItem( "BottomMargin" ).nodeValue() );
-    templ->props[ "LeftMargin" ].setValue( attributes.namedItem( "LeftMargin" ).nodeValue() );
-    templ->props[ "RightMargin" ].setValue( attributes.namedItem( "RightMargin" ).nodeValue() );
+    templ->props[ "TopMargin" ].setValue( attributes.namedItem( "TopMargin" ).nodeValue().toInt() );
+    templ->props[ "BottomMargin" ].setValue( attributes.namedItem( "BottomMargin" ).nodeValue().toInt() );
+    templ->props[ "LeftMargin" ].setValue( attributes.namedItem( "LeftMargin" ).nodeValue().toInt() );
+    templ->props[ "RightMargin" ].setValue( attributes.namedItem( "RightMargin" ).nodeValue().toInt() );
 
     // Get all the child report elements
     QDomNodeList children = report.childNodes();
@@ -208,7 +208,7 @@ void Canvas::setReportHeaderAttributes( QDomNode *node )
                                          0, kugarTemplate() ->width() - kugarTemplate() ->props[ "RightMargin" ].value().toInt() -
                                          kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                                          attributes.namedItem( "Height" ).nodeValue().toInt(), this );
-    rh->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    rh->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
     kugarTemplate() ->reportHeader = rh;
     addReportItems( node, rh );
 }
@@ -221,7 +221,7 @@ void Canvas::setReportFooterAttributes( QDomNode *node )
                                          0, kugarTemplate() ->width() - kugarTemplate() ->props[ "RightMargin" ].value().toInt() -
                                          kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                                          attributes.namedItem( "Height" ).nodeValue().toInt(), this );
-    rf->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    rf->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
     kugarTemplate() ->reportFooter = rf;
     addReportItems( node, rf );
 }
@@ -234,7 +234,7 @@ void Canvas::setPageHeaderAttributes( QDomNode *node )
                                      0, kugarTemplate() ->width() - kugarTemplate() ->props[ "RightMargin" ].value().toInt() -
                                      kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                                      attributes.namedItem( "Height" ).nodeValue().toInt(), this );
-    ph->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    ph->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
     kugarTemplate() ->pageHeader = ph;
     addReportItems( node, ph );
 }
@@ -247,7 +247,7 @@ void Canvas::setPageFooterAttributes( QDomNode *node )
                                      0, kugarTemplate() ->width() - kugarTemplate() ->props[ "RightMargin" ].value().toInt() -
                                      kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                                      attributes.namedItem( "Height" ).nodeValue().toInt(), this );
-    pf->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    pf->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
     kugarTemplate() ->pageFooter = pf;
     addReportItems( node, pf );
 }
@@ -261,8 +261,8 @@ void Canvas::setDetailHeaderAttributes( QDomNode *node )
                                          kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                                          attributes.namedItem( "Height" ).nodeValue().toInt(),
                                          attributes.namedItem( "Level" ).nodeValue().toInt(), this );
-    dh->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue() );
-    dh->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    dh->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue().toInt() );
+    dh->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
     kugarTemplate() ->details[ attributes.namedItem( "Level" ).nodeValue().toInt() ].first.first = dh;
     addReportItems( node, dh );
 }
@@ -276,9 +276,9 @@ void Canvas::setDetailAttributes( QDomNode *node )
                             kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                             attributes.namedItem( "Height" ).nodeValue().toInt(),
                             attributes.namedItem( "Level" ).nodeValue().toInt(), this );
-    d->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue() );
-    d->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
-    d->props[ "Repeat" ].setValue( attributes.namedItem( "Repeat" ).nodeValue() == "true" );
+    d->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue().toInt() );
+    d->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
+    d->props[ "Repeat" ].setValue( QVariant( attributes.namedItem( "Repeat" ).nodeValue() == "true", 3 ) );
     kugarTemplate() ->details[ attributes.namedItem( "Level" ).nodeValue().toInt() ].second = d;
     addReportItems( node, d );
 }
@@ -292,8 +292,8 @@ void Canvas::setDetailFooterAttributes( QDomNode *node )
                                          kugarTemplate() ->props[ "LeftMargin" ].value().toInt(),
                                          attributes.namedItem( "Height" ).nodeValue().toInt(),
                                          attributes.namedItem( "Level" ).nodeValue().toInt(), this );
-    df->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue() );
-    df->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue() );
+    df->props[ "Level" ].setValue( attributes.namedItem( "Level" ).nodeValue().toInt() );
+    df->props[ "Height" ].setValue( attributes.namedItem( "Height" ).nodeValue().toInt() );
     kugarTemplate() ->details[ attributes.namedItem( "Level" ).nodeValue().toInt() ].first.second = df;
     addReportItems( node, df );
 }
