@@ -30,7 +30,9 @@
 #include <qfontmetrics.h>
 #include <qlabel.h>
 
+#include <kdeversion.h>
 #include <kfontrequester.h>
+#include <kaccelmanager.h>
 
 #ifdef QT_ONLY
 //! \todo
@@ -50,6 +52,10 @@ class FontEditRequester : public KFontRequester
 			label()->setMinimumWidth(0);
 			label()->setFrameShape(QFrame::Box);
 			label()->setIndent(-1);
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
+			label()->setFocusPolicy(ClickFocus);
+			KAcceleratorManager::setNoAccel(label());
+#endif
 			layout()->remove(label());
 			layout()->remove(button());//->reparent(this, 0, QPoint(0,0));
 			delete layout();
@@ -77,7 +83,7 @@ FontEdit::FontEdit(Property *property, QWidget *parent, const char *name)
 	m_edit = new FontEditRequester(this);
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
-//	setFocusWidget(m_edit);
+	setFocusWidget(m_edit->label());
 	connect(m_edit, SIGNAL(fontSelected(const QFont& )), this, SLOT(slotValueChanged(const QFont&)));
 }
 

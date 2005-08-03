@@ -65,7 +65,7 @@ class KOPROPERTY_EXPORT EditorItem : public KListViewItem
 		EditorItem(KListView *parent);
 		EditorItem(EditorItem *parent, const QString &text);
 
-		~EditorItem();
+		virtual ~EditorItem();
 
 		//! \return a pointer to the property associated to this item.
 		Property* property();
@@ -93,7 +93,7 @@ class KOPROPERTY_EXPORT EditorGroupItem : public EditorItem
 {
 	public:
 		EditorGroupItem(EditorItem *parent, const QString &text);
-		~EditorGroupItem();
+		virtual ~EditorGroupItem();
 
 	protected:
 		/*! Reimplemented from KListViewItem to draw custom contents. */
@@ -105,7 +105,7 @@ class KOPROPERTY_EXPORT EditorDummyItem : public EditorItem
 {
 	public:
 		EditorDummyItem(KListView *parent);
-		~EditorDummyItem();
+		virtual ~EditorDummyItem();
 
 	protected:
 		virtual void setup();

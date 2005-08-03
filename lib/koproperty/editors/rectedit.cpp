@@ -38,11 +38,12 @@ RectEdit::RectEdit(Property *property, QWidget *parent, const char *name)
 {
 	setHasBorders(false);
 	m_edit = new KActiveLabel(this);
+	m_edit->setFocusPolicy(NoFocus);
 	m_edit->setPaletteBackgroundColor(palette().active().base());
 	m_edit->setWordWrap( QTextEdit::NoWrap );
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
-	setFocusWidget(m_edit);
+//	setFocusWidget(m_edit);
 }
 
 RectEdit::~RectEdit()
@@ -71,7 +72,9 @@ RectEdit::setValue(const QVariant &value, bool emitChange)
 void
 RectEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	Widget::drawViewer(p, cg, r, 
+	QRect rect(r);
+	rect.setBottom(r.bottom()+1);
+	Widget::drawViewer(p, cg, rect, 
 		QString(RECTEDIT_MASK).arg(value.toRect().x()).arg(value.toRect().y())
 	 	.arg(value.toRect().width()).arg(value.toRect().height()));
 //	p->eraseRect(r);

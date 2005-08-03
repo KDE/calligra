@@ -38,7 +38,7 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
     m_toggle = new QToolButton(this);
-    m_toggle->setFocusPolicy(QWidget::NoFocus);
+    m_toggle->setFocusPolicy(QWidget::WheelFocus);
     m_toggle->setToggleButton(true);
     m_toggle->setUsesTextLabel(true);
     m_toggle->setTextPosition(QToolButton::Right);
@@ -131,4 +131,3 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
 }
 
 #include "booledit.moc"
-

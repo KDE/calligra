@@ -130,6 +130,9 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	d->undoButton->hide();
 	connect(d->undoButton, SIGNAL(clicked()), this, SLOT(undo()));
 
+	installEventFilter(this);
+	viewport()->installEventFilter(this);
+
 	addColumn(i18n("Name"));
 	addColumn(i18n("Value"));
 	setAllColumnsShowFocus(true);
@@ -155,6 +158,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
 	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometry()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
+
 }
 
 Editor::~Editor()
@@ -488,11 +492,11 @@ Editor::slotClicked(QListViewItem *it)
 
 	d->currentItem = item;
 	d->currentWidget = createWidgetForProperty(p);
-	d->currentWidget->setFocus();
 
 	updateEditorGeometry();
 	showUndoButton( p->isModified() );
 	d->currentWidget->show();
+	d->currentWidget->setFocus();
 
 	d->justClickedItem = true;
 }
@@ -551,8 +555,9 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 	if(!widget->property() || changeWidgetProperty)
 		widget->setProperty(property);
 
-	if (!d->doNotSetFocusOnSelection)
-		widget->setFocus();
+//	if (!d->doNotSetFocusOnSelection) {
+//		widget->setFocus();
+//	}
 	return widget;
 }
 
@@ -658,6 +663,11 @@ void
 Editor::slotColumnSizeChanged(int section, int, int newS)
 {
 	updateEditorGeometry();
+	for (QListViewItemIterator it(this); it.current(); ++it) {
+		if (dynamic_cast<EditorGroupItem*>(it.current())) {
+//			it.current()->repaint();
+		}
+	}
 /*
 	if(d->currentWidget) {
 		if(section == 0)
@@ -717,10 +727,14 @@ Editor::setFocus()
 			setSelected(item, true);
 		}
 	}
-	if (d->currentWidget)
+	if (d->currentWidget) {
+		kopropertydbg << "d->currentWidget->setFocus()" << endl;
 		d->currentWidget->setFocus();
-	else
+	}
+	else {
+		kopropertydbg << "KListView::setFocus()" << endl;
 		KListView::setFocus();
+	}
 }
 
 void
@@ -729,6 +743,16 @@ Editor::resizeEvent(QResizeEvent *ev)
 	KListView::resizeEvent(ev);
 	if(d->undoButton->isVisible())
 		showUndoButton(true);
+}
+
+bool
+Editor::eventFilter( QObject * watched, QEvent * e )
+{
+	if ((watched==this || watched==viewport()) && e->type()==QEvent::KeyPress) {
+		if (handleKeyPress(static_cast<QKeyEvent*>(e)))
+			return true;
+	}
+	return QListView::eventFilter(watched, e);
 }
 
 bool
@@ -777,6 +801,7 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		}
 		item = lastVisible;
 	}
+
 	if(item) {
 		ev->accept();
 		ensureItemVisible(item);
@@ -785,18 +810,6 @@ Editor::handleKeyPress(QKeyEvent* ev)
 	}
 	return false;
 }
-
-/*void
-Editor::fontChange( const QFont & )
-{
-	d->baseRowHeight = QFontMetrics(parentWidget()->font()).height() + itemMargin() * 2;
-	if (!d->currentItem)
-		d->undoButton->resize(d->baseRowHeight, d->baseRowHeight);
-	else {
-		showUndoButton(d->undoButton->isVisible());
-		updateEditorGeometry();
-	}
-}*/
 
 void
 Editor::updateFont()

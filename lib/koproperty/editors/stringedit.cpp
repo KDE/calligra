@@ -32,6 +32,7 @@ StringEdit::StringEdit(Property *property, QWidget *parent, const char *name)
 	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 	m_edit = new QLineEdit(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_edit->setMargin(1);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
 	setFocusWidget(m_edit);

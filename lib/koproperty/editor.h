@@ -72,7 +72,7 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		*/
 		Editor(QWidget *parent=0, bool autoSync=true, const char *name=0);
 
-		~Editor();
+		virtual ~Editor();
 
 		virtual QSize sizeHint() const;
 		virtual void setFocus();
@@ -151,6 +151,7 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		void showUndoButton( bool show );
 
 		virtual void resizeEvent(QResizeEvent *ev);
+		virtual bool eventFilter( QObject * watched, QEvent * e );
 		bool handleKeyPress(QKeyEvent* ev);
 
 		//! reaction on font change ('undo button' will be resized)

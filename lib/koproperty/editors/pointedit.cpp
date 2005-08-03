@@ -39,6 +39,7 @@ PointEdit::PointEdit(Property *property, QWidget *parent, const char *name)
 {
 	setHasBorders(false);
 	m_edit = new KActiveLabel(this);
+	m_edit->setFocusPolicy(NoFocus);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	m_edit->setPaletteBackgroundColor(palette().active().base());
 	m_edit->setWordWrap( QTextEdit::NoWrap );
@@ -46,8 +47,7 @@ PointEdit::PointEdit(Property *property, QWidget *parent, const char *name)
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
-
-	setFocusWidget(m_edit);
+//	setFocusWidget(m_edit);
 }
 
 PointEdit::~PointEdit()
@@ -74,7 +74,9 @@ PointEdit::setValue(const QVariant &value, bool emitChange)
 void
 PointEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	Widget::drawViewer(p, cg, r, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
+	QRect rect(r);
+	rect.setBottom(r.bottom()+1);
+	Widget::drawViewer(p, cg, rect, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
 //		QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));

@@ -95,7 +95,9 @@ SizePolicyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 {
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
-	Widget::drawViewer(p, cg, r, 
+	QRect rect(r);
+	rect.setBottom(r.bottom()+1);
+	Widget::drawViewer(p, cg, rect, 
 		QString("%1/%2/%3/%4").arg(findDescription(value.toSizePolicy().horData())).
 		arg(findDescription(value.toSizePolicy().verData())).
 		arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));

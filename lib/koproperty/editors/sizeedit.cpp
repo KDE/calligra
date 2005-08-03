@@ -39,14 +39,14 @@ SizeEdit::SizeEdit(Property *property, QWidget *parent, const char *name)
 {
 	setHasBorders(false);
 	m_edit = new KActiveLabel(this);
+	m_edit->setFocusPolicy(NoFocus);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	m_edit->setPaletteBackgroundColor(palette().active().base());
 //	m_edit->setBackgroundMode(Qt::PaletteBase);
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
-
-	setFocusWidget(m_edit);
+//	setFocusWidget(m_edit);
 }
 
 SizeEdit::~SizeEdit()
@@ -73,7 +73,9 @@ SizeEdit::setValue(const QVariant &value, bool emitChange)
 void
 SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	Widget::drawViewer(p, cg, r, 
+	QRect rect(r);
+	rect.setBottom(r.bottom()+1);
+	Widget::drawViewer(p, cg, rect, 
 		QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,

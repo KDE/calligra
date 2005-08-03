@@ -150,8 +150,9 @@ Widget::eventFilter(QObject*, QEvent* e)
 void
 Widget::setFocusWidget(QWidget*focusProxy)
 {
-	if (focusProxy && focusProxy->focusPolicy() != NoFocus) {
-		setFocusProxy(focusProxy);
+	if (focusProxy) {
+		if (focusProxy->focusPolicy() != NoFocus)
+			setFocusProxy(focusProxy);
 		focusProxy->installEventFilter(this);
 	}
 }
