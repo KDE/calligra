@@ -771,7 +771,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     m_cache.counterFormat = counterFormat( paragraph );
     m_cache.counterFormat->addRef();
     m_cache.width = 0;
-    if ( m_style != NUM_NONE )
+    if ( m_style != STYLE_NONE )
     {
         QString text = m_cache.text;
         if ( m_style == STYLE_CUSTOMBULLET && !text.isEmpty() )
