@@ -46,6 +46,10 @@ ObjectTreeViewItem::ObjectTreeViewItem(KListView *list, ObjectTreeItem *item)
 	m_item = item;
 }
 
+ObjectTreeViewItem::~ObjectTreeViewItem()
+{
+}
+
 const QString
 ObjectTreeViewItem::name() const
 {
@@ -174,6 +178,10 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 	setAllColumnsShowFocus(true);
 	setItemMargin(3);
 	setSorting(-1);
+}
+
+ObjectTreeView::~ObjectTreeView()
+{
 }
 
 QSize

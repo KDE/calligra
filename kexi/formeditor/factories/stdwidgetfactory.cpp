@@ -840,6 +840,7 @@ bool
 StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, 
 	QWidget *w, const QCString &property, bool isTopLevel)
 {
+	bool ok = true;
 	if(classname == "FormWidgetBase")
 	{
 		if(property == "iconText")
@@ -868,7 +869,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname,
 			return false;
 	}
 	else if(classname == "KTextEdit")
-		return m_showAdvancedProperties ||
+		ok = m_showAdvancedProperties ||
 			   property!="undoDepth"
 			&& property!="undoRedoEnabled" //always true!
 			&& property!="dragAutoScroll" //always true!
@@ -886,18 +887,18 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname,
 	}
 	else if(classname=="QCheckBox")
 	{
-		return m_showAdvancedProperties || (property != "autoRepeat");
+		ok = m_showAdvancedProperties || (property != "autoRepeat");
 	}
 	else if(classname=="QRadioButton")
 	{
-		return m_showAdvancedProperties || (property != "autoRepeat");
+		ok = m_showAdvancedProperties || (property != "autoRepeat");
 	}
 	else if(classname=="KPushButton")
 	{
 //! @todo reenable autoDefault / default if the top level window is dialog...
-		return m_showAdvancedProperties || (property != "autoDefault" && property != "default");
+		ok = m_showAdvancedProperties || (property != "autoDefault" && property != "default");
 	}
-	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
+	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 QValueList<QCString>

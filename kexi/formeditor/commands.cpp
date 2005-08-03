@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
+#include <kaccelmanager.h>
 
 #include "formIO.h"
 #include "container.h"
@@ -675,9 +676,16 @@ InsertWidgetCommand::execute()
 		KMessageBox::sorry(manager->activeForm() ? manager->activeForm()->widget() : 0,
 				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.")
 				.arg(winfo ? winfo->name() : QString::null));
-		kdDebug() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
+		kdWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
 	}
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
+//! @todo allow setting this for data view mode as well
+	if (m_form->designMode()) {
+		//don't generate accelerators for widgets in design mode
+		KAcceleratorManager::setNoAccel(w);
+	}
+#endif
 
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
 	if(( (m_insertRect.width() < 21) && (m_insertRect.height() < 21)))
@@ -808,7 +816,17 @@ CreateLayoutCommand::execute()
 
 	if(m_name.isEmpty())// the name must be generated only once
 		m_name = m_form->objectTree()->generateUniqueName(classname);
+
 	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
+//! @todo allow setting this for data view mode as well
+	if (w) {
+		if (m_form->designMode()) {
+			//don't generate accelerators for widgets in design mode
+			KAcceleratorManager::setNoAccel(w);
+		}
+	}
+#endif
 	ObjectTreeItem *tree = w ? m_form->objectTree()->lookup(w->name()) : 0;
 	if(!tree)
 		return;
@@ -1291,6 +1309,8 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 void
 DeleteWidgetCommand::execute()
 {
+	Container *containerToSelect = 0;
+
 	QMap<QCString,QCString>::ConstIterator endIt = m_containers.constEnd();
 	for(QMap<QCString,QCString>::ConstIterator  it = m_containers.constBegin(); it != endIt; ++it)
 	{
@@ -1299,8 +1319,13 @@ DeleteWidgetCommand::execute()
 			continue;
 
 		Container *cont = m_form->parentContainer(item->widget());
+		if (!containerToSelect)
+			containerToSelect = cont;
 		cont->deleteWidget(item->widget());
 	}
+	//now we've nothing selecte: select parent container
+	if (containerToSelect)
+		m_form->setSelectedWidget( containerToSelect->widget() );
 }
 
 void

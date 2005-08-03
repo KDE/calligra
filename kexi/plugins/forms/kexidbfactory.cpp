@@ -540,11 +540,13 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 	const QCString& property, bool isTopLevel)
 {
 	//general
-	if (property=="dataSource" || property=="dataSourceMimeType")
-		return false;
+	if (property=="dataSource" || property=="dataSourceMimeType") 
+		return false; //force
+
+	bool ok = true;
 
 	if(classname == "KexiPushButton") {
-		return property!="isDragEnabled"
+		ok = property!="isDragEnabled"
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="onClickAction" /*! @todo reenable */
 			&& property!="iconSet" /*! @todo reenable */
@@ -553,7 +555,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 			;
 	}
 	else if(classname == "KexiDBLineEdit")
-		return property!="urlDropsEnabled"
+		ok = property!="urlDropsEnabled"
 			&& property != "vAlign"
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="inputMask"
@@ -561,7 +563,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 #endif
 		;
 	else if(classname == "KexiDBTextEdit")
-		return property!="undoDepth"
+		ok = property!="undoDepth"
 			&& property!="undoRedoEnabled" //always true!
 			&& property!="dragAutoScroll" //always true!
 			&& property!="overwriteMode" //always false!
@@ -572,19 +574,19 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 #endif
 			;
 	else if(classname == "KexiSubForm")
-		return property!="dragAutoScroll"
+		ok = property!="dragAutoScroll"
 			&& property!="resizePolicy"
 			&& property!="focusPolicy";
 	else if(classname == "KexiDBForm")
-		return property!="iconText";
+		ok = property!="iconText";
 	else if(classname == "KexiLabel")
-		return property!="focusPolicy";
+		ok = property!="focusPolicy";
 	else if(classname == "KexiDBFieldEdit") {
 		if (!isTopLevel && property=="caption")
-			return true;
+			return true; //force
 	}
 
-	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
+	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 bool

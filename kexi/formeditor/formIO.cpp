@@ -36,6 +36,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kcommand.h>
+#include <kaccelmanager.h>
 
 #include "form.h"
 #include "container.h"
@@ -1155,6 +1156,13 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	if(!w)
 		return;
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
+//! @todo allow setting this for data view mode as well
+	if (m_currentForm->designMode()) {
+		//don't generate accelerators for widgets in design mode
+		KAcceleratorManager::setNoAccel(w);
+	}
+#endif
 	w->setStyle(&(container->widget()->style()));
 	w->show();
 

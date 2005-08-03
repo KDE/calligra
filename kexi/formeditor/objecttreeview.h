@@ -33,10 +33,11 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 	public:
 		ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
 		ObjectTreeViewItem(KListView *list, ObjectTreeItem *item=0);
-		~ObjectTreeViewItem() {;}
+		virtual ~ObjectTreeViewItem();
 
 		//! \return the item name, ie the ObjectTreeItem name
-		const QString	name() const;
+		const QString name() const;
+
 		//! \return the ObjectTreeItem associated to this item.
 		ObjectTreeItem* objectTree() const { return m_item; }
 
@@ -45,13 +46,15 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 	protected:
 		//! Reimplemented to draw custom contents (copied from Property Editor)
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+
 		//! Reimplemented to draw custom contents (copied from Property Editor)
 		virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
+
 		//! Reimplemented to draw custom contents (copied from Property Editor)
 		virtual void setup();
 
 	private:
-		ObjectTreeItem     *m_item;
+		ObjectTreeItem *m_item;
 
 	friend class ObjectTreeView;
 };
@@ -66,7 +69,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 
 	public:
 		ObjectTreeView(QWidget *parent=0, const char *name=0, bool tabStop = false);
-		~ObjectTreeView(){;}
+		virtual ~ObjectTreeView();
 
 		virtual QSize sizeHint() const;
 
@@ -74,29 +77,36 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form.
 		 */
 		void setForm(Form *form);
+
 		//! Return the pixmap for a given class, to be shown next to the widget name.
 		QString pixmapForClass(const QCString &classname);
 
 	public slots:
 		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */
 		void  setSelectedWidget(QWidget *w, bool add=false);
+
 		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
 		void addItem(ObjectTreeItem *item);
+
 		/*! Removess the ObjectTreeItem \a item from the list. */
 		void removeItem(ObjectTreeItem *item);
+
 		/*! Just renames the list item from \a oldname to \a newname. */
 		void renameItem(const QCString &oldname, const QCString &newname);
 
 	protected slots:
 		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
 		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
+
 		void slotColumnSizeChanged(int);
+
 		/*! The selected list item has changed, so we emit a signal to update the Form. */
 		void slotSelectionChanged();
 
 	protected:
 		//! Internal function to fill the list.
 		ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
+
 		//! \return The item whose name is \a name.
 		ObjectTreeViewItem* findItem(const QString &name);
 
@@ -110,4 +120,3 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 }
 
 #endif
-

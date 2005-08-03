@@ -83,7 +83,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		/**
 		 * searches the right factory and creates a widget.
-		 * @returns the widget or 0 if something falid
+		 * \return the widget or 0 if something falid
 		 */
 		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
 			WidgetFactory::OrientationHint orientationHint = WidgetFactory::Any);

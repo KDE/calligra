@@ -634,7 +634,10 @@ WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property&
 void
 WidgetPropertySet::slotWidgetDestroyed()
 {
-	clearSet();
+	//only clear this set if it contains the destroyed widget
+	if(d->widgets.findRef(dynamic_cast<const QWidget*>(sender())) != -1) {
+		clearSet();
+	}
 }
 
 bool
