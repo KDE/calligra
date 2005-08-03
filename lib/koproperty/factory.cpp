@@ -110,14 +110,20 @@ Factory::widgetForProperty(Property *property)
 	if(!property)
 		return 0;
 
-	int type = property->type();
+	const int type = property->type();
 
 	if (d->registeredWidgets.contains(type))
 		return d->registeredWidgets[type]->createCustomWidget(property);
 
-	if(property->listData())
-		return new ComboBox(property);
+	//handle combobox-based widgets:
+	if (type==Cursor)
+		return new CursorEdit(property);
 
+	if (property->listData()) {
+		return new ComboBox(property);
+	}
+
+	//handle other widget types:
 	switch(type)
 	{
 		// Default QVariant types
@@ -175,8 +181,6 @@ Factory::widgetForProperty(Property *property)
 			return new RectEdit(property);
 		case SizePolicy:
 			return new SizePolicyEdit(property);
-		case Cursor:
-			return new CursorEdit(property);
 
 		case List:
 		case Map:
