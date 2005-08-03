@@ -1490,7 +1490,7 @@ KSpreadValue ValueCalc::sum (QValueVector<KSpreadValue> range)
 {
   KSpreadValue res;
   arrayWalk (range, res, awFunc ("sum"), 0);
-  return converter->asInteger (res).asInteger ();
+  return res;
 }
 
 // sum of squares
