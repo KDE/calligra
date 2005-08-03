@@ -395,21 +395,21 @@ Set::typeName() const
 Buffer::Buffer()
 	:Set(false)
 {
-	connect( this, SIGNAL( propertyChanged( Set&, Property& ) ),
-			  this, SLOT(intersectedChanged( Set&, Property& ) ) );
+	connect( this, SIGNAL( propertyChanged( KoProperty::Set&, KoProperty::Property& ) ),
+	         this, SLOT(intersectedChanged( KoProperty::Set&, KoProperty::Property& ) ) );
 
-	connect( this, SIGNAL( propertyReset( Set&, Property& ) ),
-			 this, SLOT(intersectedReset( Set&, Property& ) ) );
+	connect( this, SIGNAL( propertyReset( KoProperty::Set&, KoProperty::Property& ) ),
+	         this, SLOT(intersectedReset( KoProperty::Set&, KoProperty::Property& ) ) );
 }
 
 Buffer::Buffer(const Set *set)
 	:Set(false)
 {
-	connect( this, SIGNAL( propertyChanged( Set&, Property& ) ),
-			 this, SLOT(intersectedChanged( Set&, Property& ) ) );
+	connect( this, SIGNAL( propertyChanged( KoProperty::Set&, KoProperty::Property& ) ),
+	         this, SLOT(intersectedChanged( KoProperty::Set&, KoProperty::Property& ) ) );
 
-	connect( this, SIGNAL( propertyReset( Set&, Property& ) ),
-			 this, SLOT(intersectedReset( Set&, Property& ) ) );
+	connect( this, SIGNAL( propertyReset( KoProperty::Set&, KoProperty::Property& ) ),
+	         this, SLOT(intersectedReset( KoProperty::Set&, KoProperty::Property& ) ) );
 
 	initialSet( set );
 }
@@ -451,7 +451,7 @@ void Buffer::intersect(const Set *set)
 	}
 }
 
-void Buffer::intersectedChanged(Set& set, Property& prop)
+void Buffer::intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop)
 {
 	QCString propertyName = prop.name();
 	if ( !contains( propertyName ) )
@@ -464,7 +464,7 @@ void Buffer::intersectedChanged(Set& set, Property& prop)
 	}
 }
 
-void Buffer::intersectedReset(Set& set, Property& prop)
+void Buffer::intersectedReset(KoProperty::Set& set, KoProperty::Property& prop)
 {
 	QCString propertyName = prop.name();
 	if ( !contains( propertyName ) )

@@ -212,8 +212,8 @@ class KOPROPERTY_EXPORT Buffer : public Set
 		virtual void intersect(const Set *set);
 
 	protected slots:
-		void intersectedChanged(Set& set, Property& prop);
-		void intersectedReset(Set& set, Property& prop);
+		void intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop);
+		void intersectedReset(KoProperty::Set& set, KoProperty::Property& prop);
 
 	private:
 		void initialSet(const Set *set);
