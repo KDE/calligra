@@ -3,7 +3,7 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
-#include <values.h>		// For MAXDOUBLE
+#include <limits> // For basic data types characteristics.
 
 #include "kchart_part.h"
 #include "kchart_view.h"
@@ -299,8 +299,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// Calculate the min, max, open and close values for each row.
 	m_displayData.expand(tmpData.usedRows(), 4);
 	for (uint row = 0; row < tmpData.usedRows(); row++) {
-	    double  minVal   = MAXDOUBLE;
-	    double  maxVal   = -MAXDOUBLE;
+	    double  minVal   = numeric_limits<double>::max() ;
+	    double  maxVal   = -numeric_limits<double>::max() ;
 
 	    // Calculate min and max for this row.
 	    for (uint col = 0; col < tmpData.usedCols(); col++) {
