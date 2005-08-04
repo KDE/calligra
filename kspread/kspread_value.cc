@@ -26,21 +26,63 @@
 #include <qstring.h>
 #include <qtextstream.h>
 
+// helper struct for array implementation
+// this struct holds one piece of an array of size CHUNK_COLS x CHUNK_ROWS
+// or less
+struct arrayChunk {
+  arrayChunk (int c, int r) {
+    cols = c; rows = r;
+    ptr = new KSpreadValue* [c*r];
+    for (int i = 0; i < c*r; ++i) ptr[i] = 0;
+  }
+  
+  ~arrayChunk () {
+    if (!ptr) return;
+    unsigned count = cols * rows;
+    for (unsigned i = 0; i < count; i++)
+      delete ptr[i];
+    delete [] ptr;
+  }
 
+  arrayChunk( const arrayChunk& ac )
+  {
+    operator=( ac );
+  }
+  
+  arrayChunk& operator= ( const arrayChunk& ac )
+  {
+    cols = ac.cols; rows = ac.rows;
+    ptr = new KSpreadValue* [cols*rows];
+    unsigned count = cols * rows;
+    for( unsigned i = 0; i < count; i++ )
+      if( ac.ptr[i] )
+        ptr[i] = new KSpreadValue( *ac.ptr[i] );
+      else
+        ptr[i] = 0;
+    return *this;
+  }
+  
+  KSpreadValue **ptr;
+  unsigned cols, rows;
+};
+
+#define CHUNK_COLS 128
+#define CHUNK_ROWS 128
 // helper class for array implementation
 class ValueArray
 {
 public:
-  KSpreadValue** ptr;
+  arrayChunk **chunks;
   unsigned columns;
   unsigned rows;
+  unsigned chunkCols, chunkRows;
   
-  ValueArray(): ptr(0), columns(0), rows(0) {};
+  ValueArray(): chunks(0), columns(0), rows(0), chunkCols(0), chunkRows(0) {};
   
   ~ValueArray()
   { 
     clear();
-   };  
+  };
    
   ValueArray( const ValueArray& va )
   {
@@ -52,49 +94,80 @@ public:
     init( va.columns, va.rows );
     unsigned count = columns * rows;
     for( unsigned i = 0; i < count; i++ )
-      if( va.ptr[i] )
-        ptr[i] = new KSpreadValue( *va.ptr[i] );
+      if( va.chunks[i] )
+        chunks[i] = new arrayChunk (*va.chunks[i]);
+      else
+        chunks[i] = 0;
     return *this;
   }
    
   void clear()
   {
-    if( !ptr ) return;
-    unsigned count = columns * rows;
+    int c = columns / CHUNK_COLS;
+    int r = rows / CHUNK_ROWS;
+    if (columns % CHUNK_COLS != 0) c++;
+    if (rows % CHUNK_ROWS != 0) r++;
+    if( !chunks ) return;
+    unsigned count = c*r;
     if( !count ) return;
-    for( unsigned i = 0; i < count; i++ )
-      delete ptr[i];
-    delete [] ptr;
-    ptr = 0;
+    for (unsigned i = 0; i < count; i++)
+      delete chunks[i];
+    delete [] chunks;
+    chunks = 0;
+    columns = rows = chunkCols = chunkRows = 0;
   }
   
   void init( unsigned c, unsigned r )
   {
-    if( ptr ) clear();
+    if (chunks) clear();
     columns = c; rows = r;
-    unsigned count = columns * rows;
-    ptr = new KSpreadValue* [count];
+    int cc = columns / CHUNK_COLS;
+    int rr = rows / CHUNK_ROWS;
+    if (columns % CHUNK_COLS != 0) cc++;
+    if (rows % CHUNK_ROWS != 0) rr++;
+    chunkCols = cc;
+    chunkRows = rr;
+    unsigned count = cc*rr;
+    chunks = new arrayChunk* [count];
     for( unsigned i = 0; i < count; i++ )
-      ptr[i] = (KSpreadValue*)0;
+      chunks[i] = 0;
   }
   
   KSpreadValue* at( unsigned c, unsigned r )
   {
-    if( !ptr ) return 0;
+    if( !chunks ) return 0;
     if( c >= columns ) return 0;
     if( r >= rows ) return 0;
-    return ptr[r*columns+c];
+    
+    int col = c / CHUNK_COLS;
+    int row = r / CHUNK_ROWS;
+    int cpos = c % CHUNK_COLS;
+    int rpos = r % CHUNK_ROWS;
+    arrayChunk *chunk = chunks[row * chunkCols + col];
+    if (!chunk) return 0;
+    return chunk->ptr[rpos * chunk->cols + cpos];
   };
   
   void set( unsigned c, unsigned r, KSpreadValue* v )
   {
-    if( !ptr ) return;
+    if (!chunks) return;
     if( c >= columns ) return;
     if( r >= rows ) return;
-    delete ptr[r*columns+c];
-    ptr[r*columns+c] = v;
+    unsigned col = c / CHUNK_COLS;
+    unsigned row = r / CHUNK_ROWS;
+    unsigned cpos = c % CHUNK_COLS;
+    unsigned rpos = r % CHUNK_ROWS;
+    arrayChunk *chunk = chunks[row * chunkCols + col];
+    if (!chunk) {
+      unsigned cc = (col==chunkCols-1) ? (columns % CHUNK_COLS) : CHUNK_COLS;
+      unsigned rr = (row==chunkRows-1) ? (rows % CHUNK_ROWS) : CHUNK_ROWS;
+      chunk = new arrayChunk (cc, rr);
+      chunks[row * chunkCols + col] = chunk;
+    }
+    delete chunk->ptr[rpos * chunk->cols + cpos];
+    chunk->ptr[rpos * chunk->cols + cpos] = v;
   }
-  
+
 };
 
 

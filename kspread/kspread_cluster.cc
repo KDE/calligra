@@ -630,9 +630,6 @@ void KSpreadCluster::clearRow( int row )
 KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
     int col2, int row2) const
 {
-  // TODO: two-level hierarchy should be moved to KSpreadValue, no need to
-  // handle it here ... KSpreadValue needs transparent flattener ...
-  
   KSpreadValue empty;
   
   //swap first/second values if needed
@@ -652,50 +649,13 @@ KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
   if ((row1 > m_biggestY) || (col1 > m_biggestX))
     return empty;
 
-  //split the requested range into cluster-sized sections
-  int x1, y1, x2, y2;
-  x1 = col1 / KSPREAD_CLUSTER_LEVEL2;
-  y1 = row1 / KSPREAD_CLUSTER_LEVEL2;
-  x2 = col2 / KSPREAD_CLUSTER_LEVEL2;
-  y2 = row2 / KSPREAD_CLUSTER_LEVEL2;
-  
-  if ((x1 == x2) && (y1 == y2))  //start/end in the same chunk
-  {
-    return makeArray (col1, row1, col2, row2);
-  }
-  
-  KSpreadValue result (x2 - x1 + 1, y2 - y1 + 1);
-  
-  //fill up each section with cell values - if a cell contains a range,
-  //we only take one its element - or else we'd have problems with
-  //matrix functions and expansion of returned matrices to nearby cells
-  for (int y = y1; y <= y2; ++y)
-    for (int x = x1; x <= x2; ++x)
-      //check whether the current element contains anything
-      if (m_cluster[y * KSPREAD_CLUSTER_LEVEL1 + x])
-      {
-        //compute start/end indexes
-        int xx1, xx2, yy1, yy2;
-        xx1 = x * KSPREAD_CLUSTER_LEVEL2;
-        xx2 = (x + 1) * KSPREAD_CLUSTER_LEVEL2 - 1;
-        yy1 = y * KSPREAD_CLUSTER_LEVEL2;
-        yy2 = (y + 1) * KSPREAD_CLUSTER_LEVEL2 - 1;
-        if (xx1 < col1) xx1 = col1;
-        if (yy1 < row1) yy1 = row1;
-        if (xx2 > col2) xx2 = col2;
-        if (yy2 > row2) yy2 = row2;
-        
-        //fill the array element
-        result.setElement (x, y, makeArray (xx1, yy1, xx2, yy2));
-      }
-  //now return the result
-  return result;
+  return makeArray (col1, row1, col2, row2);
 }
 
 KSpreadValue KSpreadCluster::makeArray (int col1, int row1,
     int col2, int row2) const
 {
-  //this generates a simple, one-dimensional array
+  //this generates an array of values
   int cols = col2 - col1 + 1;
   int rows = row2 - row1 + 1;
   KSpreadValue array (cols, rows);
@@ -706,8 +666,6 @@ KSpreadValue KSpreadCluster::makeArray (int col1, int row1,
       if (cell)
       {
         KSpreadValue val = cell->value();
-        while (val.isArray ())
-          val = val.element (0, 0);
         array.setElement (col-col1, row-row1, val); 
       }
     }
