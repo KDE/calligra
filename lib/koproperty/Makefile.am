@@ -9,8 +9,7 @@ libkoproperty_la_SOURCES = property.cpp customproperty.cpp set.cpp editor.cpp \
 
 METASOURCES = AUTO
 
-SUBDIRS = editors . 
-#test
+SUBDIRS = editors . test
 
 
 icondir = $(kde_datadir)/koffice/icons
