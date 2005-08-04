@@ -55,6 +55,7 @@ KoSelectAction::KoSelectAction(const QString &text, const QString& icon,
   QObject* parent, const char* name) : KAction(text, icon, 0, parent, name)
 {
   d = new KoSelectActionPrivate;
+  setShowCurrentSelection(true);
   
   connect(popupMenu(), SIGNAL(activated(int)), this, SLOT(execute(int)));
 }
@@ -176,9 +177,17 @@ int KoSelectAction::currentSelection()
 
 void KoSelectAction::setCurrentSelection(int index)
 {
-  popupMenu()->setItemChecked(d->m_currentSelection, false);
-  popupMenu()->setItemChecked(index, true);
+  if(popupMenu()->isCheckable()) {
+    popupMenu()->setItemChecked(d->m_currentSelection, false);
+    popupMenu()->setItemChecked(index, true);
+  }
+
   d->m_currentSelection = index;
+}
+
+void KoSelectAction::setShowCurrentSelection(bool show)
+{
+  popupMenu()->setCheckable(show);
 }
 
 #include "koselectaction.moc"

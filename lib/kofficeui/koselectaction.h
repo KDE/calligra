@@ -62,7 +62,10 @@ class KoSelectAction : public KAction
     
     /** Returns the index of the currently selected item. */
     virtual int currentSelection();
-  
+
+    /** If the current selection selection should be shown or not in the menu */
+    void setShowCurrentSelection(bool show);
+
   signals:
     /** Emited when the selection changed */
     void selectionChanged(int);
