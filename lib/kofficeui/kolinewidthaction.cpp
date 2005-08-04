@@ -159,22 +159,20 @@ void KoLineWidthAction::setUnit(KoUnit::Unit unit)
 class KoLineWidthChooser::KoLineWidthChooserPrivate
 {
   public:
-    KoUnit::Unit m_unit;
-    KoBuggyUnitDoubleSpinBox* m_lineWidthUSBox;
+    KoUnitDoubleSpinBox2* m_lineWidthUSBox;
 };
 
 KoLineWidthChooser::KoLineWidthChooser(QWidget* parent, const char* name)
  : KDialogBase(parent, name, true, i18n("Custom Line Width"), Ok|Cancel, Ok)
 {
   d = new KoLineWidthChooserPrivate;
-  d->m_unit = KoUnit::U_PT;
 
   // Create the ui
   QWidget* mainWidget = new QWidget(this);
   setMainWidget(mainWidget);
   QGridLayout* gl = new QGridLayout(mainWidget, 1, 2, KDialog::marginHint(), KDialog::spacingHint());
   QLabel* textLbl = new QLabel(i18n("Line width:"), mainWidget);
-  d->m_lineWidthUSBox = new KoBuggyUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, d->m_unit, 2);
+  d->m_lineWidthUSBox = new KoUnitDoubleSpinBox2(mainWidget, 0.0, 1000.0, 0.1, 1.0, KoUnit::U_PT, 2);
   gl->addWidget(textLbl, 0, 0);
   gl->addWidget(d->m_lineWidthUSBox, 0, 1);
 }
@@ -186,18 +184,17 @@ KoLineWidthChooser::~KoLineWidthChooser()
 
 double KoLineWidthChooser::width() const
 {
-  return KoUnit::fromUserValue(d->m_lineWidthUSBox->value(), d->m_unit);
+  return d->m_lineWidthUSBox->value();
 }
 
 void KoLineWidthChooser::setUnit(KoUnit::Unit unit)
 {
-  d->m_unit = unit;
   d->m_lineWidthUSBox->setUnit(unit);
 }
 
 void KoLineWidthChooser::setWidth(double width)
 {
-  d->m_lineWidthUSBox->changeValue(KoUnit::toUserValue(width, d->m_unit));
+  d->m_lineWidthUSBox->changeValue(width);
 }
 
 #include "kolinewidthaction.moc"
