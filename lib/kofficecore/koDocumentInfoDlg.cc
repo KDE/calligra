@@ -21,6 +21,9 @@
 
 #include <koDocumentInfoDlg.h>
 #include <koDocumentInfo.h>
+#include <koDocumentInfoAboutWidget.h>
+#include <koDocumentInfoAuthorWidget.h>
+#include <koDocument.h>
 #include <koGlobal.h>
 #include <koStore.h>
 
@@ -29,12 +32,10 @@
 #include <assert.h>
 
 #include <qlabel.h>
-#include <qlineedit.h>
-#include <qmultilineedit.h>
 #include <qbuffer.h>
 #include <qdom.h>
 #include <qdir.h>
-#include <qpushbutton.h>
+#include <qvbox.h>
 
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
@@ -48,6 +49,10 @@
 #include <qlayout.h>
 #include <qgrid.h>
 #include <kfilterdev.h>
+#include <klineedit.h>
+#include <ktextedit.h>
+#include <kiconloader.h>
+#include <kpushbutton.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -60,27 +65,8 @@ public:
   }
 
   KoDocumentInfo *m_info;
-
-  QLineEdit *m_leFullName;
-  QLineEdit *m_leInitial;
-  QLineEdit *m_leAuthorTitle;
-  QLineEdit *m_leCompany;
-  QLineEdit *m_leEmail;
-  QLineEdit *m_leTelephoneWork;
-  QLineEdit *m_leTelephoneHome;
-  QLineEdit *m_leFax;
-  QLineEdit *m_leCountry;
-  QLineEdit *m_lePostalCode;
-  QLineEdit *m_leCity;
-  QLineEdit *m_leStreet;
-  QPushButton *m_pbLoadKABC;
-
-  QLineEdit *m_leDocTitle;
-  QMultiLineEdit *m_meAbstract;
-    QLineEdit *m_leDocSubject;
-    QLineEdit *m_leDocKeywords;
-    QLineEdit *m_leAuthorPosition;
-
+  KoDocumentInfoAboutWidget *m_aboutWidget;
+  KoDocumentInfoAuthorWidget *m_authorWidget;
 
   bool m_bDeleteDialog;
   KDialogBase *m_dialog;
@@ -101,7 +87,8 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
     d->m_dialog = new KDialogBase( KDialogBase::Tabbed,
                                    i18n( "Document Information" ),
                                    KDialogBase::Ok | KDialogBase::Cancel,
-                                   KDialogBase::Ok, parent, name, true, true );
+                                   KDialogBase::Ok, parent, name, true, false );
+    d->m_dialog->setInitialSize( QSize( 500, 500 ) );
     d->m_bDeleteDialog = true;
   }
 
@@ -152,157 +139,107 @@ void KoDocumentInfoDlg::loadFromKABC()
     return;
   }
 
-  d->m_leFullName->setText( addr.formattedName() );
-  d->m_leInitial->setText( addr.givenName()[ 0 ] + ". " +
+  d->m_authorWidget->leFullName->setText( addr.formattedName() );
+  d->m_authorWidget->leInitial->setText( addr.givenName()[ 0 ] + ". " +
                            addr.familyName()[ 0 ] + "." );
-  d->m_leAuthorTitle->setText( addr.title() );
-  d->m_leCompany->setText( addr.organization() );
-  d->m_leEmail->setText( addr.preferredEmail() );
+  d->m_authorWidget->leAuthorTitle->setText( addr.title() );
+  d->m_authorWidget->leCompany->setText( addr.organization() );
+  d->m_authorWidget->leEmail->setText( addr.preferredEmail() );
 
   KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home );
-  d->m_leTelephoneHome->setText( phone.number() );
+  d->m_authorWidget->leTelephoneHome->setText( phone.number() );
   phone = addr.phoneNumber( KABC::PhoneNumber::Work );
-  d->m_leTelephoneWork->setText( phone.number() );
+  d->m_authorWidget->leTelephoneWork->setText( phone.number() );
 
   phone = addr.phoneNumber( KABC::PhoneNumber::Fax );
-  d->m_leFax->setText( phone.number() );
+  d->m_authorWidget->leFax->setText( phone.number() );
 
   KABC::Address a = addr.address( KABC::Address::Home );
-  d->m_leCountry->setText( a.country() );
-  d->m_lePostalCode->setText( a.postalCode() );
-  d->m_leCity->setText( a.locality() );
-  d->m_leStreet->setText( a.street() );
+  d->m_authorWidget->leCountry->setText( a.country() );
+  d->m_authorWidget->lePostalCode->setText( a.postalCode() );
+  d->m_authorWidget->leCity->setText( a.locality() );
+  d->m_authorWidget->leStreet->setText( a.street() );
 
   emit changed();
 }
 
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
-  QFrame *page = d->m_dialog->addPage( i18n( "Author" ) );
-  QGridLayout *layout = new QGridLayout( page, 11, 2, KDialog::marginHint(),
-                                         KDialog::spacingHint() );
+  QVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
+  d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
+  d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "kuser", KIcon::Desktop, 48 ) );
+  d->m_authorWidget->pbLoadKABC->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "kaddressbook", KIcon::Small ) ) );
 
-  layout->addWidget( new QLabel( i18n( "Name:" ), page ), 0, 0 );
-  d->m_leFullName = new QLineEdit( authorInfo->fullName(), page );
-  layout->addWidget( d->m_leFullName, 0, 1 );
+  d->m_authorWidget->leFullName->setText( authorInfo->fullName() );
+  d->m_authorWidget->leInitial->setText( authorInfo->initial() );
+  d->m_authorWidget->leAuthorTitle->setText( authorInfo->title() );
+  d->m_authorWidget->leCompany->setText( authorInfo->company() );
+  d->m_authorWidget->leEmail->setText( authorInfo->email() );
+  d->m_authorWidget->leTelephoneWork->setText( authorInfo->telephoneWork() );
+  d->m_authorWidget->leTelephoneHome->setText( authorInfo->telephoneHome() );
+  d->m_authorWidget->leFax->setText( authorInfo->fax() );
+  d->m_authorWidget->leCountry->setText( authorInfo->country() );
+  d->m_authorWidget->lePostalCode->setText( authorInfo->postalCode() );
+  d->m_authorWidget->leCity->setText( authorInfo->city() );
+  d->m_authorWidget->leStreet->setText( authorInfo->street() );
+  d->m_authorWidget->leAuthorPosition->setText( authorInfo->position() );
 
-
-  layout->addWidget( new QLabel( i18n( "Initials:" ), page ), 1, 0 );
-  d->m_leInitial = new QLineEdit( authorInfo->initial(), page );
-  layout->addWidget( d->m_leInitial, 1, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Title:" ), page ), 2, 0 );
-  d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), page );
-  layout->addWidget( d->m_leAuthorTitle, 2, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Position:" ), page ), 3, 0 );
-  d->m_leAuthorPosition = new QLineEdit( authorInfo->position(), page );
-  layout->addWidget( d->m_leAuthorPosition, 3, 1 );
-
-
-  layout->addWidget( new QLabel( i18n( "Company:" ), page ), 4, 0 );
-  d->m_leCompany = new QLineEdit( authorInfo->company(), page );
-  layout->addWidget( d->m_leCompany, 4, 1 );
-
-
-  layout->addWidget( new QLabel( i18n( "Email:" ), page ), 5, 0 );
-  d->m_leEmail = new QLineEdit( authorInfo->email(), page );
-  layout->addWidget( d->m_leEmail, 5, 1 );
-
-
-  layout->addWidget( new QLabel( i18n( "Telephone (Home):" ), page ), 6, 0 );
-  d->m_leTelephoneHome = new QLineEdit( authorInfo->telephoneHome(), page );
-  layout->addWidget( d->m_leTelephoneHome, 6, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Telephone (Work):" ), page ), 7, 0 );
-  d->m_leTelephoneWork = new QLineEdit( authorInfo->telephoneWork(), page );
-  layout->addWidget( d->m_leTelephoneWork, 7, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Fax:" ), page ), 8, 0 );
-  d->m_leFax = new QLineEdit( authorInfo->fax(), page );
-  layout->addWidget( d->m_leFax, 8, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Street:" ), page ), 9, 0 );
-  d->m_leStreet = new QLineEdit( authorInfo->street(), page );
-  layout->addWidget( d->m_leStreet, 9, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Postal code:" ), page ), 10, 0 );
-  d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), page );
-  layout->addWidget( d->m_lePostalCode, 10, 1 );
-
-  layout->addWidget( new QLabel( i18n( "City:" ), page ), 11, 0 );
-  d->m_leCity = new QLineEdit( authorInfo->city(), page );
-  layout->addWidget( d->m_leCity, 11, 1 );
-
-  layout->addWidget( new QLabel( i18n( "Country:" ), page ), 12, 0 );
-  d->m_leCountry = new QLineEdit( authorInfo->country(), page );
-  layout->addWidget( d->m_leCountry, 12, 1 );
-
-  d->m_pbLoadKABC = new QPushButton( i18n( "Load From Address Book" ), page );
-  layout->addMultiCellWidget( d->m_pbLoadKABC, 13, 13, 0, 1 );
-
-  connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leFullName, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leInitial, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leInitial, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-
-  connect( d->m_leAuthorTitle, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leAuthorTitle, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leCompany, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leCompany, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leEmail, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leEmail, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leTelephoneWork, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leTelephoneWork, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leTelephoneHome, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leTelephoneHome, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leFax, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leFax, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leCountry, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leCountry, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_lePostalCode, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->lePostalCode, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leCity, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leCity, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leStreet, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leStreet, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leAuthorPosition, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_authorWidget->leAuthorPosition, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_pbLoadKABC, SIGNAL( clicked() ),
+  connect( d->m_authorWidget->pbLoadKABC, SIGNAL( clicked() ),
            this, SLOT( loadFromKABC() ) );
 }
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
-  QFrame *page = d->m_dialog->addPage( i18n("about the document", "Document") );
-  QGridLayout *grid = new QGridLayout( page, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
+  QVBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
+  d->m_aboutWidget = new KoDocumentInfoAboutWidget( page );
+  KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
+  if ( doc )
+  {
+    d->m_aboutWidget->leDocFile->setText( doc->file() );
+    d->m_aboutWidget->labelType->setText( doc->mimeType() );
+    d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( KIcon::Desktop, 48 ) );
+  }
+  d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + " " + aboutInfo->initialCreator() );
+  d->m_aboutWidget->labelModified->setText( aboutInfo->modificationDate() + " " + d->m_info->creator() );
+  d->m_aboutWidget->labelRevision->setText( aboutInfo->editingCycles() );
+  d->m_aboutWidget->leDocTitle->setText( aboutInfo->title() );
+  d->m_aboutWidget->leDocSubject->setText( aboutInfo->subject() );
+  d->m_aboutWidget->leDocKeywords->setText( aboutInfo->keywords() );
+  d->m_aboutWidget->meDocAbstract->setText( aboutInfo->abstract() );
 
-  grid->addWidget( new QLabel( i18n( "Title:" ), page ), 0, 0);
-  d->m_leDocTitle = new QLineEdit( aboutInfo->title(), page );
-  grid->addWidget(d->m_leDocTitle, 0, 1);
-
-  grid->addWidget( new QLabel( i18n( "Subject:" ), page ), 1, 0);
-  d->m_leDocSubject = new QLineEdit( aboutInfo->subject(), page );
-  grid->addWidget(d->m_leDocSubject, 1, 1);
-
-  grid->addWidget( new QLabel( i18n( "Keywords:" ), page ), 2, 0);
-  d->m_leDocKeywords = new QLineEdit( aboutInfo->keywords(), page );
-  grid->addWidget(d->m_leDocKeywords, 2, 1);
-
-
-  grid->addWidget(new QLabel( i18n( "Abstract:" ), page ), 3, 0, Qt::AlignTop );
-
-  d->m_meAbstract = new QMultiLineEdit( page );
-  d->m_meAbstract->setText( aboutInfo->abstract() );
-  grid->addMultiCellWidget(d->m_meAbstract, 3, 5, 1, 1);
-
-  connect( d->m_leDocTitle, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_aboutWidget->leDocTitle, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_meAbstract, SIGNAL( textChanged() ),
+  connect( d->m_aboutWidget->meDocAbstract, SIGNAL( textChanged() ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leDocSubject, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_aboutWidget->leDocSubject, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leDocKeywords, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_aboutWidget->leDocKeywords, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
 }
 
@@ -332,38 +269,38 @@ void KoDocumentInfoDlg::save()
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
 {
-  authorInfo->setFullName( d->m_leFullName->text() );
-  authorInfo->setInitial( d->m_leInitial->text() );
-  authorInfo->setTitle( d->m_leAuthorTitle->text() );
-  authorInfo->setCompany( d->m_leCompany->text() );
-  authorInfo->setEmail( d->m_leEmail->text() );
-  authorInfo->setTelephoneWork( d->m_leTelephoneWork->text() );
-  authorInfo->setTelephoneHome( d->m_leTelephoneHome->text() );
-  authorInfo->setFax( d->m_leFax->text() );
-  authorInfo->setCountry( d->m_leCountry->text() );
-  authorInfo->setPostalCode( d->m_lePostalCode->text() );
-  authorInfo->setCity( d->m_leCity->text() );
-  authorInfo->setStreet( d->m_leStreet->text() );
-  authorInfo->setPosition( d->m_leAuthorPosition->text() );
+  authorInfo->setFullName( d->m_authorWidget->leFullName->text() );
+  authorInfo->setInitial( d->m_authorWidget->leInitial->text() );
+  authorInfo->setTitle( d->m_authorWidget->leAuthorTitle->text() );
+  authorInfo->setCompany( d->m_authorWidget->leCompany->text() );
+  authorInfo->setEmail( d->m_authorWidget->leEmail->text() );
+  authorInfo->setTelephoneWork( d->m_authorWidget->leTelephoneWork->text() );
+  authorInfo->setTelephoneHome( d->m_authorWidget->leTelephoneHome->text() );
+  authorInfo->setFax( d->m_authorWidget->leFax->text() );
+  authorInfo->setCountry( d->m_authorWidget->leCountry->text() );
+  authorInfo->setPostalCode( d->m_authorWidget->lePostalCode->text() );
+  authorInfo->setCity( d->m_authorWidget->leCity->text() );
+  authorInfo->setStreet( d->m_authorWidget->leStreet->text() );
+  authorInfo->setPosition( d->m_authorWidget->leAuthorPosition->text() );
 
   KConfig* config = KoGlobal::kofficeConfig();
   KConfigGroupSaver cgs( config, "Author" );
-  config->writeEntry("telephone", d->m_leTelephoneHome->text());
-  config->writeEntry("telephone-work", d->m_leTelephoneWork->text());
-  config->writeEntry("fax", d->m_leFax->text());
-  config->writeEntry("country",d->m_leCountry->text());
-  config->writeEntry("postal-code",d->m_lePostalCode->text());
-  config->writeEntry("city",  d->m_leCity->text());
-  config->writeEntry("street", d->m_leStreet->text());
+  config->writeEntry("telephone", d->m_authorWidget->leTelephoneHome->text());
+  config->writeEntry("telephone-work", d->m_authorWidget->leTelephoneWork->text());
+  config->writeEntry("fax", d->m_authorWidget->leFax->text());
+  config->writeEntry("country",d->m_authorWidget->leCountry->text());
+  config->writeEntry("postal-code",d->m_authorWidget->lePostalCode->text());
+  config->writeEntry("city",  d->m_authorWidget->leCity->text());
+  config->writeEntry("street", d->m_authorWidget->leStreet->text());
   config->sync();
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
 {
-  aboutInfo->setTitle( d->m_leDocTitle->text() );
-  aboutInfo->setSubject( d->m_leDocSubject->text() );
-  aboutInfo->setKeywords( d->m_leDocKeywords->text() );
-  aboutInfo->setAbstract( d->m_meAbstract->text() );
+  aboutInfo->setTitle( d->m_aboutWidget->leDocTitle->text() );
+  aboutInfo->setSubject( d->m_aboutWidget->leDocSubject->text() );
+  aboutInfo->setKeywords( d->m_aboutWidget->leDocKeywords->text() );
+  aboutInfo->setAbstract( d->m_aboutWidget->meDocAbstract->text() );
 }
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate

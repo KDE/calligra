@@ -30,6 +30,7 @@ class QStringList;
 class QDomDocument;
 class QDomElement;
 class QDomNode;
+class QDateTime;
 class KoStore;
 class KoDocumentInfoPage;
 class KoXmlWriter;
@@ -52,6 +53,7 @@ public:
      * Equivalent to page("about")->title() (but checking that the page exists)
      */
     QString title() const;
+    QString creator() const;
 
     KoDocumentInfoPage* page( const QString& name ) const;
     QStringList pages() const;
@@ -69,7 +71,6 @@ public:
     virtual QDomElement save( QDomDocument& doc ) = 0;
     virtual bool loadOasis( const QDomNode& metaDoc ) = 0;
     virtual bool saveOasis( KoXmlWriter &xmlWriter ) = 0;
-
 };
 
 class KOFFICECORE_EXPORT KoDocumentInfoAuthor : public KoDocumentInfoPage
@@ -145,6 +146,10 @@ public:
     QString abstract() const;
     QString subject() const;
     QString keywords() const;
+    QString initialCreator() const;
+    QString editingCycles() const;
+    QString creationDate() const;
+    QString modificationDate() const;
 
     void setKeywords( const QString &n );
     void setSubject( const QString& n );
@@ -153,10 +158,15 @@ public:
     void setAbstract( const QString& n );
 
 private:
+    KoDocumentInfo* m_docInfo;
     QString m_title;
     QString m_abstract;
     QString m_keywords;
     QString m_subject;
+    QString m_initialCreator;
+    QDateTime m_creationDate;
+    QDateTime m_modificationDate;
+    int m_editingCycles;
 };
 
 #endif

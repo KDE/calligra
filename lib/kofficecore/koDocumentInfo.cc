@@ -29,8 +29,11 @@
 
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <qobjectlist.h>
+#include <qdatetime.h>
 #include "koxmlns.h"
 
 /*****************************************
@@ -42,8 +45,8 @@
 KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* name )
     : QObject( parent, name )
 {
-    (void)new KoDocumentInfoAuthor( this );
     (void)new KoDocumentInfoAbout( this );
+    (void)new KoDocumentInfoAuthor( this );
 }
 
 KoDocumentInfo::~KoDocumentInfo()
@@ -169,6 +172,17 @@ QString KoDocumentInfo::title() const
     }
     else
         return aboutPage->title();
+}
+
+QString KoDocumentInfo::creator() const
+{
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(page( "author" ));
+    if ( !authorPage ) {
+        kdWarning() << "'Author' page not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->fullName();
 }
 
 /*****************************************
@@ -615,35 +629,62 @@ void KoDocumentInfoAuthor::setPosition( const QString& n )
 KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
     : KoDocumentInfoPage( info, "about" )
 {
+    m_docInfo = info;
+    m_editingCycles = 0;
+    m_initialCreator = i18n( "Unknown" );
 }
 
 bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
 {
     if ( !m_title.isEmpty() )
     {
-     xmlWriter.startElement( "dc:title");
+     xmlWriter.startElement( "dc:title" );
      xmlWriter.addTextNode( m_title );
      xmlWriter.endElement();
     }
     if ( !m_abstract.isEmpty() )
     {
-     xmlWriter.startElement( "dc:description");
+     xmlWriter.startElement( "dc:description" );
      xmlWriter.addTextNode( m_abstract );
      xmlWriter.endElement();
     }
     if ( !m_keywords.isEmpty() )
     {
-     xmlWriter.startElement( "meta:keyword");
+     xmlWriter.startElement( "meta:keyword" );
      xmlWriter.addTextNode( m_keywords );
      xmlWriter.endElement();
     }
     if ( !m_subject.isEmpty() )
     {
-     xmlWriter.startElement( "dc:subject");
+     xmlWriter.startElement( "dc:subject" );
      xmlWriter.addTextNode( m_subject );
      xmlWriter.endElement();
     }
+    if ( !m_initialCreator.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:initial-creator" );
+     xmlWriter.addTextNode( m_initialCreator );
+     xmlWriter.endElement();
+    }
 
+    KoDocument* doc = dynamic_cast< KoDocument* >( m_docInfo->parent() );
+    if ( doc && !doc->isAutosaving() )
+       m_editingCycles++;
+    xmlWriter.startElement( "meta:editing-cycles" );
+    xmlWriter.addTextNode( QString::number( m_editingCycles ) );
+    xmlWriter.endElement();
+
+    xmlWriter.startElement( "meta:creation-date" );
+    if ( !m_creationDate.isNull() )
+       xmlWriter.addTextNode( m_creationDate.toString( Qt::ISODate ) );
+    else
+       xmlWriter.addTextNode( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+    xmlWriter.endElement();
+
+    xmlWriter.startElement( "dc:date" );
+    m_modificationDate = QDateTime::currentDateTime();
+    xmlWriter.addTextNode( m_modificationDate.toString( Qt::ISODate ) );
+    xmlWriter.endElement();
     return true;
 }
 
@@ -669,6 +710,21 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
     {
         m_keywords = e.text();
     }
+    e = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "initial-creator" );
+    if ( !e.isNull() && !e.text().isEmpty() )
+        m_initialCreator = e.text();
+
+    e = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "editing-cycles" );
+    if ( !e.isNull() && !e.text().isEmpty() )
+        m_editingCycles = e.text().toInt();
+
+    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "creation-date" );
+    if ( !e.isNull() && !e.text().isEmpty() )
+        m_creationDate = QDateTime::fromString( e.text(), Qt::ISODate );
+
+    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "date" );
+    if ( !e.isNull() && !e.text().isEmpty() )
+        m_modificationDate = QDateTime::fromString( e.text(), Qt::ISODate );
     return true;
 }
 
@@ -725,6 +781,26 @@ QString KoDocumentInfoAbout::title() const
 QString KoDocumentInfoAbout::abstract() const
 {
     return m_abstract;
+}
+
+QString KoDocumentInfoAbout::initialCreator() const
+{
+    return m_initialCreator;
+}
+
+QString KoDocumentInfoAbout::editingCycles() const
+{
+    return QString::number( m_editingCycles );
+}
+
+QString KoDocumentInfoAbout::creationDate() const
+{
+    return KGlobal::locale()->formatDateTime( m_creationDate );
+}
+
+QString KoDocumentInfoAbout::modificationDate() const
+{
+    return KGlobal::locale()->formatDateTime( m_modificationDate );
 }
 
 void KoDocumentInfoAbout::setTitle( const QString& n )
