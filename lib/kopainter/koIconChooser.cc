@@ -30,18 +30,15 @@
 #include <kdebug.h>
 
 KoPixmapWidget::KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent, const char *name):
-QFrame(parent, name, WStyle_Customize | WStyle_NoBorder | WType_Dialog)
+QFrame(parent, name, WType_Popup)
 {
+  kdDebug() << "Popup created: " << name << "\n";
   setFrameStyle(QFrame::WinPanel | QFrame::Raised);
   mPixmap = aPixmap;
   int w = mPixmap.width() + 2 * lineWidth();
   int h = mPixmap.height() + 2 * lineWidth();
   resize(w, h);
 
-  // center widget under mouse cursor
-  QPoint p = QCursor::pos();
-  move(p.x() - w / 2, p.y() - h / 2);
-  show();
 }
 
 KoPixmapWidget::~KoPixmapWidget()
@@ -57,6 +54,11 @@ void KoPixmapWidget::paintEvent(QPaintEvent *e)
   p.drawPixmap(lineWidth(), lineWidth(), mPixmap);
 }
 
+
+void KoPixmapWidget::mouseReleaseEvent(QMouseEvent *)
+{
+	hide();
+}
 
 
 KoIconChooser::KoIconChooser(QSize aIconSize, QWidget *parent, const char *name, bool sort):
@@ -176,6 +178,32 @@ void KoIconChooser::setCurrentItem(KoIconItem *item)
 void KoIconChooser::mousePressEvent(QMouseEvent *e)
 {
   QGridView::mousePressEvent(e);
+}
+
+void KoIconChooser::mouseMoveEvent(QMouseEvent *e)
+{
+  if(mMouseButtonDown && mDragEnabled )
+  {
+#if 0
+    if(mPixmapWidget)
+    {
+      delete mPixmapWidget;
+      mPixmapWidget = 0L;
+    }
+#endif
+    if( ( mDragStartPos - e->pos() ).manhattanLength() > QApplication::startDragDistance() )
+      startDrag();
+  }
+}
+
+void
+KoIconChooser::startDrag()
+{
+  mMouseButtonDown = false;
+}
+
+void KoIconChooser::mouseReleaseEvent(QMouseEvent * e)
+{
   mMouseButtonDown = true;
   if(e->button() == LeftButton)
   {
@@ -201,37 +229,6 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
         emit selected( item );
       }
     }
-  }
-}
-
-void KoIconChooser::mouseMoveEvent(QMouseEvent *e)
-{
-  if(mMouseButtonDown && mDragEnabled )
-  {
-    if(mPixmapWidget)
-    {
-      delete mPixmapWidget;
-      mPixmapWidget = 0L;
-    }
-    if( ( mDragStartPos - e->pos() ).manhattanLength() > QApplication::startDragDistance() )
-      startDrag();
-  }
-}
-
-void
-KoIconChooser::startDrag()
-{
-  mMouseButtonDown = false;
-}
-
-// when a big item is shown in full size, delete it on mouseRelease
-void KoIconChooser::mouseReleaseEvent(QMouseEvent * /*e*/)
-{
-  mMouseButtonDown = false;
-  if(mPixmapWidget)
-  {
-    delete mPixmapWidget;
-    mPixmapWidget = 0L;
   }
 }
 
@@ -332,7 +329,7 @@ void KoIconChooser::paintCell(QPainter *p, int row, int col)
 // return the pointer of the item at (row,col) - beware, resizing disturbs
 // rows and cols!
 // return 0L if item is not found
-KoIconItem *KoIconChooser::itemAt(int row, int col)
+KoIconItem *KoIconChooser::itemAt(int row, int col) 
 {
   return itemAt(cellIndex(row, col));
 }
@@ -374,7 +371,15 @@ void KoIconChooser::calculateCells()
 // show the full pixmap of a large item in an extra widget
 void KoIconChooser::showFullPixmap(const QPixmap &pix, const QPoint &/*p*/)
 {
+  //delete mPixmapWidget;
   mPixmapWidget = new KoPixmapWidget(pix, this);
+
+  // center widget under mouse cursor
+  QPoint p = QCursor::pos();
+  int w = mPixmapWidget->width();
+  int h = mPixmapWidget->height();
+  mPixmapWidget->move(p.x() - w / 2, p.y() - h / 2);
+  mPixmapWidget->show();
 }
 
 int KoIconChooser::sortInsertionIndex(const KoIconItem *item)

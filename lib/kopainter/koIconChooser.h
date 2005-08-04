@@ -53,6 +53,7 @@ public:
 
 protected:
   void paintEvent(QPaintEvent *e);
+  void mouseReleaseEvent( QMouseEvent *e);
 
 private:
   QPixmap mPixmap;
