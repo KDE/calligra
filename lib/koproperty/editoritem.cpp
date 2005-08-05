@@ -136,6 +136,10 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 
 		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 		p->drawLine(width-1, 0, width-1, height()-1);
+
+		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
+		if (dynamic_cast<EditorDummyItem*>(parent()))
+			p->drawLine(0, 0, 0, height()-1 );
 	}
 	else if(column == 1)
 	{
@@ -155,11 +159,8 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 			p->setClipping(false);
 		}
 	}
-
 	p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
 	p->drawLine(0, height()-1, width, height()-1 );
-	if (dynamic_cast<EditorDummyItem*>(parent()))
-		p->drawLine(0, 0, 0, height()-1 );
 }
 
 void
