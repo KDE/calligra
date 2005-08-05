@@ -115,7 +115,7 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
 		void init(const QString &text, WidgetType type, LabelPosition pos);
 		void createEditor();
-		void changeText(const QString &text);
+		void changeText(const QString &text, bool beautify = true);
 
 	protected slots:
 		void slotValueChanged();

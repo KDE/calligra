@@ -215,7 +215,7 @@ KexiDBFieldEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
-		iface->setValueInternal(add, removeOld);
+		iface->setValue(m_origValue, add, removeOld);
 }
 
 QVariant
@@ -294,10 +294,11 @@ void
 KexiDBFieldEdit::setFieldCaptionInternal(const QString& text)
 {
 	m_fieldCaptionInternal = text;
-	//chang etext only if autocaption is set and no columnInfo is available
+	//change text only if autocaption is set and no columnInfo is available
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
-	if((!iface || !iface->columnInfo()) && m_autoCaption)
+	if((!iface || !iface->columnInfo()) && m_autoCaption) {
 		changeText(m_fieldCaptionInternal);
+	}
 }
 
 void
@@ -357,12 +358,25 @@ KexiDBFieldEdit::widgetTypeForFieldType(KexiDB::Field::Type type)
 }
 
 void
-KexiDBFieldEdit::changeText(const QString &text)
+KexiDBFieldEdit::changeText(const QString &text, bool beautify)
 {
-	if(m_widgetType == Boolean)
-		static_cast<QCheckBox*>(m_editor)->setText(text);
+	QString realText;
+	if (beautify) {
+/*! @todo look at appendColonToAutoLabels setting [bool]
+    @todo look at makeFirstCharacterUpperCaseInAutoLabels setting [bool]
+    (see doc/dev/settings.txt) */
+		if (!text.isEmpty()) {
+			realText = text[0].upper();
+			realText += (text.mid(1) + ": ");
+		}
+	}
 	else
-		m_label->setText(text);
+		realText = text;
+
+	if(m_widgetType == Boolean)
+		static_cast<QCheckBox*>(m_editor)->setText(realText);
+	else
+		m_label->setText(realText);
 }
 
 void
