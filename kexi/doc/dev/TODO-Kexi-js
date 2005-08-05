@@ -291,6 +291,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - KTextEdit doesn't allow to set custom cursor (also in Qt Designer)
 - support for multiple widgets selection in the property editor (requires changes to kexiproperty)
 - handle older and newer formats in FormIO::loadFormFromDom()
+- KAcceleratorManager::setNoAccel(QWidget*) - use it in data mode, 
+    define "auto accels" form's property and if it's false
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -544,6 +546,9 @@ TODO: in KexiMainWindowImpl::slotProjectOpen() add support for starting new kexi
 TODO: move ConnectionData::savePassword to QMap<ConnectionData*,bool> KexiDBConnectionSet::savePasswordMap or so
 TODO: Forms: fix label width resizing when enteing text within inline editor
 TODO: Forms copy more properties (like palette) to inline editor from e.g. text label
-TODO: Forms: fix: double clicking unselected widget doesn't swithc us to inline editing mode
+TODO: Forms: fix: double clicking unselected widget doesn't switch us to inline editing mode
 TODO: Forms: object tree: enable sorting by name after clicking "name" header; 
              enable sorting by class,name by clicking "class" header
+
+TODO: Startup: when using a startup item, touch the file for better sorting:
+http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx

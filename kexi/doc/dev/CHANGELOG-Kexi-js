@@ -12,23 +12,34 @@
 
 CCMAIL: dkite@shaw.ca
 
-2005-07-29
+2005-08-05
+Property Editor
+- '-flat' arg added for test app
+- painting improved for both flat and groupped mode
+
+2005-07-29..2005-08-02
 Form Designer
 - field editor's types list reuses KexiDB::fieldName() for i18n
 - autocaption is set properly for field editor on design time
 - field editor's labelCaption is no longer needed
-
 - propeditor: preserve "changed" flags (marked with BOLD) between property set switching
-
+- KAcceleratorManager::setNoAccel(QWidget*) is used for widgets in design mode 
+  to avoid adding accelerators (for FormIO and for new widgets inserting)
+- factories: isPropertyVisibleInternal() is now called for superclass when needed
+  (thus, properties like "iconText" are properly hidden)
+- when a widget is deleted or cut, its parent container become selected
 KoProperty library
 - fix for spin box editor's width
 - better display for composed editors for types like Rect
 - fixed undo button's size in Editor
 - font editor fixed
 - Editor: expand/collapse boxes painted using styles; whitespace added on the left hand
-
+- Editor: editor widget's focusing fixed
 Table Designer
 - a fix for 'subType' combo
+Main Window
+- Navigator: when items renaming, treat "*" ("changed" flag) as a special character, 
+  not a part of the item's name
 
 2005-07-28
 Form Designer

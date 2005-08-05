@@ -51,6 +51,11 @@ TODO:-overrideStyleName [string] (empty if do not override)
 TODO:-doNotFocusAutonumberFields [bool] (true by default; when this and autoTabStop for a form is true, 
                                          autonumber text fields are skipped)
                                          implement this in KexiFormView::afterSwitchFrom()
+TODO:-appendColonToAutoLabels [bool] (true by default; when true, colon character is appended 
+                                      to autolabel text)
+TODO:-makeFirstCharacterUpperCaseInAutoLabels [bool] (true by default; when true, first character 
+                                      in autolabel text is converted to upper case. 
+                                      Usable when no field's title is provided)
 
 Group: NewFormDefaults
 TODO:-styleName [string]
