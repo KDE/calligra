@@ -27,6 +27,7 @@
 #include <qlistview.h>
 #else
 #include <klistview.h>
+//#define KListViewItem QListViewItem
 #endif
 
 #define KPROPEDITOR_ITEM_MARGIN 2
@@ -45,11 +46,12 @@ class Editor;
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>
+   @internal
  */
 #ifdef QT_ONLY
-class KOPROPERTY_EXPORT EditorItem : public QListViewItem
+class EditorItem : public QListViewItem
 #else
-class KOPROPERTY_EXPORT EditorItem : public KListViewItem
+class EditorItem : public KListViewItem
 #endif
 {
 	public:
@@ -89,7 +91,8 @@ class KOPROPERTY_EXPORT EditorItem : public KListViewItem
 		EditorItemPrivate *d;
 };
 
-class KOPROPERTY_EXPORT EditorGroupItem : public EditorItem
+//! @internal
+class EditorGroupItem : public EditorItem
 {
 	public:
 		EditorGroupItem(EditorItem *parent, const QString &text);
@@ -101,7 +104,8 @@ class KOPROPERTY_EXPORT EditorGroupItem : public EditorItem
 		virtual void setup();
 };
 
-class KOPROPERTY_EXPORT EditorDummyItem : public EditorItem
+//! @internal
+class EditorDummyItem : public EditorItem
 {
 	public:
 		EditorDummyItem(KListView *parent);

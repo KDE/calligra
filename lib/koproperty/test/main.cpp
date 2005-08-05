@@ -29,13 +29,13 @@ static const char version[] = "0.2";
 
 static KCmdLineOptions options[] =
 {
-//    { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
+    { "flat", I18N_NOOP( "Flat display: don't display groups\n(useful for testing)" ), 0 },
     KCmdLineLastOption
 };
 
 int main(int argc, char **argv)
 {
-    KAboutData about("test", "test", version, description,
+    KAboutData about("proptest", "KoProperty Test", version, description,
                      KAboutData::License_GPL, "(C) 2003 Cédric Pasteur", 0, 0, "cedric.pasteur@free.fr");
     about.addAuthor( "Cédric Pasteur", 0, "cedric.pasteur@free.fr" );
     KCmdLineArgs::init(argc, argv, &about);

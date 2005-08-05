@@ -20,10 +20,13 @@
 #include <kmainwindow.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kcmdlineargs.h>
+
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include <qdatetimeedit.h>
 #include <qcursor.h>
+#include <qapplication.h>
 
 #include <koproperty/property.h>
 #include <koproperty/editor.h>
@@ -35,19 +38,28 @@ using namespace KoProperty;
 test::test()
     : KMainWindow( 0, "test" )
 {
-    setXMLFile("testui.rc");
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	const bool flat = args->isSet("flat");
+
+//	setXMLFile("testui.rc");
+	QFont f;
+	f.setPixelSize(f.pixelSize()*2/3);
+	setFont(f);
 
 //  Simple
 	m_set = new Set(this, "test");
-	m_set->addProperty(new Property("Name", "Name"), "SimpleGroup");
+	QCString group;
+	if (!flat)
+		group = "SimpleGroup";
+	m_set->addProperty(new Property("Name", "Name"), group);
 	(*m_set)["Name"].setAutoSync(1);
 	
-	m_set->addProperty(new Property("Int", 2, "Int"), "SimpleGroup");
-	m_set->addProperty(new Property("Double", 3.1415,"Double"), "SimpleGroup");
-	m_set->addProperty(new Property("Bool", QVariant(true, 4), "Bool"), "SimpleGroup");
-	m_set->addProperty(new Property("Date", QDate::currentDate(),"Date"), "SimpleGroup");
-	m_set->addProperty(new Property("Time", QTime::currentTime(),"Time"), "SimpleGroup");
-	m_set->addProperty(new Property("DateTime", QDateTime::currentDateTime(),"DateTime"), "SimpleGroup");
+	m_set->addProperty(new Property("Int", 2, "Int"), group);
+	m_set->addProperty(new Property("Double", 3.1415,"Double"), group);
+	m_set->addProperty(new Property("Bool", QVariant(true, 4), "Bool"), group);
+	m_set->addProperty(new Property("Date", QDate::currentDate(),"Date"), group);
+	m_set->addProperty(new Property("Time", QTime::currentTime(),"Time"), group);
+	m_set->addProperty(new Property("DateTime", QDateTime::currentDateTime(),"DateTime"), group);
 
 	QStringList list;//keys
 	list.append("myitem");
@@ -57,27 +69,30 @@ test::test()
 	name_list.append("My Item");
 	name_list.append("Other Item");
 	name_list.append("Third Item");
-	m_set->addProperty(new Property("List", list, name_list, "otheritem", "List"), "SimpleGroup");
+	m_set->addProperty(new Property("List", list, name_list, "otheritem", "List"), group);
 
 //  Complex
-	m_set->addProperty(new Property("Rect", this->geometry(),"Rect"), "ComplexGroup");
-	m_set->addProperty(new Property("Point", QPoint(3,4), "Point"), "ComplexGroup");
-	m_set->addProperty(new Property("Size", QPoint(3,4), "Size"), "ComplexGroup");
+	group = flat ? "" : "ComplexGroup";
+	m_set->addProperty(new Property("Rect", this->geometry(),"Rect"), group);
+	m_set->addProperty(new Property("Point", QPoint(3,4), "Point"), group);
+	m_set->addProperty(new Property("Size", QPoint(3,4), "Size"), group);
 
 //  Appearance
-	m_set->addProperty(new Property("Color", this->paletteBackgroundColor(),"Color"), "AppearanceGroup");
+	group = flat ? "" : "AppearanceGroup";
+	m_set->addProperty(new Property("Color", this->paletteBackgroundColor(),"Color"), group);
 	const QPixmap *pix = this->icon();
-	m_set->addProperty(new Property("Pixmap", *pix,"Pixmap"), "AppearanceGroup");
-	m_set->addProperty(new Property("Font", this->font(),"Font"), "AppearanceGroup");
-	m_set->addProperty(new Property("Cursor", QCursor(Qt::WaitCursor),"Cursor"), "AppearanceGroup");
-	m_set->addProperty(new Property("LineStyle", 3, "LineStyle", "", LineStyle), "AppearanceGroup");
-
-	m_set->addProperty(new Property("SizePolicy", sizePolicy(), "SizePolicy"), "ComplexGroup");
+	m_set->addProperty(new Property("Pixmap", *pix,"Pixmap"), group);
+	m_set->addProperty(new Property("Font", this->font(),"Font"), group);
+	m_set->addProperty(new Property("Cursor", QCursor(Qt::WaitCursor),"Cursor"), group);
+	m_set->addProperty(new Property("LineStyle", 3, "LineStyle", "", LineStyle), group);
+	m_set->addProperty(new Property("SizePolicy", sizePolicy(), "SizePolicy"), group);
 
 	Editor *edit = new Editor(this,true/*autosync*/);
 	setCentralWidget(edit);
 	edit->changeSet(m_set);
-	resize(500,500);
+	resize(400,qApp->desktop()->height()-200);
+	move(x(),5);
+	edit->setFocus();
 }
 
 test::~test()

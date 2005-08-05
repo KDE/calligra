@@ -177,6 +177,8 @@ Set::~Set()
 void
 Set::addProperty(Property *property, QCString group)
 {
+	if (group.isEmpty())
+		group = "common";
 	if (property == 0) {
 		kopropertywarn << "Set::addProperty(): property == 0" << endl; 
 		return;

@@ -29,7 +29,7 @@
 #include <qlistview.h>
 #else
 #include <klistview.h>
-#define QListView KListView
+//#define QListView KListView
 #endif
 
 class QSize;
@@ -58,7 +58,7 @@ class EditorItem;
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>
  */
-class KOPROPERTY_EXPORT Editor : public QListView
+class KOPROPERTY_EXPORT Editor : public KListView
 {
 	Q_OBJECT
 
@@ -160,6 +160,8 @@ class KOPROPERTY_EXPORT Editor : public QListView
 		void updateFont();
 		bool insideFill() const;
 
+//		virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
+//		virtual void paintEmptyArea ( QPainter * p, const QRect & rect );
 	private:
 		EditorPrivate *d;
 

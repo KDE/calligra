@@ -73,6 +73,8 @@ class EditorPrivate
 				KGlobal::iconLoader()->addAppDir("koffice");
 			}
 			insideFill = false;
+			previouslyCollapsedGroupItem = 0;
+			childFormPreviouslyCollapsedGroupItem = 0;
 		}
 		~EditorPrivate()
 		{
@@ -101,6 +103,9 @@ class EditorPrivate
 		bool insideFill : 1;
 		//! Helper for changeSet()
 		Set* setListLater_list;
+
+		QListViewItem *previouslyCollapsedGroupItem;
+		QListViewItem *childFormPreviouslyCollapsedGroupItem;
 };
 }
 
@@ -174,14 +179,18 @@ Editor::fill()
 	hideEditor();
 	KListView::clear();
 	d->itemDict.clear();
-	if(!d->set)
+	if(!d->set) {
+		d->insideFill = false;
 		return;
+	}
 
 	d->topItem = new EditorDummyItem(this);
 
 	int i = 0;
 	StringListMap map = d->set->groups();
-	if(map.count() == 1) { // just one group (default one), so don't show groups
+	kopropertydbg << "Editor::fill(): groups = " << map.count() << endl;
+	if(map.count() == 1) { // one group (default one), so don't show groups
+//		EditorGroupItem *hiddenGroupItem = new EditorGroupItem(d->topItem, "");
 
 		QValueList<QCString> props = map.begin().data();
 		QValueList<QCString>::ConstIterator it = props.constBegin();
@@ -189,7 +198,6 @@ Editor::fill()
 			addItem(*it, d->topItem);
 
 	} else { // else create a groupItem for each group
-
 		StringListMap::ConstIterator it = map.constBegin();
 		for( ; it != map.constEnd(); ++it) {
 			EditorGroupItem *groupItem = 0;
@@ -479,6 +487,9 @@ Editor::slotWidgetRejectInput(Widget *widget)
 void
 Editor::slotClicked(QListViewItem *it)
 {
+	d->previouslyCollapsedGroupItem = 0;
+	d->childFormPreviouslyCollapsedGroupItem = 0;
+
 	acceptInput();
 
 	hideEditor();
@@ -648,6 +659,14 @@ Editor::slotExpanded(QListViewItem *item)
 {
 	if (!item)
 		return;
+
+	//select child item again if a group item has been expanded
+	if (!selectedItem() && dynamic_cast<EditorGroupItem*>(item) && d->previouslyCollapsedGroupItem == item
+		&& d->childFormPreviouslyCollapsedGroupItem) {
+			setSelected(d->childFormPreviouslyCollapsedGroupItem, true);
+			setCurrentItem(selectedItem());
+			slotClicked(selectedItem());
+	}
 	updateEditorGeometry();
 }
 
@@ -656,6 +675,19 @@ Editor::slotCollapsed(QListViewItem *item)
 {
 	if (!item)
 		return;
+	//unselect child item and hide editor if a group item has been collapsed
+	if (dynamic_cast<EditorGroupItem*>(item)) {
+		for (QListViewItem *i = selectedItem(); i; i = i->parent()) {
+			if (i->parent()==item) {
+				d->previouslyCollapsedGroupItem = item;
+				d->childFormPreviouslyCollapsedGroupItem = selectedItem();
+				hideEditor();
+				setSelected(selectedItem(), false);
+				setSelected(item->nextSibling(), true);
+				break;
+			}
+		}
+	}
 	updateEditorGeometry();
 }
 
@@ -839,5 +871,16 @@ Editor::insideFill() const
 {
 	return d->insideFill;
 }
+
+/*void 
+Editor::drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
+{
+	KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
+}
+
+void
+Editor::paintEmptyArea ( QPainter * p, const QRect & rect ) 
+{
+}*/
 
 #include "editor.moc"
