@@ -41,6 +41,8 @@ class ValueConverter {
   KSpreadValue asBoolean (const KSpreadValue &value) const;
   KSpreadValue asInteger (const KSpreadValue &value) const;
   KSpreadValue asFloat (const KSpreadValue &value) const;
+  /** convert to a numeric value - not necessarily float */
+  KSpreadValue asNumeric (const KSpreadValue &value) const;
   KSpreadValue asString (const KSpreadValue &value) const;
   KSpreadValue asDateTime (const KSpreadValue &value) const;
   KSpreadValue asDate (const KSpreadValue &value) const;

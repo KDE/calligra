@@ -33,6 +33,7 @@ using namespace KSpread;
 // prototypes (sorted!)
 KSpreadValue func_arrang (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_average (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_averagea (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_avedev (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_bino (valVector args, ValueCalc *calc, FuncExtra *);
@@ -42,6 +43,7 @@ KSpreadValue func_confidence (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_correl_pop (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_covar (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_devsq (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_devsqa (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_expondist (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_fdist (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
@@ -101,7 +103,7 @@ void KSpreadRegisterStatisticalFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("AVERAGEA", func_average);  // same as AVERAGE
+  f = new Function ("AVERAGEA", func_averagea);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -129,6 +131,10 @@ void KSpreadRegisterStatisticalFunctions()
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("DEVSQ", func_devsq);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("DEVSQA", func_devsqa);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -232,7 +238,7 @@ void KSpreadRegisterStatisticalFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("STDEVA", func_stddev);
+  f = new Function ("STDEVA", func_stddeva);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -240,7 +246,7 @@ void KSpreadRegisterStatisticalFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("STDEVPA", func_stddevp);
+  f = new Function ("STDEVPA", func_stddevpa);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -275,11 +281,11 @@ void KSpreadRegisterStatisticalFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("VARA", func_variance);
+  f = new Function ("VARA", func_variancea);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("VARPA", func_variancep);
+  f = new Function ("VARPA", func_variancepa);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -327,7 +333,7 @@ void awKurtosis (ValueCalc *c, KSpreadValue &res, KSpreadValue val,
 
 KSpreadValue func_skew_est (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int number = calc->countA (args);
+  int number = calc->count (args);
   KSpreadValue avg = calc->avg (args);
   if (number < 3)
     return KSpreadValue::errorVALUE();
@@ -348,7 +354,7 @@ KSpreadValue func_skew_est (valVector args, ValueCalc *calc, FuncExtra *)
 
 KSpreadValue func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int number = calc->countA (args);
+  int number = calc->count (args);
   KSpreadValue avg = calc->avg (args);
   if (number < 1)
     return KSpreadValue::errorVALUE();
@@ -532,7 +538,7 @@ KSpreadValue func_small (valVector args, ValueCalc *calc, FuncExtra *)
 
 KSpreadValue func_geomean (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue count = calc->countA (args);
+  KSpreadValue count = calc->count (args);
   KSpreadValue prod = calc->product (args, 1.0);
   if (calc->isZero (count))
     return KSpreadValue::errorDIV0();
@@ -541,7 +547,7 @@ KSpreadValue func_geomean (valVector args, ValueCalc *calc, FuncExtra *)
 
 KSpreadValue func_harmean (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue count = calc->countA (args);
+  KSpreadValue count = calc->count (args);
   if (calc->isZero (count))
     return KSpreadValue::errorDIV0();
   KSpreadValue suminv;
@@ -576,19 +582,26 @@ KSpreadValue func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
 KSpreadValue func_devsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
   KSpreadValue res;
-  calc->arrayWalk (args, res, calc->awFunc ("devsq"), calc->avg (args));
+  calc->arrayWalk (args, res, calc->awFunc ("devsq"), calc->avg (args, false));
+  return res;
+}
+
+KSpreadValue func_devsqa (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue res;
+  calc->arrayWalk (args, res, calc->awFunc ("devsqa"), calc->avg (args));
   return res;
 }
 
 KSpreadValue func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int count = calc->countA (args);
+  int count = calc->count (args);
   if (count < 4)
     return KSpreadValue::errorVALUE();
 
   KSpreadValue avg = calc->avg (args);
   KSpreadValue devsq;
-  calc->arrayWalk (args, devsq, calc->awFunc ("devsq"), avg);
+  calc->arrayWalk (args, devsq, calc->awFunc ("devsqa"), avg);
 
   if (devsq.isZero ())
     return KSpreadValue::errorDIV0();
@@ -609,13 +622,13 @@ KSpreadValue func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *)
 
 KSpreadValue func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int count = calc->countA (args);
+  int count = calc->count (args);
   if (count < 4)
     return KSpreadValue::errorVALUE();
 
   KSpreadValue avg = calc->avg (args);
   KSpreadValue devsq;
-  calc->arrayWalk (args, devsq, calc->awFunc ("devsq"), avg);
+  calc->arrayWalk (args, devsq, calc->awFunc ("devsqa"), avg);
 
   if (devsq.isZero ())
     return KSpreadValue::errorDIV0();
@@ -701,6 +714,12 @@ KSpreadValue func_arrang (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: average
 KSpreadValue func_average (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  return calc->avg (args, false);
+}
+
+// Function: averagea
+KSpreadValue func_averagea (valVector args, ValueCalc *calc, FuncExtra *)
+{
   return calc->avg (args);
 }
 
@@ -730,7 +749,7 @@ KSpreadValue func_median (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: variance
 KSpreadValue func_variance (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int count = calc->count (args);
+  int count = calc->count (args, false);
   if (count < 2)
     return KSpreadValue::errorVALUE();
 
@@ -738,10 +757,21 @@ KSpreadValue func_variance (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->div (result, count-1);
 }
 
+// Function: vara
+KSpreadValue func_variancea (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  int count = calc->count (args);
+  if (count < 2)
+    return KSpreadValue::errorVALUE();
+
+  KSpreadValue result = func_devsqa (args, calc, 0);
+  return calc->div (result, count-1);
+}
+
 // Function: varp
 KSpreadValue func_variancep (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int count = calc->count (args);
+  int count = calc->count (args, false);
   if (count == 0)
     return KSpreadValue::errorVALUE();
 
@@ -749,14 +779,37 @@ KSpreadValue func_variancep (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->div (result, count);
 }
 
+// Function: varpa
+KSpreadValue func_variancepa (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  int count = calc->count (args);
+  if (count == 0)
+    return KSpreadValue::errorVALUE();
+
+  KSpreadValue result = func_devsqa (args, calc, 0);
+  return calc->div (result, count);
+}
+
 // Function: stddev
 KSpreadValue func_stddev (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->stddev (args, false);
+}
+
+// Function: stddeva
+KSpreadValue func_stddeva (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->stddev (args);
 }
 
 // Function: stddevp
 KSpreadValue func_stddevp (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->stddevP (args, false);
+}
+
+// Function: stddevpa
+KSpreadValue func_stddevpa (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->stddevP (args);
 }

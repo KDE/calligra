@@ -144,6 +144,13 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value) const
   return val;
 }
 
+KSpreadValue ValueConverter::asNumeric (const KSpreadValue &value) const
+{
+  // as of now, we simply go to float; later on, further datatypes
+  // may be possible as a result of this
+  return asFloat (value);
+}
+
 KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
 {
   // This is a simpler version of ValueFormatter... We cannot use that one,

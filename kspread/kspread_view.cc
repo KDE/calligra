@@ -6151,10 +6151,10 @@ void KSpreadView::resultOfCalc()
         val = calc->max (range);
       break;
       case CountA:
-        val = KSpreadValue (calc->countA (range));
+        val = KSpreadValue (calc->count (range));
         break;
       case Count:
-        val = KSpreadValue (calc->count (range));
+        val = KSpreadValue (calc->count (range, false));
       case NoneCalc:
       break;
       default:

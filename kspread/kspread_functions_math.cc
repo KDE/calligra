@@ -62,7 +62,9 @@ KSpreadValue func_log2 (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_logn (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_maxa (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mina (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mod (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mult (valVector args, ValueCalc *calc, FuncExtra *);
@@ -88,6 +90,7 @@ KSpreadValue func_sqrt (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_suma (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
@@ -249,7 +252,7 @@ void KSpreadRegisterMathFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("MAXA",          func_max);
+  f = new Function ("MAXA",          func_maxa);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -257,7 +260,7 @@ void KSpreadRegisterMathFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("MINA",          func_min);
+  f = new Function ("MINA",          func_mina);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -273,7 +276,7 @@ void KSpreadRegisterMathFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("SUMA",          func_sum);   // same as SUM
+  f = new Function ("SUMA",          func_suma);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
@@ -393,18 +396,22 @@ KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: sum
 KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res;
-  calc->arrayWalk (args, res, calc->awFunc ("sum"), 0);
-  return res;
+  return calc->sum (args, false);
+}
+
+// Function: suma
+KSpreadValue func_suma (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->sum (args, true);
 }
 
 KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue sumRange = args[0];
+  KSpreadValue checkRange = args[0];
   QString condition = calc->conv()->asString (args[1]).asString();
-  KSpreadValue checkRange = sumRange;
+  KSpreadValue sumRange = checkRange;
   if (args.count() == 3)
-    checkRange = args[2];
+    sumRange = args[2];
 
   Condition cond;
   calc->getCond (cond, condition);
@@ -448,19 +455,29 @@ KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MAX
 KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = args[0];
-  while (res.isArray()) res = res.element (0,0);
-  calc->arrayWalk (args, res, calc->awFunc ("max"), 0);
-  return res;
+  KSpreadValue m = calc->max (args, false);
+  return m.isEmpty() ? KSpreadValue(0.0) : m;
+}
+
+// Function: MAXA
+KSpreadValue func_maxa (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue m = calc->max (args);
+  return m.isEmpty() ? KSpreadValue(0.0) : m;
 }
 
 // Function: MIN
 KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = args[0];
-  while (res.isArray()) res = res.element (0,0);
-  calc->arrayWalk (args, res, calc->awFunc ("min"), 0);
-  return res;
+  KSpreadValue m = calc->min (args, false);
+  return m.isEmpty() ? KSpreadValue(0.0) : m;
+}
+
+// Function: MINA
+KSpreadValue func_mina (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue m = calc->min (args);
+  return m.isEmpty() ? KSpreadValue(0.0) : m;
 }
 
 // Function: INT
@@ -745,24 +762,31 @@ KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: COUNT
 KSpreadValue func_count (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = 0;
-  calc->arrayWalk (args, res, calc->awFunc ("count"), 0);
-  return res;
+  return calc->count (args, false);
 }
 
 // Function: COUNTA
 KSpreadValue func_counta (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = 0;
-  calc->arrayWalk (args, res, calc->awFunc ("counta"), 0);
-  return res;
+  return calc->count (args);
 }
 
 // Function: COUNTBLANK
-KSpreadValue func_countblank (valVector args, ValueCalc *calc, FuncExtra *)
+KSpreadValue func_countblank (valVector args, ValueCalc *, FuncExtra *)
 {
-  // all without non-empty = empty
-  return calc->sub (func_count (args, calc, 0), func_counta (args, calc, 0));
+  int cnt = 0;
+  for (unsigned int i = 0; i < args.count(); ++i)
+    if (args[i].isArray()) {
+      int rows = args[i].rows();
+      int cols = args[i].columns();
+      for (int r = 0; r < rows; ++r)
+        for (int c = 0; c < cols; ++c)
+          if (args[i].element (c, r).isEmpty())
+            cnt++;
+    } else
+      if (args[i].isEmpty())
+        cnt++;
+  return KSpreadValue (cnt);
 }
 
 // Function: COUNTIF
@@ -812,6 +836,7 @@ static KSpreadValue func_gcd_helper(const KSpreadValue &val, ValueCalc *calc)
         v = func_gcd_helper (v, calc);
       res = calc->gcd (res, v);
     }
+  return res;
 }
 
 // Function: GCD
@@ -823,6 +848,7 @@ KSpreadValue func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
       result = calc->gcd (result, func_gcd_helper (args[i], calc));
     else
       result = calc->gcd (result, args[i]);
+  return result;
 }
 
 static KSpreadValue func_lcm_helper(const KSpreadValue &val, ValueCalc *calc)
@@ -838,6 +864,7 @@ static KSpreadValue func_lcm_helper(const KSpreadValue &val, ValueCalc *calc)
         v = func_lcm_helper (v, calc);
       res = calc->lcm (res, v);
     }
+  return res;
 }
 
 // Function: lcm
@@ -849,6 +876,7 @@ KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
       result = calc->lcm (result, func_lcm_helper (args[i], calc));
     else
       result = calc->lcm (result, args[i]);
+  return result;
 }
 
 

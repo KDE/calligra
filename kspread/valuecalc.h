@@ -209,32 +209,39 @@ class ValueCalc {
   void registerAwFunc (const QString &name, arrayWalkFunc func);
 
   /** basic range functions */
-  KSpreadValue sum (const KSpreadValue &range);
-  KSpreadValue sumsq (const KSpreadValue &range);
+  // if full is true, A-version is used (means string/bool values included)
+  KSpreadValue sum (const KSpreadValue &range, bool full = true);
+  KSpreadValue sumsq (const KSpreadValue &range, bool full = true);
   KSpreadValue sumIf (const KSpreadValue &range,
       const KSpreadValue &checkRange, const Condition &cond);
-  int count (const KSpreadValue &range);
-  int countA (const KSpreadValue &range);
+  int count (const KSpreadValue &range, bool full = true);
   int countIf (const KSpreadValue &range, const Condition &cond);
-  KSpreadValue avg (const KSpreadValue &range);
-  KSpreadValue max (const KSpreadValue &range);
-  KSpreadValue min (const KSpreadValue &range);
-  KSpreadValue product (const KSpreadValue &range, KSpreadValue init);
-  KSpreadValue stddev (const KSpreadValue &range);
-  KSpreadValue stddev (const KSpreadValue &range, KSpreadValue avg);
-  KSpreadValue stddevP (const KSpreadValue &range);
-  KSpreadValue stddevP (const KSpreadValue &range, KSpreadValue avg);
+  KSpreadValue avg (const KSpreadValue &range, bool full = true);
+  KSpreadValue max (const KSpreadValue &range, bool full = true);
+  KSpreadValue min (const KSpreadValue &range, bool full = true);
+  KSpreadValue product (const KSpreadValue &range, KSpreadValue init,
+      bool full = true);
+  KSpreadValue stddev (const KSpreadValue &range, bool full = true);
+  KSpreadValue stddev (const KSpreadValue &range, KSpreadValue avg,
+      bool full = true);
+  KSpreadValue stddevP (const KSpreadValue &range, bool full = true);
+  KSpreadValue stddevP (const KSpreadValue &range, KSpreadValue avg,
+      bool full = true);
   
   /** range functions using value lists */
-  KSpreadValue sum (QValueVector<KSpreadValue> range);
-  int count (QValueVector<KSpreadValue> range);
-  int countA (QValueVector<KSpreadValue> range);
-  KSpreadValue avg (QValueVector<KSpreadValue> range);
-  KSpreadValue product (QValueVector<KSpreadValue> range, KSpreadValue init);
-  KSpreadValue stddev (QValueVector<KSpreadValue> range);
-  KSpreadValue stddev (QValueVector<KSpreadValue> range, KSpreadValue avg);
-  KSpreadValue stddevP (QValueVector<KSpreadValue> range);
-  KSpreadValue stddevP (QValueVector<KSpreadValue> range, KSpreadValue avg);
+  KSpreadValue sum (QValueVector<KSpreadValue> range, bool full = true);
+  int count (QValueVector<KSpreadValue> range, bool full = true);
+  KSpreadValue avg (QValueVector<KSpreadValue> range, bool full = true);
+  KSpreadValue max (QValueVector<KSpreadValue> range, bool full = true);
+  KSpreadValue min (QValueVector<KSpreadValue> range, bool full = true);
+  KSpreadValue product (QValueVector<KSpreadValue> range, KSpreadValue init,
+      bool full = true);
+  KSpreadValue stddev (QValueVector<KSpreadValue> range, bool full = true);
+  KSpreadValue stddev (QValueVector<KSpreadValue> range, KSpreadValue avg,
+      bool full = true);
+  KSpreadValue stddevP (QValueVector<KSpreadValue> range, bool full = true);
+  KSpreadValue stddevP (QValueVector<KSpreadValue> range, KSpreadValue avg,
+      bool full = true);
 
   /**
     This method parses the condition in string text to the condition cond.

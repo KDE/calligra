@@ -35,17 +35,32 @@ using namespace KSpread;
 
 void awSum (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  res = c->add (res, val);
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+    res = c->add (res, val);
+}
+
+void awSumA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  if (!val.isEmpty())
+    res = c->add (res, val);
 }
 
 void awSumSq (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  res = c->add (res, c->sqr (val));
+  if (!val.isEmpty())
+    res = c->add (res, c->sqr (val));
 }
 
-void awCount (ValueCalc *c, KSpreadValue &res, KSpreadValue, KSpreadValue)
+void awSumSqA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  res = c->add (res, 1);
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+    res = c->add (res, c->sqr (val));
+}
+
+void awCount (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+    res = c->add (res, 1);
 }
 
 void awCountA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
@@ -56,17 +71,56 @@ void awCountA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 
 void awMax (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  if (c->greater (val, res)) res = val;
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+    if (res.isEmpty())
+      res = val;
+    else
+      if (c->greater (val, res)) res = val;
+}
+
+void awMaxA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  if (!val.isEmpty())
+    if (res.isEmpty())
+      // convert to number, so that we don't return string/bool
+      res = c->conv()->asNumeric (val);
+    else
+      if (c->greater (val, res))
+        // convert to number, so that we don't return string/bool
+        res = c->conv()->asNumeric (val);
 }
 
 void awMin (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  if (c->lower (val, res)) res = val;
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+    if (res.isEmpty())
+      res = val;
+    else
+      if (c->lower (val, res)) res = val;
+}
+
+void awMinA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  if (!val.isEmpty())
+    if (res.isEmpty())
+      // convert to number, so that we don't return string/bool
+      res = c->conv()->asNumeric (val);
+    else
+      if (c->lower (val, res))
+        // convert to number, so that we don't return string/bool
+        res = c->conv()->asNumeric (val);
 }
 
 void awProd (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 {
-  res = c->mul (res, val);
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+    res = c->mul (res, val);
+}
+
+void awProdA (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+{
+  if (!val.isEmpty())
+    res = c->mul (res, val);
 }
 
 // sum of squares of deviations, used to compute standard deviation
@@ -74,6 +128,14 @@ void awDevSq (ValueCalc *c, KSpreadValue &res, KSpreadValue val,
     KSpreadValue avg)
 {
   if (!val.isEmpty())
+    res = c->add (res, c->sqr (c->sub (val, avg)));
+}
+
+// sum of squares of deviations, used to compute standard deviation
+void awDevSqA (ValueCalc *c, KSpreadValue &res, KSpreadValue val,
+    KSpreadValue avg)
+{
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
     res = c->add (res, c->sqr (c->sub (val, avg)));
 }
 
@@ -89,13 +151,19 @@ ValueCalc::ValueCalc (ValueConverter* c): converter( c )
   
   // register array-walk functions
   registerAwFunc ("sum", awSum);
+  registerAwFunc ("suma", awSumA);
   registerAwFunc ("sumsq", awSumSq);
+  registerAwFunc ("sumsqa", awSumSqA);
   registerAwFunc ("count", awCount);
   registerAwFunc ("counta", awCountA);
   registerAwFunc ("max", awMax);
+  registerAwFunc ("maxa", awMaxA);
   registerAwFunc ("min", awMin);
+  registerAwFunc ("mina", awMinA);
   registerAwFunc ("prod", awProd);
+  registerAwFunc ("proda", awProdA);
   registerAwFunc ("devsq", awDevSq);
+  registerAwFunc ("devsqa", awDevSq);
 }
 
 KSpreadValue ValueCalc::add (const KSpreadValue &a, const KSpreadValue &b)
@@ -1479,25 +1547,25 @@ void ValueCalc::registerAwFunc (const QString &name, arrayWalkFunc func)
 
 // ------------------------------------------------------
 
-KSpreadValue ValueCalc::sum (const KSpreadValue &range)
+KSpreadValue ValueCalc::sum (const KSpreadValue &range, bool full)
 {
   KSpreadValue res;
-  arrayWalk (range, res, awFunc ("sum"), 0);
+  arrayWalk (range, res, awFunc (full ? "suma" : "sum"), 0);
   return res;
 }
 
-KSpreadValue ValueCalc::sum (QValueVector<KSpreadValue> range)
+KSpreadValue ValueCalc::sum (QValueVector<KSpreadValue> range, bool full)
 {
   KSpreadValue res;
-  arrayWalk (range, res, awFunc ("sum"), 0);
+  arrayWalk (range, res, awFunc (full ? "suma" : "sum"), 0);
   return res;
 }
 
 // sum of squares
-KSpreadValue ValueCalc::sumsq (const KSpreadValue &range)
+KSpreadValue ValueCalc::sumsq (const KSpreadValue &range, bool full)
 {
   KSpreadValue res;
-  arrayWalk (range, res, awFunc ("sumsq"), 0);
+  arrayWalk (range, res, awFunc (full ? "sumsqa" : "sumsq"), 0);
   return res;
 }
 
@@ -1507,7 +1575,7 @@ KSpreadValue ValueCalc::sumIf (const KSpreadValue &range,
   if (!range.isArray())
   {
     if (matches (cond, checkRange.element (0, 0)))
-      return converter->asFloat (range);
+      return converter->asNumeric (range);
     return KSpreadValue (0.0);
   }
 
@@ -1521,7 +1589,7 @@ KSpreadValue ValueCalc::sumIf (const KSpreadValue &range,
     {
       KSpreadValue v = range.element (c, r);
       KSpreadValue newcheck = v;
-      if ((checkRange.columns() <= c) && (checkRange.rows() <= r))
+      if ((c < checkRange.columns()) && (r < checkRange.rows()))
         newcheck = checkRange.element (c, r);
       
       if (v.isArray())
@@ -1534,17 +1602,17 @@ KSpreadValue ValueCalc::sumIf (const KSpreadValue &range,
   return res;
 }
 
-int ValueCalc::count (const KSpreadValue &range)
+int ValueCalc::count (const KSpreadValue &range, bool full)
 {
   KSpreadValue res = 0;
-  arrayWalk (range, res, awFunc ("count"), 0);
+  arrayWalk (range, res, awFunc (full ? "counta" : "count"), 0);
   return converter->asInteger (res).asInteger ();
 }
 
-int ValueCalc::count (QValueVector<KSpreadValue> range)
+int ValueCalc::count (QValueVector<KSpreadValue> range, bool full)
 {
   KSpreadValue res = 0;
-  arrayWalk (range, res, awFunc ("count"), 0);
+  arrayWalk (range, res, awFunc (full ? "counta" : "count"), 0);
   return converter->asInteger (res).asInteger ();
 }
 
@@ -1576,118 +1644,119 @@ int ValueCalc::countIf (const KSpreadValue &range, const Condition &cond)
   return res;
 }
 
-int ValueCalc::countA (const KSpreadValue &range)
+KSpreadValue ValueCalc::avg (const KSpreadValue &range, bool full)
 {
-  KSpreadValue res = 0;
-  arrayWalk (range, res, awFunc ("counta"), 0);
-  return converter->asInteger (res).asInteger ();
-}
-
-int ValueCalc::countA (QValueVector<KSpreadValue> range)
-{
-  KSpreadValue res = 0;
-  arrayWalk (range, res, awFunc ("counta"), 0);
-  return converter->asInteger (res).asInteger ();
-}
-
-KSpreadValue ValueCalc::avg (const KSpreadValue &range)
-{
-  int cnt = countA (range);
+  int cnt = count (range, full);
   if (cnt)
-    return div (sum (range), cnt);
+    return div (sum (range, full), cnt);
   return KSpreadValue (0.0);
 }
 
-KSpreadValue ValueCalc::avg (QValueVector<KSpreadValue> range)
+KSpreadValue ValueCalc::avg (QValueVector<KSpreadValue> range, bool full)
 {
-  int cnt = countA (range);
+  int cnt = count (range, full);
   if (cnt)
-    return div (sum (range), cnt);
+    return div (sum (range, full), cnt);
   return KSpreadValue (0.0);
 }
 
-KSpreadValue ValueCalc::max (const KSpreadValue &range)
+KSpreadValue ValueCalc::max (const KSpreadValue &range, bool full)
 {
-  KSpreadValue res = range;
-  while (res.isArray()) res = res.element (0, 0);
-  arrayWalk (range, res, awFunc ("max"), 0);
+  KSpreadValue res;
+  arrayWalk (range, res, awFunc (full ? "maxa" : "max"), 0);
   return res;
 }
 
-KSpreadValue ValueCalc::min (const KSpreadValue &range)
+KSpreadValue ValueCalc::max (QValueVector<KSpreadValue> range, bool full)
 {
-  KSpreadValue res = range;
-  while (res.isArray()) res = res.element (0, 0);
-  arrayWalk (range, res, awFunc ("min"), 0);
+  KSpreadValue res;
+  arrayWalk (range, res, awFunc (full ? "maxa" : "max"), 0);
   return res;
 }
 
-KSpreadValue ValueCalc::product (const KSpreadValue &range, KSpreadValue init)
+KSpreadValue ValueCalc::min (const KSpreadValue &range, bool full)
+{
+  KSpreadValue res;
+  arrayWalk (range, res, awFunc (full ? "mina" : "min"), 0);
+  return res;
+}
+
+KSpreadValue ValueCalc::min (QValueVector<KSpreadValue> range, bool full)
+{
+  KSpreadValue res;
+  arrayWalk (range, res, awFunc (full ? "mina" : "min"), 0);
+  return res;
+}
+
+KSpreadValue ValueCalc::product (const KSpreadValue &range, KSpreadValue init,
+    bool full)
 {
   KSpreadValue res = init;
-  arrayWalk (range, res, awFunc ("prod"), 0);
+  arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
   return res;
 }
 
 KSpreadValue ValueCalc::product (QValueVector<KSpreadValue> range,
-    KSpreadValue init)
+    KSpreadValue init, bool full)
 {
   KSpreadValue res = init;
-  arrayWalk (range, res, awFunc ("prod"), 0);
+  arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
   return res;
 }
 
-KSpreadValue ValueCalc::stddev (const KSpreadValue &range)
+KSpreadValue ValueCalc::stddev (const KSpreadValue &range, bool full)
 {
-  return stddev (range, avg (range));
+  return stddev (range, avg (range, full), full);
 }
 
-KSpreadValue ValueCalc::stddev (const KSpreadValue &range, KSpreadValue avg)
+KSpreadValue ValueCalc::stddev (const KSpreadValue &range, KSpreadValue avg,
+    bool full)
 {
   KSpreadValue res;
-  int cnt = countA (range);
-  arrayWalk (range, res, awFunc ("devsq"), avg);
+  int cnt = count (range, full);
+  arrayWalk (range, res, awFunc (full ? "devsqa" : "devsq"), avg);
   return sqrt (div (res, cnt-1));
 }
 
-KSpreadValue ValueCalc::stddev (QValueVector<KSpreadValue> range)
+KSpreadValue ValueCalc::stddev (QValueVector<KSpreadValue> range, bool full)
 {
-  return stddev (range, avg (range));
+  return stddev (range, avg (range, full), full);
 }
 
 KSpreadValue ValueCalc::stddev (QValueVector<KSpreadValue> range,
-    KSpreadValue avg)
+    KSpreadValue avg, bool full)
 {
   KSpreadValue res;
-  int cnt = countA (range);
-  arrayWalk (range, res, awFunc ("devsq"), avg);
+  int cnt = count (range, full);
+  arrayWalk (range, res, awFunc (full ? "devsqa" : "devsq"), avg);
   return sqrt (div (res, cnt-1));
 }
 
-KSpreadValue ValueCalc::stddevP (const KSpreadValue &range)
+KSpreadValue ValueCalc::stddevP (const KSpreadValue &range, bool full)
 {
-  return stddevP (range, avg (range));
+  return stddevP (range, avg (range, full), full);
 }
 
-KSpreadValue ValueCalc::stddevP (const KSpreadValue &range, KSpreadValue avg)
+KSpreadValue ValueCalc::stddevP (const KSpreadValue &range, KSpreadValue avg,
+    bool full)
 {
   KSpreadValue res;
-  int cnt = countA (range);
-  arrayWalk (range, res, awFunc ("devsq"), avg);
+  int cnt = count (range, full);
+  arrayWalk (range, res, awFunc (full ? "devsqa" : "devsq"), avg);
   return sqrt (div (res, cnt));
 }
 
-KSpreadValue ValueCalc::stddevP (QValueVector<KSpreadValue> range)
+KSpreadValue ValueCalc::stddevP (QValueVector<KSpreadValue> range, bool full)
 {
-  return stddevP (range, avg (range));
+  return stddevP (range, avg (range, full), full);
 }
 
 KSpreadValue ValueCalc::stddevP (QValueVector<KSpreadValue> range,
-    KSpreadValue avg)
+    KSpreadValue avg, bool full)
 {
   KSpreadValue res;
-  int cnt = countA (range);
-  arrayWalk (range, res, awFunc ("devsq"), avg);
+  int cnt = count (range, full);
+  arrayWalk (range, res, awFunc (full ? "devsqa" : "devsq"), avg);
   return sqrt (div (res, cnt));
 }
 
