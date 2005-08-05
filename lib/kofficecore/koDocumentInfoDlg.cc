@@ -167,7 +167,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
   QVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
   d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
-  d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "kuser", KIcon::Desktop, 48 ) );
+  d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", KIcon::Desktop, 48 ) );
   d->m_authorWidget->pbLoadKABC->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "kaddressbook", KIcon::Small ) ) );
 
   d->m_authorWidget->leFullName->setText( authorInfo->fullName() );
@@ -225,8 +225,8 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
     d->m_aboutWidget->labelType->setText( doc->mimeType() );
     d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( KIcon::Desktop, 48 ) );
   }
-  d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + " " + aboutInfo->initialCreator() );
-  d->m_aboutWidget->labelModified->setText( aboutInfo->modificationDate() + " " + d->m_info->creator() );
+  d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + " - " + aboutInfo->initialCreator() );
+  d->m_aboutWidget->labelModified->setText( aboutInfo->modificationDate() + " - " + d->m_info->creator() );
   d->m_aboutWidget->labelRevision->setText( aboutInfo->editingCycles() );
   d->m_aboutWidget->leDocTitle->setText( aboutInfo->title() );
   d->m_aboutWidget->leDocSubject->setText( aboutInfo->subject() );

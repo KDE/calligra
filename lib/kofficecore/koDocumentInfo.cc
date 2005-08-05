@@ -45,8 +45,8 @@
 KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* name )
     : QObject( parent, name )
 {
-    (void)new KoDocumentInfoAbout( this );
     (void)new KoDocumentInfoAuthor( this );
+    (void)new KoDocumentInfoAbout( this );
 }
 
 KoDocumentInfo::~KoDocumentInfo()
@@ -155,7 +155,7 @@ QStringList KoDocumentInfo::pages() const
         QObject *obj;
         while ( ( obj = it.current() ) )
         {
-            ret.append( obj->name() );
+            ret.prepend( obj->name() );
             ++it;
         }
     }
@@ -631,7 +631,8 @@ KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
 {
     m_docInfo = info;
     m_editingCycles = 0;
-    m_initialCreator = i18n( "Unknown" );
+    m_initialCreator = m_docInfo->creator();
+    m_creationDate = QDateTime::currentDateTime();
 }
 
 void KoDocumentInfoAbout::saveParameters()
@@ -681,10 +682,7 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
     xmlWriter.endElement();
 
     xmlWriter.startElement( "meta:creation-date" );
-    if ( !m_creationDate.isNull() )
-       xmlWriter.addTextNode( m_creationDate.toString( Qt::ISODate ) );
-    else
-       xmlWriter.addTextNode( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+    xmlWriter.addTextNode( m_creationDate.toString( Qt::ISODate ) );
     xmlWriter.endElement();
 
     xmlWriter.startElement( "dc:date" );
@@ -718,6 +716,8 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
     e = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "initial-creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
         m_initialCreator = e.text();
+    else
+	m_initialCreator = i18n( "Unknown" );
 
     e = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "editing-cycles" );
     if ( !e.isNull() && !e.text().isEmpty() )
@@ -726,6 +726,8 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
     e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, "creation-date" );
     if ( !e.isNull() && !e.text().isEmpty() )
         m_creationDate = QDateTime::fromString( e.text(), Qt::ISODate );
+    else
+        m_creationDate = QDateTime();
 
     e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "date" );
     if ( !e.isNull() && !e.text().isEmpty() )
@@ -794,10 +796,7 @@ QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
 
     t = doc.createElement( "creation-date" );
     e.appendChild( t );
-    if ( !m_creationDate.isNull() )
-       t.appendChild( doc.createTextNode( m_creationDate.toString( Qt::ISODate ) ) );
-    else
-       t.appendChild( doc.createTextNode( QDateTime::currentDateTime().toString( Qt::ISODate ) ) );
+    t.appendChild( doc.createTextNode( m_creationDate.toString( Qt::ISODate ) ) );
 
     t = doc.createElement( "date" );
     e.appendChild( t );
@@ -827,12 +826,18 @@ QString KoDocumentInfoAbout::editingCycles() const
 
 QString KoDocumentInfoAbout::creationDate() const
 {
-    return KGlobal::locale()->formatDateTime( m_creationDate );
+    if ( m_creationDate.isValid() )
+        return KGlobal::locale()->formatDateTime( m_creationDate );
+    else
+        return i18n( "N/A" );
 }
 
 QString KoDocumentInfoAbout::modificationDate() const
 {
-    return KGlobal::locale()->formatDateTime( m_modificationDate );
+    if ( m_modificationDate.isValid() )
+        return KGlobal::locale()->formatDateTime( m_modificationDate );
+    else
+        return i18n( "N/A" );
 }
 
 void KoDocumentInfoAbout::setTitle( const QString& n )
