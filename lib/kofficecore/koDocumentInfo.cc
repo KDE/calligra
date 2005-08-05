@@ -634,8 +634,17 @@ KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
     m_initialCreator = i18n( "Unknown" );
 }
 
+void KoDocumentInfoAbout::saveParameters()
+{
+    KoDocument* doc = dynamic_cast< KoDocument* >( m_docInfo->parent() );
+    if ( doc && !doc->isAutosaving() )
+       m_editingCycles++;
+    m_modificationDate = QDateTime::currentDateTime();
+}
+
 bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
 {
+    saveParameters();
     if ( !m_title.isEmpty() )
     {
      xmlWriter.startElement( "dc:title" );
@@ -667,9 +676,6 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
      xmlWriter.endElement();
     }
 
-    KoDocument* doc = dynamic_cast< KoDocument* >( m_docInfo->parent() );
-    if ( doc && !doc->isAutosaving() )
-       m_editingCycles++;
     xmlWriter.startElement( "meta:editing-cycles" );
     xmlWriter.addTextNode( QString::number( m_editingCycles ) );
     xmlWriter.endElement();
@@ -682,7 +688,6 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
     xmlWriter.endElement();
 
     xmlWriter.startElement( "dc:date" );
-    m_modificationDate = QDateTime::currentDateTime();
     xmlWriter.addTextNode( m_modificationDate.toString( Qt::ISODate ) );
     xmlWriter.endElement();
     return true;
@@ -744,6 +749,14 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
             m_subject = e.text();
         else if ( e.tagName() == "keyword" )
             m_keywords = e.text();
+        else if ( e.tagName() == "initial-creator" )
+            m_initialCreator = e.text();
+        else if ( e.tagName() == "editing-cycles" )
+            m_editingCycles = e.text().toInt();
+        else if ( e.tagName() == "creation-date" )
+            m_creationDate = QDateTime::fromString( e.text(), Qt::ISODate );
+        else if ( e.tagName() == "date" )
+            m_modificationDate = QDateTime::fromString( e.text(), Qt::ISODate );
     }
 
     return true;
@@ -752,6 +765,7 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
 // KOffice-1.3 format
 QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
 {
+    saveParameters(); 
     QDomElement e = doc.createElement( "about" );
 
     QDomElement t = doc.createElement( "abstract" );
@@ -770,6 +784,24 @@ QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_subject ) );
 
+    t = doc.createElement( "initial-creator" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_initialCreator ) );
+
+    t = doc.createElement( "editing-cycles" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( QString::number( m_editingCycles ) ) );
+
+    t = doc.createElement( "creation-date" );
+    e.appendChild( t );
+    if ( !m_creationDate.isNull() )
+       t.appendChild( doc.createTextNode( m_creationDate.toString( Qt::ISODate ) ) );
+    else
+       t.appendChild( doc.createTextNode( QDateTime::currentDateTime().toString( Qt::ISODate ) ) );
+
+    t = doc.createElement( "date" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_modificationDate.toString( Qt::ISODate ) ) );
     return e;
 }
 

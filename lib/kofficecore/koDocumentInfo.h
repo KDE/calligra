@@ -156,6 +156,7 @@ public:
 
     void setTitle( const QString& n );
     void setAbstract( const QString& n );
+    void saveParameters();
 
 private:
     KoDocumentInfo* m_docInfo;
