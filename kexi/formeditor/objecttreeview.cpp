@@ -269,7 +269,7 @@ ObjectTreeView::slotSelectionChanged()
 {
 	const bool hadFocus = hasFocus();
 	QPtrList<QListViewItem> list = selectedItems();
-	m_form->resetSelection();
+	m_form->selectFormWidget();
 	for(QListViewItem *item = list.first(); item; item = list.next())
 	{
 		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);

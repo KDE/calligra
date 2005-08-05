@@ -81,7 +81,7 @@ PropertyCommand::setValue(const QVariant &value)
 void
 PropertyCommand::execute()
 {
-	m_propSet->manager()->activeForm()->resetSelection();
+	m_propSet->manager()->activeForm()->selectFormWidget();
 	m_propSet->setUndoing(true);
 
 	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
@@ -98,7 +98,7 @@ PropertyCommand::execute()
 void
 PropertyCommand::unexecute()
 {
-	m_propSet->manager()->activeForm()->resetSelection();
+	m_propSet->manager()->activeForm()->selectFormWidget();
 	m_propSet->setUndoing(true);
 
 	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
@@ -199,7 +199,7 @@ void
 AlignWidgetsCommand::execute()
 {
 	// To avoid creation of GeometryPropertyCommand
-	m_form->resetSelection();
+	m_form->selectFormWidget();
 
 	int gridX = m_form->gridX();
 	int gridY = m_form->gridY();
@@ -299,7 +299,7 @@ void
 AlignWidgetsCommand::unexecute()
 {
 	// To avoid creation of GeometryPropertyCommand
-	m_form->resetSelection();
+	m_form->selectFormWidget();
 	// We move widgets to their original pos
 	QMap<QCString, QPoint>::ConstIterator endIt = m_pos.constEnd();
 	for(QMap<QCString, QPoint>::ConstIterator it = m_pos.constBegin(); it != endIt; ++it)
@@ -355,7 +355,7 @@ void
 AdjustSizeCommand::execute()
 {
 	// To avoid creation of GeometryPropertyCommand
-	m_form->resetSelection();
+	m_form->selectFormWidget();
 
 	int gridX = m_form->gridX();
 	int gridY = m_form->gridY();
@@ -522,7 +522,7 @@ void
 AdjustSizeCommand::unexecute()
 {
 	// To avoid creation of GeometryPropertyCommand
-	m_form->resetSelection();
+	m_form->selectFormWidget();
 	// We resize widgets to their original size
 	QMap<QCString, QSize>::ConstIterator endIt = m_sizes.constEnd();
 	for(QMap<QCString, QSize>::ConstIterator it = m_sizes.constBegin(); it != endIt; ++it)
@@ -726,7 +726,7 @@ InsertWidgetCommand::execute()
 	}
 	//assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
 	//(e.g. KexiDBFieldEdit)
-	if (dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
+	if (m_form->designMode() && dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
 		dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)->assignItem(item);
 	}
 
@@ -1072,7 +1072,7 @@ PasteWidgetCommand::execute()
 		}
 	}
 
-	m_container->form()->resetSelection();
+	m_container->form()->selectFormWidget();
 	QStringList::ConstIterator endIt = m_names.constEnd();
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it) // We select all the pasted widgets
 	{

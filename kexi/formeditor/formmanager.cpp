@@ -1284,7 +1284,7 @@ FormManager::selectAll()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	activeForm()->resetSelection();
+	activeForm()->selectFormWidget();
 	for(ObjectTreeItem *it = activeForm()->objectTree()->children()->first(); it; it = activeForm()->objectTree()->children()->next())
 		activeForm()->setSelectedWidget(it->widget(), true);
 }
@@ -1405,7 +1405,9 @@ FormManager::emitWidgetSelected( KFormDesigner::Form* form, bool multiple )
 	bool containerSelected = false;
 	if(!multiple)
 	{
-		KFormDesigner::ObjectTreeItem *item = form->objectTree()->lookup( form->selectedWidgets()->first()->name() );
+		KFormDesigner::ObjectTreeItem *item = 0;
+		if (form->selectedWidgets()->first())
+			form->objectTree()->lookup( form->selectedWidgets()->first()->name() );
 		if(item && item->container())
 			containerSelected = true;
 	}

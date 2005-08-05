@@ -314,9 +314,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void changeName(const QCString &oldname, const QCString &newname);
 
-		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
-		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
-		  The form widget is always selected alone.
+		/*! Sets \a selected to be the selected widget of this Form. 
+		 If \a add is true, the formerly selected widget is still selected, 
+		 and the new one is just added. If false, \a selected replace the actually selected widget.
+		 The form widget is always selected alone.
 		 */
 		void setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
 
@@ -324,8 +325,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		and its resizeHandle is removed. */
 		void unSelectWidget(QWidget *w);
 
-		/*! Resets the form selection, ie set form widget as unique selected widget. */
-		void resetSelection();
+		/*! Sets the form widget (it will be uniquely selected widget). */
+		void selectFormWidget();
+
+		void clearSelection();
 
 	protected slots:
 		/*! This slot is called when the toplevel widget of this Form is deleted

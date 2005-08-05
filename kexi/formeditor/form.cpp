@@ -280,9 +280,18 @@ Form::unSelectWidget(QWidget *w)
 }
 
 void
-Form::resetSelection()
+Form::selectFormWidget()
 {
 	setSelectedWidget(widget(), false);
+}
+
+void
+Form::clearSelection()
+{
+	d->selected.clear();
+	d->resizeHandles.clear();
+	emit selectionChanged(0, false);
+	emitActionSignals(false);
 }
 
 void
@@ -320,6 +329,14 @@ Form::emitSelectionSignals()
 void
 Form::formDeleted()
 {
+//	clearSelection();
+	d->selected.clear();
+	d->resizeHandles.setAutoDelete(false);
+	d->resizeHandles.clear();
+	d->resizeHandles.setAutoDelete(true);
+//	emit selectionChanged(0, false);
+//	emitActionSignals(false);
+
 	d->manager->deleteForm(this);
 	//delete this;
 	deleteLater();
