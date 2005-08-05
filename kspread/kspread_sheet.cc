@@ -5206,7 +5206,7 @@ struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
     }
     void doWork( KSpreadCell* cell, bool, int, int )
     {
-	cell->setCellText( "" );
+      cell->setCellText( "" );
     }
 };
 

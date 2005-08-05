@@ -645,9 +645,15 @@ KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
       (col2 > KSPREAD_CLUSTER_MAX))
     return empty;
 
-  //return nothing if we are out of range occupied by cells
+  // if we are out of range occupied by cells, we return an empty
+  // array of the requested size
   if ((row1 > m_biggestY) || (col1 > m_biggestX))
-    return empty;
+  {
+    int cols = col2 - col1 + 1;
+    int rows = row2 - row1 + 1;
+    KSpreadValue array (cols, rows);
+    return array;
+  }
 
   return makeArray (col1, row1, col2, row2);
 }

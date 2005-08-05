@@ -4333,29 +4333,34 @@ void KSpreadCell::setNumber( double number )
 
 void KSpreadCell::setCellText( const QString& _text, bool asText )
 {
-    QString ctext = _text;
-    if( ctext.length() > 5000 )
-      ctext = ctext.left( 5000 );
+  QString ctext = _text;
+  if( ctext.length() > 5000 )
+    ctext = ctext.left( 5000 );
 
-    if ( asText )
-    {
-      d->strOutText = ctext;
-      d->strText    = ctext;
-      setValue( KSpreadValue( ctext ) );
+  // empty string ?
+  if (ctext.length() == 0) {
+    d->strOutText = d->strText = "";
+    setValue (KSpreadValue::empty());
+    return;
+  }
+  
+  // as text ?
+  if (asText) {
+    d->strOutText = ctext;
+    d->strText    = ctext;
+    setValue (KSpreadValue (ctext));
 
-      return;
-    }
+    return;
+  }
 
-    QString oldText = d->strText;
-    setDisplayText( ctext );
-    if(!m_pSheet->isLoading() && !testValidity() )
-    {
-      //reapply old value if action == stop
-      setDisplayText( oldText );
-    }
+  QString oldText = d->strText;
+  setDisplayText( ctext );
+  if(!m_pSheet->isLoading() && !testValidity() )
+  {
+    //reapply old value if action == stop
+    setDisplayText( oldText );
+  }
 }
-
-
 
 void KSpreadCell::setDisplayText( const QString& _text )
 {
