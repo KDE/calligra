@@ -126,7 +126,10 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 			delta = KPROPEDITOR_ITEM_MARGIN*2;
 		}
 		else if (parent() && dynamic_cast<EditorDummyItem*>(parent()->parent())) {
-			delta += KPROPEDITOR_ITEM_MARGIN*2;
+			if (dynamic_cast<EditorGroupItem*>(parent()))
+				delta += KPROPEDITOR_ITEM_MARGIN*2;
+			else
+				delta += KPROPEDITOR_ITEM_MARGIN*5;
 		}
 		p->drawText(QRect(delta,0, width+listView()->columnWidth(1), height()), 
 			Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0)); 
@@ -239,8 +242,12 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 		else if (dynamic_cast<EditorDummyItem*>(item->parent())) {
 			delta = 19;
 		}
-		if (item->parent() && dynamic_cast<EditorDummyItem*>(item->parent()->parent()))
-			delta += KPROPEDITOR_ITEM_MARGIN*2;
+		if (item->parent() && dynamic_cast<EditorDummyItem*>(item->parent()->parent())) {
+			if (dynamic_cast<EditorGroupItem*>(item->parent()))
+				delta += KPROPEDITOR_ITEM_MARGIN*2;
+			else
+				delta += KPROPEDITOR_ITEM_MARGIN*5;
+		}
 
 		p->drawText(QRect(delta+1,0, w+listView()->columnWidth(1), item->height()), 
 			Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, item->text(0)); 
