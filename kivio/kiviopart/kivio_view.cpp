@@ -1611,6 +1611,7 @@ void KivioView::pasteStencil()
 {
     m_pActivePage->paste(this);
     m_pDoc->updateView(m_pActivePage);
+    m_pCanvas->setFocus();
 }
 
 void KivioView::slotChangeStencilSize(double newW, double newH)

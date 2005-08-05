@@ -149,6 +149,7 @@ QByteArray KivioDragObject::kivioEncoded() const
 
   while((stencil = it.current()) != 0) {
     ++it;
+    kdDebug() << "Stencil: " << stencil->type() << endl;
     elem.appendChild(stencil->saveXML(doc));
   }
 

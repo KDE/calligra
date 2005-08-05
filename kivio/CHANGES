@@ -58,3 +58,8 @@ Kivio 1.3.x -> 1.4
 - Moving selected stencils with the keyboard.
 - Added a docker for adding stencils to the document.
 - Added a tool for adding connector targets to stencils.
+
+Kivio 1.4 -> 1.4.2
+-------------------
+- Fix copy/paste of polyline connector
+- Fix focus problem on paste (BUG: 109194)

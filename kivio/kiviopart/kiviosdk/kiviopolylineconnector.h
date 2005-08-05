@@ -39,6 +39,8 @@ namespace Kivio {
       PolyLineConnector();
       virtual ~PolyLineConnector();
       
+      virtual KivioStencil* duplicate();
+      
       virtual bool loadCustom(const QDomElement& e);
       virtual bool saveCustom(QDomElement& e, QDomDocument& doc);
       
