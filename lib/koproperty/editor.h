@@ -154,14 +154,12 @@ class KOPROPERTY_EXPORT Editor : public KListView
 		virtual bool eventFilter( QObject * watched, QEvent * e );
 		bool handleKeyPress(QKeyEvent* ev);
 
-		//! reaction on font change ('undo button' will be resized)
-//		virtual void fontChange( const QFont & oldFont );
 		virtual bool event( QEvent * e );
 		void updateFont();
 		bool insideFill() const;
 
-//		virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
-//		virtual void paintEmptyArea ( QPainter * p, const QRect & rect );
+		virtual void contentsMousePressEvent( QMouseEvent * e );
+
 	private:
 		EditorPrivate *d;
 

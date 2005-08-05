@@ -163,7 +163,6 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
 	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometry()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
-
 }
 
 Editor::~Editor()
@@ -847,7 +846,6 @@ void
 Editor::updateFont()
 {
 	setFont(parentWidget()->font());
-//		fontChange( font() );
 	d->baseRowHeight = QFontMetrics(parentWidget()->font()).height() + itemMargin() * 2;
 	if (!d->currentItem)
 		d->undoButton->resize(d->baseRowHeight, d->baseRowHeight);
@@ -872,15 +870,15 @@ Editor::insideFill() const
 	return d->insideFill;
 }
 
-/*void 
-Editor::drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
-{
-	KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
-}
-
 void
-Editor::paintEmptyArea ( QPainter * p, const QRect & rect ) 
+Editor::contentsMousePressEvent( QMouseEvent * e )
 {
-}*/
+	QListViewItem *item = itemAt(e->pos());
+	if (dynamic_cast<EditorGroupItem*>(item)) {
+		setOpen( item, !isOpen(item) );
+		return;
+	}
+	KListView::contentsMousePressEvent(e);
+}
 
 #include "editor.moc"
