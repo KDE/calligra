@@ -1,14 +1,12 @@
 //----------------------------------*-C++-*----------------------------------//
-// Copyright 1998 The Regents of the University of California.
+// Copyright 1998 The Regents of the University of California. 
 // All rights reserved. See LEGAL.LLNL for full text and disclaimer.
 //---------------------------------------------------------------------------//
 
 #ifndef __CXX_Exception_h
 #define __CXX_Exception_h
 
-//#include "Python.h"
-#include <Python.h>
-
+#include "Python.h"
 #include "Config.hxx"
 #include "IndirectPythonInterface.hxx"
 
@@ -27,17 +25,17 @@ namespace Py
 
 		explicit Exception ()
 			{}
-
+		
 		Exception (const std::string& reason)
 			{
 			PyErr_SetString (Py::_Exc_RuntimeError(), reason.c_str());
 			}
-
+		
 		Exception (PyObject* exception, const std::string& reason)
 			{
 			PyErr_SetString (exception, reason.c_str());
 			}
-
+		
 
 		void clear() // clear the error
 		// technically but not philosophically const
@@ -45,39 +43,39 @@ namespace Py
 			PyErr_Clear();
 			}
 		};
-
-
+	
+	
 	// Abstract
 	class StandardError: public Exception
 		{
-	protected:
+	protected: 
 		explicit StandardError()
 			{}
 		};
-
+	
 	class LookupError: public StandardError
 		{
-	protected:
+	protected: 
 		explicit LookupError()
 			{}
 		};
-
+	
 	class ArithmeticError: public StandardError
 		{
-	protected:
+	protected: 
 		explicit ArithmeticError()
 			{}
 		};
-
+	
 	class EnvironmentError: public StandardError
 		{
-	protected:
+	protected: 
 		explicit EnvironmentError()
 			{}
 		};
-
+	
 	// Concrete
-
+	
 	class TypeError: public StandardError
 		{
 	public:
@@ -87,7 +85,7 @@ namespace Py
 			PyErr_SetString (Py::_Exc_TypeError(),reason.c_str());
 			}
 		};
-
+	
 	class IndexError: public LookupError
 		{
 	public:
@@ -97,7 +95,7 @@ namespace Py
 			PyErr_SetString (Py::_Exc_IndexError(), reason.c_str());
 			}
 		};
-
+	
 	class AttributeError: public StandardError
 		{
 	public:
@@ -105,9 +103,9 @@ namespace Py
 			: StandardError()
 			{
 			PyErr_SetString (Py::_Exc_AttributeError(), reason.c_str());
-			}
+			}		
 		};
-
+	
 	class NameError: public StandardError
 		{
 	public:
@@ -117,7 +115,7 @@ namespace Py
 			PyErr_SetString (Py::_Exc_NameError(), reason.c_str());
 			}
 		};
-
+	
 	class RuntimeError: public StandardError
 		{
 	public:
@@ -127,7 +125,7 @@ namespace Py
 			PyErr_SetString (Py::_Exc_RuntimeError(), reason.c_str());
 			}
 		};
-
+	
 	class SystemError: public StandardError
 		{
 	public:
@@ -137,7 +135,7 @@ namespace Py
 			PyErr_SetString (Py::_Exc_SystemError(),reason.c_str());
 			}
 		};
-
+	
 	class KeyError: public LookupError
 		{
 	public:
@@ -147,8 +145,8 @@ namespace Py
 			PyErr_SetString (Py::_Exc_KeyError(),reason.c_str());
 			}
 		};
-
-
+	
+	
 	class ValueError: public StandardError
 		{
 	public:
@@ -158,7 +156,7 @@ namespace Py
 			PyErr_SetString (Py::_Exc_ValueError(), reason.c_str());
 			}
 		};
-
+	
 	class OverflowError: public ArithmeticError
 		{
 	public:
@@ -166,29 +164,29 @@ namespace Py
 			: ArithmeticError()
 			{
 			PyErr_SetString (Py::_Exc_OverflowError(), reason.c_str());
-			}
+			}		
 		};
-
+	
 	class ZeroDivisionError: public ArithmeticError
 		{
 	public:
 		ZeroDivisionError (const std::string& reason)
-			: ArithmeticError()
+			: ArithmeticError() 
 			{
 			PyErr_SetString (Py::_Exc_ZeroDivisionError(), reason.c_str());
 			}
 		};
-
+	
 	class FloatingPointError: public ArithmeticError
 		{
 	public:
 		FloatingPointError (const std::string& reason)
-			: ArithmeticError()
+			: ArithmeticError() 
 			{
 			PyErr_SetString (Py::_Exc_FloatingPointError(), reason.c_str());
 			}
 		};
-
+	
 	class MemoryError: public StandardError
 		{
 	public:
@@ -196,14 +194,14 @@ namespace Py
 			: StandardError()
 			{
 			PyErr_SetString (Py::_Exc_MemoryError(), reason.c_str());
-			}
+			}	
 		};
-
+	
 	class SystemExit: public StandardError
 		{
 	public:
 		SystemExit (const std::string& reason)
-			: StandardError()
+			: StandardError() 
 			{
 			PyErr_SetString (Py::_Exc_SystemExit(),reason.c_str());
 			}

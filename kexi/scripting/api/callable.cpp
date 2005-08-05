@@ -19,6 +19,7 @@
 
 #include "callable.h"
 #include "variant.h"
+#include "dict.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -68,6 +69,10 @@ Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
         //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
         return getChildrenList(arguments);
     }
+    else if(name == "dict") {
+        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
+        return getChildrenDict(arguments);
+    }
 
     return Object::call(name, arguments);
 }
@@ -112,7 +117,7 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
 
 Object::Ptr Callable::hasChild(List::Ptr args)
 {
-    kdDebug() << QString("Kross::Api::Callable::hasChild() getName()=%1").arg(getName()) << endl;
+    //kdDebug() << QString("Kross::Api::Callable::hasChild() getName()=%1").arg(getName()) << endl;
     return new Variant( Object::hasChild( Variant::toString(args->item(0)) ),
                         "Kross::Api::Callable::hasChild::Bool" );
 }
@@ -120,14 +125,14 @@ Object::Ptr Callable::hasChild(List::Ptr args)
 Object::Ptr Callable::getChild(List::Ptr args)
 {
     QString s = Variant::toString(args->item(0));
-    kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1 childName=%2").arg(getName()).arg(s) << endl;
+    //kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1 childName=%2").arg(getName()).arg(s) << endl;
     Object::Ptr obj = Object::getChild(s);
     if(! obj)
         throw AttributeException(i18n("The object '%1' has no child object '%2'").arg(getName()).arg(s));
     return obj;
 }
 
-Object::Ptr Callable::getChildrenList(List::Ptr args)
+Object::Ptr Callable::getChildrenList(List::Ptr)
 {
     QStringList list;
     QMap<QString, Object::Ptr> children = getChildren();
@@ -137,17 +142,14 @@ Object::Ptr Callable::getChildrenList(List::Ptr args)
     return new Variant(list);
 }
 
-/*TODO
-Object::Ptr Callable::getChildren(List::Ptr args)
+Object::Ptr Callable::getChildrenDict(List::Ptr)
 {
-    kdDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! => Callable::getChildren"<<endl;
-    return new Dict(Object::getChildren());
+    //kdDebug()<<"Kross::Api::Callable::getChildrenDict()"<<endl;
+    return new Dict(Object::getChildren(), "Kross::Api::Callable::getChildrenDict::Dict");
 }
-*/
 
 Object::Ptr Callable::callChild(List::Ptr args)
 {
-    kdDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
     //kdDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
     return Object::call(Variant::toString(args->item(0)), args);
 }

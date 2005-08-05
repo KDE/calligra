@@ -28,7 +28,6 @@
 
 namespace Kross { namespace Api {
 
-//the Dict class is unused at the moment. Do we even need it?
     /**
      * The Dict class implementates \a Value to handle
      * key=value base dictonaries/maps.
@@ -36,16 +35,31 @@ namespace Kross { namespace Api {
     class Dict : public Value< List, QMap<QString, Object::Ptr> >
     {
             friend class Value< List, QMap<QString, Object::Ptr> >;
-        protected:
-            Dict(const QMap<QString, Object::Ptr> value, const QString& name = "dict");
         public:
+
+            /**
+            * Constructor.
+            */
+            Dict(const QMap<QString, Object::Ptr> value, const QString& name = "dict");
+
+            /**
+            * Destructor.
+            */
             virtual ~Dict();
 
-            /// See \see Kross::Api::Object::getClassName
+            /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
+            /// \see Kross::Api::Object::getDescription()
             virtual const QString getDescription() const;
+
+            /**
+             * \return a string representation of the whole dictonary.
+             *
+             * \see Kross::Api::Object::toString()
+             */
+            virtual const QString toString();
+
     };
 
 }}

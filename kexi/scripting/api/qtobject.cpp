@@ -40,8 +40,8 @@ QtObject::QtObject(Object::Ptr parent, QObject* object)
     : Kross::Api::Class<QtObject>(object->name(), parent)
     , m_object(object)
 {
-kdDebug() << QString("================================================================================0") << endl;
-    kdDebug() << QString("QtObject::QtObject(%1) Constructor").arg(object->name()) << endl;
+    // Walk through the signals and slots the QObject has
+    // and attach them as events to this QtObject.
 
     QStrList slotnames = m_object->metaObject()->slotNames(false);
     for(char* c = slotnames.first(); c; c = slotnames.next()) {
@@ -55,7 +55,8 @@ kdDebug() << QString("==========================================================
         addChild( new EventSignal(s, this, object, s) );
     }
 
-//TODO port functions to the new event-framework.
+    // Add functions to wrap QObject methods into callable
+    // Kross objects.
 
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
@@ -129,7 +130,7 @@ const QString QtObject::getClassName() const
 
 const QString QtObject::getDescription() const
 {
-    return i18n("Class to wrap QObject instances.");
+    return "Class to wrap QObject instances.";
 }
 
 QObject* QtObject::getObject()
@@ -186,6 +187,22 @@ Kross::Api::Object::Ptr QtObject::hasSlot(Kross::Api::List::Ptr args)
            "Kross::Api::QtObject::hasSlot::Variant::Bool");
 }
 
+Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
+{
+/*TODO
+    QUObject uo[12] = { QUObject(), QUObject(), QUObject(),
+                        QUObject(), QUObject(), QUObject(),
+                        QUObject(), QUObject(), QUObject(),
+                        QUObject(), QUObject(), QUObject() };
+*/
+    QString name = Kross::Api::Variant::toString(args->item(0));
+    int slotid = m_object->metaObject()->findSlot(name.latin1(), false);
+    if(slotid < 0)
+        throw TypeException(i18n("No such slot '%1'.").arg(name));
+    m_object->qt_invoke(slotid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
+    return 0;
+}
+
 Kross::Api::Object::Ptr QtObject::signalNames(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(
@@ -200,6 +217,16 @@ Kross::Api::Object::Ptr QtObject::hasSignal(Kross::Api::List::Ptr args)
                Kross::Api::Variant::toString(args->item(0)).latin1()
            ) != -1),
            "Kross::Api::QtObject::hasSignal::Variant::Bool");
+}
+
+Kross::Api::Object::Ptr QtObject::emitSignal(Kross::Api::List::Ptr args)
+{
+    QString name = Kross::Api::Variant::toString(args->item(0));
+    int signalid = m_object->metaObject()->findSignal(name.latin1(), false);
+    if(signalid < 0)
+        throw TypeException(i18n("No such signal '%1'.").arg(name));
+    m_object->qt_invoke(signalid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
+    return 0;
 }
 
 Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
@@ -225,32 +252,6 @@ Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
 Kross::Api::Object::Ptr QtObject::disconnectSignal(Kross::Api::List::Ptr)
 {
     //TODO
-    return 0;
-}
-
-Kross::Api::Object::Ptr QtObject::emitSignal(Kross::Api::List::Ptr args)
-{
-    QString name = Kross::Api::Variant::toString(args->item(0));
-    int signalid = m_object->metaObject()->findSignal(name.latin1(), false);
-    if(signalid < 0)
-        throw TypeException(i18n("No such signal '%1'.").arg(name));
-    m_object->qt_invoke(signalid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
-    return 0;
-}
-
-Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
-{
-/*TODO
-    QUObject uo[12] = { QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject() };
-*/
-    QString name = Kross::Api::Variant::toString(args->item(0));
-    int slotid = m_object->metaObject()->findSlot(name.latin1(), false);
-    if(slotid < 0)
-        throw TypeException(i18n("No such slot '%1'.").arg(name));
-    m_object->qt_invoke(slotid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
     return 0;
 }
 

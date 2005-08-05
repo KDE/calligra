@@ -233,66 +233,61 @@ def testobjectCallbackWithParams(argument):
     print "testobjectCallbackWithParams() argument = %s" % str(argument)
     return "this is the __main__.testobjectCallbackWithParams() returnvalue!"
 
+def testQtObject(self):
+
+    # Get the QtObject instance to access the QObject.
+    testobject = get("TestObject")
+    if testobject == None:
+        raise "Object 'TestObject' undefined !!!"
+
+    print "testobject = %s %s" % (str(testobject),dir(testobject))
+    #print "propertyNames = %s" % testobject.propertyNames()
+    #print "slotNames = %s" % testobject.slotNames()
+    #print "signalNames = %s" % testobject.signalNames()
+
+    # We could just call a slot or a signal.
+    print "################################### 1"
+    print testobject.call("testSlot2()");
+    print testobject.call("testSignal()");
+    #print testobject.call() #KrossTest: List::item index=0 is out of bounds. Raising TypeException.
+
+    # Each slot a QObject spends is a object itself.
+    print "################################### 2"
+    myslot = testobject.get("testSlot()")
+    print "myslotevent = %s" % str(myslot)
+    print "################################### 3"
+    print myslot.call()
+
+    print "################################### 4"
+    print "__name__ = %s" % __name__
+    print "__dir__ = %s" % dir()
+    #print "__builtin__ = %s" % __builtin__
+    print "self = %s %s" % (str(self),dir(self))
+    #print "TestCase = %s" % str(TestCase)
+
+    print "################################### 5"
+    print "self.list = %s" % self.list()
+    print "self.dict = %s" % self.dict()
+    print "################################### 6"
+    testobject = self.get("TestObject")
+    print "testobject = %s" % testobject
+
+    print "################################### 7"
+    if not testobject.connect("testSignal()",testobject,"testSlot2()"):
+        raise "Failed to connect testSignal() with testSlot2() at object 'TestObject'."
+    testobject.signal("testSignal()")
+    #testobject.testSlot()
+    testobject.slot("testSlot()")
+    testobject.disconnect("testSignal()")
+
 print "########## BEGIN TEST: KexiDB ##########"
 testKexiDB()
 print "########## END TEST: KexiDB ##########"
 
+print "########## BEGIN TEST: QObject ##########"
+testQtObject(self)
+print "########## END TEST: QObject ##########"
+
 #testfunc("from __main__")
 #maintestfunc()
 #print __name__
-#print mymodule.exttest()
-
-print "########## BEGIN TEST: QObject ##########"
-
-# Get the QtObject instance to access the QObject.
-testobject = get("TestObject")
-if testobject == None:
-    raise "Object 'TestObject' undefined !!!"
-
-print "testobject = %s %s" % (str(testobject),dir(testobject))
-#print "propertyNames = %s" % testobject.propertyNames()
-#print "slotNames = %s" % testobject.slotNames()
-#print "signalNames = %s" % testobject.signalNames()
-
-# We could just call a slot or a signal.
-print "################################### 1"
-print testobject.call("testSlot2()");
-print testobject.call("testSignal()");
-#print testobject.call() #KrossTest: List::item index=0 is out of bounds. Raising TypeException.
-
-# Each slot a QObject spends is a object itself.
-print "################################### 2"
-myslot = testobject.get("testSlot()")
-print "myslotevent = %s" % str(myslot)
-print "################################### 3"
-print myslot.call()
-
-#testobject.connect("testSignal()",testobject,"testSlot2()")
-#testobject.signal("testSignal()")
-#testobject.call("testSlot()")
-#myslotevent.call("muh")
-#myslotevent.testSlot()
-#print testobject.call("testSlot()")
-#myslotevent.call();
-
-#testobject.testSlot()
-#testobject.slot("testSlot()")
-#testobject.disconnect("testSignal()")
-
-print "################################### 4"
-print "__name__ = %s" % __name__
-print "__dir__ = %s" % dir()
-#print "__builtin__ = %s" % __builtin__
-print "self = %s %s" % (str(self),dir(self))
-#print "TestCase = %s" % str(TestCase)
-
-print "################################### 5"
-print "self.list = %s" % self.list()
-print "################################### 6"
-testobject22 = self.get("TestObject")
-print "testobject22 = %s" % testobject22
-
-#mts = self.get("myTestSlot")
-#print str(mts)
-
-print "########## END TEST: QObject ##########"

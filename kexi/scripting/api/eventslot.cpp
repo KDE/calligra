@@ -19,13 +19,8 @@
 
 #include "eventslot.h"
 
-//#include "interpreter.h"
-//#include "object.h"
-//#include "list.h"
 #include "variant.h"
 #include "qtobject.h"
-//#include "../main/scriptcontainer.h"
-//#include "eventmanager.h"
 
 #include <qmetaobject.h>
 #include <private/qucom_p.h>
@@ -60,9 +55,6 @@ QUObject* EventSlot::toQUObject(const QString& signature, List::Ptr arguments)
     QStringList paramlist = QStringList::split(",", params); // this will fail on something like myslot(QMap<QString,QString> arg), but we don't care jet.
     uint paramcount = paramlist.size();
 
-    uint argcount = arguments ? arguments->count() : 0;
-    //uint mincount = (argcount < paramcount) ? argcount : paramcount;
-
     // The first item in the QUObject-array is for the returnvalue
     // while everything >=1 are the passed parameters.
     QUObject* uo = new QUObject[ paramcount + 1 ];
@@ -73,11 +65,11 @@ QUObject* EventSlot::toQUObject(const QString& signature, List::Ptr arguments)
 //kdDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
 
     // Fill parameters.
+    uint argcount = arguments ? arguments->count() : 0;
     for(uint i = 0; i < paramcount; i++) {
         if(paramlist[i].find("QString") >= 0) {
-            //QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString("<<<<<<NO>>>>>>>");//QString::null;
-            const QString s = Variant::toString(arguments->item(i));
-//kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
+            const QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString::null;
+            //kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
             static_QUType_QString.set( &(uo[i + 1]), s );
         }
         //TODO handle int, long, char*, QStringList, etc.

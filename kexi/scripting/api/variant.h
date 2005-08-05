@@ -31,12 +31,8 @@
 namespace Kross { namespace Api {
 
     /**
-     * Variant value to represent a QVariant.
-     *
-     * We handle all primitive types like strings
-     * or numerics with Variant cause it spends
-     * us more typesafety and handles conversation
-     * in a flexible manner.
+     * Variant value to wrap a QVariant into a \a Kross::Api::Value
+     * to enable primitive types like strings or numerics.
      */
     class Variant : public Value<Variant, QVariant>
     {
@@ -57,10 +53,10 @@ namespace Kross { namespace Api {
              */
             virtual ~Variant();
 
-            /// See \see Kross::Api::Object::getClassName
+            /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
+            /// \see Kross::Api::Object::getDescription()
             virtual const QString getDescription() const;
 
             /**

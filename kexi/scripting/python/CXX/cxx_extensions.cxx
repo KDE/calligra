@@ -3,7 +3,7 @@
 
 #include <assert.h>
 
-namespace Py
+namespace Py 
 {
 
 //================================================================================
@@ -12,7 +12,7 @@ namespace Py
 //
 //================================================================================
 
-PyMethodDef MethodTable::method( const char* method_name, PyCFunction f, int flags, const char* doc )
+PyMethodDef MethodTable::method( const char* method_name, PyCFunction f, int flags, const char* doc ) 
 	{
 	PyMethodDef m;
 	m.ml_name = const_cast<char*>( method_name );
@@ -46,7 +46,7 @@ void MethodTable::add( const char* method_name, PyCFunction f, const char* doc, 
 	}
 
 PyMethodDef* MethodTable::table()
-	{
+	{    
 	if( !mt )
 		{
 		int t1size = t.size();
@@ -269,7 +269,7 @@ void PythonType::supportBufferType()
 		}
 	}
 
-// if you define one sequence method you must define
+// if you define one sequence method you must define 
 // all of them except the assigns
 
 PythonType::PythonType( size_t basic_size, int itemsize, const char *default_name )

@@ -85,10 +85,12 @@ namespace Kross { namespace Api {
             // Slots
             Kross::Api::Object::Ptr slotNames(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr hasSlot(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr callSlot(Kross::Api::List::Ptr);
 
             // Signals
             Kross::Api::Object::Ptr signalNames(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr hasSignal(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr emitSignal(Kross::Api::List::Ptr);
 
             // Connect a QObject signal with a scripting function
             Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
@@ -96,11 +98,6 @@ namespace Kross { namespace Api {
             // Disconnect a QObject signal from a scripting function
             Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
 
-            // Emit a QObject signal per scripting
-            Kross::Api::Object::Ptr emitSignal(Kross::Api::List::Ptr);
-
-            // Call a slot in a QObject per scripting
-            Kross::Api::Object::Ptr callSlot(Kross::Api::List::Ptr);
     };
 
 }}

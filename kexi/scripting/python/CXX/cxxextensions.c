@@ -1,5 +1,5 @@
 /*
- Copyright 1998 The Regents of the University of California.
+ Copyright 1998 The Regents of the University of California. 
  All rights reserved. See Legal.htm for full text and disclaimer.
 */
 
@@ -16,4 +16,4 @@ PyObject py_object_initializer = {PyObject_HEAD_INIT(0)};
 
 
 
-
+       

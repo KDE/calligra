@@ -21,6 +21,7 @@
 #include "pythonobject.h"
 
 #include "../api/variant.h"
+#include "../api/dict.h"
 #include "../api/exception.h"
 
 #include <kdebug.h>
@@ -333,8 +334,20 @@ Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
         Kross::Api::List* list = static_cast<Kross::Api::List*>( object.data() );
         QValueList<Kross::Api::Object::Ptr> valuelist = list->getValue();
         for(QValueList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
-            pylist.append( toPyObject(*it) );
+            pylist.append( toPyObject(*it) ); // recursive
         return pylist;
+    }
+
+    if(object->getClassName() == "Kross::Api::Dict") {
+#ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
+        kdDebug() << "Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Dict" << endl;
+#endif
+        Py::Dict pydict;
+        Kross::Api::Dict* dict = static_cast<Kross::Api::Dict*>( object.data() );
+        QMap<QString, Kross::Api::Object::Ptr> valuedict = dict->getValue();
+        for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it)
+            pydict[ it.key().latin1() ] = toPyObject( it.data() ); // recursive
+        return pydict;
     }
 
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG

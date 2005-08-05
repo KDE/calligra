@@ -43,6 +43,11 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
+             *
+             * \param interpreter The \a Interpreter instance
+             *       that uses this \a Script instance.
+             * \param scriptcontainer The \a ScriptContainer instance
+             *       this script is associated with.
              */
             Script(Interpreter* interpreter, ScriptContainer* scriptcontainer);
 
@@ -53,27 +58,39 @@ namespace Kross { namespace Api {
 
             /**
              * Execute the script.
+             *
+             * \throws Exception on error.
+             * \return The execution result. Could be NULL too.
              */
             virtual Kross::Api::Object::Ptr execute() = 0;
 
             /**
-             * Return a list of callable functionnames this
+             * \return a list of callable functionnames this
              * script spends.
              */
             virtual const QStringList& getFunctionNames() = 0;
 
             /**
              * Call a function.
+             *
+             * \throws Exception on error.
+             * \param name The name of the function to execute.
+             * \param args Optional arguments passed to the function.
+             * \return The result of the called function. Could be NULL.
              */
             virtual Kross::Api::Object::Ptr callFunction(const QString& name, Kross::Api::List::Ptr args) = 0;
 
             /**
-             * Return a list of classes.
+             * \return a list of classnames.
              */
             virtual const QStringList& getClassNames() = 0;
 
             /**
              * Create and return a new class instance.
+             *
+             * \throws Exception on error.
+             * \param name The name of the class to create a instance of.
+             * \return The new classinstance.
              */
             virtual Kross::Api::Object::Ptr classInstance(const QString& name) = 0;
 
@@ -82,7 +99,6 @@ namespace Kross { namespace Api {
             Interpreter* m_interpreter;
             /// The \a ScriptContainer associated with this Script.
             ScriptContainer* m_scriptcontainer;
-            //Object* m_object;
     };
 
 }}

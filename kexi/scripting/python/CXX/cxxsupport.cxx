@@ -1,16 +1,15 @@
 //----------------------------------*-C++-*----------------------------------//
-// Copyright 1998 The Regents of the University of California.
+// Copyright 1998 The Regents of the University of California. 
 // All rights reserved. See Legal.htm for full text and disclaimer.
 //---------------------------------------------------------------------------//
 
 #include "Objects.hxx"
-
 namespace Py {
 
 Py_UNICODE unicode_null_string[1] = { 0 };
 
 Type Object::type () const
-	{
+	{ 
 	return Type (PyObject_Type (p), true);
 	}
 
@@ -20,7 +19,7 @@ String Object::str () const
 	}
 
 String Object::repr () const
-	{
+	{ 
 	return String (PyObject_Repr (p), true);
 	}
 
@@ -30,12 +29,12 @@ std::string Object::as_string() const
 	}
 
 List Object::dir () const
-        {
-        return List (PyObject_Dir (p), true);
-        }
+    {
+    return List (PyObject_Dir (p), true);
+    }
 
 bool Object::isType (const Type& t) const
-	{
+	{ 
 	return type ().ptr() == t.ptr();
 	}
 
@@ -137,7 +136,7 @@ bool operator!=(const Mapping::const_iterator& left, const Mapping::const_iterat
 std::ostream& operator<< (std::ostream& os, const Object& ob)
 	{
 	return (os << static_cast<std::string>(ob.str()));
-	}
+	}  
 #endif
 
 } // Py

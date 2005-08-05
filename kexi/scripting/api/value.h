@@ -29,10 +29,11 @@
 namespace Kross { namespace Api {
 
     /**
-     * Template class to represent values. Any kind
-     * of value like \a Variant are implementating
-     * this class. That way we have a common base
-     * for all kind of values.
+     * Template class to represent values.
+     *
+     * Classes like \a Variant or \a List are implementing this
+     * class. That way we have a common base for all kind of
+     * values.
      */
     template<class T, class V>
     class Value : public Object

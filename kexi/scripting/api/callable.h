@@ -101,7 +101,23 @@ namespace Kross { namespace Api {
             Object::Ptr getChild(List::Ptr args);
 
             //Object::Ptr setChild(List::Ptr args);
+
+            /**
+             * Wrapper for the \a Kross::Api::Object::getChildren() method
+             * to return a list of childrennames this object has.
+             *
+             * \return a \a List filled with a list of names of the
+             *        children this object has.
+             */
             Object::Ptr getChildrenList(List::Ptr args);
+
+            /**
+             * Wrapper for the \a Kross::Api::Object::getChild() method
+             * to return a dictonary of children this object has.
+             *
+             * \return a \a Dict filled with the children.
+             */
+            Object::Ptr getChildrenDict(List::Ptr args);
 
             /**
              * Wrapper for the \a Kross::Api::Object::call() method
