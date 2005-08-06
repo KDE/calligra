@@ -64,6 +64,8 @@ class TKSelectColorAction;
 class KoPartSelectAction;
 class KoPicture;
 class KoParagStyle;
+class KoLineStyleAction;
+class KoLineWidthAction;
 
 class KoCharSelectDia;
 class KoTextFormat;
@@ -260,8 +262,8 @@ public slots:
     void extraDefaultTemplate();
     void extraGroup();
     void extraUnGroup();
-    void extraPenStyle();
-    void extraPenWidth();
+    void extraPenStyle( int newStyle );
+    void extraPenWidth( double newWidth );
 
     void configureCompletion();
 
@@ -693,24 +695,7 @@ protected slots:
     void extraLineEndDoubleLineArrow();
     void setExtraLineEnd(LineEnd le);
 
-    void extraPenStyleSolid();
-    void extraPenStyleDash();
-    void extraPenStyleDot();
-    void extraPenStyleDashDot();
-    void extraPenStyleDashDotDot();
-    void extraPenStyleNoPen();
     void setExtraPenStyle( Qt::PenStyle style );
-
-    void extraPenWidth1();
-    void extraPenWidth2();
-    void extraPenWidth3();
-    void extraPenWidth4();
-    void extraPenWidth5();
-    void extraPenWidth6();
-    void extraPenWidth7();
-    void extraPenWidth8();
-    void extraPenWidth9();
-    void extraPenWidth10();
     void setExtraPenWidth( unsigned int width );
 
     /**
@@ -758,6 +743,8 @@ protected slots:
     void slotCorrectWord();
     void editFindNext();
     void editFindPrevious();
+
+    void initialLayoutOfSplitter();
 
 protected:
     virtual void resizeEvent( QResizeEvent* );
@@ -829,7 +816,7 @@ private:
     bool m_screenSaverWasEnabled;
 
     // right button popup menus
-    QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend, *rb_pstyle, *rb_pwidth;
+    QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend;
     QPopupMenu *m_arrangeObjectsPopup;
     QPtrList<KAction> m_actionList; // for the kodatatools
     QPtrList<KAction> m_variableActionList;
@@ -1007,8 +994,8 @@ private:
     KAction *actionExtraLineEnd;
     KAction *actionExtraGroup;
     KAction *actionExtraUnGroup;
-    KAction *actionExtraPenStyle;
-    KAction *actionExtraPenWidth;
+    KoLineStyleAction *actionExtraPenStyle;
+    KoLineWidthAction *actionExtraPenWidth;
 
     KAction *actionScreenConfigPages;
     KAction *actionScreenAssignEffect;

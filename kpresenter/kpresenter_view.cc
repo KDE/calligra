@@ -98,6 +98,8 @@
 #include <qcombobox.h>
 #include <koPartSelectAction.h>
 #include <kozoomhandler.h>
+#include <kolinestyleaction.h>
+#include <kolinewidthaction.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -396,8 +398,6 @@ KPresenterView::~KPresenterView()
     delete pgConfDia;
     delete rotateDia;
     delete shadowDia;
-    delete rb_pstyle;
-    delete rb_pwidth;
     delete afChoose;
     delete m_fontDlg;
     delete m_paragDlg;
@@ -1359,18 +1359,16 @@ void KPresenterView::extraUnGroup()
     objectSelectedChanged();
 }
 
-void KPresenterView::extraPenStyle()
+void KPresenterView::extraPenStyle( int newStyle )
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    QPoint pnt( QCursor::pos() );
-    rb_pstyle->popup( pnt );
+    setExtraPenStyle(static_cast<Qt::PenStyle>(newStyle));
 }
 
-void KPresenterView::extraPenWidth()
+void KPresenterView::extraPenWidth( double newWidth )
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    QPoint pnt( QCursor::pos() );
-    rb_pwidth->popup( pnt );
+    setExtraPenWidth( qRound( newWidth ) );
 }
 
 void KPresenterView::screenConfigPages()
@@ -2010,36 +2008,6 @@ void KPresenterView::setExtraLineEnd(LineEnd le)
         lineEnd = le;
 }
 
-void KPresenterView::extraPenStyleSolid()
-{
-    setExtraPenStyle( Qt::SolidLine );
-}
-
-void KPresenterView::extraPenStyleDash()
-{
-    setExtraPenStyle( Qt::DashLine );
-}
-
-void KPresenterView::extraPenStyleDot()
-{
-    setExtraPenStyle( Qt::DotLine );
-}
-
-void KPresenterView::extraPenStyleDashDot()
-{
-    setExtraPenStyle( Qt::DashDotLine );
-}
-
-void KPresenterView::extraPenStyleDashDotDot()
-{
-    setExtraPenStyle( Qt::DashDotDotLine );
-}
-
-void KPresenterView::extraPenStyleNoPen()
-{
-    setExtraPenStyle( Qt::NoPen );
-}
-
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
     KCommand * cmd( getPenCmd( i18n("Change Outline Style"), QPen(style),
@@ -2049,56 +2017,6 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
         kPresenterDoc()->addCommand( cmd );
     else
         pen.setStyle( style );
-}
-
-void KPresenterView::extraPenWidth1()
-{
-    setExtraPenWidth( 1 );
-}
-
-void KPresenterView::extraPenWidth2()
-{
-    setExtraPenWidth( 2 );
-}
-
-void KPresenterView::extraPenWidth3()
-{
-    setExtraPenWidth( 3 );
-}
-
-void KPresenterView::extraPenWidth4()
-{
-    setExtraPenWidth( 4 );
-}
-
-void KPresenterView::extraPenWidth5()
-{
-    setExtraPenWidth( 5 );
-}
-
-void KPresenterView::extraPenWidth6()
-{
-    setExtraPenWidth( 6 );
-}
-
-void KPresenterView::extraPenWidth7()
-{
-    setExtraPenWidth( 7 );
-}
-
-void KPresenterView::extraPenWidth8()
-{
-    setExtraPenWidth( 8 );
-}
-
-void KPresenterView::extraPenWidth9()
-{
-    setExtraPenWidth( 9 );
-}
-
-void KPresenterView::extraPenWidth10()
-{
-    setExtraPenWidth( 10 );
 }
 
 void KPresenterView::setExtraPenWidth( unsigned int width )
@@ -2178,10 +2096,6 @@ void KPresenterView::createGUI()
          && !m_pKPresenterDoc->isSingleViewMode() ) // No notebar if the document is embedded
     {
         notebar = new NoteBar( splitterVertical, this );
-
-        QValueList<int> tmpList;
-        tmpList << 100 << 10;
-        splitterVertical->setSizes( tmpList );
     }
 
     // setup GUI
@@ -2217,6 +2131,9 @@ void KPresenterView::createGUI()
             notebar->hide();
             actionViewShowNoteBar->setChecked(false);
         }
+
+        // HACK This is needed to be able to calculate a good initial size for the notebar
+        QTimer::singleShot( 0, this, SLOT( initialLayoutOfSplitter() ) );
     }
     KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
     if ( !initPage )
@@ -2707,13 +2624,18 @@ void KPresenterView::setupActions()
                                       this, SLOT( extraLineEnd() ),
                                       actionCollection(), "extra_lineend" );
 
-    actionExtraPenStyle = new KAction( i18n("Outline Style"), "pen_style", 0,
-                                       this, SLOT( extraPenStyle() ),
+    actionExtraPenStyle = new KoLineStyleAction( i18n("Outline Style"), "pen_style",
+                                       this, SLOT( extraPenStyle(int) ),
                                        actionCollection(), "extra_penstyle" );
+    actionExtraPenStyle->setShowCurrentSelection(false);
 
-    actionExtraPenWidth = new KAction( i18n("Outline Width"), "pen_width", 0,
-                                       this, SLOT( extraPenWidth() ),
+    actionExtraPenWidth = new KoLineWidthAction( i18n("Outline Width"), "pen_width",
+                                       this, SLOT( extraPenWidth(double) ),
                                        actionCollection(), "extra_penwidth" );
+    actionExtraPenWidth->setUnit( kPresenterDoc()->getUnit() );
+    actionExtraPenWidth->setShowCurrentSelection(false);
+    connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
+             actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
 
     actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
                                     this, SLOT( extraGroup() ),
@@ -3675,48 +3597,6 @@ void KPresenterView::setupPopupMenus()
     rb_lend->insertItem( KPBarIcon("line_double_line_arrow_end" ), this, SLOT( extraLineEndDoubleLineArrow() ) );
     rb_lend->setMouseTracking( true );
     rb_lend->setCheckable( false );
-
-    // create right button pen style
-    rb_pstyle = new QPopupMenu();
-    Q_CHECK_PTR( rb_pstyle );
-    rb_pstyle->insertItem( KPBarIcon( "pen_style_solid" ), this, SLOT( extraPenStyleSolid() ) );
-    rb_pstyle->insertSeparator();
-    rb_pstyle->insertItem( KPBarIcon( "pen_style_dash" ), this, SLOT( extraPenStyleDash() ) );
-    rb_pstyle->insertSeparator();
-    rb_pstyle->insertItem( KPBarIcon( "pen_style_dot" ), this, SLOT( extraPenStyleDot() ) );
-    rb_pstyle->insertSeparator();
-    rb_pstyle->insertItem( KPBarIcon( "pen_style_dashdot" ), this, SLOT( extraPenStyleDashDot() ) );
-    rb_pstyle->insertSeparator();
-    rb_pstyle->insertItem( KPBarIcon( "pen_style_dashdotdot" ), this, SLOT( extraPenStyleDashDotDot() ) );
-    rb_pstyle->insertSeparator();
-    rb_pstyle->insertItem( KPBarIcon( "pen_style_nopen" ), this, SLOT( extraPenStyleNoPen() ) );
-    rb_pstyle->setMouseTracking( true );
-    rb_pstyle->setCheckable( false );
-
-    // create right button pen width
-    rb_pwidth = new QPopupMenu();
-    Q_CHECK_PTR( rb_pwidth );
-    rb_pwidth->insertItem( KPBarIcon( "pen_width1" ), this, SLOT( extraPenWidth1() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width2" ), this, SLOT( extraPenWidth2() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width3" ), this, SLOT( extraPenWidth3() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width4" ), this, SLOT( extraPenWidth4() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width5" ), this, SLOT( extraPenWidth5() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width6" ), this, SLOT( extraPenWidth6() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width7" ), this, SLOT( extraPenWidth7() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width8" ), this, SLOT( extraPenWidth8() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width9" ), this, SLOT( extraPenWidth9() ) );
-    rb_pwidth->insertSeparator();
-    rb_pwidth->insertItem( KPBarIcon( "pen_width10" ), this, SLOT( extraPenWidth10() ) );
-    rb_pwidth->setMouseTracking( true );
-    rb_pwidth->setCheckable( false );
 
     // create arrange-objects popup
     m_arrangeObjectsPopup = new QPopupMenu();
@@ -6606,6 +6486,20 @@ KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb,
     }
 
     return macro;
+}
+
+void KPresenterView::initialLayoutOfSplitter()
+{
+    if( !notebar )
+    {
+        return;
+    }
+
+    QSplitter* splitterVertical = static_cast<QSplitter*>( notebar->parent() );
+    QValueList<int> tmpList;
+    int noteHeight = height() / 25;
+    tmpList << height() - noteHeight << noteHeight;
+    splitterVertical->setSizes( tmpList );
 }
 
 #ifdef HAVE_LIBKSPELL2

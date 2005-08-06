@@ -536,6 +536,7 @@ signals:
     void sig_updateRuler();
     void sig_terminateEditing( KPTextObject * );
     void sig_updateMenuBar();
+    void unitChanged(KoUnit::Unit);
 
 protected slots:
     void slotDocumentRestored();

@@ -286,12 +286,14 @@ void KPresenterViewIface::extraUnGroup()
 
 void KPresenterViewIface::extraPenStyle()
 {
-    view->extraPenStyle();
+// FIXME
+//     view->extraPenStyle();
 }
 
 void KPresenterViewIface::extraPenWidth()
 {
-    view->extraPenWidth();
+// FIXME
+//     view->extraPenWidth();
 }
 
 void KPresenterViewIface::screenTransEffect()

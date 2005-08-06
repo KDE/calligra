@@ -309,6 +309,11 @@ void KPresenterDoc::slotCommandExecuted()
 
 void KPresenterDoc::setUnit( KoUnit::Unit _unit )
 {
+    if( m_unit == _unit )
+    {
+        return;
+    }
+
     m_unit = _unit;
 
     QPtrListIterator<KoView> it( views() );
@@ -316,6 +321,8 @@ void KPresenterDoc::setUnit( KoUnit::Unit _unit )
         ((KPresenterView*)it.current())->getHRuler()->setUnit( m_unit );
         ((KPresenterView*)it.current())->getVRuler()->setUnit( m_unit );
     }
+
+    emit unitChanged( m_unit );
 }
 
 void KPresenterDoc::saveConfig()
