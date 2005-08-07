@@ -28,6 +28,10 @@ TestObject::TestObject(QObject* parent)
 {
     //kdDebug() << "TestObject::TestObject Constructor." << endl;
     connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
+
+    connect(this, SIGNAL(stdoutSignal(const QString&)), this, SLOT(stdoutSlot(const QString&)));
+    connect(this, SIGNAL(stderrSignal(const QString&)), this, SLOT(stderrSlot(const QString&)));
+
 }
 
 TestObject::~TestObject()

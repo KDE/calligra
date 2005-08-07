@@ -23,7 +23,7 @@
 #include "qtobject.h"
 
 #include <qmetaobject.h>
-#include <private/qucom_p.h>
+#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
@@ -43,64 +43,27 @@ const QString EventSlot::getClassName() const
     return "Kross::Api::EventSlot";
 }
 
-QUObject* EventSlot::toQUObject(const QString& signature, List::Ptr arguments)
-{
-    int startpos = signature.find("(");
-    int endpos = signature.findRev(")");
-    if(startpos < 0 || startpos > endpos)
-        throw RuntimeException(QString("Invalid Qt signal or slot signature '%1'").arg(signature));
-
-    QString signalname = signature.left(startpos);
-    QString params = signature.mid(startpos + 1, endpos - startpos - 1);
-    QStringList paramlist = QStringList::split(",", params); // this will fail on something like myslot(QMap<QString,QString> arg), but we don't care jet.
-    uint paramcount = paramlist.size();
-
-    // The first item in the QUObject-array is for the returnvalue
-    // while everything >=1 are the passed parameters.
-    QUObject* uo = new QUObject[ paramcount + 1 ];
-    uo[0] = QUObject(); // empty placeholder for the returnvalue.
-
-//QString t;
-//for(int j=0; j<argcount; j++) t += "'" + Variant::toString(arguments->item(j)) + "' ";
-//kdDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
-
-    // Fill parameters.
-    uint argcount = arguments ? arguments->count() : 0;
-    for(uint i = 0; i < paramcount; i++) {
-        if(paramlist[i].find("QString") >= 0) {
-            const QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString::null;
-            //kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
-            static_QUType_QString.set( &(uo[i + 1]), s );
-        }
-        //TODO handle int, long, char*, QStringList, etc.
-        else {
-            throw RuntimeException(QString("Unknown Qt signal or slot argument '%1' in signature '%2'.").arg(paramlist[i]).arg(signature));
-        }
-    }
-
-//kdDebug()<<"2 --------------------- "<<endl;
-    return uo;
-}
-
 Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
 {
 #ifdef KROSS_API_EVENTSLOT_CALL_DEBUG
-    kdDebug() << QString("EventSlot::call(%1) m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) << endl;
+    kdDebug() << QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) << endl;
 #endif
 
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
-    if(n.startsWith("1"))
-        n.remove(0,1);
+
+    if(! n.startsWith("1")) throw TypeException(i18n("Invalid slot '%1'.").arg(n));
+    //if(n.startsWith("1")) n.remove(0,1);
+    n.remove(0,1);
 
     int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
     if(slotid < 0)
         throw TypeException(i18n("No such slot '%1'.").arg(n));
 
-    QUObject* uo = toQUObject(n, arguments);
-    m_receiver->qt_invoke(slotid, uo);
-    delete uo;
+    QUObject* uo = QtObject::toQUObject(n, arguments);
+    m_receiver->qt_invoke(slotid, uo); // invoke the slot
+    delete [] uo;
 
-    return 0;
+    return new Variant(true, "Kross::Api::EventSlot::Bool");
 }
 
 /*

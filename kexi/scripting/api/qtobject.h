@@ -20,10 +20,13 @@
 #ifndef KROSS_API_QTOBJECT_H
 #define KROSS_API_QTOBJECT_H
 
+#include "class.h"
+
 #include <qstring.h>
 #include <qobject.h>
 
-#include "class.h"
+// Forward-declaration of the builtin Qt QUObject struct.
+struct QUObject;
 
 namespace Kross { namespace Api {
 
@@ -31,7 +34,6 @@ namespace Kross { namespace Api {
     class Object;
     class Variant;
     class ScriptContainer;
-    //class EventManager;
     class ScriptContrainer;
 
     /**
@@ -50,6 +52,8 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
+             * \param parent The \a QObject instance this
+             *        class is children of.
              * \param object The \a QObject instance this
              *        class wraps.
              */
@@ -60,10 +64,10 @@ namespace Kross { namespace Api {
              */
             virtual ~QtObject();
 
-            /// See \see Kross::Api::Object::getClassName
+            /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
+            /// \see Kross::Api::Object::getDescription()
             virtual const QString getDescription() const;
 
             /**
@@ -73,29 +77,42 @@ namespace Kross { namespace Api {
              */
             QObject* getObject();
 
+            /**
+            * Build a Qt QUObject struct out of the Qt signal or
+            * slot signature and the passed \a List arguments.
+            *
+            * \throw RuntimeException If the try to translate \p arguments
+            *       failed.
+            * \param signature The Qt signal or slot signature.
+            * \param arguments The optional \a List of arguments.
+            * \return A QUObject array.
+            */
+            static QUObject* toQUObject(const QString& signature, List::Ptr arguments);
+
         private:
+            /// The wrapped QObject.
             QObject* m_object;
 
-            // QProperty's
+            /// QProperty's
             Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr hasProperty(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr);
 
-            // Slots
+            /// Slots
             Kross::Api::Object::Ptr slotNames(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr hasSlot(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr callSlot(Kross::Api::List::Ptr);
 
-            // Signals
+            /// Signals
             Kross::Api::Object::Ptr signalNames(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr hasSignal(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr emitSignal(Kross::Api::List::Ptr);
 
-            // Connect a QObject signal with a scripting function
+            /// Connect a QObject signal with a scripting function
             Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
 
-            // Disconnect a QObject signal from a scripting function
+            /// Disconnect a QObject signal from a scripting function
             Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
 
     };

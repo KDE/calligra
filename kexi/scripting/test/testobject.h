@@ -40,6 +40,8 @@ class TestObject : public QObject
     signals:
         void testSignal();
         void testSignalString(const QString&);
+        void stdoutSignal(const QString&);
+        void stderrSignal(const QString&);
     public slots:
         void testSlot();
         void testSlot2();

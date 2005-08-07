@@ -92,8 +92,10 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     scriptcontainer->setCode(scriptcode);
 
     try {
-        scriptcontainer->addSlot("stdout", testobject, SLOT(stdoutSlot(const QString&)));
-        scriptcontainer->addSlot("stderr", testobject, SLOT(stderrSlot(const QString&)));
+        //scriptcontainer->addSlot("stdout", testobject, SLOT(stdoutSlot(const QString&)));
+        scriptcontainer->addSignal("stdout", testobject, SIGNAL(stdoutSignal(const QString&)));
+        //scriptcontainer->addSlot("stderr", testobject, SLOT(stderrSlot(const QString&)));
+
         scriptcontainer->addQObject( testobject );
         //scriptcontainer->addSignal("myTestSignal", testobject, SIGNAL(testSignal()));
         //scriptcontainer->addSlot("myTestSlot", testobject, SLOT(testSlot()));

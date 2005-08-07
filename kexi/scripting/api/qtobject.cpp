@@ -22,9 +22,7 @@
 #include "variant.h"
 #include "event.h"
 
-//#include "eventmanager.h"
 #include "../main/manager.h"
-//#include "../main/scriptcontainer.h"
 #include "eventslot.h"
 #include "eventsignal.h"
 
@@ -33,6 +31,7 @@
 //#include <qglobal.h>
 //#include <qobjectdefs.h>
 #include <qmetaobject.h>
+#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
@@ -138,6 +137,45 @@ QObject* QtObject::getObject()
     return m_object;
 }
 
+QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
+{
+    int startpos = signature.find("(");
+    int endpos = signature.findRev(")");
+    if(startpos < 0 || startpos > endpos)
+        throw RuntimeException(QString("Invalid Qt signal or slot signature '%1'").arg(signature));
+
+    //QString sig = signature.left(startpos);
+    QString params = signature.mid(startpos + 1, endpos - startpos - 1);
+    QStringList paramlist = QStringList::split(",", params); // this will fail on something like myslot(QMap<QString,QString> arg), but we don't care jet.
+    uint paramcount = paramlist.size();
+
+    // The first item in the QUObject-array is for the returnvalue
+    // while everything >=1 are the passed parameters.
+    QUObject* uo = new QUObject[ paramcount + 1 ];
+    uo[0] = QUObject(); // empty placeholder for the returnvalue.
+
+//QString t;
+//for(int j=0; j<argcount; j++) t += "'" + Variant::toString(arguments->item(j)) + "' ";
+//kdDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
+
+    // Fill parameters.
+    uint argcount = arguments ? arguments->count() : 0;
+    for(uint i = 0; i < paramcount; i++) {
+        if(paramlist[i].find("QString") >= 0) {
+            const QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString::null;
+            //kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
+            static_QUType_QString.set( &(uo[i + 1]), s );
+        }
+        //TODO handle int, long, char*, QStringList, etc.
+        else {
+            throw RuntimeException(QString("Unknown Qt signal or slot argument '%1' in signature '%2'.").arg(paramlist[i]).arg(signature));
+        }
+    }
+
+//kdDebug()<<"2 --------------------- "<<endl;
+    return uo;
+}
+
 Kross::Api::Object::Ptr QtObject::propertyNames(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(
@@ -157,8 +195,7 @@ Kross::Api::Object::Ptr QtObject::getProperty(Kross::Api::List::Ptr args)
     QVariant variant = m_object->property(Kross::Api::Variant::toString(args->item(0)).latin1());
     if(variant.type() == QVariant::Invalid)
         return 0;
-    return new Kross::Api::Variant(variant,
-        "Kross::Api::QtObject::getProperty::Variant");
+    return new Kross::Api::Variant(variant, "Kross::Api::QtObject::getProperty::Variant");
 }
 
 Kross::Api::Object::Ptr QtObject::setProperty(Kross::Api::List::Ptr args)
@@ -189,18 +226,17 @@ Kross::Api::Object::Ptr QtObject::hasSlot(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
 {
-/*TODO
-    QUObject uo[12] = { QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject(),
-                        QUObject(), QUObject(), QUObject() };
-*/
+//TODO just call the child event ?!
     QString name = Kross::Api::Variant::toString(args->item(0));
     int slotid = m_object->metaObject()->findSlot(name.latin1(), false);
     if(slotid < 0)
         throw TypeException(i18n("No such slot '%1'.").arg(name));
-    m_object->qt_invoke(slotid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
-    return 0;
+
+    QUObject* uo = QtObject::toQUObject(name, args);
+    m_object->qt_invoke(slotid, uo);
+    delete [] uo;
+
+    return new Variant(true, "Kross::Api::QtObject::Bool");
 }
 
 Kross::Api::Object::Ptr QtObject::signalNames(Kross::Api::List::Ptr)

@@ -19,11 +19,11 @@
 
 #include "eventsignal.h"
 
-//#include "object.h"
-//#include "list.h"
-//#include "qtobject.h"
-//#include "variant.h"
-//#include "../main/scriptcontainer.h"
+#include "variant.h"
+#include "qtobject.h"
+
+#include <qmetaobject.h>
+#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
@@ -45,6 +45,23 @@ const QString EventSignal::getClassName() const
 
 Object::Ptr EventSignal::call(const QString& name, KSharedPtr<List> arguments)
 {
-    //TODO
-    return 0;
+#ifdef KROSS_API_EVENTSIGNAL_CALL_DEBUG
+    kdDebug() << QString("EventSignal::call() name=%1 m_signal=%2 arguments=%3").arg(name).arg(m_signal).arg(arguments->toString()) << endl;
+#endif
+
+    QString n = m_signal;
+
+    if(! n.startsWith("2")) throw TypeException(i18n("Invalid signal '%1'.").arg(n));
+    //if(n.startsWith("2")) n.remove(0,1);
+    n.remove(0,1);
+
+    int signalid = m_sender->metaObject()->findSignal(n.latin1(), false);
+    if(signalid < 0)
+        throw TypeException(i18n("No such signal '%1'.").arg(n));
+
+    QUObject* uo = QtObject::toQUObject(n, arguments);
+    m_sender->qt_emit(signalid, uo); // emit the signal
+    delete [] uo;
+
+    return new Variant(true, "Kross::Api::EventSignal::Bool");
 }

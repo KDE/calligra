@@ -67,6 +67,11 @@ class KexiScriptContainer : public QObject
         */
         void setCode(const QString& code);
 
+        /**
+        * \return the stdout and stderr output.
+        */
+        QString getOutput();
+
     signals:
         void stdOut(const QString&);
         void stdErr(const QString&);
@@ -77,6 +82,9 @@ class KexiScriptContainer : public QObject
         * Try to execute the scripting code.
         */
         bool execute();
+
+        void addStdOut(const QString&);
+        void addStdErr(const QString&);
 
     private:
         KexiScriptContainerPrivate* d;

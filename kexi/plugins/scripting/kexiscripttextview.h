@@ -50,7 +50,7 @@ class KexiScriptTextView : public KexiViewBase
     public slots:
         /// Add a string to our stdOut handler.
         void addStdOut(const QString&);
-        /// Add a string to our stderr handler.
+        /// Add a string to our stdErr handler.
         void addStdErr(const QString&);
 
     private:

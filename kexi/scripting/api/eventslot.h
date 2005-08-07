@@ -26,9 +26,6 @@
 
 #include "event.h"
 
-// Forward-declaration of the builtin Qt QUObject struct.
-struct QUObject;
-
 namespace Kross { namespace Api {
 
     /**
@@ -118,13 +115,6 @@ namespace Kross { namespace Api {
         private:
             QObject* m_receiver;
             QCString m_slot;
-
-            /**
-            * Build a Qt QUObject struct out of the Qt signal or
-            * slot signature and the passed \a List arguments.
-            */
-            QUObject* toQUObject(const QString& signature, List::Ptr arguments);
-
     };
 
 }}

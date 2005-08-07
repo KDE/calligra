@@ -145,7 +145,7 @@ void ScriptContainer::initialize()
     finalize();
     Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->m_interpretername);
     if(! interpreter)
-        throw TypeException(i18n("Unknown interpreter on ScriptContainer::execute()."));
+        throw TypeException(i18n("Unknown interpreter '%1' on ScriptContainer::execute()").arg(d->m_interpretername));
     d->m_script = interpreter->createScript(this);
 }
 

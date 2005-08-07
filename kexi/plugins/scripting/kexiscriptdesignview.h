@@ -25,12 +25,14 @@
 
 #include <kexiviewbase.h>
 
+#include <koproperty/set.h>
+#include <koproperty/property.h>
+
 // Forward declarations.
 class KexiScriptManager;
 class KexiScriptContainer;
 class KexiScriptEditor;
 class KexiScriptDesignViewPrivate;
-namespace KoProperty { class Set; }
 
 /**
  * The KexiScriptDesignView class provides the \a KexiViewBase to
@@ -75,6 +77,13 @@ class KexiScriptDesignView : public KexiViewBase
          * currently used \a KexiDB::SchemaData instance.
          */
         virtual tristate storeData();
+
+    private slots:
+
+        /**
+         * Handle changes in the property editor.
+         */
+        void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
     private:
         KexiScriptDesignViewPrivate* d;

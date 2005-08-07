@@ -21,11 +21,6 @@
 #include "kexiscriptpart.h"
 
 #include <kdebug.h>
-//#include <kparts/factory.h>
-//#include <klibloader.h>
-//#include <kmdimainfrm.h>
-//#include <kmainwindow.h>
-//#include <kpopupmenu.h>
 
 #ifdef KEXI_KROSS_SUPPORT
 # include "main/manager.h"
@@ -33,19 +28,20 @@
 # include "api/exception.h"
 #endif
 
-//! @internal
+/*** KexiScriptContainer ***/
+
+/// @internal
 class KexiScriptContainerPrivate
 {
     public:
 #ifdef KEXI_KROSS_SUPPORT
         Kross::Api::Manager* manager;
-        KSharedPtr<Kross::Api::ScriptContainer> scriptcontainer;
+        Kross::Api::ScriptContainer::Ptr scriptcontainer;
 #else
         QString interpretername, code;
 #endif
+        QString output; // remember stdout and stderr scripting output.
 };
-
-/*** KexiScriptContainer ***/
 
 KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QString& name)
     : QObject(manager)
@@ -54,17 +50,21 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
 #ifdef KEXI_KROSS_SUPPORT
     d->manager = Kross::Api::Manager::scriptManager();
     d->scriptcontainer = d->manager->getScriptContainer(name);
+    d->scriptcontainer->setInterpreterName("python"); // set default interpreter
 
-    //d->scriptcontainer->connect(SIGNAL(stdOut(const QString&)), this, SIGNAL(stdOut(const QString&)));
-    //d->scriptcontainer->connect(SIGNAL(stdErr(const QString&)), this, SIGNAL(stdErr(const QString&)));
+    // Redirect stdout and stderr.
+    //FIXME remember previous stdout+stderr and restore them in the dtor?
+    d->scriptcontainer->addSlot("stdout", this, SLOT(addStdOut(const QString&)));
+    d->scriptcontainer->addSlot("stderr", this, SLOT(addStdErr(const QString&)));
 #endif
 }
 
 KexiScriptContainer::~KexiScriptContainer()
 {
 #ifdef KEXI_KROSS_SUPPORT
-    //d->scriptcontainer->disconnect(SIGNAL(stdOut(const QString&)), this, SLOT(stdOut(const QString&)));
-    //d->scriptcontainer->disconnect(SIGNAL(stdErr(const QString&)), this, SLOT(stdErr(const QString&)));
+    //TODO Don't redirect stdout and stderr any longer.
+    //d->scriptcontainer->removeSignal("stdout");
+    //d->scriptcontainer->removeSignal("stderr");
 #endif
     delete d;
 }
@@ -105,6 +105,11 @@ void KexiScriptContainer::setCode(const QString& code)
 #endif
 }
 
+QString KexiScriptContainer::getOutput()
+{
+    return d->output;
+}
+
 bool KexiScriptContainer::execute()
 {
     bool ret = false;
@@ -119,6 +124,18 @@ bool KexiScriptContainer::execute()
     kdWarning() << "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." << endl;
 #endif
     return ret;
+}
+
+void KexiScriptContainer::addStdOut(const QString& s)
+{
+    d->output += s;
+    emit stdOut(s);
+}
+
+void KexiScriptContainer::addStdErr(const QString& s)
+{
+    d->output += QString("<b>%1</b>").arg(s);
+    emit stdErr(s);
 }
 
 /*** KexiScriptManager ***/

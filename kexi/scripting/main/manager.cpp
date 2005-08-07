@@ -173,6 +173,7 @@ const QStringList Manager::getInterpreters()
     list << "kjs";
 #endif
 */
+list << "TestCase";
 
     return  list;
 }
