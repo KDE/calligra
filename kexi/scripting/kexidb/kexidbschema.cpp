@@ -37,7 +37,7 @@ using namespace Kross::KexiDB;
  */
 
 template<class T>
-KexiDBSchema<T>::KexiDBSchema<T>(const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist)
+KexiDBSchema<T>::KexiDBSchema(const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist)
     : Kross::Api::Class<T>(name)
     , m_schema(schema)
     , m_fieldlist(fieldlist)

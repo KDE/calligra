@@ -34,6 +34,7 @@ namespace Kross { namespace Python {
 
     // Forward declarations.
     class PythonSecurity;
+    class PythonModule;
 
     /**
      * Python interpreter bridge.
