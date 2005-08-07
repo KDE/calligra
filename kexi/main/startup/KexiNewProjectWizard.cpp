@@ -40,7 +40,6 @@
 #include <kconfig.h>
 #include <klistview.h>
 #include <kurlcombobox.h>
-#include <kiconview.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 
@@ -49,6 +48,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qheader.h>
 
 //! @internal
 class KexiNewProjectWizardPrivate
@@ -67,8 +67,8 @@ class KexiNewProjectWizardPrivate
 //		delete project_set_to_show;
 		delete msgHandler;
 	}
-	KIconView *lv_types;
-	KIconViewItem *lvi_file, *lvi_server;
+//	KListView *lv_types;
+	KListViewItem *lvi_file, *lvi_server;
 	QString chk_file_txt, chk_server_txt; //!< helper
 
 	QString server_db_name_dblist_lbl_txt; //!< helper
@@ -95,26 +95,41 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
 	//page: type selector
 	m_prjtype_sel = new KexiNewPrjTypeSelector(this, "KexiNewPrjTypeSelector");
-	d->lv_types = new KIconView(m_prjtype_sel, "types");
+//	lv_types = new KListView(m_prjtype_sel, "types listview");
+//	m_prjtype_sel->lv_types->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 2));
+	m_prjtype_sel->lv_types->header()->hide();
+	m_prjtype_sel->lv_types->setSorting(-1);
+	m_prjtype_sel->lv_types->setAlternateBackground(QColor()); //disable altering
+	m_prjtype_sel->lv_types->setItemMargin( KDialogBase::marginHint() );
 	QString none;
-	d->lvi_file = new KIconViewItem( d->lv_types, i18n("New Project Stored in a File"),
-		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop ) );
-	d->lvi_server = new KIconViewItem( d->lv_types, i18n("New Project Stored on a Database Server"), DesktopIcon("socket") );
-	d->lv_types->setFocus();
+	d->lvi_file = new KListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in a File") );
+	d->lvi_file->setPixmap(0, 
+		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
+			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop 
+		)
+	);
+	d->lvi_file->setMultiLinesEnabled( true );
+	d->lvi_server = new KListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
+		i18n("New Project Stored on a Database Server") );
+	d->lvi_server->setPixmap(0, DesktopIcon("socket") );
+	d->lvi_server->setMultiLinesEnabled( true );
+//	m_prjtype_sel->lv_types->resize(d->m_prjtype_sel->lv_types->width(), d->lvi_file->height()*3);
+	m_prjtype_sel->lv_types->setFocus();
 	QString txt_dns = i18n("Don't show me this question again.");
 	d->chk_file_txt = m_prjtype_sel->chk_always->text() +"\n"+txt_dns;
 	d->chk_server_txt = i18n("Always &use database server for creating new projects.")
 		+"\n"+txt_dns;
 
-	connect(d->lv_types,SIGNAL(executed(QIconViewItem*)),this,SLOT(slotLvTypesExecuted(QIconViewItem*)));
-	connect(d->lv_types,SIGNAL(returnPressed(QIconViewItem*)),this,SLOT(slotLvTypesExecuted(QIconViewItem*)));
-	connect(d->lv_types,SIGNAL(selectionChanged( QIconViewItem*)),this,SLOT(slotLvTypesSelected(QIconViewItem*)));
+	connect(m_prjtype_sel->lv_types,SIGNAL(executed(QListViewItem*)),this,SLOT(slotLvTypesExecuted(QListViewItem*)));
+	connect(m_prjtype_sel->lv_types,SIGNAL(returnPressed(QListViewItem*)),this,SLOT(slotLvTypesExecuted(QListViewItem*)));
+	connect(m_prjtype_sel->lv_types,SIGNAL(selectionChanged( QListViewItem*)),this,SLOT(slotLvTypesSelected(QListViewItem*)));
 
-	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertWidget(1,d->lv_types);
-	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertStretch(3,1);
+//	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertWidget(1,d->m_prjtype_sel->lv_types);
+//	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertStretch(3,1);
+//	updateGeometry();
 
 	addPage(m_prjtype_sel, i18n("Select Storage Method"));
-	d->lv_types->setMinimumHeight(QMAX(d->lvi_file->height(),d->lvi_server->height())+25);
+//	d->m_prjtype_sel->lv_types->setMinimumHeight(QMAX(d->lvi_file->height(),d->lvi_server->height())+25);
 
 	//page: db title
 	m_db_title = new KexiDBTitlePage(this, "KexiDBTitlePage");
@@ -175,8 +190,8 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
 	//finish:
 	updateGeometry();
-	d->lv_types->setMaximumWidth(width()/2);
-	d->lv_types->setSelected(d->lvi_file, true);
+//	d->m_prjtype_sel->lv_types->setMaximumWidth(width()/2);
+	m_prjtype_sel->lv_types->setSelected(d->lvi_file, true);
 
 #ifdef KEXI_SERVER_SUPPORT
 	//get settings
@@ -191,7 +206,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 		m_prjtype_sel->chk_always->setChecked(true);
 		showPage(m_db_title);
 	} else if (default_storage.lower()=="server") {
-		d->lv_types->setSelected(d->lvi_server, true);
+		m_prjtype_sel->lv_types->setSelected(d->lvi_server, true);
 		m_prjtype_sel->chk_always->setChecked(true);
 		showPage(m_conn_sel);
 	}
@@ -208,37 +223,35 @@ void KexiNewProjectWizard::show()
 	KWizard::show();
 }
 
-void KexiNewProjectWizard::slotLvTypesExecuted(QIconViewItem *)
+void KexiNewProjectWizard::slotLvTypesExecuted(QListViewItem *)
 {
 	next();//showPage(m_conn_sel);
 }
 
-void KexiNewProjectWizard::slotLvTypesSelected(QIconViewItem *item)
+void KexiNewProjectWizard::slotLvTypesSelected(QListViewItem *item)
 {
 	if (item==d->lvi_file) {
 		m_prjtype_sel->chk_always->setText(d->chk_file_txt);
-		setAppropriate( m_db_title, true );
-		setAppropriate( m_server_db_name, false );
 	}
-	else {
+	else if (item==d->lvi_server) {
 		m_prjtype_sel->chk_always->setText(d->chk_server_txt);
-		setAppropriate( m_db_title, false );
-		setAppropriate( m_server_db_name, true );
 	}
+	setAppropriate( m_db_title, item==d->lvi_file );
+	setAppropriate( m_server_db_name, item==d->lvi_server );
 }
 
 void KexiNewProjectWizard::showPage(QWidget *page)
 {
 	if (page==m_prjtype_sel) {//p 1
-		d->lv_types->setFocus();
-		d->lv_types->setCurrentItem(d->lv_types->currentItem());
+		m_prjtype_sel->lv_types->setFocus();
+		m_prjtype_sel->lv_types->setCurrentItem(m_prjtype_sel->lv_types->currentItem());
 	} else if (page==m_db_title) {//p 2
 		if (m_db_title->le_caption->text().stripWhiteSpace().isEmpty())
 			m_db_title->le_caption->setText(i18n("New database"));
 		m_db_title->le_caption->selectAll();
 		m_db_title->le_caption->setFocus();
 	} else if (page==m_conn_sel) {//p 3
-		if (d->lv_types->currentItem()==d->lvi_file) {
+		if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file) {
 			m_conn_sel->showSimpleConn();
 			QString fn = KexiUtils::string2FileName( m_db_title->le_caption->text() );
 			if (!fn.endsWith(".kexi"))
@@ -284,7 +297,7 @@ void KexiNewProjectWizard::next()
 			return;
 		}
 	} else if (currentPage()==m_conn_sel) {//p 3
-		if (d->lv_types->currentItem()==d->lvi_file) {
+		if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file) {
 			//test for db file selection
 		}
 		else {
@@ -304,7 +317,7 @@ void KexiNewProjectWizard::next()
 
 void KexiNewProjectWizard::accept()
 {
-	if (d->lv_types->currentItem()==d->lvi_file) {//FILE:
+	if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file) {//FILE:
 		//check if new db file name is ok
 		kdDebug() << "********** sender() " << sender()->className() << endl;
 		if (sender()==finishButton()) { /*(only if signal does not come from filedialog)*/
@@ -352,7 +365,7 @@ void KexiNewProjectWizard::done(int r)
 	KGlobal::config()->setGroup("Startup");
 	if (!m_prjtype_sel->chk_always->isChecked())
 		KGlobal::config()->deleteEntry("DefaultStorageForNewProjects");
-	else if (d->lv_types->currentItem()==d->lvi_file)
+	else if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file)
 		KGlobal::config()->writeEntry("DefaultStorageForNewProjects","File");
 	else
 		KGlobal::config()->writeEntry("DefaultStorageForNewProjects","Server");
@@ -364,14 +377,14 @@ void KexiNewProjectWizard::done(int r)
 
 QString KexiNewProjectWizard::projectDBName() const
 {
-	if (d->lv_types->currentItem()==d->lvi_server)
+	if (m_prjtype_sel->lv_types->currentItem()==d->lvi_server)
 		return m_server_db_name->le_dbname->text();
 	return m_conn_sel->selectedFileName();
 }
 
 QString KexiNewProjectWizard::projectCaption() const
 {
-	if (d->lv_types->currentItem()==d->lvi_server) {
+	if (m_prjtype_sel->lv_types->currentItem()==d->lvi_server) {
 		return m_server_db_name->le_caption->text();
 	}
 	return m_db_title->le_caption->text();
@@ -379,7 +392,7 @@ QString KexiNewProjectWizard::projectCaption() const
 
 KexiDB::ConnectionData* KexiNewProjectWizard::projectConnectionData() const
 {
-	if (d->lv_types->currentItem()==d->lvi_file)
+	if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file)
 		return 0;
 	return m_conn_sel->selectedConnectionData();
 }

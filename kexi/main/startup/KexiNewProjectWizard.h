@@ -31,7 +31,6 @@ class KexiNewProjectWizardPrivate;
 class KexiDBTitlePage;
 class KexiServerDBNamePage;
 class KexiProjectSelectorWidget;
-class QIconViewItem;
 
 class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
 {
@@ -62,8 +61,8 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
 		void setConfirmOverwrites(bool set);
 
 	protected slots:
-		void slotLvTypesSelected(QIconViewItem *);
-		void slotLvTypesExecuted(QIconViewItem *);
+		void slotLvTypesSelected(QListViewItem *);
+		void slotLvTypesExecuted(QListViewItem *);
 		void slotServerDBCaptionTxtChanged(const QString &capt);
 		void slotServerDBNameTxtChanged(const QString &n);
 		

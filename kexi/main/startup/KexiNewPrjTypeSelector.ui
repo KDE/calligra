@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KexiNewPrjTypeSelector</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,38 +8,21 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>364</width>
-            <height>122</height>
+            <width>328</width>
+            <height>203</height>
         </rect>
     </property>
-    <vbox>
+    <property name="caption">
+        <string>KexiNewPrjTypeSelector</string>
+    </property>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>lbl</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>2</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Kexi will create a new database project. Select a storage method which will be used to store the new project.
-</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignTop</set>
-            </property>
-        </widget>
-        <spacer>
+        <spacer row="2" column="0">
             <property name="name">
                 <cstring>spacer9</cstring>
             </property>
@@ -47,23 +30,23 @@
                 <enum>Vertical</enum>
             </property>
             <property name="sizeType">
-                <enum>Minimum</enum>
+                <enum>Fixed</enum>
             </property>
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>6</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="3" column="0">
             <property name="name">
                 <cstring>chk_always</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>1</vsizetype>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
@@ -71,8 +54,11 @@
             <property name="text">
                 <string>Always &amp;use files for creating new projects</string>
             </property>
+            <property name="accel">
+                <string>Alt+U</string>
+            </property>
         </widget>
-        <spacer>
+        <spacer row="4" column="0">
             <property name="name">
                 <cstring>spacer9_2</cstring>
             </property>
@@ -89,8 +75,55 @@
                 </size>
             </property>
         </spacer>
-    </vbox>
+        <widget class="KListView" row="1" column="0">
+            <column>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>lv_types</cstring>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="resizeMode">
+                <enum>LastColumn</enum>
+            </property>
+            <property name="shadeSortColumn">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lbl</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Kexi will create a new database project. Select a storage method which will be used to store the new project.
+</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>chk_always</tabstop>
 </tabstops>
@@ -98,4 +131,7 @@
     <function access="private" specifier="non virtual">init()</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>
