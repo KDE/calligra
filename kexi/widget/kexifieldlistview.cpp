@@ -57,14 +57,12 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int opti
 	setDropVisualizer(false);
 	setDropHighlighter(true);
 	setAllColumnsShowFocus(true);
-	addColumn(i18n("Primary Key", "PK"), 0);
 	addColumn(i18n("Field Name"));
 	if (m_options & ShowDataTypes)
 		addColumn(i18n("Data Type"));
 	if (m_options & AllowMultiSelection)
 		setSelectionMode(QListView::Extended);
 	setResizeMode(QListView::LastColumn);
-//	setResizeMode(QListView::AllColumns);
 	header()->hide();
 	setSorting(-1, true); // disable sorting
 	setDragEnabled(true);
@@ -96,18 +94,18 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 		if (i==-1) {
 			if (schema->table() && (m_options & HideTableAsterisk))
 				continue;
-			item = new KListViewItem(this, item, QString::number(order), "*");
+			item = new KListViewItem(this, item, "*");
 		}
 		else {
 			colinfo = columns[i];
-			item = new KListViewItem(this, item, QString::number(order), colinfo->aliasOrName());
+			item = new KListViewItem(this, item, colinfo->aliasOrName());
 			if (m_options & ShowDataTypes)
-				item->setText(2, colinfo->field->typeName());
+				item->setText(1, colinfo->field->typeName());
 		}
 		if(colinfo && (colinfo->field->isPrimaryKey() || colinfo->field->isUniqueKey()))
-			item->setPixmap(1, m_keyIcon);
+			item->setPixmap(0, m_keyIcon);
 		else if (hasPKeys) {
-			item->setPixmap(1, m_noIcon);
+			item->setPixmap(0, m_noIcon);
 		}
 		order++;
 	}
@@ -140,7 +138,7 @@ QDragObject* KexiFieldListView::dragObject()
 	for (QListViewItemIterator it(this); it.current(); ++it) {
 		if (it.current()->isSelected()) {
 //! @todo what about query fields/aliases? it.current()->text(1) can be not enough
-			selectedFields.append(it.current()->text(1));
+			selectedFields.append(it.current()->text(0));
 		}
 	}
 	return new KexiFieldDrag(m_schema->table() ? "kexi/table" : "kexi/query", 

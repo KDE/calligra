@@ -53,7 +53,8 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public KListView
 		virtual QDragObject *dragObject();
 
 		KexiDB::TableOrQuerySchema* m_schema;
-		QPixmap m_keyIcon, m_noIcon;
+		QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column
+		QPixmap m_noIcon; //!< blank icon of the same size as m_keyIcon
 		int m_options;
 };
 
