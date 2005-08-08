@@ -19,6 +19,7 @@ class KChartWizardSelectChartSubTypePage : public QWidget
 public:
   KChartWizardSelectChartSubTypePage( QWidget* parent, KChartPart* chart );
   void changeSubTypeName( KDChartParams::ChartType _type);
+
   bool chartSubType;
 public slots:
   void apply();

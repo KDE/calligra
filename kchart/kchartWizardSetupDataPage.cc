@@ -122,10 +122,10 @@ void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 {
   _parent->emitNeedNewData( (const char*)_parent->dataArea().local8Bit(),
-                                                        ( datarow->isChecked() ? KChartWizard::Row :
-                                                          KChartWizard::Col ),
-                                                        coldescript->isChecked(),
-                                                        rowdescript->isChecked() );
+			    ( datarow->isChecked() ? KChartWizard::Row 
+			                           : KChartWizard::Col ),
+			    coldescript->isChecked(),
+			    rowdescript->isChecked() );
 }
 
 }  //namespace KChart

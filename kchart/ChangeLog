@@ -1,3 +1,8 @@
+2005-08-08  Inge Wallin  <ingwa@localhost.localdomain>
+
+	Code cleaning.
+	* kchartWizard.{h,cpp}: cleaning
+
 2005-07-28  Inge Wallin  <ingwa@dhcp-254-153.lkpg.cendio.se>
 
 	Fix error in creating HiLo charts

@@ -20,10 +20,10 @@
 namespace KChart
 {
 
-KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
+KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* name,
                              bool modal, WFlags f ) :
     KWizard( parent, name, modal, f ),
-    _chart( chart )
+    m_chart( _chart )
 {
     // hack
 
@@ -34,44 +34,46 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
     //     addPage( _selectdatapage, i18n( "Select Data" ) );
 
     // Second page: select the major chart type
-    _selectcharttypepage =  new KChartWizardSelectChartTypePage( this, _chart );
-    addPage( _selectcharttypepage, i18n( "Select Chart Type" ) );
+    m_selectcharttypepage = new KChartWizardSelectChartTypePage( this, m_chart );
+    addPage( m_selectcharttypepage, i18n( "Select Chart Type" ) );
     //finishButton()->setEnabled( TRUE );
-    setFinishEnabled(_selectcharttypepage, true);
-    setHelpEnabled(_selectcharttypepage, false);
+    setFinishEnabled(m_selectcharttypepage, true);
+    setHelpEnabled(m_selectcharttypepage, false);
 
     // Third page: select the minor chart type
-    _selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, _chart );
-    addPage( _selectchartsubtypepage, i18n( "Select Chart Subtype" ) );
-    setFinishEnabled(_selectchartsubtypepage, true);
-    setHelpEnabled(_selectchartsubtypepage, false);
+    m_selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, m_chart );
+    addPage( m_selectchartsubtypepage, i18n( "Select Chart Subtype" ) );
+    setFinishEnabled(m_selectchartsubtypepage, true);
+    setHelpEnabled(m_selectchartsubtypepage, false);
 
     // Fourth page: data setup
-    //_setupdatapage = new KChartWizardSetupDataPage( this, _chart );
+    //_setupdatapage = new KChartWizardSetupDataPage( this, m_chart );
     //addPage( _setupdatapage, i18n( "Data Setup" ) );
 
     // Fifth page: labels/legends setup
-    _labelslegendpage = new KChartWizardLabelsLegendPage( this, _chart );
-    addPage( _labelslegendpage, i18n( "Labels & Legend" ) );
-    setFinishEnabled(_labelslegendpage, true);
-    setHelpEnabled(_labelslegendpage, false);
+    m_labelslegendpage = new KChartWizardLabelsLegendPage( this, m_chart );
+    addPage( m_labelslegendpage, i18n( "Labels & Legend" ) );
+    setFinishEnabled(m_labelslegendpage, true);
+    setHelpEnabled(m_labelslegendpage, false);
 
     // Sixth page: axes setup
-    _axespage = new KChartWizardSetupAxesPage( this, _chart );
-    addPage( _axespage, i18n( "Setup Axes" ) );
-    setFinishEnabled(_axespage, true);
-    setNextEnabled(_axespage, false);
-    setHelpEnabled(_axespage, false);
-    //  connect( this, SIGNAL( finished() ), _selectdatapage, SLOT( apply() ) );
-    connect( this ,SIGNAL(finished()), _labelslegendpage,    SLOT(apply()) );
-    connect( this ,SIGNAL(finished()), _selectcharttypepage, SLOT(apply()) );
-    connect( this ,SIGNAL(finished()), _axespage,            SLOT( apply() ) );
-    connect( this ,SIGNAL(finished()), _selectchartsubtypepage,SLOT( apply()) );
-    connect( _selectcharttypepage, SIGNAL( chartChange( int ) ),
-             this,                 SLOT( subType( int ) ) );
+    m_axespage = new KChartWizardSetupAxesPage( this, m_chart );
+    addPage( m_axespage, i18n( "Setup Axes" ) );
+    setFinishEnabled(m_axespage, true);
+    setNextEnabled(m_axespage, false);
+    setHelpEnabled(m_axespage, false);
+
+    // connect( this, SIGNAL( finished() ), _selectdatapage, SLOT( apply() ) );
+    connect(this, SIGNAL(finished()), m_labelslegendpage,       SLOT(apply()));
+    connect(this, SIGNAL(finished()), m_selectcharttypepage,    SLOT(apply()));
+    connect(this, SIGNAL(finished()), m_axespage,               SLOT(apply()));
+    connect(this ,SIGNAL(finished()), m_selectchartsubtypepage, SLOT(apply()));
+
+    connect( m_selectcharttypepage, SIGNAL( chartChange( int ) ),
+             this,                  SLOT( subType( int ) ) );
     adjustSize();
 
-    subType( _chart->params()->chartType() );
+    subType( m_chart->params()->chartType() );
     kdDebug(35001) << "kchartwizard created" << endl;
 }
 
@@ -79,40 +81,38 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
 KChartWizard::~KChartWizard()
 {
     //  delete _selectdatapage;
-    delete _selectcharttypepage;
-    delete _selectchartsubtypepage;
+    delete m_selectcharttypepage;
+    delete m_selectchartsubtypepage;
     //delete _setupdatapage;
-    delete _labelslegendpage;
-    delete _axespage;
+    delete m_labelslegendpage;
+    delete m_axespage;
 }
 
 void KChartWizard::subType(int _type)
 {
     KDChartParams::ChartType type = (KDChartParams::ChartType)_type;
-    if( type == KDChartParams::Bar ||
+    if (type == KDChartParams::Bar ||
         type == KDChartParams::Line ||
         type == KDChartParams::Area ||
         type == KDChartParams::HiLo ||
         type == KDChartParams::Polar) {
-        _selectchartsubtypepage->chartSubType=true;
+        m_selectchartsubtypepage->chartSubType=true;
     } else {
-        _selectchartsubtypepage->chartSubType=false;
+        m_selectchartsubtypepage->chartSubType=false;
     }
-    _selectchartsubtypepage->changeSubTypeName( type );
-    if( ( type == KDChartParams::Bar &&
-          _chart->params()->threeDBars() ) ||
-        ( type == KDChartParams::Pie &&
-          _chart->params()->threeDPies() ) ) {
-        _axespage->chart3d = true;
+    m_selectchartsubtypepage->changeSubTypeName( type );
+    if( ( type == KDChartParams::Bar && m_chart->params()->threeDBars() ) 
+	|| ( type == KDChartParams::Pie && m_chart->params()->threeDPies() ) ) {
+	m_axespage->chart3d = true;
     } else {
-        _axespage->chart3d = false;
+        m_axespage->chart3d = false;
     }
 
 #if 0				// No second Y axis so far /ingwa
-    if( _chart->params()->axisVisible( KDChartAxisParams::AxisPosRight ) ) {
-        _labelslegendpage->ytitle2=true;
+    if ( m_chart->params()->axisVisible( KDChartAxisParams::AxisPosRight ) ) {
+        m_labelslegendpage->ytitle2=true;
     } else {
-        _labelslegendpage->ytitle2=false;
+        m_labelslegendpage->ytitle2=false;
     }
 #endif
 }
@@ -120,13 +120,13 @@ void KChartWizard::subType(int _type)
 
 bool KChartWizard::appropriate( QWidget * w ) const
 {
-    if ( w == _selectchartsubtypepage )
-        // Show the sub-type page only if has anything to show
-        return _selectchartsubtypepage->chartSubType;
+    // Show the sub-type page only if has anything to show
+    if ( w == m_selectchartsubtypepage )
+        return m_selectchartsubtypepage->chartSubType;
     else
         return true;
-
 }
+
 
 void KChartWizard::next()
 {
