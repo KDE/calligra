@@ -63,8 +63,10 @@ KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_logn (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_maxa (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mina (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mod (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_mult (valVector args, ValueCalc *calc, FuncExtra *);
@@ -256,12 +258,20 @@ void KSpreadRegisterMathFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
+  f = new Function ("MDETERM",          func_mdeterm);
+  f->setParamCount (1);
+  f->setAcceptArray ();
+  repo->add (f);
   f = new Function ("MIN",           func_min);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("MINA",          func_mina);
   f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MMULT",          func_mmult);
+  f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("MULTIPLY",      func_product);  // same as PRODUCT
@@ -877,6 +887,78 @@ KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
     else
       result = calc->lcm (result, args[i]);
   return result;
+}
+
+KSpreadValue determinant (ValueCalc *calc, KSpreadValue matrix)
+{
+  // this is a --- SLOOOW --- recursive function
+  // using this for something bigger than 10x10 or so = suicide :P
+  // but I'm too lazy to adjust gnumeric's code - remains as a TODO then
+  // as a note, gnumeric uses LUP decomposition to compute this
+  
+  // take first row, generate smaller matrices, recursion, multiply
+  KSpreadValue res = 0.0;
+  int n = matrix.columns();
+  if (n == 1) return matrix.element (0, 0);
+  if (n == 2) return calc->sub (
+      calc->mul (matrix.element (1,1), matrix.element (0,0)),
+      calc->mul (matrix.element (1,0), matrix.element (0,1)));
+  
+  // n >= 3
+  for (int i = 0; i < n; ++i) {
+    KSpreadValue smaller (n-1, n-1);
+    int col = 0;
+    for (int c = 0; c < n; ++c)
+      if (c != i) {
+        // copy column c to column col in new matrix
+        for (int r = 1; r < n; r++)
+          smaller.setElement (col, r-1, matrix.element (c, r));
+        col++;
+      }
+    KSpreadValue minor = determinant (calc, smaller);
+    if (i % 2 == 1) minor = calc->mul (minor, -1);
+    res = calc->add (res, calc->mul (minor, matrix.element (i, 0)));
+  }
+  return res;
+}
+
+// Function: mdeterm
+KSpreadValue func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue m = args[0];
+  unsigned r = m.rows ();
+  unsigned c = m.columns ();
+  if (r != c)   // must be a square matrix
+    return KSpreadValue::errorVALUE();
+  
+  return determinant (calc, args[0]);
+}
+
+// Function: mmult
+KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  KSpreadValue m1 = args[0];
+  KSpreadValue m2 = args[1];
+  unsigned r1 = m1.rows ();
+  unsigned c1 = m1.columns ();
+  unsigned r2 = m2.rows ();
+  unsigned c2 = m2.columns ();
+  if (c1 != r2)  // row/column counts must match
+    return KSpreadValue::errorVALUE();
+  
+  // create the resulting matrix
+  KSpreadValue res (c2, r1);
+  
+  // perform the multiplication - O(n^3) algorithm
+  for (int row = 0; row < r1; ++row)
+    for (int col = 0; col < c2; ++col) {
+      KSpreadValue val = 0.0;
+      for (int pos = 0; pos < c1; ++pos)
+        val = calc->add (val,
+            calc->mul (m1.element (pos, row), m2.element (col, pos)));
+      res.setElement (col, row, val);
+    }
+  return res;
 }
 
 

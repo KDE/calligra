@@ -661,7 +661,8 @@ KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
 KSpreadValue KSpreadCluster::makeArray (int col1, int row1,
     int col2, int row2) const
 {
-  //this generates an array of values
+  // this generates an array of values
+  // TODO: make this thing faster by skipping empty regions
   int cols = col2 - col1 + 1;
   int rows = row2 - row1 + 1;
   KSpreadValue array (cols, rows);

@@ -140,6 +140,13 @@ void awDevSqA (ValueCalc *c, KSpreadValue &res, KSpreadValue val,
 }
 
 
+bool isDate (KSpreadValue val) {
+  KSpreadValue::Format fmt = val.format();
+  if ((fmt == KSpreadValue::fmt_Date) || (fmt == KSpreadValue::fmt_DateTime))
+    return true;
+  return false;
+}
+
 // ***********************
 // ****** ValueCalc ******
 // ***********************
@@ -175,6 +182,9 @@ KSpreadValue ValueCalc::add (const KSpreadValue &a, const KSpreadValue &b)
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
+  // operation on two dates should produce a number
+  if (isDate(a) && isDate(b))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
@@ -188,6 +198,9 @@ KSpreadValue ValueCalc::sub (const KSpreadValue &a, const KSpreadValue &b)
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
+  // operation on two dates should produce a number
+  if (isDate(a) && isDate(b))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
@@ -201,6 +214,9 @@ KSpreadValue ValueCalc::mul (const KSpreadValue &a, const KSpreadValue &b)
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
+  // operation on two dates should produce a number
+  if (isDate(a) && isDate(b))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
@@ -218,6 +234,9 @@ KSpreadValue ValueCalc::div (const KSpreadValue &a, const KSpreadValue &b)
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
+  // operation on two dates should produce a number
+  if (isDate(a) && isDate(b))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
@@ -235,6 +254,8 @@ KSpreadValue ValueCalc::mod (const KSpreadValue &a, const KSpreadValue &b)
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
+  if (isDate(a) && isDate(b))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
@@ -248,6 +269,9 @@ KSpreadValue ValueCalc::pow (const KSpreadValue &a, const KSpreadValue &b)
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
+  // operation on date(s) should produce a number
+  if (isDate(a) || isDate(b))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
@@ -262,6 +286,9 @@ KSpreadValue ValueCalc::sqrt (const KSpreadValue &a)
   KSpreadValue res = KSpreadValue (::sqrt (converter->asFloat(a).asFloat()));
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
+  // operation on date(s) should produce a number
+  if (isDate(a))
+    res.setFormat (KSpreadValue::fmt_Number);
 
   return res;
 }
