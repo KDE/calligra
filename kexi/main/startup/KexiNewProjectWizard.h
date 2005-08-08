@@ -25,6 +25,8 @@
 
 #include <kwizard.h>
 
+class QListViewItem;
+
 class KexiNewPrjTypeSelector;
 class KexiConnSelectorWidget;
 class KexiNewProjectWizardPrivate;
