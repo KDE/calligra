@@ -1159,7 +1159,8 @@ KSpreadValue Formula::eval() const
   
 
   Function* function;
-  
+  FuncExtra fe;
+
   if( d->dirty )
   {
     Tokens tokens = scan( d->expression );
@@ -1382,6 +1383,9 @@ KSpreadValue Formula::eval() const
           return KSpreadValue::errorVALUE(); // not enough arguments
         
         args.clear();
+        fe.ranges.clear ();
+        fe.ranges.reserve (index);
+        fe.sheet = sheet;
         for( ; index; index-- )
         {
           stackEntry e = stack.pop();
@@ -1389,6 +1393,10 @@ KSpreadValue Formula::eval() const
           // TODO: create and fill a FunctionExtra object, if needed
           // problem: we don't know if we need it, as we don't have the
           // fuction name yet ...
+          fe.ranges[index - 1].col1 = e.col1;
+          fe.ranges[index - 1].row1 = e.row1;
+          fe.ranges[index - 1].col2 = e.col2;
+          fe.ranges[index - 1].row2 = e.row2;
         }
 
         // function name as string value
@@ -1399,7 +1407,7 @@ KSpreadValue Formula::eval() const
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
         
-        ret = function->exec (args, calc, 0);
+        ret = function->exec (args, calc, &fe);
         if (ret.isError ())
           return ret;    // error in the function
         entry.reset();

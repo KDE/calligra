@@ -28,15 +28,20 @@
 #include "kspread_value.h"
 
 class QDomElement;
-
+class KSpreadSheet;
 
 typedef QValueVector<KSpreadValue> valVector;
 
 namespace KSpread
 {
 
+struct rangeInfo {
+  int col1, col2, row1, row2;
+};
 struct FuncExtra {
   // here we'll add all the extras a function may need
+  QValueVector<rangeInfo> ranges;
+  KSpreadSheet *sheet;
 };
 
 class ValueCalc;
