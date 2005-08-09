@@ -27,7 +27,7 @@ libkformdesigner_la_LIBADD = \
 servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=widgetfactory.desktop
 
-SUBDIRS = . factories test #scripting #kdevelop_plugin
+SUBDIRS = . factories #test #scripting #kdevelop_plugin
 
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` >> rc.cpp
