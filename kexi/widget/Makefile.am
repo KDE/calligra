@@ -11,8 +11,6 @@ libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexifieldlistview.cpp kexifieldcombobox.cpp kexidatasourcecombobox.cpp \
 	kexipropertyeditorview.cpp
 
-noinst_HEADERS = kexidbconnectionwidget_p.h
-
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
 
