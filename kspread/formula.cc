@@ -1124,9 +1124,16 @@ void Formula::compile( const Tokens& tokens ) const
 
 // Evaluates the formula, returns the result.
 
+struct stackEntry {
+  void reset () { row1 = col1 = row2 = col2 = -1; };
+  KSpreadValue val;
+  int row1, col1, row2, col2;
+};
+
 KSpreadValue Formula::eval() const
 {
-  QValueStack<KSpreadValue> stack;
+  QValueStack<stackEntry> stack;
+  stackEntry entry;
   unsigned index;
   KSpreadValue val1, val2;
   QString c;
@@ -1177,149 +1184,194 @@ KSpreadValue Formula::eval() const
 
       // load a constant, push to stack
       case Opcode::Load:
-        val1 = d->constants[index];
-        stack.push( val1 );
+        entry.reset();
+        entry.val = d->constants[index];
+        stack.push (entry);
         break;
 
       // unary operation
       case Opcode::Neg:
-        val1 = converter->asFloat (stack.pop());
-        if( val1.isError() ) return KSpreadValue::errorVALUE();
-        stack.push( -val1.asFloat() );
+        entry.reset();
+        entry.val = stack.pop().val;
+        if( entry.val.isError() ) return KSpreadValue::errorVALUE();
+        entry.val = calc->mul (entry.val, -1);
+        stack.push (entry);
         break;
 
       // binary operation: take two values from stack, do the operation,
       // push the result to stack
       case Opcode::Add:
-        val2 = stack.pop();
-        val1 = stack.pop();
+        entry.reset();
+        val2 = stack.pop().val;
+        val1 = stack.pop().val;
         val2 = calc->add( val1, val2 );
         if( val2.isError() ) return val2;
-        stack.push( val2 );
+        entry.reset();
+        entry.val = val2;
+        stack.push (entry);
         break;
 
       case Opcode::Sub:
-        val2 = stack.pop();
-        val1 = stack.pop();
+        val2 = stack.pop().val;
+        val1 = stack.pop().val;
         val2 = calc->sub( val1, val2 );
         if( val2.isError() ) return val2;
-        stack.push( val2 );
+        entry.reset();
+        entry.val = val2;
+        stack.push (entry);
         break;
 
       case Opcode::Mul:
-        val2 = stack.pop();
-        val1 = stack.pop();
+        val2 = stack.pop().val;
+        val1 = stack.pop().val;
         val2 = calc->mul( val1, val2 );
         if( val2.isError() ) return val2;
-        stack.push( val2 );
+        entry.reset();
+        entry.val = val2;
+        stack.push (entry);
         break;
 
       case Opcode::Div:
-        val2 = stack.pop();
-        val1 = stack.pop();
+        val2 = stack.pop().val;
+        val1 = stack.pop().val;
         if( val1.isZero() ) return KSpreadValue::errorDIV0();
         val2 = calc->div( val1, val2 );
         if( val2.isError() ) return val2;
-        stack.push( val2 );
+        entry.reset();
+        entry.val = val2;
+        stack.push (entry);
         break;
 
       case Opcode::Pow:
-        val2 = stack.pop();
-        val1 = stack.pop();
+        val2 = stack.pop().val;
+        val1 = stack.pop().val;
         val2 = calc->pow( val1, val2 );
         if( val2.isError() ) return val2;
-        stack.push( val2 );
+        entry.reset();
+        entry.val = val2;
+        stack.push (entry);
         break;
 
       // string concatenation
       case Opcode::Concat:
-        val1 = converter->asString( stack.pop());
+        val1 = converter->asString (stack.pop().val);
         if( val1.isError() ) return KSpreadValue::errorVALUE();
-        val2 = converter->asString( stack.pop());
+        val2 = converter->asString (stack.pop().val);
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         val1.setValue( val2.asString().append( val1.asString() ) );
-        stack.push( val1 );
+        entry.reset();
+        entry.val = val1;
+        stack.push (entry);
         break;
 
       // logical not
       case Opcode::Not:
-        val1 = converter->asBoolean( stack.pop());
+        val1 = converter->asBoolean (stack.pop().val);
         if( val1.isError() ) return KSpreadValue::errorVALUE();
         val1.setValue( !val1.asBoolean() );
-        stack.push( val1 );
+        entry.reset();
+        entry.val = val1;
+        stack.push (entry);
         break;
 
       // comparison
       case Opcode::Equal:
-        val1 = stack.pop();
+        val1 = stack.pop().val;
         if( val1.isError() ) return KSpreadValue::errorVALUE();
-        val2 = stack.pop();
+        val2 = stack.pop().val;
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return KSpreadValue::errorVALUE();
         if( val2.compare( val1 ) == 0 )
-          stack.push( KSpreadValue( true ) );
+          val1 = KSpreadValue (true);
         else
-          stack.push( KSpreadValue( false ) );
+          val1 = KSpreadValue (false);
+        entry.reset();
+        entry.val = val1;
+        stack.push (entry);
         break;
 
       // less than
       case Opcode::Less:
-        val1 = stack.pop();
+        val1 = stack.pop().val;
         if( val1.isError() ) return KSpreadValue::errorVALUE();
-        val2 = stack.pop();
+        val2 = stack.pop().val;
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return KSpreadValue::errorVALUE();
         if( val2.compare( val1 ) < 0 )
-          stack.push( KSpreadValue( true ) );
+          val1 = KSpreadValue (true);
         else
-          stack.push( KSpreadValue( false ) );
+          val1 = KSpreadValue (false);
+        entry.reset();
+        entry.val = val1;
+        stack.push (entry);
         break;
 
       // greater than
       case Opcode::Greater:
-        val1 = stack.pop();
+        val1 = stack.pop().val;
         if( val1.isError() ) return KSpreadValue::errorVALUE();
-        val2 = stack.pop();
+        val2 = stack.pop().val;
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return KSpreadValue::errorVALUE();
         if( val2.compare( val1 ) > 0 )
-          stack.push( KSpreadValue( true ) );
+          val1 = KSpreadValue (true);
         else
-          stack.push( KSpreadValue( false ) );
+          val1 = KSpreadValue (false);
+        entry.reset();
+        entry.val = val1;
+        stack.push (entry);
         break;
 
 
       case Opcode::Cell:
         c = d->constants[index].asString();
         val1 = KSpreadValue::empty();
+        entry.reset();
         if (sheet)
         {
           KSpreadPoint cell (c, sheet->workbook(), sheet);
           if (cell.isValid())
+          {
             val1 = cell.sheet->value (cell.column(), cell.row());
+            // store the reference, so we can use it within functions
+            entry.col1 = entry.col2 = cell.column();
+            entry.row1 = entry.row2 = cell.row();
+          }
         }
-        stack.push( val1 );
+        entry.val = val1;
+        stack.push (entry);
         break;
       
       case Opcode::Range:
         c = d->constants[index].asString();
         val1 = KSpreadValue::empty();
+        entry.reset();
         if (sheet)
         {
           KSpreadRange range (c, sheet->workbook(), sheet);
           if (range.isValid())
+          {
             val1 = range.sheet->valueRange (range.startCol(), range.startRow(),
                 range.endCol(), range.endRow());
+            // store the reference, so we can use it within functions
+            entry.col1 = range.startCol();
+            entry.row1 = range.startRow();
+            entry.col2 = range.endCol();
+            entry.row2 = range.endRow();
+          }
         }
-        stack.push( val1 );
+        entry.val = val1;
+        stack.push (entry);
         break;
       
       case Opcode::Ref:
         val1 = d->constants[index];
-        stack.push( val1 );
+        entry.reset();
+        entry.val = val1;
+        stack.push (entry);
         break;
 
       // calling function
@@ -1328,21 +1380,31 @@ KSpreadValue Formula::eval() const
           // (Tomas) umm, how could that be ? I mean, the index value
           //  is computed from the stack *confused*
           return KSpreadValue::errorVALUE(); // not enough arguments
+        
         args.clear();
         for( ; index; index-- )
-          args.insert( args.begin(), stack.pop() );
+        {
+          stackEntry e = stack.pop();
+          args.insert (args.begin(), e.val);
+          // TODO: create and fill a FunctionExtra object, if needed
+          // problem: we don't know if we need it, as we don't have the
+          // fuction name yet ...
+        }
+
         // function name as string value
-        val1 = converter->asString (stack.pop());
+        val1 = converter->asString (stack.pop().val);
         if( val1.isError() )
           return KSpreadValue::errorVALUE();
         function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
-        // TODO: create and fill a FunctionExtra object, if needed
+        
         ret = function->exec (args, calc, 0);
         if (ret.isError ())
           return ret;    // error in the function
-        stack.push (ret);
+        entry.reset();
+        entry.val = ret;
+        stack.push (entry);
         
         break;
 
@@ -1361,7 +1423,7 @@ KSpreadValue Formula::eval() const
   if( stack.count() != 1 )
     return KSpreadValue::errorVALUE();
 
-  return stack.pop();
+  return stack.pop().val;
 
 }
 
