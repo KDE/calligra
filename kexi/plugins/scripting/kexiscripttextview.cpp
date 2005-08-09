@@ -22,53 +22,80 @@
 
 #include <kexidialogbase.h>
 
+#include <qstringlist.h>
 #include <qlayout.h>
 //#include <kdebug.h>
 #include <ktextbrowser.h>
 
+/// @internal
+class KexiScriptTextViewPrivate
+{
+    public:
+        /**
+         * The \a KexiScriptManager instance used to handle
+         * the different \a KexiScriptContainer instances.
+         */
+        KexiScriptManager* manager;
+
+        /**
+         * The \a KexiScriptContainer instance is used to
+         * wrap the \a Kross::Api::ScriptContainer functionality
+         * to work with scripting code.
+         */
+        KexiScriptContainer* scriptcontainer;
+
+        /**
+         * The textbrowser used to display feedback like the
+         * stdOut and stdErr messages of the scripting code.
+         */
+        KTextBrowser* browser;
+};
+
 KexiScriptTextView::KexiScriptTextView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiViewBase(mainWin, parent, name)
-    , m_manager(manager)
+    , d( new KexiScriptTextViewPrivate() )
 {
-    m_browser = new KTextBrowser(this, "KexiScriptTextViewEditor");
-    m_browser->setReadOnly(true);
-    //m_browser->setFocusPolicy(QTextBrowser::ClickFocus);
-    m_browser->setTextFormat(QTextBrowser::RichText);
-    //m_browser->setLinkUnderline(true);
-    //m_browser->setWordWrap(QTextEdit::WidgetWidth);
+    d->manager = manager;
+
+    d->browser = new KTextBrowser(this, "KexiScriptTextViewEditor");
+    d->browser->setReadOnly(true);
+    //d->browser->setFocusPolicy(QTextBrowser::ClickFocus);
+    d->browser->setTextFormat(QTextBrowser::RichText);
+    //d->browser->setLinkUnderline(true);
+    //d->browser->setWordWrap(QTextEdit::WidgetWidth);
 
     QBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(m_browser);
+    layout->addWidget(d->browser);
 
-    m_scriptcontainer = m_manager->getScriptContainer( parentDialog()->partItem()->name() );
-    //plugSharedAction( "script_execute", m_scriptcontainer, SLOT(execute()) );
+    d->scriptcontainer = manager->getScriptContainer( parentDialog()->partItem()->name() );
+    //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
 
-    m_browser->setText( m_scriptcontainer->getOutput() );
+    QStringList output = d->scriptcontainer->getOutput();
+    for(uint i = 0; i < output.size(); i++)
+        d->browser->append( output[i] );
 
-    connect(m_scriptcontainer, SIGNAL(stdOut(const QString&)),
-            this, SLOT(addStdOut(const QString&)));
-    connect(m_scriptcontainer, SIGNAL(stdErr(const QString&)),
-            this, SLOT(addStdErr(const QString&)));
+    connect(d->scriptcontainer, SIGNAL(clear()), this, SLOT(clearLog()));
+    connect(d->scriptcontainer, SIGNAL(log(const QString&)), this, SLOT(addLog(const QString&)));
 }
 
 KexiScriptTextView::~KexiScriptTextView()
 {
     /*
-    disconnect(m_scriptcontainer, SIGNAL(stdOut(const QString&)),
+    disconnect(d->scriptcontainer, SIGNAL(stdOut(const QString&)),
             this, SLOT(addStdOut(const QString&)));
-    disconnect(m_scriptcontainer, SIGNAL(stdErr(const QString&)),
+    disconnect(d->scriptcontainer, SIGNAL(stdErr(const QString&)),
             this, SLOT(addStdErr(const QString&)));
     */
 }
 
-void KexiScriptTextView::addStdOut(const QString& message)
+void KexiScriptTextView::clearLog()
 {
-    m_browser->append( message );
+    d->browser->clear();
 }
 
-void KexiScriptTextView::addStdErr(const QString& message)
+void KexiScriptTextView::addLog(const QString& message)
 {
-    m_browser->append( QString("<b>%1</b>").arg(message) );
+    d->browser->append( message );
     //if(! hasFocus()) setFocus();
 }
 

@@ -21,6 +21,7 @@
 #include "list.h"
 #include "variant.h"
 #include "event.h"
+#include "exception.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -123,6 +124,6 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
     }
 
     // If there exists no such object throw an exception.
-    throw TypeException(i18n("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
+    throw new Exception(i18n("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
 }
 

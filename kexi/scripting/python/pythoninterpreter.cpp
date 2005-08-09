@@ -101,7 +101,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
-        throw Kross::Api::RuntimeException(i18n("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()));
+        throw new Kross::Api::Exception(i18n("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()));
     }
     Py_XDECREF(pyrun); // free the reference.
 

@@ -129,8 +129,8 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
 std::string s; std::cin >> s; // just wait.
 
     }
-    catch(Kross::Api::Exception& e) {
-        std::cout << QString("EXCEPTION type=%1 description=%2").arg(e.type()).arg(e.description()).latin1() << std::endl;
+    catch(Kross::Api::Exception::Ptr e) {
+        std::cout << QString("EXCEPTION %1").arg(e->toString()).latin1() << std::endl;
     }
 
 /*TESTCASE

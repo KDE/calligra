@@ -241,9 +241,9 @@ const QString KexiDBConnection::getDescription() const
 ::KexiDB::Connection* KexiDBConnection::connection()
 {
     if(! m_connection)
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Connection is NULL."));
+        throw new Kross::Api::Exception(i18n("KexiDB::Connection is NULL."));
     if(m_connection->error())
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Connection error: %1").arg(m_connection->errorMsg()));
+        throw new Kross::Api::Exception(i18n("KexiDB::Connection error: %1").arg(m_connection->errorMsg()));
     return m_connection;
 }
 
@@ -257,7 +257,7 @@ Kross::Api::Object::Ptr KexiDBConnection::data(Kross::Api::List::Ptr)
 Kross::Api::Object::Ptr KexiDBConnection::driver(Kross::Api::List::Ptr)
 {
     if(! getParent()) // We don't check getParent()->driver() here!
-        throw Kross::Api::RuntimeException(i18n("Invalid driver - KexiDBConnection::driver() is NULL."));
+        throw new Kross::Api::Exception(i18n("Invalid driver - KexiDBConnection::driver() is NULL."));
     return getParent(); // the parent object is our KexiDBDriver* instance
 }
 
@@ -308,7 +308,7 @@ Kross::Api::Object::Ptr KexiDBConnection::useDatabase(Kross::Api::List::Ptr args
 {
     QString dbname = Kross::Api::Variant::toString(args->item(0));
     if(! connection()->databaseExists(dbname))
-        throw Kross::Api::TypeException(i18n("There exists no database with the name '%1'.").arg(dbname));
+        throw new Kross::Api::Exception(i18n("There exists no database with the name '%1'.").arg(dbname));
     return new Kross::Api::Variant(m_connection->useDatabase(dbname),
            "Kross::KexiDB::Connection::useDatabase::Bool");
 }
@@ -353,7 +353,7 @@ Kross::Api::Object::Ptr KexiDBConnection::querySingleString(Kross::Api::List::Pt
     uint column = Kross::Api::Variant::toUInt(args->item(1));
     QString value;
     if(! connection()->querySingleString(sql, value, column))
-        throw Kross::Api::RuntimeException(i18n("The string query failed."));
+        throw new Kross::Api::Exception(i18n("The string query failed."));
     return new Kross::Api::Variant(value,
            "Kross::KexiDB::Connection::querySingleString::String");
 }
@@ -364,7 +364,7 @@ Kross::Api::Object::Ptr KexiDBConnection::queryStringList(Kross::Api::List::Ptr 
     uint column = Kross::Api::Variant::toUInt(args->item(1));
     QStringList valuelist;
     if(! connection()->queryStringList(sql, valuelist, column))
-        throw Kross::Api::RuntimeException(i18n("The stringlist query failed."));
+        throw new Kross::Api::Exception(i18n("The stringlist query failed."));
     return new Kross::Api::Variant(valuelist,
            "Kross::KexiDB::Connection::queryStringList::StringList");
 }

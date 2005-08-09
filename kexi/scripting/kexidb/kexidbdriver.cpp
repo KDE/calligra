@@ -85,9 +85,9 @@ const QString KexiDBDriver::getDescription() const
 ::KexiDB::Driver* KexiDBDriver::driver()
 {
     if(! m_driver)
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Driver is NULL."));
+        throw new Kross::Api::Exception(i18n("KexiDB::Driver is NULL."));
     if(m_driver->error())
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Driver error: %1").arg(m_driver->errorMsg()));
+        throw new Kross::Api::Exception(i18n("KexiDB::Driver error: %1").arg(m_driver->errorMsg()));
     return m_driver;
 }
 
@@ -109,7 +109,7 @@ Kross::Api::Object::Ptr KexiDBDriver::createConnection(Kross::Api::List::Ptr arg
         Kross::Api::Object::fromObject<KexiDBConnectionData>(args->item(0));
     QGuardedPtr< ::KexiDB::Connection > connection = driver()->createConnection( *(data->getConnectionData()) );
     if(! connection)
-        throw Kross::Api::RuntimeException("Failed to create connection.");
+        throw new Kross::Api::Exception("Failed to create connection.");
     return new KexiDBConnection(this, connection, data);
 }
 

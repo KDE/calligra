@@ -21,6 +21,7 @@
 #include "object.h"
 #include "list.h"
 #include "interpreter.h"
+#include "exception.h"
 #include "../main/scriptcontainer.h"
 
 using namespace Kross::Api;
@@ -28,10 +29,31 @@ using namespace Kross::Api;
 Script::Script(Interpreter* interpreter, ScriptContainer* scriptcontainer)
     : m_interpreter(interpreter)
     , m_scriptcontainer(scriptcontainer)
+    , m_exception(0)
 {
 }
 
 Script::~Script()
 {
+}
+
+bool Script::hadException()
+{
+    return m_exception != 0;
+}
+
+Exception::Ptr Script::getException()
+{
+    return m_exception;
+}
+
+void Script::setException(Exception::Ptr e)
+{
+    m_exception = e;
+}
+
+void Script::clearException()
+{
+    m_exception = 0;
 }
 

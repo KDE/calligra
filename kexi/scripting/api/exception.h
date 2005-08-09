@@ -20,64 +20,81 @@
 #ifndef KROSS_API_EXCEPTION_H
 #define KROSS_API_EXCEPTION_H
 
+#include "object.h"
+
 #include <qstring.h>
+#include <ksharedptr.h>
 #include <klocale.h>
 
 namespace Kross { namespace Api {
 
     /**
-     * Common exception class used for throwing exceptions
+     * Common exception class used for representing exceptions
      * in Kross.
+     *
+     * Internal we use \a Exception instances to throw and handle
+     * exceptions. Those exceptions are inherited from \a Object
+     * and therefore they are first class citizens in Kross.
      */
-    class Exception
+    class Exception : public Object
     {
-        public:
-            Exception(const QString& description)
-                : m_description(description) {}
-            virtual ~Exception() {}
-            virtual const QString type() { return i18n("Exception"); }
-            const QString& description() { return m_description; }
         private:
-            QString m_description;
-    };
 
-    /**
-     * From \a Exception inherited exception class to
-     * represent any kind of attribute/argument error.
-     */
-    class AttributeException : public Exception
-    {
-        public:
-            AttributeException(const QString& description)
-                : Exception(description) {}
-            virtual ~AttributeException() {}
-            virtual const QString type() { return i18n("AttributeException"); }
-    };
+            /// The error message.
+            QString m_error;
 
-    /**
-     * From \a Exception inherited exception class to
-     * represent runtime or unexpected errors.
-     */
-    class RuntimeException : public Exception
-    {
         public:
-            RuntimeException(const QString& description)
-                : Exception(description) {}
-            virtual ~RuntimeException() {}
-            virtual const QString type() { return i18n("RuntimeException"); }
-    };
 
-    /**
-     * From \a Exception inherited exception class to
-     * represent type or casting errors.
-     */
-    class TypeException : public Exception
-    {
-        public:
-            TypeException(const QString& description)
-                : Exception(description) {}
-            virtual ~TypeException() {}
-            virtual const QString type() { return i18n("TypeException"); }
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<Exception> Ptr;
+
+            /**
+             * Constructor.
+             *
+             * \param error The error message.
+             * \param parent The parent \a Object or NULL if
+             *        this exception object doesn't has a
+             *        parent.
+             */
+            Exception(const QString& error, Object::Ptr parent = 0)
+                : Object("Exception", parent)
+                , m_error(error)
+            {
+            }
+
+            /**
+             * Destructor.
+             */
+            virtual ~Exception()
+            {
+            }
+
+            /// \see Kross::Api::Object::getClassName()
+            virtual const QString getClassName() const
+            {
+                return "Kross::Api::Exception";
+            }
+
+            /// \see Kross::Api::Object::getDescription()
+            virtual const QString getDescription() const
+            {
+                return "Exception object.";
+            }
+
+            /// \see Kross::Api::Object::toString()
+            virtual const QString toString()
+            {
+                return i18n("Exception: %1").arg( getError() );
+            }
+
+            /**
+             * \return the error message.
+             */
+            const QString& getError()
+            {
+                return m_error;
+            }
+
     };
 
 }}

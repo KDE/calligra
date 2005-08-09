@@ -56,7 +56,7 @@ const QString Variant::toString(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     if(variant.type() != QVariant::String && variant.type() != QVariant::CString)
-        throw TypeException(QString("Kross::Api::Variant::String expected, but got %1.").arg(variant.typeName()).latin1());
+        throw new Exception(QString("Kross::Api::Variant::String expected, but got %1.").arg(variant.typeName()).latin1());
     return variant.toString();
 }
 
@@ -67,7 +67,7 @@ uint Variant::toUInt(Object::Ptr object)
     bool ok;
     uint i = variant.toUInt(&ok);
     if(! ok)
-        throw TypeException(QString("Kross::Api::Variant::UInt expected, but got %1.").arg(variant.typeName()).latin1());
+        throw new Exception(QString("Kross::Api::Variant::UInt expected, but got %1.").arg(variant.typeName()).latin1());
     return i;
 }
 
@@ -77,7 +77,7 @@ Q_LLONG Variant::toLLONG(Object::Ptr object)
     bool ok;
     Q_LLONG l = variant.toLongLong(&ok);
     if(! ok)
-        throw TypeException(QString("Kross::Api::Variant::LLONG expected, but got %1.").arg(variant.typeName()).latin1());
+        throw new Exception(QString("Kross::Api::Variant::LLONG expected, but got %1.").arg(variant.typeName()).latin1());
     return l;
 }
 
@@ -87,7 +87,7 @@ Q_ULLONG Variant::toULLONG(Object::Ptr object)
     bool ok;
     Q_ULLONG l = variant.toULongLong(&ok);
     if(! ok)
-        throw TypeException(QString("Kross::Api::Variant::ULLONG expected, but got %1.").arg(variant.typeName()).latin1());
+        throw new Exception(QString("Kross::Api::Variant::ULLONG expected, but got %1.").arg(variant.typeName()).latin1());
     return l;
 }
 
@@ -100,7 +100,7 @@ bool Variant::toBool(Object::Ptr object)
        variant.type() != QVariant::Int &&
        variant.type() != QVariant::UInt
     )
-        throw TypeException(QString("Kross::Api::Variant::Bool expected, but got %1.").arg(variant.typeName()).latin1());
+        throw new Exception(QString("Kross::Api::Variant::Bool expected, but got %1.").arg(variant.typeName()).latin1());
     return variant.toBool();
 }
 
@@ -108,6 +108,6 @@ QValueList<QVariant> Variant::toList(Object::Ptr object)
 {
     QVariant variant = toVariant(object);
     if(variant.type() != QVariant::List)
-        throw TypeException(QString("Kross::Api::Variant::List expected, but got %1.").arg(variant.typeName()).latin1());
+        throw new Exception(QString("Kross::Api::Variant::List expected, but got %1.").arg(variant.typeName()).latin1());
     return variant.toList();
 }

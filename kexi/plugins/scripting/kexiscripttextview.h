@@ -22,9 +22,9 @@
 
 #include <kexiviewbase.h>
 
+// Forward declarations.
 class KexiScriptManager;
-class KexiScriptContainer;
-class KTextBrowser;
+class KexiScriptTextViewPrivate;
 
 /**
  * The KexiScriptTextView class provides the \a KexiViewBase to
@@ -48,31 +48,16 @@ class KexiScriptTextView : public KexiViewBase
         virtual ~KexiScriptTextView();
 
     public slots:
-        /// Add a string to our stdOut handler.
-        void addStdOut(const QString&);
-        /// Add a string to our stdErr handler.
-        void addStdErr(const QString&);
+
+        /// Clear the logs.
+        void clearLog();
+
+        /// Add a string to the logs.
+        void addLog(const QString&);
 
     private:
-
-        /**
-         * The \a KexiScriptManager instance used to handle
-         * the different \a KexiScriptContainer instances.
-         */
-        KexiScriptManager* m_manager;
-
-        /**
-         * The \a KexiScriptContainer instance is used to
-         * wrap the \a Kross::Api::ScriptContainer functionality
-         * to work with scripting code.
-         */
-        KexiScriptContainer* m_scriptcontainer;
-
-        /**
-         * The textbrowser used to display feedback like the
-         * stdOut and stdErr messages of the scripting code.
-         */
-        KTextBrowser* m_browser;
+        /// Private d-pointer.
+        KexiScriptTextViewPrivate* d;
 };
 
 #endif

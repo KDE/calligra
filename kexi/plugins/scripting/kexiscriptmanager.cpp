@@ -40,7 +40,7 @@ class KexiScriptContainerPrivate
 #else
         QString interpretername, code;
 #endif
-        QString output; // remember stdout and stderr scripting output.
+        QStringList output; // remember stdout and stderr scripting output.
 };
 
 KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QString& name)
@@ -105,7 +105,7 @@ void KexiScriptContainer::setCode(const QString& code)
 #endif
 }
 
-QString KexiScriptContainer::getOutput()
+QStringList KexiScriptContainer::getOutput()
 {
     return d->output;
 }
@@ -113,29 +113,34 @@ QString KexiScriptContainer::getOutput()
 bool KexiScriptContainer::execute()
 {
     bool ret = false;
+    d->output.clear(); // clear previous output
+    emit clear();
+
 #ifdef KEXI_KROSS_SUPPORT
     try {
         ret = d->scriptcontainer->execute();
     }
-    catch(Kross::Api::Exception& e) {
-        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+    catch(Kross::Api::Exception::Ptr e) {
+        kdDebug() << QString("KexiScriptContainer::execute() => EXCEPTION %1").arg(e->toString()) << endl;
     }
 #else
     kdWarning() << "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." << endl;
 #endif
+
     return ret;
 }
 
 void KexiScriptContainer::addStdOut(const QString& s)
 {
-    d->output += s;
-    emit stdOut(s);
+    d->output.append(s);
+    emit log(s);
 }
 
 void KexiScriptContainer::addStdErr(const QString& s)
 {
-    d->output += QString("<b>%1</b>").arg(s);
-    emit stdErr(s);
+    QString t = QString("<b>%1</b>").arg(s);
+    d->output.append(t);
+    emit log(t);
 }
 
 /*** KexiScriptManager ***/
@@ -154,7 +159,7 @@ KexiScriptContainer* KexiScriptManager::getScriptContainer(const QString& name)
     if(m_scriptcontainers.contains(name))
         return m_scriptcontainers[name];
     KexiScriptContainer* sc = new KexiScriptContainer(this, name);
-    m_scriptcontainers.replace(name, sc);
+    m_scriptcontainers.replace(name, sc); // remember them
     return sc;
 }
 

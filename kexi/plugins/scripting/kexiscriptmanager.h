@@ -70,11 +70,11 @@ class KexiScriptContainer : public QObject
         /**
         * \return the stdout and stderr output.
         */
-        QString getOutput();
+        QStringList getOutput();
 
     signals:
-        void stdOut(const QString&);
-        void stdErr(const QString&);
+        void clear();
+        void log(const QString&);
 
     public slots:
 
@@ -83,6 +83,7 @@ class KexiScriptContainer : public QObject
         */
         bool execute();
 
+    private slots:
         void addStdOut(const QString&);
         void addStdErr(const QString&);
 

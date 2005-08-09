@@ -391,17 +391,8 @@ Py::Object PythonExtension::_call_(const Py::Tuple& args)
             obj = m_object->call(m_methodname, arguments);
         }
     }
-    catch(Kross::Api::RuntimeException& e) {
-        throw Py::RuntimeError(e.description().latin1());
-    }
-    catch(Kross::Api::AttributeException& e) {
-        throw Py::AttributeError(e.description().latin1());
-    }
-    catch(Kross::Api::TypeException& e) {
-        throw Py::TypeError(e.description().latin1());
-    }
-    catch(Kross::Api::Exception& e) {
-        throw Py::SystemError(QString("%1: %2").arg(e.type()).arg(e.description()).latin1());
+    catch(Kross::Api::Exception::Ptr e) {
+        throw Py::RuntimeError( e->toString().latin1() );
     }
 
     return obj ? toPyObject(obj) : Py::None();

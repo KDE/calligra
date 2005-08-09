@@ -65,7 +65,8 @@ void PythonSecurity::initRestrictedPython()
             mainmoduledict.ptr(), // reference to the local namespace
             0 // PyObject *fromlist
         );
-        if(! pymodule) throw Py::Exception();
+        if(! pymodule)
+            throw Py::Exception();
         m_pymodule = new Py::Module(pymodule, true);
 
         PyObject* pyrun = PyRun_String(
@@ -87,13 +88,14 @@ void PythonSecurity::initRestrictedPython()
             m_pymodule->getDict().ptr(),
             m_pymodule->getDict().ptr()
         );
-        if(! pyrun) throw Py::Exception();
+        if(! pyrun)
+            throw Py::Exception();
 
         kdDebug()<<"!!!!!!!!!!!!!! PythonSecurity::PythonSecurity SUCCESS !!!!!!!!!!!!!!!!!"<<endl;
 
     }
     catch(Py::Exception& e) {
-        throw Kross::Api::RuntimeException(i18n("Failed to initialize PythonSecurity module: %1").arg(Py::value(e).as_string().c_str()));
+        throw new Kross::Api::Exception(i18n("Failed to initialize PythonSecurity module: %1").arg(Py::value(e).as_string().c_str()));
     }
 }
 
@@ -115,12 +117,12 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
 
         PyObject* func = PyDict_GetItemString(m_pymodule->getDict().ptr(), "compile_restricted");
         if(! func)
-            throw Kross::Api::AttributeException(i18n("No such function '%1'.").arg("compile_restricted"));
+            throw new Kross::Api::Exception(i18n("No such function '%1'.").arg("compile_restricted"));
 
         Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
 
         if(! funcobject.isCallable())
-            throw Kross::Api::AttributeException(i18n("Function '%1' is not callable.").arg("compile_restricted"));
+            throw new Kross::Api::Exception(i18n("Function '%1' is not callable.").arg("compile_restricted"));
 
         Py::Tuple args(3);
         args[0] = Py::String(source.latin1());
@@ -134,7 +136,8 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
             mainmoduledict.ptr(),
             mainmoduledict.ptr()
         );
-        if(! pycode) throw Py::Exception();
+        if(! pycode)
+            throw Py::Exception();
         Py::Object code(pycode, true);
 /*
         kdDebug()<<"$---------------------------------------------------"<<endl;
@@ -159,7 +162,7 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
     }
     catch(Py::Exception& e) {
         Py::Object errobj = Py::value(e);
-        throw Kross::Api::AttributeException(i18n("Function '%1' failed with python exception: %2").arg("compile_restricted").arg(errobj.as_string().c_str()));
+        throw new Kross::Api::Exception(i18n("Function '%1' failed with python exception: %2").arg("compile_restricted").arg(errobj.as_string().c_str()));
     }
 }
 

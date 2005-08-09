@@ -58,7 +58,7 @@ Object::Ptr List::item(uint idx)
     QValueList<Object::Ptr> list = getValue();
     if(idx >= list.count()) {
         kdDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
-        throw TypeException(i18n("List-index %1 out of bounds.").arg(idx));
+        throw new Exception(i18n("List-index %1 out of bounds.").arg(idx));
     }
     Object::Ptr obj = list[idx];
     return obj;

@@ -25,6 +25,7 @@
 #include "argument.h"
 #include "callable.h"
 #include "list.h"
+#include "exception.h"
 
 #include <qstring.h>
 #include <kdebug.h>
@@ -71,7 +72,7 @@ namespace Kross { namespace Api {
             void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
             {
                 if(m_functions.contains(name))
-                    throw RuntimeException( QString("Class::addFunction(%1 failed cause there exists already a function with such name.)").arg(name) );
+                    throw new Exception( QString("Class::addFunction(%1 failed cause there exists already a function with such name.)").arg(name) );
                 Event<T> *event = new Event<T>(name, this, function, arglist, documentation);
                 m_functions.replace(name, event);
             }
@@ -137,7 +138,7 @@ namespace Kross { namespace Api {
                     }
 
                     // Something went wrong.
-                    throw RuntimeException(QString("The event '%1' points to an invalid instance.").arg(getName()));
+                    throw new Exception(QString("The event '%1' points to an invalid instance.").arg(getName()));
                 }
 
                 // Check if we've a registered event with that name and

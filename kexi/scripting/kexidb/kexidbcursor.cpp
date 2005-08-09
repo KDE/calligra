@@ -20,7 +20,7 @@
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
 //#include "kexidbdriver.h"
-//#include "../api/exception.h"
+#include "../api/exception.h"
 
 //#include <qvaluelist.h>
 #include <klocale.h>
@@ -91,9 +91,9 @@ const QString KexiDBCursor::getDescription() const
 ::KexiDB::Cursor* KexiDBCursor::cursor()
 {
     if(! m_cursor)
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Cursor is NULL."));
+        throw new Kross::Api::Exception(i18n("KexiDB::Cursor is NULL."));
     if(m_cursor->error())
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg()));
+        throw new Kross::Api::Exception(i18n("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg()));
     return m_cursor;
 }
 

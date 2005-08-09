@@ -114,7 +114,7 @@ namespace Kross { namespace Api {
              * Return a list of functionnames the with
              * \a setCode defined scriptcode spends.
              */
-            const QStringList& getFunctionNames();
+            const QStringList getFunctionNames();
 
             /**
              * Call a function in the script container.
@@ -131,7 +131,7 @@ namespace Kross { namespace Api {
             /**
              * Return a list of classes.
              */
-            const QStringList& getClassNames();
+            const QStringList getClassNames();
 
             /**
              * Create and return a new class instance.

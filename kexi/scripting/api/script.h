@@ -32,6 +32,7 @@ namespace Kross { namespace Api {
     class Interpreter;
     class ScriptContainer;
     class List;
+    class Exception;
 
     /**
      * Base class for interpreter dependend functionality
@@ -55,6 +56,30 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             virtual ~Script();
+
+            /**
+             * \return true if the script throwed an exception
+             *        else false.
+             */
+            bool hadException();
+
+            /**
+             * \return the \a Exception the script throwed.
+             */
+            Exception::Ptr getException();
+
+            /**
+             * Set a new exception this script throwed.
+             *
+             * \param e The \a Exception .
+             */
+            void setException(Exception::Ptr e);
+
+            /**
+             * Clear previous exceptions. If called \a hadException()
+             * will return false again.
+             */
+            void clearException();
 
             /**
              * Execute the script.
@@ -99,6 +124,10 @@ namespace Kross { namespace Api {
             Interpreter* m_interpreter;
             /// The \a ScriptContainer associated with this Script.
             ScriptContainer* m_scriptcontainer;
+
+        private:
+            /// The \a Exception this script throwed.
+            Exception::Ptr m_exception;
     };
 
 }}

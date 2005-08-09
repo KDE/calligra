@@ -90,9 +90,9 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
 
     // check the number of parameters passed.
     if(arglist.size() < fmin)
-        throw AttributeException(i18n("Too few parameters for callable object '%1'.").arg(getName()));
+        throw new Exception(i18n("Too few parameters for callable object '%1'.").arg(getName()));
     if(arglist.size() > fmax)
-        throw AttributeException(i18n("Too many parameters for callable object '%1'.").arg(getName()));
+        throw new Exception(i18n("Too many parameters for callable object '%1'.").arg(getName()));
 
     // check type of passed parameters.
     QValueList<Argument> farglist = m_arglist.getArguments();
@@ -111,7 +111,7 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
         //We should add those ::String part even to the arguments in Kross::KexiDB::*
 
         if(fcn.find(ocn) != 0)
-            throw AttributeException(i18n("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn));
+            throw new Exception(i18n("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn));
     }
 }
 
@@ -128,7 +128,7 @@ Object::Ptr Callable::getChild(List::Ptr args)
     //kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1 childName=%2").arg(getName()).arg(s) << endl;
     Object::Ptr obj = Object::getChild(s);
     if(! obj)
-        throw AttributeException(i18n("The object '%1' has no child object '%2'").arg(getName()).arg(s));
+        throw new Exception(i18n("The object '%1' has no child object '%2'").arg(getName()).arg(s));
     return obj;
 }
 

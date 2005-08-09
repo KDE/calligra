@@ -28,12 +28,17 @@
 #include <ksharedptr.h>
 
 #include "../main/krossconfig.h"
-#include "exception.h"
 
 namespace Kross { namespace Api {
 
     // Forward declaration.
     class List;
+
+    //FIXME We forward declare class Exception here while it's
+    //     used at the static fromObject() template-method.
+    //     Could that provide probs on !=gcc? Maybe that method
+    //     should go into it's own sourcefile anyway...
+    class Exception;
 
     /**
      * The common Object class all other object-classes are
@@ -61,7 +66,7 @@ namespace Kross { namespace Api {
              * \param name The name this object has. Return
              *        it via \a getName() and set a new
              *        name via \a setName().
-             * \param parent The parent Object or NULL if
+             * \param parent The parent \a Object or NULL if
              *        this object doesn't has an parent.
              */
             explicit Object(const QString& name, Object::Ptr parent = 0);
@@ -201,7 +206,7 @@ namespace Kross { namespace Api {
             {
                 T* t = (T*) object.data();
                 if(! t)
-                    throw Kross::Api::TypeException(i18n("Object \"%1\" invalid.").arg(object->getClassName()));
+                    throw new Exception(i18n("Object \"%1\" invalid.").arg(object->getClassName()));
                 return t;
             }
 

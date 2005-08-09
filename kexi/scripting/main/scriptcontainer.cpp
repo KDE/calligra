@@ -110,10 +110,13 @@ Object::Ptr ScriptContainer::execute()
 {
     if(! d->m_script)
         initialize();
-    return d->m_script->execute();
+    Object::Ptr r = d->m_script->execute();
+    if(d->m_script->hadException())
+        throw d->m_script->getException();
+    return r;
 }
 
-const QStringList& ScriptContainer::getFunctionNames()
+const QStringList ScriptContainer::getFunctionNames()
 {
     return d->m_script ? d->m_script->getFunctionNames() : QStringList();
 }
@@ -121,14 +124,17 @@ const QStringList& ScriptContainer::getFunctionNames()
 Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr arguments)
 {
     if(functionname.isEmpty())
-        throw RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
+        throw new Exception(i18n("No functionname defined for ScriptContainer::callFunction()."));
 
     if(! d->m_script)
         initialize();
-    return d->m_script->callFunction(functionname, arguments);
+    Object::Ptr r = d->m_script->callFunction(functionname, arguments);
+    if(d->m_script->hadException())
+        throw d->m_script->getException();
+    return r;
 }
 
-const QStringList& ScriptContainer::getClassNames()
+const QStringList ScriptContainer::getClassNames()
 {
     return d->m_script ? d->m_script->getClassNames() : QStringList();
 }
@@ -137,7 +143,10 @@ Object::Ptr ScriptContainer::classInstance(const QString& name)
 {
     if(! d->m_script)
         initialize();
-    return d->m_script->classInstance(name);
+    Object::Ptr r = d->m_script->classInstance(name);
+    if(d->m_script->hadException())
+        throw d->m_script->getException();
+    return r;
 }
 
 void ScriptContainer::initialize()
@@ -145,8 +154,12 @@ void ScriptContainer::initialize()
     finalize();
     Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->m_interpretername);
     if(! interpreter)
-        throw TypeException(i18n("Unknown interpreter '%1' on ScriptContainer::execute()").arg(d->m_interpretername));
+        throw new Exception(i18n("Unknown interpreter '%1'").arg(d->m_interpretername));
     d->m_script = interpreter->createScript(this);
+    if(! d->m_script)
+        throw new Exception(i18n("Failed to create script for interpreter '%1'").arg(d->m_interpretername));
+    if(d->m_script->hadException())
+        throw d->m_script->getException();
 }
 
 void ScriptContainer::finalize()

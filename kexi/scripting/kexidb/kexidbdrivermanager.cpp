@@ -91,7 +91,7 @@ const QString KexiDBDriverManager::getDescription() const
 KexiDB::DriverManager& KexiDBDriverManager::driverManager()
 {
     if(m_drivermanager.error())
-        throw Kross::Api::RuntimeException(i18n("KexiDB::DriverManager error: %1").arg(m_drivermanager.errorMsg()));
+        throw new Kross::Api::Exception(i18n("KexiDB::DriverManager error: %1").arg(m_drivermanager.errorMsg()));
     return m_drivermanager;
 }
 
@@ -105,9 +105,9 @@ Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
     QString drivername = Kross::Api::Variant::toString(args->item(0));
     QGuardedPtr< ::KexiDB::Driver > driver = driverManager().driver(drivername); // caching is done by the DriverManager
     if(! driver)
-        throw Kross::Api::AttributeException(i18n("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername));
+        throw new Kross::Api::Exception(i18n("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername));
     if(driver->error())
-        throw Kross::Api::RuntimeException(i18n("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()));
+        throw new Kross::Api::Exception(i18n("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()));
     return new KexiDBDriver(this, driver);
 }
 

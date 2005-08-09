@@ -51,13 +51,13 @@ Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
 
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
 
-    if(! n.startsWith("1")) throw TypeException(i18n("Invalid slot '%1'.").arg(n));
+    if(! n.startsWith("1")) throw new Exception(i18n("Invalid slot '%1'.").arg(n));
     //if(n.startsWith("1")) n.remove(0,1);
     n.remove(0,1);
 
     int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
     if(slotid < 0)
-        throw TypeException(i18n("No such slot '%1'.").arg(n));
+        throw new Exception(i18n("No such slot '%1'.").arg(n));
 
     QUObject* uo = QtObject::toQUObject(n, arguments);
     m_receiver->qt_invoke(slotid, uo); // invoke the slot
