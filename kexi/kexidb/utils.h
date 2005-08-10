@@ -152,7 +152,7 @@ namespace KexiDB
 			QCString name() const;
 
 			//! \return all columns for the table or the query
-			const QueryColumnInfo::Vector columns();
+			const QueryColumnInfo::Vector columns(bool unique = false);
 
 			/*! \return a field of the table or the query schema for name \a name
 			 or 0 if there is no such field. */

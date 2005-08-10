@@ -343,15 +343,29 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 but in a case when there are asterisks defined for the query,
 		 it does not expand QueryAsterisk objects to field lists but return every
 		 asterisk as-is.
-		 This could be inconvenient when you need just full expanded list of fields,
+		 This could be inconvenient when you need just a fully expanded list of fields,
 		 so this method does the work for you. 
+
+		 If \a unique is true, each field is returned in the vector only once 
+		 (first found field is selected).
+		 Note however, that the same field can be returned more than once if it has attached 
+		 a different alias.
+		 For example, let t is TABLE( a, b ) and let query be defined 
+		 by "SELECT *, a AS alfa FROM t" statement. Either fieldsExpanded(true) and fieldsExpanded(false)
+		 will return [ a, b, a (alfa) ] list.
+		 On the other hand, for query defined by "SELECT *, a FROM t" statement,
+		 fieldsExpanded(true) will return [ a, b ] list 
+		 and fieldsExpanded(false) will return [ a, b, a ] list.
+
+		 By default, all fields are returned in the vector even 
+		 if there are multiple occurences of one or more.
 
 		 Note: You should assign the resulted vector in your space - it will be shared 
 		 and implicity copied on any modification.
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		QueryColumnInfo::Vector fieldsExpanded();//QValueList<bool> *detailedVisibility = 0);
+		QueryColumnInfo::Vector fieldsExpanded(bool unique = false); //QValueList<bool> *detailedVisibility = 0);
 
 		/*! \return a map for fast lookup of query columns' order.
 		 This is exactly opposite information compared to vector returned 

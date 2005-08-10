@@ -775,10 +775,28 @@ QueryColumnInfo* QuerySchema::columnInfo(const QString& name)
 	return d->columnInfosByName[name];
 }
 
-QueryColumnInfo::Vector QuerySchema::fieldsExpanded()
+QueryColumnInfo::Vector QuerySchema::fieldsExpanded(bool unique)
 {
 	computeFieldsExpanded();
-	return *d->fieldsExpanded;
+	if (!unique)
+		return *d->fieldsExpanded;
+
+	QDict<char> columnsAlreadyFound;
+	QueryColumnInfo::Vector result( d->fieldsExpanded->count() ); //initial size is set
+//	QMapConstIterator<QueryColumnInfo*, bool> columnsAlreadyFoundIt;
+	//compute unique list
+	uint uniqueListCount = 0;
+	for (uint i=0; i<d->fieldsExpanded->count(); i++) {
+		QueryColumnInfo *ci = (*d->fieldsExpanded)[i];
+//		columnsAlreadyFoundIt = columnsAlreadyFound.find(ci);
+//		uint foundColumnIndex = -1;
+		if (!columnsAlreadyFound[ci->aliasOrName()]) {// columnsAlreadyFoundIt==columnsAlreadyFound.constEnd())
+			columnsAlreadyFound.insert(ci->aliasOrName(), (char*)1);
+			result.insert(uniqueListCount++, ci);
+		}
+	}
+	result.resize(uniqueListCount); //update result size
+	return result;
 }
 
 void QuerySchema::computeFieldsExpanded()
