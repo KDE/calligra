@@ -120,10 +120,26 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	dsLabel->setBuddy(m_dataSourceCombo);
 	vlyr->addWidget(m_dataSourceCombo);
 
-	vlyr->addSpacing(4);
+	vlyr->addSpacing(8);
+	QFrame *separator = new QFrame(this);
+	separator->setFrameShape(QFrame::HLine);
+	separator->setFrameShadow(QFrame::Sunken);
+	vlyr->addWidget(separator);
+
+	//helper info
+//! @todo allow to hide such helpers by adding global option
 	hlyr = new QHBoxLayout(vlyr);
+	QLabel *label = new QLabel(this);
+	hlyr->addWidget(label);
+	label->setPixmap( SmallIcon("mouse_pointer") );
+	label->setFixedWidth(label->pixmap()->width());
+	label = new QLabel(i18n("Select fields from the list below and drag them onto a form or click \"Insert\" button"), this);
+	label->setAlignment( Qt::AlignAuto | Qt::WordBreak );
+	hlyr->addWidget(label);
 
 	//Available Fields
+	vlyr->addSpacing(4);
+	hlyr = new QHBoxLayout(vlyr);
 	m_availableFieldsLabel = new QLabel(i18n("Available Fields:"), this);
 	m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_availableFieldsLabel->setMargin(2);
@@ -131,28 +147,31 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	hlyr->addWidget(m_availableFieldsLabel);
 
 	m_addField = new QToolButton(this, "addFieldButton");
+	m_addField->setUsesTextLabel(true);
+	m_addField->setTextPosition(QToolButton::Right);
+	m_addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
 	m_addField->setIconSet(SmallIconSet("add_field"));
 	m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
 	m_addField->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_addField->setAutoRaise(true);
 	m_addField->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(m_addField, i18n("Add selected field to form"));
+	QToolTip::add(m_addField, i18n("Insert selected field into form"));
 	hlyr->addWidget(m_addField);
 	connect(m_addField, SIGNAL(clicked()), this, SLOT(slotAddSelectedField()));
 
 	m_fieldListView = new KexiFieldListView(this, "fieldListView", 
-		KexiFieldListView::ShowDataTypes 
-		| KexiFieldListView::HideTableAsterisk 
-		| KexiFieldListView::AllowMultiSelection );
-	m_fieldListView->header()->show();
+		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
+//	m_fieldListView->header()->show();
 	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 2));
 	vlyr->addWidget(m_fieldListView);
 
 	connect(m_dataSourceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(slotDataSourceTextChanged(const QString &)));
 	connect(m_dataSourceCombo, SIGNAL(dataSourceSelected()), this, SLOT(slotDataSourceSelected()));
 	connect(m_sourceFieldCombo, SIGNAL(selected()), this, SLOT(slotFieldSelected()));
+	connect(m_fieldListView, SIGNAL(selectionChanged()), this, SLOT(slotFieldListViewSelectionChanged()));
 
 	clearDataSourceSelection();
+	slotFieldListViewSelectionChanged();
 }
 
 KexiDataSourcePage::~KexiDataSourcePage()
@@ -212,7 +231,7 @@ void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 		clearDataSourceSelection();
 	}
 	m_fieldListView->setEnabled(enable);
-	m_addField->setEnabled(enable);
+//	m_addField->setEnabled(enable);
 	m_availableFieldsLabel->setEnabled(enable);
 }
 
@@ -240,7 +259,10 @@ void KexiDataSourcePage::slotDataSourceSelected()
 	}
 	m_clearDSButton->setEnabled(dataSourceFound);
 	m_gotoButton->setEnabled(dataSourceFound);
-	m_addField->setEnabled(dataSourceFound);
+	if (dataSourceFound)
+		slotFieldListViewSelectionChanged();
+	else
+		m_addField->setEnabled(false);
 
 	emit formDataSourceChanged(mime, name);
 }
@@ -331,6 +353,18 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 		m_clearWidgetDSButton->hide();
 		m_sourceFieldCombo->hide();
 	}
+}
+
+void KexiDataSourcePage::slotFieldListViewSelectionChanged()
+{
+	//update "add field" button's state
+	for (QListViewItemIterator it(m_fieldListView); it.current(); ++it) {
+		if (it.current()->isSelected()) {
+			m_addField->setEnabled(true);
+			return;
+		}
+	}
+	m_addField->setEnabled(false);
 }
 
 #include "kexidatasourcepage.moc"

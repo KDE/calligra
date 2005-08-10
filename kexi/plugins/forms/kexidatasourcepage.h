@@ -76,6 +76,7 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		void slotFieldSelected();
 		void slotGotoSelected();
 		void slotAddSelectedField();
+		void slotFieldListViewSelectionChanged();
 
 	protected:
 		KexiFieldComboBox *m_sourceFieldCombo;
