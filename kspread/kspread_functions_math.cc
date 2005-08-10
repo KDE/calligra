@@ -28,6 +28,10 @@
 #include "valuecalc.h"
 #include "valueconverter.h"
 
+// these two are needed for SUBTOTAL:
+#include "kspread_cell.h"
+#include "kspread_sheet.h"
+
 // needed for RANDBINOM and so
 #include <math.h>
 
@@ -293,6 +297,7 @@ void KSpreadRegisterMathFunctions()
   f = new Function ("SUBTOTAL",      func_subtotal);
   f->setParamCount (2);
   f->setAcceptArray ();
+  f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("SUMIF",         func_sumif);
   f->setParamCount (2, 3);
@@ -432,7 +437,7 @@ KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: product
 KSpreadValue func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->product (args[0], 0.0);
+  KSpreadValue res = calc->product (args[0], 0.0);
 }
 
 // Function: kproduct
@@ -970,146 +975,81 @@ KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
 // This function requires access to the KSpreadSheet and so on, because
 // it needs to check whether cells contain the SUBTOTAL formula or not ...
 // Cells containing a SUBTOTAL formula must be ignored.
-KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *)
+KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
 {
-/*
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "SUBTOTAL", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-
-  // create a new list
-  QValueList<KSValue::Ptr> * list = new QValueList<KSValue::Ptr>;
-  int function = args[0]->intValue();
-
-  KSValue * c = 0;
-  KSpreadCell  * cell = 0;
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
-  KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-
-  kdDebug() << "Range: " << extra[1]->stringValue() << endl;
-
-  KSpreadRange range ( extra[1]->stringValue(), map, sheet );
-  if ( !range.isValid() )
-  {
-    KSpreadPoint point( extra[1]->stringValue(), map, sheet );
-
-    if ( !point.isValid() )
-      return false;
-
-    range.range = QRect( point.pos.x(), point.pos.y(),
-                         point.pos.x(), point.pos.y() );
-
+  int function = calc->conv()->asInteger (args[0]).asInteger();
+  KSpreadValue range = args[1];
+  int r1 = -1, c1 = -1, r2 = -1, c2 = -1;
+  if (e) {
+    r1 = e->ranges[1].row1;
+    c1 = e->ranges[1].col1;
+    r2 = e->ranges[1].row2;
+    c2 = e->ranges[1].col2;
+  }
+  
+  // if we have a range, run through it, and put an empty value to the place
+  // of all occurences of the SUBTOTAL function
+  KSpreadValue empty;
+  if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
+    for (int r = r1; r <= r2; ++r)
+      for (int c = c1; c <= c2; ++c) {
+        KSpreadCell *cell = e->sheet->cellAt (c, r);
+        if (cell->isDefault())
+          continue;
+        if (cell->isFormula() && cell->text().find ("SUBTOTAL", 0, false) != -1)
+          // cell contains the word SUBTOTAL - replace value with empty
+          range.setElement (c-c1, r-r1, empty);
+      }
   }
 
-  KSValue * l = new KSValue( KSValue::ListType );
-  int count = 0;
-  int countA = 0;
-  double sum = 0.0;
-  double max = 0.0;
-
-  if ( function == 6 ) // product
-    sum = 1.0;
-
-  int x = range.range.left();
-  int y = range.range.top();
-  int bottom = range.range.bottom();
-
-  for ( ; y <= bottom; ++y )
-  {
-    cell = sheet->cellAt( x, y );
-    if ( cell->isDefault() || cell->text().find( "SUBTOTAL", 0, false ) != -1 )
-      continue;
-
-    ++count;
-    if ( cell->value().isNumber() )
-    {
-      ++countA;
-      if ( function == 1 || function == 9 || function == 7 || function == 8
-           || function == 10 || function == 11 )
-        sum += cell->value().asFloat();
-      else if ( function == 4 )
-      {
-        if ( countA == 1 )
-          max = cell->value().asFloat();
-        else
-        if ( cell->value().asFloat() > max )
-          max = cell->value().asFloat();
-      }
-      else if ( function == 5 )
-      {
-        if ( countA == 1 )
-          max = cell->value().asFloat();
-        else
-        if ( cell->value().asFloat() < max )
-          max = cell->value().asFloat();
-      }
-      else if ( function == 6 )
-        sum *= cell->value().asFloat();
-    }
-
-
-    c = new KSValue( cell->value().asFloat() );
-    l->listValue().append( c );
-  }
-  list->append ( l );
-
-
-  double result  = 0.0;
-  double average = sum / countA;
-
-  switch( function )
-  {
+  // Good. Now we can execute the necessary function on the range.
+  KSpreadValue res;
+  Function *f;
+  valVector a;
+  switch (function) {
    case 1: // Average
-    context.setValue( new KSValue( average ) );
+    res = calc->avg (range, false);
     break;
    case 2: // Count
-    context.setValue( new KSValue( count ) );
+    res = calc->count (range, false);
     break;
-   case 3: // CountA (count without blanks)
-    context.setValue( new KSValue( countA ) );
+   case 3: // CountA
+    res = calc->count (range);
     break;
    case 4: // MAX
-    context.setValue( new KSValue( max ) );
+    res = calc->max (range, false);
     break;
    case 5: // Min
-    context.setValue( new KSValue( max ) );
+    res = calc->min (range, false);
     break;
    case 6: // Product
-    if ( countA == 0 )
-      sum = 0.0;       // Excel compatibility :-(
-    context.setValue( new KSValue( sum ) );
+    res = calc->product (range, 0.0, false);
     break;
    case 7: // StDev
-    func_stddev_helper( context, *list, result, average, false );
-    context.setValue( new KSValue( sqrt( result / ((double) (countA - 1) ) ) ) );
+    res = calc->stddev (range, false);
     break;
    case 8: // StDevP
-    func_stddev_helper( context, *list, result, average, false );
-    context.setValue( new KSValue( sqrt( result / countA ) ) );
+    res = calc->stddevP (range, false);
     break;
    case 9: // Sum
-    context.setValue( new KSValue( sum ) );
+    res = calc->sum (range, false);
     break;
    case 10: // Var
-    func_variance_helper( context, *list, result, average, false );
-    context.setValue( new KSValue( (double)(result / (countA - 1)) ) );
+    f = FunctionRepository::self()->function ("VAR");
+    a.reserve (1);
+    a[0] = range;
+    res = f->exec (a, calc, 0);
     break;
    case 11: // VarP
-    func_variance_helper( context, *list, result, average, false );
-    context.setValue( new KSValue( (double)(result / countA) ) );
+    f = FunctionRepository::self()->function ("VARP");
+    a.reserve (1);
+    a[0] = range;
+    res = f->exec (a, calc, 0);
     break;
    default:
-    return false;
+    return KSpreadValue::errorVALUE();
   }
-
-  return true;
-
-*/
+  return res;
 }
 
 /*

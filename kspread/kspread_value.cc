@@ -85,6 +85,7 @@ public:
   };
    
   ValueArray( const ValueArray& va )
+    : chunks(0), columns(0), rows(0), chunkCols(0), chunkRows(0)
   {
     operator=( va );
   }
@@ -92,7 +93,7 @@ public:
   ValueArray& operator= ( const ValueArray& va )
   {
     init( va.columns, va.rows );
-    unsigned count = columns * rows;
+    unsigned count = chunkCols * chunkRows;
     for( unsigned i = 0; i < count; i++ )
       if( va.chunks[i] )
         chunks[i] = new arrayChunk (*va.chunks[i]);

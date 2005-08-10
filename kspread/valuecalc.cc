@@ -1719,6 +1719,12 @@ KSpreadValue ValueCalc::product (const KSpreadValue &range, KSpreadValue init,
     bool full)
 {
   KSpreadValue res = init;
+  if (isZero (init))  // special handling of a zero, due to excel-compat
+  {
+    if (count (range, full) == 0)
+      return init;
+    res = 1.0;
+  }  
   arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
   return res;
 }
@@ -1727,6 +1733,12 @@ KSpreadValue ValueCalc::product (QValueVector<KSpreadValue> range,
     KSpreadValue init, bool full)
 {
   KSpreadValue res = init;
+  if (isZero (init))  // special handling of a zero, due to excel-compat
+  {
+    if (count (range, full) == 0)
+      return init;
+    res = 1.0;
+  }  
   arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
   return res;
 }
