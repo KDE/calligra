@@ -42,6 +42,7 @@ struct FuncExtra {
   // here we'll add all the extras a function may need
   QValueVector<rangeInfo> ranges;
   KSpreadSheet *sheet;
+  int myrow, mycol;
 };
 
 class ValueCalc;

@@ -1157,10 +1157,14 @@ KSpreadValue Formula::eval() const
     calc = new ValueCalc( converter );
   }
   
-
   Function* function;
   FuncExtra fe;
-
+  fe.mycol = fe.myrow = 0;
+  if (d->cell) {
+    fe.mycol = d->cell->column();
+    fe.myrow = d->cell->row();
+  }
+  
   if( d->dirty )
   {
     Tokens tokens = scan( d->expression );
