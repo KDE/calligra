@@ -63,7 +63,7 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int opti
 	if (m_options & AllowMultiSelection)
 		setSelectionMode(QListView::Extended);
 	setResizeMode(QListView::LastColumn);
-	header()->hide();
+//	header()->hide();
 	setSorting(-1, true); // disable sorting
 	setDragEnabled(true);
 }
@@ -86,13 +86,13 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 	int order=0;
 	bool hasPKeys = true; //t->hasPrimaryKeys();
 	KListViewItem *item = 0;
-	KexiDB::QueryColumnInfo::Vector columns = m_schema->columns();
+	KexiDB::QueryColumnInfo::Vector columns = m_schema->columns(true /*unique*/);
 	const int count = columns.count();
 	for(int i=-1; i < count; i++)
 	{
 		KexiDB::QueryColumnInfo *colinfo = 0;
 		if (i==-1) {
-			if (schema->table() && (m_options & HideTableAsterisk))
+			if (! (m_options & ShowAsterisk))
 				continue;
 			item = new KListViewItem(this, item, "*");
 		}
@@ -109,6 +109,8 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 		}
 		order++;
 	}
+
+	setCurrentItem(firstChild());
 }
 
 #if 0

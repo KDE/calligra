@@ -12,6 +12,21 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-08-10
+Form Designer
+- data source tab: usability improved for field list
+Widgets
+- KexiFieldListView is now displaying unique fields list for queries
+KexiDB
+- 'bool unique' arg supported for QuerySchema::fieldsExpanded()
+  and TableOrQuerySchema::columns()
+Query Designer
+- fixes for recent API change of KexiFieldListView
+
+2005-08-08
+Main
+- better readibility: new project type selector uses listview, not icon view
+
 2005-08-05
 Property Editor
 - '-flat' arg added for test app

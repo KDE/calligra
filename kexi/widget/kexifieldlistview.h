@@ -35,9 +35,15 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public KListView
 	Q_OBJECT
 
 	public:
-		enum Options { ShowDataTypes = 1, HideTableAsterisk = 2, AllowMultiSelection = 4 };
+		//! Flags used to alter list's behaviour and appearance
+		enum Options { 
+			ShowDataTypes = 1, //!< if set, 'data type' column is added
+			ShowAsterisk = 2, //!< if set, asterisk ('*') item is prepended to the list
+			AllowMultiSelection = 4 //!< if set, multiple selection is allowed
+		};
 
-		KexiFieldListView(QWidget *parent, const char *name = 0, int options = 0);
+		KexiFieldListView(QWidget *parent, const char *name = 0, 
+			int options = ShowDataTypes | AllowMultiSelection );
 		virtual ~KexiFieldListView();
 
 		/*! Sets table or query schema \a schema. 

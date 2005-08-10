@@ -399,6 +399,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
  The setting could be assigned to a given connection data, 
  but could be also defined globally for the application. 
  (note: db:login-timeout is defined by opendocument spec.)
+- take a look at agrep: http://www.tgries.de/agrep/ -- looks loke it manages to convert 
+  non latin1 characters to latin1, eg. '¹' to 'a':
+  "*  option -ia searches case-insensitive
+     ISO characters are mapped to the nearest lower ASCII equivalent."
 
 ?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
 	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
@@ -544,7 +548,7 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 TODO: in KexiMainWindowImpl::slotProjectOpen() add support for starting new kexi instance for selected conn data
       (we need to remember from what filename has been a conndata loaded)
 TODO: move ConnectionData::savePassword to QMap<ConnectionData*,bool> KexiDBConnectionSet::savePasswordMap or so
-TODO: Forms: fix label width resizing when enteing text within inline editor
+TODO: Forms: fix label width resizing when entering text within inline editor
 TODO: Forms copy more properties (like palette) to inline editor from e.g. text label
 TODO: Forms: fix: double clicking unselected widget doesn't switch us to inline editing mode
 TODO: Forms: object tree: enable sorting by name after clicking "name" header; 
@@ -552,3 +556,4 @@ TODO: Forms: object tree: enable sorting by name after clicking "name" header;
 
 TODO: Startup: when using a startup item, touch the file for better sorting:
 http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx
+
