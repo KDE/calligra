@@ -236,12 +236,15 @@ public:
      * @param doc document to save cell in
      * @param _x_offset x offset
      * @param _y_offset y offset
-     * @param force if set to true, all the properties of the format are stored (used for "Copy")
+     * @param force if set to true, all the properties of the format are stored (used for "Copy"),
+     *              otherwise only the non-default properties will be stored.
+     *              Set this to false if you want smaller files.
+     * @param copy if set to true, all cell formats will be copied instead of referencing the format (style name),
+     *             thus resulting in larger output (files).
+     *             Set this to false if you want smaller files.
      * @param era set this to true if you want to encode relative references as absolutely (they will be switched
      *            back to relative references during decoding) - is used for cutting to clipboard
-     * Usually this is false, to only store the properties explicitly set.
-     *
-     * @todo So what does @p copy do?
+     *            Usually this is false, to only store the properties explicitely set.
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
