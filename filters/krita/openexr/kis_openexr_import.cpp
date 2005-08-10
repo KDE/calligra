@@ -40,7 +40,7 @@
 #include "kis_annotation.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_strategy_colorspace_rgb_f32.h"
 
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
 	int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
 	int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-	KisStrategyColorSpaceRGBF32SP cs = static_cast<KisStrategyColorSpaceRGBF32 *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
+	KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
 	     
 	if (cs == 0) {
 		return KoFilter::InternalError;

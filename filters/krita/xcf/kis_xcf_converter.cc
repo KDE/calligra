@@ -43,7 +43,7 @@
 #include "kis_xcf_converter.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_profile.h"
 #include "kis_annotation.h"
@@ -57,11 +57,11 @@ namespace {
 	const PIXELTYPE PIXEL_RED = 2;
 	const PIXELTYPE PIXEL_ALPHA = 3;
 
-	KisStrategyColorSpace * getColorSpaceForColorType() {
+	KisAbstractColorSpace * getColorSpaceForColorType() {
 		return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 	}
 
-	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpace * cs)
+	KisProfileSP getProfileForProfileInfo(const Image * image, KisAbstractColorSpace * cs)
 	{
 	}
 

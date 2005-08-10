@@ -43,7 +43,7 @@
 #include "kis_image_magick_converter.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_profile.h"
 #include "kis_annotation.h"
@@ -62,7 +62,7 @@ namespace {
 	 * Make this more flexible -- although... ImageMagick
 	 * isn't that flexible either.
 	 */
-	KisStrategyColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
+	KisAbstractColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
 
 		
 		if (type == GRAYColorspace) {
@@ -83,7 +83,7 @@ namespace {
 
 	}
 
-	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpace * cs)
+	KisProfileSP getProfileForProfileInfo(const Image * image, KisAbstractColorSpace * cs)
 	{
 #ifndef HAVE_MAGICK6
 		return 0;
@@ -306,7 +306,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		// Determine image type -- rgb, grayscale or cmyk
 		ColorspaceType colorspaceType = image->colorspace;
 		
-		KisStrategyColorSpace * cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
+		KisAbstractColorSpace * cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
 
 		if (cs == 0) {
 			kdDebug() << "Krita does not suport colorspace " << image -> colorspace << "\n";
