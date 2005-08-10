@@ -4,6 +4,7 @@ Type=Service
 Name=Krita OpenEXR Import Filter
 Name[es]=Filtro de importación a OpenEXR de Krita
 Name[et]=Krita OpenEXR-i impordifilter
+Name[ga]=Scagaire Iompórtála OpenEXR Krita
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-exr
 X-KDE-Weight=1
