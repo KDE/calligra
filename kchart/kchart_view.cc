@@ -602,21 +602,24 @@ void KChartView::updateButton()
 
 void KChartView::slotConfigPageLayout()
 {
-    KChartParams* params = ((KChartPart*)koDocument())->params();
-    KChartPageLayout *dialog=new KChartPageLayout(params,this,"Page Layout");
+    KChartParams      *params = ((KChartPart*)koDocument())->params();
+    KChartPageLayout  *dialog = new KChartPageLayout(params, this,
+						     "Page Layout");
 
     connect( dialog, SIGNAL( dataChanged() ),
-             this, SLOT( slotRepaint() ) );
+             this,   SLOT( slotRepaint() ) );
 
     dialog->exec();
     delete dialog;
 }
+
 
 void KChartView::setupPrinter( KPrinter &printer )
 {
   if ( !printer.previewOnly() )
     printer.addDialogPage( new KChartPrinterDlg( 0, "KChart page" ) );
 }
+
 
 void KChartView::print(KPrinter &printer)
 {

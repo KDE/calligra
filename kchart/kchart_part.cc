@@ -3,6 +3,7 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
+#include <values.h>		// For MAXDOUBLE
 
 #include <qdom.h>
 #include <qtextstream.h>
@@ -220,12 +221,19 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
+    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+
     // Handle data in rows or columns.
     //
     // This means getting row or column headers from the document and
     // set them as X axis labels or legend according to the current
-    // setting.
-    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    // setting.  Also, transpose the data if it should be displayed in
+    // columns instead of in rows.
+    //
+    // After this sequence, m_DisplyData contains the data in the
+    // correct transposition, and the X axis (represented by
+    // bottomparms) and the legend contain the correct labels.
+
     QStringList  longLabels;
     QStringList  shortLabels;
 
@@ -277,6 +285,60 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	for ( uint col = 0; col < m_currentData.cols(); col++ )
 	    m_params->setLegendText( col, m_colLabels[col] );
     }
+
+    // If this is a HiLo chart, we need to manually create the correct
+    // values.  This is not done by KDChart.
+    //
+    // FIXME: In a HiLo chart, the Legend should be the same as the
+    //        labels on the X Axis.  Should we disable one of them?
+    if (m_params->chartType() == KDChartParams::HiLo) {
+	KoChart::Data  tmpData = m_displayData;
+
+	// Calculate the min, max, open and close values for each row.
+	m_displayData.expand(tmpData.usedRows(), 4);
+	for (uint row = 0; row < tmpData.usedRows(); row++) {
+	    double  minVal   = MAXDOUBLE;
+	    double  maxVal   = -MAXDOUBLE;
+
+	    // Calculate min and max for this row.
+	    for (uint col = 0; col < tmpData.usedCols(); col++) {
+		double  data = tmpData.cell(row, col).doubleValue();
+
+		if (data < minVal)
+		    minVal = data;
+		if (data > maxVal)
+		    maxVal = data;
+	    }
+	    m_displayData.setCell(row, 0, KoChart::Value(minVal)); // min
+	    m_displayData.setCell(row, 1, KoChart::Value(maxVal)); // max
+	    m_displayData.setCell(row, 2, tmpData.cell(row, 0));   // open
+	    m_displayData.setCell(row, 3,                          // close
+				  tmpData.cell(row, tmpData.usedCols() - 1));
+	}
+
+	// Set the correct X axis labels and legend.
+	longLabels.clear();
+	shortLabels.clear();
+	if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+
+	    // If data are in rows, then the X axis labels should be
+	    // taken from the row headers.
+	    for ( uint row = 0; row < m_currentData.rows(); row++ ) {
+		longLabels  << m_rowLabels[row];
+		shortLabels << m_rowLabels[row].left( 3 );
+	    }
+	}
+	else {
+	    // If data are in columns, then the X axis labels should
+	    // be taken from the column headers.
+	    for ( uint col = 0; col < m_currentData.cols(); col++ ) {
+		longLabels  << m_colLabels[col];
+		shortLabels << m_colLabels[col].left( 3 );
+	    }	    
+	}
+    }
+
+    // Actually set the axis labels.
     bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
     m_params->setAxisParams(KDChartAxisParams::AxisPosBottom, bottomparms);
 
@@ -284,7 +346,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // suitable legends and axis labels.  Now start the real painting.
 
     // Handle transparency.
-    if( !transparent )
+    if ( !transparent )
         painter.eraseRect( rect );
 
     // ## TODO: support zooming
