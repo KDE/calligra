@@ -42,7 +42,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
-#include "kis_strategy_colorspace_rgb_f32.h"
+#include "kis_rgb_f32_colorspace.h"
 
 using namespace std;
 using namespace Imf;
