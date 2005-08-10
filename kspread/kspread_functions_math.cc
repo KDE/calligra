@@ -1031,12 +1031,14 @@ KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
     break;
    case 10: // Var
     f = FunctionRepository::self()->function ("VAR");
+    if (!f) return KSpreadValue::errorVALUE();
     a.reserve (1);
     a[0] = range;
     res = f->exec (a, calc, 0);
     break;
    case 11: // VarP
     f = FunctionRepository::self()->function ("VARP");
+    if (!f) return KSpreadValue::errorVALUE();
     a.reserve (1);
     a[0] = range;
     res = f->exec (a, calc, 0);
