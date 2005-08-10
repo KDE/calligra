@@ -291,10 +291,11 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 
 KexiRelationViewTable::KexiRelationViewTable(KexiDB::TableOrQuerySchema* tableOrQuerySchema, 
 	KexiRelationView *view, QWidget *parent, const char *name)
- : KexiFieldListView(parent, name)
+ : KexiFieldListView(parent, name, KexiFieldListView::ShowAsterisk)
  , m_view(view)
 {
 	setSchema(tableOrQuerySchema);
+	header()->hide();
 
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
@@ -310,11 +311,11 @@ QSize KexiRelationViewTable::sizeHint()
 {
 	QFontMetrics fm(font());
 
-	kdDebug() << schema()->name() << " cw=" << columnWidth(1) + fm.width("i") 
+	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
 		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
 	QSize s( 
-		QMAX( columnWidth(1) + fm.width("i"), fm.width(schema()->name()+"  ")), 
+		QMAX( columnWidth(0) + fm.width("i"), fm.width(schema()->name()+"  ")), 
 		childCount()*firstChild()->totalHeight() + 4 );
 //	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
 	return s;
@@ -331,7 +332,7 @@ void KexiRelationViewTable::setReadOnly(bool b)
 int
 KexiRelationViewTable::globalY(const QString &item)
 {
-	QListViewItem *i = findItem(item, 1);
+	QListViewItem *i = findItem(item, 0);
 	if(i)
 	{
 		int y=itemRect(i).y() + (itemRect(i).height() / 2);
@@ -354,7 +355,7 @@ KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 		return false;
 	if (sourceMimeType!="kexi/table" && sourceMimeType=="kexi/query")
 		return false;
-	QString f = receiver->text(1).stripWhiteSpace();
+	QString f = receiver->text(0).stripWhiteSpace();
 	if (srcField.stripWhiteSpace()!="*" && f!="*" && ev->source() != (QWidget*)this)
 		return true;
 
@@ -378,7 +379,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		return;
 //		kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
-	QString rcvField = recever->text(1);
+	QString rcvField = recever->text(0);
 
 	SourceConnection s;
 	s.masterTable = srcTable;
