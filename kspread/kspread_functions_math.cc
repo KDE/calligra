@@ -966,11 +966,6 @@ KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
   return res;
 }
 
-
-/** TODO continue here TODO **/
-/** SUBTOTAL **/
-#warning SUBTOTAL commented out
-
 // Function: SUBTOTAL
 // This function requires access to the KSpreadSheet and so on, because
 // it needs to check whether cells contain the SUBTOTAL formula or not ...
