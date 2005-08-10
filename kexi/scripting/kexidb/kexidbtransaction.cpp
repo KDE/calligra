@@ -22,7 +22,6 @@
 #include "kexidbconnection.h"
 #include "../api/variant.h"
 
-//#include <klocale.h>
 //#include <kdebug.h>
 
 using namespace Kross::KexiDB;
@@ -33,15 +32,15 @@ KexiDBTransaction::KexiDBTransaction(KexiDBConnection* connection, ::KexiDB::Tra
 {
     addFunction("connection", &KexiDBTransaction::connection,
         Kross::Api::ArgumentList(),
-        i18n("Returns the KexiDBConnection object to which this KexiDBTransaction belongs.")
+        QString("Returns the KexiDBConnection object to which this KexiDBTransaction belongs.")
     );
     addFunction("isActive", &KexiDBTransaction::isActive,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the transaction is active (ie. started).")
+        QString("Returns true if the transaction is active (ie. started).")
     );
     addFunction("isNull", &KexiDBTransaction::isNull,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the transaction is uninitialized (null).")
+        QString("Returns true if the transaction is uninitialized (null).")
     );
 }
 
@@ -56,7 +55,7 @@ const QString KexiDBTransaction::getClassName() const
 
 const QString KexiDBTransaction::getDescription() const
 {
-    return i18n("KexiDB::Transaction wrapper to enable transaction "
+    return QString("KexiDB::Transaction wrapper to enable transaction "
                 "handling if the KexiDBDriver supports it.");
 }
 

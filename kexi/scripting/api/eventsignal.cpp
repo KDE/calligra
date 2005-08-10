@@ -51,13 +51,14 @@ Object::Ptr EventSignal::call(const QString& name, KSharedPtr<List> arguments)
 
     QString n = m_signal;
 
-    if(! n.startsWith("2")) throw new Exception(i18n("Invalid signal '%1'.").arg(n));
+    if(! n.startsWith("2"))
+        throw new Exception(QString("Invalid signal '%1'.").arg(n));
     //if(n.startsWith("2")) n.remove(0,1);
     n.remove(0,1);
 
     int signalid = m_sender->metaObject()->findSignal(n.latin1(), false);
     if(signalid < 0)
-        throw new Exception(i18n("No such signal '%1'.").arg(n));
+        throw new Exception(QString("No such signal '%1'.").arg(n));
 
     QUObject* uo = QtObject::toQUObject(n, arguments);
     m_sender->qt_emit(signalid, uo); // emit the signal

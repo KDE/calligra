@@ -24,7 +24,6 @@
 #include "kexidbconnectiondata.h"
 
 #include <qvaluelist.h>
-#include <klocale.h>
 #include <kdebug.h>
 
 #include <kexidb/connection.h>
@@ -37,33 +36,33 @@ KexiDBDriver::KexiDBDriver(KexiDBDriverManager* drivermanager, ::KexiDB::Driver*
 {
     addFunction("versionMajor", &KexiDBDriver::versionMajor,
         Kross::Api::ArgumentList(),
-        i18n("Return the major version number of this driver.")
+        QString("Return the major version number of this driver.")
     );
     addFunction("versionMinor", &KexiDBDriver::versionMinor,
         Kross::Api::ArgumentList(),
-        i18n("Return the minor version number of this driver.")
+        QString("Return the minor version number of this driver.")
     );
 
     addFunction("escapeString", &KexiDBDriver::escapeString,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Return a driver-specific escaped SQL string.")
+        QString("Return a driver-specific escaped SQL string.")
     );
     addFunction("valueToSQL", &KexiDBDriver::valueToSQL,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
             << Kross::Api::Argument("Kross::Api::Variant"),
-        i18n("Return the escaped and convert as second argument passed "
+        QString("Return the escaped and convert as second argument passed "
              "Variant value to the as first argument passed "
              "KexiDBField::type.")
     );
 
     addFunction("createConnection", &KexiDBDriver::createConnection,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBConnectionData"),
-        i18n("Create a new KexiDBConnection object and return it.")
+        QString("Create a new KexiDBConnection object and return it.")
     );
     addFunction("connectionList", &KexiDBDriver::connectionList,
         Kross::Api::ArgumentList(),
-        i18n("Return a list of KexiDBConnection objects.")
+        QString("Return a list of KexiDBConnection objects.")
     );
 }
 
@@ -78,16 +77,16 @@ const QString KexiDBDriver::getClassName() const
 
 const QString KexiDBDriver::getDescription() const
 {
-    return i18n("KexiDB::Driver wrapper to access the generic "
+    return QString("KexiDB::Driver wrapper to access the generic "
                 "database abstraction functionality provided by KexiDB.");
 }
 
 ::KexiDB::Driver* KexiDBDriver::driver()
 {
     if(! m_driver)
-        throw new Kross::Api::Exception(i18n("KexiDB::Driver is NULL."));
+        throw new Kross::Api::Exception(QString("KexiDB::Driver is NULL."));
     if(m_driver->error())
-        throw new Kross::Api::Exception(i18n("KexiDB::Driver error: %1").arg(m_driver->errorMsg()));
+        throw new Kross::Api::Exception(QString("KexiDB::Driver error: %1").arg(m_driver->errorMsg()));
     return m_driver;
 }
 

@@ -124,7 +124,7 @@ const QStringList ScriptContainer::getFunctionNames()
 Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr arguments)
 {
     if(functionname.isEmpty())
-        throw new Exception(i18n("No functionname defined for ScriptContainer::callFunction()."));
+        throw new Exception(QString("No functionname defined for ScriptContainer::callFunction()."));
 
     if(! d->m_script)
         initialize();
@@ -154,10 +154,10 @@ void ScriptContainer::initialize()
     finalize();
     Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->m_interpretername);
     if(! interpreter)
-        throw new Exception(i18n("Unknown interpreter '%1'").arg(d->m_interpretername));
+        throw new Exception(QString("Unknown interpreter '%1'").arg(d->m_interpretername));
     d->m_script = interpreter->createScript(this);
     if(! d->m_script)
-        throw new Exception(i18n("Failed to create script for interpreter '%1'").arg(d->m_interpretername));
+        throw new Exception(QString("Failed to create script for interpreter '%1'").arg(d->m_interpretername));
     if(d->m_script->hadException())
         throw d->m_script->getException();
 }

@@ -26,7 +26,6 @@
 //#include "../api/exception.h"
 
 //#include <qvaluelist.h>
-//#include <klocale.h>
 //#include <kdebug.h>
 
 using namespace Kross::KexiDB;
@@ -37,145 +36,145 @@ KexiDBField::KexiDBField(::KexiDB::Field* field)
 {
     addFunction("type", &KexiDBField::type,
         Kross::Api::ArgumentList(),
-        i18n("Returns the type string for this field, e.g. \"Integer\" for "
+        QString("Returns the type string for this field, e.g. \"Integer\" for "
              "Integer type.")
     );
     addFunction("setType", &KexiDBField::setType,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Sets the type string for this field, e.g. \"Integer\" for "
+        QString("Sets the type string for this field, e.g. \"Integer\" for "
              "Integer type.")
     );
     addFunction("subType", &KexiDBField::subType,
         Kross::Api::ArgumentList(),
-        i18n("Returns the optional subtype for this field. Subtype is a "
+        QString("Returns the optional subtype for this field. Subtype is a "
              "string providing additional hint for field's type. E.g. for "
              "BLOB type, it can be a MIME type or certain QVariant type "
              "name, for example: \"QPixmap\", \"QColor\" or \"QFont\".")
     );
     addFunction("setSubType", &KexiDBField::setSubType,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Sets the optional subtype for this field.")
+        QString("Sets the optional subtype for this field.")
     );
     addFunction("typeGroup", &KexiDBField::typeGroup,
         Kross::Api::ArgumentList(),
-        i18n("Returns type group string for this field, e.g. "
+        QString("Returns type group string for this field, e.g. "
              "\"IntegerGroup\" for IntegerGroup type.")
     );
 
     addFunction("isAutoInc", &KexiDBField::isAutoInc,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is autoincrement (e.g. integer/numeric).")
+        QString("Returns true if the field is autoincrement (e.g. integer/numeric).")
     );
     addFunction("setAutoInc", &KexiDBField::setAutoInc,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Sets auto increment flag.")
+        QString("Sets auto increment flag.")
     );
     addFunction("isUniqueKey", &KexiDBField::isUniqueKey,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is member of single-field unique key.")
+        QString("Returns true if the field is member of single-field unique key.")
     );
     addFunction("setUniqueKey", &KexiDBField::setUniqueKey,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Specifies whether the field has single-field unique constraint or not.")
+        QString("Specifies whether the field has single-field unique constraint or not.")
     );
     addFunction("isPrimaryKey", &KexiDBField::isPrimaryKey,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is member of single-field primary key.")
+        QString("Returns true if the field is member of single-field primary key.")
     );
     addFunction("setPrimaryKey", &KexiDBField::setPrimaryKey,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Specifies whether the field is single-field primary key or not.")
+        QString("Specifies whether the field is single-field primary key or not.")
     );
     addFunction("isForeignKey", &KexiDBField::isForeignKey,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is member of single-field foreign key.")
+        QString("Returns true if the field is member of single-field foreign key.")
     );
     addFunction("setForeignKey", &KexiDBField::setForeignKey,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Sets whether the field has to be declared with single-field foreign key.")
+        QString("Sets whether the field has to be declared with single-field foreign key.")
     );
     addFunction("isNotNull", &KexiDBField::isNotNull,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is not allowed to be null.")
+        QString("Returns true if the field is not allowed to be null.")
     );
     addFunction("setNotNull", &KexiDBField::setNotNull,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Specifies whether the field has single-field unique constraint or not.")
+        QString("Specifies whether the field has single-field unique constraint or not.")
     );
     addFunction("isNotEmpty", &KexiDBField::isNotEmpty,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is not allowed to be null.")
+        QString("Returns true if the field is not allowed to be null.")
     );
     addFunction("setNotEmpty", &KexiDBField::setNotEmpty,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Specifies whether the field has single-field unique constraint or not.")
+        QString("Specifies whether the field has single-field unique constraint or not.")
     );
     addFunction("isIndexed", &KexiDBField::isIndexed,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if the field is indexed using single-field database index.")
+        QString("Returns true if the field is indexed using single-field database index.")
     );
     addFunction("setIndexed", &KexiDBField::setIndexed,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        i18n("Specifies whether the field is indexed or not.")
+        QString("Specifies whether the field is indexed or not.")
     );
 
     addFunction("name", &KexiDBField::name,
         Kross::Api::ArgumentList(),
-        i18n("Returns the name of this field.")
+        QString("Returns the name of this field.")
     );
     addFunction("setName", &KexiDBField::setName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Sets the name of this field.")
+        QString("Sets the name of this field.")
     );
     addFunction("caption", &KexiDBField::caption,
         Kross::Api::ArgumentList(),
-        i18n("Returns the caption of this field.")
+        QString("Returns the caption of this field.")
     );
     addFunction("setCaption", &KexiDBField::setCaption,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Sets the caption of this field.")
+        QString("Sets the caption of this field.")
     );
     addFunction("description", &KexiDBField::description,
         Kross::Api::ArgumentList(),
-        i18n("Returns the descriptive text for this field.")
+        QString("Returns the descriptive text for this field.")
     );
     addFunction("setDescription", &KexiDBField::setDescription,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set the description for this field.")
+        QString("Set the description for this field.")
     );
     addFunction("length", &KexiDBField::length,
         Kross::Api::ArgumentList(),
-        i18n("Returns the length of text if the field type is text.")
+        QString("Returns the length of text if the field type is text.")
     );
     addFunction("setLength", &KexiDBField::setLength,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Sets the length for this field. Only works for Text Type (not including LongText).")
+        QString("Sets the length for this field. Only works for Text Type (not including LongText).")
     );
     addFunction("precision", &KexiDBField::precision,
         Kross::Api::ArgumentList(),
-        i18n("Returns precision for numeric and other fields that have "
+        QString("Returns precision for numeric and other fields that have "
              "both length and precision (floating point types).")
     );
     addFunction("setPrecision", &KexiDBField::setPrecision,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Sets the precision for numeric and other fields.")
+        QString("Sets the precision for numeric and other fields.")
     );
     addFunction("width", &KexiDBField::width,
         Kross::Api::ArgumentList(),
-        i18n("Returns the width of this field (usually in pixels or points). "
+        QString("Returns the width of this field (usually in pixels or points). "
              "0 (the default) means there is no hint for the width.")
     );
     addFunction("setWidth", &KexiDBField::setWidth,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Sets the width of this field.")
+        QString("Sets the width of this field.")
     );
     addFunction("defaultValue", &KexiDBField::defaultValue,
         Kross::Api::ArgumentList(),
-        i18n("Returns the default value this field has.")
+        QString("Returns the default value this field has.")
     );
     addFunction("setDefaultValue", &KexiDBField::setDefaultValue,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant"),
-        i18n("Sets the default value this field has.")
+        QString("Sets the default value this field has.")
     );
 }
 
@@ -190,7 +189,7 @@ const QString KexiDBField::getClassName() const
 
 const QString KexiDBField::getDescription() const
 {
-    return i18n("KexiDB::Field wrapper to work with Meta-data for a field.");
+    return QString("KexiDB::Field wrapper to work with Meta-data for a field.");
 }
 
 Kross::Api::Object::Ptr KexiDBField::type(Kross::Api::List::Ptr)

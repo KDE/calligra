@@ -23,7 +23,6 @@
 //#include "../api/exception.h"
 
 #include <qvariant.h>
-#include <klocale.h>
 //#include <kdebug.h>
 
 using namespace Kross::KexiDB;
@@ -34,83 +33,83 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
 {
     addFunction("caption", &KexiDBConnectionData::caption,
         Kross::Api::ArgumentList(),
-        i18n("Return connection name.")
+        QString("Return connection name.")
     );
     addFunction("setCaption", &KexiDBConnectionData::setCaption,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set connection name.")
+        QString("Set connection name.")
     );
     addFunction("description", &KexiDBConnectionData::description,
         Kross::Api::ArgumentList(),
-        i18n("Return description.")
+        QString("Return description.")
     );
     addFunction("setDescription", &KexiDBConnectionData::setDescription,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set description.")
+        QString("Set description.")
     );
     addFunction("driverName", &KexiDBConnectionData::driverName,
         Kross::Api::ArgumentList(),
-        i18n("Return drivername.")
+        QString("Return drivername.")
     );
     addFunction("setDriverName", &KexiDBConnectionData::setDriverName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set drivername.")
+        QString("Set drivername.")
     );
     addFunction("localSocketFileName", &KexiDBConnectionData::localSocketFileName,
         Kross::Api::ArgumentList(),
-        i18n("Return local socket filename.")
+        QString("Return local socket filename.")
     );
     addFunction("hostName", &KexiDBConnectionData::hostName,
         Kross::Api::ArgumentList(),
-        i18n("Return hostname.")
+        QString("Return hostname.")
     );
     addFunction("setHostName", &KexiDBConnectionData::setHostName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set hostname.")
+        QString("Set hostname.")
     );
     addFunction("port", &KexiDBConnectionData::port,
         Kross::Api::ArgumentList(),
-        i18n("Return port.")
+        QString("Return port.")
     );
     addFunction("setPort", &KexiDBConnectionData::setPort,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Set port.")
+        QString("Set port.")
     );
     addFunction("password", &KexiDBConnectionData::password,
         Kross::Api::ArgumentList(),
-        i18n("Return password.")
+        QString("Return password.")
     );
     addFunction("setPassword", &KexiDBConnectionData::setPassword,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set password.")
+        QString("Set password.")
     );
     addFunction("userName", &KexiDBConnectionData::userName,
         Kross::Api::ArgumentList(),
-        i18n("Return username.")
+        QString("Return username.")
     );
     addFunction("setUserName", &KexiDBConnectionData::setUserName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set username.")
+        QString("Set username.")
     );
     addFunction("fileName", &KexiDBConnectionData::fileName,
         Kross::Api::ArgumentList(),
-        i18n("Return filename.")
+        QString("Return filename.")
     );
     addFunction("setFileName", &KexiDBConnectionData::setFileName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Set filename.")
+        QString("Set filename.")
     );
     addFunction("dbPath", &KexiDBConnectionData::dbPath,
         Kross::Api::ArgumentList(),
-        i18n("Return database path.")
+        QString("Return database path.")
     );
     addFunction("dbFileName", &KexiDBConnectionData::dbFileName,
         Kross::Api::ArgumentList(),
-        i18n("Return database filename.")
+        QString("Return database filename.")
     );
     addFunction("serverInfoString", &KexiDBConnectionData::serverInfoString,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(true))),
-        i18n("Return a user-friendly string representation.")
+        QString("Return a user-friendly string representation.")
     );
 }
 
@@ -126,7 +125,7 @@ const QString KexiDBConnectionData::getClassName() const
 
 const QString KexiDBConnectionData::getDescription() const
 {
-    return i18n("KexiDB::ConnectionData wrapper for database-"
+    return QString("KexiDB::ConnectionData wrapper for database-"
                 "specific connection data, e.g. host, port.");
 }
 

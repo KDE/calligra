@@ -24,7 +24,6 @@
 //#include <qvaluelist.h>
 //#include <qmap.h>
 #include <qobject.h>
-//#include <klocale.h>
 #include <kdebug.h>
 
 //#include "../main/krossconfig.h"

@@ -23,7 +23,6 @@
 #include "../api/exception.h"
 
 //#include <qvaluelist.h>
-#include <klocale.h>
 #include <kdebug.h>
 
 using namespace Kross::KexiDB;
@@ -34,42 +33,42 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
 {
     addFunction("moveFirst", &KexiDBCursor::moveFirst,
         Kross::Api::ArgumentList(),
-        i18n("Moves current position to the first record and retrieves it.")
+        QString("Moves current position to the first record and retrieves it.")
     );
     addFunction("moveLast", &KexiDBCursor::moveLast,
         Kross::Api::ArgumentList(),
-        i18n("Moves current position to the last record and retrieves it.")
+        QString("Moves current position to the last record and retrieves it.")
     );
     addFunction("moveNext", &KexiDBCursor::moveNext,
         Kross::Api::ArgumentList(),
-        i18n("Moves current position to the next record and retrieves it.")
+        QString("Moves current position to the next record and retrieves it.")
     );
     addFunction("movePrev", &KexiDBCursor::movePrev,
         Kross::Api::ArgumentList(),
-        i18n("Moves current position to the next record and retrieves it.")
+        QString("Moves current position to the next record and retrieves it.")
     );
     addFunction("eof", &KexiDBCursor::eof,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if current position is after last record.")
+        QString("Returns true if current position is after last record.")
     );
     addFunction("bof", &KexiDBCursor::bof,
         Kross::Api::ArgumentList(),
-        i18n("Returns true if current position is before first record.")
+        QString("Returns true if current position is before first record.")
     );
     addFunction("at", &KexiDBCursor::at,
         Kross::Api::ArgumentList(),
-        i18n("Returns current internal position of the cursor's query. "
+        QString("Returns current internal position of the cursor's query. "
              "Records are numbered from 0; the value -1 means that "
              "the cursor does not point to a valid record.")
     );
     addFunction("fieldCount", &KexiDBCursor::fieldCount,
         Kross::Api::ArgumentList(),
-        i18n("Returns the number of fields available for this cursor.")
+        QString("Returns the number of fields available for this cursor.")
     );
 
     addFunction("value", &KexiDBCursor::value,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        i18n("Returns the value stored in column number \a i (counting from 0).")
+        QString("Returns the value stored in column number \a i (counting from 0).")
     );
 }
 
@@ -84,16 +83,16 @@ const QString KexiDBCursor::getClassName() const
 
 const QString KexiDBCursor::getDescription() const
 {
-    return i18n("KexiDB::Cursor wrapper to provide database "
+    return QString("KexiDB::Cursor wrapper to provide database "
                 "cursor functionality.");
 }
 
 ::KexiDB::Cursor* KexiDBCursor::cursor()
 {
     if(! m_cursor)
-        throw new Kross::Api::Exception(i18n("KexiDB::Cursor is NULL."));
+        throw new Kross::Api::Exception(QString("KexiDB::Cursor is NULL."));
     if(m_cursor->error())
-        throw new Kross::Api::Exception(i18n("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg()));
+        throw new Kross::Api::Exception(QString("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg()));
     return m_cursor;
 }
 

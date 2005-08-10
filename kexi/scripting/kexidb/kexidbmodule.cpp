@@ -42,7 +42,7 @@ const QString KexiDBModule::getClassName() const
 
 const QString KexiDBModule::getDescription() const
 {
-    return i18n("The KexiDB object provides a wrapper for the Kexi::KexiDB "
+    return QString("The KexiDB object provides a wrapper for the Kexi::KexiDB "
                 "library and allows using the functionality from within "
                 "scripting languages.");
 }

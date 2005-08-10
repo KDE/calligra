@@ -20,7 +20,6 @@
 #include "list.h"
 #include "exception.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 
 using namespace Kross::Api;
@@ -41,7 +40,7 @@ const QString List::getClassName() const
 
 const QString List::getDescription() const
 {
-    return i18n("Object to handle QValueList collections.");
+    return QString("Object to handle QValueList collections.");
 }
 
 const QString List::toString()
@@ -58,7 +57,7 @@ Object::Ptr List::item(uint idx)
     QValueList<Object::Ptr> list = getValue();
     if(idx >= list.count()) {
         kdDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
-        throw new Exception(i18n("List-index %1 out of bounds.").arg(idx));
+        throw new Exception(QString("List-index %1 out of bounds.").arg(idx));
     }
     Object::Ptr obj = list[idx];
     return obj;

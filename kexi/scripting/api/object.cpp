@@ -23,7 +23,6 @@
 #include "event.h"
 #include "exception.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 
 using namespace Kross::Api;
@@ -124,6 +123,6 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
     }
 
     // If there exists no such object throw an exception.
-    throw new Exception(i18n("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
+    throw new Exception(QString("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * dict.cpp
+ * exception.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,36 +17,41 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "dict.h"
-//#include "exception.h"
+#include "exception.h"
+
+//#include <qstring.h>
+//#include <ksharedptr.h>
+//#include <kdebug.h>
 
 using namespace Kross::Api;
 
-Dict::Dict(const QMap<QString, Object::Ptr> value, const QString& name)
-    : Value< List, QMap<QString, Object::Ptr> >(value, name)
+Exception::Exception(const QString& error, Object::Ptr parent)
+    : Object("Exception", parent)
+    , m_error(error)
 {
 }
 
-Dict::~Dict()
+Exception::~Exception()
 {
 }
 
-const QString Dict::getClassName() const
+const QString Exception::getClassName() const
 {
-    return "Kross::Api::Dict";
+    return "Kross::Api::Exception";
 }
 
-const QString Dict::getDescription() const
+const QString Exception::getDescription() const
 {
-    return QString("Object to handle QMaps.");
+    return "Exception object.";
 }
 
-const QString Dict::toString()
+const QString Exception::toString()
 {
-    QString s = "[";
-    QMap<QString, Object::Ptr> list = getValue();
-    for(QMap<QString, Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
-        s += "'" + it.key() + "' = '" + it.data()->toString() + "', ";
-    return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
+    return QString("Exception: %1").arg( getError() );
+}
+
+const QString& Exception::getError()
+{
+    return m_error;
 }
 

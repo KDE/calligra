@@ -24,7 +24,6 @@
 
 #include <qstring.h>
 #include <ksharedptr.h>
-#include <klocale.h>
 
 namespace Kross { namespace Api {
 
@@ -56,44 +55,26 @@ namespace Kross { namespace Api {
              *        this exception object doesn't has a
              *        parent.
              */
-            Exception(const QString& error, Object::Ptr parent = 0)
-                : Object("Exception", parent)
-                , m_error(error)
-            {
-            }
+            Exception(const QString& error, Object::Ptr parent = 0);
 
             /**
              * Destructor.
              */
-            virtual ~Exception()
-            {
-            }
+            virtual ~Exception();
 
             /// \see Kross::Api::Object::getClassName()
-            virtual const QString getClassName() const
-            {
-                return "Kross::Api::Exception";
-            }
+            virtual const QString getClassName() const;
 
             /// \see Kross::Api::Object::getDescription()
-            virtual const QString getDescription() const
-            {
-                return "Exception object.";
-            }
+            virtual const QString getDescription() const;
 
             /// \see Kross::Api::Object::toString()
-            virtual const QString toString()
-            {
-                return i18n("Exception: %1").arg( getError() );
-            }
+            virtual const QString toString();
 
             /**
              * \return the error message.
              */
-            const QString& getError()
-            {
-                return m_error;
-            }
+            const QString& getError();
 
     };
 

@@ -26,7 +26,6 @@
 #include "../api/exception.h"
 
 #include <qguardedptr.h>
-#include <klocale.h>
 #include <kdebug.h>
 
 #include <kexidb/driver.h>
@@ -42,34 +41,34 @@ KexiDBDriverManager::KexiDBDriverManager()
 {
     addFunction("driverNames", &KexiDBDriverManager::driverNames,
         Kross::Api::ArgumentList(),
-        i18n("Returns a stringlist of all available drivernames.")
+        QString("Returns a stringlist of all available drivernames.")
     );
     addFunction("driver", &KexiDBDriverManager::driver,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Returns the KexiDBDriver object whose name matches the passed string.")
+        QString("Returns the KexiDBDriver object whose name matches the passed string.")
     );
     addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Looks up a drivers list by MIME type of database file. "
+        QString("Looks up a drivers list by MIME type of database file. "
              "Only file-based database drivers are checked. "
              "The lookup is case insensitive.")
     );
 
     addFunction("connectionData", &KexiDBDriverManager::connectionData,
         Kross::Api::ArgumentList(),
-        i18n("Returns a new KexiDBConnectionData object.")
+        QString("Returns a new KexiDBConnectionData object.")
     );
     addFunction("field", &KexiDBDriverManager::field,
         Kross::Api::ArgumentList(),
-        i18n("Returns a new KexiDBField object.")
+        QString("Returns a new KexiDBField object.")
     );
     addFunction("tableSchema", &KexiDBDriverManager::tableSchema,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        i18n("Returns a new KexiDBTableSchema object.")
+        QString("Returns a new KexiDBTableSchema object.")
     );
     addFunction("querySchema", &KexiDBDriverManager::querySchema,
         Kross::Api::ArgumentList(),
-        i18n("Returns a new KexiDBQuerySchema object.")
+        QString("Returns a new KexiDBQuerySchema object.")
     );
 }
 
@@ -84,14 +83,14 @@ const QString KexiDBDriverManager::getClassName() const
 
 const QString KexiDBDriverManager::getDescription() const
 {
-    return i18n("KexiDB::DriverManager wrapper for database driver "
+    return QString("KexiDB::DriverManager wrapper for database driver "
                 "management, e.g. finding and loading drivers.");
 }
 
 KexiDB::DriverManager& KexiDBDriverManager::driverManager()
 {
     if(m_drivermanager.error())
-        throw new Kross::Api::Exception(i18n("KexiDB::DriverManager error: %1").arg(m_drivermanager.errorMsg()));
+        throw new Kross::Api::Exception(QString("KexiDB::DriverManager error: %1").arg(m_drivermanager.errorMsg()));
     return m_drivermanager;
 }
 
@@ -105,9 +104,9 @@ Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
     QString drivername = Kross::Api::Variant::toString(args->item(0));
     QGuardedPtr< ::KexiDB::Driver > driver = driverManager().driver(drivername); // caching is done by the DriverManager
     if(! driver)
-        throw new Kross::Api::Exception(i18n("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername));
+        throw new Kross::Api::Exception(QString("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername));
     if(driver->error())
-        throw new Kross::Api::Exception(i18n("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()));
+        throw new Kross::Api::Exception(QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()));
     return new KexiDBDriver(this, driver);
 }
 

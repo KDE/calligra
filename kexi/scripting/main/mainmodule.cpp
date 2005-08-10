@@ -39,7 +39,7 @@ const QString MainModule::getClassName() const
 
 const QString MainModule::getDescription() const
 {
-    return i18n("TODO: Documentation");
+    return QString("TODO: Documentation");
 }
 
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)

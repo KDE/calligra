@@ -206,7 +206,7 @@ namespace Kross { namespace Api {
             {
                 T* t = (T*) object.data();
                 if(! t)
-                    throw new Exception(i18n("Object \"%1\" invalid.").arg(object->getClassName()));
+                    throw new Exception(QString("Object \"%1\" invalid.").arg(object->getClassName()));
                 return t;
             }
 

@@ -39,7 +39,7 @@ const QString Variant::getClassName() const
 
 const QString Variant::getDescription() const
 {
-    return i18n("Object to handle QVariant values.");
+    return "Object to handle QVariant values.";
 }
 
 const QString Variant::toString()

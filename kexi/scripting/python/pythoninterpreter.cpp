@@ -50,7 +50,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     // Options the python interpreter spends.
     m_options.replace(
         "restricted",
-        new Option(i18n("Restricted"), i18n("Enable RestrictedPython module."), QVariant((bool)false))
+        new Option(QString("Restricted"), QString("Enable RestrictedPython module."), QVariant((bool)false))
     );
 
     //kdDebug() << "Py_GetVersion()=" << Py_GetVersion() << " Py_GetPath()=" << Py_GetPath() << endl;
@@ -101,7 +101,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
-        throw new Kross::Api::Exception(i18n("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()));
+        throw new Kross::Api::Exception(QString("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()));
     }
     Py_XDECREF(pyrun); // free the reference.
 

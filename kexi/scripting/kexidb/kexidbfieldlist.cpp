@@ -23,7 +23,6 @@
 #include "../api/variant.h"
 #include "../api/exception.h"
 
-#include <klocale.h>
 #include <kdebug.h>
 
 using namespace Kross::KexiDB;
@@ -34,43 +33,43 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
 {
     addFunction("fieldCount", &KexiDBFieldList::fieldCount,
         Kross::Api::ArgumentList(),
-        i18n("Returns the number of fields.")
+        QString("Returns the number of fields.")
     );
     addFunction("field", &KexiDBFieldList::field,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant"),
-        i18n("Returns the field specified by the number passed as an argument.")
+        QString("Returns the field specified by the number passed as an argument.")
     );
     addFunction("fields", &KexiDBFieldList::fields,
         Kross::Api::ArgumentList(),
-        i18n("Returns a list of fields.")
+        QString("Returns a list of fields.")
     );
     addFunction("hasField", &KexiDBFieldList::hasField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Returns true if the KexiDBField object passed as an argument is in the field list.")
+        QString("Returns true if the KexiDBField object passed as an argument is in the field list.")
     );
     addFunction("names", &KexiDBFieldList::names,
         Kross::Api::ArgumentList(),
-        i18n("Returns a stringlist of field names.")
+        QString("Returns a stringlist of field names.")
     );
     addFunction("addField", &KexiDBFieldList::addField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Adds the KexiDBField object passed as an argument to the field list.")
+        QString("Adds the KexiDBField object passed as an argument to the field list.")
     );
     addFunction("insertField", &KexiDBFieldList::insertField,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::UInt")
             << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Inserts the KexiDBField object passed as the second argument "
+        QString("Inserts the KexiDBField object passed as the second argument "
              "into the field list at the position defined by the first "
              "argument.")
     );
     addFunction("removeField", &KexiDBFieldList::removeField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"),
-        i18n("Removes the KexiDBField object passed as an argument from the field list.")
+        QString("Removes the KexiDBField object passed as an argument from the field list.")
     );
     addFunction("clear", &KexiDBFieldList::clear,
         Kross::Api::ArgumentList(),
-        i18n("Removes all KexiDBField objects from the fieldlist.")
+        QString("Removes all KexiDBField objects from the fieldlist.")
     );
 }
 
@@ -85,7 +84,7 @@ const QString KexiDBFieldList::getClassName() const
 
 const QString KexiDBFieldList::getDescription() const
 {
-    return i18n("KexiDB::FieldList wrapper to handle a list of KexiDBField objects.");
+    return QString("KexiDB::FieldList wrapper to handle a list of KexiDBField objects.");
 }
 
 Kross::Api::Object::Ptr KexiDBFieldList::fieldCount(Kross::Api::List::Ptr)
