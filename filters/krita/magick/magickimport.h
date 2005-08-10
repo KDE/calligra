@@ -21,14 +21,14 @@
 #include <koFilter.h>
 
 class MagickImport : public KoFilter {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	MagickImport(KoFilter *parent, const char *name, const QStringList&);
-	virtual ~MagickImport();
+    MagickImport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~MagickImport();
 
 public:
-	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 };
 
 #endif // MAGICKIMPORT_H_

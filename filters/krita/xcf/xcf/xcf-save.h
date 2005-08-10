@@ -21,9 +21,9 @@
 
 
 void   xcf_save_choose_format (XcfInfo   *info,
-			       GimpImage *gimage);
+                   GimpImage *gimage);
 gint   xcf_save_image         (XcfInfo   *info,
-			       GimpImage *gimage);
+                   GimpImage *gimage);
 
 
 #endif  /* __XCF_SAVE_H__ */

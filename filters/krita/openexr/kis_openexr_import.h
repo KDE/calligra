@@ -22,14 +22,14 @@
 #include <koFilter.h>
 
 class KisOpenEXRImport : public KoFilter {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KisOpenEXRImport(KoFilter *parent, const char *name, const QStringList&);
-	virtual ~KisOpenEXRImport();
+    KisOpenEXRImport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~KisOpenEXRImport();
 
 public:
-	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 };
 
 #endif // KIS_OPENEXR_IMPORT_H_

@@ -61,95 +61,95 @@ KisOpenEXRImport::~KisOpenEXRImport()
 
 KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const QCString& to)
 {
-	if (from != "image/x-exr" || to != "application/x-krita") {
-		return KoFilter::NotImplemented;
-	}
+    if (from != "image/x-exr" || to != "application/x-krita") {
+        return KoFilter::NotImplemented;
+    }
 
-	kdDebug() << "\n\n\nKrita importing from OpenEXR\n";
+    kdDebug() << "\n\n\nKrita importing from OpenEXR\n";
 
-	KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
-	if (!doc) {
-		return KoFilter::CreationError;
-	}
+    KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
+    if (!doc) {
+        return KoFilter::CreationError;
+    }
 
-	doc -> prepareForImport();
+    doc -> prepareForImport();
 
-	QString filename = m_chain -> inputFile();
+    QString filename = m_chain -> inputFile();
 
-	if (filename.isEmpty()) {
-		return KoFilter::FileNotFound;
-	}
+    if (filename.isEmpty()) {
+        return KoFilter::FileNotFound;
+    }
 
-	RgbaInputFile file(QFile::encodeName(filename));
-	Box2i dataWindow = file.dataWindow();
-	Box2i displayWindow = file.dataWindow();
+    RgbaInputFile file(QFile::encodeName(filename));
+    Box2i dataWindow = file.dataWindow();
+    Box2i displayWindow = file.dataWindow();
 
-	kdDebug() << "Data window: " << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1) << endl;
-	kdDebug() << "Display window: " << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1) << endl;
+    kdDebug() << "Data window: " << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1) << endl;
+    kdDebug() << "Display window: " << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1) << endl;
 
-	int imageWidth = displayWindow.max.x - displayWindow.min.x + 1;
-	int imageHeight = displayWindow.max.y - displayWindow.min.y + 1;
+    int imageWidth = displayWindow.max.x - displayWindow.min.x + 1;
+    int imageHeight = displayWindow.max.y - displayWindow.min.y + 1;
 
-	QString imageName = "Imported from OpenEXR";
+    QString imageName = "Imported from OpenEXR";
 
-	int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
-	int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
+    int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
+    int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-	KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
-	     
-	if (cs == 0) {
-		return KoFilter::InternalError;
-	}
+    KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
+         
+    if (cs == 0) {
+        return KoFilter::InternalError;
+    }
 
-	doc -> undoAdapter() -> setUndo(false);
+    doc -> undoAdapter() -> setUndo(false);
 
-	KisImageSP image = new KisImage(doc, imageWidth, imageHeight, cs, imageName);
+    KisImageSP image = new KisImage(doc, imageWidth, imageHeight, cs, imageName);
 
-	if (image == 0) {
-		return KoFilter::CreationError;
-	}
+    if (image == 0) {
+        return KoFilter::CreationError;
+    }
 
-	KisLayerSP layer = image -> layerAdd(image -> nextLayerName(), OPACITY_OPAQUE);
+    KisLayerSP layer = image -> layerAdd(image -> nextLayerName(), OPACITY_OPAQUE);
 
-	if (layer == 0) {
-		return KoFilter::CreationError;
-	}
+    if (layer == 0) {
+        return KoFilter::CreationError;
+    }
 
-	Rgba pixels[dataWidth];
+    Rgba pixels[dataWidth];
 
-	for (int y = 0; y < dataHeight; ++y) {
+    for (int y = 0; y < dataHeight; ++y) {
 
-		file.setFrameBuffer(pixels - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
-		file.readPixels(dataWindow.min.y + y);
+        file.setFrameBuffer(pixels - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
+        file.readPixels(dataWindow.min.y + y);
 
-		KisHLineIterator it = layer -> createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
-		Rgba *rgba = pixels;
+        KisHLineIterator it = layer -> createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
+        Rgba *rgba = pixels;
 
-		while (!it.isDone()) {
+        while (!it.isDone()) {
 
-			// XXX: For now unmultiply the alpha, though compositing will be faster if we
-			// keep it premultiplied.
-			float unmultipliedRed = rgba -> r;
-			float unmultipliedGreen = rgba -> g;
-			float unmultipliedBlue = rgba -> b;
+            // XXX: For now unmultiply the alpha, though compositing will be faster if we
+            // keep it premultiplied.
+            float unmultipliedRed = rgba -> r;
+            float unmultipliedGreen = rgba -> g;
+            float unmultipliedBlue = rgba -> b;
 
-			if (rgba -> a >= HALF_EPSILON) {
-				unmultipliedRed /= rgba -> a;
-				unmultipliedGreen /= rgba -> a;
-				unmultipliedBlue /= rgba -> a;
-			}
+            if (rgba -> a >= HALF_EPSILON) {
+                unmultipliedRed /= rgba -> a;
+                unmultipliedGreen /= rgba -> a;
+                unmultipliedBlue /= rgba -> a;
+            }
 
-			cs -> setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
-			++it;
-			++rgba;
-		}
-	}
+            cs -> setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
+            ++it;
+            ++rgba;
+        }
+    }
 
-	doc -> setCurrentImage(image);
-	doc -> undoAdapter() -> setUndo(true);
-	doc -> setModified(false);
+    doc -> setCurrentImage(image);
+    doc -> undoAdapter() -> setUndo(true);
+    doc -> setModified(false);
 
-	return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 #include "kis_openexr_import.moc"

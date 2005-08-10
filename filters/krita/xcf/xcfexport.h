@@ -21,14 +21,14 @@
 #include <koFilter.h>
 
 class XCFExport : public KoFilter {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	XCFExport(KoFilter *parent, const char *name, const QStringList&);
-	virtual ~XCFExport();
+    XCFExport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~XCFExport();
 
 public:
-	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 };
 
 #endif // XCFEXPORT_H_

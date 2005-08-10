@@ -59,41 +59,41 @@ enum KisImageBuilder_Result {
  * Build a KisImage representation of an image file.
  */
 class KisXCFConverter : public KisProgressSubject {
-	typedef QObject super;
-	Q_OBJECT
+    typedef QObject super;
+    Q_OBJECT
 
 public:
-	KisXCFConverter(KisDoc *doc, KisUndoAdapter *adapter);
-	virtual ~KisXCFConverter();
+    KisXCFConverter(KisDoc *doc, KisUndoAdapter *adapter);
+    virtual ~KisXCFConverter();
 
 public slots:
-	virtual void cancel();
+    virtual void cancel();
 
 public:
-	// Create a KisImage from a file
-	KisImageBuilder_Result buildImage(const KURL& uri);
+    // Create a KisImage from a file
+    KisImageBuilder_Result buildImage(const KURL& uri);
 
-	// Create an xcf file from an image
-	KisImageBuilder_Result buildFile(const KURL& uri,
-		KisImageSP image,
-		vKisAnnotationSP_it annotationsStart,
-		vKisAnnotationSP_it annotationsEnd);
+    // Create an xcf file from an image
+    KisImageBuilder_Result buildFile(const KURL& uri,
+        KisImageSP image,
+        vKisAnnotationSP_it annotationsStart,
+        vKisAnnotationSP_it annotationsEnd);
 
-	// Retrieve the constructed image
-	KisImageSP image();
-
-private:
-
-	KisXCFConverter(const KisXCFConverter&);
-	KisXCFConverter& operator=(const KisXCFConverter&);
-	
-	KisImageBuilder_Result decode(const KURL& uri);
+    // Retrieve the constructed image
+    KisImageSP image();
 
 private:
-	KisImageSP m_img;
-	KisDoc *m_doc;
-	KisUndoAdapter *m_adapter;
-	bool m_stop;
+
+    KisXCFConverter(const KisXCFConverter&);
+    KisXCFConverter& operator=(const KisXCFConverter&);
+    
+    KisImageBuilder_Result decode(const KURL& uri);
+
+private:
+    KisImageSP m_img;
+    KisDoc *m_doc;
+    KisUndoAdapter *m_adapter;
+    bool m_stop;
 };
 
 #endif // KIS_XCF_CONVERTER_H_

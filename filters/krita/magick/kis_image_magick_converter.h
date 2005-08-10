@@ -58,46 +58,46 @@ enum KisImageBuilder_Result {
  * Build a KisImage representation of an image file.
  */
 class KisImageMagickConverter : public KisProgressSubject {
-	typedef QObject super;
-	Q_OBJECT
+    typedef QObject super;
+    Q_OBJECT
 
 public:
-	KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter);
-	virtual ~KisImageMagickConverter();
+    KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter);
+    virtual ~KisImageMagickConverter();
 
 public slots:
-	virtual void cancel();
+    virtual void cancel();
 
 public:
-	KisImageBuilder_Result buildImage(const KURL& uri);
-	KisImageBuilder_Result buildFile(const KURL& uri, KisImageSP img);
-	KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer);
-	KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
-	KisImageSP image();
+    KisImageBuilder_Result buildImage(const KURL& uri);
+    KisImageBuilder_Result buildFile(const KURL& uri, KisImageSP img);
+    KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer);
+    KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
+    KisImageSP image();
 
 public:
-	static QString readFilters();
-	static QString writeFilters();
+    static QString readFilters();
+    static QString writeFilters();
 
 private slots:
-	void ioData(KIO::Job *job, const QByteArray& data);
-	void ioResult(KIO::Job *job);
-	void ioTotalSize(KIO::Job *job, KIO::filesize_t size);
+    void ioData(KIO::Job *job, const QByteArray& data);
+    void ioResult(KIO::Job *job);
+    void ioTotalSize(KIO::Job *job, KIO::filesize_t size);
 
 private:
-	KisImageMagickConverter(const KisImageMagickConverter&);
-	KisImageMagickConverter& operator=(const KisImageMagickConverter&);
-	void init(KisDoc *doc, KisUndoAdapter *adapter);
-	KisImageBuilder_Result decode(const KURL& uri, bool isBlob);
+    KisImageMagickConverter(const KisImageMagickConverter&);
+    KisImageMagickConverter& operator=(const KisImageMagickConverter&);
+    void init(KisDoc *doc, KisUndoAdapter *adapter);
+    KisImageBuilder_Result decode(const KURL& uri, bool isBlob);
 
 private:
-	KisImageSP m_img;
-	KisDoc *m_doc;
-	KisUndoAdapter *m_adapter;
-	QValueVector<Q_UINT8> m_data;
-	KIO::TransferJob *m_job;
-	KIO::filesize_t m_size;
-	bool m_stop;
+    KisImageSP m_img;
+    KisDoc *m_doc;
+    KisUndoAdapter *m_adapter;
+    QValueVector<Q_UINT8> m_data;
+    KIO::TransferJob *m_job;
+    KIO::filesize_t m_size;
+    bool m_stop;
 };
 
 #endif // KIS_IMAGE_MAGICK_CONVERTER_H_

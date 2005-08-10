@@ -52,47 +52,47 @@
 
 namespace {
 
-	const PIXELTYPE PIXEL_BLUE = 0;
-	const PIXELTYPE PIXEL_GREEN = 1;
-	const PIXELTYPE PIXEL_RED = 2;
-	const PIXELTYPE PIXEL_ALPHA = 3;
+    const PIXELTYPE PIXEL_BLUE = 0;
+    const PIXELTYPE PIXEL_GREEN = 1;
+    const PIXELTYPE PIXEL_RED = 2;
+    const PIXELTYPE PIXEL_ALPHA = 3;
 
-	KisAbstractColorSpace * getColorSpaceForColorType() {
-		return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
-	}
+    KisAbstractColorSpace * getColorSpaceForColorType() {
+        return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+    }
 
-	KisProfileSP getProfileForProfileInfo(const Image * image, KisAbstractColorSpace * cs)
-	{
-	}
+    KisProfileSP getProfileForProfileInfo(const Image * image, KisAbstractColorSpace * cs)
+    {
+    }
 
-	void setAnnotationsForImage(const Image * src, KisImageSP image)
-	{
-	}
+    void setAnnotationsForImage(const Image * src, KisImageSP image)
+    {
+    }
 
-	void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotationSP_it& annotationsEnd)
-	{
-	}
+    void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotationSP_it& annotationsEnd)
+    {
+    }
 
-	MagickBooleanType monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
-	{
-		KApplication *app = KApplication::kApplication();
+    MagickBooleanType monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
+    {
+        KApplication *app = KApplication::kApplication();
 
-		Q_ASSERT(app);
+        Q_ASSERT(app);
 
-		if (app -> hasPendingEvents())
-			app -> processEvents();
+        if (app -> hasPendingEvents())
+            app -> processEvents();
 
-		printf("%s\n", text);
-		return MagickTrue;
-	}
+        printf("%s\n", text);
+        return MagickTrue;
+    }
 }
 
 KisXCFConverter::KisXCFConverter(KisDoc *doc, KisUndoAdapter *adapter)
 {
-	m_doc = doc;
-	m_adapter = adapter;
-	m_job = 0;
-	m_stop = false;
+    m_doc = doc;
+    m_adapter = adapter;
+    m_job = 0;
+    m_stop = false;
 }
 
 KisXCFConverter::~KisXCFConverter()
@@ -101,75 +101,75 @@ KisXCFConverter::~KisXCFConverter()
 
 KisImageBuilder_Result KisXCFConverter::decode(const KURL& uri)
 {
-	if (m_stop) {
-		m_img = 0;
-		return KisImageBuilder_RESULT_INTR;
-	}
+    if (m_stop) {
+        m_img = 0;
+        return KisImageBuilder_RESULT_INTR;
+    }
 
-	emit notifyProgressStage(this, i18n("Importing..."), 0);
+    emit notifyProgressStage(this, i18n("Importing..."), 0);
 
-	m_img = 0;
+    m_img = 0;
 
-	// Decode the xcf file
-	
+    // Decode the xcf file
+    
 
 
-	emit notifyProgressDone(this);
-	
-	return KisImageBuilder_RESULT_OK;
+    emit notifyProgressDone(this);
+    
+    return KisImageBuilder_RESULT_OK;
 
 }
 
 KisImageBuilder_Result KisXCFConverter::buildImage(const KURL& uri)
 {
-	if (uri.isEmpty())
-		return KisImageBuilder_RESULT_NO_URI;
+    if (uri.isEmpty())
+        return KisImageBuilder_RESULT_NO_URI;
 
-	if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
-		return KisImageBuilder_RESULT_NOT_EXIST;
-	}
+    if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
+        return KisImageBuilder_RESULT_NOT_EXIST;
+    }
 
-	// We're not set up to handle asynchronous loading at the moment.
-	KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-	
-	QString tmpFile;
+    // We're not set up to handle asynchronous loading at the moment.
+    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
+    
+    QString tmpFile;
 
-	if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-		result = decode(tmpFile);
-		KIO::NetAccess::removeTempFile(tmpFile);
-	}
+    if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
+        result = decode(tmpFile);
+        KIO::NetAccess::removeTempFile(tmpFile);
+    }
 
-	QFile in(tmpFile);
-	if(!in.open(IO_ReadOnly)) {
-		KMessageBox::sorry( 0L, i18n("Cannot open file - please report.") );
-		in.close();
-		return KisImageBuilder_RESULT_NOT_EXIST ;
-	}
+    QFile in(tmpFile);
+    if(!in.open(IO_ReadOnly)) {
+        KMessageBox::sorry( 0L, i18n("Cannot open file - please report.") );
+        in.close();
+        return KisImageBuilder_RESULT_NOT_EXIST ;
+    }
 
-	// Check the header
-	char tag[14];
-	if (in.readBlock(&tag, 14) != 14) return KisImageBuilder_FAILURE;
-	if (strncmp(tag, "
+    // Check the header
+    char tag[14];
+    if (in.readBlock(&tag, 14) != 14) return KisImageBuilder_FAILURE;
+    if (strncmp(tag, "
 
-	return result;
+    return result;
 }
 
 
 KisImageSP KisXCFConverter::image()
 {
-	return m_img;
+    return m_img;
 }
 
 
 KisImageBuilder_Result KisXCFConverter::buildFile(const KURL&, KisImageSP image, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
 {
-	return KisImageBuilder_RESULT_UNSUPPORTED;
+    return KisImageBuilder_RESULT_UNSUPPORTED;
 }
 
 
 void KisXCFConverter::cancel()
 {
-	m_stop = true;
+    m_stop = true;
 }
 
 #include "kis_xcf_converter.moc"

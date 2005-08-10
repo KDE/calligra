@@ -21,14 +21,14 @@
 #include <koFilter.h>
 
 class XCFImport : public KoFilter {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	XCFImport(KoFilter *parent, const char *name, const QStringList&);
-	virtual ~XCFImport();
+    XCFImport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~XCFImport();
 
 public:
-	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 };
 
 #endif // XCFIMPORT_H_

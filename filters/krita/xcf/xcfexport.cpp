@@ -42,35 +42,35 @@ XCFExport::~XCFExport()
 
 KoFilter::ConversionStatus XCFExport::convert(const QCString& from, const QCString& to)
 {
-	kdDebug() << "xcf export! From: " << from << ", To: " << to << "\n";
-	
-	if (from != "application/x-krita")
-		return KoFilter::NotImplemented;
+    kdDebug() << "xcf export! From: " << from << ", To: " << to << "\n";
+    
+    if (from != "application/x-krita")
+        return KoFilter::NotImplemented;
 
-	KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
-	QString filename = m_chain->outputFile();
-	
-	if (!output)
-		return KoFilter::CreationError;
-	
-	
-	if (filename.isEmpty()) return KoFilter::FileNotFound;
+    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    QString filename = m_chain->outputFile();
+    
+    if (!output)
+        return KoFilter::CreationError;
+    
+    
+    if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-	KURL url(filename);
+    KURL url(filename);
 
-	KisImageSP img = output->currentImage();
-	if (!img) return KoFilter::ParsingError;
+    KisImageSP img = output->currentImage();
+    if (!img) return KoFilter::ParsingError;
 
-	KisXCFConverter ib(output, output->undoAdapter());
+    KisXCFConverter ib(output, output->undoAdapter());
 
-	vKisAnnotationSP_it beginIt = img->beginAnnotations();
-	vKisAnnotationSP_it endIt = img->endAnnotations();
-	
-	if (ib.buildFile(url, img, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
-		return KoFilter::OK;
-	}
+    vKisAnnotationSP_it beginIt = img->beginAnnotations();
+    vKisAnnotationSP_it endIt = img->endAnnotations();
+    
+    if (ib.buildFile(url, img, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
+        return KoFilter::OK;
+    }
 
-	return KoFilter::InternalError;
+    return KoFilter::InternalError;
 }
 
 #include <xcfexport.moc>

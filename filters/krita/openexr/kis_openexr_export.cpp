@@ -41,49 +41,49 @@ KisOpenEXRExport::~KisOpenEXRExport()
 
 KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const QCString& to)
 {
-	if (to != "image/x-exr" || from != "application/x-krita") {
-		return KoFilter::NotImplemented;
-	}
+    if (to != "image/x-exr" || from != "application/x-krita") {
+        return KoFilter::NotImplemented;
+    }
 
-	return KoFilter::NotImplemented;
+    return KoFilter::NotImplemented;
 
-	kdDebug() << "Krita exporting to OpenEXR\n";
+    kdDebug() << "Krita exporting to OpenEXR\n";
 
-	// XXX: Add dialog about flattening layers here
+    // XXX: Add dialog about flattening layers here
 
-	KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
-	QString filename = m_chain->outputFile();
-	
-	if (!output)
-		return KoFilter::CreationError;
-	
-	
-	if (filename.isEmpty()) return KoFilter::FileNotFound;
+    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    QString filename = m_chain->outputFile();
+    
+    if (!output)
+        return KoFilter::CreationError;
+    
+    
+    if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-	KURL url(filename);
+    KURL url(filename);
 
-	KisLayerSP dst;
+    KisLayerSP dst;
 
-	KisImageSP img = new KisImage(*output->currentImage());
-	Q_CHECK_PTR(img);
+    KisImageSP img = new KisImage(*output->currentImage());
+    Q_CHECK_PTR(img);
 
-	// Don't store this information in the document's undo adapter
-	bool undo = output->undoAdapter()->undo();
-	output->undoAdapter()->setUndo(false);
+    // Don't store this information in the document's undo adapter
+    bool undo = output->undoAdapter()->undo();
+    output->undoAdapter()->setUndo(false);
 
-	img->flatten();
+    img->flatten();
 
-	dst = img->layer(0);
-	Q_ASSERT(dst);
-	
-	output->undoAdapter()->setUndo(undo);
+    dst = img->layer(0);
+    Q_ASSERT(dst);
+    
+    output->undoAdapter()->setUndo(undo);
 
-	//vKisAnnotationSP_it beginIt = img->beginAnnotations();
-	//vKisAnnotationSP_it endIt = img->endAnnotations();
-	if (1) {
-		return KoFilter::OK;
-	}
-	return KoFilter::InternalError;
+    //vKisAnnotationSP_it beginIt = img->beginAnnotations();
+    //vKisAnnotationSP_it endIt = img->endAnnotations();
+    if (1) {
+        return KoFilter::OK;
+    }
+    return KoFilter::InternalError;
 }
 
 #include "kis_openexr_export.moc"
