@@ -1,3 +1,11 @@
+2005-08-10  Inge Wallin  <ingwa@dhcp-254-153.lkpg.cendio.se>
+
+	Fix an old FIXME: Get rid of KChartPart::m_bLoading;
+	* kchart_part.{h,cc} (m_bLoading): removed
+	(isLoading): removed
+
+	Some code cleaning (improved comments).
+
 2005-05-10  Inge Wallin  <inge@lysator.liu.se>
 	
 	More work on bug 105356:
