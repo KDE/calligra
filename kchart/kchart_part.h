@@ -74,8 +74,6 @@ public:
 				     KoStore *store );
     virtual bool          saveOasis(KoStore*, KoXmlWriter*);
 
-    bool  m_bLoading; // FIXME: Kalle: get rid of that one :)
-    bool  isLoading()        const             { return m_bLoading;        }
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
     virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 

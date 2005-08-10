@@ -49,7 +49,6 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     m_params( 0 ),
     m_parentWidget( parentWidget )
 {
-    m_bLoading = false;
     kdDebug(35001) << "Constructor started!" << endl;
 
     setInstance( KChartFactory::global(), false );
@@ -218,11 +217,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 			       bool transparent,
 			       double /*zoomX*/, double /*zoomY*/ )
 {
-    if (isLoading()) {
-        kdDebug(35001) << "Loading... Do not paint!!!..." << endl;
-        return;
-    }
-
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
