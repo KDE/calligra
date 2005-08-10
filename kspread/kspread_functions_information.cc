@@ -85,6 +85,7 @@ void KSpreadRegisterInformationFunctions()
   f = new Function ("ISODD", func_isodd);
   repo->add (f);
   f = new Function ("ISREF", func_isref);
+  f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("ISTEXT", func_istext);
   repo->add (f);
@@ -176,12 +177,13 @@ KSpreadValue func_istext (valVector args, ValueCalc *, FuncExtra *)
 }
 
 // Function: ISREF
-KSpreadValue func_isref (valVector /*args*/, ValueCalc */*calc*/, FuncExtra *)
+KSpreadValue func_isref (valVector, ValueCalc */*calc*/, FuncExtra *e)
 {
-  // TODO: figure out how this thingie could be done
-  // (Tomas) Do we need this at all ? I can't see any reason for it.
-  kdDebug() << "ISREF is only a stub implementation !!!" << endl;
-  return KSpreadValue (false);
+  // no reference ?
+  if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    return KSpreadValue (false);
+  // if we are here, it is a reference (cell/range)
+  return KSpreadValue (true);
 }
 
 // Function: ISNOTTEXT
