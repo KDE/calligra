@@ -392,6 +392,7 @@ Py::Object PythonExtension::_call_(const Py::Tuple& args)
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
+        kdDebug() << "EXCEPTION in PythonExtension::_call_" << endl;
         throw Py::RuntimeError( e->toString().latin1() );
     }
 

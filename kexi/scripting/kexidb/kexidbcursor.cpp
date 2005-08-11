@@ -90,9 +90,9 @@ const QString KexiDBCursor::getDescription() const
 ::KexiDB::Cursor* KexiDBCursor::cursor()
 {
     if(! m_cursor)
-        throw new Kross::Api::Exception(QString("KexiDB::Cursor is NULL."));
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Cursor is NULL.")) );
     if(m_cursor->error())
-        throw new Kross::Api::Exception(QString("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg()));
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg())) );
     return m_cursor;
 }
 

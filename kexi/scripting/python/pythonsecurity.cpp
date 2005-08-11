@@ -94,7 +94,7 @@ void PythonSecurity::initRestrictedPython()
 
     }
     catch(Py::Exception& e) {
-        throw new Kross::Api::Exception(QString("Failed to initialize PythonSecurity module: %1").arg(Py::value(e).as_string().c_str()));
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize PythonSecurity module: %1").arg(Py::value(e).as_string().c_str())) );
     }
 }
 
@@ -116,12 +116,12 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
 
         PyObject* func = PyDict_GetItemString(m_pymodule->getDict().ptr(), "compile_restricted");
         if(! func)
-            throw new Kross::Api::Exception(QString("No such function '%1'.").arg("compile_restricted"));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such function '%1'.").arg("compile_restricted")) );
 
         Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
 
         if(! funcobject.isCallable())
-            throw new Kross::Api::Exception(QString("Function '%1' is not callable.").arg("compile_restricted"));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' is not callable.").arg("compile_restricted")) );
 
         Py::Tuple args(3);
         args[0] = Py::String(source.latin1());
@@ -161,7 +161,7 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
     }
     catch(Py::Exception& e) {
         Py::Object errobj = Py::value(e);
-        throw new Kross::Api::Exception(QString("Function '%1' failed with python exception: %2").arg("compile_restricted").arg(errobj.as_string().c_str()));
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' failed with python exception: %2").arg("compile_restricted").arg(errobj.as_string().c_str())) );
     }
 }
 

@@ -142,7 +142,7 @@ QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
     int startpos = signature.find("(");
     int endpos = signature.findRev(")");
     if(startpos < 0 || startpos > endpos)
-        throw new Exception(QString("Invalid Qt signal or slot signature '%1'").arg(signature));
+        throw Exception::Ptr( new Exception(QString("Invalid Qt signal or slot signature '%1'").arg(signature)) );
 
     //QString sig = signature.left(startpos);
     QString params = signature.mid(startpos + 1, endpos - startpos - 1);
@@ -168,7 +168,7 @@ QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
         }
         //TODO handle int, long, char*, QStringList, etc.
         else {
-            throw new Exception(QString("Unknown Qt signal or slot argument '%1' in signature '%2'.").arg(paramlist[i]).arg(signature));
+            throw Exception::Ptr( new Exception(QString("Unknown Qt signal or slot argument '%1' in signature '%2'.").arg(paramlist[i]).arg(signature)) );
         }
     }
 
@@ -230,7 +230,7 @@ Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
     QString name = Kross::Api::Variant::toString(args->item(0));
     int slotid = m_object->metaObject()->findSlot(name.latin1(), false);
     if(slotid < 0)
-        throw new Exception(QString("No such slot '%1'.").arg(name));
+        throw Exception::Ptr( new Exception(QString("No such slot '%1'.").arg(name)) );
 
     QUObject* uo = QtObject::toQUObject(name, args);
     m_object->qt_invoke(slotid, uo);
@@ -260,7 +260,7 @@ Kross::Api::Object::Ptr QtObject::emitSignal(Kross::Api::List::Ptr args)
     QString name = Kross::Api::Variant::toString(args->item(0));
     int signalid = m_object->metaObject()->findSignal(name.latin1(), false);
     if(signalid < 0)
-        throw new Exception(QString("No such signal '%1'.").arg(name));
+        throw Exception::Ptr( new Exception(QString("No such signal '%1'.").arg(name)) );
     m_object->qt_invoke(signalid, 0); //TODO convert Kross::Api::List::Ptr => QUObject*
     return 0;
 }
@@ -274,7 +274,7 @@ Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
     QtObject* obj = Kross::Api::Object::fromObject<Kross::Api::QtObject>(args->item(1));
     QObject* o = obj->getObject();
     if(! o)
-        throw new Exception(QString("No such QObject receiver in '%1'.").arg(obj->getName()));
+        throw Exception::Ptr( new Exception(QString("No such QObject receiver in '%1'.").arg(obj->getName())) );
 
     QString slotname = Kross::Api::Variant::toString(args->item(2));
     QString slotsignatur = QString("1%1").arg(slotname);

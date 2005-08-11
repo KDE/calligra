@@ -123,6 +123,6 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
     }
 
     // If there exists no such object throw an exception.
-    throw new Exception(QString("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
+    throw Exception::Ptr( new Exception(QString("Object '%1' has no function named '%2'.").arg(getName()).arg(name)) );
 }
 

@@ -98,7 +98,7 @@ void PythonScript::initialize()
         PyObject* pymod = PyModule_New((char*)m_scriptcontainer->getName().latin1());
         d->m_module = new Py::Module(pymod, true);
         if(! d->m_module)
-            throw new Kross::Api::Exception(QString("Failed to initialize local module context for script '%1'").arg( m_scriptcontainer->getName() ));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize local module context for script '%1'").arg( m_scriptcontainer->getName() )) );
 
 #ifdef KROSS_PYTHON_SCRIPT_INIT_DEBUG
         kdDebug() << QString("PythonScript::initialize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
@@ -169,7 +169,7 @@ Py_XDECREF(pyrun); // free the reference.
         d->m_code = new Py::Object(code, true);
     }
     catch(Py::Exception& e) {
-        throw new Kross::Api::Exception( QString("Failed to compile python code: %1").arg(Py::value(e).as_string().c_str()) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( QString("Failed to compile python code: %1").arg(Py::value(e).as_string().c_str()) ) );
     }
 }
 
@@ -339,13 +339,13 @@ Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::A
         PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.latin1());
 
         if( (! d->m_functions.contains(name)) || (! func) )
-            throw new Kross::Api::Exception(QString("No such function '%1'.").arg(name));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such function '%1'.").arg(name)) );
 
         Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
 
         // Check if the object is really a function and therefore callable.
         if(! funcobject.isCallable())
-            throw new Kross::Api::Exception(QString("Function is not callable."));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function is not callable.")) );
 
         // Call the function.
         Py::Object result = funcobject.apply(PythonExtension::toPyTuple(args));
@@ -398,13 +398,13 @@ Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
         // Try to determinate the class.
         PyObject* pyclass = PyDict_GetItemString(moduledict.ptr(), name.latin1());
         if( (! d->m_classes.contains(name)) || (! pyclass) )
-            throw new Kross::Api::Exception(QString("No such class '%1'.").arg(name));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such class '%1'.").arg(name)) );
 
         //PyClass_Check( vt.second.ptr() ))
         //PyObject *aclarg = Py_BuildValue("(s)", rs.as_string().c_str());
         PyObject *pyobj = PyInstance_New(pyclass, 0, 0);//aclarg, 0);
         if(! pyobj)
-            throw new Kross::Api::Exception(QString("Failed to create instance of class '%1'.").arg(name));
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to create instance of class '%1'.").arg(name)) );
 
         Py::Object classobject(pyobj, true);
 
@@ -415,7 +415,7 @@ Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
     }
     catch(Py::Exception& e) {
         Py::Object errobj = Py::value(e);
-        setException( new Kross::Api::Exception(errobj.as_string().c_str()) );
+        setException( Kross::Api::Exception::Ptr( new Kross::Api::Exception(errobj.as_string().c_str()) ) );
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);
