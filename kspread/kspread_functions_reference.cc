@@ -21,12 +21,6 @@
 
 // built-in reference functions
 
-/*
-All these functions are temporarily disabled.
-Reasons are the same as with the database functions.
-Not all of these functions require range info, but almost all do.
-*/
-
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
 #include "kspread_util.h"
