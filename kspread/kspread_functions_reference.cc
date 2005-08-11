@@ -27,7 +27,9 @@ Reasons are the same as with the database functions.
 Not all of these functions require range info, but almost all do.
 */
 
+#include "kspread_cell.h"
 #include "kspread_sheet.h"
+#include "kspread_util.h"
 #include "kspread_value.h"
 
 #include "functions.h"
@@ -58,6 +60,7 @@ void KSpreadRegisterReferenceFunctions()
   repo->add (f);
   f = new Function ("AREAS",    func_areas);
   f->setParamCount (1);
+  f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("CHOOSE",   func_choose);
   f->setParamCount (2, -1);
@@ -72,6 +75,8 @@ void KSpreadRegisterReferenceFunctions()
   f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("INDIRECT", func_indirect);
+  f->setParamCount (1, 2);
+  f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("LOOKUP",   func_lookup);
   f->setParamCount (3);
@@ -90,69 +95,19 @@ void KSpreadRegisterReferenceFunctions()
 // Function: ADDRESS
 KSpreadValue func_address (valVector args, ValueCalc *calc, FuncExtra *)
 {
-#if 0
-  QValueList<KSValue::Ptr> & args = context.value()->listValue();
   bool r1c1 = false;
   QString sheetName;
   int absNum = 1;
-
-  if ( !KSUtil::checkArgumentsCount( context, 5, "ADDRESS", false ) )
-  {
-    if ( !KSUtil::checkArgumentsCount( context, 4, "ADDRESS", false ) )
-    {
-      r1c1 = false;
-
-      if ( !KSUtil::checkArgumentsCount( context, 3, "ADDRESS", false ) )
-      {
-        absNum = 1;
-
-        if ( !KSUtil::checkArgumentsCount( context, 2, "ADDRESS", true ) )
-          return false;
-      }
-      else
-      {
-        if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-          return false;
-
-        absNum = args[2]->intValue();
-      }
-    }
-    else
-    {
-      if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-        return false;
-
-      if ( !KSUtil::checkType( context, args[3], KSValue::BoolType, true ) )
-        return false;
-
-      absNum = args[2]->intValue();
-      r1c1   = !args[3]->boolValue();
-    }
-  }
-  else
-  {
-    if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[3], KSValue::BoolType, true ) )
-      return false;
-
-    if ( !KSUtil::checkType( context, args[4], KSValue::StringType, true ) )
-      return false;
-
-    absNum    = args[2]->intValue();
-    r1c1      = !args[3]->boolValue();
-    sheetName = args[4]->stringValue();
-  }
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-    return false;
+  if (args.count() > 2)
+    absNum = calc->conv()->asInteger (args[2]).asInteger();
+  if (args.count() > 3)
+    r1c1 = !(calc->conv()->asBoolean (args[3]).asBoolean());
+  if (args.count() == 5)
+    sheetName = calc->conv()->asString (args[4]).asString();
 
   QString result;
-  int row = args[0]->intValue();
-  int col = args[1]->intValue();
+  int row = calc->conv()->asInteger (args[0]).asInteger();
+  int col = calc->conv()->asInteger (args[1]).asInteger();
 
   if ( !sheetName.isEmpty() )
   {
@@ -208,14 +163,10 @@ KSpreadValue func_address (valVector args, ValueCalc *calc, FuncExtra *)
 
     result += QString::number( row );
   }
-
-  context.setValue( new KSValue( result ) );
-
-  return true;
-#endif
+  
+  return KSpreadValue (result);
 }
 
-#if 0
 bool checkRef( QString const & ref )
 {
   KSpreadRange r( ref );
@@ -227,27 +178,20 @@ bool checkRef( QString const & ref )
   }
   return true;
 }
-#endif
 
 // Function: AREAS
-KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *)
+KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
 {
-#if 0
-  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
-  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
-
-  if ( extra.count() > 0 )
-  {
-    context.setValue( new KSValue( (int) extra.count() ) );
-    return true;
+  if (e) {
+    if ((e->ranges[0].col1 != -1) && (e->ranges[0].row1 != -1) &&
+        (e->ranges[0].col2 != -1) && (e->ranges[0].row2 != -1))
+      // we have a range reference - return 1
+      return 1;
   }
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "AREAS", true ) )
-    return false;
-
-  QString s = args[0]->stringValue();
+  
+  QString s = calc->conv()->asString (args[0]).asString();
   if ( s[0] != '(' || s[s.length() - 1] != ')' )
-    return false;
+    return KSpreadValue::errorVALUE();
 
   int l = s.length();
 
@@ -258,7 +202,7 @@ KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *)
     if ( s[i] == ',' || s[i] == ')' )
     {
       if ( !checkRef( ref ) )
-        return false;
+        return KSpreadValue::errorVALUE();
       else
       {
         ++num;
@@ -269,9 +213,7 @@ KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *)
       ref += s[i];
   }
 
-  context.setValue( new KSValue( num ) );
-  return true;
-#endif
+  return KSpreadValue (num);
 }
 
 // Function: CHOOSE
@@ -313,7 +255,7 @@ KSpreadValue func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: COLUMN
-KSpreadValue func_column (valVector args, ValueCalc *calc, FuncExtra *e)
+KSpreadValue func_column (valVector args, ValueCalc *, FuncExtra *e)
 {
   int col = e ? e->mycol : 0;
   if (e && args.count())
@@ -324,7 +266,7 @@ KSpreadValue func_column (valVector args, ValueCalc *calc, FuncExtra *e)
 }
 
 // Function: ROW
-KSpreadValue func_row (valVector args, ValueCalc *calc, FuncExtra *e)
+KSpreadValue func_row (valVector args, ValueCalc *, FuncExtra *e)
 {
   int row = e ? e->myrow : 0;
   if (e && args.count())
@@ -335,7 +277,7 @@ KSpreadValue func_row (valVector args, ValueCalc *calc, FuncExtra *e)
 }
 
 // Function: COLUMNS
-KSpreadValue func_columns (valVector args, ValueCalc *calc, FuncExtra *e)
+KSpreadValue func_columns (valVector, ValueCalc *, FuncExtra *e)
 {
   int col1 = e->ranges[0].col1;
   int col2 = e->ranges[0].col2;
@@ -345,7 +287,7 @@ KSpreadValue func_columns (valVector args, ValueCalc *calc, FuncExtra *e)
 }
 
 // Function: ROWS
-KSpreadValue func_rows (valVector args, ValueCalc *calc, FuncExtra *e)
+KSpreadValue func_rows (valVector, ValueCalc *, FuncExtra *e)
 {
   int row1 = e->ranges[0].row1;
   int row2 = e->ranges[0].row2;
@@ -356,39 +298,15 @@ KSpreadValue func_rows (valVector args, ValueCalc *calc, FuncExtra *e)
 
 
 // Function: INDIRECT
-KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *)
+KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
 {
-#if 0
-  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
-  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "INDIRECT", true ) )
-    return false;
-
   bool r1c1 = false;
-  if ( !KSUtil::checkArgumentsCount( context, 2, "INDIRECT", false ) )
-    r1c1 = false;
-  else
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
-      return false;
+  QString ref = calc->conv()->asString (args[4]).asString();
+  if (args.count() == 2)
+    r1c1 = !(calc->conv()->asBoolean (args[1]).asBoolean());
 
-    r1c1 = !args[1]->boolValue();
-  }
-
-  QString ref;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-  {
-    if ( !KSUtil::checkType( context, extra[0], KSValue::StringType, true ) )
-      return false;
-    ref = extra[0]->stringValue();
-  }
-  else
-    ref = args[0]->stringValue();
-
-  if ( ref.isEmpty() )
-    return false;
+  if (ref.isEmpty())
+    return KSpreadValue::errorVALUE();
 
   if ( r1c1 )
   {
@@ -396,36 +314,14 @@ KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *)
     ref = ref;
   }
 
-  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
-
-  KSpreadPoint p( ref, map, sheet );
+  KSpreadPoint p (ref, e->sheet->workbook(), e->sheet);
 
   if ( !p.isValid() )
-    return false;
+    return KSpreadValue::errorVALUE();
 
   KSpreadCell * cell = p.cell();
-  if ( cell )
-  {
-    if ( cell->value().isString() )
-      context.setValue( new KSValue( cell->value().asString() ) );
-    else if ( cell->value().isNumber() )
-      context.setValue( new KSValue( cell->value().asFloat() ) );
-    else if ( cell->value().isBoolean() )
-      context.setValue( new KSValue( cell->value().asBoolean() ) );
-    else if ( cell->isDate() )
-      context.setValue( new KSValue( cell->value().asDate() ) );
-    else if ( cell->isTime() )
-      context.setValue( new KSValue( cell->value().asTime() ) );
-    else if ( cell->value().isEmpty() || cell->isEmpty() || cell->isDefault() )
-      context.setValue( new KSValue( (int) 0 ) );
-    else
-      context.setValue( new KSValue( cell->strOutText() ) );
-
-    return true;
-  }
-
-  return false;
-#endif
+  if (cell)
+    return cell->value();
+  return KSpreadValue::errorVALUE();
 }
 
