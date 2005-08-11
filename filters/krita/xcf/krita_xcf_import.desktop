@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita XCF Import Filter
+Name[es]=Filtro de importación a XCF de Krita
+Name[ga]=Scagaire Iompórtála XCF Krita
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf-gimp
 X-KDE-Weight=1
