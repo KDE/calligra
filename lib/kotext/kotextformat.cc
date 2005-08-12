@@ -258,7 +258,7 @@ static void importTextPosition( const QString& text_position, double fontSize, K
             textPos.truncate( textPos.length() - 1 );
             double val = textPos.toDouble();
             offset = qRound( fontSize * val / 100.0 );
-	    value = KoTextFormat::AlignCustom;
+            value = KoTextFormat::AlignCustom;
         }
         else if ( textPos == "super" )
             value = KoTextFormat::AlignSuperScript;
@@ -566,16 +566,19 @@ void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context ) const
         gs.addProperty( "style:text-line-through-style", "none", tt );
     }
 
-    QString textPos;
-    if ( d->m_offsetFromBaseLine != 0 )
-        textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeFloat() ) + '%';
-    else if ( va == AlignSuperScript ) textPos = "super";
-    else if ( va == AlignSubScript ) textPos = "sub";
-    else textPos = "0%";
-    textPos += ' ';
-    textPos += QString::number( d->m_relativeTextSize * 100 );
-    textPos += '%';
-    gs.addProperty( "style:text-position", textPos, tt );
+    if ( va != AlignNormal )
+    {
+        QString textPos;
+        if ( d->m_offsetFromBaseLine != 0 )
+            textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeFloat() ) + '%';
+        else if ( va == AlignSuperScript ) textPos = "super";
+        else if ( va == AlignSubScript ) textPos = "sub";
+        else textPos = "0%";
+        textPos += ' ';
+        textPos += QString::number( d->m_relativeTextSize * 100 );
+        textPos += '%';
+        gs.addProperty( "style:text-position", textPos, tt );
+    }
 
     if ( m_attributeFont == ATT_SMALL_CAPS )
         gs.addProperty( "fo:font-variant", "small-caps", tt );
