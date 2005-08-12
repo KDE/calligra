@@ -49,6 +49,7 @@ magic_DATA = kexi.magic
 
 mimetypedir = $(kde_mimedir)/application
 mimetype_DATA = x-kexiproject-sqlite.desktop \
+x-kexi-connectiondata.desktop \
 x-kexiproject-sqlite2.desktop \
 x-kexiproject-sqlite3.desktop \
 x-kexiproject-shortcut.desktop
