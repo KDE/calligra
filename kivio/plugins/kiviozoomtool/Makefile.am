@@ -1,5 +1,5 @@
 SUBDIRS = zoom_pics
-lib_LTLIBRARIES =libkiviozoomtool.la
+kde_module_LTLIBRARIES =libkiviozoomtool.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 	-I$(top_builddir)/kivio/kiviopart/config \

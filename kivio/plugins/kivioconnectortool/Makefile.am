@@ -1,5 +1,5 @@
 SUBDIRS = straight_connector .
-lib_LTLIBRARIES =libkivioconnectortool.la
+kde_module_LTLIBRARIES =libkivioconnectortool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
