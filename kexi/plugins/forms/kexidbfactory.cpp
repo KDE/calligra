@@ -339,6 +339,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["Top"] = i18n("Label Position", "Top");
 	m_propValDesc["NoLabel"] = i18n("Label Position", "No Label");
 
+	m_propDesc["sizeInternal"] = i18n("Size");
+
 #ifdef KEXI_NO_UNFINISHED
 	//we don't want not-fully implemented/usable classes:
 	hideClass("KexiPictureLabel");
@@ -578,12 +580,15 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 			&& property!="resizePolicy"
 			&& property!="focusPolicy";
 	else if(classname == "KexiDBForm")
-		ok = property!="iconText";
+		ok = property!="iconText"
+			&& property!="geometry" /*nonsense for toplevel widget; for size, "size" property is used*/;
 	else if(classname == "KexiLabel")
 		ok = property!="focusPolicy";
 	else if(classname == "KexiDBFieldEdit") {
 		if (!isTopLevel && property=="caption")
 			return true; //force
+		if (property=="fieldTypeInternal" || property=="fieldCaptionInternal")
+			return false;
 	}
 
 	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);

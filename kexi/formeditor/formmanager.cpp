@@ -106,6 +106,8 @@ FormManager::FormManager(QObject *parent,
    , m_uiCodeDialog(0)
    , m_options(options)
 #endif
+	 , m_objectBlockingPropertyEditorUpdating(0)
+   , m_isRedoing(false)
 {
 	KGlobal::locale()->insertCatalogue("kformdesigner");
 
@@ -242,7 +244,9 @@ FormManager::redo()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
+	m_isRedoing = true;
 	activeForm()->commandHistory()->redo();
+	m_isRedoing = false;
 }
 
 void
@@ -629,8 +633,8 @@ FormManager::isTopLevel(QWidget *w)
 	if(!activeForm() || !activeForm()->objectTree())
 		return false;
 
-	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "
-		<< activeForm()->objectTree()->lookup(w->name())<< endl;
+//	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "
+//		<< activeForm()->objectTree()->lookup(w->name())<< endl;
 
 	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
 	if(!item)
@@ -1084,10 +1088,31 @@ FormManager::breakLayout()
 void
 FormManager::showPropertySet(WidgetPropertySet *propSet, bool forceReload)
 {
+	if (m_objectBlockingPropertyEditorUpdating)
+		return;
+
 	if(m_editor)
 		m_editor->changeSet(propSet ? propSet->set() : 0);
 
 	emit propertySetSwitched(propSet ? propSet->set(): 0, forceReload);
+}
+
+void
+FormManager::blockPropertyEditorUpdating(void *blockingObject)
+{
+	if (!blockingObject || m_objectBlockingPropertyEditorUpdating)
+		return;
+	m_objectBlockingPropertyEditorUpdating = blockingObject;
+}
+
+void
+FormManager::unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *propSet)
+{
+	if (!blockingObject || m_objectBlockingPropertyEditorUpdating!=blockingObject)
+		return;
+
+	m_objectBlockingPropertyEditorUpdating = 0;
+	showPropertySet(propSet, true/*forceReload*/);
 }
 
 void

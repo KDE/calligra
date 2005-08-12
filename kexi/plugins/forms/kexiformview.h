@@ -76,11 +76,31 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		/*! Reimplemented to update resize policy. */
 		virtual void show();
 
+		/*! Inserts autofields onto the form at \a pos position.
+		 \a sourceMimeType can be "kexi/table" or "kexi/query", 
+		 \a sourceName is a name of a table or query, \a fields is a list of fields to insert (one or more)
+		 Fields are inserted using standard KFormDesigner::InsertWidgetCommand framework, 
+		 so undo/redo is available for this operation.
+
+		 If multiple fields are provided, they will be aligned vertically.
+		 If \a pos is QPoint(-1,-1) (the default), position is computed automatically
+		 based on a position last inserted field using this method. 
+		 If this method has not been called yet, position of QPoint(40, 40) will be set.
+
+		 Called by:
+		 - slotHandleDropEvent() when field(s) are dropped from the data source pane onto the form
+		 - KexiFormManager is a used clicked "Insert fields" button on the data source pane. */
+		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+			const QStringList& fields, const QPoint& pos = QPoint(-1,-1));
+
 	protected slots:
 		void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 		void slotFocus(bool in);
 		void slotHandleDragMoveEvent(QDragMoveEvent* e);
+
+		//! Handles field(s) dropping from the data source pane onto the form
+		//! @see insertAutoFields()
 		void slotHandleDropEvent(QDropEvent* e);
 
 //moved to formmanager		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
@@ -165,8 +185,16 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		 We will resize form widget itself later (in resizeEvent()). */
 		int m_delayedFormContentsResizeOnShow;
 
-		//! @internal Used in setFocusInternal()
+		//! Used in setFocusInternal()
 		QWidget *m_setFocusInternalOnce;
+
+	
+		/*! Stores geometry of widget recently inserted using insertAutoFields() method.
+		 having this information, we'r eable to compute position for a newly 
+		 inserted widget in insertAutoFields() is such position has not been specified.
+		 (the position is specified when a widget is inserted with mouse drag & dropping
+		 but not with clicking of 'Insert fields' button from Data Source pane) */
+		QRect m_widgetGeometryForRecentInsertAutoFields;
 };
 
 #endif

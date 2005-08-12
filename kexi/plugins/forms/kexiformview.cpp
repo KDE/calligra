@@ -845,71 +845,145 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
 		QStringList fields;
 		if (!KexiFieldDrag::decodeMultiple( e, sourceMimeType, sourceName, fields ))
 			return;
+		insertAutoFields(sourceMimeType, sourceName, fields, e->pos());
+	}
+}
 
-		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-		KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.latin1(), sourceMimeType=="kexi/table");
-		if (!tableOrQuery.table() && !tableOrQuery.query()) {
-			kdWarning() << "KexiFormView::slotHandleDropEvent(): no such table/query \""
-				<< sourceName << "\"" << endl;
-			return;
+void
+KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+	const QStringList& fields, const QPoint& _pos)
+{
+	if (fields.isEmpty())
+		return;
+
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+	KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.latin1(), sourceMimeType=="kexi/table");
+	if (!tableOrQuery.table() && !tableOrQuery.query()) {
+		kdWarning() << "KexiFormView::slotHandleDropEvent(): no such table/query \""
+			<< sourceName << "\"" << endl;
+		return;
+	}
+
+	QPoint pos(_pos);
+	//if pos is not specified, compute a new position:
+	if (pos==QPoint(-1,-1)) {
+		if (m_widgetGeometryForRecentInsertAutoFields.isValid()) {
+			pos = m_widgetGeometryForRecentInsertAutoFields.bottomLeft() 
+				+ QPoint(0,form()->gridSize());
 		}
+		else {
+			pos = QPoint(40, 40); //start here
+		}
+	}
 
-		QPoint pos = e->pos();
 //! todo unnamed query colums are not supported
 
 //		KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
-		KFormDesigner::WidgetList widgetsToSelect;
-		foreach( QStringList::ConstIterator, it, fields ) {
-			KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
-			if (!column) {
-				kdWarning() << "KexiFormView::slotHandleDropEvent(): no such field \""
-					<< *it << "\" in table/query \"" << sourceName << "\"" << endl;
-				continue;
-			}
-	//! todo add autolabel using field's caption or name
-			KFormDesigner::InsertWidgetCommand *insertCmd;
-			form()->addCommand(
-				insertCmd = new KFormDesigner::InsertWidgetCommand(form()->toplevelContainer(),
-		//! todo this is hardcoded!
-					"KexiDBFieldEdit", //"KexiDBLineEdit", 
-		//! todo this name can be invalid for expressions: if so, fall back to a default class' prefix!
-					pos, column->aliasOrName()),
-				true/*exec*/);
-			KFormDesigner::ObjectTreeItem *newWidgetItem 
-				= form()->objectTree()->dict()->find(insertCmd->widgetName());
-			QWidget* newWidget = newWidgetItem ? newWidgetItem->widget() : 0;
-			widgetsToSelect.append(newWidget);
-//			KexiFormDataItemInterface *newWidgetIface = dynamic_cast<KexiFormDataItemInterface*>(newWidget);
-//			if (newWidgetIface) {
-	//			newWidgetIface->setDataSourceMimeType( sourceMimeType.latin1() );
-		//		newWidgetIface->setDataSource( column->aliasOrName() );
-			//}
-//			if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
-			QMap<QCString, QVariant> propValues;
-			propValues.insert("dataSource", column->aliasOrName());
-			propValues.insert("fieldTypeInternal", (int)column->field->type());
-			propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
-//			propValues.insert("labelCaption", column->captionOrAliasOrName());
-//			propValues.insert("widgetType", 
-//				(int)KexiDBFieldEdit::widgetTypeForFieldType(column->field->type()));
-			//propValues.insert("dataSourceMimeType", sourceMimeType.latin1());
-			formPart()->manager()->propertySet()->setPropertyValueInDesignMode(
-				newWidget, propValues, i18n("Set \"%1\" widget's data source to \"%1\"")
-				.arg(newWidget->name()).arg(column->aliasOrName()));
-	//		}
-			//resize again because when autofield's type changed what can lead to changed sizeHint() 
-			newWidget->resize(newWidget->sizeHint());
+	KFormDesigner::WidgetList widgetsToSelect;
+	KFormDesigner::CommandGroup *group = new KFormDesigner::CommandGroup(
+		fields.count()==1 ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets").arg(fields.count()),
+		form()->manager()->propertySet()
+	);
 
-			if (newWidget) {//move position down for next widget
-				pos.setY( pos.y() + newWidget->height() + 4);
-			}
+	foreach( QStringList::ConstIterator, it, fields ) {
+		KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
+		if (!column) {
+			kdWarning() << "KexiFormView::slotHandleDropEvent(): no such field \""
+				<< *it << "\" in table/query \"" << sourceName << "\"" << endl;
+			continue;
 		}
-		//select all inserted widgets, if multiple
-		if (widgetsToSelect.count()>1) {
-			form()->setSelectedWidget(0);
-			foreach_list (KFormDesigner::WidgetListIterator, it, widgetsToSelect)
-				form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+//! todo add autolabel using field's caption or name
+		KFormDesigner::InsertWidgetCommand *insertCmd
+			= new KFormDesigner::InsertWidgetCommand(form()->toplevelContainer(),
+	//! todo this is hardcoded!
+				"KexiDBFieldEdit",
+	//! todo this name can be invalid for expressions: if so, fall back to a default class' prefix!
+			pos, column->aliasOrName()
+		);
+		insertCmd->execute();
+		group->addCommand(insertCmd, false/*don't exec twice*/);
+
+		KFormDesigner::ObjectTreeItem *newWidgetItem 
+			= form()->objectTree()->dict()->find(insertCmd->widgetName());
+		KexiDBFieldEdit* newWidget 
+			= newWidgetItem ? dynamic_cast<KexiDBFieldEdit*>(newWidgetItem->widget()) : 0;
+		widgetsToSelect.append(newWidget);
+//#if 0
+		KFormDesigner::CommandGroup *subGroup 
+			= new KFormDesigner::CommandGroup("", form()->manager()->propertySet());
+		QMap<QCString, QVariant> propValues;
+		propValues.insert("dataSource", column->aliasOrName());
+		propValues.insert("fieldTypeInternal", (int)column->field->type());
+		propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
+		formPart()->manager()->propertySet()->createPropertyCommandsInDesignMode(
+			newWidget, propValues, subGroup, false/*!addToActiveForm*/, 
+			true /*!execFlagForSubCommands*/);
+		subGroup->execute();
+		group->addCommand( subGroup, false/*will not be executed on CommandGroup::execute()*/ );
+
+//#endif
+		//set data source and caption
+		//-we don't need to use PropertyCommand here beacause we don't need UNDO 
+		// for these single commands
+//		newWidget->setDataSource(column->aliasOrName());
+//		newWidget->setFieldTypeInternal((int)column->field->type());
+//		newWidget->setFieldCaptionInternal(column->captionOrAliasOrName());
+		//resize again because autofield's type changed what can lead to changed sizeHint() 
+//		newWidget->resize(newWidget->sizeHint());
+		KFormDesigner::WidgetList list;
+		list.append(newWidget);
+		KFormDesigner::AdjustSizeCommand *adjustCommand 
+			=	new KFormDesigner::AdjustSizeCommand(KFormDesigner::AdjustSizeCommand::SizeToFit,
+				list, form());
+		adjustCommand->execute();
+		group->addCommand( adjustCommand,
+			false/*will not be executed on CommandGroup::execute()*/
+		);
+
+		if (newWidget) {//move position down for next widget
+			pos.setY( pos.y() + newWidget->height() + form()->gridSize());
 		}
+	}
+	if (widgetsToSelect.last()) {
+		//resize form if needed
+		QRect oldFormRect( m_dbform->geometry() );
+		QRect newFormRect( oldFormRect );
+		newFormRect.setWidth(QMAX(m_dbform->width(), widgetsToSelect.last()->geometry().right()+1));
+		newFormRect.setHeight(QMAX(m_dbform->height(), widgetsToSelect.last()->geometry().bottom()+1));
+		if (newFormRect != oldFormRect) {
+			//1. resize by hand
+			m_dbform->setGeometry( newFormRect );
+			//2. store information about resize
+			KFormDesigner::PropertyCommand *resizeFormCommand = new KFormDesigner::PropertyCommand(
+				formPart()->manager()->propertySet(), m_dbform->name(),
+				oldFormRect, newFormRect, "geometry"); 
+			group->addCommand(resizeFormCommand, true/*will be executed on CommandGroup::execute()*/);
+		}
+
+		//remember geometry of the last inserted widget
+		m_widgetGeometryForRecentInsertAutoFields = widgetsToSelect.last()->geometry();
+	}
+
+	//eventually, add entire command group to active form
+	form()->addCommand( group, true/*exec*/ );
+
+//	group->debug();
+
+	//enable proper REDO usage
+	group->resetAllowExecuteFlags();
+
+	m_scrollView->repaint();
+	m_scrollView->viewport()->repaint();
+	m_scrollView->repaintContents();
+	m_scrollView->updateContents();
+	m_scrollView->clipper()->repaint();
+	m_scrollView->refreshContentsSize();
+
+	//select all inserted widgets, if multiple
+	if (widgetsToSelect.count()>1) {
+		form()->setSelectedWidget(0);
+		foreach_list (KFormDesigner::WidgetListIterator, it, widgetsToSelect)
+			form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
 	}
 }
 

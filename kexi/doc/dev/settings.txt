@@ -56,7 +56,7 @@ TODO:-appendColonToAutoLabels [bool] (true by default; when true, colon characte
 TODO:-makeFirstCharacterUpperCaseInAutoLabels [bool] (true by default; when true, first character 
                                       in autolabel text is converted to upper case. 
                                       Usable when no field's title is provided)
-
+TODO:-gridSize [uint] (10 by default)
 Group: NewFormDefaults
 TODO:-styleName [string]
 TODO:-autoTabStop [bool]

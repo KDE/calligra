@@ -843,7 +843,8 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname,
 	bool ok = true;
 	if(classname == "FormWidgetBase")
 	{
-		if(property == "iconText")
+		if(property == "iconText" 
+			|| property == "geometry" /*nonsense for toplevel widget*/)
 			return false;
 	}
 	else if (classname == "CustomWidget")

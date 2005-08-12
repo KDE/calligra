@@ -71,20 +71,25 @@ KAction* KexiFormManager::action( const char* name )
 	return formViewWidget->parentDialog()->mainWin()->actionCollection()->action(n);
 }
 
-void KexiFormManager::enableAction( const char* name, bool enable )
+KexiFormView* KexiFormManager::activeFormViewWidget() const
 {
 	KexiDBForm *dbform;
 	if (!activeForm() || !activeForm()->designMode()
 		|| !(dbform = dynamic_cast<KexiDBForm*>(activeForm()->formWidget())))
-		return;
+		return 0;
 	KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
 	if (!scrollViewWidget)
-		return;
-	KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
+		return 0;
+	return dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
+}
+
+void KexiFormManager::enableAction( const char* name, bool enable )
+{
+	KexiFormView* formViewWidget = activeFormViewWidget();
 	if (!formViewWidget)
 		return;
-	if (QString(name)=="layout_menu")
-		kdDebug() << "!!!!!!!!!!! " << enable << endl;
+//	if (QString(name)=="layout_menu")
+//		kdDebug() << "!!!!!!!!!!! " << enable << endl;
 	formViewWidget->setAvailable(translateName( name ).latin1(), enable);
 }
 
@@ -104,8 +109,9 @@ void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& na
 		QMap<QCString, QVariant> propValues;
 		propValues.insert("dataSource", name);
 		propValues.insert("dataSourceMimeType", mime);
-		propertySet()->setPropertyValueInDesignMode(formWidget, propValues, 
-			i18n("Set form's data source to \"%1\"").arg(name));
+		KFormDesigner::CommandGroup *group 
+			= new KFormDesigner::CommandGroup(i18n("Set form's data source to \"%1\"").arg(name), propertySet());
+		propertySet()->createPropertyCommandsInDesignMode(formWidget, propValues, group, true /*addToActiveForm*/);
 	}
 
 /*
@@ -165,6 +171,15 @@ void KexiFormManager::setDataSourceFieldOrExpression(const QString& string, cons
 
 		buffer
 	}*/
+}
+
+void KexiFormManager::insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+	const QStringList& fields)
+{
+	KexiFormView* formViewWidget = activeFormViewWidget();
+	if (!formViewWidget)
+		return;
+	formViewWidget->insertAutoFields(sourceMimeType, sourceName, fields);
 }
 
 void KexiFormManager::slotHistoryCommandExecuted()

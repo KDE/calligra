@@ -24,6 +24,7 @@
 #include <qmap.h>
 #include <qdict.h>
 #include <qptrlist.h>
+#include <qptrdict.h>
 #include <qvariant.h>
 #include <qdom.h>
 
@@ -43,11 +44,21 @@ class ObjectTreeItem;
 class Container;
 class Form;
 
+//! Base class for KFormDesigner's commands
+class KFORMEDITOR_EXPORT Command : public KCommand
+{
+	public:
+		Command();
+		virtual ~Command();
+
+		virtual void debug() = 0;
+};
+
 /*! This command is used when changing a property for one or more widgets. \a oldvalues is a QMap
  of the old values of the property for every widget, to allow reverting the change. \a value is
  the new value of the property. You can use the simpler constructor for a single widget.
  */
-class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
+class KFORMEDITOR_EXPORT PropertyCommand : public Command
 {
 	public:
 		PropertyCommand(WidgetPropertySet *set, const QCString &wname, const QVariant &oldValue,
@@ -62,6 +73,7 @@ class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 
 		void  setValue(const QVariant &value);
 		const QMap<QCString, QVariant>& oldValues() const { return m_oldvalues; }
+		virtual void debug();
 
 	protected:
 		WidgetPropertySet *m_propSet;
@@ -73,7 +85,7 @@ class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 /*! This command is used when moving multiples widgets at the same time, while holding Ctrl or Shift.
  You need to supply a list of widget names, and the position of the cursor before moving. Use setPos()
   to tell the new cursor pos every time it changes.*/
-class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
+class KFORMEDITOR_EXPORT GeometryPropertyCommand : public Command
 {
 	public:
 		GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, const QPoint& oldPos);
@@ -81,8 +93,8 @@ class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-
 		void setPos(const QPoint& pos);
+		virtual void debug();
 
 	protected:
 		WidgetPropertySet *m_propSet;
@@ -94,46 +106,48 @@ class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 /*! This command is used when an item in 'Align Widgets position' is selected. You just need
 to give the list of widget names (the selected ones), and the
   type of alignment (see the enum for possible values). */
-class KFORMEDITOR_EXPORT AlignWidgetsCommand : public KCommand
+class KFORMEDITOR_EXPORT AlignWidgetsCommand : public Command
 {
 	public:
+		enum { AlignToGrid = 100, AlignToLeft, AlignToRight, AlignToTop, AlignToBottom };
+
 		AlignWidgetsCommand(int type, WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-
-		enum { AlignToGrid = 100, AlignToLeft, AlignToRight, AlignToTop, AlignToBottom };
+		virtual void debug();
 
 	protected:
-		Form  *m_form;
-		int    m_type;
-		QMap<QCString, QPoint>  m_pos;
+		Form *m_form;
+		int m_type;
+		QMap<QCString, QPoint> m_pos;
 };
 
 /*! This command is used when an item in 'Adjust Widgets Size' is selected. You just need
  to give the list of widget names (the selected ones), and the
   type of size modification (see the enum for possible values). */
-class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
+class KFORMEDITOR_EXPORT AdjustSizeCommand : public Command
 {
 	public:
+		enum { SizeToGrid = 200, SizeToFit, SizeToSmallWidth, SizeToBigWidth,
+			SizeToSmallHeight, SizeToBigHeight };
+
 		AdjustSizeCommand(int type, WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-
-		enum { SizeToGrid = 200, SizeToFit, SizeToSmallWidth, SizeToBigWidth,
-			SizeToSmallHeight, SizeToBigHeight };
+		virtual void debug();
 
 	protected:
 		QSize  getSizeFromChildren(ObjectTreeItem *item);
 
 	protected:
-		Form  *m_form;
-		int    m_type;
-		QMap<QCString, QPoint>  m_pos;
-		QMap<QCString, QSize>  m_sizes;
+		Form *m_form;
+		int m_type;
+		QMap<QCString, QPoint> m_pos;
+		QMap<QCString, QSize> m_sizes;
 };
 
 /*! This command is used when switching the layout of a Container. It remembers the old pos
@@ -147,6 +161,7 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 
 	protected:
 		Form *m_form;
@@ -156,7 +171,7 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 /*! This command is used when inserting a widger using toolbar or menu. You only need to give
 the parent Container and the widget pos.
  The other informations are taken from FormManager. */
-class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
+class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 {
 	public:
 		InsertWidgetCommand(Container *container);
@@ -174,6 +189,7 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 
 		//! \return inserted widget's name
 		QCString widgetName() const { return m_name; }
@@ -182,15 +198,15 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 		Form *m_form;
 		QString m_containername;
 		QPoint m_point;
-		QCString  m_name;
-		QCString  m_class;
-		QRect  m_insertRect;
+		QCString m_name;
+		QCString m_class;
+		QRect m_insertRect;
 };
 
 /*! This command is used when creating a layout from some widgets using "Lay out in..." menu item.
  It remembers the old pos of every widget, and takes care of updating ObjectTree too. You need
  to supply a WidgetList of the selected widgets. */
-class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
+class KFORMEDITOR_EXPORT CreateLayoutCommand : public Command
 {
 	public:
 		CreateLayoutCommand(int layoutType, WidgetList &list, Form *form);
@@ -199,13 +215,14 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 
 	protected:
-		Form  *m_form;
-		QString  m_containername;
-		QString  m_name;
-		QMap<QCString,QRect>  m_pos;
-		int  m_type;
+		Form *m_form;
+		QString m_containername;
+		QString m_name;
+		QMap<QCString,QRect> m_pos;
+		int m_type;
 };
 
 /*! This command is used when the 'Break Layout' menu item is selected. It does exactly the
@@ -218,11 +235,12 @@ class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 };
 
 /*! This command is used when pasting widgets. You need to give the QDomDocument containing
 the widget(s) to paste, and optionnally the point where to paste widgets. */
-class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
+class KFORMEDITOR_EXPORT PasteWidgetCommand : public Command
 {
 	public:
 		PasteWidgetCommand(QDomDocument &domDoc, Container *container, const QPoint& p = QPoint());
@@ -230,6 +248,7 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 
 	protected:
 		/*! Internal function used to change the coordinates of a widget to \a newpos
@@ -251,15 +270,15 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 
 	protected:
 		Form *m_form;
-		QCString    m_data;
-		QString     m_containername;
-		QPoint      m_point;
+		QCString m_data;
+		QString m_containername;
+		QPoint m_point;
 		QStringList m_names;
 };
 
 /*! This command is used when deleting a widget using the "Delete" menu item.
 You need to give a WidgetList of the selected widgets. */
-class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
+class KFORMEDITOR_EXPORT DeleteWidgetCommand : public Command
 {
 	public:
 		DeleteWidgetCommand(WidgetList &list, Form *form);
@@ -267,6 +286,7 @@ class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 
 	protected:
 		QDomDocument m_domDoc;
@@ -285,23 +305,74 @@ class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
+		virtual void debug();
 
 	protected:
-		QCString  m_data;
+		QCString m_data;
 };
 
-/*! A Command Group is a command that holds several sub-commands.
+/*! A Command Group is a command that holds several subcommands.
  It will appear as one to the user and in the command history,
  but it can use the implementation of multiple commands internally.
  It extends KMacroCommand by providing the list of commands executed.
- */
-class KFORMEDITOR_EXPORT CommandGroup : public KMacroCommand
+ Selected subcommands can be marked as nonexecutable by adding them using
+ addCommand(KCommand *command, bool allowExecute) special method.
+*/
+class KFORMEDITOR_EXPORT CommandGroup : public Command
 {
 	public:
-		CommandGroup( const QString & name );
+		CommandGroup( const QString & name, WidgetPropertySet *propSet );
 		virtual ~CommandGroup();
 
-		const QPtrList<KCommand>& commands() const { return m_commands; }
+		/*! Like KmacroCommand::addCommand(KCommand*) 
+		 but if \a allowExecute is false, \a command will not be executed 
+		 as a subcommand when CommandGroup::execute() is called. 
+
+		 This is useful e.g. in KexiFormView::insertAutoFields(),
+		 where a number of subcommands of InsertWidgetCommand type and subcommands 
+		 is groupped using CommandGroup but some of these subcommands are executed 
+		 before executing CommandGroup::execute().
+		 
+		 If \a allowExecute is true, this method behaves exactly like 
+		 KmacroCommand::addCommand(KCommand*).
+
+		 Note that unexecute() doesn't check \a allowExecute flag: 
+		 all subcommands will be unexecuted (in reverse order 
+		 to the one in which they were added).
+		*/
+		void addCommand(KCommand *command, bool allowExecute);
+
+		/*! Executes all subcommands added to this group
+		 in the same order as they were added. Subcommands added with 
+		 addCommand(KCommand *command, bool allowExecute) where allowExecute == false,
+		 will not be executed. */
+		virtual void execute();
+
+		/*! Unexecutes all subcommands added to this group,
+		 (in reversed order). */
+		virtual void unexecute();
+
+		virtual QString name() const;
+
+		/*! \return a list of all subcommands of this group. 
+		 Note that if a given subcommand is a group itself, 
+		 it will not be expanded to subcommands on this list. */
+		const QPtrList<KCommand>& commands() const;
+
+		/*! Resets all 'allowExecute' flags that was set in addCommand().
+		 Call this after calling CommandGroup::execute() to ensure that
+		 in the future, when REDO is be executed, all subcommands will be executed. */
+		void resetAllowExecuteFlags();
+
+		virtual void debug();
+
+	protected:
+		class SubCommands;
+		SubCommands *m_subCommands;
+		//! Used to store pointers to subcommands that shouldn't be executed 
+		//! on CommandGroup::execute()
+		QPtrDict<char> m_commandsShouldntBeExecuted;
+		WidgetPropertySet *m_propSet;
 };
 
 }

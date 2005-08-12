@@ -72,7 +72,7 @@ void
 KexiReportScrollView::slotResizingStarted()
 {
 	if(m_form && m_form->manager())
-		setSnapToGrid(m_form->manager()->snapWidgetsToGrid(), m_form->gridX(), m_form->gridY());
+		setSnapToGrid(m_form->manager()->snapWidgetsToGrid(), m_form->gridSize());
 	else
 		setSnapToGrid(false);
 }

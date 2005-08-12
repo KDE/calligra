@@ -218,11 +218,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		bool isModified() { return d->dirty; }
 
-		//! \return the x distance between two dots in the background.
-		int gridX() { return 10;}
-
-		//! \return the y distance between two dots in the background.
-		int gridY() { return 10;}
+		//! \return the distance between two dots in the form background.
+//! @todo make gridSize configurable at global level
+		int gridSize() { return 10; }
 
 		//! \return the default margin for all the layout inside this Form.
 		int defaultMargin() { return 11;}

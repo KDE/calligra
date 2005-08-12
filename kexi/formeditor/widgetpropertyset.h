@@ -38,6 +38,7 @@ class FormManager;
 class ObjectTreeItem;
 class WidgetPropertySetPrivate;
 class WidgetInfo;
+class CommandGroup;
 
 class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 {
@@ -77,8 +78,10 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! This slot is called when the watched widget is destroyed. Resets the buffer.*/
 		void slotWidgetDestroyed();
 
-		void setPropertyValueInDesignMode(QWidget* widget, const QMap<QCString, QVariant> &propValues,
-			const QString& commandName);
+//		void setPropertyValueInDesignMode(QWidget* widget, const QMap<QCString, QVariant> &propValues,
+		void createPropertyCommandsInDesignMode(QWidget* widget, const QMap<QCString, 
+			QVariant> &propValues, CommandGroup *group, bool addToActiveForm = true,
+			bool execFlagForSubCommands = false);
 
 	signals:
 		/*! This signal is emitted when a property was changed.

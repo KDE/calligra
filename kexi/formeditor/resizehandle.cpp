@@ -129,8 +129,8 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 
 void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 {
-	int gridX = m_set->m_form->gridX();
-	int gridY = m_set->m_form->gridY();
+	int gridX = m_set->m_form->gridSize();
+	int gridY = m_set->m_form->gridSize();
 
 	if (!m_dragging) return;
 	//if(m_editing)  return;

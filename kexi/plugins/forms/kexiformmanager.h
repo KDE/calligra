@@ -24,6 +24,7 @@
 #include <kexipart.h>
 
 class KCommand;
+class KexiFormView;
 
 //! @internal
 //! Used to customize KFormDesigner::FormManager behaviour.
@@ -48,11 +49,20 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 		 like KexiDB::QueryColumnInfo */
 		void setDataSourceFieldOrExpression(const QString& string, const QString& caption);
 
+		/*! Receives signal from KexiDataSourcePage and inserts autofields onto the current form. */
+		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+			const QStringList& fields);
+
 	protected slots:
 		void slotHistoryCommandExecuted();
 
 	protected:
 		inline QString translateName( const char* name ) const;
+
+	private:
+		//! Helper: return active form's view widget or 0 if there's no active form having such widget
+		KexiFormView* activeFormViewWidget() const;
+
 //		virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
 //		virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
 

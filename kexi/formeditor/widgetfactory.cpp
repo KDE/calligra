@@ -523,7 +523,7 @@ WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w,
 }
 
 bool
-WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *,
+WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *w,
 	const QCString &property, bool isTopLevel)
 {
 	if (!isTopLevel 

@@ -308,6 +308,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
  * expand children for cells of type like "Rect"
  * other types- by default: just move cursor to editor
 - add support for "set" types (e.g. AlignTop|AlignBottom) and port form's objpropertybuffer to this
+- add "description" label on the bottom of the property editor; 
+  it should reuse Property::description() text
 
 ==== Query GUI Designer TODO: ======
 - add tables dropping from the browser
@@ -403,6 +405,7 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
   non latin1 characters to latin1, eg. '¹' to 'a':
   "*  option -ia searches case-insensitive
      ISO characters are mapped to the nearest lower ASCII equivalent."
+- support for COMPOUND KEYS, ie. keys with 2+ fields; http://en.wikipedia.org/wiki/Compound_key
 
 ?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
 	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
@@ -421,6 +424,8 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 - add flexible support for date/time constants
 - store text position information (line, column) for every token so it can be used 
    in SQL editor to place cursor in case of errors
+- add translation method for SQL operators to driver, 
+  so SQLite can return "CONCAT" and mysql return "||" for concatenation oeprator, and so on
 
 === MDB import TODO ===
 crash:
@@ -516,7 +521,6 @@ KMDI TODO
 QUICK TODO: 
 Forms:
 -change form's object caption to "caption" property, when changed and conversely!
--new forms should have "dirty" set to true, so user can save them quickly
 
 TODO:::::::
 1. test dipesh.kexi - ID column is not used on row updating!!!
@@ -557,3 +561,4 @@ TODO: Forms: object tree: enable sorting by name after clicking "name" header;
 TODO: Startup: when using a startup item, touch the file for better sorting:
 http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx
 
+TODO: Startup: add support for opening applications/x-kexi-connectiondata

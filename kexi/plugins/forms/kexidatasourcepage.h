@@ -70,12 +70,16 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		 \a caption for this field is also provided (e.g. AutoField form widget use it) */
 		void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption);
 
+		/*! Signal emitted when 'insert fields' button has been clicked */
+		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+			const QStringList& fields);
+
 	protected slots:
 		void slotDataSourceTextChanged(const QString & string);
 		void slotDataSourceSelected();
 		void slotFieldSelected();
 		void slotGotoSelected();
-		void slotAddSelectedField();
+		void slotInsertSelectedFields();
 		void slotFieldListViewSelectionChanged();
 
 	protected:

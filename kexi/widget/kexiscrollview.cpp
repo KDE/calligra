@@ -70,8 +70,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 	m_resizing = false;
 	m_enableResizing = true;
 	m_snapToGrid = false;
-	m_gridX = 0;
-	m_gridY = 0;
+	m_gridSize = 0;
 	m_outerAreaVisible = true;
 
 	connect(&m_delayedResize, SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
@@ -108,12 +107,11 @@ KexiScrollView::setRecordNavigatorVisible(bool visible)
 }
 
 void
-KexiScrollView::setSnapToGrid(bool enable, int gridX, int gridY)
+KexiScrollView::setSnapToGrid(bool enable, int gridSize)
 {
 	m_snapToGrid = enable;
 	if(enable) {
-		m_gridX = gridX;
-		m_gridY = gridY;
+		m_gridSize = gridSize;
 	}
 }
 
@@ -171,8 +169,15 @@ KexiScrollView::refreshContentsSize()
 			h = m_widget->height() + delta_y;
 			change = true;
 		}
-		if (change)
+		if (change) {
+	repaint();
+	viewport()->repaint();
+	repaintContents();
+	updateContents(0, 0, 2000,2000);
+	clipper()->repaint();
+
 			resizeContents(w, h);
+		}
 		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
 			<< contentsWidth() <<", "<< contentsHeight() << endl;
 		updateScrollBars();
@@ -258,7 +263,7 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 		if(cursor().shape() == QCursor::SizeHorCursor)
 		{
 			if(m_snapToGrid)
-				neww = int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX;
+				neww = int( float(tmpx) / float(m_gridSize) + 0.5 ) * m_gridSize;
 			else
 				neww = tmpx;
 			newh = m_widget->height();
@@ -267,15 +272,15 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 		{
 			neww = m_widget->width();
 			if(m_snapToGrid)
-				newh = int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY;
+				newh = int( float(tmpy) / float(m_gridSize) + 0.5 ) * m_gridSize;
 			else
 				newh = tmpy;
 		}
 		else if(cursor().shape() == QCursor::SizeFDiagCursor)
 		{
 			if(m_snapToGrid) {
-				neww = int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX;
-				newh = int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY;
+				neww = int( float(tmpx) / float(m_gridSize) + 0.5 ) * m_gridSize;
+				newh = int( float(tmpy) / float(m_gridSize) + 0.5 ) * m_gridSize;
 			} else {
 				neww = tmpx;
 				newh = tmpy;
@@ -338,7 +343,7 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 		p->setPen(palette().active().foreground());
 		p->drawLine(wx+m_widget->width(), wy, wx+m_widget->width(), wy+m_widget->height());
 		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
-
+kdDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
 
 		if (!KexiScrollView_data) {
 			KexiScrollView_data_deleter.setObject( KexiScrollView_data, new KexiScrollViewData() );
@@ -351,11 +356,13 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 			&& !KexiScrollView_data->verticalOuterAreaPixmapBuffer.isNull() 
 			&& !m_delayedResize.isActive() /* only draw text if there's not pending delayed resize*/)
 		{
-			p->drawPixmap( 
-				QMAX( m_widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20 ) + 20,
-				QMAX( (m_widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height())/2, 20 ),
-				KexiScrollView_data->verticalOuterAreaPixmapBuffer
-			);
+			if (m_widget->height()>(KexiScrollView_data->verticalOuterAreaPixmapBuffer.height()+20)) {
+				p->drawPixmap( 
+					QMAX( m_widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20 ) + 20,
+					QMAX( (m_widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height())/2, 20 ),
+					KexiScrollView_data->verticalOuterAreaPixmapBuffer
+				);
+			}
 			p->drawPixmap( 
 				QMAX( (m_widget->width() - KexiScrollView_data->horizontalOuterAreaPixmapBuffer.width())/2, 20 ),
 				QMAX( m_widget->height(), KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() + 20 ) + 20,

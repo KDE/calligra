@@ -202,8 +202,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				}
 				else
 				{
-					int gridX = m_form->gridX();
-					int gridY = m_form->gridY();
+					int gridX = m_form->gridSize();
+					int gridY = m_form->gridSize();
 					tmpx = int( (float)mev->x() / ((float)gridX) + 0.5 ); // snap to grid
 					tmpx *= gridX;
 					tmpy = int( (float)mev->y() / ((float)gridY) + 0.5 );
@@ -255,8 +255,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 
 				// prevent accidental copying of widget (when moving mouse a little while selecting)
-				if( ( (mev->pos().x() - m_grab.x()) < form()->gridX() &&  (m_grab.x() - mev->pos().x()) < form()->gridX() ) &&
-					( (mev->pos().y() - m_grab.y()) < form()->gridY() &&  (m_grab.y() - mev->pos().y()) < form()->gridY() ) )
+				if( ( (mev->pos().x() - m_grab.x()) < form()->gridSize() &&  (m_grab.x() - mev->pos().x()) < form()->gridSize() ) &&
+					( (mev->pos().y() - m_grab.y()) < form()->gridSize() &&  (m_grab.y() - mev->pos().y()) < form()->gridSize() ) )
 				{
 					kdDebug() << "The widget has not been moved. No copying" << endl;
 					return true;
@@ -346,8 +346,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 		{
 			if(s != m_container)
 				return false;
-			int gridX = m_form->gridX();
-			int gridY = m_form->gridY();
+			int gridX = m_form->gridSize();
+			int gridY = m_form->gridSize();
 
 			QPainter p(m_container);
 			p.setPen(QPen(white, 2));
@@ -421,19 +421,19 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			// directional buttons move the widget
 			else if(kev->key() == Key_Left){ // move the widget of gridX to the left
-				moveSelectedWidgetsBy(-form()->gridX(), 0);
+				moveSelectedWidgetsBy(-form()->gridSize(), 0);
 				return true;
 			}
 			else if(kev->key() == Key_Right){ // move the widget of gridX to the right
-				moveSelectedWidgetsBy(form()->gridX(), 0);
+				moveSelectedWidgetsBy(form()->gridSize(), 0);
 				return true;
 			}
 			else if(kev->key() == Key_Up){ // move the widget of gridY to the top
-				moveSelectedWidgetsBy(0, - form()->gridY());
+				moveSelectedWidgetsBy(0, - form()->gridSize());
 				return true;
 			}
 			else if(kev->key() == Key_Down){ // move the widget of gridX to the bottom
-				moveSelectedWidgetsBy(0, form()->gridY());
+				moveSelectedWidgetsBy(0, form()->gridSize());
 				return true;
 			}
 			else if((kev->key() == Key_Tab) || (kev->key() == Key_BackTab)){
@@ -544,8 +544,7 @@ Container::deleteWidget(QWidget *w)
 {
 	if(!w)
 		return;
-
-	kdDebug() << "Deleting a widget: " << w->name() << endl;
+//	kdDebug() << "Deleting a widget: " << w->name() << endl;
 	m_form->objectTree()->removeItem(w->name());
 	m_form->manager()->deleteWidgetLater( w );
 	m_form->setSelectedWidget(m_container);
@@ -987,8 +986,8 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 {
 	int tmpx, tmpy;
 	QPoint pos = static_cast<QWidget*>(s)->mapTo(m_container, mev->pos());
-	int gridX = m_form->gridX();
-	int gridY = m_form->gridY();
+	int gridX = m_form->gridSize();
+	int gridY = m_form->gridSize();
 	if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
 	{
 		tmpx = pos.x();
@@ -1064,8 +1063,8 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
 void
 Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 {
-	int gridX = m_form->gridX();
-	int gridY = m_form->gridY();
+	int gridX = m_form->gridSize();
+	int gridY = m_form->gridSize();
 	int dx=realdx, dy=realdy;
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())

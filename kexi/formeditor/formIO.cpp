@@ -400,11 +400,13 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib)
+FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, 
+	const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
 	// Widget specific properties and attributes ///////////////
 	kdDebug() << "FormIO::prop()  Saving the property: " << name << endl;
-	if(w->metaObject()->findProperty(name, true) == -1)
+	const int propertyId = w->metaObject()->findProperty(name, true);
+	if(propertyId == -1)
 	{
 		kdDebug() << "FormIO::prop()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
 		if(lib)
@@ -412,14 +414,15 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 		return;
 	}
 
+	const QMetaProperty *meta = w->metaObject()->property(propertyId, true);
+	if (!meta->stored( w )) //not storable
+		return;
 	QDomElement propertyE = parent.createElement("property");
 	propertyE.setAttribute("name", name);
 
-	// Checking if this property is enum or set type
-	int count = w->metaObject()->findProperty(name, true);
-	const QMetaProperty *meta = w->metaObject()->property(count, true);
 	if(meta && meta->isEnumType())
 	{
+		// this property is enum or set type
 		QDomElement type;
 		QDomText valueE;
 
@@ -973,8 +976,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			}
 		}
 
-		else if((name != "name") && (name != "geometry") && (name != "layout")) // these have already been saved
-			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget(), lib);
+		else if(name == "name" || name == "geometry" || name == "layout") {
+			// these have already been saved
+		}
+		else {
+			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), 
+				item->widget(), lib);
+		}
 	}
 	delete map;
 

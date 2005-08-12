@@ -235,7 +235,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 			d->set[it.currentKey()].setVisible(false);
 	}
 
-	if (d->widgets.count()==2) {
+	if (d->widgets.count()>=2) {
 		//second widget, update metainfo
 		d->set["this:classString"].setValue(
 			i18n("Multiple Widgets") + QString(" (%1)").arg(d->widgets.count()) );
@@ -460,7 +460,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	}
 
 	 // make sure we are not already undoing -> avoid recursion
-	if(d->isUndoing)
+	if(d->isUndoing && !d->manager->isRedoing())
 		return;
 
 	const bool alterLastCommand = d->lastCommand && d->lastCommand->property() == property;
@@ -468,11 +468,11 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	if(d->widgets.count() == 1) // one widget selected
 	{
 		// If the last command is the same, we just change its value
-		if(alterLastCommand)
+		if(alterLastCommand && !d->manager->isRedoing())
 			d->lastCommand->setValue(value);
 		else  {
 //			if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
-			if (d->slotPropertyChanged_addCommandEnabled) {
+			if (d->slotPropertyChanged_addCommandEnabled && !d->manager->isRedoing()) {
 				d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
 						d->widgets.first()->property(property), value, property);
 				d->manager->activeForm()->addCommand(d->lastCommand, false);
@@ -491,10 +491,10 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	}
 	else
 	{
-		if(alterLastCommand)
+		if(alterLastCommand && !d->manager->isRedoing())
 			d->lastCommand->setValue(value);
 		else {
-			if (d->slotPropertyChanged_addCommandEnabled) {
+			if (d->slotPropertyChanged_addCommandEnabled && !d->manager->isRedoing()) {
 				// We store old values for each widget
 				QMap<QCString, QVariant> list;
 	//			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
@@ -519,29 +519,29 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	}
 }
 
-//const QCString& propertyName, 
-//	const QVariant& propertyValue)
-
 void
-WidgetPropertySet::setPropertyValueInDesignMode(QWidget* widget, 
-	const QMap<QCString, QVariant> &propValues, const QString& commandName)
+WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget, 
+	const QMap<QCString, QVariant> &propValues, CommandGroup *group, bool addToActiveForm,
+	bool execFlagForSubCommands)
 {
 	if (!widget || propValues.isEmpty())
 		return;
 	
-	//is this widget is selected? (if so, use property system)
+	//is this widget selected? (if so, use property system)
 	const bool widgetIsSelected = d->manager->activeForm()->selectedWidget() == widget;
 
 	d->slotPropertyChanged_addCommandEnabled = false;
 	QMap<QCString, QVariant>::ConstIterator endIt = propValues.constEnd();
-	CommandGroup *group = new CommandGroup(commandName);
+//	CommandGroup *group = new CommandGroup(commandName);
 	for(QMap<QCString, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it)
 	{
-		if (!d->set.contains(it.key()))
+		if (!d->set.contains(it.key())) {
+			kdWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" <<it.key()<<"\" property not found"<<endl;
 			continue;
+		}
 		PropertyCommand *subCommand = new PropertyCommand(this, widget->name(),
-					widget->property(it.key()), it.data(), it.key());
-		group->addCommand( subCommand );
+			widget->property(it.key()), it.data(), it.key());
+		group->addCommand( subCommand, execFlagForSubCommands);
 		if (widgetIsSelected) {
 			d->set[it.key()].setValue(it.data());
 		}
@@ -556,7 +556,8 @@ WidgetPropertySet::setPropertyValueInDesignMode(QWidget* widget,
 		}
 	}
 	d->lastCommand = 0;
-	d->manager->activeForm()->addCommand(group, false/*no exec*/);
+	if (addToActiveForm)
+		d->manager->activeForm()->addCommand(group, false/*no exec*/);
 	d->slotPropertyChanged_addCommandEnabled = true;
 //	}
 }

@@ -163,6 +163,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 if it's the same as previous one. */
 		virtual void showPropertySet(WidgetPropertySet *list, bool forceReload = false);
 
+		void blockPropertyEditorUpdating(void *blockingObject);
+
+		void unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *propSet);
+
 		/*! Sets the external property editor pane used by FormDesigner (it may be docked).*/
 		void setEditor(KoProperty::Editor *editor);
 
@@ -197,6 +201,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void emitFormWidgetSelected( KFormDesigner::Form* form );
 		//! @internal
 		void emitNoFormSelected();
+
+		/*! @internal
+		 \return true is redo action is being executed. 
+		 Used in WidgetPropertySet::slotPropertyChanged() */
+		bool isRedoing() const { return m_isRedoing; }
 
 	public slots:
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -419,28 +428,28 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QGuardedPtr<KoProperty::Editor>  m_editor;
 		QGuardedPtr<ObjectTreeView>  m_treeview;
 		// Forms
-		QPtrList<Form>		m_forms;
-		QPtrList<Form>		m_preview;
-		QGuardedPtr<Form>	m_active;
+		QPtrList<Form> m_forms;
+		QPtrList<Form> m_preview;
+		QGuardedPtr<Form> m_active;
 
 		// Copy/Paste
-		QDomDocument		m_domDoc;
-		KPopupMenu		*m_popup;
-		QPoint			m_insertPoint;
-		QGuardedPtr<QWidget>	m_menuWidget;
+		QDomDocument m_domDoc;
+		KPopupMenu *m_popup;
+		QPoint m_insertPoint;
+		QGuardedPtr<QWidget> m_menuWidget;
 
 		// Insertion
-		bool			m_inserting;
-		QCString			m_selectedClass;
+		bool m_inserting;
+		QCString m_selectedClass;
 
 		// Connection stuff
-		bool			m_drawingSlot;
-		Connection		*m_connection;
-		KPopupMenu		*m_sigSlotMenu;
+		bool m_drawingSlot;
+		Connection *m_connection;
+		KPopupMenu *m_sigSlotMenu;
 
 		// Actions
-		KActionCollection	*m_collection;
-		KToggleAction		*m_pointer, *m_dragConnection, *m_snapToGrid;
+		KActionCollection *m_collection;
+		KToggleAction *m_pointer, *m_dragConnection, *m_snapToGrid;
 
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;
@@ -456,6 +465,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		int m_contextMenuKey; //!< Id of context menu key (cached)
 
 		PropertyFactory *m_propFactory;
+		void *m_objectBlockingPropertyEditorUpdating;
+		bool m_isRedoing : 1;
 
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;

@@ -149,15 +149,15 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_addField = new QToolButton(this, "addFieldButton");
 	m_addField->setUsesTextLabel(true);
 	m_addField->setTextPosition(QToolButton::Right);
-	m_addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
+	m_addField->setTextLabel(i18n("Insert selecteds field into form", "Insert"));
 	m_addField->setIconSet(SmallIconSet("add_field"));
 	m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
 	m_addField->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_addField->setAutoRaise(true);
 	m_addField->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(m_addField, i18n("Insert selected field into form"));
+	QToolTip::add(m_addField, i18n("Insert selected fields into form"));
 	hlyr->addWidget(m_addField);
-	connect(m_addField, SIGNAL(clicked()), this, SLOT(slotAddSelectedField()));
+	connect(m_addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
 
 	m_fieldListView = new KexiFieldListView(this, "fieldListView", 
 		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
@@ -220,8 +220,22 @@ void KexiDataSourcePage::slotGotoSelected()
 	}
 }
 
-void KexiDataSourcePage::slotAddSelectedField()
+void KexiDataSourcePage::slotInsertSelectedFields()
 {
+	if (!m_fieldListView->schema())
+		return;
+	QStringList selectedFields;
+	for (QListViewItemIterator it(m_fieldListView); it.current(); ++it) {
+		if (it.current()->isSelected()) {
+//! @todo what about query fields/aliases? it.current()->text(0) can be not enough
+			selectedFields.append(it.current()->text(0));
+		}
+	}
+	if (selectedFields.isEmpty())
+		return;
+
+	emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query", 
+		m_fieldListView->schema()->name(), selectedFields);
 }
 
 void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
@@ -299,7 +313,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 
 
 	const bool isForm = objectClassName=="KexiDBForm";
-	kdDebug() << "objectClassName=" << objectClassName << endl;
+//	kdDebug() << "objectClassName=" << objectClassName << endl;
 //	{
 /*		//this is top level form's surface: data source means table or query
 		QCString dataSourceMimeType, dataSource;

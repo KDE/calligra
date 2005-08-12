@@ -42,7 +42,7 @@ class KexiFormScrollView;
 	QApplication::sendEvent( widget, &fe ); \
 	QFocusEvent::resetReason(); }
 
-//! A DB-aware form widget
+//! A DB-aware form widget, acting as form's toplevel widget
 class KEXIFORMUTILS_EXPORT KexiDBForm : 
 	public KexiDBFormBase,
 	public KFormDesigner::FormWidget,
@@ -52,7 +52,8 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
-
+	//original "size" property is not designable, so here's a custom (not storable) replacement
+	Q_PROPERTY( QSize sizeInternal READ sizeInternal WRITE resizeInternal DESIGNABLE true STORED false )
 	public:
 		KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject, const char *name="kexi_dbform");
 		virtual ~KexiDBForm();
@@ -103,6 +104,12 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		void setAutoTabStops(bool set);
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+
+		//! @internal for sizeInternal property
+		QSize sizeInternal() const { return KexiDBFormBase::size(); }
+
+		//! @internal for sizeInternal property
+		void resizeInternal(const QSize& s) { KexiDBFormBase::resize(s); }
 
 	signals:
 		void handleDragMoveEvent(QDragMoveEvent *e);

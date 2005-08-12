@@ -412,6 +412,10 @@ KexiFormPart::slotPropertyChanged(QWidget *w, const QCString &name, const QVaria
 		//update autoTabStops setting at KFD::Form level
 		d->manager->activeForm()->setAutoTabStops( value.toBool() );
 	}
+	if (d->manager->activeForm()->widget() && name == "geometry") {
+		//fall back to sizeInternal property....
+		d->manager->propertySet()->property("sizeInternal").setValue(value.toRect().size());
+	}
 }
 
 KFormDesigner::FormManager*
@@ -437,6 +441,8 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 			d->manager, SLOT(setFormDataSource(const QCString&, const QCString&)));
 		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&)),
 			d->manager, SLOT(setDataSourceFieldOrExpression(const QString&, const QString&)));
+		connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)), 
+			d->manager, SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));
 	}
 
 	KexiProject *prj = mainWin->project();

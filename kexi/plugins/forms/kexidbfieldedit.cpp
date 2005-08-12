@@ -424,15 +424,16 @@ KexiDBFieldEdit::sizeHint() const
 	if (m_lblPosition == NoLabel)
 		return m_editor ? m_editor->sizeHint() : QWidget::sizeHint();
 
-	QSize s1;
+	QSize s1(0,0);
 	if (m_editor)
 		s1 = m_editor->sizeHint();
 	QSize s2(m_label->sizeHint());
 	if (m_lblPosition == Top)
 		return QSize(QMAX(s1.width(), s2.width()), s1.height()+KexiDBFieldEdit_SPACING+s2.height());
 
-	if (m_lblPosition == Left) 
-		return QSize(s1.width()+KexiDBFieldEdit_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
+//	if (m_lblPosition == Left) 
+	//left
+	return QSize(s1.width()+KexiDBFieldEdit_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
 }
 
 void

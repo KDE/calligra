@@ -40,7 +40,7 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 		virtual ~KexiScrollView();
 
 		void setWidget(QWidget *w);
-		void setSnapToGrid(bool enable, int gridX=1, int gridY=1);
+		void setSnapToGrid(bool enable, int gridSize=10);
 
 		void setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
 		void setRecordNavigatorVisible(bool visible);
@@ -76,7 +76,7 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 		bool m_enableResizing;
 		QWidget *m_widget;
 
-		int m_gridX, m_gridY;
+		int m_gridSize;
 		QFont m_helpFont;
 		QColor m_helpColor;
 		QTimer m_delayedResize;

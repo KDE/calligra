@@ -45,18 +45,29 @@
 
 using namespace KFormDesigner;
 
+// Command
+
+Command::Command()
+ : KCommand()
+{
+}
+
+Command::~Command()
+{
+}
+
 // PropertyCommand
 
 PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QCString &wname,
 	const QVariant &oldValue, const QVariant &value, const QCString &property)
-  : KCommand(), m_propSet(set), m_value(value), m_property(property)
+  : Command(), m_propSet(set), m_value(value), m_property(property)
 {
 	m_oldvalues.insert(wname, oldValue);
 }
 
 PropertyCommand::PropertyCommand(WidgetPropertySet *set, const QMap<QCString, QVariant> &oldvalues,
 	const QVariant &value, const QCString &property)
-  : KCommand(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
+  : Command(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
 {
 }
 
@@ -66,7 +77,7 @@ MultiCommand::MultiCommand()
 }
 
 MultiCommandGroup::addSubCommand(PropertyCommand* subCommand)
-  : KCommand(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
+  : Command(), m_propSet(set), m_value(value), m_oldvalues(oldvalues), m_property(property)
 {
 }
 */
@@ -87,8 +98,10 @@ PropertyCommand::execute()
 	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QCString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
-		QWidget *widg = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key())->widget();
-		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
+		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key());
+		if (item) {//we're checking for item!=0 because the name could be of a form widget
+			m_propSet->manager()->activeForm()->setSelectedWidget(item->widget(), true);
+		}
 	}
 
 	(*m_propSet)[m_property] = m_value;
@@ -110,7 +123,7 @@ PropertyCommand::unexecute()
 		QWidget *widg = item->widget();
 		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
 		//m_propSet->setSelectedWidget(widg, true);
-    if (-1!=widg->metaObject()->findProperty( m_property, TRUE ))
+		if (-1!=widg->metaObject()->findProperty( m_property, TRUE ))
 			widg->setProperty(m_property, it.data());
 	}
 
@@ -127,11 +140,20 @@ PropertyCommand::name() const
 		return i18n("Change \"%1\" property for widget \"%2\"" ).arg(m_property).arg(m_oldvalues.begin().key());
 }
 
+void
+PropertyCommand::debug()
+{
+	kdDebug() << "PropertyCommand: name=\"" << name() << "\" widgets=" << m_oldvalues.keys() 
+		<< " value=" << m_value << " oldValues=" << m_oldvalues.values() << endl;
+}
+
 // GeometryPropertyCommand (for multiples widgets)
 
-GeometryPropertyCommand::GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, const QPoint& oldPos)
- : KCommand(), m_propSet(set), m_names(names), m_oldPos(oldPos)
-{}
+GeometryPropertyCommand::GeometryPropertyCommand(WidgetPropertySet *set, 
+	const QStringList &names, const QPoint& oldPos)
+ : Command(), m_propSet(set), m_names(names), m_oldPos(oldPos)
+{
+}
 
 void
 GeometryPropertyCommand::execute()
@@ -186,10 +208,17 @@ GeometryPropertyCommand::name() const
 	return i18n("Move multiple widgets");
 }
 
+void
+GeometryPropertyCommand::debug()
+{
+	kdDebug() << "GeometryPropertyCommand: pos=" << m_pos << " oldPos=" << m_oldPos 
+		<< " widgets=" << m_names << endl;
+}
+
 /////////////////  AlignWidgetsCommand  ////////
 
 AlignWidgetsCommand::AlignWidgetsCommand(int type, WidgetList &list, Form *form)
-: KCommand(), m_form(form), m_type(type)
+: Command(), m_form(form), m_type(type)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
 		m_pos.insert(w->name(), w->pos());
@@ -201,8 +230,8 @@ AlignWidgetsCommand::execute()
 	// To avoid creation of GeometryPropertyCommand
 	m_form->selectFormWidget();
 
-	int gridX = m_form->gridX();
-	int gridY = m_form->gridY();
+	int gridX = m_form->gridSize();
+	int gridY = m_form->gridSize();
 	QWidget *parentWidget = m_form->selectedWidgets()->first()->parentWidget();
 	int tmpx, tmpy;
 
@@ -331,10 +360,17 @@ AlignWidgetsCommand::name() const
 	}
 }
 
+void
+AlignWidgetsCommand::debug()
+{
+	kdDebug() << "AlignWidgetsCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
+		<< " widgets=" << m_pos.keys() << endl;
+}
+
 ///// AdjustSizeCommand ///////////
 
 AdjustSizeCommand::AdjustSizeCommand(int type, WidgetList &list, Form *form)
-: KCommand(), m_form(form), m_type(type)
+: Command(), m_form(form), m_type(type)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
 	{
@@ -357,8 +393,8 @@ AdjustSizeCommand::execute()
 	// To avoid creation of GeometryPropertyCommand
 	m_form->selectFormWidget();
 
-	int gridX = m_form->gridX();
-	int gridY = m_form->gridY();
+	int gridX = m_form->gridSize();
+	int gridY = m_form->gridSize();
 	int tmpw=0, tmph=0;
 
 	WidgetList list;
@@ -415,7 +451,7 @@ AdjustSizeCommand::execute()
 					w->resize(s);
 				}
 				else if(item && item->container()) // empty container
-					w->resize(item->container()->form()->gridX() * 5, item->container()->form()->gridY() * 5); // basic size
+					w->resize(item->container()->form()->gridSize() * 5, item->container()->form()->gridSize() * 5); // basic size
 				else
 					w->resize(w->sizeHint());
 			}
@@ -560,9 +596,17 @@ AdjustSizeCommand::name() const
 	}
 }
 
+void
+AdjustSizeCommand::debug()
+{
+	kdDebug() << "AdjustSizeCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
+		<< " widgets=" << m_sizes.keys() << endl;
+}
+
 // LayoutPropertyCommand
 
-LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const QCString &wname, const QVariant &oldValue, const QVariant &value)
+LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const QCString &wname, 
+	const QVariant &oldValue, const QVariant &value)
  : PropertyCommand(buf, wname, oldValue, value, "layout")
 {
 	m_form = buf->manager()->activeForm();
@@ -607,11 +651,17 @@ LayoutPropertyCommand::name() const
 	return i18n("Change layout of widget \"%1\"").arg(m_oldvalues.begin().key());
 }
 
+void
+LayoutPropertyCommand::debug()
+{
+	kdDebug() << "LayoutPropertyCommand: name=\"" << name() << "\" oldValue=" << m_oldvalues.keys()
+		<< " value=" << m_value << endl;
+}
 
 // InsertWidgetCommand
 
 InsertWidgetCommand::InsertWidgetCommand(Container *container)
-  : KCommand()
+  : Command()
 {
 	m_containername = container->widget()->name();
 	m_form = container->form();
@@ -624,7 +674,7 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container)
 
 InsertWidgetCommand::InsertWidgetCommand(Container *container,
 	const QCString& className, const QPoint& pos, const QCString& namePrefix)
-  : KCommand()
+  : Command()
 {
 	m_containername = container->widget()->name();
 	m_form = container->form();
@@ -763,6 +813,15 @@ InsertWidgetCommand::name() const
 		return i18n("Insert widget \"%1\"").arg(m_name);
 	else
 		return i18n("Insert widget");
+}
+
+void
+InsertWidgetCommand::debug()
+{
+	kdDebug() << "InsertWidgetCommand: name=\"" << name() << "\" generatedName=" << m_name 
+		<< " container=" << m_containername
+		<< " form=" << m_form->widget()->name() << " class=" << m_class 
+		<< " rect=" << m_insertRect << " pos=" << m_point << endl;
 }
 
 /// CreateLayoutCommand ///////////////
@@ -922,6 +981,14 @@ CreateLayoutCommand::name() const
 	}
 }
 
+void
+CreateLayoutCommand::debug()
+{
+	kdDebug() << "CreateLayoutCommand: name=\"" << name() << "\" generatedName=" << m_name 
+		<< " widgets=" << m_pos.keys() << " container=" << m_containername
+		<< " form=" << m_form->widget()->name() << endl;
+}
+
 /// BreakLayoutCommand ///////////////
 
 BreakLayoutCommand::BreakLayoutCommand(Container *container)
@@ -955,6 +1022,14 @@ QString
 BreakLayoutCommand::name() const
 {
 	return i18n("Break Layout: \"%1\"").arg(m_name);
+}
+
+void
+BreakLayoutCommand::debug()
+{
+	kdDebug() << "BreakLayoutCommand: name=\"" << name()
+		<< " widgets=" << m_pos.keys() << " container=" << m_containername
+		<< " form=" << m_form->widget()->name() << endl;
 }
 
 // PasteWidgetCommand
@@ -1264,13 +1339,21 @@ PasteWidgetCommand::fixNames(QDomElement &el)
 			fixNames(child);
 		}
 	}
+}
 
+void
+PasteWidgetCommand::debug()
+{
+	kdDebug() << "PasteWidgetCommand: pos=" << m_point
+		<< " widgets=" << m_names << " container=" << m_containername
+		<< " form=" << m_form->widget()->name() 
+		<< " data=\"" << m_data.left(80) << "...\"" << endl;
 }
 
 // DeleteWidgetCommand
 
 DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
- : KCommand(), m_form(form)
+ : Command(), m_form(form)
 {
 	m_domDoc = QDomDocument("UI");
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
@@ -1369,6 +1452,13 @@ DeleteWidgetCommand::name() const
 	return i18n("Delete widget");
 }
 
+void
+DeleteWidgetCommand::debug()
+{
+	kdDebug() << "DeleteWidgetCommand: containers=" << m_containers.keys()
+		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->name() << endl;
+}
+
 // CutWidgetCommand
 
 CutWidgetCommand::CutWidgetCommand(WidgetList &list, Form *form)
@@ -1396,14 +1486,96 @@ CutWidgetCommand::name() const
 	return i18n("Cut");
 }
 
+void
+CutWidgetCommand::debug()
+{
+	kdDebug() << "CutWidgetCommand: containers=" << m_containers.keys()
+		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->name()
+		<< " data=\"" << m_data.left(80) << "...\"" << endl;
+}
+
 // CommandGroup
 
-CommandGroup::CommandGroup( const QString & name )
-	: KMacroCommand(name)
+namespace KFormDesigner {
+class CommandGroup::SubCommands : public KMacroCommand
+{
+	public:
+		SubCommands( const QString & name )
+		 : KMacroCommand(name)
+		{
+		}
+		const QPtrList<KCommand>& commands() const { return m_commands; }
+};
+}
+
+CommandGroup::CommandGroup( const QString & name, WidgetPropertySet *propSet )
+	: Command()
+	, m_propSet(propSet)
+	, m_subCommands(new SubCommands(name))
 {
 }
 
 CommandGroup::~CommandGroup()
 {
+	delete m_subCommands;
 }
 
+const QPtrList<KCommand>& CommandGroup::commands() const
+{
+	return m_subCommands->commands();
+}
+
+void CommandGroup::addCommand(KCommand *command, bool allowExecute)
+{
+	if (!command)
+		return;
+
+	m_subCommands->addCommand(command);
+	if (!allowExecute)
+		m_commandsShouldntBeExecuted.insert(command, (char*)1);
+}
+
+void CommandGroup::execute()
+{
+	m_propSet->manager()->blockPropertyEditorUpdating(this);
+	for (QPtrListIterator<KCommand> it(m_subCommands->commands()); it.current(); ++it) {
+		if (!m_commandsShouldntBeExecuted[it.current()])
+			it.current()->execute();
+	}
+	m_propSet->manager()->unblockPropertyEditorUpdating(this, m_propSet);
+}
+
+void CommandGroup::unexecute()
+{
+	m_propSet->manager()->blockPropertyEditorUpdating(this);
+	m_subCommands->unexecute();
+	m_propSet->manager()->unblockPropertyEditorUpdating(this, m_propSet);
+}
+
+QString CommandGroup::name() const
+{
+	return m_subCommands->name();
+}
+
+void CommandGroup::resetAllowExecuteFlags()
+{
+	m_commandsShouldntBeExecuted.clear();
+}
+
+void
+CommandGroup::debug()
+{
+	kdDebug() << "*CommandGroup: name=\"" << name() << "\" #=" << m_subCommands->commands().count() << endl;
+	uint i = 1;
+	for (QPtrListIterator<KCommand> it(m_subCommands->commands()); it.current(); ++it, i++) {
+		kdDebug() << "#" << i << ":" 
+			<< (m_commandsShouldntBeExecuted[it.current()] ? "!" : "") << "allowExecute:" << endl;
+		if (dynamic_cast<Command*>(it.current()))
+			dynamic_cast<Command*>(it.current())->debug();
+		else if (dynamic_cast<CommandGroup*>(it.current()))
+			dynamic_cast<CommandGroup*>(it.current())->debug();
+		else
+			kdDebug() << "(other KCommand)" << endl;
+	}
+	kdDebug() << "End of CommandGroup" << endl;
+}
