@@ -149,7 +149,6 @@ KisImageBuilder_Result KisXCFConverter::buildImage(const KURL& uri)
     // Check the header
     char tag[14];
     if (in.readBlock(&tag, 14) != 14) return KisImageBuilder_FAILURE;
-    if (strncmp(tag, "
 
     return result;
 }
