@@ -1259,7 +1259,7 @@ int KoTextParag::topMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
-        + ( ( joinBorder() && prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
+        + ( ( prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
         prev()->topBorder() == m_layout.topBorder && prev()->leftBorder() == m_layout.leftBorder &&
         prev()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.topBorder.width() ) );
 }
@@ -1269,7 +1269,7 @@ int KoTextParag::bottomMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
-        + ( ( joinBorder() && next() && next()->joinBorder() && next()->bottomBorder() == m_layout.bottomBorder &&
+        + ( ( joinBorder() && next() && next()->bottomBorder() == m_layout.bottomBorder &&
         next()->topBorder() == m_layout.topBorder && next()->leftBorder() == m_layout.leftBorder &&
         next()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.bottomBorder.width() ) );
 }
@@ -1413,8 +1413,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         KoZoomHandler * zh = textDocument()->paintingZoomHandler();
         assert(zh);
 
-        bool const drawTopBorder = !joinBorder() || !prev() || !prev()->joinBorder() || prev()->bottomBorder() != bottomBorder() || prev()->topBorder() != topBorder() || prev()->leftBorder() != leftBorder() || prev()->rightBorder() != rightBorder();
-        bool const drawBottomBorder = !joinBorder() || !next() || !next()->joinBorder() || next()->bottomBorder() != bottomBorder() || next()->topBorder() != topBorder() || next()->leftBorder() != leftBorder() || next()->rightBorder() != rightBorder();
+        bool const drawTopBorder = !prev() || !prev()->joinBorder() || prev()->bottomBorder() != bottomBorder() || prev()->topBorder() != topBorder() || prev()->leftBorder() != leftBorder() || prev()->rightBorder() != rightBorder();
+        bool const drawBottomBorder = !joinBorder() || !next() || next()->bottomBorder() != bottomBorder() || next()->topBorder() != topBorder() || next()->leftBorder() != leftBorder() || next()->rightBorder() != rightBorder();
         QRect r;
         // Old solution: stick to the text
         //r.setLeft( at( 0 )->x - counterWidth() - 1 );
