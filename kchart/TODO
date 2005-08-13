@@ -29,9 +29,10 @@ Item								   Prio Status
      - Do it in the wizard as well					done
   + 101490: Error in drawing charts with logarithmic scale.	      1	----
        Fixed by new KDChart version (hopefully)
+  + 108461: Bug in generation of HiLo charts			      1 DONE
 
 * Wishes
-  + Give KChart the same page layout dialog as KSpread.		     1 ----
+  + Give KChart the same page layout dialog as KSpread.		      1 ----
        (Kivio has a simpler variation with only one page.)
 
 * Issues with KSpread
@@ -112,7 +113,7 @@ Item								   Prio Status
     - Maybe create a little combination widget that can change        2 --
       both font and color for a text item?
 
-* Data Editor							     1 ----
+* Data Editor							      1 ----
   + Insert / Delete Rows / Columns
   + Selections: Clear, Cut/Copy&Paste, 
   + Formulas?
