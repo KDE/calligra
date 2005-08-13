@@ -29,7 +29,6 @@ Name[sv]=Kspread-tabellkällfil
 Name[ta]=கேஸ்பிரிட் அட்டவணை மூலம்
 Name[tg]=Сарчашмаи ҷадвали KSpread
 Name[tr]=KSpread Tablo Kaynağı
-Name[uk]=Джерело таблиць KSpread
 Name[xx]=xxKSpread Table Sourcexx
 Name[zh_CN]=KSpread 表源
 Comment=This datasource type lets you use your entries from a kspread file.
