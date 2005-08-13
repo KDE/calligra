@@ -584,6 +584,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     width = img -> width();
 
     bool alpha = layer -> hasAlpha();
+
     Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
     for (y = 0; y < height; y++) {
@@ -670,6 +671,9 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
 
+
+    Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
+
     GetExceptionInfo(&ei);
 
     ii = CloneImageInfo(0);
@@ -684,9 +688,38 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     if (!img -> width() || !img -> height())
         return KisImageBuilder_RESULT_EMPTY;
 
+    if (layerBytesPerChannel < 2) {
+        ii->depth = 8;
+    }
+    else {
+        ii->depth=16;
+    }
+
+    QString colorspace = layer->colorStrategy()->id().id();
+    
+    if (colorspace == "GRAYA") {
+        ii -> colorspace = GRAYColorspace;
+    }
+    else if (colorspace == "RGBA" || colorspace == "RGBA16" || colorspace == "RGBAF32" ) {
+        if (layer->profile() && layer->profile()->productName() == "sRGB") {
+            ii -> colorspace = sRGBColorspace;
+        }
+        else {
+            ii -> colorspace = RGBColorspace;
+        }
+    }
+    else if (colorspace == "XYZA") {
+        ii -> colorspace = XYZColorspace;
+    }
+    else if (colorspace == "CMYK") {
+        ii -> colorspace = CMYKColorspace;
+    }
+
     image = AllocateImage(ii);
     image -> columns = img -> width();
     image -> rows = img -> height();
+
+    kdDebug() << "IM Image thinks it has depth: " << image->depth << "\n";
 
 #ifdef HAVE_MAGICK6
     if ( layer-> hasAlpha() )
@@ -704,7 +737,6 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     width = img -> width();
 
     bool alpha = layer -> hasAlpha();
-    Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
     for (y = 0; y < height; y++) {
 
