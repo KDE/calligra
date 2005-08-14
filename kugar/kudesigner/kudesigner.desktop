@@ -117,4 +117,4 @@ X-KDE-NativeMimeType=application/x-kudesigner
 X-KDE-Library=libkudesignerpart
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;X-KDE-More;

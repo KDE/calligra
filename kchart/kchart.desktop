@@ -66,4 +66,4 @@ MimeType=application/x-kchart
 X-KDE-NativeMimeType=application/x-kchart
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;X-KDE-More;

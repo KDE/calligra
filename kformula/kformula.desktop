@@ -73,4 +73,4 @@ Icon=kformula
 X-KDE-NativeMimeType=application/x-kformula
 X-DCOP-ServiceType=Multi
 DocPath=kformula/index.html
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;X-KDE-More;

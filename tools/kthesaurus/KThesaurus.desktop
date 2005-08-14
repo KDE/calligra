@@ -65,4 +65,4 @@ GenericName[xh]=Amagama Ahlobeneyo
 GenericName[zh_CN]=相关单词
 GenericName[zh_TW]=相關單字
 X-KDE-StartupNotify=true
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;X-KDE-More;
