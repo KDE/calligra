@@ -55,6 +55,7 @@ Name[xx]=xxTitle Portraitxx
 Name[zh_CN]=标题纵向
 Name[zh_TW]=標題肖象
 Name[zu]=Umdwebi Onebizo
+Comment=Presentation with a page title (portrait-oriented)
 Type=Link
 URL=.source/TitlePortrait.kpt
 X-KDE-Hidden=false

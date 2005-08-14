@@ -59,6 +59,7 @@ Name[xx]=xxTitlexx
 Name[zh_CN]=标题
 Name[zh_TW]=標題
 Name[zu]=Ibizo
+Comment=Presentation with a page title
 Type=Link
 URL=.source/TitleLandscape.kpt
 X-KDE-Hidden=false

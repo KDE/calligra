@@ -55,6 +55,7 @@ Name[xx]=xxOne Column Portraitxx
 Name[zh_CN]=单列纵向
 Name[zh_TW]=單列肖象
 Name[zu]=Eyodwa Ikholamu Yodwebu
+Comment=Presentation with a page title and single large text area (portrait-oriented)
 Type=Link
 URL=.source/OneColumnPortrait.kpt
 X-KDE-Hidden=false

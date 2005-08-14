@@ -38,6 +38,7 @@ Name[uz]=Бўш
 Name[wa]=Vude
 Name[xx]=xxEmptyxx
 Name[zh_CN]=空
+Comment=Empty presentation
 Type=Link
 URL=.source/emptyLandscape.kpt
 X-KDE-Hidden=false

@@ -54,6 +54,7 @@ Name[xx]=xxTotally New Productxx
 Name[zh_CN]=全新产品
 Name[zh_TW]=新產品
 Name[zu]=Entsha sha Iprodakhti
+Comment=An informal, green-swirl presentation
 Type=Link
 URL=.source/TotallyNewProduct.kpt
 X-KDE-Hidden=false

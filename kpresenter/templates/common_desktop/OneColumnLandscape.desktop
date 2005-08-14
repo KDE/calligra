@@ -59,6 +59,7 @@ Name[xx]=xxOne Columnxx
 Name[zh_CN]=单列
 Name[zh_TW]=單列
 Name[zu]=Ikholamu Eyodwa
+Comment=Presentation with a page title and single large text area
 Type=Link
 URL=.source/OneColumnLandscape.kpt
 X-KDE-Hidden=false
