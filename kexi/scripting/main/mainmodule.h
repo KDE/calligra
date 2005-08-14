@@ -114,6 +114,8 @@ namespace Kross { namespace Api {
              *
              * \param object the QObject instance that should
              *       be added to this \a MainModule
+	     * \param name the name under which this QObject instance
+	     *       should be registered as
              * \return the newly added \a QtObject instance
              *       which is now a child of this \a MainModule
              */

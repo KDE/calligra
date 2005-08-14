@@ -28,7 +28,7 @@ class KexiDataSourceFields;
 
 /**
  * this page is part of @ref KexiDataSourceWizard
- * it provides a combo box to choose (@ref KexiDataSourceCombo)
+ * it provides a combo box to choose (KexiDataSourceComboBox)
  * the datasource and fields that should be used in the produced
  * document (@ref KexiDataSourceFields)
  */
