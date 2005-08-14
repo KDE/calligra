@@ -23,4 +23,6 @@ krosspython_la_LIBADD = \
     ../main/libkrossmain.la
 
 METASOURCES = AUTO
-SUBDIRS = CXX . modules
+SUBDIRS = CXX .
+#TODO install-/modulpath needs to be a runtime-option!
+#modules
