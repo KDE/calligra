@@ -63,4 +63,4 @@ GenericName[zh_CN]=报告生成器
 GenericName[zh_TW]=報告產生器
 Terminal=false
 X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;X-KDE-More;
