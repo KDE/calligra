@@ -23,15 +23,22 @@
 
 #include <kdebug.h>
 
-TestObject::TestObject(QObject* parent)
+TestObject::TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer)
     : QObject(parent, "TestObject")
 {
     //kdDebug() << "TestObject::TestObject Constructor." << endl;
-    connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
 
+    connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
     connect(this, SIGNAL(stdoutSignal(const QString&)), this, SLOT(stdoutSlot(const QString&)));
     connect(this, SIGNAL(stderrSignal(const QString&)), this, SLOT(stderrSlot(const QString&)));
 
+    scriptcontainer->addQObject(this);
+
+//scriptcontainer->addSignal("stdout", this, SIGNAL(stdoutSignal(const QString&)));
+//scriptcontainer->addSlot("stderr", this, SLOT(stderrSlot(const QString&)));
+
+    //scriptcontainer->addSignal("myTestSignal", this, SIGNAL(testSignal()));
+    //scriptcontainer->addSlot("myTestSlot", this, SLOT(testSlot()));
 }
 
 TestObject::~TestObject()

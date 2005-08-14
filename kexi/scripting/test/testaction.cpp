@@ -1,5 +1,5 @@
 /***************************************************************************
- * testobject.h
+ * testaction.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,40 +17,35 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_TEST_TESTOBJECT_H
-#define KROSS_TEST_TESTOBJECT_H
+#include "testaction.h"
 
-#include "../main/scriptcontainer.h"
+#include <kdebug.h>
 
-#include <qobject.h>
-#include <qstring.h>
-
-class TestObject : public QObject
+TestAction::TestAction(Kross::Api::ScriptContainer::Ptr scriptcontainer)
+    : QWidget()
 {
-        Q_OBJECT
+    m_actioncollection = new KActionCollection(this, this);
 
-        //Q_PROPERTY(QString testProperty READ testProperty WRITE setTestProperty)
+    m_action1 = new KAction("Action1_Text", 0, this, SLOT(activatedAction1()), m_actioncollection, "Action1");
+    m_actionlist.append(m_action1);
+    scriptcontainer->addKAction(m_action1);
 
-    public:
-        TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer);
-        ~TestObject();
+    m_action2 = new KAction("Action2_Text", 0, this, SLOT(activatedAction2()), m_actioncollection, "Action2");
+    m_actionlist.append(m_action2);
+    scriptcontainer->addKAction(m_action2);
+}
 
-        //QString m_prop;
-        //QString testProperty() const { return m_prop; }
-        //void setTestProperty(QString prop) { m_prop = prop; }
+TestAction::~TestAction()
+{
+}
 
-    signals:
-        void testSignal();
-        void testSignalString(const QString&);
-        void stdoutSignal(const QString&);
-        void stderrSignal(const QString&);
-    public slots:
-        void testSlot();
-        void testSlot2();
-        void stdoutSlot(const QString&);
-        void stderrSlot(const QString&);
-    private slots:
-        void testSignalSlot();
-};
+void TestAction::activatedAction1()
+{
+    kdDebug() << "TestAction::activatedAction1()" << endl;
+}
 
-#endif
+void TestAction::activatedAction2()
+{
+    kdDebug() << "TestAction::activatedAction2()" << endl;
+}
+

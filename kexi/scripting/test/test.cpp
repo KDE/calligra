@@ -30,6 +30,7 @@
 #include "../kexidb/kexidbmodule.h"
 
 #include "testobject.h"
+#include "testaction.h"
 
 // Qt
 #include <qstring.h>
@@ -60,45 +61,39 @@ static KCmdLineOptions options[] =
 
 void runInterpreter(const QString& interpretername, const QString& scriptcode)
 {
-    // Return the scriptingmanager instance. The manager is used as main
-    // entry point to work with Kross.
-    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
-    if(! manager) {
-        kdWarning() << "Failed to get Kross::Api::Manager instance!" << endl;
-        return;
-    }
-
-    //TESTCASE
-    TestObject* testobject = new TestObject(app);
-    manager->addQObject( testobject );
-
-    // Add modules that should be accessible by scripting. Those
-    // modules are wrappers around functionality you want to be
-    // able to access from within scripts. You don't need to take
-    // care of freeing them cause that will be done by Kross.
-    // Modules are shared between the ScriptContainer instances.
-    Kross::KexiDB::KexiDBModule* kdbm = new Kross::KexiDB::KexiDBModule();
-    manager->addChild(kdbm);
-    manager->addChild( new Kross::KexiDB::TestModule() ); //testcase
-
-    // To represent a script that should be executed Kross uses
-    // the Script container class. You are able to fill them with
-    // what is needed and just execute them.
-    Kross::Api::ScriptContainer::Ptr scriptcontainer = manager->getScriptContainer("MyScriptName");
-
-    //scriptcontainer->enableModule("KexiDB");
-
-    scriptcontainer->setInterpreterName(interpretername);
-    scriptcontainer->setCode(scriptcode);
-
     try {
-        //scriptcontainer->addSlot("stdout", testobject, SLOT(stdoutSlot(const QString&)));
-        scriptcontainer->addSignal("stdout", testobject, SIGNAL(stdoutSignal(const QString&)));
-        //scriptcontainer->addSlot("stderr", testobject, SLOT(stderrSlot(const QString&)));
 
-        scriptcontainer->addQObject( testobject );
-        //scriptcontainer->addSignal("myTestSignal", testobject, SIGNAL(testSignal()));
-        //scriptcontainer->addSlot("myTestSlot", testobject, SLOT(testSlot()));
+        // Return the scriptingmanager instance. The manager is used as main
+        // entry point to work with Kross.
+        Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
+        if(! manager)
+            Kross::Api::Exception::Ptr( new Kross::Api::Exception("Failed to get Kross::Api::Manager instance!") );
+
+        // Add modules that should be accessible by scripting. Those
+        // modules are wrappers around functionality you want to be
+        // able to access from within scripts. You don't need to take
+        // care of freeing them cause that will be done by Kross.
+        // Modules are shared between the ScriptContainer instances.
+        Kross::KexiDB::KexiDBModule* kdbm = new Kross::KexiDB::KexiDBModule();
+        manager->addChild(kdbm);
+        manager->addChild( new Kross::KexiDB::TestModule() ); //testcase
+
+        // To represent a script that should be executed Kross uses
+        // the Script container class. You are able to fill them with
+        // what is needed and just execute them.
+        Kross::Api::ScriptContainer::Ptr scriptcontainer = manager->getScriptContainer("MyScriptName");
+
+        //scriptcontainer->enableModule("KexiDB");
+
+        scriptcontainer->setInterpreterName(interpretername);
+        scriptcontainer->setCode(scriptcode);
+
+        //TESTCASE
+        TestObject* testobject = new TestObject(app, scriptcontainer);
+        manager->addQObject( testobject );
+
+        TestAction* testaction = new TestAction(scriptcontainer);
+        //manager->addQObject( testaction );
 
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
 
@@ -126,8 +121,6 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         // Call the testSlot to emit the testSignal.
         testobject->testSlot();
 */
-std::string s; std::cin >> s; // just wait.
-
     }
     catch(Kross::Api::Exception::Ptr e) {
         std::cout << QString("EXCEPTION %1").arg(e->toString()).latin1() << std::endl;
@@ -145,6 +138,8 @@ std::string s; std::cin >> s; // just wait.
     }
     //delete sc2;
 */
+
+    std::string s; std::cin >> s; // just wait.
 }
 
 int main(int argc, char **argv)

@@ -86,10 +86,11 @@ Py::Object PythonExtension::getattr(const char* n)
         QMap<QString, Kross::Api::Object::Ptr> children = m_object->getChildren();
         QMap<QString, Kross::Api::Object::Ptr>::Iterator it( children.begin() );
         for(; it != children.end(); ++it) {
+kdDebug() << "0" << endl;
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
             kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' child='%2'").arg(name).arg(it.key()) << endl;
 #endif
-            members.append(Py::String( it.key().latin1()));
+            members.append(Py::String( it.key().latin1() ));
         }
         return members;
     }

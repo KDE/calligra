@@ -35,8 +35,8 @@
 
 using namespace Kross::Api;
 
-QtObject::QtObject(Object::Ptr parent, QObject* object)
-    : Kross::Api::Class<QtObject>(object->name(), parent)
+QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
+    : Kross::Api::Class<QtObject>(name.isEmpty() ? object->name() : name, parent)
     , m_object(object)
 {
     // Walk through the signals and slots the QObject has

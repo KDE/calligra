@@ -58,15 +58,15 @@ EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCStr
     return event;
 }
 
-QtObject::Ptr MainModule::addQObject(QObject* object)
+QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
-    QtObject* qtobject = new QtObject(this, object);
+    QtObject* qtobject = new QtObject(this, object, name);
     if(! addChild(qtobject))
         throw new Exception( QString("Failed to add QObject name='%1'").arg(object->name()) );
     return qtobject;
 }
 
-EventAction::Ptr MainModule::addKAction(const QString& name, KAction* action)
+EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, this, action);
     if(! addChild(event))

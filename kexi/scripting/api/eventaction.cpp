@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "eventaction.h"
+#include "variant.h"
 
 //#include <qobject.h>
 //#include <kaction.h>
@@ -25,9 +26,31 @@
 using namespace Kross::Api;
 
 EventAction::EventAction(const QString& name, Object::Ptr parent, KAction* action)
-    : Event<EventAction>(name, parent)
+    : Event<EventAction>(name.isEmpty() ? action->name() : name, parent)
     , m_action(action)
 {
+    addFunction("getText", &EventAction::getText,
+        Kross::Api::ArgumentList(),
+        "Get the text associated with this action."
+    );
+    addFunction("setText", &EventAction::setText,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
+        "Sets the text associated with this action."
+    );
+
+    addFunction("isEnabled", &EventAction::isEnabled,
+        Kross::Api::ArgumentList(),
+        "Returns true if this action is enabled else false."
+    );
+    addFunction("setEnabled", &EventAction::setEnabled,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
+        "Enables or disables this action."
+    );
+
+    addFunction("activate", &EventAction::activate,
+        Kross::Api::ArgumentList(),
+        "Activates the action."
+    );
 }
 
 EventAction::~EventAction()
@@ -39,10 +62,40 @@ const QString EventAction::getClassName() const
     return "Kross::Api::EventAction";
 }
 
+/*
 Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 {
-    kdDebug() << QString("EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
+    kdDebug() << QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
     //TODO
+    return 0;
+}
+*/
+
+Object::Ptr EventAction::getText(List::Ptr)
+{
+    return new Variant(m_action->text(), "Kross::Api::EventAction::getText::String");
+}
+
+Object::Ptr EventAction::setText(List::Ptr args)
+{
+    m_action->setText( Variant::toString(args->item(0)) );
+    return 0;
+}
+
+Object::Ptr EventAction::isEnabled(List::Ptr)
+{
+    return new Variant(m_action->isEnabled(), "Kross::Api::EventAction::isEnabled::Bool");
+}
+
+Object::Ptr EventAction::setEnabled(List::Ptr args)
+{
+    m_action->setEnabled( Variant::toBool(args->item(0)) );
+    return 0;
+}
+
+Object::Ptr EventAction::activate(List::Ptr)
+{
+    m_action->activate();
     return 0;
 }
 

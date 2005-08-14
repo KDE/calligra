@@ -32,8 +32,12 @@ namespace Kross { namespace Api {
     // Forward declarations.
     class ScriptContainer;
 
+//TODO handle KActionPtrList too.
+
     /**
-     *
+     * The EventAction class is used to wrap KAction instances
+     * into the Kross object hierachy and provide access to
+     * them.
      */
     class EventAction : public Event<EventAction>
     {
@@ -53,18 +57,22 @@ namespace Kross { namespace Api {
              */
             virtual ~EventAction();
 
+            /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
+            /// \see Kross::Api::Event::call()
+            //virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
         private:
             KAction* m_action;
 
-            //Kross::Api::Object::Ptr getText(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr setText(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr isEnabled(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr setEnabled(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr activate(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr getText(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setText(Kross::Api::List::Ptr);
+
+            Kross::Api::Object::Ptr isEnabled(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr setEnabled(Kross::Api::List::Ptr);
+
+            Kross::Api::Object::Ptr activate(Kross::Api::List::Ptr);
     };
 
 }}

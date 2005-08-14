@@ -1,5 +1,5 @@
 /***************************************************************************
- * testobject.h
+ * testaction.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,40 +17,34 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_TEST_TESTOBJECT_H
-#define KROSS_TEST_TESTOBJECT_H
+#ifndef KROSS_TEST_TESTACTION_H
+#define KROSS_TEST_TESTACTION_H
 
 #include "../main/scriptcontainer.h"
 
 #include <qobject.h>
+#include <qwidget.h>
 #include <qstring.h>
 
-class TestObject : public QObject
+#include <kaction.h>
+#include <kactioncollection.h>
+
+class TestAction : public QWidget
 {
         Q_OBJECT
-
-        //Q_PROPERTY(QString testProperty READ testProperty WRITE setTestProperty)
-
     public:
-        TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer);
-        ~TestObject();
+        TestAction(Kross::Api::ScriptContainer::Ptr scriptcontainer);
+        ~TestAction();
 
-        //QString m_prop;
-        //QString testProperty() const { return m_prop; }
-        //void setTestProperty(QString prop) { m_prop = prop; }
-
-    signals:
-        void testSignal();
-        void testSignalString(const QString&);
-        void stdoutSignal(const QString&);
-        void stderrSignal(const QString&);
-    public slots:
-        void testSlot();
-        void testSlot2();
-        void stdoutSlot(const QString&);
-        void stderrSlot(const QString&);
     private slots:
-        void testSignalSlot();
+        void activatedAction1();
+        void activatedAction2();
+
+    private:
+        KAction* m_action1;
+        KAction* m_action2;
+        KActionCollection* m_actioncollection;
+        KActionPtrList m_actionlist;
 };
 
 #endif

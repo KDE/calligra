@@ -59,10 +59,10 @@ namespace Kross { namespace Api {
              */
             virtual ~EventSlot();
 
-            /// \see Kross::Api::Object::getClassName
+            /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Event::call
+            /// \see Kross::Api::Event::call()
             virtual Object::Ptr call(const QString& name, KSharedPtr<List> arguments);
 
 /*

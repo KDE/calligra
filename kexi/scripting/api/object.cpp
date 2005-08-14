@@ -78,13 +78,18 @@ QMap<QString, Object::Ptr> Object::getChildren() const
 bool Object::addChild(Object::Ptr object)
 {
     QString name = object->getName();
+
 #ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
     kdDebug() << QString("Kross::Api::Object::addChild() object.name='%2' object.classname='%3'")
         .arg(name).arg(object->getClassName()) << endl;
 #endif
 
-    if(m_children.contains(name))
-        return false;
+    if(name.isEmpty()) // prevent invalid items.
+        throw Exception::Ptr( new Exception( QString("Failed to add child object to object '%1'. Invalid name for class '%2'.").arg(getName()).arg(object->getClassName()) ) );
+
+    if(m_children.contains(name)) // don't replace.
+        throw Exception::Ptr( new Exception(QString("Failed to add child object '%1' from type '%2' to object '%3'. There exists already a child with such a name.").arg(name).arg(object->getClassName()).arg(getName())) );
+
     object->m_parent = this;
     m_children.replace(name, object);
     return true;

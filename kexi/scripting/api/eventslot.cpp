@@ -51,11 +51,8 @@ Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
 
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
 
-    if(! n.startsWith("1"))
-        throw Exception::Ptr( new Exception(QString("Invalid slot '%1'.").arg(n)) );
-
-    //if(n.startsWith("1")) n.remove(0,1);
-    n.remove(0,1);
+    if(n.startsWith("1")) // Remove prefix of SLOT-macros
+        n.remove(0,1);
 
     int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
     if(slotid < 0)

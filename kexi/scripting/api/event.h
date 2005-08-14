@@ -130,7 +130,7 @@ namespace Kross { namespace Api {
 
                     // We try to redirect the call to the m_function of
                     // the parent event.
-                    Object::Ptr parent = getParent();
+                    Object::Ptr parent = getParent(); //FIXME don't rely on the parent
                     if(parent) {
                         T *self = static_cast<T*>( parent.data() );
                         if(self)

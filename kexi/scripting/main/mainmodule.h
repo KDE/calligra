@@ -117,7 +117,7 @@ namespace Kross { namespace Api {
              * \return the newly added \a QtObject instance
              *       which is now a child of this \a MainModule
              */
-            QtObject::Ptr addQObject(QObject* object);
+            QtObject::Ptr addQObject(QObject* object, const QString& name = QString::null);
 
             /**
              * Add a \a KAction to the eventcollection. The
@@ -132,7 +132,7 @@ namespace Kross { namespace Api {
              *
              * \todo check \a name dox.
              */
-            EventAction::Ptr addKAction(const QString& name, KAction* action);
+            EventAction::Ptr addKAction(KAction* action, const QString& name = QString::null);
 
             //typedef QValueList<Callable::Ptr> EventList;
             //EventList getEvents();

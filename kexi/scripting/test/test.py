@@ -236,7 +236,8 @@ def testobjectCallbackWithParams(argument):
 def testQtObject(self):
 
     # Get the QtObject instance to access the QObject.
-    testobject = get("TestObject")
+    #testobject = get("TestObject")
+    testobject = self.get("TestObject")
     if testobject == None:
         raise "Object 'TestObject' undefined !!!"
 
@@ -280,6 +281,19 @@ def testQtObject(self):
     testobject.slot("testSlot()")
     testobject.disconnect("testSignal()")
 
+def testActionEvent(self):
+
+    #action1 = get("Action1")
+    action1 = self.get("Action1")
+    if action1 == None:
+        raise "Object 'Action1' undefined !!!"
+
+    print "action1 = %s %s" % (str(action1),dir(action1))
+
+    print "################################### 1"
+    #action1.call()
+    action1.activate()
+
 print "########## BEGIN TEST: KexiDB ##########"
 testKexiDB()
 print "########## END TEST: KexiDB ##########"
@@ -287,6 +301,10 @@ print "########## END TEST: KexiDB ##########"
 print "########## BEGIN TEST: QObject ##########"
 testQtObject(self)
 print "########## END TEST: QObject ##########"
+
+print "########## BEGIN TEST: ActionEvent ##########"
+testActionEvent(self)
+print "########## END TEST: ActionEvent ##########"
 
 #testfunc("from __main__")
 #maintestfunc()

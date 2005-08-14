@@ -51,10 +51,8 @@ Object::Ptr EventSignal::call(const QString& name, KSharedPtr<List> arguments)
 
     QString n = m_signal;
 
-    if(! n.startsWith("2"))
-        throw Exception::Ptr( new Exception(QString("Invalid signal '%1'.").arg(n)) );
-    //if(n.startsWith("2")) n.remove(0,1);
-    n.remove(0,1);
+    if(n.startsWith("2")) // Remove prefix of SIGNAL-macros
+        n.remove(0,1);
 
     int signalid = m_sender->metaObject()->findSignal(n.latin1(), false);
     if(signalid < 0)
