@@ -1,7 +1,6 @@
-2005-08-10  Inge Wallin  <ingwa@dhcp-254-153.lkpg.cendio.se>
+2005-08-10  Inge Wallin  <inge@lysator.liu.se>
 
-	Fix error in creating HiLo charts
-	(Bug number will be created)
+	Fix bug 108461: Bug in generation of HiLo charts
 	* kchart_part.cc (paintContent): Add code to handle HiLo chart
 	separately.
 
@@ -12,6 +11,11 @@
 	(isLoading): removed
 
 	Some code cleaning (improved comments).
+
+
+	================================================================
+	KChart 1.4.1 released
+
 
 2005-05-10  Inge Wallin  <inge@lysator.liu.se>
 	
@@ -67,7 +71,7 @@
 	setDrawSolidExcessArrows(true) after a chart has been loaded or
 	created.
 
-2005-04-13  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-04-13  Inge Wallin  <inge@lysator.liu.se>
 
 	CSV import: Disable irrelevant formats
 	* csvimportdialog.cc (CSVImportDialog): Disable formats Currency
@@ -77,7 +81,7 @@
 	* kchart_view.{h,cc} (m_importData): New member
 	(KChartView): Disable the KAction if data is unchangeable.
 
-2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-04-10  Inge Wallin  <inge@lysator.liu.se>
 
 	Get a file name for "Import Data" and actually read data.
 	(No new strings).
@@ -95,18 +99,18 @@
 	(importData): new slot
 	
 
-2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
-
-        * kchart_part.cc (KChartPart): Set modified when the chart type is
-	changed.
-
-2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-04-10  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix the margins on the pie config page.
 	* kchartParameterPieConfigPage.cc (KChartParameterPieConfigPage):
 	Added a toplevel layout.
 
-2005-04-07  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
+
+        * kchart_part.cc (KChartPart): Set modified when the chart type is
+	changed.
+
+2005-04-07  Inge Wallin  <inge@lysator.liu.se>
 
 	* kchartWizardLabelsLegendPage.cc (KChartWizardLabelsLegendPage):
 	Reenable titles for X and Y axis.
