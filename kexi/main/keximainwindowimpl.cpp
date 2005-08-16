@@ -200,9 +200,7 @@ class KexiMainWindowImpl::Private
 		KAction *action_format_font;
 
 		//! tools menu
-#ifndef KEXI_NO_MIGRATION
 		KAction *action_tools_data_migration;
-#endif
 
 		//! window menu
 		KAction *action_window_next, *action_window_previous;
