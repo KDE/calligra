@@ -94,8 +94,8 @@ class VDocumentTab : public QWidget
 class VLayerListViewItem : public QCheckListItem
 {
 public:
-	VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc );
-	virtual ~VLayerListViewItem() {}
+	VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc, QPtrDict<VLayerListViewItem> *map );
+	virtual ~VLayerListViewItem();
 
 	VLayer* layer() { return m_layer; }
 	int pos();
@@ -110,23 +110,24 @@ private:
 	VLayer		*m_layer;
 	VDocument	*m_document;
 	uint		 m_key;
+	QPtrDict<VLayerListViewItem> *m_map;
 }; // VLayerListViewItem
 
 class VObjectListViewItem : public QListViewItem
 {
 public:
-	VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key );
-	virtual ~VObjectListViewItem() {}
+	VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key, QPtrDict<VObjectListViewItem> *map );
+	virtual ~VObjectListViewItem();
 
 	VObject* object() { return m_object; }
 	void update();
 	virtual QString key( int column, bool ascending ) const;
 	void setKey( uint key ) { m_key = key; }
-
 private:
 	VObject		*m_object;
 	VDocument	*m_document;
 	uint		 m_key;
+	QPtrDict<VObjectListViewItem> *m_map;
 };
 
 class VLayersTab : public QWidget
@@ -149,9 +150,13 @@ public slots:
 	void raiseItem();
 	void lowerItem();
 	void deleteItem();
+	void slotCommandExecuted( VCommand* command );
 
 private slots:
 	void slotButtonClicked( int ID );
+	void removeDeletedObjectsFromList();
+	void updateChildItems( QListViewItem *item );
+	void toggleState( VObject *obj, int col );
 
 protected:
 	VLayerListViewItem* listItem( int pos );

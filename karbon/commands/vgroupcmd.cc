@@ -62,6 +62,9 @@ VGroupCmd::execute()
 void
 VGroupCmd::unexecute()
 {
+	if( ! m_group ) 
+		return;
+
 	document()->selection()->clear();
 
 	VObjectListIterator itr( m_group->objects() );
@@ -81,14 +84,14 @@ VGroupCmd::unexecute()
 		VObjectListIterator itr = m_selection->objects();
 
 		for ( ; itr.current() ; ++itr )
+		{
 			parent->append( itr.current() );
+		}
 
 		m_group->clear();
+		m_group->setState( VObject::deleted );
 	}
 	
-	delete m_group;
-	m_group = 0L;
-
 	setSuccess( false );
 }
 
