@@ -342,7 +342,7 @@ if ( m_mode == Clipboard )
 			KexiUtils::fileDialogFilterStrings(mimetypes, false),
 			this, "KexiCSVDialog", i18n("Open CSV Data File"));
 #else
-		m_fname = KFileDialog::getOpenFileName(":CSVImportDialog", mimetypes.join("\n"), this);
+		m_fname = KFileDialog::getOpenFileName(":CSVImportDialog", mimetypes.join(" "), this);
 #endif
 		//cancel action !
 		if ( m_fname.isEmpty() )
