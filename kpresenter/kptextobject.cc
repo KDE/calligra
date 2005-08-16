@@ -402,7 +402,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
-    double pw = pen.width() / 2;
+    double pw = pen.pointWidth() / 2;
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
@@ -414,8 +414,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     }
 
     _painter->save();
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+    QPen pen2 = pen.zoomedPen(_zoomHandler);
     //QRect clip=QRect(_zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw),_zoomHandler->zoomItY( oh - 2 * pw));
     //kdDebug(33001) << "KPTextObject::paint cliprect:" << DEBUGRECT(_zoomHandler->zoomRect( getBoundingRect() )) << endl;
     //setupClipRegion( _painter, clip );
@@ -2578,9 +2577,9 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
     parentElem.appendChild(paragraph);
 }
 
-QPen KPTextObject::defaultPen() const
+KPPen KPTextObject::defaultPen() const
 {
-    return QPen( Qt::black, 1, Qt::NoPen );
+    return KPPen( Qt::black, 1.0, Qt::NoPen );
 }
 
 QPoint KPTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const

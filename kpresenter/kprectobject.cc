@@ -48,7 +48,7 @@ DCOPObject* KPRectObject::dcopObject()
     return dcop;
 }
 
-KPRectObject::KPRectObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+KPRectObject::KPRectObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
                             const QColor &_gColor1, const QColor &_gColor2,
                             BCType _gType, int _xRnd, int _yRnd,
                             bool _unbalanced, int _xfactor, int _yfactor)
@@ -164,8 +164,7 @@ void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         return;
     }
 
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+    QPen pen2 = pen.zoomedPen( _zoomHandler );
     int pw = ( pen2.style() == Qt::NoPen ) ? 1 : pen2.width();
     _painter->setPen( pen2 );
 

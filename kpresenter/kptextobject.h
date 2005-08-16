@@ -194,7 +194,7 @@ protected:
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
     void recalcVerticalAlignment();
-    virtual QPen defaultPen() const;
+    virtual KPPen defaultPen() const;
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();

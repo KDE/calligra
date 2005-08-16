@@ -32,7 +32,7 @@ class KPCubicBezierCurveObject : public KPPointObject
 public:
     KPCubicBezierCurveObject();
     KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
-                              const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+                              const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPCubicBezierCurveObject() {}
 
     virtual DCOPObject* dcopObject();

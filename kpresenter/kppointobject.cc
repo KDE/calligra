@@ -35,7 +35,7 @@ KPPointObject::KPPointObject()
 }
 
 
-KPPointObject::KPPointObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+KPPointObject::KPPointObject( const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPShadowObject( _pen ), KPStartEndLine(_lineBegin, _lineEnd)
 {
 }
@@ -193,7 +193,7 @@ bool KPPointObject::isClosed() const
 void KPPointObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
                            int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
-    int _w = pen.width();
+    int _w = pen.pointWidth();
 
     QPen pen2;
     if ( drawContour ) {
@@ -201,8 +201,7 @@ void KPPointObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         _painter->setRasterOp( Qt::NotXorROP );
     }
     else {
-        pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+        pen2 = pen.zoomedPen( _zoomHandler );
     }
     _painter->setPen( pen2 );
 

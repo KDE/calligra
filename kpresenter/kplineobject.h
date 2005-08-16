@@ -33,7 +33,7 @@ class KPLineObject : public KPShadowObject, public KPStartEndLine
 {
 public:
     KPLineObject();
-    KPLineObject( const QPen &_pen, LineEnd _lineBegin,
+    KPLineObject( const KPPen &_pen, LineEnd _lineBegin,
                   LineEnd _lineEnd, LineType _lineType );
     virtual ~KPLineObject()
         {}

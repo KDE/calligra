@@ -24,9 +24,9 @@
 #include "global.h"
 
 #include <qwidget.h>
-#include <qpen.h>
 
 #include "kprcommand.h"
+#include "kppen.h"
 
 class PenStyleUI;
 
@@ -45,11 +45,11 @@ public:
     void apply();
 
 private:
-    QPen getQPen() const;
+    KPPen getKPPen() const;
     LineEnd getLineBegin() const;
     LineEnd getLineEnd() const;
 
-    void setPen( const QPen &pen );
+    void setPen( const KPPen &pen );
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
 

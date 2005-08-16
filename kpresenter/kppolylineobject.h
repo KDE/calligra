@@ -34,7 +34,7 @@ class KPPolylineObject : public KPPointObject
 public:
     KPPolylineObject();
     KPPolylineObject( const KoPointArray &_points, const KoSize &_size,
-                      const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+                      const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPPolylineObject() {}
 
     virtual DCOPObject* dcopObject();

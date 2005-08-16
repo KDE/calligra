@@ -39,7 +39,7 @@ KPCubicBezierCurveObject::KPCubicBezierCurveObject()
 
 KPCubicBezierCurveObject::KPCubicBezierCurveObject( const KoPointArray &_controlPoints,
                                                     const KoPointArray &_allPoints,
-                                                    const KoSize &_size, const QPen &_pen,
+                                                    const KoSize &_size, const KPPen &_pen,
                                                     LineEnd _lineBegin, LineEnd _lineEnd )
     : KPPointObject( _pen, _lineBegin, _lineEnd )
 {

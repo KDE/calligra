@@ -223,7 +223,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     presDurationDia = 0;
     v_ruler = 0;
     h_ruler = 0;
-    pen = QPen( black, 1, SolidLine );
+    pen = KPPen( black, 1.0, SolidLine );
     brush = QBrush( white, SolidPattern );
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -1368,7 +1368,7 @@ void KPresenterView::extraPenStyle( int newStyle )
 void KPresenterView::extraPenWidth( double newWidth )
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    setExtraPenWidth( qRound( newWidth ) );
+    setExtraPenWidth( newWidth );
 }
 
 void KPresenterView::screenConfigPages()
@@ -1830,7 +1830,7 @@ void KPresenterView::penChosen()
     QColor c = actionPenColor->color();
     if ( !m_canvas->currentTextObjectView() )
     {
-        KCommand * cmd( getPenCmd( i18n( "Change Outline Color" ), QPen(c),
+        KCommand * cmd( getPenCmd( i18n( "Change Outline Color" ), KPPen(c),
                                    L_NORMAL, L_NORMAL, PenCmd::Color ) );
         if( cmd )
             m_pKPresenterDoc->addCommand( cmd );
@@ -1950,7 +1950,7 @@ void KPresenterView::extraLineBeginDoubleLineArrow()
 
 void KPresenterView::setExtraLineBegin(LineEnd lb)
 {
-    KCommand * cmd( getPenCmd( i18n("Change Line Begin"), QPen(),
+    KCommand * cmd( getPenCmd( i18n("Change Line Begin"), KPPen(),
                                lb, L_NORMAL, PenCmd::LineBegin ) );
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
@@ -2000,7 +2000,7 @@ void KPresenterView::extraLineEndDoubleLineArrow()
 
 void KPresenterView::setExtraLineEnd(LineEnd le)
 {
-    KCommand * cmd( getPenCmd( i18n("Change Line End"), QPen(),
+    KCommand * cmd( getPenCmd( i18n("Change Line End"), KPPen(),
                                L_NORMAL, le, PenCmd::LineEnd ) );
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
@@ -2010,7 +2010,7 @@ void KPresenterView::setExtraLineEnd(LineEnd le)
 
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KCommand * cmd( getPenCmd( i18n("Change Outline Style"), QPen(style),
+    KCommand * cmd( getPenCmd( i18n("Change Outline Style"), KPPen(style),
                                L_NORMAL, L_NORMAL, PenCmd::Style ) );
 
     if( cmd )
@@ -2019,17 +2019,17 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
         pen.setStyle( style );
 }
 
-void KPresenterView::setExtraPenWidth( unsigned int width )
+void KPresenterView::setExtraPenWidth( double width )
 {
-    QPen tmpPen;
-    tmpPen.setWidth( width );
+    KPPen tmpPen;
+    tmpPen.setPointWidth( width );
     KCommand * cmd( getPenCmd( i18n("Change Outline Width"), tmpPen,
                                L_NORMAL, L_NORMAL, PenCmd::Width ) );
 
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
     else
-        pen.setWidth( width );
+        pen.setPointWidth( width );
 }
 
 void KPresenterView::newPageLayout( const KoPageLayout &_layout )
@@ -4191,7 +4191,7 @@ void KPresenterView::chPic()
     m_canvas->chPic();
 }
 
-void KPresenterView::penColorChanged( const QPen & _pen )
+void KPresenterView::penColorChanged( const KPPen & _pen )
 {
     //actionPenColor->setEnabled( true );
     actionPenColor->setCurrentColor( _pen.color() );
@@ -6473,7 +6473,7 @@ void KPresenterView::slotCorrectWord()
     }
 }
 
-KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb, LineEnd le, int flags )
+KCommand * KPresenterView::getPenCmd( const QString &name, KPPen pen, LineEnd lb, LineEnd le, int flags )
 {
     KMacroCommand * macro = NULL;
 

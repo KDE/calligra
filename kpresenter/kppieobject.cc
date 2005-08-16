@@ -45,7 +45,7 @@ KPPieObject::KPPieObject()
     lineEnd = L_NORMAL;
 }
 
-KPPieObject::KPPieObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+KPPieObject::KPPieObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
                           const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                           PieType _pieType, int _p_angle, int _p_len,
                           LineEnd _lineBegin, LineEnd _lineEnd,
@@ -236,7 +236,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
-    double pw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0;
+    double pw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth() ) / 2.0;
 
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
@@ -244,8 +244,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         _painter->setRasterOp( Qt::NotXorROP );
     }
     else {
-        QPen pen2( pen );
-        pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
+        QPen pen2 = pen.zoomedPen( _zoomHandler );
         _painter->setPen( pen2 );
         _painter->setBrush( getBrush() );
     }

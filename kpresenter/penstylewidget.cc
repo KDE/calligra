@@ -97,7 +97,7 @@ PenStyleWidget::~PenStyleWidget()
 }
 
 
-void PenStyleWidget::setPen( const QPen &pen )
+void PenStyleWidget::setPen( const KPPen &pen )
 {
     m_ui->colorChooser->setColor( pen.color() );
 
@@ -125,7 +125,7 @@ void PenStyleWidget::setPen( const QPen &pen )
             break; // not supported.
     }
 
-    m_ui->widthInput->setValue( pen.width() );
+    m_ui->widthInput->setValue( pen.pointWidth() );
     m_ui->pbPreview->setPen( pen );
 }
 
@@ -144,9 +144,9 @@ void PenStyleWidget::setLineEnd( LineEnd le )
 }
 
 
-QPen PenStyleWidget::getQPen() const
+KPPen PenStyleWidget::getKPPen() const
 {
-    QPen pen;
+    KPPen pen;
 
     switch ( m_ui->styleCombo->currentItem() )
     {
@@ -171,7 +171,7 @@ QPen PenStyleWidget::getQPen() const
     }
 
     pen.setColor( m_ui->colorChooser->color() );
-    pen.setWidth( m_ui->widthInput->value() );
+    pen.setPointWidth( m_ui->widthInput->value() );
 
     return pen;
 }
@@ -197,11 +197,11 @@ int PenStyleWidget::getPenConfigChange() const
         flags = flags | PenCmd::LineEnd;
     if ( getLineBegin() != m_pen.lineBegin )
         flags = flags | PenCmd::LineBegin;
-    if ( getQPen().color() != m_pen.pen.color() )
+    if ( getKPPen().color() != m_pen.pen.color() )
         flags = flags | PenCmd::Color;
-    if ( getQPen().style() != m_pen.pen.style() )
+    if ( getKPPen().style() != m_pen.pen.style() )
         flags = flags | PenCmd::Style;
-    if ( getQPen().width() != m_pen.pen.width() )
+    if ( getKPPen().pointWidth() != m_pen.pen.pointWidth() )
         flags = flags | PenCmd::Width;
 
     return flags;
@@ -210,7 +210,7 @@ int PenStyleWidget::getPenConfigChange() const
 
 PenCmd::Pen PenStyleWidget::getPen() const
 {
-    PenCmd::Pen pen( getQPen(), getLineBegin(), getLineEnd() );
+    PenCmd::Pen pen( getKPPen(), getLineBegin(), getLineEnd() );
     return pen;
 }
 
@@ -233,13 +233,13 @@ void PenStyleWidget::apply()
         m_pen.lineBegin = getLineBegin();
 
     if ( flags & PenCmd::Color )
-        m_pen.pen.setColor( getQPen().color() );
+        m_pen.pen.setColor( getKPPen().color() );
 
     if ( flags & PenCmd::Style )
-        m_pen.pen.setStyle( getQPen().style() );
+        m_pen.pen.setStyle( getKPPen().style() );
 
     if ( flags & PenCmd::Width )
-        m_pen.pen.setWidth( getQPen().width() );
+        m_pen.pen.setPointWidth( getKPPen().pointWidth() );
 }
 
 
@@ -256,7 +256,7 @@ void PenStyleWidget::slotReset()
 
 void PenStyleWidget::slotPenChanged()
 {
-    QPen pen = getQPen();
+    KPPen pen = getKPPen();
     m_ui->widthLabel->setEnabled( pen.style() != NoPen );
     m_ui->widthInput->setEnabled( pen.style() != NoPen );
     m_ui->pbPreview->setPen( pen );

@@ -1469,23 +1469,23 @@ QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1
     return elem;
 }
 
-QDomElement KPObject::createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc) {
+QDomElement KPObject::createPenElement(const QString &tag, const KPPen &pen, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute(attrColor, pen.color().name());
-    elem.setAttribute(attrWidth, pen.width());
+    elem.setAttribute(attrWidth, pen.pointWidth());
     elem.setAttribute(attrStyle, static_cast<int>(pen.style()));
     return elem;
 }
 
-QPen KPObject::toPen(const QDomElement &element) const {
+KPPen KPObject::toPen(const QDomElement &element) const {
 
-    QPen pen;
+    KPPen pen;
     pen.setColor(retrieveColor(element));
     if(element.hasAttribute(attrStyle))
         pen.setStyle(static_cast<Qt::PenStyle>(element.attribute(attrStyle).toInt()));
     if(element.hasAttribute(attrWidth))
-        pen.setWidth(element.attribute(attrWidth).toInt());
+        pen.setPointWidth(element.attribute(attrWidth).toDouble());
     return pen;
 }
 
@@ -1531,10 +1531,10 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         paintSelection( _painter, _zoomHandler, selectionMode );
 }
 
-QPen KPObject::getPen() const
+KPPen KPObject::getPen() const
 {
     // Return the default pen
-    return QPen();
+    return KPPen();
 }
 
 void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
@@ -1587,7 +1587,7 @@ KPShadowObject::KPShadowObject()
 {
 }
 
-KPShadowObject::KPShadowObject( const QPen &_pen )
+KPShadowObject::KPShadowObject( const KPPen &_pen )
     : KPObject(), pen( _pen )
 {
 }
@@ -1628,7 +1628,7 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle
             break;
         }
         styleobjectauto.addProperty( "svg:stroke-color", pen.color().name() );
-        styleobjectauto.addPropertyPt( "svg:stroke-width", ( int )pen.width() );
+        styleobjectauto.addPropertyPt( "svg:stroke-width", pen.pointWidth() );
     }
 }
 
@@ -1826,7 +1826,7 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         }
         //FIXME witdh pen style is not good :(
         if ( styleStack.hasAttributeNS( KoXmlNS::svg, "stroke-width" ) )
-            pen.setWidth( (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::svg, "stroke-width" ) ) );
+            pen.setPointWidth( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::svg, "stroke-width" ) ) );
         if ( styleStack.hasAttributeNS( KoXmlNS::svg, "stroke-color" ) )
             pen.setColor( styleStack.attributeNS( KoXmlNS::svg, "stroke-color" ) );
     }
@@ -1858,7 +1858,7 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     {
         _painter->save();
         // tz TODO fix tmpPen usage
-        QPen tmpPen( pen );
+        KPPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush brush;
         brush.setColor( shadowColor );
@@ -1894,9 +1894,9 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
-QPen KPShadowObject::defaultPen() const
+KPPen KPShadowObject::defaultPen() const
 {
-    return QPen();
+    return KPPen();
 }
 
 KP2DObject::KP2DObject()
@@ -1906,7 +1906,7 @@ KP2DObject::KP2DObject()
 {
 }
 
-KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+KP2DObject::KP2DObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
                         const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
     : KPShadowObject( _pen )
@@ -2311,7 +2311,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     if ( shadowDistance > 0 && !drawContour )
     {
         _painter->save();
-        QPen tmpPen( pen );
+        KPPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush tmpBrush( m_brush.getBrush() );
         QBrush shadowBrush( tmpBrush );

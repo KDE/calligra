@@ -36,7 +36,7 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     : KP2DObject()
 {
     child = _child;
-    pen = QPen( Qt::black, 1, Qt::NoPen );
+    pen = KPPen( Qt::black, 1.0, Qt::NoPen );
     _enableDrawing = true;
 }
 
@@ -101,14 +101,13 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     double oh = ext.height();
 
     QSize size( _zoomhandler->zoomSize( ext ) );
-    int penw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2;
+    int penw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth() ) / 2;
 
     QPen pen2;
     if ( drawContour )
         pen2 = QPen( Qt::black, 1, Qt::NoPen );
     else {
-        pen2 = pen;
-        pen2.setWidth( _zoomhandler->zoomItX( pen.width() ) );
+        pen2 = pen.zoomedPen( _zoomhandler );
     }
     _painter->save();
     child->transform( *_painter );
@@ -174,7 +173,7 @@ void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
     if ( !child || !child->document() )
         return;
 
-    int penw = pen.width();
+    int penw = pen.pointWidth();
     KoRect r( KoPoint( penw, penw ), KoPoint( getSize().width() - ( penw * 2.0 ),
               getSize().height() - ( penw * 2.0 ) ) );
     child->document()->paintEverything( *_painter,

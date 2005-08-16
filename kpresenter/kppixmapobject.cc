@@ -54,7 +54,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     : KP2DObject()
 {
     imageCollection = _imageCollection;
-    pen = QPen( Qt::black, 1, Qt::NoPen );
+    pen = KPPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -74,7 +74,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     imageCollection = _imageCollection;
 
     ext = KoSize(); // invalid size means unset
-    pen = QPen( Qt::black, 1, Qt::NoPen );
+    pen = KPPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -502,8 +502,7 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
 
     _painter->save();
 
-    QPen pen2(pen);
-    pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    QPen pen2 = pen.zoomedPen( _zoomHandler );
     _painter->setPen( pen2 );
     _painter->setBrush( getBrush() );
 

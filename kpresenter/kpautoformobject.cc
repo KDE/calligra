@@ -44,7 +44,7 @@ KPAutoformObject::KPAutoformObject()
     lineEnd = L_NORMAL;
 }
 
-KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString & _filename,
+KPAutoformObject::KPAutoformObject( const KPPen & _pen, const QBrush &_brush, const QString & _filename,
                                     LineEnd _lineBegin, LineEnd _lineEnd,
                                     FillType _fillType, const QColor &_gColor1,
                                     const QColor &_gColor2, BCType _gType,
@@ -167,8 +167,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     if ( drawContour )
         pen2 = QPen( Qt::black, 1, Qt::DotLine );
     else {
-        pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+        pen2 = pen.zoomedPen( _zoomHandler );
     }
 
     _painter->setPen( pen2 );
@@ -256,7 +255,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
         else
         {
             KoSize diff1( 0, 0 ), diff2( 0, 0 );
-            int _w = pen.width();
+            int _w = pen.pointWidth();
 
             if ( lineBegin != L_NORMAL )
                 diff1 = getBoundingSize( lineBegin, _w, _zoomHandler );

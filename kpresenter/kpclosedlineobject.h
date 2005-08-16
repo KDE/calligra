@@ -34,7 +34,7 @@ class KPClosedLineObject : public KP2DObject
 {
 public:
     KPClosedLineObject();
-    KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
+    KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KPPen &_pen, const QBrush &_brush,
                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor, const QString _type );
 

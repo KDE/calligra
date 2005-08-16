@@ -52,6 +52,7 @@ class KPBackGround;
 
 class KoXmlWriter;
 class KoGenStyles;
+class KPPen;
 
 
 class KPrPage
@@ -359,7 +360,7 @@ public:
      */
     void lowerObjs( bool backward );
 
-    KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags );
+    KCommand* setPen( const KPPen &pen, LineEnd lb, LineEnd le, int flags );
     KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2,
                         BCType gt, bool unbalanced, int xfactor, int yfactor, int flags );
 
@@ -370,36 +371,36 @@ public:
 
     virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
-    void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft,
+    void insertRectangle( const KoRect &r, const KPPen & pen, const QBrush &brush, FillType ft,
                           const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY,
                           bool unbalanced, int xfactor, int yfactor );
 
-    void insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
+    void insertCircleOrEllipse( const KoRect &r, const KPPen &pen, const QBrush &brush, FillType ft,
                                 const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
 
-    void insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
+    void insertPie( const KoRect &r, const KPPen &pen, const QBrush &brush, FillType ft,
                     const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len,
                     LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
     KPTextObject*  insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
-    void insertLine( const KoRect &r, const QPen &pen, LineEnd lb, LineEnd le, LineType lt );
+    void insertLine( const KoRect &r, const KPPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
-    void insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
+    void insertAutoform( const KoRect &r, const KPPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
                          FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName,
                          bool unbalanced,int xfactor, int yfactor );
 
-    void insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
-    void insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
+    void insertFreehand( const KoPointArray &points, const KoRect &r, const KPPen &pen,LineEnd lb, LineEnd le );
+    void insertPolyline( const KoPointArray &points, const KoRect &r, const KPPen &pen,LineEnd lb, LineEnd le );
     void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
-                                   const QPen &pen,LineEnd lb, LineEnd le );
+                                   const KPPen &pen,LineEnd lb, LineEnd le );
     void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
-                                 const QPen &pen,LineEnd lb, LineEnd le );
+                                 const KPPen &pen,LineEnd lb, LineEnd le );
 
-    void insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
+    void insertPolygon( const KoPointArray &points, const KoRect &r, const KPPen &pen, const QBrush &brush,
                         FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced,
                         int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
-    void insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
+    void insertClosedLine( const KoPointArray &points, const KoRect &r, const KPPen &pen, const QBrush &brush,
                            FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
 

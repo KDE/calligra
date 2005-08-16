@@ -38,7 +38,7 @@ KPEllipseObject::KPEllipseObject()
 {
 }
 
-KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+KPEllipseObject::KPEllipseObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
                                   const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
@@ -72,8 +72,7 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
         return;
     }
 
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX( pen.width()));
+    QPen pen2 = pen.zoomedPen( _zoomHandler );
     int pw = ( pen2.style() == Qt::NoPen ) ? 1 : pen2.width();
     _painter->setPen( pen2 );
 

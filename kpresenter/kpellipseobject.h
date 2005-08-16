@@ -33,7 +33,7 @@ class KPEllipseObject : public KP2DObject
 {
 public:
     KPEllipseObject();
-    KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPEllipseObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
                      const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPEllipseObject() {}

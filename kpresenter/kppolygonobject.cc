@@ -33,6 +33,7 @@
 #include <kooasiscontext.h>
 #include <math.h>
 #include <koxmlns.h>
+#include "kppen.h"
 
 using namespace std;
 
@@ -42,7 +43,7 @@ KPPolygonObject::KPPolygonObject()
 }
 
 KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_size,
-                                  const QPen &_pen, const QBrush &_brush,
+                                  const KPPen &_pen, const QBrush &_brush,
                                   FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor,
                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
@@ -215,8 +216,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     }
 
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
-    QPen pen2( pen );
-    pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    QPen pen2 = pen.zoomedPen( _zoomHandler );
 
     if ( drawingShadow || getFillType() == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );

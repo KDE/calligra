@@ -39,7 +39,7 @@ KPClosedLineObject::KPClosedLineObject()
 {
 }
 
-KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
+KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KPPen &_pen, const QBrush &_brush,
                                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                         bool _unbalanced, int _xfactor, int _yfactor, const QString _typeString )
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
@@ -164,7 +164,7 @@ void KPClosedLineObject::updatePoints( double _fx, double _fy )
 void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
                                 int /* pageNum */, bool drawingShadow, bool drawContour )
 {
-    int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();
+    int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth();
 
     if ( drawContour ) {
         QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
@@ -176,8 +176,7 @@ void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     }
 
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
-    QPen pen2( pen );
-    pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    QPen pen2 = pen.zoomedPen( _zoomHandler );
 
     if ( drawingShadow || getFillType() == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );

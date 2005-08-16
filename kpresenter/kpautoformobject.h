@@ -35,7 +35,7 @@ class KPAutoformObject : public KP2DObject
 {
 public:
     KPAutoformObject();
-    KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
+    KPAutoformObject( const KPPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
                       FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                       bool _unbalanced, int _xfactor, int _yfactor);
     virtual ~KPAutoformObject() {}

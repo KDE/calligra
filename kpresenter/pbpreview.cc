@@ -31,7 +31,7 @@ PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
     //FIXME zoom
     _zoomHandler=new KoZoomHandler();
     paintType = _paintType;
-    pen = QPen( black, 1, SolidLine );
+    pen = KPPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
     gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
     savedGradient = gradient;
@@ -69,7 +69,7 @@ void PBPreview::drawContents( QPainter *painter )
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
                            colorGroup().base() );
         KoSize diff1( 0, 0 ), diff2( 0, 0 );
-        int _w = pen.width();
+        int _w = pen.pointWidth();
 
         if ( lineBegin != L_NORMAL )
             diff1 = getOffset( lineBegin, _w, + 180.0 );

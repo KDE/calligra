@@ -41,6 +41,7 @@
 #include <qvaluevector.h>
 #include "kpbackground.h"
 #include "kprvariable.h"
+#include "kppen.h"
 
 class KPresenterDoc;
 class KPTextObject;
@@ -354,13 +355,13 @@ class PenCmd : public KNamedCommand
 {
 public:
     struct Pen {
-        Pen( QPen p, LineEnd lb, LineEnd le )
+        Pen( KPPen p, LineEnd lb, LineEnd le )
         : pen( p )
         , lineBegin( lb )
         , lineEnd( le )
         {}
 
-        QPen pen;
+        KPPen pen;
         LineEnd lineBegin, lineEnd;
 
         Pen &operator=( const Pen &_pen ) {

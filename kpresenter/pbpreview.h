@@ -24,9 +24,9 @@
 #include "global.h"
 
 #include <qframe.h>
-#include <qpen.h>
 
 #include "kpgradient.h"
+#include "kppen.h"
 
 class KoZoomHandler;
 
@@ -47,7 +47,7 @@ public:
 
     PBPreview( QWidget* parent, const char* name, PaintType _paintType = Pen );
     ~PBPreview();
-    void setPen( const QPen &_pen ) { pen = _pen; repaint( true ); }
+    void setPen( const KPPen &_pen ) { pen = _pen; repaint( true ); }
     void setBrush( const QBrush &_brush ) { brush = _brush; repaint( true ); }
     void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
     void setLineEnd( LineEnd le ) { lineEnd = le; repaint( true ); }
@@ -69,7 +69,7 @@ protected:
 
 private:
     PaintType paintType;
-    QPen pen;
+    KPPen pen;
     QBrush brush;
     LineEnd lineBegin, lineEnd;
     KPGradient *gradient;

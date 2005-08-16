@@ -874,7 +874,7 @@ void PenCmd::execute()
             tmpPen.pen.setColor( newPen.pen.color() );
 
         if ( flags & Width )
-            tmpPen.pen.setWidth( newPen.pen.width() );
+            tmpPen.pen.setPointWidth( newPen.pen.pointWidth() );
 
         if ( flags & Style )
             tmpPen.pen.setStyle( newPen.pen.style() );

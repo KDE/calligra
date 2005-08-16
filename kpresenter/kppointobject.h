@@ -28,7 +28,7 @@ class KPPointObject : public KPShadowObject,  public KPStartEndLine
 {
 public:
     KPPointObject();
-    KPPointObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    KPPointObject( const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
 
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;

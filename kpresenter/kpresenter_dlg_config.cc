@@ -880,7 +880,7 @@ void configureToolsPage::apply()
 
 void configureToolsPage::slotDefault()
 {
-    PenCmd::Pen pen( QPen(black, 1, SolidLine), L_NORMAL, L_NORMAL );
+    PenCmd::Pen pen( KPPen(black, 1.0, SolidLine), L_NORMAL, L_NORMAL );
     m_confPenDia->setPen( pen );
     m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
 

@@ -27,10 +27,10 @@
 #include <qguardedptr.h>
 #include <qtimer.h>
 #include <qdatetime.h>
-#include <qpen.h>
 
 #include <koView.h>
 #include "global.h"
+#include "kppen.h"
 #include <koRuler.h>
 
 class QPopupMenu;
@@ -502,7 +502,7 @@ public:
     PieType getPieType() const { return pieType; }
     int getPieAngle() const { return pieAngle; }
     int getPieLength() const { return pieLength; }
-    QPen getPen() const { return pen; }
+    KPPen getPen() const { return pen; }
     QBrush getBrush() const { return brush; }
     LineEnd getLineBegin() const { return lineBegin; }
     LineEnd getLineEnd() const{ return lineEnd; }
@@ -519,7 +519,7 @@ public:
     void setPieType(PieType _pieType) { pieType = _pieType; }
     void setPieAngle(int _pieAngle) { pieAngle = _pieAngle; }
     void setPieLength(int _pieLength) { pieLength = _pieLength; }
-    void setPen(QPen _pen) { pen = _pen; }
+    void setPen(KPPen _pen) { pen = _pen; }
     void setBrush(QBrush _brush) { brush = _brush; }
     void setLineBegin(LineEnd _lineBegin) { lineBegin = _lineBegin; }
     void setLineEnd(LineEnd _lineEnd){ lineEnd = _lineEnd; }
@@ -580,7 +580,7 @@ public:
     void openPopupMenuHelpPoint( const QPoint & _point );
     void openPopupMenuZoom( const QPoint & _point );
 
-    void penColorChanged( const QPen & _pen );
+    void penColorChanged( const KPPen & _pen );
     void brushColorChanged( const QBrush & _brush );
 
     /**
@@ -696,7 +696,7 @@ protected slots:
     void setExtraLineEnd(LineEnd le);
 
     void setExtraPenStyle( Qt::PenStyle style );
-    void setExtraPenWidth( unsigned int width );
+    void setExtraPenWidth( double width );
 
     /**
      * Restart the presenation from the first shown slide.
@@ -788,7 +788,7 @@ protected:
      * create a command which sets the pen according to the flags
      * for the selected objects on the active and sticky page
      */
-    KCommand * getPenCmd( const QString &name, QPen pen, LineEnd lb, LineEnd le, int flags );
+    KCommand * getPenCmd( const QString &name, KPPen pen, LineEnd lb, LineEnd le, int flags );
 
     void spellCheckerRemoveHighlight();
 
@@ -834,7 +834,7 @@ private:
     KPPresDurationDia *presDurationDia;
 
     // default pen and brush
-    QPen pen;
+    KPPen pen;
     QBrush brush;
     LineEnd lineBegin;
     LineEnd lineEnd;

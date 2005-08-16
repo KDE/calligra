@@ -45,7 +45,7 @@ KPLineObject::KPLineObject()
     lineType = LT_HORZ;
 }
 
-KPLineObject::KPLineObject( const QPen &_pen, LineEnd _lineBegin,
+KPLineObject::KPLineObject( const KPPen &_pen, LineEnd _lineBegin,
                             LineEnd _lineEnd, LineType _lineType )
     : KPShadowObject( _pen ), KPStartEndLine( _lineBegin, _lineEnd )
 {
@@ -199,7 +199,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
-    int _w = pen.width();
+    int _w = pen.pointWidth();
 
     QPen pen2;
     if ( drawContour ) {
@@ -207,8 +207,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         _painter->setRasterOp( Qt::NotXorROP );
     }
     else {
-        pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+        pen2 = pen.zoomedPen( _zoomHandler );
     }
     _painter->setPen( pen2 );
 
@@ -362,8 +361,8 @@ KoSize KPLineObject::getRealSize() const {
     if ( lineType == LT_LU_RD || lineType == LT_LD_RU )
     {
         double objAngle = atan( ext.width() / ext.height() );
-        double x = cos( objAngle ) * pen.width();
-        double y = sin( objAngle ) * pen.width();
+        double x = cos( objAngle ) * pen.pointWidth();
+        double y = sin( objAngle ) * pen.pointWidth();
 
         if ( lineType == LT_LU_RD )
         {
@@ -387,27 +386,27 @@ KoSize KPLineObject::getRealSize() const {
 
     if ( angle == 0.0 && lineType == LT_HORZ )
     {
-        size.setHeight( pen.width() );
+        size.setHeight( pen.pointWidth() );
     }
     else if ( angle == 0.0 && lineType == LT_VERT )
     {
-        size.setWidth( pen.width() );
+        size.setWidth( pen.pointWidth() );
     }
     else
     {
         if ( lineType == LT_HORZ )
         {
-            points.setPoint( 0, 0, ( ext.height() - pen.width() ) / 2.0 );
-            points.setPoint( 1, 0, ( ext.height() + pen.width() ) / 2.0 );
-            points.setPoint( 2, ext.width(), ( ext.height() - pen.width() ) / 2.0 );
-            points.setPoint( 3, ext.width(), ( ext.height() + pen.width() ) / 2.0 );
+            points.setPoint( 0, 0, ( ext.height() - pen.pointWidth() ) / 2.0 );
+            points.setPoint( 1, 0, ( ext.height() + pen.pointWidth() ) / 2.0 );
+            points.setPoint( 2, ext.width(), ( ext.height() - pen.pointWidth() ) / 2.0 );
+            points.setPoint( 3, ext.width(), ( ext.height() + pen.pointWidth() ) / 2.0 );
         }
         else if ( lineType == LT_VERT )
         {
-            points.setPoint( 0, ( ext.width() - pen.width() ) / 2.0, 0 );
-            points.setPoint( 1, ( ext.width() + pen.width() ) / 2.0, 0 );
-            points.setPoint( 2, ( ext.width() - pen.width() ) / 2.0, ext.height() );
-            points.setPoint( 3, ( ext.width() + pen.width() ) / 2.0, ext.height() );
+            points.setPoint( 0, ( ext.width() - pen.pointWidth() ) / 2.0, 0 );
+            points.setPoint( 1, ( ext.width() + pen.pointWidth() ) / 2.0, 0 );
+            points.setPoint( 2, ( ext.width() - pen.pointWidth() ) / 2.0, ext.height() );
+            points.setPoint( 3, ( ext.width() + pen.pointWidth() ) / 2.0, ext.height() );
         }
 
         getRealSizeAndOrigFromPoints( points, angle, size, realOrig );
@@ -425,8 +424,8 @@ KoPoint KPLineObject::getRealOrig() const {
     if ( lineType == LT_LU_RD || lineType == LT_LD_RU )
     {
         double objAngle = atan( ext.width() / ext.height() );
-        double x = cos( objAngle ) * pen.width();
-        double y = sin( objAngle ) * pen.width();
+        double x = cos( objAngle ) * pen.pointWidth();
+        double y = sin( objAngle ) * pen.pointWidth();
 
         if ( lineType == LT_LU_RD )
         {
@@ -450,27 +449,27 @@ KoPoint KPLineObject::getRealOrig() const {
 
     if ( angle == 0.0 && lineType == LT_HORZ )
     {
-        realOrig.setY( realOrig.y() + ( ext.height() - pen.width() ) / 2.0 );
+        realOrig.setY( realOrig.y() + ( ext.height() - pen.pointWidth() ) / 2.0 );
     }
     else if ( angle == 0.0 && lineType == LT_VERT )
     {
-        realOrig.setX( realOrig.x() + ( ext.width() - pen.width() ) / 2.0 );
+        realOrig.setX( realOrig.x() + ( ext.width() - pen.pointWidth() ) / 2.0 );
     }
     else
     {
         if ( lineType == LT_HORZ )
         {
-            points.setPoint( 0, 0, ( ext.height() - pen.width() ) / 2.0 );
-            points.setPoint( 1, 0, ( ext.height() + pen.width() ) / 2.0 );
-            points.setPoint( 2, ext.width(), ( ext.height() - pen.width() ) / 2.0 );
-            points.setPoint( 3, ext.width(), ( ext.height() + pen.width() ) / 2.0 );
+            points.setPoint( 0, 0, ( ext.height() - pen.pointWidth() ) / 2.0 );
+            points.setPoint( 1, 0, ( ext.height() + pen.pointWidth() ) / 2.0 );
+            points.setPoint( 2, ext.width(), ( ext.height() - pen.pointWidth() ) / 2.0 );
+            points.setPoint( 3, ext.width(), ( ext.height() + pen.pointWidth() ) / 2.0 );
         }
         else if ( lineType == LT_VERT )
         {
-            points.setPoint( 0, ( ext.width() - pen.width() ) / 2.0, 0 );
-            points.setPoint( 1, ( ext.width() + pen.width() ) / 2.0, 0 );
-            points.setPoint( 2, ( ext.width() - pen.width() ) / 2.0, ext.height() );
-            points.setPoint( 3, ( ext.width() + pen.width() ) / 2.0, ext.height() );
+            points.setPoint( 0, ( ext.width() - pen.pointWidth() ) / 2.0, 0 );
+            points.setPoint( 1, ( ext.width() + pen.pointWidth() ) / 2.0, 0 );
+            points.setPoint( 2, ( ext.width() - pen.pointWidth() ) / 2.0, ext.height() );
+            points.setPoint( 3, ( ext.width() + pen.pointWidth() ) / 2.0, ext.height() );
         }
 
         getRealSizeAndOrigFromPoints( points, angle, size, realOrig );

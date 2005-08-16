@@ -64,7 +64,8 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	marginui.ui kpmarginwidget.cc textproperty.cc \
 	kpobjectproperties.cc \
 	propertyeditor.cc \
-	slidetransitionwidget.ui slidetransitiondia.cc
+	slidetransitionwidget.ui slidetransitiondia.cc \
+	kppen.cc
 
 if include_ARTS
 ARTSKDE = -lartskde
