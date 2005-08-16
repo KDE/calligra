@@ -184,7 +184,7 @@ To split a window select <menuchoice><guimenu>View</guimenu><guimenuitem>Split V
 
 <sect2>
 <title>The View Manager</title>
-<para>The View Manager allows you to store the current display settings, including zoom level and position. You can then adjust the view and still be able to revert back to the previous settings with a single mouse click. A number of different settings can be stored and given names for ease of reference.</para>
+<para>The View Manager allows you to store the current display settings, including zoom level and position. You can then adjust the view and still be able to revert back to the previous settings. A number of different settings can be stored and given names for ease of reference.</para>
 <para>To display the View Manager choose <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>View Manager</guimenuitem></menuchoice>. The docker contains five buttons and a list of stored views.</para>
 <para>The first button, <guibutton>Add Current View</guibutton>, stores the current display settings. Once the settings have been stored you can modify the display settings. To revert to any one of the stored settings click on its name in the list.</para>
 <para>By default &kivio; labels the settings with the page number and the magnification level, to enter a more descriptive name click on the middle button, <guibutton>Rename Item</guibutton>; this lets you enter your own text.</para>
