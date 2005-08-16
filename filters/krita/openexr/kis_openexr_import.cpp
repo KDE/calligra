@@ -82,7 +82,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
 
     RgbaInputFile file(QFile::encodeName(filename));
     Box2i dataWindow = file.dataWindow();
-    Box2i displayWindow = file.dataWindow();
+    Box2i displayWindow = file.displayWindow();
 
     kdDebug() << "Data window: " << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1) << endl;
     kdDebug() << "Display window: " << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1) << endl;
@@ -115,15 +115,15 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         return KoFilter::CreationError;
     }
 
-    Rgba pixels[dataWidth];
+    QMemArray<Rgba> pixels(dataWidth);
 
     for (int y = 0; y < dataHeight; ++y) {
 
-        file.setFrameBuffer(pixels - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
+        file.setFrameBuffer(pixels.data() - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
         file.readPixels(dataWindow.min.y + y);
 
         KisHLineIterator it = layer -> createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
-        Rgba *rgba = pixels;
+        Rgba *rgba = pixels.data();
 
         while (!it.isDone()) {
 
