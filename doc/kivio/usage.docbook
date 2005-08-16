@@ -25,16 +25,16 @@
 
 <sect1 id="stencils">
 <title>Using Stencils</title>
-<para>Diagrams are created by placing different pre-drawn shapes called stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they are grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into several groups; a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
+<para>Diagrams are created by placing different pre-drawn shapes and stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they are grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into several groups; a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
 <para>Stencils are grouped into stencil sets for organizational purposes only; it is perfectly okay to add several stencil sets to a document and &kivio; allows you to mix and match stencils from different sets freely.</para>
 <para>To place a stencil onto the document simply drag it from the stencil area to the page.</para>
 
 <sect2>
 <title>Selecting Stencils</title>
 <para>
-&kivio; identifies the stencil currently being edited by displaying six green rectangles on the corners and edges of a square around the stencil. Stencils shown in this manner are described as being selected. The green rectangles are known as handles.
+&kivio; identifies the stencil currently being edited by displaying eight green squares on the corners and edges of a square around the stencil. Stencils shown in this manner are described as being selected. The green rectangles are known as handles.
 To change the currently selected stencil move the mouse pointer over the stencil you wish to select and press the &LMB;.
-To select all the stencils in the current document select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Select All</guimenuitem></menuchoice>.
+To select all the stencils on the current page select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Select All</guimenuitem></menuchoice>.
 To deselect all stencils select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Select None</guimenuitem></menuchoice>.
 </para>
 </sect2>
@@ -42,13 +42,12 @@ To deselect all stencils select <menuchoice><guimenu>Edit</guimenu><guimenuitem>
 <sect2>
 <title>Moving Stencils</title>
 <para>
-To move a stencil to another position on the page, move the mouse pointer over the stencil, note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the stencil to the new position. Release the mouse button.</para>
+To move a stencil to another position on the page, select the stencil. Note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the mouse to the new position. Release the mouse button, and the stencil will move to the new position.</para>
 </sect2>
 
 <sect2>
 <title>Resizing a Stencil</title>
-<para>
-Move the mouse pointer over one of the handles and note the mouse pointer change. Hold down the &LMB; and move the mouse. The size of the stencil will be adjusted continuously as the mouse is moved. When you are happy with the new size release the mouse button.</para>
+<para>Select the stencil, and then move the mouse pointer over one of the handles.  Note the mouse pointer change. Hold down the &LMB; and move the mouse. The coordinates of the stencil will be adjusted continuously as the mouse is moved. When you are happy with the new size release the mouse button and the stencil will be resized.</para>
 </sect2>
 
 <sect2>
@@ -79,9 +78,9 @@ The adjustments will only affect the currently selected stencil.</para>
 	All the stencils will be shown with handles around them.</para>
 </listitem>
 <listitem>
-<para> the mouse pointer to a blank area of the document near the stencils you want to select.
-	Hold down the &LMB; and move the mouse to the other side of the stencils you want to select, drawing a square around them.
-	The square must completely encompass the stencils for them to be selected.
+<para>Move the mouse pointer to a blank area of the document near the stencils you want to select.</para>
+<para>Hold down the &LMB; and move the mouse to the other side of the stencils you want to select, drawing a rectangle around them.</para>
+<para>The rectangle must completely encompass the stencils for them to be selected.
 </para>
 </listitem>
 </orderedlist>
@@ -115,13 +114,13 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Grouping Stencils</title>
 <para>Several stencils may be semi-permanently grouped together. Once this has been done any changes made to one stencil will affect the others in the group.</para>
-<para>To make a group select the stencils and select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Group Selected Stencils</guimenuitem></menuchoice>.</para>
-<para>The procedure can be reversed by selecting a group of stencils and select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Ungroup Selected Stencils</guimenuitem></menuchoice>.</para>
+<para>To make a group select the stencils and select <menuchoice><guimenu>Format</guimenu><guimenuitem>Group Selected Stencils</guimenuitem></menuchoice>.</para>
+<para>The procedure can be reversed by selecting a group of stencils and select <menuchoice><guimenu>Format</guimenu><guimenuitem>Ungroup Selected Stencils</guimenuitem></menuchoice>.</para>
 </sect2>
 
 <sect2>
 <title>Overlaying Stencils</title>
-<para>Stencils can be positioned on top of one another. A stencil drawn on top of another stencil will obscure the stencil underneath it. To adjust the drawing order select one of the stencils and select either <menuchoice><guimenu>Edit</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice> or <menuchoice><guimenu>Edit</guimenu><guimenuitem>Send to Back</guimenuitem></menuchoice>.</para>
+<para>Stencils can be positioned on top of one another. A stencil drawn on top of another stencil will obscure the stencil underneath it. To adjust the drawing order select one of the stencils and select either <menuchoice><guimenu>Format</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice> or <menuchoice><guimenu>Format</guimenu><guimenuitem>Send to Back</guimenuitem></menuchoice>.</para>
 <para><guimenuitem>Send to Back</guimenuitem> will cause the stencil to be obscured by any stencil which overlaps it. <guimenuitem>Bring to Front</guimenuitem> will cause the stencil to obscure any stencil which it overlaps.</para>
 </sect2>
 
@@ -146,7 +145,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Zooming In and Out</title>
-<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This sub-menu contains a list of percentages from 33% to 500%; selecting one of these will adjust the magnification to show that percentage of the document.</para>
+<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This sub-menu contains a list of percentages from 33% to 500%; selecting one of these magnify the document by that percentage.</para>
 <para>There is also a list of zoom levels on the Edit toolbar, by default shown at the top of the screen.</para>
 <para>A second method of controlling the magnification is to use the zoom tool. This is available on the left-hand tools menu. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the &Shift; key whilst clicking will decrease the magnification, &ie; zoom out.</para>
 <para>Alternatively, holding down the &LMB; and dragging out a box then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
@@ -167,7 +166,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Using Dockers</title>
-<para>All dockers can have a handle on one edge which enables them to be moved around and positioned on any edge of the main view. They can also float anywhere on the screen. If they are not floating they shrink when not in use to remain unobtrusive, however, this behavior can be toggled by clicking on the icon that looks like a small pin. Next to this is a button marked with a cross that removes the docker.</para>
+<para>All dockers have a handle on one edge which enables them to be moved around and positioned on any edge of the main view. They can also float anywhere on the screen. If they are not floating they shrink when not in use to remain unobtrusive, however, this behavior can be toggled by clicking on the icon that looks like a small pin. Next to this is a button marked with a cross that removes the docker.</para>
 </sect2>
 
 <sect2>

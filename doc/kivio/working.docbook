@@ -17,19 +17,19 @@
 
 <sect1 id="opening">
 <title>Opening a Document</title>
-<para>To open a previously saved document select <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>, a standard &kde; file dialog box will appear.</para>
+<para>To open a previously saved document select <menuchoice><guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice>, a standard &kde; file dialog box will appear.</para>
 <para>Recently used documents are listed under <menuchoice><guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem></menuchoice>.</para>
 </sect1>
 
 <sect1 id="saving">
 <title>Saving a Document</title>
-<para>To save the current document select <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu><guimenuitem>Save As</guimenuitem></menuchoice> to give an existing file a different name.</para>
+<para>To save the current document select <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice> to give an existing file a different name.</para>
 <note><para>It is possible to save the document in a format that can be opened by earlier versions of &kivio;. Select the version you require from the <guilabel>Filter</guilabel> combo box in the Save file dialog.</para></note>
 </sect1>
 
 <sect1 id="printing">
 <title>Printing</title>
-<para>The document can be printed by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>. The standard &kde; printing dialog appears. A preview of the printed output can be obtained by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print Preview</guimenuitem></menuchoice>.</para>
+<para>The document can be printed by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print...</guimenuitem></menuchoice>. The standard &kde; printing dialog appears. A preview of the printed output can be obtained by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print Preview...</guimenuitem></menuchoice>.</para>
 </sect1>
 
 <sect1 id="import-export">
@@ -88,7 +88,7 @@
 </sect1>
 
 <sect1 id="grid">
-<title>The Grid</title>
+<title>The Grid</title>	
 <para>&kivio; displays a regularly spaced grid over the document to aid stencil positioning. The visibility of the grid can be toggled by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Show Grid</guimenuitem></menuchoice>.</para>
 <para>Objects edges are snapped to the nearest point on the grid regardless of whether it is visible. To toggle this behavior select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Grid</guimenuitem></menuchoice>.</para>
 <para>To customize the grid select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Kivio...</guimenuitem></menuchoice> and click on the <guiicon>Grid</guiicon> on the icon list.</para>
@@ -100,12 +100,12 @@
 <title>Freestanding Text</title>
 <para>The text tool can be used to add text to a document that is not associated with any object. This is useful for noting general information about a drawing.</para>
 <para>To add freestanding text make sure no object is selected by selecting <menuchoice><guimenu>Edit</guimenu><guimenuitem>Select None</guimenuitem></menuchoice>, then activate the text tool by selecting <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Stencil Text</guimenuitem></menuchoice>. The mouse pointer will change to indicate the text tool is activated.</para>
-<para>Drag a box to contain the text. A dialog box will appear prompting for the text, enter some text and click OK. The formatting of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice> or by using the toolbars.</para>
+<para>Drag a box to contain the text. A dialog box will appear prompting for the text, enter some text and click <guibutton>OK</guibutton>. The formatting of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice> or by using the toolbars.</para>
 </sect1>
 
 <sect1 id="page-layout">
 <title>Page Layout</title>
-<para>The page size, margins and orientation, portrait or landscape, can be adjusted using the <guilabel>Page Size and Margins</guilabel> dialog box. This is accessible by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout</guimenuitem></menuchoice>.</para>
+<para>The page size, margins and orientation, portrait or landscape, can be adjusted using the <guilabel>Page Size and Margins</guilabel> dialog box. This is accessible by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>.</para>
 </sect1>
 
 <sect1 id="guides">
@@ -149,9 +149,35 @@ Each page of the document has its own set of layers.</para>
 <sect2>
 <title>Layer Settings</title>
 <para>Layers are drawn in the order they are listed. The drawing occurs from the top down so objects in the layer at the bottom of the list are drawn on top of objects in all the other layers. The order of the list can be changed by selecting a layer and using the <guibutton>Move Layer Up</guibutton> and <guibutton>Move Layer Down</guibutton> buttons to change its position.</para>
-<para>Each layer is listed with four small icons next to its name. From left to right they represent:
-	Visibility - shown as a small eye. Clicking on the icon will toggle the layer's visibility.
-</para>
+<para>Each layer is listed with four small icons next to its name. From left
+to right they represent:</para>
+<variablelist>
+<varlistentry>
+<term>Visibility (shown as a small eye)</term>
+<listitem><para>Clicking on the icon will toggle the layer's visibility.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Printable (shown as a small printer)</term>
+<listitem><para>Toggles if the layer should be printed with the document or
+not.  You might use a non-printing layer to keep notes to yourself, or as a
+scrapbook to hold images you're not ready to use yet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Editable (shown as a small pencil)</term>
+<listitem><para>Toggles if you can edit a layer or not.  You might want to
+mark some layers non-editable while you work on others, to prevent
+inadvertant changes.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Connectable (shown as a small connector)</term>
+<listitem><para>You can permit connecting of items that lie on different
+layers with this icon.</para></listitem>
+</varlistentry>
+</variablelist>
+
 </sect2>
 </sect1>
 
