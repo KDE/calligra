@@ -38,6 +38,7 @@ KSpreadValue func_areas (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_choose (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_column (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_columns (valVector args, ValueCalc *calc, FuncExtra *);
+KSpreadValue func_index (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_lookup (valVector args, ValueCalc *calc, FuncExtra *);
 KSpreadValue func_row (valVector args, ValueCalc *calc, FuncExtra *);
@@ -67,6 +68,10 @@ void KSpreadRegisterReferenceFunctions()
   f->setParamCount (1);
   f->setAcceptArray ();
   f->setNeedsExtra (true);
+  repo->add (f);
+  f = new Function ("INDEX",   func_index);
+  f->setParamCount (3);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("INDIRECT", func_indirect);
   f->setParamCount (1, 2);
@@ -218,6 +223,22 @@ KSpreadValue func_choose (valVector args, ValueCalc *calc, FuncExtra *)
   if ((num <= 0) || (num > cnt))
     return KSpreadValue::errorVALUE();
   return args[num];
+}
+
+// Function: INDEX
+KSpreadValue func_index (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  // first argument can be either a range, then we return a given cell's
+  // value, or a single cell containing an array - then we return the array
+  // element. In any case, this function can assume that the given value
+  // is the same. Because it is.
+  
+  KSpreadValue val = args[0];
+  unsigned row = calc->conv()->asInteger (args[1]).asInteger() - 1;
+  unsigned col = calc->conv()->asInteger (args[2]).asInteger() - 1;
+  if ((row >= val.rows()) || (col >= val.columns()))
+    return KSpreadValue::errorNA();
+  return val.element (col, row);
 }
 
 // Function: LOOKUP

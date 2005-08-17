@@ -108,6 +108,29 @@
     </Function>
 
     <Function>
+      <Name>INDEX</Name>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Row</Comment>
+        <Type>Integer</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Column</Comment>
+        <Type>Integer</Type>
+      </Parameter>
+      <Help>
+        <Text>If a range is given, returns value stored in a given row/column. If one cell is given, which contains an array, then one element of the array is retrned..</Text>
+	<Syntax>INDEX(cell, row, column)</Syntax>
+	<Syntax>INDEX(range, row, column)</Syntax>
+	<Example>INDEX(A1:C3,2,2), returns contents of B2</Example>
+	<Example>INDEX(A1,2,2), if A1 is a result of array calculation, returns its )2,2) element.</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>INDIRECT</Name>
       <Parameter>
         <Comment>Reference</Comment>
