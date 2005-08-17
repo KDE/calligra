@@ -56,7 +56,7 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
     connect( m_ui->styleCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotPenChanged() ) );
 
-    connect( m_ui->widthInput, SIGNAL( valueChanged( int ) ),
+    connect( m_ui->widthInput, SIGNAL( valueChanged( double ) ),
              this, SLOT( slotPenChanged() ) );
 
     m_ui->lineBeginCombo->insertItem( i18n("Normal") );

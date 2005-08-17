@@ -86,7 +86,7 @@ void PBPreview::drawContents( QPainter *painter )
                                                    _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
                         pen.color(), _w, 0.0, _zoomHandler );
 
-        painter->setPen( pen );
+        painter->setPen( pen.zoomedPen( _zoomHandler ) );
         painter->drawLine( - (int)diff1.width() + 8,
                            contentsRect().height() / 2,
                            contentsRect().width() - (int)diff2.width() - 7,
