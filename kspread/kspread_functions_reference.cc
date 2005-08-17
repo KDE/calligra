@@ -237,7 +237,7 @@ KSpreadValue func_index (valVector args, ValueCalc *calc, FuncExtra *)
   unsigned row = calc->conv()->asInteger (args[1]).asInteger() - 1;
   unsigned col = calc->conv()->asInteger (args[2]).asInteger() - 1;
   if ((row >= val.rows()) || (col >= val.columns()))
-    return KSpreadValue::errorNA();
+    return KSpreadValue::errorREF();
   return val.element (col, row);
 }
 
