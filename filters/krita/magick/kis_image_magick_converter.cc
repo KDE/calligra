@@ -389,26 +389,31 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                     return KisImageBuilder_RESULT_FAILURE;
                 }
 
-                KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
+                IndexPacket * indexes = GetCacheViewIndexes(vi);
 
+                KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
+    
                 if (colorspaceType== CMYKColorspace) {
                     if (imageDepth == 8) {
-
+                        int x = 0;
                         while (!hiter.isDone())
                         {
                             Q_UINT8 *ptr= hiter.rawData();
                             *(ptr++) = Downscale(pp->red); // cyan
                             *(ptr++) = Downscale(pp->green); // magenta
                             *(ptr++) = Downscale(pp->blue); // yellow
-                            if (image->matte == 0) {
-                                *(ptr++) = Downscale(pp->opacity); // black
-                                *(ptr++) = OPACITY_OPAQUE; // That's not in ImageMagick...
+                            *(ptr++) = indexes[x]; // Black
+#ifdef HAVE_MAGICK6
+                            if (image->matte != MagickFalse) {
+#else
+                            if (image->matte == true) {
+#endif
+                                *(ptr++) = pp->opacity;
                             }
                             else {
-                                //*(ptr++) = Downscale(pp->index);
-                                *(ptr++) = Downscale(pp->opacity);
+                                *(ptr++) = OPACITY_OPAQUE;
                             }
-    
+                            ++x;
                             pp++;
                             ++hiter;
                         }
