@@ -32,7 +32,6 @@
 
 #include <kexi.h>
 #include <kexidialogbase.h>
-#include <kexidatasourcewizard.h>
 #include <kexidragobjects.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
