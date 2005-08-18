@@ -32,6 +32,7 @@ Comment[sv]=Tjänsttyp för alla sorters serverbaserade Kexi-importfilter (tabel
 Comment[ta]= சேவைகள் அனைத்தையும் Kexi சேவையக வடிகட்டியில் காணலாம்
 Comment[tg]=Намуди хизматгузорӣ барои шакли филтрҳои воридоти ҳамдигар аз сервер дар kexi (ҷадвалҳо,шаклҳо,талаботҳо, ...)
 Comment[tr]=Sunucu tabanlı her tür Kexi alım filtreleri için servis türü (tablo,formlar,sorgular, ...)
+Comment[uk]=Тип служби для будь-якого виду фільтрів імпорту з серверів в Kexi (таблиць, форм, запитів, ...)
 Comment[xx]=xxService type for any kind of server based kexi import filters (table,forms,queries, ...)xx
 Comment[zh_CN]=任何种类的基于服务器的 kexi 导入过滤器服务类型(表、表单、查询，等等)
 

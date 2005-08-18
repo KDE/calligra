@@ -5,3 +5,4 @@ MimeType=application/x-kexi-connectiondata
 Icon=kexi_connectiondata
 Patterns=*.kexic
 Comment=Data for Database Server Connection
+Comment[es]=Datos para la conexión con el servidor de bases de datos
