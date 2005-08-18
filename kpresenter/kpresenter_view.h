@@ -746,6 +746,8 @@ protected slots:
 
     void initialLayoutOfSplitter();
 
+    virtual void slotChildActivated(bool a);
+
 protected:
     virtual void resizeEvent( QResizeEvent* );
     virtual void dragEnterEvent( QDragEnterEvent *e );

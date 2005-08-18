@@ -6502,6 +6502,19 @@ void KPresenterView::initialLayoutOfSplitter()
     splitterVertical->setSizes( tmpList );
 }
 
+void KPresenterView::slotChildActivated(bool a)
+{
+  KoViewChild* ch = child( (KoView*)sender() );
+  if ( !ch )
+    return;
+
+  if( !a ) {
+    m_canvas->exitEditMode();
+  }
+
+  KoView::slotChildActivated( a );
+}
+
 #ifdef HAVE_LIBKSPELL2
 Broker *KPresenterView::broker() const
 {
