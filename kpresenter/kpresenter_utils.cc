@@ -169,6 +169,18 @@ void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coor
     drawFigure( figure, painter, offsetPoint, color, _w, angle,_zoomHandler );
 }
 
+void drawFigureWithOffset( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
+                           int w, float angle, KoZoomHandler*_zoomHandler, bool begin )
+{
+    KoSize diff = getOffset( figure, w, angle );
+    KoPoint offsetPoint(diff.width(), diff.height());
+    double offsetAngle = angle + ( begin ? 90.0 : -90.0 );
+    KoPoint lineOffset( w * cos( offsetAngle * M_PI / 180.0 ) / 2,
+                        w * sin( offsetAngle * M_PI / 180.0 ) / 2 );
+    offsetPoint += coord + lineOffset;
+    drawFigure( figure, painter, offsetPoint, color, w, angle,_zoomHandler );
+}
+
 KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler )
 {
     switch ( figure )

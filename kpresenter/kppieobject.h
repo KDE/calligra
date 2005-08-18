@@ -98,6 +98,8 @@ protected:
     void setMinMax( double &min_x, double &min_y, double &max_x, double &max_y, KoPoint point ) const;
     void getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const;
 
+    void setEndPoints( KoPointArray &points ) const;
+
     PieType pieType;
     int p_angle, p_len;
     LineEnd lineBegin, lineEnd;
