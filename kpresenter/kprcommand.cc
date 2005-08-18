@@ -913,6 +913,15 @@ void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
                 //doc->repaint( obj );
             }
         } break;
+        case OT_PIE:
+        {
+            KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+            if ( obj )
+            {
+                obj->setLineBegin( tmpPen->lineBegin );
+                obj->setLineEnd( tmpPen->lineEnd );
+            }
+        } break;
         default:
             break;
     }
@@ -970,6 +979,15 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
                 case OT_CUBICBEZIERCURVE:
                 {
                     KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+                    if ( obj )
+                    {
+                        lineBegin = obj->getLineBegin();
+                        lineEnd = obj->getLineEnd();
+                    }
+                } break;
+                case OT_PIE:
+                {
+                    KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
                     if ( obj )
                     {
                         lineBegin = obj->getLineBegin();

@@ -3,7 +3,7 @@
 # This script helps finding out problems in the OASIS loading/saving code,
 # by converting .kpr -> .odp -> .kpr and comparing the initial and final .kpr files.
 # We use the kpr format as a "dump" of the KPresenter data, to check if everything is correct
-# in memory, but the point is of course to ensure that the .odt has all the information.
+# in memory, but the point is of course to ensure that the .odp has all the information.
 
 # To use this script, you need to pass the full path to an existing kpr file as argument.
 # Don't use a relative path, dcopstart won't handle it

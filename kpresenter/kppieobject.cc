@@ -20,6 +20,7 @@
 
 #include "kppieobject.h"
 #include "kpgradient.h"
+#include "kpresenter_utils.h"
 #include "KPPieObjectIface.h"
 
 #include <kozoomhandler.h>
@@ -292,6 +293,39 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
                 _painter->setBrush( Qt::NoBrush );
             }
         }
+        if ( pieType == PT_ARC )
+        {
+            KoPointArray points( 2 );
+            setEndPoints( points );
+            KoPoint start( points.point( 0 ) );
+            KoPoint end( points.point( 1 ) );
+
+            double ys = ( ( 1 - start.x() / ( ext.width() * ext.width() / 4 ) ) * ext.height() * ext.height() / 4 ) / start.y();
+            double s_angle = 90 + ( atan( ( start.x() - 1 ) / ( start.y() - ys ) ) * 180 / M_PI );
+            if ( p_angle / 16 >= 90 && p_angle / 16 <= 270 )
+            {
+                s_angle += 180.0;
+            }
+            double ye = ( ( 1 - end.x() / ( ext.width() * ext.width() / 4 ) ) * ext.height() * ext.height() / 4 ) / end.y();
+            double e_angle = 270 + ( atan( ( end.x() - 1 ) / ( end.y() - ye ) ) * 180 / M_PI );
+            if ( ( ( p_angle + p_len ) / 16 ) % 360 >= 90 && ( ( p_angle + p_len ) / 16 ) % 360 <= 270 )
+            {
+                e_angle -= 180.0;
+            }
+
+            start = KoPoint( ext.width() / 2.0 + start.x(), ext.height() / 2.0 - start.y() );
+            end = KoPoint( ext.width() / 2.0 + end.x(), ext.height() / 2.0 - end.y() );
+
+
+            
+            if ( lineBegin != L_NORMAL )
+                drawFigureWithOffset( lineBegin, _painter, start,
+                            pen2.color(), pen.pointWidth(), s_angle, _zoomHandler, true );
+
+            if ( lineEnd != L_NORMAL )
+                drawFigureWithOffset( lineEnd, _painter, end,
+                            pen2.color(), pen.pointWidth(), e_angle, _zoomHandler, false );
+        }
     }
     switch ( pieType )
     {
@@ -369,53 +403,29 @@ void KPPieObject::setMinMax( double &min_x, double &min_y,
  *
  */
 void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
-    // the angles of the object
-    int angles[] = { p_angle, ( p_angle + p_len ) % ( 16 * 360 ) };
-    double anglesInRad[] = { p_angle / 16.0 * M_PI / 180, ( angles[1] ) / 16.0 * M_PI / 180 };
-
     double radius1 = size.width() / 2.0;
     double radius2 = size.height() / 2.0;
-
-    double prop = radius2 / radius1;
 
     // the rotation angle
     double angInRad = angle * M_PI / 180;
 
     // 1. calulate position of end points
     KoPointArray points(2);
+    setEndPoints( points );
+
+    // rotate point
     for ( int i = 0; i < 2; i++ ) {
-        double x = 0;
-        double y = 0;
-
-        // be carefull
-        if ( angles[i] == 90 * 16 ) {
-            y = radius2;
-        }
-        else if ( angles[i] == 270 * 16 ) {
-            y = -radius2;
-        }
-        else {
-            // The real angle is not what was given. It is only ok if radius1 == radius2,
-            // otherwise it is arctan ( radius2 / radius1 tan ( angle ) )
-            double tanalpha = tan( anglesInRad[i] ) * prop;
-            x = sqrt( 1 / ( pow ( 1 / radius1, 2 ) + pow( tanalpha / radius2, 2 ) ) );
-            if ( angles[i] > 90 * 16 && angles[i] < 270 * 16 )
-              x = -x;
-            y = tanalpha * x;
-        }
-
-        // rotate point
         if ( angle != 0 ) {
             double sinus = sin( angInRad );
             double cosinus = cos( angInRad );
 
-            double tmp_x = x;
-            double tmp_y = y;
+            double tmp_x = points.point( i ).x();
+            double tmp_y = points.point( i ).y();
 
-            x = tmp_x * cosinus + tmp_y * sinus;
-            y = - tmp_x * sinus + tmp_y * cosinus;
+            double x = tmp_x * cosinus + tmp_y * sinus;
+            double y = - tmp_x * sinus + tmp_y * cosinus;
+            points.setPoint( i, x, y );
         }
-        points.setPoint( i, x, y );
     }
 
     KoPoint firstPoint( points.point(0) );
@@ -585,6 +595,40 @@ void KPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
 
     realOrig.setX( realOrig.x() + mid_x + min_x );
     realOrig.setY( realOrig.y() + mid_y - max_y );
+}
+
+void KPPieObject::setEndPoints( KoPointArray &points ) const
+{
+    int angles[] = { p_angle, ( p_angle + p_len ) % ( 16 * 360 ) };
+    double anglesInRad[] = { p_angle / 16.0 * M_PI / 180, ( angles[1] ) / 16.0 * M_PI / 180 };
+
+    double radius1 = ext.width() / 2.0;
+    double radius2 = ext.height() / 2.0;
+
+    double prop = radius2 / radius1;
+
+    for ( int i = 0; i < 2; i++ ) {
+        double x = 0;
+        double y = 0;
+
+        // be carefull
+        if ( angles[i] == 90 * 16 ) {
+            y = radius2;
+        }
+        else if ( angles[i] == 270 * 16 ) {
+            y = -radius2;
+        }
+        else {
+            // The real angle is not what was given. It is only ok if radius1 == radius2,
+            // otherwise it is arctan ( radius2 / radius1 tan ( angle ) )
+            double tanalpha = tan( anglesInRad[i] ) * prop;
+            x = sqrt( 1 / ( pow ( 1 / radius1, 2 ) + pow( tanalpha / radius2, 2 ) ) );
+            if ( angles[i] > 90 * 16 && angles[i] < 270 * 16 )
+              x = -x;
+            y = tanalpha * x;
+        }
+        points.setPoint( i, x, y );
+    }
 }
 
 KoSize KPPieObject::getRealSize() const {

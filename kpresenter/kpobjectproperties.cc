@@ -166,6 +166,18 @@ void KPObjectProperties::getLineEndsProperties( KPObject *object )
                     }
                     break;
                 }
+            case OT_PIE:
+                {
+                    KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+                    if ( obj )
+                    {
+                        m_pen.lineBegin = obj->getLineBegin();
+                        m_pen.lineEnd = obj->getLineEnd();
+
+                        m_flags |= PtLineEnds;
+                    }
+                    break;
+                }
             default:
                 break;
         }
@@ -244,7 +256,13 @@ void KPObjectProperties::getPieProperties( KPObject *object )
 
             getPenProperties( object );
             if ( obj->getPieType() != PT_ARC )
+            {
                 getBrushProperties( object );
+            }
+            else
+            {
+                getLineEndsProperties( object );
+            }
 
             m_flags |= PtPie;
         }
