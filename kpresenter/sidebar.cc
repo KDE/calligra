@@ -662,6 +662,7 @@ OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _objec
     : KListViewItem( parent ), m_object( _object )
 {
     setObject( m_object );
+    setDragEnabled( false );
 
     QString objectName = name.isEmpty() ? m_object->getObjectName() : name;
     //if( sticky ) objectName += i18n(" (Sticky)" );
@@ -1053,5 +1054,13 @@ void Outline::renamePageTitle()
     }
 }
 
+QDragObject* Outline::dragObject()
+{
+    if( !selectedItem()->dragEnabled() ) {
+      return 0;
+    }
+
+    return KListView::dragObject();
+}
 
 #include "sidebar.moc"

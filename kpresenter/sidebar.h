@@ -105,6 +105,8 @@ protected:
     OutlineSlideItem* slideItem( int pageNumber );
     bool acceptDrag( QDropEvent* e ) const;
 
+    virtual QDragObject* dragObject();
+
 signals: // all page numbers 0-based
     void showPage( int i );
     void movePage( int from, int to );
