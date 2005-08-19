@@ -430,18 +430,22 @@ as these are encoded into the index file.
 
 <para>It is very easy to add new templates to &kpresenter;'s library.</para>
 
-<para>If you have made a presentation in a style you would like to use
+<para>If you have made a presentation in a style that you would like to use
 again, you can save it as a template.</para>
 
 <para>This tutorial will show how we can make a new template and save
 it.</para>
 
 <procedure>
-<step><para>Open &kpresenter; and create a new document.</para>
+<step>
+<para>Open &kpresenter; and create a new document.</para>
+</step>
 
-<para>I chose a plain background with a text entry box. &RMB; click
-on the work area and you get a <guilabel>Slide Background</guilabel>
-dialog box.</para>
+<step>
+<para>To add a little sparkle to the blank slide, we can change the slide
+background - do this by either going to <guimenu>Format</guimenu> >
+<guimenuitem>Slide Background...</guimenuitem>, or by selecting the same item
+from the &RMB; menu:</para>
 
 <screenshot>
 <screeninfo>The &kpresenter; <guilabel>Slide Background</guilabel>
@@ -455,13 +459,11 @@ dialog.</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>Under <guimenu>Format</guimenu> you will find <guimenuitem>Page
-Background</guimenuitem> which opens the same dialog
-box.</para></step>
-
-<step>
-<para>I want the background to look attractive. In the top Combo box you can
-choose to use a picture or some clipart for the background.</para>
+<para>We want the background to look attractive, so lets add a background
+gradient by using the drop-down menu, and then selecting the gradient colors by
+clicking the colored boxes. Of course, you may choose to use an image as a
+background by clicking the <guilabel>Picture</guilabel> tab: feel free to
+experiment, but keep it beautiful!</para>
 
 <screenshot>
 <screeninfo>Choosing a slide background</screeninfo>
@@ -472,25 +474,11 @@ choose to use a picture or some clipart for the background.</para>
 <textobject><phrase>Choosing a slide background</phrase></textobject>
 </mediaobject>
 </screenshot>
+</step>
 
-<para>I have left this at the default
-<guilabel>Color/Gradient</guilabel> option. In the next Combo box down
-I have chosen <guilabel>Vertical gradient</guilabel>, clicked into the
-two long boxes below it and chosen two colors.</para>
-
-<para>You can alter the start positions of the colors in the gradients
-by clicking in the <guilabel>Unbalanced</guilabel> Check box. This
-lets you use the pair of X and Y sliders. Sometimes one slider will
-not do anything at all, it depends on what type of gradient you have
-chosen.</para>
-
-<para>Remember to choose contrasting colors first. If you leave both
-white, you will not see anything. When you have a color scheme that
-you like, click <guibutton>Apply</guibutton> and
-<guibutton>OK</guibutton> to close the Dialog box.</para> </step>
 <step>
-<para>The page should now be in the colors you chose. Double click in the
-text box to add a heading.</para>
+<para>The page should now have the background you desire. Create a text box, and
+type a heading for your slide:</para>
 
 <screenshot>
 <screeninfo>Adding a Heading to the new template</screeninfo>
@@ -502,14 +490,23 @@ text box to add a heading.</para>
 </mediaobject>
 </screenshot>
 
-<para>When you are happy with your template, click <guimenu>File</guimenu> on
- the Menu Bar and choose
- <guimenuitem>Template Manager</guimenuitem>.</para>
+<para>When you are happy with your template, go to <guimenu>File</guimenu> >
+<guimenuitem>Template Manager</guimenuitem>:</para>
 
-<!-- Skipped screenshot of menu "template05.png" -->
+<screenshot>
+<screeninfo><guimenu>File</guimenu> > <guimenuitem>Template
+Manager</guimenuitem></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template05.png" format="PNG"/>
+</imageobject>
+<textobject><phrase><guimenu>File</guimenu> > <guimenuitem>Template
+Manager</guimenuitem></phrase></textobject>
+</mediaobject>
+</screenshot>
 
-<para>This Dialog box allows you to select where you want your template to
-be saved.</para>
+<para>This dialog box allows you to select where you would like your template to
+be saved:</para>
 
 <screenshot>
 <screeninfo>Saving the new template</screeninfo>
@@ -521,32 +518,32 @@ be saved.</para>
 </mediaobject>
 </screenshot>
 
-<para>I chose to save mine under the <guilabel>Screen presentations</guilabel>
- menu and called it <userinput>Tutorial Template</userinput>. Click
-<guibutton>OK</guibutton> to close this Dialog box.</para> 
+<para>I highly recommend that you save the template in the <guilabel>Screen
+Presentations</guilabel> group. You may call it whatever you wish, in this case,
+my template is named <userinput>Tutorial_Template</userinput>. Once you are
+happy with the settings, press <guibutton>OK</guibutton> to add your custom
+template to the template collection.</para>
 </step>
 
 <step>
-<para>Now close the document you have been working on (do not save it)
-and &kpresenter; will show the <guilabel>Choose</guilabel> Dialog box.</para>
+<para>You can now close the document you have been working on (there is no need
+to save it). The next time you are presented with the <guilabel>Create
+Document</guilabel> dialog, your very own template will be available to
+select!</para>
 
 <screenshot>
-<screeninfo>Your new template in the &kpresenter; <guilabel>Choose</guilabel>
+<screeninfo>Your new template in the &kpresenter; <guilabel>Create
+Document</guilabel>
 dialog.</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="template07.png" format="PNG"/>
 </imageobject>
 <textobject><phrase>Your new template in the &kpresenter;
-<guilabel>Choose</guilabel>
+<guilabel>Create Document</guilabel>
 dialog.</phrase></textobject>
 </mediaobject>
 </screenshot>
-
-<para>You want to <guilabel>Create a new document from a
-Template</guilabel>. Click to open the <guilabel>Screen
-Presentations</guilabel> tab and there is the template we made
-earlier.</para>
 </step>
 </procedure>
 
