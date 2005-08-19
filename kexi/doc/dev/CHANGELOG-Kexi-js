@@ -14,7 +14,10 @@ CCMAIL: dkite@shaw.ca
 
 2005-08-19
 Startup
-- "-type connection" command line arg added (i.e. support for applications/x-kexi-connectiondata mime)
+- "-type connection" command line arg added 
+  (i.e. support for applications/x-kexi-connectiondata mime type)
+Main Window
+- project navigator visibility flag is now stored in config file (usable  for IDEAl)
 
 2005-08-16..18
 Main Window

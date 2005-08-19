@@ -11,7 +11,9 @@ Group: MainWindow
 #percentage navigator's width
 -LeftDockPosition [integer: 0..100]
 #percentage property editor's width
-RightDockPosition [integer: 0..100]
+-RightDockPosition [integer: 0..100]
+#default: true
+-ShowProjectNavigator [boolean]
 
 Group: PropertyEditor
 -FontSize [integer]

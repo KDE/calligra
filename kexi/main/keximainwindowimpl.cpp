@@ -244,6 +244,12 @@ class KexiMainWindowImpl::Private
 		//! Used on opening 1st child window
 		bool maximizeFirstOpenedChildFrm : 1;
 
+		//! Set in restoreSettings() and used in initNavigator() 
+		//! to customize navigator visibility on startup
+		bool forceShowProjectNavigatorOnCreation : 1;
+		bool forceHideProjectNavigatorOnCreation : 1;
+
+		bool navWasVisibleBeforeProjectClosing : 1;
 #ifdef HAVE_KNEWSTUFF
 		KexiNewStuff  *newStuff;
 #endif
@@ -292,6 +298,9 @@ class KexiMainWindowImpl::Private
 		newStuff = 0;
 #endif
 		mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
+		forceShowProjectNavigatorOnCreation = false;
+		forceHideProjectNavigatorOnCreation = false;
+		navWasVisibleBeforeProjectClosing = false;
 	}
 	~Private() {
 	}
@@ -1278,6 +1287,7 @@ tristate KexiMainWindowImpl::closeProject()
 
 	if(d->nav)
 	{
+		d->navWasVisibleBeforeProjectClosing = manager()->findWidgetParentDock(d->nav)->isVisible();
 		d->nav->clear();
 		d->navToolWindow->hide();
 	}
@@ -1379,6 +1389,17 @@ KexiMainWindowImpl::initNavigator()
 	}
 	connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav, SLOT(addItem(KexiPart::Item&)));
 	d->nav->setFocus();
+
+	if (d->forceShowProjectNavigatorOnCreation) {
+		slotViewNavigator();
+		d->forceShowProjectNavigatorOnCreation = false;
+	}
+	else if (d->forceHideProjectNavigatorOnCreation) {
+		d->navToolWindow->hide();
+//		makeDockInvisible( manager()->findWidgetParentDock(d->nav) );
+		d->forceHideProjectNavigatorOnCreation = false;
+	}
+
 	invalidateActions();
 }
 
@@ -1626,6 +1647,8 @@ KexiMainWindowImpl::restoreSettings()
 	d->config->setGroup("MainWindow");
 	int mdimode = d->config->readNumEntry("MDIMode", -1);//KMdi::TabPageMode);
 
+	const bool showProjectNavigator = d->config->readBoolEntry("ShowProjectNavigator", true);
+
 	switch(mdimode)
 	{
 /*		case KMdi::ToplevelMode:
@@ -1635,6 +1658,17 @@ KexiMainWindowImpl::restoreSettings()
 		case KMdi::ChildframeMode:
 			switchToChildframeMode(false);
 			m_pTaskBar->switchOn(true);
+
+			// restore a possible maximized Childframe mode,
+			// will be used in KexiMainWindowImpl::addWindow()
+			d->maximizeFirstOpenedChildFrm = d->config->readBoolEntry("maximized childframes", true);
+			setEnableMaximizedChildFrmMode(d->maximizeFirstOpenedChildFrm);
+
+			if (!showProjectNavigator) {
+				//it's visible by default but we want to hide it on navigator creation
+				d->forceHideProjectNavigatorOnCreation = true;
+			}
+
 			break;
 
 #define DEFAULT_MDI_MODE KMdi::IDEAlMode
@@ -1642,17 +1676,16 @@ KexiMainWindowImpl::restoreSettings()
 		case DEFAULT_MDI_MODE:
 		default:
 			switchToIDEAlMode(false);
+			if (showProjectNavigator) {
+				//it's invisible by default but we want to show it on navigator creation
+				d->forceShowProjectNavigatorOnCreation = true;
+			}
 			break;
 /*		case KMdi::TabPageMode:
 			switchToTabPageMode();
 			break;
 */
 	}
-
-	// restore a possible maximized Childframe mode,
-	// will be used in KexiMainWindowImpl::addWindow()
-	d->maximizeFirstOpenedChildFrm = d->config->readBoolEntry("maximized childframes", true);
-	setEnableMaximizedChildFrmMode(d->maximizeFirstOpenedChildFrm);
 
 #if 0
 	if ( !initialGeometrySet() ) {
@@ -1704,6 +1737,12 @@ KexiMainWindowImpl::storeSettings()
 	else
 		d->config->writeEntry("MDIMode", modeToSave);
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
+
+//	if (manager()->findWidgetParentDock(d->nav)->isVisible())
+	if (d->navWasVisibleBeforeProjectClosing)
+		d->config->deleteEntry("ShowProjectNavigator");
+	else
+		d->config->writeEntry("ShowProjectNavigator", false);
 
 	if (modeToSave==KMdi::ChildframeMode || modeToSave==KMdi::TabPageMode) {
 		if (d->propEditor && d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
