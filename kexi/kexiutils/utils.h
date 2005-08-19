@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KEXIUTILS_UTILS_H__
-#define __KEXIUTILS_UTILS_H__
+#ifndef KEXIUTILS_UTILS_H
+#define KEXIUTILS_UTILS_H
 
 #include "kexiutils_export.h"
 
@@ -122,4 +122,4 @@ namespace KexiUtils
 	{ QVBoxLayout *lyr = new QVBoxLayout(where); \
 	  lyr->addWidget(what); }
 
-#endif //__KEXIUTILS_UTILS_H__
+#endif //KEXIUTILS_UTILS_H

@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KEXIUTILS_P_H__
-#define __KEXIUTILS_P_H__
+#ifndef KEXIUTILS_P_H
+#define KEXIUTILS_P_H
 
 #include <qtimer.h>
 #include <qapplication.h>

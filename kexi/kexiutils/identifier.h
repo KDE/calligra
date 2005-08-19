@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __IDENTIFIER_H
-#define __IDENTIFIER_H
+#ifndef KEXIUTILS_IDENTIFIER_H
+#define KEXIUTILS_IDENTIFIER_H
 
 #include "validator.h"
 #include <qstring.h>
