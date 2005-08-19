@@ -45,6 +45,13 @@
 #include <qapplication.h>
 #include "kprcommand.h"
 #include <qvalidator.h>
+#include "kpfreehandobject.h"
+#include "kpcubicbeziercurveobject.h"
+#include "kpquadricbeziercurveobject.h"
+#include "kptextobject.h"
+#include "kppolylineobject.h"
+#include "kpclosedlineobject.h"
+#include "kpgroupobject.h"
 
 class ThumbToolTip : public QToolTip
 {
@@ -1020,9 +1027,91 @@ void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
     if( !item ) return;
 
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
-    if( !slideItem ) return;
 
-    m_view->openPopupMenuSideBar(pnt);
+    if( slideItem ) {
+        m_view->openPopupMenuSideBar(pnt);
+    } else {
+        OutlineObjectItem* objectItem = dynamic_cast<OutlineObjectItem*>(item);
+        KPObject * kpobject = objectItem->object();
+
+        if( !kpobject ) {
+            return;
+        }
+
+        KPrCanvas* canvas = static_cast<KPrCanvas*>(m_view->canvas());
+        ObjType objectType = kpobject->getType();
+        canvas->deSelectAllObj();
+        canvas->selectObj( kpobject );
+
+        if( objectItem ) {
+            if ( objectType == OT_PICTURE || objectType == OT_CLIPART ) {
+                m_view->openPopupMenuObject( "picmenu_popup", pnt );
+            } else if ( objectType == OT_TEXT ) {
+                KPTextObject *obj = dynamic_cast<KPTextObject *>(kpobject);
+                if ( obj )
+                    m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
+                m_view->openPopupMenuObject( "textobject_popup", pnt );
+            } else if ( objectType == OT_PIE ) {
+                m_view->openPopupMenuObject( "piemenu_popup", pnt );
+            } else if ( objectType == OT_RECT || objectType == OT_ELLIPSE ) {
+                m_view->openPopupMenuObject( "rectangleobject_popup", pnt );
+            } else if ( objectType == OT_PART ) {
+                m_view->openPopupMenuObject( "partobject_popup", pnt );
+            } else if ( objectType == OT_POLYGON ) {
+                m_view->openPopupMenuObject( "polygonobject_popup", pnt );
+            } else if ( objectType == OT_POLYLINE ) {
+                KPPolylineObject *tmpObj = dynamic_cast<KPPolylineObject *>(kpobject);
+                if ( tmpObj )
+                {
+                    if (!tmpObj->isClosed())
+                        m_view->openPopupMenuObject( "closed_popup", pnt );
+                    else
+                        m_view->openPopupMenuObject( "flip_popup", pnt );
+                }
+            } else if ( objectType == OT_CUBICBEZIERCURVE ) {
+                KPCubicBezierCurveObject *tmpObj = dynamic_cast<KPCubicBezierCurveObject *>(kpobject);
+                if ( tmpObj )
+                {
+                    if (!tmpObj->isClosed())
+                        m_view->openPopupMenuObject( "closed_popup", pnt );
+                    else
+                        m_view->openPopupMenuObject( "flip_popup", pnt );
+                }
+            } else if ( objectType == OT_QUADRICBEZIERCURVE ) {
+                KPQuadricBezierCurveObject *tmpObj = dynamic_cast<KPQuadricBezierCurveObject *>(kpobject);
+                if ( tmpObj )
+                {
+                    if (!tmpObj->isClosed())
+                        m_view->openPopupMenuObject( "closed_popup", pnt );
+                    else
+                        m_view->openPopupMenuObject( "flip_popup", pnt );
+                }
+            } else if ( objectType == OT_FREEHAND ) {
+                KPFreehandObject *tmpObj = dynamic_cast<KPFreehandObject *>(kpobject);
+                if ( tmpObj )
+                {
+                    if (!tmpObj->isClosed())
+                        m_view->openPopupMenuObject( "closed_popup", pnt );
+                    else
+                        m_view->openPopupMenuObject( "flip_popup", pnt );
+                }
+            } else if ( objectType == OT_LINE ){
+                m_view->openPopupMenuObject( "flip_popup", pnt );
+            } else if ( objectType == OT_CLOSED_LINE ) {
+                KPClosedLineObject *tmpObj=dynamic_cast<KPClosedLineObject *>(kpobject);
+                if ( tmpObj )
+                    m_view->openPopupMenuObject( "flip_popup", pnt );
+            } else if ( objectType == OT_GROUP ) {
+                KPGroupObject *obj=dynamic_cast<KPGroupObject *>(kpobject);
+                if ( obj && canvas->oneObjectTextSelected())
+                    m_view->openPopupMenuObject( "textobject_popup", pnt );
+                else
+                    m_view->openPopupMenuObject( "flip_popup", pnt );
+            } else {
+                m_view->openPopupMenuObject( "graphmenu_popup", pnt );
+            }
+        }
+    }
 }
 
 void Outline::renamePageTitle()
