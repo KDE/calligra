@@ -12,7 +12,11 @@
 
 CCMAIL: dkite@shaw.ca
 
-2005-08-16
+2005-08-19
+Startup
+- "-type connection" command line arg added (i.e. support for applications/x-kexi-connectiondata mime)
+
+2005-08-16..18
 Main Window
 - Toplevel (buggy) and Tabbed (redundant) KMDI modes hidden in Window menu;
   Changing MDI mode now requires application restart (the lesser of two evils)

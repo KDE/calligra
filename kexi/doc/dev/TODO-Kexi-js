@@ -498,9 +498,6 @@ TODO: 0.2: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
 
 TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kexi/
 
-Startup TODO:
-- add "Save Special->Shortcut file for this project" action
-- split .kexis format to .kexis and .kexic
 
 Core TODO:
 - update shared actons availability ONLY AFTER we've switched to other kexidialog base,
@@ -559,10 +556,17 @@ TODO: Forms: fix: double clicking unselected widget doesn't switch us to inline 
 TODO: Forms: object tree: enable sorting by name after clicking "name" header; 
              enable sorting by class,name by clicking "class" header
 
-TODO: Startup: when using a startup item, touch the file for better sorting:
+Startup TODO:
+- when using a startup item, touch the file for better sorting:
 http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx
 
-TODO: Startup: add support for opening applications/x-kexi-connectiondata
+- add "Save Special->Shortcut file for this project" action
+- add "Save Shortcut file for this connection" action
+- FOR SLOW CONNECTIONS: show progress bar on:
+-- retrieving a list of projects (in KexiProjectSelectorDialog)
+-- opening a project (in status bar?)
+- Also, add "cancel" button near the progress bar (reuse the one from KMail?)
+
 
 TODO: If a form has no focus, FormManager::windowChanged() and KexiFormView::setFocusInternal()
  don't work properly (setFocus() is not available...)

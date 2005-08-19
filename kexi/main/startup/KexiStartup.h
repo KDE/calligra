@@ -63,14 +63,17 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		enum DetectDriverForFileOptions { 
 			DontConvert = 1, //!< skip asking for conversion (used e.g. when dropdb is called)
 			ThisIsAProjectFile = 2, //!< a hint, forces detection of the file as a project file
-			ThisIsAShortcutToAProjectFile = 4 //!< a hint, forces detection of the file 
-											   //!< as a shortcut to a project file
+			ThisIsAShortcutToAProjectFile = 4, //!< a hint, forces detection of the file 
+			                                   //!< as a shortcut to a project file
+			ThisIsAShortcutToAConnectionData = 8 //!< a hint, forces detection of the file 
+			                                     //!< as a shortcut to a connection data
 		};
 
 		/*! Used for opening existing file-based projects. 
-		 Detects project file type by mime type and returns driver name suitable for it
-		 -- if it can be detected, otherwise - NULL. 
-		 \return "shortcut" string if the file looks like a shortcut to a project/connection file.
+		 Detects project file type by mime type.
+		 \return driver name suitable for it -- if it can be detected, otherwise - NULL. 
+		 Can return "shortcut" string if the file looks like a shortcut to a project/connection file
+		 or "connection" if the file looks like a connection data file.
 		 \a parent is passed as a parent for potential error message boxes.
 		 \a driverName is a preferred driver name. For 
 		 cdata.driverName is adjusted, if a file-based project has been detected.

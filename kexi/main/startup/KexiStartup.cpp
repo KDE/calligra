@@ -83,7 +83,7 @@ class KexiStartupHandlerPrivate
 	public:
 		KexiStartupHandlerPrivate()
 		 : passwordDialog(0), showConnectionDetailsExecuted(false)
-			, shortcutFile(0), connDialog(0), startupDialog(0)
+			, shortcutFile(0), connShortcutFile(0), connDialog(0), startupDialog(0)
 		{
 		}
 
@@ -97,6 +97,7 @@ class KexiStartupHandlerPrivate
 		KPasswordDialog* passwordDialog;
 		bool showConnectionDetailsExecuted : 1;
 		KexiDBShortcutFile *shortcutFile;
+		KexiDBConnShortcutFile *connShortcutFile;
 		KexiDBConnectionDialog *connDialog;
 		QString shortcutFileGroupKey;
 		KexiStartupDialog *startupDialog;
@@ -213,7 +214,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	cdata.driverName = args->getOption("dbdriver");
 
 	QString fileType( args->getOption("type").lower() );
-	if (args->count()>0 && (!fileType.isEmpty() && fileType!="project" && fileType!="shortcut")) {
+	if (args->count()>0 && (!fileType.isEmpty() && fileType!="project" && fileType!="shortcut" && fileType!="connection")) {
 		KMessageBox::sorry( 0, 
 			i18n("You have specified invalid argument (\"%1\") for \"type\" command-line option.")
 			.arg(fileType));
@@ -395,6 +396,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 					detectOptions |= ThisIsAProjectFile;
 				else if (fileType=="shortcut")
 					detectOptions |= ThisIsAShortcutToAProjectFile;
+				else if (fileType=="connection")
+					detectOptions |= ThisIsAShortcutToAConnectionData;
 
 				if (m_dropDB)
 					detectOptions |= DontConvert;
@@ -434,6 +437,24 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 						delete m_projectData;
 						m_projectData = 0;
 						return cancelled;
+					}
+				}
+				else if (cdata.driverName=="connection") {
+					//get information for a connection file
+					d->connShortcutFile = new KexiDBConnShortcutFile(cdata.fileName());
+					if (!d->connShortcutFile->loadConnectionData(cdata, &d->shortcutFileGroupKey)) {
+						KMessageBox::sorry(0, i18n("Could not open connection data file\n\"%1\".")
+							.arg(cdata.fileName()));
+						delete d->connShortcutFile;
+						d->connShortcutFile = 0;
+						return false;
+					}
+					bool cancelled;
+					while (true) {
+//! @todo add "connecting to database" dialog
+						m_projectData = selectProject(&cdata, cancelled);
+						if (m_projectData || cancelled)
+							break;
 					}
 				}
 				else
@@ -601,8 +622,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 				if (!m_projectData && !cancelled) {
 						//try again
 						return init(0, 0);
-//						m_action = Exit;
-//						return false;
 				}
 				//not needed anymore
 				delete d->startupDialog;
@@ -650,7 +669,8 @@ QString KexiStartupHandler::detectDriverForFile(
 	KMimeType::Ptr ptr;
 	QString mimename;
 
-	if ((options & ThisIsAProjectFile) || !(options & ThisIsAShortcutToAProjectFile)) {
+	if ((options & ThisIsAProjectFile) 
+		|| !( (options & ThisIsAShortcutToAProjectFile) || (options & ThisIsAShortcutToAConnectionData)) ) {
 		//try this detection if "project file" mode is forced or no type is forced:
 		ptr = KMimeType::findByFileContent(dbFileName);
 		mimename = ptr.data()->name();
@@ -664,6 +684,9 @@ QString KexiStartupHandler::detectDriverForFile(
 	}
 	if ((options & ThisIsAShortcutToAProjectFile) || mimename=="application/x-kexiproject-shortcut")
 		return "shortcut";
+
+	if ((options & ThisIsAShortcutToAConnectionData) || mimename=="application/x-kexi-connectiondata")
+		return "connection";
 
 	// "application/x-kexiproject-sqlite", etc.
 	QString detectedDriverName = Kexi::driverManager().lookupByMime(mimename).latin1();

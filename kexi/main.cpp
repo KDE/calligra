@@ -77,6 +77,7 @@ static KCmdLineOptions options[] =
 	"- \"project\" for a project file (the default)\n"
 	"- \"shortcut\" for a shortcut file pointing\n"
 	"  you to a project.\n"
+	"- \"connection\" for a database connection data.\n"
 	), 0 },
 
   { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
