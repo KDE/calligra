@@ -242,7 +242,7 @@ void
 ShadowWidget::setUseShadow( bool use )
 {
 	m_useShadow->setChecked( use );
-	m_preview->repaint();
+	updatePreview();
 }
 
 bool ShadowWidget::useShadow()
@@ -294,7 +294,7 @@ ShadowWidget::setShadowValues( int angle, int distance, bool translucent )
 	m_angle->setValue( angle );
 	m_distance->setValue( distance );
 	m_translucent->setChecked( translucent );
-	m_preview->repaint();
+	updatePreview();
 }
 
 void
@@ -393,6 +393,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	connect( m_textEditor, SIGNAL( textChanged( const QString& ) ), this, SLOT( textChanged( const QString& ) ) );
 	connect( m_editBasePath, SIGNAL( clicked() ), this, SLOT( editBasePath() ) );
 	connect( m_convertToShapes, SIGNAL( clicked() ), this, SLOT( convertToShapes() ) );
+	connect( this, SIGNAL( cancelClicked() ), this, SLOT( cancel() ) );
 
 	setMainWidget( base );
 	setFixedSize( baseSize() );
@@ -418,6 +419,14 @@ VTextOptionsWidget::accept()
 {
 	if( m_tool )
 		m_tool->accept();
+	hide();
+}
+
+void
+VTextOptionsWidget::cancel()
+{
+	if( m_tool )
+		m_tool->cancel();
 }
 
 void
@@ -527,6 +536,20 @@ VTextOptionsWidget::shadowDistance()
 	return m_shadow->shadowDistance();
 }
 
+void 
+VTextOptionsWidget::initialize( VObject &text )
+{
+	if( m_tool )
+		m_tool->visit( text );
+}
+
+void 
+VTextOptionsWidget::moveEvent ( QMoveEvent * )
+{
+	if( m_tool )
+		m_tool->textChanged();
+}
+
 VTextTool::VTextTool( KarbonPart *part, const char* name )
 		: VTool( part, name )
 {
@@ -559,23 +582,14 @@ VTextTool::activate()
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 
 	m_creating = true;
-	//delete m_text;
 	m_text = 0L;
 	delete m_editedText;
 	m_editedText = 0L;
-
-	VSelection* selection = view()->part()->document().selection();
-	kdDebug(38000) << "Nb objects selected: " << selection->objects().count() << endl;
-
-	if( selection->objects().count() == 1 )
-		visit( *selection->objects().getFirst() );
 }
 
 void
 VTextTool::deactivate()
 {
-	if( m_creating )
-		delete m_text;
 }
 
 void
@@ -649,6 +663,7 @@ VTextTool::mouseDragRelease()
 	path.moveTo( first() );
 	path.lineTo( last() );
 	m_text = 0L;
+
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
 
@@ -658,7 +673,7 @@ VTextTool::mouseDragRelease()
 
 	m_creating = true;
 
-	drawEditedText();
+	m_optionsWidget->show();
 }
 
 void
@@ -670,11 +685,12 @@ VTextTool::textChanged()
 
 	if( !m_creating && m_text && m_text->state() != VObject::hidden )
 	{
+		// hide the original text if we are changing it
 		m_text->setState( VObject::hidden );
 		view()->repaintAll( true );
 	}
 	else
-		drawEditedText();
+		view()->repaintAll( m_editedText->boundingBox() );
 
 	m_editedText->setText( m_optionsWidget->text() );
 	m_editedText->setFont( m_optionsWidget->font() );
@@ -714,25 +730,32 @@ VTextTool::accept()
 	}
 	else
 	{
-		m_text = m_editedText->clone();
-		m_text->setUseShadow( m_optionsWidget->useShadow() );
-		m_text->setShadow( m_optionsWidget->shadowAngle(), m_optionsWidget->shadowDistance(), m_optionsWidget->translucentShadow() );
+		VText *newText = m_editedText->clone();
+		newText->setUseShadow( m_optionsWidget->useShadow() );
+		newText->setShadow( m_optionsWidget->shadowAngle(), m_optionsWidget->shadowDistance(), m_optionsWidget->translucentShadow() );
 
 		cmd = new VTextCmd(
 				  &view()->part()->document(),
 				  i18n( "Insert Text" ),
-				  m_text );
+				  newText );
 	}
 
 	view()->part()->addCommand( cmd, true );
-
+	view()->part()->repaintAllViews();
 	m_creating = false;
 }
 
 void
 VTextTool::cancel()
 {
-	drawPathCreation();
+	if( m_text )
+	{
+		// show original text if we canceled changing it
+		m_text->setState( VObject::selected );
+		view()->repaintAll( m_text->boundingBox() );
+	}
+	else
+		drawPathCreation();
 }
 
 void
@@ -774,6 +797,7 @@ VTextTool::visitVPath( VPath& composite )
 		return;
 
 	m_text = 0L;
+	delete m_editedText;
 
 	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 
@@ -792,6 +816,7 @@ void
 VTextTool::visitVSubpath( VSubpath& path )
 {
 	m_text = 0L;
+	delete m_editedText;
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
 
@@ -808,12 +833,15 @@ void
 VTextTool::visitVText( VText& text )
 {
 	m_text = &text;
+	delete m_editedText;
 	m_editedText = text.clone();
 
 	m_optionsWidget->setFont( text.font() );
 	m_optionsWidget->setText( text.text() );
 	m_optionsWidget->setPosition( text.position() );
 	m_optionsWidget->setAlignment( text.alignment() );
+	m_optionsWidget->setUseShadow( text.useShadow() );
+	m_optionsWidget->setShadow( text.shadowAngle(), text.shadowDistance(), text.translucentShadow() );
 
 	m_creating = false;
 }
@@ -983,10 +1011,17 @@ VTextTool::VTextToCompositeCmd::unexecute()
 bool
 VTextTool::showDialog() const
 {
+	VSelection* selection = view()->part()->document().selection();
+
+	// initialize dialog single selected object
+	if( selection->objects().count() == 1 )
+		m_optionsWidget->initialize( *selection->objects().getFirst());
+	else 
+		return false;
+
 	m_optionsWidget->show();
 	return true;
 }
-
 
 #include "vtexttool.moc"
 
