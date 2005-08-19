@@ -5251,9 +5251,6 @@ void KPresenterView::setZoom( int zoom, bool updateViews )
     m_pKPresenterDoc->newZoomAndResolution(updateViews,false);
     m_pKPresenterDoc->updateZoomRuler();
 
-    // Also set the zoom in KoView (for embedded views)
-    //kdDebug(33001) << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
-    KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
     setRanges();
 }
 
