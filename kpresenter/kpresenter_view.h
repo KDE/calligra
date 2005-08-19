@@ -756,6 +756,8 @@ protected slots:
     void editFindNext();
     void editFindPrevious();
 
+    virtual void slotChildActivated(bool a);
+
 protected:
     virtual void resizeEvent( QResizeEvent* );
     virtual void dragEnterEvent( QDragEnterEvent *e );
