@@ -47,10 +47,12 @@ pages with accompanying navigation aids.</para>
 <procedure>
 <step>
 <para>First, either make a new presentation, or open an existing one. Then,
-click on <guimenu>File</guimenu> > <guimenuitem>Create HTML Slideshow...</guimenuitem></para>
+click on <guimenu>File</guimenu> > <guimenuitem>Create HTML
+Slideshow...</guimenuitem></para>
 
 <screenshot>
-<screeninfo>File menu option to <guimenuitem>Create HTML Slideshow...</guimenuitem></screeninfo>
+<screeninfo>File menu option to <guimenuitem>Create HTML
+Slideshow...</guimenuitem></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow1.png" format="PNG"/>
@@ -78,7 +80,8 @@ configuration:</para>
 <para>Click <guibutton>No</guibutton> if this is the first time that you have
 used this feature, or if you want to alter specific options. The
 <guibutton>Yes</guibutton> option allows you to use details that you have
-previously entered for your <acronym>HTML</acronym> slideshow, so that you can quickly create the
+previously entered for your <acronym>HTML</acronym> slideshow, so that you can
+quickly create the
 slideshow without needing to adjust the options.</para>
 </step>
 
@@ -86,7 +89,8 @@ slideshow without needing to adjust the options.</para>
 <para>You will then get a dialog box asking for a few details:</para>
 
 <screenshot>
-<screeninfo>Fill in the details for your <acronym>HTML</acronym> slideshow</screeninfo>
+<screeninfo>Fill in the details for your <acronym>HTML</acronym>
+slideshow</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow3.png" format="PNG"/>
@@ -108,7 +112,8 @@ ask if you would like to create it.</para></step>
 <para>Now you can configure the specific <acronym>HTML</acronym> options:</para>
 
 <screenshot>
-<screeninfo>Fill in additional details for your <acronym>HTML</acronym> slideshow</screeninfo>
+<screeninfo>Fill in additional details for your <acronym>HTML</acronym>
+slideshow</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow4.png" format="PNG"/>
@@ -132,12 +137,14 @@ browser window.</para>
 <para>Now you can customize the colors of the web pages:</para>
 
 <screenshot>
-<screeninfo>Setting up the display style for your <acronym>HTML</acronym> slideshow</screeninfo>
+<screeninfo>Setting up the display style for your <acronym>HTML</acronym>
+slideshow</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow5.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>Setting up the display style for your <acronym>HTML</acronym>
+<textobject><phrase>Setting up the display style for your
+<acronym>HTML</acronym>
 slideshow</phrase></textobject>
 </mediaobject>
 </screenshot>
@@ -152,7 +159,8 @@ presentation.</para></tip>
 </step>
 
 <step><para>The <guibutton>Next</guibutton> button presents a dialog box
-that allows you to change the name used on the <acronym>HTML</acronym> page for each slide:</para>
+that allows you to change the name used on the <acronym>HTML</acronym> page for
+each slide:</para>
 
 <screenshot>
 <screeninfo>Setting the slide names</screeninfo>
@@ -168,7 +176,8 @@ that allows you to change the name used on the <acronym>HTML</acronym> page for 
 
 <step>
 <para>If your presentation was intended to be displayed in an unattended manner
-(&ie; automatic advance to next slide, &etc;), you can also make your <acronym>HTML</acronym>
+(&ie; automatic advance to next slide, &etc;), you can also make your
+<acronym>HTML</acronym>
 presentation counterpart exhibit the same behavior:</para>
 
 <screenshot>
@@ -188,7 +197,8 @@ reaches the end.</para>
 </step>
 
 <step>
-<para>Now it is time to actually produce your <acronym>HTML</acronym> presentation, the progress of
+<para>Now it is time to actually produce your <acronym>HTML</acronym>
+presentation, the progress of
 which is shown in this dialog box:</para>
 
 <screenshot>
@@ -213,7 +223,8 @@ and <filename>pics/</filename> folders,
 created where we earlier set the path:</para>
 
 <screenshot>
-<screeninfo>The newly created <acronym>HTML</acronym> slideshow folders</screeninfo>
+<screeninfo>The newly created <acronym>HTML</acronym> slideshow
+folders</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow9.png" format="PNG"/>
@@ -246,9 +257,9 @@ Stick</trademark></title>
 <para>
 Some Sony projectors have the ability to run a presentation directly
 from a <trademark>Memory Stick</trademark>, without needing to connect a
-computer. &kpresenter; can export presentations to the format required
-to make this work, and this tutorial will show you how to export your
-presentation.
+computer up to the projector. &kpresenter; can export presentations to the
+format required by these projectors, and this tutorial will show you how to
+export your presentation.
 </para>
 
 <para>
@@ -273,27 +284,27 @@ structure</phrase></textobject>
 
 <step>
 <para>
-If the presentation that you want to use is not already open, use the
-<guimenu>File</guimenu> menu and choose <guimenu>Open...</guimenu> to
-select the presentation that you want to export.
+If the presentation that you want to export is not already open, go to
+<guimenu>File</guimenu>   > <guimenuitem>Open...</guimenuitem> and select the
+presentation that you want to export.
 </para>
 </step>
 
 <step>
 <para>
-Now use the <guimenu>File</guimenu> menu and choose <guimenu>Create
-Memory Stick Slideshow...</guimenu>.
+Now, select the <guimenu>File</guimenu> menu and choose <guimenuitem>Create
+Memory Stick Slideshow...</guimenuitem>.
 </para>
 
 <screenshot>
-<screeninfo>The &kpresenter; <guimenu>Create Memory Stick
-Slideshow...</guimenu> menu selection.</screeninfo>
+<screeninfo>The &kpresenter; <guimenuitem>Create Memory Stick
+Slideshow...</guimenuitem> menu selection.</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata format="PNG" fileref="msexport1.png"/>
 </imageobject>
-<textobject><phrase>The &kpresenter; <guimenu>Create Memory Stick
-Slideshow...</guimenu> menu selection.</phrase></textobject>
+<textobject><phrase>The &kpresenter; <guimenuitem>Create Memory Stick
+Slideshow...</guimenuitem> menu selection.</phrase></textobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -301,9 +312,7 @@ Slideshow...</guimenu> menu selection.</phrase></textobject>
 <step>
 <para>
 This will bring up the <guilabel>Create Memory Stick
-Slideshow</guilabel> dialog. Select the <guibutton>Set
-Colors</guibutton> option to expand the dialog.
-</para>
+Slideshow</guilabel> dialog.</para>
 
 <screenshot>
 <screeninfo>The &kpresenter; <guilabel>Create Memory Stick
@@ -316,18 +325,16 @@ Slideshow</guilabel> dialog.</screeninfo>
 Slideshow</guilabel> dialog.</phrase></textobject>
 </mediaobject>
 </screenshot>
-</step>
 
-<step>
 <para>
-The <guilabel>Path</guilabel> is the directory in which the top level
-directories (<filename>DCIM</filename> and
+The <guilabel>Path</guilabel> is the directory in which your presentation will
+be exported to as directories (<filename>DCIM</filename> and
 <filename>MSSONY</filename>, see the <link
 linkend="ms-export-directory-structure">directory structure
-diagram</link> above) will be created. If you have the memory stick
-mounted, and have appropriate rights, you may wish to export directly
-to the removable media, in which case you would enter the mount point
-in this text box.
+diagram</link> above) will be created. If you able to, you may wish to export
+directly
+to the <trademark>Memory Stick</trademark>, in which case you would enter the
+location of the medium here.
 </para>
 
 <para>
@@ -338,20 +345,39 @@ the title slide is visible using the Sony projector setup prior to
 starting the actual presentation display.
 </para>
 
+<para>Select the <guibutton>Set Colors</guibutton> option to expand the
+dialog:</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog (extended).</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport2b.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog (extended).</phrase></textobject>
+</mediaobject>
+</screenshot>
+
 <para>
-The two color selectors in the <guilabel>Preliminary
-Slides</guilabel> group box are also only used for the title slide. It
+These two color selectors are only used for the title slide. It
 can be useful to change the title slides to make the presentations
-easier to identify when working on the projector, but it is safe and
-normal to leave them as the default.
+easier to identify when working on the projector, though it is perfectly safe to
+leave them as default.
+</para>
+
+<para>
+You can then press the <guibutton>OK</guibutton> button to proceed with the
+actual export process.
 </para>
 </step>
 
 <step>
+
 <para>
-You can then select <guibutton>OK</guibutton> to proceed with the
-actual export process. This will close the current dialog, and bring
-up another dialog that advises of progress as the export takes place.
+Your presentation will now be exported into the correct format, with the
+following dialog informing you of the progress of this process:
 </para>
 
 <screenshot>
@@ -374,20 +400,23 @@ When the export is complete, you can select the
 
 <step>
 <para>
-If you did not create the slideshow directly onto a mounted memory
-stick, you will need to copy over the correct files. As noted above,
+If you did not export the slideshow directly onto a <trademark>Memory
+Stick</trademark>, you will need to copy the correct files onto the
+<trademark>Memory
+Stick</trademark> before you can utilise the projector. As noted above,
 you need to copy over the correct directories and files starting at
 <filename>DCIM</filename> and <filename>MSSONY</filename> into the
-"root" of the <trademark>Memory Stick</trademark>. It is
+"root", or <filename>/</filename> of the <trademark>Memory Stick</trademark>. It
+is
 critical that the directory structure is maintained, and you may
-find it easiest to copy the whole of <filename>DCIM</filename> and
-<filename>MSSONY</filename> directories. 
+find it easier to copy the whole of <filename>DCIM</filename> and
+<filename>MSSONY</filename> directories.
 </para>
 
 <para>
 If necessary, you can safely rename the index file (which is
 <filename>Slideshow.SPP</filename> by default), however you cannot
-rename the slide images, nor can you change the name of the directory,
+rename the slide images, nor can you change the name of these directories,
 as these are encoded into the index file.
 </para>
 </step>
