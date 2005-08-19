@@ -4,4 +4,5 @@ Type=Link
 URL=.source/kde3.kpt
 Name=KDE 3
 Comment=A presentation with KDE 3 theming
+Comment[es]=Una presentación con el tema de KDE 3
 Icon=template_kde3

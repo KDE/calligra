@@ -56,6 +56,7 @@ Name[zh_CN]=全新产品
 Name[zh_TW]=新產品
 Name[zu]=Entsha sha Iprodakhti
 Comment=An informal, green-swirl presentation
+Comment[es]=Una presentación informal, con una espiral verde
 Type=Link
 URL=.source/TotallyNewProduct.kpt
 X-KDE-Hidden=false

@@ -39,6 +39,7 @@ Name[wa]=Vude d' astampé
 Name[xx]=xxEmpty Portraitxx
 Name[zh_CN]=空纵向
 Comment=Empty presentation (portrait-oriented)
+Comment[es]=Presentación vacía (orientación vertical)
 Type=Link
 URL=.source/emptyPortrait.kpt
 X-KDE-Hidden=false

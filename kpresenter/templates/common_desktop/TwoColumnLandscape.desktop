@@ -59,6 +59,7 @@ Name[zh_CN]=双列
 Name[zh_TW]=兩列
 Name[zu]=Amakholamu Amabili
 Comment=Presentation with a page title and two text columns
+Comment[es]=Presentación con un título de página y dos columnas de texto
 Type=Link
 URL=.source/TwoColumnLandscape.kpt
 X-KDE-Hidden=false
