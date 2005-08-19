@@ -63,7 +63,7 @@ void KexiSmallToolButton::updateAction()
 	if (!m_action)
 		return;
 	update(m_action->text(), m_action->iconSet(KIcon::Small));
-	setAccel((QKeySequence)m_action->shortcut());
+	setAccel((QKeySequence&)m_action->shortcut());
 	QToolTip::add(this, m_action->toolTip());
 	QWhatsThis::add(this, m_action->whatsThis());
 }
