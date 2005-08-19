@@ -124,6 +124,13 @@ VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 	midPoint = kMax( 0.0f, midPoint );
 	midPoint = kMin( 1.0f, midPoint );
 
+	// Work around stops with the same position
+	VColorStop *v;
+	for(v = m_colorStops.first(); v; v = m_colorStops.next())
+	{
+		if(rampPoint == v->rampPoint)
+			rampPoint += 0.001f;
+	} 
 	m_colorStops.inSort( new VColorStop( rampPoint, midPoint, color ) );
 }
 

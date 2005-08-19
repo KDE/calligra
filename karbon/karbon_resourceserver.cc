@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kogradientmanager.h>
 
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
@@ -85,7 +86,7 @@ KarbonResourceServer::KarbonResourceServer()
 
 	formats.clear();
 	lst.clear();
-	formats << "*.kgr";
+	formats = KoGradientManager::filters();
 
 	// find Gradients
 
@@ -261,34 +262,81 @@ KarbonResourceServer::removeGradient( VGradientListItem* gradient )
 void
 KarbonResourceServer::loadGradient( const QString& filename )
 {
-	VGradient gradient;
+	KoGradientManager gradLoader;
+	
+	KoGradient* grad = gradLoader.loadGradient(filename);
+	
+	if( !grad )
+		return;
 
-	QFile f( filename );
-
-	if( f.open( IO_ReadOnly ) )
+	if( grad->colorStops.count() > 1 )
 	{
-		QDomDocument doc;
+		VGradient vgrad;
 
-		if( !( doc.setContent( &f ) ) )
-			f.close();
-		else
+		vgrad.setOrigin(KoPoint(grad->originX, grad->originY));
+		vgrad.setVector(KoPoint(grad->vectorX, grad->vectorY));
+		vgrad.setFocalPoint(KoPoint(grad->focalpointX, grad->focalpointY));
+		
+		switch(grad->gradientType)
 		{
-			QDomElement e;
-			QDomNode n = doc.documentElement().firstChild();
-
-			if( !n.isNull() )
-			{
-				e = n.toElement();
-
-				if( !e.isNull() )
-					if( e.tagName() == "GRADIENT" )
-						gradient.load( e );
-			}
+			case KoGradientManager::gradient_type_linear:
+				vgrad.setType(VGradient::linear);
+				break;
+			case KoGradientManager::gradient_type_radial:
+				vgrad.setType(VGradient::radial);
+				break;
+			case KoGradientManager::gradient_type_conic:
+				vgrad.setType(VGradient::conic);
+				break;
+			default: return;
 		}
-	}
 
-	if( gradient.colorStops().count() > 1 )
-		m_gradients->append( new VGradientListItem( gradient, filename ) );
+		switch(grad->gradientRepeatMethod)
+		{
+			case KoGradientManager::repeat_method_none:
+				vgrad.setRepeatMethod(VGradient::none);
+				break;
+			case KoGradientManager::repeat_method_reflect:
+				vgrad.setRepeatMethod(VGradient::reflect);
+				break;
+			case KoGradientManager::repeat_method_repeat:
+				vgrad.setRepeatMethod(VGradient::repeat);
+				break;
+			default: return;
+		}
+
+		vgrad.clearStops();
+
+		KoColorStop *colstop;
+		for(colstop = grad->colorStops.first(); colstop; colstop = grad->colorStops.next())
+		{
+			VColor col;
+
+			switch(colstop->colorType)
+			{
+				case KoGradientManager::color_type_hsv_ccw:
+				case KoGradientManager::color_type_hsv_cw:
+					col.setColorSpace(VColor::hsb, false);
+					col.set(colstop->color1, colstop->color2, colstop->color3);
+					break;
+				case KoGradientManager::color_type_gray:
+					col.setColorSpace(VColor::gray, false);
+					col.set(colstop->color1);
+					break;
+				case KoGradientManager::color_type_cmyk:
+					col.setColorSpace(VColor::cmyk, false);
+					col.set(colstop->color1, colstop->color2, colstop->color3, colstop->color4);
+					break;
+				case KoGradientManager::color_type_rgb:
+				default:
+					col.set(colstop->color1, colstop->color2, colstop->color3);
+			}
+			col.setOpacity(colstop->opacity);
+
+			vgrad.addStop(col, colstop->offset, colstop->midpoint);
+		}
+		m_gradients->append( new VGradientListItem( vgrad, filename ) );
+	}
 } // KarbonResourceServer::loadGradient
 
 void
