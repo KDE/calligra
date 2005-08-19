@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="9">
+<kpartgui name="kexiformpartinst" version="10">
 
 <MenuBar>
   <Menu name="edit">
@@ -36,15 +36,10 @@
    <Action name="library_widget_KexiPictureLabel"/>
    <Action name="library_widget_KexiDBLineEdit"/>
    <Action name="library_widget_KexiDBTextEdit"/>
-   <Action name="library_widget_KexiDBIntSpinBox"/>
-   <Action name="library_widget_KexiDBDoubleSpinBox"/>
    <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_KComboBox"/>
    <Action name="library_widget_QRadioButton"/>
    <Action name="library_widget_KexiDBCheckBox"/>
-   <Action name="library_widget_KexiDBDateEdit"/>
-   <Action name="library_widget_KexiDBTimeEdit"/>
-   <Action name="library_widget_KexiDBDateTimeEdit"/>
    <Action name="library_widget_Spacer"/>
    <Action name="library_widget_Line"/>
    <Separator/>
@@ -54,6 +49,8 @@
    <Action name="library_widget_KexiSubForm"/>
    <Separator/>
    <Action name="library_widget_Spring"/>
+   <Separator/>
+   <Action name="other_widgets_menu"/>
    <ActionList name="library_widgets" />
 </ToolBar>
 <ToolBar name="format" fullWidth="false" noMerge="1">
@@ -67,5 +64,12 @@
    <Action name="change_style"/>
 </ToolBar -->
 
-</kpartgui>
+<Menu name="other_widgets_menu">
+   <Action name="library_widget_KexiDBIntSpinBox"/>
+   <Action name="library_widget_KexiDBDoubleSpinBox"/>
+   <Action name="library_widget_KexiDBDateEdit"/>
+   <Action name="library_widget_KexiDBTimeEdit"/>
+   <Action name="library_widget_KexiDBDateTimeEdit"/>
+</Menu> 
 
+</kpartgui>

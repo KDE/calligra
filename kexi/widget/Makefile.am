@@ -9,7 +9,7 @@ libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexidbconnectionwidgetdetailsbase.ui kexidbdrivercombobox.cpp \
 	kexieditor.cpp \
 	kexifieldlistview.cpp kexifieldcombobox.cpp kexidatasourcecombobox.cpp \
-	kexipropertyeditorview.cpp
+	kexipropertyeditorview.cpp kexismalltoolbutton.cpp
 
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor

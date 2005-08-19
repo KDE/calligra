@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,8 +59,8 @@ static struct EmbedImage {
     bool alpha;
     const char *name;
 } embed_image[] = {
-    { 17, 12, 32, (const unsigned char*)img_pen_data, 57, 0, 0, TRUE, "tableview_pen.png" },
-    { 10, 10, 32, (const unsigned char*)img_pen_data, 50, 0, 0, TRUE, "tableview_plus.png" }
+    { 17, 12, 32, (const unsigned char*)img_pen_data, 57, 0, 0, true, "tableview_pen.png" },
+    { 10, 10, 32, (const unsigned char*)img_pen_data, 50, 0, 0, true, "tableview_plus.png" }
 };
 
 QImage* getImg(const unsigned char* data, int id)
@@ -73,7 +73,7 @@ QImage* getImg(const unsigned char* data, int id)
 			embed_image[id].numColors, QImage::BigEndian
 	).copy() );
 	if ( embed_image[id].alpha )
-		img->setAlphaBuffer(TRUE);
+		img->setAlphaBuffer(true);
 	return img;
 }
 

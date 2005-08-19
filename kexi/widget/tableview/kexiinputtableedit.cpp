@@ -317,7 +317,6 @@ QVariant KexiInputTableEdit::value()
 //			QString v;
 			if(!m_calculatedCell)
 			{
-				qDebug("KexiInputTableEdit::value() converting => %s", m_cview->text().latin1());
 				v = m_cview->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
 				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
 				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
@@ -332,7 +331,6 @@ QVariant KexiInputTableEdit::value()
 				QString real = m_cview->text().right(m_cview->text().length() - 1);
 				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
 				real = real.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
-//				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
 				QStringList values = QStringList::split(QRegExp("[\\+|\\*|\\/|-]"), real, false);
 				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);
 

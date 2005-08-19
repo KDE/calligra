@@ -24,7 +24,7 @@
 
 #include "kexieditor.h"
 
-//! Ttext editor for entering query statements.
+//! Text editor for entering query statements.
 /*! The KexiQueryDesignerSQLEditor class embeds text editor
  for entering query statements. */
 class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiEditor

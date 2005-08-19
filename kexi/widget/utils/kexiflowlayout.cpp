@@ -69,7 +69,7 @@ KexiFlowLayoutIterator::takeCurrent()
 KexiFlowLayout::KexiFlowLayout(QWidget *parent, int border, int space, const char *name)
  : QLayout(parent, border, space, name)
 {
-	m_orientation = Vertical;
+	m_orientation = Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
 }
@@ -77,7 +77,7 @@ KexiFlowLayout::KexiFlowLayout(QWidget *parent, int border, int space, const cha
 KexiFlowLayout::KexiFlowLayout(QLayout* parent, int space, const char *name)
  : QLayout( parent, space, name )
 {
-	m_orientation = Vertical;
+	m_orientation = Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
 }
@@ -85,7 +85,7 @@ KexiFlowLayout::KexiFlowLayout(QLayout* parent, int space, const char *name)
 KexiFlowLayout::KexiFlowLayout(int space, const char *name)
  : QLayout(space, name)
  {
- 	m_orientation = Vertical;
+	m_orientation = Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
  }
@@ -101,6 +101,15 @@ KexiFlowLayout::addItem(QLayoutItem *item)
 	m_list.append(item);
 }
 
+void
+KexiFlowLayout::addSpacing(int size)
+{
+	if (m_orientation == Horizontal)
+		addItem( new QSpacerItem( size, 0, QSizePolicy::Fixed, QSizePolicy::Minimum ) );
+	else
+		addItem( new QSpacerItem( 0, size, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+}
+
 QLayoutIterator
 KexiFlowLayout::iterator()
 {
@@ -108,12 +117,12 @@ KexiFlowLayout::iterator()
 }
 
 QPtrList<QWidget>*
-KexiFlowLayout::widgetList()
+KexiFlowLayout::widgetList() const
 {
 	QPtrList<QWidget> *list = new QPtrList<QWidget>();
-	for(QLayoutItem *item = m_list.first(); item; item = m_list.next()) {
-		if(item->widget())
-			list->append(item->widget());
+	for (QPtrListIterator<QLayoutItem> it(m_list); it.current(); ++it) {
+		if(it.current()->widget())
+			list->append(it.current()->widget());
 	}
 	return list;
 }
@@ -167,11 +176,16 @@ KexiFlowLayout::sizeHint() const
 QSize
 KexiFlowLayout::minimumSize() const
 {
+//js: do we really need to simulate layout here?
+//    I commented this out because it was impossible to stretch layout conveniently.
+//    Now, minimum size is computed automatically based on item's minimumSize...
+#if 0
 	if(m_cached_minSize.isEmpty()) {
 		KexiFlowLayout *mthis = (KexiFlowLayout*)this;
 		QRect r = QRect(0, 0, 2000, 2000);
 		mthis->simulateLayout(r);
 	}
+#endif
 	return m_cached_minSize;
 }
 
@@ -223,8 +237,9 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 			continue;
 		}
 
+		kdDebug() << "- doHorizontalLayout(): " << o->widget()->className() << " " << o->widget()->name() << endl;
 		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
-		if (x + oSizeHint.width() > r.right() && h > 0) {
+		if ((x + oSizeHint.width()) > r.right() && h > 0) {
 			// do the layout of current line
 			QPtrListIterator<QLayoutItem> it2(currentLine);
 			QLayoutItem *item;

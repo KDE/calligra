@@ -21,6 +21,8 @@
 #include <qheader.h>
 #include <qpoint.h>
 #include <qpixmapcache.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -32,16 +34,19 @@
 #include <klineedit.h>
 #include <kimageeffect.h>
 
-#include "kexi.h"
-#include "kexipart.h"
-#include "kexipartinfo.h"
-#include "kexipartitem.h"
+#include <kexi.h>
+#include <kexipart.h>
+#include <kexipartinfo.h>
+#include <kexipartitem.h>
+#include <kexiproject.h>
+#include <kexidialogbase.h>
+#include <keximainwindow.h>
+#include <kexiutils/identifier.h>
+#include <widget/utils/kexiflowlayout.h>
+#include <widget/kexismalltoolbutton.h>
+
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
-#include "kexiproject.h"
-#include "kexidialogbase.h"
-#include "keximainwindow.h"
-#include <kexiutils/identifier.h>
 
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
@@ -51,13 +56,11 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  , m_singleClick(false)
 {
 	QVBoxLayout *lyr = new QVBoxLayout(this);
-	m_toolbar = new KToolBar(this, "kexibrowser_toolbar", false);
-	m_toolbar->setIconSize( kapp->iconLoader()->currentSize(KIcon::Small) );
-	m_toolbar->insertSeparator();
-	lyr->addWidget(m_toolbar);
+	KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
+//	buttons_flyr->addSpacing(4);
+
 	m_list = new KexiBrowserListView(this);
 	lyr->addWidget(m_list);
-//	setFocusProxy(m_list);
 	m_list->installEventFilter(this);
 
 	m_list->renameLineEdit()->installEventFilter(this);
@@ -100,34 +103,41 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->plug(m_itemPopup);
 	m_openAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
-	m_openAction->plug(m_toolbar);
+//	m_openAction->plug(m_toolbar);
+	KexiSmallToolButton *btn = new KexiSmallToolButton(this, m_openAction);
+	buttons_flyr->add(btn);
+
 	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->plug(m_itemPopup);
 	m_designAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
-	m_designAction->plug(m_toolbar);
+//	m_designAction->plug(m_toolbar);
+	btn = new KexiSmallToolButton(this, m_designAction);
+	buttons_flyr->add(btn);
+
 	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
 		SLOT(slotEditTextObject()), this, "editText_object");
 	m_editTextAction->plug(m_itemPopup);
 	m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
-
-/*	QImage img = SmallIcon("table").convertToImage();
-	QImage img2 = SmallIcon("new_sign").convertToImage();
-
-	bitBlt( &img, 0, 0, &img2, 0, 0, img2.width(), img2.height(), 0);
-
-	QPixmap pix;
-	pix.convertFromImage(img);
-//	m_newObjectAction->setIconSet( pix );
-//$kico_kexi_32_0:1:notrans_0
-	QPixmapCache::insert("$kico_table_newobj_16_0:1:notrans_0", pix);*/
-//	m_newObjectAction->setIconSet( SmallIcon("table_newobj") );
-
 	m_newObjectAction->plug(m_itemPopup);
-	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
-	m_toolbar->insertSeparator();
-	m_newObjectToolbarAction->plug(m_toolbar);
+//	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
+//	m_toolbar->insertSeparator();
+//	m_newObjectToolbarAction->plug(m_toolbar);
+	m_newObjectToolButton = new KexiSmallToolButton(this, "", QIconSet(), "new_object");
+	m_newObjectPopup = new KPopupMenu(this, "newObjectPopup");
+	connect(m_newObjectPopup, SIGNAL(aboutToShow()), this, SLOT(slotNewObjectPopupAboutToShow()));
+//	KexiPart::Part* part = Kexi::partManager().part("kexi/table");
+//	m_newObjectPopup->insertItem( SmallIconSet(part->info()->createItemIcon()), part->instanceName() );
+	m_newObjectToolButton->setPopup(m_newObjectPopup);
+	m_newObjectToolButton->setPopupDelay(QApplication::startDragTime());
+	connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
+	buttons_flyr->add(m_newObjectToolButton);
+
+	btn = new KexiSmallToolButton(this, sharedAction("edit_delete"));
+	btn->setTextLabel("");
+	buttons_flyr->add(btn);
+
 	m_itemPopup->insertSeparator();
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	plugSharedAction("edit_cut", m_itemPopup);
@@ -288,13 +298,16 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 		if (part) {
 			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
 			m_newObjectAction->setIcon( part->info()->createItemIcon() );
-			m_newObjectToolbarAction->setIcon( part->info()->createItemIcon() );
-			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+//			m_newObjectToolbarAction->setIcon( part->info()->createItemIcon() );
+//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+			m_newObjectToolButton->setIconSet( part->info()->createItemIcon() );
 		} else {
 			m_newObjectAction->setText(i18n("&Create Object..."));
-			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
-			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+//			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
+//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+			m_newObjectToolButton->setIconSet( "filenew" );
 		}
+		QToolTip::add(m_newObjectToolButton, m_newObjectAction->text().replace('&', ""));
 	}
 }
 
@@ -465,6 +478,24 @@ void KexiBrowser::highlightItem(KexiPart::Item& item)
 	m_list->setSelected(bitem, true);
 	m_list->ensureItemVisible(bitem);
 	m_list->setCurrentItem(bitem);
+}
+
+void KexiBrowser::slotNewObjectPopupAboutToShow()
+{
+	if (m_newObjectPopup->count()==0) {
+		//preload items
+		KexiPart::PartInfoList *list = Kexi::partManager().partInfoList(); //this list is properly sorted
+		for (KexiPart::PartInfoListIterator it(*list); it.current(); ++it) {
+			//add an item to "New object" toolbar popup 
+			KAction *action = m_mainWin->actionCollection()->action( KexiPart::nameForCreateAction(*it.current()) );
+			if (action) {
+				action->plug(m_newObjectPopup);
+			}
+			else {
+				//! @todo err
+			}
+		}
+	}
 }
 
 //--------------------------------------------

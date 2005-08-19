@@ -56,6 +56,7 @@ namespace KexiPart
 	typedef QDictIterator<Info> PartInfoDictIterator;
 	typedef QValueList<Missing> MissingList;
 	typedef QPtrList<Info> PartInfoList;
+	typedef QPtrListIterator<Info> PartInfoListIterator;
 	typedef QIntDict<Part> PartDict;
 //	typedef QPtrList<DataSource> DataSourceList;
 

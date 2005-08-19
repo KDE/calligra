@@ -74,7 +74,15 @@ FormPrivate::~FormPrivate()
 //--------------------------------------
 
 FormWidget::FormWidget()
+ : m_form(0)
 {
+}
+
+FormWidget::~FormWidget()
+{
+	if (m_form) {
+		m_form->setFormWidget(0);
+	}
 }
 
 //--------------------------------------
@@ -116,7 +124,7 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QCString 
 	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
 
-	d->formWidget = formWidget;
+	setFormWidget( formWidget );
 	d->toplevel = new Container(0, container, this, name());
 	d->topTree = new ObjectTree(i18n("Form"), container->name(), container, d->toplevel);
 	d->toplevel->setObjectTree(d->topTree);
@@ -537,6 +545,14 @@ uint Form::originalFormatVersion() const
 void Form::setOriginalFormatVersion(uint ver)
 {
 	d->originalFormatVersion = ver;
+}
+
+void Form::setFormWidget(FormWidget* w)
+{
+	d->formWidget = w;
+	if (!d->formWidget)
+		return;
+	d->formWidget->m_form = this;
 }
 
 #include "form.moc"

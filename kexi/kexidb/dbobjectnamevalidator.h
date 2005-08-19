@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __DBOBJECTNAMEVALIDATOR_H
-#define __DBOBJECTNAMEVALIDATOR_H
+#ifndef KEXIDBOBJECTNAMEVALIDATOR_H
+#define KEXIDBOBJECTNAMEVALIDATOR_H
 
 #include <kexiutils/validator.h>
 #include <qstring.h>

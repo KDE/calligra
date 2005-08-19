@@ -189,7 +189,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    This function loads the pixmap named \a name in the DOM document \a domDoc.
 		    Decoding code is taken from QT Designer.
 		*/
-		static QPixmap loadImage(QDomDocument domDoc, QString name);
+		static QPixmap loadImage(QDomDocument domDoc, const QString& name);
 
 		/*! Reads the child nodes of a "widget" element. */
 		static void readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib,

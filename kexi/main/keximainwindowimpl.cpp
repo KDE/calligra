@@ -291,6 +291,7 @@ class KexiMainWindowImpl::Private
 #ifdef HAVE_KNEWSTUFF
 		newStuff = 0;
 #endif
+		mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
 	}
 	~Private() {
 	}
@@ -316,6 +317,9 @@ class KexiMainWindowImpl::Private
 //	int navDockSeparatorPosWithAutoOpen;
 	bool wasAutoOpen;
 	bool dialogExistedBeforeCloseProject;
+
+	KMdi::MdiMode mdiModeToSwitchAfterRestart;
+
 /*
 void updatePropEditorDockWidthInfo() {
 		if (propEditor) {
@@ -557,6 +561,25 @@ void KexiMainWindowImpl::fillWindowMenu()
 {
 	KexiMainWindow::fillWindowMenu();
 
+/*	int i;
+	for (i=0; i < (int)m_pWindowMenu->count(); i++) {
+		if (m_pWindowMenu->text( m_pWindowMenu->idAt( i ) ) == i18n( "&MDI Mode" )) {
+//			kdDebug() << m_pWindowMenu->text( m_pWindowMenu->idAt( i ) ) << endl;
+			m_pWindowMenu->removeItem( m_pWindowMenu->idAt( i ) );
+			break;
+		}
+	}*/
+
+	m_pMdiModeMenu->removeItem( m_pMdiModeMenu->idAt( 0 ) ); //hide toplevel mode
+	m_pMdiModeMenu->removeItem( m_pMdiModeMenu->idAt( 1 ) ); //hide tabbed mode
+	//update
+	if (d->mdiModeToSwitchAfterRestart != (KMdi::MdiMode)0) {
+		m_pMdiModeMenu->setItemChecked( m_pMdiModeMenu->idAt( 0 ), 
+			d->mdiModeToSwitchAfterRestart == KMdi::ChildframeMode );
+		m_pMdiModeMenu->setItemChecked( m_pMdiModeMenu->idAt( 1 ), 
+			d->mdiModeToSwitchAfterRestart == KMdi::IDEAlMode );
+	}
+
 	//insert window_next, window_previous actions:
 //	const QString t = i18n("&Dock/Undock...");
 	int i = m_pWindowMenu->count()-1;
@@ -570,6 +593,58 @@ void KexiMainWindowImpl::fillWindowMenu()
 	d->action_window_previous->plug( m_pWindowMenu, i++ );
 	if (!m_pDocumentViews->isEmpty())
 		m_pWindowMenu->insertSeparator( i++ );
+}
+
+void KexiMainWindowImpl::switchToIDEAlMode()
+{
+	switchToIDEAlMode(true);
+}
+
+void KexiMainWindowImpl::switchToIDEAlMode(bool showMessage)
+{
+	if (showMessage) {
+		if ((int)d->mdiModeToSwitchAfterRestart == 0 && mdiMode()==KMdi::IDEAlMode)
+			return;
+		if (d->mdiModeToSwitchAfterRestart == KMdi::IDEAlMode)
+			return;
+		if (mdiMode()==KMdi::IDEAlMode) {//current mode
+			d->mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
+		}
+		else {
+			KMessageBox::information(this,
+				i18n("User interface mode will be switched to IDEAl at next %1 application startup.").arg(KEXI_APP_NAME));
+			//delayed
+			d->mdiModeToSwitchAfterRestart = KMdi::IDEAlMode;
+		}
+	}
+	else
+		KexiMainWindow::switchToIDEAlMode();
+}
+
+void KexiMainWindowImpl::switchToChildframeMode()
+{
+	switchToChildframeMode(true);
+}
+
+void KexiMainWindowImpl::switchToChildframeMode(bool showMessage)
+{
+	if (showMessage) {
+		if ((int)d->mdiModeToSwitchAfterRestart == 0 && mdiMode()==KMdi::ChildframeMode)
+			return;
+		if (d->mdiModeToSwitchAfterRestart == KMdi::ChildframeMode)
+			return;
+		if (mdiMode()==KMdi::ChildframeMode) {//current mode
+			d->mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
+		}
+		else {
+			KMessageBox::information(this,
+				i18n("User interface mode will be switched to Childframe at next %1 application startup.").arg(KEXI_APP_NAME));
+			//delayed
+			d->mdiModeToSwitchAfterRestart = KMdi::ChildframeMode;
+		}
+	}
+	else
+		KexiMainWindow::switchToChildframeMode();
 }
 
 QPopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
@@ -1185,8 +1260,8 @@ tristate KexiMainWindowImpl::closeProject()
 		if (ds) {
 				if (!d->dialogs.isEmpty() && d->propEditorTabWidget->isVisible())
 					d->navDockSeparatorPos = ds->separatorPosInPercent();
-//				else
-//					d->navDockSeparatorPos = (100 * dwWidth) / width();
+				else
+					d->navDockSeparatorPos = (100 * dwWidth) / width();
 
 //				int navDockSeparatorPosWithAutoOpen = (100 * dw->width()) / width() + 4;
 //				d->navDockSeparatorPos = (100 * dw->width()) / width() + 1;
@@ -1340,13 +1415,9 @@ void KexiMainWindowImpl::initPropertyEditor()
 
 		d->config->setGroup("PropertyEditor");
 		int size = d->config->readNumEntry("FontSize", -1);
-		QFont f(d->propEditorTabWidget->font());
-		if (size<0) {
-			const int wdth = KGlobalSettings::desktopGeometry(this).width();
-			size = 10 + QMAX(0, wdth - 1100) / 100;
-			size = QMIN( d->propEditorTabWidget->fontInfo().pixelSize(), size );
-		}
-		f.setPixelSize( size );
+		QFont f( Kexi::smallFont(this/*init*/) );
+		if (size>0)
+			f.setPixelSize( size );
 		d->propEditorTabWidget->setFont(f);
 
 		if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
@@ -1557,21 +1628,25 @@ KexiMainWindowImpl::restoreSettings()
 
 	switch(mdimode)
 	{
-		case KMdi::ToplevelMode:
+/*		case KMdi::ToplevelMode:
 			switchToToplevelMode();
 			m_pTaskBar->switchOn(true);
-			break;
+			break;*/
 		case KMdi::ChildframeMode:
-			switchToChildframeMode();
+			switchToChildframeMode(false);
 			m_pTaskBar->switchOn(true);
 			break;
-		case KMdi::IDEAlMode:
-			switchToIDEAlMode();
+
+#define DEFAULT_MDI_MODE KMdi::IDEAlMode
+
+		case DEFAULT_MDI_MODE:
+		default:
+			switchToIDEAlMode(false);
 			break;
-		case KMdi::TabPageMode:
+/*		case KMdi::TabPageMode:
 			switchToTabPageMode();
 			break;
-		default:;//-1
+*/
 	}
 
 	// restore a possible maximized Childframe mode,
@@ -1621,12 +1696,16 @@ KexiMainWindowImpl::storeSettings()
 //	saveWindowSize( d->config ); //instance()->config() );
 	saveMainWindowSettings( d->config, "MainWindow" );
 	d->config->setGroup("MainWindow");
-	d->config->writeEntry("MDIMode", mdiMode());
-//	config->sync();
+	KMdi::MdiMode modeToSave = mdiMode();
+	if (d->mdiModeToSwitchAfterRestart!=(KMdi::MdiMode)0)
+		modeToSave = d->mdiModeToSwitchAfterRestart;
+	if (modeToSave == DEFAULT_MDI_MODE)
+		d->config->deleteEntry("MDIMode");
+	else
+		d->config->writeEntry("MDIMode", modeToSave);
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
 
-	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
-//		manager()->writeConfig( d->config, "DockWindows" );
+	if (modeToSave==KMdi::ChildframeMode || modeToSave==KMdi::TabPageMode) {
 		if (d->propEditor && d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
 			d->config->writeEntry("RightDockPosition", d->propEditorDockSeparatorPos);

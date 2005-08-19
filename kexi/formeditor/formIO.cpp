@@ -1507,7 +1507,7 @@ FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 }
 
 QPixmap
-FormIO::loadImage(QDomDocument domDoc, QString name)
+FormIO::loadImage(QDomDocument domDoc, const QString& name)
 {
 	QDomElement images = domDoc.namedItem("UI").namedItem("images").toElement();
 	if(images.isNull())

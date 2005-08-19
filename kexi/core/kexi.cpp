@@ -34,6 +34,7 @@
 #include <ksharedptr.h>
 #include <kmimetype.h>
 #include <kstaticdeleter.h>
+#include <kglobalsettings.h>
 
 using namespace Kexi;
 
@@ -44,17 +45,20 @@ class KexiInternal : public KShared
 	public:
 		KexiInternal() : KShared()
 		 , connset(0)
+		 , smallFont(0)
 		{
 		}
 		~KexiInternal()
 		{
 			delete connset;
+			delete smallFont;
 		}
 		KexiDBConnectionSet* connset;
 		KexiProjectSet recentProjects;
 		KexiDBConnectionSet recentConnections;
 		KexiDB::DriverManager driverManager;
 		KexiPart::Manager partManager;
+		QFont *smallFont;
 };
 
 static KStaticDeleter<KexiInternal> Kexi_intDeleter;
@@ -119,6 +123,21 @@ bool& Kexi::tempShowScripts() {
 	_tempShowScripts = false; 
 #endif
 	return _tempShowScripts;
+}
+
+//--------------------------------------------------------------------------------
+
+QFont Kexi::smallFont(QWidget *init)
+{
+	_INIT_SHARED;
+	if (!_int->smallFont) {
+		_int->smallFont = new QFont( init->font() );
+		const int wdth = KGlobalSettings::desktopGeometry(init).width();
+		int size = 10 + QMAX(0, wdth - 1100) / 100;
+		size = QMIN( init->fontInfo().pixelSize(), size );
+		_int->smallFont->setPixelSize( size );
+	}
+	return *_int->smallFont;
 }
 
 //--------------------------------------------------------------------------------

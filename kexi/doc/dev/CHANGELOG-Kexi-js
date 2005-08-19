@@ -12,7 +12,23 @@
 
 CCMAIL: dkite@shaw.ca
 
-2005-08-10
+2005-08-16
+Main Window
+- Toplevel (buggy) and Tabbed (redundant) KMDI modes hidden in Window menu;
+  Changing MDI mode now requires application restart (the lesser of two evils)
+- 'Create' menu renamed to more typical 'Insert'; 'Data' menuu moved after 'Format'
+- project navigator: usability fixes
+Widgets
+- KexiSmallToolButton helper class added
+- fixes for KexiFlowLayout
+Forms
+- "other widgets" toolbar popup added for clarity
+
+2005-08-12
+Form Designer
+- possible crashes fixed
+
+2005-08-10, 11
 Form Designer
 - added possibility of inserting autofields using 'Insert fields' button 
   from Data Source tab

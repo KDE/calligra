@@ -28,7 +28,7 @@ class QColor;
 class QFont;
 class KexiRecordNavigator;
 
-//! The scrollview which inlcudes KexiDBForm
+//! The scrollview which includes KexiDBForm
 /*! It allows to resize its m_widget, following snapToGrid setting. 
  Its contents is resized so the widget can always be resized. */
 class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView

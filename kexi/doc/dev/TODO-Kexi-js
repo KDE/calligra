@@ -258,7 +258,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - highlight sorted column's cells slightly darker, like in current KListView's impl.
 - clicking on a header section (to sort), it ensures current cell is visible, but 
   only y-position should be changed, not x
-
+- add support for crossed out rows - that can be used for results of DELETE queries
+  (see http://www.gnome-db.org/images/screenshots/mergeant_table_data.png)
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
   2 methods: 1) in additional dock 2) in property editor
@@ -562,3 +563,6 @@ TODO: Startup: when using a startup item, touch the file for better sorting:
 http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx
 
 TODO: Startup: add support for opening applications/x-kexi-connectiondata
+
+TODO: If a form has no focus, FormManager::windowChanged() and KexiFormView::setFocusInternal()
+ don't work properly (setFocus() is not available...)

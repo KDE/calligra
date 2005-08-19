@@ -55,6 +55,7 @@ class KFORMEDITOR_EXPORT FormWidget
 {
 	public:
 		FormWidget();
+		virtual ~FormWidget();
 
 		/*! This function draws the rects in the \a list  in the Form, above of all widgets,
 		 using double-buffering. \a type can be 1 (selection rect)
@@ -73,6 +74,11 @@ class KFORMEDITOR_EXPORT FormWidget
 		/*! This function highlights two widgets (to is optional), which are
 		sender and receiver, and draws a link between them. */
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
+	
+	protected:
+		Form *m_form;
+
+	friend class Form;
 };
 
 //! @internal
@@ -85,7 +91,7 @@ class FormPrivate
 		FormManager  *manager;
 		QGuardedPtr<Container>  toplevel;
 		ObjectTree  *topTree;
-		QWidget *widget;
+		QGuardedPtr<QWidget> widget;
 
 		WidgetList  selected;
 		ResizeHandleSet::Dict resizeHandles;
@@ -368,10 +374,12 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	protected:
 		void setConnectionBuffer(ConnectionBuffer *b) { d->connBuffer = b; }
 
+		void setFormWidget(FormWidget* w);
 	private:
 		FormPrivate *d;
 
 		friend class FormManager;
+		friend class FormWidget;
 		friend class ConnectionDialog;
 };
 

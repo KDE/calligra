@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpart" version="4">
+<kpartgui name="kexiformpart" version="5">
 
-<ToolBar name="tools" fullWidth="false" noMerge="0">
-   <text>Tools</text>
-   <Action name="show_form_ui"/>
+<!-- ToolBar name="design" fullWidth="false" noMerge="0">
+   <text>Design</text>
+   <Action name="show_form_ui"/ -->
 </ToolBar>
 
 </kpartgui>

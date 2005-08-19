@@ -33,6 +33,7 @@ class KIconLoader;
 class KexiBrowserItem;
 class KexiView;
 class KexiMainWindow;
+class KexiSmallToolButton;
 class KPopupMenu;
 class KListView;
 class KToolBar;
@@ -100,7 +101,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void slotExecuteItem(QListViewItem *item);
 		void slotSelectionChanged(QListViewItem* i);
 		void slotSettingsChanged(int);
-
+		void slotNewObjectPopupAboutToShow();
 
 		void slotNewObject();
 		void slotOpenObject();
@@ -119,14 +120,16 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		QAsciiDict<KexiBrowserItem> m_baseItems;
 		QIntDict<KexiBrowserItem> m_normalItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
-		KAction *m_newObjectAction, *m_newObjectToolbarAction,
+		KAction *m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction;
+		KPopupMenu* m_newObjectPopup;
 		int m_itemPopupTitle_id, m_partPopupTitle_id, 
 			m_openAction_id, m_designAction_id, m_editTextAction_id;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;
 		KexiBrowserListView *m_list;
+		KexiSmallToolButton* m_newObjectToolButton;
 		bool m_singleClick : 1;
 		bool m_nameEndsWithAsterisk : 1;
 };

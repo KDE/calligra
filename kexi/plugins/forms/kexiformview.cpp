@@ -61,7 +61,6 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
  , m_query(0)
  , m_queryIsOwned(false)
  , m_cursor(0)
- , m_setFocusInternalOnce(0)
 // , m_firstFocusWidget(0)
 {
 	m_delayedFormContentsResizeOnShow = 0;
@@ -164,6 +163,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 KexiFormView::~KexiFormView()
 {
 	deleteQuery();
+	KexiProject *prj = parentDialog()->mainWin()->project();
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	conn->deleteCursor(m_cursor);
 
@@ -432,6 +432,11 @@ KexiFormView::afterSwitchFrom(int mode)
 	//dirty only if it's a new object
 	if (mode == 0)
 		setDirty( parentDialog()->partItem()->neverSaved() );
+
+	if (mode==Kexi::DataViewMode && viewMode()==Kexi::DesignViewMode) {
+//		slotPropertySetSwitched
+//		emit form()->manager()->propertySetSwitched( form()->manager()->propertySet()->set(), true );
+	}
 
 	return true;
 }

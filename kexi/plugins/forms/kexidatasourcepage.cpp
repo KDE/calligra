@@ -149,7 +149,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_addField = new QToolButton(this, "addFieldButton");
 	m_addField->setUsesTextLabel(true);
 	m_addField->setTextPosition(QToolButton::Right);
-	m_addField->setTextLabel(i18n("Insert selecteds field into form", "Insert"));
+	m_addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
 	m_addField->setIconSet(SmallIconSet("add_field"));
 	m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
 	m_addField->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);

@@ -34,15 +34,19 @@ class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
 
 		/*! \return the widgets in the order of the layout,
 		 ie as it is stored in m_list. You must delete the list after using it. */
-		QPtrList<QWidget>*  widgetList();
+		QPtrList<QWidget>* widgetList() const;
 
+		/*! Sets layout's orientation to \a orientation. Default orientation is Vertical. */
 		void  setOrientation(Orientation orientation) { m_orientation = orientation; }
-		Qt::Orientation  orientation() { return m_orientation; }
 
-		void  setJustified(bool justify) { m_justify = justify; }
-		bool  isJustified() { return m_justify; }
+		/*! \return layout's orientation. */
+		Qt::Orientation orientation() const { return m_orientation; }
+
+		void setJustified(bool justify) { m_justify = justify; }
+		bool isJustified() const { return m_justify; }
 
 		virtual void addItem(QLayoutItem *item);
+		virtual void addSpacing(int size);
 		virtual QLayoutIterator iterator();
 		virtual void  invalidate();
 

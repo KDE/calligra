@@ -17,10 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KEXI_H__
-#define __KEXI_H__
+#ifndef KEXI_H
+#define KEXI_H
 
 #include <qguardedptr.h>
+#include <qfont.h>
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
@@ -74,6 +75,11 @@ namespace Kexi
 
 	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowScripts(); 
+
+	/*! A global setting for minimal readable font.
+	 Note: this is defined because KDE has no such setting yet.
+	 \a init is a widget that should be passed if no qApp->mainWidget() is available yet. */
+	KEXICORE_EXPORT QFont smallFont(QWidget *init = 0);
 
 	/*! Helper class for storing object status. */
 	class KEXICORE_EXPORT ObjectStatus

@@ -1993,10 +1993,11 @@ KPopupMenu* KexiTableView::popup() const
 	return m_popup;
 }*/
 
-void KexiTableView::showContextMenu(QPoint pos)
+void KexiTableView::showContextMenu(const QPoint& _pos)
 {
 	if (!d->contextMenuEnabled || m_popup->count()<1)
 		return;
+	QPoint pos(_pos);
 	if (pos==QPoint(-1,-1)) {
 		pos = viewport()->mapToGlobal( QPoint( columnPos(m_curCol), rowPos(m_curRow) + d->rowHeight ) );
 	}
@@ -2401,7 +2402,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				return;
 			}
 
-			qDebug("KexiTableView::KeyPressEvent(): default");
+			kdDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
 			if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
 				kdDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(e->key(),0,16) <<endl;
 //				e->ignore();

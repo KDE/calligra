@@ -779,7 +779,7 @@ protected:
 	 and keyPressEvent() for Qt::Key_Menu key.
 	 If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
 	*/
-	void	showContextMenu( QPoint pos = QPoint(-1,-1) );
+	void showContextMenu( const QPoint& pos = QPoint(-1,-1) );
 
 	/*! internal */
 	inline void paintRow(KexiTableItem *item,

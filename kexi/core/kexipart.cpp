@@ -81,8 +81,9 @@ void Part::createGUIClients(KexiMainWindow *win)
 
 		//default actions for part's gui client:
 		KAction *act = new KAction(m_names["instance"]+"...", info()->createItemIcon(), 0, this, 
-			SLOT(slotCreate()), this, (info()->objectName()+"part_create").latin1());
-		act->plug( m_mainWin->findPopupMenu("create") );
+			SLOT(slotCreate()), m_mainWin->actionCollection(), 
+			KexiPart::nameForCreateAction(*info()));
+		act->plug( m_mainWin->findPopupMenu("insert") );
 //		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
 //		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").latin1());
 		//let init specific actions for parts

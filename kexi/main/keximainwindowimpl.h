@@ -340,6 +340,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
 
+		//reimplemented to add "restart is required" message box
+		virtual void switchToIDEAlMode();
+		void switchToIDEAlMode(bool showMessage);
+		virtual void switchToChildframeMode();
+		void switchToChildframeMode(bool showMessage);
+
 	private:
 
 		class MessageHandler;

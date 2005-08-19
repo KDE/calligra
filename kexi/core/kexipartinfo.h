@@ -138,7 +138,10 @@ class KEXICORE_EXPORT Info
 
 };
 
+//! \return "create" KAction name for part defined by \a info. 
+//! The result is like "tablepart_create".
+KEXICORE_EXPORT QCString nameForCreateAction(const Info& info);
+
 }
 
 #endif
-

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="134">
+<kpartgui name="kexi" version="135">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -73,8 +73,15 @@
     <MergeLocal/>
   </Menu>
 
-  <Menu name="create" noMerge="1">
-    <text>&amp;Create</text>
+  <Menu name="insert" noMerge="1">
+    <text>&amp;Insert</text>
+  </Menu>
+
+  <Menu name="format" noMerge="0">
+    <text>&amp;Format</text>
+    <Action name="format_font"/>
+    <Separator/>
+    <MergeLocal/>
   </Menu>
 
   <Menu name="data" noMerge="1">
@@ -87,13 +94,6 @@
       <Action name="data_sort_az"/>
       <Action name="data_sort_za"/>
     </Menu>
-  </Menu>
-
-  <Menu name="format" noMerge="0">
-    <text>&amp;Format</text>
-    <Action name="format_font"/>
-    <Separator/>
-    <MergeLocal/>
   </Menu>
 
   <Merge/>
@@ -168,7 +168,7 @@
   <Action name="view_text_mode" type="toggle" />
 </ToolBar>
 
-<ToolBar name="data" fullWidth="false" noMerge="0">
+<ToolBar name="dataToolBar" fullWidth="false" noMerge="0">
   <text>Data</text>
   <ActionList name="data_cancel_row_changes"/>
   <ActionList name="data_save_row"/>

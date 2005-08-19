@@ -639,7 +639,7 @@ Container::createBoxLayout(WidgetList *list)
 void
 Container::createFlowLayout()
 {
-	KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(m_layout);
+	KexiFlowLayout *flow = dynamic_cast<KexiFlowLayout*>(m_layout);
 	if(!flow || m_tree->children()->isEmpty())
 		return;
 

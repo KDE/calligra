@@ -75,6 +75,8 @@
 
 #include "formmanager.h"
 
+#define KFD_NO_STYLES //disables; styles support needs improvements
+
 namespace KFormDesigner {
 
 //! @internal
@@ -82,7 +84,9 @@ class PropertyFactory : public KoProperty::CustomPropertyFactory
 {
 	public:
 		PropertyFactory(FormManager *manager) : KoProperty::CustomPropertyFactory(),
-		 m_manager(manager) {;}
+		 m_manager(manager)
+		{
+		}
 		virtual ~PropertyFactory() {}
 
 		CustomProperty*  createCustomProperty(int type) { return 0;}
@@ -322,6 +326,9 @@ FormManager::slotPointerClicked()
 void
 FormManager::startCreatingConnection()
 {
+	if (m_options & HideSignalSlotConnections)
+		return;
+
 	if(m_inserting)
 		stopInsert();
 
@@ -362,6 +369,9 @@ FormManager::startCreatingConnection()
 void
 FormManager::resetCreatedConnection()
 {
+	if (m_options & HideSignalSlotConnections)
+		return;
+
 	delete m_connection;
 	m_connection = new Connection();
 
@@ -372,13 +382,15 @@ FormManager::resetCreatedConnection()
 			fw = ff->formWidget();
 		m_active->formWidget()->clearForm();
 	}
-	if (m_active)
+	if (m_active && m_active->widget())
 		m_active->widget()->repaint();
 }
 
 void
 FormManager::stopCreatingConnection()
 {
+	if (m_options & HideSignalSlotConnections)
+		return;
 	if(!m_drawingSlot)
 		return;
 
@@ -426,12 +438,15 @@ FormManager::snapWidgetsToGrid()
 void
 FormManager::windowChanged(QWidget *w)
 {
+	kdDebug() << "FormManager::windowChanged(" 
+		<< (w ? (QString(w->className())+" "+w->name()) : QString("0")) << ")" << endl;
+
 	if(!w)
 	{
 		m_active = 0;
 		if(m_treeview)
 			m_treeview->setForm(0);
-		propertySetSwitched(0);
+		emit propertySetSwitched(0);
 		if(isCreatingConnection())
 			stopCreatingConnection();
 
@@ -454,6 +469,7 @@ FormManager::windowChanged(QWidget *w)
 
 			if(m_collection)
 			{
+#ifndef KFD_NO_STYLES
 				// update the 'style' action
 				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 				const QString currentStyle = form->widget()->style().name();
@@ -469,6 +485,7 @@ FormManager::windowChanged(QWidget *w)
 						break;
 					}
 				}
+#endif
 			}
 
 			if((form != previousActive) && isCreatingConnection())
@@ -481,38 +498,46 @@ FormManager::windowChanged(QWidget *w)
 			m_active->emitActionSignals();
 			//update the buffer too
 			form->emitSelectionSignals();
+
+			showPropertySet( propertySet(), true );
 			return;
 		}
 	}
 
 	for(form = m_preview.first(); form; form = m_preview.next())
 	{
-		kdDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->name() << endl;
+		kdDebug() << (form->widget() ? form->widget()->name() : "") << endl;
+		if(form->toplevelContainer() && form->widget() == w) {
+			kdDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->name() << endl;
 
-		if(m_collection)
-		{
-			// update the 'style' action
-			KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
-			const QString currentStyle = form->widget()->style().name();
-			const QStringList styles = m_style->items();
-
-			int idx = 0;
-			QStringList::ConstIterator endIt = styles.constEnd();
-			for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
+			if(m_collection)
 			{
-				if ((*it).lower() == currentStyle) {
-					kdDebug() << "Updating the style to " << currentStyle << endl;
-					m_style->setCurrentItem(idx);
-					break;
+#ifndef KFD_NO_STYLES
+				// update the 'style' action
+				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+				const QString currentStyle = form->widget()->style().name();
+				const QStringList styles = m_style->items();
+
+				int idx = 0;
+				QStringList::ConstIterator endIt = styles.constEnd();
+				for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
+				{
+					if ((*it).lower() == currentStyle) {
+						kdDebug() << "Updating the style to " << currentStyle << endl;
+						m_style->setCurrentItem(idx);
+						break;
+					}
 				}
+#endif
+
+				resetCreatedConnection();
+				m_active = form;
+
+				emit dirty(form, false);
+				emitNoFormSelected();
+				showPropertySet(0);
+				return;
 			}
-
-			resetCreatedConnection();
-			m_active = form;
-
-			emit dirty(form, false);
-			emitNoFormSelected();
-			showPropertySet(0);
 		}
 	}
 	//m_active = 0;
@@ -547,7 +572,7 @@ FormManager::deleteForm(Form *form)
 
 	if(m_forms.count() == 0) {
 		m_active = 0;
-		propertySetSwitched(0);
+		emit propertySetSwitched(0);
 	}
 }
 
@@ -955,6 +980,9 @@ FormManager::buddyChoosed(int id)
 void
 FormManager::menuSignalChoosed(int id)
 {
+	if (m_options & HideSignalSlotConnections)
+		return;
+
 	//if(!m_menuWidget)
 	//	return;
 	if(m_drawingSlot && m_sigSlotMenu)
@@ -977,12 +1005,13 @@ FormManager::menuSignalChoosed(int id)
 void
 FormManager::slotConnectionCreated(Form *form, Connection &connection)
 {
+	if (m_options & HideSignalSlotConnections)
+		return;
 	if(!form)
 		return;
 
 	Connection *c = new Connection(connection);
 	form->connectionBuffer()->append(c);
-
 }
 
 void
@@ -1161,6 +1190,8 @@ FormManager::editFormPixmapCollection()
 void
 FormManager::editConnections()
 {
+	if (m_options & HideSignalSlotConnections)
+		return;
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
@@ -1502,7 +1533,8 @@ FormManager::emitNoFormSelected()
 
 	// Disable 'Tools' actions
 	enableAction("pixmap_collection", false);
-	enableAction("form_connections", false);
+	if (!(m_options & HideSignalSlotConnections))
+		enableAction("form_connections", false);
 	enableAction("taborder", false);
 	enableAction("change_style", activeForm()!=0);
 
@@ -1521,7 +1553,8 @@ FormManager::enableFormActions()
 {
 	// Enable 'Tools' actions
 	enableAction("pixmap_collection", true);
-	enableAction("form_connections", true);
+	if (!(m_options & HideSignalSlotConnections))
+		enableAction("form_connections", true);
 	enableAction("taborder", true);
 	enableAction("change_style", true);
 

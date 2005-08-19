@@ -58,3 +58,9 @@ Info::~Info()
 {
 }
 
+//--------------
+
+QCString KexiPart::nameForCreateAction(const Info& info)
+{
+	return (info.objectName()+"part_create").latin1();
+}
