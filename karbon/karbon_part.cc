@@ -115,10 +115,10 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	KoTemplateChooseDia::ReturnType result;
 
         KoTemplateChooseDia::DialogType dlgtype;
-        //if (flags != KoDocument::InitDocFileNew)
+        if (flags != KoDocument::InitDocFileNew)
             dlgtype = KoTemplateChooseDia::Everything;
-      //  else
-        //    dlgtype = KoTemplateChooseDia::OnlyTemplates;
+        else
+            dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, dlgtype, "karbon_template", parentWidget );
 	// set as default paper

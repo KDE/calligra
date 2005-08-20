@@ -10,7 +10,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/widgets \
 	$(all_includes)
 
-SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . plugins data pics
+SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . plugins data pics templates
 
 # Filters should link to libkarbonbase or libkarboncommon, NOT to libkarbonpart
 #
