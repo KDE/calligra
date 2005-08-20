@@ -28,7 +28,7 @@
 
 #include <core/kexi.h>
 
-KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text, 
+KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
 	const QString& icon, const char* name)
  : QToolButton(parent, name)
 {
@@ -36,7 +36,7 @@ KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
 	update(text, SmallIconSet(icon));
 }
 
-KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text, 
+KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
 	const QIconSet& iconSet, const char* name)
  : QToolButton(parent, name)
 {
@@ -63,7 +63,7 @@ void KexiSmallToolButton::updateAction()
 	if (!m_action)
 		return;
 	update(m_action->text(), m_action->iconSet(KIcon::Small));
-	setAccel((const QKeySequence&)m_action->shortcut());
+	setAccel(m_action->shortcut());
 	QToolTip::add(this, m_action->toolTip());
 	QWhatsThis::add(this, m_action->whatsThis());
 }
