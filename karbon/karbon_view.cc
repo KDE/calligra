@@ -1145,32 +1145,24 @@ KarbonView::selectionChanged()
 	{
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
+		if ( shell() ) {
+			if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
+				m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
+				m_smallPreview->update( *obj->stroke(), *obj->fill() );
+			}
+		}
+		m_strokeDocker->setStroke( *( obj->stroke() ) );
+
 		if( count == 1 )
 		{
-			if ( shell() ) {
-				if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-					m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
-					m_smallPreview->update( *obj->stroke(), *obj->fill() );
-				}
-			}
-			m_strokeDocker->setStroke( *( obj->stroke() ) );
 			VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
 			m_ungroupObjects->setEnabled( group );
 			VPath *path = dynamic_cast<VPath *>( part()->document().selection()->objects().getFirst() );
 			m_closePath->setEnabled( path && !path->isClosed() );
 		}
 		else
-		{
-			VStroke stroke;
-			stroke.setType( VStroke::none );
-			VFill fill;
-			if ( shell() )
-				if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-					m_strokeFillPreview->update( stroke, fill );
-					m_smallPreview->update( stroke, fill );
-				}
 			m_groupObjects->setEnabled( true );
-		}
+
 		part()->document().selection()->setStroke( *obj->stroke() );
 		part()->document().selection()->setFill( *obj->fill() );
 		m_setLineWidth->setEnabled( true );
