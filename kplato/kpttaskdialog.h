@@ -50,10 +50,20 @@ class KPTTask;
 class KPTStandardWorktime;
 class KPTTaskProgressPanel;
 
+/**
+ * The dialog that shows and allows you to alter any task.  Contains a couple of tabs.
+ */
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0, const char *name=0);
+    /**
+     * The constructor for the task settings dialog.
+     * @param task the task to show
+     * @param workTime
+     * @param baseline
+     * @param parent parent widget
+     */
+    KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
 
     KMacroCommand *buildCommand(KPTPart *part);
 

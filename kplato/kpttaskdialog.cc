@@ -32,8 +32,8 @@
 namespace KPlato
 {
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool baseline, QWidget *p, const char *n)
-    : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true)
+KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool baseline, QWidget *p)
+    : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, "Task Settings Dialog", true, true)
 {
     QVBox *page;
     

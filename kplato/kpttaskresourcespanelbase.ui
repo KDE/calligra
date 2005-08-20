@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::KPTTaskResourcesPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
@@ -9,123 +9,97 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>390</width>
+            <width>372</width>
             <height>224</height>
         </rect>
     </property>
     <property name="caption">
         <string>KPTTaskResourcesPanelBase</string>
     </property>
-    <vbox>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QListView">
+            <column>
+                <property name="text">
+                    <string>Group</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Max. Units</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
             <property name="name">
-                <cstring>resourcesGroup</cstring>
+                <cstring>groupList</cstring>
             </property>
-            <property name="frameShape">
-                <enum>GroupBoxPanel</enum>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>0</height>
+                </size>
             </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="title">
-                <string>Resources</string>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout14</cstring>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout15</cstring>
+                        <cstring>textLabel2</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
+                    <property name="text">
+                        <string>Assign resources:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>resourceTable</cstring>
+                    </property>
+                </widget>
+                <widget class="QTable">
+                    <column>
+                        <property name="text">
+                            <string>Resource</string>
                         </property>
-                        <widget class="QListView">
-                            <column>
-                                <property name="text">
-                                    <string>Group</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <column>
-                                <property name="text">
-                                    <string>Max. Units</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <property name="name">
-                                <cstring>groupList</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>200</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout14</cstring>
-                            </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Assign resources:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>resourceTable</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QTable">
-                                    <column>
-                                        <property name="text">
-                                            <string>Resource</string>
-                                        </property>
-                                    </column>
-                                    <property name="name">
-                                        <cstring>resourceTable</cstring>
-                                    </property>
-                                    <property name="resizePolicy">
-                                        <enum>Default</enum>
-                                    </property>
-                                    <property name="numRows">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="numCols">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="readOnly">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                            </vbox>
-                        </widget>
-                    </hbox>
+                    </column>
+                    <property name="name">
+                        <cstring>resourceTable</cstring>
+                    </property>
+                    <property name="resizePolicy">
+                        <enum>Default</enum>
+                    </property>
+                    <property name="numRows">
+                        <number>0</number>
+                    </property>
+                    <property name="numCols">
+                        <number>1</number>
+                    </property>
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
                 </widget>
             </vbox>
         </widget>
-    </vbox>
+    </hbox>
 </widget>
 <includes>
     <include location="local" impldecl="in implementation">kpttaskresourcespanelbase.ui.h</include>

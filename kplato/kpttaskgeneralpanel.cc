@@ -51,13 +51,13 @@ KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *wor
       m_dayLength(24)
 {
     setStartValues(task, workTime);
-    
+/*  Why is this done?  Its useless (its not actually read only, but that may be a Qt thing) and I have to
+    edit these to actually be able to OK the dialog.   TZ-8-2005
     namefield->setReadOnly(baseline);
     leaderfield->setReadOnly(baseline);
     idfield->setReadOnly(baseline);
     schedulingGroup->setEnabled(!baseline);
-    
-    namefield->setFocus();
+*/
 }
 
 void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *workTime) {
