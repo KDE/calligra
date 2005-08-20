@@ -101,7 +101,7 @@ void KPTMainProjectPanelBase::slotBaseline()
     idfield->setReadOnly(b);
     leaderfield->setReadOnly(b);
     chooseLeader->setEnabled(!b);
-    scheduling->setEnabled(!b);
+    schedulingGroup->setEnabled(!b);
 }
 
 } // namespace KPlato

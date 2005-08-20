@@ -43,7 +43,7 @@ namespace KPlato
 
 /// Use for main projects
 KPTProject::KPTProject(KPTNode *parent)
-    : KPTNode(parent)
+    : KPTNode(parent), m_baselined(false)
 {
     m_constraint = KPTNode::MustStartOn;
     m_standardWorktime = new KPTStandardWorktime();

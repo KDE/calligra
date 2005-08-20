@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::KPTMainProjectPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>471</width>
-            <height>410</height>
+            <width>441</width>
+            <height>340</height>
         </rect>
     </property>
     <property name="caption">
@@ -20,66 +20,17 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QFrame">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>frame3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Raised</enum>
+                <cstring>layout3</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Project n&amp;ame:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>namefield</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Project &amp;id:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>namefield</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Project &amp;leader:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>leaderfield</cstring>
-                    </property>
-                </widget>
-                <widget class="KLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>namefield</cstring>
-                    </property>
-                </widget>
-                <widget class="KLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>idfield</cstring>
-                    </property>
-                </widget>
                 <widget class="QLayoutWidget" row="2" column="1">
                     <property name="name">
                         <cstring>layout4</cstring>
@@ -103,6 +54,52 @@
                         </widget>
                     </hbox>
                 </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>N&amp;ame:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>namefield</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;ID:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>namefield</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>idfield</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>namefield</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Leader:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>leaderfield</cstring>
+                    </property>
+                </widget>
             </grid>
         </widget>
         <widget class="QCheckBox">
@@ -110,126 +107,66 @@
                 <cstring>baseline</cstring>
             </property>
             <property name="text">
-                <string>Baseline</string>
+                <string>Freeze project (set as baseline)</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Checking this will freeze the project</string>
             </property>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>scheduling</cstring>
+            <property name="whatsThis" stdset="0">
+                <string>Checking this will freeze the project</string>
             </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>schedulingGroup</cstring>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
             </property>
             <property name="title">
                 <string>Scheduling</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QButtonGroup">
+                <widget class="KDateWidget" row="0" column="1">
                     <property name="name">
-                        <cstring>schedulingGroup</cstring>
+                        <cstring>startDate</cstring>
                     </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="lineWidth">
-                        <number>1</number>
-                    </property>
-                    <property name="title">
-                        <string></string>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>0</number>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout13</cstring>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <property name="margin">
-                                    <number>0</number>
-                                </property>
-                                <property name="spacing">
-                                    <number>0</number>
-                                </property>
-                                <widget class="QRadioButton" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>bStartDate</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Start date:</string>
-                                    </property>
-                                </widget>
-                                <widget class="QTimeEdit" row="0" column="2">
-                                    <property name="name">
-                                        <cstring>startTime</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KDateWidget" row="1" column="1">
-                                    <property name="name">
-                                        <cstring>endDate</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>bEndDate</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>End date:</string>
-                                    </property>
-                                </widget>
-                                <widget class="KDateWidget" row="0" column="1">
-                                    <property name="name">
-                                        <cstring>startDate</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QTimeEdit" row="1" column="2">
-                                    <property name="name">
-                                        <cstring>endTime</cstring>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                    </hbox>
                 </widget>
-                <widget class="QGroupBox">
+                <widget class="QTimeEdit" row="0" column="2">
                     <property name="name">
-                        <cstring>groupBox3</cstring>
+                        <cstring>startTime</cstring>
                     </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="title">
-                        <string></string>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>0</number>
-                        </property>
-                    </hbox>
                 </widget>
-            </vbox>
+                <widget class="QTimeEdit" row="1" column="2">
+                    <property name="name">
+                        <cstring>endTime</cstring>
+                    </property>
+                </widget>
+                <widget class="KDateWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>endDate</cstring>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>bEndDate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>End date:</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>bStartDate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Start date:</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -240,9 +177,6 @@
             </property>
             <property name="buddy" stdset="0">
                 <cstring>descriptionfield</cstring>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string></string>
             </property>
         </widget>
         <widget class="KTextEdit">
@@ -268,12 +202,6 @@
         <slot>slotEndDateClicked()</slot>
     </connection>
     <connection>
-        <sender>chooseLeader</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotChooseLeader()</slot>
-    </connection>
-    <connection>
         <sender>bStartDate</sender>
         <signal>clicked()</signal>
         <receiver>KPTMainProjectPanelBase</receiver>
@@ -288,24 +216,6 @@
     <connection>
         <sender>descriptionfield</sender>
         <signal>textChanged()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>namefield</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>idfield</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>leaderfield</sender>
-        <signal>textChanged(const QString&amp;)</signal>
         <receiver>KPTMainProjectPanelBase</receiver>
         <slot>slotCheckAllFieldsFilled()</slot>
     </connection>
@@ -340,12 +250,42 @@
         <slot>slotCheckAllFieldsFilled()</slot>
     </connection>
     <connection>
+        <sender>namefield</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>idfield</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>leaderfield</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
         <sender>baseline</sender>
         <signal>toggled(bool)</signal>
         <receiver>KPTMainProjectPanelBase</receiver>
         <slot>slotBaseline()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>namefield</tabstop>
+    <tabstop>idfield</tabstop>
+    <tabstop>leaderfield</tabstop>
+    <tabstop>chooseLeader</tabstop>
+    <tabstop>baseline</tabstop>
+    <tabstop>bStartDate</tabstop>
+    <tabstop>startTime</tabstop>
+    <tabstop>bEndDate</tabstop>
+    <tabstop>endTime</tabstop>
+    <tabstop>descriptionfield</tabstop>
+</tabstops>
 <includes>
     <include location="local" impldecl="in implementation">kabc/addresseedialog.h</include>
     <include location="local" impldecl="in implementation">kabc/addressee.h</include>
@@ -372,8 +312,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kdatewidget.h</includehint>
-    <includehint>kdatewidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>

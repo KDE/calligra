@@ -187,7 +187,14 @@ public:
     virtual void insertCalendarId(const QString &id, const KPTCalendar *calendar)
         { calendarIdDict.insert(id, calendar); }
     
+    /**
+     * Setting a project to be baselined means the project data can not be edited anymore.
+     * @param on the new baseline value
+     */
     void setBaselined(bool on) { m_baselined = on; }
+    /**
+     * @return if the project is baselined; a baselined project becomes uneditable.
+     */
     bool isBaselined() const { return m_baselined; }
     
 protected:
