@@ -256,6 +256,13 @@ private:
 
 	void drawPathCreation();
 	void drawEditedText();
+	
+	/**
+	* Creates new temporary text object along given path for displaying.
+	*
+	* @param path the path to create the text along
+	*/
+	bool createText( VSubpath &path );
 
 	VTextOptionsWidget* m_optionsWidget;
 	KoPoint m_last;
