@@ -47,7 +47,7 @@ pages with accompanying navigation aids.</para>
 <procedure>
 <step>
 <para>First, either make a new presentation, or open an existing one. Then,
-click on <guimenu>File</guimenu> > <guimenuitem>Create HTML
+click on <guimenu>File</guimenu><guimenuitem>Create HTML
 Slideshow...</guimenuitem></para>
 
 <screenshot>
@@ -285,7 +285,7 @@ structure</phrase></textobject>
 <step>
 <para>
 If the presentation that you want to export is not already open, go to
-<guimenu>File</guimenu>   > <guimenuitem>Open...</guimenuitem> and select the
+<guimenu>File</guimenu><guimenuitem>Open...</guimenuitem> and select the
 presentation that you want to export.
 </para>
 </step>
@@ -494,13 +494,13 @@ type a heading for your slide:</para>
 <guimenuitem>Template Manager</guimenuitem>:</para>
 
 <screenshot>
-<screeninfo><guimenu>File</guimenu> > <guimenuitem>Template
+<screeninfo><guimenu>File</guimenu><guimenuitem>Template
 Manager</guimenuitem></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="template05.png" format="PNG"/>
 </imageobject>
-<textobject><phrase><guimenu>File</guimenu> > <guimenuitem>Template
+<textobject><phrase><guimenu>File</guimenu><guimenuitem>Template
 Manager</guimenuitem></phrase></textobject>
 </mediaobject>
 </screenshot>
