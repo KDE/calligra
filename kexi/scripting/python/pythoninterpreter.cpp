@@ -91,13 +91,16 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
 
     // Prepare the interpreter.
     QString s = "import sys\n"
+
+                // dirty hack to get sys.argv defined.
+                "sys.argv = ['']\n"
+
                 //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
                 //"sys.stdout = self._bu\n"
                 //"sys.stderr = self._bu\n"
                 "import cStringIO\n"
                 "sys.stdin = cStringIO.StringIO()\n"
                 ;
-
     PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
