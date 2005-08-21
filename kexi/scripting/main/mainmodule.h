@@ -76,6 +76,26 @@ namespace Kross { namespace Api {
             virtual const QString getDescription() const;
 
             /**
+             * \return true if the script throwed an exception
+             *        else false.
+             */
+            bool hadException();
+
+            /**
+             * \return the \a Exception this module throwed.
+             */
+            Exception::Ptr getException();
+
+            /**
+             * Set the \a Exception this module throwed.
+             *
+             * \param exception The \a Exception this module throws or
+             *       NULL if you like to clear exception and to let
+             *       \a hadException() return false.
+             */
+            void setException(Exception::Ptr exception);
+
+            /**
              * Add a Qt signal to the \a Module by creating
              * an \a EventSignal for it.
              *
@@ -114,8 +134,8 @@ namespace Kross { namespace Api {
              *
              * \param object the QObject instance that should
              *       be added to this \a MainModule
-	     * \param name the name under which this QObject instance
-	     *       should be registered as
+             * \param name the name under which this QObject instance
+             *       should be registered as
              * \return the newly added \a QtObject instance
              *       which is now a child of this \a MainModule
              */
@@ -140,6 +160,15 @@ namespace Kross { namespace Api {
             //EventList getEvents();
             //const QString& serializeToXML();
             //void unserializeFromXML(const QString& xml);
+
+        private:
+
+           /**
+            * The \a Exception this \a MainModule throwed or
+            * NULL if we don't had an exception.
+            */
+            Exception::Ptr m_exception;
+
     };
 
 }}

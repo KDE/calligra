@@ -74,6 +74,9 @@ Manager::~Manager()
 
 ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 {
+    if(hadException())
+        return 0;
+
     //TODO at the moment we don't share ScriptContainer instances.
 
     //if(d->m_scriptcontainers.contains(scriptname))
@@ -89,7 +92,9 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
 {
     if(d->m_interpreter.contains(interpretername))
         return d->m_interpreter[interpretername];
+
     Interpreter* interpreter = 0;
+    setException(0);
 
     if(interpretername == "python") {
 
@@ -117,7 +122,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
 
             d->m_library = libloader->globalLibrary( KROSS_PYTHON_LIBRARY );
             if(! d->m_library) {
-                kdWarning() << "Failed to load the krosspython library." << endl;
+                setException( new Exception("Failed to load the krosspython library.") );
                 return 0;
             }
         }
@@ -126,13 +131,13 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         def_interpreter_func interpreter_func;
         interpreter_func = (def_interpreter_func) d->m_library->symbol("krosspython_instance");
         if(! interpreter_func) {
-            kdWarning() << "Failed to load symbol in krosspython library." << endl;
+            setException( new Exception("Failed to load symbol in krosspython library.") );
         }
         else {
             // and execute the extern krosspython_instance function.
             interpreter = (Kross::Api::Interpreter*) (interpreter_func)(this, "python");
             if(! interpreter) {
-                kdWarning() << "Failed to load PythonInterpreter instance from krosspython library." << endl;
+                setException( new Exception("Failed to load PythonInterpreter instance from krosspython library.") );
             }
             else {
                 // Job done. The library is loaded and our Interpreter* points
@@ -146,13 +151,16 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         d->m_library = 0;
 #endif
     }
-
 /*
+    else if(interpretername == "kjs") {
 #ifdef KROSS_KJS_LIBRARY
-    else if(interpretername == "kjs")
         interpreter = new Kross::Kjs::KjsInterpreter(this, "kjs");
 #endif
+    }
 */
+    else {
+        setException( new Exception(QString("No such interpreter '%1'").arg(interpretername)) );
+    }
 
     if(interpreter)
         d->m_interpreter.replace(interpretername, interpreter);

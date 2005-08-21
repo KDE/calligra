@@ -145,7 +145,7 @@ namespace Kross { namespace Api {
             /**
              * Initialize the \a Script instance.
              */
-            void initialize();
+            bool initialize();
 
             /**
              * Finalize the \a Script instance.

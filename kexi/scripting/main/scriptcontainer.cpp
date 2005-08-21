@@ -59,6 +59,7 @@ namespace Kross { namespace Api {
             * binding.
             */
             QString m_interpretername;
+
     };
 
 }}
@@ -109,57 +110,93 @@ void ScriptContainer::setInterpreterName(const QString& name)
 Object::Ptr ScriptContainer::execute()
 {
     if(! d->m_script)
-        initialize();
+        if(! initialize())
+            return 0;
+
+    if(hadException())
+        return 0;
+
     Object::Ptr r = d->m_script->execute();
-    if(d->m_script->hadException())
-        throw d->m_script->getException();
+    if(d->m_script->hadException()) {
+        setException( d->m_script->getException() );
+        finalize();
+        return 0;
+    }
     return r;
 }
 
 const QStringList ScriptContainer::getFunctionNames()
 {
-    return d->m_script ? d->m_script->getFunctionNames() : QStringList();
+    return d->m_script ? d->m_script->getFunctionNames() : QStringList(); //FIXME init before if needed?
 }
 
 Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr arguments)
 {
-    if(functionname.isEmpty())
-        throw new Exception(QString("No functionname defined for ScriptContainer::callFunction()."));
-
     if(! d->m_script)
-        initialize();
+        if(! initialize())
+            return 0;
+
+    if(hadException())
+        return 0;
+
+    if(functionname.isEmpty()) {
+        setException( new Exception(QString("No functionname defined for ScriptContainer::callFunction().")) );
+        finalize();
+        return 0;
+    }
+
     Object::Ptr r = d->m_script->callFunction(functionname, arguments);
-    if(d->m_script->hadException())
-        throw d->m_script->getException();
+    if(d->m_script->hadException()) {
+        setException( d->m_script->getException() );
+        finalize();
+        return 0;
+    }
     return r;
 }
 
 const QStringList ScriptContainer::getClassNames()
 {
-    return d->m_script ? d->m_script->getClassNames() : QStringList();
+    return d->m_script ? d->m_script->getClassNames() : QStringList(); //FIXME init before if needed?
 }
 
 Object::Ptr ScriptContainer::classInstance(const QString& name)
 {
     if(! d->m_script)
-        initialize();
+        if(! initialize())
+            return 0;
+
+    if(hadException())
+        return 0;
+
     Object::Ptr r = d->m_script->classInstance(name);
-    if(d->m_script->hadException())
-        throw d->m_script->getException();
+    if(d->m_script->hadException()) {
+        setException( d->m_script->getException() );
+        finalize();
+        return 0;
+    }
     return r;
 }
 
-void ScriptContainer::initialize()
+bool ScriptContainer::initialize()
 {
     finalize();
     Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->m_interpretername);
-    if(! interpreter)
-        throw new Exception(QString("Unknown interpreter '%1'").arg(d->m_interpretername));
+    if(! interpreter) {
+        setException( new Exception(QString("Unknown interpreter '%1'").arg(d->m_interpretername)) );
+        return false;
+    }
     d->m_script = interpreter->createScript(this);
-    if(! d->m_script)
-        throw new Exception(QString("Failed to create script for interpreter '%1'").arg(d->m_interpretername));
-    if(d->m_script->hadException())
-        throw d->m_script->getException();
+    if(! d->m_script) {
+        setException( new Exception(QString("Failed to create script for interpreter '%1'").arg(d->m_interpretername)) );
+        return false;
+    }
+    if(d->m_script->hadException()) {
+        setException( d->m_script->getException() );
+        finalize();
+        return false;
+    }
+    setException( 0 ); // clear old exception
+    return true;
 }
 
 void ScriptContainer::finalize()

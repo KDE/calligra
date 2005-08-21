@@ -21,7 +21,7 @@
 
 //#include <qstring.h>
 //#include <ksharedptr.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 
 using namespace Kross::Api;
 
@@ -29,6 +29,7 @@ Exception::Exception(const QString& error, Object::Ptr parent)
     : Object("Exception", parent)
     , m_error(error)
 {
+    kdWarning() << QString("Kross::Api::Exception: %1").arg(error) << endl;
 }
 
 Exception::~Exception()

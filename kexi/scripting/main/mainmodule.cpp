@@ -25,6 +25,7 @@ using namespace Kross::Api;
 
 MainModule::MainModule(const QString& name)
     : Module<MainModule>(name)
+    , m_exception(0)
 {
 }
 
@@ -42,35 +43,61 @@ const QString MainModule::getDescription() const
     return QString("TODO: Documentation");
 }
 
+bool MainModule::hadException()
+{
+    return m_exception != 0;
+}
+
+Exception::Ptr MainModule::getException()
+{
+    return m_exception;
+}
+
+void MainModule::setException(Exception::Ptr exception)
+{
+    m_exception = exception;
+}
+
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)
 {
     EventSignal* event = new EventSignal(name, this, sender, signal);
-    if(! addChild(event))
-        throw new Exception( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
+    if(! addChild(event)) {
+        m_exception = new Exception( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
+        return 0;
+    }
     return event;
 }
 
 EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCString slot)
 {
     EventSlot* event = new EventSlot(name, this, receiver, slot);
-    if(! addChild(event))
-        throw new Exception( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
+    if(! addChild(event)) {
+        m_exception = new Exception( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
+        delete event;
+        return 0;
+    }
     return event;
 }
 
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(this, object, name);
-    if(! addChild(qtobject))
-        throw new Exception( QString("Failed to add QObject name='%1'").arg(object->name()) );
+    if(! addChild(qtobject)) {
+        m_exception = new Exception( QString("Failed to add QObject name='%1'").arg(object->name()) );
+        delete qtobject;
+        return 0;
+    }
     return qtobject;
 }
 
 EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, this, action);
-    if(! addChild(event))
-        throw new Exception( QString("Failed to add KAction name='%1'").arg(action->name()) );
+    if(! addChild(event)) {
+        m_exception = new Exception( QString("Failed to add KAction name='%1'").arg(action->name()) );
+        delete m_exception;
+        return 0;
+    }
     return event;
 }
 

@@ -117,17 +117,20 @@ bool KexiScriptContainer::execute()
     emit clear();
 
 #ifdef KEXI_KROSS_SUPPORT
-    try {
-        ret = d->scriptcontainer->execute();
+    Kross::Api::Object::Ptr result = d->scriptcontainer->execute();
+    if( d->scriptcontainer->hadException() ) {
+        QString s = d->scriptcontainer->getException()->toString();
+        kdDebug() << "KexiScriptContainer::execute() failed to execute with exception: " << s << endl;
+        addStdErr(s);
+        return false;
     }
-    catch(Kross::Api::Exception::Ptr e) {
-        kdDebug() << QString("KexiScriptContainer::execute() => EXCEPTION %1").arg(e->toString()) << endl;
-    }
+    //return result != 0;
 #else
-    kdWarning() << "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." << endl;
+    addStdErr( "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." );
+    return false;
 #endif
 
-    return ret;
+    return true;
 }
 
 void KexiScriptContainer::addStdOut(const QString& s)
