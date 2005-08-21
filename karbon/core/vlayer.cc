@@ -133,18 +133,21 @@ VLayer::sendToBack( const VObject& object )
 void
 VLayer::save( QDomElement& element ) const
 {
-	QDomElement me = element.ownerDocument().createElement( "LAYER" );
-	element.appendChild( me );
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "LAYER" );
+		element.appendChild( me );
 
-	if( state() == normal || state() == normal_locked || state() == VObject::selected )
-		me.setAttribute( "visible", 1 );
+		if( state() == normal || state() == normal_locked || state() == VObject::selected )
+			me.setAttribute( "visible", 1 );
 
-	// save objects:
-	VObjectListIterator itr = m_objects;
-	for ( ; itr.current(); ++itr )
-		itr.current()->save( me );
+		// save objects:
+		VObjectListIterator itr = m_objects;
+		for ( ; itr.current(); ++itr )
+			itr.current()->save( me );
 
-	VObject::save( me );
+		VObject::save( me );
+	}
 }
 
 void
