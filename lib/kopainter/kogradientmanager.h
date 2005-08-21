@@ -20,7 +20,7 @@
 #ifndef __GRADIENT_LOADER__
 #define __GRADIENT_LOADER__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
