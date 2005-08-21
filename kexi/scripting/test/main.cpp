@@ -1,5 +1,5 @@
 /***************************************************************************
- * test.cpp
+ * main.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -31,6 +31,7 @@
 
 #include "testobject.h"
 #include "testaction.h"
+#include "testwindow.h"
 
 // Qt
 #include <qstring.h>
@@ -54,6 +55,8 @@ static KCmdLineOptions options[] =
 {
     { "interpreter <interpretername>", I18N_NOOP("Name of the used interpreter"), "python" },
     { "scriptfile <filename>", I18N_NOOP("Scriptfile to execute with the defined interpreter"), "test.py" },
+    { "gui", I18N_NOOP("Run the gui. Else the commandline application is used."), 0 },
+
     //{ "functionname <functioname>", I18N_NOOP("Execute the function in the defined scriptfile."), "" },
     //{ "functionargs <functioarguments>", I18N_NOOP("List of arguments to pass to the function on execution."), "" },
     { 0, 0, 0 }
@@ -146,30 +149,44 @@ int main(int argc, char **argv)
 {
     int result = 0;
 
-    KCmdLineArgs::init(argc, argv,
-        new KAboutData("KrossTest", "KrossTest",
-            "0.1", "", KAboutData::License_LGPL,
-            "(c)2004-2005 Sebastian Sauer\n"
-            "http://www.koffice.org/kexi\n"
-            "http://www.dipe.org/kross",
-            "kross@dipe.org"
-        )
-    );
+    KAboutData about("krosstest",
+                     "KrossTest",
+                     "0.1",
+                     "KDE application to test the Kross framework.",
+                     KAboutData::License_LGPL,
+                     "(C) 2005 Sebastian Sauer",
+                     "Test the Kross framework!",
+                     "http://www.dipe.org/kross",
+                     "kross@dipe.org");
+    about.addAuthor("Sebastian Sauer", "Author", "mail@dipe.org");
+
+    KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
-    app = new KApplication(true, true);
+
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
     QString interpretername = args->getOption("interpreter");
-    QString filename = args->getOption("scriptfile");
+    QString scriptfilename = args->getOption("scriptfile");
 
-    QFile f(QFile::encodeName(filename));
+    QFile f(QFile::encodeName(scriptfilename));
     if(f.exists() && f.open(IO_ReadOnly)) {
         QString scriptcode = f.readAll();
         f.close();
-        runInterpreter(interpretername, scriptcode);
+
+        if( args->isSet("gui") ) {
+            app = new KApplication();
+            TestWindow *mainWin = new TestWindow(interpretername, scriptcode);
+            app->setMainWidget(mainWin);
+            mainWin->show();
+            args->clear();
+            int result = app->exec();
+        }
+        else {
+            app = new KApplication(true, true);
+            runInterpreter(interpretername, scriptcode);
+        }
     }
     else {
-        kdWarning() << "Failed to load scriptfile: " << filename << endl;
+        kdWarning() << "Failed to load scriptfile: " << scriptfilename << endl;
         result = -1;
     }
 
