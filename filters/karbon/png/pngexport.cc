@@ -33,6 +33,7 @@
 #include "vdocument.h"
 #include "vselection.h"
 #include "vkopainter.h"
+#include "vlayer.h"
 
 #include <kdebug.h>
 
@@ -66,8 +67,16 @@ PngExport::convert( const QCString& from, const QCString& to )
 	VDocument doc;
 	doc.load( docNode );
 
-	// select all objects:
-	doc.selection()->append();
+	VLayerListIterator layerItr( doc.layers() );
+	VLayer *currentLayer;
+
+	for( ; currentLayer = layerItr.current(); ++layerItr )
+	{
+		if( currentLayer->state() == VObject::normal || currentLayer->state() == VObject::normal_locked || currentLayer->state() == VObject::selected )
+		{
+			doc.selection()->append(currentLayer->objects());
+		}
+	}
 
 	// get the bounding box of all selected objects:
 	const KoRect& rect = doc.selection()->boundingBox();
