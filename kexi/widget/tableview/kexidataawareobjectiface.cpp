@@ -1468,3 +1468,5 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
 	if (m_editor)
 		m_editor->setFocus();
 }
+
+#include "kexidataawareobjectiface.moc"
