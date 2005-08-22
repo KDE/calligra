@@ -119,9 +119,13 @@ bool KexiScriptContainer::execute()
 #ifdef KEXI_KROSS_SUPPORT
     Kross::Api::Object::Ptr result = d->scriptcontainer->execute();
     if( d->scriptcontainer->hadException() ) {
-        QString s = d->scriptcontainer->getException()->toString();
+        Kross::Api::Exception::Ptr exception = d->scriptcontainer->getException();
+        QString s = exception->toString();
         kdDebug() << "KexiScriptContainer::execute() failed to execute with exception: " << s << endl;
         addStdErr(s);
+        long line = exception->getLineNo();
+        if(line >= 0)
+            emit lineno(line);
         return false;
     }
     //return result != 0;

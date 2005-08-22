@@ -25,11 +25,12 @@
 
 using namespace Kross::Api;
 
-Exception::Exception(const QString& error, Object::Ptr parent)
+Exception::Exception(const QString& error, long lineno, Object::Ptr parent)
     : Object("Exception", parent)
     , m_error(error)
+    , m_lineno(lineno)
 {
-    kdWarning() << QString("Kross::Api::Exception: %1").arg(error) << endl;
+    kdWarning() << QString("Kross::Api::Exception error='%1' lineno='%3'").arg(m_error).arg(m_lineno) << endl;
 }
 
 Exception::~Exception()
@@ -48,11 +49,18 @@ const QString Exception::getDescription() const
 
 const QString Exception::toString()
 {
-    return QString("Exception: %1").arg( getError() );
+    return (m_lineno != -1)
+        ? QString("Exception at line %1: %2").arg(m_lineno).arg(m_error)
+        : QString("Exception: %1").arg(m_error);
 }
 
 const QString& Exception::getError()
 {
     return m_error;
+}
+
+long Exception::getLineNo()
+{
+    return m_lineno;
 }
 

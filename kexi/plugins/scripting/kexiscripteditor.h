@@ -61,6 +61,7 @@ class KexiScriptEditor : protected KexiEditor
 
     private slots:
         void slotTextChanged();
+        void setLineNo(long);
 
     private:
         KexiScriptContainer* m_scriptcontainer;

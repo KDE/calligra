@@ -46,6 +46,7 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 
 		QString text();
 		void jump(int character);
+		void setCursorPosition(int line, int col);
 
 		//void installEventFilter ( const QObject * filterObj );
 		//virtual bool eventFilter(QObject *o, QEvent *ev);

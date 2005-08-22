@@ -1443,7 +1443,7 @@ namespace Py
 	template <TEMPLATE_TYPENAME T> bool operator< (const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
 	template <TEMPLATE_TYPENAME T> bool operator> (const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
 	template <TEMPLATE_TYPENAME T> bool operator<=(const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
-	template <TEMPLATE_TYPENAME T> bool operator>=(const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right); 
+	template <TEMPLATE_TYPENAME T> bool operator>=(const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& left, const EXPLICIT_TYPENAME SeqBase<T>::const_iterator& right);
 
 
 	extern bool operator==(const Sequence::iterator& left, const Sequence::iterator& right);
@@ -1458,7 +1458,7 @@ namespace Py
 	extern bool operator< (const Sequence::const_iterator& left, const Sequence::const_iterator& right);
 	extern bool operator> (const Sequence::const_iterator& left, const Sequence::const_iterator& right);
 	extern bool operator<=(const Sequence::const_iterator& left, const Sequence::const_iterator& right);
-	extern bool operator>=(const Sequence::const_iterator& left, const Sequence::const_iterator& right); 
+	extern bool operator>=(const Sequence::const_iterator& left, const Sequence::const_iterator& right);
 
 	// ==================================================
 	// class Char
@@ -1760,7 +1760,7 @@ namespace Py
 
 			set(PyTuple_New (limit), true);
 			validate();
-			
+
 			for(sequence_index_type i=0; i < limit; i++)
 				{
 				if(PyTuple_SetItem (ptr(), i, new_reference_to(s[i])) == -1)
@@ -2775,7 +2775,7 @@ namespace Py
 		PyObject *ptype, *pvalue, *ptrace;
 		PyErr_Fetch(&ptype, &pvalue, &ptrace);
 		Object result;
-		if(ptrace) result = pvalue;
+		if(ptrace) result = ptrace;
 		PyErr_Restore(ptype, pvalue, ptrace);
 		return result;
 		}

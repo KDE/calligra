@@ -246,74 +246,22 @@ Kross::Api::Object::Ptr PythonScript::execute()
         return r;
     }
     catch(Py::Exception& e) {
-        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str())) );
+
+        long lineno = -1;
+        Py::Object tb = Py::trace(e);
+        if(tb.hasAttr("tb_lineno")) {
+            Py::Object lo = tb.getAttr("tb_lineno");
+            if(lo.isNumeric())
+                lineno = Py::Long(lo) + 1; // python points to the line after the line where the error occured
+        }
+
+        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str()), lineno) );
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);
     }
 
     return 0; // return nothing if exception got thrown.
-
-/*
-    if(! d->m_module) initialize();
-    try {
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_module->getDict();
-        PyObject* pyrun = PyRun_String(
-            (char*)m_scriptcontainer->getCode().latin1(),
-            Py_file_input,
-            mainmoduledict.ptr(),
-            d->m_module->getDict().ptr()
-        );
-        if(! pyrun) {
-            Py::Object errobj = Py::value(Py::Exception()); // get last error
-            throw Kross::Api::RuntimeException(QString("Python Exception: %1").arg(errobj.as_string().c_str()));
-        }
-        Py::Object run(pyrun, true); // the run-object takes care of freeing our pyrun pyobject.
-        //kdDebug() << QString("PythonScript::execute --------------------------- 1") << endl;
-        Py::Dict moduledict( d->m_module->getDict().ptr() );
-        for(Py::Dict::iterator it = moduledict.begin(); it != moduledict.end(); ++it) {
-            Py::Dict::value_type vt(*it);
-            if(PyClass_Check( vt.second.ptr() )) {
-                kdDebug() << QString("PythonScript::execute() class '%1' added.").arg(vt.first.as_string().c_str()) << endl;
-                d->m_classes.append( vt.first.as_string().c_str() );
-            }
-            else if(vt.second.isCallable()) {
-                kdDebug() << QString("PythonScript::execute() function '%1' added.").arg(vt.first.as_string().c_str()) << endl;
-                d->m_functions.append( vt.first.as_string().c_str() );
-            }
-*/
-            /*
-            QString s;
-            if(vt.second.isCallable()) s += "isCallable ";
-            if(vt.second.isDict()) s += "isDict ";
-            if(vt.second.isList()) s += "isList ";
-            if(vt.second.isMapping()) s += "isMapping ";
-            if(vt.second.isNumeric()) s += "isNumeric ";
-            if(vt.second.isSequence()) s += "isSequence ";
-            if(vt.second.isTrue()) s += "isTrue ";
-            if(vt.second.isInstance()) s += "isInstance ";
-            if(PyClass_Check( vt.second.ptr() )) s += "vt.second.isClass ";
-            Py::String rf = vt.first.repr();
-            Py::String rs = vt.second.repr();
-            kdDebug() << QString("PythonScript::execute d->m_module->getDict() rs='%1' vt.first='%2' rf='%3' test='%4' s='%5'")
-                        .arg(rs.as_string().c_str())
-                        .arg(vt.first.as_string().c_str())
-                        .arg(rf.as_string().c_str())
-                        .arg("")
-                        .arg(s) << endl;
-            //m_objects.replace(vt.first.repr().as_string().c_str(), vt.second);
-            if(PyClass_Check( vt.second.ptr() )) {
-                //PyObject *aclarg = Py_BuildValue("(s)", rs.as_string().c_str());
-                PyObject *pyinst = PyInstance_New(vt.second.ptr(), 0, 0);//aclarg, 0);
-                //Py_DECREF(aclarg);
-                if (pyinst == 0)
-                    kdDebug() << QString("PythonScript::execute PyInstance_New() returned NULL !!!") << endl;
-                else {
-                    Py::Object inst(pyinst, true);
-                    kdDebug() << QString("====> PythonScript::execute inst='%1'").arg(inst.as_string().c_str()) << endl;
-                }
-            }
-            */
 }
 
 Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::Api::List::Ptr args)

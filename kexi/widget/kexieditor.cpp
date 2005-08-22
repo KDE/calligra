@@ -176,7 +176,6 @@ bool KexiEditor::eventFilter(QObject *o, QEvent *ev)
 	return KexiViewBase::eventFilter(o,ev);
 }*/
 
-
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 // === KexiEditor implementation using KTextEdit only ===
 QString
@@ -209,6 +208,12 @@ KexiEditor::jump(int character)
 	}
 
 	d->view->setCursorPosition(row, col);
+}
+
+void
+KexiEditor::setCursorPosition(int line, int col)
+{
+	d->view->setCursorPosition(line, col);
 }
 
 #else
@@ -269,6 +274,13 @@ KexiEditor::jump(int character)
 
 	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
 	ci->setCursorPositionReal(row, col);
+}
+
+void
+KexiEditor::setCursorPosition(int line, int col)
+{
+	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface( docView() );
+	ci->setCursorPosition(line, col);
 }
 
 #endif //!KTEXTEDIT_BASED_SQL_EDITOR

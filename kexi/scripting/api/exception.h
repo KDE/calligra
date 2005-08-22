@@ -41,6 +41,8 @@ namespace Kross { namespace Api {
 
             /// The error message.
             QString m_error;
+            /// The line number where the exception got thrown
+            long m_lineno;
 
         public:
 
@@ -51,11 +53,13 @@ namespace Kross { namespace Api {
              * Constructor.
              *
              * \param error The error message.
+             * \param lineno The liner number in the scripting
+             *        code where this exception got thrown.
              * \param parent The parent \a Object or NULL if
              *        this exception object doesn't has a
              *        parent.
              */
-            Exception(const QString& error, Object::Ptr parent = 0);
+            Exception(const QString& error, long lineno = -1, Object::Ptr parent = 0);
 
             /**
              * Destructor.
@@ -76,6 +80,12 @@ namespace Kross { namespace Api {
              */
             const QString& getError();
 
+            /**
+             * \return the line number in the scripting code
+             * where the exception got thrown or -1 if there
+             * was no line number defined.
+             */
+            long getLineNo();
     };
 
 }}

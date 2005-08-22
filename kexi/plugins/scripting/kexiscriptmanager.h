@@ -75,6 +75,7 @@ class KexiScriptContainer : public QObject
     signals:
         void clear();
         void log(const QString&);
+        void lineno(long);
 
     public slots:
 

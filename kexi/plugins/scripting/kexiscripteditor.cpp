@@ -41,12 +41,6 @@
 # include <ktexteditor/undointerface.h>
 #endif
 
-#ifdef KEXI_KROSS_SUPPORT
-# include "main/manager.h"
-# include "main/scriptcontainer.h"
-# include "api/exception.h"
-#endif
-
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiEditor(mainWin, parent, name)
     , m_scriptcontainer(0)
@@ -62,6 +56,7 @@ void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
     m_scriptcontainer = scriptcontainer;
+    connect(m_scriptcontainer, SIGNAL(lineno(long)), this, SLOT(setLineNo(long)));
 
     if(m_scriptcontainer) {
         KexiEditor::setText(m_scriptcontainer->getCode());
@@ -102,6 +97,11 @@ void KexiScriptEditor::slotTextChanged()
     KexiScriptEditor::setDirty(true);
     if(m_scriptcontainer)
         m_scriptcontainer->setCode( KexiEditor::text() );
+}
+
+void KexiScriptEditor::setLineNo(long lineno)
+{
+    setCursorPosition(lineno, 0);
 }
 
 #include "kexiscripteditor.moc"
