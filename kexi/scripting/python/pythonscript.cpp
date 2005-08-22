@@ -252,7 +252,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
         if(tb.hasAttr("tb_lineno")) {
             Py::Object lo = tb.getAttr("tb_lineno");
             if(lo.isNumeric())
-                lineno = Py::Long(lo) + 1; // python points to the line after the line where the error occured
+                lineno = long(Py::Long(lo)) - 1; // python linecount starts with 1..
         }
 
         setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str()), lineno) );
