@@ -49,6 +49,8 @@ signals:
 
 private slots:
   void loadFromKABC();
+  void deleteInfo();
+  void resetMetaData();
 
 private:
   void addAuthorPage( KoDocumentInfoAuthor *authorInfo );

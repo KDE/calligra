@@ -36,6 +36,7 @@
 #include <qdom.h>
 #include <qdir.h>
 #include <qvbox.h>
+#include <qdatetime.h>
 
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
@@ -53,6 +54,7 @@
 #include <ktextedit.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
+#include <klocale.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -163,12 +165,39 @@ void KoDocumentInfoDlg::loadFromKABC()
   emit changed();
 }
 
+void KoDocumentInfoDlg::deleteInfo()
+{
+  d->m_authorWidget->leFullName->setText( QString::null );
+  d->m_authorWidget->leInitial->setText( QString::null );
+  d->m_authorWidget->leAuthorTitle->setText( QString::null );
+  d->m_authorWidget->leCompany->setText( QString::null );
+  d->m_authorWidget->leEmail->setText( QString::null );
+  d->m_authorWidget->leTelephoneHome->setText( QString::null );
+  d->m_authorWidget->leTelephoneWork->setText( QString::null );
+  d->m_authorWidget->leFax->setText( QString::null );
+  d->m_authorWidget->leCountry->setText( QString::null );
+  d->m_authorWidget->lePostalCode->setText( QString::null );
+  d->m_authorWidget->leCity->setText( QString::null );
+  d->m_authorWidget->leStreet->setText( QString::null );
+  emit changed();
+}
+
+void KoDocumentInfoDlg::resetMetaData()
+{
+  QString s = KGlobal::locale()->formatDateTime( QDateTime::currentDateTime() );
+  d->m_aboutWidget->labelCreated->setText( s + ", " + d->m_info->creator() );
+  d->m_aboutWidget->labelModified->setText( "" );
+  d->m_aboutWidget->labelRevision->setText( "0" );
+  emit changed();
+}
+
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
   QVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
   d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
   d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", KIcon::Desktop, 48 ) );
   d->m_authorWidget->pbLoadKABC->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "kaddressbook", KIcon::Small ) ) );
+  d->m_authorWidget->pbDelete->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "eraser", KIcon::Small ) ) );
 
   d->m_authorWidget->leFullName->setText( authorInfo->fullName() );
   d->m_authorWidget->leInitial->setText( authorInfo->initial() );
@@ -212,12 +241,15 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
            this, SIGNAL( changed() ) );
   connect( d->m_authorWidget->pbLoadKABC, SIGNAL( clicked() ),
            this, SLOT( loadFromKABC() ) );
+  connect( d->m_authorWidget->pbDelete, SIGNAL( clicked() ),
+           this, SLOT( deleteInfo() ) );
 }
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
   QVBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
   d->m_aboutWidget = new KoDocumentInfoAboutWidget( page );
+  d->m_aboutWidget->pbReset->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "reload", KIcon::Small ) ) );
   KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
   if ( doc )
   {
@@ -225,8 +257,10 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
     d->m_aboutWidget->labelType->setText( doc->mimeType() );
     d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( KIcon::Desktop, 48 ) );
   }
-  d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + " - " + aboutInfo->initialCreator() );
-  d->m_aboutWidget->labelModified->setText( aboutInfo->modificationDate() + " - " + d->m_info->creator() );
+  if ( aboutInfo->creationDate() != QString::null )
+    d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + ", " + aboutInfo->initialCreator() );
+  if ( aboutInfo->modificationDate() != QString::null )
+    d->m_aboutWidget->labelModified->setText( aboutInfo->modificationDate() + ", " + d->m_info->creator() );
   d->m_aboutWidget->labelRevision->setText( aboutInfo->editingCycles() );
   d->m_aboutWidget->leDocTitle->setText( aboutInfo->title() );
   d->m_aboutWidget->leDocSubject->setText( aboutInfo->subject() );
@@ -241,6 +275,10 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
            this, SIGNAL( changed() ) );
   connect( d->m_aboutWidget->leDocKeywords, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
+  connect( d->m_aboutWidget->pbReset, SIGNAL( clicked() ),
+           aboutInfo, SLOT( resetMetaData() ) );
+  connect( d->m_aboutWidget->pbReset, SIGNAL( clicked() ),
+           this, SLOT( resetMetaData() ) );
 }
 
 void KoDocumentInfoDlg::save()

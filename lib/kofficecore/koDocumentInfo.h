@@ -158,6 +158,9 @@ public:
     void setAbstract( const QString& n );
     void saveParameters();
 
+public slots:
+    void resetMetaData();
+
 private:
     KoDocumentInfo* m_docInfo;
     QString m_title;

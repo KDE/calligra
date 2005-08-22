@@ -829,7 +829,7 @@ QString KoDocumentInfoAbout::creationDate() const
     if ( m_creationDate.isValid() )
         return KGlobal::locale()->formatDateTime( m_creationDate );
     else
-        return i18n( "N/A" );
+        return QString::null;
 }
 
 QString KoDocumentInfoAbout::modificationDate() const
@@ -837,7 +837,7 @@ QString KoDocumentInfoAbout::modificationDate() const
     if ( m_modificationDate.isValid() )
         return KGlobal::locale()->formatDateTime( m_modificationDate );
     else
-        return i18n( "N/A" );
+        return QString::null;
 }
 
 void KoDocumentInfoAbout::setTitle( const QString& n )
@@ -870,6 +870,13 @@ void KoDocumentInfoAbout::setSubject( const QString& n )
     m_subject = n;
 }
 
+void KoDocumentInfoAbout::resetMetaData()
+{
+    m_editingCycles = 0;
+    m_initialCreator = m_docInfo->creator();
+    m_creationDate = QDateTime::currentDateTime();
+    m_modificationDate = QDateTime();
+}
 
 
 #include <koDocumentInfo.moc>
