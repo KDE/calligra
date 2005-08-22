@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined XCFEXPORT_H_
+#ifndef XCFEXPORT_H_
 #define XCFEXPORT_H_
 
 #include <koFilter.h>
