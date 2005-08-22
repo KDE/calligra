@@ -67,17 +67,17 @@ namespace {
         
         if (type == GRAYColorspace) {
             if (imageDepth == 8)
-                return KisColorSpaceRegistry::instance() -> get(KisID("GRAYA", ""));
+                return KisColorSpaceRegistry::instance() -> get("GRAYA");
         }
         else if (type == CMYKColorspace) {
             if (imageDepth == 8)
-                return KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
+                return KisColorSpaceRegistry::instance() -> get("CMYK");
         }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
             if (imageDepth == 8)
-                return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+                return KisColorSpaceRegistry::instance() -> get("RGBA");
             else if (imageDepth == 16)
-                return KisColorSpaceRegistry::instance()->get(KisID("RGBA16", ""));
+                return KisColorSpaceRegistry::instance()->get("RGBA16");
         }
         return 0;
 
@@ -151,8 +151,6 @@ namespace {
             rawdata.resize(profile->length);
             memcpy(rawdata.data(), profile->datum, profile->length);
             
-            kdDebug() << "Loaded annotation: " << name << endl;
-
             annotation = new KisAnnotation(QString(name), "", rawdata);
             Q_CHECK_PTR(annotation);
             
@@ -167,7 +165,6 @@ namespace {
         return;
 #else
         while(it != annotationsEnd) {
-            kdDebug() << "new annotation" << endl;
             if (!(*it) || (*it) -> type() == QString()) {
                 kdDebug() << "Warning: empty annotation" << endl;
                 ++it;
@@ -318,7 +315,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             emit notifyProgressError(this);
             return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
         }
-        kdDebug() << "Image has colorspace: " << cs -> id().name() << "\n";
+        kdDebug() << "Image has colorspace: " << cs -> id().id() << "\n";
 
         KisProfileSP profile = getProfileForProfileInfo(image, cs);
          if (profile)
