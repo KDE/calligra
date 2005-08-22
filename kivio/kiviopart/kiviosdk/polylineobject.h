@@ -62,6 +62,11 @@ class PolylineObject : public Object
      */
     virtual void resizeInPercent(double percentWidth, double percentHeight);
 
+    /**
+     * returns the bouding box of the object
+     */
+    virtual KoRect boundingBox();
+
     /// Returns a vector containing the 4 control points of the bezier curve
     QValueVector<KoPoint> pointVector() const;
     /// Set a vector containing the control points of the polyline

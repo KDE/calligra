@@ -19,63 +19,50 @@
 #ifndef KIVIO_ICON_VIEW_H
 #define KIVIO_ICON_VIEW_H
 
-#include <qdom.h>
 #include <qiconview.h>
-#include <qptrlist.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <qdragobject.h>
 
-class KivioStencilSpawnerSet;
-class KivioStencilSpawner;
+class QDragObject;
+
+namespace Kivio
+{
+  class Object;
+  class ShapeCollection;
+}
 
 class KivioIconView : public QIconView
 {
   Q_OBJECT
-  protected:
-    KivioStencilSpawnerSet *m_pSpawnerSet;
-    static KivioStencilSpawner *m_pCurDrag;
-
-    void drawBackground( QPainter *, const QRect & );
-    QDragObject *dragObject();
-
-  protected slots:
-    void slotDoubleClicked( QIconViewItem * );
-
-  signals:
-    void createNewStencil( KivioStencilSpawner * );
-
   public:
-    KivioIconView( bool _readWrite,QWidget *parent=0, const char *name=0 );
+    KivioIconView(bool _readWrite, QWidget *parent = 0, const char *name = 0);
     virtual ~KivioIconView();
 
-    static void clearCurrentDrag();
-    static KivioStencilSpawner *curDragSpawner() { return m_pCurDrag; }
+    void setShapeCollection(Kivio::ShapeCollection* collection) { m_shapeCollection = collection; }
+    Kivio::ShapeCollection* shapeCollection() const { return m_shapeCollection; }
 
-    void setStencilSpawnerSet( KivioStencilSpawnerSet * );
-    KivioStencilSpawnerSet *spawnerSet() { return m_pSpawnerSet; }
+  protected:
+    QDragObject* dragObject();
+
+  protected slots:
+    void slotDoubleClicked(QIconViewItem*);
 
   private:
-    static QPtrList<KivioIconView> objList;
     bool isReadWrite;
+    Kivio::ShapeCollection* m_shapeCollection;
 };
 
 class KivioIconViewItem : public QIconViewItem
 {
-  friend class KivioIconView;
-
-  protected:
-    KivioStencilSpawner *m_pSpawner;
-
   public:
     KivioIconViewItem( QIconView *parent );
     virtual ~KivioIconViewItem();
 
-    void setStencilSpawner( KivioStencilSpawner * );
-    KivioStencilSpawner *spawner() { return m_pSpawner; }
+    void setShape(Kivio::Object* newShape);
+    Kivio::Object* shape() const { return m_shape; }
 
     virtual bool acceptDrop( const QMimeSource *e ) const;
+
+  protected:
+    Kivio::Object* m_shape;
 };
 
 

@@ -20,8 +20,13 @@
 
 #include <qdom.h>
 #include <qbrush.h>
+#include <qfile.h>
+#include <qdir.h>
+#include <qstringlist.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include "object.h"
 #include "rectangleobject.h"
@@ -34,6 +39,7 @@
 #include "kivio_common.h"
 #include "pen.h"
 #include "groupobject.h"
+#include "shapecollection.h"
 
 namespace Kivio {
 
@@ -55,6 +61,75 @@ SmlObjectLoader::SmlObjectLoader()
 
 SmlObjectLoader::~SmlObjectLoader()
 {
+}
+
+ShapeCollection* SmlObjectLoader::loadShapeCollection(const QString& path)
+{
+  QDomDocument doc("ShapeCollection");
+  QDomElement root, nodeElement;
+  QDomNode node;
+  QString nodeName;
+  QString title, origTitle, id;
+  QFile file(path + "/desc");
+
+  if(file.open(IO_ReadOnly) == false) {
+    kdDebug(43000) << "SmlObjectLoader::loadShapeCollection - Error opening: " << path << "/desc" << endl;
+    return 0; //FIXME We should probably still load the collection even if we don't find a desc file
+  }
+
+  doc.setContent(&file);
+
+  root = doc.documentElement();
+  node = root.firstChild();
+
+  //Load the collection's name and id
+  while(!node.isNull()) {
+    nodeName = node.nodeName();
+    nodeElement = node.toElement();
+
+    if(nodeName == "Id") {
+      id = XmlReadString( node.toElement(), "data", path );
+    } else if((nodeName == "Title") && nodeElement.hasAttribute("lang")) {
+      if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
+        title = XmlReadString(nodeElement, "data", path);
+      }
+    } else if((nodeName == "Title") && !nodeElement.hasAttribute("lang")) {
+      origTitle = XmlReadString( nodeElement, "data", path );
+    }
+
+    node = node.nextSibling();
+  }
+
+  if(title.isEmpty()) {
+    title = i18n("Stencils", origTitle.utf8());
+  }
+
+  // Create the collection
+  ShapeCollection* collection = new ShapeCollection;
+  collection->setId(id);
+  collection->setName(title);
+
+  // Get the list of shapes
+  QDir dir(path);
+  dir.setNameFilter("*.sml *.shape");
+  QStringList fileList = dir.entryList();
+  QStringList::iterator itEnd = fileList.end();
+  QString fileName;
+
+  for(QStringList::iterator it = fileList.begin(); it != itEnd; ++it) {
+    fileName = *it;
+
+    if(fileName.contains(".sml", false)) {
+      file.setName(fileName);
+      if(file.open(IO_ReadOnly) == true) {
+        doc.setContent(&file);
+        collection->addShape(loadShape(doc.documentElement()));
+      }
+    } else if(fileName.contains(".shape", false)) {
+    }
+  }
+
+  return collection;
 }
 
 Object* SmlObjectLoader::loadShape(const QDomElement& shapeElement)
@@ -125,8 +200,7 @@ Object* SmlObjectLoader::loadObject(const QDomElement& shapeElement)
 
   t = it.data();
 
-  switch( t )
-  {
+  switch(t) {
     case kstNone:
       break;
 
@@ -171,6 +245,13 @@ Object* SmlObjectLoader::loadObject(const QDomElement& shapeElement)
       break;
 
     case kstTextBox:
+      break;
+
+    case kstGroup:
+      object = loadGroupObject(shapeElement);
+      break;
+
+    case kstConnector:
       break;
 
     default:
@@ -457,6 +538,28 @@ Object* SmlObjectLoader::loadLineArrayObject(const QDomElement& shapeElement)
   return object;
 }
 
+Object* SmlObjectLoader::loadGroupObject(const QDomElement& shapeElement)
+{
+ // Create the new shape to load into
+  GroupObject* object = new GroupObject;
+
+  // Load the name
+  object->setName(XmlReadString(shapeElement, "name", ""));
+
+  object->setPosition(KoPoint(XmlReadFloat(shapeElement, "x", 0.0f), XmlReadFloat(shapeElement, "y", 0.0f)));
+  object->setSize(KoSize(XmlReadFloat(shapeElement, "w", 72.0f), XmlReadFloat(shapeElement, "h", 72.0f)));
+
+  QDomNode node = shapeElement.firstChild();
+
+  while(!node.isNull()) {
+    if(node.nodeName() == "KivioShape") {
+      object->addObject(loadObject(node.toElement()));
+    }
+
+    node = node.nextSibling();
+  }
+}
+
 Pen SmlObjectLoader::loadPen(const QDomElement& element)
 {
   Pen p;
@@ -478,13 +581,7 @@ QBrush SmlObjectLoader::loadBrush(const QDomElement& element)
   b.setColor(XmlReadColor(element, "color", QColor(255,255,255)));
   //m_color2 = XmlReadColor( e, "gradientColor", QColor(255,255,255).rgb() );
 
-  int colorstyle = XmlReadInt(element, "colorStyle", 1/*Solid fill*/);
-
-  if(colorstyle) {
-    b.setStyle(Qt::SolidPattern);
-  } else {
-    b.setStyle(Qt::NoBrush);
-  }
+  b.setStyle(static_cast<Qt::BrushStyle>(XmlReadInt(element, "colorStyle", Qt::SolidPattern)));
 
   //m_gradientType = static_cast<KImageEffect::GradientType>(XmlReadInt(e, "gradientType", KImageEffect::VerticalGradient));
 

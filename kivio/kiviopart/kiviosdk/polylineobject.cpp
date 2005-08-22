@@ -22,6 +22,7 @@
 #include <qpointarray.h>
 
 #include <kozoomhandler.h>
+#include <koRect.h>
 
 namespace Kivio {
 
@@ -44,6 +45,28 @@ Object* PolylineObject::duplicate()
 ShapeType PolylineObject::type()
 {
   return kstPolyline;
+}
+
+KoRect PolylineObject::boundingBox()
+{
+  KoPoint topLeft = m_pointVector[0], bottomRight, current;
+  QValueVector<KoPoint>::iterator it;
+  QValueVector<KoPoint>::iterator itEnd = m_pointVector.end();
+
+  for(it = m_pointVector.begin(); it != itEnd; ++it) {
+    current = *it;
+    topLeft.setX(QMIN(current.x(), topLeft.x()));
+    topLeft.setY(QMIN(current.y(), topLeft.y()));
+    bottomRight.setX(QMAX(current.x(), bottomRight.x()));
+    bottomRight.setY(QMAX(current.y(), bottomRight.y()));
+  }
+
+  KoRect rect;
+  rect.moveTopLeft(topLeft);
+  rect.setWidth(bottomRight.x() - topLeft.x());
+  rect.setHeight(bottomRight.y() - topLeft.y());
+
+  return rect;
 }
 
 QValueVector<KoPoint> PolylineObject::pointVector() const

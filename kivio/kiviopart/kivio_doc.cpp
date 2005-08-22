@@ -39,6 +39,8 @@
 #include "kivioglobal.h"
 #include "kivio_config.h"
 #include "polylineconnectorspawner.h"
+#include "shapecollection.h"
+#include "smlobjectloader.h"
 
 #include "stencilbarbutton.h"
 
@@ -576,7 +578,7 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &id )
             {
 
               // Load the spawner set with  rootDir + "/" + fi.fileName()
-              addSpawnerSetDuringLoad( innerFI->absFilePath() );
+              openShapeCollection(innerFI->absFilePath());
               return true;
             }
           }
@@ -762,80 +764,33 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
 // TODO: Fix for id system
 bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString id )
 {
-    KivioStencilSpawnerSet *pSet = m_pLstSpawnerSets->first();
-    while(pSet)
-    {
-        if( pSet->dir() == dirName || pSet->id() == id )
-        {
-            return true;
-        }
-
-        pSet = m_pLstSpawnerSets->next();
-    }
+//     KivioStencilSpawnerSet *pSet = m_pLstSpawnerSets->first();
+//     while(pSet)
+//     {
+//         if( pSet->dir() == dirName || pSet->id() == id )
+//         {
+//             return true;
+//         }
+// 
+//         pSet = m_pLstSpawnerSets->next();
+//     }
 
     return false;
 }
 
-void KivioDoc::addSpawnerSet( const QString &dirName )
+void KivioDoc::openShapeCollection(const QString& path)
 {
-  QString id = KivioStencilSpawnerSet::readId( dirName );
+  Kivio::SmlObjectLoader loader;
+  Kivio::ShapeCollection* collection = loader.loadShapeCollection(path);
 
-  if( setIsAlreadyLoaded( dirName, id ) )
-  {
-      kdDebug(43000) << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets" << endl;
-      return;
+  if(!m_bLoading) {
+    emit newShapeCollectionOpened(collection);
   }
-
-
-  KivioStencilSpawnerSet* set = new KivioStencilSpawnerSet();
-
-  if( set->loadDir(dirName)==false )
-  {
-      kdDebug(43000) << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
-      delete set;
-      return;
-  }
-
-  // Queue set for loading stencils
-  m_stencilSetLoadQueue.append(set);
-
-  if(!m_loadTimer) {
-    m_loadTimer = new QTimer(this);
-    connect(m_loadTimer, SIGNAL(timeout()), this, SLOT(loadStencil()));
-  }
-
-  if(!m_loadTimer->isActive()) {
-    emit initProgress();
-    m_loadTimer->start(0, false);
-  }
-}
-
-void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
-{
-  KivioStencilSpawnerSet *set;
-
-  set = new KivioStencilSpawnerSet();
-  if( set->loadDir(dirName)==false )
-  {
-    kdDebug(43000) << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
-    delete set;
-    return;
-  }
-
-  QStringList::iterator it;
-  QStringList files = set->files();
-
-  for(it = files.begin(); it != files.end(); ++it) {
-    QString fileName = set->dir() + "/" + (*it);
-    set->loadFile(fileName);
-  }
-
-  m_pLstSpawnerSets->append(set);
 }
 
 KivioDoc::~KivioDoc()
 {
-  saveConfig();
+  Kivio::Config::self()->writeConfig();
 
   // ***MUST*** Delete the pages first because they may
   // contain plugins which will be unloaded soon.  The stencils which are
@@ -848,12 +803,17 @@ KivioDoc::~KivioDoc()
   delete m_pLstSpawnerSets;
   m_pLstSpawnerSets = 0;
 
-  s_docs->removeRef(this);
-}
+  QValueList<Kivio::ShapeCollection*>::iterator it = m_shapeCollectionList.begin();
+  QValueList<Kivio::ShapeCollection*>::iterator itEnd = m_shapeCollectionList.end();
+  Kivio::ShapeCollection* collection;
 
-void KivioDoc::saveConfig()
-{
-  Kivio::Config::self()->writeConfig();
+  while(it != itEnd) {
+    collection = *it;
+    it = m_shapeCollectionList.remove(it);
+    delete collection;
+  }
+
+  s_docs->removeRef(this);
 }
 
 void KivioDoc::initConfig()
@@ -868,45 +828,36 @@ bool KivioDoc::removeSpawnerSet( KivioStencilSpawnerSet *pSet )
     return m_pLstSpawnerSets->removeRef( pSet );
 }
 
+void KivioDoc::closeShapeCollection(Kivio::ShapeCollection* collection)
+{
+  if(!collection) {
+    return;
+  }
+
+  m_shapeCollectionList.remove(m_shapeCollectionList.find(collection));
+  delete collection;
+  collection = 0;
+}
+
 /**
  * Iterates through all spawner objects in the stencil set checking if
  * they exist in any of the pages.
  */
 void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStackBar *pBar )
 {
-    // Iterate through all spawners in the set checking if they exist in any of
+  //FIXME Port to Object code
+/*    // Iterate through all spawners in the set checking if they exist in any of
     // the pages
     KivioIconView *pIconView = (KivioIconView *)w;
     KivioStencilSpawnerSet *pSet = pIconView->spawnerSet();
 
-    // Start the iteration
-    KivioStencilSpawner *pSpawner = pSet->spawners()->first();
-    while( pSpawner )
-    {
-        // Check for a spawner.  If there is one, the set cannot be deleted
-        if( checkStencilsForSpawner( pSpawner )==true )
-        {
-            KMessageBox::error(NULL, i18n("Cannot delete stencil set because there are still stencils in use."),
-                i18n("Cannot Delete Stencil Set"));
-            return;
-        }
+    // Destroying the IconView does not destroy the spawner set, so we remove
+    // it here
+    closeShapeCollection();
+    removeSpawnerSet( pIconView->spawnerSet() );
 
-        pSpawner = pSet->spawners()->next();
-    }
-
-
-
-    // If we made it this far, it's ok to delete this stencil set, so do it
-//    if( KMessageBox::questionYesNo(NULL, i18n("Are you sure you want to delete this stencil set?"),
-//        i18n("Delete Stencil Set?"))==KMessageBox::Yes )
-    {
-        // Destroying the IconView does not destroy the spawner set, so we remove
-        // it here
-        removeSpawnerSet( pIconView->spawnerSet() );
-
-        // And emit the signal to kill the set (page & button)
-        emit sig_deleteStencilSet( pBtn, w, pBar );
-    }
+    // And emit the signal to kill the set (page & button)
+    emit sig_deleteStencilSet( pBtn, w, pBar );*/
 }
 
 /**
@@ -976,27 +927,6 @@ bool KivioDoc::checkGroupForSpawner( KivioStencil *pGroup, KivioStencilSpawner *
 void KivioDoc::slotSelectionChanged()
 {
     emit sig_selectionChanged();
-}
-
-KivioStencilSpawner* KivioDoc::findStencilSpawner( const QString& setId, const QString& stencilId )
-{
-    KivioStencilSpawnerSet *pSpawnerSet = m_pLstSpawnerSets->first();
-    while( pSpawnerSet )
-    {
-        if( pSpawnerSet->id() == setId && pSpawnerSet->find(stencilId) )
-        {
-            return pSpawnerSet->find(stencilId);
-	    // return pSpawnerSet->find(name)
-        }
-        pSpawnerSet = m_pLstSpawnerSets->next();
-    }
-
-    if( m_pInternalSet->id() == setId && m_pInternalSet->find(stencilId) )
-    {
-        return m_pInternalSet->find(stencilId);
-    }
-
-    return NULL;
 }
 
 KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stencilId )

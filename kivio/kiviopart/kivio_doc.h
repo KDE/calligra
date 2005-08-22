@@ -46,6 +46,7 @@ class KivioStencil;
 
 namespace Kivio {
   class DragBarButton;
+  class ShapeCollection;
 }
 
 class KoStore;
@@ -101,13 +102,13 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     * Adds a KivioStencilSpawnerSet to the list of spawner sets and make it active.
     *
     */
-    void addSpawnerSet( const QString& );
-    void addSpawnerSetDuringLoad( const QString& );
+    void openShapeCollection(const QString& path);
+    void closeShapeCollection(Kivio::ShapeCollection* collection);
     bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
     QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
+    QValueList<Kivio::ShapeCollection*> shapeCollectionList() const { return m_shapeCollectionList; }
 
-    KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
     KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
     
     void addInternalStencilSpawner(KivioStencilSpawner* spawner);
@@ -133,7 +134,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     KivioGridData grid() { return Kivio::Config::grid(); }
 
     void initConfig();
-    void saveConfig();
     void updateButton();
     void addCommand( KCommand * cmd );
 
@@ -166,6 +166,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void sig_selectionChanged();
     void sig_addPage(KivioPage*);
     void sig_addSpawnerSet( KivioStencilSpawnerSet * );
+    void newShapeCollectionOpened(Kivio::ShapeCollection*);
     void sig_updateView(KivioPage*);
     void sig_pageNameChanged(KivioPage*, const QString&);
     void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
@@ -250,6 +251,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     unsigned int m_currentFile;
     KivioStencilSpawnerSet* m_currentSet;
     QValueList<KivioStencilSpawnerSet*> m_stencilSetLoadQueue;
+
+    QValueList<Kivio::ShapeCollection*> m_shapeCollectionList;
 };
 
 #endif

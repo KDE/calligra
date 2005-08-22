@@ -44,11 +44,6 @@ void KIvioDocIface::initConfig()
     doc->initConfig();
 }
 
-void KIvioDocIface::saveConfig()
-{
-    doc->saveConfig();
-}
-
 void KIvioDocIface::setShowGrid( bool b )
 {
     Kivio::Config::setShowGrid(b);

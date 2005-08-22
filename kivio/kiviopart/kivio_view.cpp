@@ -932,12 +932,13 @@ void KivioView::toggleSnapGrid(bool b)
 
 void KivioView::addStencilSet( const QString& name )
 {
-  m_pDoc->addSpawnerSet(name);
+  m_pDoc->openShapeCollection(name);
 }
 
 void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
-  if(!pSpawner) {
+  //FIXME Port to Object code
+/*  if(!pSpawner) {
     kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
     return;
   }
@@ -947,7 +948,7 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
                    SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
 
   pView->setStencilSpawnerSet(pSpawner);
-  m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());
+  m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());*/
 }
 
 void KivioView::setFGColor()

@@ -22,15 +22,20 @@
 #include <qdom.h>
 #include <qpixmap.h>
 #include <qprinter.h>
+#include <qpainter.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
 #include <koGenStyles.h>
+#include <kozoomhandler.h>
+#include <koGlobal.h>
 
 #include "kivio_common.h"
 #include "kivio_settings.h"
+#include "object.h"
 
 struct PaperSizeDef {
   const char* title;
@@ -1285,4 +1290,22 @@ QString Kivio::systemDefaultUnit()
   }
 
   return defMS;
+}
+
+QPixmap Kivio::generatePixmapFromObject(int width, int height, Kivio::Object* object)
+{
+  KoZoomHandler zoomHandler;
+  QRect rect = zoomHandler.zoomRect(object->boundingBox());
+
+  double zw = (double)rect.width() / (double)width;
+  double hw = (double)rect.height() / (double)height;
+  zoomHandler.setZoomAndResolution(qRound(kMin(zw, hw) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
+
+  QPixmap pix(width, height);
+  pix.fill(Qt::white);
+  QPainter painter(&pix);
+  object->paint(painter, &zoomHandler);
+  painter.end();
+
+  return pix;
 }

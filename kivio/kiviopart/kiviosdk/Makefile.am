@@ -10,16 +10,17 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 libkiviosdk_la_METASOURCES = AUTO
 
 libkiviosdk_la_SOURCES = kivio_common.cpp kivio_fill_style.cpp \
-	kivio_gradient.cpp kivio_point.cpp kivio_shape.cpp kivio_shape_data.cpp \
-	kivio_sml_stencil.cpp kivio_sml_stencil_spawner.cpp kivio_dia_stencil_spawner.cpp \
-	kivio_stencil.cpp kivio_stencil_spawner.cpp kivio_stencil_spawner_info.cpp \
-	kivio_stencil_spawner_set.cpp kivio_painter.cpp kivio_screen_painter.cpp kivio_layer.cpp \
-	kivio_connector_target.cpp kivio_group_stencil.cpp kivio_connector_point.cpp \
-	kivio_plugin_stencil_spawner.cpp kivio_custom_drag_data.cpp kivio_arrowhead.cpp kivio_line_style.cpp \
-	kivio_text_style.cpp kivio_1d_stencil.cpp diapathparser.cpp kiviopolylineconnector.cpp \
-	polylineconnectorspawner.cpp object.cpp arcobject.cpp pen.cpp bezierobject.cpp ellipseobject.cpp \
-	rectangleobject.cpp roundedrectangleobject.cpp polylineobject.cpp polygonobject.cpp \
-	linearrayobject.cpp smlobjectloader.cpp groupobject.cpp
+			kivio_gradient.cpp kivio_point.cpp kivio_shape.cpp kivio_shape_data.cpp \
+			kivio_sml_stencil.cpp kivio_sml_stencil_spawner.cpp kivio_dia_stencil_spawner.cpp \
+			kivio_stencil.cpp kivio_stencil_spawner.cpp kivio_stencil_spawner_info.cpp \
+			kivio_stencil_spawner_set.cpp kivio_painter.cpp kivio_screen_painter.cpp kivio_layer.cpp \
+			kivio_connector_target.cpp kivio_group_stencil.cpp kivio_connector_point.cpp \
+			kivio_plugin_stencil_spawner.cpp kivio_custom_drag_data.cpp kivio_arrowhead.cpp kivio_line_style.cpp \
+			kivio_text_style.cpp kivio_1d_stencil.cpp diapathparser.cpp kiviopolylineconnector.cpp \
+			polylineconnectorspawner.cpp object.cpp arcobject.cpp pen.cpp bezierobject.cpp ellipseobject.cpp \
+			rectangleobject.cpp roundedrectangleobject.cpp polylineobject.cpp polygonobject.cpp \
+			linearrayobject.cpp smlobjectloader.cpp groupobject.cpp shapecollection.cpp \
+	smlobjectsaver.cpp
 noinst_HEADERS = object.h arcobject.h pen.h bezierobject.h ellipseobject.h \
-	rectangleobject.h roundedrectangleobject.h polylineobject.h polygonobject.h \
-	linearrayobject.h smlobjectloader.h groupobject.h
+		rectangleobject.h roundedrectangleobject.h polylineobject.h polygonobject.h \
+		linearrayobject.h smlobjectloader.h groupobject.h shapecollection.h smlobjectsaver.h

@@ -984,10 +984,11 @@ void KivioPage::copy()
   }
 
   // push to clipbaord
-  KivioDragObject* kdo = new KivioDragObject();
+  //FIXME Port to Object code
+/*  KivioDragObject* kdo = new KivioDragObject();
   kdo->setStencilList(m_lstSelection);
   kdo->setStencilRect(getRectForAllSelectedStencils());
-  QApplication::clipboard()->setData(kdo, QClipboard::Clipboard);
+  QApplication::clipboard()->setData(kdo, QClipboard::Clipboard);*/
 }
 
 void KivioPage::cut()

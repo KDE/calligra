@@ -29,6 +29,7 @@ class QBrush;
 namespace Kivio {
 
 class Pen;
+class ShapeCollection;
 
 /**
  * Loads objects in Kivio's sml format
@@ -37,6 +38,8 @@ class SmlObjectLoader{
   public:
     SmlObjectLoader();
     ~SmlObjectLoader();
+
+    ShapeCollection* loadShapeCollection(const QString& path);
 
     Object* loadShape(const QDomElement& shapeElement);
     Object* loadObject(const QDomElement& shapeElement);
@@ -49,6 +52,7 @@ class SmlObjectLoader{
     Object* loadPolygonObject(const QDomElement& shapeElement);
     Object* loadPolylineObject(const QDomElement& shapeElement);
     Object* loadLineArrayObject(const QDomElement& shapeElement);
+    Object* loadGroupObject(const QDomElement& shapeElement);
 
     Pen loadPen(const QDomElement& element);
     QBrush loadBrush(const QDomElement& element);

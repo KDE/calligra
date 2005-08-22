@@ -26,6 +26,7 @@
 
 class QPainter;
 class KoZoomHandler;
+class KoRect;
 
 namespace Kivio {
 
@@ -86,6 +87,11 @@ class Object{
      * @param percentHeight the percent the height have changed
      */
     virtual void resizeInPercent(double percentWidth, double percentHeight) = 0;
+
+    /**
+     * returns the bouding box of the object
+     */
+    virtual KoRect boundingBox() = 0;
 
     /// Brush used to fill Object
     virtual QBrush brush() const;

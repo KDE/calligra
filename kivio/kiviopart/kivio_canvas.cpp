@@ -603,7 +603,8 @@ void KivioCanvas::endRectDraw()
  */
 void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
 {
-  currRect = QRect( 0, 0, -1, -1 );
+  //FIXME Port to Object code
+/*  currRect = QRect( 0, 0, -1, -1 );
 
   KivioStencilSpawner *pSpawner = KivioIconView::curDragSpawner();
   if( !pSpawner )
@@ -644,7 +645,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
   // Draw the outline of the stencil
   m_pDragStencil->paintOutline( &m_dragStencilData );
 
-  unclippedSpawnerPainter->painter()->restore();
+  unclippedSpawnerPainter->painter()->restore();*/
 }
 
 /**
@@ -908,7 +909,8 @@ void KivioCanvas::dragMoveEvent( QDragMoveEvent *e )
  */
 void KivioCanvas::dropEvent( QDropEvent *e )
 {
-    // Terminate the drawing object
+  //FIXME Port to Object code
+/*    // Terminate the drawing object
     endSpawnerDragDraw();
 
     // Get a pointer to the currently dragged KivioStencilSpawner object
@@ -921,7 +923,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     KoPoint pagePoint = snapToGrid(mapFromScreen( pos ));
     view()->addStencilFromSpawner(pSpawner, pagePoint.x(), pagePoint.y());
 
-    // FIXME Select the "selection tool" in case it's not done
+    // FIXME Select the "selection tool" in case it's not done*/
 }
 
 

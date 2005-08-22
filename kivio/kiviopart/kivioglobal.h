@@ -31,6 +31,8 @@ class KoGenStyle;
 
 namespace Kivio
 {
+  class Object;
+
   enum {
     STYLE_PAGE = 20
   };
@@ -91,6 +93,11 @@ namespace Kivio
    * Get system default unit
    */
   QString systemDefaultUnit();
+
+  /**
+   * Generate a pixmap from @param object
+   */
+  QPixmap generatePixmapFromObject(int width, int height, Kivio::Object* object);
 }
 
 #endif

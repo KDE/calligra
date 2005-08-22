@@ -53,6 +53,11 @@ class GroupObject : public RectangleObject
      */
     virtual void resizeInPercent(double percentWidth, double percentHeight);
 
+    /**
+     * returns the bouding box of the object
+     */
+    virtual KoRect boundingBox();
+
     /// Brush used to fill Object
     virtual QBrush brush() const;
     /// Set brush used to fill Object
@@ -66,6 +71,7 @@ class GroupObject : public RectangleObject
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 
     virtual void addObject(Object* newObject);
+    virtual QValueList<Object*> objectList() const;
   private:
     QValueList<Object*> m_objectList;
 };

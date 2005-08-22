@@ -93,9 +93,14 @@ void RectangleObject::resizeInPercent(double percentWidth, double percentHeight)
   setSize(newSize);
 }
 
+KoRect RectangleObject::boundingBox()
+{
+  return KoRect(position(), size());
+}
+
 void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 {
-  QRect rect = zoomHandler->zoomRect(KoRect(position(), size()));
+  QRect rect = zoomHandler->zoomRect(boundingBox());
   painter.setPen(pen().zoomedPen(zoomHandler));
   painter.setBrush(brush());
   painter.drawRect(rect);

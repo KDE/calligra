@@ -69,6 +69,11 @@ class RectangleObject : public Object
     /// Set the size of the rectangle.
     virtual void setSize(const KoSize& newSize);
 
+    /**
+     * returns the bouding box of the object
+     */
+    virtual KoRect boundingBox();
+
     /// Draws a rectangle to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 

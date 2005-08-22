@@ -88,6 +88,19 @@ void GroupObject::resizeInPercent(double percentWidth, double percentHeight)
   }
 }
 
+KoRect GroupObject::boundingBox()
+{
+  QValueList<Kivio::Object*>::iterator it = m_objectList.begin();
+  QValueList<Kivio::Object*>::iterator itEnd = m_objectList.end();
+  KoRect rect;
+
+  for(;it != itEnd; ++it) {
+    rect = rect.unite((*it)->boundingBox());
+  }
+
+  return rect;
+}
+
 QBrush GroupObject::brush() const
 {
   return m_objectList.first()->brush();
@@ -135,6 +148,11 @@ void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 void GroupObject::addObject(Object* newObject)
 {
   m_objectList.append(newObject);
+}
+
+QValueList<Object*> GroupObject::objectList() const
+{
+  return m_objectList;
 }
 
 }

@@ -36,7 +36,6 @@ public:
 k_dcop:
     virtual DCOPRef map();
     void initConfig();
-    void saveConfig();
     void setShowGrid( bool b );
     bool showGrid() const;
     int undoRedoLimit() const;
