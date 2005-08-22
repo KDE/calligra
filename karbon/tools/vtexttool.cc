@@ -371,6 +371,8 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	m_fontSize->setSuffix( " pt" );
 
 	m_textEditor->setMinimumHeight( 100 );
+	m_textEditor->setText( "New text" );
+	m_textEditor->selectAll();
 
 	m_convertToShapes->setEnabled( true );
 
@@ -568,10 +570,10 @@ VTextTool::~VTextTool()
 QString VTextTool::contextHelp()
 {
 	QString s = "<qt><b>Text tool</b><br>";
-	s += "<i>Type</i> your text and <i>click and drag</i> to place it.<br>";
-	s += "If the selection made before the tool activation was a text object, it is edited.<br>";
-	s += "If the selection was a path, the text is drawn along it.<br>";
-	s += "Press <i>Return</i> to validate your text.</qt>";
+	s += "Click on document to place horizontal text.<br>";
+	s += "Click and drag in document to place directional text.<br>";
+	s += "Select an object and click tool to place text along a path.<br>";
+	s += "Select a text object and click the tool to change existing text.<br></qt>";
 
 	return s;
 }
@@ -641,7 +643,10 @@ VTextTool::mouseButtonRelease()
 	path.lineTo( KoPoint( first().x()+10, first().y() ) );
 
 	if( createText( path ) )
+	{
+		m_optionsWidget->setCaption( "Insert Text" );
 		m_optionsWidget->show();
+	}
 }
 
 void
@@ -672,7 +677,10 @@ VTextTool::mouseDragRelease()
 	path.lineTo( last() );
 
 	if( createText( path ) )
+	{
+		m_optionsWidget->setCaption( "Insert Text" );
 		m_optionsWidget->show();
+	}
 }
 
 bool
@@ -1017,11 +1025,16 @@ VTextTool::showDialog() const
 {
 	VSelection* selection = view()->part()->document().selection();
 
-	// initialize dialog single selected object
+	// initialize dialog with single selected object
 	if( selection->objects().count() == 1 )
 		m_optionsWidget->initialize( *selection->objects().getFirst());
 	else 
 		return false;
+
+	if( dynamic_cast<VText*>( selection->objects().getFirst() ) )
+		m_optionsWidget->setCaption( "Change Text" );
+	else 
+		m_optionsWidget->setCaption( "Insert Text" );
 
 	m_optionsWidget->show();
 	return true;
