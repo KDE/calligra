@@ -632,7 +632,7 @@ KarbonView::setZoomAt( double zoom, const KoPoint &p )
 {
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
 	QStringList stl = m_zoomAction->items();
-	if( stl.first() == "    25%" )
+	if( stl.first() == "25%" )
 	{
 		stl.prepend( zoomText.latin1() );
 		m_zoomAction->setItems( stl );
@@ -674,7 +674,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 		centerY = 1 - ( ( p.y() ) * zoom() + m_canvas->pageOffsetY() ) / double( m_canvas->contentsHeight() );
 		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
 	}
-	else if( m_zoomAction->currentText() == i18n("  Width") )
+	else if( m_zoomAction->currentText() == i18n("Zoom Width") )
 	{
 		centerX = 0.5;
 		centerY = double( m_canvas->contentsY() + ( height() - vSpace ) / 2 ) / double( m_canvas->contentsHeight() );
@@ -817,21 +817,21 @@ KarbonView::initActions()
 
 	QStringList stl;
         // xgettext:no-c-format
-	stl << i18n( "    25%" );
+	stl << i18n( "25%" );
         // xgettext:no-c-format
-	stl << i18n( "    50%" );
+	stl << i18n( "50%" );
         // xgettext:no-c-format
-	stl << i18n( "   100%" );
+	stl << i18n( "100%" );
         // xgettext:no-c-format
-	stl << i18n( "   200%" );
+	stl << i18n( "200%" );
         // xgettext:no-c-format
-	stl << i18n( "   300%" );
+	stl << i18n( "300%" );
         // xgettext:no-c-format
-	stl << i18n( "   400%" );
+	stl << i18n( "400%" );
         // xgettext:no-c-format
-	stl << i18n( "   800%" );
+	stl << i18n( "800%" );
 	stl << i18n( "Whole Page" )
-            << i18n( "  Width" );
+            << i18n( "Zoom Width" );
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
@@ -867,16 +867,16 @@ KarbonView::initActions()
 
 	// object ----->
 	new KAction(
-		i18n( "Bring to &Front" ), "bring_forward", QKeySequence( "Shift+PgUp" ), this,
+		i18n( "Bring to &Front" ), "bring_forward", QKeySequence( "Ctrl+Shift+]" ), this,
 		SLOT( selectionBringToFront() ), actionCollection(), "object_move_totop" );
 	new KAction(
-		i18n( "&Raise" ), "raise", QKeySequence( "Ctrl+PgUp" ), this,
+		i18n( "&Raise" ), "raise", QKeySequence( "Ctrl+]" ), this,
 		SLOT( selectionMoveUp() ), actionCollection(), "object_move_up" );
 	new KAction(
-		i18n( "&Lower" ), "lower", QKeySequence( "Ctrl+PgDown" ), this,
+		i18n( "&Lower" ), "lower", QKeySequence( "Ctrl+[" ), this,
 		SLOT( selectionMoveDown() ), actionCollection(), "object_move_down" );
 	new KAction(
-		i18n( "Send to &Back" ), "send_backward", QKeySequence( "Shift+PgDown" ), this,
+		i18n( "Send to &Back" ), "send_backward", QKeySequence( "Ctrl+Shift+[" ), this,
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 
 	new KAction(
@@ -923,10 +923,10 @@ KarbonView::initActions()
 		i18n( "&Group Objects" ), "group", QKeySequence( "Ctrl+G" ), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );
 	m_ungroupObjects = new KAction(
-		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence( "Ctrl+U" ), this,
+		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence( "Ctrl+Shift+G" ), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	m_closePath = new KAction(
-		i18n( "&Close Path" ), 0 /*QKeySequence( "Ctrl+U" )*/, this,
+		i18n( "&Close Path" ), QKeySequence( "Ctrl+U" ), this,
 		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
 

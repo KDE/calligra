@@ -12,12 +12,12 @@ KAboutData * newKarbonAboutData()
 	KAboutData * aboutData = new KAboutData(
 		"karbon",
 		I18N_NOOP( "Karbon14" ),
-		"0.1",
-		I18N_NOOP( "Yet another vector graphics application." ),
+		"0.2",
+		I18N_NOOP( "A Vector Graphics Drawing Application." ),
 		KAboutData::License_GPL,
 		I18N_NOOP( "(c) 2001-2005, The Karbon Developers" ),
 		I18N_NOOP( "You are invited to participate in any way." ),
-		"http://www.xs4all.nl/~rwlbuis/karbon/");
+		"http://www.koffice.org/karbon/");
 	aboutData->addAuthor(
 		"Rob Buis",
 		0,
@@ -32,6 +32,11 @@ KAboutData * newKarbonAboutData()
 		"Benoît Vautrin",
 		0,
 		"benoit.vautrin@free.fr",
+		0 );
+	aboutData->addCredit(
+		"Alan Horkan",
+		I18N_NOOP( "Helpfull patches and advice" ),
+		0,
 		0 );
 	// TODO: add the names of some helpful souls
         return aboutData;
