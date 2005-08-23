@@ -47,8 +47,11 @@ VGroupCmd::execute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		// TODO : remove from corresponding VLayer
-		document()->activeLayer()->take( *itr.current() );
+		// remove from corresponding parent
+		VGroup *parent = dynamic_cast<VGroup*>( itr.current()->parent() );
+		if( parent )
+			parent->take( *itr.current() );
+
 		m_group->append( itr.current() );
 	}
 
