@@ -443,6 +443,7 @@ KarbonView::editPaste()
 		}
 
 		part()->repaintAllViews();
+		selectionChanged();
 	}
 }
 
