@@ -54,7 +54,7 @@ KexiDBDriverManager::KexiDBDriverManager()
              "The lookup is case insensitive.")
     );
 
-    addFunction("connectionData", &KexiDBDriverManager::connectionData,
+    addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData,
         Kross::Api::ArgumentList(),
         QString("Returns a new KexiDBConnectionData object.")
     );
@@ -117,7 +117,7 @@ Kross::Api::Object::Ptr KexiDBDriverManager::lookupByMime(Kross::Api::List::Ptr 
         "Kross::KexiDB::DriverManager::lookupByMime::String");
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::connectionData(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionData(Kross::Api::List::Ptr)
 {
     return new KexiDBConnectionData( new ::KexiDB::ConnectionData() );
 }

@@ -99,7 +99,7 @@ namespace Kross { namespace KexiDB {
             /**
              * Return a new \a KexiDBConnectionData object.
              */
-            Kross::Api::Object::Ptr connectionData(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr createConnectionData(Kross::Api::List::Ptr);
 
             /**
              * Return a new \a KexiDBField object.

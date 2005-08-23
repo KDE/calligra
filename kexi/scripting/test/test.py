@@ -54,7 +54,7 @@ class KexiDBClass:
 
     # Return a new KexiDBConnectionData object.
     def getConnectionData(self):
-        return self.drivermanager.connectionData()
+        return self.drivermanager.createConnectionData()
 
     # Open a connection to a filebased driver.
     def connectWithFile(self, driver, filename):
