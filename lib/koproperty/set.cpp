@@ -370,7 +370,7 @@ Set::debug()
 	}
 	kopropertydbg << d->dict.count() << " properties:" << endl;
 
-   for(Property::DictIterator it(d->dict); it.current(); ++it)
+	for(Property::DictIterator it(d->dict); it.current(); ++it)
 		it.current()->debug();
 }
 

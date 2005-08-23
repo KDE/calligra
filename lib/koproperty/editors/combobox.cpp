@@ -57,7 +57,9 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 	m_edit->setContextMenuEnabled(false);
 #endif
 
-	fillBox();
+	if (this->property()->listData()) {
+		fillBox();
+	}
 //not needed for combo	setLeavesTheSpaceForRevertButton(true);
 
 	setFocusWidget(m_edit);
@@ -65,13 +67,16 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 }
 
 ComboBox::~ComboBox()
-{}
+{
+}
 
 QVariant
 ComboBox::value() const
 {
-	if (!property()->listData())
+	if (!property()->listData()) {
+		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
 		return QVariant();
+	}
 	const int idx = m_edit->currentItem();
 	if (idx<0 || idx>=(int)property()->listData()->keys.count())
 		return QVariant();
@@ -84,6 +89,10 @@ ComboBox::value() const
 void
 ComboBox::setValue(const QVariant &value, bool emitChange)
 {
+	if (!property()->listData()) {
+		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
+		return;
+	}
 	if (!m_setValueEnabled)
 		return;
 	int idx = property()->listData()->keys.findIndex( value );
@@ -137,8 +146,12 @@ ComboBox::fillBox()
 	m_edit->clear();
 	//m_edit->clearContents();
 
-	if(!property() || !property()->listData())
+	if(!property())
 		return;
+	if (!property()->listData()) {
+		kopropertywarn << "ComboBox::fillBox(): propery listData not available!" << endl;
+		return;
+	}
 
 	m_edit->insertStringList(property()->listData()->names);
 #ifndef QT_ONLY

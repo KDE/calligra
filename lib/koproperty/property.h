@@ -131,23 +131,20 @@ enum PropertyType {
   It also supports setting arbitrary number of options (of type option=value).
   See Editor for a list of options, and their meaning.
 
-	To create a property :
 	\code
-	property = Property(name, caption, description, value); // name is a QCString,
+	// To create a property
+	property = Property(name, value, caption, description); // name is a QCString,
 	// value is whatever type QVariant supports
-	\endcode
-
-	There are two exceptions :
-	\code
-	property = Property(name, caption, dsecription, QVariant(bool, 3));
-	// You must use QVariant(bool, int) to create a bool property
-	// See QVariant doc for more details
 
 	// To create a list property
-	property = Property(name, caption, description, list, "Current Value");
-	// where list is the list of possible values for this property
-	// in a QMap<QString, QVariant>
+	QStringList keys, strings;
+	keys << "one" << "two" << "three";
+	strings << i18n("One") << i18n("Two") << i18n("Three");
+	property = Property(name, keys, strings, "two", caption);
 	\endcode
+
+	Note that you need to use QVariant(bool, int) to create a boolean property value.
+	See QVariant docs for more details.
 
 	\author Cedric Pasteur <cedric.pasteur@free.fr>
 	\author Alexander Dymo <cloudtemple@mskat.net>

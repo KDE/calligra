@@ -301,7 +301,7 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		return;
 	}
 
-	kopropertydbg << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
+//	kopropertydbg << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
 	if (d->value.type() != value.type() && !d->value.isNull() && !value.isNull()
 		 && !( (d->value.type()==QVariant::Int && value.type()==QVariant::UInt)
 			   || (d->value.type()==QVariant::UInt && value.type()==QVariant::Int)
