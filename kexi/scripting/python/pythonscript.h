@@ -84,6 +84,8 @@ namespace Kross { namespace Python {
 
             void initialize();
             void finalize();
+
+            long getLineNo(Py::Exception&);
     };
 
 }}

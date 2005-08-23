@@ -156,6 +156,11 @@ Py_XDECREF(pyrun); // free the reference.
 */
         }
         else {
+            /*
+            PyCompilerFlags cf;
+            cf.cf_flags |= PyCF_SOURCE_IS_UTF8;
+            */
+
             // Just compile the code without any restrictions.
             code = Py_CompileString(
                 (char*)m_scriptcontainer->getCode().latin1(),
@@ -169,7 +174,9 @@ Py_XDECREF(pyrun); // free the reference.
         d->m_code = new Py::Object(code, true);
     }
     catch(Py::Exception& e) {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( QString("Failed to compile python code: %1").arg(Py::value(e).as_string().c_str()) ) );
+        QString err = Py::value(e).as_string().c_str();
+        long lineno = getLineNo(e);
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to compile python code: %1").arg(err), lineno) );
     }
 }
 
@@ -184,6 +191,32 @@ void PythonScript::finalize()
     delete d->m_code; d->m_code = 0;
     d->m_functions.clear();
     d->m_classes.clear();
+}
+
+long PythonScript::getLineNo(Py::Exception& exception)
+{
+    PyObject *type, *value, *traceback;
+    PyObject *lineobj = 0;
+
+    PyErr_Fetch(&type, &value, &traceback);
+    Py_FlushLine();
+    PyErr_NormalizeException(&type, &value, &traceback);
+
+    if(traceback)
+        lineobj = PyObject_GetAttrString(traceback, "tb_lineno");
+    if((! lineobj) && value)
+        lineobj = PyObject_GetAttrString(value, "lineno"); //['args', 'filename', 'lineno', 'msg', 'offset', 'print_file_and_line', 'text']
+
+    PyErr_Restore(type, value, traceback);
+
+    long line = -1;
+    if(lineobj) {
+        Py::Object o(lineobj, true);
+        if(o.isNumeric())
+            line = long(Py::Long(o)) - 1; // python linecount starts with 1..
+    }
+
+    return line;
 }
 
 const QStringList& PythonScript::getFunctionNames()
@@ -246,16 +279,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
         return r;
     }
     catch(Py::Exception& e) {
-
-        long lineno = -1;
-        Py::Object tb = Py::trace(e);
-        if(tb.hasAttr("tb_lineno")) {
-            Py::Object lo = tb.getAttr("tb_lineno");
-            if(lo.isNumeric())
-                lineno = long(Py::Long(lo)) - 1; // python linecount starts with 1..
-        }
-
-        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str()), lineno) );
+        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str()), getLineNo(e)) );
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);
