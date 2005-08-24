@@ -936,11 +936,13 @@ VLayersTab::updateLayers()
 		if ( vector[i]->state() != VObject::deleted )
 		{
 			if( !m_layers[ vector[i] ] )
+			{
 				item = new VLayerListViewItem( m_layersListView, vector[i], m_document, &m_layers );
+				item->setOpen( true );
+			}
 			else 
 				item = m_layers[ vector[i] ];
 
-			item->setOpen( true );
 			item->setKey(i);
 
 			updateObjects( vector[i], item );
