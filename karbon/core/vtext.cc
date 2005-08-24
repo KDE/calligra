@@ -353,6 +353,8 @@ VText::load( const QDomElement& element )
 
 	m_text = element.attribute( "text", "" );
 
+	VObject::load( element );
+
 	QDomNodeList list = element.childNodes();
 	QDomElement e = list.item( 0 ).toElement();
 	if( e.tagName() == "PATH" )
