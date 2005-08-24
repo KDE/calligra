@@ -689,6 +689,10 @@ VLayersTab::lowerItem()
 void
 VLayersTab::deleteItem()
 {
+	// Can't remove the last layer.
+	if ( m_layersListView->childCount() == 1 )
+		return;
+
 	VCommand *cmd = 0L;
 	VLayerListViewItem* layerItem = dynamic_cast< VLayerListViewItem *>( m_layersListView->selectedItem() );
 	if( layerItem )
