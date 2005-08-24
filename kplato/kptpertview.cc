@@ -110,21 +110,25 @@ void KPTPertView::slotModifyRelation(KPTRelation *rel)
     emit modifyRelation(rel);
 }
 
-void KPTPertView::print(KPrinter &printer) {
+void KPTPertView::print(KPrinter &printer)
+{
     kdDebug()<<k_funcinfo<<endl;
 
 }
 
-KPTNode *KPTPertView::currentNode() {
+KPTNode *KPTPertView::currentNode()
+{
     return m_canvasview->selectedNode(); 
 }
 
-bool KPTPertView::setContext(KPTContext &context) {
+bool KPTPertView::setContext(KPTContext &context)
+{
     kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void KPTPertView::getContext(KPTContext &context) const {
+void KPTPertView::getContext(KPTContext &context) const
+{
     kdDebug()<<k_funcinfo<<endl;
 }
 

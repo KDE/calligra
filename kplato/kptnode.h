@@ -253,7 +253,7 @@ public:
     virtual KPTDateTime &mustStartOn() { return m_constraintStartTime; }
     virtual KPTDateTime &mustFinishOn() { return m_constraintEndTime; }
 
-    virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
+    virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup */*group*/) const { return 0; }
     virtual void makeAppointments();
 
     /// EffortType == Effort, but no resource is requested
@@ -280,9 +280,9 @@ public:
     /// Returns the total actual effort for this task (or subtasks) 
     virtual KPTDuration actualEffort() { return KPTDuration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual KPTDuration actualEffort(const QDate &date) { return KPTDuration::zeroDuration; }
+    virtual KPTDuration actualEffort(const QDate &/*date*/) { return KPTDuration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
-    virtual KPTDuration actualEffortTo(const QDate &date) { return KPTDuration::zeroDuration; }
+    virtual KPTDuration actualEffortTo(const QDate &/*date*/) { return KPTDuration::zeroDuration; }
     
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -326,13 +326,13 @@ public:
     void moveEarliestStart(KPTDateTime &time);
     void moveLatestFinish(KPTDateTime &time);
     // Reimplement this
-    virtual KPTDuration summarytaskDurationForward(const KPTDateTime &time) 
+    virtual KPTDuration summarytaskDurationForward(const KPTDateTime &/*time*/) 
         { return KPTDuration::zeroDuration; }
     // Reimplement this
     virtual KPTDateTime summarytaskEarliestStart() 
         { return KPTDateTime(); }
     // Reimplement this
-    virtual KPTDuration summarytaskDurationBackward(const KPTDateTime &time) 
+    virtual KPTDuration summarytaskDurationBackward(const KPTDateTime &/*time*/) 
         { return KPTDuration::zeroDuration; }
     // Reimplement this
     virtual KPTDateTime summarytaskLatestFinish() 

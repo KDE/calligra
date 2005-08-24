@@ -508,9 +508,10 @@ KPTNode *KPTNode::siblingAfter() {
     return 0;
 }
 
-KPTNode *KPTNode::childAfter(KPTNode *node) {
+KPTNode *KPTNode::childAfter(KPTNode *node)
+{
     //kdDebug()<<k_funcinfo<<endl;
-    int index = m_nodes.findRef(node);
+    uint index = m_nodes.findRef(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);    }
     return 0;
@@ -748,18 +749,21 @@ void KPTEffort::setType(QString type) {
         setType(Type_Effort); // default
 }
 
-void KPTEffort::setOptimisticRatio(int percent) {
-    int p = percent>0 ? p = -percent : p = percent;
+void KPTEffort::setOptimisticRatio(int percent)
+{
+    int p = percent>0 ? -percent : percent;
     m_optimisticEffort = m_expectedEffort*(100+p)/100;
 }
+
 int KPTEffort::optimisticRatio() const {
     if (m_expectedEffort == KPTDuration::zeroDuration)
         return 0;
     return (m_optimisticEffort.milliseconds()*100/m_expectedEffort.milliseconds())-100;
 }
 
-void KPTEffort::setPessimisticRatio(int percent) {
-    int p = percent<0 ? p = -percent : p = percent;
+void KPTEffort::setPessimisticRatio(int percent) 
+{
+    int p = percent<0 ? -percent : percent;
     m_pessimisticEffort = m_expectedEffort*(100+p)/100;
 }
 int KPTEffort::pessimisticRatio() const {

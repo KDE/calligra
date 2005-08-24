@@ -323,7 +323,7 @@ void KPTPertRelationItem::draw()
 	QPointArray a = poly;
 	left = right = a[0].x();
 	top = bottom = a[0].y();
-    for (int i = 0; i < a.size(); i++)
+    for (uint i = 0; i < a.size(); i++)
 	{
 	    left = QMIN(a[i].x(), left);
 		top = QMIN(a[i].y(), top);
