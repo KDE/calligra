@@ -17,10 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiscriptmanager.h"
-#include "kexiscriptpart.h"
+#include "kexiscripting.h"
 
 #include <kdebug.h>
+
+#include "core/keximainwindow.h"
 
 #ifdef KEXI_KROSS_SUPPORT
 # include "main/manager.h"
@@ -28,23 +29,33 @@
 # include "api/exception.h"
 #endif
 
-/*** KexiScriptContainer ***/
+/****************************************************************
+ * KexiScriptContainer
+ */
 
-/// @internal
+/// \internal
 class KexiScriptContainerPrivate
 {
     public:
 #ifdef KEXI_KROSS_SUPPORT
+        /// The \a Kross::Api::Manager singelton.
         Kross::Api::Manager* manager;
+        /// The wrapped \a Kross::Api::ScriptContainer instance.
         Kross::Api::ScriptContainer::Ptr scriptcontainer;
 #else
-        QString interpretername, code;
+        /// The name this container has.
+        QString name;
+        /// The name of the interpreter.
+        QString interpretername;
+        /// The scripting code.
+        QString code;
 #endif
-        QStringList output; // remember stdout and stderr scripting output.
+        /// Remembered stdout and stderr output.
+        QStringList output;
 };
 
 KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QString& name)
-    : QObject(manager)
+    : QObject(manager, "KexiScriptContainer")
     , d(new KexiScriptContainerPrivate())
 {
 #ifdef KEXI_KROSS_SUPPORT
@@ -56,6 +67,8 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
     //FIXME remember previous stdout+stderr and restore them in the dtor?
     d->scriptcontainer->addSlot("stdout", this, SLOT(addStdOut(const QString&)));
     d->scriptcontainer->addSlot("stderr", this, SLOT(addStdErr(const QString&)));
+#else
+    d->name = name;
 #endif
 }
 
@@ -112,23 +125,20 @@ QStringList KexiScriptContainer::getOutput()
 
 bool KexiScriptContainer::execute()
 {
-    bool ret = false;
     d->output.clear(); // clear previous output
-    emit clear();
+    emit clearOutput();
 
 #ifdef KEXI_KROSS_SUPPORT
     Kross::Api::Object::Ptr result = d->scriptcontainer->execute();
     if( d->scriptcontainer->hadException() ) {
         Kross::Api::Exception::Ptr exception = d->scriptcontainer->getException();
         QString s = exception->toString();
-        kdDebug() << "KexiScriptContainer::execute() failed to execute with exception: " << s << endl;
         addStdErr(s);
         long line = exception->getLineNo();
         if(line >= 0)
-            emit lineno(line);
+            emit lineNo(line);
         return false;
     }
-    //return result != 0;
 #else
     addStdErr( "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." );
     return false;
@@ -140,33 +150,54 @@ bool KexiScriptContainer::execute()
 void KexiScriptContainer::addStdOut(const QString& s)
 {
     d->output.append(s);
-    emit log(s);
+    emit addOutput(s);
 }
 
 void KexiScriptContainer::addStdErr(const QString& s)
 {
     QString t = QString("<b>%1</b>").arg(s);
     d->output.append(t);
-    emit log(t);
+    emit addOutput(t);
 }
 
-/*** KexiScriptManager ***/
+/****************************************************************
+ * KexiScriptManager
+ */
 
-KexiScriptManager::KexiScriptManager(KexiScriptPart* part)
-    : QObject(part)
+/// \internal
+class KexiScriptManagerPrivate
+{
+    public:
+        /**
+        * Map of \a KexiScriptContainer children this \a KexiScriptManager
+        * has.
+        */
+        QMap<QString, KexiScriptContainer*> scriptcontainers;
+};
+
+KexiScriptManager::KexiScriptManager(KexiMainWindow* mainwindow)
+    : QObject(mainwindow, "KexiScriptManager")
+    , d(new KexiScriptManagerPrivate())
 {
 }
 
 KexiScriptManager::~KexiScriptManager()
 {
+    delete d;
 }
 
-KexiScriptContainer* KexiScriptManager::getScriptContainer(const QString& name)
+bool KexiScriptManager::hasScriptContainer(const QString& name)
 {
-    if(m_scriptcontainers.contains(name))
-        return m_scriptcontainers[name];
-    KexiScriptContainer* sc = new KexiScriptContainer(this, name);
-    m_scriptcontainers.replace(name, sc); // remember them
+    return d->scriptcontainers.contains(name);
+}
+
+KexiScriptContainer* KexiScriptManager::getScriptContainer(const QString& name, bool create)
+{
+    KexiScriptContainer* sc = d->scriptcontainers[name];
+    if((! sc) && create) {
+        sc = new KexiScriptContainer(this, name);
+        d->scriptcontainers.replace(name, sc); // remember them
+    }
     return sc;
 }
 
@@ -179,5 +210,5 @@ const QStringList KexiScriptManager::getInterpreters()
 #endif
 }
 
-#include "kexiscriptmanager.moc"
+#include "kexiscripting.moc"
 

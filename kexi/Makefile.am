@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-lib_LTLIBRARIES = 
+lib_LTLIBRARIES =
 kdeinit_LTLIBRARIES = kexi.la
 bin_PROGRAMS =
 kexi_la_SOURCES = main.cpp
@@ -13,9 +13,9 @@ if compile_kross_plugin
 endif
 
 SUBDIRS= 3rdparty kexiutils kexidb core widget formeditor \
-data pics main migration $(SCRIPTING) plugins . tests
+data pics $(SCRIPTING) main migration plugins . tests
 
-#(will be reenabled after main/startup move)  
+#(will be reenabled after main/startup move)
 
 kdelnkdir = $(kde_appsdir)/Office
 xdg_apps_DATA = kexi.desktop

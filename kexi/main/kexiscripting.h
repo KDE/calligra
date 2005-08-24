@@ -17,28 +17,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXISCRIPTMANAGER_H
-#define KEXISCRIPTMANAGER_H
+#ifndef KEXISCRIPTING_H
+#define KEXISCRIPTING_H
 
 #include <qobject.h>
 #include <qstringlist.h>
 
 // Forward declarations.
-class KexiScriptPart;
-class KexiScriptManager;
 class KexiScriptContainerPrivate;
+class KexiScriptManager;
+class KexiScriptManagerPrivate;
+class KexiMainWindow;
 
 /**
- * The KexiScriptContainer class wraps \a Kross::Api::ScriptContainer
- * instances if build in.
+ * The KexiScriptContainer is a thin wrapper around
+ * \a Kross::Api::ScriptContainer instances if they are build
+ * in. If not cause scripting is disabled, then this
+ * class provides some basic functionality to still let
+ * other classes using this class work as expected without
+ * any #ifdef's.
  */
-class KexiScriptContainer : public QObject
+class KEXIMAIN_EXPORT KexiScriptContainer : public QObject
 {
         Q_OBJECT
     public:
 
         /**
         * Constructor.
+        *
+        * \param manager The \a KexiScriptManager this
+        *       \a KexiScriptContainer belongs to.
+        * \param name The unique name this \a KexiScriptContainer
+        *       is reachable as.
         */
         KexiScriptContainer(KexiScriptManager* manager, const QString& name);
 
@@ -48,22 +58,28 @@ class KexiScriptContainer : public QObject
         virtual ~KexiScriptContainer();
 
         /**
-        * Return the name of the used scripting language.
+        * \return the name of the used scripting language.
         */
         QString getInterpreterName();
 
         /**
         * Set the name of the used scripting language.
+        *
+        * \param interpretername The name of the used interpreter. This
+        *       could be something like "python" for the python
+        *       interpreter.
         */
         void setInterpreterName(const QString& interpretername);
 
         /**
-        * Return the scripting code.
+        * \return the scripting code.
         */
         QString getCode();
 
         /**
         * Set the scripting code.
+        *
+        * \param code The scripting code.
         */
         void setCode(const QString& code);
 
@@ -73,9 +89,22 @@ class KexiScriptContainer : public QObject
         QStringList getOutput();
 
     signals:
-        void clear();
-        void log(const QString&);
-        void lineno(long);
+
+        /**
+        * Emitted if the output got cleared.
+        */
+        void clearOutput();
+
+        /**
+        * Emitted if a new logmessage got added to the output.
+        */
+        void addOutput(const QString&);
+
+        /**
+        * Emitted on error if we know the line number where the
+        * error happened.
+        */
+        void lineNo(long);
 
     public slots:
 
@@ -85,26 +114,37 @@ class KexiScriptContainer : public QObject
         bool execute();
 
     private slots:
+
+        /**
+        * Add a new logmessage to stdout.
+        */
         void addStdOut(const QString&);
+
+        /**
+        * Add a new logmessage to stderr.
+        */
         void addStdErr(const QString&);
 
     private:
+        /// Private d-pointer class.
         KexiScriptContainerPrivate* d;
-
 };
 
 /**
  * The KexiScriptManager manages the scripting code. Internaly we
  * use \a Kross::Api::ScriptContainer as scripting bridge.
  */
-class KexiScriptManager : public QObject
+class KEXIMAIN_EXPORT KexiScriptManager : public QObject
 {
     public:
 
         /**
          * Constructor.
+         *
+         * \param mainwindow The \a KexiMainWindow this
+         *       \a KexiScriptManager belongs to.
          */
-        KexiScriptManager(KexiScriptPart* part);
+        KexiScriptManager(KexiMainWindow* mainwindow);
 
         /**
          * Destructor.
@@ -112,18 +152,28 @@ class KexiScriptManager : public QObject
         virtual ~KexiScriptManager();
 
         /**
-         * \return the \a KexiScriptContainer defined with \p name .
-         * The KexiScriptContainer's are cached.
+         * \return true if there exists already a
+         * \a KexiScriptContainer instance defined with \p name .
          */
-        KexiScriptContainer* getScriptContainer(const QString& name);
+        bool hasScriptContainer(const QString& name);
 
         /**
-         * Return a list of interpreter names.
+         * \return the \a KexiScriptContainer defined with \p name .
+         * If there exists no such \a KexiScriptContainer instance
+         * with that name and \p create is false return NULL. If
+         * \p create is true create a new instance if it doesn't
+         * exists already and return this one.
+         */
+        KexiScriptContainer* getScriptContainer(const QString& name, bool create);
+
+        /**
+         * \return a list of interpreter names.
          */
         const QStringList getInterpreters();
 
     private:
-        QMap<QString, KexiScriptContainer*> m_scriptcontainers;
+        /// Private d-pointer class.
+        KexiScriptManagerPrivate* d;
 };
 
 #endif

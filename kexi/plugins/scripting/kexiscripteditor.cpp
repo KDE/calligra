@@ -21,7 +21,6 @@
 */
 
 #include "kexiscripteditor.h"
-#include "kexiscriptmanager.h"
 
 #include <kdebug.h>
 //#include <kparts/factory.h>
@@ -31,6 +30,7 @@
 #include <kpopupmenu.h>
 
 #include <kexidialogbase.h>
+#include <kexiscripting.h>
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
@@ -56,7 +56,7 @@ void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
     m_scriptcontainer = scriptcontainer;
-    connect(m_scriptcontainer, SIGNAL(lineno(long)), this, SLOT(setLineNo(long)));
+    connect(m_scriptcontainer, SIGNAL(lineNo(long)), this, SLOT(setLineNo(long)));
 
     if(m_scriptcontainer) {
         KexiEditor::setText(m_scriptcontainer->getCode());

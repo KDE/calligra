@@ -11,13 +11,14 @@ endif
 AM_CPPFLAGS=$(KROSS_DEFINES)
 
 kexihandler_script_la_SOURCES = \
-    kexiscriptpart.cpp kexiscriptmanager.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp kexiscripttextview.cpp
+    kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp kexiscripttextview.cpp
 
 kexihandler_script_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
 
 kexihandler_script_la_LIBADD = \
     $(top_builddir)/kexi/core/libkexicore.la \
+    $(top_builddir)/kexi/main/libkeximain.la \
     $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
     $(top_builddir)/lib/koproperty/libkoproperty.la \
     $(KROSS_LIB)
@@ -26,6 +27,7 @@ INCLUDES = \
     $(KOFFICE_INCLUDES) \
     -I$(top_srcdir)/lib  \
     -I$(top_srcdir)/kexi/core \
+    -I$(top_srcdir)/kexi/main \
     -I$(top_srcdir)/kexi \
     -I$(top_srcdir)/kexi/widget \
     $(KROSS_INCLUDE) \

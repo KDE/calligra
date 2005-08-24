@@ -18,9 +18,9 @@
 */
 
 #include "kexiscripttextview.h"
-#include "kexiscriptmanager.h"
 
 #include <kexidialogbase.h>
+#include <kexiscripting.h>
 
 #include <qstringlist.h>
 #include <qlayout.h>
@@ -67,15 +67,15 @@ KexiScriptTextView::KexiScriptTextView(KexiScriptManager* manager, KexiMainWindo
     QBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->browser);
 
-    d->scriptcontainer = manager->getScriptContainer( parentDialog()->partItem()->name() );
+    d->scriptcontainer = manager->getScriptContainer(parentDialog()->partItem()->name(), true);
     //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
 
     QStringList output = d->scriptcontainer->getOutput();
     for(uint i = 0; i < output.size(); i++)
         d->browser->append( output[i] );
 
-    connect(d->scriptcontainer, SIGNAL(clear()), this, SLOT(clearLog()));
-    connect(d->scriptcontainer, SIGNAL(log(const QString&)), this, SLOT(addLog(const QString&)));
+    connect(d->scriptcontainer, SIGNAL(clearOutput()), this, SLOT(clearLog()));
+    connect(d->scriptcontainer, SIGNAL(addOutput(const QString&)), this, SLOT(addLog(const QString&)));
 }
 
 KexiScriptTextView::~KexiScriptTextView()

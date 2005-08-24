@@ -31,18 +31,18 @@
 
 #include "kexiscriptdesignview.h"
 #include "kexiscripttextview.h"
-#include "kexiscriptmanager.h"
+
+#include <kexiscripting.h>
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
- : KexiPart::Part(parent, name, l)
+	: KexiPart::Part(parent, name, l)
+	, m_manager(0)
 {
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::ScriptObjectType;
 
 	m_names["instance"] = i18n("Script");
 	m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
-
-	m_manager = new KexiScriptManager(this);
 }
 
 KexiScriptPart::~KexiScriptPart()
@@ -62,15 +62,18 @@ void KexiScriptPart::initInstanceActions()
 
 KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
+    KexiMainWindow *win = dialog->mainWin();
+
+    if(! m_manager) // create on demand
+        m_manager = new KexiScriptManager(win);
+
     if(viewMode == Kexi::DesignViewMode) {
-        KexiMainWindow *win = dialog->mainWin();
         if(!win || !win->project() || !win->project()->dbConnection())
             return 0;
         return new KexiScriptDesignView(m_manager, win, parent, item.name().latin1());
     }
 
     if(viewMode == Kexi::TextViewMode) {
-        KexiMainWindow *win = dialog->mainWin();
         if(!win || !win->project() || !win->project()->dbConnection())
             return 0;
         return new KexiScriptTextView(m_manager, win, parent, item.name().latin1());

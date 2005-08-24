@@ -22,7 +22,6 @@
 
 #include "kexiscriptdesignview.h"
 #include "kexiscripteditor.h"
-#include "kexiscriptmanager.h"
 
 #include <qlayout.h>
 #include <qdom.h>
@@ -30,6 +29,7 @@
 
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
+#include <kexiscripting.h>
 
 /// @internal
 class KexiScriptDesignViewPrivate
@@ -54,7 +54,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiScriptManager* manager, KexiMainW
 {
     d->manager = manager;
 
-    d->scriptcontainer = d->manager->getScriptContainer( parentDialog()->partItem()->name() );
+    d->scriptcontainer = d->manager->getScriptContainer(parentDialog()->partItem()->name(), true);
     plugSharedAction( "script_execute", d->scriptcontainer, SLOT(execute()) );
 
     d->propertyset = new KoProperty::Set(this, "KexiScripting");
