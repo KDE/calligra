@@ -520,6 +520,39 @@ VLayersTab::resetSelection()
 	}
 }
 
+void 
+VLayersTab::selectActiveLayer()
+{
+	if( ! m_layers[ m_document->activeLayer() ] )
+	{
+		QPtrVector<VLayer> vector;
+		m_document->layers().toVector( &vector );
+		// find another layer to set active
+		for( int i = vector.count() - 1; i >= 0; i-- )
+			if ( vector[i]->state() != VObject::deleted )
+			{
+				m_document->setActiveLayer( vector[i] );
+				break;
+			}
+	}
+
+	// deselect all other layers
+	QPtrDictIterator<VLayerListViewItem> it( m_layers );
+	for(; it.current(); ++it )
+	{
+		it.current()->setSelected( false );
+		it.current()->repaint();
+	}
+
+	VLayerListViewItem *layerItem = m_layers[ m_document->activeLayer() ];
+	if( layerItem )
+	{
+		layerItem->setSelected( true );
+		layerItem->repaint();
+		kdDebug(38000) << "selecting active layer: " << layerItem->text() << endl;
+	}
+}
+
 void
 VLayersTab::selectionChangedFromTool()
 {
@@ -551,6 +584,7 @@ VLayersTab::selectionChangedFromTool()
 			item->setSelected( true );
 			item->update();
 		}
+	selectActiveLayer();	
 }
 
 void 
@@ -614,8 +648,11 @@ VLayersTab::itemClicked( QListViewItem* item, const QPoint &, int col )
 		VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( item );
 		if( layerItem )
 		{
-			m_document->setActiveLayer( layerItem->layer() );
-			
+			if( col == 0 )
+			{
+				m_document->setActiveLayer( layerItem->layer() );
+				selectActiveLayer();
+			}
 			if( col > 0 )
 			{
 				toggleState( layerItem->layer(), col );
@@ -624,7 +661,7 @@ VLayersTab::itemClicked( QListViewItem* item, const QPoint &, int col )
 				layerItem->repaint();
 
 				updateChildItems( layerItem );
-				
+
 				m_view->part()->repaintAllViews();
 			}
 		}
@@ -632,13 +669,24 @@ VLayersTab::itemClicked( QListViewItem* item, const QPoint &, int col )
 		{
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
 
+			if( col == 0 )
+			{
+				VObject *obj = objectItem->object();
+				if( obj->state() == VObject::normal )
+					obj->setState( VObject::selected );
+			}
 			if( col > 0 ) 
 			{
 				toggleState( objectItem->object(), col );
 				
+				if( objectItem->object()->state() == VObject::selected )
+					objectItem->setSelected( true );
+				else
+					objectItem->setSelected( false );
+
 				objectItem->update();
 				objectItem->repaint();
-			
+
 				if( dynamic_cast<VGroup*>( objectItem->object() ) )
 					updateChildItems( objectItem );
 
@@ -826,7 +874,7 @@ VLayersTab::deleteItem()
 		if( layerItem )
 		{
 			VLayer *layer = layerItem->layer();
-			if( layer )
+			if( layer && m_layers.count() > 1 )
 			{
 				cmd = new VLayerCmd( m_document, i18n( "Delete Layer" ), layer, VLayerCmd::deleteLayer );
 
@@ -842,6 +890,8 @@ VLayersTab::deleteItem()
 				delete layerItem;
 
 				m_view->part()->addCommand( cmd );
+				
+				selectActiveLayer();
 			}
 		}
 		else
@@ -896,6 +946,8 @@ VLayersTab::updateLayers()
 			updateObjects( vector[i], item );
 		}
 	}
+
+	selectActiveLayer();
 	m_layersListView->sort();
 } // VLayersTab::updateLayers
 
@@ -974,6 +1026,22 @@ VLayersTab::removeDeletedObjectsFromList()
 		}
 
 		++it;
+	}
+
+	QPtrDictIterator<VLayerListViewItem> itr( m_layers );
+
+	// iterate over all layer items and delete the following items:
+	// - items representing deleted layers
+	// BEWARE: when deleting an item, the iterator is automatically incremented
+	for(; itr.current(); )
+	{
+		if( itr.current()->layer()->state() == VObject::deleted )
+		{
+			m_layersListView->takeItem( itr.current() );
+			delete itr.current();
+			continue;
+		}
+		++itr;
 	}
 }
 
