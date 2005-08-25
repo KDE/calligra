@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KSpread Microsoft Excel Import Filter
 Name[bg]=Филтър за импорт от Microsoft Excel в KSpread
+Name[br]=Sil enporzh Microsoft Excel evit KSpread
 Name[ca]=Filtre d'importació Microsoft Excel per a KSpread
 Name[cs]=Importní filtr Microsoft Excel pro KSpread
 Name[cy]=Hidlen Fewnforio Microsoft Excel KSpread

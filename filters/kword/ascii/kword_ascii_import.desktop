@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord ASCII Import Filter
+Name[br]=Sil Enporzh ASCII KWord
 Name[ca]=Filtre d'importació ASCII per a KWord
 Name[cs]=KWord ASCII importní filtr
 Name[cy]=Hidlen Fewnforio Ascii KWord 

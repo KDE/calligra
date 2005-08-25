@@ -5,6 +5,7 @@ ServiceTypes=Kexi/Handler
 
 GenericName=Forms
 GenericName[bg]=Формуляри
+GenericName[br]=Paperennoù-reol
 GenericName[cs]=Formuláře
 GenericName[cy]=Ffurflenni
 GenericName[da]=Formularer
@@ -36,6 +37,7 @@ GenericName[uk]=Форми
 GenericName[zh_CN]=表单
 Name=Forms
 Name[bg]=Формуляри
+Name[br]=Paperennoù-reol
 Name[ca]=Formularis
 Name[cs]=Formuláře
 Name[cy]=Ffurflenni

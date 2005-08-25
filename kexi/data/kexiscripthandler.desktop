@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Scripts
+GenericName[br]=Urzhiaouegoù
 GenericName[cy]=Sgriptiau
 GenericName[da]=Scripter
 GenericName[de]=Skripte
@@ -28,6 +29,7 @@ GenericName[sv]=Skript
 GenericName[uk]=Скрипти
 GenericName[zh_CN]=脚本
 Name=Scripts
+Name[br]=Urzhiaouegoù
 Name[cy]=Sgriptiau
 Name[da]=Scripter
 Name[de]=Skripte

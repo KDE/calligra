@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Writer Export Filter for KWord
 Name[bg]=Филтър за експорт от KWord в OpenOffice.org Writer
+Name[br]=Sil ezporzh OpenOffice.org Writer evit KWord
 Name[ca]=Filtre d'exportació OpenOffice.org Writer per a KWord
 Name[cs]=Exportní filtr formátu OpenOffice.org Writer pro KWord
 Name[da]=OpenOffice.org Writer eksportfilter for KWord

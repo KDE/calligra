@@ -6,6 +6,7 @@ Patterns=*.odg;*.ODG
 Icon=drawing
 Comment=OASIS OpenDocument Graphics
 Comment[bg]=Графика на OASIS OpenDocument
+Comment[br]=Skeudenn OpenOffice.org OASIS
 Comment[ca]=Gràfics OASIS OpenDocument
 Comment[da]=OASIS OpenDocument grafik
 Comment[de]=OASIS OpenDocument-Graphiken
