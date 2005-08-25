@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=MimeType
 MimeType=application/x-sqlite2
-Icon=
+Icon=empty
 Patterns=
 Comment=SQLite2 Database File
 Comment[da]=SQLite2 databasefil
