@@ -20,9 +20,10 @@ services_DATA = kexireportfactory.desktop
 SUBDIRS = .
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
+		-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
 		-I$(top_srcdir)/kexi/widget/utils \
 		-I$(top_srcdir)/kexi/widget \
-		-I$(top_srcdir)/kexi/formeditor $(all_includes)
+		-I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/plugins/forms $(all_includes)
 
 METASOURCES = AUTO
 

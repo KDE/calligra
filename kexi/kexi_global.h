@@ -21,6 +21,7 @@
 #define _KEXI_GLOBAL_
 
 #include <kexi_export.h>
+#include <config.h>
 
 #define kexidbg  kdDebug(44010)   //! General debug area for Kexi
 #define kexicoredbg  kdDebug(44020)   //! Debug area for Kexi Core

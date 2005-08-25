@@ -13,6 +13,6 @@ krosstest_LDADD = \
     ../../kexiutils/libkexiutils.la
 
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
-krosstest_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO)
+krosstest_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 SUBDIRS = .
 METASOURCES = AUTO

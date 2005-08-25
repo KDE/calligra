@@ -33,8 +33,8 @@
 
 #include <form.h>
 #include <formIO.h>
+#include <kexiformmanager.h>
 
-#include "kexiformmanager.h"
 #include "kexireportview.h"
 #include "kexireportpart.h"
 

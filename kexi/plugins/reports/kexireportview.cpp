@@ -30,7 +30,7 @@
 #include <container.h>
 
 #include <kexidialogbase.h>
-#include <kexidatasourcewizard.h>
+//#include <kexidatasourcewizard.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
 
