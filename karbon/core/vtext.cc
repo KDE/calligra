@@ -361,7 +361,7 @@ VText::load( const QDomElement& element )
 		m_basePath.load( e );
 
 	// load text glyphs:
-	for( uint i = 1; i < list.count(); ++i )
+	for( uint i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
