@@ -156,14 +156,8 @@ TODO:
 
 
 MOST RECENT TODO:
-- port old ProjectWizard as ConnectionWizard and plug it to "Add connection" action
-  or add "Edit connection dialog" [difficulty: 3]
 - reuse recent project tab as separate window for "More projects..." menu action [difficulty: 1]
 - implement contents update for "recentprojects" menu action [difficulty: 2]
-- implement starting a new Kexi process for "open" and "new" actions, when there 
-  is already project opened in Kexi [difficulty: 2]
-- start using .xml files for recent connections and recent projects
-- implement use of xml .kexis file [difficulty: 2]
 - implement: drag-and-drop of the project file to the outside of Kexi, [difficulty: 2]
 - saveas== saving another shortcut to a project if it is server-based [difficulty: 2]
 

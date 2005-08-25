@@ -14,7 +14,7 @@ libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.
 
 noinst_HEADERS = KexiStartup_p.h
 
-libkeximainstartup_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
+libkeximainstartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkeximainstartup_la_LIBADD = \
 	../../widget/libkexiextendedwidgets.la
 

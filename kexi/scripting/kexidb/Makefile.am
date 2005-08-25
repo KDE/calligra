@@ -15,7 +15,7 @@ libkrosskexidb_la_SOURCES = \
     kexidbdrivermanager.cpp \
     kexidbmodule.cpp
 
-libkrosskexidb_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
+libkrosskexidb_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkrosskexidb_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \

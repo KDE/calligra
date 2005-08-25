@@ -118,7 +118,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */
 		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* /*mainWin*/, 
-		 QWidget * /*parent*/, const char * /*objName*/ =0, const QVariant& arg = QVariant()) { return 0; }
+		 QWidget * /*parent*/, const char * /*objName*/ =0, const QVariant& /*arg*/ = QVariant()) { return 0; }
 		
 //		//! Reimplement this if your internal part has to return dialogs
 //		virtual KexiDialogBase *createDialog(KexiMainWindow* /*mainWin*/, 

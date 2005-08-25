@@ -98,12 +98,11 @@ class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 };
 
 #if 0
-/*! Loads and saves information for a sef of "shortcut to a connection" file containing 
- connection information (i.e. KexiDBConnectionSet). 
- This is implementation for handling .KEXIC files.
- The set is loaded from files found using 
- KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic").
-*/
+//! Loads and saves information for a sef of "shortcut to a connection" file containing 
+//! connection information (i.e. KexiDBConnectionSet). 
+//! This is implementation for handling .KEXIC files.
+//! The set is loaded from files found using 
+//! KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic").
 class KexiDBConnSetShortcutFiles
 {
 	public:

@@ -122,7 +122,7 @@ QImage KexiLabelPrivate::makeShadow( const QImage& textImage,
 	}
 
 //	result.fill( 0 ); // all black
-	result.fill( SHADOW_OPACITY );
+	result.fill( (int)SHADOW_OPACITY );
 	result.setAlphaBuffer( true );
 
 	for ( int i = startX; i < effectWidth; i++ ) {

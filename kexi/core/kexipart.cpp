@@ -298,7 +298,8 @@ void Part::slotCreate()
 	emit newObjectRequest( m_info );
 }
 
-KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB::SchemaData& sdata, int viewMode)
+KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB::SchemaData& sdata, 
+	int /*viewMode*/)
 {
 	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
 	*new_schema = sdata;

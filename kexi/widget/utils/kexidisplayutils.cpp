@@ -113,7 +113,7 @@ void KexiDisplayUtils::drawAutonumberSign(const DisplayParameters& par, QPainter
 	if (!(align & Qt::AlignHorizontal_Mask))
 		align |= Qt::AlignLeft;
 
-	int y_pixmap_pos;
+	int y_pixmap_pos = 0;
 	if (align & Qt::AlignVCenter) {
 		y_pixmap_pos = QMAX(0, y+1 + (height - KexiDisplayUtils_autonum->height())/2);
 	}

@@ -216,7 +216,7 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 //				kdDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
 //				kdDebug() << o->className() << " " << o->name()<< endl;
 				KexiViewBase *v = KexiUtils::findParent<KexiViewBase>(o, "KexiViewBase") ;
-				QWidget *www=v->focusWidget();
+//				QWidget *www=v->focusWidget();
 				if (v) {
 					while (v->m_parentView)
 						v = v->m_parentView;

@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 
-//#define ERRMSG(a1, a2) \
+//#define ERRMSG(a1, a2) 
 //	{ if (m_msgHandler) m_msgHandler->showErrorMessage(a1, a2); }
 
 //! @internal

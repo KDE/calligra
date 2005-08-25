@@ -200,7 +200,8 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, 
+			const KexiDB::SchemaData& sdata, int viewMode);
 
 		bool loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID = QString::null);
 
