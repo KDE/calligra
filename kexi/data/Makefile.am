@@ -54,10 +54,11 @@ x-kexiproject-sqlite2.desktop \
 x-kexiproject-sqlite3.desktop \
 x-kexiproject-shortcut.desktop
 
-#TODO: add x-kexi-conndata x-kexi-conndataset x-kexi-shortcut-table etc.
+#TODO: add x-kexi-shortcut-table etc.
 
-if need_kde32_compatibility
-  KDE32COMPAT = kde32compat
+#kde <=3.4
+if need_kde34_compatibility
+  KDE34COMPAT = kde34compat
 endif
 
-SUBDIRS = $(KDE32COMPAT)
+SUBDIRS = $(KDE34COMPAT)
