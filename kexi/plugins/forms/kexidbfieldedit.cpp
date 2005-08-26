@@ -252,6 +252,25 @@ KexiDBFieldEdit::valueIsEmpty()
 }
 
 bool
+KexiDBFieldEdit::valueChanged()
+{
+	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
+	kdDebug() << m_origValue  << endl;
+	if(iface)
+		return iface->valueChanged();
+	return false;
+}
+
+void
+KexiDBFieldEdit::installListener(KexiDataItemChangesListener* listener)
+{
+	KexiFormDataItemInterface::installListener(listener);
+	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
+	if(iface)
+		iface->installListener(listener);
+}
+
+bool
 KexiDBFieldEdit::cursorAtStart()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);

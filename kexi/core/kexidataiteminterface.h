@@ -68,8 +68,8 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! Used internally to set column information.
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) = 0;
 
-		//! Sets listener 
-		void installListener(KexiDataItemChangesListener* listener);
+		//! Sets listener. No need to reimplement this.
+		virtual void installListener(KexiDataItemChangesListener* listener);
 
 //		//! Sets value \a value for a widget. 
 //		//! Just calls setValueInternal(), but also blocks valueChanged() 

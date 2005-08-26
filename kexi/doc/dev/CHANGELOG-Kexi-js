@@ -12,6 +12,10 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-08-27
+Forms
+- a fix for value changed flag and datachangeslistener in autofields
+
 2005-08-19
 Startup
 - "-type connection" command line arg added 

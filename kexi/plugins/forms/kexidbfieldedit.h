@@ -70,7 +70,11 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
+		virtual bool valueChanged();
 		virtual void clear();
+
+		//! Reimpelmented to also install \a listenter for internal editor
+		virtual void installListener(KexiDataItemChangesListener* listener);
 
 		WidgetType widgetType() const { return m_widgetType; }
 		void setWidgetType(WidgetType type);
