@@ -55,6 +55,8 @@ protected:
 
 	virtual bool keyReleased( Qt::Key key );
 
+	virtual void rightMouseButtonRelease();
+
 	void recalc();
 
 	KoPoint m_current;
