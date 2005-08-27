@@ -1,5 +1,5 @@
 /***************************************************************************
- * kexidbfieldlist.h
+ * kexidbparser.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,34 +17,36 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBFIELDLIST_H
-#define KROSS_KEXIDB_KEXIDBFIELDLIST_H
+#ifndef KROSS_KEXIDB_KEXIDBPARSER_H
+#define KROSS_KEXIDB_KEXIDBPARSER_H
 
 #include <qstring.h>
 
-#include "../api/object.h"
-//#include "../api/variant.h"
-#include "../api/list.h"
-#include "../api/class.h"
+#include <scripting/api/object.h>
+#include <scripting/api/list.h>
+#include <scripting/api/class.h>
 
 #include <kexidb/drivermanager.h>
-#include <kexidb/fieldlist.h>
+#include <kexidb/parser/parser.h>
 
 namespace Kross { namespace KexiDB {
 
-    class KexiDBFieldList : public Kross::Api::Class<KexiDBFieldList>
+    // Forward declaration.
+    class KexiDBConnection;
+
+    class KexiDBParser : public Kross::Api::Class<KexiDBParser>
     {
         public:
 
             /**
              * Constructor.
              */
-            KexiDBFieldList(::KexiDB::FieldList* fieldlist);
+            KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser);
 
             /**
              * Destructor.
              */
-            virtual ~KexiDBFieldList();
+            virtual ~KexiDBParser();
 
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
@@ -52,21 +54,21 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getDescription
             virtual const QString getDescription() const;
 
-            ::KexiDB::FieldList* fieldlist() { return m_fieldlist; }
-
         private:
-            ::KexiDB::FieldList* m_fieldlist;
+            KexiDBConnection* m_connection;
+            ::KexiDB::Parser* m_parser;
 
-            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr fields(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr hasField(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr names(Kross::Api::List::Ptr);
-
-            Kross::Api::Object::Ptr addField(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr insertField(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr removeField(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr parse(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr operation(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr table(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
+
+            Kross::Api::Object::Ptr errorType(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr errorMsg(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr errorAt(Kross::Api::List::Ptr);
     };
 
 }}

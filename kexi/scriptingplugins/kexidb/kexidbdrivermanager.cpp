@@ -23,7 +23,7 @@
 #include "kexidbfield.h"
 #include "kexidbschema.h"
 
-#include "../api/exception.h"
+#include <scripting/api/exception.h>
 
 #include <qguardedptr.h>
 #include <kdebug.h>

@@ -5,15 +5,15 @@ kdeinit_LTLIBRARIES = kexi.la
 bin_PROGRAMS =
 kexi_la_SOURCES = main.cpp
 kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO)
-kexi_la_LIBADD = ./core/libkexicore.la \
-	./main/libkeximain.la
+kexi_la_LIBADD = ./core/libkexicore.la ./main/libkeximain.la
 
 if compile_kross_plugin
   SCRIPTING=scripting
+  SCRIPTING_PLUGINS=scriptingplugins
 endif
 
-SUBDIRS= 3rdparty kexiutils kexidb core widget formeditor \
-data pics $(SCRIPTING) main migration plugins . tests
+SUBDIRS= 3rdparty kexiutils kexidb $(SCRIPTING) core widget formeditor \
+data pics main migration $(SCRIPTING_PLUGINS) plugins . tests
 
 #(will be reenabled after main/startup move)
 

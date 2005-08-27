@@ -18,12 +18,8 @@
  ***************************************************************************/
 
 #include "kexidbconnectiondata.h"
-//#include "kexidbconnection.h"
-//#include "kexidbdriver.h"
-//#include "../api/exception.h"
 
 #include <qvariant.h>
-//#include <kdebug.h>
 
 using namespace Kross::KexiDB;
 

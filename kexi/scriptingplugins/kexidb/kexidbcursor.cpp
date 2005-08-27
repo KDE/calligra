@@ -19,10 +19,9 @@
 
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
-//#include "kexidbdriver.h"
-#include "../api/exception.h"
 
-//#include <qvaluelist.h>
+#include <scripting/api/exception.h>
+
 #include <kdebug.h>
 
 using namespace Kross::KexiDB;

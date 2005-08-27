@@ -19,14 +19,8 @@
 
 
 #include "kexidbfield.h"
-//#include "kexidbcursor.h"
-//#include "kexidbconnection.h"
-//#include "kexidbdriver.h"
-#include "../api/variant.h"
-//#include "../api/exception.h"
 
-//#include <qvaluelist.h>
-//#include <kdebug.h>
+#include <scripting/api/variant.h>
 
 using namespace Kross::KexiDB;
 

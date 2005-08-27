@@ -21,9 +21,8 @@
 #include "kexidbparser.h"
 #include "kexidbschema.h"
 #include "kexidbconnection.h"
-#include "../api/variant.h"
 
-//#include <kdebug.h>
+#include <scripting/api/variant.h>
 
 using namespace Kross::KexiDB;
 

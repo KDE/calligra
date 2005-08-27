@@ -1,1 +1,1 @@
-SUBDIRS = api kexidb kjs main python test
+SUBDIRS = api kjs main python test

@@ -27,7 +27,7 @@
 
 #include "../main/scriptcontainer.h"
 
-#include "../kexidb/kexidbmodule.h"
+//#include "../kexidb/kexidbmodule.h"
 
 #include "testobject.h"
 #include "testaction.h"
@@ -77,9 +77,9 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         // able to access from within scripts. You don't need to take
         // care of freeing them cause that will be done by Kross.
         // Modules are shared between the ScriptContainer instances.
-        Kross::KexiDB::KexiDBModule* kdbm = new Kross::KexiDB::KexiDBModule();
-        manager->addChild(kdbm);
-        manager->addChild( new Kross::KexiDB::TestModule() ); //testcase
+//Kross::KexiDB::KexiDBModule* kdbm = new Kross::KexiDB::KexiDBModule();
+//manager->addChild(kdbm);
+//manager->addChild( new Kross::KexiDB::TestModule() ); //testcase
 
         // To represent a script that should be executed Kross uses
         // the Script container class. You are able to fill them with

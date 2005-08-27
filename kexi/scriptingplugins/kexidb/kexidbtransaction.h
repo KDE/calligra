@@ -1,5 +1,5 @@
 /***************************************************************************
- * kexidbcursor.h
+ * kexidbtransaction.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,49 +17,39 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBCURSOR_H
-#define KROSS_KEXIDB_KEXIDBCURSOR_H
+#ifndef KROSS_KEXIDB_KEXIDBTRANSACTION_H
+#define KROSS_KEXIDB_KEXIDBTRANSACTION_H
 
 #include <qstring.h>
 
-#include "../api/object.h"
-#include "../api/variant.h"
-#include "../api/list.h"
-//#include "../api/module.h"
-#include "../api/class.h"
+#include <scripting/api/class.h>
 
-//#include <kexidb/driver.h>
-//#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <kexidb/drivermanager.h>
+#include <kexidb/transaction.h>
 
 namespace Kross { namespace KexiDB {
 
     // Forward declaration.
     class KexiDBConnection;
 
-    /**
-     * The KexiDBCursor class is a wrapper around the
-     * \a ::KexiDB::Cursor class to provide database
-     * cursor functionality.
-     */
-    class KexiDBCursor : public Kross::Api::Class<KexiDBCursor>
+    class KexiDBTransaction : public Kross::Api::Class<KexiDBTransaction>
     {
         public:
 
             /**
              * Constructor.
              *
-             * \param connection The parent \a KexiDBConnection
-             *        instance this KexiDBCursor belongs to.
-             * \param cursor The \a ::KexiDB::Cursor this class
-             *        wraps.
+             * \param connection The \a KexiDBConnection object this
+             *        transaction belongs to.
+             * \param transaction The \a ::KexiDB::Transaction instance
+             *        this object wraps.
              */
-            KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* cursor);
+            KexiDBTransaction(KexiDBConnection* connection, ::KexiDB::Transaction& transaction);
 
             /**
              * Destructor.
              */
-            virtual ~KexiDBCursor();
+            virtual ~KexiDBTransaction();
 
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
@@ -67,20 +57,19 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getDescription
             virtual const QString getDescription() const;
 
+            ::KexiDB::Transaction& transaction();
+
         private:
-            ::KexiDB::Cursor* cursor();
-            ::KexiDB::Cursor* m_cursor;
+            ::KexiDB::Transaction& m_transaction;
 
-            Kross::Api::Object::Ptr moveFirst(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr moveLast(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr moveNext(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr movePrev(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr eof(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr bof(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr at(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
+            /// Return the KexiDBConnection object this KexiDBTransaction belongs to.
+            Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
 
-            Kross::Api::Object::Ptr value(Kross::Api::List::Ptr);
+            /// Return true if the transaction is avtive (ie. started).
+            Kross::Api::Object::Ptr isActive(Kross::Api::List::Ptr);
+
+            /// Return true if the transaction is uinitialised (null).
+            Kross::Api::Object::Ptr isNull(Kross::Api::List::Ptr);
     };
 
 }}

@@ -22,9 +22,9 @@
 
 #include <qstring.h>
 
-#include "../api/object.h"
-#include "../api/list.h"
-#include "../api/class.h"
+#include <scripting/api/object.h>
+#include <scripting/api/list.h>
+#include <scripting/api/class.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/field.h>

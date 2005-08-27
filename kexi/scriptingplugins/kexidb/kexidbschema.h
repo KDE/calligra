@@ -22,10 +22,8 @@
 
 #include <qstring.h>
 
-#include "../api/object.h"
-//#include "../api/list.h"
-//#include "../api/module.h"
-#include "../api/class.h"
+#include <scripting/api/object.h>
+#include <scripting/api/class.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/schemadata.h>

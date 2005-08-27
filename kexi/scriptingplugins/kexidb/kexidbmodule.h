@@ -23,10 +23,9 @@
 #include <qstring.h>
 #include <qvariant.h>
 
-#include "../api/object.h"
-#include "../api/variant.h"
-//#include "../api/class.h"
-#include "../api/module.h"
+#include <scripting/api/object.h>
+#include <scripting/api/variant.h>
+#include <scripting/api/module.h>
 
 namespace Kross { namespace KexiDB {
 
