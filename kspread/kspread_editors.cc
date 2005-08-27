@@ -415,8 +415,8 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
             QString ltext = text();
             QString tmp = ltext.lower();
             QValueList<Reference>::Iterator it;
-	    QValueList<Reference> area = m_pView->doc()->listArea();
-	    for ( it = area.begin(); it != area.end(); ++it )
+      QValueList<Reference> area = m_pView->doc()->listArea();
+      for ( it = area.begin(); it != area.end(); ++it )
             {
                 if ((*it).ref_name == tmp)
                 {
@@ -512,6 +512,7 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
   // properly in the layout - but they are then managed here.
   m_pCancelButton = cancelButton;
   m_pOkButton = okButton;
+  isArray = false;
 
   installEventFilter(m_pCanvas);
 
@@ -522,7 +523,7 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
                     this, SLOT( slotAbortEdit() ) );
   QObject::connect( m_pOkButton, SIGNAL( clicked() ),
                     this, SLOT( slotDoneEdit() ) );
-
+  
   setEditMode( false ); // disable buttons
 }
 
@@ -550,17 +551,19 @@ void KSpreadEditWidget::slotAbortEdit()
 
 void KSpreadEditWidget::slotDoneEdit()
 {
-    m_pCanvas->deleteEditor( true /*keep changes*/ );
-    // will take care of the buttons
+  m_pCanvas->deleteEditor( true /*keep changes*/, isArray);
+  isArray = false;
+  // will take care of the buttons
 }
 
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
-    // Dont handle special keys and accelerators
-    if ( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+    // Dont handle special keys and accelerators, except Enter ones
+    if (( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
          || ( _ev->state() & Qt::ShiftButton )
          || ( _ev->key() == Key_Shift )
          || ( _ev->key() == Key_Control ) )
+      && (_ev->key() != Key_Return) && (_ev->key() != Key_Enter))
     {
         QLineEdit::keyPressEvent( _ev );
         _ev->accept();
@@ -589,6 +592,8 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
       // This is why we call slotDoneEdit now, instead of sending
       // to the canvas.
       //QApplication::sendEvent( m_pCanvas, _ev );
+      isArray = (_ev->state() & Qt::AltButton) &&
+          (_ev->state() & Qt::ControlButton);
       slotDoneEdit();
       m_pCanvas->view()->updateEditWidget();
       _ev->accept();

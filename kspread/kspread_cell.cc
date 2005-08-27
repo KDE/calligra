@@ -3745,11 +3745,14 @@ int KSpreadCell::defineAlignX()
     if ((formatType() == Text_format) || value().isString())
       a = (d->strOutText.isRightToLeft()) ?
                                KSpreadCell::Right : KSpreadCell::Left;
-    else
-      if (value().isBoolean() || value().isNumber())
+    else {
+      KSpreadValue val = value();
+      while (val.isArray()) val = val.element (0, 0);
+      if (val.isBoolean() || val.isNumber())
         a = KSpreadCell::Right;
       else
         a = KSpreadCell::Left;
+    }
   }
   return a;
 }

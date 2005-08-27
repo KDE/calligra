@@ -171,6 +171,7 @@ private:
     QButton* m_pCancelButton;
     QButton* m_pOkButton;
     KSpreadCanvas* m_pCanvas;
+    bool isArray;
 };
 
 

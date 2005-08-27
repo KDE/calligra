@@ -519,7 +519,8 @@ public:
      */
     void setText( int row, int column, const QString& text,
                   bool asString = false );
-
+    void setArrayFormula (int _row, int _column, int rows, int cols,
+        const QString &_text);
 
 
     void setSelectionFont( KSpreadSelection* selectionInfo,

@@ -1057,6 +1057,48 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool as
       emit sig_updateView( this, QRect(_column,_row,_column,_row) );
 }
 
+void KSpreadSheet::setArrayFormula (int _row, int _column, int rows, int cols,
+    const QString &_text)
+{
+  // check protection
+  bool nomodify = false;
+  if ( isProtected() )
+    for (int row = _row; row < _row+rows; ++row)
+      for (int col = _column; col < _column+cols; ++col) {
+        KSpreadCell * cell = nonDefaultCell (col, row);
+        if ( !cell->notProtected( _column, _row ) )
+        {
+          nomodify = true;
+          break;
+        }
+      }
+  if (nomodify)
+    NO_MODIFICATION_POSSIBLE;
+  
+  // add undo
+  if ( !doc()->undoLocked() )
+  {
+    KSpreadUndoChangeAreaTextCell *undo =
+        new KSpreadUndoChangeAreaTextCell (doc(), this,
+        QRect (_column, _row, cols, rows));
+    doc()->addCommand( undo );
+  }
+
+  // fill in the cells ... top-left one gets the formula, the rest gets =INDEX
+  // TODO: also fill in information about cells being a part of a range
+  KSpreadCell *cell = nonDefaultCell (_column, _row);
+  cell->setCellText (_text, false);
+  QString cellRef = cell->name();
+  for (int row = 0; row < rows; ++row)
+    for (int col = 0; col < cols; col++)
+      if (col || row)
+      {
+        KSpreadCell *cell = nonDefaultCell (_column + col, _row + row);
+        cell->setCellText ("=INDEX(" + cellRef + ";" + QString::number (row+1)
+            + ";" + QString::number (col+1) + ")", false);
+      }
+}
+
 void KSpreadSheet::setLayoutDirtyFlag()
 {
     KSpreadCell * c = d->cells.firstCell();

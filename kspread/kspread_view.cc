@@ -5974,22 +5974,37 @@ void KSpreadView::slotRename()
   }
 }
 
-void KSpreadView::setText( const QString & _text )
+void KSpreadView::setText (const QString & _text, bool array)
 {
   if ( d->activeSheet == 0L )
     return;
 
-  int x = d->canvas->markerColumn();
-  int y = d->canvas->markerRow();
-
-  doc()->emitBeginOperation( false );
-  d->activeSheet->setText( y, x, _text );
-  KSpreadCell * cell = d->activeSheet->cellAt( x, y );
-
-  if ( cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula() )
-    doc()->addStringCompletion( _text );
-
-  doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
+  if (array) {
+    // array version
+    QRect r = d->canvas->selection();
+    int x = r.left();
+    int y = r.top();
+    int xl = r.right() - r.left() + 1;
+    int yl = r.bottom() - r.top() + 1;
+    doc()->emitBeginOperation( false );
+    d->activeSheet->setArrayFormula (y, x, yl, xl, _text);
+    doc()->emitEndOperation( QRect( x, y, xl, yl ) );
+  }
+  else
+  {
+    // non-array version
+    int x = d->canvas->markerColumn();
+    int y = d->canvas->markerRow();
+  
+    doc()->emitBeginOperation( false );
+    d->activeSheet->setText( y, x, _text );
+    KSpreadCell * cell = d->activeSheet->cellAt( x, y );
+  
+    if ( cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula() )
+      doc()->addStringCompletion( _text );
+  
+    doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
+  }
 }
 
 //------------------------------------------------

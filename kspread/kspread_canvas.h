@@ -207,8 +207,9 @@ public:
      * @see #editor
      * @param saveChanges if true, the edited text is stored in the cell.
      *                    if false, the changes are discarded.
+     * @param array if true, array formula was entered
      */
-    void deleteEditor( bool saveChanges );
+    void deleteEditor (bool saveChanges, bool array = false);
 
     /**
      * Called from @ref KSpreadEditWidget and KSpreadCellEditor

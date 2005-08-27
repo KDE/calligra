@@ -1760,10 +1760,14 @@ QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelect
 
 void KSpreadCanvas::processEnterKey(QKeyEvent* event)
 {
+  // array is true, if ctrl+alt are pressed
+  bool array = (event->state() & Qt::AltButton) &&
+      (event->state() & Qt::ControlButton);
+
   /* save changes to the current editor */
   if (!d->chooseCell)
   {
-    deleteEditor( true );
+    deleteEditor(true, array);
   }
 
   /* use the configuration setting to see which direction we're supposed to move
@@ -2412,7 +2416,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
        (_ev->key() != Key_Up) &&
        (_ev->key() != Key_Right) &&
        (_ev->key() != Key_Left) &&
-       (_ev->key() != Key_Home) )
+       (_ev->key() != Key_Home) &&
+       (_ev->key() != Key_Enter) &&
+       (_ev->key() != Key_Return) )
   {
     QWidget::keyPressEvent( _ev );
     return;
@@ -2844,7 +2850,7 @@ double KSpreadCanvas::autoScrollAccelerationY( int offset )
     }
 }
 
-void KSpreadCanvas::deleteEditor( bool saveChanges )
+void KSpreadCanvas::deleteEditor (bool saveChanges, bool array)
 {
   if ( !d->cellEditor )
     return;
@@ -2880,7 +2886,7 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
               }
           }
       }
-    d->view->setText( t );
+    d->view->setText (t, array);
   }
   else
     d->view->updateEditWidget();

@@ -133,9 +133,9 @@ public:
     // void showFormulaToolBar( bool show );
 
     /**
-     * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
+     * Used by @ref KSpreadEditWidget. Sets the text of the active cell(s).
      */
-    void setText( const QString& _text );
+    void setText( const QString& _text, bool array = false );
 
     void enableUndo( bool _b );
     void enableRedo( bool _b );
