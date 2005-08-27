@@ -20,7 +20,7 @@
 
 #include "kexidbfield.h"
 
-#include <scripting/api/variant.h>
+#include <api/variant.h>
 
 using namespace Kross::KexiDB;
 

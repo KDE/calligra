@@ -21,12 +21,12 @@
 
 #include <kdebug.h>
 
-#include "core/keximainwindow.h"
+#include "keximainwindow.h"
 
 #ifdef KEXI_KROSS_SUPPORT
-# include "main/manager.h"
-# include "main/scriptcontainer.h"
-# include "api/exception.h"
+# include <scriptingcore/main/manager.h>
+# include <scriptingcore/main/scriptcontainer.h>
+# include <scriptingcore/api/exception.h>
 #endif
 
 /****************************************************************

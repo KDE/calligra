@@ -26,7 +26,7 @@
 #include "kexidbtransaction.h"
 #include "kexidbparser.h"
 
-#include <scripting/api/exception.h>
+#include <api/exception.h>
 
 #include <kdebug.h>
 

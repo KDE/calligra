@@ -20,8 +20,8 @@
 #include "kexidbfieldlist.h"
 #include "kexidbfield.h"
 
-#include <scripting/api/variant.h>
-#include <scripting/api/exception.h>
+#include <api/variant.h>
+#include <api/exception.h>
 
 #include <kdebug.h>
 

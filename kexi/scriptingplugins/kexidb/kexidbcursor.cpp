@@ -20,7 +20,7 @@
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
 
-#include <scripting/api/exception.h>
+#include <api/exception.h>
 
 #include <kdebug.h>
 

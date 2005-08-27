@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 
-#include <scripting/api/class.h>
+#include <api/class.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/transaction.h>

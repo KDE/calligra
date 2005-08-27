@@ -36,6 +36,7 @@ class KexiScriptEditor : protected KexiEditor
         Q_OBJECT
 
     public:
+
         /**
          * Constructor.
          */

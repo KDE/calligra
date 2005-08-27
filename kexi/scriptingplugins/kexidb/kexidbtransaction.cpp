@@ -20,7 +20,7 @@
 
 #include "kexidbtransaction.h"
 #include "kexidbconnection.h"
-#include <scripting/api/variant.h>
+#include <api/variant.h>
 
 //#include <kdebug.h>
 

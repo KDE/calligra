@@ -19,10 +19,10 @@ libkrosskexidb_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkrosskexidb_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
-    $(top_builddir)/kexi/scripting/api/libkrossapi.la \
+    $(top_builddir)/kexi/scriptingcore/api/libkrossapi.la \
     $(top_builddir)/kexi/kexidb/libkexidb.la \
     $(top_builddir)/kexi/kexidb/parser/libkexidbparser.la
 
 libkrosskexidb_la_METASOURCES = AUTO
 SUBDIRS = .
-INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/scriptingcore $(all_includes)

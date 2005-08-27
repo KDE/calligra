@@ -22,13 +22,11 @@
 
 #include <qstring.h>
 
-#include <scripting/api/object.h>
-#include <scripting/api/variant.h>
-#include <scripting/api/list.h>
-#include <scripting/api/class.h>
+#include <api/object.h>
+#include <api/variant.h>
+#include <api/list.h>
+#include <api/class.h>
 
-//#include <kexidb/driver.h>
-//#include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
 namespace Kross { namespace KexiDB {

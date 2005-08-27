@@ -10,7 +10,6 @@ kexihandler_script_la_LDFLAGS = \
 
 kexihandler_script_la_LIBADD = \
     $(top_builddir)/kexi/core/libkexicore.la \
-    $(top_builddir)/kexi/main/libkeximain.la \
     $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
     $(top_builddir)/lib/koproperty/libkoproperty.la
 
@@ -18,7 +17,6 @@ INCLUDES = \
     $(KOFFICE_INCLUDES) \
     -I$(top_srcdir)/lib  \
     -I$(top_srcdir)/kexi/core \
-    -I$(top_srcdir)/kexi/main \
     -I$(top_srcdir)/kexi \
     -I$(top_srcdir)/kexi/widget \
     $(all_includes)
