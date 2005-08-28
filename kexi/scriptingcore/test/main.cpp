@@ -44,6 +44,7 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <ksharedptr.h>
+#include <klibloader.h>
 
 // for std namespace
 #include <string>
@@ -61,6 +62,27 @@ static KCmdLineOptions options[] =
     //{ "functionargs <functioarguments>", I18N_NOOP("List of arguments to pass to the function on execution."), "" },
     { 0, 0, 0 }
 };
+
+void initModules()
+{
+    KLibLoader* loader = KLibLoader::self();
+
+    //KLibFactory* factory = loader->factory("libkrosskexidb");
+    //KLibrary* lib = loader->library("/mnt/hdb1/home/cvs/kde/head/koffice/kexi/scriptingplugins/kexidb/krosskexidb.la");
+    //KLibrary* lib = loader->library("/home/snoopy/cvs/kde/head/koffice/kexi/scriptingplugins/kexidb/krosskexidb.la");
+    QString s = loader->findLibrary("libkrosskexidb");
+    kdDebug() << "s=" << s << endl;
+    //KLibrary* lib = loader->library( s.latin1() );
+    KLibrary* lib = loader->globalLibrary("libkrosskexidb");
+
+    if(! lib) {
+        kdDebug() << "===========> Failed to load KexiDB library." << endl;
+        return;
+    }
+    kdDebug() << "===========> Successfully loaded KexiDB library." << endl;
+
+    //QObject* o = lib->create(app);
+}
 
 void runInterpreter(const QString& interpretername, const QString& scriptcode)
 {
@@ -174,14 +196,17 @@ int main(int argc, char **argv)
 
         if( args->isSet("gui") ) {
             app = new KApplication();
+
             TestWindow *mainWin = new TestWindow(interpretername, scriptcode);
             app->setMainWidget(mainWin);
             mainWin->show();
             args->clear();
+initModules();
             int result = app->exec();
         }
         else {
             app = new KApplication(true, true);
+initModules();
             runInterpreter(interpretername, scriptcode);
         }
     }
