@@ -12,9 +12,6 @@
             <height>490</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KoDocumentInfoAuthorWidget</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -269,9 +266,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Load From Address Book</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
                     </property>
                 </widget>
                 <widget class="KPushButton">
