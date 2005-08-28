@@ -1,5 +1,3 @@
-AC_MSG_CHECKING([whether kopainter should be compiled])
-
 if test -s $srcdir/inst-apps ; then
     SUBDIRLIST=`cat $srcdir/inst-apps`
 else
@@ -10,6 +8,24 @@ fi
 if test -z "$SUBDIRLIST" ; then
     SUBDIRLIST=`ls -1 $srcdir`
 fi
+
+AC_MSG_CHECKING([whether only Kexi is being built])
+KEXI_ONLY=yes
+for args in $SUBDIRLIST ; do
+    case $args in
+        lib) ;;
+        kexi) ;;
+        *) if test -d $srcdir/$args ; then 
+             KEXI_ONLY=no
+           fi
+           ;;
+    esac
+done
+AC_MSG_RESULT([$KEXI_ONLY])
+AM_CONDITIONAL(compile_kexionly, test "$KEXI_ONLY" = "yes" )
+
+AC_MSG_CHECKING([whether kopainter should be compiled])
+
 
 # first check which main application we could compile
 for args in $SUBDIRLIST ; do
@@ -38,3 +54,4 @@ fi
 AC_MSG_RESULT([$USERFEEDBACKCOMPILELIB])
 
 AM_CONDITIONAL(compile_lib_KOPAINTER, test "$USERFEEDBACKCOMPILELIB" = "yes" )
+
