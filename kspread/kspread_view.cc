@@ -1586,8 +1586,8 @@ void KSpreadView::initView()
     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
 
-    d->vertScrollBar->setLineStep(60); //just random guess based on what feels okay
-    d->vertScrollBar->setPageStep(60);
+    d->horzScrollBar->setLineStep(60); //just random guess based on what feels okay
+    d->horzScrollBar->setPageStep(60);
 
     QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeSheet( const QString& ) ) );
     QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
