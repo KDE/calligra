@@ -83,12 +83,16 @@ public:
     // this is the target position, it's 0 if no tab is dragged
     int targetTab;
 
+    // wheel movement since selected tab was last changed by the
+    // mouse wheel
+    int wheelDelta;
+
     // true if autoscroll is active
     bool autoScroll;
 
     // calculate the bounding rectangle for each visible tab
     void layoutTabs();
-    
+
     // reposition scroll buttons
     void layoutButtons();
 
@@ -104,6 +108,7 @@ public:
 
     // update the enable/disable status of scroll buttons
     void updateButtons();
+
 };
 
 // built-in pixmap for scroll-first button
@@ -338,6 +343,7 @@ KoTabBar::KoTabBar( QWidget* parent, const char* name )
     d->lastTab = 0;
     d->activeTab = 0;
     d->targetTab = 0;
+    d->wheelDelta = 0;
     d->autoScroll = false;
     d->offset = 64;
 
@@ -712,7 +718,7 @@ void KoTabBar::mousePressEvent( QMouseEvent* ev )
 
     QPoint pos = ev->pos();
     if( !d->reverseLayout ) pos = pos - QPoint( d->offset,0 );
-    
+
     int tab = d->tabAt( pos ) + 1;
     if( ( tab > 0 ) && ( tab != d->activeTab ) )
     {
@@ -811,6 +817,59 @@ void KoTabBar::mouseDoubleClickEvent( QMouseEvent* ev )
     if( ev->pos().x() > offset )
     if( !d->readOnly )
         emit doubleClicked();
+}
+
+void KoTabBar::wheelEvent( QWheelEvent * e )
+{
+  if ( d->tabs.count() == 0 )
+  {
+    erase();
+    return;
+  }
+
+  // Currently one wheel movement is a delta of 120.
+  // The 'unused' delta is stored for devices that allow
+  // a higher scrolling resolution.
+  // The delta required to move one tab is one wheel movement:
+  const int deltaRequired = 120;
+
+  d->wheelDelta += e->delta();
+  int tabDelta = - (d->wheelDelta / deltaRequired);
+  d->wheelDelta = d->wheelDelta % deltaRequired;
+  int numTabs = d->tabs.size();
+
+  if(d->activeTab + tabDelta > numTabs)
+  {
+    // Would take us past the last tab
+    d->activeTab = numTabs;
+  }
+  else if (d->activeTab + tabDelta < 1)
+  {
+    // Would take us before the first tab
+    d->activeTab = 1;
+  }
+  else
+  {
+    d->activeTab = d->activeTab + tabDelta;
+  }
+
+  // Find the left and right edge of the new tab.  If we're
+  // going forward, and the right of the new tab isn't visible
+  // then scroll forward.  Likewise, if going back, and the 
+  // left of the new tab isn't visible, then scroll back.
+  int activeTabRight = d->tabRects[ d->activeTab-1 ].right();
+  int activeTabLeft  = d->tabRects[ d->activeTab-1 ].left();
+  if(tabDelta > 0 && activeTabRight > width() - d->offset )
+  {
+    scrollForward();
+  }
+  else if(tabDelta < 0 && activeTabLeft < width() - d->offset )
+  {
+    scrollBack();
+  }
+
+  update();
+  emit tabChanged( d->tabs[ d->activeTab-1] );
 }
 
 
