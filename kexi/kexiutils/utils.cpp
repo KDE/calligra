@@ -23,8 +23,6 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
-#include <kexi_global.h>
-
 using namespace KexiUtils;
 
 DelayedCursorHandler::DelayedCursorHandler() {
@@ -102,7 +100,8 @@ QString KexiUtils::fileDialogFilterString(const QString& mimeString, bool kdeFor
 QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat)
 {
 	QString ret;
-	foreach( QStringList::ConstIterator, it, mimeStrings)
+	QStringList::ConstIterator endIt = mimeStrings.constEnd();
+	for(QStringList::ConstIterator it = mimeStrings.constBegin(); it != endIt; ++it)
 		ret += fileDialogFilterString(*it, kdeFormat);
 	return ret;
 }
