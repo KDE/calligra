@@ -63,6 +63,7 @@ protected:
 	virtual void setCursor() const;
 
 	virtual void mouseButtonPress();
+	virtual void rightMouseButtonPress();
 	virtual void mouseButtonRelease();
 	virtual void rightMouseButtonRelease();
 	virtual void mouseDrag();
@@ -80,7 +81,8 @@ protected:
 private:
 	enum { normal, moving, scaling, rotating } m_state;
 	bool m_lock;
-
+	// controls if objects are added to or removed from the selection
+	bool m_add;
 	double m_s1;
 	double m_s2;
 	double m_distx;

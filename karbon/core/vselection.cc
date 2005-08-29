@@ -80,6 +80,50 @@ VSelection::take( VObject& object )
 	invalidateBoundingBox();
 }
 
+bool
+VSelection::take( const KoRect& rect, bool selectObjects, bool exclusive )
+{
+	bool success = false;
+
+	if( selectObjects )
+	{
+		VSelectObjects op( m_objects, rect, false );
+		if( op.visit( *static_cast<VDocument*>( parent() ) ) )
+		{
+			selectNodes();
+			success = true;
+		}
+	}
+	else
+	{
+		// TODO implement and test node deselection properly
+		/* 
+		VObjectListIterator itr( m_objects );
+		VObjectList deselected;
+
+		// Try to deselect all that have at least one node contained in the rect
+		for ( ; itr.current(); ++itr )
+		{
+			VSelectNodes op( rect, false, exclusive );
+
+			if( op.visit( *itr.current() ) )
+			{
+				deselected.append( itr.current() );
+				success = true;
+			}
+		}
+		// Remove all that were selected from this selection
+		VObjectListIterator jtr( deselected );
+		for ( ; jtr.current(); ++jtr )
+			take( *( jtr.current() ) );
+		*/
+	}
+
+	invalidateBoundingBox();
+
+	return success;
+}
+
 void
 VSelection::append()
 {
@@ -95,9 +139,11 @@ VSelection::append()
 void
 VSelection::append( VObject* object )
 {
+	// only append if item is not deleted or not already in list
 	if( object->state() != deleted )
 	{
-		m_objects.append( object );
+		if( ! m_objects.containsRef( object ) )
+			m_objects.append( object );
 		object->setState( selected );
 		invalidateBoundingBox();
 	}
@@ -118,7 +164,7 @@ VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 
 	if( selectObjects )
 	{
-		m_objects.clear();
+		//m_objects.clear();
 		VSelectObjects op( m_objects, rect );
 		if( op.visit( *static_cast<VDocument*>( parent() ) ) )
 		{

@@ -80,6 +80,8 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 	setCursor();
 
 	m_altPressed = mouseEvent->state() & Qt::AltButton;
+	m_shiftPressed = mouseEvent->state() & Qt::ShiftButton;
+	m_ctrlPressed = mouseEvent->state() & Qt::ControlButton;
 
 	// Mouse events:
 	if( mouseEvent->type() == QEvent::MouseButtonDblClick )
@@ -94,7 +96,7 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 		m_firstPoint.setX( canvasCoordinate.x() );
 		m_firstPoint.setY( canvasCoordinate.y() );
 
-		if( mouseEvent->state() == QEvent::RightButton )
+		if( mouseEvent->button() == QEvent::RightButton )
 			rightMouseButtonPress();
 		else
 			mouseButtonPress();
@@ -129,7 +131,7 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 			m_isDragging = false;
 		}
 		else if( m_mouseButtonIsDown )	// False if canceled.
-			if( mouseEvent->state() == QEvent::RightButton )
+			if( mouseEvent->button() == QEvent::RightButton )
 				rightMouseButtonRelease();
 			else
 				mouseButtonRelease();
