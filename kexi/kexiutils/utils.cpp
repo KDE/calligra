@@ -23,6 +23,8 @@
 #include <kcursor.h>
 #include <kapplication.h>
 
+#include <kexi_global.h>
+
 using namespace KexiUtils;
 
 DelayedCursorHandler::DelayedCursorHandler() {

@@ -25,7 +25,8 @@ kexidbinclude_HEADERS=connection.h connectiondata.h cursor.h \
   relationship.h parser/parser.h transaction.h \
   kexidb_export.h
 
-libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO)
+libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO) \
+	 $(top_builddir)/kexi/kexiutils/libkexiutils.la
 libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 kde_servicetypes_DATA = kexidb_driver.desktop

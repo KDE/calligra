@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/kexi $(PYTHONINC) $(all_includes)
 
 kde_module_LTLIBRARIES = krosspython.la
 
-krosspython_la_LDFLAGS = $(LIBPYTHON) $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+krosspython_la_LDFLAGS = $(LIBPYTHON) $(PYTHONLIB)  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 
 krosspython_la_SOURCES = \
     pythonextension.cpp \
