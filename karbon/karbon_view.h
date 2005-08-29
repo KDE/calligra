@@ -168,6 +168,7 @@ protected slots:
 	void viewColorManager();
 	void viewStrokeDocker();
 	void viewStyleDocker();
+	void viewDocumentDocker();
 
 	// Toolbox dialogs.
 	void slotStrokeChanged( const VStroke& );

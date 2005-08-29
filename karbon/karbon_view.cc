@@ -799,6 +799,21 @@ KarbonView::viewStyleDocker()
 }
 
 void
+KarbonView::viewDocumentDocker()
+{
+	if( !m_documentDocker )
+	{
+		m_documentDocker = new VDocumentDocker(this);
+		mainWindow()->addDockWindow( m_documentDocker, DockRight );
+	}
+	else if( m_documentDocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_documentDocker, DockRight );
+		m_documentDocker->show();
+	}
+}
+
+void
 KarbonView::initActions()
 {
 	// view ----->
@@ -931,6 +946,9 @@ KarbonView::initActions()
 		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
 
+	new KAction(
+		i18n( "&Document Properties" ), 0, this,
+		SLOT( viewDocumentDocker() ), actionCollection(), "view_document_docker" );
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
