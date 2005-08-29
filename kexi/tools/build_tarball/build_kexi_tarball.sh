@@ -27,6 +27,7 @@ PROJECT_VER=1.0
 #PROJECT_PATH=branches/kexi/$PROJECT_VER
 SVN2DIST_OPTIONS=--no-i18n #set --no-i18n for version being outside the trunk
 
+# Make sure these are all directories - see Makefile creation below
 EXC="3rdparty/uuid plugins/importwizard scriptingcore scriptingplugins"
 
 # Uploading
@@ -170,8 +171,11 @@ if [ -n "$CONF" ]; then
 	cp $CONF $DESTINATION/source/$MODULE
 fi
 cd $DESTINATION/source/$MODULE/$PROJECT
+
 for dir in $EXC; do
 	rm -rf $dir
+  #  Avoid Makefile.cvs complaining about missing dirs
+  mkdir $dir
 done
 #fix exectutable bits for sources:
 find . -name \*.h -o -name \*.cpp -o -name \*.c -o -name \*.cc -o -name \*.1 | xargs chmod a-x
