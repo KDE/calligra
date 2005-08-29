@@ -70,7 +70,7 @@ class KEXI_DB_EXPORT FieldList
 		 this implementation in your subclass. */
 		virtual void removeField(KexiDB::Field *field);
 
-		/*! \return field #id or NULL if there is no such a field. */
+		/*! \return field id or NULL if there is no such a field. */
 		inline Field* field(uint id) { return (id < m_fields.count()) ? m_fields.at(id) : 0; }
 		
 		/*! \return field with name \a name or NULL if there is no such a field. */
