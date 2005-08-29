@@ -30,20 +30,6 @@
 namespace Kross { namespace KexiDB {
 
     /**
-     * The TestModule class is only used for internal
-     * testcases.
-     */
-    class TestModule : public Kross::Api::Module<TestModule>
-    {
-        public:
-            TestModule()
-                : Kross::Api::Module<TestModule>("TestModule") {}
-            virtual ~TestModule() {}
-            virtual const QString getClassName() const { return "Kross::KexiDB::TestModule"; }
-            virtual const QString getDescription() const { return ""; }
-    };
-
-    /**
      * The KexiDBModule wrapper around KexiDB.
      *
      * This class implementates a \a Kross::Api::Module to wrap

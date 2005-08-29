@@ -63,25 +63,31 @@ static KCmdLineOptions options[] =
     { 0, 0, 0 }
 };
 
+extern "C"
+{
+    typedef int (*def_module_func)();
+}
+
 void initModules()
 {
     KLibLoader* loader = KLibLoader::self();
-
-    //KLibFactory* factory = loader->factory("libkrosskexidb");
-    //KLibrary* lib = loader->library("/mnt/hdb1/home/cvs/kde/head/koffice/kexi/scriptingplugins/kexidb/krosskexidb.la");
-    //KLibrary* lib = loader->library("/home/snoopy/cvs/kde/head/koffice/kexi/scriptingplugins/kexidb/krosskexidb.la");
-    QString s = loader->findLibrary("libkrosskexidb");
-    kdDebug() << "s=" << s << endl;
-    //KLibrary* lib = loader->library( s.latin1() );
-    KLibrary* lib = loader->globalLibrary("libkrosskexidb");
-
+    KLibrary* lib = loader->library("libkrosskexidb");
     if(! lib) {
-        kdDebug() << "===========> Failed to load KexiDB library." << endl;
+        kdWarning() << QString("Failed to load library: %1").arg( loader->lastErrorMessage() ) << endl;
         return;
     }
-    kdDebug() << "===========> Successfully loaded KexiDB library." << endl;
+    kdDebug() << "Successfully loaded KexiDB library." << endl;
 
-    //QObject* o = lib->create(app);
+    def_module_func func;
+    func = (def_module_func) lib->symbol("init_module");
+    if(! func) {
+        kdWarning() << "Failed to determinate init function." << endl;
+        return;
+    }
+    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
+    Kross::Api::Object* module = (Kross::Api::Object*) (func)();
+    manager->addChild(module);
+    //lib->unload();
 }
 
 void runInterpreter(const QString& interpretername, const QString& scriptcode)
@@ -196,17 +202,16 @@ int main(int argc, char **argv)
 
         if( args->isSet("gui") ) {
             app = new KApplication();
-
             TestWindow *mainWin = new TestWindow(interpretername, scriptcode);
             app->setMainWidget(mainWin);
             mainWin->show();
             args->clear();
-initModules();
+            initModules();
             int result = app->exec();
         }
         else {
             app = new KApplication(true, true);
-initModules();
+            initModules();
             runInterpreter(interpretername, scriptcode);
         }
     }

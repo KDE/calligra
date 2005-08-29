@@ -22,6 +22,18 @@
 
 #include <kdebug.h>
 
+extern "C"
+{
+    /**
+     * Exported an loadable function as entry point to use
+     * the \a KexiDBModule.
+     */
+    void* init_module()
+    {
+        return new Kross::KexiDB::KexiDBModule();
+    }
+};
+
 using namespace Kross::KexiDB;
 
 KexiDBModule::KexiDBModule()
