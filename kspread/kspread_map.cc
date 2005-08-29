@@ -222,9 +222,11 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   if ( view ) // no view if embedded document
   {
     KSpreadCanvas * canvas = view->canvasWidget();
-    mymap.setAttribute( "activeTable", canvas->activeSheet()->sheetName() );
+    mymap.setAttribute( "activeTable",  canvas->activeSheet()->sheetName() );
     mymap.setAttribute( "markerColumn", canvas->markerColumn() );
-    mymap.setAttribute( "markerRow", canvas->markerRow() );
+    mymap.setAttribute( "markerRow",    canvas->markerRow() );
+    mymap.setAttribute( "xOffset",      canvas->xOffset() );
+    mymap.setAttribute( "yOffset",      canvas->yOffset() );
   }
 
   if ( !m_strPassword.isNull() )
@@ -318,9 +320,11 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
 
 bool KSpreadMap::loadXML( const QDomElement& mymap )
 {
-  QString activeSheet = mymap.attribute( "activeTable" );
+  QString activeSheet   = mymap.attribute( "activeTable" );
   m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
-  m_initialMarkerRow = mymap.attribute( "markerRow" ).toInt();
+  m_initialMarkerRow    = mymap.attribute( "markerRow" ).toInt();
+  m_initialXOffset      = mymap.attribute( "xOffset" ).toDouble();
+  m_initialYOffset      = mymap.attribute( "yOffset" ).toDouble();
 
   QDomNode n = mymap.firstChild();
   if ( n.isNull() )

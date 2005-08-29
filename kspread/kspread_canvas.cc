@@ -236,6 +236,26 @@ double KSpreadCanvas::yOffset() const
   return d->yOffset; 
 }
 
+void KSpreadCanvas::setXOffset( double _xOffset )
+{
+  d->xOffset = _xOffset;
+  kdDebug(36001) << "setXOffset(): XOffset before scrollToCell: " 
+		 << d->xOffset << endl;
+  scrollToCell( marker() );
+  kdDebug(36001) << "setXOffset(): XOffset after scrollToCell: " 
+		 << d->xOffset << endl;
+}
+
+void KSpreadCanvas::setYOffset( double _yOffset )
+{
+  d->yOffset = _yOffset;
+  kdDebug(36001) << "setyOffset(): YOffset before scrollToCell: " 
+		 << d->yOffset << endl;
+  scrollToCell( marker() );
+  kdDebug(36001) << "setYOffset(): YOffset after scrollToCell: " 
+		 << d->yOffset << endl;
+}
+
 const QPen& KSpreadCanvas::defaultGridPen() const 
 { 
   return d->defaultGridPen; 
@@ -591,6 +611,10 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   if (sheet == NULL)
     return;
 
+  kdDebug(36001) << "------------------------------------------------" << endl;
+  kdDebug(36001) << "scrollToCell(): at location [" << location.x() << ","
+  		 << location.y() << "]" << endl;
+
   /* we don't need this cell ptr, but this call is necessary to update the
      scroll bar correctly.  I don't like having that as part of the cellAt function
      but I suppose that's ok for now.
@@ -598,34 +622,42 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   KSpreadCell* cell = sheet->cellAt(location.x(), location.y(), true);
   Q_UNUSED(cell);
 
-  double unzoomedWidth = d->view->doc()->unzoomItX( width() );
-  double unzoomedHeight = d->view->doc()->unzoomItY( height() );
+  double  unzoomedWidth  = d->view->doc()->unzoomItX( width() );
+  double  unzoomedHeight = d->view->doc()->unzoomItY( height() );
+  
+  kdDebug(36001) << "Unzoomed view size: [" << unzoomedWidth << "," 
+		 << unzoomedHeight << "]" << endl;
 
+  // xpos is the position of the cell in the current window in unzoomed
+  // document coordinates.
   double xpos;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
-    xpos = unzoomedWidth - sheet->dblColumnPos( location.x() ) + xOffset();
-  else
+  if ( sheet->layoutDirection()==KSpreadSheet::LeftToRight )
     xpos = sheet->dblColumnPos( location.x() ) - xOffset();
+  else
+    xpos = unzoomedWidth - sheet->dblColumnPos( location.x() ) + xOffset();
   double ypos = sheet->dblRowPos( location.y() ) - yOffset();
+
+  kdDebug(36001) << "Position: [" << xpos << "," << ypos << "]" << endl;
 
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
-  //kdDebug(36001) << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
-  //kdDebug(36001) << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
+  kdDebug(36001) << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
+  kdDebug(36001) << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
-  {
+  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft ) {
+    // Right to left sheet.
+
     double minX = unzoomedWidth - 100.0; // less than that, we scroll
     double maxX = 100.0; // more than that, we scroll
 
     // kdDebug() << "rtl2: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << ", Offset: " << xOffset() << endl;
 
-    // do we need to scroll left
+    // Do we need to scroll left?
     if ( xpos > minX )
       horzScrollBar()->setValue( horzScrollBar()->maxValue() -
                                   d->view->doc()->zoomItX( xOffset() - xpos + minX ) );
 
-    //do we need to scroll right
+    // Do we need to scroll right?
     else if ( xpos < maxX )
     {
       double horzScrollBarValue = xOffset() - xpos + maxX;
@@ -639,18 +671,19 @@ void KSpreadCanvas::scrollToCell(QPoint location)
                                   d->view->doc()->zoomItX( horzScrollBarValue ) );
     }
   }
-  else
-  {
+  else {
+    // Left to right sheet.
+
     double minX = 100.0; // less than that, we scroll
     double maxX = unzoomedWidth - 100.0; // more than that, we scroll
 
-    // kdDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
+    kdDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
 
-    // do we need to scroll left
+    // Do we need to scroll left?
     if ( xpos < minX )
       horzScrollBar()->setValue( d->view->doc()->zoomItX( xOffset() + xpos - minX ) );
 
-    //do we need to scroll right
+    // Do we need to scroll right?
     else if ( xpos > maxX )
     {
       double horzScrollBarValue = xOffset() + xpos - maxX;
@@ -689,6 +722,9 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   if ( sheet == 0L )
     return;
 
+  kdDebug(36001) << "slotScrollHorz: value = " << _value << endl;
+  //kdDebug(36001) << kdBacktrace() << endl;
+
   if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
     _value = horzScrollBar()->maxValue() - _value;
 
@@ -698,9 +734,10 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   d->view->doc()->emitBeginOperation(false);
 
   if ( unzoomedValue < 0.0 ) {
+    kdDebug (36001)
+      << "KSpreadCanvas::slotScrollHorz: value out of range (unzoomedValue: " 
+      << unzoomedValue << ")" << endl;
     unzoomedValue = 0.0;
-    kdDebug (36001) << "KSpreadCanvas::slotScrollHorz: value out of range (unzoomedValue: " <<
-                       unzoomedValue << ")" << endl;
   }
 
   double xpos = sheet->dblColumnPos( QMIN( KS_colMax, d->view->activeSheet()->maxColumn()+10 ) ) - d->xOffset;
@@ -730,7 +767,11 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   sheet->setRegionPaintDirty(area);
 
   // New absolute position
+  kdDebug(36001) << "slotScrollHorz(): XOffset before setting: " 
+		 << d->xOffset << endl;
   d->xOffset = unzoomedValue;
+  kdDebug(36001) << "slotScrollHorz(): XOffset after setting: " 
+		 << d->xOffset << endl;
 
   if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
     dx = -dx;

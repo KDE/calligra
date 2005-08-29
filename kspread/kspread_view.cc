@@ -2269,6 +2269,10 @@ void KSpreadView::initialPosition()
       row = 1;
     d->canvas->gotoLocation( col, row );
 
+    // Set the initial X and Y offsets for the view.
+    d->canvas->setXOffset( doc()->map()->initialXOffset() );
+    d->canvas->setYOffset( doc()->map()->initialYOffset() );
+
     updateBorderButton();
     updateShowSheetMenu();
 

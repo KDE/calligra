@@ -137,6 +137,14 @@ public:
      * Returns the height of the rows before the current screen
      */
     double yOffset() const;
+    /**
+     * Sets the width of the columns before the current screen
+     */
+    void  setXOffset( double _xOffset );
+    /**
+     * Sets the height of the rows before the current screen
+     */
+    void  setYOffset( double _yOffset );
 
     /**
      * Return a rect indicating which cell range is currently visible onscreen

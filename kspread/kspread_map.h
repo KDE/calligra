@@ -92,8 +92,11 @@ public:
   KSpreadSheet* previousSheet( KSpreadSheet* );
 
   KSpreadSheet* initialActiveSheet()const { return m_initialActiveSheet; }
-  int initialMarkerColumn()const { return m_initialMarkerColumn; }
-  int initialMarkerRow()const { return m_initialMarkerRow; }
+  int initialMarkerColumn() const { return m_initialMarkerColumn; }
+  int initialMarkerRow()    const { return m_initialMarkerRow; }
+  double initialXOffset()   const { return m_initialXOffset; }
+  double initialYOffset()   const { return m_initialYOffset; }
+
 
   /**
    * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added
@@ -181,6 +184,8 @@ private:
   KSpreadSheet * m_initialActiveSheet;
   int m_initialMarkerColumn;
   int m_initialMarkerRow;
+  double m_initialXOffset;
+  double m_initialYOffset;
   
   // used to give every KSpreadSheet a unique default name.
   int tableId;

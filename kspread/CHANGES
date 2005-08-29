@@ -1,6 +1,9 @@
-since 1.4.0
+since 1.4.1
 ===========
 - Fix slow scrolling left/right (#110551, #101234)
+
+since 1.4.0
+===========
 - Fix potential crash when rendering obscured cells (#108659)
 - Don't automatically make cells left aligned when increasing indent.
 
