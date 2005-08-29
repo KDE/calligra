@@ -31,15 +31,20 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-
+#include <klistviewsearchline.h>
+#include <kglobalsettings.h>
+#include <kglobal.h>
+#include <kpixmap.h>
+#include <ktoolbar.h>
+#include <ktoolbarbutton.h>
 
 KWDocListViewItem::KWDocListViewItem(QListViewItem *_parent, const QString &_text)
-    :QListViewItem( _parent, _text )
+    :KListViewItem( _parent, _text )
 {
 }
 
 KWDocListViewItem::KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text )
-    :QListViewItem( _parent, _after, _text )
+    :KListViewItem( _parent, _after, _text )
 {
 }
 
@@ -322,7 +327,7 @@ void KWDocStructPartItem::editProperties()
 /******************************************************************/
 
 KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent )
-    : QListViewItem( _parent )
+    : KListViewItem( _parent )
 {
     doc = _doc;
     type = _type;
@@ -331,28 +336,28 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
     switch ( type ) {
         case Arrangement: {
             setText( 0, i18n( "Arrangement" ) );
-            setPixmap( 0, KWBarIcon( "tree_arrange" ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "tree_arrange", KIcon::Small ) );
         } break;
         case TextFrames: {
             setText( 0, i18n( "Text Frames/Frame Sets" ) );
-            setPixmap( 0, KWBarIcon( "frame_text" ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_text", KIcon::Small ) );
         } break;
         case FormulaFrames: {
             setText( 0, i18n( "Formula Frames" ) );
-            setPixmap( 0, KWBarIcon( "frame_formula" ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_formula", KIcon::Small ) );
         }break;
         case Tables: {
             setText( 0, i18n( "Tables" ) );
-            setPixmap( 0, KWBarIcon( "inline_table" ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "inline_table", KIcon::Small ) );
         } break;
         case Pictures:
         {
             setText( 0, i18n( "Pictures" ) );
-            setPixmap( 0, KWBarIcon( "frame_image" ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_image", KIcon::Small ) );
         } break;
         case Embedded: {
             setText( 0, i18n( "Embedded Objects" ) );
-            setPixmap( 0, KWBarIcon( "frame_query" ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_query", KIcon::Small ) );
         } break;
     }
 }
@@ -415,7 +420,7 @@ void KWDocStructRootItem::setupArrangement()
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
         {
-            item = new QListViewItem( this, frameset->getName() );
+            item = new KListViewItem( this, frameset->getName() );
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
             textdoc= tmpParag->textDocument();
             parag = static_cast<KWTextParag *>(textdoc->firstParag());
@@ -452,7 +457,7 @@ void KWDocStructRootItem::setupArrangement()
     }
 
     if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
+        ( void )new KListViewItem( this, i18n( "Empty" ) );
 
 }
 
@@ -480,7 +485,7 @@ void KWDocStructRootItem::setupTextFrames()
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
         {
-            item = new QListViewItem( this, frameset->getName() );
+            item = new KListViewItem( this, frameset->getName() );
 
             for ( int j = frameset->getNumFrames() - 1; j >= 0; j-- )
             {
@@ -504,7 +509,7 @@ void KWDocStructRootItem::setupTextFrames()
     }
 
     if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
+        ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
 
 void KWDocStructRootItem::setupFormulaFrames()
@@ -541,7 +546,7 @@ void KWDocStructRootItem::setupFormulaFrames()
     }
 
     if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
+        ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
 
 void KWDocStructRootItem::setupTables()
@@ -580,7 +585,7 @@ void KWDocStructRootItem::setupTables()
     }
 
     if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
+        ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
 
 void KWDocStructRootItem::setupPictures()
@@ -618,7 +623,7 @@ void KWDocStructRootItem::setupPictures()
     }
 
     if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
+        ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
 
 void KWDocStructRootItem::setupEmbedded()
@@ -655,7 +660,7 @@ void KWDocStructRootItem::setupEmbedded()
     }
 
     if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
+        ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
 
 /******************************************************************/
@@ -663,36 +668,41 @@ void KWDocStructRootItem::setupEmbedded()
 /******************************************************************/
 
 KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
-    : QListView( _parent )
+    : KListView( _parent )
 {
     doc = _doc;
     gui = __parent;
 
-    arrangement=0L;
-    tables=0L;
-    pictures=0L;
-    textfrms=0L;
-    embedded=0L;
-    formulafrms=0L;
+    embedded = new KWDocStructRootItem( this, doc, Embedded, gui );
+    formulafrms = new KWDocStructRootItem( this, doc, FormulaFrames, gui );
+    tables = new KWDocStructRootItem( this, doc, Tables, gui );
+    pictures = new KWDocStructRootItem( this, doc, Pictures, gui );
+    textfrms = new KWDocStructRootItem( this, doc, TextFrames, gui );
+    arrangement = new KWDocStructRootItem( this, doc, Arrangement, gui );
 
     addColumn( i18n( "Document Structure" ) );
-    //addColumn( i18n( "Additional Info" ) );
-    //setColumnWidthMode( 0, Manual );
-    //setColumnWidthMode( 1, Manual );
-	setResizeMode(QListView::LastColumn);
+    setFullWidth( true );
+}
+
+KWDocStructTree::~KWDocStructTree()
+{
+    delete embedded;
+    delete formulafrms;
+    delete tables;
+    delete pictures;
+    delete textfrms;
+    delete arrangement;
 }
 
 void KWDocStructTree::setup()
 {
     setRootIsDecorated( true );
     setSorting( -1 );
-    //test if theses frames exist.
     refreshTree((int)TextFrames);
     refreshTree((int)FormulaFrames);
     refreshTree((int)Tables);
     refreshTree((int)Pictures);
     refreshTree((int)Embedded);
-    arrangement = new KWDocStructRootItem( this, doc, Arrangement, gui );
 }
 
 void KWDocStructTree::refreshTree(int _type)
@@ -702,73 +712,27 @@ void KWDocStructTree::refreshTree(int _type)
     if(((int)TextFrames) & _type)
     {
         if(testExistTypeOfFrame(TextFrames))
-        {
-            if(!textfrms)
-                textfrms = new KWDocStructRootItem( this, doc, TextFrames, gui );
             textfrms->setupTextFrames();
-        }
-        else
-        {
-            delete textfrms;
-            textfrms=0L;
-        }
-
     }
     if(((int)FormulaFrames) & _type)
     {
         if(testExistTypeOfFrame(FormulaFrames))
-        {
-            if(!formulafrms)
-                formulafrms = new KWDocStructRootItem( this, doc, FormulaFrames, gui );
             formulafrms->setupFormulaFrames();
-        }
-        else
-        {
-            delete formulafrms;
-            formulafrms=0L;
-        }
     }
     if(((int)Tables) & _type)
     {
         if(testExistTypeOfFrame(Tables))
-        {
-            if(!tables)
-                tables = new KWDocStructRootItem( this, doc, Tables, gui );
             tables->setupTables();
-        }
-        else
-        {
-            delete tables;
-            tables=0L;
-        }
     }
     if(((int)Pictures) & _type)
     {
         if(testExistTypeOfFrame(Pictures))
-        {
-            if(!pictures)
-                pictures = new KWDocStructRootItem( this, doc,Pictures, gui );
             pictures->setupPictures();
-        }
-        else
-        {
-            delete pictures;
-            pictures=0L;
-        }
     }
     if(((int)Embedded) & _type)
     {
         if(testExistTypeOfFrame(Embedded))
-        {
-            if(!embedded)
-                embedded = new KWDocStructRootItem( this, doc, Embedded, gui );
             embedded->setupEmbedded();
-        }
-        else
-        {
-            delete embedded;
-            embedded=0L;
-        }
     }
 }
 
@@ -876,20 +840,23 @@ KWDocStruct::KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
     doc = _doc;
     parent = __parent;
 
-    layout = new QGridLayout( this, 1, 1, 0, 0 );
+    QVBoxLayout* vBox = new QVBoxLayout( this );
 
+    KToolBar* searchBar = new KToolBar( this );
+    searchBar->setFlat( true );
+    searchBar->setMovingEnabled( false );
+
+    KToolBarButton* eraseButton = new KToolBarButton( "locationbar_erase", 0, searchBar );
     tree = new KWDocStructTree( this, doc, __parent );
-    tree->resize( tree->sizeHint() );
-    layout->addWidget( tree, 0, 0 );
-    layout->addColSpacing( 0, 0 );
-    layout->addRowSpacing( 0, tree->width() );
-    layout->setColStretch( 0, 1 );
-    layout->setRowStretch( 0, 1 );
+    tree->setAlternateBackground( KGlobalSettings::alternateBackgroundColor() );
+    KListViewSearchLine* searchLine = new KListViewSearchLine( searchBar, tree );
+    searchBar->setStretchableWidget( searchLine );
+    connect( eraseButton, SIGNAL( clicked() ), searchLine, SLOT( clear() ) );
+
+    vBox->addWidget( searchBar );
+    vBox->addWidget( tree );
     tree->setup();
-
-    layout->activate();
 }
-
 
 void KWDocStruct::selectFrameSet()
 {

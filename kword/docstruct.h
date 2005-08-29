@@ -20,7 +20,7 @@
 #ifndef docstruct_h
 #define docstruct_h
 
-#include <qlistview.h>
+#include <klistview.h>
 #include <qwidget.h>
 
 class KWDocument;
@@ -33,7 +33,7 @@ class KWFrame;
 class KWFrameSet;
 class KWTextParag;
 
-class KWDocListViewItem : public QObject,public QListViewItem
+class KWDocListViewItem : public QObject,public KListViewItem
 {
 public:
     KWDocListViewItem(QListViewItem *_parent, const QString &_text);
@@ -192,7 +192,7 @@ protected:
 /* Class: KWDocStructRootItem                                     */
 /******************************************************************/
 
-class KWDocStructRootItem : public QListViewItem
+class KWDocStructRootItem : public KListViewItem
 {
 public:
 
@@ -217,12 +217,13 @@ protected:
 /* Class: KWDocStructTree                                         */
 /******************************************************************/
 
-class KWDocStructTree : public QListView
+class KWDocStructTree : public KListView
 {
     Q_OBJECT
 
 public:
     KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
+    ~KWDocStructTree();
 
     void setup();
     void refreshTree(int _type);
