@@ -34,6 +34,7 @@
 #include "kpobjectproperties.h"
 
 #include <klocale.h>
+#include <kstdguiitem.h>
 
 PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPresenterDoc *doc )
     : QTabDialog( parent, name, true )
@@ -50,9 +51,9 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
     , m_generalProperty( 0 )
     , m_objectProperties( 0 )
 {
-    setCancelButton( i18n( "&Cancel" ) );
-    setOkButton( i18n( "&OK" ) );
-    setApplyButton( i18n( "&Apply" ) );
+    setCancelButton( KStdGuiItem::cancel().text() );
+    setOkButton( KStdGuiItem::ok().text() );
+    setApplyButton( KStdGuiItem::apply().text() );
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotDone() ) );
 
