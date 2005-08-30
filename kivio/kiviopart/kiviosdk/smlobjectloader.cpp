@@ -57,6 +57,7 @@ SmlObjectLoader::SmlObjectLoader()
   m_shapeTypeMap.insert("OpenPath", kstOpenPath);
   m_shapeTypeMap.insert("ClosedPath", kstClosedPath);
   m_shapeTypeMap.insert("TextBox", kstTextBox);
+  m_shapeTypeMap.insert("Group", kstGroup);
 }
 
 SmlObjectLoader::~SmlObjectLoader()
@@ -104,6 +105,8 @@ ShapeCollection* SmlObjectLoader::loadShapeCollection(const QString& path)
     title = i18n("Stencils", origTitle.utf8());
   }
 
+  file.close();
+
   // Create the collection
   ShapeCollection* collection = new ShapeCollection;
   collection->setId(id);
@@ -117,7 +120,7 @@ ShapeCollection* SmlObjectLoader::loadShapeCollection(const QString& path)
   QString fileName;
 
   for(QStringList::iterator it = fileList.begin(); it != itEnd; ++it) {
-    fileName = *it;
+    fileName = path + "/" + (*it);
 
     if(fileName.contains(".sml", false)) {
       file.setName(fileName);
@@ -125,6 +128,7 @@ ShapeCollection* SmlObjectLoader::loadShapeCollection(const QString& path)
         doc.setContent(&file);
         collection->addShape(loadShape(doc.documentElement()));
       }
+      file.close();
     } else if(fileName.contains(".shape", false)) {
     }
   }
@@ -147,7 +151,35 @@ Object* SmlObjectLoader::loadShape(const QDomElement& shapeElement)
 
     if(nodeName == "KivioSMLStencilSpawnerInfo")
     {
-//       m_pInfo->loadXML( (const QDomElement)node.toElement() );
+      QDomNode infoNode = e.firstChild();
+      QDomElement nodeElement;
+      QString title, origTitle;
+
+      while(!infoNode.isNull())
+      {
+        nodeName = infoNode.nodeName();
+
+        nodeElement = infoNode.toElement();
+
+        if((nodeName == "Title") && nodeElement.hasAttribute("lang"))
+        {
+          if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
+            title = nodeElement.attribute("data");
+          }
+        }
+        else if((nodeName == "Title") && !nodeElement.hasAttribute("lang"))
+        {
+          origTitle = nodeElement.attribute("data");
+        }
+
+        infoNode = infoNode.nextSibling();
+      }
+
+      if(title.isEmpty()) {
+        title = i18n( "Stencils", origTitle.utf8());
+      }
+
+      object->setName(title);
     }
     else if(nodeName == "KivioShape")
     {
@@ -192,7 +224,7 @@ Object* SmlObjectLoader::loadObject(const QDomElement& shapeElement)
   ShapeType t;
   QString typeString = XmlReadString(shapeElement, "type", "None");
   QMap<QString, ShapeType>::iterator it = m_shapeTypeMap.find(typeString);
-//   kdDebug() << "Loading shape type: " << typeString << endl;
+//    kdDebug() << "Loading shape type: " << typeString << endl;
 
   if(it == m_shapeTypeMap.end()) {
     return 0;
@@ -540,7 +572,7 @@ Object* SmlObjectLoader::loadLineArrayObject(const QDomElement& shapeElement)
 
 Object* SmlObjectLoader::loadGroupObject(const QDomElement& shapeElement)
 {
- // Create the new shape to load into
+  // Create the new shape to load into
   GroupObject* object = new GroupObject;
 
   // Load the name
@@ -558,6 +590,8 @@ Object* SmlObjectLoader::loadGroupObject(const QDomElement& shapeElement)
 
     node = node.nextSibling();
   }
+
+  return object;
 }
 
 Pen SmlObjectLoader::loadPen(const QDomElement& element)

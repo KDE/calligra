@@ -41,6 +41,7 @@ class ShapeCollection
     QString name() const { return m_name; }
 
     void addShape(Object* shape);
+    QValueList<Object*> shapeList() const { return m_shapeList; }
 
   private:
     QString m_id;

@@ -36,7 +36,7 @@ class KivioIconView : public QIconView
     KivioIconView(bool _readWrite, QWidget *parent = 0, const char *name = 0);
     virtual ~KivioIconView();
 
-    void setShapeCollection(Kivio::ShapeCollection* collection) { m_shapeCollection = collection; }
+    void setShapeCollection(Kivio::ShapeCollection* collection);
     Kivio::ShapeCollection* shapeCollection() const { return m_shapeCollection; }
 
   protected:

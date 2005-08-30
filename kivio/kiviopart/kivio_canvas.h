@@ -53,6 +53,10 @@ class QTimer;
 class KoSize;
 class KoRect;
 
+namespace Kivio {
+  class Object;
+};
+
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
@@ -195,6 +199,7 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     KivioScreenPainter* unclippedSpawnerPainter;
     KivioIntraStencilData m_dragStencilData;
     KivioStencil* m_pDragStencil;
+    QValueList<Kivio::Object*> m_dragObjectList;
 
     QTimer* m_borderTimer;
     QTimer* m_guideLinesTimer;

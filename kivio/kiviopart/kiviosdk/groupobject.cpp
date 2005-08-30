@@ -134,7 +134,7 @@ void GroupObject::setPen(const Pen& newPen)
 void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 {
   painter.save();
-  painter.setWindow(zoomHandler->zoomRect(KoRect(position(), size())));
+  painter.translate(zoomHandler->zoomItX(position().x()), zoomHandler->zoomItY(position().y()));
   QValueList<Kivio::Object*>::iterator it = m_objectList.begin();
   QValueList<Kivio::Object*>::iterator itEnd = m_objectList.end();
 
@@ -147,6 +147,10 @@ void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 
 void GroupObject::addObject(Object* newObject)
 {
+  if(!newObject) {
+    return;
+  }
+
   m_objectList.append(newObject);
 }
 

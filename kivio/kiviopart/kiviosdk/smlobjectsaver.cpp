@@ -137,7 +137,7 @@ QDomElement SmlObjectSaver::saveRectangleObject(RectangleObject* object, QDomDoc
 QDomElement SmlObjectSaver::saveGroupObject(GroupObject* object, QDomDocument& doc)
 {
   QDomElement objE = doc.createElement("KivioShape");
-  XmlWriteString(objE, "type", "Object");
+  XmlWriteString(objE, "type", "Group");
   XmlWriteString(objE, "name", object->name());
 
   KoRect rect = object->boundingBox();

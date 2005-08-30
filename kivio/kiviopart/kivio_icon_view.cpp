@@ -22,6 +22,7 @@
 #include "kiviodragobject.h"
 #include "object.h"
 #include "kivioglobal.h"
+#include "shapecollection.h"
 
 #include <qcursor.h>
 #include <klocale.h>
@@ -52,7 +53,7 @@ void KivioIconViewItem::setShape(Kivio::Object* newShape)
     setText(i18n("untitled shape", "Untitled"));
   } else {
     setText(m_shape->name());
-    setPixmap(Kivio::generatePixmapFromObject(32, 32, m_shape));
+    setPixmap(Kivio::generatePixmapFromObject(48, 48, m_shape));
   }
 }
 
@@ -110,6 +111,22 @@ QDragObject *KivioIconView::dragObject()
 
 
   return dragObject;
+}
+
+void KivioIconView::setShapeCollection(Kivio::ShapeCollection* collection)
+{
+  m_shapeCollection = collection;
+
+  clear();
+
+  QValueList<Kivio::Object*> list = m_shapeCollection->shapeList();
+  QValueList<Kivio::Object*>::iterator itEnd = list.end();
+  KivioIconViewItem* item = 0;
+
+  for(QValueList<Kivio::Object*>::iterator it = list.begin(); it != itEnd; ++it) {
+    item = new KivioIconViewItem(this);
+    item->setShape(*it);
+  }
 }
 
 void KivioIconView::slotDoubleClicked( QIconViewItem *pQtItem )

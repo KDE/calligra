@@ -52,7 +52,7 @@ namespace Kivio {
     m_pCanProtect->clearBit(kpY);
     
     // This is a stencil of type connector
-    setType(kstConnector);
+//     setType(kstConnector);
   }
   
   PolyLineConnector::~PolyLineConnector()

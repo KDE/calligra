@@ -100,8 +100,6 @@ KivioPage::KivioPage( KivioMap *_map, const QString &pageName, const char *_name
   m_lstLayers.append( m_pCurLayer );
   m_lstLayers.setAutoDelete(true);
 
-  m_lstSelection.setAutoDelete(false);
-
   m_strName = pageName;
 
   setHidden(false);
@@ -540,88 +538,62 @@ void KivioPage::selectStencils( double x, double y, double w, double h )
   m_pDoc->slotSelectionChanged();*/
 }
 
-void KivioPage::selectStencil( KivioStencil *pStencil )
+void KivioPage::selectStencil(Kivio::Object* object)
 {
-  if(!pStencil) {
-    kdDebug(43000) << "KivioPage::selectStencil - AHHHH! NULL STENCIL!" << endl;
+  if(!object) {
+    kdDebug(43000) << "KivioPage::selectStencil - AHHHH! NULL object!" << endl;
     return;
   }
 
   // Don't allow reselection
-  if(m_lstSelection.findRef(pStencil) != -1) {
+  if(m_lstSelection.find(object) == m_lstSelection.end()) {
     return;
   }
 
   kdDebug(43000) <<"KivioPage::selectStencil - Selecting stencil" << endl;
-  pStencil->select();
-  m_lstSelection.append(pStencil);
+  object->setSelected(true);
+  m_lstSelection.append(object);
   m_pDoc->slotSelectionChanged();
 }
 
-bool KivioPage::unselectStencil( KivioStencil *pStencil )
+bool KivioPage::unselectStencil(Kivio::Object* object)
 {
-    pStencil->unselect();
-    m_pDoc->slotSelectionChanged();
-    return m_lstSelection.removeRef( pStencil );
+  object->setSelected(false);
+  m_pDoc->slotSelectionChanged();
+  QValueList<Kivio::Object*>::iterator it = m_lstSelection.find(object);
+  bool ok = (it != m_lstSelection.end());
+  m_lstSelection.remove(it);
+  return ok;
 }
 
 void KivioPage::selectAllStencils()
 {
-  //FIXME Port to Object code
-//   unselectAllStencils();
-//   KivioStencil* pStencil = m_pCurLayer->objectList()->first();
-// 
-//   while(pStencil) {
-//     pStencil->select();
-//     m_lstSelection.append(pStencil);
-//     pStencil = m_pCurLayer->objectList()->next();
-//   }
+  unselectAllStencils();
+  QValueList<Kivio::Object*>::iterator itEnd = m_pCurLayer->objectList()->end();
 
+  for(QValueList<Kivio::Object*>::iterator it = m_pCurLayer->objectList()->begin(); it != itEnd; ++it) {
+    (*it)->setSelected(true);
+    m_lstSelection.append(*it);
+  }
 
-    /*
-     * The following code is commented out because selections must
-     * remain in the current layer.
-    */
-/*
-    KivioLayer* pLayer = m_lstLayers.first();
-    while( pLayer )
-    {
-        if( pLayer->visible() )
-        {
-            pStencil = pLayer->objectList()->first();
-            while( pStencil )
-            {
-                pStencil->select();
-                m_lstSelection.append(pStencil);
-
-                pStencil = pLayer->objectList()->next();
-            }
-        }
-
-        pLayer = m_lstLayers.next();
-    }
-*/
-//   m_pDoc->slotSelectionChanged();
+  m_pDoc->slotSelectionChanged();
 }
 
 void KivioPage::unselectAllStencils()
 {
-  //FIXME Port to Object code
-/*  KivioStencil* pStencil = m_lstSelection.first();
+  QValueList<Kivio::Object*>::iterator itEnd = m_lstSelection.end();
 
-  while(pStencil)
-  {
-    pStencil->unselect();
-    pStencil = m_lstSelection.next();
+  for(QValueList<Kivio::Object*>::iterator it = m_lstSelection.begin(); it != itEnd; ++it) {
+    (*it)->setSelected(false);
   }
 
   m_lstSelection.clear();
-  m_pDoc->slotSelectionChanged();*/
+  m_pDoc->slotSelectionChanged();
 }
 
-bool KivioPage::isStencilSelected(KivioStencil *pStencil)
+bool KivioPage::isStencilSelected(Kivio::Object* object)
 {
-  return m_lstSelection.findRef( pStencil ) == -1;
+  return object->selected();
 }
 
 /**
@@ -674,36 +646,35 @@ KivioStencil *KivioPage::checkForStencil( KoPoint *pPoint, int *collisionType, d
 
 void KivioPage::deleteSelectedStencils()
 {
+  // Make sure none of them have deletion protection
+  QValueList<Kivio::Object*>::iterator itEnd = m_lstSelection.end();
+
+  for(QValueList<Kivio::Object*>::iterator it = m_lstSelection.begin(); it != itEnd; ++it) {
   //FIXME Port to Object code
-/*  // Make sure none of them have deletion protection
-  KivioStencil* pStencil = m_lstSelection.first();
-
-  while(pStencil) {
-    if(pStencil->protection()->at(kpDeletion)) {
+/*    if((*it)->protection()->at(kpDeletion)) {
       KMessageBox::information(NULL, i18n("One of the selected stencils has protection from deletion and cannot be deleted."),
-                                i18n("Protection From Deletion") );
+                               i18n("Protection From Deletion") );
       return;
-    }
-
-    pStencil = m_lstSelection.next();
+    }*/
   }
 
   // Iterate through all items in the selection list
   m_lstSelection.first();
-  pStencil = m_lstSelection.take();
   KMacroCommand *macro = new KMacroCommand( i18n("Remove Stencil"));
   bool createMacro = false;
+  QValueList<Kivio::Object*>::iterator it = m_lstSelection.begin();
 
-  while(pStencil) {
-    KivioRemoveStencilCommand *cmd =new KivioRemoveStencilCommand(i18n("Remove Stencil"), this,  m_pCurLayer , pStencil );
+  while(it != itEnd) {
+    KivioRemoveStencilCommand *cmd = new KivioRemoveStencilCommand(i18n("Remove Stencil"), this,  m_pCurLayer , *it);
     createMacro = true;
     macro->addCommand(cmd);
 
-    if(pStencil->type() == kstConnector) {
+  //FIXME Port to Object code
+/*    if(pStencil->type() == kstConnector) {
       static_cast<Kivio1DStencil*>(pStencil)->disconnectFromTargets();
-    }
+    }*/
 
-    pStencil = m_lstSelection.take();
+    it = m_lstSelection.remove(it);
   }
 
   if (createMacro) {
@@ -711,7 +682,7 @@ void KivioPage::deleteSelectedStencils()
     m_pDoc->addCommand( macro );
   } else {
     delete macro;
-  }*/
+  }
 }
 
 void KivioPage::groupSelectedStencils()
@@ -1031,23 +1002,20 @@ void KivioPage::cut()
 
 void KivioPage::paste(KivioView* view)
 {
-  //FIXME Port to Object code
-/*  QPtrList<KivioStencil> list;
-  list.setAutoDelete(false);
+  QValueList<Kivio::Object*> list;
   KivioDragObject kdo;
 
-  if(kdo.decode(QApplication::clipboard()->data(QClipboard::Clipboard), list, this)) {
+  if(kdo.decode(QApplication::clipboard()->data(QClipboard::Clipboard), list)) {
     unselectAllStencils();
-    KivioStencil* stencil = list.first();
+    QValueList<Kivio::Object*>::iterator itEnd = list.end();
 
-    while(stencil) {
-      addStencil(stencil);
-      selectStencil(stencil);
-      stencil = list.next();
+    for(QValueList<Kivio::Object*>::iterator it = list.begin(); it != itEnd; ++it) {
+      addStencil(*it);
+      selectStencil(*it);
     }
 
     view->canvasWidget()->startPasteMoving();
-  }*/
+  }
 }
 
 int KivioPage::generateStencilIds(int next)
@@ -1265,57 +1233,57 @@ private:
 
 void KivioPage::distributeStencils(DistributeData d)
 {
-  double x  = 0.0;
-  double y  = 0.0;
-  double x1 = 0.0;
-  double y1 = 0.0;
-
-  KivioStencil* pStencil = m_lstSelection.first();
-  if (!pStencil)
-    return;
-
-  XYSortedStencilList xSortList(true);
-  XYSortedStencilList ySortList(false);
-  QValueList<KoRect> oldRects;
-
-  while( pStencil )
-  {
-      xSortList.append(pStencil);
-      ySortList.append(pStencil);
-      oldRects.append(pStencil->rect());
-      pStencil = m_lstSelection.next();
-  }
-  xSortList.sort();
-  ySortList.sort();
-
-  switch (d.extent) {
-    case DistributeData::Page:
-      x = m_pPageLayout.ptLeft;
-      y = m_pPageLayout.ptTop;
-      x1 = m_pPageLayout.ptWidth - m_pPageLayout.ptRight;
-      y1 = m_pPageLayout.ptHeight - m_pPageLayout.ptBottom;
-      break;
-    case DistributeData::Selection:
-      pStencil = m_lstSelection.first();
-      x = pStencil->x();
-      y = pStencil->x();
-      x1 = x + pStencil->w();
-      y1 = y + pStencil->h();
-      while( pStencil )
-      {
-          x = QMIN(x,pStencil->x());
-          y = QMIN(y,pStencil->y());
-          x1 = QMAX(x1,pStencil->x() + pStencil->w());
-          y1 = QMAX(y1,pStencil->y() + pStencil->h());
-          pStencil = m_lstSelection.next();
-      }
-      break;
-    default:
-      break;
-  }
+//   double x  = 0.0;
+//   double y  = 0.0;
+//   double x1 = 0.0;
+//   double y1 = 0.0;
+// 
+//   KivioStencil* pStencil = m_lstSelection.first();
+//   if (!pStencil)
+//     return;
+// 
+//   XYSortedStencilList xSortList(true);
+//   XYSortedStencilList ySortList(false);
+//   QValueList<KoRect> oldRects;
+// 
+//   while( pStencil )
+//   {
+//       xSortList.append(pStencil);
+//       ySortList.append(pStencil);
+//       oldRects.append(pStencil->rect());
+//       pStencil = m_lstSelection.next();
+//   }
+//   xSortList.sort();
+//   ySortList.sort();
+// 
+//   switch (d.extent) {
+//     case DistributeData::Page:
+//       x = m_pPageLayout.ptLeft;
+//       y = m_pPageLayout.ptTop;
+//       x1 = m_pPageLayout.ptWidth - m_pPageLayout.ptRight;
+//       y1 = m_pPageLayout.ptHeight - m_pPageLayout.ptBottom;
+//       break;
+//     case DistributeData::Selection:
+//       pStencil = m_lstSelection.first();
+//       x = pStencil->x();
+//       y = pStencil->x();
+//       x1 = x + pStencil->w();
+//       y1 = y + pStencil->h();
+//       while( pStencil )
+//       {
+//           x = QMIN(x,pStencil->x());
+//           y = QMIN(y,pStencil->y());
+//           x1 = QMAX(x1,pStencil->x() + pStencil->w());
+//           y1 = QMAX(y1,pStencil->y() + pStencil->h());
+//           pStencil = m_lstSelection.next();
+//       }
+//       break;
+//     default:
+//       break;
+//   }
 
   /*****************************************************/
-  KivioStencil* firstx = xSortList.first();
+/*  KivioStencil* firstx = xSortList.first();
   KivioStencil* lastx = xSortList.last();
   double countx = (double)(xSortList.count()-1);
   double distx = 0.0;
@@ -1387,9 +1355,9 @@ void KivioPage::distributeStencils(DistributeData d)
       break;
     default:
       break;
-  }
+  }*/
   /*****************************************************/
-  KivioStencil* firsty = ySortList.first();
+/*  KivioStencil* firsty = ySortList.first();
   KivioStencil* lasty = ySortList.last();
   double county = (double)(ySortList.count()-1);
   double disty = 0.0;
@@ -1476,7 +1444,7 @@ void KivioPage::distributeStencils(DistributeData d)
     }
 
     m_pDoc->addCommand( macro );
-  }
+  }*/
 }
 
 
@@ -1485,26 +1453,13 @@ void KivioPage::distributeStencils(DistributeData d)
  */
 KoRect KivioPage::getRectForAllSelectedStencils()
 {
-    KoRect rTotal, r;
-
-    KivioStencil *pStencil = m_lstSelection.first();
-
-    // Get the rect of the first selected stencil
-    if( pStencil )
-    {
-        rTotal = pStencil->rect();
-
-        pStencil = m_lstSelection.next();
-    }
+    KoRect rTotal;
 
     // iterate through all the stencils uniting the rectangles
-    while( pStencil )
-    {
-        r = pStencil->rect();
+    QValueList<Kivio::Object*>::iterator itEnd = m_lstSelection.end();
 
-        rTotal = rTotal.unite( r );
-
-        pStencil = m_lstSelection.next();
+    for(QValueList<Kivio::Object*>::iterator it = m_lstSelection.begin(); it != itEnd; ++it) {
+      rTotal = rTotal.unite((*it)->boundingBox());
     }
 
     return rTotal;
@@ -1636,34 +1591,33 @@ void KivioPage::setHidePage(bool _hide)
 
 void KivioPage::setPaintSelected(bool paint)
 {
-  KivioStencil *pStencil = m_lstSelection.first();
+  //FIXME Port to object code
+/*  KivioStencil *pStencil = m_lstSelection.first();
 
   while( pStencil )
   {
     pStencil->setHidden(!paint);
     pStencil = m_lstSelection.next();
-  }
+  }*/
 }
 
-bool KivioPage::checkForStencilTypeInSelection(KivioStencilType type)
+bool KivioPage::checkForStencilTypeInSelection(Kivio::ShapeType type)
 {
-  KivioStencil *pStencil = m_lstSelection.first();
+  QValueList<Kivio::Object*>::iterator itEnd = m_lstSelection.end();
 
-  while( pStencil )
-  {
-    if(pStencil->type() == type) {
+  for(QValueList<Kivio::Object*>::iterator it = m_lstSelection.begin(); it != itEnd; ++it) {
+    if((*it)->type() == type) {
       return true;
     }
-    
-    pStencil = m_lstSelection.next();
   }
-  
+
   return false;
 }
 
 bool KivioPage::checkForTextBoxesInSelection()
 {
-  KivioStencil *pStencil = m_lstSelection.first();
+  //FIXME Port to object code
+/*  KivioStencil *pStencil = m_lstSelection.first();
 
   while(pStencil) {
     if(pStencil->hasTextBox()) {
@@ -1672,7 +1626,7 @@ bool KivioPage::checkForTextBoxesInSelection()
 
     pStencil = m_lstSelection.next();
   }
-
+*/
   return false;
 }
 

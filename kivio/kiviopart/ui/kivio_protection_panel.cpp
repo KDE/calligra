@@ -31,7 +31,7 @@ KivioProtectionPanel::~KivioProtectionPanel()
 
 void KivioProtectionPanel::togWidth(bool on)
 {
-    KivioStencil *pStencil;
+/*    KivioStencil *pStencil;
 
     pStencil = m_pView->activePage()->selectedStencils()->first();
     KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
@@ -56,46 +56,46 @@ void KivioProtectionPanel::togWidth(bool on)
         m_pView->doc()->addCommand( macro );
     }
     else
-        delete macro;
+        delete macro;*/
 }
 
 void KivioProtectionPanel::togHeight(bool on)
 {
-    KivioStencil *pStencil;
-
-    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
-    bool createMacro=false;
-
-    pStencil = m_pView->activePage()->selectedStencils()->first();
-    while( pStencil )
-    {
-        if( pStencil->canProtect()->at(kpHeight)==true )
-        {
-            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_HEIGHT);
-            macro->addCommand( cmd );
-            createMacro=true;
-
-        }
-        else
-        {
-            kdDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
-        }
-
-        pStencil = m_pView->activePage()->selectedStencils()->next();
-    }
-    if (createMacro )
-    {
-        macro->execute();
-        m_pView->doc()->addCommand( macro );
-    }
-    else
-        delete macro;
+//     KivioStencil *pStencil;
+// 
+//     KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+//     bool createMacro=false;
+// 
+//     pStencil = m_pView->activePage()->selectedStencils()->first();
+//     while( pStencil )
+//     {
+//         if( pStencil->canProtect()->at(kpHeight)==true )
+//         {
+//             KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_HEIGHT);
+//             macro->addCommand( cmd );
+//             createMacro=true;
+// 
+//         }
+//         else
+//         {
+//             kdDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
+//         }
+// 
+//         pStencil = m_pView->activePage()->selectedStencils()->next();
+//     }
+//     if (createMacro )
+//     {
+//         macro->execute();
+//         m_pView->doc()->addCommand( macro );
+//     }
+//     else
+//         delete macro;
 
 }
 
 void KivioProtectionPanel::togAspect(bool on)
 {
-    KivioStencil *pStencil;
+/*    KivioStencil *pStencil;
     KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
     bool createMacro=false;
 
@@ -123,12 +123,12 @@ void KivioProtectionPanel::togAspect(bool on)
     }
     else
         delete macro;
-
+*/
 }
 
 void KivioProtectionPanel::togDelete(bool on)
 {
-    KivioStencil *pStencil;
+/*    KivioStencil *pStencil;
     KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
     bool createMacro=false;
 
@@ -156,12 +156,12 @@ void KivioProtectionPanel::togDelete(bool on)
     }
     else
         delete macro;
-
+*/
 }
 
 void KivioProtectionPanel::togX(bool on)
 {
-    KivioStencil *pStencil;
+/*    KivioStencil *pStencil;
     KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
     bool createMacro=false;
 
@@ -189,13 +189,13 @@ void KivioProtectionPanel::togX(bool on)
     }
     else
         delete macro;
-
+*/
 }
 
 
 void KivioProtectionPanel::togY(bool on)
 {
-    KivioStencil *pStencil;
+/*    KivioStencil *pStencil;
     KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
     bool createMacro=false;
 
@@ -223,12 +223,12 @@ void KivioProtectionPanel::togY(bool on)
     }
     else
         delete macro;
-
+*/
 }
 
 void KivioProtectionPanel::updateCheckBoxes()
 {
-   KivioStencil *pStencil;
+/*   KivioStencil *pStencil;
    QBitArray bits( NUM_PROTECTIONS );
    int i;
 
@@ -352,5 +352,5 @@ void KivioProtectionPanel::updateCheckBoxes()
    QObject::connect( m_checkDeletion, SIGNAL(toggled(bool)), this, SLOT(togDelete(bool)) );
    QObject::connect( m_checkXPosition, SIGNAL(toggled(bool)), this, SLOT(togX(bool)) );
    QObject::connect( m_checkYPosition, SIGNAL(toggled(bool)), this, SLOT(togY(bool)) );
-
+*/
 }

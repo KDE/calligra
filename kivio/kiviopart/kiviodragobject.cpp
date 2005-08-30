@@ -119,10 +119,10 @@ bool KivioDragObject::decode(QMimeSource* e, QValueList<Kivio::Object*>& objectL
         }
       }
 
-      node.nextSibling();
+      node = node.nextSibling();
     }
 
-    ok = objectList.isEmpty();
+    ok = !objectList.isEmpty();
   } else if(e->provides("text/plain")) {
     // FIXME Port this to object code
 /*    QString str;

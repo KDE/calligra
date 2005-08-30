@@ -105,11 +105,16 @@ class Object{
     /// Reimplement this function to paint Object to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler) = 0;
 
+    virtual void setSelected(bool isSelected) { m_selected = isSelected; }
+    virtual bool selected() const { return m_selected; }
+
   private:
     QString m_name;
 
     QBrush m_brush;
     Pen m_pen;
+
+    bool m_selected;
 };
 
 }

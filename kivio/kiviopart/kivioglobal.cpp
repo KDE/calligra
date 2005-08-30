@@ -1297,13 +1297,15 @@ QPixmap Kivio::generatePixmapFromObject(int width, int height, Kivio::Object* ob
   KoZoomHandler zoomHandler;
   QRect rect = zoomHandler.zoomRect(object->boundingBox());
 
-  double zw = (double)rect.width() / (double)width;
-  double hw = (double)rect.height() / (double)height;
-  zoomHandler.setZoomAndResolution(qRound(kMin(zw, hw) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
+  double zw = (double)(width - 2) / (double)rect.width();
+  double zh = (double)(height - 2) / (double)rect.height();
+  zoomHandler.setZoomAndResolution(qRound(kMin(zw, zh) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
+  rect = zoomHandler.zoomRect(object->boundingBox());
 
   QPixmap pix(width, height);
   pix.fill(Qt::white);
   QPainter painter(&pix);
+  painter.translate(((width - rect.width()) / 2), ((height - rect.height()) / 2));
   object->paint(painter, &zoomHandler);
   painter.end();
 

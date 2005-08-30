@@ -44,9 +44,11 @@ class DCOPObject;
 #include <qrect.h>
 #include <qpalette.h>
 #include <qwidget.h>
+#include <qvaluelist.h>
 #include <koPoint.h>
 
 #include "kivio_stencil.h"
+#include <object.h>
 #include <koffice_export.h>
 class KivioPainter;
 class KPrinter;
@@ -56,10 +58,6 @@ class KoRect;
 class KoXmlWriter;
 class KoStore;
 class KoGenStyles;
-
-namespace Kivio {
-  class Object;
-}
 
 #define BORDER_SPACE 1
 
@@ -120,14 +118,14 @@ class KIVIO_EXPORT KivioPage : public QObject
     void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
     void printSelected( QPainter& painter, int xdpi = 0, int ydpi = 0 );
 
-    bool isStencilSelected( KivioStencil * );
+    bool isStencilSelected(Kivio::Object* object);
     void selectAllStencils();
     void unselectAllStencils();
-    bool unselectStencil( KivioStencil * );
-    void selectStencil( KivioStencil * );
+    bool unselectStencil(Kivio::Object* object);
+    void selectStencil(Kivio::Object* object);
     void selectStencils( double, double, double, double );
-    QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
-    bool checkForStencilTypeInSelection(KivioStencilType type);
+    QValueList<Kivio::Object*>* selectedStencils() { return &m_lstSelection; }
+    bool checkForStencilTypeInSelection(Kivio::ShapeType type);
     bool checkForTextBoxesInSelection();
 
     KoRect getRectForAllSelectedStencils();
@@ -203,7 +201,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     QPtrList<KivioLayer> m_lstLayers;
     KivioLayer *m_pCurLayer;
 
-    QPtrList<KivioStencil> m_lstSelection;
+    QValueList<Kivio::Object*> m_lstSelection;
 
     int m_id;
     bool m_bPageHide;

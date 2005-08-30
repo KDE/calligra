@@ -126,6 +126,7 @@
 #include "kivio_config.h"
 #include "kivioaddstencilsetpanel.h"
 #include "kiviostencilsetinstaller.h"
+#include "shapecollection.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -269,7 +270,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   connect( m_pDoc, SIGNAL( sig_selectionChanged() ), SLOT( updateToolBars() ) );
   connect( m_pDoc, SIGNAL( sig_addPage(KivioPage*) ), SLOT( slotAddPage(KivioPage*) ) );
-  connect( m_pDoc, SIGNAL( sig_addSpawnerSet(KivioStencilSpawnerSet*) ), SLOT(addSpawnerToStackBar(KivioStencilSpawnerSet*)) );
+  connect( m_pDoc, SIGNAL( newShapeCollectionOpened(Kivio::ShapeCollection*) ), SLOT(addShapeCollectionToStackBar(Kivio::ShapeCollection*)) );
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*) ), SLOT(slotUpdateView(KivioPage*)) );
   connect( m_pDoc, SIGNAL( sig_pageNameChanged(KivioPage*,const QString&)), SLOT(slotPageRenamed(KivioPage*,const QString&)) );
 
@@ -282,12 +283,12 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   // Load any already-loaded stencils into the stencil dock
   if( m_pDoc->isReadWrite() ) // only if not embedded in Konqueror
   {
-    KivioStencilSpawnerSet *pSet;
-    pSet = m_pDoc->spawnerSets()->first();
-    while( pSet )
+    QValueList<Kivio::ShapeCollection*> list = m_pDoc->shapeCollectionList();
+    QValueList<Kivio::ShapeCollection*>::iterator itEnd = list.end();
+
+    for(QValueList<Kivio::ShapeCollection*>::iterator it = list.begin(); it != itEnd; ++it)
     {
-      addSpawnerToStackBar( pSet );
-      pSet = m_pDoc->spawnerSets()->next();
+      addShapeCollectionToStackBar(*it);
     }
   }
 
@@ -935,43 +936,36 @@ void KivioView::addStencilSet( const QString& name )
   m_pDoc->openShapeCollection(name);
 }
 
-void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
+void KivioView::addShapeCollectionToStackBar(Kivio::ShapeCollection* collection)
 {
-  //FIXME Port to Object code
-/*  if(!pSpawner) {
-    kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
+  if(!collection) {
+    kdDebug(43000) << "KivioView::addShapeCollectionToStackBar() - collection == NULL" << endl;
     return;
   }
 
-  KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite());
-  QObject::connect(pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this,
-                   SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
-
-  pView->setStencilSpawnerSet(pSpawner);
-  m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());*/
+  KivioIconView *iconView = new KivioIconView(m_pDoc->isReadWrite());
+  iconView->setShapeCollection(collection);
+  m_pStencilBarDockManager->insertStencilSet(iconView, collection->name());
 }
 
 void KivioView::setFGColor()
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-  if (!pStencil)
-    return;
-  KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
+/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
   bool createMacro = false;
-  QColor col( m_setFGColor->color());
+  QColor col = m_setFGColor->color();
 
-  while( pStencil )
+  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
+
+  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
   {
-    if ( col != pStencil->fgColor() )
+    if ( col != (*it)->fgColor() )
     {
-      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, (*it), (*it)->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
 
-      pStencil->setFGColor( col );
+      (*it)->setFGColor( col );
       macro->addCommand( cmd );
       createMacro = true;
     }
-
-    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
   if ( createMacro )
@@ -979,30 +973,27 @@ void KivioView::setFGColor()
   else
     delete macro;
 
-  m_pDoc->updateView(m_pActivePage);
+  m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::setBGColor()
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-  if (!pStencil)
-    return;
-  KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
+/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
   bool createMacro = false;
-  QColor col( m_setBGColor->color());
+  QColor col = m_setBGColor->color();
 
-  while( pStencil )
+  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
+
+  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
   {
-    if ( col != pStencil->bgColor() )
+    if ( col != (*it)->bgColor() )
     {
-      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, pStencil, pStencil->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, (*it), (*it)->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
 
-      pStencil->setBGColor( col );
+      (*it)->setBGColor( col );
       macro->addCommand( cmd );
       createMacro = true;
     }
-
-    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
   if ( createMacro )
@@ -1010,12 +1001,12 @@ void KivioView::setBGColor()
   else
     delete macro;
 
-  m_pDoc->updateView(m_pActivePage);
+  m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::setTextColor()
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if (!pStencil)
     return;
@@ -1042,32 +1033,27 @@ void KivioView::setTextColor()
   else
     delete macro;
 
-  m_pDoc->updateView(m_pActivePage);
+  m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::setLineWidth(double width)
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-
-  if (!pStencil)
-    return;
-
-  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
+/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
   bool createMacro = false ;
 
-  while( pStencil )
+  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
+
+  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
   {
-    if ( width != pStencil->lineWidth() )
+    if ( width != (*it)->lineWidth() )
     {
       KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"),
-        m_pActivePage, pStencil, pStencil->lineWidth(), width );
+          m_pActivePage, (*it), (*it)->lineWidth(), width );
 
-      pStencil->setLineWidth( width );
+      (*it)->setLineWidth( width );
       macro->addCommand( cmd );
       createMacro = true;
     }
-
-    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
   if ( createMacro ) {
@@ -1076,38 +1062,34 @@ void KivioView::setLineWidth(double width)
     delete macro;
   }
 
-  m_pDoc->updateView(m_pActivePage);
+  m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::setLineStyle(int style)
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-
-  if(!pStencil)
-    return;
-
-  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Style") );
+/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Style") );
   bool createMacro = false ;
 
-  while(pStencil)
+  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
+
+  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->.begin(); it != itEnd; ++it)
   {
-    if(style != pStencil->linePattern())
+    if(style != (*it)->linePattern())
     {
-        KivioChangeLineStyleCommand * cmd = new KivioChangeLineStyleCommand( i18n("Change Line Style"),
-        m_pActivePage, pStencil, pStencil->linePattern(), style );
-        pStencil->setLinePattern(style);
-        macro->addCommand( cmd );
-        createMacro = true;
+      KivioChangeLineStyleCommand * cmd = new KivioChangeLineStyleCommand( i18n("Change Line Style"),
+          m_pActivePage, (*it), (*it)->linePattern(), style );
+      (*it)->setLinePattern(style);
+      macro->addCommand( cmd );
+      createMacro = true;
     }
 
-    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
-    if ( createMacro ) {
+  if ( createMacro ) {
     m_pDoc->addCommand( macro );
   } else {
     delete macro;
-  }
+  }*/
 }
 
 void KivioView::groupStencils()
@@ -1157,7 +1139,7 @@ int KivioView::lineStyle() const
 
 void KivioView::setFontFamily( const QString &str )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1182,12 +1164,12 @@ void KivioView::setFontFamily( const QString &str )
     }
     if ( macro )
         m_pDoc->addCommand( macro  );
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::setFontSize(int size )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1212,12 +1194,12 @@ void KivioView::setFontSize(int size )
     }
     if ( macro )
         m_pDoc->addCommand( macro   );
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::toggleFontBold(bool b)
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1241,12 +1223,12 @@ void KivioView::toggleFontBold(bool b)
     }
     if ( macro )
         m_pDoc->addCommand( macro );
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::toggleFontItalics(bool b)
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
         return;
 
@@ -1271,12 +1253,12 @@ void KivioView::toggleFontItalics(bool b)
     }
     if ( macro )
         m_pDoc->addCommand( macro );
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::toggleFontUnderline( bool b)
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand * macro = 0L;
@@ -1300,14 +1282,14 @@ void KivioView::toggleFontUnderline( bool b)
     }
     if ( macro )
         m_pDoc->addCommand( macro );
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 
 
 void KivioView::updateToolBars()
 {
-    KivioStencil *pStencil;
+/*    KivioStencil *pStencil;
     pStencil = m_pActivePage->selectedStencils()->first();
     m_pStencilGeometryPanel->setEmitSignals(false);
     m_setArrowHeads->setEmitSignals(false);
@@ -1414,12 +1396,12 @@ void KivioView::updateToolBars()
       m_stencilToFront->setEnabled(false);
       m_setArrowHeads->setEnabled (false);
       m_arrowHeadsMenuAction->setEnabled (false);
-    }
+    }*/
 }
 
 void KivioView::slotSetStartArrow( int i )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Begin Arrow"));
@@ -1442,12 +1424,12 @@ void KivioView::slotSetStartArrow( int i )
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::slotSetEndArrow( int i )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change End Arrow"));
@@ -1471,12 +1453,12 @@ void KivioView::slotSetEndArrow( int i )
     else
         delete macro;
 
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::slotSetStartArrowSize()
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1500,12 +1482,12 @@ void KivioView::slotSetStartArrowSize()
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::slotSetEndArrowSize()
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1528,12 +1510,12 @@ void KivioView::slotSetEndArrowSize()
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::setHParaAlign( int i )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Horizontal Alignment"));
@@ -1555,13 +1537,13 @@ void KivioView::setHParaAlign( int i )
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 
 void KivioView::setVParaAlign( int i )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Vertical Alignment"));
@@ -1582,7 +1564,7 @@ void KivioView::setVParaAlign( int i )
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    m_pDoc->updateView(m_pActivePage);*/
 }
 
 void KivioView::bringStencilToFront()
@@ -1617,7 +1599,7 @@ void KivioView::pasteStencil()
 
 void KivioView::slotChangeStencilSize(double newW, double newH)
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if ( pStencil )
   {
@@ -1629,12 +1611,12 @@ void KivioView::slotChangeStencilSize(double newW, double newH)
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand( cmd );
     }
-  }
+  }*/
 }
 
 void KivioView::slotChangeStencilPosition(double newW, double newH)
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if ( pStencil )
   {
@@ -1646,19 +1628,19 @@ void KivioView::slotChangeStencilPosition(double newW, double newH)
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand( cmd );
     }
-  }
+  }*/
 }
 
 void KivioView::slotChangeStencilRotation(int d)
 {
-  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if(pStencil && pStencil->rotation() != d) {
       pStencil->setRotation(d);
       KivioChangeRotationCommand * cmd = new KivioChangeRotationCommand( i18n("Change Stencil Rotation"), m_pCanvas->activePage(), pStencil, pStencil->rotation() , d);
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand( cmd );
-  }
+  }*/
 }
 
 /**
@@ -2031,7 +2013,7 @@ void KivioView::showVAlign( int align )
 
 void KivioView::textFormat()
 {
-  KivioTextFormatDlg dlg(this);
+/*  KivioTextFormatDlg dlg(this);
   KivioStencil* stencil = activePage()->selectedStencils()->getLast();
 
   if(stencil) {
@@ -2058,12 +2040,12 @@ void KivioView::textFormat()
     }
 
     updateToolBars();
-  }
+  }*/
 }
 
 void KivioView::stencilFormat()
 {
-  KivioStencilFormatDlg dlg(this);
+/*  KivioStencilFormatDlg dlg(this);
   KivioStencil* stencil = activePage()->selectedStencils()->getLast();
   KivioLineStyle ls;
 
@@ -2094,12 +2076,12 @@ void KivioView::stencilFormat()
     }
 
     updateToolBars();
-  }
+  }*/
 }
 
 void KivioView::arrowHeadFormat()
 {
-  KivioArrowHeadFormatDlg dlg(this);
+/*  KivioArrowHeadFormatDlg dlg(this);
   dlg.setUnit(m_pDoc->units());
   dlg.setStartAHType(0);
   dlg.setEndAHType(0);
@@ -2139,7 +2121,7 @@ void KivioView::arrowHeadFormat()
     }
 
     updateToolBars();
-  }
+  }*/
 }
 
 Kivio::PluginManager* KivioView::pluginManager()

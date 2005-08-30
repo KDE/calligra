@@ -37,6 +37,7 @@ namespace Kivio {
   class ToolController;
   class PluginManager;
   class AddStencilSetPanel;
+  class ShapeCollection;
 }
 
 class KivioBirdEyePanel;
@@ -256,8 +257,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void viewZoom(const QString& s);
 
-    void addSpawnerToStackBar( KivioStencilSpawnerSet * );
     void addStencilSet( const QString& );
+    void addShapeCollectionToStackBar(Kivio::ShapeCollection* collection);
 
     void setMousePos( int mx, int my );
     void setRulerUnit(KoUnit::Unit);
