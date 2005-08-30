@@ -364,8 +364,9 @@ MPageCollection* MReportEngine::renderReport()
                         footer->setReportDate( currDate );
                         footer->setCalcFieldData( &grandTotal );
                         if ( ( currY + footer->getHeight() ) > currHeight )
+                        {
                             newPage( pages );
-
+                        }
                         footer->draw( &p, leftMargin, currY );
                         currY += footer->getHeight();
                     }
@@ -379,8 +380,9 @@ MPageCollection* MReportEngine::renderReport()
                 header->setPageNumber( currPage );
                 header->setReportDate( currDate );
                 if ( ( currY + header->getHeight() ) > currHeight )
+                {
                     newPage( pages );
-
+                }
                 header->draw( &p, leftMargin, currY );
                 currY += header->getHeight();
             }
@@ -428,7 +430,7 @@ MPageCollection* MReportEngine::renderReport()
         }
     }
 
-    // Draw detail footers that was not drawn before
+    // Draw detail footers that were not drawn before
     //   for details from curDetailLevel up to prevDetailLevel
     for ( int i = prevDetailLevel; i >= 0; i-- )
     {
@@ -439,7 +441,9 @@ MPageCollection* MReportEngine::renderReport()
             footer->setReportDate( currDate );
             footer->setCalcFieldData( &grandTotal );
             if ( ( currY + footer->getHeight() ) > currHeight )
+            {
                 newPage( pages );
+            }
 
             footer->draw( &p, leftMargin, currY );
             currY += footer->getHeight();
@@ -669,6 +673,7 @@ void MReportEngine::recalcAttribute( const QString& name, QDomNamedNodeMap attri
 /** Walks the document tree, setting the report layout */
 void MReportEngine::initTemplate()
 {
+    heightOfDetails = 0;
 
 #ifdef Q_WS_WIN
     recalcDimensions();
