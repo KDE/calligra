@@ -386,7 +386,7 @@ QString KPObject::getStyle( KPOasisSaveContext &sc ) const
 void KPObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyles */ ) const
 {
     kdDebug(33001) << "KPObject::fillStyle" << endl;
-    saveOasisObjectProtectStyle( styleObjectAuto ); 
+    saveOasisObjectProtectStyle( styleObjectAuto );
     saveOasisShadowElement( styleObjectAuto );
 }
 
@@ -892,7 +892,7 @@ bool KPObject::saveOasisObject( KPOasisSaveContext &sc ) const
         sc.xmlWriter.addAttribute( "draw:name", objectName );
 
     saveOasisObjectAttributes( sc );
-    
+
     sc.xmlWriter.endElement();
     return true;
 }
@@ -1307,8 +1307,10 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
     //header footer can't move
     if(!headerFooter)
         _modType = MT_MOVE;
-
-    return Qt::sizeAllCursor;
+    if ( protect )
+        return Qt::ForbiddenCursor;
+    else
+        return Qt::sizeAllCursor;
 }
 
 void KPObject::getShadowCoords( double& _x, double& _y ) const
@@ -1682,7 +1684,7 @@ bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSav
     int maxX=0;
     int maxY=0;
     KoPointArray::ConstIterator it( points.begin() );
-    for ( ; it != points.end(); ++it ) 
+    for ( ; it != points.end(); ++it )
     {
         int tmpX = int( ( *it ).x() * 10000 );
         int tmpY = int( ( *it ).y() * 10000 );
@@ -1698,7 +1700,7 @@ bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSav
     return true;
 }
 
-bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element, 
+bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
                                           KoOasisContext & context, KPRLoadingInfo *info )
 {
     QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
@@ -1734,7 +1736,7 @@ bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElemen
             bottom = QMAX( (*it).section( ',', 1, 1 ).toInt(), bottom );
         }
     }
-    
+
     if ( right - left != 0 && bottom - top != 0 )
     {
         double tmp_x, tmp_y;

@@ -1584,7 +1584,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 else if ( m_view->kPresenterDoc()->indexOfHelpPoint(KoPoint( m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()),
                                                                              m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy())))!=-1)
                 {
-                    setCursor ( Qt::SizeAllCursor );
+                    kdDebug()<<"canMoveOneObject() :"<<canMoveOneObject()<<endl;
+                    if ( canMoveOneObject() )
+                        setCursor ( Qt::SizeAllCursor );
+                    else
+                        setCursor( Qt::ForbiddenCursor );
                     cursorAlreadySet = true;
                 }
             }
