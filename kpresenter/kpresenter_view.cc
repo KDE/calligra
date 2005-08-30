@@ -2250,7 +2250,7 @@ void KPresenterView::setupActions()
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
     actionViewHeader->setCheckedState(i18n("Hide &Header"));
-    actionViewFooter->setCheckedState(i18n("View Foo&ter"));
+    actionViewFooter->setCheckedState(i18n("Hide Foo&ter"));
 
     actionViewShowHelpLine= new KToggleAction( i18n( "Help Lines" ), 0,
                                                this, SLOT( viewHelpLines() ),
