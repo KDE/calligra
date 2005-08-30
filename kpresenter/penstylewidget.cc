@@ -53,6 +53,8 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
     m_ui->styleCombo->insertItem( i18n( "Dash Dot Line ( -*-* )" ) );
     m_ui->styleCombo->insertItem( i18n( "Dash Dot Dot Line ( -**- )" ) );
 
+    m_ui->widthInput->setRange( 1, 10,  1, false);
+
     connect( m_ui->styleCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotPenChanged() ) );
 
