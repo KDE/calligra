@@ -70,6 +70,7 @@ protected:
     QComboBox *m_customSlideCombobox;
     QListView *slides;
     QRadioButton *m_customSlide, *m_selectedSlide;
+    QLabel *m_labelCustomSlide;
     void setupPageGeneral();
     void setupPageSlides();
 
