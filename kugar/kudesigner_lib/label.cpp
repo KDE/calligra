@@ -69,9 +69,9 @@ Label::Label( int x, int y, int width, int height, Canvas *canvas )
 
 
     props.setGroupDescription( "Font", i18n( "Font" ) );
-    props.addProperty( new Property( "FontFamily", QFont( "Times New Roman" ), i18n( "Family" ), i18n( "Font Family" ), KoProperty::Font ), "Font" );
+    props.addProperty( new Property( "FontFamily", QApplication::font(), i18n( "Family" ), i18n( "Font Family" ), KoProperty::Font ), "Font" );
 
-    props.addProperty( new Property( "FontSize", 12, i18n( "Size" ), i18n( "Font Size" ), KoProperty::Integer ), "Font" );
+    props.addProperty( new Property( "FontSize", QApplication::font().pointSize(), i18n( "Size" ), i18n( "Font Size" ), KoProperty::Integer ), "Font" );
 
     m[ i18n( "Light" ) ] = "25";
     m[ i18n( "Normal" ) ] = "50";
