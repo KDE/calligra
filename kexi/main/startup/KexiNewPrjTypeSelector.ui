@@ -96,9 +96,6 @@
             <property name="resizeMode">
                 <enum>LastColumn</enum>
             </property>
-            <property name="shadeSortColumn">
-                <bool>false</bool>
-            </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
             <property name="name">
