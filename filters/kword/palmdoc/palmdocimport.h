@@ -42,7 +42,7 @@ class PalmDocImport : public KoFilter
     
     QString processPlainParagraph( QString text );
     QString processPlainDocument( QString plaindoc );
-    QString processDocumentInfo( QString title );
+    QString processDocumentInfo( const QString &title );
 };
 
 #endif // __PALMDOCIMPORT_H

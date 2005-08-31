@@ -157,7 +157,7 @@ QString PalmDocImport::processPlainDocument( QString plaindoc )
   QStringList paragraphs;
 
   paragraphs = QStringList::split( "\n\n", plaindoc, TRUE );
-  for( int i = 0; i < paragraphs.count(); i++ )
+  for( unsigned int i = 0; i < paragraphs.count(); i++ )
   {
       QString text = paragraphs[i];
       text.replace( '\n', ' ' );
@@ -184,7 +184,7 @@ QString PalmDocImport::processPlainDocument( QString plaindoc )
   return prolog + content + epilog;
 }
 
-QString PalmDocImport::processDocumentInfo( QString title )
+QString PalmDocImport::processDocumentInfo( const QString &title )
 {
   QString documentInfo;
 
