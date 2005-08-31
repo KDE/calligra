@@ -3044,6 +3044,7 @@ void KPresenterView::setupActions()
     actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Display Object From Master Page" ), 0,
                                          this, SLOT( displayObjectFromMasterPage() ),
                                          actionCollection(), "display_object_from_master_page" );
+    actionDisplayObjectFromMasterPage->setCheckedState(i18n("Hide Object From Master Page"));
 
 }
 
