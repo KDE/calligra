@@ -32,7 +32,7 @@ KPrBrush::KPrBrush()
 }
 
 
-KPrBrush::KPrBrush( QBrush brush, QColor gColor1, QColor gColor2,
+KPrBrush::KPrBrush( const QBrush &brush, const QColor &gColor1, const QColor &gColor2,
                     BCType gType, FillType fillType, bool unbalanced,
                     int xfactor, int yfactor )
 : m_brush( brush )

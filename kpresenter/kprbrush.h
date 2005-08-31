@@ -29,17 +29,17 @@ class KPrBrush
 {
 public:
     KPrBrush();
-    KPrBrush( QBrush brush, QColor gColor1, QColor gColor2,
+    KPrBrush(  const QBrush &brush, const QColor &gColor1, const QColor &gColor2,
               BCType gType, FillType fillType, bool unbalanced,
               int xfactor, int yfactor );
 
     KPrBrush &operator=( const KPrBrush &brush );
 
-    void setBrush( QBrush brush )
+    void setBrush( const QBrush &brush )
         {  m_brush = brush; }
-    void setGColor1( QColor gColor1 )
+    void setGColor1( const QColor &gColor1 )
         {  m_gColor1 = gColor1; }
-    void setGColor2( QColor gColor2 )
+    void setGColor2( const QColor &gColor2 )
         {  m_gColor2 = gColor2; }
     void setGType( BCType gType )
         {  m_gType = gType; }
