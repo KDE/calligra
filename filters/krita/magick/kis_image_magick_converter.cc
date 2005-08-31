@@ -64,14 +64,19 @@ namespace {
      */
     KisAbstractColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
 
-        
+
         if (type == GRAYColorspace) {
             if (imageDepth == 8)
                 return KisColorSpaceRegistry::instance() -> get("GRAYA");
+            else if ( imageDepth == 16 )
+                return KisColorSpaceRegistry::instance() -> get( "GRAYA16" );
         }
         else if (type == CMYKColorspace) {
             if (imageDepth == 8)
                 return KisColorSpaceRegistry::instance() -> get("CMYK");
+            else if ( imageDepth == 16 ) {
+                return KisColorSpaceRegistry::instance() -> get( "CMYK16" );
+            }
         }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
             if (imageDepth == 8)
@@ -80,6 +85,17 @@ namespace {
                 return KisColorSpaceRegistry::instance()->get("RGBA16");
         }
         return 0;
+
+    }
+
+    ColorspaceType getColorTypeforColorSpace( KisAbstractColorSpace * cs )
+    {
+        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") ) return GRAYColorspace;
+        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") ) return RGBColorspace;
+        if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYK16") ) return CMYKColorspace;
+
+        kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
+        return RGBColorspace;
 
     }
 
@@ -150,10 +166,10 @@ namespace {
             QByteArray rawdata;
             rawdata.resize(profile->length);
             memcpy(rawdata.data(), profile->datum, profile->length);
-            
+
             annotation = new KisAnnotation(QString(name), "", rawdata);
             Q_CHECK_PTR(annotation);
-            
+
             image -> addAnnotation(annotation);
         }
 #endif
@@ -260,23 +276,23 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
     GetExceptionInfo(&ei);
     ii = CloneImageInfo(0);
-    
+
     if (isBlob) {
-        
+
         // TODO : Test.  Does BlobToImage even work?
         Q_ASSERT(uri.isEmpty());
         images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
     } else {
-        
+
         qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
         if (ii -> filename[MaxTextExtent - 1]) {
             emit notifyProgressError(this);
             return KisImageBuilder_RESULT_PATH;
         }
-        
+
         images = ReadImage(ii, &ei);
-        
+
     }
 
     if (ei.severity != UndefinedException)
@@ -302,7 +318,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
         // Determine image type -- rgb, grayscale or cmyk
         ColorspaceType colorspaceType = image->colorspace;
-        
+
         KisAbstractColorSpace * cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
 
         if (cs == 0) {
@@ -327,7 +343,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
              if (profile)
                  m_img -> setProfile(profile);
-            
+
             // XXX I'm assuming seperate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }
@@ -356,7 +372,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             // Layerlocation  (set by the photoshop import filter)
             Q_INT32 x_offset = 0;
             Q_INT32 y_offset = 0;
-            
+
             attr = GetImageAttribute(image, "[layer-xpos]");
             if (attr != 0) {
                 x_offset = QString(attr->value).toInt();
@@ -389,7 +405,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                 IndexPacket * indexes = GetCacheViewIndexes(vi);
 
                 KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
-    
+
                 if (colorspaceType== CMYKColorspace) {
                     if (imageDepth == 8) {
                         int x = 0;
@@ -444,7 +460,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                             *(ptr++) = ScaleQuantumToShort(pp->green);
                             *(ptr++) = ScaleQuantumToShort(pp->red);
                             *(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
-    
+
                             pp++;
                             ++hiter;
                         }
@@ -554,9 +570,14 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 
     GetExceptionInfo(&ei);
 
+    ColorspaceType cstype = getColorTypeforColorSpace( layer->colorStrategy() );
+    Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
+
     ii = CloneImageInfo(0);
 
     qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
+    ii->colorspace = cstype;
+    ii->depth = 8 * layerBytesPerChannel;
 
     if (ii -> filename[MaxTextExtent - 1]) {
         emit notifyProgressError(this);
@@ -569,6 +590,9 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     image = AllocateImage(ii);
     image -> columns = img -> width();
     image -> rows = img -> height();
+
+
+    kdDebug() << "Image with cs: " << image->colorspace << ", " << ii->colorspace << "\n";
 
 #ifdef HAVE_MAGICK6
     if ( layer-> hasAlpha() )
@@ -586,8 +610,6 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     width = img -> width();
 
     bool alpha = layer -> hasAlpha();
-
-    Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
 
     for (y = 0; y < height; y++) {
 
@@ -698,7 +720,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     }
 
     QString colorspace = layer->colorStrategy()->id().id();
-    
+
     if (colorspace == "GRAYA") {
         ii -> colorspace = GRAYColorspace;
     }
@@ -770,7 +792,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
             }
         } else {
             while (!it.isDone()) {
-    
+
                 Q_UINT8 * d = it.rawData();
                 // NOTE: Upscale is necessary for a correct export, otherwise
                 // only Krita can read the result.
@@ -779,7 +801,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
                 pp -> blue = Upscale(d[PIXEL_BLUE]);
                 if (alpha)
                     pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
-    
+
                 pp++;
                 ++it;
             }

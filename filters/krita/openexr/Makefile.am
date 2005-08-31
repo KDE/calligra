@@ -2,6 +2,7 @@ AM_CPPFLAGS= \
 	-I$(srcdir) \
 	-I$(top_srcdir)/krita \
 	-I$(top_srcdir)/krita/core \
+	-I$(top_srcdir)/krita/sdk \
 	-I$(top_srcdir)/krita/core/resources \
 	-I$(top_srcdir)/krita/core/strategy \
 	-I$(top_srcdir)/krita/core/tiles \

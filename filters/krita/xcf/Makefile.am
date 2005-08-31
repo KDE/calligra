@@ -17,6 +17,7 @@ INCLUDES= \
 	 $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/krita \
 	-I$(top_srcdir)/krita/core \
+	-I$(top_srcdir)/krita/sdk \
 	-I$(top_srcdir)/krita/core/tool \
 	-I$(top_srcdir)/krita/core/resources \
 	-I$(top_srcdir)/krita/core/strategy \
