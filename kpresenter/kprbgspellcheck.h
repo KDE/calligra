@@ -25,7 +25,6 @@
 class KPresenterDoc;
 class KPTextObject;
 #include "kobgspellcheck.h"
-#ifdef HAVE_LIBKSPELL2
 
 
 class KPrBgSpellCheck : public KoBgSpellCheck
@@ -40,5 +39,4 @@ private:
     KPresenterDoc *m_doc;
     KPTextObject *m_currentObj;
 };
-#endif
 #endif

@@ -92,12 +92,10 @@ class KPTextObject;
 class KoTextIterator;
 
 class KoSpell;
-#ifdef HAVE_LIBKSPELL2
 #include <kspell2/broker.h>
 namespace KSpell2 {
     class Dialog;
 }
-#endif
 
 class PageBase : public QWidget
 {
@@ -163,12 +161,10 @@ public:
     void updateRulerInProtectContentMode();
     QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
 
-#ifdef HAVE_LIBKSPELL2
     /**
      * Returns the KPresenter global KSpell2 Broker object.
      */
     KSpell2::Broker *broker() const;
-#endif
     bool editMaster() const { return m_editMaster;}
 
 signals:
@@ -1195,14 +1191,10 @@ private:
         KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         KoTextIterator * textIterator;
-#ifdef HAVE_LIBKSPELL2
         KSpell2::Dialog *dlg;
-#endif
     } m_spell;
 
-#ifdef HAVE_LIBKSPELL2
     KSpell2::Broker::Ptr m_broker;
-#endif
 
 
 

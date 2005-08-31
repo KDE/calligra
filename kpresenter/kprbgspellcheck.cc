@@ -23,7 +23,6 @@
 #include "kprbgspellcheck.h"
 #include "kpresenter_doc.h"
 #include "kptextobject.h"
-#ifdef HAVE_LIBKSPELL2
 
 #include "kotextiterator.h"
 #include "kotextobject.h"
@@ -59,4 +58,3 @@ KoTextIterator *KPrBgSpellCheck::createWholeDocIterator() const
     return new KoTextIterator( objects, 0, 0 );
 }
 
-#endif

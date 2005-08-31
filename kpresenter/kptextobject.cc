@@ -116,9 +116,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ), this );
 
-#ifdef HAVE_LIBKSPELL2
     m_doc->backSpeller()->registerNewTextObject( m_textobj );
-#endif
     pen = defaultPen();
     drawEditRect = true;
     drawEmpty = true;

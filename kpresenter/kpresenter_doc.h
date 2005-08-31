@@ -40,9 +40,7 @@ class KoVariableFormatCollection;
 class KPrVariableCollection;
 class KTempFile;
 class KoParagStyle;
-#ifdef HAVE_LIBKSPELL2
 class KPrBgSpellCheck;
-#endif
 class KoTextParag;
 class KoTextObject;
 class KPRLoadingInfo;
@@ -493,9 +491,8 @@ class KPresenterDoc : public KoDocument
     void loadImagesFromStore( KoStore *_store );
     void saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
     void insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, KPrPage *page, int pos );
-#ifdef HAVE_LIBKSPELL2
+
     KPrBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
-#endif
 
     CustomListMap customListSlideShow();
     void updateCustomListSlideShow( CustomListMap & map, bool loadOasis = false );
@@ -699,9 +696,7 @@ private:
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_masterPage;
- #ifdef HAVE_LIBKSPELL2
     KPrBgSpellCheck *m_bgSpellCheck;
-#endif
     KoStyleCollection *m_styleColl;
     KPObject *bgObjSpellChecked;
     QString m_picturePath;

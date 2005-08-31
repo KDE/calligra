@@ -89,9 +89,7 @@
 #include <kcommand.h>
 #include "KPresenterDocIface.h"
 
-#ifdef HAVE_LIBKSPELL2
 #include <kspell2/settings.h>
-#endif
 
 #include <kovariable.h>
 #include <koAutoFormat.h>
@@ -197,9 +195,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl = new KPrVariableCollection( new KoVariableSettings(), m_varFormatCollection );
-#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck = new KPrBgSpellCheck(this);
-#endif
     dcop = 0;
     m_initialActivePage=0;
     m_bShowStatusBar = true;
@@ -395,12 +391,10 @@ void KPresenterDoc::initConfig()
 
        // Default is false for spellcheck, but the spell-check config dialog
        // should write out "true" when the user configures spell checking.
-#ifdef HAVE_LIBKSPELL2
         if ( isReadWrite() )
           m_bgSpellCheck->setEnabled(config->readBoolEntry( "SpellCheck", false ));
        else
           m_bgSpellCheck->setEnabled( false );
-#endif
     }
     int undo=30;
     if(config->hasGroup("Misc" ) )
@@ -454,9 +448,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_varFormatCollection;
     delete dcop;
     delete m_masterPage;
-#ifdef HAVE_LIBKSPELL2
     delete m_bgSpellCheck;
-#endif
     delete m_styleColl;
 
     m_pageList.setAutoDelete( true );
@@ -4373,9 +4365,7 @@ void KPresenterDoc::startBackgroundSpellCheck()
     {
         if(m_initialActivePage->allTextObjects().count()>0)
         {
-#ifdef HAVE_LIBKSPELL2
             m_bgSpellCheck->start();
-#endif
         }
     }
 }
@@ -4383,9 +4373,7 @@ void KPresenterDoc::startBackgroundSpellCheck()
 void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 {
     //m_bgSpellCheck->enableBackgroundSpellCheck(b);
-#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck->setEnabled(b);
-#endif
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it )
         ((KPresenterView*)it.current())->updateBgSpellCheckingState();
@@ -4393,11 +4381,7 @@ void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 
 bool KPresenterDoc::backgroundSpellCheckEnabled() const
 {
-#ifdef HAVE_LIBKSPELL2
     return m_bgSpellCheck->enabled();
-#else
-    return false;
-#endif
 }
 
 void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
@@ -4609,10 +4593,8 @@ int KPresenterDoc::indexOfHelpPoint( const KoPoint &pos )
 void KPresenterDoc::setSpellCheckIgnoreList( const QStringList& lst )
 {
     m_spellCheckIgnoreList = lst;
-#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
-#endif
-    setModified( true );
+   setModified( true );
 }
 
 void KPresenterDoc::addSpellCheckIgnoreWord( const QString & word )
@@ -4792,7 +4774,6 @@ KPresenterView *KPresenterDoc::firstView() const
 
 void KPresenterDoc::addWordToDictionary( const QString & word)
 {
-#ifdef HAVE_LIBKSPELL2
     if ( m_bgSpellCheck )
     {
         if( m_spellCheckPersonalDict.findIndex( word ) == -1 )
@@ -4802,7 +4783,6 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
             // Re-check everything to make this word normal again
             reactivateBgSpellChecking();
     }
-#endif
 }
 
 CustomListMap KPresenterDoc::customListSlideShow()
