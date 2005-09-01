@@ -93,13 +93,16 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     m_view->itemToInsert = 0;
 
-    QDockWindow *dw = new QDockWindow( QDockWindow::OutsideDock, shell() );
-    dw->setResizeEnabled( true );
-    m_structure = new Kudesigner::StructureWidget( dw );
-    dw->boxLayout() ->addWidget( m_structure, 1 );
-    m_propertyEditor = new Editor( dw );
-    dw->setFixedExtentWidth( 400 );
-    dw->boxLayout() ->addWidget( m_propertyEditor, 2 );
+    QDockWindow *dw1 = new QDockWindow( QDockWindow::OutsideDock, shell() );
+    QDockWindow *dw2 = new QDockWindow( QDockWindow::OutsideDock, shell() );
+    m_structure = new Kudesigner::StructureWidget( dw1 );
+    m_propertyEditor = new Editor( dw2 );
+    dw1->boxLayout() ->addWidget( m_structure, 1 );
+    dw2->boxLayout() ->addWidget( m_propertyEditor, 1 );
+    dw1->setFixedExtentWidth( 400 );
+    dw1->setResizeEnabled( true );
+    dw2->setFixedExtentWidth( 400 );
+    dw2->setResizeEnabled( true );
 
     if ( m_doc->plugin() )
     {
@@ -109,7 +112,8 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
         kdDebug() << "*************Property and plugin have been connected" << endl;
     }
 
-    shell() ->addDockWindow( dw, m_doc->propertyPosition() );
+    shell() ->addDockWindow( dw1, m_doc->propertyPosition() );
+    shell() ->addDockWindow( dw2, m_doc->propertyPosition() );
 
     m_structure->setDocument( m_doc->canvas() );
 
