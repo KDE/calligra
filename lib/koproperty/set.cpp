@@ -439,14 +439,12 @@ void Buffer::intersect(const Set *set)
 
 	 for(Property::DictIterator it(d->dict); it.current(); ++it) {
 		const char* key = it.current()->name();
-		if ( Property *property =   set->d->dict[ key ] )
+		if ( Property *property =  set->d->dict[ key ] )
 		{
-			if ( ( it.current() == property ) &&
-				 ( set->d->groupForProperty[ property ] ==
-				   d->groupForProperty[ it.current() ] ) ) {
+				blockSignals( true );
+				it.current()->resetValue();
 				it.current()->addRelatedProperty( property );
-				continue;
-			}
+				blockSignals( false );
 		}
 		else
 			removeProperty( key );
