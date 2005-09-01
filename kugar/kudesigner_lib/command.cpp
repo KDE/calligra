@@ -63,15 +63,14 @@ void AddDetailFooterCommand::execute()
     m_section->props[ "Level" ].setValue( m_level );
     m_doc->kugarTemplate() ->details[ m_level ].first.second = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
+    m_doc->setStructureModified();
 }
 
 void AddDetailFooterCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
-
 
 //AddDetailCommand
 
@@ -89,16 +88,14 @@ void AddDetailCommand::execute()
     m_doc->kugarTemplate() ->details[ m_level ].second = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
     m_doc->kugarTemplate() ->detailsCount++;
+    m_doc->setStructureModified();
 }
 
 void AddDetailCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
-
-
 
 //AddDetailHeaderCommand
 AddDetailHeaderCommand::AddDetailHeaderCommand( int level, Canvas *doc )
@@ -114,15 +111,14 @@ void AddDetailHeaderCommand::execute()
     m_section->props[ "Level" ].setValue( m_level );
     m_doc->kugarTemplate() ->details[ m_level ].first.first = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
+    m_doc->setStructureModified();
 }
 
 void AddDetailHeaderCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
-
 
 //AddPageFooterCommand
 
@@ -138,14 +134,14 @@ void AddPageFooterCommand::execute()
                                 50, m_doc );
     m_doc->kugarTemplate() ->pageFooter = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
+    m_doc->setStructureModified();
 }
 
 void AddPageFooterCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
 
 //AddPageHeaderCommand
 
@@ -161,14 +157,14 @@ void AddPageHeaderCommand::execute()
                                 50, m_doc );
     m_doc->kugarTemplate() ->pageHeader = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
+    m_doc->setStructureModified();
 }
 
 void AddPageHeaderCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
 
 //AddReportFooterCommand
 
@@ -184,14 +180,14 @@ void AddReportFooterCommand::execute()
                                   50, m_doc );
     m_doc->kugarTemplate() ->reportFooter = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
+    m_doc->setStructureModified();
 }
 
 void AddReportFooterCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
 
 //AddReportHeaderCommand
 
@@ -207,15 +203,14 @@ void AddReportHeaderCommand::execute()
                                   50, m_doc );
     m_doc->kugarTemplate() ->reportHeader = m_section;
     m_doc->kugarTemplate() ->arrangeSections();
+    m_doc->setStructureModified();
 }
 
 void AddReportHeaderCommand::unexecute()
 {
     m_doc->kugarTemplate() ->removeReportItem( m_section );
+    m_doc->setStructureModified();
 }
-
-
-
 
 //AddReportItemCommand
 
@@ -261,6 +256,7 @@ void AddReportItemCommand::execute()
 
     m_item->show();
     m_doc->kugarTemplate() ->band( m_section, m_sectionLevel ) ->items.append( m_item );
+    m_doc->setStructureModified();
 }
 
 void AddReportItemCommand::unexecute()
@@ -269,6 +265,7 @@ void AddReportItemCommand::unexecute()
     {
         m_doc->unselectItem( m_item );
         m_doc->kugarTemplate() ->removeReportItem( m_item );
+        m_doc->setStructureModified();
     }
 }
 
@@ -285,6 +282,8 @@ void DeleteReportItemsCommand::execute( )
         Box *b = *it;
         m_doc->kugarTemplate() ->removeReportItem( b );
     }
+
+    m_doc->setStructureModified();
 }
 
 void DeleteReportItemsCommand::unexecute( )
@@ -295,6 +294,8 @@ void DeleteReportItemsCommand::unexecute( )
             b->show();*/
     //        m_doc->kugarTemplate()->removeReportItem( b );
     //     }
+
+    m_doc->setStructureModified();
 }
 
 }

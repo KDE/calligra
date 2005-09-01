@@ -374,7 +374,6 @@ void Canvas::changed()
             it != selected.end(); ++it )
     {
         Kudesigner::Box *b = *it;
-        //         b->props[name]->setValue(value);
         b->hide();
         b->show();
         if ( ( b->rtti() >= 1800 ) && ( b->rtti() < 2000 ) )

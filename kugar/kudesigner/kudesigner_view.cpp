@@ -115,7 +115,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     connect( m_doc, SIGNAL( canvasChanged( Kudesigner::Canvas * ) ),
              m_structure, SLOT( setDocument( Kudesigner::Canvas * ) ) );
-    connect( m_doc, SIGNAL( modificationMade( bool ) ),
+    connect( m_doc->canvas(), SIGNAL( structureModified() ),
              m_structure, SLOT( refresh() ) );
 
     connect( m_view, SIGNAL( selectionMade( Buffer* ) ),
@@ -229,9 +229,6 @@ void KudesignerView::initActions()
 
 void KudesignerView::updateReadWrite( bool /*readwrite*/ )
 {
-#ifdef __GNUC__
-#warning TODO
-#endif
 }
 
 void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -246,7 +243,6 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 void KudesignerView::populateProperties( Buffer *buf )
 {
     connect( buf, SIGNAL( propertyChanged() ), m_doc->canvas(), SLOT( changed() ) );
-    connect( buf, SIGNAL( propertyChanged() ), m_doc, SLOT( setModified() ) );
     m_propertyEditor->changeSet( buf );
 }
 

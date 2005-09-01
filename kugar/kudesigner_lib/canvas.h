@@ -58,6 +58,7 @@ public:
     void selectAll();
     void selectItem( Box *it, bool addToSelection = true );
     void unselectItem( Box *it );
+    void setStructureModified() { emit structureModified(); }
     //    void deleteSelected();
 
     virtual bool loadXML( const QDomNode &report );
@@ -67,6 +68,7 @@ public slots:
 
 signals:
     void itemSelected();
+    void structureModified();
 
 protected:
     virtual void drawForeground( QPainter &painter, const QRect &clip );
