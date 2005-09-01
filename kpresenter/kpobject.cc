@@ -1684,7 +1684,8 @@ bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSav
     int maxX=0;
     int maxY=0;
     KoPointArray::ConstIterator it( points.begin() );
-    for ( ; it != points.end(); ++it )
+    KoPointArray::ConstIterator end( points.end() );
+    for ( ; it != end; ++it )
     {
         int tmpX = int( ( *it ).x() * 10000 );
         int tmpY = int( ( *it ).y() * 10000 );
@@ -1730,7 +1731,8 @@ bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElemen
     else
     {
         //if no viewBox is found
-        for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+        QStringList::ConstIterator end( ptList.end() );
+        for (QStringList::ConstIterator it = ptList.begin(); it != end; ++it)
         {
             right = QMAX( (*it).section( ',', 0, 0 ).toInt(), right );
             bottom = QMAX( (*it).section( ',', 1, 1 ).toInt(), bottom );

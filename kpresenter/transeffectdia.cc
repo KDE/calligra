@@ -248,7 +248,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
 
     speedCombo->setCurrentItem( speed );
-    
+
     connect( speedCombo, SIGNAL(activated(int)), this, SLOT(speedChanged(int)) );
 
 
@@ -381,7 +381,8 @@ static QString getSoundFileFilter()
 
     bool comma = false;
     QString full, str;
-    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it ) {
+    QStringList::ConstIterator end( fileList.end() );
+    for ( QStringList::ConstIterator it = fileList.begin(); it != end; ++it ) {
         if ( comma )
             str += '\n';
         comma = true;
