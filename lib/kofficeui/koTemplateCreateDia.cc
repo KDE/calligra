@@ -29,6 +29,8 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qheader.h>
+#include <qcheckbox.h>
+#include <qtooltip.h>
 
 #include <ktempfile.h>
 #include <klineedit.h>
@@ -43,6 +45,9 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kiconloader.h>
+#include <kaboutdata.h>
+#include <kconfigbase.h>
+#include <kconfig.h>
 
 #include <stdlib.h>
 #include <kinstance.h>
@@ -50,8 +55,8 @@
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate( QWidget* parent )
-         : m_tempFile( QString::null, ".png" )
+    KoTemplateCreateDiaPrivate( QWidget* parent, KInstance * instance)
+         : m_instance( instance ), m_tempFile( QString::null, ".png" )
     {
         m_tree=0L;
         m_name=0L;
@@ -62,6 +67,7 @@ public:
         m_groups=0L;
         m_add=0L;
         m_remove=0L;
+        m_defaultTemplate=0L;
         m_tempFile.setAutoDelete( true );
     }
     ~KoTemplateCreateDiaPrivate() {
@@ -77,6 +83,8 @@ public:
     QPixmap m_customPixmap;
     KListView *m_groups;
     QPushButton *m_add, *m_remove;
+    QCheckBox *m_defaultTemplate;
+    KInstance *m_instance;
     bool m_changed;
     /// Temp file for remote picture file
     KTempFile m_tempFile;
@@ -94,7 +102,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     KDialogBase( parent, "template create dia", true, i18n( "Create Template" ),
                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
 
-    d=new KoTemplateCreateDiaPrivate( parent );
+    d=new KoTemplateCreateDiaPrivate( parent, instance );
 
     QFrame *mainwidget=makeMainWidget();
     QHBoxLayout *mbox=new QHBoxLayout(mainwidget, KDialogBase::marginHint(),
@@ -161,6 +169,11 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     previewbox->addWidget(d->m_preview);
     previewbox->addStretch(10);
     pixlayout->addStretch(8);
+
+    d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
+    d->m_defaultTemplate->setChecked( true );
+    QToolTip::add( d->m_defaultTemplate, i18n("Use the new template every time %1 starts").arg(instance->aboutData()->programName() ) );
+    rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOK(false);
     d->m_changed=false;
@@ -322,6 +335,15 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     d->m_tree->writeTemplateTree();
+
+    if ( d->m_defaultTemplate->isChecked() )
+    {
+      KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
+      grp.writeEntry( "LastReturnType", "Template" );
+      grp.writeEntry( "TemplateTab", 0 );
+      grp.writePathEntry( "TemplateName", d->m_name->text() );
+      grp.writePathEntry( "FullTemplateName", dir + "/" + t->file() );
+    }
     KDialogBase::slotOk();
 }
 
