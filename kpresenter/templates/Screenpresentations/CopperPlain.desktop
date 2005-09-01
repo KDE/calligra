@@ -42,6 +42,7 @@ Name[zh_CN]=金色年华
 Name[zh_TW]=單銅色
 Comment=An elegant, uplifting presentation
 Comment[es]=Una presentación elegante y edificante
+Comment[xx]=xxAn elegant, uplifting presentationxx
 Type=Link
 URL=.source/CopperPlain.kpt
 X-KDE-Hidden=false

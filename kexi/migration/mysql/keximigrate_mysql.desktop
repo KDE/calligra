@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=MySQL
+Name[xx]=xxMySQLxx
 Comment=MySQL Migration Driver for Kexi
 Comment[da]=MySQL Migrationsdriver for Kexi
 Comment[de]=MySQL-Migrationstreiber für Kexi
@@ -20,6 +21,7 @@ Comment[sr]=Драјвер Kexi-ја за миграцију са MySQL-а
 Comment[sr@Latn]=Drajver Kexi-ja za migraciju sa MySQL-a
 Comment[sv]=MySQL-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için MySQL Aktarma Sürücüsü
+Comment[xx]=xxMySQL Migration Driver for Kexixx
 Comment[zh_CN]=Kexi MySQL 升迁驱动程序
 X-KDE-Library=keximigrate_mysql
 ServiceTypes=Kexi/MigrationDriver

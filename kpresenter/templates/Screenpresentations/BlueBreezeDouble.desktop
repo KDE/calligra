@@ -44,6 +44,7 @@ Name[zh_TW]=雙頁藍色和風
 Name[zu]=Uphindo kabili lomoya oluhlaza (okwesibhaka-bhaka)
 Comment=A peaceful presentation with a title and two text columns
 Comment[es]=Una presentación tranquila con un título y dos columnas de texto
+Comment[xx]=xxA peaceful presentation with a title and two text columnsxx
 Type=Link
 URL=.source/BlueBreezeDouble.kpt
 X-KDE-Hidden=false

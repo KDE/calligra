@@ -28,6 +28,7 @@ GenericName[ru]=Редактор форм
 GenericName[sr]=Дизајнер форми
 GenericName[sr@Latn]=Dizajner formi
 GenericName[sv]=Formulärkonstruktion
+GenericName[xx]=xxForm Designerxx
 GenericName[zh_CN]=表单设计器
 MimeType=application/x-designer;
 Terminal=false

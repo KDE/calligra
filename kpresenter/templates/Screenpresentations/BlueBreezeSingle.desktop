@@ -44,6 +44,7 @@ Name[zh_TW]=單頁藍色和風
 Name[zu]=Owodwa Umoya Oluhlaza (okwesibhaka-bhaka)
 Comment=A peaceful presentation with a title and single large text area
 Comment[es]=Una presentación tranquila con un título un área grande texto
+Comment[xx]=xxA peaceful presentation with a title and single large text areaxx
 Type=Link
 URL=.source/BlueBreezeSingle.kpt
 X-KDE-Hidden=false

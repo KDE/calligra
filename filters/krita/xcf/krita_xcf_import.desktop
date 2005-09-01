@@ -4,6 +4,7 @@ Type=Service
 Name=Krita XCF Import Filter
 Name[es]=Filtro de importación a XCF de Krita
 Name[ga]=Scagaire Iompórtála XCF Krita
+Name[xx]=xxKrita XCF Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf-gimp
 X-KDE-Weight=1

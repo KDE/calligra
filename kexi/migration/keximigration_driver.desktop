@@ -22,6 +22,7 @@ Comment[sr]=Драјвер Kexi-ја за миграцију података
 Comment[sr@Latn]=Drajver Kexi-ja za migraciju podataka
 Comment[sv]=Kexi dataövergångsdrivrutin
 Comment[tr]=Kexi Veri Aktarma Sürücüsü
+Comment[xx]=xxKexi Data Migration Driverxx
 Comment[zh_CN]=Kexi 数据升迁驱动程序
 
 [PropertyDef::X-Kexi-FileMigrationDriverMime]

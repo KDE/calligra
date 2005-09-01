@@ -57,6 +57,7 @@ Name[zh_TW]=雪山
 Name[zu]=Izintaba Ezikhithikayo
 Comment=A cool and smooth presentation
 Comment[es]=Una presentación moderna y agradable
+Comment[xx]=xxA cool and smooth presentationxx
 Type=Link
 URL=.source/SnowyMountains.kpt
 X-KDE-Hidden=false
