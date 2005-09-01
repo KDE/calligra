@@ -9,8 +9,8 @@ KSpreadInsertHandler::KSpreadInsertHandler( KSpreadView* view, QWidget* widget, 
 {
     m_isChart = ischart;
     m_view = view;
-    m_started = FALSE;
-    m_clicked = FALSE;
+    m_started = false;
+    m_clicked = false;
 
     widget->setCursor( crossCursor );
 }
@@ -29,15 +29,15 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	
 	m_geometryStart = e->pos();
 	m_geometryEnd = e->pos();
-	m_started = FALSE;
-	m_clicked = TRUE;
+	m_started = false;
+	m_clicked = true;
 	
-	return TRUE;
+	return true;
     }
     else if ( ev->type() == QEvent::MouseMove )
     {
 	if ( !m_clicked )
-	    return TRUE;
+	    return true;
 	
 	QMouseEvent* e = (QMouseEvent*)ev;
 	
@@ -68,7 +68,7 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	    painter.drawRect( x, y, w, h );
 	}
 	else
-	    m_started = TRUE;
+	    m_started = true;
 
 	m_geometryEnd = e->pos();
 
@@ -89,7 +89,7 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	painter.drawRect( x, y, w, h );
 	painter.end();
 
-	return TRUE;
+	return true;
     }
     else if ( ev->type() == QEvent::MouseButtonRelease )
     {
@@ -98,7 +98,7 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	if ( !m_started )
         {
 	    delete this;
-	    return TRUE;
+	    return true;
 	}
 	
 	m_geometryEnd = e->pos();
@@ -134,19 +134,19 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	    m_view->insertChild( QRect( x, y, w, h  ), m_entry );
 
 	delete this;
-	return TRUE;
+	return true;
     }
     else if ( ev->type() == QEvent::KeyPress )
     {
 	QKeyEvent* e = (QKeyEvent*)ev;
 	if ( e->key() != Key_Escape )
-	    return FALSE;
+	    return false;
 	
 	delete this;
-	return TRUE;
+	return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 #include "kspread_handler.moc"

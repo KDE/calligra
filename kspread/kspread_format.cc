@@ -2753,7 +2753,7 @@ const KSpreadFormat* KSpreadFormat::fallbackFormat( int, int ) const
 
 bool KSpreadFormat::isDefault() const
 {
-  return TRUE;
+  return true;
 }
 
 /*****************************************************************************
@@ -2959,7 +2959,7 @@ void RowFormat::setBottomBorderPen( const QPen & p )
 {
     if ( row() < KS_rowMax )
     {
-        RowFormat * cl = sheet()->nonDefaultRowFormat( row() + 1, FALSE );
+        RowFormat * cl = sheet()->nonDefaultRowFormat( row() + 1, false );
         if ( cl )
 	    cl->clearProperty( PTopBorder );
     }
@@ -3181,7 +3181,7 @@ const QPen & ColumnFormat::leftBorderPen( int _col, int _row ) const
 
 void ColumnFormat::setLeftBorderPen( const QPen & p )
 {
-    ColumnFormat * cl = sheet()->nonDefaultColumnFormat( column() - 1, FALSE );
+    ColumnFormat * cl = sheet()->nonDefaultColumnFormat( column() - 1, false );
     if ( cl )
 	cl->clearProperty( PRightBorder );
 

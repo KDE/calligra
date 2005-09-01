@@ -213,7 +213,7 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
     start = 0;
 
   int i = str.length() - start;
-  bool bFinished = FALSE;
+  bool bFinished = false;
   while ( !bFinished && i > 0 )
   {
     QChar ch = str[i - 1];
@@ -221,7 +221,7 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
       str.remove (--i,1);
     else
     {
-      bFinished = TRUE;
+      bFinished = true;
       if (ch == decimal_point)
         str.remove (--i, 1);
     }

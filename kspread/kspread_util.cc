@@ -137,16 +137,16 @@ QFont util_toFont( QDomElement & element )
     return QFont();
 
   if ( element.hasAttribute( "italic" ) && element.attribute("italic") == "yes" )
-    f.setItalic( TRUE );
+    f.setItalic( true );
 
   if ( element.hasAttribute( "bold" ) && element.attribute("bold") == "yes" )
-    f.setBold( TRUE );
+    f.setBold( true );
 
   if ( element.hasAttribute( "underline" ) && element.attribute("underline") == "yes" )
-    f.setUnderline( TRUE );
+    f.setUnderline( true );
 
   if ( element.hasAttribute( "strikeout" ) && element.attribute("strikeout") == "yes" )
-    f.setStrikeOut( TRUE );
+    f.setStrikeOut( true );
 
   /* Uncomment when charset is added to kspread_dlg_layout
      + save a document-global charset

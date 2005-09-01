@@ -153,7 +153,7 @@ KSpreadCanvas::KSpreadCanvas (KSpreadView *_view)
   d->length_namecell = 0;
   d->chooseStartSheet = NULL;
   d->cellEditor = 0;
-  d->chooseCell = FALSE;
+  d->chooseCell = false;
   d->validationInfo = 0L;
 
   QWidget::setFocusPolicy( QWidget::StrongFocus );
@@ -180,7 +180,7 @@ KSpreadCanvas::KSpreadCanvas (KSpreadView *_view)
 
   setBackgroundMode( PaletteBase );
 
-  setMouseTracking( TRUE );
+  setMouseTracking( true );
   d->mousePressed = false;
 
   d->scrollTimer = new QTimer( this );
@@ -278,7 +278,7 @@ bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
      as events to this filter itself.
   */
   if ( !o || !e )
-    return TRUE;
+    return true;
   switch ( e->type() )
   {
   case QEvent::KeyPress:
@@ -307,7 +307,7 @@ bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
 
 bool KSpreadCanvas::focusNextPrevChild( bool )
 {
-    return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
+    return true; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
 int KSpreadCanvas::chooseTextLen() const
@@ -358,7 +358,7 @@ void KSpreadCanvas::startChoose()
   updateChooseRect(QPoint(0,0), QPoint(0,0));
 
   // It is important to enable this AFTER we set the rect!
-  d->chooseCell = TRUE;
+  d->chooseCell = true;
   d->chooseStartSheet = activeSheet();
 }
 
@@ -370,7 +370,7 @@ void KSpreadCanvas::startChoose( const QRect& rect )
   updateChooseRect(rect.bottomRight(), rect.topLeft());
 
   // It is important to enable this AFTER we set the rect!
-  d->chooseCell = TRUE;
+  d->chooseCell = true;
   d->chooseStartSheet = activeSheet();
 }
 
@@ -382,7 +382,7 @@ void KSpreadCanvas::endChoose()
   updateChooseRect(QPoint(0,0), QPoint(0,0));
 
   d->length_namecell = 0;
-  d->chooseCell = FALSE;
+  d->chooseCell = false;
 
   KSpreadSheet *sheet=d->view->doc()->map()->findSheet(d->chooseStartSheet->sheetName());
   if (sheet)
@@ -1364,7 +1364,7 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
 void KSpreadCanvas::chooseMouseReleaseEvent( QMouseEvent* )
 {
     // gets done in mouseReleaseEvent
-    //  d->mousePressed = FALSE;
+    //  d->mousePressed = false;
   d->mouseAction = NoAction;
 }
 
@@ -2139,7 +2139,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   KSpreadCell* cell = NULL;
   KSpreadCell* lastCell;
   QPoint destination;
-  bool searchThroughEmpty = TRUE;
+  bool searchThroughEmpty = true;
   int row;
   int col;
 
@@ -2164,7 +2164,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         if (!(sheet->rowFormat(cell->row())->isHide()))
         {
           lastCell = cell;
-          searchThroughEmpty = FALSE;
+          searchThroughEmpty = false;
         }
         row--;
         if ( row > 0 )
@@ -2211,7 +2211,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         if (!(sheet->rowFormat(cell->row())->isHide()))
         {
           lastCell = cell;
-          searchThroughEmpty = FALSE;
+          searchThroughEmpty = false;
         }
         row++;
         cell = sheet->cellAt(cell->column(), row);
@@ -2259,7 +2259,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
           lastCell = cell;
-          searchThroughEmpty = FALSE;
+          searchThroughEmpty = false;
         }
         col++;
         cell = sheet->cellAt(col, cell->row());
@@ -2303,7 +2303,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
           lastCell = cell;
-          searchThroughEmpty = FALSE;
+          searchThroughEmpty = false;
         }
         col--;
         if ( col > 0 )
@@ -2353,7 +2353,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
           lastCell = cell;
-          searchThroughEmpty = FALSE;
+          searchThroughEmpty = false;
         }
         col--;
         if ( col > 0 )
@@ -2398,7 +2398,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
           lastCell = cell;
-          searchThroughEmpty = FALSE;
+          searchThroughEmpty = false;
         }
         col++;
         cell = sheet->cellAt(col, cell->row());
@@ -3127,9 +3127,9 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
     QString res = text.left( d->cellEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - d->cellEditor->cursorPosition() );
     int pos = d->cellEditor->cursorPosition() - old;
 
-    ((KSpreadTextEditor*)d->cellEditor)->blockCheckChoose( TRUE );
+    ((KSpreadTextEditor*)d->cellEditor)->blockCheckChoose( true );
     d->cellEditor->setText( res );
-    ((KSpreadTextEditor*)d->cellEditor)->blockCheckChoose( FALSE );
+    ((KSpreadTextEditor*)d->cellEditor)->blockCheckChoose( false );
     d->cellEditor->setCursorPosition( pos + d->length_namecell );
     d->editWidget->setText( res );
     //kdDebug(36001) << "old=" << old << " len=" << d->length_namecell << " pos=" << pos << endl;
@@ -3901,11 +3901,11 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
   m_lSize = 0L;
 
   setBackgroundMode( PaletteButton );
-  setMouseTracking( TRUE );
-  m_bResize = FALSE;
-  m_bSelection = FALSE;
+  setMouseTracking( true );
+  m_bResize = false;
+  m_bSelection = false;
   m_iSelectionAnchor=1;
-  m_bMousePressed = FALSE;
+  m_bMousePressed = false;
 
   m_scrollTimer = new QTimer( this );
   connect (m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
@@ -3936,8 +3936,8 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
-  m_bResize = FALSE;
-  m_bSelection = FALSE;
+  m_bResize = false;
+  m_bSelection = false;
 
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
@@ -3961,7 +3961,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     if ( ( ev_PosY >= y + h - 2 ) &&
          ( ev_PosY <= y + h + 1 ) &&
          !( sheet->rowFormat( row )->isHide() && row == 1 ) )
-      m_bResize = TRUE;
+      m_bResize = true;
     y += h;
   }
 
@@ -3983,7 +3983,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else
   {
-    m_bSelection = TRUE;
+    m_bSelection = true;
 
     double tmp;
     int hit_row = sheet->topRow( ev_PosY, tmp );
@@ -4007,7 +4007,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     {
       QPoint p = mapToGlobal( _ev->pos() );
       m_pView->popupRowMenu( p );
-      m_bSelection = FALSE;
+      m_bSelection = false;
     }
     m_pView->updateEditWidget();
   }
@@ -4125,8 +4125,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         }
     }
 
-    m_bSelection = FALSE;
-    m_bResize = FALSE;
+    m_bSelection = false;
+    m_bResize = false;
 }
 
 void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
@@ -4461,7 +4461,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
                                   normalFont.pointSizeFloat() );
   }
   QFont boldFont = normalFont;
-  boldFont.setBold( TRUE );
+  boldFont.setBold( true );
 
   //several cells selected but not just a cell merged
   bool area = !( m_pView->selectionInfo()->singleCellSelection() );
@@ -4544,11 +4544,11 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
   m_pCanvas = _canvas;
   m_lSize = 0L;
   setBackgroundMode( PaletteButton );
-  setMouseTracking( TRUE );
-  m_bResize = FALSE;
-  m_bSelection = FALSE;
+  setMouseTracking( true );
+  m_bResize = false;
+  m_bSelection = false;
   m_iSelectionAnchor=1;
-  m_bMousePressed = FALSE;
+  m_bMousePressed = false;
 
   m_scrollTimer = new QTimer( this );
   connect ( m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
@@ -4590,8 +4590,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
     ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
-  m_bResize = FALSE;
-  m_bSelection = FALSE;
+  m_bResize = false;
+  m_bSelection = false;
 
   // Find the first visible column and the x position of this column.
   double x;
@@ -4649,7 +4649,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       if ( ( ev_PosX >= x + w - unzoomedPixel ) &&
          ( ev_PosX <= x + w + unzoomedPixel ) &&
            !( sheet->columnFormat( col )->isHide() && col == 1 ) )
-        m_bResize = TRUE;
+        m_bResize = true;
       x += w;
     }
 
@@ -4686,7 +4686,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else
   {
-    m_bSelection = TRUE;
+    m_bSelection = true;
 
     double tmp;
     int hit_col = sheet->leftColumn( ev_PosX, tmp );
@@ -4710,7 +4710,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     {
       QPoint p = mapToGlobal( _ev->pos() );
       m_pView->popupColumnMenu( p );
-      m_bSelection = FALSE;
+      m_bSelection = false;
     }
     m_pView->updateEditWidget();
   }
@@ -4835,8 +4835,8 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         }
     }
 
-    m_bSelection = FALSE;
-    m_bResize = FALSE;
+    m_bSelection = false;
+    m_bResize = false;
 }
 
 void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
@@ -5262,7 +5262,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
                                   normalFont.pointSizeFloat() );
   }
   QFont boldFont = normalFont;
-  boldFont.setBold( TRUE );
+  boldFont.setBold( true );
 
   KSpreadCell *cell = sheet->cellAt( m_pView->marker() );
   QRect extraCell;

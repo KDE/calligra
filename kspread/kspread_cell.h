@@ -358,7 +358,7 @@ public:
     QRect cellRect();
 
     /**
-     * @return TRUE if the cell should be printed in a print out.
+     * @return true if the cell should be printed in a print out.
      *         That si the case if it has any content, border, backgroundcolor,
      *         or background brush.
      *
@@ -549,7 +549,7 @@ public:
      *         false if you really have to calculate the value right now
      *         e.g. if you sort with formula as key
      *
-     * @return TRUE on success and FALSE on error.
+     * @return true on success and false on error.
      */
     bool calc(bool delay = true);
 
@@ -598,13 +598,13 @@ public:
      */
     void unobscure(KSpreadCell* cell);
     /**
-     * @return TRUE if this cell is obscured by another.
+     * @return true if this cell is obscured by another.
      */
     bool isObscured() const;
     /**
      * If obscuring is forced then the marker may never reside on this cell.
      *
-     * @return TRUE if an obscuring cell is forced to obscure this one.
+     * @return true if an obscuring cell is forced to obscure this one.
      */
     bool isObscuringForced() const;
 
@@ -637,7 +637,7 @@ public:
     void forceExtraCells( int _col, int _row, int _x, int _y );
 
     /**
-     * @return TRUE if the cell is forced to obscure other cells.
+     * @return true if the cell is forced to obscure other cells.
      */
     bool isForceExtraCells() const;
 
@@ -689,7 +689,7 @@ public:
     QString pasteOperation( const QString &new_text, const QString &old_text, Operation op );
 
     /**
-     * @return TRUE if the cell contains a formula that could not
+     * @return true if the cell contains a formula that could not
      *         be evaluated. These cells usually appear with "####" on the screen.
      */
     bool hasError() const;
@@ -708,7 +708,7 @@ public:
     /**
      * Parses the formula.
      * Fills #dependList and #formula.
-     * @return FALSE on error.
+     * @return false on error.
      */
     bool makeFormula();
 
@@ -794,7 +794,7 @@ public:
    * CalcDirty
    * Shows whether recalculation is necessary.
    * If this cell must be recalculated for some reason, for example the user
-   * entered a new formula, then this flag is set. If @ref #bFormula is FALSE
+   * entered a new formula, then this flag is set. If @ref #bFormula is false
    * nothing will happen at all.
    *
    * Progress

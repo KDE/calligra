@@ -275,19 +275,19 @@ public:
      * If the name really changed then @ref #sig_nameChanged is emitted
      * and the GUI will reflect the change.
      *
-     * @param init If set to TRUE then no formula will be changed and no signal
+     * @param init If set to true then no formula will be changed and no signal
      *             will be emitted and no undo action created. Usually you dont
      *             want to do that.
      *
      *
-     * @return FALSE if the sheet could not be renamed. Usually the reason is
+     * @return false if the sheet could not be renamed. Usually the reason is
      *         that this name is already used.
      *
      * @see #changeCellTabName
      * @see KSpreadTabBar::renameTab
      * @see #sheetName
      */
-    bool setSheetName( const QString& name, bool init = FALSE, bool makeUndo=true );
+    bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
     
     KSpreadMap* workbook();
     KSpreadDoc* doc();
@@ -352,7 +352,7 @@ public:
      *
      * @return a non default ColumnFormat for this column.
      */
-    ColumnFormat* nonDefaultColumnFormat( int _column, bool force_creation = TRUE );
+    ColumnFormat* nonDefaultColumnFormat( int _column, bool force_creation = true );
 
     const RowFormat* rowFormat( int _row ) const;
     RowFormat* rowFormat( int _row );
@@ -361,7 +361,7 @@ public:
      *
      * @return a non default RowFormat for this row.
      */
-    RowFormat* nonDefaultRowFormat( int _row, bool force_creation = TRUE );
+    RowFormat* nonDefaultRowFormat( int _row, bool force_creation = true );
 
     /**
      * @return the first cell of this sheet. Next cells can
@@ -646,8 +646,8 @@ public:
      * the column _marker.x() or right hand of that one position
      * to the right.
      *
-     * @return TRUE if the shift was possible, or false otherwise.
-     *         A reason for returning FALSE is that there was a cell
+     * @return true if the shift was possible, or false otherwise.
+     *         A reason for returning false is that there was a cell
      *         in the right most position.
      */
     bool shiftRow( const QRect &_rect, bool makeUndo=true );
@@ -930,7 +930,7 @@ public:
 
 
     /**
-     * Return TRUE if there are text value in cell
+     * Return true if there are text value in cell
      * so you can create list selection
      */
     bool testListChoose(KSpreadSelection* selectionInfo);

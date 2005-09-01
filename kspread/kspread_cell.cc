@@ -733,11 +733,11 @@ void KSpreadCell::setLayoutDirtyFlag( bool format )
 bool KSpreadCell::needsPrinting() const
 {
     if ( isDefault() )
-        return FALSE;
+        return false;
 
     if ( !d->strText.isEmpty() ) {
 	//kdWarning(36001) << name() << ": not empty - needs printing" << endl;
-        return TRUE;
+        return true;
     }
 
     // Cell borders?
@@ -746,24 +746,24 @@ bool KSpreadCell::needsPrinting() const
          hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ) {
 	//kdDebug(36001) << name()
 	//		 << ": has border property - needs printing" << endl;
-	return TRUE;
+	return true;
     }
 
     // Background color or brush?
     if ( hasProperty( PBackgroundBrush ) ) {
 	//kdDebug(36001) << name()
 	//		 << ": has brush property - needs printing" << endl;
-        return TRUE;
+        return true;
     }
 
     if ( hasProperty( PBackgroundColor ) ) {
 	//kdDebug(36001) << name()
 	//		 << ": has backgroundColor property - needs printing"
 	//		 << endl;
-	return TRUE;
+	return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool KSpreadCell::isEmpty() const
@@ -915,8 +915,8 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
     if(d->strText.isEmpty())
         return d->strText;
 
-    bool fix1 = FALSE;
-    bool fix2 = FALSE;
+    bool fix1 = false;
+    bool fix2 = false;
     bool onNumber = false;
     unsigned int pos = 0;
     const unsigned int length = d->strText.length();
@@ -946,13 +946,13 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
         else if ( d->strText[pos].isDigit() )
         {
           erg += d->strText[pos++];
-          fix1 = fix2 = FALSE;
+          fix1 = fix2 = false;
           onNumber = true;
         }
         else if ( d->strText[pos] != '$' && !d->strText[pos].isLetter() )
         {
             erg += d->strText[pos++];
-            fix1 = fix2 = FALSE;
+            fix1 = fix2 = false;
             onNumber = false;
         }
         else
@@ -962,7 +962,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
             {
                 tmp = "$";
                 pos++;
-                fix1 = TRUE;
+                fix1 = true;
             }
             if ( d->strText[pos].isLetter() )
             {
@@ -977,7 +977,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                 {
                     tmp += "$";
                     pos++;
-                    fix2 = TRUE;
+                    fix2 = true;
                 }
                 if ( d->strText[pos].isDigit() )
                 {
@@ -994,7 +994,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                          onNumber )
                     {
                         erg += tmp;
-                        fix1 = fix2 = FALSE;
+                        fix1 = fix2 = false;
                         pos = oldPos;
                     }
                     else // It must be a cell identifier
@@ -1022,13 +1022,13 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                 else
                 {
                     erg += tmp;
-                    fix1 = fix2 = FALSE;
+                    fix1 = fix2 = false;
                 }
             }
             else
             {
                 erg += tmp;
-                fix1 = FALSE;
+                fix1 = false;
             }
             onNumber = false;
         }
@@ -1071,16 +1071,16 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
         }
         else if ( _text[pos] == '#' || _text[pos] == '$' || _text[pos] == QChar(0xA7))
         {
-            bool abs1 = FALSE;
-            bool abs2 = FALSE;
-            bool era1 = FALSE; // if 1st is relative but encoded absolutely
-            bool era2 = FALSE;
+            bool abs1 = false;
+            bool abs2 = false;
+            bool era1 = false; // if 1st is relative but encoded absolutely
+            bool era2 = false;
 
             QChar _t = _text[pos++];
             if ( _t == '$' )
-                abs1 = TRUE;
+                abs1 = true;
             else if ( _t == QChar(0xA7) )
-                era1 = TRUE;
+                era1 = true;
 
             int col = 0;
             unsigned int oldPos = pos;
@@ -1093,9 +1093,9 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
 
             _t = _text[pos++];
             if ( _t == '$' )
-                 abs2 = TRUE;
+                 abs2 = true;
             else if ( _t == QChar(0xA7) )
-                 era2 = TRUE;
+                 era2 = true;
 
             int row = 0;
             oldPos = pos;

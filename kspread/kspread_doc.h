@@ -474,7 +474,7 @@ public:
   void enableRedo( bool _b );
 
   /**
-   * @return TRUE if the document is currently loading.
+   * @return true if the document is currently loading.
    */
   bool isLoading() const;
 

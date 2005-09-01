@@ -20,7 +20,7 @@ class KSpreadInsertHandler : public EventHandler
 {
     Q_OBJECT
 public:
-    KSpreadInsertHandler( KSpreadView* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart = FALSE );
+    KSpreadInsertHandler( KSpreadView* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart = false );
     ~KSpreadInsertHandler();
 
 protected:

@@ -67,7 +67,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 {
   m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
-  m_pEdit->setFrame( FALSE );
+  m_pEdit->setFrame( false );
   m_pEdit->setCompletionMode((KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
   m_pEdit->setCompletionObject( &canvas()->view()->doc()->completion(),true );
   setFocusProxy( m_pEdit );
@@ -79,7 +79,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 //  canvas()->setChooseMarkerRow( canvas()->markerRow() );
 //  canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
 
-  m_blockCheck = FALSE;
+  m_blockCheck = false;
 
   // set font size according to zoom factor
   QFont font( _cell->font() );
@@ -324,11 +324,11 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 {
     // Only interested in KLineEdit
     if ( o != m_pEdit )
-        return FALSE;
+        return false;
     if ( e->type() == QEvent::FocusOut )
     {
         canvas()->setLastEditorWithFocus( KSpreadCanvas::CellEditor );
-        return FALSE;
+        return false;
     }
 
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
@@ -342,7 +342,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
             {
                 // Send directly to canvas
                 QApplication::sendEvent( parent(), e );
-                return TRUE;
+                return true;
             }
         }
         // End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
@@ -354,7 +354,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * _parent,
@@ -608,9 +608,9 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
       QLineEdit::keyPressEvent( _ev );
 
       setFocus();
-      cellEditor->blockCheckChoose( TRUE );
+      cellEditor->blockCheckChoose( true );
       cellEditor->setText( text() );
-      cellEditor->blockCheckChoose( FALSE );
+      cellEditor->blockCheckChoose( false );
       cellEditor->setCursorPosition( cursorPosition() );
   }
 }

@@ -172,7 +172,7 @@ public:
     ViewActions* actions;
 
     // If updateEditWidget is called it changes some KToggleActions.
-    // That causes them to emit a signal. If this lock is TRUE, then these
+    // That causes them to emit a signal. If this lock is true, then these
     // signals are ignored.
     bool toolbarLock;
 
@@ -840,7 +840,7 @@ void ViewPrivate::initActions()
   actions->transform = new KAction( i18n("Transform Object..."), "rotate",
       0, view, SLOT( transformPart() ), ac, "transform" );
   actions->transform->setToolTip(i18n("Rotate the contents of the cell."));
-  actions->transform->setEnabled( FALSE );
+  actions->transform->setEnabled( false );
 
   actions->sort = new KAction( i18n("&Sort..."),
       0, view, SLOT( sort() ), ac, "sort" );
@@ -1284,7 +1284,7 @@ void ViewPrivate::adjustWorkbookActions( bool mode )
 // TODO this should be merged with adjustActions
 void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
 {
-    toolbarLock = TRUE;
+    toolbarLock = true;
 
     // workaround for bug #59291 (crash upon starting from template)
     // certain Qt and Fontconfig combination fail miserably if can not
@@ -1327,7 +1327,7 @@ void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
     if ( activeSheet && !activeSheet->isProtected() )
       actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
-    toolbarLock = FALSE;
+    toolbarLock = false;
     if ( activeSheet )
       adjustActions( activeSheet, cell );
 }
@@ -1545,14 +1545,14 @@ void KSpreadView::initView()
     d->formulaBarLayout->addWidget( d->posWidget );
     d->formulaBarLayout->addSpacing( 6 );
 
-    d->formulaButton = d->newIconButton( "funct", TRUE, d->toolWidget );
+    d->formulaButton = d->newIconButton( "funct", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->formulaButton );
     d->formulaBarLayout->addSpacing( 2 );
     connect( d->formulaButton, SIGNAL( clicked() ), SLOT( insertMathExpr() ) );
 
-    d->cancelButton = d->newIconButton( "cancel", TRUE, d->toolWidget );
+    d->cancelButton = d->newIconButton( "cancel", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->cancelButton );
-    d->okButton = d->newIconButton( "ok", TRUE, d->toolWidget );
+    d->okButton = d->newIconButton( "ok", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->okButton );
     d->formulaBarLayout->addSpacing( 6 );
 
@@ -2877,8 +2877,8 @@ void KSpreadView::verticalText(bool b)
 
   doc()->emitBeginOperation( false );
   d->activeSheet->setSelectionVerticalText( selectionInfo(), b );
-  if ( util_isRowSelected( selection() ) == FALSE
-       && util_isColumnSelected( selection() ) == FALSE )
+  if ( util_isRowSelected( selection() ) == false
+       && util_isColumnSelected( selection() ) == false )
   {
     d->canvas->adjustArea( false );
     updateEditWidget();
@@ -3687,8 +3687,8 @@ void KSpreadView::changeAngle()
                     QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ));
   if ( dlg.exec() )
   {
-    if ( (util_isRowSelected(selection()) == FALSE) &&
-        (util_isColumnSelected(selection()) == FALSE) )
+    if ( (util_isRowSelected(selection()) == false) &&
+        (util_isColumnSelected(selection()) == false) )
     {
       doc()->emitBeginOperation( false );
       d->canvas->adjustArea( false );
@@ -4250,7 +4250,7 @@ void KSpreadView::setupPrinter( KPrinter &prt )
     else
         prt.setOrientation( KPrinter::Portrait );
 
-    prt.setFullPage( TRUE );
+    prt.setFullPage( true );
 }
 
 void KSpreadView::print( KPrinter &prt )
@@ -4914,7 +4914,7 @@ void KSpreadView::popupColumnMenu( const QPoint & _point )
       d->popupColumn->insertSeparator();
       d->actions->defaultFormat->plug( d->popupColumn );
       // If there is no selection
-      if ((util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
+      if ((util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
       {
         d->actions->areaName->plug( d->popupColumn );
       }
@@ -4999,7 +4999,7 @@ void KSpreadView::popupRowMenu( const QPoint & _point )
       d->popupRow->insertSeparator();
       d->actions->defaultFormat->plug( d->popupRow );
       // If there is no selection
-      if ( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
+      if ( (util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
       {
 	d->actions->areaName->plug( d->popupRow );
       }
@@ -5200,7 +5200,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
       d->actions->defaultFormat->plug( d->popupMenu );
 
       // If there is no selection
-      if ( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
+      if ( (util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
       {
         d->actions->areaName->plug( d->popupMenu );
         d->popupMenu->insertSeparator();
@@ -5834,7 +5834,7 @@ void KSpreadView::insertChart()
 
   doc()->emitBeginOperation( false );
 
-  d->insertHandler = new KSpreadInsertHandler( this, d->canvas, vec[0], TRUE );
+  d->insertHandler = new KSpreadInsertHandler( this, d->canvas, vec[0], true );
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
@@ -6292,11 +6292,11 @@ void KSpreadView::slotChildSelected( KoDocumentChild* ch )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
   {
-    d->actions->transform->setEnabled( TRUE );
+    d->actions->transform->setEnabled( true );
 
     if ( !d->transformToolBox.isNull() )
     {
-        d->transformToolBox->setEnabled( TRUE );
+        d->transformToolBox->setEnabled( true );
         d->transformToolBox->setDocumentChild( ch );
     }
   }
@@ -6311,11 +6311,11 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
   {
-    d->actions->transform->setEnabled( FALSE );
+    d->actions->transform->setEnabled( false );
 
     if ( !d->transformToolBox.isNull() )
     {
-        d->transformToolBox->setEnabled( FALSE );
+        d->transformToolBox->setEnabled( false );
     }
     deleteEditor( true );
   }

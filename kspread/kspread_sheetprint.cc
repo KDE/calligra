@@ -173,13 +173,13 @@ int KSpreadSheetPrint::pagesY( const QRect& cellsPrintRange )
 
 bool KSpreadSheetPrint::pageNeedsPrinting( QRect& page_range )
 {
-    bool filled = FALSE;
+    bool filled = false;
 
     // Look at the cells
     for( int r = page_range.top(); !filled && ( r <= page_range.bottom() ); ++r )
         for( int c = page_range.left(); !filled && ( c <= page_range.right() ); ++c )
             if ( m_pSheet->cellAt( c, r )->needsPrinting() )
-                filled = TRUE;
+                filled = true;
 
     if( !filled ) //Page empty, but maybe children on it?
     {
@@ -195,7 +195,7 @@ bool KSpreadSheetPrint::pageNeedsPrinting( QRect& page_range )
         {
             QRect bound = it.current()->boundingRect();
             if ( bound.intersects( intView ) )
-                filled = TRUE;
+                filled = true;
         }
     }
 
@@ -649,13 +649,13 @@ bool KSpreadSheetPrint::isOnNewPageX( int _column )
     //Are these the edges of the print range?
     if ( _column == m_printRange.left() || _column == m_printRange.right() + 1 )
     {
-        return TRUE;
+        return true;
     }
 
     //beyond the print range it's always false
     if ( _column < m_printRange.left() || _column > m_printRange.right() )
     {
-        return TRUE;
+        return true;
     }
 
     //Now check if we find the column already in the list
@@ -663,9 +663,9 @@ bool KSpreadSheetPrint::isOnNewPageX( int _column )
     {
         if( _column > m_maxCheckedNewPageX )
             m_maxCheckedNewPageX = _column;
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -764,13 +764,13 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
     //Are these the edges of the print range?
     if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
     {
-        return FALSE;
+        return false;
     }
 
      //beyond the print range it's always false
     if ( _row < m_printRange.top() || _row > m_printRange.bottom() )
     {
-        return FALSE;
+        return false;
     }
 
     //Now check if we find the row already in the list
@@ -778,10 +778,10 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
     {
         if( _row > m_maxCheckedNewPageY )
             m_maxCheckedNewPageY = _row;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -1040,7 +1040,7 @@ void KSpreadSheetPrint::setHeadFootLine( const QString &_headl, const QString &_
     m_footRight = _footr;
     m_footMid   = _footm;
 
-    m_pDoc->setModified( TRUE );
+    m_pDoc->setModified( true );
 }
 
 void KSpreadSheetPrint::setPaperOrientation( KoOrientation _orient )
@@ -1103,7 +1103,7 @@ void KSpreadSheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
 //        v->activeSheet()->setShowPageBorders( bBorderWasShown );
 //    }
 
-    m_pDoc->setModified( TRUE );
+    m_pDoc->setModified( true );
 }
 
 void KSpreadSheetPrint::setPaperLayout( float _leftBorder, float _topBorder,

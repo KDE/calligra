@@ -102,7 +102,7 @@ public:
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() one position downwards.
      *
-     * @return FALSE if a cell would drop out of the sheet because of that.
+     * @return false if a cell would drop out of the sheet because of that.
      *         In this case the shift is not performed.
      */
     bool shiftColumn( const QPoint& marker );
@@ -117,7 +117,7 @@ public:
     /**
      * Moves all columns beginning with @p col one position
      * to the right. If that does not work because a cell would
-     * drop out of the sheet, then FALSE is returned.
+     * drop out of the sheet, then false is returned.
      *
      * @see #removeColumn
      */
@@ -239,7 +239,7 @@ public:
 
 private:
     /**
-     * @param work is set to TRUE if the method found some clusters
+     * @param work is set to true if the method found some clusters
      *        which belong to the shifted row.
      */
     bool shiftRow( const QPoint& marker, bool& work );

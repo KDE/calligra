@@ -33,7 +33,7 @@
 
 /* Generate a matrix LEVEL1 with the size LEVEL1*LEVEL1 */
 KSpreadCluster::KSpreadCluster()
-    : m_first( 0 ), m_autoDelete( FALSE ), m_biggestX(0), m_biggestY(0)
+    : m_first( 0 ), m_autoDelete( false ), m_biggestX(0), m_biggestY(0)
 {
     m_cluster = (KSpreadCell***)malloc( KSPREAD_CLUSTER_LEVEL1 * KSPREAD_CLUSTER_LEVEL1 * sizeof( KSpreadCell** ) );
 
@@ -250,14 +250,14 @@ KSpreadCell* KSpreadCluster::firstCell() const
 
 bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 {
-    work = FALSE;
+    work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
 	kdDebug(36001) << "KSpreadCluster::shiftRow: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     int cx = marker.x() / KSPREAD_CLUSTER_LEVEL2;
@@ -269,10 +269,10 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
     // In this case the shift is impossible.
     KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ dy * KSPREAD_CLUSTER_LEVEL2 + KSPREAD_CLUSTER_LEVEL2 - 1 ] )
-	return FALSE;
+	return false;
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     // Move cells in this row one down.
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
@@ -280,7 +280,7 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + i ];
 	if ( cl )
         {
-	    work = TRUE;
+	    work = true;
 	    int left = 0;
 	    if ( i == cx )
 		left = dx;
@@ -302,19 +302,19 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 
     setAutoDelete( a );
 
-    return TRUE;
+    return true;
 }
 
 bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 {
-    work = FALSE;
+    work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
 	kdDebug(36001) << "KSpreadCluster::shiftColumn: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     int cx = marker.x() / KSPREAD_CLUSTER_LEVEL2;
@@ -326,10 +326,10 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
     // In this case the shift is impossible.
     KSpreadCell** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 * ( KSPREAD_CLUSTER_LEVEL1 - 1 ) + cx ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 * ( KSPREAD_CLUSTER_LEVEL2 - 1 ) + dx ] )
-	return FALSE;
+	return false;
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     // Move cells in this column one right.
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cy ; --i )
@@ -337,7 +337,7 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 	KSpreadCell** cl = m_cluster[ i * KSPREAD_CLUSTER_LEVEL1 + cx ];
 	if ( cl )
         {
-	    work = TRUE;
+	    work = true;
 
 	    int top = 0;
 	    if ( i == cy )
@@ -360,7 +360,7 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 
     setAutoDelete( a );
 
-    return TRUE;
+    return true;
 }
 
 bool KSpreadCluster::insertColumn( int col )
@@ -369,7 +369,7 @@ bool KSpreadCluster::insertColumn( int col )
     {
 	kdDebug(36001) << "KSpreadCluster::insertColumn: invalid column value (col: "
 		       << col << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     // Is there a cell at the right most position ?
@@ -380,17 +380,17 @@ bool KSpreadCluster::insertColumn( int col )
 	if ( cl )
 	    for( int t2 = 0; t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 		if ( cl[ t2 * KSPREAD_CLUSTER_LEVEL2 + KSPREAD_CLUSTER_LEVEL2 - 1 ] )
-		    return FALSE;
+		    return false;
     }
 
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
-	bool work = TRUE;
+	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    shiftRow( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
     }
 
-    return TRUE;
+    return true;
 }
 
 bool KSpreadCluster::insertRow( int row )
@@ -399,7 +399,7 @@ bool KSpreadCluster::insertRow( int row )
     {
 	kdDebug(36001) << "KSpreadCluster::insertRow: invalid row value (row: "
 		       << row << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     // Is there a cell at the bottom most position ?
@@ -410,22 +410,22 @@ bool KSpreadCluster::insertRow( int row )
 	if ( cl )
 	    for( int t2 = 0; t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 		if ( cl[ KSPREAD_CLUSTER_LEVEL2 * ( KSPREAD_CLUSTER_LEVEL2 - 1 ) + t2 ] )
-		    return FALSE;
+		    return false;
     }
 
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
-	bool work = TRUE;
+	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    shiftColumn( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
     }
 
-    return TRUE;
+    return true;
 }
 
 void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 {
-    work = FALSE;
+    work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
@@ -441,7 +441,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
     int dy = marker.y() % KSPREAD_CLUSTER_LEVEL2;
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     // Move cells in this column one column to the left.
     for( int i = cy; i < KSPREAD_CLUSTER_LEVEL1; ++i )
@@ -449,7 +449,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 	KSpreadCell** cl = m_cluster[ i * KSPREAD_CLUSTER_LEVEL1 + cx ];
 	if ( cl )
         {
-	    work = TRUE;
+	    work = true;
 
 	    int top = 0;
 	    if ( i == cy )
@@ -473,7 +473,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 
 void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 {
-    work = FALSE;
+    work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
@@ -489,7 +489,7 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
     int dy = marker.y() % KSPREAD_CLUSTER_LEVEL2;
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     // Move cells in this row one row up.
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
@@ -497,7 +497,7 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + i ];
 	if ( cl )
         {
-	    work = TRUE;
+	    work = true;
 
 	    int left = 0;
 	    if ( i == cx )
@@ -542,7 +542,7 @@ void KSpreadCluster::removeColumn( int col )
 
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
-	bool work = TRUE;
+	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    unshiftRow( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
     }
@@ -571,7 +571,7 @@ void KSpreadCluster::removeRow( int row )
 
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
-	bool work = TRUE;
+	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    unshiftColumn( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
     }
@@ -848,7 +848,7 @@ KSpreadCell* KSpreadCluster::getNextCellRight(int col, int row) const
  ****************************************************/
 
 KSpreadColumnCluster::KSpreadColumnCluster()
-    : m_first( 0 ), m_autoDelete( FALSE )
+    : m_first( 0 ), m_autoDelete( false )
 {
     m_cluster = (ColumnFormat***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( ColumnFormat** ) );
 
@@ -1029,7 +1029,7 @@ bool KSpreadColumnCluster::insertColumn( int col )
     {
 	kdDebug(36001) << "KSpreadColumnCluster::insertColumn: invalid column value (col: "
 		       << col << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
@@ -1039,10 +1039,10 @@ bool KSpreadColumnCluster::insertColumn( int col )
     // In this case the shift is impossible.
     ColumnFormat** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 - 1 ] )
-	return FALSE;
+	return false;
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
@@ -1070,7 +1070,7 @@ bool KSpreadColumnCluster::insertColumn( int col )
 
     setAutoDelete( a );
 
-    return TRUE;
+    return true;
 }
 
 bool KSpreadColumnCluster::removeColumn( int column )
@@ -1079,7 +1079,7 @@ bool KSpreadColumnCluster::removeColumn( int column )
     {
 	kdDebug(36001) << "KSpreadColumnCluster::removeColumn: invalid column value (col: "
 		       << column << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     int cx = column / KSPREAD_CLUSTER_LEVEL2;
@@ -1088,7 +1088,7 @@ bool KSpreadColumnCluster::removeColumn( int column )
     removeElement( column );
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
@@ -1114,7 +1114,7 @@ bool KSpreadColumnCluster::removeColumn( int column )
 
     setAutoDelete( a );
 
-    return TRUE;
+    return true;
 }
 
 void KSpreadColumnCluster::setAutoDelete( bool a )
@@ -1134,7 +1134,7 @@ bool KSpreadColumnCluster::autoDelete() const
  ****************************************************/
 
 KSpreadRowCluster::KSpreadRowCluster()
-    : m_first( 0 ), m_autoDelete( FALSE )
+    : m_first( 0 ), m_autoDelete( false )
 {
     m_cluster = (RowFormat***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( RowFormat** ) );
 
@@ -1314,7 +1314,7 @@ bool KSpreadRowCluster::insertRow( int row )
     {
 	kdDebug(36001) << "KSpreadRowCluster::insertRow: invalid row value (row: "
 		       << row << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
@@ -1324,10 +1324,10 @@ bool KSpreadRowCluster::insertRow( int row )
     // In this case the shift is impossible.
     RowFormat** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 - 1 ] )
-	return FALSE;
+	return false;
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
@@ -1355,7 +1355,7 @@ bool KSpreadRowCluster::insertRow( int row )
 
     setAutoDelete( a );
 
-    return TRUE;
+    return true;
 }
 
 bool KSpreadRowCluster::removeRow( int row )
@@ -1364,7 +1364,7 @@ bool KSpreadRowCluster::removeRow( int row )
     {
 	kdDebug(36001) << "KSpreadRowCluster::removeRow: invalid row value (row: "
 		       << row << ")" << endl;
-	return FALSE;
+	return false;
     }
 
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
@@ -1373,7 +1373,7 @@ bool KSpreadRowCluster::removeRow( int row )
     removeElement( row );
 
     bool a = autoDelete();
-    setAutoDelete( FALSE );
+    setAutoDelete( false );
 
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
@@ -1399,7 +1399,7 @@ bool KSpreadRowCluster::removeRow( int row )
 
     setAutoDelete( a );
 
-    return TRUE;
+    return true;
 }
 
 void KSpreadRowCluster::setAutoDelete( bool a )

@@ -390,7 +390,7 @@ protected:
     virtual const KSpreadFormat* fallbackFormat( int col, int row ) const;
 
     /**
-     * Default implementation returns TRUE.
+     * Default implementation returns true.
      */
     virtual bool isDefault() const;
 
@@ -483,7 +483,7 @@ public:
     /**
      * Use this function to tell this format that it is the default format.
      */
-    void setDefault() { m_bDefault = TRUE; }
+    void setDefault() { m_bDefault = true; }
     /**
      * @reimp
      */
@@ -623,7 +623,7 @@ public:
     /**
      * Use this function to tell this format that it is the default format.
      */
-    void setDefault() { m_bDefault = TRUE; }
+    void setDefault() { m_bDefault = true; }
     /**
      * @reimp
      */

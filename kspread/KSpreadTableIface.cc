@@ -80,14 +80,14 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 	kdDebug()<<"KSpreadCellProxy::process: requested object:"<<obj<<endl;
 	kdDebug()<<"KSpreadCellProxy::process: prefix:"<<m_prefix<<endl;
     if ( strncmp( m_prefix.data(), obj.data(), m_prefix.length() ) != 0 )
-        return FALSE;
+        return false;
 
 	if ( fun == "functions()" ) {
         	replyType = "QCStringList";
 	        QDataStream reply( replyData, IO_WriteOnly );
 		 QCStringList repList=m_cell->functions();
 		reply<<repList;
-	        return TRUE;
+	        return true;
 	}
 
     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
@@ -98,7 +98,7 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
     KSpreadPoint p( cellID); //obj.data() + m_prefix.length() );
     if ( p.pos.x()<0 ) {
 	kdDebug(36001)<<"KSpreadCellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
-        return FALSE;
+        return false;
     }
 
     kdDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos.x()<<endl;
@@ -232,22 +232,22 @@ bool KSpreadSheetIface::processDynamic( const QCString& fun, const QByteArray&/*
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
-        return FALSE;
+        return false;
 
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
-        return FALSE;
+        return false;
 
     // Is the function name a valid cell like "B5" ?
     KSpreadPoint p( fun.left( len - 2 ).data() );
     if ( !p.isValid() )
-        return FALSE;
+        return false;
 
     QCString str = objId() + "/" + fun.left( len - 2 );
 
     replyType = "DCOPRef";
     QDataStream out( replyData, IO_WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), str );
-    return TRUE;
+    return true;
 }
 
 bool KSpreadSheetIface::setSheetName( const QString & name)

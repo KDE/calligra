@@ -294,7 +294,7 @@ KSpreadValue func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
   // uses double, hence won't support big precision
 
   int decimals = 2;
-  bool no_commas = FALSE;
+  bool no_commas = false;
 
   double number = calc->conv()->asFloat (args[0]).asFloat();
   if (args.count() > 1)
@@ -307,7 +307,7 @@ KSpreadValue func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
 
   // unfortunately, we can't just use KLocale::formatNumber because
   // * if decimals < 0, number is rounded
-  // * if no_commas is TRUE, thousand separators shouldn't show up
+  // * if no_commas is true, thousand separators shouldn't show up
 
   if( decimals < 0 )
   {

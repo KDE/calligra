@@ -39,8 +39,8 @@ KSpreadUndo::KSpreadUndo( KSpreadDoc *_doc )
 {
     m_pDoc = _doc;
 
-    m_stckUndo.setAutoDelete( FALSE );
-    m_stckRedo.setAutoDelete( FALSE );
+    m_stckUndo.setAutoDelete( false );
+    m_stckRedo.setAutoDelete( false );
 }
 
 KSpreadUndo::~KSpreadUndo()
@@ -53,9 +53,9 @@ void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
     if ( isLocked() )
 	return;
 
-    m_stckRedo.setAutoDelete( TRUE );
+    m_stckRedo.setAutoDelete( true );
     m_stckRedo.clear();
-    m_stckRedo.setAutoDelete( FALSE );
+    m_stckRedo.setAutoDelete( false );
 
     m_stckUndo.push( _action );
 
@@ -72,14 +72,14 @@ void KSpreadUndo::clear()
     if ( isLocked() )
 	return;
 
-    m_stckUndo.setAutoDelete( TRUE );
-    m_stckRedo.setAutoDelete( TRUE );
+    m_stckUndo.setAutoDelete( true );
+    m_stckRedo.setAutoDelete( true );
 
     m_stckUndo.clear();
     m_stckRedo.clear();
 
-    m_stckUndo.setAutoDelete( FALSE );
-    m_stckRedo.setAutoDelete( FALSE );
+    m_stckUndo.setAutoDelete( false );
+    m_stckRedo.setAutoDelete( false );
 }
 
 void KSpreadUndo::undo()

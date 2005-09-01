@@ -471,7 +471,7 @@ private:
     /**
      * Flag that inidicates whether the user wants to mark columns.
      * The user may mark columns by dragging the mouse around in th XBorder widget.
-     * If he is doing that right now, this flag is TRUE. Mention that the user may
+     * If he is doing that right now, this flag is true. Mention that the user may
      * also resize columns by dragging the mouse. This case is not covered by this flag.
      */
     bool m_bSelection;
@@ -486,7 +486,7 @@ private:
     /**
      * Flag that indicates whether the user resizes a column
      * The user may resize columns by dragging the mouse around in the HBorder widget.
-     * If he is doing that right now, this flag is TRUE.
+     * If he is doing that right now, this flag is true.
      */
     bool m_bResize;
 

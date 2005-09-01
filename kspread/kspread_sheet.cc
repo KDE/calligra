@@ -336,7 +336,7 @@ KSpreadSheet::KSpreadSheet (KSpreadMap* map,
   d->name = sheetName;
 
   dcopObject();
-  d->cellBindings.setAutoDelete( FALSE );
+  d->cellBindings.setAutoDelete( false );
 
   // m_lstChildren.setAutoDelete( true );
 
@@ -365,7 +365,7 @@ KSpreadSheet::KSpreadSheet (KSpreadMap* map,
   d->showGrid=true;
   d->showFormula=false;
   d->showFormulaIndicator=true;
-  d->showPageBorders = FALSE;
+  d->showPageBorders = false;
 
   d->lcMode=false;
   d->showColumnNumber=false;
@@ -3687,7 +3687,7 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
   Q_ASSERT( order1 == Increase || order1 == Decrease );
 
   // It may not happen that entire columns are selected.
-  Q_ASSERT( util_isColumnSelected(r) == FALSE );
+  Q_ASSERT( util_isColumnSelected(r) == false );
 
   // Are entire rows selected ?
   if ( util_isRowSelected(r) )
@@ -4030,7 +4030,7 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
   Q_ASSERT( order1 == Increase || order1 == Decrease );
 
   // It may not happen that entire rows are selected.
-  Q_ASSERT( util_isRowSelected(r) == FALSE );
+  Q_ASSERT( util_isRowSelected(r) == false );
 
   // Are entire columns selected ?
   if ( util_isColumnSelected(r) )
@@ -5900,11 +5900,11 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
 
     // find size of rectangle that we want to paste to (either clipboard size or current selection)
     const int pasteWidth = ( pasteArea.width() >= columnsInClpbrd
-                             && util_isRowSelected(pasteArea) == FALSE
+                             && util_isRowSelected(pasteArea) == false
                              && e.namedItem( "rows" ).toElement().isNull() )
       ? pasteArea.width() : columnsInClpbrd;
     const int pasteHeight = ( pasteArea.height() >= rowsInClpbrd
-                              && util_isColumnSelected(pasteArea) == FALSE
+                              && util_isColumnSelected(pasteArea) == false
                               && e.namedItem( "columns" ).toElement().isNull())
       ? pasteArea.height() : rowsInClpbrd;
 
@@ -6053,11 +6053,11 @@ void KSpreadSheet::loadSelectionUndo( const QDomDocument & d, const QRect &loadA
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
     // find rect that we paste to
     const int pasteWidth = ( loadArea.width() >= columnsInClpbrd &&
-                             util_isRowSelected(loadArea) == FALSE &&
+                             util_isRowSelected(loadArea) == false &&
                              e.namedItem( "rows" ).toElement().isNull() )
         ? loadArea.width() : columnsInClpbrd;
     const int pasteHeight = ( loadArea.height() >= rowsInClpbrd &&
-                              util_isColumnSelected(loadArea) == FALSE &&
+                              util_isColumnSelected(loadArea) == false &&
                               e.namedItem( "columns" ).toElement().isNull() )
         ? loadArea.height() : rowsInClpbrd;
     QRect rect;
@@ -8409,19 +8409,19 @@ void KSpreadSheet::removeSheet()
 bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
 {
     if ( workbook()->findSheet( name ) )
-        return FALSE;
+        return false;
 
     if ( isProtected() )
       return false;
 
     if ( d->name == name )
-        return TRUE;
+        return true;
 
     QString old_name = d->name;
     d->name = name;
 
     if ( init )
-        return TRUE;
+        return true;
 
     QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for ( ; it.current(); ++it )
@@ -8433,7 +8433,7 @@ bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo
     setName(name.utf8());
     (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->sheetNameHasChanged();
 
-    return TRUE;
+    return true;
 }
 
 

@@ -1106,12 +1106,12 @@ static double GammaHelp(double& x, bool& bReflect)
                  -1.231739516, 0.120858003E-2, -0.536382E-5};
   if (x >= 1.0)
     {
-      bReflect = FALSE;
+      bReflect = false;
       x -= 1.0;
     }
   else
     {
-      bReflect = TRUE;
+      bReflect = true;
       x = 1.0 - x;
     }
   double s, anum;
@@ -1235,12 +1235,12 @@ KSpreadValue ValueCalc::GetBeta (KSpreadValue _x, KSpreadValue _alpha,
   double cf, fA, fB;
 
   if (x < (alpha+1.0)/(alpha+beta+1.0)) {
-    bReflect = FALSE;
+    bReflect = false;
     fA = alpha;
     fB = beta;
   }
   else {
-    bReflect = TRUE;
+    bReflect = true;
     fA = beta;
     fB = alpha;
     x = 1.0 - x;

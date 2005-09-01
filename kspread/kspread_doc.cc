@@ -112,7 +112,7 @@ public:
   bool undoLocked;
   KoCommandHistory* commandHistory;
 
-  // TRUE if loading is in process, otherwise FALSE.
+  // true if loading is in process, otherwise false.
   // This flag is used to avoid updates etc. during loading.
   bool isLoading;
 
@@ -405,7 +405,7 @@ void KSpreadDoc::initConfig()
         ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
         ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
         ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-        ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+        ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", false));
         ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
         ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
         setKSpellConfig(ksconfig);
@@ -896,7 +896,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     dt.start();
 
     emit sigProgress( 0 );
-    d->isLoading = TRUE;
+    d->isLoading = true;
     d->spellListIgnoreAll.clear();
 
     d->refs.clear();
@@ -961,7 +961,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   dt.start();
 
   emit sigProgress( 0 );
-  d->isLoading = TRUE;
+  d->isLoading = true;
   d->spellListIgnoreAll.clear();
   // <spreadsheet>
   QDomElement spread = doc.documentElement();
@@ -1185,7 +1185,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
-  setModified( FALSE );
+  setModified( false );
   return true;
 }
 

@@ -99,7 +99,7 @@ static bool kspreadfunc_cell( KSContext& context )
 
     const QValueList<KSValue::Ptr>& lines = args[0]->listValue();
     if ( lines.count() < 2 )
-      return FALSE;
+      return false;
 
     QValueList<KSValue::Ptr>::ConstIterator it = lines.begin();
     if ( !KSUtil::checkType( context, (*it), KSValue::ListType, true ) )
@@ -118,18 +118,18 @@ static bool kspreadfunc_cell( KSContext& context )
       ++x;
     }
     if ( it2 == line.end() )
-      return FALSE;
+      return false;
 
     kdDebug(36001) <<"x= "<<x<<endl;
     for( ; it != lines.end(); ++it )
     {
       const QValueList<KSValue::Ptr>& l = (*it)->listValue();
       if ( x >= (int)l.count() )
-        return FALSE;
+        return false;
       if ( l[0]->stringValue() == args[2]->stringValue() )
       {
         context.setValue( new KSValue( *(l[x]) ) );
-        return TRUE;
+        return true;
       }
     }
 

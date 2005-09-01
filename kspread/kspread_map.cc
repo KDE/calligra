@@ -70,7 +70,7 @@ KSpreadSheet* KSpreadMap::createSheet()
   QString s( i18n("Sheet%1") );
   s = s.arg( tableId++ );
   KSpreadSheet *t = new KSpreadSheet ( this, s , s.utf8());
-  t->setSheetName( s, TRUE ); // huh? (Werner)
+  t->setSheetName( s, true ); // huh? (Werner)
   return t;
 }
 
@@ -78,7 +78,7 @@ void KSpreadMap::addSheet( KSpreadSheet *_sheet )
 {
   m_lstSheets.append( _sheet );
 
-  m_doc->setModified( TRUE );
+  m_doc->setModified( true );
 
   emit sig_addSheet( _sheet );
 }
