@@ -1967,6 +1967,37 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
+
+                    if ( table->anchorFrameset()->isAHeader() ) //we must recalculate the header frame size
+                    {
+                      theFrame = table->anchorFrameset()->frameIterator().getLast();
+                      theFrame->setBottom(newPosition);
+                      frameResized( theFrame, false );
+                    }
+                    else if ( table->anchorFrameset()->isAFooter() || table->anchorFrameset()->isFootNote() ) //we must recalculate the footer frame size
+                    {
+                      theFrame = table->anchorFrameset()->frameIterator().getLast();
+                      // The Y position doesn't matter much, recalcFrames will reposition the frame
+                      // But the point of this code is set the correct height for the frame.
+                      double maxFooterSize = footerHeaderSizeMax( theFrame );
+                      double diffPt = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+                      wantedPosition = theFrame->top() - diffPt;
+                      if ( wantedPosition < 0 )
+                      {
+                        m_textobj->setLastFormattedParag( 0 );
+                        return true; // abort
+                      }
+
+                      if ( wantedPosition != theFrame->top() &&
+                           ( theFrame->frameSet()->isFootEndNote() ||
+                           theFrame->bottom() - maxFooterSize <= wantedPosition ) ) // Apply maxFooterSize for footers only
+                      {
+                        theFrame->setTop( wantedPosition );
+                        frameResized( theFrame, true );
+                        // We only got room for the next paragraph, we still have to keep the formatting going...
+                      }
+                    }
+
                     m_doc->delayedRepaintAllViews();
                 }
                 return true; // abort formatting for now (not sure this is correct)
@@ -2082,6 +2113,24 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
+
+                    if ( table->anchorFrameset()->isAHeader()  )
+                    {
+                      theFrame = table->anchorFrameset()->frameIterator().getLast();
+                      theFrame->setBottom(wantedPosition);
+                      frameResized( theFrame, false );
+                    }
+                    else if ( table->anchorFrameset()->isAFooter() ||  table->anchorFrameset()->isFootEndNote() )
+                    {
+                      theFrame = table->anchorFrameset()->frameIterator().getLast();
+                      double wantedPosition = theFrame->top() + m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+                      Q_ASSERT( wantedPosition < theFrame->bottom() );
+                      if ( wantedPosition != theFrame->top() )
+                      {
+                        theFrame->setTop( wantedPosition );
+                        frameResized( theFrame, true );
+                      }
+                    }
                     m_doc->delayedRepaintAllViews();
                 }
             }
