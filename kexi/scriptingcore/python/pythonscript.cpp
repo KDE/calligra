@@ -279,7 +279,9 @@ Kross::Api::Object::Ptr PythonScript::execute()
         return r;
     }
     catch(Py::Exception& e) {
-        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str()), getLineNo(e)) );
+        QString err = Py::value(e).as_string().c_str();
+        long lineno = getLineNo(e);
+        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);
@@ -321,25 +323,11 @@ Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::A
 
         // Call the function.
         Py::Object result = funcobject.apply(PythonExtension::toPyTuple(args));
-
-/* TESTCASE
-//PyObject* pDict = PyObject_GetAttrString(func,"__dict__");
-//kdDebug()<<"INT => "<< PyObject_IsInstance(func,d->m_module->ptr()) <<endl;
-//( PyCallable_Check(func)){//PyModule_CheckExact(func)){//PyModule_Check(func)){//PyMethod_Check(func)){//PyMethod_Function(func)){//PyInstance_Check(func) )
-        kdDebug() << QString("PythonScript::callFunction result='%1' type='%2'").arg(result.as_string().c_str()).arg(result.type().as_string().c_str()) << endl;
-        if(result.isInstance()) {
-            kdDebug() << ">>> IS_INSTANCE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
-        }
-        if(result.isCallable()) {
-            kdDebug() << ">>> IS_CALLABLE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
-        }
-*/
-
         return PythonExtension::toObject(result);
     }
     catch(Py::Exception& e) {
-        Py::Object errobj = Py::value(e);
-        setException( new Kross::Api::Exception(QString("Python Exception: %1").arg(errobj.as_string().c_str())) );
+        QString err = Py::value(e).as_string().c_str();
+        setException( new Kross::Api::Exception(QString("Python Exception: %1").arg(err)) );
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);
@@ -372,8 +360,6 @@ Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
         if( (! d->m_classes.contains(name)) || (! pyclass) )
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such class '%1'.").arg(name)) );
 
-        //PyClass_Check( vt.second.ptr() ))
-        //PyObject *aclarg = Py_BuildValue("(s)", rs.as_string().c_str());
         PyObject *pyobj = PyInstance_New(pyclass, 0, 0);//aclarg, 0);
         if(! pyobj)
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to create instance of class '%1'.").arg(name)) );

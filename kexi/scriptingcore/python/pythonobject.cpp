@@ -77,18 +77,6 @@ Kross::Api::Object::Ptr PythonObject::call(const QString& name, Kross::Api::List
     if(m_pyobject.isInstance()) {
         //if(! m_calls.contains(n)) throw ...
 
-        /*CRASHES !!!
-        PyObject* func = PyDict_GetItemString(m_pyobject.ptr(), name.latin1());
-        if(! func) kdDebug()<<"???????? error1"<<endl;
-        Py::Callable funcobject(func, true);
-        kdDebug() << QString("=============================== PythonObject::call() 2") << endl;
-        Py::Tuple tp;
-        //tp.add(m_pyobject.ptr());
-        kdDebug() << QString("=============================== PythonObject::call() 3") << endl;
-        Py::Object r2 = funcobject.apply(tp);
-        kdDebug() << QString("PythonObject::PythonObject() YEAH '%1'").arg(r2.as_string().c_str()) << endl;
-        */
-
         char* n = const_cast<char*>( name.latin1() );
         PyObject* r = PyObject_CallMethod(m_pyobject.ptr(), n, 0);
         if(! r) { //FIXME happens too if e.g. number of arguments doesn't match !!!

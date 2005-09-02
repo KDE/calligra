@@ -57,28 +57,9 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
 
     d->m_interpreter = interpreter;
 
-    //add_varargs_method("get", &PythonModule::get, "FIXME: Documentation");
     add_varargs_method("_import", &PythonModule::import, "FIXME: Documentation");
 
     initialize("FIXME: Documentation"); //TODO initialize( object->getDescription().latin1() );
-
-/*
-    kdDebug()<<"$$$$$$$$$$$$---------------------------------------------------"<<endl;
-    Py::List l = module().dir();
-    for(Py::List::size_type i=0; i < l.length(); ++i) {
-            kdDebug() << QString("-------------------") << endl;
-            kdDebug() << QString("dir() = %1").arg( l[i].str().as_string().c_str() ) << endl;
-            kdDebug() << QString("dir().dir() = %1").arg( Py::Object(l[i]).dir().as_string().c_str() ) << endl;
-    }
-    kdDebug()<<"$$$$$$$$$$$$---------------------------------------------------"<<endl;
-*/
-
-/*
-kdDebug() << QString("Kross::Python::PythonModule::Constructor 1") << endl;
-Py::Dict moduledict = moduleDictionary();
-moduledict["self"] = Py::String("test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-kdDebug() << QString("Kross::Python::PythonModule::Constructor 2") << endl;
-*/
 }
 
 PythonModule::~PythonModule()
@@ -93,41 +74,6 @@ PythonModule::~PythonModule()
 Py::Dict PythonModule::getDict()
 {
     return moduleDictionary();
-}
-
-Py::Object PythonModule::get(const Py::Tuple& args)
-{
-kdDebug() << "PythonModule::get() 1" << endl;
-
-    if(args.size() < 1)
-        throw Py::TypeError("Too few arguments.");
-    if(args.size() > 1)
-        throw Py::TypeError("Too many arguments.");
-    if(! args[0].isString())
-        throw Py::TypeError("String argument expected.");
-    QString name = args[0].as_string().c_str();
-
-kdDebug() << "PythonModule::get() 2" << endl;
-//Kross::Api::Object::Ptr object = d->m_interpreter->m_manager->getChild( PythonExtension::toObject(args) );
-Kross::Api::Object::Ptr object = static_cast<Kross::Api::Object*>(d->m_interpreter->m_manager)->getChild(name);
-if(! object)
-    throw Py::TypeError(QString("Unknown module '%1'.").arg(name).latin1());
-kdDebug() << "PythonModule::get() 3" << endl;
-return PythonExtension::toPyObject(object);
-
-/*
-Kross::Api::Object::Ptr module = d->m_interpreter->m_manager->getChild(name);
-    //Kross::Api::Object::Ptr module = d->m_interpreter->m_manager->getModule(name);
-    if(! module)
-        throw Py::TypeError(QString("Unknown module '%1'.").arg(name).latin1());
-
-    if(d->m_modules.contains(name))
-        return Py::asObject(d->m_modules[name]);
-
-    PythonExtension* pythonmodule = new PythonExtension(module);
-    d->m_modules.replace(name, pythonmodule);
-    return Py::asObject(pythonmodule);
-*/
 }
 
 Py::Object PythonModule::import(const Py::Tuple& args)
