@@ -73,7 +73,7 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-
+	virtual bool changesSelection() const { return true; }
 private:
 	VSelection	*m_oldObjects;
 	VSelection	*m_newObjects;

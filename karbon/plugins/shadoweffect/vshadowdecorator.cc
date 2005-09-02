@@ -21,10 +21,14 @@
 #include <core/vfill.h>
 #include <core/vstroke.h>
 #include <render/vpainter.h>
+#include <core/vvisitor.h>
+#include <core/vdocument.h>
+#include <core/vselection.h>
 
 VShadowDecorator::VShadowDecorator( VObject *object, VObject* parent, int distance, int angle, float opacity )
 	: VObject( parent ), m_object( object ), m_distance( distance ), m_angle( angle ), m_opacity( opacity )
 {
+	m_object->setParent( 0L );
 }
 
 VShadowDecorator::VShadowDecorator( const VShadowDecorator& other ) : VObject( other )
@@ -49,6 +53,9 @@ VShadowDecorator::draw( VPainter* painter, const KoRect* rect ) const
 	{
 		return;
 	}
+
+	// make sure swallowed object has the same state
+	m_object->setState( state() );
 
 	if( state() != VObject::edit )
 	{
@@ -82,4 +89,34 @@ void
 VShadowDecorator::accept( VVisitor& visitor )
 {
 	m_object->accept( visitor );
+	visitor.visitVObject( *this );
+	// do not allow swallowed object to be part of the selection
+	document()->selection()->take( *m_object );
+}
+
+void 
+VShadowDecorator::setShadow( int distance, int angle, float opacity )
+{
+	m_distance = distance; 
+	m_angle = angle;
+	m_opacity = opacity;	
+}
+
+void 
+VShadowDecorator::setStroke( const VStroke& stroke )
+{
+	m_object->setStroke( stroke );
+}
+
+void 
+VShadowDecorator::setFill( const VFill& fill )
+{
+	m_object->setFill( fill );
+}
+
+void 
+VShadowDecorator::setState( const VState state )
+{ 
+	m_state = state;
+	m_object->setState( state );
 }

@@ -40,7 +40,7 @@ public:
 	}
 
 	virtual bool visit( VObject& object );
-
+	virtual void visitVObject( VObject& object );
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVGroup( VGroup& group );
