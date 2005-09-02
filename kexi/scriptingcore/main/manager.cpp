@@ -214,5 +214,7 @@ Object::Ptr Manager::loadModule(const QString& modulename)
     kdDebug()<< module->toString() <<endl;
     Object::addChild(module, modulename);
     return module;
+
+    //TODO lib->unload();
 }
 

@@ -44,7 +44,6 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <ksharedptr.h>
-#include <klibloader.h>
 
 // for std namespace
 #include <string>
@@ -62,33 +61,6 @@ static KCmdLineOptions options[] =
     //{ "functionargs <functioarguments>", I18N_NOOP("List of arguments to pass to the function on execution."), "" },
     { 0, 0, 0 }
 };
-
-extern "C"
-{
-    typedef int (*def_module_func)();
-}
-
-void initModules()
-{
-    KLibLoader* loader = KLibLoader::self();
-    KLibrary* lib = loader->library("libkrosskexidb");
-    if(! lib) {
-        kdWarning() << QString("Failed to load library: %1").arg( loader->lastErrorMessage() ) << endl;
-        return;
-    }
-    kdDebug() << "Successfully loaded KexiDB library." << endl;
-
-    def_module_func func;
-    func = (def_module_func) lib->symbol("init_module");
-    if(! func) {
-        kdWarning() << "Failed to determinate init function." << endl;
-        return;
-    }
-    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
-    Kross::Api::Object* module = (Kross::Api::Object*) (func)();
-    manager->addChild(module);
-    //lib->unload();
-}
 
 void runInterpreter(const QString& interpretername, const QString& scriptcode)
 {
@@ -206,12 +178,10 @@ int main(int argc, char **argv)
             app->setMainWidget(mainWin);
             mainWin->show();
             args->clear();
-            //initModules();
             int result = app->exec();
         }
         else {
             app = new KApplication(true, true);
-            //initModules();
             runInterpreter(interpretername, scriptcode);
         }
     }
