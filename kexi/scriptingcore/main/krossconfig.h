@@ -73,8 +73,8 @@ namespace Kross {
         //#define KROSS_API_CALLABLE_CALL_DEBUG
         //#define KROSS_API_CALLABLE_CHECKARG_DEBUG
 
-        #define KROSS_API_EVENTSLOT_CALL_DEBUG
-        #define KROSS_API_EVENTSIGNAL_CALL_DEBUG
+        //#define KROSS_API_EVENTSLOT_CALL_DEBUG
+        //#define KROSS_API_EVENTSIGNAL_CALL_DEBUG
     }
 
     /**
@@ -94,7 +94,7 @@ namespace Kross {
     // during runtime. Comment out to disable the usage or for
     // developing refer to your not jet installed lib like I did at
     // the following line.
-    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scripting/python/krosspython.la"
+    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/head/koffice/kexi/scriptingcore/python/krosspython.la"
     #define KROSS_PYTHON_LIBRARY "krosspython"
 
 }

@@ -103,10 +103,22 @@ namespace Kross { namespace Api {
             Interpreter* getInterpreter(const QString& interpretername);
 
             /**
-             * Return a list of names of the at the backend
+             * \return a list of names of the at the backend
              * supported interpreters.
              */
             const QStringList getInterpreters();
+
+            /**
+             * Load an external module and add it as child to
+             * the manager. The given \p modulename is the
+             * name of the library we should try to load. Those
+             * library needs to be a valid kross module.
+             *
+             * \param modulename The name of the module to load.
+             * \return The loaded \a Object or NULL if loading
+             *        failed.
+             */
+            Object::Ptr loadModule(const QString& modulename);
 
         private:
             /// Private d-pointer class.

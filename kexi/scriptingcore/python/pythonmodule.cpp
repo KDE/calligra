@@ -57,7 +57,9 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
 
     d->m_interpreter = interpreter;
 
-    add_varargs_method("get", &PythonModule::get, "FIXME: Documentation");
+    //add_varargs_method("get", &PythonModule::get, "FIXME: Documentation");
+    add_varargs_method("_import", &PythonModule::import, "FIXME: Documentation");
+
     initialize("FIXME: Documentation"); //TODO initialize( object->getDescription().latin1() );
 
 /*
@@ -128,3 +130,16 @@ Kross::Api::Object::Ptr module = d->m_interpreter->m_manager->getChild(name);
 */
 }
 
+Py::Object PythonModule::import(const Py::Tuple& args)
+{
+    if(args.size() > 0) {
+        QString modname = args[0].as_string().c_str();
+        if(modname.startsWith("kross")) {
+            kdDebug() << QString("PythonModule::import() module=%1").arg(modname) << endl;
+            Kross::Api::Object::Ptr module = d->m_interpreter->m_manager->loadModule(modname);
+            if(module)
+                return PythonExtension::toPyObject(module);
+        }
+    }
+    return Py::None();
+}

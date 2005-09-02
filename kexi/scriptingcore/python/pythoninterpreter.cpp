@@ -90,17 +90,38 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     //TODO moduledict["KrossPythonVersion"] = Py::Int(KROSS_PYTHON_VERSION);
 
     // Prepare the interpreter.
-    QString s = "import sys\n"
+    QString s =
+        "import sys\n"
 
-                // dirty hack to get sys.argv defined.
-                "sys.argv = ['']\n"
+        // Dirty hack to get sys.argv defined. Needed for e.g. TKinter.
+        "sys.argv = ['']\n"
 
-                //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
-                //"sys.stdout = self._bu\n"
-                //"sys.stderr = self._bu\n"
-                "import cStringIO\n"
-                "sys.stdin = cStringIO.StringIO()\n"
-                ;
+        //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
+        //"sys.stdout = self._bu\n"
+        //"sys.stderr = self._bu\n"
+
+        // On the try to read something from stdin always return an empty
+        // string. That way such reads don't block our script.
+        "import cStringIO\n"
+        "sys.stdin = cStringIO.StringIO()\n"
+
+        // Wrap builtin __import__ method. All import requests are
+        // first redirected to our PythonModule.import method and
+        // if the call returns None, then we call the original
+        // python import mechanism.
+        "import __builtin__\n"
+        "import __main__\n"
+        "class Importer:\n"
+        "    def __init__(self):\n"
+        "        self.realImporter = __builtin__.__import__\n"
+        "        __builtin__.__import__ = self._import\n"
+        "    def _import(self, name, globals=None, locals=None, fromlist=[]):\n"
+        "        mod = __main__._import(name, globals, locals, fromlist)\n"
+        "        if mod != None: return mod\n"
+        "        return self.realImporter(name, globals, locals, fromlist)\n"
+        "Importer()\n"
+        ;
+
     PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error

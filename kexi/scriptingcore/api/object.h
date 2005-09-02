@@ -150,7 +150,7 @@ namespace Kross { namespace Api {
              *         else (e.g. if there exists already another
              *         childobject with same name) false.
              */
-            bool addChild(Object::Ptr object);
+            bool addChild(Object::Ptr object, const QString& name = QString::null);
 
             /**
              * Remove an existing child.

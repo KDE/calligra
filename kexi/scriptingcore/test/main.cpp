@@ -206,12 +206,12 @@ int main(int argc, char **argv)
             app->setMainWidget(mainWin);
             mainWin->show();
             args->clear();
-            initModules();
+            //initModules();
             int result = app->exec();
         }
         else {
             app = new KApplication(true, true);
-            initModules();
+            //initModules();
             runInterpreter(interpretername, scriptcode);
         }
     }

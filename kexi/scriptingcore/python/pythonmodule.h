@@ -68,6 +68,7 @@ namespace Kross { namespace Python {
             PythonModulePrivate* d;
 
             Py::Object get(const Py::Tuple&);
+            Py::Object import(const Py::Tuple&);
     };
 
 }}

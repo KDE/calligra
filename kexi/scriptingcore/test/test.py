@@ -6,13 +6,23 @@
   within Python.
 """
 
+#print "-------------- 1"
+#__import__("hahaha")
+#print "-------------- 2"
+#import blablabla
+#print "-------------- 3"
+
+
 # Class to test the KexiDB functionality.
 class KexiDBClass:
 
     # Constructor.
     def __init__(self):
         # The KexiDB module spends us access to the KexiDB functionality.
-        self.kexidbmodule = get("KexiDB")
+        #import KexiDB
+        import krosskexidb
+        self.kexidbmodule = krosskexidb
+
         # Create and remember the drivermanager.
         self.drivermanager = self.kexidbmodule.DriverManager()
 
@@ -298,13 +308,13 @@ print "########## BEGIN TEST: KexiDB ##########"
 testKexiDB()
 print "########## END TEST: KexiDB ##########"
 
-print "########## BEGIN TEST: QObject ##########"
-testQtObject(self)
-print "########## END TEST: QObject ##########"
+#print "########## BEGIN TEST: QObject ##########"
+#testQtObject(self)
+#print "########## END TEST: QObject ##########"
 
-print "########## BEGIN TEST: ActionEvent ##########"
-testActionEvent(self)
-print "########## END TEST: ActionEvent ##########"
+#print "########## BEGIN TEST: ActionEvent ##########"
+#testActionEvent(self)
+#print "########## END TEST: ActionEvent ##########"
 
 #testfunc("from __main__")
 #maintestfunc()

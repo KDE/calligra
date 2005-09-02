@@ -28,7 +28,7 @@ extern "C"
      * Exported an loadable function as entry point to use
      * the \a KexiDBModule.
      */
-    void* init_module()
+    Kross::Api::Object* init_module()
     {
         return new Kross::KexiDB::KexiDBModule();
     }

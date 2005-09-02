@@ -2,9 +2,9 @@ include $(top_srcdir)/kexi/Makefile.global
 
 INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/scriptingcore $(all_includes)
 
-kde_module_LTLIBRARIES = libkrosskexidb.la
+kde_module_LTLIBRARIES = krosskexidb.la
 
-libkrosskexidb_la_SOURCES = \
+krosskexidb_la_SOURCES = \
     kexidbfield.cpp \
     kexidbfieldlist.cpp \
     kexidbschema.cpp \
@@ -17,8 +17,8 @@ libkrosskexidb_la_SOURCES = \
     kexidbdrivermanager.cpp \
     kexidbmodule.cpp
 
-libkrosskexidb_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
-libkrosskexidb_la_LIBADD = \
+krosskexidb_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+krosskexidb_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     $(top_builddir)/kexi/scriptingcore/api/libkrossapi.la \

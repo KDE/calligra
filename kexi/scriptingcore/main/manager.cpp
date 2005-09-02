@@ -37,6 +37,7 @@ using namespace Kross::Api;
 extern "C"
 {
     typedef int (*def_interpreter_func)(Kross::Api::Manager*, const QString&);
+    typedef Kross::Api::Object* (*def_module_func)();
 }
 
 namespace Kross { namespace Api {
@@ -45,9 +46,6 @@ namespace Kross { namespace Api {
     class ManagerPrivate
     {
         public:
-            /// List of script instances.
-            //QMap<QString, ScriptContainer* > m_scriptcontainers;
-
             /// List of interpreter instances.
             QMap<QString, Interpreter*> m_interpreter;
 
@@ -185,3 +183,36 @@ list << "TestCase";
 
     return  list;
 }
+
+Object::Ptr Manager::loadModule(const QString& modulename)
+{
+    if(Object::hasChild(modulename))
+        return Object::getChild(modulename);
+
+    KLibLoader* loader = KLibLoader::self();
+    KLibrary* lib = loader->globalLibrary(modulename.latin1());
+    if(! lib) {
+        kdWarning() << QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) << endl;
+        return 0;
+    }
+    kdDebug() << QString("Successfully loaded module '%1'").arg(modulename) << endl;
+
+    def_module_func func;
+    func = (def_module_func) lib->symbol("init_module");
+
+    if(! func) {
+        kdWarning() << QString("Failed to determinate init function in module '%1'").arg(modulename) << endl;
+        return 0;
+    }
+
+    Kross::Api::Object* module = (Kross::Api::Object*) (func)();
+    if(! module) {
+        kdWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
+        return 0;
+    }
+
+    kdDebug()<< module->toString() <<endl;
+    Object::addChild(module, modulename);
+    return module;
+}
+
