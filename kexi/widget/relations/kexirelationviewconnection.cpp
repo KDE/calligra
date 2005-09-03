@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,8 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qcolor.h>
+#include <qapplication.h>
+#include <qpointarray.h>
 
 #include <kdebug.h>
 
@@ -31,9 +33,10 @@
 #include "kexirelationviewconnection.h"
 #include <kexidb/tableschema.h>
 #include <kexidb/utils.h>
+#include <core/kexi.h>
 
-#include "r1.xpm"
-#include "rn.xpm"
+//#include "r1.xpm"
+//#include "rn.xpm"
 
 KexiRelationViewConnection::KexiRelationViewConnection(
 	KexiRelationViewTableContainer *masterTbl, KexiRelationViewTableContainer *detailsTbl, 
@@ -64,32 +67,45 @@ KexiRelationViewConnection::~KexiRelationViewConnection()
 void
 KexiRelationViewConnection::drawConnection(QPainter *p)
 {
-	p->setPen(QColor(0,0,0));
+	p->setPen(m_parent->palette().active().foreground());
 	int sx = m_masterTable->x() + m_masterTable->width() + m_parent->contentsX();
 	int sy = m_masterTable->globalY(m_masterField);
 	int rx = m_detailsTable->x() + m_parent->contentsX();
 	int ry = m_detailsTable->globalY(m_detailsField);
 
-	QPoint side1(0, 0);
-	QPoint sideN(0, 0);
+	QFont f( Kexi::smallFont( m_parent ) );
+	QFontMetrics fm(f);
+	int side1x=0, side1y=sy - fm.height(), 
+		sideNx=0, sideNy=ry - fm.height();
+//! @todo details char can be also just a '1' for some cases
+	QChar sideNChar(0x221E); //infinity char
+	uint sideNCharWidth = 2+2+ fm.width( sideNChar );
+	QChar side1Char('1');
+	uint side1CharWidth = 2+2+ fm.width( side1Char );
+	p->setBrush(p->pen().color());
 
 	if(m_masterTable->x() < m_detailsTable->x())
 	{
-		p->drawLine(rx - 8, ry, rx, ry);
-		p->drawPoint(rx - 2, ry - 1);
-		p->drawPoint(rx - 2, ry + 1);
-		p->drawLine(rx - 3, ry - 2, rx - 3, ry + 2);
+		//det. side
+		p->drawLine(rx - sideNCharWidth, ry, rx, ry);
+		QPointArray pa(3);
+		pa.setPoint(0, rx - 4, ry - 3);
+		pa.setPoint(1, rx - 4, ry + 3);
+		pa.setPoint(2, rx - 1, ry);
+		p->drawPolygon(pa, true);
+		
+		//master side
+		p->drawLine(sx, sy - 1, sx + side1CharWidth -1, sy - 1);
+		p->drawLine(sx, sy, sx + side1CharWidth -1, sy);
+		p->drawLine(sx, sy + 1, sx + side1CharWidth -1, sy + 1);
 
-		p->drawLine(sx, sy - 1, sx + 5, sy - 1);
-		p->drawLine(sx, sy, sx + 6, sy);
-		p->drawLine(sx, sy + 1, sx + 5, sy + 1);
+		side1x = sx;
+//		side1y = sy - 7;
 
-		side1.setX(sx + 2);
-		side1.setY(sy - 7);
+		sideNx = rx - sideNCharWidth - 1;
+//		sideNy = ry - 6;
 
-		sideN.setX(rx - 10);
-		sideN.setY(ry - 6);
-
+		QPen pen(p->pen());
 		if(m_selected)
 		{
 			QPen pen(p->pen());
@@ -97,7 +113,7 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 			p->setPen(pen);
 		}
 
-		p->drawLine(sx + 6, sy, rx - 8, ry);
+		p->drawLine(sx + side1CharWidth, sy, rx - sideNCharWidth, ry);
 
 		if(m_selected)
 		{
@@ -112,21 +128,29 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 		int lx = rx + m_detailsTable->width();
 		int rx = sx - m_masterTable->width();
 
+		//det. side
+		p->drawLine(lx, ry, lx + sideNCharWidth, ry);
+		QPointArray pa(3);
+		pa.setPoint(0, lx + 3, ry - 3);
+		pa.setPoint(1, lx + 3, ry + 3);
+		pa.setPoint(2, lx, ry);
+		p->drawPolygon(pa, true);
+		
+//		p->drawLine(lx, ry, lx + 8, ry);
+//		p->drawPoint(lx + 1, ry - 1);
+//		p->drawPoint(lx + 1, ry + 1);
+//		p->drawLine(lx + 2, ry - 2, lx + 2, ry + 2);
 
-		p->drawLine(lx, ry, lx + 8, ry);
-		p->drawPoint(lx + 1, ry - 1);
-		p->drawPoint(lx + 1, ry + 1);
-		p->drawLine(lx + 2, ry - 2, lx + 2, ry + 2);
+		//master side
+		p->drawLine(rx - side1CharWidth +1, sy - 1, rx, sy - 1);
+		p->drawLine(rx - side1CharWidth +1, sy + 1, rx, sy + 1);
+		p->drawLine(rx - side1CharWidth +1, sy, rx, sy);
 
-		p->drawLine(rx - 7, sy - 1, rx, sy - 1);
-		p->drawLine(rx - 7, sy + 1, rx, sy + 1);
-		p->drawLine(rx - 8, sy, rx, sy);
+		side1x = rx - side1CharWidth;
+//		side1y = sy - 7;
 
-		side1.setX(rx - 4);
-		side1.setY(sy - 7);
-
-		sideN.setX(lx + 3);
-		sideN.setY(ry - 6);
+		sideNx = lx + 1;
+//		sideNy = ry - 6;
 
 		if(m_selected)
 		{
@@ -135,7 +159,7 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 			p->setPen(pen);
 		}
 
-		p->drawLine(lx + 8, ry, rx - 8, sy);
+		p->drawLine(lx + sideNCharWidth, ry, rx - side1CharWidth, sy);
 
 		if(m_selected)
 		{
@@ -143,18 +167,18 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 			pen.setWidth(1);
 			p->setPen(pen);
 		}
-
-
 	}
 
-	p->drawPixmap(side1, QPixmap(r1_xpm));
-	p->drawPixmap(sideN, QPixmap(rn_xpm));
+	p->drawText(side1x, side1y, side1CharWidth, fm.height(), Qt::AlignCenter, side1Char);
+	p->drawText(sideNx, sideNy, sideNCharWidth, fm.height(), Qt::AlignCenter, sideNChar);
+	//p->drawRect(QRect(connectionRect().topLeft(), QSize(50,50)));
+//	p->drawPixmap(side1, QPixmap(r1_xpm));
+//	p->drawPixmap(sideN, QPixmap(rn_xpm));
 }
 
 const QRect
 KexiRelationViewConnection::connectionRect()
 {
-
 	int sx = m_masterTable->x() + m_parent->contentsX();
 	int rx = m_detailsTable->x() + m_parent->contentsX();
 	int ry = m_detailsTable->globalY(m_detailsField);
@@ -184,7 +208,9 @@ KexiRelationViewConnection::connectionRect()
 
 
 //	return QRect(sx - 1, sy - 1, (rx + m_detailsTable->width()) - sx + 1, ry - sy + 1);
-	QRect rect(left - 3, top - 7, dx + 3, dy + 10);
+	QRect rect(left - 150, top - 150, dx + 150, dy + 150);
+	kdDebug() << "KexiRelationViewConnection::connectionRect():" << m_oldRect << "," << rect << endl;
+	
 	m_oldRect = rect;
 
 	return rect;

@@ -266,6 +266,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
 		m_grabY=ev->globalPos().y();
 		m_offsetX=0;
 		m_offsetY=0;
+		setCursor(Qt::SizeAllCursor);
 		return;
 	}
 	if (ev->button()==Qt::RightButton) {
@@ -278,6 +279,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Release Event"<<endl;
 	if (m_dragging && ev->button() & Qt::LeftButton) {
+		setCursor(Qt::ArrowCursor);
 		m_dragging=false;
 		emit endDrag();
 	}

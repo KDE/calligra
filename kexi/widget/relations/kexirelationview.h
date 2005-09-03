@@ -135,7 +135,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		contentsMousePressEvent(QMouseEvent *ev);
-//		virtual void	keyPressEvent(QKeyEvent *ev);
+		virtual void	keyPressEvent(QKeyEvent *ev);
 
 		void		recalculateSize(int width, int height);
 		void		stretchExpandSize();

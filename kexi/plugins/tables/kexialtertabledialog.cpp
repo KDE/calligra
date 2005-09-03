@@ -193,7 +193,7 @@ void KexiAlterTableDialog::initData()
 //	}
 
 	//add empty space
-	const int columnsCount = d->data->columnsCount();
+//	const int columnsCount = d->data->columnsCount();
 	for (int i=tableFieldCount; i<(int)d->sets->size(); i++) {
 //		KexiTableItem *item = new KexiTableItem(columnsCount);//3 empty fields
 		d->data->append(d->data->createItem());
@@ -581,7 +581,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		const QStringList slist = KexiDB::typeStringsForGroup(fieldTypeGroup);
 		const QStringList nlist = KexiDB::typeNamesForGroup(fieldTypeGroup);
 		KoProperty::Property *subTypeProperty = &set["subType"];
-
+kdDebug() << "++++++++++" << slist << nlist << endl;
 		//update subtype list and value
 		subTypeProperty->setListData( slist, nlist );
 		if (set["primaryKey"].value().toBool()==true) //primary keys require big int

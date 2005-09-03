@@ -267,7 +267,7 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 	QRect clipping(cx, cy, cw, ch);
 	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
 	{
-		if(clipping.intersects(cview->connectionRect()))
+		if(clipping.intersects(cview->oldRect() | cview->connectionRect()))
 			cview->drawConnection(p);
 	}
 }
@@ -285,14 +285,24 @@ void
 KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 {
 	KexiRelationViewConnection *cview;
-	for (cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
-	{
-		if(cview->masterTable() == c || cview->detailsTable() == c)
+	QRect r;
+	for (ConnectionListIterator it(m_connectionViews); ((cview=it.current())); ++it) {
+//! @todo	optimize
+		if(cview->masterTable() == c || cview->detailsTable() == c
+			|| cview->connectionRect().intersects(r)) 
 		{
-			updateContents(cview->oldRect());
-			updateContents(cview->connectionRect());
+			r |= cview->oldRect();
+			kdDebug() << r << endl;
+			r |= cview->connectionRect();
+			kdDebug() << r << endl;
 		}
+//			updateContents(cview->oldRect());
+//			updateContents(cview->connectionRect());
+//		}
 	}
+//! @todo	optimize!
+//didn't work well:	updateContents(r);
+	updateContents();
 
 //	QRect w(c->x() - 5, c->y() - 5, c->width() + 5, c->height() + 5);
 //	updateContents(w);
@@ -348,6 +358,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 		if(!cview->matchesPoint(ev->pos(), 3))
 			continue;
 		clearSelection();
+		setFocus();
 		cview->setSelected(true);
 		updateContents(cview->connectionRect());
 		m_selectedConnection = cview;
@@ -396,21 +407,24 @@ void KexiRelationView::clearSelection()
 	}
 }
 
-/*
 void
 KexiRelationView::keyPressEvent(QKeyEvent *ev)
 {
 	kdDebug() << "KexiRelationView::keyPressEvent()" << endl;
 
 	if (ev->key()==KGlobalSettings::contextMenuKey()) {
+		if (m_selectedConnection) {
+			emit connectionContextMenuRequest(
+				mapToGlobal(m_selectedConnection->connectionRect().center()) );
+		}
 //		m_popup->exec( mapToGlobal( m_focusedTableView ? m_focusedTableView->pos() + m_focusedTableView->rect().center() : rect().center() ) );
-		executePopup();
+//		executePopup();
 	}
-
-	if(ev->key() == Key_Delete)
-		removeSelectedConnection();
-
-}*/
+	else {
+		if(ev->key() == Key_Delete)
+			removeSelectedObject();
+	}
+}
 
 void
 KexiRelationView::recalculateSize(int width, int height)

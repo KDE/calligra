@@ -256,7 +256,7 @@ void KexiRelationWidget::connectionContextMenuRequest(const QPoint& pos)
 //	m_connectionPopup->exec(pos);
 }
 
-void KexiRelationWidget::emptyAreaContextMenuRequest( const QPoint& pos )
+void KexiRelationWidget::emptyAreaContextMenuRequest( const QPoint& /*pos*/ )
 {
 	invalidateActions();
 	//TODO

@@ -12,6 +12,10 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-09-03 (aKademy)
+Relations view
+- fixed redrawing (in an unoptimized way)
+
 2005-08-27
 Forms
 - a fix for value changed flag and datachangeslistener in autofields

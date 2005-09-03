@@ -8,7 +8,8 @@ keximigrate_pqxx_la_METASOURCES = AUTO
 
 keximigrate_pqxx_la_SOURCES = pqxxmigrate.cpp
 
-keximigrate_pqxx_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lpqxx ../libkeximigrate.la
+#TODO share -libs with pqxx kexidb drv!
+keximigrate_pqxx_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lcom_err -lkrb5 -lssl -lcrypto -lcrypt -lpqxx ../libkeximigrate.la
 
 keximigrate_pqxx_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L$(PQXX_LIBDIR) -L$(PG_LIBDIR) $(VER_INFO) -no-undefined
 

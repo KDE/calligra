@@ -83,7 +83,7 @@ KexiFieldDrag::decodeSingle( QDropEvent* e, QString& sourceMimeType,
 	stream1 >> sourceMimeType;
 	stream1 >> sourceName;
 	stream1 >> field;
-	kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<field << endl;
+//	kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<field << endl;
 	return true;
 }
 
@@ -105,7 +105,7 @@ KexiFieldDrag::decodeMultiple( QDropEvent* e, QString& sourceMimeType,
 	stream1 >> sourceMimeType;
 	stream1 >> sourceName;
 	stream1 >> fields;
-	kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<fields << endl;
+//	kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<fields << endl;
 	return true;
 }
 
@@ -139,7 +139,7 @@ KexiDataProviderDrag::decode( QDropEvent* e, QString& sourceMimeType, QString& s
 		QDataStream stream1(payload, IO_ReadOnly);
 		stream1 >> sourceMimeType;
 		stream1 >> sourceName;
-		kdDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceMimeType <<"/"<<sourceName<< endl;
+//		kdDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceMimeType <<"/"<<sourceName<< endl;
 		return true;
 	}
 	return false;

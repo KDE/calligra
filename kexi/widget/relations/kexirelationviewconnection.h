@@ -38,8 +38,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 
 
 		/*
-		   C++PROGRAMMIERER bestehen darauf, daß der Elefant eine Klasse sei,
-		   und somit schließlich seine Fang-Methoden selbst mitzubringen habe.
+		   C++PROGRAMMIERER bestehen darauf, daï¿½der Elefant eine Klasse sei,
+		   und somit schlieï¿½ich seine Fang-Methoden selbst mitzubringen habe.
 
 		   http://www.c-plusplus.de ;)
 		*/
@@ -49,7 +49,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 		void		setSelected(bool s) { m_selected = s; }
 
 		const QRect	connectionRect();
-		const QRect	oldRect() { return m_oldRect; }
+		const QRect	oldRect() const { return m_oldRect; }
 
 		KexiRelationViewTableContainer	*masterTable() { return m_masterTable; }
 		KexiRelationViewTableContainer	*detailsTable() { return m_detailsTable; }
