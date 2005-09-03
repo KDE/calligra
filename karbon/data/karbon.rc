@@ -69,7 +69,7 @@
 		<Action name="close_path"/>
 	</Menu>
 	<Menu name="effects">
-		<text>&amp;Effects</text>
+		<text>Effe&amp;cts</text>
 	</Menu>
 	 <Menu name="settings"><text>&amp;Settings</text>
 		<Separator group="settings_show"/>
