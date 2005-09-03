@@ -68,8 +68,8 @@
 		<Action name="selection_ungroup"/>
 		<Action name="close_path"/>
 	</Menu>
-	<Menu name="plugins">
-		<text>&amp;Plugins</text>
+	<Menu name="effects">
+		<text>&amp;Effects</text>
 	</Menu>
 	 <Menu name="settings"><text>&amp;Settings</text>
 		<Separator group="settings_show"/>
@@ -115,7 +115,7 @@
 		<Action name="object_align_vertical_center"/>
 		<Action name="object_align_vertical_bottom"/>
 	</ToolBar>
-	<ToolBar name="Plugins" hidden="true" fullWidth="false">
+	<ToolBar name="Effects" hidden="true" fullWidth="false">
 		<Text></Text>
 	</ToolBar>
 	<Menu name="selection_popup">

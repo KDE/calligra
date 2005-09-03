@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="insertknotsplugin" library="karbon_insertknotsplugin">
 <MenuBar>
-	<Menu name="plugins">
+	<Menu name="effects">
 		<Action name="path_insert_knots"/>
 	</Menu>
 </MenuBar>
-<ToolBar name="Plugins" fullWidth="false">
+<ToolBar name="Effects" fullWidth="false">
 	<Action name="path_insert_knots"/>
 </ToolBar>
 </kpartplugin>
