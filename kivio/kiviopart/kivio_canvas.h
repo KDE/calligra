@@ -91,10 +91,6 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     void endRectDraw();
     QRect rect()const { return currRect; }
 
-    void startSpawnerDragDraw( const QPoint &p );
-    void continueSpawnerDragDraw( const QPoint &p );
-    void endSpawnerDragDraw();
-
     void drawSelectedStencilsXOR();
     void drawStencilXOR( KivioStencil * );
 

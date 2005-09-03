@@ -61,6 +61,10 @@ QDomElement SmlObjectSaver::saveObject(Object* object, QDomDocument& doc)
 {
   QDomElement element;
 
+  if(!object) {
+    return element;
+  }
+
   switch(object->type()) {
     case kstNone:
       break;

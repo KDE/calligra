@@ -403,14 +403,13 @@ void KivioPage::paintContent( QPainter& painter, const QRect& rect, bool transpa
   QPoint p0, KoZoomHandler* zoom, bool drawHandles )
 {
   KivioLayer *pLayer = m_lstLayers.first();
-  while( pLayer )
-  {
-      if( pLayer->visible() )
-      {
-          pLayer->paintContent( painter, rect, transparent, p0, zoom );
-      }
 
-      pLayer = m_lstLayers.next();
+  while(pLayer) {
+    if(pLayer->visible()) {
+      pLayer->paintContent(painter, rect, transparent, p0, zoom);
+    }
+
+    pLayer = m_lstLayers.next();
   }
 
   // Now the second iteration - connection targets

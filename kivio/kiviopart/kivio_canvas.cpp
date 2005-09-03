@@ -32,6 +32,7 @@
 #include "kivio_grid_data.h"
 #include "object.h"
 #include "kiviodragobject.h"
+#include "groupobject.h"
 
 #include "kivio_pluginmanager.h"
 
@@ -308,15 +309,15 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     int h = QMIN(y + paintRect.height() + m_iYOffset, ph);
 
     QSize dxy = m_pView->zoomHandler()->zoomSize(m_pDoc->grid().freq);
-    
+
     if(m_pView->zoomHandler()->zoom() >= 150) {
       dxy = dxy / 2;
     } else if(m_pView->zoomHandler()->zoom() <= 50) {
       dxy = dxy * 2;
     }
-    
+
     painter.setPen(m_pDoc->grid().color);
-    
+
     x = qRound(x / dxy.width()) * dxy.width();
 
     while (x <= w) {
@@ -351,6 +352,12 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
   // Draw content
   m_pDoc->paintContent(painter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
+
+  QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
+
+  for(QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin(); it != itEnd; ++it) {
+    (*it)->paint(painter, m_pView->zoomHandler());
+  }
 
   paintGuides(false);
   painter.end();
@@ -603,148 +610,6 @@ void KivioCanvas::endRectDraw()
   endUnclippedPainter();
 }
 
-/**
- * Starts a new drag & draw (called from the drag enter event)
- *
- * @param p The point to begin at
- *
- * This will allocate a new KivioStencil for drawing with and
- * set some class variables used during redraws.
- */
-void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
-{
-  //FIXME Port to Object code
-/*  currRect = QRect( 0, 0, -1, -1 );
-
-  KivioStencilSpawner *pSpawner = KivioIconView::curDragSpawner();
-  if( !pSpawner )
-    return;
-
-  // If we for some reason didn't delete an old drag stencil,
-  // do so now.
-  if( m_pDragStencil )
-  {
-    kdDebug(43000) << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
-    delete m_pDragStencil;
-    m_pDragStencil = 0L;
-  }
-
-  // Map the point from screenspace to page space
-  KoPoint qp = mapFromScreen( p );
-  qp = snapToGrid(qp);
-
-  // Allocate a new stencil for dragging around
-  m_pDragStencil = pSpawner->newStencil();
-  m_pDragStencil->setPosition( qp.x(), qp.y() );
-
-  // Invalidate the rectangle
-  oldRectValid = true;
-
-  // Create a new painter object
-  beginUnclippedSpawnerPainter();
-
-  // Translate the painter so that 0,0 means where the page starts on the canvas
-  unclippedSpawnerPainter->painter()->save();
-  unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
-
-  // Assign the painter object to the intra-stencil data object, as well
-  // as the zoom factor
-  m_dragStencilData.painter = unclippedSpawnerPainter;
-  m_dragStencilData.zoomHandler = m_pView->zoomHandler();
-
-  // Draw the outline of the stencil
-  m_pDragStencil->paintOutline( &m_dragStencilData );
-
-  unclippedSpawnerPainter->painter()->restore();*/
-}
-
-/**
- * Undraws the old stencil outline, draws the new one
- */
-void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
-{
-//   bool snappedX, snappedY;
-// 
-//   // Translate the painter so that 0,0 means where the page starts on the canvas
-//   unclippedSpawnerPainter->painter()->save();
-//   unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
-// 
-//   // Undraw the old outline
-//   if( oldRectValid )
-//   {
-//     m_pDragStencil->paintOutline( &m_dragStencilData );
-//   }
-// 
-//   // Map the new point from screenspace to page space
-//   KoPoint orig = mapFromScreen(p);
-//   KoPoint qp = snapToGrid( orig );
-// 
-//   // First snap to screen
-//   qp = snapToGrid(qp);
-//   m_pDragStencil->setPosition( qp.x(), qp.y() );
-// 
-//   // Now snap to the guides
-//   qp.setCoords(orig.x() + m_pDragStencil->w(), orig.y() + m_pDragStencil->h());
-//   qp = snapToGuides(qp, snappedX, snappedY);
-// 
-//   if(snappedX) {
-//     m_pDragStencil->setX(qp.x() - m_pDragStencil->w());
-//   }
-// 
-//   if(snappedY) {
-//     m_pDragStencil->setY(qp.y() - m_pDragStencil->h());
-//   }
-// 
-//   qp.setCoords(orig.x(), orig.y());
-//   qp = snapToGuides(qp, snappedX, snappedY);
-// 
-//   if(snappedX) {
-//     m_pDragStencil->setX(qp.x());
-//   }
-// 
-//   if(snappedY) {
-//     m_pDragStencil->setY(qp.y());
-//   }
-// 
-//   // Redraw the new outline
-//   oldRectValid = true;
-//   m_pDragStencil->paintOutline( &m_dragStencilData );
-//   unclippedSpawnerPainter->painter()->restore();
-
-}
-
-
-/**
- * Ends the ability to draw a drag & drop spawner object
- */
-void KivioCanvas::endSpawnerDragDraw()
-{
-  // Avoid the noid
-/*  if ( !unclippedSpawnerPainter )
-    return;
-
-  // If we have a valid old drawing spot, undraw it
-  if ( oldRectValid )
-  {
-    unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
-    m_pDragStencil->paintOutline( &m_dragStencilData );
-    unclippedSpawnerPainter->painter()->restore();
-  }
-
-  // Smack the painter around a bit
-  endUnclippedSpawnerPainter();
-
-  // If we have a stencil we were dragging around, delete it.
-  if( m_pDragStencil )
-  {
-    delete m_pDragStencil;
-    m_pDragStencil = 0L;
-  }
-
-  setFocus();*/
-}
-
 
 /**
  * Creates a new spawner drawing object
@@ -895,12 +760,18 @@ void KivioCanvas::dragEnterEvent( QDragEnterEvent *e )
     }
 
     if(kdo.decode(e, m_dragObjectList)) {
-      startSpawnerDragDraw(e->pos());
+      m_origPoint = snapToGridAndGuides(mapFromScreen(e->pos()));
+      QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
+
+      for(QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();it != itEnd; ++it) {
+        static_cast<Kivio::GroupObject*>(*it)->setPosition(m_origPoint);
+//        (*it)->move(m_origPoint.x(), m_origPoint.y());
+      }
+
+      update();
     }
   }
 }
-
-
 
 /**
  * Handles drag-move events
@@ -913,9 +784,17 @@ void KivioCanvas::dragEnterEvent( QDragEnterEvent *e )
  */
 void KivioCanvas::dragMoveEvent( QDragMoveEvent *e )
 {
-  continueSpawnerDragDraw(e->pos());
-}
+  KoPoint mousePos = snapToGridAndGuides(mapFromScreen(e->pos()));
+  QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
 
+  for(QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();it != itEnd; ++it) {
+    (*it)->move(mousePos.x() - m_origPoint.x(), mousePos.y() - m_origPoint.y());
+  }
+
+  m_origPoint = mousePos;
+
+  update();
+}
 
 /**
  * Handles drops for this object
@@ -929,9 +808,6 @@ void KivioCanvas::dragMoveEvent( QDragMoveEvent *e )
  */
 void KivioCanvas::dropEvent( QDropEvent *e )
 {
-  // Terminate the drawing object
-  endSpawnerDragDraw();
-
   QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
   QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();
 
@@ -940,9 +816,9 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     it = m_dragObjectList.remove(it);
   }
 
+  update();
   view()->pluginManager()->activateDefaultTool();
 }
-
 
 /**
  * Handles when a drag leaves this object
@@ -954,18 +830,16 @@ void KivioCanvas::dropEvent( QDropEvent *e )
  */
 void KivioCanvas::dragLeaveEvent( QDragLeaveEvent * )
 {
-    endSpawnerDragDraw();
+  QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
+  QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();
 
-    QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
-    QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();
+  while(it != itEnd) {
+    delete *it;
+    it = m_dragObjectList.remove(it);
+  }
 
-    while(it != itEnd) {
-      delete *it;
-      it = m_dragObjectList.remove(it);
-    }
+  update();
 }
-
-
 
 void KivioCanvas::drawSelectedStencilsXOR()
 {
