@@ -22,6 +22,7 @@ krosskexidb_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     $(top_builddir)/kexi/scriptingcore/api/libkrossapi.la \
+    $(top_builddir)/kexi/scriptingcore/main/libkrossmain.la \
     $(top_builddir)/kexi/kexidb/libkexidb.la \
     $(top_builddir)/kexi/kexidb/parser/libkexidbparser.la
 

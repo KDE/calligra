@@ -37,7 +37,7 @@ using namespace Kross::Api;
 extern "C"
 {
     typedef int (*def_interpreter_func)(Kross::Api::Manager*, const QString&);
-    typedef Kross::Api::Object* (*def_module_func)();
+    typedef Kross::Api::Object* (*def_module_func)(Kross::Api::Manager*);
 }
 
 namespace Kross { namespace Api {
@@ -205,16 +205,17 @@ Object::Ptr Manager::loadModule(const QString& modulename)
         return 0;
     }
 
-    Kross::Api::Object* module = (Kross::Api::Object*) (func)();
+    Kross::Api::Object::Ptr module = (Kross::Api::Object*) (func)(this);
     if(! module) {
         kdWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
         return 0;
     }
+    lib->unload();
 
     kdDebug()<< module->toString() <<endl;
     Object::addChild(module, modulename);
     return module;
 
-    //TODO lib->unload();
+
 }
 

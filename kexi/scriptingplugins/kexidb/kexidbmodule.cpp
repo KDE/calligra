@@ -20,6 +20,10 @@
 #include "kexidbmodule.h"
 #include "kexidbdrivermanager.h"
 
+//#include <api/object.h>
+//#include <api/variant.h>
+#include <main/manager.h>
+
 #include <kdebug.h>
 
 extern "C"
@@ -28,16 +32,17 @@ extern "C"
      * Exported an loadable function as entry point to use
      * the \a KexiDBModule.
      */
-    Kross::Api::Object* init_module()
+    Kross::Api::Object* init_module(Kross::Api::Manager* manager)
     {
-        return new Kross::KexiDB::KexiDBModule();
+        return new Kross::KexiDB::KexiDBModule(manager);
     }
 };
 
 using namespace Kross::KexiDB;
 
-KexiDBModule::KexiDBModule()
+KexiDBModule::KexiDBModule(Kross::Api::Manager* /*manager*/)
     : Kross::Api::Module<KexiDBModule>("KexiDB")
+    //, m_manager(manager)
 {
     addChild( new KexiDBDriverManager() );
 }

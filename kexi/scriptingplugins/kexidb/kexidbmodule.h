@@ -23,9 +23,11 @@
 #include <qstring.h>
 #include <qvariant.h>
 
-#include <api/object.h>
-#include <api/variant.h>
 #include <api/module.h>
+
+namespace Kross { namespace Api {
+    class Manager;
+}}
 
 namespace Kross { namespace KexiDB {
 
@@ -45,7 +47,7 @@ namespace Kross { namespace KexiDB {
             /**
              * Constructor.
              */
-            KexiDBModule();
+            KexiDBModule(Kross::Api::Manager* manager);
 
             /**
              * Destructor.

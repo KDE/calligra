@@ -19,6 +19,8 @@
 
 #include "kexiscripting.h"
 
+//include <qapplication.h>
+#include <qcursor.h>
 #include <kdebug.h>
 
 #include "keximainwindow.h"
@@ -62,6 +64,11 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
     d->manager = Kross::Api::Manager::scriptManager();
     d->scriptcontainer = d->manager->getScriptContainer(name);
     d->scriptcontainer->setInterpreterName("python"); // set default interpreter
+
+    // Publish the KexiMainWindow singelton instance.
+    KexiMainWindow* mainwindow = manager->getKexiMainWindow();
+    if(mainwindow)
+        d->scriptcontainer->addQObject(mainwindow, "KexiMainWindow");
 
     // Redirect stdout and stderr.
     //FIXME remember previous stdout+stderr and restore them in the dtor?
@@ -129,7 +136,9 @@ bool KexiScriptContainer::execute()
     emit clearOutput();
 
 #ifdef KEXI_KROSS_SUPPORT
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Kross::Api::Object::Ptr result = d->scriptcontainer->execute();
+    bool ok = true;
     if( d->scriptcontainer->hadException() ) {
         Kross::Api::Exception::Ptr exception = d->scriptcontainer->getException();
         QString s = exception->toString();
@@ -137,14 +146,14 @@ bool KexiScriptContainer::execute()
         long line = exception->getLineNo();
         if(line >= 0)
             emit lineNo(line);
-        return false;
+        ok = false;
     }
+    QApplication::restoreOverrideCursor();
+    return ok;
 #else
     addStdErr( "KexiScriptManager::execute() called, but Kexi is compiled without Kross scripting support." );
     return false;
 #endif
-
-    return true;
 }
 
 void KexiScriptContainer::addStdOut(const QString& s)
@@ -168,10 +177,9 @@ void KexiScriptContainer::addStdErr(const QString& s)
 class KexiScriptManagerPrivate
 {
     public:
-        /**
-        * Map of \a KexiScriptContainer children this \a KexiScriptManager
-        * has.
-        */
+        /// The \a KexiMainWindow singelton instance.
+        KexiMainWindow* mainwindow;
+        /// Map of \a KexiScriptContainer children this \a KexiScriptManager
         QMap<QString, KexiScriptContainer*> scriptcontainers;
 };
 
@@ -179,11 +187,17 @@ KexiScriptManager::KexiScriptManager(KexiMainWindow* mainwindow)
     : QObject(mainwindow, "KexiScriptManager")
     , d(new KexiScriptManagerPrivate())
 {
+    d->mainwindow = mainwindow;
 }
 
 KexiScriptManager::~KexiScriptManager()
 {
     delete d;
+}
+
+KexiMainWindow* KexiScriptManager::getKexiMainWindow()
+{
+    return d->mainwindow;
 }
 
 bool KexiScriptManager::hasScriptContainer(const QString& name)
