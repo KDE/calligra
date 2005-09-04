@@ -49,6 +49,14 @@ Object* GroupObject::duplicate()
 {
   GroupObject* object = new GroupObject(*this);
 
+  QValueList<Kivio::Object*>::iterator it = m_objectList.begin();
+  QValueList<Kivio::Object*>::iterator itEnd = m_objectList.end();
+  object->m_objectList.clear();
+
+  for(;it != itEnd; ++it) {
+    object->addObject((*it)->duplicate());
+  }
+
   return object;
 }
 

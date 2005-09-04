@@ -30,6 +30,7 @@ class QBrush;
 namespace Kivio {
 
 class RectangleObject;
+class RoundedRectangleObject;
 class GroupObject;
 class Pen;
 
@@ -45,6 +46,7 @@ class SmlObjectSaver{
 
   protected:
     QDomElement saveRectangleObject(RectangleObject* object, QDomDocument& doc);
+    QDomElement saveRoundedRectangleObject(RoundedRectangleObject* object, QDomDocument& doc);
     QDomElement saveGroupObject(GroupObject* object, QDomDocument& doc);
 
     QDomElement saveBrush(const QBrush& brush, QDomDocument& doc);

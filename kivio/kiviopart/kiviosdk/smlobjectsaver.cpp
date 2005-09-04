@@ -34,6 +34,7 @@
 #include "kivio_common.h"
 #include "pen.h"
 #include "groupobject.h"
+#include "roundedrectangleobject.h"
 
 namespace Kivio {
 
@@ -92,6 +93,7 @@ QDomElement SmlObjectSaver::saveObject(Object* object, QDomDocument& doc)
       break;
 
     case kstRoundedRectangle:
+      element = saveRoundedRectangleObject(static_cast<RoundedRectangleObject*>(object), doc);
       break;
 
     case kstEllipse:
@@ -131,6 +133,28 @@ QDomElement SmlObjectSaver::saveRectangleObject(RectangleObject* object, QDomDoc
   XmlWriteFloat(objE, "y", rect.y());
   XmlWriteFloat(objE, "w", rect.width());
   XmlWriteFloat(objE, "h", rect.height());
+
+  objE.appendChild(saveBrush(object->brush(), doc));
+  objE.appendChild(savePen(object->pen(), doc));
+
+  return objE;
+}
+
+QDomElement SmlObjectSaver::saveRoundedRectangleObject(RoundedRectangleObject* object, QDomDocument& doc)
+{
+  QDomElement objE = doc.createElement("KivioShape");
+  XmlWriteString(objE, "type", "Rectangle");
+  XmlWriteString(objE, "name", object->name());
+
+  KoRect rect = object->boundingBox();
+  XmlWriteFloat(objE, "x", rect.x());
+  XmlWriteFloat(objE, "y", rect.y());
+  XmlWriteFloat(objE, "w", rect.width());
+  XmlWriteFloat(objE, "h", rect.height());
+
+  // Write the radii of the curves
+  XmlWriteInt(objE, "r1", object->xRoundness());
+  XmlWriteInt(objE, "r2", object->yRoundness());
 
   objE.appendChild(saveBrush(object->brush(), doc));
   objE.appendChild(savePen(object->pen(), doc));

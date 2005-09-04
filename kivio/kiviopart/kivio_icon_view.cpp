@@ -107,7 +107,7 @@ QDragObject *KivioIconView::dragObject()
   KivioDragObject* dragObject = new KivioDragObject(this, "shapeDrag");
 
   KivioIconViewItem *item = (KivioIconViewItem *)currentItem();
-  dragObject->addObject(item->shape());
+  dragObject->addObject(item->shape()->duplicate());
 
 
   return dragObject;
