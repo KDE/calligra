@@ -35,6 +35,7 @@
 #include "pen.h"
 #include "groupobject.h"
 #include "roundedrectangleobject.h"
+#include "ellipseobject.h"
 
 namespace Kivio {
 
@@ -97,6 +98,7 @@ QDomElement SmlObjectSaver::saveObject(Object* object, QDomDocument& doc)
       break;
 
     case kstEllipse:
+      element = saveEllipseObject(static_cast<EllipseObject*>(object), doc);
       break;
 
     case kstOpenPath:
@@ -125,7 +127,25 @@ QDomElement SmlObjectSaver::saveObject(Object* object, QDomDocument& doc)
 QDomElement SmlObjectSaver::saveRectangleObject(RectangleObject* object, QDomDocument& doc)
 {
   QDomElement objE = doc.createElement("KivioShape");
-  XmlWriteString(objE, "type", "Rectangle");
+  XmlWriteString(objE, "type", "RoundRectangle");
+  XmlWriteString(objE, "name", object->name());
+
+  KoRect rect = object->boundingBox();
+  XmlWriteFloat(objE, "x", rect.x());
+  XmlWriteFloat(objE, "y", rect.y());
+  XmlWriteFloat(objE, "w", rect.width());
+  XmlWriteFloat(objE, "h", rect.height());
+
+  objE.appendChild(saveBrush(object->brush(), doc));
+  objE.appendChild(savePen(object->pen(), doc));
+
+  return objE;
+}
+
+QDomElement SmlObjectSaver::saveEllipseObject(EllipseObject* object, QDomDocument& doc)
+{
+  QDomElement objE = doc.createElement("KivioShape");
+  XmlWriteString(objE, "type", "Ellipse");
   XmlWriteString(objE, "name", object->name());
 
   KoRect rect = object->boundingBox();
