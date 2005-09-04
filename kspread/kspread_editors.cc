@@ -352,6 +352,13 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
             canvas()->endChoose();
             //kdDebug(36001) << "Cont" << endl;
         }
+        // forward Left/Right keys - so that pressing left/right in this
+        // editor leaves editing mode ... otherwise editing is annoying
+        // left/right arrows still work with the F2-editor.
+        if ((k->key() == Qt::Key_Left) || (k->key() == Qt::Key_Right)) {
+          QApplication::sendEvent (parent(), e);
+          return true;
+        }
     }
 
     return false;
