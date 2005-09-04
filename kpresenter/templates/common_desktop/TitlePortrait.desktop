@@ -58,6 +58,7 @@ Name[zh_TW]=標題肖象
 Name[zu]=Umdwebi Onebizo
 Comment=Presentation with a page title (portrait-oriented)
 Comment[es]=Presentación con un título de página (orientación vertical)
+Comment[sv]=Presentation med en sidrubrik (stående format)
 Comment[xx]=xxPresentation with a page title (portrait-oriented)xx
 Type=Link
 URL=.source/TitlePortrait.kpt

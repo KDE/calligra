@@ -6,4 +6,5 @@ Icon=kexi_connectiondata
 Patterns=*.kexic
 Comment=Data for Database Server Connection
 Comment[es]=Datos para la conexión con el servidor de bases de datos
+Comment[sv]=Data för anslutning till databasserver
 Comment[xx]=xxData for Database Server Connectionxx

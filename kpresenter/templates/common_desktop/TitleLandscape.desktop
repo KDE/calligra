@@ -62,6 +62,7 @@ Name[zh_TW]=標題
 Name[zu]=Ibizo
 Comment=Presentation with a page title
 Comment[es]=Presentación con un título de página
+Comment[sv]=Presentation med en sidrubrik
 Comment[xx]=xxPresentation with a page titlexx
 Type=Link
 URL=.source/TitleLandscape.kpt

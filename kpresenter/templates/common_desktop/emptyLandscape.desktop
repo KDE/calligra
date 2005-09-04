@@ -41,6 +41,7 @@ Name[xx]=xxEmptyxx
 Name[zh_CN]=空
 Comment=Empty presentation
 Comment[es]=Presentación vacía
+Comment[sv]=Tom presentation
 Comment[xx]=xxEmpty presentationxx
 Type=Link
 URL=.source/emptyLandscape.kpt
