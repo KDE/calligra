@@ -24,7 +24,7 @@
 
 #include "vshapetool.h"
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 
 
@@ -57,9 +57,9 @@ private:
 		void refreshUnit();
 
 	private:
-		KoBuggyUnitDoubleSpinBox	*m_radius;
+		KoUnitDoubleSpinBox		*m_radius;
 		KIntSpinBox			*m_edges;
-		KarbonPart          *m_part;
+		KarbonPart		        *m_part;
 	};
 
 	VPolygonOptionsWidget* m_optionsWidget;

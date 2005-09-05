@@ -5,14 +5,14 @@
 #include <koUnit.h>
 
 class KoPageLayout;
-class KoUnitDoubleSpinBox2;
+class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 
 class KivioStencilGeometryPanel : public QWidget
 {
   Q_OBJECT
   protected:
-    KoUnitDoubleSpinBox2 *m_pX, *m_pY, *m_pW, *m_pH;
+    KoUnitDoubleSpinBox *m_pX, *m_pY, *m_pW, *m_pH;
     KIntSpinBox* m_rotationSBox;
     KoUnit::Unit m_unit;
     bool m_emitSignals;

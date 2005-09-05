@@ -25,7 +25,7 @@
 
 class KarbonPart;
 class KarbonView;
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 
 class VTransformDocker : public VDocker
 {
@@ -43,10 +43,10 @@ private slots:
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;
-	KoBuggyUnitDoubleSpinBox *m_x;
-	KoBuggyUnitDoubleSpinBox *m_y;
-	KoBuggyUnitDoubleSpinBox *m_width;
-	KoBuggyUnitDoubleSpinBox *m_height;
+	KoUnitDoubleSpinBox *m_x;
+	KoUnitDoubleSpinBox *m_y;
+	KoUnitDoubleSpinBox *m_width;
+	KoUnitDoubleSpinBox *m_height;
 	QWidget *mainWidget;
 };
 

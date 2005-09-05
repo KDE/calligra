@@ -50,7 +50,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	mainLayout->addWidget( widthLabel, 0, 0 );
-	m_setLineWidth = new KoBuggyUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	

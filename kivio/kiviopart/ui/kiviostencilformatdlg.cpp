@@ -46,7 +46,7 @@ void KivioStencilFormatDlg::init()
   QGridLayout* gl = new QGridLayout(mainWidget, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
 
   QLabel* lineWidthLbl = new QLabel(i18n("Line &width:"), mainWidget);
-  m_lineWidthUSBox = new KoUnitDoubleSpinBox2(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  m_lineWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   lineWidthLbl->setBuddy(m_lineWidthUSBox);
   QLabel* lineColorLbl = new QLabel(i18n("Line &color:"), mainWidget);
   m_lineCBtn = new KColorButton(mainWidget);

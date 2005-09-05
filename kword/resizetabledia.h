@@ -31,7 +31,7 @@ class QButtonGroup;
 class QRadioButton;
 class QLabel;
 class QSpinBox;
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 
 class KWResizeTableDia : public KDialogBase
 {
@@ -48,7 +48,7 @@ protected:
     KWDocument *doc;
     ResizeType type;
     KWCanvas *canvas;
-    KoBuggyUnitDoubleSpinBox *position;
+    KoUnitDoubleSpinBox *position;
     double resetValue;
 protected slots:
     virtual void slotOk();

@@ -24,7 +24,7 @@
 
 #include "vshapetool.h"
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KComboBox;
 class KIntSpinBox;
 class KarbonPart;
@@ -53,8 +53,8 @@ private:
 	KComboBox				*m_type;
 	KIntSpinBox				*m_startAngle;
 	KIntSpinBox				*m_endAngle;
-	KoBuggyUnitDoubleSpinBox		*m_width;
-	KoBuggyUnitDoubleSpinBox		*m_height;
+	KoUnitDoubleSpinBox			*m_width;
+	KoUnitDoubleSpinBox			*m_height;
 	KarbonPart				*m_part;
 	QLabel					*m_heightLabel;
 	QLabel					*m_widthLabel;

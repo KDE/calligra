@@ -28,6 +28,11 @@
 #include <koUnit.h>
 #include <koffice_export.h>
 
+
+// ----------------------------------------------------------------
+//                          Support classes
+
+
 class KoUnitDoubleBase;
 
 // ### TODO: put it out of the public header file (if possible)
@@ -90,17 +95,22 @@ protected:
     unsigned int m_precision;
 };
 
+
+// ----------------------------------------------------------------
+//                          Widget classes
+
+
 /**
  * Spin box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoBuggyUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
+class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
     Q_OBJECT
 public:
-    KoBuggyUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
+    KoUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
     // lower, upper, step and value are in pt
-    KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+    KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -122,23 +132,6 @@ private:
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points
     double m_stepInPoints;  ///< step in points
-};
-
-/**
- * Temporary class that will be merged with koBuggyUnitDoubleSpinBox
- * and renamed into KoUnitDoubleSpinBox when all the users of that
- * class have been converted.
- */
-class KOFFICEUI_EXPORT KoUnitDoubleSpinBox2 : public KoBuggyUnitDoubleSpinBox
-{
-    Q_OBJECT
-public:
-    KoUnitDoubleSpinBox2( QWidget *parent = 0L, const char *name = 0L );
-    // lower, upper, step and value are in pt
-    KoUnitDoubleSpinBox2( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
-
-    virtual void changeValue( double );
 };
 
 

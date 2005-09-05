@@ -96,10 +96,10 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
   lw->setPixmap( QPixmap((const char **)width_xpm) );
   lh->setPixmap( QPixmap((const char **)height_xpm) );
 
-  m_pX = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
-  m_pY = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
-  m_pW = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
-  m_pH = new KoUnitDoubleSpinBox2(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pX = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pY = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pW = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_pH = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
   m_rotationSBox = new KIntSpinBox(-360, 360, 1, 0, 10, this);
   m_rotationSBox->hide();
 

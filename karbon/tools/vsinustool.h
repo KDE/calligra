@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 #include "vshapetool.h"
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 class KarbonPart;
 class QLabel;
@@ -57,8 +57,8 @@ private:
 		void refreshUnit();
 
 	private:
-		KoBuggyUnitDoubleSpinBox	*m_width;
-		KoBuggyUnitDoubleSpinBox	*m_height;
+		KoUnitDoubleSpinBox		*m_width;
+		KoUnitDoubleSpinBox		*m_height;
 		KIntSpinBox			*m_periods;
 		KarbonPart			*m_part;
 		QLabel				*m_heightLabel;
