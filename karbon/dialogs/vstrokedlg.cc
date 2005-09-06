@@ -50,7 +50,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	leftLayout->addWidget ( widthLabel );
-	m_setLineWidth = new KoBuggyUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	leftLayout->addWidget ( m_setLineWidth );
 
 	//Dashing ->

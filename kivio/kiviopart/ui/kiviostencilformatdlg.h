@@ -24,7 +24,7 @@
 
 #include <koUnit.h>
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KColorButton;
 class KComboBox;
 class KivioView;
@@ -61,7 +61,7 @@ class KivioStencilFormatDlg : public KDialogBase
     void initLineEndStyles();
 
   protected:
-    KoBuggyUnitDoubleSpinBox* m_lineWidthUSBox;
+    KoUnitDoubleSpinBox* m_lineWidthUSBox;
     KColorButton* m_lineCBtn;
     KColorButton* m_fillCBtn;
     KComboBox* m_patternCBox;

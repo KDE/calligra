@@ -48,25 +48,25 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 	//X: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* xLabel = new QLabel( i18n ( "X:" ), mainWidget );
 	mainLayout->addWidget( xLabel, 1, 0 );
-	m_x = new KoBuggyUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_x = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_x, 1, 1 );
 
 	//Y: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* yLabel = new QLabel( i18n ( "Y:" ), mainWidget );
 	mainLayout->addWidget( yLabel, 2, 0 );
-	m_y = new KoBuggyUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_y = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_y, 2, 1 );
 
 	//Width: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* wLabel = new QLabel( i18n ( "W:" ), mainWidget );
 	mainLayout->addWidget( wLabel, 1, 2 );
-	m_width = new KoBuggyUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_width = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_width, 1, 3 );
 
 	//Height: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* hLabel = new QLabel( i18n ( "H:" ), mainWidget );
 	mainLayout->addWidget( hLabel, 2, 2 );
-	m_height = new KoBuggyUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_height = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_height, 2, 3 );
 
 	//TODO: Add Rotation, Shear

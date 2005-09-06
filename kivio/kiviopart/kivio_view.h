@@ -63,7 +63,7 @@ class QProgressBar;
 class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;

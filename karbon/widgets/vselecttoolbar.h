@@ -24,7 +24,7 @@
 
 #include <ktoolbar.h>
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KarbonView;
 
 class VSelectToolBar : public KToolBar
@@ -42,10 +42,10 @@ public slots:
 	void slotHeightChanged( double );
 
 private:
-	KoBuggyUnitDoubleSpinBox *m_x;
-	KoBuggyUnitDoubleSpinBox *m_y;
-	KoBuggyUnitDoubleSpinBox *m_width;
-	KoBuggyUnitDoubleSpinBox *m_height;
+	KoUnitDoubleSpinBox *m_x;
+	KoUnitDoubleSpinBox *m_y;
+	KoUnitDoubleSpinBox *m_width;
+	KoUnitDoubleSpinBox *m_height;
 	KarbonView			*m_view;
 };
 

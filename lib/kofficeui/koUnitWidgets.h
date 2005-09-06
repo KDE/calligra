@@ -28,6 +28,11 @@
 #include <koUnit.h>
 #include <koffice_export.h>
 
+
+// ----------------------------------------------------------------
+//                          Support classes
+
+
 class KoUnitDoubleBase;
 
 // ### TODO: put it out of the public header file (if possible)
@@ -94,11 +99,11 @@ protected:
  * Spin box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoBuggyUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
+class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
     // lower, upper, step and value are in pt
-    KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+    KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
@@ -120,21 +125,6 @@ private:
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points
     double m_stepInPoints;  ///< step in points
-};
-
-/**
- * Temporary class that will be merged with koBuggyUnitDoubleSpinBox
- * and renamed into KoUnitDoubleSpinBox when all the users of that
- * class have been converted.
- */
-class KOFFICEUI_EXPORT KoUnitDoubleSpinBox2 : public KoBuggyUnitDoubleSpinBox
-{
-public:
-    // lower, upper, step and value are in pt
-    KoUnitDoubleSpinBox2( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
-
-    virtual void changeValue( double );
 };
 
 

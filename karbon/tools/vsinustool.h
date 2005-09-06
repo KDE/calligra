@@ -24,7 +24,7 @@
 #include <knuminput.h>
 #include "vshapetool.h"
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 class KarbonPart;
 class QLabel;

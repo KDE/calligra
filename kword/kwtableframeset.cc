@@ -342,6 +342,10 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
     //kdDebug(32004) << "end KWTableFrameSet::recalcCols" << endl;
 }
 
+
+// Step through the whole table and recalculate the position and size
+// of each cell.
+
 void KWTableFrameSet::recalcRows(int _col, int _row) {
     kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;

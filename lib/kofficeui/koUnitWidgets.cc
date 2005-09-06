@@ -26,6 +26,10 @@
 #include <qlayout.h>
 
 
+// ----------------------------------------------------------------
+//                          Support classes
+
+
 KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name )
 : KDoubleValidator( parent, name ), m_base( base )
 {
@@ -112,7 +116,13 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 // ----------------------------------------------------------------
 
 
-KoBuggyUnitDoubleSpinBox::KoBuggyUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit,       unsigned int precision, const char *name )
+KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, 
+					  double lower, double upper, 
+					  double step, 
+					  double value, 
+					  KoUnit::Unit unit,
+					  unsigned int precision, 
+					  const char *name )
     : KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision ),
     m_lowerInPoints( lower ), m_upperInPoints( upper ), m_stepInPoints( step )
 {
@@ -124,16 +134,16 @@ KoBuggyUnitDoubleSpinBox::KoBuggyUnitDoubleSpinBox( QWidget *parent, double lowe
 }
 
 void
-KoBuggyUnitDoubleSpinBox::changeValue( double val )
+KoUnitDoubleSpinBox::changeValue( double val )
 {
-    KDoubleSpinBox::setValue( val );
+    KDoubleSpinBox::setValue( KoUnit::toUserValue( val, m_unit ) );
     // TODO: emit valueChanged ONLY if the value was out-of-bounds
     // This will allow the 'user' dialog to set a dirty bool and ensure
     // a proper value is getting saved.
 }
 
 void
-KoBuggyUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
+KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
     double oldvalue = KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
     KDoubleSpinBox::setMinValue( KoUnit::toUserValue( m_lowerInPoints, unit ) );
@@ -144,47 +154,27 @@ KoBuggyUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
 
-double KoBuggyUnitDoubleSpinBox::value( void ) const
+double KoUnitDoubleSpinBox::value( void ) const
 {
     return KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
 }
 
-void KoBuggyUnitDoubleSpinBox::setMinValue( double min )
+void KoUnitDoubleSpinBox::setMinValue( double min )
 {
   m_lowerInPoints = min;
   KDoubleSpinBox::setMinValue( KoUnit::toUserValue( m_lowerInPoints, m_unit ) );
 }
 
-void KoBuggyUnitDoubleSpinBox::setMaxValue( double max )
+void KoUnitDoubleSpinBox::setMaxValue( double max )
 {
   m_upperInPoints = max;
   KDoubleSpinBox::setMaxValue( KoUnit::toUserValue( m_upperInPoints, m_unit ) );
 }
 
-void KoBuggyUnitDoubleSpinBox::setLineStep( double step )
+void KoUnitDoubleSpinBox::setLineStep( double step )
 {
   m_stepInPoints = step;
   KDoubleSpinBox::setLineStep( KoUnit::toUserValue( m_stepInPoints, m_unit ) );
-}
-
-
-// ----------------------------------------------------------------
-
-
-KoUnitDoubleSpinBox2::KoUnitDoubleSpinBox2( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit,       unsigned int precision, const char *name )
-    : KoBuggyUnitDoubleSpinBox( parent, lower, upper, step, value, unit, precision, name )
-{
-    m_validator = new KoUnitDoubleValidator( this, this );
-    QSpinBox::setValidator( m_validator );
-    setAcceptLocalizedNumbers( true );
-    setUnit( unit );
-    changeValue( value );
-}
-
-void
-KoUnitDoubleSpinBox2::changeValue( double val )
-{
-    KDoubleSpinBox::setValue( KoUnit::toUserValue( val, m_unit ) );
 }
 
 

@@ -25,7 +25,7 @@
 
 #include "vshapetool.h"
 
-class KoBuggyUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KComboBox;
 class KIntSpinBox;
 class KarbonPart;
