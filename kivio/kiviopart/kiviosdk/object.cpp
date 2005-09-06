@@ -22,6 +22,7 @@ namespace Kivio {
 
 Object::Object()
 {
+  m_selected = false;
 }
 
 Object::~Object()

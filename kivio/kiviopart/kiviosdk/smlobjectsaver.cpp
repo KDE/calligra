@@ -36,6 +36,9 @@
 #include "groupobject.h"
 #include "roundedrectangleobject.h"
 #include "ellipseobject.h"
+#include "polylineobject.h"
+#include "polygonobject.h"
+#include "bezierobject.h"
 
 namespace Kivio {
 
@@ -78,15 +81,19 @@ QDomElement SmlObjectSaver::saveObject(Object* object, QDomDocument& doc)
       break;
 
     case kstLineArray:
+      element = saveLineArrayObject(static_cast<LineArrayObject*>(object), doc);
       break;
 
     case kstPolyline:
+      element = savePolylineObject(static_cast<PolylineObject*>(object), doc);
       break;
 
     case kstPolygon:
+      element = savePolygonObject(static_cast<PolygonObject*>(object), doc);
       break;
 
     case kstBezier:
+      element = saveBezierObject(static_cast<BezierObject*>(object), doc);
       break;
 
     case kstRectangle:
@@ -178,6 +185,94 @@ QDomElement SmlObjectSaver::saveRoundedRectangleObject(RoundedRectangleObject* o
 
   objE.appendChild(saveBrush(object->brush(), doc));
   objE.appendChild(savePen(object->pen(), doc));
+
+  return objE;
+}
+
+QDomElement SmlObjectSaver::savePolylineObject(PolylineObject* object, QDomDocument& doc)
+{
+  QDomElement objE = doc.createElement("KivioShape");
+  XmlWriteString(objE, "type", "Polyline");
+  XmlWriteString(objE, "name", object->name());
+
+  objE.appendChild(savePen(object->pen(), doc));
+
+  QValueVector<KoPoint> points = object->pointVector();
+  QValueVector<KoPoint>::iterator itEnd = points.end();
+
+  for(QValueVector<KoPoint>::iterator it = points.begin(); it != itEnd; ++it) {
+    QDomElement pointElement = doc.createElement("KivioPoint");
+    XmlWriteFloat(pointElement, "x", (*it).x());
+    XmlWriteFloat(pointElement, "y", (*it).y());
+    objE.appendChild(pointElement);
+  }
+
+  return objE;
+}
+
+QDomElement SmlObjectSaver::savePolygonObject(PolygonObject* object, QDomDocument& doc)
+{
+  QDomElement objE = doc.createElement("KivioShape");
+  XmlWriteString(objE, "type", "Polygon");
+  XmlWriteString(objE, "name", object->name());
+
+  objE.appendChild(saveBrush(object->brush(), doc));
+  objE.appendChild(savePen(object->pen(), doc));
+
+  QValueVector<KoPoint> points = object->pointVector();
+  QValueVector<KoPoint>::iterator itEnd = points.end();
+
+  for(QValueVector<KoPoint>::iterator it = points.begin(); it != itEnd; ++it) {
+    QDomElement pointElement = doc.createElement("KivioPoint");
+    XmlWriteFloat(pointElement, "x", (*it).x());
+    XmlWriteFloat(pointElement, "y", (*it).y());
+    objE.appendChild(pointElement);
+  }
+
+  return objE;
+}
+
+QDomElement SmlObjectSaver::saveBezierObject(BezierObject* object, QDomDocument& doc)
+{
+  QDomElement objE = doc.createElement("KivioShape");
+  XmlWriteString(objE, "type", "Bezier");
+  XmlWriteString(objE, "name", object->name());
+
+  objE.appendChild(savePen(object->pen(), doc));
+
+  QValueVector<KoPoint> points = object->pointVector();
+  QValueVector<KoPoint>::iterator itEnd = points.end();
+
+  for(QValueVector<KoPoint>::iterator it = points.begin(); it != itEnd; ++it) {
+    QDomElement pointElement = doc.createElement("KivioPoint");
+    XmlWriteFloat(pointElement, "x", (*it).x());
+    XmlWriteFloat(pointElement, "y", (*it).y());
+    objE.appendChild(pointElement);
+  }
+
+  return objE;
+}
+
+QDomElement SmlObjectSaver::saveLineArrayObject(LineArrayObject* object, QDomDocument& doc)
+{
+  QDomElement objE = doc.createElement("KivioShape");
+  XmlWriteString(objE, "type", "LineArray");
+  XmlWriteString(objE, "name", object->name());
+
+  objE.appendChild(savePen(object->pen(), doc));
+
+  QValueVector<KoPoint> points = object->pointVector();
+
+  for(uint i = 0; i < points.count() - 1; ++i) {
+    QDomElement pointElement = doc.createElement("Line");
+    KoPoint p = points[i];
+    XmlWriteFloat(pointElement, "x1", p.x());
+    XmlWriteFloat(pointElement, "y1", p.y());
+    p = points[++i];
+    XmlWriteFloat(pointElement, "x2", p.x());
+    XmlWriteFloat(pointElement, "y2", p.y());
+    objE.appendChild(pointElement);
+  }
 
   return objE;
 }

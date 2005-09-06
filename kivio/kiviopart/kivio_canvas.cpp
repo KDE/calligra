@@ -764,8 +764,7 @@ void KivioCanvas::dragEnterEvent( QDragEnterEvent *e )
       QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
 
       for(QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();it != itEnd; ++it) {
-        static_cast<Kivio::GroupObject*>(*it)->setPosition(m_origPoint);
-//        (*it)->move(m_origPoint.x(), m_origPoint.y());
+        (*it)->move(m_origPoint.x(), m_origPoint.y());
       }
 
       update();

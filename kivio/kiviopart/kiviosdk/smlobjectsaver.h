@@ -32,6 +32,10 @@ namespace Kivio {
 class RectangleObject;
 class RoundedRectangleObject;
 class EllipseObject;
+class PolylineObject;
+class PolygonObject;
+class BezierObject;
+class LineArrayObject;
 class GroupObject;
 class Pen;
 
@@ -49,6 +53,10 @@ class SmlObjectSaver{
     QDomElement saveRectangleObject(RectangleObject* object, QDomDocument& doc);
     QDomElement saveRoundedRectangleObject(RoundedRectangleObject* object, QDomDocument& doc);
     QDomElement saveEllipseObject(EllipseObject* object, QDomDocument& doc);
+    QDomElement savePolylineObject(PolylineObject* object, QDomDocument& doc);
+    QDomElement savePolygonObject(PolygonObject* object, QDomDocument& doc);
+    QDomElement saveBezierObject(BezierObject* object, QDomDocument& doc);
+    QDomElement saveLineArrayObject(LineArrayObject* object, QDomDocument& doc);
     QDomElement saveGroupObject(GroupObject* object, QDomDocument& doc);
 
     QDomElement saveBrush(const QBrush& brush, QDomDocument& doc);
