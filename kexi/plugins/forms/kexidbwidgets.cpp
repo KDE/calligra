@@ -25,6 +25,8 @@
 #include <qdatetime.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
+#include <qlabel.h>
+#include <qtoolbutton.h>
 
 #include <knumvalidator.h>
 #include <kdatetbl.h>
@@ -795,7 +797,7 @@ KexiDBDateTimeEdit::~KexiDBDateTimeEdit()
 {
 }
 
-void KexiDBDateTimeEdit::setInvalidState(const QString &text)
+void KexiDBDateTimeEdit::setInvalidState(const QString & /*! @todo paint this text: text*/)
 {
 	setEnabled(false);
 	m_invalidState = true;
@@ -1121,5 +1123,104 @@ KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const ch
 KexiPushButton::~KexiPushButton()
 {
 }
+
+//////////////////////////////////////////
+
+KexiImageBox::KexiImageBox( QWidget *parent, const char *name, WFlags f )
+	: QFrame( parent, name, f )
+	, KexiFormDataItemInterface()
+{
+	QHBoxLayout *hlyr = new QHBoxLayout(this, 2);
+	m_pixmapLabel = new QLabel(this);
+	m_pixmapLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	hlyr->addWidget(m_pixmapLabel);
+	m_chooser = new QToolButton(this);
+	m_chooser->setText("...");//todo
+	m_chooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+//	m_chooser->setFixedWidth(m_chooser->minimumSizeHint().width()); //! @todo get this from a KStyle
+	m_chooser->setAutoRaise(true);
+	hlyr->addWidget(m_chooser);
+//todo	m_chooser->setPopup(.........);
+}
+
+KexiImageBox::~KexiImageBox()
+{
+}
+
+void KexiImageBox::setValueInternal( const QVariant& add, bool /* irrelevant here: removeOld*/ )
+{
+	//! @todo ?
+	m_pixmapLabel->setPixmap(add.toPixmap());
+}
+
+QVariant KexiImageBox::value() {
+	return *m_pixmapLabel->pixmap();
+}
+
+void KexiImageBox::setInvalidState( const QString& displayText )
+{
+	m_pixmapLabel->setPixmap(QPixmap());
+	m_pixmapLabel->setText( displayText );
+	m_chooser->hide();
+}
+
+bool KexiImageBox::valueIsNull()
+{
+	return m_pixmapLabel->pixmap()->isNull();
+}
+
+bool KexiImageBox::valueIsEmpty()
+{
+	return false;
+}
+
+bool KexiImageBox::isReadOnly() const
+{
+	return m_readOnly || !m_pixmapLabel->isEnabled();
+}
+
+QWidget* KexiImageBox::widget()
+{
+	//! @todo
+	return m_pixmapLabel;
+}
+
+bool KexiImageBox::cursorAtStart()
+{
+	return true;
+}
+
+bool KexiImageBox::cursorAtEnd()
+{
+	return true;
+}
+
+void KexiImageBox::clear()
+{
+	m_pixmapLabel->setPixmap(QPixmap());
+	m_pixmapLabel->setText(QString::null);
+}
+
+/*
+bool KexiImageBox::setProperty( const char * name, const QVariant & value )
+{
+	const bool ret = QLabel::setProperty(name, value);
+	if (p_shadowEnabled) {
+		if (0==qstrcmp("indent", name) || 0==qstrcmp("font", name) || 0==qstrcmp("margin", name)
+			|| 0==qstrcmp("frameShadow", name) || 0==qstrcmp("frameShape", name)
+			|| 0==qstrcmp("frameStyle", name) || 0==qstrcmp("midLineWidth", name)
+			|| 0==qstrcmp("lineWidth", name)) {
+			p_privateLabel->setProperty(name, value);
+			updatePixmap();
+		}
+	}
+	return ret;
+}
+
+void KexiImageBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+{
+	KexiFormDataItemInterface::setColumnInfo(cinfo);
+	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
+}*/
 
 #include "kexidbwidgets.moc"

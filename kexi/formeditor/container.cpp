@@ -452,7 +452,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 						index = index - 1;
 				}
 				else  {
-					if(index == list->count() - 1) // go back to the first item
+					if(index == int(list->count() - 1)) // go back to the first item
 						index = 0;
 					else
 						index = index + 1;

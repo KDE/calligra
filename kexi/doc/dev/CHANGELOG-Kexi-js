@@ -13,12 +13,17 @@
 CCMAIL: dkite@shaw.ca
 
 2005-09-03 (aKademy)
+Forms
+- data-aware image box widget 
+(partial implementation started during flight back from Girona to Warsaw)
+
+2005-09-03 (aKademy)
 Relations view
 - fixed redrawing (in an unoptimized way)
 
 2005-08-27
 Forms
-- a fix for value changed flag and datachangeslistener in autofields
+- a fix for 'value changed' flag and datachangeslistener in autofields
 
 2005-08-19
 Startup

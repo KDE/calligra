@@ -662,4 +662,9 @@ void WidgetFactory::setInternalProperty(const QCString& classname, const QCStrin
 	m_internalProp[classname+":"+property]=value;
 }
 
+void WidgetFactory::setPropertyOptions( WidgetPropertySet& /*buf*/, const WidgetInfo& /*info*/, QWidget * /*w*/ )
+{
+	//nothing
+}
+
 #include "widgetfactory.moc"

@@ -1510,8 +1510,8 @@ class CommandGroup::SubCommands : public KMacroCommand
 
 CommandGroup::CommandGroup( const QString & name, WidgetPropertySet *propSet )
 	: Command()
-	, m_propSet(propSet)
 	, m_subCommands(new SubCommands(name))
+	, m_propSet(propSet)
 {
 }
 

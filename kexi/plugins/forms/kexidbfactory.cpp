@@ -217,6 +217,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setDescription(i18n("A widget for displaying text"));
 	addClass(wi);
 
+	wi = new KexiDataAwareWidgetInfo(
+		this, "stdwidgets", "KexiPictureLabel" /*we're inheriting to get i18n'd strings already translated there*/);
+	wi->setPixmap("pixmaplabel");
+	wi->setClassName("KexiImageBox");
+	wi->addAlternateClassName("KexiPictureLabel", true/*override*/);
+	wi->setName(i18n("Image Box"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "image"));
+	wi->setDescription(i18n("A widget for displaying images"));
+	addClass(wi);
+
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
 	wi->setPixmap("check");
 	wi->setClassName("KexiDBCheckBox");
@@ -376,6 +387,8 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	}
 	else if(c == "KexiLabel")
 		w = new KexiLabel(text, p, n);
+	else if(c == "KexiImageBox")
+		w = new KexiImageBox(p, n);
 	else if(c == "KexiDBFieldEdit")
 		w = new KexiDBFieldEdit(p, n);
 	else if(c == "KexiDBCheckBox")
@@ -397,7 +410,7 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 }
 
 bool
-KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+KexiDBFactory::createMenuActions(const QCString &classname, QWidget *, QPopupMenu *menu,
 		   KFormDesigner::Container *)
 {
 	if(classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton")
@@ -426,9 +439,6 @@ bool
 KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
-#ifndef Q_WS_WIN
-	#warning Is there any reason to edit a lineedit in design-mode?
-#endif
 	if(classname == "KexiDBLineEdit")
 	{
 //! @todo this code should not be copied here but
@@ -514,7 +524,7 @@ KexiDBFactory::previewWidget(const QCString &, QWidget *, KFormDesigner::Contain
 }
 
 bool
-KexiDBFactory::clearWidgetContent(const QCString &classname, QWidget *w)
+KexiDBFactory::clearWidgetContent(const QCString & /*classname*/, QWidget *w)
 {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
@@ -525,7 +535,7 @@ KexiDBFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 }
 
 QValueList<QCString>
-KexiDBFactory::autoSaveProperties(const QCString &classname)
+KexiDBFactory::autoSaveProperties(const QCString & /*classname*/)
 {
 	QValueList<QCString> lst;
 //	if(classname == "KexiSubForm")

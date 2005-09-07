@@ -33,6 +33,7 @@
 #include <knuminput.h>
 
 class QDateTimeEditor;
+class QToolButton;
 class KDatePicker;
 class KPopupMenu;
 
@@ -421,8 +422,8 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 
 	protected slots:
 		void slotValueChanged();
-		void  slotShowDatePicker();
-		void  acceptDate();
+		void slotShowDatePicker();
+		void acceptDate();
 
 	private:
 		KDatePicker *m_datePicker;
@@ -554,6 +555,79 @@ class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 
 	protected:
 		QCString m_onClickAction;
+};
+
+//! A data-aware, editable image box.
+/*! Can also act as a normal static image box.
+*/
+class KEXIFORMUTILS_EXPORT KexiImageBox : public QFrame, public KexiFormDataItemInterface {
+		Q_OBJECT
+		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
+		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
+//		Q_OVERRIDE( QPixmap pixmap READ pixmap WRITE setPixmap DESIGNABLE trus )
+//		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
+//		Q_OVERRIDE( bool text DESIGNABLE false )
+
+	public:
+		KexiImageBox( QWidget *parent, const char *name = 0, WFlags f = 0 );
+		virtual ~KexiImageBox();
+
+		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+
+		virtual QVariant value();
+// 
+		virtual void setInvalidState( const QString& displayText );
+
+		virtual bool valueIsNull();
+
+		virtual bool valueIsEmpty();
+
+		//! always true
+		virtual bool isReadOnly() const;
+
+		virtual QWidget* widget();
+
+		//! always true
+		virtual bool cursorAtStart();
+
+		//! always true
+		virtual bool cursorAtEnd();
+
+		virtual void clear();
+
+//		//! used to catch setIndent(), etc.
+//		virtual bool setProperty ( const char * name, const QVariant & value );
+
+	public slots:
+		//! Sets the datasource to \a ds
+		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
+
+		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+
+	protected slots:
+//		void updatePixmap();
+
+	protected:
+//		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+//		virtual void paintEvent( QPaintEvent* );
+//		virtual void resizeEvent( QResizeEvent* e );
+
+		//! Sets value \a value for a widget.
+		virtual void setValueInternal( const QVariant& add, bool removeOld );
+
+//		virtual void fontChange( const QFont& font );
+//		virtual void styleChange( QStyle& style );
+//		virtual void enabledChange( bool enabled );
+
+//		virtual void paletteChange( const QPalette& pal );
+//		virtual void frameChanged();
+//		virtual void showEvent( QShowEvent* e );
+
+//		void updatePixmapLater();
+		QLabel *m_pixmapLabel;
+		QToolButton *m_chooser;
+		bool m_readOnly;
 };
 
 #endif

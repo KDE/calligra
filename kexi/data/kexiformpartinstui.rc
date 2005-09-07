@@ -34,6 +34,7 @@
    <Action name="library_widget_KexiDBFieldEdit"/>
    <Action name="library_widget_KexiLabel"/>
    <Action name="library_widget_KexiPictureLabel"/>
+	 <Action name="library_widget_KexiImageBox"/>
    <Action name="library_widget_KexiDBLineEdit"/>
    <Action name="library_widget_KexiDBTextEdit"/>
    <Action name="library_widget_KPushButton"/>
