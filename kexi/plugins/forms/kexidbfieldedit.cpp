@@ -131,6 +131,8 @@ KexiDBFieldEdit::createEditor()
 	}
 
 	if(m_editor) {
+		m_editor->setName( QCString("KexiDBFieldEdit_")+m_editor->className() );
+		dynamic_cast<KexiDataItemInterface*>(m_editor)->setParentDataItemInterface(this);
 		KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
 		m_editor->show();
 		m_label->setBuddy(m_editor);

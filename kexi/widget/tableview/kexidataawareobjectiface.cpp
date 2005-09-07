@@ -129,7 +129,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 		m_navPanel->setCurrentRecordNumber(0+1);
 	
 	if (m_data && !theSameData) {
-//! @todo: store sorting?
+//! @todo: store sorting settings?
 		setSorting(-1);
 //		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
 		connectToReloadDataSlot(m_data, SIGNAL(reloadRequested()));

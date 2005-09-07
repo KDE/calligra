@@ -76,6 +76,24 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	init();
 }
 
+KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
+	const QString& description)
+: fieldinfo(0)
+{
+	m_field = new KexiDB::Field(
+		name, ctype,
+		KexiDB::Field::NoConstraints,
+		KexiDB::Field::NoOptions,
+		0, 0,
+		QVariant(),
+		caption, description);
+
+	isDBAware = false;
+	m_fieldOwned = true;
+	m_captionAliasOrName = m_field->captionOrName();
+	init();
+}
+
 KexiTableViewColumn::KexiTableViewColumn(
 	const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& fi)
 //	const KexiDB::QuerySchema &query, KexiDB::Field& f)

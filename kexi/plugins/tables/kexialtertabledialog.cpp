@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -100,19 +100,22 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	d->data = new KexiTableViewData();
 	d->data->setInsertingEnabled( false );
 
-	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Primary Key", "PK"), KexiDB::Field::Text);
-	col->field()->setDescription(i18n("Primary Key"));
+	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, i18n("Primary Key", "PK"),
+		i18n("Describes primary key for the field."));
 	col->field()->setSubType("KIcon");
 	col->setReadOnly(true);
 	d->data->addColumn( col );
 
-	col = new KexiTableViewColumn(i18n("Field Name"), KexiDB::Field::Text);
+	col = new KexiTableViewColumn("name", KexiDB::Field::Text, i18n("Field Name"),
+		i18n("Describes name for the field."));
 	KexiUtils::Validator *vd = new KexiUtils::IdentifierValidator();
 	vd->setAcceptsEmptyValue(true);
 	col->setValidator( vd );
-
 	d->data->addColumn( col );
-	KexiDB::Field *f = new KexiDB::Field(i18n("Data Type"), KexiDB::Field::Enum);
+
+	col = new KexiTableViewColumn("type", KexiDB::Field::Enum, i18n("Data Type"),
+		i18n("Describes data type for the field."));
+	d->data->addColumn( col );
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
@@ -126,10 +129,10 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 		types[i-1] = KexiDB::Field::typeGroupName(i);
 		d->maxTypeNameTextWidth = QMAX(d->maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
-	f->setEnumHints(types);
+	col->field()->setEnumHints(types);
 
-	d->data->addColumn( new KexiTableViewColumn(*f) );
-	d->data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
+	d->data->addColumn( col = new KexiTableViewColumn("comments", KexiDB::Field::Text, i18n("Comments"),
+		i18n("Describes additional comments for the field.")) );
 
 	m_view = dynamic_cast<KexiTableView*>(mainWidget());
 

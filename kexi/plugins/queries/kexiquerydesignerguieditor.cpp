@@ -162,22 +162,26 @@ KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 void
 KexiQueryDesignerGuiEditor::initTableColumns()
 {
-	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Column"), KexiDB::Field::Enum);
+	KexiTableViewColumn *col1 = new KexiTableViewColumn("column", KexiDB::Field::Enum, i18n("Column"),
+		i18n("Describes field name or expression for the designed query."));
 	col1->setRelatedDataEditable(true);
 
 	d->fieldColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col1->setRelatedData( d->fieldColumnData );
 	d->data->addColumn(col1);
 
-	KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Table"), KexiDB::Field::Enum);
+	KexiTableViewColumn *col2 = new KexiTableViewColumn("table", KexiDB::Field::Enum, i18n("Table"),
+		i18n("Describes table for a given field. Can be empty."));
 	d->tablesColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col2->setRelatedData( d->tablesColumnData );
 	d->data->addColumn(col2);
 
-	KexiTableViewColumn *col3 = new KexiTableViewColumn(i18n("Visible"), KexiDB::Field::Boolean);
+	KexiTableViewColumn *col3 = new KexiTableViewColumn("visible", KexiDB::Field::Boolean, i18n("Visible"),
+		i18n("Describes visibility for a given field or expression."));
 	d->data->addColumn(col3);
 
-	KexiDB::Field *f = new KexiDB::Field(i18n("Totals"), KexiDB::Field::Enum);
+	KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
+		i18n("Describes a way of computing totals for a given field or expression."));
 	QValueVector<QString> totalsTypes;
 	totalsTypes.append( i18n("Group by") );
 	totalsTypes.append( i18n("Sum") );
@@ -185,8 +189,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 	totalsTypes.append( i18n("Min") );
 	totalsTypes.append( i18n("Max") );
 	//todo: more like this
-	f->setEnumHints(totalsTypes);
-	KexiTableViewColumn *col4 = new KexiTableViewColumn(*f);
+	col4->field()->setEnumHints(totalsTypes);
 	d->data->addColumn(col4);
 
 /*TODO
@@ -199,7 +202,8 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 	KexiTableViewColumn *col5 = new KexiTableViewColumn(*f);
 	d->data->addColumn(col5);*/
 
-	KexiTableViewColumn *col6 = new KexiTableViewColumn(i18n("Criteria"), KexiDB::Field::Text);
+	KexiTableViewColumn *col6 = new KexiTableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
+		i18n("Describes criateria for a given field or expression."));
 	d->data->addColumn(col6);
 
 //	KexiTableViewColumn *col7 = new KexiTableViewColumn(i18n("Or"), KexiDB::Field::Text);

@@ -151,6 +151,15 @@ class KEXICORE_EXPORT KexiDataItemInterface
 
 		inline bool cursorAtNewRow() { return m_listener ? m_listener->cursorAtNewRow() : false; }
 
+		/*! Sets a pointer to a Parent Data Item Interface. This pointer is 0 by default, 
+		 but can be set by parent widget if this interface is a building block of a larger data widget. 
+		 It is the case for KexiDBFieldEdit widget (see KexiDBFieldEdit::createEditor()). Use with care.
+		 signalValueChanged() method will check this pointer, and if it's not 0, 
+		 m_parentDataItemInterface->signalValueChanged() is called, so a changes can be signalled at higher level. */
+		void setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface) {
+			m_parentDataItemInterface = parentDataItemInterface;
+		}
+
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
 		 value (already storted in m_origValue). 
@@ -163,13 +172,17 @@ class KEXICORE_EXPORT KexiDataItemInterface
 //		//! Implement this method to allow setting value for this widget item.
 //		virtual void setValueInternal(const QVariant& value) = 0;
 
-		//! Call this in your implementation when value changes, 
-		//! so installed listener can react on this change.
+		/*! Call this in your implementation when value changes, 
+		 so installed listener can react on this change. If there is a parent data item defined
+		 (see setParentDataItemInterface()), parent's signalValueChanged() method will be called instead. */
 		void signalValueChanged();
 
 //moved to KexiFormDataItemInterface: QString m_dataSource;
 		KexiDataItemChangesListener* m_listener;
 		QVariant m_origValue;
+
+		/*! @see parentDataItemInterface() */
+		KexiDataItemInterface* m_parentDataItemInterface;
 		bool m_hasFocusableWidget : 1;
 		bool m_disable_signalValueChanged : 1;
 		bool m_acceptEditorAfterDeleteContents : 1;

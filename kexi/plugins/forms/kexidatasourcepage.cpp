@@ -162,7 +162,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_fieldListView = new KexiFieldListView(this, "fieldListView", 
 		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
 //	m_fieldListView->header()->show();
-	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 2));
+	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
 	vlyr->addWidget(m_fieldListView);
 
 	connect(m_dataSourceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(slotDataSourceTextChanged(const QString &)));

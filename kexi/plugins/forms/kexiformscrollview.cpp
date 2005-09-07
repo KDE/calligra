@@ -399,7 +399,7 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
 	if (!item)
 		return;
 	//only signal start editing when no row editing was started already
-	kdDebug() << "** KexiFormScrollView::valueChanged(): " 
+	kdDebug() << "** KexiFormScrollView::valueChanged(): editedItem=" 
 		<< (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString::null)
 		<< ", "
 		<< (item ? item->value().toString() : QString::null)

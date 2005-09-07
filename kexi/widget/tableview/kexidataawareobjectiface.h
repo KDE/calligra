@@ -193,7 +193,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 - disables sorting, inserting and filtering
 		 - enables accepting row after cell accepting; see setAcceptsRowEditAfterCellAccepting()
 		 - enables inserting empty row; see setEmptyRowInsertingEnabled() */
-		void setSpreadSheetMode();
+		virtual void setSpreadSheetMode();
 
 		/*! \return true id "spreadSheetMode" is enabled. It's false by default. */
 		bool spreadSheetMode() const { return m_spreadSheetMode; }

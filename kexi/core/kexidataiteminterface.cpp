@@ -33,6 +33,7 @@ KexiDataItemChangesListener::~KexiDataItemChangesListener()
 
 KexiDataItemInterface::KexiDataItemInterface()
  : m_listener(0)
+ , m_parentDataItemInterface(0)
  , m_hasFocusableWidget(true)
  , m_disable_signalValueChanged(false)
  , m_acceptEditorAfterDeleteContents(false)
@@ -54,6 +55,10 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
 
 void KexiDataItemInterface::signalValueChanged()
 {
+	if (m_parentDataItemInterface) {
+		m_parentDataItemInterface->signalValueChanged();
+		return;
+	}
 	if (!m_listener || m_disable_signalValueChanged || isReadOnly())
 		return;
 	m_listener->valueChanged(this);

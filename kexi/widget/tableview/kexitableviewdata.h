@@ -63,13 +63,17 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		 of this automatically generated field.
 		 */
 		KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
-			uint cconst=KexiDB::Field::NoConstraints,
+			uint cconst = KexiDB::Field::NoConstraints,
 			uint options = KexiDB::Field::NoOptions,
 			uint length=0, uint precision=0,
 			QVariant defaultValue=QVariant(),
 			const QString& caption = QString::null,
 			const QString& description = QString::null,
 			uint width = 0);
+
+		/*! Convenience ctor, simplified version of the above. */
+		KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
+			const QString& description = QString::null);
 
 		//! Db-aware version.
 		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& fi);

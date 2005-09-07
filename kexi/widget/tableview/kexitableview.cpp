@@ -76,14 +76,16 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 		textColor = p.active().text();
 		borderColor = QColor(200,200,200);
 		emptyAreaColor = p.active().color(QColorGroup::Base);
-		rowHighlightingColor = QColor(
-			(alternateBackgroundColor.red()+baseColor.red())/2,
-			(alternateBackgroundColor.green()+baseColor.green())/2,
-			(alternateBackgroundColor.blue()+baseColor.blue())/2);
+		rowHighlightingColor = KexiUtils::blendColors(alternateBackgroundColor, baseColor);
+//      QColor(
+//			(alternateBackgroundColor.red()+baseColor.red())/2,
+//    	(alternateBackgroundColor.green()+baseColor.green())/2,
+//			(alternateBackgroundColor.blue()+baseColor.blue())/2);
 		rowHighlightingTextColor = textColor;
 	}
 	backgroundAltering = true;
 	rowHighlightingEnabled = false;
+	persistentSelections = true;
 	navigatorEnabled = true;
 	fullRowSelection = false;
 }
@@ -170,16 +172,41 @@ void TableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /*new
 	m_lastToolTipSection = -1; //tooltip's rect is now invalid
 }
 
-
 //-----------------------------------------
 
-/*moved
-//sanity check
-#define CHECK_DATA(r) \
-	if (!m_data) { kdWarning() << "KexiTableView: No data assigned!" << endl; return r; }
-#define CHECK_DATA_ \
-	if (!m_data) { kdWarning() << "KexiTableView: No data assigned!" << endl; return; }
-*/
+//! @internal A special What's This class displaying information about a given column
+class KexiTableView::WhatsThis : public QWhatsThis
+{
+	public:
+		WhatsThis(KexiTableView* tv) : QWhatsThis(tv), m_tv(tv)
+		{
+			Q_ASSERT(tv);
+		}
+		virtual ~WhatsThis()
+		{
+		}
+		virtual QString text( const QPoint & pos)
+		{
+			const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
+			const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
+			const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
+			if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
+				return i18n("Contains a pointer to currently selected row");
+			}
+			else if (KexiUtils::hasParent(m_tv->m_navPanel, m_tv->childAt(pos))) {
+				return i18n("Row navigator");
+//				return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
+			}
+			KexiDB::Field *f = m_tv->field( m_tv->columnAt(pos.x()-leftMargin) );
+			if (!f)
+				return QString::null;
+			return f->description().isEmpty() ? f->captionOrName() : f->description();
+		}
+		protected:
+			KexiTableView *m_tv;
+};
+
+//-----------------------------------------
 
 bool KexiTableView_cellEditorFactoriesInitialized = false;
 
@@ -352,6 +379,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 //will be updated by setAppearance:	updateFonts();
 	setAppearance(d->appearance); //refresh
+
+	new WhatsThis(this);
 }
 
 KexiTableView::~KexiTableView()
@@ -1416,12 +1445,15 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 
 	int transly = rowp-cy;
 
-	if (d->appearance.rowHighlightingEnabled && r == d->highlightedRow)
+	if (d->appearance.rowHighlightingEnabled && r == d->highlightedRow) {
 		pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.rowHighlightingColor);
-	else if(d->appearance.backgroundAltering && (r%2 != 0))
-		pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.alternateBackgroundColor);
-	else
-		pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.baseColor);
+	}
+	else {
+		if(d->appearance.backgroundAltering && (r%2 != 0))
+			pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.alternateBackgroundColor);
+		else
+			pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.baseColor);
+	}
 
 	for(int c = colfirst; c <= collast; c++)
 	{
@@ -1700,11 +1732,15 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	const bool columnReadOnly = m_data->column(col)->readOnly();
 
+	const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
+		= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections 
+			&& d->highlightedRow >= 0 && row != d->highlightedRow;
+
 	if (m_currentItem == item && col == m_curCol) {
 /*		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 			has_focus ? colorGroup().highlight() : gray,
 			columnReadOnly, d->fullRowSelectionEnabled );*/
-		if (edit)
+		if (edit && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 				isEnabled() ? colorGroup().highlight() : QColor(200,200,200),//d->grayColor,
 				columnReadOnly, d->appearance.fullRowSelection );
@@ -1770,9 +1806,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	// draw text
 	if (!txt.isEmpty()) {
-		if (m_currentItem == item && col == m_curCol && !columnReadOnly)
+		if (m_currentItem == item && col == m_curCol && !columnReadOnly 
+			 && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			p->setPen(colorGroup().highlightedText());
-		else if (d->appearance.rowHighlightingEnabled && row == d->highlightedRow)
+		else if (d->appearance.rowHighlightingEnabled && row == d->highlightedRow && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			p->setPen(d->appearance.rowHighlightingTextColor);
 		else
 			p->setPen(d->appearance.textColor);
@@ -2026,9 +2063,14 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 //	columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
 
 		if (row != d->highlightedRow) {
+			int oldRow = d->highlightedRow;
+			d->highlightedRow = row;
+			updateRow(oldRow);
 			updateRow(d->highlightedRow);
-				d->highlightedRow = row;
-			updateRow(d->highlightedRow);
+			if (m_curRow>=0 && oldRow!=m_curRow && d->highlightedRow!=m_curRow && !d->appearance.persistentSelections) {
+				//currently selected (not necessary highlighted) row needs to be repainted
+				updateRow(m_curRow);
+			}
 		}
 	}
 
@@ -4237,13 +4279,21 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			updateWidgetContentsSize();
 		}
 	}
-	else if (e->type()==QEvent::Leave) {
+/*	else if (e->type()==QEvent::Leave) {
 		if (o==viewport() && d->appearance.rowHighlightingEnabled) {
-			if (d->highlightedRow>=0)
-				updateRow(d->highlightedRow);
-			d->highlightedRow = -1;
+			if (d->highlightedRow!=-1) {
+				int oldRow = d->highlightedRow;
+				d->highlightedRow = -1;
+				updateRow(oldRow);
+				const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
+					= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections;
+				if (oldRow!=m_curRow && m_curRow>=0 && dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted) {
+					//no highlight for now: show selection again
+					updateRow(m_curRow);
+				}
+			}
 		}
-	}
+	}*/
 /*	else if (e->type()==QEvent::FocusOut && o->inherits("QWidget")) {
 		//hp==true if currently focused widget is a child of this table view
 		const bool hp = KexiUtils::hasParent( static_cast<QWidget*>(o), focusWidget());
@@ -4410,7 +4460,8 @@ void KexiTableView::setHighlightedRow(int row)
 		row = QMAX( 0, QMIN(rows()-1, row) );
 		ensureCellVisible(row, -1);
 	}
-	updateRow(d->highlightedRow);
+	if (d->highlightedRow!=-1)
+		updateRow(d->highlightedRow);
 	if (d->highlightedRow == row)
 		return;
 	d->highlightedRow = row;
@@ -4420,7 +4471,7 @@ void KexiTableView::setHighlightedRow(int row)
 
 KexiTableItem *KexiTableView::highlightedItem() const
 {
-	return m_data->at(d->highlightedRow);
+	return d->highlightedRow == -1 ? 0 : m_data->at(d->highlightedRow);
 }
 
 void KexiTableView::slotSettingsChanged(int category)

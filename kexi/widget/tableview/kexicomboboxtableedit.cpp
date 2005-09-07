@@ -463,7 +463,14 @@ void KexiComboBoxTableEdit::showPopup()
 		d->popup->show();
 		d->popup->updateSize(w);
 //		d->popup->resize(w, h);
-		int rowToHighlight = QMAX( d->popup->tableView()->highlightedRow(), 0);
+		int rowToHighlight;
+		if (!m_origValue.isNull() && m_origValue.toInt()>=0) {
+			d->popup->tableView()->selectRow( m_origValue.toInt() );
+			rowToHighlight = -1; //don't highlight: we've a selection
+		}
+		else {
+			rowToHighlight = QMAX( d->popup->tableView()->highlightedRow(), 0);
+		}
 		d->popup->tableView()->setHighlightedRow( rowToHighlight );
 		if (rowToHighlight < d->popup->tableView()->rowsPerPage())
 			d->popup->tableView()->ensureCellVisible( 0, -1 );

@@ -115,7 +115,12 @@ public:
 		/*! true if "row highlight" behaviour is enabled. False by default. */
 		bool rowHighlightingEnabled : 1;
 
-		/*! color for row highlight, default is intermediate between
+		/*! true if selection of a row should be kept when a user moved mouse 
+     pointer over other rows. Makes only sense when rowHighlightingEnabled is true. 
+      True by default. It is set to false for comboboxpopup table to mimic original combobox look & feel. */
+		bool persistentSelections : 1;
+
+    /*! color for row highlight, default is intermediate between
 		 KGlobalSettings::alternateBackgroundColor() and base color. */
 		QColor rowHighlightingColor;
 		
@@ -835,6 +840,7 @@ protected:
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();
 
+	inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
 	//--------------------------
 		
 //moved	KexiTableViewData *m_data;
@@ -842,7 +848,9 @@ protected:
 
 	KexiTableViewPrivate *d;
 
+	class WhatsThis;
 	friend class KexiTableItem;
+	friend class WhatsThis;
 };
 
 #if 0 //moved

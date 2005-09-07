@@ -12,7 +12,7 @@
 
 CCMAIL: dkite@shaw.ca
 
-2005-09-03 (aKademy)
+2005-09-06 (aKademy)
 Forms
 - data-aware image box widget 
 (partial implementation started during flight back from Girona to Warsaw)
@@ -20,6 +20,11 @@ Forms
 2005-09-03 (aKademy)
 Relations view
 - fixed redrawing (in an unoptimized way)
+Property Editor
+- updating combobox items after change of list data
+TableView
+- combo box popup behaves more like a normal combo (highlighting, selecting)
+- added "what's this" support for table columns
 
 2005-08-27
 Forms

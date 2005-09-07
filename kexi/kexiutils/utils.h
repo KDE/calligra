@@ -112,7 +112,7 @@ namespace KexiUtils
 
 	/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 
 	 and \a factor1 factors: (c1*factor1+c2*factor2)/(factor1+factor2). */
-	KEXIUTILS_EXPORT QColor blendColors(const QColor& c1, const QColor& c2, int factor1, int factor2);
+	KEXIUTILS_EXPORT QColor blendColors(const QColor& c1, const QColor& c2, int factor1 = 1, int factor2 = 1);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
