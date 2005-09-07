@@ -6,7 +6,7 @@ if compile_kexionly
 SUBDIRS = koproperty 
 else
 SUBDIRS = store kwmf kofficecore kofficeui koscript kotext \
-          $(KOPAINTERDIR) kformula koproperty 
+          $(KOPAINTERDIR) kformula koproperty kopalette
 endif
 
 messages:

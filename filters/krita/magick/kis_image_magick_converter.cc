@@ -544,138 +544,6 @@ void KisImageMagickConverter::init(KisDoc *doc, KisUndoAdapter *adapter)
     m_job = 0;
 }
 
-KisImageBuilder_Result buildFile(const KURL&, KisImageSP)
-{
-    return KisImageBuilder_RESULT_UNSUPPORTED;
-}
-
-KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLayerSP layer)
-{
-    Image *image;
-    ExceptionInfo ei;
-    ImageInfo *ii;
-
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
-
-    KisImageSP img = layer -> image();
-    if (!img)
-        return KisImageBuilder_RESULT_EMPTY;
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
-    GetExceptionInfo(&ei);
-
-    ColorspaceType cstype = getColorTypeforColorSpace( layer->colorStrategy() );
-    Q_UINT32 layerBytesPerChannel = layer -> pixelSize() / layer -> nChannels();
-
-    ii = CloneImageInfo(0);
-
-    qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
-    ii->colorspace = cstype;
-    ii->depth = 8 * layerBytesPerChannel;
-
-    if (ii -> filename[MaxTextExtent - 1]) {
-        emit notifyProgressError(this);
-        return KisImageBuilder_RESULT_PATH;
-    }
-
-    if (!img -> width() || !img -> height())
-        return KisImageBuilder_RESULT_EMPTY;
-
-    image = AllocateImage(ii);
-    image -> columns = img -> width();
-    image -> rows = img -> height();
-
-
-    kdDebug() << "Image with cs: " << image->colorspace << ", " << ii->colorspace << "\n";
-
-#ifdef HAVE_MAGICK6
-    if ( layer-> hasAlpha() )
-        image -> matte = MagickTrue;
-    else
-        image -> matte = MagickFalse;
-#else
-    image -> matte = layer -> hasAlpha();
-#endif
-
-
-    Q_INT32 y, height, width;
-
-    height = img -> height();
-    width = img -> width();
-
-    bool alpha = layer -> hasAlpha();
-
-    for (y = 0; y < height; y++) {
-
-        // Allocate pixels for this scanline
-        PixelPacket *pp = SetImagePixels(image, 0, y, width, 1);
-
-        if (!pp) {
-            DestroyExceptionInfo(&ei);
-            DestroyImage(image);
-            emit notifyProgressError(this);
-            return KisImageBuilder_RESULT_FAILURE;
-
-        }
-
-        KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
-
-        if (layerBytesPerChannel == 2) {
-            while (!it.isDone()) {
-
-                const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                pp -> red = ScaleShortToQuantum(d[PIXEL_RED]);
-                pp -> green = ScaleShortToQuantum(d[PIXEL_GREEN]);
-                pp -> blue = ScaleShortToQuantum(d[PIXEL_BLUE]);
-                if (alpha)
-                    pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_ALPHA]);
-
-                pp++;
-                ++it;
-            }
-        } else {
-            while (!it.isDone()) {
-
-                Q_UINT8 * d = it.rawData();
-                // NOTE: Upscale is necessary for a correct export, otherwise
-                // only Krita can read the result.
-                pp -> red = Upscale(d[PIXEL_RED]);
-                pp -> green = Upscale(d[PIXEL_GREEN]);
-                pp -> blue = Upscale(d[PIXEL_BLUE]);
-                if (alpha)
-                    pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
-
-                pp++;
-                ++it;
-            }
-        }
-
-        emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
-
-#ifdef HAVE_MAGICK6
-        if (SyncImagePixels(image) == MagickFalse)
-            kdDebug() << "Syncing pixels failed\n";
-#else
-        if (!SyncImagePixels(image))
-            kdDebug() << "Syncing pixels failed\n";
-#endif
-    }
-
-    // XXX: Write to a temp file, then have Krita use KIO to copy temp
-    // image to remote location.
-    WriteImage(ii, image);
-    DestroyExceptionInfo(&ei);
-    DestroyImage(image);
-    emit notifyProgressDone(this);
-    return KisImageBuilder_RESULT_OK;
-}
-
 KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
 {
     Image *image;
@@ -719,30 +587,14 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         ii->depth=16;
     }
 
-    QString colorspace = layer->colorStrategy()->id().id();
-
-    if (colorspace == "GRAYA") {
-        ii -> colorspace = GRAYColorspace;
-    }
-    else if (colorspace == "RGBA" || colorspace == "RGBA16" || colorspace == "RGBAF32" ) {
-        if (layer->profile() && layer->profile()->productName() == "sRGB") {
-            ii -> colorspace = sRGBColorspace;
-        }
-        else {
-            ii -> colorspace = RGBColorspace;
-        }
-    }
-    else if (colorspace == "XYZA") {
-        ii -> colorspace = XYZColorspace;
-    }
-    else if (colorspace == "CMYK") {
-        ii -> colorspace = CMYKColorspace;
-    }
+    ii->colorspace = getColorTypeforColorSpace(layer->colorStrategy());
 
     image = AllocateImage(ii);
+    image -> colorspace = ii->colorspace;
     image -> columns = img -> width();
     image -> rows = img -> height();
 
+    kdDebug() << "Saving with colorspace " << image->colorspace << ", (" << layer->colorStrategy()->id().name() << ")\n";
     kdDebug() << "IM Image thinks it has depth: " << image->depth << "\n";
 
 #ifdef HAVE_MAGICK6
@@ -794,8 +646,8 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
             while (!it.isDone()) {
 
                 Q_UINT8 * d = it.rawData();
-                // NOTE: Upscale is necessary for a correct export, otherwise
-                // only Krita can read the result.
+                // NOTE: Upscale is necessary for a correct export, if IM is compiled with 16 bits, which we assume
+                // to be true at all times, otherwise only Krita can read the result.
                 pp -> red = Upscale(d[PIXEL_RED]);
                 pp -> green = Upscale(d[PIXEL_GREEN]);
                 pp -> blue = Upscale(d[PIXEL_BLUE]);

@@ -70,8 +70,6 @@ public slots:
 
 public:
     KisImageBuilder_Result buildImage(const KURL& uri);
-    KisImageBuilder_Result buildFile(const KURL& uri, KisImageSP img);
-    KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer);
     KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
     KisImageSP image();
 

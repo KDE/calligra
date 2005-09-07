@@ -148,6 +148,9 @@ void KivioBirdEyePanel::updateView()
   // FIXME: This whole function needs fixing!
   QSize s1 = canvas->size();
   QSize s2;
+ 
+  if (!m_pView || !m_pView->activePage()) return;
+
   KoPageLayout pl = m_pView->activePage()->paperLayout();
 
   int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);

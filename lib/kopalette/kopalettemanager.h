@@ -38,12 +38,8 @@ class KActionCollection;
 class KToggleAction;
 
 enum enumKoPaletteStyle {
-#if 0   // XXX
-     PALETTE_SLIDER, // Sliding docker as in Kivio
-#endif
     PALETTE_DOCKER, // QDockWindow based docker with tabs
     PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
-    PALETTE_SLIDER // Kivio-style sliders
 };
 
 
@@ -59,10 +55,22 @@ namespace {
 
 /**
  * Manages the set of dockwindow palettes and their widgets.
+ * 
+ * You create one palette manager per view; then you can add widgets
+ * to your hearts content. Widgets are grouped into dock windows by
+ * palette names. To see the menu entries, add a the following line
+ * to your .rc file:
  *
- * XXX: loading, saving and resetting of configuration
- * XXX: show/hide dockwindows menu entries
- * XXX: reset menu entry.
+ * <Action name="view_palette_action_menu"/>
+ *
+ * There are two styles: one that uses tabs and one that uses the vertical
+ * QToolBox style to separate and show individual widgets. By implementing
+ * the kopalette interface and extending the above enum, you can add
+ * more types.
+ *
+ * TODO:
+ * + loading, saving and resetting of configuration
+ * + show/hide dockwindows menu entries
  */
 class KoPaletteManager : public QObject {
 

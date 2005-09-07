@@ -33,6 +33,7 @@ class KivioTabBar;
 class TKSelectColorAction;
 class StencilBarDockManager;
 class KivioArrowHeadAction;
+
 namespace Kivio {
   class ToolController;
   class PluginManager;
@@ -47,8 +48,6 @@ class KivioStencilGeometryPanel;
 
 class KoDocumentEntry;
 class KoTabBar;
-class KoToolDockBase;
-class KoToolDockManager;
 
 class KAction;
 class KFontAction;
@@ -67,6 +66,7 @@ class KoZoomHandler;
 class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;
+class KoPaletteManager;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -101,7 +101,7 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioStencilSpawnerSet *activeSpawnerSet();
 
     KoTabBar* tabBar()const { return  m_pTabBar;}
-    KoToolDockManager* toolDockManager() { return m_pToolDockManager; }
+    KoPaletteManager* paletteManager() { return m_pPaletteManager; };
     void updateMenuPage( );
 
     virtual void setupPrinter(KPrinter&);
@@ -165,10 +165,6 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void toggleStencilGeometry(bool);
     void toggleViewManager(bool);
-    void toggleLayersPanel(bool);
-    void toggleBirdEyePanel(bool);
-    void toggleProtectionPanel(bool);
-    void toggleAddStencilSetPanel(bool);
 
     void insertPage();
     void removePage();
@@ -322,7 +318,7 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioStencilSpawnerSet* m_pActiveSpawnerSet;
 
     StencilBarDockManager* m_pStencilBarDockManager;
-    KoToolDockManager* m_pToolDockManager;
+    KoPaletteManager* m_pPaletteManager;
 
     KoRuler* vRuler;
     KoRuler* hRuler;
