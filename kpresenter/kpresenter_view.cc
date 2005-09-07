@@ -153,6 +153,7 @@
 #include <kspell2/defaultdictionary.h>
 #include <kspell2/dialog.h>
 #include "kospell.h"
+#include "printerDlg.h"
 using namespace KSpell2;
 
 #define COPYOASISFORMAT 0
@@ -423,6 +424,8 @@ void KPresenterView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
+    if ( !prt.previewOnly() )
+      prt.addDialogPage( new KSpreadPrinterDlg( 0, "KSpread page" ) );
 }
 
 void KPresenterView::unZoomDocument(int &dpiX,int &dpiY)

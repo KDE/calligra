@@ -25,6 +25,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qpainter.h>
+#include <qpaintdevicemetrics.h>
 #include <qwmatrix.h>
 #include <qapplication.h>
 #include <kpopupmenu.h>
@@ -3476,14 +3477,52 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
     p.end();
 }
 
-void KPrCanvas::printPage( QPainter* painter, PresStep step )
+void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, int rows, int cols )
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( step.m_pageNumber );
-    QRect rect = page->getZoomPageRect();
-    drawBackground( painter, rect, page, true );
-    drawPresPage( painter, rect, step );
+    QRect const rect = page->getZoomPageRect();
+    bool const drawBorder = printer->option("kde-kspread-printslideborders").toInt() && rows>1 && cols>1;
+
+    int height = rect.height();
+    int width = rect.width();
+    int begin_left = 0;
+    int begin_top = 0;
+
+    rows = cols = QMAX( rows, cols ); // all slides have the same size
+
+    if ( rows > 1 )
+    {
+      height = ( ( height - 80 ) / rows ) - 20;
+      begin_top = 40;
+    }
+    if ( cols > 1 )
+    {
+      width = (width -5) / cols;
+      begin_left = 5;
+    }
+    int top = begin_top;
+    int left = begin_left;
+    for (int r = 0; r < rows; r++ )
+    {
+      for (int c = 0; c < cols; c++ )
+      {
+        page = doc->pageList().at( step.m_pageNumber );
+        if ( !page )
+          return;
+        painter->setViewport( QRect(left, top, width, height) );
+        drawBackground( painter, rect, page, true );
+        drawPresPage( painter, rect, step );
+        if ( drawBorder )
+            painter->drawRect( rect );
+        step.m_pageNumber++;
+        left += width;
+      }
+      top += height + 20; // some y-space between the slides
+      left = begin_left;
+    }
+
 }
 
 void KPrCanvas::doObjEffects( bool isAllreadyPainted )
@@ -3647,9 +3686,20 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     int j = 0;
     progress.setProgress( 0 );
 
+
+    int rows = 1;
+    int cols = 1;
+    if ( !printer->previewOnly() )
+    {
+      rows = printer->option("kde-kspread-printrows").toInt();
+      cols = printer->option("kde-kspread-printcolumns").toInt();
+    }
+    int const slides_per_page = rows * cols;
+
     /*if ( printer->fromPage() > 1 )
       m_view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
       (int)MM_TO_POINT( top_margin ) );*/
+    int current_slide = 0;
     QValueList<int> list=printer->pageList(); // 1-based
     QValueList<int>::iterator it;
     for( it=list.begin();it!=list.end();++it)
@@ -3662,17 +3712,23 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
             break;
 
         step.m_pageNumber = i - 1;
+
+        if ( step.m_pageNumber != current_slide )
+          continue;
+
         if ( !list.isEmpty() && i > list.first() )
             printer->newPage();
 
         painter->resetXForm();
         painter->fillRect( m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber )->getZoomPageRect(), white );
 
-        printPage( painter, step );
+        printPage( painter, step, printer, rows, cols );
         kapp->processEvents();
 
         painter->resetXForm();
         kapp->processEvents();
+
+        current_slide += slides_per_page;
 
         /*m_view->setDiffY( i * ( getPageRect( 1, 1.0, false ).height() )
           - static_cast<int>( MM_TO_POINT( top_margin ) ) );*/

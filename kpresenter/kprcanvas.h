@@ -523,7 +523,7 @@ protected:
      * Draw page defined in step to painter.
      * This method is used for printing a presentation.
      */
-    void printPage( QPainter*, PresStep step );
+    void printPage( QPainter*, PresStep step, KPrinter *printer, int rows, int cols );
 
     /**
      * This method animates the objects in the presentation.
