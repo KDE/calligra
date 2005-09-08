@@ -126,7 +126,7 @@
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
 
-    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.2" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="">
+    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.5" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="">
         <title xml:lang="en_us">KOffice CVS</title>
         <description xml:lang="en_us">KOffice Development Version</description>
 
@@ -371,18 +371,38 @@
             </filter>
         </application>
 
-        <application id="krita" released="no">
-            <title xml:lang="en_US">Krita</title>
-            <foreword xml:lang="en_US">
-                Krita uses ImageMagick for importing and exporting images. This
-                means that Krita can work with all images that your installation of
-                ImageMagick supports. This includes all common image file formats, including
-                the native formats of Photoshop and the Gimp.
+        <application id="krita">
+            <title xml:lang="en_US">Krita</title> <foreword
+            xml:lang="en_US"> Krita uses &lt;a
+            href="http://imagemagick.org/"&gt;ImageMagick&lt;/a&gt;
+            for importing and exporting images. This means that Krita
+            can work with all images that your installation of
+            ImageMagick supports. This includes all common image file
+            formats, including the native formats of Photoshop and the
+            Gimp.  &lt;br /&gt; &lt;a
+            href="http://imagemagick.org/script/formats.php"&gt;More
+            information on file formats supported by
+            ImageMagick.&lt;/a&gt;
             </foreword>
+            <filter id="krita_openexr">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/openexr"/>
+                <title xml:lang="en_us">OpenEXR</title>
+                <stat import="fourstars" export="fourstars"/>
+            </filter>
+            <filter id="krita_xcf">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/xcf"/>
+                <title xml:lang="en_us">Gimp (XCF)</title>
+                <stat import="planned" export="planned"/>
+            </filter>
         </application>
 
         <application id="kchart">
             <title xml:lang="en_us">KChart</title>
+            <filter id="kchart_txt">
+                <title xml:lang="en_us">Text</title>
+                <note xml:lang="en_us">Text file (e.g. CSV or tab-delimited)</note>
+                <stat import="fourstars" export="none"/>
+            </filter>
             <filter id="kchart_png">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/png"/>
                 <title xml:lang="en_us">PNG</title>
