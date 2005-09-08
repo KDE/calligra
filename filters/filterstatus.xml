@@ -380,6 +380,23 @@
                 the native formats of Photoshop and the Gimp.
             </foreword>
         </application>
+
+        <application id="kchart">
+            <title xml:lang="en_us">KChart</title>
+            <filter id="kchart_png">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/png"/>
+                <title xml:lang="en_us">PNG</title>
+                <note xml:lang="en_us">Portable Network Graphics (most graphics programs)</note>
+                <stat import="none" export="fourstars"/>
+            </filter>
+            <filter id="kchart_svg">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/svg"/>
+                <title xml:lang="en_us">SVG</title>
+                <note xml:lang="en_us">Scalable Vector Graphics (W3C)</note>
+                <stat import="none" export="fourstars"/>
+            </filter>
+        </application>
+
 <!--
         <application id="kivio">
             <title xml:lang="en_us">Kivio</title>
