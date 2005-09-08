@@ -327,7 +327,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
         // Determine image type -- rgb, grayscale or cmyk
         ColorspaceType colorspaceType = image->colorspace;
-
+        kdDebug() << "Colorspacetype: " << image->colorspace << "\n";
         KisAbstractColorSpace * cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
 
         if (cs == 0) {
@@ -424,13 +424,13 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                             *(ptr++) = Downscale(pp->red); // cyan
                             *(ptr++) = Downscale(pp->green); // magenta
                             *(ptr++) = Downscale(pp->blue); // yellow
-                            *(ptr++) = indexes[x]; // Black
+                            *(ptr++) = Downscale(indexes[x]); // Black
 #ifdef HAVE_MAGICK6
                             if (image->matte != MagickFalse) {
 #else
                             if (image->matte == true) {
 #endif
-                                *(ptr++) = pp->opacity;
+                                *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
                             }
                             else {
                                 *(ptr++) = OPACITY_OPAQUE;
@@ -593,7 +593,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         ii->depth = 8;
     }
     else {
-        ii->depth=16;
+        ii->depth = 16;
     }
 
     ii->colorspace = getColorTypeforColorSpace(layer->colorSpace());
@@ -626,7 +626,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     for (y = 0; y < height; y++) {
 
         // Allocate pixels for this scanline
-        PixelPacket *pp = SetImagePixels(image, 0, y, width, 1);
+        PixelPacket * pp = SetImagePixels(image, 0, y, width, 1);
 
         if (!pp) {
             DestroyExceptionInfo(&ei);
@@ -639,9 +639,40 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
 
         if (image->colorspace== CMYKColorspace) {
+
+            IndexPacket * indexes = GetIndexes(image);
+            int x = 0;
             if (layerBytesPerChannel == 2) {
+                while (!it.isDone()) {
+    
+                    const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                    pp -> red = ScaleShortToQuantum(d[PIXEL_CYAN]);
+                    pp -> green = ScaleShortToQuantum(d[PIXEL_MAGENTA]);
+                    pp -> blue = ScaleShortToQuantum(d[PIXEL_YELLOW]);
+                    if (alpha)
+                        pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_CMYK_ALPHA]);
+                    indexes[x] = ScaleShortToQuantum(d[PIXEL_BLACK]);
+                    x++;
+                    pp++;
+                    ++it;
+                }
             }
             else {
+                while (!it.isDone()) {
+
+                    Q_UINT8 * d = it.rawData();
+                    pp -> red = Upscale(d[PIXEL_CYAN]);
+                    pp -> green = Upscale(d[PIXEL_MAGENTA]);
+                    pp -> blue = Upscale(d[PIXEL_YELLOW]);
+                    if (alpha)
+                        pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_CMYK_ALPHA]);
+
+                    indexes[x]= Upscale(d[PIXEL_BLACK]);
+
+                    x++;
+                    pp++;
+                    ++it;
+                }
             }
         }
         else if (image->colorspace== RGBColorspace ||
@@ -679,7 +710,6 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         }
         else if (image->colorspace == GRAYColorspace) 
         {
-            kdDebug() << "saving as a grayscale image\n";
             if (layerBytesPerChannel == 2) {
                 while (!it.isDone()) {
     
@@ -707,9 +737,11 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
                     ++it;
                 }
             }
-
         }
-        
+        else { 
+            kdDebug() << "Unsupported image format\n";
+            return KisImageBuilder_RESULT_INVALID_ARG;
+        }
         
         emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
 
