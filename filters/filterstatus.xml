@@ -371,14 +371,25 @@
             </filter>
         </application>
 
-        <application id="krita" released="no">
-            <title xml:lang="en_US">Krita</title>
-            <foreword xml:lang="en_US">
-                Krita uses ImageMagick for importing and exporting images. This
-                means that Krita can work with all images that your installation of
-                ImageMagick supports. This includes all common image file formats, including
-                the native formats of Photoshop and the Gimp.
+        <application id="krita">
+            <title xml:lang="en_US">Krita</title> <foreword
+            xml:lang="en_US"> Krita uses &lt;a
+            href="http://imagemagick.org/"&gt;ImageMagick&lt;/a&gt;
+            for importing and exporting images. This means that Krita
+            can work with all images that your installation of
+            ImageMagick supports. This includes all common image file
+            formats, including the native formats of Photoshop and the
+            Gimp.  &lt;br /&gt; &lt;a
+            href="http://imagemagick.org/script/formats.php"&gt;More
+            information on file formats supported by
+            ImageMagick.&lt;/a&gt;
             </foreword>
+<!-- Add this for 1.5, also investigate what the xcf folder is.
+            <filter id="krita_openexr">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/openexr"/>
+                <title xml:lang="en_us">OpenEXR</title>
+                <stat import="fourstars" export="fourstars"/>
+            </filter> -->
         </application>
 
         <application id="kchart">
