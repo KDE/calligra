@@ -126,7 +126,7 @@
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
 
-    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.2" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="">
+    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.5" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="">
         <title xml:lang="en_us">KOffice CVS</title>
         <description xml:lang="en_us">KOffice Development Version</description>
 
@@ -384,16 +384,27 @@
             information on file formats supported by
             ImageMagick.&lt;/a&gt;
             </foreword>
-<!-- Add this for 1.5, also investigate what the xcf folder is.
+<!--
             <filter id="krita_openexr">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/openexr"/>
                 <title xml:lang="en_us">OpenEXR</title>
                 <stat import="fourstars" export="fourstars"/>
-            </filter> -->
+            </filter>
+            <filter id="krita_xcf">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/xcf"/>
+                <title xml:lang="en_us">Gimp (XCF)</title>
+                <stat import="planned" export="planned"/>
+            </filter>
+-->
         </application>
 
         <application id="kchart">
             <title xml:lang="en_us">KChart</title>
+            <filter id="kchart_txt">
+                <title xml:lang="en_us">Text</title>
+                <note xml:lang="en_us">Text file (e.g. CSV or tab-delimited)</note>
+                <stat import="fourstars" export="none"/>
+            </filter>
             <filter id="kchart_png">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/png"/>
                 <title xml:lang="en_us">PNG</title>
