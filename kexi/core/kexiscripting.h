@@ -37,7 +37,7 @@ class KexiMainWindow;
  * other classes using this class work as expected without
  * any #ifdef's.
  */
-class KEXIMAIN_EXPORT KexiScriptContainer : public QObject
+class KEXICORE_EXPORT KexiScriptContainer : public QObject
 {
         Q_OBJECT
     public:
@@ -134,7 +134,7 @@ class KEXIMAIN_EXPORT KexiScriptContainer : public QObject
  * The KexiScriptManager manages the scripting code. Internaly we
  * use \a Kross::Api::ScriptContainer as scripting bridge.
  */
-class KEXIMAIN_EXPORT KexiScriptManager : public QObject
+class KEXICORE_EXPORT KexiScriptManager : public QObject
 {
     public:
 
