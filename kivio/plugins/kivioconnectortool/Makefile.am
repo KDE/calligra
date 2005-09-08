@@ -38,4 +38,4 @@ kiviopics_DATA = kivio_connector_cursor1.png kivio_connector_cursor2.png
 kiviopicsdir = $(kde_datadir)/kivio/pics
 
 kivioicondir = $(kde_datadir)/kivio/icons
-kivioicon_ICON = cr22-action-kivio_connector.png hi22-action-kivio_connector.png
+kivioicon_ICON = AUTO
