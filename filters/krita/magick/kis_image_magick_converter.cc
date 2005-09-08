@@ -52,11 +52,20 @@
 
 
 namespace {
+
     const Q_UINT8 PIXEL_BLUE = 0;
     const Q_UINT8 PIXEL_GREEN = 1;
     const Q_UINT8 PIXEL_RED = 2;
     const Q_UINT8 PIXEL_ALPHA = 3;
 
+    static const Q_UINT8 PIXEL_CYAN = 0;
+    static const Q_UINT8 PIXEL_MAGENTA = 1;
+    static const Q_UINT8 PIXEL_YELLOW = 2;
+    static const Q_UINT8 PIXEL_BLACK = 3;
+    static const Q_UINT8 PIXEL_CMYK_ALPHA = 4;
+
+    static const Q_UINT8 PIXEL_GRAY = 0;
+    static const Q_UINT8 PIXEL_GRAY_ALPHA = 1;
 
     /**
      * Make this more flexible -- although... ImageMagick
@@ -587,14 +596,14 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         ii->depth=16;
     }
 
-    ii->colorspace = getColorTypeforColorSpace(layer->colorStrategy());
+    ii->colorspace = getColorTypeforColorSpace(layer->colorSpace());
 
     image = AllocateImage(ii);
-    image -> colorspace = ii->colorspace;
+    SetImageColorspace(image, ii->colorspace);
     image -> columns = img -> width();
     image -> rows = img -> height();
 
-    kdDebug() << "Saving with colorspace " << image->colorspace << ", (" << layer->colorStrategy()->id().name() << ")\n";
+    kdDebug() << "Saving with colorspace " << image->colorspace << ", (" << layer->colorSpace()->id().name() << ")\n";
     kdDebug() << "IM Image thinks it has depth: " << image->depth << "\n";
 
 #ifdef HAVE_MAGICK6
@@ -629,35 +638,79 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 
         KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
 
-        if (layerBytesPerChannel == 2) {
-            while (!it.isDone()) {
-
-                const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                pp -> red = ScaleShortToQuantum(d[PIXEL_RED]);
-                pp -> green = ScaleShortToQuantum(d[PIXEL_GREEN]);
-                pp -> blue = ScaleShortToQuantum(d[PIXEL_BLUE]);
-                if (alpha)
-                    pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_ALPHA]);
-
-                pp++;
-                ++it;
+        if (image->colorspace== CMYKColorspace) {
+            if (layerBytesPerChannel == 2) {
             }
-        } else {
-            while (!it.isDone()) {
-
-                Q_UINT8 * d = it.rawData();
-                // NOTE: Upscale is necessary for a correct export, if IM is compiled with 16 bits, which we assume
-                // to be true at all times, otherwise only Krita can read the result.
-                pp -> red = Upscale(d[PIXEL_RED]);
-                pp -> green = Upscale(d[PIXEL_GREEN]);
-                pp -> blue = Upscale(d[PIXEL_BLUE]);
-                if (alpha)
-                    pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
-
-                pp++;
-                ++it;
+            else {
             }
         }
+        else if (image->colorspace== RGBColorspace ||
+                 image->colorspace == sRGBColorspace ||
+                 image->colorspace == TransparentColorspace) 
+        {
+            if (layerBytesPerChannel == 2) {
+                while (!it.isDone()) {
+    
+                    const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                    pp -> red = ScaleShortToQuantum(d[PIXEL_RED]);
+                    pp -> green = ScaleShortToQuantum(d[PIXEL_GREEN]);
+                    pp -> blue = ScaleShortToQuantum(d[PIXEL_BLUE]);
+                    if (alpha)
+                        pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_ALPHA]);
+    
+                    pp++;
+                    ++it;
+                }
+            }
+            else {
+                while (!it.isDone()) {
+    
+                    Q_UINT8 * d = it.rawData();
+                    pp -> red = Upscale(d[PIXEL_RED]);
+                    pp -> green = Upscale(d[PIXEL_GREEN]);
+                    pp -> blue = Upscale(d[PIXEL_BLUE]);
+                    if (alpha)
+                        pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+    
+                    pp++;
+                    ++it;
+                }
+            }
+        }
+        else if (image->colorspace == GRAYColorspace) 
+        {
+            kdDebug() << "saving as a grayscale image\n";
+            if (layerBytesPerChannel == 2) {
+                while (!it.isDone()) {
+    
+                    const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                    pp -> red = ScaleShortToQuantum(d[PIXEL_GRAY]);
+                    pp -> green = ScaleShortToQuantum(d[PIXEL_GRAY]);
+                    pp -> blue = ScaleShortToQuantum(d[PIXEL_GRAY]);
+                    if (alpha)
+                        pp -> opacity = ScaleShortToQuantum(65535/*OPACITY_OPAQUE*/ - d[PIXEL_GRAY_ALPHA]);
+    
+                    pp++;
+                    ++it;
+                }
+            }
+            else {
+                while (!it.isDone()) {
+                    Q_UINT8 * d = it.rawData();
+                    pp -> red = Upscale(d[PIXEL_GRAY]);
+                    pp -> green = Upscale(d[PIXEL_GRAY]);
+                    pp -> blue = Upscale(d[PIXEL_GRAY]);
+                    if (alpha)
+                        pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_GRAY_ALPHA]);
+    
+                    pp++;
+                    ++it;
+                }
+            }
+
+        }
+        
+        
         emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
 
 #ifdef HAVE_MAGICK6

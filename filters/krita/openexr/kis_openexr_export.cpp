@@ -91,7 +91,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
     output -> undoAdapter() -> setUndo(undo);
 
     //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
-    KisF32RgbColorSpace *cs = dynamic_cast<KisF32RgbColorSpace *>(layer -> colorStrategy());
+    KisF32RgbColorSpace *cs = dynamic_cast<KisF32RgbColorSpace *>(layer -> colorSpace());
 
     if (cs == 0) {
         // We could convert automatically, but the conversion wants to be done with
