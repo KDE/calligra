@@ -930,41 +930,41 @@ WidgetPropertySet::initPropertiesDescription()
 
 	d->propValCaption["NoBackground"] = i18n("No Background");
 	d->propValCaption["PaletteForeground"] = i18n("Palette Foreground");
-	d->propValCaption["AutoText"] = i18n("Auto\n\n(HINT: for AutoText)", "Auto");
+	d->propValCaption["AutoText"] = i18n("Auto (HINT: for AutoText)", "Auto");
 
-	d->propValCaption["AlignAuto"] = i18n("Auto\n\n(HINT: for Align)", "Auto");
-	d->propValCaption["AlignLeft"] = i18n("Left\n\n(HINT: for Align)", "Left");
-	d->propValCaption["AlignRight"] = i18n("Right\n\n(HINT: for Align)", "Right");
-	d->propValCaption["AlignHCenter"] = i18n("Center\n\n(HINT: for Align)", "Center");
-	d->propValCaption["AlignJustify"] = i18n("Justify\n\n(HINT: for Align)", "Justify");
-	d->propValCaption["AlignVCenter"] = i18n("Center\n\n(HINT: for Align)", "Center");
-	d->propValCaption["AlignTop"] = i18n("Top\n\n(HINT: for Align)", "Top");
-	d->propValCaption["AlignBottom"] = i18n("Bottom\n\n(HINT: for Align)", "Bottom");
+	d->propValCaption["AlignAuto"] = i18n("Auto (HINT: for Align)", "Auto");
+	d->propValCaption["AlignLeft"] = i18n("Left (HINT: for Align)", "Left");
+	d->propValCaption["AlignRight"] = i18n("Right (HINT: for Align)", "Right");
+	d->propValCaption["AlignHCenter"] = i18n("Center (HINT: for Align)", "Center");
+	d->propValCaption["AlignJustify"] = i18n("Justify (HINT: for Align)", "Justify");
+	d->propValCaption["AlignVCenter"] = i18n("Center (HINT: for Align)", "Center");
+	d->propValCaption["AlignTop"] = i18n("Top (HINT: for Align)", "Top");
+	d->propValCaption["AlignBottom"] = i18n("Bottom (HINT: for Align)", "Bottom");
 
-	d->propValCaption["NoFrame"] = i18n("No Frame\n\n(HINT: for Frame Shape)", "No Frame");
-	d->propValCaption["Box"] = i18n("Box\n\n(HINT: for Frame Shape)", "Box");
-	d->propValCaption["Panel"] = i18n("Panel\n\n(HINT: for Frame Shape)", "Panel");
-	d->propValCaption["WinPanel"] = i18n("Windows Panel\n\n(HINT: for Frame Shape)", "Windows Panel");
-	d->propValCaption["HLine"] = i18n("Horiz. Line\n\n(HINT: for Frame Shape)", "Horiz. Line");
-	d->propValCaption["VLine"] = i18n("Vertical Line\n\n(HINT: for Frame Shape)", "Vertical Line");
-	d->propValCaption["StyledPanel"] = i18n("Styled\n\n(HINT: for Frame Shape)", "Styled");
-	d->propValCaption["PopupPanel"] = i18n("Popup\n\n(HINT: for Frame Shape)", "Popup");
-	d->propValCaption["MenuBarPanel"] = i18n("Menu Bar\n\n(HINT: for Frame Shape)", "Menu Bar");
-	d->propValCaption["ToolBarPanel"] = i18n("Toolbar\n\n(HINT: for Frame Shape)", "Toolbar");
-	d->propValCaption["LineEditPanel"] = i18n("Text Box\n\n(HINT: for Frame Shape)", "Text Box");
-	d->propValCaption["TabWidgetPanel"] = i18n("Tab Widget\n\n(HINT: for Frame Shape)", "Tab Widget");
-	d->propValCaption["GroupBoxPanel"] = i18n("Group Box\n\n(HINT: for Frame Shape)", "Group Box");
+	d->propValCaption["NoFrame"] = i18n("No Frame (HINT: for Frame Shape)", "No Frame");
+	d->propValCaption["Box"] = i18n("Box (HINT: for Frame Shape)", "Box");
+	d->propValCaption["Panel"] = i18n("Panel (HINT: for Frame Shape)", "Panel");
+	d->propValCaption["WinPanel"] = i18n("Windows Panel (HINT: for Frame Shape)", "Windows Panel");
+	d->propValCaption["HLine"] = i18n("Horiz. Line (HINT: for Frame Shape)", "Horiz. Line");
+	d->propValCaption["VLine"] = i18n("Vertical Line (HINT: for Frame Shape)", "Vertical Line");
+	d->propValCaption["StyledPanel"] = i18n("Styled (HINT: for Frame Shape)", "Styled");
+	d->propValCaption["PopupPanel"] = i18n("Popup (HINT: for Frame Shape)", "Popup");
+	d->propValCaption["MenuBarPanel"] = i18n("Menu Bar (HINT: for Frame Shape)", "Menu Bar");
+	d->propValCaption["ToolBarPanel"] = i18n("Toolbar (HINT: for Frame Shape)", "Toolbar");
+	d->propValCaption["LineEditPanel"] = i18n("Text Box (HINT: for Frame Shape)", "Text Box");
+	d->propValCaption["TabWidgetPanel"] = i18n("Tab Widget (HINT: for Frame Shape)", "Tab Widget");
+	d->propValCaption["GroupBoxPanel"] = i18n("Group Box (HINT: for Frame Shape)", "Group Box");
 
-	d->propValCaption["Plain"] = i18n("Plain\n\n(HINT: for Frame Shadow)", "Plain");
-	d->propValCaption["Raised"] = i18n("Raised\n\n(HINT: for Frame Shadow)", "Raised");
-	d->propValCaption["Sunken"] = i18n("Sunken\n\n(HINT: for Frame Shadow)", "Sunken");
+	d->propValCaption["Plain"] = i18n("Plain (HINT: for Frame Shadow)", "Plain");
+	d->propValCaption["Raised"] = i18n("Raised (HINT: for Frame Shadow)", "Raised");
+	d->propValCaption["Sunken"] = i18n("Sunken (HINT: for Frame Shadow)", "Sunken");
 	d->propValCaption["MShadow"] = i18n("for Frame Shadow", "Internal");
 
-	d->propValCaption["NoFocus"] = i18n("No Focus\n\n(HINT: for Focus)", "No Focus");
-	d->propValCaption["TabFocus"] = i18n("Tab\n\n(HINT: for Focus)", "Tab");
-	d->propValCaption["ClickFocus"] = i18n("Click\n\n(HINT: for Focus)", "Click");
-	d->propValCaption["StrongFocus"] = i18n("Tab/Click\n\n(HINT: for Focus)", "Tab/Click");
-	d->propValCaption["WheelFocus"] = i18n("Tab/Click/MouseWheel\n\n(HINT: for Focus)", "Tab/Click/MouseWheel");
+	d->propValCaption["NoFocus"] = i18n("No Focus (HINT: for Focus)", "No Focus");
+	d->propValCaption["TabFocus"] = i18n("Tab (HINT: for Focus)", "Tab");
+	d->propValCaption["ClickFocus"] = i18n("Click (HINT: for Focus)", "Click");
+	d->propValCaption["StrongFocus"] = i18n("Tab/Click (HINT: for Focus)", "Tab/Click");
+	d->propValCaption["WheelFocus"] = i18n("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/MouseWheel");
 
 	d->propValCaption["Auto"] = i18n("Auto");
 	d->propValCaption["AlwaysOff"] = i18n("Always Off");
