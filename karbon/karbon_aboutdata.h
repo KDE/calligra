@@ -12,7 +12,7 @@ KAboutData * newKarbonAboutData()
 	KAboutData * aboutData = new KAboutData(
 		"karbon",
 		I18N_NOOP( "Karbon14" ),
-		"0.1",
+		"0.2",
 		I18N_NOOP( "Yet another vector graphics application." ),
 		KAboutData::License_GPL,
 		I18N_NOOP( "(c) 2001-2005, The Karbon Developers" ),
