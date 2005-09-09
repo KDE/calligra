@@ -31,13 +31,11 @@
 // local includes
 #include "printerDlg.h"
 
- KSpreadPrinterDlg::KSpreadPrinterDlg( QWidget *parent, const char *name )
+ KPresenterPrinterDlg::KPresenterPrinterDlg( QWidget *parent, const char *name )
   : KPrintDialogPage( parent, name )
 {
-  setTitle( i18n( "KSpread Options" ) );
-  QVBoxLayout *layout = new QVBoxLayout( this );
-  layout->setMargin( KDialog::marginHint() );
-  layout->setSpacing( KDialog::spacingHint() );
+  setTitle( i18n( "KPresenter Options" ) );
+  QGridLayout *layout = new QGridLayout( this, 2, 1, 11, 6 );
   txtRows = new KIntNumInput(this );
   txtRows->setMinValue(1);
   txtRows->setMaxValue(5);
@@ -51,57 +49,60 @@
 
   QLabel *caption = new QLabel(i18n("Slides in the pages:"), this );
   QToolTip::add( caption, i18n("Choose how many rows and columns with slides you want to have on every pages") );
-  layout->addWidget( caption );
-  layout->addWidget( new QLabel(i18n("Rows: "), this) );
-  layout->addWidget( txtRows );
-  layout->addWidget( new QLabel(i18n("Columns: "), this) );
-  layout->addWidget( txtColumns );
+  layout->addMultiCellWidget( caption, 0, 0, 0, 1 );
+  QVBoxLayout *l2 = new QVBoxLayout( 0, 0, 6 );
+  l2->addWidget( new QLabel(i18n("Rows: "), this) );
+  l2->addWidget( new QLabel(i18n("Columns: "), this) );
+  layout->addLayout( l2, 1, 0 );
+
+  QVBoxLayout *l3 = new QVBoxLayout( 0, 0, 6 );
+  l3->addWidget( txtRows );
+  l3->addWidget( txtColumns );
+  layout->addLayout( l3, 1, 1 );
 
   drawBorder = new QCheckBox(i18n("Draw border around the slides"), this );
   drawBorder->setChecked( true );
   drawBorder->setEnabled( false );
-  layout->addWidget( drawBorder );
-
-  layout->addStretch( 1 );
+  layout->addMultiCellWidget( drawBorder, 2, 2, 0, 1 );
 }
 
-void KSpreadPrinterDlg::getOptions( QMap<QString, QString>& opts, bool )
+void KPresenterPrinterDlg::getOptions( QMap<QString, QString>& opts, bool )
 {
-  opts["kde-kspread-printrows"] = QString::number(txtRows->value());
-  opts["kde-kspread-printcolumns"] = QString::number(txtColumns->value());
-  opts["kde-kspread-printslideborders"] = QString::number(drawBorder->isEnabled() && drawBorder->isChecked());
+  opts["kde-kpresenter-printrows"] = QString::number(txtRows->value());
+  opts["kde-kpresenter-printcolumns"] = QString::number(txtColumns->value());
+  opts["kde-kpresenter-printslideborders"] = QString::number(drawBorder->isEnabled() && drawBorder->isChecked());
 }
 
-void KSpreadPrinterDlg::setOptions( const QMap<QString, QString>& opts )
+void KPresenterPrinterDlg::setOptions( const QMap<QString, QString>& opts )
 {
-  if ( opts["kde-kspread-printrows"].isEmpty() )
+  if ( opts["kde-kpresenter-printrows"].isEmpty() )
     txtRows->setValue(1);
   else
-    txtRows->setValue((opts["kde-kspread-printrows"]).toInt());
-  if ( opts["kde-kspread-printcolumns"].isEmpty() )
+    txtRows->setValue((opts["kde-kpresenter-printrows"]).toInt());
+  if ( opts["kde-kpresenter-printcolumns"].isEmpty() )
     txtColumns->setValue(1);
   else
-    txtColumns->setValue((opts["kde-kspread-printcolumns"]).toInt());
+    txtColumns->setValue((opts["kde-kpresenter-printcolumns"]).toInt());
 
-  if ( opts["kde-kspread-printslideborders"].isEmpty() )
+  if ( opts["kde-kpresenter-printslideborders"].isEmpty() )
     drawBorder->setChecked(true);
   else
-    drawBorder->setChecked((opts["kde-kspread-printslideborders"]).toInt());
+    drawBorder->setChecked((opts["kde-kpresenter-printslideborders"]).toInt());
 }
 
-bool KSpreadPrinterDlg::isValid( const QString& )
+bool KPresenterPrinterDlg::isValid( const QString& )
 {
   return true;
 }
 
-void KSpreadPrinterDlg::txtRows_valueChanged( int new_value)
+void KPresenterPrinterDlg::txtRows_valueChanged( int new_value)
 {
   if ( new_value == 1 && txtColumns->value() == 1 )
     drawBorder->setEnabled( false );
   else
     drawBorder->setEnabled( true );
 }
-void KSpreadPrinterDlg::txtColumns_valueChanged( int new_value )
+void KPresenterPrinterDlg::txtColumns_valueChanged( int new_value )
 {
   if ( new_value == 1 && txtRows->value() == 1 )
     drawBorder->setEnabled( false );

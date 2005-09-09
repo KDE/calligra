@@ -3483,7 +3483,7 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, 
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( step.m_pageNumber );
     QRect const rect = page->getZoomPageRect();
-    bool const drawBorder = printer->option("kde-kspread-printslideborders").toInt() && rows>1 && cols>1;
+    bool const drawBorder = printer->option("kde-kpresenter-printslideborders").toInt() && rows>1 && cols>1;
 
     int height = rect.height();
     int width = rect.width();
@@ -3691,8 +3691,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     int cols = 1;
     if ( !printer->previewOnly() )
     {
-      rows = printer->option("kde-kspread-printrows").toInt();
-      cols = printer->option("kde-kspread-printcolumns").toInt();
+      rows = printer->option("kde-kpresenter-printrows").toInt();
+      cols = printer->option("kde-kpresenter-printcolumns").toInt();
     }
     int const slides_per_page = rows * cols;
 

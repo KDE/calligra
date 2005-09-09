@@ -425,7 +425,7 @@ void KPresenterView::setupPrinter( KPrinter &prt )
     else
         prt.setOrientation( KPrinter::Portrait );
     if ( !prt.previewOnly() )
-      prt.addDialogPage( new KSpreadPrinterDlg( 0, "KSpread page" ) );
+      prt.addDialogPage( new KPresenterPrinterDlg( 0, "KPresenter page" ) );
 }
 
 void KPresenterView::unZoomDocument(int &dpiX,int &dpiY)

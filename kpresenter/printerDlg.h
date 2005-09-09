@@ -19,8 +19,8 @@
 *
 */
 
-#ifndef kspreadprintdlg_included
-#define kspreadprintdlg_included
+#ifndef kpresenterprintdlg_included
+#define kpresenterprintdlg_included
 
 #include <kdeprint/kprintdialogpage.h>
 #include <knuminput.h>
@@ -28,12 +28,12 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 
-class KSpreadPrinterDlg : public KPrintDialogPage
+class KPresenterPrinterDlg : public KPrintDialogPage
 {
   Q_OBJECT
   public:
     /// Getting the common arguments.
-    KSpreadPrinterDlg( QWidget *parent = 0, const char *name = 0 );
+    KPresenterPrinterDlg( QWidget *parent = 0, const char *name = 0 );
 
     /// Reimplemented.
     void getOptions( QMap<QString, QString>& opts, bool include_def = false );
@@ -52,4 +52,4 @@ class KSpreadPrinterDlg : public KPrintDialogPage
     QCheckBox *drawBorder;
 };
 
-#endif //kspreadprinterdlg_included
+#endif //kpresenterprinterdlg_included
