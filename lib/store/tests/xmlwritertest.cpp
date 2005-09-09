@@ -1,5 +1,6 @@
-#include "koxmlwriter.h"
 #include "xmlwritertest.h"
+
+#include "koxmlwriter.h"
 
 #include <qapplication.h>
 #include <qfile.h>
@@ -13,7 +14,7 @@ void speedTest()
     QString paragText = QString::fromUtf8( "This is the text of the paragraph. I'm including a euro sign to test encoding issues: €" );
     QCString styleName = "Heading 1";
 
-    QFile out( "out5.xml" );
+    QFile out( QString::fromLatin1( "out5.xml" ) );
     if ( out.open(IO_WriteOnly) )
     {
         KoXmlWriter writer( &out );
@@ -77,7 +78,7 @@ int main( int argc, char** argv ) {
 
     TEST_BEGIN( 0, 0 );
     writer.startElement( "p", false /*no indent*/ );
-    writer.addTextSpan( "   \t\n foo  " );
+    writer.addTextSpan( QString::fromLatin1( "   \t\n foo  " ) );
     writer.endElement();
     TEST_END( "textspan test", "<r>\n"
               " <p> <text:s text:c=\"2\"/><text:tab/><text:line-break/> foo <text:s/></p>\n"
@@ -87,23 +88,23 @@ int main( int argc, char** argv ) {
     writer.startElement( "p", false /*no indent*/ );
     QMap<int, int> tabCache;
     tabCache.insert( 3, 0 );
-    writer.addTextSpan( "   \t\n foo  ", tabCache );
+    writer.addTextSpan( QString::fromUtf8( "   \t\n foö  " ), tabCache );
     writer.endElement();
     TEST_END( "textspan with tabcache", "<r>\n"
-              " <p> <text:s text:c=\"2\"/><text:tab text:tab-ref=\"1\"/><text:line-break/> foo <text:s/></p>\n"
+              " <p> <text:s text:c=\"2\"/><text:tab text:tab-ref=\"1\"/><text:line-break/> foö <text:s/></p>\n"
               "</r>\n" );
 
     TEST_BEGIN( 0, 0 );
     writer.startElement( "p", false /*no indent*/ );
     writer.addProcessingInstruction( "opendocument foobar" );
-    writer.addTextSpan( "foo" );
+    writer.addTextSpan( QString::fromLatin1( "foo" ) );
     writer.endElement();
     TEST_END( "processinginstruction test", "<r>\n"
               " <p><?opendocument foobar?>foo</p>\n"
               "</r>\n" );
 
     TEST_BEGIN( 0, 0 );
-    writer.addManifestEntry( "foo/bar/blah", "mime/type" );
+    writer.addManifestEntry( QString::fromLatin1( "foo/bar/blah" ), QString::fromLatin1( "mime/type" ) );
     TEST_END( "addManifestEntry", "<r>\n <manifest:file-entry manifest:media-type=\"mime/type\" manifest:full-path=\"foo/bar/blah\"/>\n</r>\n" );
 
     int sz = 15000;  // must be more than KoXmlWriter::s_escapeBufferLen
@@ -118,7 +119,7 @@ int main( int argc, char** argv ) {
 
     QString longPath;
     for ( uint i = 0 ; i < 1000 ; ++i )
-        longPath += "M10 10L20 20 ";
+        longPath += QString::fromLatin1( "M10 10L20 20 " );
     expected = "<r a=\"";
     expected += longPath.utf8() + "\"/>\n";
     TEST_BEGIN( 0, 0 );
@@ -130,9 +131,9 @@ int main( int argc, char** argv ) {
     bool val = true;
     int num = 1;
     double numdouble = 5.0;
-    writer.addConfigItem( "TestConfigBool", val );
-    writer.addConfigItem( "TestConfigInt", num );
-    writer.addConfigItem( "TestConfigDouble", numdouble );
+    writer.addConfigItem( QString::fromLatin1( "TestConfigBool" ), val );
+    writer.addConfigItem( QString::fromLatin1( "TestConfigInt" ), num );
+    writer.addConfigItem( QString::fromLatin1( "TestConfigDouble" ), numdouble );
     TEST_END( "test config", "<r>\n"
                              " <config:config-item config:name=\"TestConfigBool\" config:type=\"boolean\">true</config:config-item>\n"
                              " <config:config-item config:name=\"TestConfigInt\" config:type=\"int\">1</config:config-item>\n"

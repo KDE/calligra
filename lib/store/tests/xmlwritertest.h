@@ -1,6 +1,8 @@
 #ifndef XMLWRITERTEST_H
 #define XMLWRITERTEST_H
 
+#define QT_NO_CAST_ASCII
+
 // Those macros are in a separate header file in order to share them
 // with kofficecore/tests/kogenstylestest.cpp
 
@@ -32,8 +34,8 @@
             QCString s2 = expectedFull; \
             if ( s1.length() != s2.length() ) \
                 qDebug( "got length %d, expected %d", s1.length(), s2.length() ); \
-            s1.replace( QRegExp( "[x]{1000}" ), "[x]*1000" ); \
-            s2.replace( QRegExp( "[x]{1000}" ), "[x]*1000" ); \
+            s1.replace( QRegExp( QString::fromLatin1( "[x]{1000}" ) ), "[x]*1000" ); \
+            s2.replace( QRegExp( QString::fromLatin1( "[x]{1000}" ) ), "[x]*1000" ); \
             qDebug( "%s", s1.data() ); \
             qDebug( "Expected:\n%s", s2.data() ); \
             return 1; /*exit*/ \
