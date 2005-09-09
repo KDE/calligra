@@ -12,7 +12,7 @@ KAboutData * newKarbonAboutData()
 	KAboutData * aboutData = new KAboutData(
 		"karbon",
 		I18N_NOOP( "Karbon14" ),
-		"0.2",
+		"0.2.90",
 		I18N_NOOP( "A Vector Graphics Drawing Application." ),
 		KAboutData::License_GPL,
 		I18N_NOOP( "(c) 2001-2005, The Karbon Developers" ),
@@ -32,6 +32,36 @@ KAboutData * newKarbonAboutData()
 		"Benoît Vautrin",
 		0,
 		"benoit.vautrin@free.fr",
+		0 );
+	aboutData->addCredit(
+		"Jan Hambrecht",
+		I18N_NOOP( "Bug fixes and improvements" ),
+		"jaham@gmx.net",
+		0 );
+	aboutData->addCredit(
+		"Peter Simonsson",
+		I18N_NOOP( "Bug fixes and improvements" ),
+		"psn@linux.se",
+		0 );
+	aboutData->addCredit(
+		"Tim Beaulen",
+		I18N_NOOP( "Bug fixes and improvements" ),
+		"tbscope@gmail.com",
+		0 );
+	aboutData->addCredit(
+		"Boudewijn Rempt",
+		I18N_NOOP( "Bug fixes and improvements" ),
+		"boud@valdyas.org",
+		0 );
+	aboutData->addCredit(
+		"Pierre Stirnweiss",
+		I18N_NOOP( "Bug fixes and improvements" ),
+		"pierre.stirnweiss_kde@gadz.org",
+		0 );
+	aboutData->addCredit(
+		"Inge Wallin",
+		I18N_NOOP( "Bug fixes" ),
+		"inge@lysator.liu.se",
 		0 );
 	aboutData->addCredit(
 		"Alan Horkan",
