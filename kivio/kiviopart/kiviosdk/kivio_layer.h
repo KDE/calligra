@@ -87,6 +87,7 @@ class KivioLayer
     void saveOasis(KoXmlWriter* layerWriter);
 
     Kivio::Object* checkForStencil( KoPoint *, int *, float, bool );
+    Kivio::Object* checkForCollision(const KoPoint& point, int& collisionType);
 
     void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
     void paintContent( QPainter& painter, const QRect& rect, bool transparent, QPoint p0,

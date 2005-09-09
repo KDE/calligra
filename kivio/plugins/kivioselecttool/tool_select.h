@@ -73,10 +73,14 @@ class SelectTool : public Kivio::MouseTool
     void editStencilText();
 
   protected:
-    void mousePress(const QPoint&);
     void mouseMove(QMouseEvent*);
     void mouseRelease(const QPoint&);
     void leftDoubleClick(const QPoint&);
+    /** This is called when the left mouse button is pressed
+      * @p pos current mouse position
+      * @p selectMultiple if we should allow more then one selected object
+      */
+    void leftMouseButtonPressed(const QPoint& pos, bool selectMultiple);
 
     bool startResizing(const QPoint&);
     bool startDragging(const QPoint&, bool);
@@ -104,17 +108,16 @@ class SelectTool : public Kivio::MouseTool
     KoPoint m_lastPoint;
     KoPoint m_origPoint;
 
-    // Select Tool Mode
-    enum {
-      stmNone,
-      stmDrawRubber,
-      stmDragging,
-      stmCustomDragging,
-      stmResizing
+  protected:
+    typedef enum Mode {
+      MSelect,
+      MMove,
+      MResize,
+      MCustom
     };
 
   private:
-    int m_mode;     // Flag to indicate that we are drawing a rubber band
+    Mode m_mode;
     KivioStencil *m_pResizingStencil;
     KivioStencil *m_pCustomDraggingStencil;
     int m_resizeHandle;
@@ -129,6 +132,8 @@ class SelectTool : public Kivio::MouseTool
     KAction* m_textFormatAction;
 
     bool m_firstTime;
+    int m_collisionType;
+    KoPoint m_previousPos;
 };
 
 #endif

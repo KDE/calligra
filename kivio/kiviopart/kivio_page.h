@@ -134,6 +134,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     int generateStencilIds( int );
 
     KivioStencil *checkForStencil( KoPoint *, int *, double, bool);
+    Kivio::Object* checkForCollision(const KoPoint& point, int& collisionType);
 
 
     KivioLayer *curLayer()const { return m_pCurLayer; }

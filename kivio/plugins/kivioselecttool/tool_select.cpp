@@ -34,6 +34,7 @@
 #include "kivio_custom_drag_data.h"
 #include "kivio_layer.h"
 #include "kivio_stencil.h"
+#include "object.h"
 
 #include <kactionclasses.h>
 #include <kpopupmenu.h>
@@ -61,7 +62,7 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
   m_arrowHeadAction = new KAction(i18n("Format &Arrowheads..."), 0, 0, view(), SLOT(arrowHeadFormat()),
                                   actionCollection(), "formatConnector");
   
-  m_mode = stmNone;
+  m_mode = MSelect;
   m_pResizingStencil = NULL;
   m_pCustomDraggingStencil = NULL;
 
@@ -100,23 +101,19 @@ bool SelectTool::processEvent(QEvent* e)
       break;
 
     case QEvent::MouseButtonPress:
-      m = (QMouseEvent *)e;
+    {
+      QMouseEvent* me = static_cast<QMouseEvent*>(e);
 
-      if( m->button() == RightButton ) {
-        showPopupMenu(m->globalPos());
-      } else if( m->button() == LeftButton ) {
-        if((m->state() & ControlButton) || (m->state() & ShiftButton)) {
-          m_controlKey = true;
-        } else {
-          m_controlKey = false;
-        }
-
-        mousePress( m->pos() );
+      if( me->button() == RightButton ) {
+        showPopupMenu(me->globalPos());
+      } else if( me->button() == LeftButton ) {
+        leftMouseButtonPressed(me->pos(), (me->state() & ControlButton) || (me->state() & ShiftButton));
       }
 
       canvas->setFocus();
       return true;
       break;
+    }
 
     case QEvent::MouseButtonRelease:
       mouseRelease( ((QMouseEvent *)e)->pos() );
@@ -148,7 +145,7 @@ void SelectTool::setActivated(bool a)
   if(a) {
     m_selectAction->setChecked(true);
     view()->canvasWidget()->setCursor(arrowCursor);
-    m_mode = stmNone;
+    m_mode = MSelect;
     emit activated(this);
   } else if(m_selectAction->isChecked()) {
     m_selectAction->setChecked(false);
@@ -189,47 +186,46 @@ void SelectTool::select(const QRect &r)
     view()->activePage()->selectStencils( x, y, w, h );
 }
 
-void SelectTool::mousePress(const QPoint &pos)
+void SelectTool::leftMouseButtonPressed(const QPoint& pos, bool selectMultiple)
 {
-  // Last point is used for undrawing at the last position and calculating the distance the mouse has moved
-  m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
-  m_origPoint = m_lastPoint;
+  int collisionType = 0;
+  KoPoint p = view()->canvasWidget()->mapFromScreen(pos);
+  Kivio::Object* object = view()->activePage()->checkForCollision(p, collisionType);
+  m_mode = MSelect;
 
-  // Check if we nailed a custom drag point on a selected stencil
-  if( startCustomDragging(pos, true) )
-  {
-    m_mode = stmCustomDragging;
+  kdDebug() << "Select!" << endl;
+
+  if(!object) {
+    if(!selectMultiple) {
+      view()->activePage()->unselectAllStencils();
+      view()->canvasWidget()->update();
+    }
+
     return;
   }
 
-  // Check if we are resizing
-  if( startResizing(pos) )
-  {
-    m_mode = stmResizing;
-    return;
+  kdDebug() << "Select object: " << object->name() << endl;
+
+  if(!selectMultiple && !object->selected()) {
+    view()->activePage()->unselectAllStencils();
   }
 
-
-  // Check if we nailed a custom drag point on any other stencil
-  if( startCustomDragging(pos, false) )
-  {
-    m_mode = stmCustomDragging;
-    return;
+  if(object->selected() && selectMultiple) {
+    view()->activePage()->unselectStencil(object);
+  } else {
+    view()->activePage()->selectStencil(object);
   }
 
-  // Check if we can drag a stencil
-  if( startDragging(pos, false) )
-  {
-    m_mode = stmDragging;
-    return;
+  view()->canvasWidget()->update();
+
+  if(collisionType == CTBody) {
+    m_mode = MMove;
+  } else if((collisionType >= CTResizeTopLeft) && (collisionType <= CTResizeBottomRight)) {
+    m_mode = MResize;
   }
 
-  // This should always be the last 'start' call since it always returns true
-  if( startRubberBanding(pos) )
-  {
-    m_mode = stmDrawRubber;
-    return;
-  }
+  m_previousPos = p;
+  m_collisionType = collisionType;
 }
 
 
@@ -443,7 +439,7 @@ bool SelectTool::startResizing(const QPoint &pos)
 
 void SelectTool::mouseMove(QMouseEvent* e)
 {
-    QPoint pos = e->pos();
+/*    QPoint pos = e->pos();
     bool ignoreGridGuides = e->state() & ShiftButton;
 
     switch( m_mode )
@@ -469,7 +465,7 @@ void SelectTool::mouseMove(QMouseEvent* e)
             break;
     }
 
-    m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
+    m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);*/
 }
 
 void SelectTool::continueRubberBanding(const QPoint &pos)
@@ -941,7 +937,7 @@ int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const double x, cons
 
 void SelectTool::mouseRelease(const QPoint &pos)
 {
-  m_releasePoint = pos;
+/*  m_releasePoint = pos;
 
   switch( m_mode )
   {
@@ -964,7 +960,7 @@ void SelectTool::mouseRelease(const QPoint &pos)
 
   m_mode = stmNone;
 
-  view()->doc()->updateView(view()->activePage());
+  view()->doc()->updateView(view()->activePage());*/
 }
 
 void SelectTool::endRubberBanding(const QPoint &pos)

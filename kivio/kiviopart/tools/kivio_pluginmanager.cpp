@@ -40,7 +40,7 @@ namespace Kivio {
     if(activeTool() && m_delegateEvents) {
       return activeTool()->processEvent(e);
     }
-    
+
     return false;
   }
   

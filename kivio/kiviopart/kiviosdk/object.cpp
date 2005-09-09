@@ -18,6 +18,11 @@
  */
 #include "object.h"
 
+#include <kdebug.h>
+
+#include <koPoint.h>
+#include <koRect.h>
+
 namespace Kivio {
 
 Object::Object()
@@ -62,6 +67,22 @@ Pen Object::pen() const
 void Object::setPen(const Pen& newPen)
 {
   m_pen = newPen;
+}
+
+int Object::contains(const KoPoint& point)
+{
+  KoRect rect = boundingBox();
+
+  if(rect.contains(point)) {
+    return CTBody;
+  }
+
+  return CTNone;
+}
+
+bool Object::intersects(const KoRect& rect)
+{
+  return boundingBox().intersects(rect);
 }
 
 }

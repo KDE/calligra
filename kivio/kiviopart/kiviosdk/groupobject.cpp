@@ -106,6 +106,9 @@ KoRect GroupObject::boundingBox()
     rect = rect.unite((*it)->boundingBox());
   }
 
+  rect.moveTopLeft(position());
+  kdDebug() << "Rect: " << rect.toQRect() << endl;
+
   return rect;
 }
 

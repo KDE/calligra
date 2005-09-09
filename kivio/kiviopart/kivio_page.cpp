@@ -545,7 +545,7 @@ void KivioPage::selectStencil(Kivio::Object* object)
   }
 
   // Don't allow reselection
-  if(m_lstSelection.find(object) == m_lstSelection.end()) {
+  if(m_lstSelection.find(object) != m_lstSelection.end()) {
     return;
   }
 
@@ -641,6 +641,25 @@ KivioStencil *KivioPage::checkForStencil( KoPoint *pPoint, int *collisionType, d
 
     *collisionType = kctNone;*/
     return NULL;
+}
+
+Kivio::Object* KivioPage::checkForCollision(const KoPoint& point, int& collisionType)
+{
+  Kivio::Object* object = 0;
+  KivioLayer* pLayer = m_lstLayers.last();
+
+  while( pLayer )
+  {
+    object = pLayer->checkForCollision(point, collisionType);
+
+    if(object) {
+      return object;
+    }
+
+    pLayer = m_lstLayers.prev();
+  }
+
+  return 0;
 }
 
 void KivioPage::deleteSelectedStencils()

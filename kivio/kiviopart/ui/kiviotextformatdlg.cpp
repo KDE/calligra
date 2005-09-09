@@ -137,8 +137,6 @@ QColor KivioTextFormatDlg::textColor()
 
 void KivioTextFormatDlg::setVAlign(int i)
 {
-  updateVAlign(i);
-
   switch(i) {
     case Qt::AlignTop:
       m_valignBGrp->setButton(0);
@@ -150,12 +148,13 @@ void KivioTextFormatDlg::setVAlign(int i)
       m_valignBGrp->setButton(2);
       break;
   }
+
+  m_valign = static_cast<Qt::AlignmentFlags>(i);
+  m_preview->setAlignment(m_valign | m_halign);
 }
 
 void KivioTextFormatDlg::setHAlign(int i)
 {
-  updateHAlign(i);
-
   switch(i) {
     case Qt::AlignLeft:
       m_halignBGrp->setButton(0);
@@ -167,6 +166,9 @@ void KivioTextFormatDlg::setHAlign(int i)
       m_halignBGrp->setButton(2);
       break;
   }
+
+  m_halign = static_cast<Qt::AlignmentFlags>(i);
+  m_preview->setAlignment(m_valign | m_halign);
 }
 
 void KivioTextFormatDlg::setFont(QFont f)

@@ -27,6 +27,7 @@
 class QPainter;
 class KoZoomHandler;
 class KoRect;
+class KoPoint;
 
 namespace Kivio {
 
@@ -49,6 +50,21 @@ typedef enum {
   kstConnector,
   kstCustomObject = 1000
 } ShapeType;
+
+/// The different collision types
+typedef enum CollisionType {
+  CTNone = 0,
+  CTBody,
+  CTResizeTopLeft,
+  CTResizeTop,
+  CTResizeTopRight,
+  CTResizeLeft,
+  CTResizeRight,
+  CTResizeBottomLeft,
+  CTResizeBottom,
+  CTResizeBottomRight,
+  CTCustom = 1000 // All custom collision types should depend on this value
+};
 
 /**
  * Base class for canvas objects
@@ -105,8 +121,15 @@ class Object{
     /// Reimplement this function to paint Object to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler) = 0;
 
+    /// Mark the object as selected
     virtual void setSelected(bool isSelected) { m_selected = isSelected; }
+
+    /// Is the object selected
     virtual bool selected() const { return m_selected; }
+
+    virtual int contains(const KoPoint& point);
+    virtual bool intersects(const KoRect& rect);
+
 
   private:
     QString m_name;
