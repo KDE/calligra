@@ -45,6 +45,7 @@
 class KDChartBaseSeries
 {
     public:
+		virtual ~KDChartBaseSeries(){}
         virtual uint rows() const = 0;
         virtual const KDChartData& cell( uint row ) const = 0;
         virtual void setCell( uint row, const KDChartData& element) = 0;

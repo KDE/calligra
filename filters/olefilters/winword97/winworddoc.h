@@ -45,7 +45,7 @@ public:
         const myFile &table0Stream,
         const myFile &table1Stream,
         const myFile &dataStream);
-    ~WinWordDoc();
+    virtual ~WinWordDoc();
 
     bool isOk() const { return m_success; }
 

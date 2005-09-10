@@ -37,6 +37,7 @@ class QString;
 class KOPAINTER_EXPORT SVGPathParser
 {
 public:
+	virtual ~SVGPathParser(){}
 	void parseSVG( const QString &d, bool process = false );
 
 protected:

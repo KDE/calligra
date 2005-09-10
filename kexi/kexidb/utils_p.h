@@ -17,7 +17,7 @@ class ConnectionTestDialog : protected KProgressDialog
 	public:
 		ConnectionTestDialog(QWidget* parent, 
 			const KexiDB::ConnectionData& data, KexiDB::MessageHandler& msgHandler);
-		~ConnectionTestDialog();
+		virtual ~ConnectionTestDialog();
 
 		int exec();
 
