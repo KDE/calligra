@@ -27,7 +27,7 @@
 #include <qstring.h>
 #include <qfont.h>
 #include <qlayout.h>
-
+#include <koffice_export.h>
 #include <koView.h>
 
 /**
@@ -37,7 +37,7 @@
  * There is currently no titlebar with a shade button; I hope to be
  * able to use QDockWidget's toggle view action for that.
  */
-class KoPalette : public QDockWindow {
+class KOPALETTE_EXPORT KoPalette : public QDockWindow {
 
 Q_OBJECT
 

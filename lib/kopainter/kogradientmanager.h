@@ -26,7 +26,7 @@
 #include <qfile.h>
 #include <qdom.h>
 #include <qcolor.h>
-
+#include <koffice_export.h>
 struct KoColorStop
 {
 	double offset;
@@ -54,7 +54,7 @@ struct KoGradient
 	QPtrList<KoColorStop> colorStops;
 };	
 
-class KoGradientManager
+class KOPAINTER_EXPORT KoGradientManager
 {
 public:
 

@@ -27,7 +27,7 @@
 #include <qwidget.h>
 #include <qsignalmapper.h>
 #include <qstringlist.h>
-
+#include <koffice_export.h>
 
 #include <koView.h>
 
@@ -72,7 +72,7 @@ namespace {
  * + loading, saving and resetting of configuration
  * + show/hide dockwindows menu entries
  */
-class KoPaletteManager : public QObject {
+class KOPALETTE_EXPORT KoPaletteManager : public QObject {
 
     Q_OBJECT
 

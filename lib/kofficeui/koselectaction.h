@@ -20,7 +20,7 @@
 #define KOSELECTACTION_H
 
 #include <kaction.h>
-
+#include <koffice_export.h>
 class KPopupMenu;
 class QPoint;
 
@@ -28,7 +28,7 @@ class QPoint;
  * The main difference between this action and a KSelectAction is that
  * it is plugged into a toolbar as a dropdown menu and not as a combobox.
  */
-class KoSelectAction : public KAction
+class KOFFICEUI_EXPORT KoSelectAction : public KAction
 {
   Q_OBJECT
   public:
