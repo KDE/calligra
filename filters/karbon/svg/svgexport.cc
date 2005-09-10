@@ -47,13 +47,21 @@
 
 #include <kdebug.h>
 
+QString INDENT("  ");
+
+void
+printIndentation( QTextStream *stream, unsigned int indent )
+{
+	for( unsigned int i = 0; i < indent;++i)
+		*stream << INDENT;
+}
 
 typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilters" ) )
 
 
 SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(), m_indent( 0 ), m_indent2( 0 )
 {
 	m_gc.setAutoDelete( true );
 }
@@ -86,7 +94,6 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	m_body = new QTextStream( &body, IO_ReadWrite );
 	QString defs;
 	m_defs = new QTextStream( &defs, IO_ReadWrite );
-
 
 	// load the document and export it:
 	VDocument doc;
@@ -128,9 +135,13 @@ SvgExport::visitVDocument( VDocument& document )
 	*m_defs <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
 		rect.width() << "px\" height=\"" << rect.height() << "px\">" << endl;
+	printIndentation( m_defs, ++m_indent2 );
 	*m_defs << "<defs>" << endl;
 
+	printIndentation( m_body, ++m_indent );
 	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.height() << ")\">" << endl;
+	m_indent++;
+	m_indent2++;
 
 	// we dont need the selection anymore:
 	document.selection()->clear();
@@ -143,7 +154,9 @@ SvgExport::visitVDocument( VDocument& document )
 	VVisitor::visitVDocument( document );
 
 	// end tag:
+	printIndentation( m_body, --m_indent );
 	*m_body << "</g>" << endl;
+	printIndentation( m_defs, --m_indent2 );
 	*m_defs << "</defs>" << endl;
 	*m_body << "</svg>" << endl;
 }
@@ -159,8 +172,10 @@ SvgExport::getID( VObject *obj )
 void
 SvgExport::visitVGroup( VGroup& group )
 {
+	printIndentation( m_body, m_indent++ );
 	*m_body << "<g" << getID( &group ) << ">" << endl;
 	VVisitor::visitVGroup( group );
+	printIndentation( m_body, --m_indent );
 	*m_body << "</g>" << endl;
 }
 
@@ -169,6 +184,7 @@ SvgExport::visitVGroup( VGroup& group )
 void
 SvgExport::visitVImage( VImage& image )
 {
+	printIndentation( m_body, m_indent );
 	*m_body << "<image ";
 	VVisitor::visitVImage( image );
 	*m_body << "x=\"" << "\" ";
@@ -182,14 +198,17 @@ SvgExport::visitVImage( VImage& image )
 void
 SvgExport::visitVLayer( VLayer& layer )
 {
+	printIndentation( m_body, m_indent++ );
 	*m_body << "<g" << getID( &layer ) << ">" << endl;
 	VVisitor::visitVLayer( layer );
+	printIndentation( m_body, --m_indent );
 	*m_body << "</g>" << endl;
 }
 
 void
 SvgExport::visitVPath( VPath& composite )
 {
+	printIndentation( m_body, m_indent );
 	*m_body << "<path" << getID( &composite );
 
 	VVisitor::visitVPath( composite );
@@ -227,13 +246,16 @@ QString createUID()
 void
 SvgExport::getColorStops( const QPtrVector<VColorStop> &colorStops )
 {
+	m_indent2++;
 	for( unsigned int i = 0; i < colorStops.count() ; i++ )
 	{
+		printIndentation( m_defs, m_indent2 );
 		*m_defs << "<stop stop-color=\"";
 		getHexColor( m_defs, colorStops.at( i )->color );
 		*m_defs << "\" offset=\"" << QString().setNum( colorStops.at( i )->rampPoint );
 		*m_defs << "\" stop-opacity=\"" << colorStops.at( i )->color.opacity() << "\"" << " />" << endl;
 	}
+	m_indent2--;
 }
 
 void
@@ -242,6 +264,7 @@ SvgExport::getGradient( const VGradient& grad )
 	QString uid = createUID();
 	if( grad.type() == VGradient::linear )
 	{
+		printIndentation( m_defs, m_indent2 );
 		// do linear grad
 		*m_defs << "<linearGradient id=\"" << uid << "\" ";
 		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
@@ -258,12 +281,14 @@ SvgExport::getGradient( const VGradient& grad )
 		// color stops
 		getColorStops( grad.colorStops() );
 
+		printIndentation( m_defs, m_indent2 );
 		*m_defs << "</linearGradient>" << endl;
 		*m_body << "url(#" << uid << ")";
 	}
 	else if( grad.type() == VGradient::radial )
 	{
 		// do radial grad
+		printIndentation( m_defs, m_indent2 );
 		*m_defs << "<radialGradient id=\"" << uid << "\" ";
 		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
 		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
@@ -281,6 +306,7 @@ SvgExport::getGradient( const VGradient& grad )
 		// color stops
 		getColorStops( grad.colorStops() );
 
+		printIndentation( m_defs, m_indent2 );
 		*m_defs << "</radialGradient>" << endl;
 		*m_body << "url(#" << uid << ")";
 	}
@@ -289,6 +315,7 @@ SvgExport::getGradient( const VGradient& grad )
 	{
 		// fake conical grad as radial.  
 		// fugly but better than data loss.  
+		printIndentation( m_defs, m_indent2 );
 		*m_defs << "<radialGradient id=\"" << uid << "\" ";
 		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
 		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
@@ -306,6 +333,7 @@ SvgExport::getGradient( const VGradient& grad )
 		// color stops
 		getColorStops( grad.colorStops() );
 
+		printIndentation( m_defs, m_indent2 );
 		*m_defs << "</radialGradient>" << endl;
 		*m_body << "url(#" << uid << ")";
 	}
@@ -316,6 +344,7 @@ void
 SvgExport::getPattern( const VPattern & patt )
 {
 	QString uid = createUID();
+	printIndentation( m_defs, m_indent2 );
 	*m_defs << "<pattern id=\"" << uid << "\" ";
 	*m_defs << "width=\"" << "\" ";
 	*m_defs << "height=\"" << "\" ";
@@ -323,6 +352,7 @@ SvgExport::getPattern( const VPattern & patt )
 	*m_defs << "patternContentUnits=\"userSpaceOnUse\" "; 
 	*m_defs << " />" << endl;
 	// TODO: insert hard work here ;)
+	printIndentation( m_defs, m_indent2 );
 	*m_defs << "</pattern>" << endl;
 	*m_body << "url(#" << uid << ")";
 }

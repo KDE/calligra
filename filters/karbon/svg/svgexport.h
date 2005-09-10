@@ -74,6 +74,9 @@ private:
 	QTextStream* m_body;
 
 	QPtrStack<SvgGraphicsContext>	m_gc;
+
+	unsigned int m_indent;
+	unsigned int m_indent2;
 };
 
 #endif
