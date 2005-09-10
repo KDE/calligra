@@ -630,6 +630,7 @@ VTextTool::mouseButtonPress()
 {
 	m_last = first();
 	drawPathCreation();
+	m_stepwise = false;
 }
 
 void
@@ -649,7 +650,35 @@ VTextTool::mouseDrag()
 {
 	drawPathCreation();
 
-	m_last = last();
+	if( m_stepwise && shiftPressed() )
+	{
+		KoPoint act = last();
+		KoPoint dst = act - first();
+ 
+		double angle = atan2( dst.y(), dst.x() );
+		if( angle < 0 )
+			angle += VGlobal::twopi;
+
+		// calculate previuos and next modulo 45 degree step 
+		double prevStep = angle - fmod( angle, VGlobal::pi_2 / 2.0f );
+		double nextStep = prevStep + VGlobal::pi_2 / 2.0f;
+		// calculate distance between first and last point
+		double length = sqrt( dst.x()*dst.x() + dst.y()*dst.y() );
+
+		// use nearest step
+		if( angle - prevStep < nextStep - angle )
+		{
+			m_last.setX( first().x() + length * cos( prevStep ) );
+			m_last.setY( first().y() + length * sin( prevStep ) );
+		}
+		else
+		{
+			m_last.setX( first().x() + length * cos( nextStep ) );
+			m_last.setY( first().y() + length * sin( nextStep ) );
+		}
+	}
+	else
+		m_last = last();
 
 	drawPathCreation();
 }
@@ -669,7 +698,7 @@ VTextTool::mouseDragRelease()
 	// use dragged path to create text along
 	VSubpath path( 0L );
 	path.moveTo( first() );
-	path.lineTo( last() );
+	path.lineTo( m_last );
 
 	if( createText( path ) )
 		m_optionsWidget->show();
@@ -1025,6 +1054,20 @@ VTextTool::showDialog() const
 
 	m_optionsWidget->show();
 	return true;
+}
+
+void 
+VTextTool::mouseDragShiftPressed()
+{
+	m_stepwise = true;
+	mouseDrag();
+}
+
+void 
+VTextTool::mouseDragShiftReleased()
+{
+	m_stepwise = false;
+	mouseDrag();
 }
 
 #include "vtexttool.moc"

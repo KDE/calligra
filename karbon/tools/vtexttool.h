@@ -185,6 +185,10 @@ public:
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
 
+protected:
+	virtual void mouseDragShiftPressed();
+	virtual void mouseDragShiftReleased();
+
 private:
 	class VTextCmd : public VCommand
 	{
@@ -269,6 +273,8 @@ private:
 	VText* m_text;
 	VText* m_editedText;
 	bool m_creating;
+	// are we dragging in 45 degree steps?
+	bool m_stepwise;
 };
 
 #endif
