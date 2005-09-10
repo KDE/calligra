@@ -72,7 +72,7 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
     kdDebug(30508) << "findAnchor " << key.toString() << endl;
     QValueList<ParaData>::Iterator paraIt;
 
-    for ( paraIt = paraList.begin (); paraIt != paraList.end (); paraIt++ )
+    for ( paraIt = paraList.begin (); paraIt != paraList.end (); ++paraIt )
     {
         ValueListFormatData::Iterator formattingIt;
 
@@ -840,7 +840,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     // Process inlined pictures
     QValueList<ParaData>::Iterator paraIt;
 
-    for ( paraIt = paraList->begin(); paraIt != paraList->end(); paraIt++ )
+    for ( paraIt = paraList->begin(); paraIt != paraList->end(); ++paraIt )
     {
         ValueListFormatData::Iterator formattingIt;
         for ( formattingIt = (*paraIt).formattingList.begin();
@@ -893,7 +893,7 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
 {
     QValueList<ParaData>::Iterator paraIt;
 
-    for ( paraIt = paraList.begin (); paraIt != paraList.end (); paraIt++ )
+    for ( paraIt = paraList.begin (); paraIt != paraList.end (); ++paraIt )
     {
         ValueListFormatData::Iterator formattingIt;
 

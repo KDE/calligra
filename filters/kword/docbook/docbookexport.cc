@@ -513,8 +513,8 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList )
 #endif
 
     QValueList<ParaData>::ConstIterator paraIt;
-
-    for ( paraIt = paraList.begin (); paraIt != paraList.end (); paraIt++ )
+	QValueList<ParaData>::ConstIterator end(paraList.end ());
+    for ( paraIt = paraList.begin (); paraIt != end ; ++paraIt )
     {
         switch ( (*paraIt).layout.counter.numbering )
         {

@@ -42,7 +42,8 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
     QString name,value;
 
     QStringList::ConstIterator it;
-    for (it=list.begin();it!=list.end();it++)
+	QStringList::ConstIterator end(list.end());
+    for (it=list.begin();it!=end;++it)
     {
         const int result=(*it).find(':');
         if (result==-1)

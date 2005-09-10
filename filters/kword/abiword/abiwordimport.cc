@@ -1600,7 +1600,7 @@ bool StructureParser::endDocument(void)
     else
         kdWarning(30506) << "No 'Normal' style" << endl;
 
-    for (it=styleDataMap.begin();it!=styleDataMap.end();it++)
+    for (it=styleDataMap.begin();it!=styleDataMap.end();++it)
     {
         if (it.key()=="Normal")
             continue;

@@ -360,7 +360,8 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
 void OOWriterWorker::writeFontDeclaration(void)
 {
     zipWriteData( " <office:font-decls>\n");
-    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
+	QMap<QString,QString>::ConstIterator end(m_fontNames.end());
+    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=end; ++it)
     {
         const bool space=(it.key().find(' ')>=0); // Does the font has at least a space in its name
         const QString fontName(escapeOOText(it.key()));
@@ -1931,7 +1932,8 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     {
         props += "\n    <style:tab-stops>\n";
         TabulatorList::ConstIterator it;
-        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
+		TabulatorList::ConstIterator end(layout.tabulatorList.end());
+        for (it=layout.tabulatorList.begin();it!=end;++it)
         {
             props+="     <style:tab-stop style:position=\"";
             props += QString::number((*it).m_ptpos);

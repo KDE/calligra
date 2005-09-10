@@ -61,7 +61,8 @@ bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList)
 bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
 {
     QValueList<ParaData>::ConstIterator it;
-    for (it=paraList.begin();it!=paraList.end();it++)
+	QValueList<ParaData>::ConstIterator end(paraList.end());
+    for (it=paraList.begin();it!=end;++it)
     {
         if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
             return false;

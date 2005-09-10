@@ -172,7 +172,8 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
         QString endOfParagraph;
         QValueList<ParaData> *paraList = (*itCell).paraList;
         QValueList<ParaData>::ConstIterator it;
-        for (it=paraList->begin();it!=paraList->end();it++)
+		QValueList<ParaData>::ConstIterator end(paraList->end());
+        for (it=paraList->begin();it!=end;++it)
         {
             rowText += endOfParagraph;
             rowText += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
@@ -725,7 +726,8 @@ if (layout.counter.style)
                     {
                         QString fstr;
                         QValueList<ParaData>::ConstIterator it;
-                        for (it=paraList->begin();it!=paraList->end();it++)
+						QValueList<ParaData>::ConstIterator end(paraList->end());
+                        for (it=paraList->begin();it!=end;++it)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
                         content += "{\\super ";
                         content += automatic ? "\\chftn " : value;
@@ -833,7 +835,8 @@ bool RTFWorker::doHeader(const HeaderData& header)
     str += " {";
 
     QValueList<ParaData>::ConstIterator it;
-    for (it=header.para.begin();it!=header.para.end();it++)
+	QValueList<ParaData>::ConstIterator end(header.para.end());
+    for (it=header.para.begin();it!=end;++it)
         content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
     if (content!="\\par\\pard\\plain")
@@ -867,7 +870,8 @@ bool RTFWorker::doFooter(const FooterData& footer)
     str += " {";
 
     QValueList<ParaData>::ConstIterator it;
-    for (it=footer.para.begin();it!=footer.para.end();it++)
+	QValueList<ParaData>::ConstIterator end(footer.para.end());
+    for (it=footer.para.begin();it!=end;++it)
         content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
     if (content!="\\par\\pard\\plain")
@@ -1038,7 +1042,7 @@ void RTFWorker::writeStyleData(void)
         // Find the number of the following style
         uint counter=0;  // counts position in style table starting at 0
         QValueList < LayoutData > ::ConstIterator it2;
-        for( it2 =  m_styleList.begin(); it2 != m_styleList.end(); counter++, it2++ )
+        for( it2 =  m_styleList.begin(); it2 != m_styleList.end(); counter++, ++it2 )
         {
             if ( (*it2).styleName == (*it).styleFollowing )
             {
@@ -1570,7 +1574,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
     {
         TabulatorList::ConstIterator it;
-        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
+        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();++it)
         {
             switch ((*it).m_type)
             {
@@ -1638,7 +1642,7 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
     QStringList::ConstIterator it;
 
     // search font table for this font
-    for( it = m_fontList.begin(); it != m_fontList.end(); counter++, it++ )
+    for( it = m_fontList.begin(); it != m_fontList.end(); counter++, ++it )
     {
         if((*it) == cookedFontName)  // check for match
         {
@@ -1666,7 +1670,7 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
     QValueList < QColor > ::ConstIterator it;
 
     // search color table for this color
-    for( it =  m_colorList.begin(); it != m_colorList.end(); counter++, it++ )
+    for( it =  m_colorList.begin(); it != m_colorList.end(); counter++, ++it )
     {
         if ( (*it) == color )
         {
@@ -1691,9 +1695,10 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
     QString strMarkup("\\s");  // Holds RTF markup for the style
 
     QValueList < LayoutData > ::ConstIterator it;
+	QValueList < LayoutData > ::ConstIterator end(m_styleList.end());
 
     // search color table for this color
-    for( it =  m_styleList.begin(); it != m_styleList.end(); counter++, it++ )
+    for( it =  m_styleList.begin(); it != end; counter++, ++it )
     {
         if ( (*it).styleName == styleName )
         {

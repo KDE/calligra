@@ -483,7 +483,8 @@ public:
 						m_objectUpto, getNumObjects ());*/
 
 		MSWrite::List <WRIObject>::Iterator it;
-		for (it = m_objectList.begin (); it != m_objectList.end (); it++)
+		MSWrite::List <WRIObject>::Iterator end(m_objectList.end ());
+		for (it = m_objectList.begin (); it != end; ++it)
 		{
 			kdDebug (30509) << "outputting object \'" << (*it).m_nameInStore
 					  				<< "\'   (length: " << (*it).m_dataLength << ")"

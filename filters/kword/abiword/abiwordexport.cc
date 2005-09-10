@@ -302,9 +302,9 @@ bool AbiWordWorker::doCloseDocument(void)
         *m_streamOut << "<data>\n";
 
         QMap<QString,KoPictureKey>::ConstIterator it;
-
+		QMap<QString,KoPictureKey>::ConstIterator end(m_mapPictureData.end());
         // all images first
-        for (it=m_mapPictureData.begin(); it!=m_mapPictureData.end(); it++)
+        for (it=m_mapPictureData.begin(); it!=end; ++it)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
             writePictureData(it.key(),it.data().filename());
@@ -763,7 +763,8 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
         props += "tabstops:";
         bool first=true;
         TabulatorList::ConstIterator it;
-        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
+		TabulatorList::ConstIterator end(layout.tabulatorList.end());
+        for (it=layout.tabulatorList.begin();it!=end;++it)
         {
             if (first)
             {
