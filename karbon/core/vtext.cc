@@ -146,7 +146,7 @@ VText::VText( const QFont &font, const VSubpath& basePath, Position position, Al
 }
 
 VText::VText( const VText& text )
-	: VObject( text ), m_font( text.m_font ), m_basePath( text.m_basePath ), m_position( text.m_position ), m_alignment( text.m_alignment ), m_text( text.m_text )
+	: VObject( text ), m_font( text.m_font ), m_basePath( text.m_basePath ), m_position( text.m_position ), m_alignment( text.m_alignment ), m_text( text.m_text ), m_shadow( text.m_shadow ), m_translucentShadow( text.m_translucentShadow ), m_shadowDistance( text.m_shadowDistance ), m_shadowAngle( text.m_shadowAngle )
 {
 	m_stroke = new VStroke( *text.m_stroke );
 	m_stroke->setParent( this );
@@ -308,7 +308,9 @@ VText::save( QDomElement& element ) const
 	{
 		QDomElement me = element.ownerDocument().createElement( "TEXT" );
 
-		m_basePath.save( me );
+		VPath path( 0L );
+		path.combinePath( m_basePath );
+		path.save( me );
 
 		VObject::save( me );
 
@@ -341,9 +343,9 @@ VText::load( const QDomElement& element )
 
 	m_font.setFamily( element.attribute( "family", "Times" ) );
 	m_font.setPointSize( element.attribute( "size", "12" ).toInt() );
-	m_font.setItalic( element.attribute( "italic" ) == 0 ? false : true );
+	m_font.setItalic( element.attribute( "italic" ).toInt() == 1 );
 	m_font.setWeight( QFont::Normal );
-	m_font.setBold( element.attribute( "bold" ) == 0 ? false : true );
+	m_font.setBold( element.attribute( "bold" ).toInt() == 1 );
 	m_position			= (Position)element.attribute( "position", "0" ).toInt();
 	m_alignment			= (Alignment)element.attribute( "alignment", "0" ).toInt();
 	m_shadow			= ( element.attribute( "shadow" ).toInt() == 1 );
@@ -357,11 +359,20 @@ VText::load( const QDomElement& element )
 
 	QDomNodeList list = element.childNodes();
 	QDomElement e = list.item( 0 ).toElement();
+	
+	// element to start with reading glyph paths and stroke, fill, etc.
+	uint startElement = 0;
+
 	if( e.tagName() == "PATH" )
-		m_basePath.load( e );
+	{
+		VPath path( 0L );
+		path.load( e );
+		m_basePath = *path.paths().getFirst();
+		startElement++;
+	}
 
 	// load text glyphs:
-	for( uint i = 0; i < list.count(); ++i )
+	for( uint i = startElement; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
@@ -511,9 +522,12 @@ VText::traceText()
 	 // Placing the stored glyphs.
 	float pathLength = 0;
 	VSubpathIterator pIt( m_basePath );
+	
 	VSegment* seg;
-	while ( ( seg = ++pIt ) )
-		pathLength += seg->length();
+	for( ; pIt.current(); ++pIt )
+		if( (seg = pIt.current() ) ) 
+			pathLength += seg->length();
+
 	float x = 0;
 	switch( m_alignment )
 	{
