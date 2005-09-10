@@ -411,7 +411,8 @@ VTextOptionsWidget::valueChanged( int )
 
 	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
 
-	m_tool->textChanged();
+	if( isVisible() ) 
+		m_tool->textChanged();
 }
 
 void
@@ -432,7 +433,8 @@ VTextOptionsWidget::cancel()
 void
 VTextOptionsWidget::textChanged( const QString& )
 {
-	m_tool->textChanged();
+	if( isVisible() )
+		m_tool->textChanged();
 }
 
 void
@@ -546,7 +548,7 @@ VTextOptionsWidget::initialize( VObject &text )
 void 
 VTextOptionsWidget::moveEvent ( QMoveEvent * )
 {
-	if( m_tool )
+	if( m_tool && isVisible() )
 		m_tool->textChanged();
 }
 
@@ -622,7 +624,7 @@ VTextTool::drawEditedText()
 
 	painter->setZoomFactor( view()->zoom() );
 
-	m_editedText->draw( painter );
+	m_editedText->draw( painter, &m_editedText->boundingBox() );
 }
 
 void
@@ -739,7 +741,7 @@ VTextTool::textChanged()
 	{
 		// hide the original text if we are changing it
 		m_text->setState( VObject::hidden );
-		view()->repaintAll( true );
+		view()->repaintAll( m_text->boundingBox() );
 	}
 	else
 		view()->repaintAll( m_editedText->boundingBox() );
