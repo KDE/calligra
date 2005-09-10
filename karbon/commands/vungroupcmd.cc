@@ -36,7 +36,6 @@ VUnGroupCmd::VUnGroupCmd( VDocument *doc )
 
 VUnGroupCmd::~VUnGroupCmd()
 {
-	//delete( m_group );
 }
 
 void
@@ -70,10 +69,9 @@ VUnGroupCmd::execute()
 		}
 
 		m_group->clear();
+		m_group->setState( VObject::deleted );
 	}
 
-	//delete m_group;
-	//m_group = 0L;
 	setSuccess( true );
 }
 
@@ -91,6 +89,7 @@ VUnGroupCmd::unexecute()
 		m_group->append( itr.current() );
 	}
 
+	m_group->setState( VObject::normal );
 	document()->append( m_group );
 	document()->selection()->clear();
 	document()->selection()->append( m_group );

@@ -47,6 +47,8 @@
 #include "vlayercmd.h"
 #include "vdeletecmd.h"
 #include "vzordercmd.h"
+#include "vgroupcmd.h"
+#include "vungroupcmd.h"
 #include "vselection.h"
 #include "vstroke.h"
 #include "vcanvas.h"
@@ -301,10 +303,18 @@ VDocumentTab::slotCommandExecuted()
  *  Layers tab                                                           *
  *************************************************************************/
 
-VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key )
-	: QListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key )
+VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key, QPtrDict<VObjectListViewItem> *map )
+	: QListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key ), m_map( map )
 {
 	update();
+	// add itself to object list item map
+	m_map->insert( object, this );
+}
+
+VObjectListViewItem::~VObjectListViewItem() 
+{
+	// remove itself from object list item map
+	m_map->take( m_object );
 }
 
 QString
@@ -353,11 +363,19 @@ VObjectListViewItem::update()
 }
 
 
-VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc )
-	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc)
+VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc, QPtrDict<VLayerListViewItem> *map )
+	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc), m_map( map )
 {
 	update();
+	// add itself to layer list item map
+	m_map->insert( layer, this );
 } // VLayerListViewItem::VLayerListViewItem
+
+VLayerListViewItem::~VLayerListViewItem()
+{
+	// remove itself from layer list item map
+	m_map->take( m_layer );
+}
 
 void
 VLayerListViewItem::update()
@@ -462,6 +480,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	connect( m_layersListView, SIGNAL( selectionChanged() ), this, SLOT( selectionChangedFromList() ) );
 	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( selectionChangedFromTool() ) );
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
+	connect( view->part()->commandHistory(), SIGNAL( commandExecuted( VCommand*) ), this, SLOT( slotCommandExecuted( VCommand* ) ) );
 
 	layout->activate();
 	updateLayers();
@@ -505,41 +524,86 @@ void
 VLayersTab::selectionChangedFromTool()
 {
 	resetSelection();
+	removeDeletedObjectsFromList();
 
 	// TODO : use some kind of mapping...
 	VObjectListIterator itr = m_document->selection()->objects();
-	for( ; itr.current();++itr )
+	for( ; itr.current(); ++itr )
 		if( itr.current()->state() != VObject::deleted )
 		{
-			QListViewItemIterator it( m_layersListView );
-			bool found = false;
-			while( !found && it.current() )
+			VObjectListViewItem *item = m_objects[ itr.current() ];
+			if( ! item ) 
 			{
-				VObjectListViewItem *objItem = dynamic_cast<VObjectListViewItem *>( it.current() );
-				
-				if( objItem && objItem->object() == itr.current() )
+				VLayerListViewItem *layerItem = m_layers[ itr.current()->parent() ];
+				if( layerItem )
+					updateObjects( layerItem->layer(), layerItem );
+				else
 				{
-					objItem->setSelected( true );
-					objItem->update();
-					found = true;
-					break;
+					VObjectListViewItem *objectItem = m_objects[ itr.current()->parent() ];
+					if( objectItem )
+						updateObjects( objectItem->object(), objectItem );
+					else
+						continue;
 				}
-				++it;
-			}
-			// not found, insert and select
-			if( !found )
-			{
-				VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( m_layers[ m_document->activeLayer() ] );
-				if( layerItem && !m_objects[ itr.current() ] )
-				{
-					VObjectListViewItem *newItem = new VObjectListViewItem( layerItem, itr.current(), m_document, layerItem->childCount() );
-					m_objects.insert( itr.current(), newItem );
-					newItem->setSelected( true );
-					newItem->update();
-				}
+				item = m_objects[ itr.current() ];
 			}
 
+			item->setSelected( true );
+			item->update();
 		}
+}
+
+void 
+VLayersTab::updateChildItems( QListViewItem *item )
+{
+	QListViewItemIterator it( item );
+
+	// iterator points to item, so make the next item current first
+	for( ++it; it.current(); ++it )
+	{
+		VObjectListViewItem *objectItem = dynamic_cast<VObjectListViewItem *>( it.current() );
+		if( ! objectItem ) continue;
+		
+		if( dynamic_cast<VGroup*>( objectItem->object() ) )
+			updateChildItems( objectItem );
+
+		objectItem->update();
+		objectItem->repaint();
+	}
+}
+
+void 
+VLayersTab::toggleState( VObject *obj, int col )
+{
+	switch( col )
+	{
+		case 1: // toggle visibility
+			if( obj->state() == VObject::hidden_locked )
+				obj->setState( VObject::hidden );
+			else if( obj->state() == VObject::normal_locked )
+				obj->setState( VObject::selected );
+			else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
+				obj->setState( VObject::normal_locked );
+			else if( obj->state() == VObject::hidden )
+				obj->setState( VObject::hidden_locked );
+		break;
+		case 2: // toggle locking
+			if( obj->state() == VObject::hidden_locked )
+				obj->setState( VObject::normal_locked );
+			else if( obj->state() == VObject::normal_locked )
+				obj->setState( VObject::hidden_locked );
+			else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
+				obj->setState( VObject::hidden );
+			else if( obj->state() == VObject::hidden )
+				obj->setState( VObject::selected );
+		break;
+		default: return;
+	}
+
+	if( obj->state() < VObject::selected )
+		m_document->selection()->take( *obj );
+	else
+		m_document->selection()->append( obj );
 }
 
 void
@@ -550,79 +614,34 @@ VLayersTab::itemClicked( QListViewItem* item, const QPoint &, int col )
 		VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( item );
 		if( layerItem )
 		{
-			VLayer *obj = layerItem->layer();
 			m_document->setActiveLayer( layerItem->layer() );
-
+			
 			if( col > 0 )
 			{
-				if( col == 2 ) // set visibility
-				{
-					if( obj->state() == VObject::hidden_locked )
-						obj->setState( VObject::normal_locked );
-					else if( obj->state() == VObject::normal_locked )
-						obj->setState( VObject::hidden_locked );
-					else if( obj->state() == VObject::normal || obj->state() >= VObject::selected)
-						obj->setState( VObject::hidden );
-					else if( obj->state() == VObject::hidden )
-						obj->setState( VObject::selected );
-				}
-				else // set locking
-				{
-					if( obj->state() == VObject::hidden_locked )
-						obj->setState( VObject::hidden );
-					else if( obj->state() == VObject::normal_locked )
-						obj->setState( VObject::selected );
-					else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
-						obj->setState( VObject::normal_locked );
-					else if( obj->state() == VObject::hidden )
-						obj->setState( VObject::hidden_locked );
-				}
-				if( obj->state() < VObject::selected )
-					m_document->selection()->take( *obj );
-				else
-					m_document->selection()->append( obj );
+				toggleState( layerItem->layer(), col );
+
 				layerItem->update();
 				layerItem->repaint();
+
+				updateChildItems( layerItem );
+				
 				m_view->part()->repaintAllViews();
 			}
 		}
 		else
 		{
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
-			VObject *obj = objectItem->object();
 
 			if( col > 0 ) 
 			{
-				if( col == 2 ) // set visibility
-				{
-					if( obj->state() == VObject::hidden_locked )
-						obj->setState( VObject::normal_locked );
-					else if( obj->state() == VObject::normal_locked )
-						obj->setState( VObject::hidden_locked );
-					else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
-						obj->setState( VObject::hidden );
-					else if( obj->state() == VObject::hidden )
-						obj->setState( VObject::selected );
-				}
-				else // set locking
-				{
-					if( obj->state() == VObject::hidden_locked )
-						obj->setState( VObject::hidden );
-					else if( obj->state() == VObject::normal_locked )
-						obj->setState( VObject::selected );
-					else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
-						obj->setState( VObject::normal_locked );
-					else if( obj->state() == VObject::hidden )
-						obj->setState( VObject::hidden_locked );
-				}
+				toggleState( objectItem->object(), col );
 				
-				if( obj->state() < VObject::selected )
-					m_document->selection()->take( *obj );
-				else
-					m_document->selection()->append( obj );
-
 				objectItem->update();
 				objectItem->repaint();
+			
+				if( dynamic_cast<VGroup*>( objectItem->object() ) )
+					updateChildItems( objectItem );
+
 				m_view->part()->repaintAllViews();
 			}
 		}
@@ -644,6 +663,12 @@ VLayersTab::selectionChangedFromList()
 		if( ! objectItem ) continue;
 
 		VObject::VState state = objectItem->object()->state();
+		
+		if( state == VObject::deleted ) 
+		{
+			delete objectItem;
+			continue;
+		}
 
 		if( objectItem->isSelected() && (state != VObject::hidden) && (state != VObject::normal_locked ) 
 		&& (state != VObject::hidden_locked) )
@@ -783,33 +808,61 @@ VLayersTab::deleteItem()
 	VCommand *cmd = 0L;
 	QListViewItemIterator it( m_layersListView );
 
+	QPtrList<QListViewItem> deleteItems;
+	deleteItems.setAutoDelete( false );
+
+	// collect all selected items because they get deselected
+	// when the first item is removed
 	for(; it.current(); ++it )
 	{
 		if( ! it.current()->isSelected() ) continue;
-
-		VLayerListViewItem* layerItem = dynamic_cast< VLayerListViewItem *>( it.current() );
+			deleteItems.append( it.current() );
+	}
+	
+	for( ;deleteItems.first(); )
+	{
+		VLayerListViewItem* layerItem = dynamic_cast< VLayerListViewItem *>( deleteItems.current() );
 		if( layerItem )
 		{
 			VLayer *layer = layerItem->layer();
 			if( layer )
 			{
 				cmd = new VLayerCmd( m_document, i18n( "Delete Layer" ), layer, VLayerCmd::deleteLayer );
-				m_view->part()->addCommand( cmd, true );
+
+				VObjectListIterator itr = layer->objects();
+				// iterate over this layers child objects and remove them from the internal 
+				// object list and the list of the to be deleted items
+				for( ; itr.current(); ++itr )
+				{
+					VObjectListViewItem *objectItem = m_objects.take( itr.current() );
+					deleteItems.remove( objectItem );
+				}
+				
 				delete layerItem;
+
+				m_view->part()->addCommand( cmd );
 			}
 		}
 		else
 		{
-			VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( it.current() );
+			VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( deleteItems.current() );
 			if( item )
 			{
 				cmd = new VDeleteCmd( m_document, item->object() );
-				m_view->part()->addCommand( cmd, true );
+				
 				delete item;
+
+				m_view->part()->addCommand( cmd );
 			}
 		}
+		// remove first item, next item becomes current
+		deleteItems.removeFirst();
 	}
-	if( cmd ) updatePreviews();
+	if( cmd ) 
+	{
+		updatePreviews();
+		m_view->part()->repaintAllViews();
+	}
 } // VLayersTab::deleteItem
 
 void
@@ -822,34 +875,24 @@ VLayersTab::updatePreviews()
 void
 VLayersTab::updateLayers()
 {
+	removeDeletedObjectsFromList();	
+
 	QPtrVector<VLayer> vector;
 	m_document->layers().toVector( &vector );
-	VLayerListViewItem* item;
+	VLayerListViewItem* item = 0L;
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
 		if ( vector[i]->state() != VObject::deleted )
 		{
 			if( !m_layers[ vector[i] ] )
-				m_layers.insert( vector[i], new VLayerListViewItem( m_layersListView, vector[i], m_document ) );
-			item = m_layers[ vector[i] ];
+				item = new VLayerListViewItem( m_layersListView, vector[i], m_document, &m_layers );
+			else 
+				item = m_layers[ vector[i] ];
 
 			item->setOpen( true );
 			item->setKey(i);
-			VObjectListIterator itr = vector[i]->objects();
-			uint objcount = 1;
-			for( ; itr.current();++itr, objcount++ )
-				if( itr.current()->state() != VObject::deleted )
-				{
-					if( !m_objects[ itr.current() ] )
-						m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
 
-					m_objects[ itr.current() ]->setKey( objcount );
-
-					//kdDebug(38000) << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
-
-					if( dynamic_cast<VGroup *>( itr.current() ) )
-						updateObjects( itr.current(),  m_objects[ itr.current() ] );
-				}
+			updateObjects( vector[i], item );
 		}
 	}
 	m_layersListView->sort();
@@ -858,19 +901,91 @@ VLayersTab::updateLayers()
 void
 VLayersTab::updateObjects( VObject *object, QListViewItem *item )
 {
-	uint objcount = 1;
 	VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
-	for( ; itr.current();++itr, objcount++ )
+
+	for( uint objcount = 1; itr.current(); ++itr, objcount++ )
 		if( itr.current()->state() != VObject::deleted )
 		{
-			if( !m_objects[ itr.current() ] )
-				m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
+			VObjectListViewItem *objectItem = m_objects[ itr.current() ];
+			if( ! objectItem )
+			{
+				// object not found -> insert
+				objectItem = new VObjectListViewItem( item, itr.current(), m_document, objcount, &m_objects );
+				objectItem->update();
+			}
+			else if( objectItem->parent() != item )
+			{
+				// object found, but has false parent -> reparent
+				objectItem->parent()->takeItem( objectItem );
+				item->insertItem( objectItem );
+			}
 
-			m_objects[ itr.current() ]->setKey( objcount );
+			objectItem->setKey( objcount );
 
 			if( dynamic_cast<VGroup *>( itr.current() ) )
-				updateObjects( itr.current(), m_objects[ itr.current() ] );
+				updateObjects( itr.current(), objectItem );
 		}
+}
+
+void
+VLayersTab::removeDeletedObjectsFromList()
+{
+	QPtrDictIterator<VObjectListViewItem> it( m_objects );
+
+	// iterate over all object items and delete the following items:
+	// - items representing deleted objects
+	// - items with objects objects that changed parents
+	// BEWARE: when deleting an item, the iterator is automatically incremented
+	for(; it.current(); )
+	{
+		VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem*>( it.current()->parent() );
+		if( layerItem )
+		{
+			VGroup *group = dynamic_cast<VGroup*>( layerItem->layer() );
+			// check if object of item is still child of object of parent item
+			if( group && ! group->objects().contains( it.current()->object() ) )
+			{
+				layerItem->takeItem( it.current() );
+				delete it.current();
+				continue;
+			}
+		}
+		else
+		{
+			VObjectListViewItem *objectItem = dynamic_cast<VObjectListViewItem*>( it.current()->parent() );
+			if( objectItem ) 
+			{
+				VGroup *group = dynamic_cast<VGroup*>( objectItem->object() );
+				// check if object of item is still child of object of parent item
+				if( group && ! group->objects().contains( it.current()->object() ) )
+				{
+					objectItem->takeItem( it.current() );
+					delete it.current();
+					continue;
+				}
+			}
+		}
+
+		if( it.current()->object()->state() == VObject::deleted )
+		{
+			delete it.current();
+			continue;
+		}
+
+		++it;
+	}
+}
+
+
+void 
+VLayersTab::slotCommandExecuted( VCommand* command )
+{
+	// sync listview on changing layers or deleting/undeleting or grouping/ungrouping objects
+	if( dynamic_cast<VLayerCmd*>( command ) 
+	|| dynamic_cast<VDeleteCmd*>( command ) 
+	|| dynamic_cast<VGroupCmd*>( command ) 
+	|| dynamic_cast<VUnGroupCmd*>( command ) )
+		updateLayers();
 }
 
 /*************************************************************************
