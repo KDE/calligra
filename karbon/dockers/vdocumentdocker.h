@@ -178,6 +178,7 @@ class VHistoryGroupItem : public QListViewItem
 		~VHistoryGroupItem();
 
 		void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
+		void paintFocus( QPainter*, const QColorGroup&, const QRect& );
 
 		virtual QString key( int, bool ) const { return m_key; }
 		virtual int rtti() const { return 1001; }
@@ -196,6 +197,7 @@ class VHistoryItem : public QListViewItem
 		VCommand* command() { return m_command; }
 
 		void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
+		void paintFocus( QPainter*, const QColorGroup&, const QRect& );
 
 		virtual QString key( int, bool ) const { return m_key; }
 		virtual int rtti() const { return 1002; }

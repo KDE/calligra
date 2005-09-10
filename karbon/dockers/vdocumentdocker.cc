@@ -834,6 +834,14 @@ VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, in
 	p->drawText( xstart, 0, width - xstart, height(), align | Qt::AlignVCenter, text( column ) );
 } // VHistoryGroupItem::paintCell
 
+void
+VHistoryGroupItem::paintFocus( QPainter*, const QColorGroup&, const QRect& )
+{
+	// Do not paint any focus rectangle
+	// It makes the list and the selected item look messy
+
+} // VHistoryGroupItem::paintFocus
+
 VHistoryItem::VHistoryItem( VCommand* command, QListView* parent, QListViewItem* after )
 		: QListViewItem( parent, after ), m_command( command )
 {
@@ -864,7 +872,7 @@ VHistoryItem::~VHistoryItem()
 void
 VHistoryItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {
-	p->fillRect( 0, 0, width - 1, height() - 1, ( m_command->success() ? cg.base() : cg.base().dark( 140 ) ) );
+	p->fillRect( 0, 0, width, height(), ( m_command->success() ? cg.base() : cg.base().dark( 140 ) ) );
 
 	const QPixmap* pixmap = this->pixmap( column );
 	int xstart;
@@ -880,6 +888,14 @@ VHistoryItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int wid
 	p->setPen( cg.text() );
 	p->drawText( xstart, 0, width - xstart, height(), align | Qt::AlignVCenter, text( column ) );
 } // VHistoryItem::paintCell
+
+void
+VHistoryItem::paintFocus( QPainter*, const QColorGroup&, const QRect& )
+{
+	// Do not paint any focus rectangle
+	// It makes the list and the selected item look messy
+
+} // VHistoryItem::paintFocus
 
 VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 		: QWidget( parent ), m_part( part )
