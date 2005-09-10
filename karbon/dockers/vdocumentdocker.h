@@ -141,8 +141,9 @@ public slots:
 	void updatePreviews();
 	void updateLayers();
 
-	void selectionChanged( QListViewItem* item, const QPoint&, int col );
-	void slotSelectionChanged();
+	void itemClicked( QListViewItem* item, const QPoint&, int col );
+	void selectionChangedFromList();
+	void selectionChangedFromTool();
 	void renameItem( QListViewItem* item, const QPoint&, int col );
 	void addLayer();
 	void raiseItem();
@@ -155,6 +156,7 @@ private slots:
 protected:
 	VLayerListViewItem* listItem( int pos );
 	void updateObjects( VObject *object, QListViewItem *item );
+	void resetSelection();
 
 private:
 	QListView						*m_layersListView;
