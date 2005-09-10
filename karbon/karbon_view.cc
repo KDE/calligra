@@ -118,10 +118,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
 	m_status->setAlignment( AlignLeft | AlignVCenter );
 	m_status->setMinimumWidth( 300 );
-	addStatusBarItem( m_status, 0 );
+	addStatusBarItem( m_status, 1 );
 	m_cursorCoords = new KStatusBarLabel( QString::null, 0, statusBar() );
 	m_cursorCoords->setAlignment( AlignLeft | AlignVCenter );
-	m_cursorCoords->setMinimumWidth( 200 );
+	m_cursorCoords->setMinimumWidth( 50 );
 	addStatusBarItem( m_cursorCoords, 0 );
 	m_smallPreview = new VSmallPreview( this, name );
 	addStatusBarItem( m_smallPreview );
