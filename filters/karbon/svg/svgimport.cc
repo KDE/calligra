@@ -238,6 +238,9 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 	// TODO : percentage?
 	double value = 0;
 	const char *start = unit.latin1();
+	if(!start) {
+		return 0;
+	}
 	const char *end = getNumber( start, value );
 
 	if( uint( end - start ) < unit.length() )
