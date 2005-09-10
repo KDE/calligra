@@ -69,6 +69,7 @@ VSelectTool::VSelectTool( KarbonPart *part, const char* name )
 	: VTool( part, name ), m_state( normal )
 {
 	m_lock = false;
+	m_add = true;
 	m_objects.setAutoDelete( true );
 	m_optionsWidget = new VSelectOptionsWidget( part );
 	registerTool( this );
@@ -114,14 +115,8 @@ VSelectTool::draw()
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( m_state != normal || rect.contains( first() ) || m_activeNode != node_none )
+	if( m_state != normal )
 	{
-		if( m_state == normal )
-		{
-			m_state = ( m_activeNode == node_none ) ? moving : scaling;
-			recalc();
-		}
-
 		VObjectListIterator itr = m_objects;
 		for( ; itr.current(); ++itr )
 		{
@@ -173,12 +168,41 @@ VSelectTool::setCursor() const
 void
 VSelectTool::mouseButtonPress()
 {
+	// we are adding to the selection
+	m_add = true;
+
 	m_current = first();
 
 	m_activeNode = view()->part()->document().selection()->handleNode( first() );
+	KoRect rect = view()->part()->document().selection()->boundingBox();
+
+	if( ! ctrlPressed() ) 
+		if( rect.contains( m_current ) && m_state == normal )
+			m_state = moving;
+		else if( m_activeNode != node_none ) 
+			m_state = scaling;
 
 	recalc();
 
+	// undraw selection bounding box
+	view()->part()->document().selection()->setState( VObject::edit );
+	view()->repaintAll( rect );
+	view()->part()->document().selection()->setState( VObject::selected );
+
+	draw();
+}
+
+void
+VSelectTool::rightMouseButtonPress()
+{
+	// we are removing from the selection
+	m_add = false;
+
+	m_current = first();
+
+	recalc();
+
+	// undraw selection bounding box
 	view()->part()->document().selection()->setState( VObject::edit );
 	view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	view()->part()->document().selection()->setState( VObject::selected );
@@ -199,11 +223,38 @@ VSelectTool::mouseDrag()
 void
 VSelectTool::rightMouseButtonRelease()
 {
-	if( part()->document().selection()->objects().count() > 0 )
+	if( ctrlPressed() )
+	{
+		if( m_state == normal )
+		{
+			KoPoint fp = first();
+			KoPoint lp = last();
+	
+			if( (fabs( lp.x() - fp.x() ) + fabs( lp.y() - fp.y() ) ) < 3.0 )
+			{
+				// AK - should take the middle point here
+				fp = lp - KoPoint( 8.0, 8.0 );
+				lp = lp + KoPoint( 8.0, 8.0 );
+			}
+	
+			KoRect selRect = KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize();
+			
+			// unselect all object intersecting the selection rectangle
+			view()->part()->document().selection()->take( selRect.normalize() );
+			view()->part()->repaintAllViews( selRect );
+			view()->selectionChanged();
+		}
+	
+		updateStatusBar();
+	}
+	else if( part()->document().selection()->objects().count() > 0 )
 	{
 		view()->showSelectionPopupMenu( QCursor::pos() );
-		m_state = normal;
 	}
+
+	m_state = normal;
+	// switch back to add-to-selection-mode
+	m_add = true;
 }
 
 void
@@ -221,17 +272,19 @@ VSelectTool::mouseButtonRelease()
 			lp = lp + KoPoint( 8.0, 8.0 );
 		}
 
-		view()->part()->document().selection()->clear();
-		view()->part()->document().selection()->append(
-			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
+		KoRect selRect = KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize();
 
+		if( ! ctrlPressed() )
+			view()->part()->document().selection()->clear();
+		view()->part()->document().selection()->append( selRect );
+		view()->part()->repaintAllViews( selRect );
 		view()->selectionChanged();
-		view()->part()->repaintAllViews( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 	}
 	else
 		m_state = normal;
 
 	updateStatusBar();
+	m_add = true;
 }
 
 void
@@ -242,12 +295,16 @@ VSelectTool::mouseDragRelease()
 		// Y mirroring
 		KoPoint fp = first();
 		KoPoint lp = last();
-		view()->part()->document().selection()->clear();
-		view()->part()->document().selection()->append(
-			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
-
+		if( ! ctrlPressed() )
+			view()->part()->document().selection()->clear();
+		
+		KoRect selRect = KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize();
+		if( m_add )
+			view()->part()->document().selection()->append( selRect );
+		else
+			view()->part()->document().selection()->take( selRect );
+		view()->part()->repaintAllViews( selRect );
 		view()->selectionChanged();
-		view()->part()->repaintAllViews( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 	}
 	else if( m_state == moving )
 	{
@@ -320,19 +377,19 @@ VSelectTool::updateStatusBar() const
 }
 
 void
-VSelectTool::mouseDragShiftPressed()
+VSelectTool::mouseDragCtrlPressed()
 {
 	m_lock = true;
 }
 
 void
-VSelectTool::mouseDragShiftReleased()
+VSelectTool::mouseDragCtrlReleased()
 {
 	m_lock = false;
 }
 
 void
-VSelectTool::mouseDragCtrlPressed()
+VSelectTool::mouseDragShiftPressed()
 {
 	draw();
 
@@ -342,7 +399,7 @@ VSelectTool::mouseDragCtrlPressed()
 }
 
 void
-VSelectTool::mouseDragCtrlReleased()
+VSelectTool::mouseDragShiftReleased()
 {
 	draw();
 
@@ -440,7 +497,7 @@ VSelectTool::recalc()
 				m_s2 = 1;
 			}
 
-			if( ctrlPressed() )
+			if( shiftPressed() )
 				m_s1 = m_s2 = kMax( m_s1, m_s2 );
 			cmd = new VScaleCmd( 0L, m_sp, m_s1, m_s2 );
 		}

@@ -104,6 +104,12 @@ public:
 	void take( VObject& object );
 
 	/**
+	 * Removes all objects ( selectObjects == true ) or all nodes
+	 * ( selectObjects == false ) within rect from the selection.
+	 */
+	bool take( const KoRect& rect, bool selectObjects = true, bool exclusive = true );
+
+	/**
 	 * Removes the references to all objects, not the objects themselves.
 	 */
 	void clear();

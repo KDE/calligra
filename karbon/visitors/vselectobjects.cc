@@ -107,7 +107,17 @@ VSelectObjects::visitVPath( VPath& composite )
 
 	if( selected )
 	{
-		m_selection.append( &composite );
+		if( m_select )
+		{
+			composite.setState( VObject::selected );
+			if( ! m_selection.containsRef( &composite ) )
+				m_selection.append( &composite );
+		}
+		else
+		{
+			composite.setState( VObject::normal );
+			m_selection.remove( &composite );
+		}
 
 		setSuccess();
 	}
@@ -127,8 +137,9 @@ VSelectObjects::visitVObject( VObject& object )
 		{
 			if( m_rect.intersects( object.boundingBox() ) )
 			{
-				//object.setState( VObject::selected );
-				m_selection.append( &object );
+				object.setState( VObject::selected );
+				if( ! m_selection.containsRef( &object ) )
+					m_selection.append( &object );
 				setSuccess();
 			}
 		}
@@ -137,7 +148,7 @@ VSelectObjects::visitVObject( VObject& object )
 			if( m_rect.intersects( object.boundingBox() ) )
 			{
 				object.setState( VObject::normal );
-				m_selection.clear();
+				m_selection.remove( &object );
 				setSuccess();
 			}
 		}
@@ -147,12 +158,14 @@ VSelectObjects::visitVObject( VObject& object )
 		if( m_select )
 		{
 			object.setState( VObject::selected );
-			m_selection.append( &object );
+			if( ! m_selection.containsRef( &object ) )
+				m_selection.append( &object );
 			setSuccess();
 		}
 		else
 		{
 			object.setState( VObject::normal );
+			m_selection.remove( &object );
 			setSuccess();
 		}
 	}
