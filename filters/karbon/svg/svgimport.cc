@@ -675,6 +675,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			setupTransform( b );
 			parseStyle( group, b );
 			parseGroup( group, b );
+			// handle id
+			if( !b.attribute("id").isEmpty() )
+				group->setName( b.attribute("id") );
 			if( grp )
 				grp->append( group );
 			else
@@ -851,7 +854,7 @@ VObject* SvgImport::createObject( const QDomElement &b )
 		QString fname = b.attribute("xlink:href");
 		return new VImage( 0L, fname );
 	}
-
+	
 	return 0L;
 }
 
