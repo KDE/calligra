@@ -122,11 +122,15 @@ public:
 public slots:
 	void valueChanged( int );
 	void accept();
+	void cancel();
 	void textChanged( const QString& );
 	void editBasePath();
 	void convertToShapes();
+	void initialize( VObject &text );
 
 protected:
+	void moveEvent( QMoveEvent * );
+
 	QTabWidget* m_tabWidget;
 	KFontCombo* m_fontCombo;
 	QCheckBox* m_boldCheck;
@@ -197,6 +201,7 @@ private:
 		{
 			return m_executed;
 		}
+		virtual bool changesSelection() const { return true; }
 
 	private:
 		class VTextModifPrivate
