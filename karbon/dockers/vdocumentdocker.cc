@@ -564,22 +564,25 @@ VLayersTab::selectionChangedFromTool()
 	for( ; itr.current(); ++itr )
 		if( itr.current()->state() != VObject::deleted )
 		{
-			VObjectListViewItem *item = m_objects[ itr.current() ];
+			VObject *obj = itr.current();
+
+			VObjectListViewItem *item = m_objects[ obj ];
 			if( ! item ) 
 			{
-				VLayerListViewItem *layerItem = m_layers[ itr.current()->parent() ];
+				VLayerListViewItem *layerItem = m_layers[ obj->parent() ];
 				if( layerItem )
 					updateObjects( layerItem->layer(), layerItem );
 				else
 				{
-					VObjectListViewItem *objectItem = m_objects[ itr.current()->parent() ];
+					VObjectListViewItem *objectItem = m_objects[ obj->parent() ];
 					if( objectItem )
 						updateObjects( objectItem->object(), objectItem );
 					else
 						continue;
 				}
-				item = m_objects[ itr.current() ];
+				item = m_objects[ obj ];
 			}
+			if( ! item ) continue;
 
 			item->setSelected( true );
 			item->update();
@@ -1018,6 +1021,11 @@ VLayersTab::removeDeletedObjectsFromList()
 					delete it.current();
 					continue;
 				}
+			}
+			else
+			{
+				delete it.current();
+				continue;
 			}
 		}
 
