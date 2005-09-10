@@ -357,7 +357,11 @@ VGroup::append( VObject* object )
 void
 VGroup::insertInfrontOf( VObject* newObject, VObject* oldObject )
 {
+	newObject->setParent( this );
+
 	m_objects.insert( m_objects.find( oldObject ), newObject );
+
+	invalidateBoundingBox();
 }
 
 void
