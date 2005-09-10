@@ -65,8 +65,8 @@ protected:
 	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
 	void parseColor( VColor &, const QString & );
 	QColor parseColor( const QString & );
-	double toPercentage( const QString & );
-	double fromPercentage( const QString & );
+	double toPercentage( QString );
+	double fromPercentage( QString );
 	void setupTransform( const QDomElement & );
 	void addGraphicContext();
 	QDomDocument inpdoc;
