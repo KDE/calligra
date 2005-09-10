@@ -678,6 +678,7 @@ VLayersTab::selectionChangedFromList()
 		}
 	}
 	
+	m_view->selectionChanged();
 	m_view->part()->repaintAllViews();
 }
 
