@@ -242,7 +242,6 @@ public:
 
     KoRect rotateRectObject() const;
     void rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler);
-    void rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler);
 
     virtual void removeFromObjList()
         { inObjList = false; }

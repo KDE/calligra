@@ -1166,22 +1166,6 @@ void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
     paint->setWorldMatrix( m, true );
 }
 
-void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler)
-{
-    KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
-    rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
-    double sx = 0;
-    double sy = 0;
-    getShadowCoords( sx, sy );
-
-    QWMatrix m;
-    m.translate( _zoomHandler->zoomItX(ext.width() / 2.0), _zoomHandler->zoomItY(ext.height() / 2.0) );
-    m.rotate( angle );
-    m.translate( _zoomHandler->zoomItX(rr.left() + sx), _zoomHandler->zoomItY(rr.top() + sy) );
-
-    paint->setWorldMatrix( m, true );
-}
-
 bool KPObject::contains( const KoPoint &_point ) const
 {
     if ( angle == 0.0 )
@@ -1374,7 +1358,12 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
-    KoRect r = rotateRectObject();
+    KoRect r = KoRect( orig.x(), orig.y(), ext.width(), ext.height() );
+    if ( angle != 0.0 )
+    {
+        r = rotateRectObject();
+    }
+
     int x = _zoomHandler->zoomItX( r.left() - orig.x());
     int y = _zoomHandler->zoomItY( r.top() - orig.y());
     int zX6 = /*_zoomHandler->zoomItX(*/ 6 ;
@@ -1867,21 +1856,18 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         QBrush brush;
         brush.setColor( shadowColor );
 
-        if ( angle == 0 )
-        {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy );
+        double sx = ox;
+        double sy = oy;
+        getShadowCoords( sx, sy );
 
-            _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
-            paint( _painter, _zoomHandler, pageNum, true, drawContour );
-        }
-        else
+        _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
+
+        if ( angle != 0 )
         {
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter, _zoomHandler);
-            paint( _painter, _zoomHandler, pageNum, true, drawContour );
+            rotateObject( _painter, _zoomHandler );
         }
+
+        paint( _painter, _zoomHandler, pageNum, true, drawContour );
 
         pen = tmpPen;
         _painter->restore();
@@ -2322,21 +2308,18 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         shadowBrush.setColor( shadowColor );
         m_brush.setBrush( shadowBrush );
 
-        if ( angle == 0 )
-        {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy );
+        double sx = ox;
+        double sy = oy;
+        getShadowCoords( sx, sy );
 
-            _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
-            paint( _painter, _zoomHandler, pageNum, true, drawContour );
-        }
-        else
+        _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
+
+        if ( angle != 0 )
         {
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter, _zoomHandler);
-            paint( _painter, _zoomHandler, pageNum, true, drawContour );
+            rotateObject( _painter, _zoomHandler );
         }
+
+        paint( _painter, _zoomHandler, pageNum, true, drawContour );
 
         pen = tmpPen;
         m_brush.setBrush( tmpBrush );
