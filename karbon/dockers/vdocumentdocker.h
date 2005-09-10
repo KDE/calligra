@@ -162,6 +162,7 @@ protected:
 	VLayerListViewItem* listItem( int pos );
 	void updateObjects( VObject *object, QListViewItem *item );
 	void resetSelection();
+	void selectActiveLayer();
 
 private:
 	QListView						*m_layersListView;
