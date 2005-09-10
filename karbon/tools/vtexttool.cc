@@ -562,6 +562,7 @@ VTextTool::VTextTool( KarbonPart *part, const char* name )
 VTextTool::~VTextTool()
 {
 	delete m_optionsWidget;
+	delete m_editedText;
 }
 
 QString VTextTool::contextHelp()
@@ -634,7 +635,13 @@ VTextTool::mouseButtonPress()
 void
 VTextTool::mouseButtonRelease()
 {
-	cancel();
+	// use a default horizontal path when just clicking
+	VSubpath path( 0L );
+	path.moveTo( first() );
+	path.lineTo( KoPoint( first().x()+10, first().y() ) );
+
+	if( createText( path ) )
+		m_optionsWidget->show();
 }
 
 void
@@ -659,21 +666,37 @@ VTextTool::mouseDragRelease()
 		m_editedText = 0L;
 	}
 
+	// use dragged path to create text along
 	VSubpath path( 0L );
 	path.moveTo( first() );
 	path.lineTo( last() );
+
+	if( createText( path ) )
+		m_optionsWidget->show();
+}
+
+bool
+VTextTool::createText( VSubpath &path )
+{
+	// no original text is used
 	m_text = 0L;
+	delete m_editedText;
 
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
+	
+	if( ! m_editedText ) 
+		return false;
+
 	m_editedText->setState( VObject::edit );
 
 #ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
 #endif
 
+	// yes, we are creating a new text object
 	m_creating = true;
 
-	m_optionsWidget->show();
+	return true;
 }
 
 void
@@ -756,6 +779,9 @@ VTextTool::cancel()
 	}
 	else
 		drawPathCreation();
+
+	delete m_editedText;
+	m_editedText = 0L;
 }
 
 void
@@ -796,37 +822,15 @@ VTextTool::visitVPath( VPath& composite )
 	if( composite.paths().count() == 0 )
 		return;
 
-	m_text = 0L;
-	delete m_editedText;
-
-	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
-
-	m_editedText->setState( VObject::edit );
-
-#ifdef HAVE_KARBONTEXT
-	m_editedText->traceText();
-#endif
-
-	m_creating = true;
-
-	drawEditedText();
+	if( createText( *composite.paths().getFirst() ) )
+		drawEditedText();
 }
 
 void
 VTextTool::visitVSubpath( VSubpath& path )
 {
-	m_text = 0L;
-	delete m_editedText;
-	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
-	m_editedText->setState( VObject::edit );
-
-#ifdef HAVE_KARBONTEXT
-	m_editedText->traceText();
-#endif
-
-	m_creating = true;
-
-	drawEditedText();
+	if( createText( path ) )
+		drawEditedText();
 }
 
 void
