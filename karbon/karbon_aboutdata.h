@@ -33,6 +33,11 @@ KAboutData * newKarbonAboutData()
 		0,
 		"benoit.vautrin@free.fr",
 		0 );
+	aboutData->addCredit(
+		"Inge Wallin",
+		I18N_NOOP( "Bug fixes" ),
+		"inge@lysator.liu.se",
+		0 );
 	// TODO: add the names of some helpful souls
         return aboutData;
 }
