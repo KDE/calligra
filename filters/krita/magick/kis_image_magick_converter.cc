@@ -73,7 +73,6 @@ namespace {
      */
     KisAbstractColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
 
-
         if (type == GRAYColorspace) {
             if (imageDepth == 8)
                 return KisColorSpaceRegistry::instance() -> get("GRAYA");
@@ -325,10 +324,21 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         unsigned long imageDepth = image->depth;
         kdDebug() << "Image depth: " << imageDepth << "\n";
 
+        KisAbstractColorSpace * cs = 0;
+        ColorspaceType colorspaceType;
+        
         // Determine image type -- rgb, grayscale or cmyk
-        ColorspaceType colorspaceType = image->colorspace;
-        kdDebug() << "Colorspacetype: " << image->colorspace << "\n";
-        KisAbstractColorSpace * cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
+        if (GetImageType(image, &ei) == GrayscaleType || GetImageType(image, &ei) == GrayscaleMatteType) {
+            if (imageDepth == 8)
+                cs = KisColorSpaceRegistry::instance() -> get("GRAYA");
+            else if ( imageDepth == 16 )
+                cs = KisColorSpaceRegistry::instance() -> get( "GRAYA16" );
+            colorspaceType = GRAYColorspace;
+        }
+        else {
+            colorspaceType = image->colorspace;
+            cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
+        }
 
         if (cs == 0) {
             kdDebug() << "Krita does not suport colorspace " << image -> colorspace << "\n";
@@ -443,8 +453,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                 }
                 else if (colorspaceType== RGBColorspace ||
                      colorspaceType == sRGBColorspace ||
-                     colorspaceType == TransparentColorspace ||
-                     colorspaceType == GRAYColorspace)
+                     colorspaceType == TransparentColorspace)
                 {
                     if (imageDepth == 8) {
                         while(! hiter.isDone())
@@ -468,6 +477,32 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                             *(ptr++) = ScaleQuantumToShort(pp->blue);
                             *(ptr++) = ScaleQuantumToShort(pp->green);
                             *(ptr++) = ScaleQuantumToShort(pp->red);
+                            *(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
+
+                            pp++;
+                            ++hiter;
+                        }
+                    }
+                }
+                else if ( colorspaceType == GRAYColorspace) {
+                    if (imageDepth == 8) {
+                        while(! hiter.isDone())
+                        {
+                            Q_UINT8 *ptr= hiter.rawData();
+                            // XXX: not colorstrategy and bitdepth independent
+                            *(ptr++) = Downscale(pp->blue);
+                            *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
+
+                            pp++;
+                            ++hiter;
+                        }
+                    }
+                    else if (imageDepth == 16) {
+                        while(! hiter.isDone())
+                        {
+                            Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+                            // XXX: not colorstrategy independent
+                            *(ptr++) = ScaleQuantumToShort(pp->blue);
                             *(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
 
                             pp++;
@@ -637,7 +672,8 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         }
 
         KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
-
+        SetImageType(image, TrueColorMatteType);
+        
         if (image->colorspace== CMYKColorspace) {
 
             IndexPacket * indexes = GetIndexes(image);
@@ -710,6 +746,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         }
         else if (image->colorspace == GRAYColorspace) 
         {
+            SetImageType(image, GrayscaleMatteType);
             if (layerBytesPerChannel == 2) {
                 while (!it.isDone()) {
     
