@@ -1,4 +1,59 @@
 Krita
 
-* Fix Bug 109913: Crashes after drawing box, making selection then filling selection with gradient
-* Fix Bug 110187: cancel in 'new image' dialog should quit krita
+* Fix Bug 109913: Crashes after drawing box, making selection then filling 
+  selection with gradient. Also fixes bugs: 111484, 111629, 112029.
+* Fix Bug 110187: cancel in 'new image' dialog should quit krita.
+
+Karbon
+
+* Fixed loading and saving of text basepath and font properties
+* Do not trigger text tracing/repaining if we are only initializing the options dialog
+* Only repaint inside objects bounding boxes
+* When dragging a path to place text along, pressing shift makes the path "jump" in 45 degree steps
+* Create text with horizontal path when just clicking with texttool
+* Always initialize with selected object when showing the tool dialog
+* Only show tool dialog when an object is selected
+* Made texttool selection changing (triggers views selection changed signal)
+* Always repaint bounding rect of edited text when changed
+* Set all shadow options properly in tool dialog
+* Cancel tool when pressing cancel button
+* When inserting a new object in front of another, set the new objects parent and invalidate the groups bounding box
+* When grouping objects, remove all objects from their corresponding parent
+* Enabling the group/ungroup menu item when selecting objects from layer list view
+* The polyline tool was broken. When you clicked to place a point (after the first one), the point was always placed with x=0
+* Fix for karbon crashing on clicking the pattern button in the toolbox
+* Make sure, items representing an object without a proper parent are removed as well
+* Improved selection tool which now has the following abilities:
+  - left mouse click to select single object
+  - ctrl + left mouse click to add to current selection
+  - ctrl + right mouse click to remove from current selection
+  - ctrl + left mouse drag to add objects within selection rect to current selection
+  - ctrl + right mouse drag to remove objects within selection rect from current selection
+  - presssing shift while scaling makes scaling keeping the aspect ratio (adjusted to shape tool behaviour)
+* Fix a drawing bug when selecting objects
+* Object/layer listview is now better synced to the documents object hierarchy when deleting or grouping/ungrouping objects
+* Enabled multi-selection within the layer listview
+* Object/layer listview items get automatically selected when selecting their corresponding object with the selection tool
+* Visiblity and locking states are now set correctly from the layer listview
+* When embeded zoom the drawing so that it's completely visible
+* Make this statusbar text label stretchable, so the rest of the labels won't jump around
+* Filter SVG: Added reading of group names
+* Filter SVG: Fix percentage loading error
+* Filter SVG: Don't lock up on svg document loading
+* Text object names are not loaded (#111269)
+* Text stroke isn't loaded (#111268)
+* Usability: Layers open themself -> only open layer list items when inserting them into list (#111206)
+* Usability: Copy/Paste over layers is not consistent (#111203)
+* Usability: Current layer looses selection (#111201)
+    - always select layer list item corresponding to active layer
+    - delete layer list items when undoing VLayerCommand
+    - do not allow to delete last layer (see also #111210)
+* Layer deletion doesn't get saved (#111148)
+* Crash when changing the color of more than one element (#111147)
+* Export only exports the first layer (#111144)
+* SVG import fails to recognise the svg use tag (#108245)
+* Karbon svg export minor improvements (#108243)
+* Pretty print SVG export please, indentation using spaces (#108126)
+* KoUnitDoubleSpinBox has a design flaw (#106011)
+* Karbon crashes when using text-tool (#51663)
+
