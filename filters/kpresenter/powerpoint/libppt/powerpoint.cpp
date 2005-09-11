@@ -262,7 +262,7 @@ Record* Record::create( unsigned type )
     record = new ViewInfoAtom();     
     
   return record;
-};
+}
 
 void Record::setParent( Record* parent )
 {

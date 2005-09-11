@@ -415,7 +415,7 @@ bool StarWriterImport::parseTable(QByteArray n)
 
 */
     return true;
-};
+}
 
 bool StarWriterImport::parseGraphics(QByteArray n)
 {
