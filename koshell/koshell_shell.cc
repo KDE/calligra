@@ -310,7 +310,7 @@ void KoShellWindow::slotKSLoadCanceled( const QString & errMsg )
 void KoShellWindow::saveAll()
 {
   KoView *currentView = (*m_activePage).m_pView;
-  for (QValueList<Page>::iterator it=m_lstPages.begin(); it != m_lstPages.end(); it++)
+  for (QValueList<Page>::iterator it=m_lstPages.begin(); it != m_lstPages.end(); ++it)
   {
     if ( (*it).m_pDoc->isModified() )
     {

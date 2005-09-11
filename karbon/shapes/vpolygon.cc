@@ -51,7 +51,8 @@ VPolygon::init()
 	points.remove( '\r' );
 	points.remove( '\n' );
 	QStringList pointList = QStringList::split( ' ', points );
-	for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
+	QStringList::Iterator end(pointList.end());
+	for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
 	{
 		if( bFirst )
 		{

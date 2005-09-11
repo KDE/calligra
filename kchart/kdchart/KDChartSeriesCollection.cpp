@@ -141,7 +141,7 @@ double KDChartSeriesCollection::maxValue( int coordinate ) const
 #else
     QArray<KDChartBaseSeries *>::ConstIterator i;
 #endif
-    for ( i = (*this).begin(); i != (*this).end(); i ++ )
+    for ( i = (*this).begin(); i != (*this).end(); ++i )
     {
         double temp = (*i)->maxValue(coordinate, ok);
         if ( ok && (first_max || temp > result) )
@@ -172,7 +172,7 @@ double KDChartSeriesCollection::minValue( int coordinate ) const
 #else
     QArray<KDChartBaseSeries *>::ConstIterator i;
 #endif
-    for ( i = (*this).begin(); !ok && i != (*this).end(); i ++ )
+    for ( i = (*this).begin(); !ok && i != (*this).end(); ++i )
         result = (*i)->minValue(coordinate, ok);
 
     if ( ok )
@@ -195,7 +195,7 @@ unsigned int KDChartSeriesCollection::indexOf( KDChartBaseSeries *series )
 #else
     QArray<KDChartBaseSeries *>::ConstIterator i;
 #endif
-    for ( i = (*this).begin(); i != (*this).end(); i ++, index ++ )
+    for ( i = (*this).begin(); i != (*this).end(); ++i, index ++ )
         if ( *i == series )
             break;
 

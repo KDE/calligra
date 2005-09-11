@@ -365,7 +365,7 @@ void KugarTemplate::removeSection( Band *section,
         pageHeader = 0;
     if ( section == pageFooter )
         pageFooter = 0;
-    for ( std::map<int, DetailBand>::iterator i = details.begin(); i != details.end(); i++ )
+    for ( std::map<int, DetailBand>::iterator i = details.begin(); i != details.end(); ++i )
     {
         if ( i->second.second == section )
         {

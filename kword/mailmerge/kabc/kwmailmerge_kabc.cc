@@ -155,7 +155,7 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
             counter++;
         }
 
-        for ( _iterator = _addressBook->begin(); _iterator != _addressBook->end(); _iterator++ )
+        for ( _iterator = _addressBook->begin(); _iterator != _addressBook->end(); ++_iterator )
         {
 
             if( _iterator->uid() == *_UIDIterator )

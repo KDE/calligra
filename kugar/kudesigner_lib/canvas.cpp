@@ -191,7 +191,7 @@ bool Canvas::loadXML( const QDomNode &report )
     }
     templ->arrangeSections( FALSE );
     QCanvasItemList l = allItems();
-    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); it++ )
+    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {
         ( *it ) ->show();
     }
