@@ -669,7 +669,7 @@ void KChartView::importData()
 						    0,
 						    i18n("Import Data"));
     kdDebug(35001) << "Filename = <" << filename << ">" << endl;
-    if (filename == "")
+    if (filename.isEmpty())
       return;
 
     // Check to see if we can read the file.
