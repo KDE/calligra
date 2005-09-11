@@ -18,7 +18,7 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qprogressdialog.h>
-
+#include <koffice_export.h>
 #include "mreportengine.h"
 #include "mpagecollection.h"
 #include "mpagedisplay.h"
@@ -37,7 +37,7 @@ extern QApplication *mAppRef;
 namespace Kugar
 {
 
-class MReportViewer : public QWidget
+class KUGAR_EXPORT MReportViewer : public QWidget
 {
     Q_OBJECT
 
