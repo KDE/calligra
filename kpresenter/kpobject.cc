@@ -1111,6 +1111,38 @@ KoRect KPObject::getRealRect() const {
     return KoRect( getRealOrig(), getRealSize() );
 }
 
+KoRect KPObject::getRepaintRect() const
+{
+    KoRect rect( getRealOrig(), getRealSize() );
+    
+    if ( shadowDirection == SD_LEFT || 
+         shadowDirection == SD_LEFT_UP || 
+         shadowDirection == SD_LEFT_BOTTOM )
+    {
+        rect.setLeft( rect.left() - shadowDistance );
+    }
+    if ( shadowDirection == SD_UP || 
+         shadowDirection == SD_LEFT_UP || 
+         shadowDirection == SD_RIGHT_UP )
+    {
+        rect.setTop( rect.top() - shadowDistance );
+    }
+    if ( shadowDirection == SD_RIGHT || 
+         shadowDirection == SD_RIGHT_UP || 
+         shadowDirection == SD_RIGHT_BOTTOM )
+    {
+        rect.setRight( rect.right() + shadowDistance );
+    }
+    if ( shadowDirection == SD_BOTTOM || 
+         shadowDirection == SD_LEFT_BOTTOM || 
+         shadowDirection == SD_RIGHT_BOTTOM )
+    {
+        rect.setBottom( rect.bottom() + shadowDistance );
+    }
+
+    return rect;
+}
+
 void KPObject::flip( bool /*horizontal*/ ) {
     // flip the angle
     if ( angle ) {

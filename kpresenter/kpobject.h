@@ -187,6 +187,12 @@ public:
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;
     KoRect getRealRect() const;
+    /**
+     * @brief Get the rect which has to be repainted
+     *
+     * This also contains the shadow. 
+     */
+    KoRect getRepaintRect() const;
 
     virtual Effect getEffect() const
         { return effect; }
