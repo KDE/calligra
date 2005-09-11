@@ -85,6 +85,7 @@ class KPrFindReplace;
 class KPrCanvas;
 class KoFontDia;
 class KoParagDia;
+class KPObject;
 class KPPixmapObject;
 class KPresenterDoc;
 class KPrPage;
@@ -493,7 +494,15 @@ public:
     QScrollBar *getHScrollBar() const { return horz; }
     QScrollBar *getVScrollBar() const { return vert; }
 
-    void makeRectVisible( QRect _rect );
+    /**
+     * @brief Show the rect where object lies
+     *
+     * It will move the screen to the top right corner of object 
+     * when it is not allready totaly visible on the screen.
+     *
+     * @param object which should be shown
+     */
+    void showObjectRect( const KPObject * object );
 
     PieType getPieType() const { return pieType; }
     int getPieAngle() const { return pieAngle; }

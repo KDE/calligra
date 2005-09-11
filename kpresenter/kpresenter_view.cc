@@ -3770,10 +3770,27 @@ void KPresenterView::refreshPageButton()
 
 }
 
-void KPresenterView::makeRectVisible( QRect _rect )
+void KPresenterView::showObjectRect( const KPObject * object )
 {
-    horz->setValue( _rect.x() );
-    vert->setValue( _rect.y() );
+    QRect r = zoomHandler()->zoomRect( object->getBoundingRect() );
+    if ( ! QRect( getCanvas()->diffx(), 
+                  getCanvas()->diffy(), 
+                  getCanvas()->width(), 
+                  getCanvas()->height() ).contains( r ) )
+    {
+        int x = r.left() - 20;
+        int y = r.top() - 20;
+        if ( x < 0 )
+        {
+            x = 0;
+        }
+        if ( y < 0 )
+        {
+            y = 0;
+        }
+        horz->setValue( x );
+        vert->setValue( y );
+    }
 }
 
 void KPresenterView::setTool( ToolEditMode toolEditMode )

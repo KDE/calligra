@@ -4179,9 +4179,7 @@ void KPrCanvas::selectNext()
             objectList().at( 0 )->setSelected( true );
         }
     }
-    QRect r = m_view->zoomHandler()->zoomRect( m_activePage->getSelectedObj()->getBoundingRect() );
-    if ( !QRect( diffx(), diffy(), width(), height() ).contains( r ) )
-        m_view->makeRectVisible( r );
+    m_view->showObjectRect( m_activePage->getSelectedObj() );
     _repaint( false );
 }
 
@@ -4200,7 +4198,7 @@ void KPrCanvas::selectPrev()
             objectList().at( objectList().count() - 1 )->setSelected( true );
         }
     }
-    m_view->makeRectVisible( m_view->zoomHandler()->zoomRect(m_activePage->getSelectedObj()->getBoundingRect()) );
+    m_view->showObjectRect( m_activePage->getSelectedObj() );
     _repaint( false );
 }
 
