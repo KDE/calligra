@@ -32,8 +32,6 @@
 
 namespace Kross { namespace KexiDB {
 
-    class KexiDBDriverManager;
-
     /**
      * Class to handle \a ::KexiDB::Driver instances. Such
      * drivers are managed by the \a KexiDBDriverManager.
@@ -45,12 +43,10 @@ namespace Kross { namespace KexiDB {
             /**
              * Constructor.
              *
-             * \param drivermanager The \a KexiDBDriverManager
-             *        this driver belongs too.
              * \param driver The \a ::KexiDB::Driver instance
              *        this driver wraps.
              */
-            KexiDBDriver(KexiDBDriverManager* drivermanager, ::KexiDB::Driver* driver);
+            KexiDBDriver(::KexiDB::Driver* driver);
 
             /**
              * Destructor.

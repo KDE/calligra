@@ -30,8 +30,8 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBDriver::KexiDBDriver(KexiDBDriverManager* drivermanager, ::KexiDB::Driver* driver)
-    : Kross::Api::Class<KexiDBDriver>("KexiDBDriver", drivermanager)
+KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
+    : Kross::Api::Class<KexiDBDriver>("KexiDBDriver", KexiDBDriverManager::self())
     , m_driver(driver)
 {
     addFunction("versionMajor", &KexiDBDriver::versionMajor,
@@ -109,7 +109,7 @@ Kross::Api::Object::Ptr KexiDBDriver::createConnection(Kross::Api::List::Ptr arg
     QGuardedPtr< ::KexiDB::Connection > connection = driver()->createConnection( *(data->getConnectionData()) );
     if(! connection)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("Failed to create connection.") );
-    return new KexiDBConnection(this, connection, data);
+    return new KexiDBConnection(connection, this, data);
 }
 
 Kross::Api::Object::Ptr KexiDBDriver::connectionList(Kross::Api::List::Ptr)
@@ -118,7 +118,7 @@ Kross::Api::Object::Ptr KexiDBDriver::connectionList(Kross::Api::List::Ptr)
     QPtrList< ::KexiDB::Connection > connectionlist = driver()->connectionsList();
     ::KexiDB::Connection* connection;
     for(connection = connectionlist.first(); connection; connection = connectionlist.next())
-        list.append( new KexiDBConnection(this, connection) );
+        list.append( new KexiDBConnection(connection, this) );
     return new Kross::Api::List(list,
            "Kross::KexiDB::Driver::connectionList::List");
 }

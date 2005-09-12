@@ -152,12 +152,6 @@ class KEXICORE_EXPORT KexiScriptManager : public QObject
         virtual ~KexiScriptManager();
 
         /**
-         * \return the \a KexiMainWindow instance used to create
-         *        this KexiScriptManager.
-         */
-        KexiMainWindow* getKexiMainWindow();
-
-        /**
          * \return true if there exists already a
          * \a KexiScriptContainer instance defined with \p name .
          */

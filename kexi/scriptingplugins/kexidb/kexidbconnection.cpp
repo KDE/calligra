@@ -19,6 +19,7 @@
 
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
+#include "kexidbdrivermanager.h"
 #include "kexidbdriver.h"
 #include "kexidbcursor.h"
 #include "kexidbfieldlist.h"
@@ -34,10 +35,10 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBConnection::KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* connection, KexiDBConnectionData* connectiondata)
-    : Kross::Api::Class<KexiDBConnection>("KexiDBConnection", driver)
+KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver, KexiDBConnectionData* connectiondata)
+    : Kross::Api::Class<KexiDBConnection>("KexiDBConnection", driver ? driver : new KexiDBDriver(connection->driver()))
     , m_connection(connection)
-    , m_connectiondata(connectiondata)
+    , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(connection->data()))
 {
     addFunction("data", &KexiDBConnection::data,
         Kross::Api::ArgumentList(),
@@ -248,8 +249,6 @@ const QString KexiDBConnection::getDescription() const
 
 Kross::Api::Object::Ptr KexiDBConnection::data(Kross::Api::List::Ptr)
 {
-    if(! m_connectiondata) // caching
-        m_connectiondata = new KexiDBConnectionData( connection()->data() );
     return m_connectiondata;
 }
 

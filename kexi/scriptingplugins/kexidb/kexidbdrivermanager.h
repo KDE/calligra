@@ -40,7 +40,7 @@ namespace Kross { namespace KexiDB {
      */
     class KexiDBDriverManager : public Kross::Api::Class<KexiDBDriverManager>
     {
-        public:
+        protected:
 
             /**
              * Constructor.
@@ -51,6 +51,19 @@ namespace Kross { namespace KexiDB {
              * Destructor.
              */
             virtual ~KexiDBDriverManager();
+
+        public:
+
+            /**
+             * \return the \a KexiDBDriverManager singelton instance.
+             */
+            static KexiDBDriverManager* self()
+            {
+                static KexiDBDriverManager* manager = 0;
+                if(! manager)
+                    manager = new KexiDBDriverManager();
+                return manager;
+            }
 
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;

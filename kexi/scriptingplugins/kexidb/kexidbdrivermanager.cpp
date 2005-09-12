@@ -107,7 +107,7 @@ Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername)) );
     if(driver->error())
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg())) );
-    return new KexiDBDriver(this, driver);
+    return new KexiDBDriver(driver);
 }
 
 Kross::Api::Object::Ptr KexiDBDriverManager::lookupByMime(Kross::Api::List::Ptr args)

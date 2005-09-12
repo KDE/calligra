@@ -1,5 +1,5 @@
 /***************************************************************************
- * kexidbmodule.cpp
+ * kexiappmodule.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,50 +17,51 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "kexidbmodule.h"
-#include "kexidbdrivermanager.h"
+#ifndef KROSS_KEXIAPP_KEXIAPPMODULE_H
+#define KROSS_KEXIAPP_KEXIAPPMODULE_H
 
-//#include <api/object.h>
-//#include <api/variant.h>
-#include <main/manager.h>
+#include <qstring.h>
+#include <qvariant.h>
 
-#include <kdebug.h>
+#include <api/module.h>
 
-extern "C"
-{
+namespace Kross { namespace Api {
+    class Manager;
+}}
+
+namespace Kross { namespace KexiApp {
+
+    class KexiAppModulePrivate;
+
     /**
-     * Exported an loadable function as entry point to use
-     * the \a KexiDBModule.
+     *
      */
-    Kross::Api::Object* init_module(Kross::Api::Manager* manager)
+    class KexiAppModule : public Kross::Api::Module<KexiAppModule>
     {
-        return new Kross::KexiDB::KexiDBModule(manager);
-    }
-};
+        public:
 
-using namespace Kross::KexiDB;
+            /**
+             * Constructor.
+             */
+            KexiAppModule(Kross::Api::Manager* manager);
 
-KexiDBModule::KexiDBModule(Kross::Api::Manager* /*manager*/)
-    : Kross::Api::Module<KexiDBModule>("KexiDB")
-    //, m_manager(manager)
-{
-    addChild( KexiDBDriverManager::self() );
-}
+            /**
+             * Destructor.
+             */
+            virtual ~KexiAppModule();
 
-KexiDBModule::~KexiDBModule()
-{
-}
+            /// \see Kross::Api::Object::getClassName
+            virtual const QString getClassName() const;
 
+            /// \see Kross::Api::Object::getDescription
+            virtual const QString getDescription() const;
 
-const QString KexiDBModule::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBModule";
-}
+        private:
+            /// Private d-pointer class.
+            KexiAppModulePrivate* d;
+    };
 
-const QString KexiDBModule::getDescription() const
-{
-    return QString("The KexiDB object provides a wrapper for the Kexi::KexiDB "
-                "library and allows using the functionality from within "
-                "scripting languages.");
-}
+}}
+
+#endif
 

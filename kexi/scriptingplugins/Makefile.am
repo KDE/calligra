@@ -1,1 +1,1 @@
-SUBDIRS = kexidb
+SUBDIRS = kexidb kexiapp

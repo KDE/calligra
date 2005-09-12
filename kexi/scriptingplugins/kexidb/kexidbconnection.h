@@ -47,14 +47,16 @@ namespace Kross { namespace KexiDB {
             /**
              * Constructor.
              *
-             * \param driver The parent \a KexiDBDriver object
-             *        this connection belongs too.
              * \param connection The \a ::KexiDB::Connection instance
              *        this connection wraps.
+             * \param driver The parent \a KexiDBDriver object
+             *        this connection belongs too or NULL if we don't
+             *        know if jet.
              * \param connectiondata The \a KexiDBConnectionData instance
-             *        used to create this connection.
+             *        used to create this connection or NULL if we don't
+             *        know it jet.
              */
-            KexiDBConnection(KexiDBDriver* driver, ::KexiDB::Connection* connection, KexiDBConnectionData* connectiondata = 0);
+            explicit KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
 
             /**
              * Destructor.
@@ -72,6 +74,9 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::Connection* m_connection;
 
             KexiDBConnectionData* m_connectiondata;
+
+            /// Initialize the class instance.
+            void initialize();
 
             /**
              * Return the KexiDBConnectionData object

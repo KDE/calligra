@@ -65,11 +65,6 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
     d->scriptcontainer = d->manager->getScriptContainer(name);
     d->scriptcontainer->setInterpreterName("python"); // set default interpreter
 
-    // Publish the KexiMainWindow singelton instance.
-    KexiMainWindow* mainwindow = manager->getKexiMainWindow();
-    if(mainwindow)
-        d->scriptcontainer->addQObject(mainwindow, "KexiMainWindow");
-
     // Redirect stdout and stderr.
     //FIXME remember previous stdout+stderr and restore them in the dtor?
     d->scriptcontainer->addSlot("stdout", this, SLOT(addStdOut(const QString&)));
@@ -188,16 +183,18 @@ KexiScriptManager::KexiScriptManager(KexiMainWindow* mainwindow)
     , d(new KexiScriptManagerPrivate())
 {
     d->mainwindow = mainwindow;
+
+#ifdef KEXI_KROSS_SUPPORT
+    // Publish the KexiMainWindow singelton instance. At least the KexiApp 
+    // scripting-plugin depends on this instance and loading the plugin will 
+    // fail if it's not avaiable.
+    Kross::Api::Manager::scriptManager()->addQObject(mainwindow, "KexiMainWindow");
+#endif
 }
 
 KexiScriptManager::~KexiScriptManager()
 {
     delete d;
-}
-
-KexiMainWindow* KexiScriptManager::getKexiMainWindow()
-{
-    return d->mainwindow;
 }
 
 bool KexiScriptManager::hasScriptContainer(const QString& name)
