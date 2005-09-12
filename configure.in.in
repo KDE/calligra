@@ -190,3 +190,50 @@ AM_CONDITIONAL(need_kde34_compatibility, test "$need_kde34_compat" = "yes")
 AM_CONDITIONAL(need_kde31_compatibility, test "supported" = "no")
 
 # --- End KDE 3.2 check ---
+
+# --- OpenEXR check ---
+
+KDE_FIND_PATH(pkg-config, PKGCONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find pkg-config])
+])
+
+AC_MSG_CHECKING([for OpenEXR])
+
+if test -n "$PKGCONFIG"; then
+  vers=`$PKGCONFIG OpenEXR --modversion 2>/dev/null`
+  if test -n "$vers"
+  then
+     OPENEXR_LIBS="`$PKGCONFIG OpenEXR --libs`"
+     OPENEXR_RPATH=
+     for args in $OPENEXR_LIBS; do
+          case $args in
+            -L*)
+               OPENEXR_RPATH="$OPENEXR_RPATH $args"
+               ;;
+          esac
+     done
+     OPENEXR_RPATH=`echo $OPENEXR_RPATH | $SED -e "s/-L/-R/g"`
+     OPENEXR_CFLAGS="`$PKGCONFIG OpenEXR --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_OPENEXR, 1, [Defines if your system has the OpenEXR library])
+  fi
+fi
+
+if test ! "$USE_RPATH" = "yes"; then
+    OPENEXR_RPATH=
+fi
+
+if test -n "$OPENEXR_LIBS"
+then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([not found])
+fi
+
+AC_SUBST(OPENEXR_LIBS)
+AC_SUBST(OPENEXR_CFLAGS)
+AC_SUBST(OPENEXR_RPATH)
+
+AM_CONDITIONAL(have_openexr, test -n "$OPENEXR_LIBS")
+
+# --- End of OpenEXR check ---

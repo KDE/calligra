@@ -1,4 +1,4 @@
-if include_openexr_filter
+if have_openexr
 OPENEXR_SUBDIR=openexr
 endif
 
