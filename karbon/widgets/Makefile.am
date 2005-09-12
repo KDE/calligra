@@ -23,7 +23,8 @@ noinst_HEADERS = \
 	vsmallpreview.h \
 	vstatebutton.h \
 	vtoolbox.h \
-	vtypebuttonbox.h
+	vtypebuttonbox.h \
+	vruler.h
 
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
@@ -38,7 +39,8 @@ libkarbonwidgets_la_SOURCES = \
 	vsmallpreview.cc \
 	vstatebutton.cc \
 	vtoolbox.cc \
-	vtypebuttonbox.cc
+	vtypebuttonbox.cc \
+	vruler.cc
 
 libkarbonwidgets_la_METASOURCES = \
 	AUTO

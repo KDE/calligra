@@ -40,7 +40,7 @@
 #include <kocontexthelp.h>
 #include <koUnitWidgets.h>
 #include <koPageLayoutDia.h>
-#include <koRuler.h>
+#include <vruler.h>
 
 // Commands.
 #include "valigncmd.h"
@@ -153,21 +153,28 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	reorganizeGUI();
 
 	// widgets:
+	m_horizRuler = new VRuler( Qt::Horizontal, this );
+	connect( m_horizRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
+	m_horizRuler->setUnit(part()->unit());
+	m_vertRuler = new VRuler( Qt::Vertical, this );
+	connect( m_vertRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
+	m_vertRuler->setUnit(part()->unit());
+
 	m_canvas = new VCanvas( this, this, p );
 	connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
-	m_horizRuler = new KoRuler( this, m_canvas->viewport(), Qt::Horizontal, part()->pageLayout(), 0, part()->unit() );
-	connect( m_horizRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
-	m_horizRuler->showMousePos( true );
-	m_vertRuler = new KoRuler( this, m_canvas->viewport(), Qt::Vertical, part()->pageLayout(), 0, part()->unit() );
-	connect( m_vertRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
-	m_vertRuler->showMousePos( true );
-	m_horizRuler->setReadWrite( shell() );
-	m_vertRuler->setReadWrite( shell() );
-
 	m_canvas->show();
-	m_horizRuler->show();
-	m_vertRuler->show();
+
+	if( m_showRulerAction->isChecked() )
+	{
+		m_horizRuler->show();
+		m_vertRuler->show();
+	}
+	else
+	{
+		m_horizRuler->hide();
+		m_vertRuler->hide();
+	}
 
 	m_horizRuler->installEventFilter(m_canvas);
 	m_vertRuler->installEventFilter(m_canvas);
@@ -288,16 +295,21 @@ KarbonView::canvas()
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
-    int hSpace = m_vertRuler->minimumSizeHint().width();
-    int vSpace = m_horizRuler->minimumSizeHint().height();
+    int hSpace = 20;
+    int vSpace = 20;
 
-	m_horizRuler->setGeometry( hSpace, 0, width() - hSpace, vSpace );
-	m_vertRuler->setGeometry( 0, vSpace, hSpace, height() - vSpace );
-	m_canvas->setGeometry( hSpace, vSpace, width() - hSpace, height() - vSpace );
-	m_horizRuler->setOffset( m_canvas->contentsX() - m_canvas->pageOffsetX(), 0 );
-	m_horizRuler->setFrameStartEnd( 0, int( part()->document().width() * zoom() ) );
-	m_vertRuler->setOffset( 0, -m_canvas->pageOffsetY() + m_canvas->contentsY() );
-	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoom() ) );
+	if( m_showRulerAction->isChecked())
+	{
+		updateRuler();
+		m_canvas->setGeometry( hSpace, vSpace, width() - hSpace, height() - vSpace );
+	}
+	else
+	{
+		m_horizRuler->hide();
+		m_vertRuler->hide();
+		m_canvas->setGeometry( 0, 0, width(), height() );
+	}
+
 	zoomChanged();
 	reorganizeGUI();
 }
@@ -666,8 +678,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 	double centerY;
 	double zoomFactor;
 
-    int hSpace = m_vertRuler->minimumSizeHint().width();
-    int vSpace = m_horizRuler->minimumSizeHint().height();
+	int hSpace = 20;
+	int vSpace = 20;
 
 	if( !p.isNull() )
 	{
@@ -730,11 +742,16 @@ KarbonView::zoomChanged( const KoPoint &p )
 	m_canvas->repaintAll();
 	m_canvas->viewport()->setUpdatesEnabled( true );
 
-	m_horizRuler->setOffset( m_canvas->contentsX() - m_canvas->pageOffsetX(), 0 );
-	m_horizRuler->setFrameStartEnd( 0, int( part()->document().width() * zoomFactor ) );
-	m_vertRuler->setOffset( 0, -m_canvas->pageOffsetY() + m_canvas->contentsY() );
-	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoomFactor ) );
 
+	if( m_showRulerAction->isChecked() )
+	{
+		updateRuler();
+	}
+	else
+	{
+		m_horizRuler->hide();
+		m_vertRuler->hide();
+	}
 	m_canvas->viewport()->setFocus();
 
 	emit zoomChanged( zoomFactor );
@@ -925,7 +942,7 @@ KarbonView::initActions()
 	m_showRulerAction->setCheckedState(i18n("Hide Rulers"));
 #endif
 	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
-	m_showRulerAction->setChecked( true );
+	m_showRulerAction->setChecked( false );
 	m_showGridAction = new KToggleAction( i18n( "Show Grid" ), "view_grid", this, SLOT( showGrid() ), actionCollection(), "view_show_grid" );
 #if KDE_IS_VERSION(3,2,90)
 	m_showGridAction->setCheckedState(i18n("Hide Grid"));
@@ -999,13 +1016,21 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 	int mx = event->pos().x();
 	int my = event->pos().y();
 
-	m_horizRuler->setMousePos( mx, my );
-	m_vertRuler->setMousePos( mx, my );
+	int px;
+	int py;
+	if( m_canvas->horizontalScrollBar()->isVisible() && ((m_canvas->horizontalScrollBar()->value() - m_canvas->pageOffsetX()) > 0))
+		px = mx;
+	else
+		px = (mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX());
 
-	// Not necessary
-	//m_horizRuler->update();
-	//m_vertRuler->update();
-	
+	if( m_canvas->verticalScrollBar()->isVisible() && ((m_canvas->verticalScrollBar()->value() - m_canvas->pageOffsetY()) > 0))	
+		py = my;
+	else
+		py = (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY());
+
+	m_horizRuler->updatePointer(px, py); 
+	m_vertRuler->updatePointer(px, py); 
+
 	KoPoint xy;
 	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
 	xy.setY((my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
@@ -1053,24 +1078,78 @@ KarbonView::setNumberOfRecentFiles( unsigned int number )
 void
 KarbonView::showRuler()
 {
-    int hSpace = m_vertRuler->minimumSizeHint().width();
-    int vSpace = m_horizRuler->minimumSizeHint().height();
+    int hSpace = 20;
+    int vSpace = 20;
 
 	if( m_showRulerAction->isChecked() )
 	{
 		m_horizRuler->show();
 		m_vertRuler->show();
-		m_horizRuler->setGeometry( hSpace, 0, width() - hSpace, vSpace );
-		m_vertRuler->setGeometry( 0, vSpace, hSpace, height() - vSpace );
+		if( (1 + hSpace + m_canvas->pageOffsetX() - m_canvas->contentsX()) >= hSpace)
+		{
+			m_horizRuler->setGeometry( 1 + hSpace + m_canvas->pageOffsetX() - m_canvas->contentsX(), 0, qRound( 1 + part()->document().width() * zoom() ), vSpace );
+			m_horizRuler->updateVisibleArea(0,0);
+		}
+		else
+		{
+			m_horizRuler->setGeometry( hSpace, 0, qRound( 1 + part()->document().width() * zoom() ) - m_canvas->contentsX() + m_canvas->pageOffsetX(), vSpace );
+			m_horizRuler->updateVisibleArea((m_canvas->contentsX() - m_canvas->pageOffsetX()),0);
+		}
+
+		if( (1 + vSpace + m_canvas->pageOffsetY() - m_canvas->contentsY()) >= vSpace)
+		{
+			m_vertRuler->setGeometry( 0, 1 + vSpace - m_canvas->pageOffsetY() + m_canvas->contentsY(), hSpace, qRound( 1 + part()->document().height() * zoom() ));
+			m_vertRuler->updateVisibleArea(0,0);
+		}
+		else
+		{
+			m_vertRuler->setGeometry( 0, vSpace, hSpace, qRound( 1 + part()->document().height() * zoom() ) - m_canvas->contentsY() + m_canvas->pageOffsetY() );
+			m_vertRuler->updateVisibleArea(0, (m_canvas->contentsY() - m_canvas->pageOffsetY()));
+		}
 		m_canvas->setGeometry( hSpace, vSpace, width() - hSpace, height() - vSpace );
 	}
 	else
 	{
 		m_horizRuler->hide();
 		m_vertRuler->hide();
-		//m_horizRuler->setGeometry( space, 0, width() - space, space );
-		//m_vertRuler->setGeometry( 0, space, space, height() - space );
 		m_canvas->setGeometry( 0, 0, width(), height() );
+	}
+
+	zoomChanged();
+}
+
+void
+KarbonView::updateRuler()
+{
+    int hSpace = 20;
+    int vSpace = 20;
+
+	if(!m_canvas->horizontalScrollBar()->isVisible())
+	{
+		if( (1 + hSpace + m_canvas->pageOffsetX() - m_canvas->contentsX()) >= hSpace)
+		{
+			m_horizRuler->setGeometry( 1 + hSpace + m_canvas->pageOffsetX() - m_canvas->contentsX(), 0, qRound( 1 + part()->document().width() * zoom() ), vSpace );
+			m_horizRuler->updateVisibleArea(0,0);
+		}
+		else
+		{
+			m_horizRuler->setGeometry( hSpace, 0, qRound( 1 + part()->document().width() * zoom() ) - m_canvas->contentsX() + m_canvas->pageOffsetX(), vSpace );
+			m_horizRuler->updateVisibleArea((m_canvas->contentsX() - m_canvas->pageOffsetX()),0);
+		}
+	}
+
+	if(!m_canvas->verticalScrollBar()->isVisible())
+	{
+		if( (1 + vSpace + m_canvas->pageOffsetY() - m_canvas->contentsY()) >= vSpace)
+		{
+			m_vertRuler->setGeometry( 0, 1 + vSpace - m_canvas->pageOffsetY() + m_canvas->contentsY(), hSpace, qRound( 1 + part()->document().height() * zoom() ));
+			m_vertRuler->updateVisibleArea(0,0);
+		}
+		else
+		{
+			m_vertRuler->setGeometry( 0, vSpace, hSpace, qRound( 1 + part()->document().height() * zoom() ) - m_canvas->contentsY() + m_canvas->pageOffsetY() );
+			m_vertRuler->updateVisibleArea(0, (m_canvas->contentsY() - m_canvas->pageOffsetY()));
+		}
 	}
 }
 
@@ -1117,9 +1196,7 @@ KarbonView::pageLayout()
 	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS, unit ) )
 	{
 		part()->setPageLayout( layout, unit );
-		m_horizRuler->setPageLayout( layout );
 		m_horizRuler->setUnit( unit );
-		m_vertRuler->setPageLayout( layout );
 		m_vertRuler->setUnit( unit );
 		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
 								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
@@ -1132,15 +1209,41 @@ KarbonView::pageLayout()
 void
 KarbonView::canvasContentsMoving( int x, int y )
 {
+	int hSpace = 20;
+	int vSpace = 20;
+
 	if( m_canvas->horizontalScrollBar()->isVisible() )
 	{
-		m_horizRuler->setOffset( x - m_canvas->pageOffsetX(), 0 );
-		m_horizRuler->setFrameStartEnd( 0/*-x + m_canvas->pageOffsetX()*/, int( part()->document().width() * zoom() ) );
+		if( m_showRulerAction->isChecked() )
+		{
+			if( (1 + hSpace + m_canvas->pageOffsetX() - x) >= hSpace)
+			{
+				m_horizRuler->setGeometry( 1 + hSpace + m_canvas->pageOffsetX() - x, 0, qRound( 1 + 	part()->document().width() * zoom() ), vSpace );
+				m_horizRuler->updateVisibleArea(0,0);
+			}
+			else
+			{
+				m_horizRuler->setGeometry( hSpace, 0, qRound( 1 + part()->document().width() * zoom() ) - x + m_canvas->pageOffsetX(), vSpace ); 
+				m_horizRuler->updateVisibleArea((x - m_canvas->pageOffsetX()),0);
+			}
+		}
 	}
+
 	if( m_canvas->verticalScrollBar()->isVisible() )
 	{
-		m_vertRuler->setOffset( 0, y - m_canvas->pageOffsetY() );
-		m_vertRuler->setFrameStartEnd( 0/*y - m_canvas->pageOffsetY()*/, int( part()->document().height() * zoom() ) );
+		if( m_showRulerAction->isChecked() )
+		{
+			if( (1 + vSpace + m_canvas->pageOffsetY() - y) >= vSpace)
+			{
+				m_vertRuler->setGeometry( 0, 1 + vSpace + m_canvas->pageOffsetY() - y , hSpace, qRound( 1 + part()->document().height() * zoom() ));
+				m_vertRuler->updateVisibleArea(0,0);
+			}
+			else
+			{
+				m_vertRuler->setGeometry( 0, vSpace, hSpace, qRound( 1 + part()->document().height() * zoom() ) - y + m_canvas->pageOffsetY() );
+				m_vertRuler->updateVisibleArea(0, (y - m_canvas->pageOffsetY()));
+			}
+		}
 	}
 }
 

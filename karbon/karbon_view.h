@@ -40,7 +40,7 @@ class KoContextHelpAction;
 
 class KoUnitDoubleSpinComboBox;
 class KoRect;
-class KoRuler;
+class VRuler;
 
 class VColorDocker;
 class VDocumentDocker;
@@ -196,10 +196,11 @@ protected:
 
 private:
 	void initActions();
+	void updateRuler();
 
 	VCanvas			*m_canvas;
-	KoRuler			*m_horizRuler;
-	KoRuler			*m_vertRuler;
+	VRuler		*m_horizRuler;
+	VRuler		*m_vertRuler;
 
 	VPainterFactory		*m_painterFactory;
 	VStrokeFillPreview	*m_strokeFillPreview;
