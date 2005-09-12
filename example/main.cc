@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <dcopclient.h>
 #include "example_aboutdata.h"
-
+#include <koffice_export.h>
 
 static const KCmdLineOptions options[]=
 {
@@ -32,7 +32,7 @@ static const KCmdLineOptions options[]=
 	KCmdLineLastOption
 };
 
-extern "C" int kdemain( int argc, char **argv )
+extern "C" EXAMPLE_EXPORT int kdemain( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, newExampleAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
@@ -42,3 +42,4 @@ extern "C" int kdemain( int argc, char **argv )
 	return 1;
     return app.exec();
 }
+
