@@ -24,6 +24,7 @@
 #include <core/vvisitor.h>
 #include <core/vdocument.h>
 #include <core/vselection.h>
+#include <commands/vtransformcmd.h>
 
 VShadowDecorator::VShadowDecorator( VObject *object, VObject* parent, int distance, int angle, float opacity )
 	: VObject( parent ), m_object( object ), m_distance( distance ), m_angle( angle ), m_opacity( opacity )
@@ -119,4 +120,32 @@ VShadowDecorator::setState( const VState state )
 { 
 	m_state = state;
 	m_object->setState( state );
+}
+
+void 
+VShadowDecorator::save( QDomElement& element ) const
+{
+	if( m_state != VObject::deleted )
+	{
+		// save shadow as new object
+		int shadowDx = int( m_distance * cos( m_angle / 360. * 6.2832 ) );
+		int shadowDy = int( m_distance * sin( m_angle / 360. * 6.2832 ) );
+	
+		VObject *shadow = m_object->clone();
+
+		VColor black( Qt::black );
+		black.setOpacity( m_opacity );
+		if( shadow->fill()->type() != VFill::none )
+			shadow->fill()->setColor( black );
+		shadow->stroke()->setColor( black );
+		QWMatrix mat;
+		mat.translate( shadowDx, -shadowDy );
+		VTransformCmd trafo( 0L, mat );
+		trafo.visit( *shadow );
+		shadow->save( element );
+		delete shadow;
+		
+		// save swallowed object
+		m_object->save( element );
+	}
 }
