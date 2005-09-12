@@ -33,6 +33,7 @@
 #include <core/vglobal.h>
 #include <core/vgroup.h>
 #include <core/vimage.h>
+#include <core/vlayer.h>
 #include <qcolor.h>
 #include <qfile.h>
 #include <kfilterdev.h>
@@ -138,7 +139,6 @@ SvgImport::convert()
 		m_outerRect.setWidth( m_outerRect.width() * ( points[2].toFloat() / width ) );
 		m_outerRect.setHeight( m_outerRect.height() * ( points[3].toFloat() / height ) );
 	}
-
 	m_gc.push( gc );
 	parseGroup( 0L, docElem );
 
@@ -571,8 +571,18 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 		gc->font.setFamily( family );
 	}
 	else if( command == "font-size" )
-		gc->font.setPointSize( parseUnit( params ) );
-
+	{
+		float pointSize = parseUnit( params );
+		pointSize *= gc->matrix.m22() > 0 ? gc->matrix.m22() : -1.0 * gc->matrix.m22();
+		gc->font.setPointSizeFloat( pointSize );
+	}
+	else if( command == "text-decoration" )
+	{
+		if( params == "line-through" )
+			gc->font.setStrikeOut( true );
+		else if( params == "underline" )
+			gc->font.setUnderline( true );
+	}
 	if( gc->fill.type() != VFill::none )
 		gc->fill.setColor( fillcolor, false );
 	//if( gc->stroke.type() == VStroke::solid )
@@ -652,6 +662,20 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 }
 
 void
+SvgImport::parseFont( const QDomElement &e )
+{
+	SvgGraphicsContext *gc = m_gc.current();
+	if( !gc ) return;
+
+	if( ! e.attribute( "font-family" ).isEmpty() )	
+		parsePA( 0L, m_gc.current(), "font-family", e.attribute( "font-family" ) );
+	if( ! e.attribute( "font-size" ).isEmpty() )	
+		parsePA( 0L, m_gc.current(), "font-size", e.attribute( "font-size" ) );
+	if( ! e.attribute( "text-decoration" ).isEmpty() )
+		parsePA( 0L, m_gc.current(), "text-decoration", e.attribute( "text-decoration" ) );
+}
+
+void
 SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 {
 	bool isDef = false;
@@ -674,7 +698,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			addGraphicContext();
 			setupTransform( b );
 			parseStyle( group, b );
+			parseFont( b );
 			parseGroup( group, b );
+			
 			// handle id
 			if( !b.attribute("id").isEmpty() )
 				group->setName( b.attribute("id") );
@@ -711,25 +737,10 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "text" )
 		{
-			continue; // TODO : remove when text loading works
-			/*VText *text = new VText( &m_document );
-			text->setText( b.text() );
-			VSubpath base( 0L );
-			double x = parseUnit( b.attribute( "x" ) );
-			double y = parseUnit( b.attribute( "y" ) );
-			base.moveTo( KoPoint( x, y ) );
-			base.lineTo( KoPoint( x + 10, y ) );
-			text->setBasePath( base );
-			addGraphicContext();
-			setupTransform( b );
-			parseStyle( text, b );
-			text->setFont( m_gc.current()->font );
-			if( grp )
-				grp->append( text );
+			if( isDef )
+				m_paths.insert( b.attribute( "id" ), b );
 			else
-				m_document.append( text );
-			delete( m_gc.pop() );
-			continue;*/
+				createText( grp, b );
 		}
 		else if( b.tagName() == "use" )
 		{
@@ -764,6 +775,177 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			m_document.append( obj );
 		delete( m_gc.pop() );
 	}
+}
+
+VObject* SvgImport::findObject( const QString &name, VGroup* group )
+{
+	if( ! group )
+		return 0L;
+
+	VObjectListIterator itr = group->objects();
+
+	for( uint objcount = 1; itr.current(); ++itr, objcount++ )
+		if( itr.current()->state() != VObject::deleted )
+		{
+			if( itr.current()->name() == name )
+				return itr.current();
+			
+			if( dynamic_cast<VGroup *>( itr.current() ) )
+			{
+				VObject *obj = findObject( name, dynamic_cast<VGroup *>( itr.current() ) );
+				if( obj ) 
+					return obj;
+			}
+		}
+	
+	return 0L;
+}
+
+VObject* SvgImport::findObject( const QString &name )
+{
+	QPtrVector<VLayer> vector;
+	m_document.layers().toVector( &vector );
+	for( int i = vector.count() - 1; i >= 0; i-- )
+	{
+		if ( vector[i]->state() != VObject::deleted )
+		{
+			VObject* obj = findObject( name, dynamic_cast<VGroup *>( vector[i] ) );
+			if( obj ) 
+				return obj;
+		}
+	}
+	
+	return 0L;
+}
+
+void SvgImport::createText( VGroup *grp, const QDomElement &b )
+{
+	VText *text = 0L;
+	QString content;
+	VSubpath base( 0L );
+	VPath *path = 0L;
+
+	addGraphicContext();
+	setupTransform( b );
+	VTransformCmd trafo( 0L, m_gc.current()->matrix );
+	
+	parseFont( b );
+
+	if( b.hasChildNodes() )
+	{
+		if( base.isEmpty() && ! b.attribute( "x" ).isEmpty() && ! b.attribute( "y" ).isEmpty() )
+		{
+			double x = parseUnit( b.attribute( "x" ) );
+			double y = parseUnit( b.attribute( "y" ) );
+			base.moveTo( KoPoint( x, y ) );
+			base.lineTo( KoPoint( x + 10, y ) );
+		}
+
+		for( QDomNode n = b.firstChild(); !n.isNull(); n = n.nextSibling() )
+		{
+			QDomElement e = n.toElement();
+			if( e.isNull() ) 
+			{
+				content += n.toCharacterData().data();
+			}
+			else if( e.tagName() == "textPath" )
+			{
+				if( e.attribute( "xlink:href" ).isEmpty() )
+					continue;
+
+				QString uri = e.attribute( "xlink:href" );
+				unsigned int start = uri.find("#") + 1;
+				unsigned int end = uri.findRev(")");
+				QString key = uri.mid( start, end - start );
+				if( ! m_paths.contains(key) )
+				{
+					VObject* obj = findObject( key );
+					if( obj ) 
+						path = dynamic_cast<VPath*>( obj );
+				}
+				else
+				{
+					QDomElement p = m_paths[key];
+					path = dynamic_cast<VPath*>( createObject( p ) );
+					if( path )
+						path->setState( VObject::deleted );
+				}
+				if( ! path )
+					continue;
+				base = *path->paths().getFirst();
+				content += e.text();
+			}
+			else if( e.tagName() == "tspan" )
+			{
+				// only use text of tspan element, as we are not supporting text 
+				// with different styles
+				content += e.text();
+				if( base.isEmpty() && ! e.attribute( "x" ).isEmpty() && ! e.attribute( "y" ).isEmpty() )
+				{
+					QStringList posX = QStringList::split( ", ", e.attribute( "x" ) );
+					QStringList posY = QStringList::split( ", ", e.attribute( "y" ) );
+					if( posX.count() && posY.count() )
+					{
+						double x = parseUnit( posX.first() );
+						double y = parseUnit( posY.first() );
+						base.moveTo( KoPoint( x, y ) );
+						base.lineTo( KoPoint( x + 10, y ) );
+					}
+				}
+			}
+			else if( e.tagName() == "tref" )
+			{
+				if( e.attribute( "xlink:href" ).isEmpty() )
+					continue;
+
+				QString uri = e.attribute( "xlink:href" );
+				unsigned int start = uri.find("#") + 1;
+				unsigned int end = uri.findRev(")");
+				QString key = uri.mid( start, end - start );
+
+				if( ! m_paths.contains(key) )
+				{
+					VObject* obj = findObject( key );
+					if( obj ) 
+						content += dynamic_cast<VText*>( obj )->text();
+				}
+				else
+				{
+					QDomElement p = m_paths[key];
+					content += p.text();
+				}
+			}
+			else 
+				continue;
+		}
+		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, content.simplifyWhiteSpace() );
+	}
+	else
+	{
+		VSubpath base( 0L );
+		double x = parseUnit( b.attribute( "x" ) );
+		double y = parseUnit( b.attribute( "y" ) );
+		base.moveTo( KoPoint( x, y ) );
+		base.lineTo( KoPoint( x + 10, y ) );
+		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, b.text().simplifyWhiteSpace() );
+	}
+
+	if( text )
+	{
+		text->setParent( &m_document );
+		
+		parseStyle( text, b );
+		trafo.visit( *text );
+
+		if( !b.attribute("id").isEmpty() )
+			text->setName( b.attribute("id") );
+
+		if( grp ) 
+			grp->append( text );
+		else 
+			m_document.append( text );
+	}
+	delete( m_gc.pop() );
 }
 
 VObject* SvgImport::createObject( const QDomElement &b )

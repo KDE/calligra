@@ -73,6 +73,12 @@ protected:
 	QDomDocument outdoc;
 	void convert();
 	VObject* createObject( const QDomElement & );
+	void createText( VGroup *, const QDomElement & );
+	void parseFont( const QDomElement & );
+	// find object with given id in document
+	VObject* findObject( const QString &name );
+	// find object with given id in given group
+	VObject* findObject( const QString &name, VGroup * );
 
 private:
 	VDocument						m_document;
