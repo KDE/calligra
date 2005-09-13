@@ -70,7 +70,6 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	m_angle = new KIntNumInput( group );
 	m_angle->setRange( 0, 360, 10, true );
 	m_angle->setValue( 0 );
-        m_angle->setSuffix(" °");
 	new QLabel( i18n( "Opacity:" ), group );
 	m_opacity = new KIntNumInput( group );
 	m_opacity->setRange( 0, 100, 1, true );
@@ -155,11 +154,12 @@ VCreateShadowCmd::execute()
 		for( ; itr.current(); ++itr )
 		{
 			// Clone object and visit the clone.
-			if( dynamic_cast<VShadowDecorator *>( itr.current() ) )
+			VShadowDecorator *shadow = dynamic_cast<VShadowDecorator *>( itr.current() );
+			if( shadow )
 			{
 				//kdDebug() << "Its a decorator!!!" << endl;
-				//dynamic_cast<VShadowDecorator *>( itr.current() )->setShadow
-				newObject = 0L;//itr.current();
+				shadow->setShadow( m_distance, m_angle, m_opacity );
+				newObject = 0L;
 			}
 			else
 				newObject = new VShadowDecorator( itr.current()->clone(), 0L, m_distance, m_angle, m_opacity );
@@ -168,12 +168,12 @@ VCreateShadowCmd::execute()
 
 			if(newObject)
 			{
-			// Insert new shape right before old shape.
-			itr.current()->parent()->insertInfrontOf(
-				newObject, itr.current() );
+				// Insert new shape right before old shape.
+				itr.current()->parent()->insertInfrontOf(
+					newObject, itr.current() );
 
-			// Add new shape to list of new objects.
-			m_newObjects->append( newObject );
+				// Add new shape to list of new objects.
+				m_newObjects->append( newObject );
 			}
 		}
 	}
@@ -198,6 +198,7 @@ VCreateShadowCmd::execute()
 		document()->selection()->append( itr.current() );
 	}
 
+	successful = true;
 
 	// Tell command history wether we had success at least once.
 	setSuccess( successful );

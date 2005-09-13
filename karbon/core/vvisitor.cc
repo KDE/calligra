@@ -108,3 +108,7 @@ VVisitor::visitVImage( VImage& /*img*/ )
 {
 }
 
+void 
+VVisitor::visitVObject( VObject& /*object*/ )
+{
+}

@@ -38,7 +38,9 @@ public:
 
 	virtual const KoRect& boundingBox() const { return m_object->boundingBox(); }
 	VStroke* stroke() const { return m_object->stroke(); }
+	virtual void setStroke( const VStroke& stroke );
 	VFill* fill() const { return m_object->fill(); }
+	virtual void setFill( const VFill& fill );
 
 	virtual void accept( VVisitor& /*visitor*/ );
 
@@ -47,6 +49,10 @@ public:
 
 	virtual VObject* clone() const;
 
+	VState state() const { return m_state; }
+	virtual void setState( const VState state );
+	
+	void setShadow( int distance = 2, int angle = 0, float opacity = 1.0 );
 protected:
 	VObject *m_object;
 	int		m_distance;
