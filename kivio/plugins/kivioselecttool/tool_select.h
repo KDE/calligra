@@ -20,6 +20,8 @@
 #define TOOL_SELECT_H
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
+
 #include <koPoint.h>
 #include <koRect.h>
 #include "kivio_mousetool.h"
@@ -33,6 +35,10 @@ class KRadioAction;
 class KAction;
 
 class KivioStencil;
+
+namespace Kivio {
+  class Object;
+}
 
 class KivioSelectDragData
 {
@@ -87,6 +93,9 @@ class SelectTool : public Kivio::MouseTool
     bool startCustomDragging(const QPoint&, bool);
     bool startRubberBanding(const QPoint&);
 
+    void move(const QPoint& pos);
+    void endOperation();
+
     void continueDragging(const QPoint&, bool ignoreGridGuides = false);
     void continueCustomDragging(const QPoint&);
     void continueResizing(const QPoint&, bool ignoreGridGuides = false);
@@ -101,9 +110,9 @@ class SelectTool : public Kivio::MouseTool
 
     void changeMouseCursor(const QPoint&);
     int isOverResizeHandle( KivioStencil *pStencil, const double x, const double y );
-    
+
     void keyPress(QKeyEvent* e);
-    
+
     QPoint m_startPoint, m_releasePoint;
     KoPoint m_lastPoint;
     KoPoint m_origPoint;
@@ -134,6 +143,7 @@ class SelectTool : public Kivio::MouseTool
     bool m_firstTime;
     int m_collisionType;
     KoPoint m_previousPos;
+    QValueList<Kivio::Object*> m_origObjectList;
 };
 
 #endif
