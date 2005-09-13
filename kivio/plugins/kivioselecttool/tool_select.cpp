@@ -236,6 +236,8 @@ void SelectTool::leftMouseButtonPressed(const QPoint& pos, bool selectMultiple)
     m_previousPos = p;
     m_collisionType = collisionType;
   }
+
+  changeMouseCursor(pos);
 }
 
 
@@ -482,6 +484,7 @@ void SelectTool::mouseMove(QMouseEvent* e)
 
   switch(m_mode) {
     case MSelect:
+      changeMouseCursor(pos);
       break;
 
     case MMove:
@@ -807,66 +810,16 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
  */
 void SelectTool::changeMouseCursor(const QPoint &pos)
 {
-/*  KivioCanvas* canvas = view()->canvasWidget();
-  KoPoint pagePoint = canvas->mapFromScreen(pos);
-  KivioStencil *pStencil;
-  double threshold = view()->zoomHandler()->unzoomItY(4);
-  int cursorType;
+  KivioCanvas* canvas = view()->canvasWidget();
+  int collisionType = 0;
+  KoPoint p = canvas->mapFromScreen(pos);
+  Kivio::Object* object = view()->activePage()->checkForCollision(p, collisionType);
 
-  // Iterate through all the selected stencils
-  pStencil = canvas->activePage()->selectedStencils()->first();
-  while( pStencil )
-  {
-    cursorType = isOverResizeHandle(pStencil, pagePoint.x(), pagePoint.y());
-    switch( cursorType )
-    {
-      case 1: // top left
-        canvas->setCursor( sizeFDiagCursor );
-        return;
-
-      case 2: // top
-        canvas->setCursor( sizeVerCursor );
-        return;
-
-      case 3: // top right
-        canvas->setCursor( sizeBDiagCursor );
-        return;
-
-      case 4: // right
-        canvas->setCursor( sizeHorCursor );
-        return;
-
-      case 5: // bottom right
-        canvas->setCursor( sizeFDiagCursor );
-        return;
-
-      case 6: // bottom
-        canvas->setCursor( sizeVerCursor );
-        return;
-
-      case 7: // bottom left
-        canvas->setCursor( sizeBDiagCursor );
-        return;
-
-      case 8: // left
-        canvas->setCursor( sizeHorCursor );
-        return;
-
-      default:
-        if( pStencil->checkForCollision( &pagePoint, threshold )!= kctNone )
-        {
-          canvas->setCursor( sizeAllCursor );
-          return;
-        }
-        break;
-
-    }
-
-
-    pStencil = canvas->activePage()->selectedStencils()->next();
+  if((collisionType == CTBody) && object->selected()) {
+    canvas->setCursor(sizeAllCursor);
+  } else {
+    canvas->setCursor(arrowCursor);
   }
-
-  canvas->setCursor( arrowCursor );*/
 }
 
 

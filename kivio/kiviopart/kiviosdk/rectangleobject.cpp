@@ -101,8 +101,16 @@ KoRect RectangleObject::boundingBox()
 void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 {
   QRect rect = zoomHandler->zoomRect(boundingBox());
-  painter.setPen(pen().zoomedPen(zoomHandler));
+  QPen zoomedPen = pen().zoomedPen(zoomHandler);
+  painter.setPen(zoomedPen);
   painter.setBrush(brush());
+
+  if(zoomedPen.width() > 1) {
+    int lineOffset = (zoomedPen.width() / 2);
+    rect.moveBy(lineOffset, lineOffset);
+    rect.setSize(QSize(rect.size().width() - zoomedPen.width() + 1, rect.size().height() - zoomedPen.width() + 1));
+  }
+
   painter.drawRect(rect);
 }
 

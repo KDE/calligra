@@ -153,7 +153,7 @@ void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
   }
 
   if(selected()) {
-    painter.setPen(QPen(Qt::green, 0, Qt::DashLine));
+    painter.setPen(QPen(QColor(0, 200, 0), 0, Qt::DashLine));
     painter.drawRect(0, 0, zoomHandler->zoomItX(size().width()), zoomHandler->zoomItY(size().height()));
   }
 
