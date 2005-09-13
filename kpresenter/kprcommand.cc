@@ -374,9 +374,8 @@ void DeleteCmd::execute()
 
     for ( itDelete.toFirst(); itDelete.current(); ++itDelete )
     {
-        QRect oldRect = m_doc->zoomHandler()->zoomRect( itDelete.current()->getBoundingRect() );
+        QRect oldRect = m_doc->zoomHandler()->zoomRect( itDelete.current()->getRepaintRect() );
         m_doc->repaint( oldRect );
-        //m_doc->repaint( objects.at( i ) );
     }
     if(textObj)
         m_doc->updateRuler();
@@ -487,7 +486,7 @@ void GroupObjCmd::execute()
     {
         it.current()->setSelected( false );
         position = m_page->takeObject(it.current() );
-        r |= it.current()->getBoundingRect();
+        r |= it.current()->getRealRect();
     }
 
     m_groupObject->setUpdateObjects( false );
@@ -573,7 +572,7 @@ void UnGroupObjCmd::unexecute()
     {
         it.current()->setSelected( false );
         position = m_page->takeObject( it.current() );
-        r |= it.current()->getBoundingRect();
+        r |= it.current()->getRealRect();
     }
 
     m_groupObject->setUpdateObjects( false );
@@ -618,7 +617,7 @@ void InsertCmd::execute()
 
 void InsertCmd::unexecute()
 {
-    QRect oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect());
+    QRect oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
     QPtrList<KPObject> list(m_page->objectList());
     if ( list.findRef( object ) != -1 ) {
         m_page->takeObject(  object );
@@ -701,7 +700,7 @@ void MoveByCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
+        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( diff );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -720,7 +719,7 @@ void MoveByCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
+        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( -diff.x(), -diff.y() );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -803,7 +802,7 @@ void AlignCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getBoundingRect());
+        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( *diffs.at( i ) );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -823,7 +822,7 @@ void AlignCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
+        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -1749,7 +1748,7 @@ void ResizeCmd::execute()
 {
     QRect oldRect;
 
-    oldRect = doc->zoomHandler()->zoomRect( object->getBoundingRect());
+    oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
     object->moveBy( m_diff );
     object->resizeBy( r_diff );
     if ( object->getType() == OT_TEXT )
@@ -1770,7 +1769,7 @@ void ResizeCmd::unexecute()
 {
     QRect oldRect;
 
-    oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect());
+    oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )

@@ -2043,19 +2043,11 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
             continue;
         if ( it.current()->isSelected() && !it.current()->isProtect()) {
 
-            KoRect oldKoBoundingRect = it.current()->getBoundingRect();
-            double _dx = oldKoBoundingRect.x() - 5.0;
-            double _dy = oldKoBoundingRect.y() - 5.0;
-            double _dw = oldKoBoundingRect.width() + 10.0;
-            double _dh = oldKoBoundingRect.height() + 10.0;
-            oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
-            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
+            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( it.current()->getRepaintRect() );
 
             it.current()->moveBy( _move );
             _objects.append( it.current() );
             m_doc->repaint( oldBoundingRect );
-            QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect() );
-            m_doc->repaint( br );
             m_doc->repaint( it.current() );
         }
     }

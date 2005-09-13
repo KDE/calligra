@@ -159,7 +159,7 @@ void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, KPrPage * newpage
     KoRect r=KoRect();
     for ( ; it.current() ; ++it )
     {
-        r |= it.current()->getBoundingRect();
+        r |= it.current()->getRealRect();
     }
     setOrig( r.x(), r.y() );
     setSize( r.width(), r.height() );

@@ -242,8 +242,26 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        int /*pageNum*/, SelectionMode selectionMode, bool drawContour = FALSE );
 
-    virtual bool contains( const KoPoint &_point ) const;
-    virtual bool intersects( const KoRect & _rect ) const;
+    /**
+     * @brief Check if point lies in rect of object
+     *
+     * @param point to check
+     *
+     * @return true if point lies in rect of object
+     * @return false otherwise
+     */
+    virtual bool contains( const KoPoint &point ) const;
+
+    /**
+     * @brief Check if rect intersects with rect of object
+     *
+     * @param rect to check
+     *
+     * @return true if rect interesct with rect of object
+     * @return false otherwise
+     */
+    virtual bool intersects( const KoRect & rect ) const;
+
     virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const;
 
     KoRect rotateRectObject() const;

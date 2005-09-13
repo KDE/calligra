@@ -414,7 +414,6 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->save();
     QPen pen2 = pen.zoomedPen(_zoomHandler);
     //QRect clip=QRect(_zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw),_zoomHandler->zoomItY( oh - 2 * pw));
-    //kdDebug(33001) << "KPTextObject::paint cliprect:" << DEBUGRECT(_zoomHandler->zoomRect( getBoundingRect() )) << endl;
     //setupClipRegion( _painter, clip );
     //for debug
     //_painter->fillRect( clip, Qt::blue );

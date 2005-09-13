@@ -3772,7 +3772,7 @@ void KPresenterView::refreshPageButton()
 
 void KPresenterView::showObjectRect( const KPObject * object )
 {
-    QRect r = zoomHandler()->zoomRect( object->getBoundingRect() );
+    QRect r = zoomHandler()->zoomRect( object->getRealRect() );
     if ( ! QRect( getCanvas()->diffx(), 
                   getCanvas()->diffy(), 
                   getCanvas()->width(), 
@@ -4961,7 +4961,7 @@ void KPresenterView::slotUpdateRuler()
         KPTextObject *txtobj= m_canvas->applicableTextObjects().first();
         if ( txtobj )
         {
-            QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect());
+            QRect r= zoomHandler()->zoomRect(txtobj->getRealRect());
             getHRuler()->setFrameStartEnd( r.left() /*+ m_canvas->diffx()*//*- pc.x()*/, r.right()/*+m_canvas->diffx()*/ /*- pc.x()*/ );
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())

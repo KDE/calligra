@@ -1140,6 +1140,15 @@ KoRect KPObject::getRepaintRect() const
         rect.setBottom( rect.bottom() + shadowDistance );
     }
 
+    if ( angle != 0.0 )
+    {
+        double _dx = rect.x() - 1.0;
+        double _dy = rect.y() - 1.0;
+        double _dw = rect.width() + 2.0;
+        double _dh = rect.height() + 2.0;
+        rect.setRect(  _dx, _dy, _dw, _dh );
+    }
+
     return rect;
 }
 
@@ -1198,32 +1207,14 @@ void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
     paint->setWorldMatrix( m, true );
 }
 
-bool KPObject::contains( const KoPoint &_point ) const
+bool KPObject::contains( const KoPoint &point ) const
 {
-    if ( angle == 0.0 )
-    {
-        KoRect r( orig, ext );
-        return r.contains( _point );
-    }
-    else
-    {
-        KoRect r=rotateRectObject();
-        return r.contains( _point );
-    }
+    return getRealRect().contains( point );
 }
 
-bool KPObject::intersects( const KoRect &_rect ) const
+bool KPObject::intersects( const KoRect &rect ) const
 {
-    if ( angle == 0.0 )
-    {
-        KoRect r( orig, ext );
-        return r.intersects( _rect );
-    }
-    else
-    {
-        KoRect r=rotateRectObject();
-        return r.intersects( _rect );
-    }
+    return getRealRect().intersects( rect );
 }
 
 QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
@@ -1232,21 +1223,14 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
     KoZoomHandler * zh = doc->zoomHandler();
     int px = zh->zoomItX(_point.x());
     int py = zh->zoomItY(_point.y());
-    int ox = zh->zoomItX(orig.x());
-    int oy = zh->zoomItY(orig.y());
-    int ow = zh->zoomItX(ext.width());
-    int oh = zh->zoomItY(ext.height());
+
+    QRect rect = zh->zoomRect( getRealRect() );
+    int ox = rect.left();
+    int oy = rect.top();
+    int ow = rect.width();
+    int oh = rect.height();
 
     bool headerFooter=doc->isHeaderFooter(this);
-    KoRect r( ox, oy, ow, oh );
-    if ( angle != 0.0 )
-    {
-        QRect rr = zh->zoomRect( rotateRectObject() );
-        ox = rr.x();
-        oy = rr.y();
-        ow = rr.width();
-        oh = rr.height();
-    }
 
     int sz = 4;
     if ( px >= ox && py >= oy && px <= ox + QMIN( ow / 3, sz ) && py <= oy + QMIN( oh / 3, sz ) )
@@ -1390,11 +1374,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
-    KoRect r = KoRect( orig.x(), orig.y(), ext.width(), ext.height() );
-    if ( angle != 0.0 )
-    {
-        r = rotateRectObject();
-    }
+    KoRect r = getRealRect();
 
     int x = _zoomHandler->zoomItX( r.left() - orig.x());
     int y = _zoomHandler->zoomItY( r.top() - orig.y());

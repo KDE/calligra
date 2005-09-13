@@ -490,7 +490,7 @@ void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QP
         if ( objectIsAHeaderFooterHidden(it.current()) )
             continue;
 
-        if ( rect.intersects( it.current()->getBoundingRect() ) )
+        if ( rect.intersects( it.current()->getRepaintRect() ) )
         {
             if ( m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == it.current() )
             {
@@ -617,17 +617,6 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject
             continue;
         it.current()->draw( painter, m_view->zoomHandler(), pageNum, SM_NONE, false );
     }
-}
-
-QRect KPrCanvas::getOldBoundingRect( const KPObject *obj )
-{
-    KoRect oldKoBoundingRect = obj->getBoundingRect();
-    double _dx = oldKoBoundingRect.x() - 5.0;
-    double _dy = oldKoBoundingRect.y() - 5.0;
-    double _dw = oldKoBoundingRect.width() + 10.0;
-    double _dh = oldKoBoundingRect.height() + 10.0;
-    oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
-    return m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
 }
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
@@ -4830,7 +4819,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
     KPObject *kpobject = m_resizeObject;
 
-    QRect oldBoundingRect( getOldBoundingRect(kpobject) );
+    QRect oldBoundingRect( m_view->zoomHandler()->zoomRect( kpobject->getRepaintRect() ) );
 
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect();

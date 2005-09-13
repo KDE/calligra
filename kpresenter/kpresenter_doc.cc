@@ -3219,13 +3219,13 @@ void KPresenterDoc::setPageLayout( const KoPageLayout &pgLayout )
 void KPresenterDoc::updateHeaderFooterPosition( )
 {
     KoRect pageRect=m_masterPage->getPageRect();
-    QRect oldBoundingRect=zoomHandler()->zoomRect(_header->getBoundingRect());
+    QRect oldBoundingRect = zoomHandler()->zoomRect( _header->getRepaintRect() );
     _header->setOrig(pageRect.topLeft ());
     _header->setSize(pageRect.width(),_header->getSize().height());
     repaint( oldBoundingRect );
     repaint(_header);
 
-    oldBoundingRect=zoomHandler()->zoomRect(_footer->getBoundingRect());
+    oldBoundingRect = zoomHandler()->zoomRect( _footer->getRepaintRect() );
     _footer->setOrig(pageRect.left(),pageRect.bottom()-_footer->getSize().height());
     _footer->setSize(pageRect.width(),_footer->getSize().height());
     repaint(oldBoundingRect);
@@ -3361,7 +3361,7 @@ void KPresenterDoc::layout()
 
 void KPresenterDoc::repaint( KPObject *kpobject )
 {
-    repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect()) );
+    repaint( m_zoomHandler->zoomRect( kpobject->getRepaintRect() ) );
 }
 
 QValueList<int> KPresenterDoc::getPageEffectSteps( unsigned int num )

@@ -386,8 +386,6 @@ void KPPieObject::setMinMax( double &min_x, double &min_y,
     else if ( tmp_y > max_y ) {
         max_y = tmp_y;
     }
-
-    kdDebug(33001) << "setMinMax min(x,y) max(x,y) min(" << min_x << "," << min_y << ") max(" << max_x << "," << max_y << ")" << endl;
 }
 
 

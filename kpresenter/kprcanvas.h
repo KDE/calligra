@@ -473,8 +473,6 @@ protected:
 
     bool finishPageEffect( bool cancel = false );
 
-    QRect getOldBoundingRect( const KPObject *obj );
-
     void drawCurrentPageInPix( QPixmap& ) const;
     virtual void mousePressEvent( QMouseEvent *e );
     virtual void mouseReleaseEvent( QMouseEvent *e );
