@@ -44,7 +44,7 @@ public:
 
 	virtual void accept( VVisitor& /*visitor*/ );
 
-	virtual void save( QDomElement& ) const {}
+	virtual void save( QDomElement& ) const;
 	virtual void load( const QDomElement& ) {}
 
 	virtual VObject* clone() const;
