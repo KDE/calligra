@@ -43,7 +43,7 @@
 #include "kis_image_magick_converter.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_profile.h"
 #include "kis_annotation.h"
@@ -71,7 +71,7 @@ namespace {
      * Make this more flexible -- although... ImageMagick
      * isn't that flexible either.
      */
-    KisAbstractColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
+    KisColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
 
         if (type == GRAYColorspace) {
             if (imageDepth == 8)
@@ -96,7 +96,7 @@ namespace {
 
     }
 
-    ColorspaceType getColorTypeforColorSpace( KisAbstractColorSpace * cs )
+    ColorspaceType getColorTypeforColorSpace( KisColorSpace * cs )
     {
         if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") ) return GRAYColorspace;
         if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") ) return RGBColorspace;
@@ -107,7 +107,7 @@ namespace {
 
     }
 
-    KisProfileSP getProfileForProfileInfo(const Image * image, KisAbstractColorSpace * cs)
+    KisProfile * getProfileForProfileInfo(const Image * image, KisColorSpace * cs)
     {
 #ifndef HAVE_MAGICK6
         return 0;
@@ -119,7 +119,7 @@ namespace {
         const char *name;
         const StringInfo *profile;
 
-        KisProfileSP p = 0;
+        KisProfile * p = 0;
 
         ResetImageProfileIterator(image);
         for (name = GetNextImageProfile(image); name != (char *) NULL; )
@@ -324,7 +324,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         unsigned long imageDepth = image->depth;
         kdDebug() << "Image depth: " << imageDepth << "\n";
 
-        KisAbstractColorSpace * cs = 0;
+        KisColorSpace * cs = 0;
         ColorspaceType colorspaceType;
         
         // Determine image type -- rgb, grayscale or cmyk
@@ -352,7 +352,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         }
         kdDebug() << "Image has colorspace: " << cs -> id().id() << "\n";
 
-        KisProfileSP profile = getProfileForProfileInfo(image, cs);
+        KisProfile * profile = getProfileForProfileInfo(image, cs);
          if (profile)
              kdDebug() << "Layer has profile: " << profile -> productName() << "\n";
 
@@ -370,10 +370,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         if (image -> columns && image -> rows) {
 
             // Opacity (set by the photoshop import filter)
-            QUANTUM opacity = OPACITY_OPAQUE;
+            Q_UINT8 opacity = OPACITY_OPAQUE;
             const ImageAttribute * attr = GetImageAttribute(image, "[layer-opacity]");
             if (attr != 0) {
-                opacity = QUANTUM_MAX - Downscale(QString(attr->value).toInt());
+                opacity = Q_UINT8_MAX - Downscale(QString(attr->value).toInt());
             }
 
             KisLayerSP layer = 0;
