@@ -250,11 +250,13 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 
   // Must be executed before setActivePage() and before setupActions()
-  createGeometryDock();
-  createLayerDock();
   createBirdEyeDock();
+  createLayerDock();
+  createGeometryDock();
   createProtectionDock();
   createAddStencilSetDock();
+  paletteManager()->showWidget("birdseyepanel");
+  paletteManager()->showWidget("stencilgeometrypanel");
 
   setupActions();
 
@@ -335,14 +337,14 @@ void KivioView::createLayerDock()
 {
   m_pLayersPanel = new KivioLayerPanel( this, this);
   m_pLayersPanel -> setCaption(i18n("Layers"));
-  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "layersdocker");
+  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "birdeyedocker");
 }
 
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
   m_pProtectionPanel -> setCaption(i18n("Protection"));
-  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "protectiondocker");
+  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "geometrydocker");
 }
 
 void KivioView::createAddStencilSetDock()
