@@ -105,7 +105,7 @@ VStarOptionsWidget::setInnerRadius( double v )
 void
 VStarOptionsWidget::setOuterRadius( double v )
 {
-	m_outerR->changeValue( v );
+	m_outerR->setValue( v );
 
 	// set optimal inner radius
 	if( type() == VStar::star )
