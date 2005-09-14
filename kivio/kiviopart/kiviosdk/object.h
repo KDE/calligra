@@ -85,6 +85,11 @@ class Object{
     /// Set the name of Object to @param newName
     virtual void setName(const QString& newName);
 
+    /// Position of Object
+    virtual KoPoint position() const = 0;
+    /// Set the position of Object to @param newPosition
+    virtual void setPosition(const KoPoint& newPosition) = 0;
+
     /**
      * Move the Object
      * @param xOffset number of points to move the Object horizontaly

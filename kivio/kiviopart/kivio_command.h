@@ -197,18 +197,19 @@ protected:
 
 class KIVIO_EXPORT KivioMoveStencilCommand : public KNamedCommand
 {
-public:
-    KivioMoveStencilCommand(const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page );
+  public:
+    KivioMoveStencilCommand(const QString &_name, Kivio::Object* _stencil, const KoPoint& _origPosition,
+                            const KoPoint& _newPosition, KivioPage* _page);
     ~KivioMoveStencilCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
-    KivioStencil *m_stencil;
-    KoRect initSize;
-    KoRect endSize;
-    KivioPage *m_page;
+  protected:
+    Kivio::Object* m_stencil;
+    KoPoint m_origPosition;
+    KoPoint m_newPosition;
+    KivioPage* m_page;
 };
 
 class KivioChangeLayoutCommand : public KNamedCommand

@@ -261,6 +261,33 @@ void SelectTool::endOperation()
   QValueList<Kivio::Object*>::iterator it = m_origObjectList.begin();
   QValueList<Kivio::Object*>::iterator itEnd = m_origObjectList.end();
 
+  if(m_mode == MMove) {
+    QValueList<Kivio::Object*>::iterator it2 = view()->activePage()->selectedStencils()->begin();
+    QValueList<Kivio::Object*>::iterator itEnd2 = view()->activePage()->selectedStencils()->end();
+    KMacroCommand* macro = new KMacroCommand(i18n("Move Stencil"));
+    bool moved = false;
+
+    while((it != itEnd) && (it2 != itEnd2)) {
+      if((*it)->position() != (*it2)->position()) {
+        KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
+            (*it2), (*it)->position(), (*it2)->position(), view()->activePage());
+        macro->addCommand( cmd);
+        moved = true;
+      }
+
+      ++it;
+      ++it2;
+    }
+
+    if(moved) {
+      view()->doc()->addCommand(macro);
+    } else {
+      delete macro;
+    }
+  }
+
+  it = m_origObjectList.begin();
+
   while(it != itEnd) {
     delete (*it);
     it = m_origObjectList.remove(it);

@@ -42,6 +42,11 @@ class PolylineObject : public Object
     /// Type of object
     virtual ShapeType type();
 
+    /// Position of Object
+    virtual KoPoint position() const;
+    /// Set the position of Object to @param newPosition
+    virtual void setPosition(const KoPoint& newPosition);
+
     /**
      * Move the Object
      * @param xOffset number of points to move the Object horizontaly

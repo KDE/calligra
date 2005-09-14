@@ -35,6 +35,18 @@ PolylineObject::~PolylineObject()
 {
 }
 
+KoPoint PolylineObject::position() const
+{
+  return m_pointVector[0];
+}
+
+void PolylineObject::setPosition(const KoPoint& newPosition)
+{
+  KoPoint offset = newPosition - m_pointVector[0];
+
+  move(offset.x(), offset.y());
+}
+
 Object* PolylineObject::duplicate()
 {
   PolylineObject* object = new PolylineObject(*this);
