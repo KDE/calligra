@@ -37,6 +37,7 @@
 #include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_rgb_f32_colorspace.h"
+#include "kis_rgb_f16half_colorspace.h"
 
 #include "kis_openexr_export.h"
 
@@ -65,10 +66,10 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
 
     // XXX: Add dialog about flattening layers here
 
-    KisDoc *output = dynamic_cast<KisDoc*>(m_chain -> inputDocument());
+    KisDoc *doc = dynamic_cast<KisDoc*>(m_chain -> inputDocument());
     QString filename = m_chain -> outputFile();
     
-    if (!output) {
+    if (!doc) {
         return KoFilter::CreationError;
     }
     
@@ -76,29 +77,33 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
         return KoFilter::FileNotFound;
     }
 
-    KisImageSP img = new KisImage(*output -> currentImage());
+    KisImageSP img = new KisImage(*doc -> currentImage());
     Q_CHECK_PTR(img);
 
     // Don't store this information in the document's undo adapter
-    bool undo = output -> undoAdapter() -> undo();
-    output -> undoAdapter() -> setUndo(false);
+    bool undo = doc -> undoAdapter() -> undo();
+    doc -> undoAdapter() -> setUndo(false);
 
     img -> flatten();
 
     KisLayerSP layer = img -> layer(0);
     Q_ASSERT(layer);
     
-    output -> undoAdapter() -> setUndo(undo);
+    doc -> undoAdapter() -> setUndo(undo);
 
     //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
-    KisF32RgbColorSpace *cs = dynamic_cast<KisF32RgbColorSpace *>(layer -> colorSpace());
+    KisRgbF16HalfColorSpace *cs = dynamic_cast<KisRgbF16HalfColorSpace *>(layer -> colorSpace());
 
     if (cs == 0) {
         // We could convert automatically, but the conversion wants to be done with
         // selectable profiles and rendering intent.
         KMessageBox::information(0, i18n("The image is using an unsupported color space. "
-                                         "Please convert to 32-bit floating point RGB/Alpha "
+                                         "Please convert to 16-bit floating point RGB/Alpha "
                                          "before saving in the OpenEXR format."));
+
+        // Don't show the couldn't save error dialog.
+        doc -> setErrorMessage("USER_CANCELED");
+
         return KoFilter::WrongFormat;
     }
 
@@ -124,10 +129,10 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
         while (!it.isDone()) {
 
             // XXX: Currently we use unmultiplied data so premult it.
-            float unmultipliedRed;
-            float unmultipliedGreen;
-            float unmultipliedBlue;
-            float alpha;
+            half unmultipliedRed;
+            half unmultipliedGreen;
+            half unmultipliedBlue;
+            half alpha;
 
             cs -> getPixel(it.rawData(), &unmultipliedRed, &unmultipliedGreen, &unmultipliedBlue, &alpha);
             rgba -> r = unmultipliedRed * alpha;

@@ -43,6 +43,7 @@
 #include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_rgb_f32_colorspace.h"
+#include "kis_rgb_f16half_colorspace.h"
 
 using namespace std;
 using namespace Imf;
@@ -95,7 +96,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
+    KisRgbF16HalfColorSpace *cs = static_cast<KisRgbF16HalfColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF16HALF", ""))));
          
     if (cs == 0) {
         return KoFilter::InternalError;
@@ -129,9 +130,9 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
-            float unmultipliedRed = rgba -> r;
-            float unmultipliedGreen = rgba -> g;
-            float unmultipliedBlue = rgba -> b;
+            half unmultipliedRed = rgba -> r;
+            half unmultipliedGreen = rgba -> g;
+            half unmultipliedBlue = rgba -> b;
 
             if (rgba -> a >= HALF_EPSILON) {
                 unmultipliedRed /= rgba -> a;
