@@ -36,16 +36,19 @@ Description: If defined, form plugin will be loaded; else: it will be
 not loaded even if is compiled.
 
 * KEXI_REPORTS_SUPPORT
+Type: defined/undefined
 Like KEXI_FORMS_SUPPORT macro, but for enabling report plugin.
 Default: undefined
 
 * KEXI_SCRIPTS_SUPPORT
+Type: defined/undefined
 Like KEXI_FORMS_SUPPORT macro, but for enabling scripts plugin.
 Default: undefined
 
 * KEXI_KROSS_SUPPORT
+Type: defined/undefined
 If KEXI_SCRIPTS_SUPPORT is defined, this option defines that
-Kross, located at kexi/scripting{core|plugins} should be
+Kross, located at kexi/scripting{core|plugins}, should be
 compiled and used for scripting.
 Default: same as KEXI_SCRIPTS_SUPPORT
 
