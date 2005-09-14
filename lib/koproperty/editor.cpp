@@ -635,7 +635,7 @@ Editor::hideEditor()
 void
 Editor::showUndoButton( bool show )
 {
-	if (!d->currentItem)
+	if (!d->currentItem || !d->currentWidget)
 		return;
 
 	int y = viewportToContents(QPoint(0, itemRect(d->currentItem).y())).y();
