@@ -97,21 +97,16 @@ PixmapEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_pixmap = value.toPixmap();
 	if (m_pixmap.isNull() || (m_pixmap.height()<=height())) {
-		if (m_pixmap.isNull())
-			m_edit->setPixmap(m_pixmap);
-//		m_previewPixmap = m_pixmap;
-		kdDebug() << "1" << endl;
+		m_edit->setPixmap(m_pixmap);
+		m_previewPixmap = m_pixmap;
 	}
 	else {
-		kdDebug() << "2" << endl;
 		QImage img(m_pixmap.convertToImage());
 		if (!QRect(QPoint(0,0), m_edit->size()*3).contains(m_pixmap.rect())) {
-			kdDebug() << "2.1" << m_edit->size() << m_pixmap.rect() <<endl;
 			img = img.smoothScale(m_edit->size()*3, QImage::ScaleMin);
 			m_previewPixmap.convertFromImage(img);//preview pixmap is a bit larger
 		}
 		else {
-			kdDebug() << "2.2" << endl;
 			m_previewPixmap = m_pixmap;
 		}
 		img = img.smoothScale(m_edit->size(), QImage::ScaleMin);
