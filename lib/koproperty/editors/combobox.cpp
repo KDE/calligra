@@ -108,7 +108,7 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 			for (int i=0; i<m_edit->count(); i++)
 				list += m_edit->text(i);
 			kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx 
-				<< " count=" << m_edit->count() << " value=" << value.toString() 
+				<< " count=" << m_edit->count() << " value='" << value.toString() 
 				<< "' (property '" << property()->name() << "')\nActual combobox contents: "
 				<< list << endl;
 		}

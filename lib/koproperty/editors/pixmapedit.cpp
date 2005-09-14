@@ -159,7 +159,7 @@ PixmapEdit::selectPixmap()
 		this, 0, caption);
 #else
 	QString fileName = KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, caption);
+		":lastVisitedImagePath", this, caption).url();
 #endif
 
 	if (fileName.isEmpty())
