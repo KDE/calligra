@@ -36,10 +36,10 @@
 
 #include <kdebug.h>
 #include <kimageio.h>
-#include <krecentdirs.h>
 
 #ifdef Q_WS_WIN
 #include <win32_utils.h>
+#include <krecentdirs.h>
 #endif
 
 #ifndef PURE_QT
