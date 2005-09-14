@@ -503,7 +503,7 @@ Editor::slotClicked(QListViewItem *it)
 	d->currentItem = item;
 	d->currentWidget = createWidgetForProperty(p);
 
-	updateEditorGeometry();
+	//moved up updateEditorGeometry();
 	showUndoButton( p->isModified() );
 	d->currentWidget->show();
 	d->currentWidget->setFocus();
@@ -546,11 +546,9 @@ Widget*
 Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 {
 	int type = property->type();
-	Widget *widget = 0;
+	Widget *widget = d->widgetCache[property];
 
-	if(d->widgetCache.contains(property) )
-		widget = d->widgetCache[property];
-	else {
+	if(!widget) {
 		widget = Factory::getInstance()->widgetForProperty(property);
 		d->widgetCache[property] = widget;
 		widget->setProperty(0); // to force reloading property later
@@ -562,12 +560,17 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 		connect(widget, SIGNAL(rejectInput(Widget*)),
 			this, SLOT(slotWidgetRejectInput(Widget*)) );
 	}
+
+	//update geometry earlier, because Widget::setValue() can depend on widget's geometry
+	updateEditorGeometry(d->currentItem, widget);
+
 	if(!widget->property() || changeWidgetProperty)
 		widget->setProperty(property);
 
 //	if (!d->doNotSetFocusOnSelection) {
 //		widget->setFocus();
 //	}
+
 	return widget;
 }
 
@@ -583,29 +586,38 @@ Editor::clearWidgetCache()
 void
 Editor::updateEditorGeometry(bool forceUndoButtonSettings, bool undoButtonVisible)
 {
-	if(!d->currentItem || !d->currentWidget)
+	updateEditorGeometry(d->currentItem, d->currentWidget, 
+		forceUndoButtonSettings, undoButtonVisible);
+}
+
+void
+Editor::updateEditorGeometry(EditorItem *item, Widget* widget, 
+  bool forceUndoButtonSettings, bool undoButtonVisible)
+{
+	if(!item || !widget)
 		return;
 
 	int placeForUndoButton;
 	if (forceUndoButtonSettings ? undoButtonVisible : d->undoButton->isVisible())
 		placeForUndoButton = d->undoButton->width();
 	else
-		placeForUndoButton = d->currentWidget->leavesTheSpaceForRevertButton() ? d->undoButton->width() : 0;
+		placeForUndoButton = widget->leavesTheSpaceForRevertButton() ? d->undoButton->width() : 0;
 
 	QRect r;
-	int y = itemPos(d->currentItem);
-	r.setX(header()->sectionPos(1)-(d->currentWidget->hasBorders()?1:0)); //-1, to align to horizontal line
-	r.setY(y-(d->currentWidget->hasBorders()?1:0));
-	r.setWidth(header()->sectionSize(1)+(d->currentWidget->hasBorders()?1:0) //+1 because we subtracted 1 from X
+	int y = itemPos(item);
+	r.setX(header()->sectionPos(1)-(widget->hasBorders()?1:0)); //-1, to align to horizontal line
+	r.setY(y-(widget->hasBorders()?1:0));
+	r.setWidth(header()->sectionSize(1)+(widget->hasBorders()?1:0) //+1 because we subtracted 1 from X
 		- placeForUndoButton);
-	r.setHeight(d->currentItem->height()+(d->currentWidget->hasBorders()?1:-1));
+	r.setHeight(item->height()+(widget->hasBorders()?1:-1));
 
 	// check if the column is fully visible
 	if (visibleWidth() < r.right())
 		r.setRight(visibleWidth());
 
-	moveChild(d->currentWidget, r.x(), r.y());
-	d->currentWidget->resize(r.size());
+	moveChild(widget, r.x(), r.y());
+	widget->resize(r.size());
+	qApp->processEvents();
 }
 
 void

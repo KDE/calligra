@@ -127,6 +127,8 @@ class KOPROPERTY_EXPORT Editor : public KListView
 		void  undo();
 
 		void  updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+		void  updateEditorGeometry(EditorItem *item, Widget* widget, bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+
 		void  hideEditor();
 
 		void  slotCollapsed(QListViewItem *item);

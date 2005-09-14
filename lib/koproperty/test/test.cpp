@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcmdlineargs.h>
+#include <kiconloader.h>
 
 #include <qpixmap.h>
 #include <qstringlist.h>
@@ -80,8 +81,8 @@ test::test()
 //  Appearance
 	group = flat ? "" : "AppearanceGroup";
 	m_set->addProperty(new Property("Color", this->paletteBackgroundColor(),"Color"), group);
-	const QPixmap *pix = this->icon();
-	m_set->addProperty(new Property("Pixmap", *pix,"Pixmap"), group);
+	QPixmap pm(DesktopIcon("network"));
+	m_set->addProperty(new Property("Pixmap", pm,"Pixmap"), group);
 	m_set->addProperty(new Property("Font", this->font(),"Font"), group);
 	m_set->addProperty(new Property("Cursor", QCursor(Qt::WaitCursor),"Cursor"), group);
 	m_set->addProperty(new Property("LineStyle", 3, "LineStyle", "", LineStyle), group);

@@ -80,6 +80,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		void setHasBorders(bool set);
 
 	protected:
+		int m_rowHeight;
 		WidgetPrivate  *d;
 };
 
