@@ -78,10 +78,16 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 void
 VTransformDocker::update()
 {
-	disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
-	disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
-	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
-	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+
+	// update units in case they changed
+	m_x->setUnit( m_view->part()->unit() );
+	m_y->setUnit( m_view->part()->unit() );
+	m_width->setUnit( m_view->part()->unit() );
+	m_height->setUnit( m_view->part()->unit() );
 
 	int objcount = m_view->part()->document().selection()->objects().count();
 	if ( objcount>0 )
@@ -103,16 +109,44 @@ VTransformDocker::update()
 		mainWidget->setEnabled( false );
 	}
 
-	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
-	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
-	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
-	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
 }
 
 void
-VTransformDocker::transform()
+VTransformDocker::translate()
 {
 	//FIXME: Needs an appropriate transform command which takes absolute values of object size
+	double newX = m_x->value();
+	double newY = m_y->value();
+
+	KoRect rect = m_view->part()->document().selection()->boundingBox();
+
+	if( rect.x() != newX || rect.y() != newY )
+	{
+		VTranslateCmd *cmd = new VTranslateCmd( &m_view->part()->document(), newX-rect.x(), newY-rect.y(), false );
+		m_view->part()->addCommand( cmd );
+	}
+	m_part->repaintAllViews( true );
+}
+
+void
+VTransformDocker::scale()
+{
+	//FIXME: Needs an appropriate transform command which takes absolute values of object size
+	double newW = m_width->value();
+	double newH = m_height->value();
+
+	KoRect rect = m_view->part()->document().selection()->boundingBox();
+
+	if( rect.width() != newW || rect.height() != newH )
+	{
+		
+		VScaleCmd *cmd = new VScaleCmd( &m_view->part()->document(), rect.topLeft(), newW/rect.width(), newH/rect.height(), false );
+		m_view->part()->addCommand( cmd );
+	}
 	m_part->repaintAllViews( true );
 }
 

@@ -1339,6 +1339,8 @@ KarbonView::setUnit( KoUnit::Unit _unit )
 		part()->toolController()->activeTool()->refreshUnit();
 	m_horizRuler->setUnit( _unit );
 	m_vertRuler->setUnit( _unit );
+	// TODO introduce a unitChanged signal in karbon part
+	m_TransformDocker->update();
 }
 
 #include "karbon_view.moc"

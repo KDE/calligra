@@ -38,7 +38,8 @@ public slots:
 	void update();
 
 private slots:
-	void transform();
+	void translate();
+	void scale();
 
 private:
 	KarbonPart *m_part;
