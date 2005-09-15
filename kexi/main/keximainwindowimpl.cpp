@@ -760,7 +760,7 @@ void KexiMainWindowImpl::initActions()
 	connect(d->action_tools_scripts->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(slotToolsScriptsAboutToShow()));
 #else
-	//d->action_tools_scripts = d->dummy_action;
+	d->action_tools_scripts = d->dummy_action;
 #endif
 
 #ifndef KEXI_NO_CSV_IMPORT
