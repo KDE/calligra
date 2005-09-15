@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-kexipics_DATA = cp-wiz.png
+kexipics_DATA = cp-wiz.png imagebox.png
 
 kexipicsdir = $(kde_datadir)/kexi/pics
 
