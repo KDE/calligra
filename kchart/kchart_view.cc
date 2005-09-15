@@ -545,7 +545,7 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
     if (!koDocument()->isReadWrite() || !factory())
         return;
     if ( e->button() == RightButton )
-        ((QPopupMenu*)factory()->container("Format",this))->popup(QCursor::pos());
+        ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
 }
 
 
