@@ -16,7 +16,7 @@ libkeximain_la_LDFLAGS = -no-undefined $(KDE_RPATH) $(all_libraries) \
 SUBDIRS = startup .
 
 libkeximain_la_LIBADD =  $(top_builddir)/kexi/kexidb/libkexidb.la $(top_builddir)/kexi/core/libkexicore.la \
-	$(top_builddir)/kexi/main/startup/libkexiutils.la \
+	$(top_builddir)/kexi/kexiutils/libkexiutils.la \
 	$(top_builddir)/kexi/main/startup/libkeximainstartup.la \
 	$(top_builddir)/lib/koproperty/libkoproperty.la \
 	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
