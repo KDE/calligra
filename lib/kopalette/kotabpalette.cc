@@ -28,7 +28,7 @@
 #include <kopalette.h>
 #include <kotabpalette.h>
 
-KoTabPalette::KoTabPalette(KoView * parent, const char * name)
+KoTabPalette::KoTabPalette(QWidget * parent, const char * name)
     : KoPalette(parent, name)
 {
     m_page = new QTabWidget(this);
@@ -36,7 +36,7 @@ KoTabPalette::KoTabPalette(KoView * parent, const char * name)
     m_page->setFocusPolicy(QWidget::NoFocus);
     //m_page->setFont(m_font);
     m_page->setMargin(1);
-//     m_page->setTabReorderingEnabled(true);
+    //m_page->setTabReorderingEnabled(true);
     setMainWidget(m_page);
 }
 
@@ -47,11 +47,7 @@ KoTabPalette::~KoTabPalette()
 void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
 {
     w -> setFont(m_font);
-        
-    if (w -> layout() != 0) {
-         w -> layout() -> setSpacing(0);
-         w -> layout() -> setMargin(0);
-    }
+
     m_page -> insertTab(w, w -> caption(), position);
 }
 

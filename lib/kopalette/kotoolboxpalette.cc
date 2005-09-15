@@ -24,7 +24,7 @@
 #include <kopalettemanager.h>
 #include <kotoolboxpalette.h>
 
-KoToolBoxPalette::KoToolBoxPalette(KoView * parent, const char * name)
+KoToolBoxPalette::KoToolBoxPalette(QWidget * parent, const char * name)
     : KoPalette(parent, name)
 {
     m_page = new QToolBox(this);

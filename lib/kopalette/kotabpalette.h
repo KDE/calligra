@@ -39,18 +39,18 @@ Q_OBJECT
 
 public:
 
-    KoTabPalette(KoView * parent, const char * name);
+    KoTabPalette(QWidget * parent, const char * name);
     virtual ~KoTabPalette();
 
 public:
 
     virtual void plug(QWidget * widget, const QString & name, int position = -1);
     virtual void unplug(const QWidget * widget);
-        void showPage(QWidget *w);
-        void makeVisible(bool v);
-        int indexOf(QWidget *w);
+    void showPage(QWidget *w);
+    void makeVisible(bool v);
+    int indexOf(QWidget *w);
     bool isHidden(QWidget *w);
-        virtual void togglePageHidden(QWidget *w);
+    virtual void togglePageHidden(QWidget *w);
 
 private:
 

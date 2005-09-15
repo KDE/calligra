@@ -82,9 +82,12 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 KoPaletteManager::~KoPaletteManager()
 {
     save();
-
+    delete m_viewActionMenu;
+    delete m_widgetNames;
     delete m_widgets;
     delete m_palettes;
+    delete m_actions;
+    delete m_mapper;
     delete m_defaultMapping;
     delete m_currentMapping;
 }
@@ -270,11 +273,11 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
     KoPalette * palette = 0;
     switch (style) {
         case (PALETTE_DOCKER):
-            palette = new KoTabPalette(m_view, name.latin1());
+            palette = new KoTabPalette(m_view/*->mainWindow()*/, name.latin1());
             break;
         case (PALETTE_TOOLBOX):
         default:
-            palette = new KoToolBoxPalette(m_view, name.latin1());
+            palette = new KoToolBoxPalette(m_view/*->mainWindow()*/, name.latin1());
             break;
         
     };

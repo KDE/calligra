@@ -28,8 +28,6 @@
 #include <qfont.h>
 #include <qlayout.h>
 #include <koffice_export.h>
-#include <koView.h>
-
 /**
  * A floating palette that allows the adding and removing of widgets
  * to its organzing principle.
@@ -43,27 +41,18 @@ Q_OBJECT
 
 public:
 
-    KoPalette(KoView * parent, const char * name);
+    KoPalette(QWidget * parent, const char * name);
     virtual ~KoPalette();
 
 public:
 
     virtual void plug(QWidget * widget, const QString & name, int position) = 0;
     virtual void unplug(const QWidget * widget) = 0;
-        virtual void showPage(QWidget *w) = 0;
-        virtual void togglePageHidden(QWidget *w) = 0;
-        virtual void makeVisible(bool v) = 0;
+    virtual void showPage(QWidget *w) = 0;
+    virtual void togglePageHidden(QWidget *w) = 0;
+    virtual void makeVisible(bool v) = 0;
     virtual bool isHidden(QWidget * w) = 0;
-        virtual int indexOf(QWidget *w) = 0;
-
-    void setCaption(const QString & caption);
-
-public slots:
-
-    void slotShade(bool toggle);
-    void slotPlaceChanged(QDockWindow::Place p);
-    
-
+    virtual int indexOf(QWidget *w) = 0;
 
 protected:
 
@@ -71,13 +60,7 @@ protected:
     QFont m_font;
     
 private:
-    QGridLayout * m_wdgDockerTabLayout;
-    QLabel* m_lblCaption;
-    QToolButton* m_bnShade;
-    QPixmap m_pixShadeButton;
     QWidget * m_page;
-    bool m_docked;
-    bool m_shaded;
 
 };
 

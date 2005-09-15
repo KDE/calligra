@@ -34,7 +34,7 @@ Q_OBJECT
 
 public:
 
-    KoToolBoxPalette(KoView * parent, const char * name);
+    KoToolBoxPalette(QWidget * parent, const char * name);
     ~KoToolBoxPalette();
 
 public:
