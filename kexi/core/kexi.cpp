@@ -98,7 +98,7 @@ KexiPart::Manager& Kexi::partManager()
 	return _int->partManager;
 }
 
-KEXICORE_EXPORT KexiScriptManager* Kexi::scriptManager(KexiMainWindow* mainwin)
+KexiScriptManager* Kexi::scriptManager(KexiMainWindow* mainwin)
 {
 	_INIT_SHARED;
 	if(! _int->scriptManager)
