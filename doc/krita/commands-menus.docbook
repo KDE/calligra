@@ -1,0 +1,1818 @@
+<sect1 id="commands-menus">
+<title>Menus</title>
+
+<para>
+Some of &krita;'s menus are standard in &kde; or &koffice;, while others are
+particular to &krita;. The <guimenu>File</guimenu> menu contains commands for
+manipluating files. In the <guimenu>Edit</guimenu> menu, you can find
+commands that do things with the current selection.
+With the commands from the <guimenu>View</guimenu> menu, you can change the way
+you look at the image. The <guimenu>Image</guimenu> menu contains commands that
+change the entire image, like converting all layers to another color model or
+resizing or scaling the image. The <guimenu>Adjust</guimenu> menu contains
+commands that change the color values of the current layer. The
+<guimenu>Layer</guimenu> menu is like the <guimenu>Image</guimenu> menu, but the
+commands only work on the current layer. The <guimenu>Select</guimenu> menu
+contains commands to create and manipulate selections. The
+<guimenu>Filter</guimenu> menu contains all the filters you have installed.
+These work on the current layer. The <guimenu>Tools</guimenu> menu is common to
+&koffice; and contains &koffice;-wide plugins. The <guimenu>Settings</guimenu>
+menu is again common to &koffice; and allows you to manipulate the toolbars,
+shortcuts and configuration of &krita;.
+</para>
+
+<!-- ====== File ================================================ -->
+
+<sect2 id="commands-menus-file">
+<title>The <guimenu>File</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>N</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens an existing document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a recently opened
+document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>S</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document under a different name.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the current document
+from disk.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens an existing document.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document under a different name.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>P</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Prints the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Shows a preview of what the printed document
+will look like.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the Document Information
+dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sends the document via
+e-mail.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits &krita;.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Edit ================================================ -->
+
+
+<sect2 id="commands-menus-edit">
+<title>The <guimenu>Edit</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Undo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Undos the last action
+carried out.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Redo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Carries out the last undone
+action.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>X</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Cuts the selection to the
+clipboard.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>C</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Copies the selection to the
+keyboard.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>V</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Pastes the contents of the
+clipboard.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste into New Image</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Pastes the contents of the
+clipboard as a new image.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Clear</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Clears the selection.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== View ================================================ -->
+
+
+<sect2 id="commands-menus-view">
+<title>The <guimenu>View</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Full Screen Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Switches between normal view
+and full screen view.</action> In full screen view, the title
+bar is hidden and the actual application window is resized to the entire
+screen.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>New View</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a new view for the
+current document.</action> A new application window is opened
+so that you can have two different views of the same document, for example
+to work on different areas at the same time, or to look at an area at different
+zoom levels simultaneously. Changes you make to the document in one view are
+immediately visible in other views.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Close All Views</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes all views.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Split View</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Splits the current view.</action> The
+drawing area will be split into two parts, which can be used
+just like two views in different windows.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Remove View</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Unsplits the view.</action> The second
+view (the bottom or right one) will be closed and the first one will remain
+visible.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Splitter Orientation</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Changes the way the split
+view is displayed.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Splitter Orientation</guisubmenu>
+<guimenuitem>Vertical</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Changes the orientation of
+the splitter to vertical.</action> The two split
+views will be positioned side by side.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Splitter Orientation</guisubmenu>
+<guimenuitem>Horizontal</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Changes the orientation of
+the splitter to horizontal.</action> The two split views will
+be positioned above each other.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>+</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Zoom In</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Zooms in the view.</action> The view
+will be more detailed, but a smaller area will be visible at the
+same time.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>-</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Zoom Out</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Zooms out the view.</action> A larger
+area will be visible at the same time, but it will be less
+detailed.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Actual Pixels</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Zooms the view to actual pixel
+level.</action> (1:1 scale)</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Actual Size</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Zooms the view to the actual
+size.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>R</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Show Rulers</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles display of the
+rulers on and off.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Allows you to toggle the
+display of the various palettes on and off.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide all Palette Windows</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides all palettes.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Layers</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the <guilabel>Layers</guilabel>
+palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Overview</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the
+<guilabel>Overview</guilabel> palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide HSV</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the
+<guilabel>HSV</guilabel> palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide RGB</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the
+<guilabel>RGB</guilabel> palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Gray</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the
+<guilabel>Gray</guilabel> palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Palettes</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the
+<guilabel>Palettes</guilabel> palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Brushes and stuff</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the
+<guilabel>Brushes and stuff</guilabel> palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Watercolors</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the <guilabel>Watercolors</guilabel>
+palette.</action></para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Wetness Visualisation</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles wetness
+visualisation on and off.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Image =============================================== -->
+
+
+<sect2 id="commands-menus-image">
+<title>The <guimenu>Image</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Image Properties</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Image Properties</guilabel> dialog,
+in which you can change the image name, size,
+profile and description.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Resize Image to Size of Current Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Resizes the image to the
+size of the currently active layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Convert Image Type...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Convert All Layers</guilabel>
+dialog.</action> This allows you to convert the image to a different color
+space. Apart from the color space, the profile and
+rendering intent can be specified as well.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Separate Image...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Separate Image</guilabel>
+dialog for separating the image into various layers.</action>
+You can set various options like source, destination, and
+alpha channels.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Change Image Size...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Image Size</guilabel> dialog.</action> You can
+resize or scale the image using various algorithms here.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Rotate Image...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Rotate Image</guilabel>
+dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Shear Image...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Shear Image</guilabel>
+dialog.</action> You can shear the image in X or Y directions,
+or both.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Adjust ============================================== -->
+
+
+<sect2 id="commands-menus-adjust">
+<title>The <guimenu>Adjust</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains various options for changing the
+colors in your image.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Auto Contrast</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Changes the colors to obtain an image with as
+much contrast as possible.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Brightness/Contrast...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Brightness/Contrast</guilabel> dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Color Adjustment...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Color Adjustment</guilabel>
+dialog.</action> You can modify the red, green, and blue levels
+of the current image there.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Desaturate</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Desaturates the image.</action> This
+will effectively convert the current image to grayscale.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Gamma Correction...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Gamma Correction</guilabel> dialog.</action> You can
+change the gamma of the current image there.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Adjust</guimenu>
+<guimenuitem>Variations</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Variations</guilabel> dialog.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Layer =============================================== -->
+
+
+<sect2 id="commands-menus-layer">
+<title>The <guimenu>Layer</guimenu> Menu</title>
+
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>N</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guimenuitem>Add Layer...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>New Layer</guilabel> dialog.</action> This will create a new empty
+layer. You can set the name, opacity, composite mode and
+layer type.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for a
+given &koffice; object type.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Scalable Graphics</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &karbon14; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Flowchart &amp; diagram</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an embedded
+&kivio; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Slide Presentations</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an embedded
+&kpresenter; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Image Object</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &krita; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Report Template</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an embedded
+&kugar; Designer object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Chart</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &kchart; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Formula Editor</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &kformula; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Report Generator</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &kugar; object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Project Management</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded KPlato object.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Spreadsheets</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &kspread; document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Word Processing</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &kword; document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guimenuitem>Insert Image as Layer...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Import Image</guilabel>
+dialog.</action> You can browse and select an image file,
+which will be inserted in a new layer.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>J</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guimenuitem>Cut Selection to New Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Cuts the current selection
+and inserts it as a new layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>J</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guimenuitem>Copy Selection to New Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Copies the current selection
+and inserts it as a new layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Remove Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Removes the current layer
+and its contents.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Duplicate Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Duplicates the current
+layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Hide/Show Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles the visibility of
+the current layer in the image editing window.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Link/Unlink Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Links or unlinks the current
+layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>]</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guimenuitem>Raise Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Moves the current layer one
+level upward.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>[</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guimenuitem>Lower Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Moves the current layer one
+level downward.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>]</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guimenuitem>Layer to Top</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Moves the current layer to the
+top.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>[</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guimenuitem>Layer to Bottom</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Moves the current layer to
+the bottom.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Save Layer as Image...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Export Layer</guilabel>
+dialog.</action> The current layer will be saved to the
+chosen file.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Flip on X Axis</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Flips the current layer
+horizontally.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Flip on Y Axis</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Flips the current layer
+vertically.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Layer Properties</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the Layer Properties
+dialog.</action> You can change the name, colorspace, opacity,
+composite mode and position of the current layer here.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mode</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>?</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>E</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guimenuitem>Merge Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merges the current layer
+with the one below it.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>E</keycap></keycombo></shortcut>
+<guimenu>Layer</guimenu>
+<guimenuitem>Merge Visible Layers</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merges all visible layers.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Merge Linked Layers</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merges all linked layers.</action> The
+layers will be merged and placed at the position of the lowest
+layer marked as linked.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Merge All Layers</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merges all layers together.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Convert Layer Type...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Convert Layer</guilabel> dialog.</action> You can
+set various options with respect to the colorspace and
+rendering intent.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Histogram...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Shows a color histogram for
+the current layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Change Layer Size...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Layer
+Size</guilabel> dialog.</action> You can choose the new
+dimensions and the resize filter to use.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate Layer</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate Layer</guisubmenu>
+<guimenuitem>Rotate 90</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer by 90
+degrees clockwise.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate Layer</guisubmenu>
+<guimenuitem>Rotate 180</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer by
+180 degrees.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate Layer</guisubmenu>
+<guimenuitem>Rotate 270</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer by
+90 degrees counterclockwise (270 degrees clockwise).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate Layer</guisubmenu>
+<guimenuitem>Rotate Layer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Rotate Layer</guilabel>
+dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Shear Layer...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Shear Layer</guilabel>
+dialog.</action> You can select the X and Y angles to shear
+by.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Watercolors</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains options for working
+with watercolors.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Watercolors</guisubmenu>
+<guimenuitem>Initialize Texture</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>?</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Select ============================================== -->
+
+
+<sect2 id="commands-menus-select">
+<title>The <guimenu>Select</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>A</keycap></keycombo></shortcut>
+<guimenu>Select</guimenu>
+<guimenuitem>Select All</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Selects the entire
+current layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>A</keycap></keycombo></shortcut>
+<guimenu>Select</guimenu>
+<guimenuitem>Deselect</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Unselects everything.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>D</keycap></keycombo></shortcut>
+<guimenu>Select</guimenu>
+<guimenuitem>Reselect</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reselects the previous
+unselected areas.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>I</keycap></keycombo></shortcut>
+<guimenu>Select</guimenu>
+<guimenuitem>Invert</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inverts the selection.</action>
+(Everything that is selected will be unselected and vice
+versa.)</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Alt;&Ctrl;<keycap>D</keycap></keycombo></shortcut>
+<guimenu>Select</guimenu>
+<guimenuitem>Feather...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Feathers the selection.</action> (Adds
+a soft border around it.)</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Select</guimenu>
+<guisubmenu>Modify</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>?</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Select</guimenu>
+<guimenuitem>Color Range...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Color Range</guilabel>
+dialog.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Filter ============================================== -->
+
+
+<sect2 id="commands-menus-filter">
+<title>The <guimenu>Filter</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>J</keycap></keycombo></shortcut>
+<guimenu>Filter</guimenu>
+<guimenuitem>Apply filter again</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Applies the last filter
+again.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains various filters for
+<quote>artistic</quote> actions.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Blur</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains various blur
+filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Blur</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Blur</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains filters that change
+the image colors.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Decor</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains decorative filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Decor</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains edge detecting
+filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains image enhancing
+filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains emboss filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains map filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains miscellaneous filters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu>
+<guimenuitem></guimenuitem>
+</menuchoice></term>
+<listitem><para><action>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guimenuitem>Filters Gallery</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Filters Gallery</guilabel> window.</action> This
+shows previews of the various filters and allows for easy
+comparison.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Scripts ============================================= -->
+
+
+<sect2 id="commands-menus-scripts">
+<title>The <guimenu>Scripts</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Scripts</guimenu>
+<guimenuitem>Script Console</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the &krita;
+JavaScript Console.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Scripts</guimenu>
+<guimenuitem>Load Script...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Loads a script.</action> &krita; JavaScript scripts
+usually have a <filename>.krajs</filename> extension. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Scripts</guimenu>
+<guisubmenu>Scripts</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Displays a list of
+available scripts.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Tools =============================================== -->
+
+
+<sect2 id="commands-menus-tools">
+<title>The <guimenu>Tools</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Performance Test...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Performance Test</guilabel>
+dialog.</action> You can select a number of tests to run (default is all
+tests) and how many times the tests should be run.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Scan Image...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Acquire Image</guilabel> dialog.</action> This
+dialog is common to all applications that make use of the SANE
+interface.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Screenshot...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the Screenshot dialog.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<!-- ====== Settings ============================================ -->
+
+
+<sect2 id="commands-menus-settings">
+<title>The <guimenu>Settings</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains options to display or hide the various
+toolbars.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>File</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>File</guilabel>
+toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Krita</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>Krita</guilabel>
+toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Edit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>Edit</guilabel>
+toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Navigation</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>Navigation</guilabel>
+toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Transformation Tools</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the
+<guilabel>Transformation Tools</guilabel> toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Paint Tool Options</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>Paint Tool
+Options</guilabel> toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Painting Tools</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>Painting
+Tools</guilabel> toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Selection Tools</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the <guilabel>Selection
+Tools</guilabel> toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Configure Shortcuts
+</guilabel> dialog.</action> This dialog is common to most &kde; applications
+and allows you to configure shortcuts for all actions &krita; has to
+offer.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Configure Toolbars</guilabel>
+dialog.</action> This dialog is common to most &kde; applications
+and allows you to configure &krita;'s toolbars.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &krita;...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Preferences</guilabel> dialog.</action> You can
+configure &krita; here to match your personal preferences.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+
+<!-- ====== Help ================================================ -->
+
+<sect2 id="commands-menus-help">
+<title>The <guimenu>Help</guimenu> Menu</title>
+&help.menu.documentation;
+</sect2>
+
+</sect1>

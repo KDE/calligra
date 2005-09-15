@@ -1,102 +1,105 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&krita;">
   <!ENTITY package "koffice">
-  <!ENTITY % English "INCLUDE" >
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY quicktour SYSTEM "quicktour.docbook">
-  <!ENTITY settings  SYSTEM "settings.docbook">
- 
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY introduction SYSTEM "introduction.docbook">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY tutorial-starting SYSTEM "tutorial-starting.docbook">
+  <!ENTITY tutorial-select-layer SYSTEM "tutorial-select-layer.docbook">
+  <!ENTITY using SYSTEM "using.docbook">
+  <!ENTITY using-selections SYSTEM "using-selections.docbook">
+  <!ENTITY commands SYSTEM "commands.docbook">
+  <!ENTITY commands-toolbars SYSTEM "commands-toolbars.docbook">
+  <!ENTITY commands-palettes SYSTEM "commands-palettes.docbook">
+  <!ENTITY commands-menus SYSTEM "commands-menus.docbook">
+  <!ENTITY developers SYSTEM "developers.docbook">
+  <!ENTITY faq SYSTEM "faq.docbook">
+  <!ENTITY credits SYSTEM "credits.docbook">
+  <!ENTITY installation SYSTEM "installation.docbook">
 ]>
 
 <book lang="&language;">
 
 <bookinfo>
-	<title>The &krita; Handbook</title>
-	
-	<authorgroup>
-		<author>
-		<firstname>Boudewijn</firstname>
-		<othername>-</othername>
-		<surname>Rempt</surname>
-		<affiliation>
-		<address><email>boud@valdyas.org</email></address>
-		</affiliation>
-		</author>
-		<!-- TRANS:ROLES_OF_TRANSLATORS -->
-	</authorgroup>
-	<copyright>
-		<year>2005</year>
-		<holder>Boudewijn Rempt</holder>
-	</copyright>
-	
+<title>The &krita; Handbook</title>
 
-	<!-- Date and version information of the documentation
-	Don't forget to include this last date and this last revision number, we
-	need them for translation coordination !
-	Please respect the format of the date (DD/MM/YYYY) and of the version
-	(Major.minor.lesser), it could be used by automation scripts -->
-	
-	<date>2005-04-01</date>
-	<releaseinfo>0.00.00</releaseinfo>
-	
-	<!-- Abstract about this handbook -->
-	
-	<abstract>
-		<para>
-		&krita; is part of the &koffice; package. &krita; is a photo retouching,
-		image editing application, but above all, a paint application that will
-		allow you to create original art on your computer as if you were working
-		with paint and brushes, pencils, pen and ink -- or, at least, it will one
-		day. We're continually working on extending &krita; and making it better in ever 
-		respect.
-		</para>
-	</abstract>
-	
-	
-	<keywordset>
-		<keyword>KDE</keyword>
-		<keyword>Kapp</keyword>
-		<keyword>Krita</keyword>
-		<keyword>KOffice</keyword>
-		<keyword>image manipulation</keyword>
-		<keyword>graphics</keyword>
-		<keyword>painting</keyword>
-	</keywordset>
+<authorgroup>
+<author>
+<personname>
+<firstname>Boudewijn</firstname>
+<surname>Rempt</surname>
+</personname>
+<email>boud@valdyas.org</email>
+</author>
+<author>
+<personname>
+<firstname>Sander</firstname>
+<surname>Koning</surname>
+</personname>
+<email>sanderkoning@kde.nl</email>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>2005</year>
+<holder>Boudewijn Rempt</holder>
+<holder>Sander Koning</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation -->
+
+<date>2005-09-01</date>
+<releaseinfo>0.01.00</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&krita; is part of the &koffice; package. &krita; is a photo retouching, image
+editing application, but above all, a paint application that will allow you to
+create original art on your computer as if you were working with paint and
+brushes, pencils, pen and ink &mdash; or, at least, it will one day. We are
+continually working on extending &krita; and making it better in every respect.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>koffice</keyword>
+<keyword>Krita</keyword>
+<keyword>image manipulation</keyword>
+<keyword>graphics</keyword>
+<keyword>painting</keyword>
+</keywordset>
 
 </bookinfo>
 
-<chapter id="introduction">
-<title>Introduction</title>
+&introduction;
+&tutorial;
+<!-- &using; -->
+&commands;
+<!-- &developers; -->
+&faq;
+&credits;
+&installation;
 
-<para>&krita; is,
-just like the rest of &koffice; open source and in a permanent state of
-development. If the release you are using now doesn't do what you want --
-from editing your holiday snapshots or repairing your great-grandfather's daguerrotype
-portrait, from quickly creating a logo with cool effects to painting the
-next Vermeer, but with pixels instead of oils, then there is a fair chance
-the very next version will help you out, if you help us out by making
-your wishes known, reporting the bugs you've experienced and, who knows?, sending
-us a fix already, or maybe a complete Krita plugin. We want Krita to be innovative,
-fun and a pleasure to use -- and to hack -- so we're open to all kinds of suggestions.</para>
-
-<para>Krita already in this version includes a more or less complete colour management
-system, making the application useful for photographers, graphic designers and artists,
-whether their works are meant for publication on the Web or in print.</para>
-
-<sect1>
-	<title>About this manual</title>
-
-	<para>This manual describes Krita in as much detail as the author was able to manage
-	when writing the text while compiling the application during development. In other
-	words, it's not complete...  The manual assumes that you have a good working knowledge of
-	KDE and the operating system you are running KDE on.</para>
-</sect1>
-
-
-
-</chapter>
-
-&quicktour;
-&settings;
+&documentation.index;
 </book>
+
+<!--
+Local Variables:
+mode: xml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab
+kate: space-indent on; indent-width 2; tab-width 2; indent-mode none;
+-->
