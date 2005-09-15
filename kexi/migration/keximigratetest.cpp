@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 {
 	KApplication app(argc, argv, "Kexi Migrate Test");
 
-	importWizard* iw = new importWizard();
+	ImportWizard* iw = new ImportWizard();
 	iw->setGeometry(300,300,300,250);
 	app.setMainWidget(iw);
 	iw->show();
