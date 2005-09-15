@@ -86,12 +86,19 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * \return the widget or 0 if something falid
 		 */
 		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
-			WidgetFactory::OrientationHint orientationHint = WidgetFactory::Any);
+			int options = WidgetFactory::DefaultOptions);
 
 		bool createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
 			KFormDesigner::Container *container);
 
-		WidgetFactory::OrientationHint showOrientationSelectionPopup(
+		/** 
+		 * Shows orientation selection popup. 
+		 * \return one of the following values: 
+		 * - WidgetFactory::AnyOrientation (means no selection has been made, i.e. it was cancelled)
+		 * - WidgetFactory::HorizontalOrientation
+		 * - WidgetFactory::VerticalOrientation
+		 */
+		WidgetFactory::CreateWidgetOptions showOrientationSelectionPopup(
 			const QCString &classname, QWidget* parent, const QPoint& pos);
 
 		QString internalProperty(const QCString& classname, const QCString& property);

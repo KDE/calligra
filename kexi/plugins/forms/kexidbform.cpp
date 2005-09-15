@@ -273,13 +273,13 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 				QObjectList *children = it.current()->widget()->queryList("QWidget");
 				for (QObjectListIt childrenIt(*children); childrenIt.current(); ++childrenIt) {
 					if (dynamic_cast<KexiFormDataItemInterface*>(childrenIt.current())) {
-						kdDebug() << "KexiDBForm::updateTabStopsOrder(): also adding '" << childrenIt.current()->className() << " " << childrenIt.current()->name()  << "' child to filtered widgets" << endl;
+						kexipluginsdbg << "KexiDBForm::updateTabStopsOrder(): also adding '" << childrenIt.current()->className() << " " << childrenIt.current()->name()  << "' child to filtered widgets" << endl;
 						it.current()->widget()->installEventFilter(static_cast<QWidget*>(childrenIt.current()));
 					}
 				}
 				delete children;
 				if (fromWidget) {
-					kdDebug() << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name() 
+					kexipluginsdbg << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name() 
 						<< " -> " << it.current()->widget()->name() << endl;
 	//				setTabOrder( fromWidget, it.current()->widget() );
 				}
@@ -289,7 +289,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 
 			KexiFormDataItemInterface* dataItem = dynamic_cast<KexiFormDataItemInterface*>( it.current()->widget() );
 			if (dataItem && !dataItem->dataSource().isEmpty()) {
-				kdDebug() << "#" << numberOfDataAwareWidgets << ": " 
+				kexipluginsdbg << "#" << numberOfDataAwareWidgets << ": " 
 					<< dataItem->dataSource() << " (" << it.current()->widget()->name() << ")" << endl;
 //	/*! @todo d->indicesForDataAwareWidgets SHOULDNT BE UPDATED HERE BECAUSE
 //	THERE CAN BE ALSO NON-TABSTOP DATA WIDGETS!
@@ -330,7 +330,7 @@ void KexiDBForm::updateTabStopsOrder()
 bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 {
 	if (e->type()==QEvent::Resize && watched == this)
-		kdDebug() << "RESIZE" << endl;
+		kexipluginsdbg << "RESIZE" << endl;
 	if (e->type()==QEvent::KeyPress) {
 		if (preview()) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -362,7 +362,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 						++d->orderedFocusWidgetsIterator;
 					}
 				}
-				kdDebug() << watched->name() << endl;
+				kexipluginsdbg << watched->name() << endl;
 				if (tab) {
 					if (d->orderedFocusWidgets.first() && watched == d->orderedFocusWidgets.last()) {
 						d->orderedFocusWidgetsIterator.toFirst();
@@ -380,7 +380,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					//behaves differently (e.g. QLineEdit calls selectAll()) when 
 					//focus event's reason is QFocusEvent::Tab
 					SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Tab);
-					kdDebug() << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+					kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
 					return true;
 				} else if (backtab) {
 					if (d->orderedFocusWidgets.last() && watched == d->orderedFocusWidgets.first()) {
@@ -393,7 +393,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 						return true; //ignore
 					//set focus, see above note
 					SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
-					kdDebug() << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+					kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
 					return true;
 				}
 			}
@@ -403,7 +403,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 		if (preview()) {
 			if (dynamic_cast<KexiDataItemInterface*>(watched) && d->dataAwareObject) {
 				uint index = d->indicesForDataAwareWidgets[ dynamic_cast<KexiDataItemInterface*>(watched) ];
-				kdDebug() << "KexiDBForm: moving cursor to column #" << index << endl;
+				kexipluginsdbg << "KexiDBForm: moving cursor to column #" << index << endl;
 				editedItem = 0;
 				if ((int)index!=d->dataAwareObject->currentColumn()) {
 					d->dataAwareObject->setCursorPosition( d->dataAwareObject->currentRow(), index /*column*/ );

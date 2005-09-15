@@ -113,6 +113,11 @@ namespace KexiUtils
 	/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 
 	 and \a factor1 factors: (c1*factor1+c2*factor2)/(factor1+factor2). */
 	KEXIUTILS_EXPORT QColor blendColors(const QColor& c1, const QColor& c2, int factor1 = 1, int factor2 = 1);
+
+	/*! \return a contrast color for a color \a c: 
+	 If \a c is light color, darker color created using c.dark(200) is returned; 
+	 otherwise lighter color created using c.light(200) is returned. */
+	KEXIUTILS_EXPORT QColor contrastColor(const QColor& c);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
@@ -121,5 +126,6 @@ namespace KexiUtils
 #define GLUE_WIDGET(what, where) \
 	{ QVBoxLayout *lyr = new QVBoxLayout(where); \
 	  lyr->addWidget(what); }
+
 
 #endif //KEXIUTILS_UTILS_H

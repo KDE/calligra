@@ -206,7 +206,9 @@ KexiFormView::setForm(KFormDesigner::Form *f)
 void
 KexiFormView::initForm()
 {
-	setForm( new KFormDesigner::Form(formPart()->manager()) );
+	setForm( new KFormDesigner::Form(formPart()->manager(), 0, viewMode()==Kexi::DesignViewMode) );
+//	if (viewMode()==Kexi::DataViewMode)
+		//form()->setDesignMode(false);
 	form()->createToplevel(m_dbform, m_dbform);
 
 	if (viewMode()==Kexi::DesignViewMode) {
@@ -410,7 +412,7 @@ KexiFormView::afterSwitchFrom(int mode)
 			for (;it.current(); ++it) {
 				KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(it.current());
 				if (iface)
-					kdDebug() << iface->dataSource() << endl;
+					kexipluginsdbg << iface->dataSource() << endl;
 				if (iface && iface->columnInfo() && !iface->isReadOnly()
 /*! @todo add option for skipping autoincremented fields */
 					/* also skip autoincremented fields:*/

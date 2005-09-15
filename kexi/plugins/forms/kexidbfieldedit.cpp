@@ -33,18 +33,21 @@
 
 #define KexiDBFieldEdit_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
-KexiDBFieldEdit::KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent, const char *name)
+KexiDBFieldEdit::KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, 
+	QWidget *parent, const char *name, bool designMode)
  : QWidget(parent, name)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
+ , m_designMode(designMode)
 {
 	init(text, type, pos);
 }
 
-KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name)
+KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name, bool designMode)
  : QWidget(parent, name)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
+ , m_designMode(designMode)
 {
 	init(QString::null/*i18n("Auto Field")*/, Auto, Left);
 }
@@ -123,6 +126,10 @@ KexiDBFieldEdit::createEditor()
 		case Integer:
 			m_editor = new KexiDBIntSpinBox(this);
 			connect( m_editor, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
+			break;
+		case Image:
+			m_editor = new KexiImageBox(m_designMode, this);
+			connect( m_editor, SIGNAL(valueChanged()), this, SLOT( slotValueChanged() ) );
 			break;
 		default:
 			m_editor = 0;
@@ -257,7 +264,7 @@ bool
 KexiDBFieldEdit::valueChanged()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
-	kdDebug() << m_origValue  << endl;
+	kexipluginsdbg << m_origValue  << endl;
 	if(iface)
 		return iface->valueChanged();
 	return false;

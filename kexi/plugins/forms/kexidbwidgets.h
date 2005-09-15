@@ -24,6 +24,7 @@
 #include "kexiformdataiteminterface.h"
 #include <widget/utils/kexidisplayutils.h>
 
+#include <qtimer.h>
 #include <qcheckbox.h>
 #include <qdatetimeedit.h>
 
@@ -31,11 +32,13 @@
 #include <ktextedit.h>
 #include <kpushbutton.h>
 #include <knuminput.h>
+#include <kactioncollection.h>
 
 class QDateTimeEditor;
 class QToolButton;
 class KDatePicker;
 class KPopupMenu;
+class KAction;
 
 //! Interface for a few text editor's features
 class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
@@ -85,9 +88,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -141,9 +142,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -193,9 +192,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget.  */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -205,12 +202,12 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 		virtual bool cursorAtEnd();
 		virtual void clear();
 
-		virtual void  setEnabled(bool enabled);
+		virtual void setEnabled(bool enabled);
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		void  slotStateChanged(int state);
+		void slotStateChanged(int state);
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
@@ -225,6 +222,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public QTimeEdit, public KexiFormDat
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
 		KexiDBTimeEdit(const QTime &time, QWidget *parent, const char *name=0);
@@ -245,9 +243,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public QTimeEdit, public KexiFormDat
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -262,6 +258,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public QTimeEdit, public KexiFormDat
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		virtual void setReadOnly(bool set);
 
 	protected slots:
 		void  slotValueChanged(const QTime&);
@@ -272,7 +269,8 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public QTimeEdit, public KexiFormDat
 	private:
 		QDateTimeEditor* m_dte_time;
 		bool m_invalidState : 1;
-		bool  m_cleared : 1;
+		bool m_cleared : 1;
+		bool m_readOnly : 1;
 };
 
 //! A db-aware date editor
@@ -288,6 +286,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 	Q_PROPERTY( bool autoAdvance READ autoAdvance WRITE setAutoAdvance DESIGNABLE true)
 	Q_PROPERTY( QDate maxValue READ maxValue WRITE setMaxValue DESIGNABLE true)
 	Q_PROPERTY( QDate minValue READ minValue WRITE setMinValue DESIGNABLE true)
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
 		enum Order { DMY = QDateEdit::DMY, MDY = QDateEdit::MDY, YMD = QDateEdit::YMD,  YDM = QDateEdit::YDM };
@@ -310,9 +309,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -342,6 +339,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		inline void setDate(const QDate& date)  { m_edit->setDate(date); }
+		virtual void setReadOnly(bool set);
 
 	protected slots:
 		void slotValueChanged(const QDate&);
@@ -358,7 +356,8 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 		KPopupMenu *m_datePickerPopupMenu;
 		QDateTimeEditor *m_dte_date;
 		bool m_invalidState : 1;
-		bool  m_cleared : 1;
+		bool m_cleared : 1;
+		bool m_readOnly : 1;
 };
 
 //! A db-aware datetime editor
@@ -369,6 +368,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	// properties copied from QDateTimeEdit
 	Q_PROPERTY( QDateTime dateTime READ dateTime WRITE setDateTime )
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
 		enum Order { DMY, MDY, YMD, YDM };
@@ -391,9 +391,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -415,6 +413,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		void setDateTime(const QDateTime &dt);
+		virtual void setReadOnly(bool set);
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
@@ -432,7 +431,8 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 		QDateTimeEditor *m_dte_date, *m_dte_time;
 		KPopupMenu *m_datePickerPopupMenu;
 		bool m_invalidState : 1;
-		bool  m_cleared : 1;
+		bool m_cleared : 1;
+		bool m_readOnly : 1;
 };
 
 //! A db-aware int spin box
@@ -441,6 +441,7 @@ class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox, public KexiFor
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
 		KexiDBIntSpinBox(QWidget *parent, const char *name=0);
@@ -461,9 +462,7 @@ class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox, public KexiFor
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -478,7 +477,8 @@ class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox, public KexiFor
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		void  slotValueChanged();
+		void slotValueChanged();
+		virtual void setReadOnly(bool set);
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
@@ -493,6 +493,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public K
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
 		KexiDBDoubleSpinBox(QWidget *parent, const char *name=0);
@@ -513,9 +514,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public K
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly().
-		 By default, always returns false. */
+		/*! \return 'readOnly' flag for this widget.  */
 		virtual bool isReadOnly() const;
 
 		/*! \return the view widget of this item, e.g. line edit widget. */
@@ -525,12 +524,12 @@ class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public K
 		virtual bool cursorAtEnd();
 		virtual void clear();
 
-		virtual void  setEnabled(bool enabled);
-
 	public slots:
+		virtual void setEnabled(bool enabled);
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		void  slotValueChanged();
+		void slotValueChanged();
+		virtual void setReadOnly(bool set);
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
@@ -560,16 +559,18 @@ class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 //! A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
-class KEXIFORMUTILS_EXPORT KexiImageBox : public QFrame, public KexiFormDataItemInterface {
+class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataItemInterface {
 		Q_OBJECT
-		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
-		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
-//		Q_OVERRIDE( QPixmap pixmap READ pixmap WRITE setPixmap DESIGNABLE trus )
-//		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
+		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
+		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
+		Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
+		Q_PROPERTY( QPixmap image READ pixmap WRITE setPixmap )
+		Q_PROPERTY( bool scaledContents READ hasScaledContents WRITE setScaledContents )
+		Q_PROPERTY( bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio )
+		Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
 //		Q_OVERRIDE( bool text DESIGNABLE false )
-
 	public:
-		KexiImageBox( QWidget *parent, const char *name = 0, WFlags f = 0 );
+		KexiImageBox( bool designMode, QWidget *parent, const char *name = 0 );
 		virtual ~KexiImageBox();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
@@ -583,9 +584,6 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QFrame, public KexiFormDataItem
 
 		virtual bool valueIsEmpty();
 
-		//! always true
-		virtual bool isReadOnly() const;
-
 		virtual QWidget* widget();
 
 		//! always true
@@ -594,27 +592,78 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QFrame, public KexiFormDataItem
 		//! always true
 		virtual bool cursorAtEnd();
 
-		virtual void clear();
+//		virtual void clear();
 
 //		//! used to catch setIndent(), etc.
 //		virtual bool setProperty ( const char * name, const QVariant & value );
 
+		virtual bool isReadOnly() const;
+
+		QPixmap pixmap() const;
+
+		bool hasScaledContents() const;
+
+//		bool designMode() const { return m_designMode; }
+
+		int alignment() const { return m_alignment; }
+
+		bool keepAspectRatio() const { return m_keepAspectRatio; }
+
+		virtual QSize sizeHint() const;
+
+		KActionCollection* actionCollection() { return &m_actionCollection; }
+
 	public slots:
 		//! Sets the datasource to \a ds
-		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
+		virtual void setDataSource( const QString &ds );
 
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
+		virtual void setReadOnly(bool set);
+
+		//! Sets \a pixmap for this widget. If the widget has data source set, 
+		//! the pixmap will be also placed inside of the buffer and saved later.
+		void setPixmap(const QPixmap& pixmap);
+
+		void setScaledContents(bool set);
+
+		void insertFromFile();
+
+		void setAlignment(int alignment);
+
+		void setKeepAspectRatio(bool set);
+
+		void updateActionsAvailability();
+
+		void saveAs();
+		void cut();
+		void copy();
+		void paste();
+		virtual void clear();
+		void showProperties();
+
+	signals:
+		//! Emitted when value has been changed. Actual value can be obtained using value().
+		void valueChanged(const QPixmap& pixmap);
+
 	protected slots:
-//		void updatePixmap();
+		void slotAboutToHidePopupMenu();
+		void slotChooserPressed();
 
 	protected:
-//		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
-//		virtual void paintEvent( QPaintEvent* );
+		virtual void contextMenuEvent ( QContextMenuEvent * e );
+//		virtual void mousePressEvent( QMouseEvent *e );
+		//		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+		virtual void paintEvent( QPaintEvent* );
 //		virtual void resizeEvent( QResizeEvent* e );
 
 		//! Sets value \a value for a widget.
 		virtual void setValueInternal( const QVariant& add, bool removeOld );
+
+		//! Updates i18n'd action strings after datasource change
+		void updateActionStrings();
+		void updatePixmap();
+//		virtual void drawContents ( QPainter *p );
 
 //		virtual void fontChange( const QFont& font );
 //		virtual void styleChange( QStyle& style );
@@ -625,9 +674,23 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QFrame, public KexiFormDataItem
 //		virtual void showEvent( QShowEvent* e );
 
 //		void updatePixmapLater();
-		QLabel *m_pixmapLabel;
-		QToolButton *m_chooser;
-		bool m_readOnly;
+//		class ImageLabel;
+//		ImageLabel *m_pixmapLabel;
+		QPixmap m_pixmap;
+		class Button;
+		Button *m_chooser;
+		KPopupMenu *m_popup;
+		KActionCollection m_actionCollection;
+		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
+			*m_deleteAction, *m_propertiesAction;
+		QTimer m_clickTimer;
+		int m_titleID;
+		int m_alignment;
+		bool m_designMode : 1;
+		bool m_readOnly : 1;
+		bool m_scaledContents : 1;
+		bool m_keepAspectRatio : 1;
+//		friend class ImageLabel;
 };
 
 #endif

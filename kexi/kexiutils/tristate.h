@@ -20,84 +20,183 @@
 #ifndef _TRISTATE_TYPE_H_
 #define _TRISTATE_TYPE_H_
 
+/**
+ * \e cancelled value, in most cases usable if there is a need for returning 
+ * \e cancelled value explicity. Example use:
+ * \code
+ * tristate myFunctionThatCanBeCancelled() {
+ *   doSomething();
+ *   if (userCancelledOperation())
+ *     return cancelled; //neither success or failure is returned here
+ *   return operationSucceeded(); //return success or failure
+ * }
+ * \endcode
+ * Even though ~ operator of tristate class can be used, it is also possible to test:
+ * \code
+ * if (cancelled == myFunctionThatCanBeCancelled()) { .... }
+ * \endcode
+ */
+static const char cancelled = 2;
 
-static const char cancelled = 2; //!< cancelled state
-static const char dontKnow = cancelled; //!< the same as cancelled
+/**
+ * Convenience name, the same as cancelled value.
+ */
+static const char dontKnow = cancelled;
 
-//! \brief 3-state logical type with convenient operators
-/*! You can use objects of this class with similar convenience as bool type:
- - use as return value when 'cancelled'
-    tristate doSomething();
- - convert from bool (1) or to bool (2)
-    tristate t = true; //(1)
-    setVisible( t );   // (2)
- - clear comparisons
-    tristate t = doSomething();
-    if (t) doSomethingIfTrue();
-    if (!t) doSomethingIfFalse();
-    if (~t) doSomethingIfCancelled();
-
- You can use "! ~" as "not cancelled".
-
- With tristate class you can also forget 
- about it's additional meaning and treat it just as a bool.
-
- @author Jaroslaw Staniek
-*/
+/**
+ * 3-state logical type with three values: \e true, \e false and \e cancelled and convenient operators.
+ *
+ * \e cancelled state can be also called \e dontKnow, it behaves as \e null in SQL.
+ * A main goal of this class is to improve readibility when there's a need 
+ * for storing third, \e cancelled, state, especially in case C++ exceptions are not in use.
+ * With it, developer can forget about declaring a specific enum type
+ * having just three values: \e true, \e false, \e cancelled.
+ *
+ * Objects of this class can be used with similar convenience as standard bool type:
+ * - use as return value when 'cancelled'
+ *   \code
+ *   tristate doSomething();
+ *   \endcode
+ * - convert from bool (1) or to bool (2)
+ *   \code
+ *   tristate t = true; //(1)
+ *   setVisible(t);   //(2)
+ *   \endcode
+ * - clear comparisons
+ *   \code
+ *   tristate t = doSomething();
+ *   if (t) doSomethingIfTrue();
+ *   if (!t) doSomethingIfFalse();
+ *   if (~t) doSomethingIfCancelled();
+ *   \endcode
+ *
+ * "! ~" can be used as "not cancelled".
+ * 
+ * With tristate class, developer can also forget about 
+ * it's additional meaning and treat it just as a bool, if the third state 
+ * is irrelevant to the current situation.
+ *
+ * Other use for tristate class could be to allow cancellation within 
+ * a callback function or a Qt slot. Example:
+ * \code
+ * public slots:
+ *   void validateData(tristate& result);
+ * \endcode
+ * Having the single parameter, signals and slots have still simple look.
+ * Developers can alter their code (by replacing 'bool& result' with 'tristate& result')
+ * in case when a possibility of cancelling of, say, data provessing needs to be implemented.
+ * Let's say \e validateData() function uses a QDialog to get some validation from a user.
+ * While QDialog::Rejected is returned after cancellation of the validation process, 
+ * the information about cancellation needs to be transferred up to a higher level of the program.
+ * Storing values of type QDialog::DialogCode there could be found as unreadable, and
+ * casting these to int is not typesafe. With tristate class it's easier to make it obvious that 
+ * cancellation should be taken into account. 
+ *
+ * @author Jaroslaw Staniek
+ */
 class tristate
 {
-	public:
-
-	/*! States used used internally. */
-	enum Value { False = 0, True = 1, cancelled = 2 };
-
-	/*! Default constructor, object have 'cancelled' value. */
+public:
+	/**
+	 * Default constructor, object has \e cancelled value set. 
+	 */
 	tristate()
-	 : value(cancelled)
+	 : m_value(Cancelled)
 	{
 	}
 
-	/*! Constructor that takes boolean value. */
+	/**
+	 * Constructor accepting a boolean value. 
+	 */
 	tristate(bool boolValue)
-	 : value(boolValue ? True : False)
+	 : m_value(boolValue ? True : False)
 	{
 	}
 
-	/*! Constructor that takes char value. It is converted in the following way:
-	 - 2 -> cancelled
-	 - 1 -> true
-	 - other -> false */
+	/**
+	 * Constructor accepting a char value.
+	 * It is converted in the following way:
+	 * - 2 -> cancelled
+	 * - 1 -> true
+	 * - other -> false 
+	 */
 	tristate(char c)
-	 : value(c==::cancelled ? tristate::cancelled : (c==1 ? True : False))
+	 : m_value(c==cancelled ? tristate::Cancelled : (c==1 ? True : False))
 	{
 	}
 
-	/*! Constructor that takes integer value. It is converted in the following way:
-	 - 2 -> cancelled
-	 - 1 -> true
-	 - other -> false */
+	/** Constructor accepting an integer value. 
+	 * It is converted in the following way:
+	 * - 2 -> cancelled
+	 * - 1 -> true
+	 * - other -> false
+	 */
 	tristate(int intValue)
-	 : value(intValue==(int)::cancelled ? tristate::cancelled : (intValue==1 ? True : False))
+	 : m_value(intValue==(int)cancelled ? tristate::Cancelled : (intValue==1 ? True : False))
 	{
 	}
 
-	operator bool() const { return value==True; }
+	/**
+	 * Casting to bool type: true is only returned 
+	 * if the original tristate value is equal to true. 
+	 */
+	operator bool() const { return m_value==True; }
 
-	/*! \return true is the value is equal to 'False' */
-	bool operator!() const { return value==False; }
+	/**
+	 * Casting to bool type with negation: true is only returned 
+	 * if the original tristate value is equal to false. 
+	 */
+	bool operator!() const { return m_value==False; }
 
-	/*! \return true is the value is equal to 'cancelled' */
-	bool operator~() const { return value==cancelled; }
+	/**
+	 * Special casting to bool type: true is only returned 
+	 * if the original tristate value is equal to \e cancelled. 
+	 */
+	bool operator~() const { return m_value==cancelled; }
+
+	tristate& operator=(const tristate& tsValue) { m_value = tsValue.m_value; return *this; }
 
 	friend inline bool operator!=(bool boolValue, tristate tsValue);
+	friend inline bool operator!=(tristate tsValue, bool boolValue);
 
-	Value value;
+private:
+	/**
+	 * @internal
+	 * States used internally.
+	 */
+	enum Value {
+		False = 0,
+		True = 1,
+		Cancelled = 2
+	};
+
+	/**
+	 * @internal
+	 */
+	Value m_value;
 };
 
+/**
+ * Inequality operator comparing a bool value @p boolValue and a tristate value @p tsValue.
+ *
+ * @return false if both @p boolValue and @p tsValue are true 
+ *         or if both  @p boolValue and @p tsValue are false. 
+ *         Else, returns true. 
+*/
 inline bool operator!=(bool boolValue, tristate tsValue) 
-{ return !( (tsValue.value==tristate::True && boolValue) || (tsValue.value==tristate::False && !boolValue) ); }
+{
+	return !( (tsValue.m_value==tristate::True && boolValue) 
+	|| (tsValue.m_value==tristate::False && !boolValue) );
+}
 
+/**
+ * Inequality operator comparing a tristate value @p tsValue and a bool value @p boolValue.
+ * @see bool operator!=(bool boolValue, tristate tsValue)
+*/
 inline bool operator!=(tristate tsValue, bool boolValue) 
-{ return !( (tsValue.value==tristate::True && boolValue) || (tsValue.value==tristate::False && !boolValue) ); }
+{
+	return !( (tsValue.m_value==tristate::True && boolValue) 
+	|| (tsValue.m_value==tristate::False && !boolValue) );
+}
 
 #endif

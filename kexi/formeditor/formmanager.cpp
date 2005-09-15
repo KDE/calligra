@@ -623,7 +623,8 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 
 	Form *myform;
 	if(!toForm)
-		myform = new Form(this, form->objectTree()->name().latin1());
+		myform = new Form(this, form->objectTree()->name().latin1(), 
+			false/*!designMode, we need to set it early enough*/);
 	else
 		myform = toForm;
 	myform->createToplevel(container);

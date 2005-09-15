@@ -318,18 +318,19 @@ WidgetLibrary::addCustomWidgetActions(KActionCollection *parent)
 
 QWidget*
 WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
-	WidgetFactory::OrientationHint orientationHint)
+	int options)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
 	if(!wclass)
 		return 0;
 
-	QWidget *widget = wclass->factory()->create(wclass->className(), parent, name, c, orientationHint);
+	QWidget *widget = wclass->factory()->createWidget(wclass->className(), parent, name, c, options);
 	if (!widget) {
 		//try to instantiate from inherited class
 		if (wclass->inheritedClass())
-			widget = wclass->inheritedClass()->factory()->create(wclass->className(), parent, name, c);
+			widget = wclass->inheritedClass()->factory()->createWidget(
+				wclass->className(), parent, name, c, options);
 	}
 	return widget;
 }
@@ -652,13 +653,13 @@ QString WidgetLibrary::internalProperty(const QCString& classname, const QCStrin
 	return value;
 }
 
-WidgetFactory::OrientationHint WidgetLibrary::showOrientationSelectionPopup(
+WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
 	const QCString &classname, QWidget* parent, const QPoint& pos)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
 	if(!wclass)
-		return WidgetFactory::Any;
+		return WidgetFactory::AnyOrientation;
 
 	//get custom icons and strings
 	QPixmap iconHorizontal, iconVertical;
@@ -692,14 +693,14 @@ WidgetFactory::OrientationHint WidgetLibrary::showOrientationSelectionPopup(
 	popup->insertItem(iconVertical, textVertical, 2);
 	popup->insertSeparator();
 	popup->insertItem(SmallIcon("button_cancel"), i18n("Cancel"), 3);
-	WidgetFactory::OrientationHint result;
+	WidgetFactory::CreateWidgetOptions result;
 	switch (popup->exec(pos)) {
 	case 1:
-		result = WidgetFactory::Horizontal; break;
+		result = WidgetFactory::HorizontalOrientation; break;
 	case 2:
-		result = WidgetFactory::Vertical; break;
+		result = WidgetFactory::VerticalOrientation; break;
 	default:
-		result = WidgetFactory::Any; //means "cancelled"
+		result = WidgetFactory::AnyOrientation; //means "cancelled"
 	}
 	delete popup;
 	return result;

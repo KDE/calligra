@@ -31,6 +31,7 @@ class QBoxLayout;
 class QLabel;
 
 //! Universal "Auto Field" widget for Kexi forms
+/*! It acts as a container for most data-aware widgets. */
 class KEXIFORMUTILS_EXPORT KexiDBFieldEdit : 
 	public QWidget,
 	public KexiFormDataItemInterface,
@@ -50,11 +51,11 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 
 	public:
 		enum WidgetType { Auto = 100, Text, Integer, Double, Boolean, Date, Time, DateTime,
-			MultiLineText, Enum };
+			MultiLineText, Enum, Image };
 		enum LabelPosition { Left = 300, Top, NoLabel };
 
-		KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0 );
-		KexiDBFieldEdit(QWidget *parent = 0, const char *name = 0);
+		KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0, bool designMode = true);
+		KexiDBFieldEdit(QWidget *parent = 0, const char *name = 0, bool designMode = true);
 
 		virtual ~KexiDBFieldEdit();
 
@@ -134,8 +135,9 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 		QString  m_caption;
 		KexiDB::Field::Type m_fieldTypeInternal;
 		QString m_fieldCaptionInternal;
-		bool  m_autoCaption : 1;
+		bool m_autoCaption : 1;
 		bool m_focusPolicyChanged : 1;
+		bool m_designMode : 1;
 };
 
 #endif

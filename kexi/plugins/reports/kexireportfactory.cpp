@@ -93,8 +93,8 @@ KexiReportFactory::name()
 }
 
 QWidget*
-KexiReportFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
-	WidgetFactory::OrientationHint)
+KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
+	int options)
 {
 	kexipluginsdbg << "KexiReportFactory::create() " << this << endl;
 

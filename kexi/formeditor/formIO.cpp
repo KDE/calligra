@@ -1156,10 +1156,16 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	{
 		if(!alternate.isNull())
 			classname = alternate;
+
+		int widgetOptions = WidgetFactory::DefaultOptions;
+		if (!container->form()->designMode()) {
+			widgetOptions ^= WidgetFactory::DesignViewMode;
+		}
+
 		if(!parent)
-			w = lib->createWidget(classname, container->widget(), wname.latin1(), container);
+			w = lib->createWidget(classname, container->widget(), wname.latin1(), container, widgetOptions);
 		else
-			w = lib->createWidget(classname, parent, wname.latin1(), container);
+			w = lib->createWidget(classname, parent, wname.latin1(), container, widgetOptions);
 	}
 
 	if(!w)

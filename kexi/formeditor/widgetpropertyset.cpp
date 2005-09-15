@@ -758,6 +758,9 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 		Property *p = new Property("wordbreak", QVariant(false, 3), i18n("Word Break"), i18n("Word Break") );
 		d->set.addProperty(p);
 		updatePropertyValue(tree, "wordbreak");
+		if(!isPropertyVisible(p->name(), isTopLevel)) {
+			p->setVisible(false);
+		}
 	}
 }
 

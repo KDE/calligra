@@ -26,6 +26,10 @@ Group: General
 #default=true for advanced Kexi mode
 NOT YET IMPELMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
 
+Group: Recent Dirs
+-lastVisitedImagePath [stringlist] # used for open/save dialogs for image files
+                                   # see KexiImageBox::slotInsertFromFile() and slotSaveAs();
+
 Group: Startup
 -OpenExistingType [File|Server]
 -ShowStartupDialog [bool]

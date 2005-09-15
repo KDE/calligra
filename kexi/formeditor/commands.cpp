@@ -701,24 +701,32 @@ InsertWidgetCommand::execute()
 		return; //better this than a crash
 	Container *m_container = titem->container();
 	FormManager *manager = m_container->form()->manager();
-	WidgetFactory::OrientationHint ohint = WidgetFactory::Any;
+	int options = WidgetFactory::DesignViewMode | WidgetFactory::AnyOrientation;
 	if (manager->lib()->internalProperty(m_class, "orientationSelectionPopup")=="1") {
 		if(m_insertRect.isValid()) {
-			if (m_insertRect.width() < m_insertRect.height())
-				ohint = WidgetFactory::Vertical;
-			else if (m_insertRect.width() > m_insertRect.height())
-				ohint = WidgetFactory::Horizontal;
+			if (m_insertRect.width() < m_insertRect.height()) {
+				options |= WidgetFactory::VerticalOrientation;
+				options ^= WidgetFactory::AnyOrientation;
+			}
+			else if (m_insertRect.width() > m_insertRect.height()) {
+				options |= WidgetFactory::HorizontalOrientation;
+				options ^= WidgetFactory::AnyOrientation;
+			}
 		}
-		if (ohint == WidgetFactory::Any) {
-			ohint = manager->lib()->showOrientationSelectionPopup(
+		if (options & WidgetFactory::AnyOrientation) {
+			options ^= WidgetFactory::AnyOrientation;
+			options |= manager->lib()->showOrientationSelectionPopup(
 				m_class, m_container->m_container,
 				m_container->form()->widget()->mapToGlobal(m_point));
-			if (ohint == WidgetFactory::Any)
+			if (options & WidgetFactory::AnyOrientation)
 				return; //cancelled
 		}
 	}
+	else
+		options |= WidgetFactory::AnyOrientation;
+
 	QWidget *w = manager->lib()->createWidget(m_class, m_container->m_container, m_name,
-		m_container, ohint);
+		m_container, options);
 
 	if(!w) {
 		manager->stopInsert();
@@ -790,7 +798,9 @@ InsertWidgetCommand::execute()
 	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 
 	m_container->setSelectedWidget(w, false);
-	m_form->manager()->lib()->startEditing(w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
+	if (manager->lib()->internalProperty(w->className(), "dontStartEditingOnInserting").isEmpty()) {
+		m_form->manager()->lib()->startEditing(w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
+	}
 //! @todo update widget's width for entered text's metrics
 	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
 }

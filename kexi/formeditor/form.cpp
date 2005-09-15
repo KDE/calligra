@@ -87,11 +87,12 @@ FormWidget::~FormWidget()
 
 //--------------------------------------
 
-Form::Form(FormManager *manager, const char *name)
+Form::Form(FormManager *manager, const char *name, bool designMode)
   : QObject(manager, name)
 {
 	d = new FormPrivate();
 	d->manager = manager;
+	d->design = designMode;
 
 	// Init actions
 	d->collection = new KActionCollection(0, this);

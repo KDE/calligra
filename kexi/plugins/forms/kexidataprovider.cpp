@@ -92,7 +92,7 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row)
  	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
 	{
-		kdDebug() << "fill data of '" << it.key()->dataSource() <<  "' at idx=" << it.data() << endl;
+		kexipluginsdbg << "fill data of '" << it.key()->dataSource() <<  "' at idx=" << it.data() << endl;
 		it.key()->setValue( row.at(it.data()) );
 	}
 }
@@ -117,8 +117,8 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		m_duplicatedItems = new QPtrDict<char>(101);
 		for (it_dup = tmpDuplicatedItems.begin(); it_dup!=tmpDuplicatedItems.end(); ++it_dup) {
 			if (it_dup.data() > 1) {
-        m_duplicatedItems->insert( it_dup.key(), (char*)1 );
-				kdDebug() << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name() 
+				m_duplicatedItems->insert( it_dup.key(), (char*)1 );
+				kexipluginsdbg << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name() 
 					<< " (" << it_dup.data() << " times)" << endl;
 			}
 		}
@@ -126,7 +126,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 	if (m_duplicatedItems->find( item->columnInfo()->field )) {
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			if (it.current()!=item && item->columnInfo()->field == it.current()->columnInfo()->field) {
-				kdDebug() << "- setting value for item '" 
+				kexipluginsdbg << "- setting value for item '" 
 					<< dynamic_cast<QObject*>(it.current())->name() << " == " << value.toString() << endl;
 				it.current()->setValue( value );
 			}
@@ -155,13 +155,13 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		dataFieldsCount = fieldsExpanded.count();
 		QMap<KexiDB::QueryColumnInfo*,int> fieldsOrder( query->fieldsOrder() );
 		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
-			kdDebug() << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
+			kexipluginsdbg << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
 		}
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			KexiFormDataItemInterface *item = it.current();
 			KexiDB::QueryColumnInfo* ci = query->columnInfo( it.current()->dataSource() );
 			int index = ci ? query->fieldsOrder()[ ci ] : -1;
-			kdDebug() << "query->fieldsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
+			kexipluginsdbg << "query->fieldsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
 				<< " (dataSource: " << item->dataSource() << ", name=" << dynamic_cast<QObject*>(item)->name() << ")" << endl;
 			if (index!=-1)
 				m_fieldNumbersForDataItems.insert( item, index );
@@ -234,7 +234,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 			KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
 //			KexiDB::Field *f = ci->field;
 			it.current()->setColumnInfo(ci);
-			kdDebug() << "- item=" << dynamic_cast<QObject*>(it.current())->name() 
+			kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(it.current())->name() 
 				<< " dataSource=" << it.current()->dataSource()
 				<< " field=" << ci->field->name() << endl;
 		}

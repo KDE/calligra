@@ -227,7 +227,8 @@ class KFORMEDITOR_EXPORT WidgetInfo
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:verticalText" - the same for "Vertical" item,
     e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
-
+  * "dontStartEditingOnInserting" - if not empty, WidgetFactory::startEditing() will not be executed upon
+    widget inseting by a user.
   See StdWidgetFactory::StdWidgetFactory() for properies like
   "Line:orientationSelectionPopup:horizontalIcon".
 
@@ -239,8 +240,14 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 {
 	Q_OBJECT
 	public:
-		//! Orientation hint used in create()
-		enum OrientationHint { Any = 0, Horizontal = 1, Vertical = 2 };
+		//! Options used in createWidget()
+		enum CreateWidgetOptions { 
+			AnyOrientation = 1, //!< any orientation hint
+			HorizontalOrientation = 2,  //!< horizontal orientation hint
+			VerticalOrientation = 4, //!< vertical orientation hint
+			DesignViewMode = 8, //!< create widget in design view mode, otherwise preview mode
+			DefaultOptions = AnyOrientation | DesignViewMode
+		};
 
 		WidgetFactory(QObject *parent=0, const char *name=0);
 		virtual ~WidgetFactory();
@@ -259,17 +266,18 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		const WidgetInfo::Dict classes() const { return m_classesByName; }
 
-		/*!
+		/**
 		 * Creates a widget (and if needed a \ref Container)
 		 * \return the created widget
 		 * \param classname the classname of the widget, which should get created
 		 * \param parent the parent for the created widget
 		 * \param name the name of the created widget
 		 * \param container the toplevel Container (if a container should get created)
-		 * \param orientationHint preferred orientation
+		 * \param options options for the created widget: orientation and view mode (see CreateWidgetOptions)
 		 */
-		virtual QWidget* create(const QCString &classname, QWidget *parent, const char *name,
-					 KFormDesigner::Container *container, OrientationHint orientationHint = Any) = 0;
+		virtual QWidget* createWidget(const QCString &classname, QWidget *parent, const char *name,
+			KFormDesigner::Container *container, 
+			int options = DefaultOptions) = 0;
 
 		virtual void createCustomActions(KActionCollection* ) {};
 

@@ -28,6 +28,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kactioncollection.h>
+#include <kstdaction.h>
 
 #include <container.h>
 #include <form.h>
@@ -228,6 +230,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setDescription(i18n("A widget for displaying images"));
 	addClass(wi);
 
+	setInternalProperty("KexiImageBox", "dontStartEditingOnInserting", "1");
+
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
 	wi->setPixmap("check");
 	wi->setClassName("KexiDBCheckBox");
@@ -341,6 +345,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["DateTime"] = KexiDB::Field::typeName(KexiDB::Field::DateTime);
 	m_propValDesc["MultiLineText"] = i18n("AutoField editor's type", "Multiline Text");
 	m_propValDesc["Enum"] = i18n("AutoField editor's type", "List of Values"); 
+	m_propValDesc["Image"] = i18n("AutoField editor's type", "Image");
 
 //	m_propDesc["labelCaption"] = i18n("Label Text");
 	m_propDesc["autoCaption"] = i18n("Auto Label");
@@ -351,6 +356,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["NoLabel"] = i18n("Label Position", "No Label");
 
 	m_propDesc["sizeInternal"] = i18n("Size");
+	m_propDesc["image"] = i18n("Image");
+	m_propDesc["scaledContents"] = i18n("Scaled Contents");
+	m_propDesc["keepAspectRatio"] = i18n("Keep Aspect Ratio (short)", "Keep Ratio");
 
 #ifdef KEXI_NO_UNFINISHED
 	//we don't want not-fully implemented/usable classes:
@@ -365,13 +373,14 @@ KexiDBFactory::~KexiDBFactory()
 }
 
 QWidget*
-KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
-	WidgetFactory::OrientationHint)
+KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+	KFormDesigner::Container *container, int options)
 {
-	kexipluginsdbg << "KexiDBFactory::create() " << this << endl;
+	kexipluginsdbg << "KexiDBFactory::createWidget() " << this << endl;
 
 	QWidget *w=0;
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+	const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
 	if(c == "KexiSubForm")
 		w = new KexiSubForm(container->form(), p, n);
@@ -388,9 +397,9 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	else if(c == "KexiLabel")
 		w = new KexiLabel(text, p, n);
 	else if(c == "KexiImageBox")
-		w = new KexiImageBox(p, n);
+		w = new KexiImageBox(designMode, p, n);
 	else if(c == "KexiDBFieldEdit")
-		w = new KexiDBFieldEdit(p, n);
+		w = new KexiDBFieldEdit(p, n, designMode);
 	else if(c == "KexiDBCheckBox")
 		w = new KexiDBCheckBox(text, p, n);
 	else if(c == "KexiDBTimeEdit")
@@ -410,7 +419,7 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 }
 
 bool
-KexiDBFactory::createMenuActions(const QCString &classname, QWidget *, QPopupMenu *menu,
+KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *)
 {
 	if(classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton")
@@ -418,6 +427,24 @@ KexiDBFactory::createMenuActions(const QCString &classname, QWidget *, QPopupMen
 /*! @todo also call createMenuActions() for inherited factory! */
 		m_assignAction->plug( menu );
 		return true;
+	}
+	else if(classname == "KexiImageBox")
+	{
+		KexiImageBox *imageBox = static_cast<KexiImageBox*>(w);
+		imageBox->updateActionsAvailability();
+		KActionCollection *ac = imageBox->actionCollection();
+		KPopupMenu *subMenu = new KPopupMenu();
+//! @todo make these actions undoable/redoable
+		menu->insertItem(i18n("&Image"), subMenu);
+		ac->action("insert")->plug(subMenu);
+		ac->action("file_save_as")->plug(subMenu);
+		subMenu->insertSeparator();
+		ac->action("edit_cut")->plug(subMenu);
+		ac->action("edit_copy")->plug(subMenu);
+		ac->action("edit_paste")->plug(subMenu);
+		ac->action("delete")->plug(subMenu);
+		subMenu->insertSeparator();
+		ac->action("properties")->plug(subMenu);
 	}
 	return false;
 }
@@ -429,11 +456,6 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 	m_assignAction = new KAction( i18n("Assign Action..."), SmallIconSet("form_action"),
 		0, 0, 0, col, "widget_assign_action");
 }
-
-/*KexiDBFactory::assignAction()
-{
-	emit executeCustomAction("assignAction", m_widget);
-}*/
 
 bool
 KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
@@ -514,6 +536,10 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
 		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
 	}
+	else if(classname == "KexiImageBox") {
+		KexiImageBox *image = static_cast<KexiImageBox*>(w);
+		image->insertFromFile();
+	}
 	return false;
 }
 
@@ -552,8 +578,10 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 	const QCString& property, bool isTopLevel)
 {
 	//general
-	if (property=="dataSource" || property=="dataSourceMimeType") 
+	if (property=="dataSource" || property=="dataSourceMimeType") {
+//		|| (property=="pixmap" && classname!="KexiImageBox")) {
 		return false; //force
+	}
 
 	bool ok = true;
 
@@ -599,6 +627,9 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 			return true; //force
 		if (property=="fieldTypeInternal" || property=="fieldCaptionInternal")
 			return false;
+	}
+	else if (classname == "KexiImageBox") {
+		ok = property!="font" && property!="wordbreak";
 	}
 
 	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);

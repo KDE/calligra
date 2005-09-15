@@ -690,7 +690,7 @@ QString KexiStartupHandler::detectDriverForFile(
 
 	// "application/x-kexiproject-sqlite", etc.
 	QString detectedDriverName = Kexi::driverManager().lookupByMime(mimename).latin1();
-//@todo What about trying to reuse KOFFICE FILTER CHANINS here?
+//@todo What about trying to reuse KOFFICE FILTER CHAINS here?
 	if (/*cdata.driverName.isEmpty() 
 		||*/ (!driverName.isEmpty() && driverName.lower()!=detectedDriverName.lower() 
 			&& KMessageBox::Yes == KMessageBox::warningYesNo(parent, i18n(

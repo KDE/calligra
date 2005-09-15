@@ -450,8 +450,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 }
 
 QWidget*
-ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
-	WidgetFactory::OrientationHint orientationHint)
+ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+	KFormDesigner::Container *container, int options)
 {
 	if(c == "QButtonGroup")
 	{
@@ -552,9 +552,9 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 	}
 	else if(c == "QSplitter") {
 		QSplitter *split = new QSplitter(p, n);
-		if (orientationHint!=WidgetFactory::Any)
+		if (0 == (options & WidgetFactory::AnyOrientation))
 			split->setOrientation(
-				orientationHint==WidgetFactory::Vertical ? Qt::Vertical : Qt::Horizontal);
+				(options & WidgetFactory::VerticalOrientation) ? Qt::Vertical : Qt::Horizontal);
 		new KFormDesigner::Container(container, split, container);
 		return split;
 	}

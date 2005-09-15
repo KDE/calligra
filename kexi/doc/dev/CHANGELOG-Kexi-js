@@ -12,10 +12,32 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-09-15
+Kexi supports static and data-aware images boxes
+- properties implemented: scaling (aspect ration can be kept), 
+  horizontal/vertical alignment
+Migration Wizard
+- cleaned up the code a bit
+- 'back' button works well on "dest. type" page when file-based driver is used
+- user is warned when no source filename was specified
+Forms
+- view mode (design/preview) is now also passed as option 
+  to WidgetFactory::createWidget() so widget's look&feel can differ depending 
+  on the view mode
+
+2005-09-14
+Property Editor
+- PixmapEditor improved displaying, and value changes support
+- Editor's widgets have proper geometry set a bit earlier
+
 2005-09-06 (aKademy)
+2005-09-08..13
 Forms
 - data-aware image box widget 
 (partial implementation started during flight back from Girona to Warsaw)
+-- "insertFromFile", "saveAs", "cut", "copy", "paste", "delete", "properties" 
+   popup actions added
+- "readOnly" property added for image, spinboxes and dbfield widgets
 
 2005-09-03 (aKademy)
 Relations view

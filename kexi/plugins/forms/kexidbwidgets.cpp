@@ -27,12 +27,27 @@
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
+#include <qstyle.h>
+#include <qfiledialog.h>
+#include <qclipboard.h>
+#include <qtooltip.h>
+#include <qimage.h>
 
+#include <kapplication.h>
 #include <knumvalidator.h>
 #include <kdatetbl.h>
 #include <kdatepicker.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kaction.h>
+#include <kstdaction.h>
+#include <kimageio.h>
+#include <kfiledialog.h>
+#include <kstandarddirs.h>
+#include <kstaticdeleter.h>
+#include <kimageeffect.h>
 
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
@@ -40,6 +55,8 @@
 
 #ifdef Q_WS_WIN
 #define KEXIDATETIMEEDITOR_P_IMPL
+#include <win32_utils.h>
+#include <krecentdirs.h>
 #endif
 
 #include <widget/tableview/kexidatetimeeditor_p.h>
@@ -454,6 +471,7 @@ KexiDBTimeEdit::~KexiDBTimeEdit()
 void KexiDBTimeEdit::setInvalidState( const QString&)
 {
 	setEnabled(false);
+	setReadOnly(true);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
@@ -507,7 +525,14 @@ bool KexiDBTimeEdit::valueIsEmpty()
 
 bool KexiDBTimeEdit::isReadOnly() const
 {
-	return !isEnabled();
+	//! @todo: data/time edit API has no readonly flag, 
+	//!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
+	return m_readOnly; //!isEnabled();
+}
+
+void KexiDBTimeEdit::setReadOnly(bool set)
+{
+	m_readOnly = set;
 }
 
 QWidget*
@@ -554,6 +579,7 @@ KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent, const char *n
 {
 	m_invalidState = false;
 	m_cleared = false;
+	m_readOnly = false;
 
 	m_edit = new QDateEdit(date, this);
 	m_edit->setAutoAdvance(true);
@@ -598,6 +624,7 @@ KexiDBDateEdit::~KexiDBDateEdit()
 void KexiDBDateEdit::setInvalidState( const QString& )
 {
 	setEnabled(false);
+	setReadOnly(true);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
@@ -648,7 +675,14 @@ bool KexiDBDateEdit::valueIsEmpty()
 
 bool KexiDBDateEdit::isReadOnly() const
 {
-	return !isEnabled();
+	//! @todo: data/time edit API has no readonly flag, 
+	//!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
+	return m_readOnly; //!isEnabled();
+}
+
+void KexiDBDateEdit::setReadOnly(bool set)
+{
+	m_readOnly = set;
 }
 
 QWidget*
@@ -746,6 +780,7 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
 {
 	m_invalidState = false;
 	m_cleared = false;
+	m_readOnly = false;
 
 	m_dateEdit = new QDateEdit(datetime.date(), this);
 	m_dateEdit->setAutoAdvance(true);
@@ -800,6 +835,7 @@ KexiDBDateTimeEdit::~KexiDBDateTimeEdit()
 void KexiDBDateTimeEdit::setInvalidState(const QString & /*! @todo paint this text: text*/)
 {
 	setEnabled(false);
+	setReadOnly(true);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
@@ -840,7 +876,14 @@ bool KexiDBDateTimeEdit::valueIsEmpty()
 
 bool KexiDBDateTimeEdit::isReadOnly() const
 {
-	return !isEnabled();
+	//! @todo: data/time edit API has no readonly flag, 
+	//!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
+	return m_readOnly; //!isEnabled();
+}
+
+void KexiDBDateTimeEdit::setReadOnly(bool set)
+{
+	m_readOnly = set;
 }
 
 QWidget*
@@ -961,6 +1004,7 @@ void KexiDBIntSpinBox::setInvalidState( const QString& displayText )
 {
 	m_invalidState = true;
 	setEnabled(false);
+	setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
 		setFocusPolicy(QWidget::ClickFocus);
@@ -1005,7 +1049,12 @@ bool KexiDBIntSpinBox::valueIsEmpty()
 
 bool KexiDBIntSpinBox::isReadOnly() const
 {
-	return !isEnabled();
+	return editor()->isReadOnly();
+}
+
+void KexiDBIntSpinBox::setReadOnly(bool set)
+{
+	editor()->setReadOnly(set);
 }
 
 QWidget*
@@ -1045,6 +1094,7 @@ void KexiDBDoubleSpinBox::setInvalidState( const QString& displayText )
 {
 	m_invalidState = true;
 	setEnabled(false);
+	setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
 		setFocusPolicy(QWidget::ClickFocus);
@@ -1089,7 +1139,12 @@ bool KexiDBDoubleSpinBox::valueIsEmpty()
 
 bool KexiDBDoubleSpinBox::isReadOnly() const
 {
-	return !isEnabled();
+	return editor()->isReadOnly();
+}
+
+void KexiDBDoubleSpinBox::setReadOnly(bool set)
+{
+	editor()->setReadOnly(set);
 }
 
 QWidget*
@@ -1126,21 +1181,180 @@ KexiPushButton::~KexiPushButton()
 
 //////////////////////////////////////////
 
-KexiImageBox::KexiImageBox( QWidget *parent, const char *name, WFlags f )
-	: QFrame( parent, name, f )
-	, KexiFormDataItemInterface()
+class KexiImageBox::Button : public QToolButton
 {
-	QHBoxLayout *hlyr = new QHBoxLayout(this, 2);
-	m_pixmapLabel = new QLabel(this);
-	m_pixmapLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	hlyr->addWidget(m_pixmapLabel);
-	m_chooser = new QToolButton(this);
-	m_chooser->setText("...");//todo
-	m_chooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-//	m_chooser->setFixedWidth(m_chooser->minimumSizeHint().width()); //! @todo get this from a KStyle
-	m_chooser->setAutoRaise(true);
-	hlyr->addWidget(m_chooser);
-//todo	m_chooser->setPopup(.........);
+	public:
+		Button(QWidget *parent) : QToolButton(parent, "KexiImageBox::Button")
+		{
+			setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+			setFixedWidth(QMAX(15, qApp->globalStrut().width()));
+			//	setFixedWidth(m_chooser->minimumSizeHint().width()); //! @todo get this from a KStyle
+			setAutoRaise(true);
+		}
+		~Button() {}
+		virtual void drawButton( QPainter *p ) {
+			QToolButton::drawButton(p);
+			QStyle::SFlags arrowFlags = QStyle::Style_Default;
+			if (isDown())
+				arrowFlags |= QStyle::Style_Down;
+			if (isEnabled())
+				arrowFlags |= QStyle::Style_Enabled;
+			style().drawPrimitive(QStyle::PE_ArrowDown, p,
+				QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
+				arrowFlags, QStyleOption() );
+		}
+};
+
+static KStaticDeleter<QPixmap> KexiImageBox_pmDeleter;
+static QPixmap* KexiImageBox_pm = 0;
+
+#if 0
+class KexiImageBox::ImageLabel : public QLabel
+{
+	public:
+		ImageLabel::ImageLabel(KexiImageBox *parent) : QLabel(parent, "KexiImageBox::Button")
+//			WNoAutoErase)
+		{
+			setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+			setBackgroundMode(Qt::NoBackground);
+		}
+		virtual void setPixmap ( const QPixmap &pixmap )
+		{
+			QLabel::setPixmap(pixmap);
+			setBackgroundMode(pixmap.isNull() ? Qt::NoBackground : Qt::PaletteBackground);
+		}
+		virtual ~ImageLabel() {}
+	protected:
+		virtual void ImageLabel::drawContents ( QPainter *p )
+		{
+			if (static_cast<KexiImageBox*>(parentWidget())->designMode() && (!pixmap() || pixmap()->isNull()))
+			{
+				QPixmap pm(size());
+				QPainter p2;
+				p2.begin(&pm, this);
+	//			QLabel::drawContents( p );
+				p2.fillRect(0,0,width(),height(), parentWidget()->palette().active().background());
+
+				updatePixmap();
+				QImage img(KexiImageBox_pm->convertToImage());
+				QColor c = parentWidget()->palette().active().background();
+				img = KImageEffect::flatten(img, c.dark(150),
+					qGray( c.rgb() ) <= 20 ? Qt::darkGray : c.light(105));
+//				m_scalledDown = (pix.width() > (width()/2) || pix.height() > (height()/2));
+//				if (m_scalledDown)
+//					img = img.smoothScale(width()/2, height()/2, QImage::ScaleMin);
+			
+//				KexiImageBox_pmDeleter.setObject( KexiImageBox_pm, new QPixmap() );
+//				KexiImageBox_pm->convertFromImage(img);
+
+				QPixmap converted;
+				converted.convertFromImage(img);
+				p2.drawPixmap(2, height()-KexiImageBox_pm->height()-2, converted);
+				QFont f(qApp->font());
+				f.setPointSize(f.pointSize()*2);
+				p2.setFont(f);
+				p2.setPen( KexiUtils::contrastColor( parentWidget()->palette().active().background() ) );
+				p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, i18n("No Image"));
+				p2.end();
+				bitBlt(this, 0, 0, &pm);
+			}
+			else
+				QLabel::drawContents( p );
+		}
+		virtual void paletteChange ( const QPalette & oldPalette )
+		{
+			QLabel::paletteChange(oldPalette);
+			if (oldPalette.active().background()!=palette().active().background()) {
+				delete KexiImageBox_pm;
+				KexiImageBox_pm = 0;
+				repaint();
+			}
+		}
+		void updatePixmap() {
+			if (!static_cast<KexiImageBox*>(parentWidget())->designMode() && pixmap() && !pixmap()->isNull())
+				return;
+
+			if (KexiImageBox_pm) {
+//				QSize size = KexiImageBox_pm->size();
+				if ((KexiImageBox_pm->width() > (width()/2) || KexiImageBox_pm->height() > (height()/2))) {
+//					int maxSize = QMAX(width()/2, height()/2);
+//					size = QSize(maxSize,maxSize);
+					delete KexiImageBox_pm;
+					KexiImageBox_pm = 0;
+				}
+			}
+			if (!KexiImageBox_pm) {
+				QString fname( locate("data", QString("kexi/pics/imagebox.png")) );
+				KexiImageBox_pmDeleter.setObject( KexiImageBox_pm, new QPixmap(fname, "PNG") );
+			}
+		}
+		virtual void resizeEvent( QResizeEvent *e )
+		{
+			updatePixmap();
+			QWidget::resizeEvent(e);
+		}
+//		bool m_scalledDown;
+};
+#endif
+
+KexiImageBox::KexiImageBox( bool designMode, QWidget *parent, const char *name )
+	: QWidget( parent, name, WNoAutoErase )
+	, KexiFormDataItemInterface()
+	, m_actionCollection(this)
+	, m_alignment(Qt::AlignAuto|Qt::AlignTop)
+	, m_designMode(designMode)
+	, m_readOnly(false)
+	, m_scaledContents(false)
+	, m_keepAspectRatio(true)
+{
+	setBackgroundMode(Qt::NoBackground);
+
+//	QHBoxLayout *hlyr = new QHBoxLayout(this, 2);
+//	m_pixmapLabel = new ImageLabel(this);
+//	hlyr->addWidget(m_pixmapLabel);
+
+	if (m_designMode) {
+		m_chooser = 0;
+	}
+	else {
+		m_chooser = new Button(this);
+//		hlyr->addWidget(m_chooser);
+	}
+	//setup popup menu
+	m_popup = new KPopupMenu(this);
+	QString titleString = i18n("Image Box");
+	m_titleID = m_popup->insertTitle(SmallIcon("pixmaplabel"), titleString);
+	m_insertFromFileAction = new KAction(i18n("Insert From &File..."), SmallIconSet("fileopen"), 0,
+			this, SLOT(insertFromFile()), &m_actionCollection, "insert");
+	m_insertFromFileAction->plug(m_popup);
+	m_saveAsAction = KStdAction::saveAs(this, SLOT(saveAs()), &m_actionCollection);
+//	m_saveAsAction->setText(i18n("&Save &As..."));
+	m_saveAsAction->plug(m_popup);
+	m_popup->insertSeparator();
+	m_cutAction = KStdAction::cut(this, SLOT(cut()), &m_actionCollection);
+	m_cutAction->plug(m_popup);
+	m_copyAction = KStdAction::copy(this, SLOT(copy()), &m_actionCollection);
+	m_copyAction->plug(m_popup);
+	m_pasteAction = KStdAction::paste(this, SLOT(paste()), &m_actionCollection);
+	m_pasteAction->plug(m_popup);
+	m_deleteAction = new KAction(i18n("&Clear"), SmallIconSet("editdelete"), Qt::Key_Delete,
+		this, SLOT(clear()), &m_actionCollection, "delete");
+	m_deleteAction->plug(m_popup);
+	m_popup->insertSeparator();
+	m_propertiesAction = new KAction(i18n("Properties"), 0, 0,
+		this, SLOT(showProperties()), &m_actionCollection, "properties");
+	m_propertiesAction->plug(m_popup);
+	connect(m_popup, SIGNAL(aboutToShow()), this, SLOT(updateActionsAvailability()));
+	connect( m_popup, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
+	if (m_chooser) {
+		//we couldn't use m_chooser->setPopup() because of drawing problems
+		connect(m_chooser, SIGNAL(pressed()), this, SLOT(slotChooserPressed()));
+	}
+
+	updateActionStrings();
+
+//	m_chooser->setPopupDelay(0);
+//	m_chooser->setPopup(m_popup);
 }
 
 KexiImageBox::~KexiImageBox()
@@ -1149,24 +1363,34 @@ KexiImageBox::~KexiImageBox()
 
 void KexiImageBox::setValueInternal( const QVariant& add, bool /* irrelevant here: removeOld*/ )
 {
-	//! @todo ?
-	m_pixmapLabel->setPixmap(add.toPixmap());
+	if (isReadOnly())
+		return;
+	m_pixmap = add.toPixmap();
+	repaint();
+	emit valueChanged(m_pixmap);
 }
 
-QVariant KexiImageBox::value() {
-	return *m_pixmapLabel->pixmap();
+QVariant KexiImageBox::value()
+{
+	return m_pixmap;
+//	if (!m_pixmapLabel->pixmap())
+//		return QVariant();
+//	return *m_pixmapLabel->pixmap();
 }
 
 void KexiImageBox::setInvalidState( const QString& displayText )
 {
-	m_pixmapLabel->setPixmap(QPixmap());
-	m_pixmapLabel->setText( displayText );
+//	m_pixmapLabel->setPixmap(QPixmap());
+	m_pixmap = QPixmap();
+//TODO	m_pixmapLabel->setText( displayText );
 	m_chooser->hide();
+	setReadOnly(true);
 }
 
 bool KexiImageBox::valueIsNull()
 {
-	return m_pixmapLabel->pixmap()->isNull();
+	return m_pixmap.isNull();
+//	return !m_pixmapLabel->pixmap() || m_pixmapLabel->pixmap()->isNull();
 }
 
 bool KexiImageBox::valueIsEmpty()
@@ -1176,13 +1400,51 @@ bool KexiImageBox::valueIsEmpty()
 
 bool KexiImageBox::isReadOnly() const
 {
-	return m_readOnly || !m_pixmapLabel->isEnabled();
+	return m_readOnly;
+}
+
+void KexiImageBox::setReadOnly(bool set)
+{
+	m_readOnly = set;
+}
+
+QPixmap KexiImageBox::pixmap() const
+{
+	return m_pixmap;
+//	return m_pixmapLabel->pixmap() ? *m_pixmapLabel->pixmap() : QPixmap();
+}
+
+bool KexiImageBox::hasScaledContents() const
+{
+	return m_scaledContents;
+//	return m_pixmapLabel->hasScaledContents();
+}
+
+void KexiImageBox::setPixmap(const QPixmap& pixmap)
+{
+	setValueInternal(pixmap, true);
+//	setBackgroundMode(pixmap.isNull() ? Qt::NoBackground : Qt::PaletteBackground);
+}
+
+void KexiImageBox::setScaledContents(bool set)
+{
+//todo	m_pixmapLabel->setScaledContents(set);
+	m_scaledContents = set;
+	repaint();
+}
+
+void KexiImageBox::setKeepAspectRatio(bool set)
+{
+	m_keepAspectRatio = set;
+	if (m_scaledContents)
+		repaint();
 }
 
 QWidget* KexiImageBox::widget()
 {
 	//! @todo
-	return m_pixmapLabel;
+//	return m_pixmapLabel;
+	return this;
 }
 
 bool KexiImageBox::cursorAtStart()
@@ -1195,12 +1457,355 @@ bool KexiImageBox::cursorAtEnd()
 	return true;
 }
 
-void KexiImageBox::clear()
+/*void KexiImageBox::clear()
 {
-	m_pixmapLabel->setPixmap(QPixmap());
-	m_pixmapLabel->setText(QString::null);
+	if (isReadOnly())
+		return;
+	m_pixmap = QPixmap();
+	repaint();
+//	m_pixmapLabel->setPixmap(QPixmap());
+//	m_pixmapLabel->setText(QString::null);
+	emit valueChanged(QPixmap());
+}*/
+
+void KexiImageBox::insertFromFile()
+{
+	if (isReadOnly())
+		return;
+
+#ifdef Q_WS_WIN
+	QString recentDir;
+	QString fileName = QFileDialog::getOpenFileName(
+		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(), 
+		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
+		this, 0, i18n("Insert image from file"));
+#else
+	QString fileName = KFileDialog::getImageOpenURL(
+		":lastVisitedImagePath", this, i18n("Insert image from file")).url();
+#endif
+	if (fileName.isEmpty())
+		return;
+	kexipluginsdbg << fileName << endl;
+	QPixmap pm;
+	if (!pm.load(fileName)) {
+		//! @todo err msg
+		return;
+	}
+	setValueInternal(pm, true);
+
+#ifdef Q_WS_WIN
+	//save last visited path
+	KURL url(fileName);
+	if (url.isLocalFile())
+		KRecentDirs::add(":lastVisitedImagePath", url.directory());
+#endif
 }
 
+void KexiImageBox::saveAs()
+{
+//	if (!m_pixmapLabel->pixmap() || m_pixmapLabel->pixmap()->isNull()) {
+	if (m_pixmap.isNull()) {
+		kdWarning() << "KexiImageBox::saveAs(): null pixmap!" << endl;
+		return;
+	}
+#ifdef Q_WS_WIN
+	QString recentDir;
+	QString fileName = QFileDialog::getSaveFileName(
+		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(), 
+		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
+		this, 0, i18n("Save image to file"));
+#else
+	QString fileName = KFileDialog::getSaveFileName(
+		":lastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save image to file"));
+#endif
+	if (fileName.isEmpty())
+		return;
+	kexipluginsdbg << fileName << endl;
+//	if (!m_pixmapLabel->pixmap()->save(fileName, KImageIO::type(fileName))) {
+	if (!m_pixmap.save(fileName, KImageIO::type(fileName))) {
+		//! @todo err msg
+		return;
+	}
+
+#ifdef Q_WS_WIN
+	//save last visited path
+	KURL url(fileName);
+	if (url.isLocalFile())
+		KRecentDirs::add(":lastVisitedImagePath", url.directory());
+#endif
+}
+
+void KexiImageBox::cut()
+{
+	if (isReadOnly())
+		return;
+	copy();
+	clear();
+}
+
+void KexiImageBox::copy()
+{
+//	if (m_pixmapLabel->pixmap())
+	qApp->clipboard()->setPixmap(m_pixmap, QClipboard::Clipboard);
+}
+
+void KexiImageBox::paste()
+{
+	if (isReadOnly())
+		return;
+	QPixmap pm( qApp->clipboard()->pixmap(QClipboard::Clipboard) );
+	if (!pm.isNull())
+		setValueInternal(pm, true);
+}
+
+void KexiImageBox::clear()
+{
+	if (isReadOnly())
+		return;
+	setValueInternal(QPixmap(), true);
+}
+
+void KexiImageBox::showProperties()
+{
+	//! @todo
+}
+
+void KexiImageBox::updateActionsAvailability()
+{
+	const bool notNull = !valueIsNull();
+	m_insertFromFileAction->setEnabled( !isReadOnly() );
+	m_saveAsAction->setEnabled( notNull );
+	m_cutAction->setEnabled( notNull && !isReadOnly() );
+	m_copyAction->setEnabled( notNull );
+	m_pasteAction->setEnabled( !isReadOnly() );
+	m_deleteAction->setEnabled( notNull && !isReadOnly() );
+	m_propertiesAction->setEnabled( notNull );
+}
+
+void KexiImageBox::slotAboutToHidePopupMenu()
+{
+	m_clickTimer.start(50, true);
+}
+
+void KexiImageBox::contextMenuEvent( QContextMenuEvent * e )
+{
+	m_popup->exec( e->globalPos(), -1 );
+}
+
+void KexiImageBox::slotChooserPressed()
+{
+	if (m_clickTimer.isActive())
+		return;
+	QRect screen = qApp->desktop()->availableGeometry( m_chooser );
+	QPoint p;
+	if ( QApplication::reverseLayout() ) {
+		if ( mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height() <= screen.height() )
+			p = m_chooser->mapToGlobal( m_chooser->rect().bottomRight() );
+		else
+			p = m_chooser->mapToGlobal( m_chooser->rect().topRight() - QPoint( 0, m_popup->sizeHint().height() ) );
+		p.rx() -= m_popup->sizeHint().width();
+	}
+	else {
+		if ( m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height() <= screen.height() )
+			p = m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() );
+		else
+			p = m_chooser->mapToGlobal( m_chooser->rect().topLeft() - QPoint( 0, m_popup->sizeHint().height() ) );
+	}
+	if (!m_popup->isVisible()) {
+		m_popup->exec( p, -1 );
+	}
+	m_chooser->setDown( false );
+}
+
+void KexiImageBox::updateActionStrings()
+{
+	if (!m_popup)
+		return;
+	QString titleString = i18n("Image Box");
+	if (!dataSource().isEmpty())
+		titleString += (": " + dataSource());
+	m_popup->changeTitle(m_titleID, m_popup->titlePixmap(m_titleID), titleString);
+
+	if (m_chooser) {
+		if (dataSource().isEmpty())
+			QToolTip::add(m_chooser, i18n("Click to show actions for this Image Box"));
+		else
+			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" Image Box").arg(dataSource()));
+	}
+}
+
+void KexiImageBox::setDataSource( const QString &ds )
+{
+	KexiFormDataItemInterface::setDataSource( ds );
+	updateActionStrings();
+}
+
+QSize KexiImageBox::sizeHint() const
+{
+	if (m_pixmap.isNull())
+		return QSize(80, 80);
+	return m_pixmap.size();
+}
+
+//void KexiImageBox::drawContents( QPainter *p )
+void KexiImageBox::paintEvent( QPaintEvent*pe )
+{
+	QPainter p(this);
+	p.setClipRect(pe->rect());
+	const int m = 0; //todo margin();
+//	QPainter ptr(this);
+//	ptr.fillRect(0,0,width(),height(), green);
+//	p->setClipRect(0, 0, width(), height());
+//	QFrame::drawContents( p );
+//	QFrame::drawFrame( p );
+//	QColor bg(palette().active().background());//parentWidget()->palette().active().background()
+	QColor bg(eraseColor());
+	if (m_designMode && m_pixmap.isNull()) {
+		QPixmap pm(size());
+		QPainter p2;
+		p2.begin(&pm, this);
+//			QLabel::drawContents( p );
+		p2.fillRect(0,0,width(),height(), bg);
+
+		updatePixmap();
+		QImage img(KexiImageBox_pm->convertToImage());
+		img = KImageEffect::flatten(img, bg.dark(150),
+			qGray( bg.rgb() ) <= 20 ? Qt::darkGray : bg.light(105));
+//				m_scalledDown = (pix.width() > (width()/2) || pix.height() > (height()/2));
+//				if (m_scalledDown)
+//					img = img.smoothScale(width()/2, height()/2, QImage::ScaleMin);
+	
+//				KexiImageBox_pmDeleter.setObject( KexiImageBox_pm, new QPixmap() );
+//				KexiImageBox_pm->convertFromImage(img);
+
+		QPixmap converted;
+		converted.convertFromImage(img);
+		p2.drawPixmap(m+2, height()-m-KexiImageBox_pm->height()-2, converted);
+		QFont f(qApp->font());
+//		f.setPointSize(f.pointSize());
+		p2.setFont(f);
+		p2.setPen( KexiUtils::contrastColor( bg ) );
+		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, i18n("No Image"));
+		p2.end();
+		bitBlt(this, 0, 0, &pm);
+	}
+	else {
+//		QFrame::drawContents( p );
+		if (m_pixmap.isNull())
+			p.fillRect(0,0,width(),height(), bg);
+		else {
+			const bool fast = m_pixmap.width()>1000 && m_pixmap.height()>800; //fast drawing needed
+//! @todo we can optimize drawing by drawing rescaled pixmap here 
+//! and performing detailed painting later (using QTimer)
+			QPixmap pm;
+			QPainter p2;
+			QPainter *target;
+			if (fast) {
+				target = &p;
+			}
+			else {
+				pm.resize(size());
+				p2.begin(&pm, this);
+				target = &p2;
+			}
+			//clearing needed here because we may need to draw a pixmap with transparency
+			target->fillRect(0,0,width(),height(), bg);
+			if (m_scaledContents) {
+				if (m_keepAspectRatio) {
+					QImage img(m_pixmap.convertToImage());
+					img = img.smoothScale(width(), height(), QImage::ScaleMin);
+					QPoint pos(0,0);
+					if (img.width()<width()) {
+						int hAlign = QApplication::horizontalAlignment( m_alignment );
+						if ( hAlign & Qt::AlignRight )
+							pos.setX(width()-img.width());
+						else if ( hAlign & Qt::AlignHCenter )
+							pos.setX(width()/2-img.width()/2);
+					}
+					else if (img.height()<height()) {
+						if ( m_alignment & Qt::AlignBottom )
+							pos.setY(height()-img.height());
+						else if ( m_alignment & Qt::AlignVCenter )
+							pos.setY(height()/2-img.height()/2);
+					}
+					QPixmap px;
+					px.convertFromImage(img);
+					target->drawPixmap(pos, px);
+				}
+				else {
+					target->drawPixmap(QRect(m, m, width()-m*2, height()-m*2), m_pixmap);
+				}
+			}
+			else {
+				int hAlign = QApplication::horizontalAlignment( m_alignment );
+				QPoint pos;
+				if ( hAlign & Qt::AlignRight )
+					pos.setX(width()-m_pixmap.width()-m);
+				else if ( hAlign & Qt::AlignHCenter )
+					pos.setX(width()/2-m_pixmap.width()/2);
+				else //left, etc.
+					pos.setX(m);
+
+				if ( m_alignment & Qt::AlignBottom )
+					pos.setY(height()-m_pixmap.height()-m);
+				else if ( m_alignment & Qt::AlignVCenter )
+					pos.setY(height()/2-m_pixmap.height()/2);
+				else //top, etc. 
+					pos.setY(m);
+				target->drawPixmap(pos, m_pixmap);
+			}
+			if (!fast) {
+				p2.end();
+				bitBlt(this, 0, 0, &pm);
+			}
+		}
+	}
+}
+/*		virtual void KexiImageBox::paletteChange ( const QPalette & oldPalette )
+{
+	QFrame::paletteChange(oldPalette);
+	if (oldPalette.active().background()!=palette().active().background()) {
+		delete KexiImageBox_pm;
+		KexiImageBox_pm = 0;
+		repaint();
+	}
+}*/
+void KexiImageBox::updatePixmap() {
+	if (! (m_designMode && m_pixmap.isNull()) )
+		return;
+
+//			if (KexiImageBox_pm) {
+//				QSize size = KexiImageBox_pm->size();
+//				if ((KexiImageBox_pm->width() > (width()/2) || KexiImageBox_pm->height() > (height()/2))) {
+//					int maxSize = QMAX(width()/2, height()/2);
+//					size = QSize(maxSize,maxSize);
+//					delete KexiImageBox_pm;
+//					KexiImageBox_pm = 0;
+//				}
+//			}
+	if (!KexiImageBox_pm) {
+		QString fname( locate("data", QString("kexi/pics/imagebox.png")) );
+		KexiImageBox_pmDeleter.setObject( KexiImageBox_pm, new QPixmap(fname, "PNG") );
+	}
+}
+
+void KexiImageBox::setAlignment(int alignment)
+{
+	m_alignment = alignment;
+	if (!m_scaledContents || m_keepAspectRatio)
+		repaint();
+}
+
+//		virtual void resizeEvent( QResizeEvent *e )
+//		{
+//			updatePixmap();
+//			QWidget::resizeEvent(e);
+//		}
+
+/*void KexiImageBox::paintEvent( QPaintEvent* )
+{
+}
+*/
 /*
 bool KexiImageBox::setProperty( const char * name, const QVariant & value )
 {

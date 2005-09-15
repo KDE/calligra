@@ -114,4 +114,16 @@ QColor KexiUtils::blendColors(const QColor& c1, const QColor& c2, int factor1, i
 		int( (c1.blue()*factor1+c2.blue()*factor2)/(factor1+factor2) ) );
 }
 
+QColor KexiUtils::contrastColor(const QColor& c)
+{
+	int g = qGray( c.rgb() );
+	if (g>110)
+		return c.dark(200);
+	else if (g>80)
+		return c.light(150);
+	else if (g>20)
+		return c.light(300);
+	return Qt::gray;
+}
+
 #include "utils_p.moc"

@@ -178,8 +178,8 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
 		~ContainerFactory();
 
-		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
-			WidgetFactory::OrientationHint orientationHint = Any);
+		virtual QWidget *createWidget(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+			int options = DefaultOptions);
 		virtual bool createMenuActions(const QCString& classname, QWidget *w, QPopupMenu *menu,
 			KFormDesigner::Container *container);
 		virtual bool startEditing(const QCString &classname, QWidget *w,

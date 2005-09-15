@@ -104,7 +104,7 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 //this is automatic? -no
 //create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
 
-	kdDebug()<<"FormPart INIT ACTIONS***********************************************************************"<<endl;
+	kexipluginsdbg<<"FormPart INIT ACTIONS***********************************************************************"<<endl;
 	//TODO
 
 	//guiClient()->setXMLFile("kexiformui.rc");

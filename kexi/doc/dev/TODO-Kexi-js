@@ -564,3 +564,11 @@ http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx
 
 TODO: If a form has no focus, FormManager::windowChanged() and KexiFormView::setFocusInternal()
  don't work properly (setFocus() is not available...)
+
+FORMS:
+-Image Box: 
+--pasting large images makes chooser button invisible; maybe place it on top of the widget?
+--set better default for focusPolicy, implement setFocus()
+--add filter property (using KImageEffect)
+--add QFrame container
+--make image-related actions undoable/redoable in design time

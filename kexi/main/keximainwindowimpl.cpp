@@ -45,6 +45,7 @@
 #include <ktextbrowser.h>
 #include <kiconloader.h>
 #include <ktabwidget.h>
+#include <kimageio.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -436,6 +437,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
  , KexiGUIMessageHandler(this)
  , d(new KexiMainWindowImpl::Private(this) )
 {
+	KImageIO::registerFormats();
 	KexiProjectData *pdata = Kexi::startupHandler().projectData();
 	d->final = Kexi::startupHandler().forcedFinalMode() /* <-- simply forced final mode */
 		/* project has 'final mode' set as default and not 'design mode' override is found: */

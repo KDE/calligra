@@ -378,8 +378,8 @@ StdWidgetFactory::~StdWidgetFactory()
 }
 
 QWidget*
-StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
-	WidgetFactory::OrientationHint orientationHint)
+StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+	KFormDesigner::Container *container, int options)
 {
 	QWidget *w=0;
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
@@ -438,13 +438,13 @@ StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 		w = new KDateTimeWidget(QDateTime::currentDateTime(), p, n);
 
 	else if(c == "Line")
-		w = new Line(orientationHint==WidgetFactory::Vertical ? Line::Vertical : Line::Horizontal, p, n);
+		w = new Line(options & WidgetFactory::VerticalOrientation ? Line::Vertical : Line::Horizontal, p, n);
 
 	else if(c == "Spring") {
 		w = new Spring(p, n);
-		if (orientationHint!=WidgetFactory::Any)
+		if (0 == (options & WidgetFactory::AnyOrientation))
 			static_cast<Spring*>(w)->setOrientation(
-				orientationHint==WidgetFactory::Vertical ? Qt::Vertical : Qt::Horizontal);
+				(options & WidgetFactory::VerticalOrientation) ? Qt::Vertical : Qt::Horizontal);
 	}
 
 	if(w)

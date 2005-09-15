@@ -140,7 +140,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	public:
 		/*! Creates a simple Form, child of the FormManager \a manager.
 		 */
-		Form(FormManager *manager, const char *name=0);
+		Form(FormManager *manager, const char *name=0, bool designMode = true);
 		~Form();
 
 		/*!
