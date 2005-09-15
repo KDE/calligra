@@ -201,6 +201,7 @@ class KexiMainWindowImpl::Private
 
 		//! tools menu
 		KAction *action_tools_data_migration;
+		KActionMenu *action_tools_scripts;
 
 		//! window menu
 		KAction *action_window_next, *action_window_previous;
@@ -750,6 +751,16 @@ void KexiMainWindowImpl::initActions()
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 #else
 	d->action_tools_data_migration = d->dummy_action;
+#endif
+
+#ifdef KEXI_SCRIPTS_SUPPORT
+	d->action_tools_scripts = new KActionMenu(i18n("Scripts"), actionCollection(), "tools_scripts");
+	connect(d->action_tools_scripts->popupMenu(),SIGNAL(activated(int)),
+		this, SLOT(slotToolsScriptsActivated(int)));
+	connect(d->action_tools_scripts->popupMenu(), SIGNAL(aboutToShow()),
+		this, SLOT(slotToolsScriptsAboutToShow()));
+#else
+	//d->action_tools_scripts = d->dummy_action;
 #endif
 
 #ifndef KEXI_NO_CSV_IMPORT
@@ -3679,6 +3690,30 @@ void KexiMainWindowImpl::slotToolsProjectImportDataTable()
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
 	delete dlg;
+#endif
+}
+
+void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
+{
+#ifdef KEXI_SCRIPTS_SUPPORT
+	KPopupMenu *popup = d->action_tools_scripts->popupMenu();
+	popup->clear();
+	QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.py");
+	int idx = 0;
+	for(QStringList::Iterator it = files.begin(); it != files.end(); ++it, idx++)
+		popup->setWhatsThis(popup->insertItem(KURL(*it).fileName(), idx), *it);
+#endif
+}
+
+void KexiMainWindowImpl::slotToolsScriptsActivated(int id)
+{
+	if(id < 0) return;
+#ifdef KEXI_SCRIPTS_SUPPORT
+	KPopupMenu *popup = d->action_tools_scripts->popupMenu();
+	QString file = popup->whatsThis(id); // we use the whatsThis for the full file URL
+	QString err;
+	if(! Kexi::scriptManager(this)->executeFile(file, err))
+		KMessageBox::error(this, err);
 #endif
 }
 

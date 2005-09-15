@@ -21,6 +21,7 @@
 
 //include <qapplication.h>
 #include <qcursor.h>
+#include <qfile.h>
 #include <kdebug.h>
 
 #include "keximainwindow.h"
@@ -52,6 +53,8 @@ class KexiScriptContainerPrivate
         /// The scripting code.
         QString code;
 #endif
+        /// The last error.
+        QString lasterr;
         /// Remembered stdout and stderr output.
         QStringList output;
 };
@@ -120,6 +123,11 @@ void KexiScriptContainer::setCode(const QString& code)
 #endif
 }
 
+QString KexiScriptContainer::getLastError()
+{
+    return d->lasterr;
+}
+
 QStringList KexiScriptContainer::getOutput()
 {
     return d->output;
@@ -136,8 +144,8 @@ bool KexiScriptContainer::execute()
     bool ok = true;
     if( d->scriptcontainer->hadException() ) {
         Kross::Api::Exception::Ptr exception = d->scriptcontainer->getException();
-        QString s = exception->toString();
-        addStdErr(s);
+        d->lasterr = exception->toString();
+        addStdErr(d->lasterr);
         long line = exception->getLineNo();
         if(line >= 0)
             emit lineNo(line);
@@ -219,6 +227,26 @@ const QStringList KexiScriptManager::getInterpreters()
 #else
     return QStringList();
 #endif
+}
+
+bool KexiScriptManager::executeFile(const QString& file, QString& error)
+{
+    QFile f(file);
+    if(! f.open(IO_ReadOnly)) {
+        error = i18n("Failed to read scriptingfile %1").arg(file);
+        return false;
+    }
+    QString code = f.readAll();
+    f.close();
+
+    KexiScriptContainer* sc = new KexiScriptContainer(this, file);
+    sc->setInterpreterName("python");
+    sc->setCode(code);
+    bool ok = sc->execute();
+    if(! ok)
+        error = sc->getLastError();
+    delete sc;
+    return ok;
 }
 
 #include "kexiscripting.moc"

@@ -84,6 +84,11 @@ class KEXICORE_EXPORT KexiScriptContainer : public QObject
         void setCode(const QString& code);
 
         /**
+        * \return the last error or QString::null if there was no error.
+        */
+        QString getLastError();
+
+        /**
         * \return the stdout and stderr output.
         */
         QStringList getOutput();
@@ -170,6 +175,16 @@ class KEXICORE_EXPORT KexiScriptManager : public QObject
          * \return a list of interpreter names.
          */
         const QStringList getInterpreters();
+
+        /**
+         * Try to execute a scriptingfile.
+         * 
+         * \param file The full filename of the scriptfile to execute.
+         * \param error If execution fails this string contains the
+         *        errormessage.
+         * \return true on success else false.
+         */
+        bool executeFile(const QString& file, QString& error);
 
     private:
         /// Private d-pointer class.

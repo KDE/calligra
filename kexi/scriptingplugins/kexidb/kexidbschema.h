@@ -73,6 +73,9 @@ namespace Kross { namespace KexiDB {
             virtual const QString getClassName() const;
             virtual const QString getDescription() const;
             ::KexiDB::TableSchema* tableschema();
+
+        private:
+            Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
     };
 
     /**

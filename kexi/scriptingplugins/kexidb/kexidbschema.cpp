@@ -126,6 +126,10 @@ Kross::Api::Object::Ptr KexiDBSchema<T>::fieldlist(Kross::Api::List::Ptr)
 KexiDBTableSchema::KexiDBTableSchema(::KexiDB::TableSchema* tableschema)
     : KexiDBSchema<KexiDBTableSchema>("KexiDBTableSchema", tableschema, tableschema)
 {
+    addFunction("query", &KexiDBTableSchema::query,
+        Kross::Api::ArgumentList(),
+        QString("Return the KexiDBQuerySchema object that represent a SELECT * FROM this_KexiDBTableSchema_object.")
+    );
 }
 
 KexiDBTableSchema::~KexiDBTableSchema()
@@ -147,6 +151,11 @@ const QString KexiDBTableSchema::getDescription() const
 ::KexiDB::TableSchema* KexiDBTableSchema::tableschema()
 {
     return static_cast< ::KexiDB::TableSchema* >(m_schema);
+}
+
+Kross::Api::Object::Ptr KexiDBTableSchema::query(Kross::Api::List::Ptr)
+{
+    return new KexiDBQuerySchema( tableschema()->query() );
 }
 
 /***************************************************************************
