@@ -150,13 +150,16 @@ public slots:
 
     void slotTogglePalette(int paletteIndex);
     void slotToggleAllPalettes();
+    void showAllPalettes(bool shown);
+    
     /**
      * Restores the palette configuration to the default layout, i.e, the layout 
      * preferred by each docker.
      */
     virtual void slotReset();
 
-
+protected:
+    bool eventFilter( QObject *o, QEvent *e );
 
 private:
 

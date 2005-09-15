@@ -20,7 +20,9 @@
 #include <qdict.h>
 #include <qwidget.h>
 #include <qobject.h>
+#include <qevent.h>
 
+#include <kparts/event.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
@@ -43,6 +45,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 {
     
     m_view = view;
+    m_view->installEventFilter(this);
     m_actionCollection = ac;
 
     m_actions = new QDict<KToggleAction>();
@@ -333,6 +336,28 @@ void KoPaletteManager::slotToggleAllPalettes()
     for (; it.current(); ++it) {
         it.current()->makeVisible(m_allPalettesShown);
     }
+}
+
+void KoPaletteManager::showAllPalettes(bool shown)
+{
+    QDictIterator<KoPalette> it(*m_palettes);
+    for (; it.current(); ++it) {
+        it.current()->makeVisible(shown);
+    }
+    m_allPalettesShown = shown;
+}
+
+bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
+{
+    if (o != m_view) return false;
+    
+    if(e && e->type() == (QEvent::User + 42)) {
+         KParts::PartActivateEvent * pae = dynamic_cast<KParts::PartActivateEvent *>(e); 
+         if(pae && pae->widget() && pae->widget() == m_view) {
+             showAllPalettes( pae->activated() );
+         }
+    }
+    return false;
 }
 
 #include "kopalettemanager.moc"
