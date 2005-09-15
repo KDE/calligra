@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="12">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="13">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
     <Action name="import_data"/>
