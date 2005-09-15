@@ -46,18 +46,20 @@ namespace KexiMigration {
 /**
 @author Adam Pigg
 */
-class KEXIMIGR_EXPORT importWizard : public KWizard
+class KEXIMIGR_EXPORT ImportWizard : public KWizard
 {
 Q_OBJECT
 public:
-    importWizard(QWidget *parent = 0, const char *name = 0);
-    virtual ~importWizard();
+    ImportWizard(QWidget *parent = 0, const char *name = 0);
+    virtual ~ImportWizard();
 
 public slots:
     void progressUpdated(int percent);
 
-private slots:
-    void nextClicked(const QString &);
+protected slots:
+    virtual void next();
+    virtual void back();
+    void pageSelected(const QString &);
     virtual void accept();
     void helpClicked();
 private:

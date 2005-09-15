@@ -50,7 +50,7 @@ using namespace KexiMigration;
 
 //===========================================================
 //
-importWizard::importWizard(QWidget *parent, const char *name)
+ImportWizard::ImportWizard(QWidget *parent, const char *name)
         : KWizard(parent, name)
 {
     m_prjSet = 0;
@@ -113,25 +113,25 @@ importWizard::importWizard(QWidget *parent, const char *name)
     this->addPage(dstPage, i18n("Select Destination Database"));
     importTypePage = new QWidget(this);
     setupImportType();
-    this->addPage(importTypePage, i18n("Type Of Import"));
+    this->addPage(importTypePage, i18n("Select Type Of Import"));
     finishPage = new QWidget(this);
     setupfinish();
     this->addPage(finishPage, i18n("Finished"));
 
-    connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
+    connect(this, SIGNAL(selected(const QString &)), this, SLOT(pageSelected(const QString &)));
     connect(this, SIGNAL(helpClicked()), this, SLOT(helpClicked()));
 }
 
 //===========================================================
 //
-importWizard::~importWizard()
+ImportWizard::~ImportWizard()
 {
 	delete m_prjSet;
 }
 
 //===========================================================
 //
-void importWizard::setupintro()
+void ImportWizard::setupintro()
 {
     QVBoxLayout *vbox = new QVBoxLayout(introPage);
     
@@ -143,13 +143,19 @@ void importWizard::setupintro()
 
 //===========================================================
 //
-void importWizard::setupsrcType()
+void ImportWizard::setupsrcType()
 {
 /*! @todo Would be good if KexiDBDriverComboBox worked for migration drivers */
-    QHBoxLayout *hbox = new QHBoxLayout(srcTypePage);
+    QVBoxLayout *vbox = new QVBoxLayout(srcTypePage);
+    vbox->addStretch(1);
+
+    QHBoxLayout *hbox = new QHBoxLayout(vbox);
+    hbox->addWidget(new QLabel(i18n("Source database type:"), srcTypePage));
 
     srcTypeCombo = new KComboBox(srcTypePage);
     hbox->addWidget(srcTypeCombo);
+    hbox->addStretch(1);
+    vbox->addStretch(2);
 
     MigrateManager manager;
 
@@ -160,7 +166,7 @@ void importWizard::setupsrcType()
 
 //===========================================================
 //
-void importWizard::setupsrcconn()
+void ImportWizard::setupsrcconn()
 {
    QVBoxLayout *vbox = new QVBoxLayout(srcConnPage);
 
@@ -172,7 +178,7 @@ void importWizard::setupsrcconn()
 
 //===========================================================
 //
-void importWizard::setupsrcdb()
+void ImportWizard::setupsrcdb()
 {
     QVBoxLayout *vbox = new QVBoxLayout(srcdbPage);
     Q_UNUSED(vbox);  // arriveSrcDBPage creates widgets on that page
@@ -181,15 +187,21 @@ void importWizard::setupsrcdb()
 
 //===========================================================
 //
-void importWizard::setupdstType()
+void ImportWizard::setupdstType()
 {
     KexiDB::DriverManager manager;
     KexiDB::Driver::InfoMap drvs = manager.driversInfo();
 
-    QHBoxLayout *hbox = new QHBoxLayout(dstTypePage);
+    QVBoxLayout *vbox = new QVBoxLayout(dstTypePage);
+    vbox->addStretch(1);
+
+    QHBoxLayout *hbox = new QHBoxLayout(vbox);
+    hbox->addWidget(new QLabel(i18n("Source database type:"), dstTypePage));
     dstTypeCombo = new KexiDBDriverComboBox(drvs, true, dstTypePage);
 
     hbox->addWidget( dstTypeCombo );
+    hbox->addStretch(1);
+    vbox->addStretch(2);
 
 //! @todo hardcoded: find a way to preselect default engine item
     dstTypeCombo->setCurrentText("SQLite3");
@@ -197,7 +209,7 @@ void importWizard::setupdstType()
 
 //===========================================================
 //
-void importWizard::setupdstTitle()
+void ImportWizard::setupdstTitle()
 {
 	dstTitlePage = new KexiDBTitlePage(this, "KexiDBTitlePage");
 	dstTitlePage->label->setText(i18n("Destination project's caption:"));
@@ -206,7 +218,7 @@ void importWizard::setupdstTitle()
 
 //===========================================================
 //
-void importWizard::setupdst()
+void ImportWizard::setupdst()
 {
     QVBoxLayout *vbox = new QVBoxLayout(dstPage);
 
@@ -234,24 +246,25 @@ void importWizard::setupdst()
 
 //===========================================================
 //
-void importWizard::setupImportType()
+void ImportWizard::setupImportType()
 {
-QVBoxLayout *vbox = new QVBoxLayout(importTypePage);
-importTypeButtonGroup = new QVButtonGroup(importTypePage);
-vbox->addWidget( importTypeButtonGroup );
+    QVBoxLayout *vbox = new QVBoxLayout(importTypePage);
+    importTypeButtonGroup = new QVButtonGroup(importTypePage);
+    importTypeButtonGroup->setLineWidth(0);
+    vbox->addWidget( importTypeButtonGroup );
 
-(void)new QRadioButton(i18n("Structure and Data"), importTypeButtonGroup);
-(void)new QRadioButton(i18n("Structure Only"), importTypeButtonGroup);
+    (void)new QRadioButton(i18n("Structure and data"), importTypeButtonGroup);
+    (void)new QRadioButton(i18n("Structure only"), importTypeButtonGroup);
 
-importTypeButtonGroup->setExclusive( true );
-importTypeButtonGroup->setButton( 0 );
+    importTypeButtonGroup->setExclusive( true );
+    importTypeButtonGroup->setButton( 0 );
 }
 //===========================================================
 //
-void importWizard::setupfinish()
+void ImportWizard::setupfinish()
 {
     finishPage->hide();
-    QHBoxLayout *hbox = new QHBoxLayout(finishPage);
+    QVBoxLayout *hbox = new QVBoxLayout(finishPage);
     QLabel *lblDone = new QLabel(finishPage);
     
     
@@ -277,11 +290,13 @@ void importWizard::setupfinish()
     hbox->addWidget( progress );
 
     finishPage->show();
+
+//! @todo add "Open imported project" checkbox
 }
 
 //===========================================================
 //
-bool importWizard::checkUserInput()
+bool ImportWizard::checkUserInput()
 {
     QString finishtxt;
     bool problem;
@@ -311,7 +326,7 @@ bool importWizard::checkUserInput()
     return !problem;
 }
 
-void importWizard::arriveSrcConnPage()
+void ImportWizard::arriveSrcConnPage()
 {
   srcConnPage->hide();
 
@@ -344,15 +359,14 @@ void importWizard::arriveSrcConnPage()
     srcConn->showAdvancedConn();
   }
   /*! @todo Support different file extensions based on MigrationDriver */
-  /*! @todo Hide the 'Advanced' button on the connection selector here. */
   srcConnPage->show();
 }
 
-void importWizard::arriveSrcDBPage()
+void ImportWizard::arriveSrcDBPage()
 {
   if (fileBasedSrc) {
     //! @todo Back button doesn't work after selecting a file to import
-    showPage(dstTypePage);
+//moved    showPage(dstTypePage);
   }
   else {
     if (!srcdbname)
@@ -367,7 +381,7 @@ void importWizard::arriveSrcDBPage()
   }
 }
 
-void importWizard::arriveDstTitlePage()
+void ImportWizard::arriveDstTitlePage()
 {
   if(fileBasedSrc) {
     // @todo Might want to show the filename here instead
@@ -381,7 +395,7 @@ void importWizard::arriveDstTitlePage()
   }
 }
 
-void importWizard::arriveDstPage()
+void ImportWizard::arriveDstPage()
 {
   dstPage->hide();
 
@@ -400,7 +414,7 @@ void importWizard::arriveDstPage()
   dstPage->show();
 }
 
-void importWizard::arriveFinishPage() {
+void ImportWizard::arriveFinishPage() {
   checkIfDstTypeFileBased(dstTypeCombo->currentText());
   if (fileBasedDstWasPresented) {
      if (!dstConn->m_fileDlg->checkFileName()) {
@@ -416,7 +430,7 @@ void importWizard::arriveFinishPage() {
   }
 }
 
-void importWizard::checkIfSrcTypeFileBased(const QString& srcType) {
+void ImportWizard::checkIfSrcTypeFileBased(const QString& srcType) {
   //! @todo Use MigrateManager to get src type property
   if ((srcType == "PostgreSQL") || (srcType == "MySQL")) {
     fileBasedSrc = false;
@@ -425,7 +439,7 @@ void importWizard::checkIfSrcTypeFileBased(const QString& srcType) {
   }
 }
 
-void importWizard::checkIfDstTypeFileBased(const QString& dstType) {
+void ImportWizard::checkIfDstTypeFileBased(const QString& dstType) {
   //! @todo Use DriverManager to get dst type property
   if ((dstType == "PostgreSQL") || (dstType == "MySQL")) {
     fileBasedDst = false;
@@ -435,14 +449,14 @@ void importWizard::checkIfDstTypeFileBased(const QString& dstType) {
 }
 
 
-void importWizard::progressUpdated(int percent) {
+void ImportWizard::progressUpdated(int percent) {
   progress->setProgress(percent);
   KApplication::kApplication()->processEvents();
 }
 
 //===========================================================
 //
-void importWizard::accept()
+void ImportWizard::accept()
 {
     KexiUtils::WaitCursor wait;
     QGuardedPtr<KexiDB::Connection> kexi_conn;
@@ -493,7 +507,7 @@ void importWizard::accept()
     else
     {
         //TODO This needs a better message
-        KMessageBox::error(this, i18n("No connection data is available. You did not select an SQLite destination filename."), i18n("Error"));
+        KMessageBox::error(this, i18n("No connection data is available. You did not select an SQLite destination filename."));
         return;
     }
 
@@ -565,7 +579,25 @@ void importWizard::accept()
 
 //===========================================================
 //
-void importWizard::nextClicked(const QString & p)
+void ImportWizard::next()
+{
+    if (currentPage() == srcConnPage && fileBasedSrc 
+        && /*! @todo use KURL? */!QFileInfo(srcConn->selectedFileName()).isFile()) {
+      KMessageBox::sorry(this,i18n("Select source database filename."));
+      return;
+    }
+
+    setAppropriate( srcdbPage, !fileBasedSrc ); //skip srcdbPage
+    KWizard::next();
+}
+
+void ImportWizard::back()
+{
+    setAppropriate( srcdbPage, !fileBasedSrc ); //skip srcdbPage
+    KWizard::back();
+}
+
+void ImportWizard::pageSelected(const QString &)
 {
     if (currentPage() == introPage) {
     }
@@ -590,7 +622,7 @@ void importWizard::nextClicked(const QString & p)
     }
 }
 
-void importWizard::helpClicked()
+void ImportWizard::helpClicked()
 {
     if (currentPage() == introPage)
     {
