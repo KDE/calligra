@@ -24,12 +24,12 @@
   <Separator group="settings_show"/>
  </Menu>
 </MenuBar>
-<ToolBar name="KChartToolBar"><Text>Actions</Text>
- <Action name="edit"/>
+<ToolBar name="KChartToolBar" position="top"><Text>Actions</Text>
+ <Action name="editdata"/>
  <Action name="config"/>
  <Action name="wizard"/>
 </ToolBar>
-<ToolBar name="KChartTypes"><Text>Types</Text>
+<ToolBar name="KChartTypes" position="left"><Text>Types</Text>
  <Action name="barschart"/>
  <Action name="linechart"/>
  <Action name="areaschart"/>
@@ -50,6 +50,6 @@
  <Action name="font_config"/>
  <Action name="back_config"/>
  <Separator />
- <Action name="edit"/>
+ <Action name="editdata"/>
 </Menu>
 </kpartgui>

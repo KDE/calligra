@@ -2,6 +2,7 @@
 
 	Fix bug 108770: [PATCH] kchart should have a format menu
 	* kchart.rc (Format): New menu
+	(KChartTypes toolbar): place to the left
 	* kchart_view.cc (KChartView::KChartView): change strings for some
 	actions.
 
