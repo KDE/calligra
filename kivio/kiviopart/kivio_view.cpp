@@ -1266,114 +1266,103 @@ void KivioView::toggleFontUnderline( bool b)
 
 void KivioView::updateToolBars()
 {
-/*    KivioStencil *pStencil;
-    pStencil = m_pActivePage->selectedStencils()->first();
-    m_pStencilGeometryPanel->setEmitSignals(false);
-    m_setArrowHeads->setEmitSignals(false);
+  m_pStencilGeometryPanel->setEmitSignals(false);
+  m_setArrowHeads->setEmitSignals(false);
 
-    if( !pStencil )
-    {
-        m_setFontFamily->setFont( doc()->defaultFont().family() );
-        m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
-        m_setBold->setChecked( false );
-        m_setItalics->setChecked( false );
-        m_setUnderline->setChecked( false );
-        m_lineWidthAction->setCurrentWidth(1.0);
-        m_lineStyleAction->setCurrentSelection(Qt::SolidLine);
-        showAlign(Qt::AlignHCenter);
-        showVAlign(Qt::AlignVCenter);
+  if(m_pActivePage->selectedStencils()->count() == 0) {
+    m_setFontFamily->setFont( doc()->defaultFont().family() );
+    m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
+    m_setBold->setChecked( false );
+    m_setItalics->setChecked( false );
+    m_setUnderline->setChecked( false );
+    m_lineWidthAction->setCurrentWidth(1.0);
+    m_lineStyleAction->setCurrentSelection(Qt::SolidLine);
+    showAlign(Qt::AlignHCenter);
+    showVAlign(Qt::AlignVCenter);
 
-        m_pStencilGeometryPanel->setSize(0.0,0.0);
-        m_pStencilGeometryPanel->setPosition(0.0,0.0);
-        m_pStencilGeometryPanel->setRotation(0);
+    m_pStencilGeometryPanel->setSize(0.0,0.0);
+    m_pStencilGeometryPanel->setPosition(0.0,0.0);
+    m_pStencilGeometryPanel->setRotation(0);
 
-        m_setArrowHeads->setCurrentStartArrow(0);
-        m_setArrowHeads->setCurrentEndArrow(0);
+    m_setArrowHeads->setCurrentStartArrow(0);
+    m_setArrowHeads->setCurrentEndArrow(0);
 
-        m_menuTextFormatAction->setEnabled( false );
-        m_menuStencilConnectorsAction->setEnabled( false );
-    }
-    else
-    {
-        QFont f = pStencil->textFont();
+    m_menuTextFormatAction->setEnabled(false);
+    m_menuStencilConnectorsAction->setEnabled(false);
+    m_editCut->setEnabled(false);
+    m_editCopy->setEnabled(false);
+    m_ungroupAction->setEnabled(false);
+    m_stencilToBack->setEnabled(false);
+    m_stencilToFront->setEnabled(false);
+    m_setArrowHeads->setEnabled (false);
+    m_arrowHeadsMenuAction->setEnabled (false);
+  } else {
+    Kivio::Object* pStencil = m_pActivePage->selectedStencils()->first();
+//     QFont f = pStencil->textFont();
+// 
+//     m_setFontFamily->setFont( f.family() );
+//     m_setFontSize->setFontSize( f.pointSize() );
+//     m_setBold->setChecked( f.bold() );
+//     m_setItalics->setChecked( f.italic() );
+//     m_setUnderline->setChecked( f.underline() );
 
-        m_setFontFamily->setFont( f.family() );
-        m_setFontSize->setFontSize( f.pointSize() );
-        m_setBold->setChecked( f.bold() );
-        m_setItalics->setChecked( f.italic() );
-        m_setUnderline->setChecked( f.underline() );
+    Kivio::Pen pen = pStencil->pen();
 
-        m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
-        m_lineStyleAction->setCurrentSelection(pStencil->linePattern());
+    m_lineWidthAction->setCurrentWidth(pen.pointWidth());
+    m_lineStyleAction->setCurrentSelection(pen.style());
 
-        showAlign(pStencil->hTextAlign());
-        showVAlign(pStencil->vTextAlign());
+//     showAlign(pStencil->hTextAlign());
+//     showVAlign(pStencil->vTextAlign());
 
-        m_pStencilGeometryPanel->setSize( pStencil->w(), pStencil->h() );
-        m_pStencilGeometryPanel->setPosition( pStencil->x(), pStencil->y() );
-        m_pStencilGeometryPanel->setRotation(pStencil->rotation());
+//     m_pStencilGeometryPanel->setSize(pStencil->size().width(), pStencil->size().height());
+    m_pStencilGeometryPanel->setPosition(pStencil->position().x(), pStencil->position().y());
+//     m_pStencilGeometryPanel->setRotation(pStencil->rotation());
 
-        m_menuTextFormatAction->setEnabled( true );
-        m_menuStencilConnectorsAction->setEnabled( true );
+    m_menuTextFormatAction->setEnabled(true);
+    m_menuStencilConnectorsAction->setEnabled(true);
 
-        if ( pStencil->type() != kstConnector )
-        {
-           m_setArrowHeads->setEnabled (false);
-           m_arrowHeadsMenuAction->setEnabled (false);
-        }
-        else
-        {
-            m_setArrowHeads->setEnabled (true);
-            m_arrowHeadsMenuAction->setEnabled (true);
-            m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
-            m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
-        }
-
-        if ( pStencil->type() != kstText )
-        {
-            m_setFGColor->setEnabled (true);
-            m_setBGColor->setEnabled (true);
-        }
-        else
-        {
-            m_setFGColor->setEnabled (false);
-            m_setBGColor->setEnabled (false);
-        }
-    }
-
-    m_pStencilGeometryPanel->setEmitSignals(true);
-    m_setArrowHeads->setEmitSignals(true);
-    m_pProtectionPanel->updateCheckBoxes();
-
-    if(activePage()->selectedStencils()->count() > 1) {
-      m_groupAction->setEnabled(true);
-      m_alignAndDistribute->setEnabled(true);
-    } else {
-      m_groupAction->setEnabled(false);
-      m_alignAndDistribute->setEnabled(false);
-    }
-
-    if(activePage()->selectedStencils()->count() > 0) {
-      m_editCut->setEnabled(true);
-      m_editCopy->setEnabled(true);
-
-      if(activePage()->checkForStencilTypeInSelection(kstGroup)) {
-        m_ungroupAction->setEnabled(true);
-      } else {
-        m_ungroupAction->setEnabled(false);
-      }
-
-      m_stencilToBack->setEnabled(true);
-      m_stencilToFront->setEnabled(true);
-    } else {
-      m_editCut->setEnabled(false);
-      m_editCopy->setEnabled(false);
-      m_ungroupAction->setEnabled(false);
-      m_stencilToBack->setEnabled(false);
-      m_stencilToFront->setEnabled(false);
+    if(pStencil->type() != Kivio::kstConnector) {
       m_setArrowHeads->setEnabled (false);
       m_arrowHeadsMenuAction->setEnabled (false);
-    }*/
+    } else {
+/*      m_setArrowHeads->setEnabled (true);
+      m_arrowHeadsMenuAction->setEnabled (true);
+      m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
+      m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );*/
+    }
+
+    if ( pStencil->type() != kstText ) {
+      m_setFGColor->setEnabled(true);
+      m_setBGColor->setEnabled(true);
+    } else {
+      m_setFGColor->setEnabled(false);
+      m_setBGColor->setEnabled(false);
+    }
+
+    m_editCut->setEnabled(true);
+    m_editCopy->setEnabled(true);
+
+    if(activePage()->checkForStencilTypeInSelection(Kivio::kstGroup)) {
+      m_ungroupAction->setEnabled(true);
+    } else {
+      m_ungroupAction->setEnabled(false);
+    }
+
+    m_stencilToBack->setEnabled(true);
+    m_stencilToFront->setEnabled(true);
+  }
+
+  m_pStencilGeometryPanel->setEmitSignals(true);
+  m_setArrowHeads->setEmitSignals(true);
+  m_pProtectionPanel->updateCheckBoxes();
+
+  if(activePage()->selectedStencils()->count() > 1) {
+    m_groupAction->setEnabled(true);
+    m_alignAndDistribute->setEnabled(true);
+  } else {
+    m_groupAction->setEnabled(false);
+    m_alignAndDistribute->setEnabled(false);
+  }
 }
 
 void KivioView::slotSetStartArrow( int i )
@@ -1593,19 +1582,20 @@ void KivioView::slotChangeStencilSize(double newW, double newH)
 
 void KivioView::slotChangeStencilPosition(double newW, double newH)
 {
-/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  Kivio::Object *pStencil = m_pActivePage->selectedStencils()->first();
 
-  if ( pStencil )
-  {
-    KoRect oldPos(pStencil->rect());
-    pStencil->setPosition(newW, newH);
-    if ((oldPos.x() != pStencil->rect().x()) || (oldPos.y() != pStencil->rect().y()))
-    {
-      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
+  if(pStencil) {
+    KoPoint newPos(newW, newH);
+
+    if(newPos != pStencil->position()) {
+      KoPoint oldPos(pStencil->position());
+      pStencil->setPosition(newPos);
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil,
+          oldPos, newPos, m_pActivePage);
       m_pDoc->updateView(m_pActivePage);
-      m_pDoc->addCommand( cmd );
+      m_pDoc->addCommand(cmd);
     }
-  }*/
+  }
 }
 
 void KivioView::slotChangeStencilRotation(int d)

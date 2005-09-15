@@ -253,6 +253,7 @@ void SelectTool::move(const QPoint& pos)
   }
 
   view()->canvasWidget()->update();
+  view()->updateToolBars();
   m_previousPos = p;
 }
 
@@ -294,6 +295,7 @@ void SelectTool::endOperation()
   }
 
   m_mode = MSelect;
+  view()->doc()->updateView(view()->activePage());
 }
 
 /**
