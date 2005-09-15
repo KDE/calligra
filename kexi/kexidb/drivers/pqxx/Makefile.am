@@ -8,7 +8,7 @@ kexidb_pqxxsqldriver_la_METASOURCES = AUTO
 
 kexidb_pqxxsqldriver_la_SOURCES = pqxxdriver.cpp pqxxcursor.cpp pqxxconnection.cpp pqxxkeywords.cpp
 
-kexidb_pqxxsqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lcom_err -lkrb5 -lssl -lcrypto -lcrypt -lpqxx ../../libkexidb.la
+kexidb_pqxxsqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lpqxx ../../libkexidb.la
 
 kexidb_pqxxsqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L$(PQXX_LIBDIR) -L$(PG_LIBDIR) $(VER_INFO) -no-undefined
 
