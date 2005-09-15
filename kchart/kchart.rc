@@ -5,9 +5,8 @@
     <Action name="extra_template"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="edit"/>
-  <Separator />
-  <Action name="page_layout"/>
+  <Action name="editdata"/>
+ </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="config"/>
   <Separator />
@@ -18,7 +17,9 @@
   <Action name="font_config"/>
   <Action name="back_config"/>
   <Action name="legend_config"/>
- </Menu>  </Menu>
+  <Separator />
+  <Action name="page_layout"/>
+ </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
  </Menu>
