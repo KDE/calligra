@@ -1461,20 +1461,5 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
 </includehints>
 </UI>
