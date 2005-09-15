@@ -1298,8 +1298,9 @@ void KivioView::updateToolBars()
     m_ungroupAction->setEnabled(false);
     m_stencilToBack->setEnabled(false);
     m_stencilToFront->setEnabled(false);
-    m_setArrowHeads->setEnabled (false);
-    m_arrowHeadsMenuAction->setEnabled (false);
+    m_setArrowHeads->setEnabled(false);
+    m_arrowHeadsMenuAction->setEnabled(false);
+    m_pStencilGeometryPanel->setEnabled(false);
   } else {
     Kivio::Object* pStencil = m_pActivePage->selectedStencils()->first();
 //     QFont f = pStencil->textFont();
@@ -1318,6 +1319,7 @@ void KivioView::updateToolBars()
 //     showAlign(pStencil->hTextAlign());
 //     showVAlign(pStencil->vTextAlign());
 
+    m_pStencilGeometryPanel->setEnabled(true);
 //     m_pStencilGeometryPanel->setSize(pStencil->size().width(), pStencil->size().height());
     m_pStencilGeometryPanel->setPosition(pStencil->position().x(), pStencil->position().y());
 //     m_pStencilGeometryPanel->setRotation(pStencil->rotation());
