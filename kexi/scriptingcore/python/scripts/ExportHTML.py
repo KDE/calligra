@@ -81,7 +81,7 @@ class HtmlExporter:
 
         caption = self.datasource.caption()
         if caption and caption != name:
-            output.write("caption: %s<br />" % self.datasource.caption())
+            output.write("caption: %s<br />" % caption)
 
         description = self.datasource.description()
         if description:
@@ -128,16 +128,15 @@ class GuiApp:
                           (queryframe, self.querycontent) + tuple( self.datasource.getSources() ))
         self.query.pack(side=Tkinter.LEFT)
 
-        import os
         fileframe = Tkinter.Frame(frame)
         fileframe.pack()
         Tkinter.Label(fileframe, text="Export to file:").pack(side=Tkinter.LEFT)
         self.filecontent = Tkinter.StringVar()
         file = Tkinter.Entry(fileframe, width=36, textvariable=self.filecontent)
-        self.filecontent.set(os.curdir + "/output.html")
+        self.filecontent.set(self.getHome() + "/output.html")
         file.pack(side=Tkinter.LEFT)
         Tkinter.Button(fileframe, text="...",
-                        command=self.doBrowse).pack(side=Tkinter.LEFT)
+                       command=self.doBrowse).pack(side=Tkinter.LEFT)
 
         btnframe = Tkinter.Frame(frame)
         btnframe.pack()
@@ -148,13 +147,28 @@ class GuiApp:
 
         self.root.mainloop()
 
-    def doBrowse(self):
+    def getHome(self):
         import os
+        try:
+            home = os.getenv("HOME")
+            if not home:
+                import pwd
+                user = os.getenv("USER") or os.getenv("LOGNAME")
+                if not user:
+                    pwent = pwd.getpwuid(os.getuid())
+                else:
+                    pwent = pwd.getpwnam(user)
+                home = pwent[6]
+            return home
+        except (KeyError, ImportError):
+            return os.curdir
+
+    def doBrowse(self):
         import tkFileDialog
-        file = tkFileDialog.asksaveasfilename(initialdir=os.curdir,
+        file = tkFileDialog.asksaveasfilename(initialdir=self.getHome(),
             initialfile='output.html', defaultextension='.html',
             filetypes=(('HTML files', '*.html'),('All files', '*')))
-        self.filecontent.set( file )
+        if file: self.filecontent.set( file )
 
     def doExport(self):
         query = self.querycontent.get()
