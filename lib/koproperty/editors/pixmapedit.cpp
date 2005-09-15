@@ -159,7 +159,8 @@ PixmapEdit::selectPixmap()
 		this, 0, caption);
 #else
 	QString fileName = KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, caption).url();
+		":lastVisitedImagePath", this, caption).pathOrURL();
+	//! @todo download the file if remote, then set fileName properly
 #endif
 
 	if (fileName.isEmpty())

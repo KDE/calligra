@@ -1481,17 +1481,21 @@ void KexiImageBox::insertFromFile()
 		this, 0, i18n("Insert image from file"));
 #else
 	QString fileName = KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, i18n("Insert image from file")).url();
+		":lastVisitedImagePath", this, i18n("Insert image from file")).pathOrURL();
+	//! @todo download the file if remote, then set fileName properly
 #endif
 	if (fileName.isEmpty())
 		return;
-	kexipluginsdbg << fileName << endl;
-	QPixmap pm;
+	kexipluginsdbg << "fname=" << fileName << endl;
+	KPixmap pm;
 	if (!pm.load(fileName)) {
 		//! @todo err msg
+		kexipluginswarn << "KexiImageBox::insertFromFile(): err. loading pixmap" << endl;
 		return;
 	}
 	setValueInternal(pm, true);
+
+	//! @todo emit signal for setting "dirty" flag within the design
 
 #ifdef Q_WS_WIN
 	//save last visited path
@@ -1563,6 +1567,8 @@ void KexiImageBox::clear()
 	if (isReadOnly())
 		return;
 	setValueInternal(QPixmap(), true);
+
+	//! @todo emit signal for setting "dirty" flag within the design
 }
 
 void KexiImageBox::showProperties()
