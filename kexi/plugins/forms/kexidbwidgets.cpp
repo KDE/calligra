@@ -1522,7 +1522,7 @@ void KexiImageBox::saveAs()
 		return;
 	kexipluginsdbg << fileName << endl;
 //	if (!m_pixmapLabel->pixmap()->save(fileName, KImageIO::type(fileName))) {
-	if (!m_pixmap.save(fileName, KImageIO::type(fileName))) {
+	if (!m_pixmap.save(fileName, KImageIO::type(fileName).latin1())) {
 		//! @todo err msg
 		return;
 	}
