@@ -1,3 +1,10 @@
+2005-09-15  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 108770: [PATCH] kchart should have a format menu
+	* kchart.rc (Format): New menu
+	* kchart_view.cc (KChartView::KChartView): change strings for some
+	actions.
+
 2005-08-08  Inge Wallin  <inge@lysator.liu.se>
 
 	Code cleaning.

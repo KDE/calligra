@@ -77,7 +77,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_edit = new KAction( i18n("Edit &Data..."), "edit", 0,
                           this, SLOT( edit() ),
                           actionCollection(), "edit");
-    m_config = new KAction( i18n( "&Configure Chart..." ), "configure", 0,
+    m_config = new KAction( i18n( "&Chart..." ), "configure", 0,
                             this, SLOT( slotConfig() ),
                             actionCollection(), "config" );
 
@@ -124,31 +124,31 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_chartpolar->setExclusiveGroup( "charttypes" );
 
     // Configuration KActions
-    m_colorConfig = new KAction( i18n( "&Configure Colors..." ), 0,
+    m_colorConfig = new KAction( i18n( "&Colors..." ), 0,
                             this, SLOT( slotConfigColor() ),
                             actionCollection(), "color_config" );
 
-    m_fontConfig = new KAction( i18n( "&Configure Font..." ), 0,
+    m_fontConfig = new KAction( i18n( "&Font..." ), 0,
                             this, SLOT( slotConfigFont() ),
                             actionCollection(), "font_config" );
 
-    m_backConfig = new KAction( i18n( "&Configure Background..." ), 0,
+    m_backConfig = new KAction( i18n( "&Background..." ), 0,
                             this, SLOT( slotConfigBack() ),
                             actionCollection(), "back_config" );
 
-    m_legendConfig = new KAction( i18n( "&Configure Legend..." ), 0,
+    m_legendConfig = new KAction( i18n( "&Legend..." ), 0,
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
 
-    m_subTypeChartConfig = new KAction( i18n( "&Configure Chart Subtype..." ), 0,
+    m_subTypeChartConfig = new KAction( i18n( "Chart &Subtype..." ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
 
-    m_dataFormatConfig = new KAction( i18n( "&Configure Data Format..." ), 0,
+    m_dataFormatConfig = new KAction( i18n( "&Data Format..." ), 0,
                             this, SLOT( slotConfigDataFormat() ),
                             actionCollection(), "data_format" );
 
-    m_headerFooterConfig = new KAction( i18n( "&Configure Header Footer..." ), 0,
+    m_headerFooterConfig = new KAction( i18n( "&Header and Footer..." ), 0,
                             this, SLOT( slotConfigHeaderFooterChart() ),
                             actionCollection(), "headerfooter_subtype" );
 
@@ -544,7 +544,7 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
     if (!koDocument()->isReadWrite() || !factory())
         return;
     if ( e->button() == RightButton )
-        ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
+        ((QPopupMenu*)factory()->container("Format",this))->popup(QCursor::pos());
 }
 
 

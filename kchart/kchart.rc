@@ -6,20 +6,19 @@
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit"/>
-  <Menu name="action_popup"><text>&amp;Chart</text>
-   <Action name="config"/>
-   <Separator />
-   <Action name="data_format"/>
-   <Action name="legend_subtype"/>
-   <Action name="headerfooter_subtype"/>
-   <Action name="color_config"/>
-   <Action name="font_config"/>
-   <Action name="back_config"/>
-   <Action name="legend_config"/>
-  </Menu>
   <Separator />
   <Action name="page_layout"/>
- </Menu>
+ <Menu name="Format"><text>F&amp;ormat</text>
+  <Action name="config"/>
+  <Separator />
+  <Action name="data_format"/>
+  <Action name="legend_subtype"/>
+  <Action name="headerfooter_subtype"/>
+  <Action name="color_config"/>
+  <Action name="font_config"/>
+  <Action name="back_config"/>
+  <Action name="legend_config"/>
+ </Menu>  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
  </Menu>
