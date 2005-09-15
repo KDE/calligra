@@ -397,7 +397,7 @@ void KivioChangeStencilFontCommand::unexecute()
     m_page->doc()->slotSelectionChanged();
 }
 
-KivioChangeStencilColorCommand::KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor, ColorType _type)
+KivioChangeStencilColorCommand::KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, Kivio::Object * _stencil, const QColor &_oldColor,  const QColor & _newColor, ColorType _type)
     :KNamedCommand( _name),
      m_page(_page),
      m_stencil( _stencil ),
@@ -413,38 +413,56 @@ KivioChangeStencilColorCommand::~KivioChangeStencilColorCommand()
 
 void KivioChangeStencilColorCommand::execute()
 {
-    switch( type )
-    {
+  switch( type )
+  {
     case CT_TEXTCOLOR:
-        m_stencil->setTextColor( newColor );
-        break;
-    case CT_BGCOLOR:
-        m_stencil->setBGColor( newColor );
-        break;
-    case CT_FGCOLOR:
-        m_stencil->setFGColor( newColor );
-        break;
+    {
+//       m_stencil->setTextColor( oldColor );
+      break;
     }
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+    case CT_BGCOLOR:
+    {
+//       m_stencil->setBGColor( oldColor );
+      break;
+    }
+    case CT_FGCOLOR:
+    {
+      Kivio::Pen pen = m_stencil->pen();
+      pen.setColor(oldColor);
+      m_stencil->setPen(pen);
+      break;
+    }
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilColorCommand::unexecute()
 {
-    switch( type )
-    {
+  switch( type )
+  {
     case CT_TEXTCOLOR:
-        m_stencil->setTextColor( oldColor );
-        break;
-    case CT_BGCOLOR:
-        m_stencil->setBGColor( oldColor );
-        break;
-    case CT_FGCOLOR:
-        m_stencil->setFGColor( oldColor );
-        break;
+    {
+//       m_stencil->setTextColor( oldColor );
+      break;
     }
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+    case CT_BGCOLOR:
+    {
+//       m_stencil->setBGColor( oldColor );
+      break;
+    }
+    case CT_FGCOLOR:
+    {
+      Kivio::Pen pen = m_stencil->pen();
+      pen.setColor(oldColor);
+      m_stencil->setPen(pen);
+      break;
+    }
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 

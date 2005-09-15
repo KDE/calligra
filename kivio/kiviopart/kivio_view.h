@@ -183,8 +183,6 @@ class KIVIO_EXPORT KivioView : public KoView
     void bringStencilToFront();
     void sendStencilToBack();
 
-    void addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x = 0.0, double y = 0.0 );
-
     void changePage( const QString& _name );
 
     void updateToolBars();

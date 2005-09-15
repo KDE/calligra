@@ -281,7 +281,7 @@ class KivioChangeStencilColorCommand : public KNamedCommand
 {
 public:
     enum ColorType { CT_TEXTCOLOR, CT_FGCOLOR, CT_BGCOLOR };
-    KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor & _oldColor,  const QColor & _newColor, ColorType _type);
+    KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, Kivio::Object * _stencil, const QColor & _oldColor,  const QColor & _newColor, ColorType _type);
     ~KivioChangeStencilColorCommand();
 
     virtual void execute();
@@ -289,7 +289,7 @@ public:
 
 protected:
     KivioPage *m_page;
-    KivioStencil *m_stencil;
+    Kivio::Object *m_stencil;
     QColor oldColor;
     QColor newColor;
     ColorType type;

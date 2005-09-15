@@ -927,19 +927,23 @@ void KivioView::addShapeCollectionToStackBar(Kivio::ShapeCollection* collection)
 
 void KivioView::setFGColor()
 {
-/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Stroke Color"));
   bool createMacro = false;
   QColor col = m_setFGColor->color();
 
   QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
+  Kivio::Pen pen;
 
   for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
   {
-    if ( col != (*it)->fgColor() )
+    pen = (*it)->pen();
+    if ( col != pen.color() )
     {
-      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, (*it), (*it)->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Stroke Color"), m_pActivePage, (*it),
+          pen.color(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
 
-      (*it)->setFGColor( col );
+      pen.setColor(col);
+      (*it)->setPen(pen);
       macro->addCommand( cmd );
       createMacro = true;
     }
@@ -950,7 +954,7 @@ void KivioView::setFGColor()
   else
     delete macro;
 
-  m_pDoc->updateView(m_pActivePage);*/
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setBGColor()
@@ -1590,7 +1594,7 @@ void KivioView::slotChangeStencilPosition(double newW, double newH)
     if(newPos != pStencil->position()) {
       KoPoint oldPos(pStencil->position());
       pStencil->setPosition(newPos);
-      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil,
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand(i18n("Move Stencil"), pStencil,
           oldPos, newPos, m_pActivePage);
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand(cmd);
@@ -1608,52 +1612,6 @@ void KivioView::slotChangeStencilRotation(int d)
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand( cmd );
   }*/
-}
-
-/**
- * When passed a spawner, this will create a new stencil at x, y.
-*/
-void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, double y )
-{
-  //FIXME Port to Object code
-/*    KivioStencil *pStencil;
-
-    // Allocate the new stencil and set it's default size/style
-    pStencil = pSpawner->newStencil();
-
-    pStencil->setPosition( x, y );
-
-    // Use default properties if we held ctrl down
-#if KDE_IS_VERSION(3, 4, 0)
-    if(kapp->keyboardMouseState() & Qt::ControlButton) {
-#else
-    if(KApplication::keyboardModifiers() & KApplication::ControlModifier) {
-#endif
-      pStencil->setTextFont(doc()->defaultFont());
-    } else {
-      pStencil->setFGColor(m_setFGColor->color());
-      pStencil->setBGColor(m_setBGColor->color());
-      QFont f = m_setFontFamily->font();
-      f.setPointSize(m_setFontSize->fontSize());
-      f.setBold(m_setBold->isChecked());
-      f.setItalic(m_setItalics->isChecked());
-      f.setUnderline(m_setUnderline->isChecked());
-      pStencil->setTextFont(f);
-      pStencil->setTextColor(m_setTextColor->color());
-      pStencil->setVTextAlign(vTextAlign());
-      pStencil->setHTextAlign(hTextAlign());
-      pStencil->setLinePattern(m_lineStyleAction->currentSelection());
-      pStencil->setLineWidth(m_lineWidthAction->currentWidth());
-    }
-
-    // Unselect everything, then the stencil to the page, and select it
-    m_pActivePage->unselectAllStencils();
-    m_pActivePage->addStencil( pStencil );
-    m_pActivePage->selectStencil( pStencil );
-
-    // Mark the page as modified and repaint
-    m_pDoc->updateView(m_pActivePage);
-    pluginManager()->activateDefaultTool();*/
 }
 
 void KivioView::alignStencilsDlg()
