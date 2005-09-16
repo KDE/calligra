@@ -161,6 +161,7 @@ namespace {
         const StringInfo *profile;
         KisAnnotation* annotation = 0;
 
+        // Profiles and so
         ResetImageProfileIterator(src);
         while((name = GetNextImageProfile(src))) {
             profile = GetImageProfile(src, name);
@@ -180,6 +181,26 @@ namespace {
 
             image -> addAnnotation(annotation);
         }
+        
+        // Attributes, since we have no hint on if this is an attribute or a profile
+        // annotation, we prefix it with 'krita_attribute:'. XXX This needs to be rethought!
+        // And there are apparantly attribute iterator functions like above, but not
+        // in my magick version *sigh*
+        ImageAttribute * attr = src -> attributes;
+        while (attr) {
+            QByteArray rawdata;
+            int len = strlen(attr -> value) + 1;
+            rawdata.resize(len);
+            memcpy(rawdata.data(), attr -> value, len);
+
+            annotation = new KisAnnotation(
+                    QString("krita_attribute:%1").arg(QString(attr -> key)), "", rawdata);
+            Q_CHECK_PTR(annotation);
+
+            image -> addAnnotation(annotation);
+            attr = attr -> next;
+        }
+
 #endif
     }
 
@@ -194,11 +215,21 @@ namespace {
                 ++it;
                 continue;
             }
+
             kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
-            if (!ProfileImage(dst, (*it) -> type().ascii(),
-                (unsigned char*)(*it) -> annotation() . data(),
-                (*it) -> annotation() . size(), MagickFalse)) {
-                    kdDebug() << "Storing failed!" << endl;
+
+            if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
+                if (!SetImageAttribute(dst,
+                    (*it) -> type().mid(strlen("krita_attribute:")).ascii(),
+                    (*it) -> annotation() . data()) ) {
+                        kdDebug() << "Storing of attribute " << (*it) -> type() << "failed!\n";
+                }
+            } else { // Profile
+                if (!ProfileImage(dst, (*it) -> type().ascii(),
+                    (unsigned char*)(*it) -> annotation() . data(),
+                    (*it) -> annotation() . size(), MagickFalse)) {
+                        kdDebug() << "Storing failed!" << endl;
+                }
             }
             ++it;
         }
