@@ -143,12 +143,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		bool dropDatabase( const QString &dbName = QString::null );
 
+		 /*! \return names of all the \p objecttype (see \a ObjectTypes
+		 in global.h) schemas stored in currently used database. If
+		 \p ok is passed (not 0) then it's true on success else false. */
+		QStringList objectNames(int objecttype, bool* ok = 0);
+
 		/*! \return names of all table schemas stored in currently 
 		 used database. If \a also_system_tables is true, 
 		 internal KexiDB system table names (kexi__*) are also returned.
 		 \sa kexiDBSystemTableNames() */
 		QStringList tableNames(bool also_system_tables = false);
-		
+
 		/*! \return list of internal KexiDB system table names 
 		 (kexi__*). This does not mean that these tables can be found
 		 in currently opened database. Just static list of table 

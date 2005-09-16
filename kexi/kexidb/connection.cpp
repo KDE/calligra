@@ -644,28 +644,40 @@ bool Connection::dropDatabase( const QString &dbName )
 	return ret;
 }
 
-QStringList Connection::tableNames(bool also_system_tables)
+QStringList Connection::objectNames(int objecttype, bool* ok)
 {
 	QStringList list;
 
-	if (!isDatabaseUsed())
+	if (!isDatabaseUsed()) {
+		if(ok) *ok = false;
 		return list;
+	}
 
 	Cursor *c = executeQuery(QString(
-	 "select o_name from kexi__objects where o_type=%1").arg(KexiDB::TableObjectType));
-	if (!c)
+	 	 "select o_name from kexi__objects where o_type=%1").arg(objecttype));
+	if (!c) {
+		if(ok) *ok = false;
 		return list;
-	for (c->moveFirst(); !c->eof(); c->moveNext())
-	{
-		QString tname = c->value(0).toString(); //kexi__objects.o_name
-		if (KexiUtils::isIdentifier( tname )) {
-			list.append(tname);
+	}
+
+	for (c->moveFirst(); !c->eof(); c->moveNext()) {
+		QString name = c->value(0).toString();
+		if (KexiUtils::isIdentifier( name )) {
+			list.append(name);
 		}
 	}
 
 	deleteCursor(c);
 
-	if (also_system_tables) {
+	//if(ok) *ok = true; // default value of ok needs to be true anyway
+	return list;
+}
+
+QStringList Connection::tableNames(bool also_system_tables)
+{
+	bool ok = true;
+	QStringList list = objectNames(TableObjectType, &ok);
+	if (also_system_tables && ok) {
 		list += Connection::kexiDBSystemTableNames();
 	}
 	return list;
@@ -724,15 +736,6 @@ QValueList<int> Connection::objectIds(int objType)
 	deleteCursor(c);
 
 	return list;
-
-/*	switch (objType) {
-	case KexiDB::TableObject:
-		return tableNames();
-	case KexiDB::QueryObject:
-		return queryNames();
-	default: ;
-	}
-	return list;*/
 }
 
 QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
