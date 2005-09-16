@@ -1,19 +1,18 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2, as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef _KO_PALETTE_MANAGER_
@@ -27,6 +26,7 @@
 #include <qwidget.h>
 #include <qsignalmapper.h>
 #include <qstringlist.h>
+
 #include <koffice_export.h>
 
 #include <koView.h>
@@ -55,7 +55,7 @@ namespace {
 
 /**
  * Manages the set of dockwindow palettes and their widgets.
- * 
+ *
  * You create one palette manager per view; then you can add widgets
  * to your hearts content. Widgets are grouped into dock windows by
  * palette names. To see the menu entries, add a the following line
@@ -96,7 +96,7 @@ public:
      * specified palette, but in the place where it was left.
      *
      * @param widget the widget that will be inserted as a tab or entry in the palette
-     * @param name the name under which the palette will be stored. Not the caption -- do not i18n this. 
+     * @param name the name under which the palette will be stored. Not the caption -- do not i18n this.
      * @param paletteName the unique name of the palette this widget will be a child of. If the palette already exists, the current widget is added to it.
      * @param position the position of the widget in the palettes
      * @param style docker, toolbox or slider
@@ -112,7 +112,7 @@ public:
      * Show a the specified palette wherever it currently is.
      */
     virtual void showWidget(const QString & name);
-     
+
     /**
      * Remove the widget with the specified name from whichever
      * palette it is currently in. If it is the last widget in
@@ -129,7 +129,7 @@ public:
 
     /**
      * Create an empty palette in the given style. with the given name and caption. If
-     * the palette already exists, nothing is done. 
+     * the palette already exists, nothing is done.
      */
     virtual KoPalette * createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style = PALETTE_DOCKER);
 
@@ -151,9 +151,9 @@ public slots:
     void slotTogglePalette(int paletteIndex);
     void slotToggleAllPalettes();
     void showAllPalettes(bool shown);
-    
+
     /**
-     * Restores the palette configuration to the default layout, i.e, the layout 
+     * Restores the palette configuration to the default layout, i.e, the layout
      * preferred by each docker.
      */
     virtual void slotReset();
@@ -168,9 +168,9 @@ private:
     KActionMenu             * m_viewActionMenu;
     KToggleAction           * m_toggleShowHidePalettes;
     bool                    m_allPalettesShown;
-    
+
     QStringList             * m_widgetNames;
-    
+
     QDict<QWidget>          * m_widgets;
     QDict<KoPalette>        * m_palettes;
     QDict<KToggleAction>    * m_actions;
