@@ -71,8 +71,8 @@ KexiScriptTextView::KexiScriptTextView(KexiScriptManager* manager, KexiMainWindo
     //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
 
     QStringList output = d->scriptcontainer->getOutput();
-    for(uint i = 0; i < output.size(); i++)
-        d->browser->append( output[i] );
+    for (QStringList::ConstIterator it=output.constBegin(); it!=output.constEnd(); ++it)
+        d->browser->append( *it );
 
     connect(d->scriptcontainer, SIGNAL(clearOutput()), this, SLOT(clearLog()));
     connect(d->scriptcontainer, SIGNAL(addOutput(const QString&)), this, SLOT(addLog(const QString&)));
