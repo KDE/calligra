@@ -671,7 +671,8 @@ QStringList Connection::objectNames(int objecttype, bool* ok)
 
 	deleteCursor(c);
 
-	//if(ok) *ok = true; // default value of ok needs to be true anyway
+	if(ok)
+		*ok = true;
 	return list;
 }
 
