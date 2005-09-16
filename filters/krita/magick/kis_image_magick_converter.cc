@@ -184,10 +184,17 @@ namespace {
         
         // Attributes, since we have no hint on if this is an attribute or a profile
         // annotation, we prefix it with 'krita_attribute:'. XXX This needs to be rethought!
-        // And there are apparantly attribute iterator functions like above, but not
-        // in my magick version *sigh*
+        // The joys of imagemagick. From at least version 6.2.1 (but I assume .0, I just
+        // can't find an older version to check) they changed the src -> attributes
+        // to void* and require us to use the iterator functions. So we #if around that, *sigh*
+#if MagickLibVersion >= 0x620
+        const ImageAttribute * attr;
+        ResetImageAttributeIterator(src);
+        while ( (attr = GetNextImageAttribute(src) ) {
+#else
         ImageAttribute * attr = src -> attributes;
         while (attr) {
+#endif
             QByteArray rawdata;
             int len = strlen(attr -> value) + 1;
             rawdata.resize(len);
@@ -198,7 +205,9 @@ namespace {
             Q_CHECK_PTR(annotation);
 
             image -> addAnnotation(annotation);
+#if MagickLibVersion < 0x620
             attr = attr -> next;
+#endif
         }
 
 #endif
