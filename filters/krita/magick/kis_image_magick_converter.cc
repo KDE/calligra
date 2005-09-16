@@ -190,7 +190,7 @@ namespace {
 #if MagickLibVersion >= 0x620
         const ImageAttribute * attr;
         ResetImageAttributeIterator(src);
-        while ( (attr = GetNextImageAttribute(src) ) {
+        while ( (attr = GetNextImageAttribute(src)) ) {
 #else
         ImageAttribute * attr = src -> attributes;
         while (attr) {
