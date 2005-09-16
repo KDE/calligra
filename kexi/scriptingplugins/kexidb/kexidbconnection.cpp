@@ -90,11 +90,16 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     );
 
     addFunction("tableNames", &KexiDBConnection::tableNames,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(true))),
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(QVariant(false))),
         QString("Returns the names of all table schemata stored in the currently "
-             "used database. If the boolean value passed as an argument "
-             "is true, internal KexiDB system table names (kexi__*) "
-             "are also returned.")
+                "used database. If the boolean value passed as an argument "
+                "is true, internal KexiDB system table names (kexi__*) "
+                "are also returned.")
+    );
+    addFunction("queryNames", &KexiDBConnection::queryNames,
+        Kross::Api::ArgumentList(),
+        QString("Returns the names of all query schemata stored in the currently "
+                "used database.")
     );
 
     addFunction("executeQueryString", &KexiDBConnection::executeQueryString,
@@ -170,12 +175,18 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     addFunction("tableSchema", &KexiDBConnection::tableSchema,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
         QString("Returns the KexiDBTableSchema object of the table matching "
-             "to the table name passed as an argument.")
+             "to the tablename passed as an argument.")
     );
     addFunction("isEmptyTable", &KexiDBConnection::isEmptyTable,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"),
         QString("Returns true if there is at least one valid record in the "
              "as KexiDBTable Schema passed as argument.")
+    );
+
+    addFunction("querySchema", &KexiDBConnection::querySchema,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
+        QString("Returns the KexiDBQuerySchema object of the query matching "
+             "to the queryname passed as an argument.")
     );
 
     addFunction("autoCommit", &KexiDBConnection::autoCommit,
@@ -324,6 +335,15 @@ Kross::Api::Object::Ptr KexiDBConnection::tableNames(Kross::Api::List::Ptr args)
            "Kross::KexiDB::Connection::tableNames::StringList");
 }
 
+Kross::Api::Object::Ptr KexiDBConnection::queryNames(Kross::Api::List::Ptr)
+{
+    bool ok = true;
+    QStringList queries = connection()->objectNames(::KexiDB::QueryObjectType, &ok);
+    if(! ok)
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to determinate querynames.")) );
+    return new Kross::Api::Variant(queries, "Kross::KexiDB::Connection::queryNames::StringList");
+}
+
 Kross::Api::Object::Ptr KexiDBConnection::executeQueryString(Kross::Api::List::Ptr args)
 {
     /*TODO move condition to ::KexiDB to prevent crashes ?!
@@ -458,6 +478,13 @@ Kross::Api::Object::Ptr KexiDBConnection::isEmptyTable(Kross::Api::List::Ptr arg
             success);
     return new Kross::Api::Variant(! (success && notempty),
            "Kross::KexiDB::Connection::isEmptyTable::Bool");
+}
+
+Kross::Api::Object::Ptr KexiDBConnection::querySchema(Kross::Api::List::Ptr args)
+{
+    ::KexiDB::QuerySchema* queryschema = connection()->querySchema( Kross::Api::Variant::toString(args->item(0)) );
+    if(! queryschema) return 0;
+    return new KexiDBQuerySchema(queryschema);
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::autoCommit(Kross::Api::List::Ptr)

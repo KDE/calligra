@@ -154,10 +154,17 @@ namespace Kross { namespace KexiDB {
              * Return names of all table schemas stored in currently
              * used database. If the as argument passed boolean value
              * is true, internal KexiDB system table names (kexi__*)
-             * are also returned.
+             * are also returned else (default) not.
              * Wrapper for \a ::KexiDB::Connection::tableNames
              */
             Kross::Api::Object::Ptr tableNames(Kross::Api::List::Ptr);
+
+            /**
+             * Return names of all query schemas stored in currently
+             * used database.
+             * Wrapper for \a ::KexiDB::Connection::objectNames
+             */
+            Kross::Api::Object::Ptr queryNames(Kross::Api::List::Ptr);
 
             /**
              * Executes query described by the as argument passed
@@ -259,6 +266,13 @@ namespace Kross { namespace KexiDB {
              * Wrapper for \a ::KexiDB::Connection::isEmpty
              */
             Kross::Api::Object::Ptr isEmptyTable(Kross::Api::List::Ptr);
+
+            /**
+             * Returns the KexiDBQuerySchema object of the query
+             * matching to the as argument passed queryname.
+             * Wrapper for \a ::KexiDB::Connection::querySchema
+             */
+            Kross::Api::Object::Ptr querySchema(Kross::Api::List::Ptr);
 
             /**
              * Return true if the \"auto commit\" option is on.
