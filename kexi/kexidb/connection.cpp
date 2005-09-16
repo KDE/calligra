@@ -649,14 +649,16 @@ QStringList Connection::objectNames(int objecttype, bool* ok)
 	QStringList list;
 
 	if (!isDatabaseUsed()) {
-		if(ok) *ok = false;
+		if(ok) 
+			*ok = false;
 		return list;
 	}
 
 	Cursor *c = executeQuery(QString(
 	 	 "select o_name from kexi__objects where o_type=%1").arg(objecttype));
 	if (!c) {
-		if(ok) *ok = false;
+		if(ok) 
+			*ok = false;
 		return list;
 	}
 
