@@ -152,7 +152,7 @@ public:
 	 * Special casting to bool type: true is only returned 
 	 * if the original tristate value is equal to \e cancelled. 
 	 */
-	bool operator~() const { return m_value==cancelled; }
+	bool operator~() const { return m_value==Cancelled; }
 
 	tristate& operator=(const tristate& tsValue) { m_value = tsValue.m_value; return *this; }
 
