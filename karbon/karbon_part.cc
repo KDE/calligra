@@ -460,14 +460,14 @@ KarbonPart::repaintAllViews( const KoRect &rect )
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-						  bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+						  bool /*transparent*/, double zoomX, double zoomY )
 {
 	kdDebug(38000) << "**** part->paintContent()" << endl;
 
 	KoRect r = KoRect::fromQRect( rect );
-	double zoomFactorX = double( r.width() ) / double( document().width() );
-	double zoomFactorY = double( r.height() ) / double( document().height() );
-	double zoomFactor = kMin( zoomFactorX, zoomFactorY );
+	//double zoomFactorX = double( r.width() ) / double( document().width() );
+	//double zoomFactorY = double( r.height() ) / double( document().height() );
+	double zoomFactor = kMin( zoomX, zoomY );
 
 	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
