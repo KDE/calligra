@@ -254,7 +254,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   createLayerDock();
   createGeometryDock();
   createProtectionDock();
-  createAddStencilSetDock();
+//   createAddStencilSetDock();
   paletteManager()->showWidget("birdseyepanel");
   paletteManager()->showWidget("stencilgeometrypanel");
 
@@ -301,6 +301,9 @@ KivioView::~KivioView()
 {
   delete dcop;
   delete m_zoomHandler;
+  m_zoomHandler = 0;
+  delete m_pluginManager;
+  m_pluginManager = 0;
 }
 
 DCOPObject* KivioView::dcopObject()
@@ -431,7 +434,7 @@ void KivioView::setupActions()
                                       this, SLOT( textAlignCenter() ),
                                       actionCollection(), "textAlignCenter" );
   m_textAlignCenter->setExclusiveGroup( "align" );
-  m_textAlignCenter->setChecked( TRUE );
+  m_textAlignCenter->setChecked( true );
   m_textAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Key_R,
                                       this, SLOT( textAlignRight() ),
                                       actionCollection(), "textAlignRight" );
@@ -821,7 +824,7 @@ int KivioView::canvasYOffset() const
 
 void KivioView::print(KPrinter& ptr)
 {
-  ptr.setFullPage(TRUE);
+  ptr.setFullPage(true);
   m_pDoc->printContent( ptr );
 }
 
@@ -1301,6 +1304,7 @@ void KivioView::updateToolBars()
     m_setArrowHeads->setEnabled(false);
     m_arrowHeadsMenuAction->setEnabled(false);
     m_pStencilGeometryPanel->setEnabled(false);
+    m_pProtectionPanel->setEnabled(false);
   } else {
     Kivio::Object* pStencil = m_pActivePage->selectedStencils()->first();
 //     QFont f = pStencil->textFont();
@@ -1356,6 +1360,7 @@ void KivioView::updateToolBars()
 
     m_stencilToBack->setEnabled(true);
     m_stencilToFront->setEnabled(true);
+    m_pProtectionPanel->setEnabled(true);
   }
 
   m_pStencilGeometryPanel->setEmitSignals(true);
