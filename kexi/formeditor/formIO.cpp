@@ -400,15 +400,15 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, 
+FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const char *name, 
 	const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
 	// Widget specific properties and attributes ///////////////
-	kdDebug() << "FormIO::prop()  Saving the property: " << name << endl;
+	kdDebug() << "FormIO::savePropertyValue()  Saving the property: " << name << endl;
 	const int propertyId = w->metaObject()->findProperty(name, true);
 	if(propertyId == -1)
 	{
-		kdDebug() << "FormIO::prop()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
+		kdDebug() << "FormIO::savePropertyValue()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
 		if(lib)
 			lib->saveSpecialProperty(w->className(), name, value, w, parentNode, parent);
 		return;
@@ -449,7 +449,8 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name,
 		QDomText valueE;
 		QDomElement type = parent.createElement("pixmap");
 		QCString property = propertyE.attribute("name").latin1();
-		if(m_savePixmapsInline || m_currentItem->pixmapName(property).isNull())
+//todo		QCString pixmapName = m_currentItem->widget()->property("pixmapName").toCString();
+		if(m_savePixmapsInline /* (js)too risky: || m_currentItem->pixmapName(property).isNull() */)
 			valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
 		else
 			valueE = parent.createTextNode(m_currentItem->pixmapName(property));
@@ -716,7 +717,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 }
 
 void
-FormIO::saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value)
+FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value)
 {
 	QDomElement propertyE = domDoc.createElement(tagName);
 	propertyE.setAttribute("name", property);
@@ -725,7 +726,7 @@ FormIO::saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QStrin
 }
 
 QVariant
-FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
+FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 {
 	QDomElement tag = node.toElement();
 	QString text = tag.text();
@@ -943,22 +944,22 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	else // Normal widgets
 		tclass.setAttribute("class", lib->savingName(item->widget()->className()) );
 
-	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+	savePropertyValue(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
 	// We don't want to save the geometry if the widget is inside a layout (so parent.tagName() == "grid" for example)
 	if(item && !item->parent()) {
 		// save form widget size, but not its position
-		prop(tclass, domDoc, "geometry",
+		savePropertyValue(tclass, domDoc, "geometry",
 			QRect( QPoint(0,0), item->widget()->size()),
 			item->widget());
 	}
 	// normal widget (if == "UI', it means we're copying widget)
 	else if(parent.tagName() == "widget" || parent.tagName() == "UI")
-		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+		savePropertyValue(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
 	// Save the buddy widget for a label
 	if(item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
-		saveProperty(tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->name());
+		savePropertyElement(tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->name());
 
 
 	// We save every property in the modifProp list of the ObjectTreeItem
@@ -971,7 +972,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		{
 			if(!savedAlignment) // not tosave it twice
 			{
-				prop(tclass, domDoc, "alignment", item->widget()->property("alignment"), item->widget());
+				savePropertyValue(tclass, domDoc, "alignment", item->widget()->property("alignment"), item->widget());
 				savedAlignment = true;
 			}
 		}
@@ -980,7 +981,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			// these have already been saved
 		}
 		else {
-			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), 
+			savePropertyValue(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), 
 				item->widget(), lib);
 		}
 	}
@@ -1001,11 +1002,11 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		if(item->container()->layout()) // there is a layout
 		{
 			layout = domDoc.createElement("temp");
-			prop(layout, domDoc, "name", "unnamed", item->widget());
+			savePropertyValue(layout, domDoc, "name", "unnamed", item->widget());
 			if(item->modifiedProperties()->contains("layoutMargin"))
-				saveProperty(layout, domDoc, "property", "margin", item->container()->layoutMargin());
+				savePropertyElement(layout, domDoc, "property", "margin", item->container()->layoutMargin());
 			if(item->modifiedProperties()->contains("layoutSpacing"))
-				saveProperty(layout, domDoc, "property", "spacing", item->container()->layoutSpacing());
+				savePropertyElement(layout, domDoc, "property", "spacing", item->container()->layoutSpacing());
 			tclass.appendChild(layout);
 		}
 	}
@@ -1052,8 +1053,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			WidgetList *list = (WidgetList*)flow->widgetList();
 
 			// save some special properties
-			saveProperty(layout, domDoc, "property", "customLayout", Container::layoutTypeToString(item->container()->layoutType()) );
-			saveProperty(layout, domDoc, "property", "justify", QVariant(static_cast<KexiFlowLayout*>(item->container()->layout())->isJustified(), 3) );
+			savePropertyElement(layout, domDoc, "property", "customLayout", Container::layoutTypeToString(item->container()->layoutType()) );
+			savePropertyElement(layout, domDoc, "property", "justify", QVariant(static_cast<KexiFlowLayout*>(item->container()->layout())->isJustified(), 3) );
 
 			// fill the widget's grid info, ie just simulate grid layout
 			item->container()->createGridLayout(true);
@@ -1308,23 +1309,23 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary
 
 			// We cannot assign the buddy now as the buddy widget may not be created yet
 			if(name == "buddy")
-				m_buddies->insert(readProp(node.firstChild(), w, name).toString(), (QLabel*)w);
+				m_buddies->insert(readPropertyValue(node.firstChild(), w, name).toString(), (QLabel*)w);
 			else if(((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
 			  item->container() && item->container()->layout()) {
 			  	// We load the margin of a Layout
 				 if(name == "margin")  {
-					int margin = readProp(node.firstChild(), w, name).toInt();
+					int margin = readPropertyValue(node.firstChild(), w, name).toInt();
 					item->container()->setLayoutMargin(margin);
 					item->container()->layout()->setMargin(margin);
 				}
 				// We load the spacing of a Layout
 				else if(name == "spacing")  {
-					int spacing = readProp(node.firstChild(), w, name).toInt();
+					int spacing = readPropertyValue(node.firstChild(), w, name).toInt();
 					item->container()->setLayoutSpacing(spacing);
 					item->container()->layout()->setSpacing(spacing);
 				}
 				else if((name == "justify")){
-					bool justify = readProp(node.firstChild(), w, name).toBool();
+					bool justify = readPropertyValue(node.firstChild(), w, name).toBool();
 					KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
 					if(flow)
 						flow->setJustified(justify);
@@ -1343,7 +1344,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary
 			}
 			else // we have a normal property, let's load it
 			{
-				QVariant val = readProp(node.firstChild(), w, name);
+				QVariant val( readPropertyValue(node.firstChild(), w, name) );
 				if(name == "geometry" && dynamic_cast<FormWidget*>(w)) {
 					//fix geometry if needed - this is top level form widget
 					QRect r( val.toRect() );

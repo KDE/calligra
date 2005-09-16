@@ -139,18 +139,18 @@ Spring::saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode,
 		}
 	}
 
-	KFormDesigner::FormIO::prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+	KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
 	if(parentNode.tagName() == "widget")
-		KFormDesigner::FormIO::prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+		KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
 	if(!item->widget()->sizeHint().isValid())
-		KFormDesigner::FormIO::prop(tclass, domDoc, "sizeHint", item->widget()->property("size"), item->widget());
+		KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "sizeHint", item->widget()->property("size"), item->widget());
 	else
-		KFormDesigner::FormIO::prop(tclass, domDoc, "sizeHint", item->widget()->property("sizeHint"), item->widget());
+		KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "sizeHint", item->widget()->property("sizeHint"), item->widget());
 
-	KFormDesigner::FormIO::prop(tclass, domDoc, "orientation", item->widget()->property("orientation"), item->widget());
-	KFormDesigner::FormIO::prop(tclass, domDoc, "sizeType", item->widget()->property("sizeType"), item->widget());
+	KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "orientation", item->widget()->property("orientation"), item->widget());
+	KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "sizeType", item->widget()->property("sizeType"), item->widget());
 }
 
 

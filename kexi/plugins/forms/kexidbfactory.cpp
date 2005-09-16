@@ -356,7 +356,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["NoLabel"] = i18n("Label Position", "No Label");
 
 	m_propDesc["sizeInternal"] = i18n("Size");
-	m_propDesc["image"] = i18n("Image");
+	m_propDesc["pixmap"] = i18n("Image");
 	m_propDesc["scaledContents"] = i18n("Scaled Contents");
 	m_propDesc["keepAspectRatio"] = i18n("Keep Aspect Ratio (short)", "Keep Ratio");
 

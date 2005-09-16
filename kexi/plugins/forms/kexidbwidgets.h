@@ -560,15 +560,15 @@ class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 /*! Can also act as a normal static image box.
 */
 class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataItemInterface {
-		Q_OBJECT
-		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
-		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
-		Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
-		Q_PROPERTY( QPixmap image READ pixmap WRITE setPixmap )
-		Q_PROPERTY( bool scaledContents READ hasScaledContents WRITE setScaledContents )
-		Q_PROPERTY( bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio )
-		Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
-//		Q_OVERRIDE( bool text DESIGNABLE false )
+	Q_OBJECT
+	Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
+	Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
+	Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
+	Q_PROPERTY( bool scaledContents READ hasScaledContents WRITE setScaledContents )
+	Q_PROPERTY( bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio )
+	Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
+
 	public:
 		KexiImageBox( bool designMode, QWidget *parent, const char *name = 0 );
 		virtual ~KexiImageBox();

@@ -669,12 +669,12 @@ ContainerFactory::saveSpecialProperty(const QCString &, const QString &name, con
 	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
 		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget()->parentWidget());
-		KFormDesigner::FormIO::saveProperty(parentNode, parent, "attribute", "title", tab->tabLabel(w));
+		KFormDesigner::FormIO::savePropertyElement(parentNode, parent, "attribute", "title", tab->tabLabel(w));
 	}
 	else if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
 		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
-		KFormDesigner::FormIO::saveProperty(parentNode, parent, "attribute", "id", stack->id(w));
+		KFormDesigner::FormIO::savePropertyElement(parentNode, parent, "attribute", "id", stack->id(w));
 	}
 	else
 		return false;
@@ -696,7 +696,7 @@ ContainerFactory::readSpecialProperty(const QCString &, QDomElement &node, QWidg
 	if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
 		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
-		int id = KFormDesigner::FormIO::readProp(node.firstChild(), w, name).toInt();
+		int id = KFormDesigner::FormIO::readPropertyValue(node.firstChild(), w, name).toInt();
 		stack->addWidget(w, id);
 		stack->raiseWidget(w);
 		item->addModifiedProperty("id", id);

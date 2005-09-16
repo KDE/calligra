@@ -126,7 +126,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 
 		/*! Saves the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc,
 		    with \a parent as parent node.
-		    It calls readProp() for each object property, readAttribute() for each attribute and
+		    It calls readPropertyValue() for each object property, readAttribute() for each attribute and
 		    itself to save child widgets.\n
 		    \return true if saving succeeded.
 		    This is used to copy/paste widgets.
@@ -146,26 +146,29 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		*/
 		static void loadWidget(Container *container, WidgetLibrary *lib,
 			const QDomElement &el, QWidget *parent=0);
+
 		/*! Save an element in the \a domDoc as child of \a parentNode.
 		  The element will be saved like this :
 		  \code  <$(tagName) name = "$(property)">< value_as_XML ><$(tagName)/>
 		  \endcode
 		*/
-		static void saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName,
+		static void savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName,
 			const QString &property, const QVariant &value);
+
 		/*! Read an object property in the DOM doc.
 		   \param node   the QDomNode of the property
 		   \param obj    the widget whose property is being read
-		   \param name   the name of the property being saved
+		   \param name   the name of the property being read
 		*/
-		static QVariant readProp(QDomNode node, QObject *obj, const QString &name);
+		static QVariant readPropertyValue(QDomNode node, QObject *obj, const QString &name);
+
 		/*! Write an object property in the DOM doc.
 		   \param parent the DOM document to write to
 		   \param name   the name of the property being saved
 		   \param value  the value of this property
-		   \param w       the widget whose property is being saved
+		   \param w      the widget whose property is being saved
 		*/
-		static void prop(QDomElement &parentNode, QDomDocument &parent, const char *name,
+		static void savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const char *name,
 			const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
 
 	protected:
@@ -174,7 +177,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 
 		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form,
 		 with \a parent as parent widget.
-		 It calls readProp() and loadWidget() to load child widgets.
+		 It calls readPropertyValue() and loadWidget() to load child widgets.
 		*/
 		static void createToplevelWidget(Form *form, QWidget *container, QDomElement &element);
 

@@ -671,7 +671,7 @@ StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &
 		for(int i=0; i < combo->count(); i++)
 		{
 			QDomElement item = domDoc.createElement("item");
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "text", combo->text(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "text", combo->text(i));
 			parentNode.appendChild(item);
 		}
 		return true;
@@ -682,7 +682,7 @@ StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &
 		for(uint i=0; i < listbox->count(); i++)
 		{
 			QDomElement item = domDoc.createElement("item");
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "text", listbox->text(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "text", listbox->text(i));
 			parentNode.appendChild(item);
 		}
 		return true;
@@ -694,11 +694,11 @@ StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &
 		for(int i = 0; i < listview->columns(); i++)
 		{
 			QDomElement item = domDoc.createElement("column");
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "text", listview->columnText(i));
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "width", listview->columnWidth(i));
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "resizable", listview->header()->isResizeEnabled(i));
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "clickable", listview->header()->isClickEnabled(i));
-			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "fullwidth", listview->header()->isStretchEnabled(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "text", listview->columnText(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "width", listview->columnWidth(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "resizable", listview->header()->isResizeEnabled(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "clickable", listview->header()->isClickEnabled(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "fullwidth", listview->header()->isStretchEnabled(i));
 			parentNode.appendChild(item);
 		}
 
@@ -723,7 +723,7 @@ StdWidgetFactory::saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDo
 
 	// We save the text of each column
 	for(int i = 0; i < item->listView()->columns(); i++)
-		KFormDesigner::FormIO::saveProperty(element, domDoc, "property", "text", item->text(i));
+		KFormDesigner::FormIO::savePropertyElement(element, domDoc, "property", "text", item->text(i));
 
 	// Then we save every sub items
 	QListViewItem *child = item->firstChild();
@@ -743,7 +743,7 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 	if((tag == "item") && (classname == "KComboBox"))
 	{
 		KComboBox *combo = (KComboBox*)w;
-		QVariant val = KFormDesigner::FormIO::readProp(node.firstChild().firstChild(), w, name);
+		QVariant val = KFormDesigner::FormIO::readPropertyValue(node.firstChild().firstChild(), w, name);
 		if(val.canCast(QVariant::Pixmap))
 			combo->insertItem(val.toPixmap());
 		else
@@ -754,7 +754,7 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 	if((tag == "item") && (classname == "KListBox"))
 	{
 		KListBox *listbox = (KListBox*)w;
-		QVariant val = KFormDesigner::FormIO::readProp(node.firstChild().firstChild(), w, name);
+		QVariant val = KFormDesigner::FormIO::readPropertyValue(node.firstChild().firstChild(), w, name);
 		if(val.canCast(QVariant::Pixmap))
 			listbox->insertItem(val.toPixmap());
 		else
@@ -769,7 +769,7 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
 		{
 			QString prop = n.toElement().attribute("name");
-			QVariant val = KFormDesigner::FormIO::readProp(n.firstChild(), w, name);
+			QVariant val = KFormDesigner::FormIO::readPropertyValue(n.firstChild(), w, name);
 			if(prop == "text")
 				id = listview->addColumn(val.toString());
 			else if(prop == "width")
@@ -829,7 +829,7 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListVi
 		// and column texts
 		else if((tag == "property") && (prop == "text"))
 		{
-			QVariant val = KFormDesigner::FormIO::readProp(n.firstChild(), listview, "item");
+			QVariant val = KFormDesigner::FormIO::readPropertyValue(n.firstChild(), listview, "item");
 			item->setText(i, val.toString());
 			i++;
 		}
