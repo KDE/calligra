@@ -143,10 +143,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		bool dropDatabase( const QString &dbName = QString::null );
 
-		 /*! \return names of all the \p objecttype (see \a ObjectTypes
-		 in global.h) schemas stored in currently used database. If
-		 \p ok is passed (not 0) then it's true on success else false. */
-		QStringList objectNames(int objecttype, bool* ok = 0);
+		 /*! \return names of all the \a objecttype (see \a ObjectTypes in global.h)
+		 schemas stored in currently used database. KexiDB::AnyObjectType can be passed 
+		 as \a objType to get names of objects of any type.
+		 If \a ok is not null then variable pointed by it will be set to the result. 
+		 On error, the functions can return incomplete list. */
+		QStringList objectNames(int objType = KexiDB::AnyObjectType, bool* ok = 0);
 
 		/*! \return names of all table schemas stored in currently 
 		 used database. If \a also_system_tables is true, 
@@ -379,28 +381,33 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 This is convenient method when we need only first record from query result,
 		 or when we know that query result has only one record.
 		 Adds a LIMIT clause to the query, \a sql should not include one already.
-		 \return true if query was successfully executed and first record has been found. */
-		bool querySingleRecord(const QString& sql, RowData &data);
+		 \return true if query was successfully executed and first record has been found,
+		 false on data retrieving failure, and cancelled if there's no single record available. */
+		tristate querySingleRecord(const QString& sql, RowData &data);
 
 		/*! Executes \a sql query and stores first record's field's (number \a column) string value 
 		 inside \a value. For efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
 		 Adds a LIMIT clause to the query, so \a sql should not include one already.
-		 \return true if query was successfully executed and first record has been found.
+		 \return true if query was successfully executed and first record has been found,
+		 false on data retrieving failure, and cancelled if there's no single record available.
 		 \sa queryStringList() */
-		bool querySingleString(const QString& sql, QString &value, uint column = 0);
+		tristate querySingleString(const QString& sql, QString &value, uint column = 0);
 
 		/*! Convenience function: executes \a sql query and stores first 
 		 record's field's (number \a column) value inside \a number. \sa querySingleString(). 
-		 Note: "LIMIT 1" is appended to \a sql statement */
-		bool querySingleNumber(const QString& sql, int &number, uint column = 0);
+		 Note: "LIMIT 1" is appended to \a sql statement 
+		 \return true if query was successfully executed and first record has been found,
+		 false on data retrieving failure, and cancelled if there's no single record available. */
+		tristate querySingleNumber(const QString& sql, int &number, uint column = 0);
 
 		/*! Executes \a sql query and stores first record's first field's string value 
 		 inside \a list. The list is initially cleared.
 		 For efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
-		 \return true if all values were fetched successfuly
-		 On errors, the list is not cleared, it may contain few retrieved values. */
+		 \return true if all values were fetched successfuly,
+		 false on data retrieving failure. Returning empty list can be still a valid result.
+		 On errors, the list is not cleared, it may contain a few retrieved values. */
 		bool queryStringList(const QString& sql, QStringList& list, uint column = 0);
 
 		/*! \return true if there is at least one record returned in \a sql query.
@@ -621,13 +628,14 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
 
 		/*! Added for convenience. 
-		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ) */
-		bool loadObjectSchemaData( int objectID, SchemaData &sdata );
+		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ).
+		 \return true on success, false on failure and cancelled when such object couldn't */
+		tristate loadObjectSchemaData( int objectID, SchemaData &sdata );
 
 		/*! Finds object schema data for object of type \a objectType and name \a objectName.
 		 If the object is found, resulted schema is stored in \a sdata and true is returned,
 		 otherwise false is returned. */
-		bool loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata );
+		tristate loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata );
 
 		/*! Loads (potentially large) data block (e.g. xml form's representation), referenced by objectID
 		 and puts it to \a dataString. The can be block indexed with optional \a dataID.

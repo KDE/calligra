@@ -149,8 +149,21 @@ KexiProject::create(bool forceOverwrite)
 	}
 	kdDebug() << "--- DB '" << m_data->databaseName() << "' used ---"<< endl;
 
-	//add some metadata
+	//<add some data>
 	KexiDB::Transaction trans = m_connection->beginTransaction();
+
+	//create default (global) image container
+/*todo
+//! @todo we'll allow to create additional image containers
+	KexiDB::TableSchema *t_objects = m_connection->tableSchema("kexi__objects");
+	if (!t_objects)
+		return false;
+
+	KexiDB::SchemaData sdata;
+	m_connection->loadObjectSchemaData( KexiPart::ImageContainerObjectType, 
+		"default", sdata );*/
+
+	//add some metadata
 	KexiDB::TableSchema *t_db = m_connection->tableSchema("kexi__db");
 //TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 	//caption:
@@ -165,6 +178,7 @@ KexiProject::create(bool forceOverwrite)
 
 	if (trans.active() && !m_connection->commitTransaction(trans))
 		return false;
+	//</add some data>
 
 	return initProject();
 }

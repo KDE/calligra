@@ -2763,9 +2763,12 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 			return cancelled;
 		//check if that name already exists
 		KexiDB::SchemaData tmp_sdata;
-		found = project()->dbConnection()->loadObjectSchemaData(
-				info->projectPartID(),
-				d->nameDialog->widget()->nameText(), tmp_sdata );
+		tristate result = project()->dbConnection()->loadObjectSchemaData(
+			info->projectPartID(),
+			d->nameDialog->widget()->nameText(), tmp_sdata );
+		if (!result)
+			return false;
+		found = result==true;
 		if (found) {
 			if (allowOverwriting) {
 				int res = KMessageBox::warningYesNoCancel(this,

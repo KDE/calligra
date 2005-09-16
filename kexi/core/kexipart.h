@@ -46,11 +46,13 @@ namespace KexiPart
 
 /*! Official (registered) type IDs for objects like table, query, form... */
 enum ObjectTypes {
-	TableObjectType = 1, //like in KexiDB::ObjectTypes
-	QueryObjectType = 2, //like in KexiDB::ObjectTypes
+	TableObjectType = KexiDB::TableObjectType, //!< 1, like in KexiDB::ObjectTypes
+	QueryObjectType = KexiDB::QueryObjectType, //!< 2, like in KexiDB::ObjectTypes
 	FormObjectType = 3,
 	ReportObjectType = 4,
 	ScriptObjectType = 5,
+	WebObjectType = 6,
+	ImageContainerObjectType = 7, //!< Special type for Image Containers
 	LastObjectType = 5, //ALWAYS UPDATE THIS
 
 	UserObjectType = 100 //external types

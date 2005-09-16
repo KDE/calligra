@@ -11,6 +11,12 @@
 ---------------------------------------------------
 
 CCMAIL: dkite@shaw.ca
+2005-09-16
+Forms
+- FormIO: some fixes in method's naming
+KexiDB
+- tristate type is used in some more methods, so it's now possible 
+  to catch "no data" cases, not only "server errors"
 
 2005-09-15
 Kexi supports static and data-aware images boxes

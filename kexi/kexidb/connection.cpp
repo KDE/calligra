@@ -494,13 +494,13 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 		//-get global database information
 		int num;
 		static QString notfound_str = i18n("\"%1\" database property not found");
-		if (!querySingleNumber(
+		if (true!=querySingleNumber(
 			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_major_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
 			return false;
 		}
 		d->m_versionMajor = num;
-		if (!querySingleNumber(
+		if (true!=querySingleNumber(
 			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_minor_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
 			return false;
@@ -644,7 +644,7 @@ bool Connection::dropDatabase( const QString &dbName )
 	return ret;
 }
 
-QStringList Connection::objectNames(int objecttype, bool* ok)
+QStringList Connection::objectNames(int objType, bool* ok)
 {
 	QStringList list;
 
@@ -654,8 +654,13 @@ QStringList Connection::objectNames(int objecttype, bool* ok)
 		return list;
 	}
 
-	Cursor *c = executeQuery(QString(
-	 	 "select o_name from kexi__objects where o_type=%1").arg(objecttype));
+	QString sql;
+	if (objType==KexiDB::AnyObjectType)
+		sql = "select o_name from kexi__objects";
+	else
+		sql = QString("select o_name from kexi__objects where o_type=%1").arg(objType);
+
+	Cursor *c = executeQuery(sql);
 	if (!c) {
 		if(ok) 
 			*ok = false;
@@ -669,7 +674,11 @@ QStringList Connection::objectNames(int objecttype, bool* ok)
 		}
 	}
 
-	deleteCursor(c);
+	if (!deleteCursor(c)) {
+		if(ok)
+			*ok = false;
+		return list;
+	}
 
 	if(ok)
 		*ok = true;
@@ -1094,10 +1103,10 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 		return row_id;
 	}
 	RowData rdata;
-	if (row_id<=0 || !querySingleRecord(
+	if (row_id<=0 || true!=querySingleRecord(
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
 	 +"="+QString::number(row_id), rdata)) {
-		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || !querySingleRecord()" << endl;
+		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
 	 	return (Q_ULLONG)-1; //ULL;
 	}
 	return rdata[0].toULongLong();
@@ -1911,20 +1920,23 @@ bool Connection::setupObjectSchemaData( const RowData &data, SchemaData &sdata )
 	return true;
 }
 
-bool Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
+tristate Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
 {
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(objectID), data))
-		return false;
+	if (true!=querySingleRecord(QString::fromLatin1(
+		"select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1")
+		.arg(objectID), data))
+		return cancelled;
 	return setupObjectSchemaData( data, sdata );
 }
 
-bool Connection::loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata )
+tristate Connection::loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata )
 {
 	RowData data;
-	if (!querySingleRecord(QString::fromLatin1("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_type=%1 and lower(o_name)=%2")
+	if (true!=querySingleRecord(QString::fromLatin1("select o_id, o_type, o_name, o_caption, o_desc "
+		"from kexi__objects where o_type=%1 and lower(o_name)=%2")
 		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.lower())), data))
-		return false;
+		return cancelled;
 	return setupObjectSchemaData( data, sdata );
 }
 
@@ -1935,7 +1947,8 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		return false;
 	if (newObject) {
 		int existingID;
-		if (querySingleNumber(QString::fromLatin1("select o_id from kexi__objects where o_type=%1 and lower(o_name)=%2")
+		if (querySingleNumber(QString::fromLatin1(
+			"select o_id from kexi__objects where o_type=%1 and lower(o_name)=%2")
 			.arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().lower())), existingID))
 		{
 			//we already have stored a schema data with the same name and type:
@@ -1981,8 +1994,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
 }
 
-//! Query database for a single record, storing entire row
-bool Connection::querySingleRecord(const QString& sql, RowData &data)
+tristate Connection::querySingleRecord(const QString& sql, RowData &data)
 {
 	KexiDB::Cursor *cursor;
 	m_sql = sql + " LIMIT 1"; // is this safe?
@@ -1991,10 +2003,11 @@ bool Connection::querySingleRecord(const QString& sql, RowData &data)
 		return false;
 	}
 	if (!cursor->moveFirst() || cursor->eof()) {
+		const tristate result = cursor->error() ? false : cancelled;
 		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
 		setError(cursor);
 		deleteCursor(cursor);
-		return false;
+		return result;
 	}
 	cursor->storeCurrentRow(data);
 	return deleteCursor(cursor);
@@ -2009,7 +2022,7 @@ bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
 	return true;
 }
 
-bool Connection::querySingleString(const QString& sql, QString &value, uint column)
+tristate Connection::querySingleString(const QString& sql, QString &value, uint column)
 {
 	KexiDB::Cursor *cursor;
 	m_sql = sql + " LIMIT 1"; // is this safe?;
@@ -2018,9 +2031,10 @@ bool Connection::querySingleString(const QString& sql, QString &value, uint colu
 		return false;
 	}
 	if (!cursor->moveFirst() || cursor->eof()) {
+		const tristate result = cursor->error() ? false : cancelled;
 		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
 		deleteCursor(cursor);
-		return false;
+		return result;
 	}
 	if (!checkIfColumnExists(cursor, column)) {
 		deleteCursor(cursor);
@@ -2030,12 +2044,13 @@ bool Connection::querySingleString(const QString& sql, QString &value, uint colu
 	return deleteCursor(cursor);
 }
 
-bool Connection::querySingleNumber(const QString& sql, int &number, uint column)
+tristate Connection::querySingleNumber(const QString& sql, int &number, uint column)
 {
 	static QString str;
 	static bool ok;
-	if (!querySingleString(sql, str, column))
-		return false;
+	const tristate result = querySingleString(sql, str, column);
+	if (result!=true)
+		return result;
 	number = str.toInt(&ok);
 	return ok;
 }
@@ -2093,14 +2108,15 @@ bool Connection::resultExists(const QString& sql, bool &success)
 		success = false;
 		return false;
 	}
-	success = true;
 	if (!cursor->moveFirst() || cursor->eof()) {
+		success = !cursor->error();
 		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
 		setError(cursor);
 		deleteCursor(cursor);
 		return false;
 	}
-	return deleteCursor(cursor);
+	success = deleteCursor(cursor);
+	return false;
 }
 
 bool Connection::isEmpty( TableSchema& table, bool &success )
@@ -2110,7 +2126,7 @@ bool Connection::isEmpty( TableSchema& table, bool &success )
 
 int Connection::resultCount(const QString& sql)
 {
-	int count = -1;
+	int count = -1; //will be changed only on success of querySingleNumber()
 	m_sql = QString("SELECT COUNT() FROM (") + sql + ")";
 	querySingleNumber(m_sql, count);
 	return count;
@@ -2198,7 +2214,7 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
+	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 
@@ -2212,7 +2228,7 @@ TableSchema* Connection::tableSchema( int tableId )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(tableId), data))
+	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(tableId), data))
 		return 0;
 
 	return setupTableSchema(data);
@@ -2295,7 +2311,7 @@ QuerySchema* Connection::querySchema( const QString& queryName )
 		return q;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
+	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
 			.arg(m_queryName).arg(KexiDB::QueryObjectType), data))
 		return 0;
 
@@ -2309,7 +2325,7 @@ QuerySchema* Connection::querySchema( int queryId )
 		return q;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(queryId), data))
+	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(queryId), data))
 		return 0;
 
 	return setupQuerySchema(data);
@@ -2616,7 +2632,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			+ QString::fromLatin1(" WHERE ")
 			+ escapeIdentifier(id_fieldinfo->field->name()) + "="
 			+ QString::number(last_id);
-		if (!querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
+		if (true!=querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
 			//! @todo show error
 			return false;
 		}

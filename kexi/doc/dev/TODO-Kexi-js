@@ -572,3 +572,7 @@ FORMS:
 --add filter property (using KImageEffect)
 --add QFrame container
 --make image-related actions undoable/redoable in design time
+
+ImportWizard:
+-store "Recent Paths" for browsed directory file 
+-set the same path for "destination" file browser as for "source" one

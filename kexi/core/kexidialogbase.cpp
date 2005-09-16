@@ -474,13 +474,13 @@ tristate KexiDialogBase::storeNewData()
 		// = KexiPart::LastObjectType+1; //min is == 3+1
 		if (p_id<0) {
 			//find 1st maximum custom id
-			if (m_parentWindow->project()->dbConnection()->querySingleNumber(
+			p_id = (int)KexiPart::UserObjectType;
+			if (!m_parentWindow->project()->dbConnection()->querySingleNumber(
 				"SELECT max(p_id) FROM kexi__parts", p_id))
-			{
+				return false;
+			else {//ok or not record found:
 				p_id = QMAX(++p_id, (int)KexiPart::UserObjectType);
 			}
-			else
-				return false;
 		}
 
 //		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");

@@ -261,6 +261,7 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 				 "types").arg(fname),
                       types, 0, false);
 
+//! @todo use QMap<QCString, KexiDB::Field::Type> here!
 	if (res == types[0])
 		return KexiDB::Field::Byte;
 	else if (res == types[1])

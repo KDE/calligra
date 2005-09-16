@@ -117,8 +117,8 @@ void yyerror(const char *str)
 					pos = re.search(e, pos);
 					QStringList captured=re.capturedTexts();
 					if (captured.count()>=2) {
-						kdDebug() << "**" << captured[1] << endl;
-						kdDebug() << "**" << captured[2] << endl;
+//						kdDebug() << "**" << captured[1] << endl;
+//						kdDebug() << "**" << captured[2] << endl;
 					}
 				}
 					
