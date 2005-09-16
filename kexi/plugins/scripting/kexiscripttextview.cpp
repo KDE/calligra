@@ -32,12 +32,6 @@ class KexiScriptTextViewPrivate
 {
     public:
         /**
-         * The \a KexiScriptManager instance used to handle
-         * the different \a KexiScriptContainer instances.
-         */
-        KexiScriptManager* manager;
-
-        /**
          * The \a KexiScriptContainer instance is used to
          * wrap the \a Kross::Api::ScriptContainer functionality
          * to work with scripting code.
@@ -51,12 +45,10 @@ class KexiScriptTextViewPrivate
         KTextBrowser* browser;
 };
 
-KexiScriptTextView::KexiScriptTextView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiViewBase(mainWin, parent, name)
     , d( new KexiScriptTextViewPrivate() )
 {
-    d->manager = manager;
-
     d->browser = new KTextBrowser(this, "KexiScriptTextViewEditor");
     d->browser->setReadOnly(true);
     //d->browser->setFocusPolicy(QTextBrowser::ClickFocus);
@@ -67,7 +59,7 @@ KexiScriptTextView::KexiScriptTextView(KexiScriptManager* manager, KexiMainWindo
     QBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->browser);
 
-    d->scriptcontainer = manager->getScriptContainer(parentDialog()->partItem()->name(), true);
+    d->scriptcontainer = Kexi::scriptManager(mainWin)->getScriptContainer(parentDialog()->partItem()->name(), true);
     //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
 
     QStringList output = d->scriptcontainer->getOutput();

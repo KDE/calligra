@@ -33,11 +33,8 @@
 #include "kexiscriptdesignview.h"
 #include "kexiscripttextview.h"
 
-#include <kexiscripting.h>
-
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
 	: KexiPart::Part(parent, name, l)
-	, m_manager(0)
 {
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::ScriptObjectType;
@@ -56,29 +53,26 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
-    createSharedAction(Kexi::DesignViewMode, i18n("Execute script"), "exec", 0, "script_execute");
+	createSharedAction(Kexi::DesignViewMode, i18n("Execute script"), "exec", 0, "script_execute");
 }
 
 KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
-    KexiMainWindow *win = dialog->mainWin();
+	KexiMainWindow *win = dialog->mainWin();
 
-    if(! m_manager) // create on demand
-        m_manager = new KexiScriptManager(win);
+	if(viewMode == Kexi::DesignViewMode) {
+		if(!win || !win->project() || !win->project()->dbConnection())
+			return 0;
+		return new KexiScriptDesignView(win, parent, item.name().latin1());
+	}
 
-    if(viewMode == Kexi::DesignViewMode) {
-        if(!win || !win->project() || !win->project()->dbConnection())
-            return 0;
-        return new KexiScriptDesignView(m_manager, win, parent, item.name().latin1());
-    }
+	if(viewMode == Kexi::TextViewMode) {
+		if(!win || !win->project() || !win->project()->dbConnection())
+			return 0;
+		return new KexiScriptTextView(win, parent, item.name().latin1());
+	}
 
-    if(viewMode == Kexi::TextViewMode) {
-        if(!win || !win->project() || !win->project()->dbConnection())
-            return 0;
-        return new KexiScriptTextView(m_manager, win, parent, item.name().latin1());
-    }
-
-    return 0;
+	return 0;
 }
 
 QString KexiScriptPart::i18nMessage(const QCString& englishMessage) const

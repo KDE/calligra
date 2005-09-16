@@ -23,7 +23,6 @@
 #include <kexiviewbase.h>
 
 // Forward declarations.
-class KexiScriptManager;
 class KexiScriptTextViewPrivate;
 
 /**
@@ -40,7 +39,7 @@ class KexiScriptTextView : public KexiViewBase
         /**
          * Constructor.
          */
-        KexiScriptTextView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 
         /**
          * Destructor.

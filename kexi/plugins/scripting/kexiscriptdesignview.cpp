@@ -35,9 +35,6 @@
 class KexiScriptDesignViewPrivate
 {
     public:
-        /// The \a KexiScriptManager instance the view belongs to.
-        KexiScriptManager* manager;
-
         /// The \a KexiScriptContainer used as facade for the Kross functionality.
         KexiScriptContainer* scriptcontainer;
 
@@ -48,18 +45,18 @@ class KexiScriptDesignViewPrivate
         KexiScriptEditor* editor;
 };
 
-KexiScriptDesignView::KexiScriptDesignView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiViewBase(mainWin, parent, name)
     , d( new KexiScriptDesignViewPrivate() )
 {
-    d->manager = manager;
+    KexiScriptManager* scriptmanager = Kexi::scriptManager(mainWin);
 
-    d->scriptcontainer = d->manager->getScriptContainer(parentDialog()->partItem()->name(), true);
+    d->scriptcontainer = scriptmanager->getScriptContainer(parentDialog()->partItem()->name(), true);
     plugSharedAction( "script_execute", d->scriptcontainer, SLOT(execute()) );
 
     d->propertyset = new KoProperty::Set(this, "KexiScripting");
 
-    QStringList interpreters = manager->getInterpreters();
+    QStringList interpreters = scriptmanager->getInterpreters();
     KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
     KoProperty::Property* prop = new KoProperty::Property(
         "language", // name
@@ -67,7 +64,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiScriptManager* manager, KexiMainW
         d->scriptcontainer->getInterpreterName(), // value
         i18n("Interpreter"), // caption
         i18n("The used scripting interpreter."), // description
-        KoProperty::List //List //ValueFromList // type
+        KoProperty::List // type
     );
     //prop->setVisible(false);
     d->propertyset->addProperty(prop);

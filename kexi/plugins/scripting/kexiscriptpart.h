@@ -29,8 +29,6 @@
 #include <kexipart.h>
 #include <kexidialogbase.h>
 
-class KexiScriptManager;
-
 /**
  * Kexi Scripting Plugin.
  */
@@ -60,8 +58,6 @@ class KexiScriptPart : public KexiPart::Part
 
         virtual void initPartActions();
         virtual void initInstanceActions();
-    private:
-        KexiScriptManager* m_manager;
 };
 
 #endif

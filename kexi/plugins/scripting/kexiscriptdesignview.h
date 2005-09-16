@@ -29,7 +29,6 @@
 #include <koproperty/property.h>
 
 // Forward declarations.
-class KexiScriptManager;
 class KexiScriptContainer;
 class KexiScriptEditor;
 class KexiScriptDesignViewPrivate;
@@ -48,7 +47,7 @@ class KexiScriptDesignView : public KexiViewBase
         /**
          * Constructor.
          */
-        KexiScriptDesignView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 
         /**
          * Destructor.
