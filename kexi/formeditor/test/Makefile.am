@@ -19,8 +19,7 @@ kformdesigner_SOURCES = main.cpp kfd_mainwindow.cpp
 
 METASOURCES = AUTO
 
-kdelnkdir = $(kde_appsdir)/Utilities
-kdelnk_DATA = kformdesigner.desktop
+xdg_apps_DATA = kformdesigner.desktop
 
 rcdir = $(kde_datadir)/kformdesigner
 rc_DATA = kfd_mainwindow.rc

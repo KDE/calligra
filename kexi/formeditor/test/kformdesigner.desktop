@@ -37,3 +37,5 @@ GenericName[uk]=Дизайнер форм
 GenericName[zh_CN]=表单设计器
 MimeType=application/x-designer;
 Terminal=false
+Categories=Qt;KDE;Development;
+
