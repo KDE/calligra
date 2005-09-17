@@ -336,3 +336,14 @@ Field* TableSchema::anyNonPKField()
 	return d->anyNonPKField;
 }
 
+//--------------------------------------
+
+InternalTableSchema::InternalTableSchema(const QString& name)
+ : TableSchema(name)
+{
+}
+
+InternalTableSchema::~InternalTableSchema()
+{
+}
+

@@ -51,8 +51,6 @@ enum ObjectTypes {
 	FormObjectType = 3,
 	ReportObjectType = 4,
 	ScriptObjectType = 5,
-	WebObjectType = 6,
-	ImageContainerObjectType = 7, //!< Special type for Image Containers
 	LastObjectType = 5, //ALWAYS UPDATE THIS
 
 	UserObjectType = 100 //external types

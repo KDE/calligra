@@ -152,16 +152,18 @@ KexiProject::create(bool forceOverwrite)
 	//<add some data>
 	KexiDB::Transaction trans = m_connection->beginTransaction();
 
-	//create default (global) image container
-/*todo
-//! @todo we'll allow to create additional image containers
-	KexiDB::TableSchema *t_objects = m_connection->tableSchema("kexi__objects");
-	if (!t_objects)
-		return false;
+	//create global BLOB container
+	KexiDB::InternalTableSchema *t_blobs = new KexiDB::InternalTableSchema("kexi__blobs");
+	t_blobs->addField( new KexiDB::Field("o_id", KexiDB::Field::Integer, 
+		KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) )
+	.addField( new KexiDB::Field("o_data", KexiDB::Field::BLOB) )
+	.addField( new KexiDB::Field("o_name", KexiDB::Field::Text ) )
+	.addField( new KexiDB::Field("o_caption", KexiDB::Field::Text ) )
+	.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull, 
+		KexiDB::Field::NoOptions, 0, 0 ) );
 
-	KexiDB::SchemaData sdata;
-	m_connection->loadObjectSchemaData( KexiPart::ImageContainerObjectType, 
-		"default", sdata );*/
+	if (!m_connection->createTable( t_blobs, false/*!replaceExisting*/ ))
+		return false;
 
 	//add some metadata
 	KexiDB::TableSchema *t_db = m_connection->tableSchema("kexi__db");

@@ -352,6 +352,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 #define createDatabase_ERROR \
 	{ createDatabase_CLOSE; return false; }
 
+
 /*! See doc/dev/kexidb_issues.txt document, chapter "Table schema, query schema, etc. storage"
  for database schema documentation (detailed description of kexi__* 'system' tables).
 */
@@ -648,7 +649,7 @@ QStringList Connection::objectNames(int objType, bool* ok)
 {
 	QStringList list;
 
-	if (!isDatabaseUsed()) {
+	if (!checkIsDatabaseUsed()) {
 		if(ok) 
 			*ok = false;
 		return list;
@@ -731,7 +732,7 @@ QValueList<int> Connection::objectIds(int objType)
 {
 	QValueList<int> list;
 
-	if (!isDatabaseUsed())
+	if (!checkIsDatabaseUsed())
 		return list;
 
 	Cursor *c = executeQuery(QString("select o_id, o_name from kexi__objects where o_type=%1").arg(objType));
@@ -1143,22 +1144,27 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		setError(ERR_CANNOT_CREATE_EMPTY_OBJECT, i18n("Cannot create table without fields."));
 		return false;
 	}
-	if (m_driver->isSystemObjectName( tableSchema->name() )) {
-		clearError();
-		setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.")
-			.arg(tableSchema->name()));
-		return false;
-	}
-	Field *sys_field = findSystemFieldName(tableSchema);
-	if (sys_field) {
-		clearError();
-		setError(ERR_SYSTEM_NAME_RESERVED,
-			i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
-			.arg(sys_field->name()).arg(tableSchema->name()));
-		return false;
-	}
+	const bool internalTable = dynamic_cast<InternalTableSchema*>(tableSchema);
 
 	const QString &tableName = tableSchema->name().lower();
+
+	if (!internalTable) {
+		if (m_driver->isSystemObjectName( tableName )) {
+			clearError();
+			setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.")
+				.arg(tableSchema->name()));
+			return false;
+		}
+
+		Field *sys_field = findSystemFieldName(tableSchema);
+		if (sys_field) {
+			clearError();
+			setError(ERR_SYSTEM_NAME_RESERVED,
+				i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
+				.arg(sys_field->name()).arg(tableName));
+			return false;
+		}
+	}
 
 	bool previousSchemaStillKept = false;
 
@@ -1202,79 +1208,60 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		createTable_ERR;
 
 	//add schema data to kexi__* tables
-	if (!storeObjectSchemaData( *tableSchema, true ))
-		createTable_ERR;
-/*	TableSchema *ts = m_tables_byname["kexi__objects"];
-	if (!ts)
-		return false;
-
-	FieldList *fl = ts->subList("o_type", "o_name", "o_caption", "o_help");
-	if (!fl)
-		return false;
-
-	if (!insertRecord(*fl, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
-		QVariant(tableSchema->caption()), QVariant(tableSchema->description()) ))
-		createTable_ERR;
-
-	delete fl;*/
-
-//	if (!insertRecord(*ts, QVariant()/*autoinc*/, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
-//		QVariant(tableSchema->caption()), QVariant(tableSchema->description())))
-//		createTable_ERR;
-/*	int obj_id = lastInsertedAutoIncValue("o_id",*ts);
-	if (obj_id<=0)
-		createTable_ERR;
-	KexiDBDbg << "######## obj_id == " << obj_id << endl;*/
-
-	TableSchema *ts = m_tables_byname["kexi__fields"];
-	if (!ts)
-		return false;
-	//for sanity: remove field info is any for this table id
-	if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id()))
-		return false;
-
-	FieldList *fl = ts->subList(
-		"t_id",
-		"f_type",
-		"f_name",
-		"f_length",
-		"f_precision",
-		"f_constraints",
-		"f_options",
-		"f_default",
-		"f_order",
-		"f_caption",
-		"f_help"
-	);
-	if (!fl)
-		return false;
-
-	Field::List *fields = tableSchema->fields();
-	Field *f = fields->first();
-	int order = 0;
-	while (f) {
-		QValueList<QVariant> vals;
-		vals
-		<< QVariant(tableSchema->id())//obj_id)
-		<< QVariant(f->type())
-		<< QVariant(f->name())
-		<< QVariant(f->isFPNumericType() ? f->scale() : f->length())
-		<< QVariant(f->isFPNumericType() ? f->precision() : 0)
-		<< QVariant(f->constraints())
-		<< QVariant(f->options())
-		<< QVariant(f->defaultValue())
-		<< QVariant(f->order())
-		<< QVariant(f->caption())
-		<< QVariant(f->description());
-
-		if (!insertRecord(*fl, vals ))
+	if (!internalTable) {
+		//update kexi__objects
+		if (!storeObjectSchemaData( *tableSchema, true ))
 			createTable_ERR;
 
-		f = fields->next();
-		order++;
-	}
-	delete fl;
+		TableSchema *ts = m_tables_byname["kexi__fields"];
+		if (!ts)
+			return false;
+		//for sanity: remove field info is any for this table id
+		if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id()))
+			return false;
 
+		FieldList *fl = ts->subList(
+			"t_id",
+			"f_type",
+			"f_name",
+			"f_length",
+			"f_precision",
+			"f_constraints",
+			"f_options",
+			"f_default",
+			"f_order",
+			"f_caption",
+			"f_help"
+		);
+		if (!fl)
+			return false;
+
+		Field::List *fields = tableSchema->fields();
+		Field *f = fields->first();
+		int order = 0;
+		while (f) {
+			QValueList<QVariant> vals;
+			vals
+			<< QVariant(tableSchema->id())//obj_id)
+			<< QVariant(f->type())
+			<< QVariant(f->name())
+			<< QVariant(f->isFPNumericType() ? f->scale() : f->length())
+			<< QVariant(f->isFPNumericType() ? f->precision() : 0)
+			<< QVariant(f->constraints())
+			<< QVariant(f->options())
+			<< QVariant(f->defaultValue())
+			<< QVariant(f->order())
+			<< QVariant(f->caption())
+			<< QVariant(f->description());
+
+			if (!insertRecord(*fl, vals ))
+				createTable_ERR;
+
+			f = fields->next();
+			order++;
+		}
+		delete fl;
+	}
 	//finally:
 /*	if (replaceExisting) {
 		if (existingTable) {
@@ -1286,13 +1273,19 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	bool res = commitAutoCommitTransaction(tg.transaction());
 
 	if (res) {
-		if (previousSchemaStillKept) {
-			//remove previous table schema
-			removeTableSchemaInternal(tableSchema);
+		if (internalTable) {
+			//insert the internal table into structures
+			newKexiDBSystemTableSchema(tableSchema);
 		}
-		//store one schema object locally:
-		m_tables.insert(tableSchema->id(), tableSchema);
-		m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
+		else {
+			if (previousSchemaStillKept) {
+				//remove previous table schema
+				removeTableSchemaInternal(tableSchema);
+			}
+			//store one schema object locally:
+			m_tables.insert(tableSchema->id(), tableSchema);
+			m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
+		}
 	}
 	return res;
 }
@@ -2334,10 +2327,15 @@ QuerySchema* Connection::querySchema( int queryId )
 TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 {
 	TableSchema *ts = new TableSchema(tsname.lower());
-	ts->setKexiDBSystem(true);
-	m_kexiDBSystemtables.append(ts);
-	m_tables_byname.insert(ts->name(),ts);
+	newKexiDBSystemTableSchema( ts );
 	return ts;
+}
+
+void Connection::newKexiDBSystemTableSchema(TableSchema *tableSchema)
+{
+	tableSchema->setKexiDBSystem(true);
+	m_kexiDBSystemtables.append(tableSchema);
+	m_tables_byname.insert(tableSchema->name(), tableSchema);
 }
 
 //! Creates kexi__* tables.
@@ -2353,7 +2351,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("o_caption", Field::Text ) )
 	.addField( new Field("o_desc", Field::LongText ) );
 
-t_objects->debug();
+	t_objects->debug();
 
 	TableSchema *t_objectdata = newKexiDBSystemTableSchema("kexi__objectdata");
 	t_objectdata->addField( new Field("o_id", Field::Integer, Field::NotNull, Field::Unsigned) )

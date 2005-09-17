@@ -2,7 +2,10 @@
  KexiDB module IDEAS, ISSUES, PROPOSALS
  Copyright (C) 2003 Jaroslaw Staniek js at iidea dot pl
  Started: 2003-08-01
- Kexi home page: http://www.koffice.org/kexi/
+ Kexi home page: Users: http://www.koffice.org/kexi/ Developers: http://kexi-project.org
+
+ Changes: 
+ 2005-09-16 Global BLOBs Storage
 ---------------------------------------------------------
 
 |
@@ -85,7 +88,7 @@ kexi__objects
 	o_id integer unsigned primary key auto_increment,
 	o_type byte, //type id taken from KexiDB::ObjectTypes
 	o_name varchar(200),
-	o_caption varchar(200), //optional, enriched name that is not 
+	o_caption varchar(200), //optional, enriched name, can contain non-latin1 characters
 	o_help varchar
 
 //This table contains object's data, such as form's xml def.
@@ -140,6 +143,17 @@ property="project_desc", value=<string>
 
 TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 		
+// Global BLOBs Storage (BLOB == BINARY LARGE OBJECT)
+// Designed to store any kind of images, sound and other binary data
+//Table:
+kexi__blobs
+	o_id integer unsigned primary key auto_increment, //unique project-wide identifier of a BLOB
+	o_data BLOB,
+	o_name varchar(200), //optional, name of the blob, can be e.g. a name of original file the data comes from
+	o_caption varchar(200), //optional, enriched name, can contain non-latin1 characters
+	o_mime varchar(200) NOT NULL, //MIME type of a BLOB, e.g.  image/jpg
+
+
 -----------------------------------------------------------------
 
 4. DEPRECATED TABLES

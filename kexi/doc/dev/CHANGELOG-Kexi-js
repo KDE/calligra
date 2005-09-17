@@ -17,6 +17,7 @@ Forms
 KexiDB
 - tristate type is used in some more methods, so it's now possible 
   to catch "no data" cases, not only "server errors"
+- InternalTableSchema class added (to avoid polluting TableSchema/Conenction APIs)
 
 2005-09-15
 Kexi supports static and data-aware images boxes

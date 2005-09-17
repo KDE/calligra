@@ -1041,6 +1041,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		ConnectionPrivate *d;
 	private:
+		/*! Used internally by newKexiDBSystemTableSchema(const QString& tsname) */
+		void newKexiDBSystemTableSchema(TableSchema *tableSchema);
+
 		Driver *m_driver;
 		bool m_is_connected : 1;
 		bool m_autoCommit : 1;

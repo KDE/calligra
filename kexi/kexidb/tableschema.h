@@ -155,6 +155,17 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 	friend class Connection;
 };
 
+/*! Internal table with a name \a name. Rarely used.
+ Use Connection::createTable() to create a table using this schema.
+ The table will not be visible as user table. 
+ For example, 'kexi__blobs' table is created this way by Kexi application. */
+class KEXI_DB_EXPORT InternalTableSchema : public TableSchema
+{
+	public:
+		InternalTableSchema(const QString& name);
+		virtual ~InternalTableSchema();
+};
+
 } //namespace KexiDB
 
 #endif
