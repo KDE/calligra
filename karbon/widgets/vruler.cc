@@ -242,7 +242,7 @@ void VRuler::drawRuler()
             if (s1 && start % st1 == 0)
                 p.drawLine(pos, RULER_SIZE - 5, pos, RULER_SIZE);
 
-            if (start % step == 0) {
+            if (step && start % step == 0) {
                 buf.setNum(QABS(start));
                 drawNums(&p, pos, 4, buf, true);
 
@@ -270,7 +270,7 @@ void VRuler::drawRuler()
             if (s1 && start % st1 == 0)
                 p.drawLine(RULER_SIZE - 5, pos, RULER_SIZE, pos);
 
-            if (start % step == 0) {
+            if (step && start % step == 0) {
                 buf.setNum(QABS(start));
                 drawNums(&p, 4, pos, buf, false);
             }
