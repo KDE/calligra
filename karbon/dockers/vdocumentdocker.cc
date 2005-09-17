@@ -440,7 +440,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 
 	QToolButton* button;
 	QVBoxLayout* layout = new QVBoxLayout( this, 1 );
-	layout->addWidget( m_layersListView = new QListView( this ), 0 );
+	layout->addWidget( m_layersListView = new QListView( this ), 1 );
 	m_buttonGroup = new QHButtonGroup( this );
 	m_buttonGroup->setInsideMargin( 3 );
 	button = new QToolButton( m_buttonGroup );
@@ -459,7 +459,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	button->setIconSet( SmallIcon( "14_layer_deletelayer" ) );
 	button->setTextLabel( i18n( "Delete" ) );
 	m_buttonGroup->insert( button );
-	layout->addWidget( m_buttonGroup, 1);
+	layout->addWidget( m_buttonGroup, 0);
 	layout->setSpacing( 0 );
 	layout->setMargin( 3 );
 
