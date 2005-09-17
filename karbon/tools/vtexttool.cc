@@ -413,7 +413,7 @@ VTextOptionsWidget::valueChanged( int )
 
 	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
 
-	if( isVisible() ) 
+	if( m_tool && isVisible() ) 
 		m_tool->textChanged();
 }
 
@@ -435,20 +435,22 @@ VTextOptionsWidget::cancel()
 void
 VTextOptionsWidget::textChanged( const QString& )
 {
-	if( isVisible() )
+	if( m_tool && isVisible() )
 		m_tool->textChanged();
 }
 
 void
 VTextOptionsWidget::editBasePath()
 {
-	m_tool->editBasePath();
+	if( m_tool )
+		m_tool->editBasePath();
 }
 
 void
 VTextOptionsWidget::convertToShapes()
 {
-	m_tool->convertToShapes();
+	if( m_tool )
+		m_tool->convertToShapes();
 }
 
 void
