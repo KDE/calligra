@@ -279,7 +279,10 @@ Kross::Api::Object::Ptr PythonScript::execute()
         return r;
     }
     catch(Py::Exception& e) {
-        QString err = Py::value(e).as_string().c_str();
+        Py::Object errobj = Py::value(e);
+        if(errobj.ptr() == Py_None) // at least string-exceptions have there errormessage in the type-object
+            errobj = Py::type(e);
+        QString err = errobj.as_string().c_str();
         long lineno = getLineNo(e);
         setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
     }

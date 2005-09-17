@@ -2755,7 +2755,7 @@ namespace Py
 		{
 		PyObject *ptype, *pvalue, *ptrace;
 		PyErr_Fetch(&ptype, &pvalue, &ptrace);
-		Object result(pvalue);
+		Object result(ptype);
 		PyErr_Restore(ptype, pvalue, ptrace);
 		return result;
 		}
