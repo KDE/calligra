@@ -75,6 +75,7 @@
 #include <koQueryTrader.h>
 #include <koxmlwriter.h>
 #include <koOasisSettings.h>
+#include <koMainWindow.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -3811,6 +3812,12 @@ QPixmap KPresenterDoc::generatePreview( const QSize& size )
     newZoomAndResolution( false, false );
 
     return pix;
+}
+
+void KPresenterDoc::addShell( KoMainWindow *shell )
+{
+    connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
+    KoDocument::addShell( shell );
 }
 
 void KPresenterDoc::movePage( int from, int to )

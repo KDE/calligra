@@ -169,6 +169,8 @@ class KPresenterDoc : public KoDocument
 
     virtual QPixmap generatePreview( const QSize &size );
 
+    virtual void addShell( KoMainWindow *shell );
+
     //header-footer
     void createHeaderFooter();
     void updateHeaderFooterPosition();
