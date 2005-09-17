@@ -63,6 +63,8 @@ public:
 	virtual QDomDocument saveXML();
 	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
 
+    virtual void addShell( KoMainWindow *shell );
+
 	virtual DCOPObject* dcopObject();
 
 	/// insert a new vobject

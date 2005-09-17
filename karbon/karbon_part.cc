@@ -35,6 +35,7 @@
 #include <koxmlns.h>
 #include <kodom.h>
 #include <koOasisSettings.h>
+#include <koMainWindow.h>
 #include "kovariable.h"
 
 #include "karbon_factory.h"
@@ -598,6 +599,14 @@ KarbonPart::mergeNativeFormat( const QString &file )
 	m_merge = false;
 	return result;
 }
+
+void
+KarbonPart::addShell( KoMainWindow *shell )
+{
+	connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
+	KoDocument::addShell( shell );
+}
+
 
 #include "karbon_part.moc"
 
