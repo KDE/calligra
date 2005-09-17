@@ -88,6 +88,7 @@
 #include <koOasisSettings.h>
 #include <kodom.h>
 #include <koxmlns.h>
+#include <koMainWindow.h>
 
 //using namespace std;
 
@@ -216,6 +217,13 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return false;
   }
 }
+
+void KivioDoc::addShell( KoMainWindow *shell )
+{
+  connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
+  KoDocument::addShell( shell );
+}
+
 
 KoView* KivioDoc::createViewInstance( QWidget* parent, const char* name )
 {

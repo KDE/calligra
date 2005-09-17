@@ -82,6 +82,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
+    virtual void addShell( KoMainWindow *shell );
+
     virtual QCString mimeType() const { return MIME_TYPE; }
 
     /**
