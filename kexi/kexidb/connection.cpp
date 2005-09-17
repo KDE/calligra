@@ -2109,7 +2109,7 @@ bool Connection::resultExists(const QString& sql, bool &success)
 		return false;
 	}
 	success = deleteCursor(cursor);
-	return false;
+	return true;
 }
 
 bool Connection::isEmpty( TableSchema& table, bool &success )
