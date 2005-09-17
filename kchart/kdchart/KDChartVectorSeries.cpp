@@ -72,7 +72,7 @@ double KDChartVectorSeries::maxValue( int coordinate, bool &ok ) const
     KDChartVectorSeries::ConstIterator i;
 #endif
 
-    for ( i = begin(); i != end(); i ++ )
+    for ( i = begin(); i != end(); ++i )
     {
         const KDChartData& d = *i;
         if ( d.isDouble( coordinate ) )
@@ -104,7 +104,7 @@ double KDChartVectorSeries::minValue( int coordinate, bool &ok ) const
     KDChartVectorSeries::ConstIterator i;
 #endif
 
-    for ( i = begin(); i != end(); i ++ )
+    for ( i = begin(); i != end(); ++i )
     {
         const KDChartData& d = *i;
         if ( d.isDouble( coordinate ) ) 
