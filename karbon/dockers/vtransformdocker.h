@@ -21,13 +21,11 @@
 #ifndef __VTRANSFORMDOCKER_H__
 #define __VTRANSFORMDOCKER_H__
 
-#include "vdocker.h"
-
 class KarbonPart;
 class KarbonView;
 class KoUnitDoubleSpinBox;
 
-class VTransformDocker : public VDocker
+class VTransformDocker : public QWidget
 {
 	Q_OBJECT
 
@@ -48,7 +46,6 @@ private:
 	KoUnitDoubleSpinBox *m_y;
 	KoUnitDoubleSpinBox *m_width;
 	KoUnitDoubleSpinBox *m_height;
-	QWidget *mainWidget;
 };
 
 #endif

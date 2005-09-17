@@ -40,24 +40,24 @@
 #include "vstrokedocker.h"
 
 VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
+	: QWidget(), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Stroke Properties" ) );
 
 	QPushButton *button;
-	mainWidget = new QWidget( this );
-	QGridLayout *mainLayout = new QGridLayout( mainWidget, 4, 2 );
+
+	QGridLayout *mainLayout = new QGridLayout( this, 4, 2 );
 	
-	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
+	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), this );
 	mainLayout->addWidget( widthLabel, 0, 0 );
-	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	
-	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
+	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), this );
 	mainLayout->addWidget( capLabel, 1, 0 );
-	m_capGroup = new QHButtonGroup( mainWidget );
-	m_capGroup->setFrameShape( NoFrame );
+	m_capGroup = new QHButtonGroup( this );
+	m_capGroup->setFrameShape( QFrame::NoFrame );
 	m_capGroup->setInsideMargin( 1 );
 	m_capGroup->setExclusive( true );
 	button = new QPushButton( "", m_capGroup );
@@ -75,11 +75,11 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	mainLayout->addWidget( m_capGroup, 1, 1 );
 	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	
-	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), mainWidget );
+	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), this );
 	mainLayout->addWidget( joinLabel, 2, 0 );
 	
-	m_joinGroup = new QHButtonGroup( mainWidget );
-	m_joinGroup->setFrameShape( NoFrame );
+	m_joinGroup = new QHButtonGroup( this );
+	m_joinGroup->setFrameShape( QFrame::NoFrame );
 	m_joinGroup->setInsideMargin( 1 );
 	m_joinGroup->setExclusive( true );
 	button = new QPushButton( "", m_joinGroup );
@@ -98,7 +98,6 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
 	mainLayout->activate();
-	setWidget( mainWidget );
 
 	updateDocker();
 }

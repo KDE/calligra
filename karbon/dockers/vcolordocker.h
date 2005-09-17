@@ -21,15 +21,13 @@
 #ifndef __VCOLORDOCKER_H__
 #define __VCOLORDOCKER_H__
 
-#include "vdocker.h"
-
 class QTabWidget;
 class QWidget;
 class KarbonView;
 class VColor;
 class VColorSlider;
 
-class VColorDocker : public VDocker
+class VColorDocker : public QWidget
 {
 	Q_OBJECT
 
@@ -47,7 +45,6 @@ public slots:
 
 private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
-	QWidget *mainWidget;
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
 	QWidget *mCMYKWidget;

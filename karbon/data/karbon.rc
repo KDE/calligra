@@ -32,13 +32,9 @@
 		<Action name="view_zoom"/>
         <Action name="view_mode"/>
 	<Separator/>
-	<Action name="view_document_docker"/>
-	<Action name="view_color_manager"/>
+	<Action name="view_palette_action_menu"/>
 	<Action name="view_tool_options"/>
 	<Action name="view_context_help"/>
-	<Action name="view_stroke_docker"/>
-	<Action name="view_style_docker"/>
-	<Action name="view_transform_docker"/>
 	<Separator/>
 	<Action name="view_show_ruler"/>
 	<Action name="view_show_grid"/>

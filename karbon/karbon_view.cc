@@ -59,6 +59,7 @@
 #include "vconfiguredlg.h"
 
 // Dockers.
+#include <kopalettemanager.h>
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"
@@ -100,7 +101,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		: KarbonViewBase( p, parent, name ), KXMLGUIBuilder( shell() )
 {
 	m_toolbox = 0L;
-	m_documentDocker = 0L;
 
 	setInstance( KarbonFactory::instance(), true );
 
@@ -128,23 +128,26 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	initActions();
 
+	m_DocumentTab = 0L;
+	m_LayersTab = 0L;
+	m_HistoryTab = 0L;
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
 	m_styleDocker = 0L;
+	m_TransformDocker = 0L;
 
 	// set selectTool by default
 	//m_toolbox->slotPressButton( 0 );
 
+	m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
+
 	if( shell() )
 	{
 		//Create Dockers
-		m_ColorManager = new VColorDocker( this );
-		connect( m_ColorManager, SIGNAL( colorChanged() ), this, SLOT( colorDockerChanged() ) );
-		m_strokeDocker = new VStrokeDocker( part(), this );
-		m_styleDocker = new VStyleDocker( part(), this );
-		m_TransformDocker = new VTransformDocker( part(), this );
-		connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
+		createColorDock();
+		createStrokeDock();
+		createTransformDock();
 	}
 
 	unsigned int max = part()->maxRecentFiles();
@@ -245,8 +248,9 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 // 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
 // 			mainWindow()->addToolBar( m_selectToolBar );
 
-			m_documentDocker = new VDocumentDocker( this );
-			mainWindow()->addDockWindow( m_documentDocker, DockRight );
+			createDocumentTabDock();
+			createLayersTabDock();
+			createHistoryTabDock();
 		}
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
@@ -270,7 +274,9 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		m_toolbox = 0L;
 // 		delete m_selectToolBar;
 // 		m_selectToolBar = 0L;
-		delete m_documentDocker;
+		delete m_DocumentTab;
+		delete m_LayersTab;
+		delete m_HistoryTab;
 	}
 	else
 		KXMLGUIBuilder::removeContainer( container, parent, element, id );
@@ -610,16 +616,6 @@ KarbonView::dummyForTesting()
 }
 
 void
-KarbonView::objectTransform()
-{
-	if( m_TransformDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
-		m_TransformDocker->show();
-	}
-}
-
-void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
 	part()->toolController()->setActiveTool( tool );
@@ -786,51 +782,6 @@ KarbonView::setLineWidth( double val )
 }
 
 void
-KarbonView::viewColorManager()
-{
-	if( m_ColorManager->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_ColorManager, DockRight );
-		m_ColorManager->show();
-	}
-}
-
-void
-KarbonView::viewStrokeDocker()
-{
-	if( m_strokeDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_strokeDocker, DockRight );
-		m_strokeDocker->show();
-	}
-}
-
-void
-KarbonView::viewStyleDocker()
-{
-	if( m_styleDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_styleDocker, DockRight );
-		m_styleDocker->show();
-	}
-}
-
-void
-KarbonView::viewDocumentDocker()
-{
-	if( !m_documentDocker )
-	{
-		m_documentDocker = new VDocumentDocker(this);
-		mainWindow()->addDockWindow( m_documentDocker, DockRight );
-	}
-	else if( m_documentDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_documentDocker, DockRight );
-		m_documentDocker->show();
-	}
-}
-
-void
 KarbonView::initActions()
 {
 	// view ----->
@@ -962,23 +913,6 @@ KarbonView::initActions()
 		i18n( "&Close Path" ), QKeySequence( "Ctrl+U" ), this,
 		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
-
-	new KAction(
-		i18n( "&Document Properties" ), 0, this,
-		SLOT( viewDocumentDocker() ), actionCollection(), "view_document_docker" );
-	new KAction(
-		i18n( "&Color Manager" ), "colorman", 0, this,
-		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-	new KAction(
-		i18n( "&Transform" ), "transform", 0, this,
-		SLOT( objectTransform() ), actionCollection(), "view_transform_docker" );
-	new KAction(
-		i18n( "&Stroke" ), "strokedocker", 0, this,
-		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
-	new KAction(
-		i18n( "&Style" ), 0, this,
-		SLOT( viewStyleDocker() ), actionCollection(), "view_style_docker" );
-	// view <-----
 
 	// line width
 	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
@@ -1341,6 +1275,52 @@ KarbonView::setUnit( KoUnit::Unit _unit )
 	m_vertRuler->setUnit( _unit );
 	// TODO introduce a unitChanged signal in karbon part
 	m_TransformDocker->update();
+}
+
+void KarbonView::createDocumentTabDock()
+{
+    m_DocumentTab = new VDocumentTab(this, this);
+    m_DocumentTab->setCaption(i18n("Document"));
+    paletteManager()->addWidget(m_DocumentTab, "DocumentTabDock", "DocumentPanel");
+}
+
+void KarbonView::createLayersTabDock()
+{
+    m_LayersTab = new VLayersTab(this, this);
+    m_LayersTab->setCaption(i18n("Layers"));
+    paletteManager()->addWidget(m_LayersTab, "LayersTabDock", "DocumentPanel");
+}
+
+void KarbonView::createHistoryTabDock()
+{
+    m_HistoryTab = new VHistoryTab(part(), this);
+    m_HistoryTab->setCaption(i18n("History"));
+    paletteManager()->addWidget(m_HistoryTab, "HistoryTabDock", "DocumentPanel");
+}
+
+void KarbonView::createStrokeDock()
+{
+    m_strokeDocker = new VStrokeDocker(part(), this);
+    m_strokeDocker->setCaption(i18n("Stroke Properties"));
+    paletteManager()->addWidget(m_strokeDocker, "StrokeTabDock", "StrokePanel");
+}
+
+void KarbonView::createColorDock()
+{
+    m_ColorManager = new VColorDocker(this);
+    //m_ColorManager->setCaption(i18n("Stroke Properties"));
+    paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
+
+    connect( m_ColorManager, SIGNAL( colorChanged() ), this, SLOT( colorDockerChanged() ) );
+}
+
+void KarbonView::createTransformDock()
+{
+    m_TransformDocker = new VTransformDocker(part(), this);
+    m_TransformDocker->setCaption(i18n("Transform"));
+    paletteManager()->addWidget(m_TransformDocker, "TransformTabDock", "TransformPanel");
+
+    connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 }
 
 #include "karbon_view.moc"

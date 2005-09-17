@@ -37,41 +37,38 @@
 #include "vtransformdocker.h"
 
 VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
+	: QWidget(), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Transform" ) );
-	setCloseMode( QDockWindow::Always );
 
-	mainWidget = new QWidget( this );
-	QGridLayout *mainLayout = new QGridLayout( mainWidget, 4, 4 );
+	QGridLayout *mainLayout = new QGridLayout( this, 4, 4 );
 
 	//X: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* xLabel = new QLabel( i18n ( "X:" ), mainWidget );
+	QLabel* xLabel = new QLabel( i18n ( "X:" ), this );
 	mainLayout->addWidget( xLabel, 1, 0 );
-	m_x = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_x = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_x, 1, 1 );
 
 	//Y: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* yLabel = new QLabel( i18n ( "Y:" ), mainWidget );
+	QLabel* yLabel = new QLabel( i18n ( "Y:" ), this );
 	mainLayout->addWidget( yLabel, 2, 0 );
-	m_y = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_y = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_y, 2, 1 );
 
 	//Width: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* wLabel = new QLabel( i18n ( "W:" ), mainWidget );
+	QLabel* wLabel = new QLabel( i18n ( "W:" ), this );
 	mainLayout->addWidget( wLabel, 1, 2 );
-	m_width = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_width = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_width, 1, 3 );
 
 	//Height: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* hLabel = new QLabel( i18n ( "H:" ), mainWidget );
+	QLabel* hLabel = new QLabel( i18n ( "H:" ), this );
 	mainLayout->addWidget( hLabel, 2, 2 );
-	m_height = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_height, 2, 3 );
 
 	//TODO: Add Rotation, Shear
 
-	setWidget( mainWidget );
 	update();
 }
 
@@ -92,7 +89,7 @@ VTransformDocker::update()
 	int objcount = m_view->part()->document().selection()->objects().count();
 	if ( objcount>0 )
 	{
-		mainWidget->setEnabled( true );
+		setEnabled( true );
 		KoRect rect = m_view->part()->document().selection()->boundingBox();
 
 		m_x->setValue( KoUnit::toUserValue( rect.x(), m_view->part()->unit() ) );
@@ -106,13 +103,13 @@ VTransformDocker::update()
 		m_y->setValue(0.0);
 		m_width->setValue(0.0);
 		m_height->setValue(0.0);
-		mainWidget->setEnabled( false );
+		setEnabled( false );
 	}
 
 	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
 	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
 	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) ); 
 }
 
 void

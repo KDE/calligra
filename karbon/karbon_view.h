@@ -42,9 +42,12 @@ class KoUnitDoubleSpinComboBox;
 class KoRect;
 class VRuler;
 
-class VColorDocker;
-class VDocumentDocker;
+class KoPaletteManager;
+class VDocumentTab;
+class VLayersTab;
+class VHistoryTab;
 class VStrokeDocker;
+class VColorDocker;
 class VStyleDocker;
 class VTransformDocker;
 
@@ -83,6 +86,8 @@ public:
 	virtual VPainterFactory* painterFactory() const { return m_painterFactory; }
 
 	KarbonPart* part() const { return (KarbonPart *)m_part; }
+
+    KoPaletteManager* paletteManager() { return m_pPaletteManager; };
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &/*printer*/ ) {}
@@ -160,15 +165,10 @@ public slots:
 
 protected slots:
 	// Object related operations.
-	void objectTransform();
 
 	// View.
 	void viewModeChanged();
 	void zoomChanged( const KoPoint & = KoPoint() );
-	void viewColorManager();
-	void viewStrokeDocker();
-	void viewStyleDocker();
-	void viewDocumentDocker();
 
 	// Toolbox dialogs.
 	void slotStrokeChanged( const VStroke& );
@@ -188,6 +188,13 @@ protected:
 	virtual void updateReadWrite( bool ) {}
 	virtual void resizeEvent( QResizeEvent* event );
 	virtual void dropEvent( QDropEvent *e );
+
+	void createDocumentTabDock();
+	void createLayersTabDock();
+	void createHistoryTabDock();
+	void createStrokeDock();
+	void createColorDock();
+	void createTransformDock();
 
 	//KXMLGUIBuilder
 	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
@@ -225,8 +232,11 @@ private:
 	KoUnitDoubleSpinComboBox *m_setLineWidth;
 
 	//dockers
+	KoPaletteManager *m_pPaletteManager;
+	VDocumentTab *m_DocumentTab;
+	VLayersTab *m_LayersTab;
+	VHistoryTab *m_HistoryTab;
 	VColorDocker		*m_ColorManager;
-	VDocumentDocker		*m_documentDocker;
 	VStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;
 	VTransformDocker	*m_TransformDocker;

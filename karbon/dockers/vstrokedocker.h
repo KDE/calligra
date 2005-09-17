@@ -21,8 +21,6 @@
 #ifndef __VSTROKEDOCKER_H__
 #define __VSTROKEDOCKER_H__
 
-#include "vdocker.h"
-
 class QHButtonGroup;
 class QWidget;
 
@@ -32,7 +30,7 @@ class KoMainWindow;
 class KarbonView;
 class KarbonPart;
 
-class VStrokeDocker : public VDocker
+class VStrokeDocker : public QWidget
 {
 	Q_OBJECT
 
@@ -45,7 +43,6 @@ public slots:
 private:
 	QHButtonGroup *m_capGroup;
 	QHButtonGroup *m_joinGroup;
-	QWidget *mainWidget;
 	KarbonPart *m_part;
 	KarbonView *m_view;
 	KoUnitDoubleSpinBox *m_setLineWidth;

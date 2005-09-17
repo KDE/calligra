@@ -36,13 +36,12 @@
 #include "vcolordocker.h"
 
 VColorDocker::VColorDocker(KarbonView* parent, const char* /*name*/ )
-	: VDocker( parent->shell() )
+	: QWidget()
 {
 	m_isStrokeDocker = false;
 	setCaption( i18n( "Fill Color" ) );
 
-	mainWidget = new QWidget( this );
-	mTabWidget = new QTabWidget( mainWidget );
+	mTabWidget = new QTabWidget( this );
 	
 	/* ##### RGB WIDGET ##### */
 	mRGBWidget = new QWidget( mTabWidget );
@@ -88,18 +87,16 @@ VColorDocker::VColorDocker(KarbonView* parent, const char* /*name*/ )
 	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );
 
 	//Opacity
-	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, mainWidget );
+	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, this );
 	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 3 );
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 3 );
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->activate();
-	mainWidget->setMaximumHeight( 174 );
-	mainWidget->setMinimumWidth( 194 );
-
-	setWidget( mainWidget );
+	setMaximumHeight( 174 );
+	setMinimumWidth( 194 );
 	
 	m_color = new VColor();
 }
