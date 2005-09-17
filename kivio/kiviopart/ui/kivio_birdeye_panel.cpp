@@ -125,7 +125,7 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
   if (o == canvas && ev->type() == QEvent::Paint) {
     updateVisibleArea();
-    return true;
+    //return true;
   }
 
   if (o == canvas && ev->type() == QEvent::MouseMove) {
@@ -160,16 +160,17 @@ void KivioBirdEyePanel::updateView()
 
   KoPageLayout pl = m_pView->activePage()->paperLayout();
 
-  int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
-  int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
+  m_zoomHandler->setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
+
+  int pw = m_zoomHandler->zoomItX(pl.ptWidth);
+  int ph = m_zoomHandler->zoomItY(pl.ptHeight);
   s2 = QSize(pw,ph);
 
   double zx = (double)s1.width()/(double)s2.width();
   double zy = (double)s1.height()/(double)s2.height();
   double zxy = QMIN(zx,zy);
 
-  m_zoomHandler->setZoomAndResolution(qRound(zxy * 100), KoGlobal::dpiX(),
-    KoGlobal::dpiY());
+  m_zoomHandler->setZoomAndResolution(qRound(zxy * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
 
   pw = m_zoomHandler->zoomItX(pl.ptWidth);
   ph = m_zoomHandler->zoomItY(pl.ptHeight);
@@ -194,7 +195,7 @@ void KivioBirdEyePanel::updateView()
 
 void KivioBirdEyePanel::updateVisibleArea()
 {
-  bitBlt(canvas,0,0,m_buffer);
+//   bitBlt(canvas,0,0,m_buffer);
 
   KoRect vr = m_pCanvas->visibleArea();
   QSize s1 = canvas->size();
@@ -207,10 +208,11 @@ void KivioBirdEyePanel::updateVisibleArea()
   int x = m_zoomHandler->zoomItX(vr.x()) + px0;
   int y = m_zoomHandler->zoomItY(vr.y()) + py0;
   int w = m_zoomHandler->zoomItX(vr.width());
-  int h = m_zoomHandler->zoomItX(vr.height());
+  int h = m_zoomHandler->zoomItY(vr.height());
 
-  QPainter painter(canvas,canvas);
+  QPainter painter(canvas, canvas);
   painter.setPen(red);
+  painter.drawPixmap(QPoint(0, 0), *m_buffer);
   painter.drawRect(x, y, w, h);
   painter.setPen(red.light());
   painter.drawRect(x-1, y-1, w+2, h+2);

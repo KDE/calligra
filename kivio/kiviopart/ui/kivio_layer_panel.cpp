@@ -78,6 +78,7 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
   actUp = new KAction( i18n("Move Layer Up"), "up", 0, this, SLOT(upItem()), this);
   actDown = new KAction( i18n("Move Layer Down"), "down", 0, this, SLOT(downItem()), this);
 
+  bar->setIconSize(16);
   actNew->plug(bar);
   actDel->plug(bar);
   bar->insertSeparator();
