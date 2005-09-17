@@ -69,6 +69,7 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 
 	//TODO: Add Rotation, Shear
 
+
 	update();
 }
 
@@ -80,29 +81,23 @@ VTransformDocker::update()
 	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
 	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
 
-	// update units in case they changed
-	m_x->setUnit( m_view->part()->unit() );
-	m_y->setUnit( m_view->part()->unit() );
-	m_width->setUnit( m_view->part()->unit() );
-	m_height->setUnit( m_view->part()->unit() );
-
 	int objcount = m_view->part()->document().selection()->objects().count();
 	if ( objcount>0 )
 	{
 		setEnabled( true );
 		KoRect rect = m_view->part()->document().selection()->boundingBox();
 
-		m_x->setValue( KoUnit::toUserValue( rect.x(), m_view->part()->unit() ) );
-		m_y->setValue( KoUnit::toUserValue( rect.y(), m_view->part()->unit() ) );
-		m_width->setValue( KoUnit::toUserValue( rect.width(), m_view->part()->unit() ) );
-		m_height->setValue( KoUnit::toUserValue( rect.height(), m_view->part()->unit() ) );
+		m_x->changeValue( rect.x() );
+		m_y->changeValue( rect.y() );
+		m_width->changeValue( rect.width() );
+		m_height->changeValue( rect.height() );
 	}
 	else
 	{
-		m_x->setValue(0.0);
-		m_y->setValue(0.0);
-		m_width->setValue(0.0);
-		m_height->setValue(0.0);
+		m_x->changeValue(0.0);
+		m_y->changeValue(0.0);
+		m_width->changeValue(0.0);
+		m_height->changeValue(0.0);
 		setEnabled( false );
 	}
 
@@ -145,6 +140,25 @@ VTransformDocker::scale()
 		m_view->part()->addCommand( cmd );
 	}
 	m_part->repaintAllViews( true );
+}
+
+void 
+VTransformDocker::setUnit( KoUnit::Unit unit )
+{
+	disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+
+	m_x->setUnit( unit );
+	m_y->setUnit( unit );
+	m_width->setUnit( unit );
+	m_height->setUnit( unit );
+
+	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
 }
 
 #include "vtransformdocker.moc"

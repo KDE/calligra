@@ -34,6 +34,7 @@ public:
 
 public slots:
 	void update();
+	virtual void setUnit( KoUnit::Unit unit );
 
 private slots:
 	void translate();

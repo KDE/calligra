@@ -51,6 +51,7 @@
 #include "vdocumentdocker.h"
 #include "vtoolcontroller.h"
 #include "koApplication.h"
+#include "vtool.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -580,6 +581,11 @@ KarbonPart::setUnit( KoUnit::Unit _unit )
 	{
 		static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
 	}
+
+	if( m_toolController->activeTool() )
+		m_toolController->activeTool()->refreshUnit();
+
+	emit unitChanged( _unit );
 }
 
 bool

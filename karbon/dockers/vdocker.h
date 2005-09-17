@@ -30,6 +30,7 @@
 
 
 #include <qdockwindow.h>
+#include <koUnit.h>
 
 /* This is the base class for all Karbon14 dockers. Smaller font is used to save screen space
 and allow more dockers on screen at the same time */
@@ -41,7 +42,14 @@ class VDocker : public QDockWindow
 	Q_OBJECT
 
 public:
-	 VDocker ( QWidget* parent = 0L, const char* name = 0L );
+	VDocker ( QWidget* parent = 0L, const char* name = 0L );
+	
+public slots:
+	/**
+	* Sets new unit.
+	* @param unit the new unit
+	*/
+	virtual void setUnit( KoUnit::Unit /*unit*/ ) {}
 };
 
 #endif

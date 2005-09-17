@@ -114,6 +114,9 @@ public slots:
 	void slotDocumentRestored();
 	void slotCommandExecuted( VCommand * );
 
+signals:
+	void unitChanged( KoUnit::Unit unit );
+
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 	virtual void removeView( KoView *view );

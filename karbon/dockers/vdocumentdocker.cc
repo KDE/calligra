@@ -1466,4 +1466,10 @@ VDocumentDocker::~VDocumentDocker()
 {
 } // VDocumentDocker::~VDocumentDocker
 
+void 
+VDocumentDocker::setUnit( KoUnit::Unit /*unit*/ )
+{
+	m_documentTab->updateDocumentInfo();
+}
+
 #include "vdocumentdocker.moc"

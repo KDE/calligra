@@ -57,6 +57,8 @@ public:
 	virtual uint priority() { return 1; }
 	virtual QString contextHelp();
 
+	virtual void refreshUnit();
+
 protected:
 	virtual void draw();
 

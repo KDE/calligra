@@ -50,7 +50,9 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), this );
 	mainLayout->addWidget( widthLabel, 0, 0 );
-	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+	// set min/max/step and value in points, then set actual unit
+	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
+	m_setLineWidth->setUnit( part->unit() );
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	
@@ -162,7 +164,7 @@ void VStrokeDocker::updateDocker()
 			m_joinGroup->setButton( 0 );
 	}
 	
-	m_setLineWidth->setValue( m_stroke.lineWidth() );
+	m_setLineWidth->changeValue( m_stroke.lineWidth() );
 	
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
@@ -181,5 +183,17 @@ void VStrokeDocker::setStroke( const VStroke &stroke )
 	updateDocker();
 }
 
+void VStrokeDocker::setUnit( KoUnit::Unit unit )
+{
+	disconnect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
+	disconnect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	disconnect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+
+	m_setLineWidth->setUnit( unit );
+
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
+	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+}
 #include "vstrokedocker.moc"
 

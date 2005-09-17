@@ -264,6 +264,9 @@ class VDocumentDocker : public VDocker
 		VDocumentDocker( KarbonView* view );
 		~VDocumentDocker();
 
+public slots:
+	virtual void setUnit( KoUnit::Unit unit );
+
 	protected:
 		VDocumentTab* m_documentTab;
 		VLayersTab*   m_layersTab;

@@ -88,6 +88,7 @@ VSelectTool::activate()
 	view()->part()->document().selection()->setSelectObjects();
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->selectNodes();
+	updateStatusBar();
 }
 
 QString
@@ -359,6 +360,9 @@ VSelectTool::arrowKeyReleased( Qt::Key key )
 void
 VSelectTool::updateStatusBar() const
 {
+	if( ! view() ) 
+		return;
+
 	int objcount = view()->part()->document().selection()->objects().count();
 	if( objcount > 0 )
 	{
@@ -528,6 +532,12 @@ bool
 VSelectTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void 
+VSelectTool::refreshUnit()
+{
+	updateStatusBar();
 }
 
 #include "vselecttool.moc"

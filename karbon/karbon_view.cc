@@ -157,11 +157,12 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	// widgets:
 	m_horizRuler = new VRuler( Qt::Horizontal, this );
-	connect( m_horizRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
-	m_horizRuler->setUnit(part()->unit());
+	m_horizRuler->setUnit(p->unit());
+	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_horizRuler, SLOT( setUnit( KoUnit::Unit ) ) );
+
 	m_vertRuler = new VRuler( Qt::Vertical, this );
-	connect( m_vertRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
-	m_vertRuler->setUnit(part()->unit());
+	m_vertRuler->setUnit(p->unit());
+	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
 	m_canvas = new VCanvas( this, this, p );
 	connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
@@ -1267,14 +1268,8 @@ KarbonView::setViewportRect( const KoRect &rect )
 }
 
 void
-KarbonView::setUnit( KoUnit::Unit _unit )
+KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 {
-	if( part()->toolController()->activeTool() )
-		part()->toolController()->activeTool()->refreshUnit();
-	m_horizRuler->setUnit( _unit );
-	m_vertRuler->setUnit( _unit );
-	// TODO introduce a unitChanged signal in karbon part
-	m_TransformDocker->update();
 }
 
 void KarbonView::createDocumentTabDock()
@@ -1282,6 +1277,7 @@ void KarbonView::createDocumentTabDock()
     m_DocumentTab = new VDocumentTab(this, this);
     m_DocumentTab->setCaption(i18n("Document"));
     paletteManager()->addWidget(m_DocumentTab, "DocumentTabDock", "DocumentPanel");
+	connect( m_part, SIGNAL( unitChanged( KoUnit::Unit ) ), m_DocumentTab, SLOT( updateDocumentInfo() ) );
 }
 
 void KarbonView::createLayersTabDock()
@@ -1303,6 +1299,8 @@ void KarbonView::createStrokeDock()
     m_strokeDocker = new VStrokeDocker(part(), this);
     m_strokeDocker->setCaption(i18n("Stroke Properties"));
     paletteManager()->addWidget(m_strokeDocker, "StrokeTabDock", "StrokePanel");
+
+	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_strokeDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
 void KarbonView::createColorDock()
@@ -1321,6 +1319,7 @@ void KarbonView::createTransformDock()
     paletteManager()->addWidget(m_TransformDocker, "TransformTabDock", "TransformPanel");
 
     connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
+	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
 #include "karbon_view.moc"

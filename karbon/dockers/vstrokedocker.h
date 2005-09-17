@@ -39,6 +39,7 @@ public:
 
 public slots:
 	virtual void setStroke( const VStroke & );
+	virtual void setUnit( KoUnit::Unit unit );
 
 private:
 	QHButtonGroup *m_capGroup;
