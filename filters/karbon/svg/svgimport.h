@@ -79,12 +79,14 @@ protected:
 	VObject* findObject( const QString &name );
 	// find object with given id in given group
 	VObject* findObject( const QString &name, VGroup * );
+	// find gradient with given id in gradient map
+	GradientHelper* findGradient( const QString &id );
 
 private:
 	VDocument						m_document;
 	QPtrStack<SvgGraphicsContext>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
-	QMap<QString, QDomElement>		m_paths;
+	QMap<QString, QDomElement>		m_defs;
 	KoRect							m_outerRect;
 };
 

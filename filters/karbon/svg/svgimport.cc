@@ -392,7 +392,15 @@ SvgImport::parseGradient( const QDomElement &e )
 	if( !href.isEmpty() )
 	{
 		//kdDebug() << "Indexing with href : " << href.latin1() << endl;
-		gradhelper.gradient = m_gradients[ href ].gradient;
+		// copy referenced gradient if it exist
+		if( m_gradients.find( href ) != m_gradients.end() )
+			gradhelper.gradient = m_gradients[ href ].gradient;
+		else
+		{
+			// save element for later parsing
+			m_defs.insert( e.attribute( "id" ), e );
+			return;
+		}
 	}
 
 	gradhelper.bbox = e.attribute( "gradientUnits" ) != "userSpaceOnUse";
@@ -442,6 +450,27 @@ SvgImport::parseGradient( const QDomElement &e )
 	m_gradients.insert( e.attribute( "id" ), gradhelper );
 }
 
+SvgImport::GradientHelper* 
+SvgImport::findGradient( const QString &id )
+{
+	// check if gradient was already parsed, and return it 
+	if( m_gradients.contains( id ) )
+		return &m_gradients[ id ];
+
+	// check if gradient was stored for later parsing
+	if( ! m_defs.contains( id ) )
+		return 0L;
+
+	// ok parse gradient now
+	parseGradient( m_defs[ id ] );
+	
+	// return successfully parsed gradient or NULL
+	if( m_gradients.contains( id ) )
+		return &m_gradients[ id ];
+	else
+		return 0L;
+}
+
 void
 SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command, const QString &params )
 {
@@ -457,34 +486,43 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			unsigned int start = params.find("#") + 1;
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
-			gc->fill.gradient() = m_gradients[ key ].gradient;
-			if( m_gradients[ key ].bbox )
+			GradientHelper *gradHelper = findGradient( key );
+			if( gradHelper )
 			{
-				// adjust to bbox
-				KoRect bbox = obj->boundingBox();
-				//kdDebug() << "bbox x : " << bbox.x() << endl;
-				//kdDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
-				//kdDebug() << gc->fill.gradient().origin().x() << endl;
-				//kdDebug() << gc->fill.gradient().vector().x() << endl;
-				double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
-				double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
-				gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().x() ), true, false, bbox );
-				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().y() ), false, true, bbox );
-				gc->fill.gradient().setFocalPoint( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
-				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
-				gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-				//kdDebug() << offsety << endl;
-				//kdDebug() << gc->fill.gradient().origin().x() << endl;
-				//kdDebug() << gc->fill.gradient().origin().y() << endl;
-				//kdDebug() << gc->fill.gradient().vector().x() << endl;
-				//kdDebug() << gc->fill.gradient().vector().y() << endl;
+				gc->fill.gradient() = gradHelper->gradient;
+
+				if( gradHelper->bbox )
+				{
+					// adjust to bbox
+					KoRect bbox = obj->boundingBox();
+					//kdDebug() << "bbox x : " << bbox.x() << endl;
+					//kdDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
+					//kdDebug() << gc->fill.gradient().origin().x() << endl;
+					//kdDebug() << gc->fill.gradient().vector().x() << endl;
+					double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
+					double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
+					gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+					offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().x() ), true, false, bbox );
+					offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().y() ), false, true, bbox );
+					gc->fill.gradient().setFocalPoint( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+					offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
+					offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
+					gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+					//kdDebug() << offsety << endl;
+					//kdDebug() << gc->fill.gradient().origin().x() << endl;
+					//kdDebug() << gc->fill.gradient().origin().y() << endl;
+					//kdDebug() << gc->fill.gradient().vector().x() << endl;
+					//kdDebug() << gc->fill.gradient().vector().y() << endl;
+				}
+				gc->fill.gradient().transform( gradHelper->gradientTransform );
+
+				if( !gradHelper->bbox )
+					gc->fill.gradient().transform( gc->matrix );
+
+				gc->fill.setType( VFill::grad );
 			}
-			gc->fill.gradient().transform( m_gradients[ key ].gradientTransform );
-			if( !m_gradients[ key ].bbox )
-				gc->fill.gradient().transform( gc->matrix );
-			gc->fill.setType( VFill::grad );
+			else
+				gc->fill.setType( VFill::none );
 		}
 		else
 		{
@@ -508,10 +546,17 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			unsigned int start = params.find("#") + 1;
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
-			gc->stroke.gradient() = m_gradients[ key ].gradient;
-			gc->stroke.gradient().transform( m_gradients[ key ].gradientTransform );
-			gc->stroke.gradient().transform( gc->matrix );
-			gc->stroke.setType( VStroke::grad );
+
+			GradientHelper *gradHelper = findGradient( key );
+			if( gradHelper )
+			{
+				gc->stroke.gradient() = gradHelper->gradient;
+				gc->stroke.gradient().transform( gradHelper->gradientTransform );
+				gc->stroke.gradient().transform( gc->matrix );
+				gc->stroke.setType( VStroke::grad );
+			}
+			else 
+				gc->stroke.setType( VStroke::none );
 		}
 		else
 		{
@@ -733,12 +778,12 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			if (!isDef)
 				obj = createObject( b );
 			else
-				m_paths.insert( b.attribute( "id" ), b );
+				m_defs.insert( b.attribute( "id" ), b );
 		}
 		else if( b.tagName() == "text" )
 		{
 			if( isDef )
-				m_paths.insert( b.attribute( "id" ), b );
+				m_defs.insert( b.attribute( "id" ), b );
 			else
 				createText( grp, b );
 		}
@@ -753,9 +798,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 				unsigned int start = params.find("#") + 1;
 				unsigned int end = params.findRev(")");
 				QString key = params.mid( start, end - start );
-				if(m_paths.contains(key))
+				if(m_defs.contains(key))
 				{
-					QDomElement a = m_paths[key];
+					QDomElement a = m_defs[key];
 					obj = createObject( a );
 					m_gc.current()->matrix.translate(tx,ty);
 					parsePA( grp, m_gc.current(), "fill", b.attribute( "fill" ) );
@@ -857,7 +902,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				unsigned int start = uri.find("#") + 1;
 				unsigned int end = uri.findRev(")");
 				QString key = uri.mid( start, end - start );
-				if( ! m_paths.contains(key) )
+				if( ! m_defs.contains(key) )
 				{
 					VObject* obj = findObject( key );
 					if( obj ) 
@@ -865,7 +910,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				}
 				else
 				{
-					QDomElement p = m_paths[key];
+					QDomElement p = m_defs[key];
 					path = dynamic_cast<VPath*>( createObject( p ) );
 					if( path )
 						path->setState( VObject::deleted );
@@ -903,7 +948,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				unsigned int end = uri.findRev(")");
 				QString key = uri.mid( start, end - start );
 
-				if( ! m_paths.contains(key) )
+				if( ! m_defs.contains(key) )
 				{
 					VObject* obj = findObject( key );
 					if( obj ) 
@@ -911,7 +956,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				}
 				else
 				{
-					QDomElement p = m_paths[key];
+					QDomElement p = m_defs[key];
 					content += p.text();
 				}
 			}
