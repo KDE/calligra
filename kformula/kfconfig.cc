@@ -32,7 +32,7 @@
 KFConfig::KFConfig( KFormulaPartView* parent )
     : KDialogBase( KDialogBase::IconList, i18n( "Configure KFormula" ),
                    KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
-                   KDialogBase::Ok )
+                   KDialogBase::Ok, parent )
 {
     //kdDebug( 40000 ) << "KFConfig::KFConfig" << endl;
     QVBox* page1 = addVBoxPage( i18n( "Formula" ), i18n( "Formula Settings" ),
