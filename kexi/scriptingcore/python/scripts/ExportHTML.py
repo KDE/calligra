@@ -13,12 +13,6 @@
 class Datasource:
     def __init__(self):
         try:
-            import krosskexidb
-            self.kexidbdrivermanager = krosskexidb.DriverManager()
-        except:
-            raise "Import of the Kross KexiDB module failed."
-
-        try:
             import krosskexiapp
             keximainwindow = krosskexiapp.get("KexiAppMainWindow")
         except:
