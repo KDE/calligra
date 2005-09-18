@@ -38,14 +38,14 @@ class ToolArea;
  * merged one day. However, it doesn't depend on a tool-like class, it aggregates
  * actions.
  */
-class KisToolBox : public KToolBar {
+class KoToolBox : public KToolBar {
 
     Q_OBJECT
 
 public:
     
-    KisToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes);
-    virtual ~KisToolBox();
+    KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes);
+    virtual ~KoToolBox();
 
     // Called by the toolcontroller for each tool. For every category,
     // there is a separate list, and the tool is categorized correctly.

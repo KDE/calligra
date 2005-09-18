@@ -35,13 +35,13 @@
 #include <kactionclasses.h>
 
 #include <koMainWindow.h>
-#include "kis_toolbox.h"
+#include "kotoolbox.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes )
+KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes )
     : KToolBar( mainWin, Qt::DockLeft, false, name, true, true), m_instance(instance)
 {
     setFullSize( false );
@@ -59,18 +59,18 @@ KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name, KInstance* insta
     setBarPos(Left);
 }
 
-KisToolBox::~KisToolBox()
+KoToolBox::~KoToolBox()
 {
 }
 
 
-void KisToolBox::slotPressButton( int id )
+void KoToolBox::slotPressButton( int id )
 {
     m_buttonGroup->setButton( id );
     slotButtonPressed( id );
 }
 
-void KisToolBox::slotButtonPressed( int id )
+void KoToolBox::slotButtonPressed( int id )
 {
     if( id != m_buttonGroup->selectedId() && m_buttonGroup->selected() ) {
         m_buttonGroup->selected()->setDown( false );
@@ -79,7 +79,7 @@ void KisToolBox::slotButtonPressed( int id )
 
 }
 
-void KisToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
+void KoToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
 {
     uint prio = priority;
     ToolList * tl = m_tools.at(toolType);
@@ -87,7 +87,7 @@ void KisToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
     (*tl)[prio] = tool;
 }
 
-QToolButton *KisToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
+QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
 {
     QToolButton *button = new QToolButton(parent);
 
@@ -103,7 +103,7 @@ QToolButton *KisToolBox::createButton(QWidget * parent,  const char* iconName, Q
     return button;
 }
 
-void KisToolBox::setupTools()
+void KoToolBox::setupTools()
 {
     int id = 0;
     // Loop through tooltypes
@@ -133,7 +133,7 @@ void KisToolBox::setupTools()
     m_numberOfButtons = id;
 }
 
-void KisToolBox::setOrientation ( Qt::Orientation o )
+void KoToolBox::setOrientation ( Qt::Orientation o )
 {
     if ( barPos() == Floating ) { // when floating, make it a standing toolbox.
         o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
@@ -147,7 +147,7 @@ void KisToolBox::setOrientation ( Qt::Orientation o )
     }
 }
 
-void KisToolBox::enableTools(bool enable)
+void KoToolBox::enableTools(bool enable)
 {
     if (m_tools.isEmpty()) return;
     if (!m_buttonGroup) return;
@@ -169,7 +169,7 @@ void KisToolBox::enableTools(bool enable)
     }
 }
 
-void KisToolBox::slotSetTool(const QString & toolname)
+void KoToolBox::slotSetTool(const QString & toolname)
 {
     for (uint i = 0; i < m_idToActionMap.count(); ++i) {
         KAction * a = m_idToActionMap.at(i);
@@ -227,4 +227,4 @@ void ToolArea::setOrientation ( Qt::Orientation o )
     m_layout->setDirection(o == Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight);
 }
 
-#include "kis_toolbox.moc"
+#include "kotoolbox.moc"

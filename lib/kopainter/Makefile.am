@@ -7,6 +7,7 @@ libkopainter_la_SOURCES = svgpathparser.cc \
 	koColorSlider.cc \
 	koColorChooser.cc \
 	koIconChooser.cc \
+    kotoolbox.cc \
 	kogradientmanager.cc
 
 libkopainter_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
