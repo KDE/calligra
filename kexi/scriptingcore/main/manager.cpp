@@ -189,8 +189,12 @@ list << "TestCase";
 
 Module* Manager::loadModule(const QString& modulename)
 {
-    if(d->modules.contains(modulename))
-        return d->modules[modulename];
+    Module* module = 0;
+    if(d->modules.contains(modulename)) {
+        module = d->modules[modulename];
+        if(module)
+            return module;
+    }
 
     KLibLoader* loader = KLibLoader::self();
     KLibrary* lib = loader->globalLibrary(modulename.latin1());
@@ -208,17 +212,16 @@ Module* Manager::loadModule(const QString& modulename)
         return 0;
     }
 
-    Kross::Api::Module::Ptr module = (Kross::Api::Module*) (func)(this);
+    module = (Kross::Api::Module*) (func)(this);
+    lib->unload();
+
     if(! module) {
         kdWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
         return 0;
     }
-    lib->unload();
 
     //kdDebug() << "Kross::Api::Manager::loadModule " << module->toString() << endl;
     d->modules.replace(modulename, module);
     return module.data();
-
-
 }
 
