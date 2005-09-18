@@ -1478,10 +1478,10 @@ void KexiImageBox::insertFromFile()
 	QString fileName = QFileDialog::getOpenFileName(
 		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
-		this, 0, i18n("Insert image from file"));
+		this, 0, i18n("Insert Image From File"));
 #else
 	QString fileName = KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, i18n("Insert image from file")).pathOrURL();
+		":lastVisitedImagePath", this, i18n("Insert Image From File")).pathOrURL();
 	//! @todo download the file if remote, then set fileName properly
 #endif
 	if (fileName.isEmpty())
@@ -1517,10 +1517,10 @@ void KexiImageBox::saveAs()
 	QString fileName = QFileDialog::getSaveFileName(
 		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
-		this, 0, i18n("Save image to file"));
+		this, 0, i18n("Save Image To File"));
 #else
 	QString fileName = KFileDialog::getSaveFileName(
-		":lastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save image to file"));
+		":lastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image To File"));
 #endif
 	if (fileName.isEmpty())
 		return;

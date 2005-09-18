@@ -150,7 +150,7 @@ PixmapEdit::selectPixmap()
 		emit valueChanged(this);
 	}
 #endif*/
-	QString caption( i18n("Insert image from file (for \"%1\" property)").arg(property()->caption()) );
+	QString caption( i18n("Insert Image From File (for \"%1\" property)").arg(property()->caption()) );
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = QFileDialog::getOpenFileName(
