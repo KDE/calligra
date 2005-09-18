@@ -11,6 +11,8 @@ These are changes that can not be backported, and will be available from KOffice
 - Keybindings like krita, and other tweak (#108789)
 - Always use this document at startup, Karbon has not way to stop doing this (#108755)
   Add a basic karbon template 
+- Dockers now use the KoPalette library. This means a huge improvement when it comes to docker management.
+  This closes the following bugs (#91376, #111207, #60844)
 
 Changes after 1.4.1 (available from 1.4.2):
 - Changed version to 0.2
