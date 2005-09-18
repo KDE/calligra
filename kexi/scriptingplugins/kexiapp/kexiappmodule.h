@@ -36,7 +36,7 @@ namespace Kross { namespace KexiApp {
     /**
      *
      */
-    class KexiAppModule : public Kross::Api::Module<KexiAppModule>
+    class KexiAppModule : public Kross::Api::Module
     {
         public:
 

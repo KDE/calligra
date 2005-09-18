@@ -19,6 +19,7 @@
 
 #include "kexidbmodule.h"
 #include "kexidbdrivermanager.h"
+#include "kexidbconnection.h"
 
 //#include <api/object.h>
 //#include <api/variant.h>
@@ -41,7 +42,7 @@ extern "C"
 using namespace Kross::KexiDB;
 
 KexiDBModule::KexiDBModule(Kross::Api::Manager* /*manager*/)
-    : Kross::Api::Module<KexiDBModule>("KexiDB")
+    : Kross::Api::Module("KexiDB")
     //, m_manager(manager)
 {
     addChild( KexiDBDriverManager::self() );
@@ -64,3 +65,12 @@ const QString KexiDBModule::getDescription() const
                 "scripting languages.");
 }
 
+Kross::Api::Object::Ptr KexiDBModule::get(const QString& name, void* p)
+{
+    if(name == "KexiDBConnection") {
+        ::KexiDB::Connection* connection = (::KexiDB::Connection*)p;
+        if(connection)
+            return new KexiDBConnection(connection);
+    }
+    return 0;
+}

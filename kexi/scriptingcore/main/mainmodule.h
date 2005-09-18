@@ -38,6 +38,9 @@
 
 namespace Kross { namespace Api {
 
+    // Forward declarations.
+    class MainModulePrivate;
+
     /**
      * This class implements \a Module for the global
      * \a Manager singleton and local \a ScriptContainer
@@ -47,7 +50,7 @@ namespace Kross { namespace Api {
      * for a root node in a tree of \a Kross::Api::Object
      * instances.
      */
-    class MainModule : public Module<MainModule>
+    class MainModule : public Module
     {
         public:
 
@@ -162,13 +165,8 @@ namespace Kross { namespace Api {
             //void unserializeFromXML(const QString& xml);
 
         private:
-
-           /**
-            * The \a Exception this \a MainModule throwed or
-            * NULL if we don't had an exception.
-            */
-            Exception::Ptr m_exception;
-
+            /// Private d-pointer class.
+            MainModulePrivate* d;
     };
 
 }}

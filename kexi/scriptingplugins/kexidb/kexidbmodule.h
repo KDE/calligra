@@ -40,7 +40,7 @@ namespace Kross { namespace KexiDB {
      * and presented in the common Kross::Api and therefore
      * is independend of any used scripting-backend.
      */
-    class KexiDBModule : public Kross::Api::Module<KexiDBModule>
+    class KexiDBModule : public Kross::Api::Module
     {
         public:
 
@@ -59,6 +59,9 @@ namespace Kross { namespace KexiDB {
 
             /// \see Kross::Api::Object::getDescription
             virtual const QString getDescription() const;
+
+virtual Kross::Api::Object::Ptr get(const QString& name, void* = 0);
+
     };
 
 }}

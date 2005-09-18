@@ -14,8 +14,7 @@ krosskexiapp_la_LIBADD = \
     $(LIB_KDECORE) \
     $(top_builddir)/kexi/scriptingcore/api/libkrossapi.la \
     $(top_builddir)/kexi/scriptingcore/main/libkrossmain.la \
-    $(top_builddir)/kexi/core/libkexicore.la \
-    $(top_builddir)/kexi/scriptingplugins/kexidb/krosskexidb.la
+    $(top_builddir)/kexi/core/libkexicore.la
 
 METASOURCES = AUTO
 SUBDIRS = .

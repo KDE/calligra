@@ -47,10 +47,13 @@ namespace Kross { namespace Api {
     {
         public:
             /// List of interpreter instances.
-            QMap<QString, Interpreter*> m_interpreter;
+            QMap<QString, Interpreter*> interpreter;
 
             /// To dynamicly load libraries.
-            KLibrary* m_library;
+            KLibrary* library;
+
+            /// Loaded modules.
+            QMap<QString, Module::Ptr> modules;
     };
 
 }}
@@ -59,12 +62,12 @@ Manager::Manager()
     : MainModule("Kross") // the manager has the name "Kross"
     , d( new ManagerPrivate() )
 {
-    d->m_library = 0;
+    d->library = 0;
 }
 
 Manager::~Manager()
 {
-    for(QMap<QString, Interpreter*>::Iterator iit = d->m_interpreter.begin(); iit != d->m_interpreter.end(); ++iit)
+    for(QMap<QString, Interpreter*>::Iterator iit = d->interpreter.begin(); iit != d->interpreter.end(); ++iit)
         delete iit.data();
 
     delete d;
@@ -88,8 +91,8 @@ ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
 {
-    if(d->m_interpreter.contains(interpretername))
-        return d->m_interpreter[interpretername];
+    if(d->interpreter.contains(interpretername))
+        return d->interpreter[interpretername];
 
     Interpreter* interpreter = 0;
     setException(0);
@@ -111,15 +114,15 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         // helped in that case.
         // See also http://mats.imk.fraunhofer.de/pipermail/pykde/2004-April/007645.html
 
-        if(d->m_library) {
+        if(d->library) {
             kdWarning() << "The krosspython library is already loaded." << endl;
         }
         else {
             // Load the krosspython library.
             KLibLoader *libloader = KLibLoader::self();
 
-            d->m_library = libloader->globalLibrary( KROSS_PYTHON_LIBRARY );
-            if(! d->m_library) {
+            d->library = libloader->globalLibrary( KROSS_PYTHON_LIBRARY );
+            if(! d->library) {
                 setException( new Exception("Failed to load the krosspython library.") );
                 return 0;
             }
@@ -127,7 +130,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
 
         // Get the extern "C" krosspython_instance function.
         def_interpreter_func interpreter_func;
-        interpreter_func = (def_interpreter_func) d->m_library->symbol("krosspython_instance");
+        interpreter_func = (def_interpreter_func) d->library->symbol("krosspython_instance");
         if(! interpreter_func) {
             setException( new Exception("Failed to load symbol in krosspython library.") );
         }
@@ -145,8 +148,8 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         }
 
         // finally unload the library.
-        d->m_library->unload();
-        d->m_library = 0;
+        d->library->unload();
+        d->library = 0;
 #endif
     }
 /*
@@ -161,7 +164,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     }
 
     if(interpreter)
-        d->m_interpreter.replace(interpretername, interpreter);
+        d->interpreter.replace(interpretername, interpreter);
 
     return interpreter;
 }
@@ -184,10 +187,10 @@ list << "TestCase";
     return  list;
 }
 
-Object::Ptr Manager::loadModule(const QString& modulename)
+Module* Manager::loadModule(const QString& modulename)
 {
-    if(Object::hasChild(modulename))
-        return Object::getChild(modulename);
+    if(d->modules.contains(modulename))
+        return d->modules[modulename];
 
     KLibLoader* loader = KLibLoader::self();
     KLibrary* lib = loader->globalLibrary(modulename.latin1());
@@ -205,16 +208,16 @@ Object::Ptr Manager::loadModule(const QString& modulename)
         return 0;
     }
 
-    Kross::Api::Object::Ptr module = (Kross::Api::Object*) (func)(this);
+    Kross::Api::Module::Ptr module = (Kross::Api::Module*) (func)(this);
     if(! module) {
         kdWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
         return 0;
     }
     lib->unload();
 
-    kdDebug()<< module->toString() <<endl;
-    Object::addChild(module, modulename);
-    return module;
+    //kdDebug() << "Kross::Api::Manager::loadModule " << module->toString() << endl;
+    d->modules.replace(modulename, module);
+    return module.data();
 
 
 }

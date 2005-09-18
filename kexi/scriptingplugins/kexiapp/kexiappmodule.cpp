@@ -54,7 +54,7 @@ namespace Kross { namespace KexiApp {
 using namespace Kross::KexiApp;
 
 KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
-    : Kross::Api::Module<KexiAppModule>("KexiApp")
+    : Kross::Api::Module("KexiApp")
     , d(new KexiAppModulePrivate())
 {
     d->manager = manager;

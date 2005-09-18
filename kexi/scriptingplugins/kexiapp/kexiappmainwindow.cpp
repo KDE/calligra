@@ -23,9 +23,9 @@
 #include "core/kexiproject.h"
 #include "kexidb/connection.h"
 
-#include "../kexidb/kexidbconnection.h"
+#include "main/manager.h"
 
-#include <kdebug.h>
+//#include <kdebug.h>
 
 namespace Kross { namespace KexiApp {
 
@@ -73,9 +73,13 @@ Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)
     KexiProject* project = d->mainwindow->project();
     if(project) {
         ::KexiDB::Connection* connection = project->dbConnection();
-        if(connection)
-            return new Kross::KexiDB::KexiDBConnection(connection);
+        if(connection) {
+            Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule("krosskexidb");
+            if(module)
+                return module->get("KexiDBConnection", connection);
+        }
     }
+    //throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("No connection established.") );
     return 0;
 }
 

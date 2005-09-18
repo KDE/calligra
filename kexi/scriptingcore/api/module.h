@@ -21,21 +21,23 @@
 #define KROSS_API_MODULE_H
 
 #include <qstring.h>
+#include <kdebug.h>
 
 #include "class.h"
 
 namespace Kross { namespace Api {
 
     /**
-     * The Module template class.
-     *
-     * Modules got managed in the \a Manager singleton
-     * instance.
+     * The Module class. Modules are managed in the \a Manager singleton 
+     * instance and are implemented as in scripting plugins as main
+     * entry point to load and work with them.
      */
-    template<class T>
-    class Module : public Class<T>
+    class Module : public Class<Module>
     {
         public:
+
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<Module> Ptr;
 
             /**
              * Constructor.
@@ -46,8 +48,9 @@ namespace Kross { namespace Api {
              *        modules with there names.
              */
             explicit Module(const QString& name)
-                : Class<T>(name)
+                : Class<Module>(name)
             {
+                kdDebug() << QString("Kross::Api::Module %1 created").arg(name) << endl;
             }
 
             /**
@@ -55,8 +58,20 @@ namespace Kross { namespace Api {
              */
             virtual ~Module()
             {
+                kdDebug() << QString("Kross::Api::Module %1 destroyed").arg(getName()) << endl;
             }
+
+            /**
+             * Method to load from \a Kross::Api::Object inherited classes
+             * this module implements from within other modules.
+             */
+            virtual Kross::Api::Object::Ptr get(const QString& /*name*/, void* /*pointer*/ = 0)
+            {
+                return 0;
+            }
+
     };
+
 
 }}
 

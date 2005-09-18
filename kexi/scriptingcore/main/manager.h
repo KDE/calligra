@@ -118,7 +118,7 @@ namespace Kross { namespace Api {
              * \return The loaded \a Object or NULL if loading
              *        failed.
              */
-            Object::Ptr loadModule(const QString& modulename);
+            Module* loadModule(const QString& modulename);
 
         private:
             /// Private d-pointer class.

@@ -82,7 +82,7 @@ Py::Object PythonModule::import(const Py::Tuple& args)
         QString modname = args[0].as_string().c_str();
         if(modname.startsWith("kross")) {
             kdDebug() << QString("PythonModule::import() module=%1").arg(modname) << endl;
-            Kross::Api::Object::Ptr module = d->m_interpreter->m_manager->loadModule(modname);
+            Kross::Api::Module* module = d->m_interpreter->m_manager->loadModule(modname);
             if(module)
                 return PythonExtension::toPyObject(module);
         }
