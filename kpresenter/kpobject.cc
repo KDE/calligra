@@ -1159,24 +1159,6 @@ void KPObject::flip( bool /*horizontal*/ ) {
     }
 }
 
-KoRect KPObject::getBoundingRect() const
-{
-    KoRect r( orig, ext );
-
-    if ( shadowDistance > 0 )
-    {
-        double sx = r.x(), sy = r.y();
-        getShadowCoords( sx, sy );
-        KoRect r2( sx, sy, r.width(), r.height() );
-        r = r.unite( r2 );
-    }
-
-    if ( angle == 0.0 )
-        return r;
-    else
-        return rotateRectObject();
-}
-
 KoRect KPObject::rotateRectObject() const
 {
     KoRect br = KoRect( 0,0, ext.width(), ext.height() );

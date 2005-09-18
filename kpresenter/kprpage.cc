@@ -1941,20 +1941,21 @@ bool KPrPage::haveASelectedPixmapObj()
     return false;
 }
 
-KoRect KPrPage::getBoundingRect(const KoRect &rect) const
+KoRect KPrPage::getRealRect( bool all ) const
 {
-    KoRect boundingRect =rect ;
+    KoRect rect;
+
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if(it.current()->isSelected() && !it.current()->isProtect())
-            boundingRect|=it.current()->getBoundingRect();
-
+        if ( all || ( it.current()->isSelected() && ! it.current()->isProtect() ) )
+            rect |= it.current()->getRealRect();
     }
-    return boundingRect;
+
+    return rect;
 }
 
 //return true if we change picture
@@ -2014,7 +2015,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view, double diffx, double diffy)
         if ( it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
-            QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect() );
+            QRect br = _view->zoomHandler()->zoomRect( it.current()->getRepaintRect() );
             br.moveBy( _view->zoomHandler()->zoomItX( diffx ), _view->zoomHandler()->zoomItY( diffy ) );
             m_doc->repaint( br ); // Previous position
             m_doc->repaint( it.current() ); // New position
@@ -2265,19 +2266,6 @@ void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
                 m_doc->repaint( oIt.current() );
         }
     }
-}
-
-KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect) const
-{
-    KoRect boundingRect =rect ;
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
-            continue;
-        boundingRect|=it.current()->getBoundingRect();
-    }
-    return boundingRect;
 }
 
 bool KPrPage::canMoveOneObject() const

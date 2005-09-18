@@ -471,8 +471,15 @@ public:
     bool haveASelectedGroupObj();
     bool haveASelectedPixmapObj();
 
-    KoRect getBoundingRect(const KoRect &rect) const;
-    KoRect getBoundingAllObjectRect(const KoRect &rect) const;
+    /**
+     * @brief get the rect for the objects
+     *
+     * @param all true if the rect for all objects shoud be returned
+     *        false if only the rect for selected objects sould be returned
+     *
+     * @return rect of the objects
+     */
+    KoRect getRealRect( bool all ) const;
     bool chPic( KPresenterView *_view);
 
     //return command when we move object

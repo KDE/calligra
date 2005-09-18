@@ -166,7 +166,6 @@ public:
     virtual QString getTypeString() const
         { return QString(); }
 
-    KoRect getBoundingRect() const;
     virtual bool isSelected() const
         { return selected; }
     virtual float getAngle() const

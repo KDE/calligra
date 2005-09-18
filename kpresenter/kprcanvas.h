@@ -312,7 +312,15 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     void ensureVisible( int x, int y, int xmargin, int ymargin );
 
-    KoRect objectSelectedBoundingRect() const;
+    /**
+     * @brief get the rect for the objects
+     *
+     * @param all true if the rect for all objects shoud be returned
+     *        false if only the rect for selected objects sould be returned
+     *
+     * @return rect of the objects
+     */
+    KoRect objectRect( bool all ) const;
 
     void scrollTopLeftPoint( const QPoint & pos );
 
@@ -326,8 +334,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     KCommand *setKeepRatioObj( bool p );
     KCommand *setProtectSizeObj(bool protect);
-
-    KoRect zoomAllObject();
 
     /**
      * Align all selected and not protected objects on the
@@ -560,14 +566,28 @@ protected:
     void tmpMoveHelpLine( const QPoint & newPos);
 
     void moveHelpPoint( const QPoint & newPos );
-    void scrollCanvas(const KoRect& oldPos);
+    
+    /** 
+     * @brief Scroll the canvas by diff
+     *
+     * This causes a processing of all posted events before the scrolling
+     * happens.
+     *
+     * @param diff the distance the canvas should be scrolled
+     */
+    void scrollCanvas( const KoPoint & diff );
 
     KoRect getAlignBoundingRect() const;
 
 private:
     void picViewOrigHelper(int x, int y);
 
-    void moveObject( int x, int y, bool key );
+    /**
+     * @brief 
+     *
+     * @return true when object is moved
+     */
+    bool moveObject( int x, int y );
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
@@ -593,8 +613,6 @@ private:
     void limitSizeOfObject();
 
     QPoint limitOfPoint(const QPoint& _point) const;
-
-    void calcBoundingRect();
 
     /**
      * Return true if object is a header/footer which is hidden.
@@ -754,11 +772,23 @@ private:
     int m_xOffset, m_yOffset;
     int m_xOffsetSaved, m_yOffsetSaved; // saved when going fullscreen
 
-    KoRect m_boundingRect; ///< when moving object(s)
-    KoPoint m_hotSpot; ///< when moving frame(s)
+    /**
+     * Start position for move with mouse
+     *
+     * This one is used for calculating the whole move
+     * ( from mousePressEvent to mouseReleaseEvent ).
+     */
+    KoPoint m_moveStartPosMouse;
+    /**
+     * Start position for move with mouse
+     *
+     * This one is used for calculating the move during
+     * the mouseMoveEvent.
+     */
+    QPoint m_origPos;
+    /// start position for move with key
+    KoPoint m_moveStartPosKey; 
 
-    KoPoint moveStartPosMouse; ///< start position for move with mouse
-    KoPoint moveStartPosKey; ///< start position for move with key
     int m_tmpHelpPoint;
     KoPoint tmpHelpPointPos;
 
@@ -772,8 +802,6 @@ private:
     bool m_keyPressEvent;
     bool m_drawSymetricObject;
 
-    KoRect m_origBRect;  ///< Start rect for move
-    QPoint m_origPos;  ///< Start point for move
 };
 
 #endif // __KPRCANVAS__

@@ -2955,7 +2955,7 @@ void KPresenterView::setupActions()
     actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), 0,
                                    this, SLOT( zoomPageWidth() ),
                                    actionCollection(), "zoom_page_width" );
-    actionZoomSelectedObject= new KAction( i18n( "Zoom Selected Object" ), "viewmagfit",0,
+    actionZoomSelectedObject= new KAction( i18n( "Zoom Selected Objects" ), "viewmagfit",0,
                                            this, SLOT( zoomSelectedObject() ),
                                            actionCollection(), "zoom_selected_object" );
     actionZoomPageHeight= new KAction( i18n( "Zoom Slide Height" ), 0,
@@ -5867,7 +5867,7 @@ void KPresenterView::zoomSelectedObject()
 {
     if(  m_canvas->isOneObjectSelected())
     {
-        KoRect rect=m_canvas->objectSelectedBoundingRect();
+        KoRect rect = m_canvas->objectRect( false );
         double height = zoomHandler()->resolutionY() * rect.height();
         double width = zoomHandler()->resolutionX() * rect.width();
         int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
@@ -5889,7 +5889,7 @@ void KPresenterView::zoomPageHeight()
 
 void KPresenterView::zoomAllObject()
 {
-    KoRect rect=m_canvas->zoomAllObject();
+    KoRect rect = m_canvas->objectRect( true );
     double height = zoomHandler()->resolutionY() * rect.height();
     double width = zoomHandler()->resolutionX() * rect.width();
     int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
