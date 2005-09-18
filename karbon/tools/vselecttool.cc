@@ -363,6 +363,9 @@ VSelectTool::updateStatusBar() const
 	if( ! view() ) 
 		return;
 
+	if( ! view()->part() )
+		return;
+
 	int objcount = view()->part()->document().selection()->objects().count();
 	if( objcount > 0 )
 	{
