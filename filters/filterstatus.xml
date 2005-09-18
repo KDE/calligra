@@ -16,15 +16,15 @@
         id: unique identifier of the version
         kofficepath: path of the status directory on www.koffice.org
         stable: is this version stable or not?
-        webcvscheckout: URL for a WebCVS checkout
-        cvstag: name of the version's CVS tag (cannot be a branch)
+        websvncheckout: URL for a WebSVN checkout
+        svntag: name of the version's SVN tag (cannot be a branch)
      -->
     <!ELEMENT version ( title+, description*, application+ )>
     <!ATTLIST version id ID #REQUIRED
                       kofficepath CDATA #IMPLIED
                       stable ( yes | no ) #REQUIRED
-                      webcvscheckout CDATA #REQUIRED
-                      cvstag CDATA #IMPLIED>
+                      websvncheckout CDATA #REQUIRED
+                      svntag CDATA #IMPLIED>
 
     <!-- Definition of a status
         id: unique identifier of the status
@@ -35,7 +35,7 @@
 
     <!-- Title
         xml:lang: language of the title
-        webcvspath: relative path in KDE's WebCVS
+        websvnpath: relative path in KDE's WebSVN
     -->
     <!ELEMENT title (#PCDATA)>
     <!ATTLIST title xml:lang CDATA "en_us">
@@ -61,16 +61,16 @@
     <!-- Defintion of a filter
         id: unique identifier of the filter
     -->
-    <!ELEMENT filter (webcvs?, title+, note*, description*, contact*, stat+)>
+    <!ELEMENT filter (websvn?, title+, note*, description*, contact*, stat+)>
     <!ATTLIST filter id ID #REQUIRED>
 
-    <!-- Element of the URL for the status file which is in KOffice's CVS
+    <!-- Element of the URL for the status file which is in KOffice's SVN
         path: relative path to the status file
         importsuffix: suffix in case of import
         exportsuffix: suffix in case of export
     -->
-    <!ELEMENT webcvs EMPTY>
-    <!ATTLIST webcvs path CDATA #REQUIRED
+    <!ELEMENT websvn EMPTY>
+    <!ATTLIST websvn path CDATA #REQUIRED
                      importsuffix CDATA #REQUIRED
                      exportsuffix CDATA #REQUIRED>
 
@@ -126,14 +126,14 @@
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
 
-    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.5" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="">
-        <title xml:lang="en_us">KOffice CVS</title>
+    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.5" websvncheckout="http://websvn.kde.org/*checkout*/trunk" svntag="">
+        <title xml:lang="en_us">KOffice SVN</title>
         <description xml:lang="en_us">KOffice Development Version</description>
 
         <application id="generic">
             <title xml:lang="en_us">Generic (for all KOffice applications)</title>
             <filter id="generic_xslt">
-                <webcvs importsuffix="" exportsuffix="" path="koffice/filters/xsltfilter"/>
+                <websvn importsuffix="" exportsuffix="" path="koffice/filters/xsltfilter"/>
                 <title xml:lang="en_us">XSLT</title>
                 <stat import="onestar" export="twostars"/>
             </filter>
@@ -142,46 +142,46 @@
         <application id="kword">
             <title xml:lang="en_us">KWord</title>
             <filter id="kword_abiword">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/abiword"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/abiword"/>
                 <title xml:lang="en_us">AbiWord</title>
                 <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_amipro">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/amipro"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/amipro"/>
                 <title xml:lang="en_us">AmiPro</title>
                 <note xml:lang="en_us">Lotus word processor</note>
                 <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_applixword">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/applixword"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/applixword"/>
                 <title xml:lang="en_us">Applix Word</title>
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kword_docbook">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/docbook"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/docbook"/>
                 <title xml:lang="en_us">DocBook</title>
                 <note xml:lang="en_us">SGML DocBook only</note>
                 <stat import="none" export="abandoned"/>
             </filter>
             <filter id="kword_hancomword">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/hancomword"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/hancomword"/>
                 <title xml:lang="en_us">HancomWord</title>
                 <note xml:lang="en_us">for version 2.0, text only</note>
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kword_html">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/html"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/html"/>
                 <title xml:lang="en_us">HTML</title>
                 <note xml:lang="en_us">HTML 4.01 / XHTML 1.0</note>
                 <stat import="onestar" export="threestars"/>
             </filter>
             <filter id="kword_latex">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/latex"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/latex"/>
                 <title xml:lang="en_us">LaTeX</title>
                 <stat import="onestar" export="twostars"/>
             </filter>
             <filter id="kword_mswrite">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/mswrite"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/mswrite"/>
                 <title xml:lang="en_us">MS Write</title>
                 <stat import="threestars" export="threestars"/>
             </filter>
@@ -190,49 +190,49 @@
                 <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="kword_palmdoc">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/palmdoc"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/palmdoc"/>
                 <title xml:lang="en_us">Palmdoc</title>
                 <note xml:lang="en_us">Palm documents</note>
                 <stat import="fivestars" export="fivestars"/>
             </filter>
             <filter id="kword_pdf">
-                <webcvs importsuffix="#import" path="koffice/filters/kword/pdf" exportsuffix=""/>
+                <websvn importsuffix="#import" path="koffice/filters/kword/pdf" exportsuffix=""/>
                 <title xml:lang="en_us">PDF</title>
                 <note xml:lang="en_us">Portable Document Format</note>
                 <stat import="threestars" export="none"/>
             </filter>
             <filter id="kword_plaintext">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/ascii"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/ascii"/>
                 <title xml:lang="en_us">Plain text</title>
                 <stat import="fivestars" export="fivestars"/>
             </filter>
             <filter id="kword_rtf">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/rtf"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/rtf"/>
                 <title xml:lang="en_us">RTF</title>
                 <note xml:lang="en_us">Rich Text Format</note>
                 <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_starwriter">
-                <webcvs importsuffix="" exportsuffix="" path="koffice/filters/kword/starwriter"/>
+                <websvn importsuffix="" exportsuffix="" path="koffice/filters/kword/starwriter"/>
                 <title xml:lang="en_us">StarWriter</title>
                 <contact href="mailto:ariya@kde.org">Ariya Hidayat</contact>
                 <contact href="mailto:info@marcozanon.com">Marco Zanon</contact>
                 <stat import="onestar" export="none"/>
             </filter>
             <filter id="kword_msword97">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/winword97"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/winword97"/>
                 <title xml:lang="en_us">MS Word</title>
                 <note xml:lang="en_us">Microsoft Word 97/2000</note>
                 <stat import="threestars" export="none"/>
             </filter>
             <filter id="kword_wml">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/wml"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/wml"/>
                 <title xml:lang="en_us">WML</title>
                 <note xml:lang="en_us">Wireless markup language</note>
                 <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_wordperfect">
-                <webcvs importsuffix="" exportsuffix="" path="koffice/filters/kword/wordperfect"/>
+                <websvn importsuffix="" exportsuffix="" path="koffice/filters/kword/wordperfect"/>
                 <title xml:lang="en_us">WordPerfect</title>
                 <note xml:lang="en_us">WP 5.x and WP 6/7/8 documents, text only</note>
                 <stat import="threestars" export="twostars"/>
@@ -242,51 +242,51 @@
         <application id="kspread">
             <title xml:lang="en_us">KSpread</title>
             <filter id="kspread_applix">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/applixspread"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/applixspread"/>
                 <title xml:lang="en_us">Applix Spreadsheet</title>
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kspread_csv">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/csv"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/csv"/>
                 <title xml:lang="en_us">CSV</title>
                 <note xml:lang="en_us">Comma Separated Values</note>
                 <stat import="fivestars" export="fivestars"/>
             </filter>
             <filter id="kspread_dbase">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/dbase"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/dbase"/>
                 <title xml:lang="en_us">dBase</title>
                 <note xml:lang="en_us">dBase 3 only</note>
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kspread_excel">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/excel97"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/excel97"/>
                 <title xml:lang="en_us">Excel</title>
                 <note xml:lang="en_us">Microsoft Excel 97/2000</note>
                 <stat import="threestars" export="none"/>
             </filter>
             <filter id="kspread_gnumeric">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/gnumeric"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/gnumeric"/>
                 <title xml:lang="en_us">Gnumeric</title>
                 <note xml:lang="en_us">Part of GNOME Office</note>
                 <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="kspread_html">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/html"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/html"/>
                 <title xml:lang="en_us">HTML</title>
                 <stat import="none" export="twostars"/>
             </filter>
             <filter id="kspread_latex">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/latex"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/latex"/>
                 <title xml:lang="en_us">LaTeX</title>
                 <stat import="none" export="onestar"/>
             </filter>
             <filter id="kspread_quattro">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/qpro"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/qpro"/>
                 <title xml:lang="en_us">Quattro Pro</title>
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kspread_opencalc">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/opencalc"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/opencalc"/>
                 <title xml:lang="en_us">OpenOffice.org Calc</title>
                 <contact href="mailto:nandres@web.de">Norbert Andres</contact>
                 <stat import="twostars" export="onestar"/>
@@ -301,18 +301,18 @@
                 <stat import="fourstars" export="none"/>
             </filter>
             <filter id="kpresenter_ooimpress">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kpresenter/ooimpress"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kpresenter/ooimpress"/>
                 <title xml:lang="en_us">OpenOffice.org Impress</title>
                 <stat import="fourstars" export="twostars"/>
             </filter>
             <filter id="kpresenter_powerpoint">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/powerpoint97"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/powerpoint97"/>
                 <title xml:lang="en_us">PowerPoint 97</title>
                 <note xml:lang="en_us">Microsoft PowerPoint 97</note>
                 <stat import="onestar" export="none"/>
             </filter>
             <filter id="kpresenter_kword">
-                <webcvs importsuffix="" exportsuffix="#export" path="koffice/filters/kpresenter/kword"/>
+                <websvn importsuffix="" exportsuffix="#export" path="koffice/filters/kpresenter/kword"/>
                 <title xml:lang="en_us">KWord</title>
                 <stat import="none" export="fivestars"/>
             </filter>
@@ -352,7 +352,7 @@
                 <stat import="planned" export="none"/>
             </filter>
             <filter id="karbon_msod">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/karbon/msod"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/karbon/msod"/>
                 <title xml:lang="en_us">MSOD</title>
                 <note xml:lang="en_us">Microsoft Office Drawing</note>
                 <stat import="onestar" export="none"/>
@@ -385,12 +385,12 @@
             ImageMagick.&lt;/a&gt;
             </foreword>
             <filter id="krita_openexr">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/openexr"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/openexr"/>
                 <title xml:lang="en_us">OpenEXR</title>
                 <stat import="fourstars" export="fourstars"/>
             </filter>
             <filter id="krita_xcf">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/xcf"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/xcf"/>
                 <title xml:lang="en_us">Gimp (XCF)</title>
                 <stat import="planned" export="planned"/>
             </filter>
@@ -404,13 +404,13 @@
                 <stat import="fourstars" export="none"/>
             </filter>
             <filter id="kchart_png">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/png"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/png"/>
                 <title xml:lang="en_us">PNG</title>
                 <note xml:lang="en_us">Portable Network Graphics (most graphics programs)</note>
                 <stat import="none" export="fourstars"/>
             </filter>
             <filter id="kchart_svg">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/svg"/>
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kchart/svg"/>
                 <title xml:lang="en_us">SVG</title>
                 <note xml:lang="en_us">Scalable Vector Graphics (W3C)</note>
                 <stat import="none" export="fourstars"/>
