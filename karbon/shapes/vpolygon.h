@@ -35,6 +35,8 @@ public:
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	virtual void load( const QDomElement& element );
 
+	virtual VPath* clone() const;
+
 protected:
 	void init();
 

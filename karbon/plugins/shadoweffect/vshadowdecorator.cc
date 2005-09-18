@@ -29,7 +29,6 @@
 VShadowDecorator::VShadowDecorator( VObject *object, VObject* parent, int distance, int angle, float opacity )
 	: VObject( parent ), m_object( object ), m_distance( distance ), m_angle( angle ), m_opacity( opacity )
 {
-	m_object->setParent( 0L );
 }
 
 VShadowDecorator::VShadowDecorator( const VShadowDecorator& other ) : VObject( other )

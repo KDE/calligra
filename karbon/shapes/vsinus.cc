@@ -191,4 +191,9 @@ VSinus::load( const QDomElement& element )
 		transform( trafo );
 }
 
+VPath* 
+VSinus::clone() const
+{
+	return new VSinus( *this );
+}
 

@@ -251,3 +251,8 @@ VEllipse::load( const QDomElement& element )
 		transform( trafo );
 }
 
+VPath* 
+VEllipse::clone() const
+{
+	return new VEllipse( *this );
+}

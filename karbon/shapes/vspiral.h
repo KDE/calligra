@@ -40,6 +40,8 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
+	virtual VPath* clone() const;
+
 protected:
 	void init();
 

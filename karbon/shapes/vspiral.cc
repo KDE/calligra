@@ -172,4 +172,8 @@ VSpiral::load( const QDomElement& element )
 		transform( trafo );
 }
 
-
+VPath* 
+VSpiral::clone() const
+{
+	return new VSpiral( *this );
+}

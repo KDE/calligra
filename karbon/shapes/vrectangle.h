@@ -37,6 +37,8 @@ public:
 	virtual void load( const QDomElement& element );
 	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
 
+	virtual VPath* clone() const;
+
 protected:
 	void init();
 

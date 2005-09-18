@@ -334,4 +334,8 @@ VStar::load( const QDomElement& element )
 		transform( trafo );
 }
 
-
+VPath* 
+VStar::clone() const
+{
+	return new VStar( *this );
+}

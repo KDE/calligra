@@ -145,3 +145,8 @@ VPolygon::load( const QDomElement& element )
 		transform( trafo );
 }
 
+VPath* 
+VPolygon::clone() const
+{
+	return new VPolygon( *this );
+}
