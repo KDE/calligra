@@ -194,6 +194,8 @@ Module* Manager::loadModule(const QString& modulename)
         module = d->modules[modulename];
         if(module)
             return module;
+        else
+            kdDebug() << QString("Manager::loadModule(%1) =======> Modulename registered, but module is invalid!").arg(modulename) << endl;
     }
 
     KLibLoader* loader = KLibLoader::self();
