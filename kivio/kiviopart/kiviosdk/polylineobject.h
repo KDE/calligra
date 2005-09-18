@@ -72,10 +72,15 @@ class PolylineObject : public Object
      */
     virtual KoRect boundingBox();
 
-    /// Returns a vector containing the 4 control points of the bezier curve
+    /// Returns a vector containing the control points of the polyline
     QValueVector<KoPoint> pointVector() const;
     /// Set a vector containing the control points of the polyline
     void setPointVector(const QValueVector<KoPoint>& newVector);
+
+    /// Add a control point to the polyline
+    void addPoint(const KoPoint& point);
+    /// Change the position of a control point
+    void changePoint(unsigned int index, const KoPoint& point);
 
     /// Draws a polyline to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);

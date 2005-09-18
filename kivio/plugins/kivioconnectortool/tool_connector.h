@@ -27,6 +27,7 @@ class QCursor;
 
 namespace Kivio {
   class MouseToolAction;
+  class Connector;
 }
 
 class KivioView;
@@ -40,63 +41,43 @@ class ConnectorTool : public Kivio::MouseTool
   public:
     ConnectorTool( KivioView* parent );
     ~ConnectorTool();
-  
+
     virtual bool processEvent(QEvent* e);
-  
-    void connector(QRect);
-    
+
   public slots:
     void setActivated(bool a);
-  
+
   protected slots:
-    void activateStraight();
     void activatePolyline();
-    
+
     void makePermanent();
-  
+
   signals:
     void operationDone();
-  
+
   protected:
     void mousePress(QMouseEvent *);
     void mouseMove(QMouseEvent *);
-    void mouseRelease(QMouseEvent *);
-  
+
     bool startRubberBanding(QMouseEvent*);
     void continueRubberBanding(QMouseEvent *);
     void endRubberBanding(QMouseEvent *);
-  
-  
-  
-    QPoint m_startPoint, m_releasePoint;
-  
+
     // Connector Tool Mode
     enum
     {
       stmNone,
       stmDrawRubber
     };
-    
-    enum {
-      StraightConnector,
-      PolyLineConnector
-    };
-  
+
   private:
     int m_mode; // Flag to indicate that we are drawing a rubber band
-    int m_type; // Type of connector
     QCursor* m_pConnectorCursor1;
     QCursor* m_pConnectorCursor2;
-    Kivio1DStencil* m_pStencil;
-    KoPoint startPoint;
-    KivioCustomDragData* m_pDragData;
-    
-    Kivio::MouseToolAction* m_connectorAction;
+    Kivio::Connector* m_connector;
+
     Kivio::MouseToolAction* m_polyLineAction;
-    
     bool m_permanent;
 };
 
 #endif
-
-

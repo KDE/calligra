@@ -45,28 +45,20 @@
 #include "kiviopolylineconnector.h"
 #include "polylineconnectorspawner.h"
 #include "mousetoolaction.h"
+#include "connector.h"
 
 ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Connector Mouse Tool")
 {
-  m_connectorAction = new Kivio::MouseToolAction(i18n("Straight Connector"), "kivio_connector", 0,
-    actionCollection(), "connector");
-  connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
-  connect(m_connectorAction, SIGNAL(activated()), this, SLOT(activateStraight()));
-  connect(m_connectorAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
-  m_connectorAction->setExclusiveGroup("ConnectorTool");
-
-  m_polyLineAction = new Kivio::MouseToolAction(i18n("Polyline Connector"), "kivio_connector", 0,
+  m_polyLineAction = new Kivio::MouseToolAction(i18n("Connector"), "kivio_connector", 0,
     actionCollection(), "polyLineConnector");
   connect(m_polyLineAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_polyLineAction, SIGNAL(activated()), this, SLOT(activatePolyline()));
-  connect(m_connectorAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
+  connect(m_polyLineAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
   m_polyLineAction->setExclusiveGroup("ConnectorTool");
 
   m_permanent = false;
 
-  m_type = StraightConnector;
   m_mode = stmNone;
-  m_pDragData = 0;
 
   m_pConnectorCursor1 = new QCursor(BarIcon("kivio_connector_cursor1",KivioFactory::global()),2,2);
   m_pConnectorCursor2 = new QCursor(BarIcon("kivio_connector_cursor2",KivioFactory::global()),2,2);
@@ -76,8 +68,6 @@ ConnectorTool::~ConnectorTool()
 {
   delete m_pConnectorCursor1;
   delete m_pConnectorCursor2;
-  delete m_pDragData;
-  m_pDragData = 0;
 }
 
 
@@ -93,11 +83,6 @@ bool ConnectorTool::processEvent(QEvent* e)
   {
   case QEvent::MouseButtonPress:
     mousePress( static_cast<QMouseEvent*>(e) );
-    return true;
-    break;
-
-  case QEvent::MouseButtonRelease:
-    mouseRelease( static_cast<QMouseEvent*>(e) );
     return true;
     break;
 
@@ -118,76 +103,52 @@ void ConnectorTool::setActivated(bool a)
   if(a) {
     view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
-    m_pStencil = 0;
-    m_pDragData = 0;
+    m_connector = 0;
     emit activated(this);
   } else {
-    m_pStencil = 0;
-    delete m_pDragData;
-    m_pDragData = 0;
-    m_type = StraightConnector;
-    m_connectorAction->setChecked(false);
+    m_connector = 0;
     m_polyLineAction->setChecked(false);
     m_permanent = false;
     view()->setStatusBarInfo("");
   }
 }
 
-void ConnectorTool::connector(QRect)
-{
-  if (!m_pStencil)
-    return;
-
-  delete m_pDragData;
-  m_pDragData = 0;
-
-  KivioDoc* doc = view()->doc();
-  KivioPage* page = view()->activePage();
-
-  m_pStencil->searchForConnections(page, view()->zoomHandler()->unzoomItY(4));
-  doc->updateView(page);
-}
-
 void ConnectorTool::mousePress( QMouseEvent *e )
 {
   if(e->button() == LeftButton) {
     bool ok = true;
-    if(!m_pStencil || (m_type == StraightConnector)) {
+
+    if(!m_connector) {
       ok = startRubberBanding(e);
     } else {
-      if(m_pStencil) {
-        Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
-        KivioCanvas* canvas = view()->canvasWidget();
-        KivioPage* pPage = canvas->activePage();
-        bool hit = false;
-        KoPoint point = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
-      
-        if(!hit) {
-          point = canvas->snapToGrid(startPoint);
-        }
-        
-        if((m_mode == stmDrawRubber) && hit) {
-          endRubberBanding(e);
-        } else {
-          connector->addPoint(point);
-        }
+      KivioCanvas* canvas = view()->canvasWidget();
+      KivioPage* pPage = canvas->activePage();
+      bool hit = false;
+      KoPoint point = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
+
+      if(!hit) {
+        point = canvas->snapToGrid(point);
+      }
+
+      if((m_mode == stmDrawRubber) && hit) {
+        endRubberBanding(e);
+      } else {
+        m_connector->addPoint(point);
       }
     }
-    
+
     if(ok) {
       m_mode = stmDrawRubber;
     } else {
       m_mode = stmNone;
     }
   } else if(e->button() == RightButton) {
-    if(m_type == PolyLineConnector) {
-      if(m_mode == stmDrawRubber) {
-        endRubberBanding(e);
-      }
-      
-      view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
-      m_mode = stmNone;
+    if(m_mode == stmDrawRubber) {
+      endRubberBanding(e);
     }
+
+    view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
+    m_mode = stmNone;
   }
 }
 
@@ -198,70 +159,32 @@ void ConnectorTool::mousePress( QMouseEvent *e )
 bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 {
   //FIXME Port to Object code
-/*  KivioCanvas* canvas = view()->canvasWidget();
+  KivioCanvas* canvas = view()->canvasWidget();
   KivioDoc* doc = view()->doc();
   KivioPage* pPage = canvas->activePage();
-  QString spawnerId;
-  
-  if(m_type == StraightConnector) {
-    spawnerId = "Dave Marotti - Straight Connector";
-  } else {
-    spawnerId = "Internal - PolyLine Connector";
-  }
 
-  KivioStencilSpawner* ss = doc->findInternalStencilSpawner(spawnerId);
-    
-  if(!ss) {
-    kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
-    return false;
-  }
-    
-    // Create the stencil
-  m_pStencil = static_cast<Kivio1DStencil*>(ss->newStencil());
-  
+  // Create the connector
+  m_connector = new Kivio::Connector();
+
   bool hit = false;
-  startPoint = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
+  KoPoint startPoint = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
 
   if(!hit) {
     startPoint = canvas->snapToGrid(startPoint);
   }
 
-  
-  if(!m_pStencil) {
-    return false;
-  }
-  
-  m_pStencil->setTextFont(doc->defaultFont());
+  m_connector->addPoint(startPoint);
+  m_connector->addPoint(startPoint);
 
   // Unselect everything, add the stencil to the page, and select it
   pPage->unselectAllStencils();
-  pPage->addStencil(m_pStencil);
-  pPage->selectStencil(m_pStencil);
-  // Get drag info ready
-  m_pDragData = new KivioCustomDragData();
-  m_pDragData->page = pPage;
-  m_pDragData->x = startPoint.x();
-  m_pDragData->y = startPoint.y();
-
-  if(m_type == StraightConnector) {
-    KivioStraightConnector* connector = static_cast<KivioStraightConnector*>(m_pStencil);
-    m_pDragData->id = kctCustom + 2;
-  
-    connector->setStartPoint(startPoint.x(), startPoint.y());
-    connector->setEndPoint(startPoint.x() + 10.0, startPoint.y() + 10.0);
-  } else {
-    Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
-    m_pDragData->id = kctCustom + 1;
-    connector->addPoint(startPoint);
-    connector->addPoint(startPoint);
-  }
-
-  m_pStencil->customDrag(m_pDragData);
+  pPage->addStencil(m_connector);
+  pPage->selectStencil(m_connector);
 
   canvas->repaint();
   canvas->setCursor(*m_pConnectorCursor2);
-  return true;*/
-  return false;
+
+  return true;
 }
 
 void ConnectorTool::mouseMove( QMouseEvent * e )
@@ -288,60 +211,21 @@ void ConnectorTool::continueRubberBanding( QMouseEvent *e )
     endPoint = canvas->snapToGrid(endPoint);
   }
 
-  m_pDragData->x = endPoint.x();
-  m_pDragData->y = endPoint.y();
-  
-  if(m_type == StraightConnector) {
-    KivioStraightConnector* connector = static_cast<KivioStraightConnector*>(m_pStencil);
-    connector->setEndPoint(endPoint.x(), endPoint.y());
-  
-    m_pDragData->id = kctCustom + 2;
-  } else {
-    Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
-    m_pDragData->id = kctCustom + connector->pointCount();
-  }
-
-  m_pStencil->customDrag(m_pDragData);
-  m_pStencil->updateGeometry();
+  m_connector->changePoint(m_connector->pointVector().count() - 1, endPoint);
   canvas->repaint();
-}
-
-void ConnectorTool::mouseRelease( QMouseEvent *e )
-{
-  if(m_type == StraightConnector) {
-    switch( m_mode )
-    {
-      case stmDrawRubber:
-        endRubberBanding(e);
-        break;
-    }
-  
-    view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
-    m_mode = stmNone;
-  }
 }
 
 void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
-  connector(view()->canvasWidget()->rect());
-  m_pStencil = 0;
-  
+  m_connector = 0;
+
   if(!m_permanent) {
     view()->pluginManager()->activateDefaultTool();
   }
 }
 
-void ConnectorTool::activateStraight()
-{
-  m_type = StraightConnector;
-  m_connectorAction->setChecked(true);
-  m_polyLineAction->setChecked(false);
-}
-
 void ConnectorTool::activatePolyline()
 {
-  m_type = PolyLineConnector;
-  m_connectorAction->setChecked(false);
   m_polyLineAction->setChecked(true);
   view()->setStatusBarInfo(i18n("Left mouse button to start drawing, right to end drawing."));
 }

@@ -37,14 +37,21 @@ PolylineObject::~PolylineObject()
 
 KoPoint PolylineObject::position() const
 {
-  return m_pointVector[0];
+  if(m_pointVector.count()) {
+    return m_pointVector[0];
+  }
+
+  return KoPoint();
 }
 
 void PolylineObject::setPosition(const KoPoint& newPosition)
 {
-  KoPoint offset = newPosition - m_pointVector[0];
-
-  move(offset.x(), offset.y());
+  if(m_pointVector.count()) {
+    KoPoint offset = newPosition - m_pointVector[0];
+    move(offset.x(), offset.y());
+  } else {
+    addPoint(newPosition);
+  }
 }
 
 Object* PolylineObject::duplicate()
@@ -89,6 +96,16 @@ QValueVector<KoPoint> PolylineObject::pointVector() const
 void PolylineObject::setPointVector(const QValueVector<KoPoint>& newVector)
 {
   m_pointVector = newVector;
+}
+
+void PolylineObject::addPoint(const KoPoint& point)
+{
+  m_pointVector.append(point);
+}
+
+void PolylineObject::changePoint(unsigned int index, const KoPoint& point)
+{
+  m_pointVector[index] = point;
 }
 
 void PolylineObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
