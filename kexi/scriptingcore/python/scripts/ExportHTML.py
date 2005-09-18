@@ -18,8 +18,9 @@ class Datasource:
         except:
             raise "Import of the Kross KexiApp module failed."
 
-        self.connection = keximainwindow.getConnection()
-        if not self.connection:
+        try:
+            self.connection = keximainwindow.getConnection()
+        except:
             raise "No connection established. Please open a project before."
 
         self.queryschema = None
