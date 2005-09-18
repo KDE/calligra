@@ -222,6 +222,6 @@ Module* Manager::loadModule(const QString& modulename)
 
     //kdDebug() << "Kross::Api::Manager::loadModule " << module->toString() << endl;
     d->modules.replace(modulename, module);
-    return module.data();
+    return module;
 }
 
