@@ -21,8 +21,6 @@
 #ifndef __VSTYLEDOCKER_H__
 #define __VSTYLEDOCKER_H__
 
-#include "vdocker.h"
-
 #include <koIconChooser.h>
 #include <qwidget.h>
 
@@ -69,7 +67,7 @@ private:
 	VClipartIconItem* m_selectedItem;
 };
 
-class VStyleDocker : public VDocker
+class VStyleDocker : public QWidget
 {
 	Q_OBJECT
 
@@ -82,7 +80,6 @@ public slots:
 
 private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
-	QWidget *mainWidget;
 	QTabWidget *mTabWidget;
 	KarbonPart *m_part;
 	KarbonView *m_view;

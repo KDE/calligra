@@ -1443,33 +1443,4 @@ VHistoryTab::groupingChanged( int )
 	m_history->update();
 } // VHistoryTab::groupingChanged
 
-/*************************************************************************
- *  Document docker                                                      *
- *************************************************************************/
-
-VDocumentDocker::VDocumentDocker( KarbonView* view )
-		: VDocker( view )
-{
-	setCaption( i18n( "Overview" ) );
-
-	QTabWidget* tabWidget;
-	setWidget( tabWidget = new QTabWidget( this ) );
-	tabWidget->setFont( font() );
-	tabWidget->addTab( m_documentTab = new VDocumentTab( view, this ), i18n( "Document" ) );
-	tabWidget->addTab( m_layersTab = new VLayersTab( view, this ), i18n( "Layers" ) );
-	tabWidget->addTab( m_historyTab = new VHistoryTab( view->part(), this ), i18n( "History" ) );
-
-	setFixedSize( 200, 200 );
-} // VDocumentDocker::VDocumentDocker
-
-VDocumentDocker::~VDocumentDocker()
-{
-} // VDocumentDocker::~VDocumentDocker
-
-void 
-VDocumentDocker::setUnit( KoUnit::Unit /*unit*/ )
-{
-	m_documentTab->updateDocumentInfo();
-}
-
 #include "vdocumentdocker.moc"

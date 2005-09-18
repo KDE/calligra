@@ -73,12 +73,11 @@ ClipartChooser::startDrag()
 }
 
 VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
+	: QWidget(), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Style Settings" ) );
 
-	mainWidget = new QWidget( this );
-	mTabWidget = new QTabWidget( mainWidget );
+	mTabWidget = new QTabWidget( this );
 
 	//Pattern
 	KoPatternChooser *pPatternChooser = new KoPatternChooser( KarbonFactory::rServer()->patterns(), mTabWidget );
@@ -91,13 +90,11 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	ClipartWidget *pClipartWidget = new ClipartWidget( KarbonFactory::rServer()->cliparts(), part, mTabWidget );
 	mTabWidget->addTab( pClipartWidget, i18n( "Clipart" ) );
 
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 2 );
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->activate();
-	mainWidget->setMinimumHeight( 174 );
-	mainWidget->setMinimumWidth( 194 );
-
-	setWidget( mainWidget );
+	setMinimumHeight( 174 );
+	setMinimumWidth( 194 );
 }
 
 VStyleDocker::~VStyleDocker()

@@ -13,7 +13,6 @@ noinst_LTLIBRARIES = \
 
 noinst_HEADERS = \
 	vcolordocker.h \
-	vdocker.h \
 	vdocumentdocker.h \
 	vstrokedocker.h \
 	vstyledocker.h \
@@ -23,7 +22,6 @@ libkarbondockers_la_SOURCES = \
 	dummy.cc \
 	vcolordocker.cc \
 	vdocumentdocker.cc \
-	vdocker.cc \
 	vstrokedocker.cc \
 	vstyledocker.cc \
 	vtransformdocker.cc

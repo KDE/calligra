@@ -23,8 +23,6 @@
 #include <qlistview.h>
 #include <qptrdict.h>
 
-#include "vdocker.h"
-
 class QHButtonGroup;
 class QPoint;
 class QLabel;
@@ -252,25 +250,5 @@ class VHistoryTab : public QWidget
 		KarbonPart*     m_part;
 }; // VHistoryTab
 
-/*************************************************************************
- *  Document docker                                                      *
- *************************************************************************/
+#endif
 
-class VDocumentDocker : public VDocker
-{
-	Q_OBJECT
-
-	public:
-		VDocumentDocker( KarbonView* view );
-		~VDocumentDocker();
-
-public slots:
-	virtual void setUnit( KoUnit::Unit unit );
-
-	protected:
-		VDocumentTab* m_documentTab;
-		VLayersTab*   m_layersTab;
-		VHistoryTab*  m_historyTab;
-}; // VDocumentDocker
-
-#endif /* __VDOCUMENTDOCKER_H__ */
