@@ -46,7 +46,7 @@
 VConfigureDlg::VConfigureDlg( KarbonView* parent )
 		: KDialogBase( KDialogBase::IconList, i18n( "Configure" ),
 					   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
-					   KDialogBase::Ok )
+					   KDialogBase::Ok, parent )
 
 {
 	QVBox * page = addVBoxPage(
