@@ -75,11 +75,11 @@ Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)
         ::KexiDB::Connection* connection = project->dbConnection();
         if(connection) {
             Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule("krosskexidb");
-            if(module)
-                return module->get("KexiDBConnection", connection);
+            if(! module)
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("Failed to load the krosskexidb module.") );
+            return module->get("KexiDBConnection", connection);
         }
     }
-    //throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("No connection established.") );
-    return 0;
+    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("No connection established.") );
 }
 
