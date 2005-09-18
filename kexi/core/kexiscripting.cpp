@@ -186,6 +186,14 @@ class KexiScriptManagerPrivate
         QMap<QString, KexiScriptContainer*> scriptcontainers;
 };
 
+KexiScriptManager* KexiScriptManager::self(KexiMainWindow* mainwin)
+{
+    static KexiScriptManager* manager = 0;
+    if(! manager)
+        manager = new KexiScriptManager(mainwin);
+    return manager;
+}
+
 KexiScriptManager::KexiScriptManager(KexiMainWindow* mainwindow)
     : QObject(mainwindow, "KexiScriptManager")
     , d(new KexiScriptManagerPrivate())

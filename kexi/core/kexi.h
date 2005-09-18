@@ -28,7 +28,6 @@
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include "kexiscripting.h"
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 
@@ -61,9 +60,6 @@ namespace Kexi
 	//! shared part manager
 	KEXICORE_EXPORT KexiPart::Manager& partManager();
 	
-	//! shared script manager
-	KEXICORE_EXPORT KexiScriptManager* scriptManager(KexiMainWindow*);
-
 	//! can be called to delete global objects like driverManager and partManager
 	//! (and thus, all loaded factories/plugins)
 	//! before KLibrary::~KLibrary() do this for us

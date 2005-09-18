@@ -69,6 +69,8 @@
 #include "kexiinternalpart.h"
 #include "kexiuseraction.h"
 
+#include "core/kexiscripting.h"
+
 #include <widget/kexipropertyeditorview.h>
 #include <koproperty/editor.h>
 #include <koproperty/set.h>
@@ -1766,10 +1768,10 @@ KexiMainWindowImpl::storeSettings()
 			d->propEditorDockSeparatorPos = 80;
 		if (d->nav && d->navDockSeparatorPos >= 0 && d->navDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
-			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
-			int w = dw->width();
-			int ww = width();
-			int d1 = (100 * dw->width()) / width() + 1;
+			//KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
+			//int w = dw->width();
+			//int ww = width();
+			//int d1 = (100 * dw->width()) / width() + 1;
 			//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			//int d2 = ds->separatorPosInPercent();
 			if (d->wasAutoOpen && d->dialogExistedBeforeCloseProject) {
@@ -3717,7 +3719,7 @@ void KexiMainWindowImpl::slotToolsScriptsActivated(int id)
 	KPopupMenu *popup = d->action_tools_scripts->popupMenu();
 	QString file = popup->whatsThis(id); // we use the whatsThis for the full file URL
 	QString err;
-	if(! Kexi::scriptManager(this)->executeFile(file, err))
+	if(! KexiScriptManager::self(this)->executeFile(file, err))
 		KMessageBox::error(this, err);
 #endif
 }

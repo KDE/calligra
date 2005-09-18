@@ -59,7 +59,7 @@ KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent,
     QBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->browser);
 
-    d->scriptcontainer = Kexi::scriptManager(mainWin)->getScriptContainer(parentDialog()->partItem()->name(), true);
+    d->scriptcontainer = KexiScriptManager::self(mainWin)->getScriptContainer(parentDialog()->partItem()->name(), true);
     //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
 
     QStringList output = d->scriptcontainer->getOutput();

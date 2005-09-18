@@ -141,7 +141,7 @@ class KEXICORE_EXPORT KexiScriptContainer : public QObject
  */
 class KEXICORE_EXPORT KexiScriptManager : public QObject
 {
-    public:
+    protected:
 
         /**
          * Constructor.
@@ -150,6 +150,14 @@ class KEXICORE_EXPORT KexiScriptManager : public QObject
          *       \a KexiScriptManager belongs to.
          */
         KexiScriptManager(KexiMainWindow* mainwindow);
+
+    public:
+
+        /**
+         * \return the \a KexiScriptManager singelton instance. Always
+         * use this method to access the scriptmanager.
+         */
+        static KexiScriptManager* self(KexiMainWindow* mainwin);
 
         /**
          * Destructor.

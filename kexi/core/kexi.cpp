@@ -46,12 +46,10 @@ class KexiInternal : public KShared
 		KexiInternal() : KShared()
 		 , connset(0)
 		 , smallFont(0)
-		 , scriptManager(0)
 		{
 		}
 		~KexiInternal()
 		{
-			//delete scriptManager; //not needed cause KexiScriptManager is a QObject-child of KexiMainWindow
 			delete connset;
 			delete smallFont;
 		}
@@ -60,7 +58,6 @@ class KexiInternal : public KShared
 		KexiDBConnectionSet recentConnections;
 		KexiDB::DriverManager driverManager;
 		KexiPart::Manager partManager;
-		KexiScriptManager* scriptManager;
 		QFont *smallFont;
 };
 
@@ -96,14 +93,6 @@ KexiPart::Manager& Kexi::partManager()
 {
 	_INIT_SHARED;
 	return _int->partManager;
-}
-
-KexiScriptManager* Kexi::scriptManager(KexiMainWindow* mainwin)
-{
-	_INIT_SHARED;
-	if(! _int->scriptManager)
-		_int->scriptManager = new KexiScriptManager(mainwin);
-	return _int->scriptManager;
 }
 
 void Kexi::deleteGlobalObjects()

@@ -49,7 +49,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     : KexiViewBase(mainWin, parent, name)
     , d( new KexiScriptDesignViewPrivate() )
 {
-    KexiScriptManager* scriptmanager = Kexi::scriptManager(mainWin);
+    KexiScriptManager* scriptmanager = KexiScriptManager::self(mainWin);
 
     d->scriptcontainer = scriptmanager->getScriptContainer(parentDialog()->partItem()->name(), true);
     plugSharedAction( "script_execute", d->scriptcontainer, SLOT(execute()) );
