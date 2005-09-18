@@ -219,21 +219,21 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         return TRUE;
     case QEvent::KeyPress:
     {
-      QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-      if ( m_currentTextObjectView &&
-	   (keyev->key()==Key_Home ||keyev->key()==Key_End
-	   || keyev->key()==Key_Tab || keyev->key()==Key_Prior
-	   || keyev->key()==Key_Next || keyev->key() == Key_Backtab) )
-      {
-	m_currentTextObjectView->keyPressEvent( keyev );
-	return true;
-      }
-      else if ( !m_currentTextObjectView && keyev->key()==Key_Tab  )
-      {
-	keyPressEvent(keyev);
-	return true;
-      }
-      break;
+        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        if ( m_currentTextObjectView &&
+                (keyev->key()==Key_Home ||keyev->key()==Key_End
+                 || keyev->key()==Key_Tab || keyev->key()==Key_Prior
+                 || keyev->key()==Key_Next || keyev->key() == Key_Backtab) )
+        {
+            m_currentTextObjectView->keyPressEvent( keyev );
+            return true;
+        }
+        else if ( !m_currentTextObjectView && keyev->key()==Key_Tab  )
+        {
+            keyPressEvent(keyev);
+            return true;
+        }
+        break;
     }
     case QEvent::AccelOverride:
     {
@@ -516,7 +516,7 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
     drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
     //draw sticky object
     if ( page->masterPage() && page->displayObjectFromMasterPage() )
-      drawObjectsEdit( painter, rect, page->masterPage()->objectList(), selectionMode, pageNum );
+        drawObjectsEdit( painter, rect, page->masterPage()->objectList(), selectionMode, pageNum );
 }
 
 
@@ -549,7 +549,7 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
 
     for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
         for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j )+pageRect.top() ) < pageRect.bottom(); j += offsetY )
-            if( rect2.contains(  zoomedX, zoomedY ) )
+            if( rect2.contains( zoomedX, zoomedY ) )
                 painter->drawPoint( zoomedX, zoomedY );
 
     painter->restore();
@@ -1487,21 +1487,21 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
-      if (m_currentTextObjectView->isLinkVariable(e->pos()) )
-      {
-	setCursor(Qt::PointingHandCursor);
-	return;
-      }
-      setCursor( arrowCursor );
+        if (m_currentTextObjectView->isLinkVariable(e->pos()) )
+        {
+            setCursor(Qt::PointingHandCursor);
+            return;
+        }
+        setCursor( arrowCursor );
 
-      KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
-      Q_ASSERT(txtObj);
-      if(txtObj->contains( docPoint )&&mousePressed)
-      {
-	KoPoint pos = docPoint - txtObj->innerRect().topLeft();
-	m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
-      }
-      return;
+        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        Q_ASSERT(txtObj);
+        if(txtObj->contains( docPoint )&&mousePressed)
+        {
+            KoPoint pos = docPoint - txtObj->innerRect().topLeft();
+            m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
+        }
+        return;
     }
 
     if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink())
@@ -1509,7 +1509,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         KPObject *tmp_kpobject = getObjectAt( docPoint );
         if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
         {
-	    KPTextObject *kptextobject = static_cast<KPTextObject*>( tmp_kpobject );
+            KPTextObject *kptextobject = static_cast<KPTextObject*>( tmp_kpobject );
             QPoint iPoint = kptextobject->viewToInternal( e->pos(), this );
             KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( kptextobject->textObject()->variableAtPoint( iPoint ) );
 
@@ -1522,12 +1522,13 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     }
 
 	if ( editMode ) {
-	  m_view->setRulerMousePos( e->x(), e->y() );
+        m_view->setRulerMousePos( e->x(), e->y() );
 
         KPObject *kpobject;
         if ( ( !mousePressed || ( m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
              ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
-             toolEditMode == TEM_MOUSE  ) {
+             toolEditMode == TEM_MOUSE  ) 
+        {
             bool cursorAlreadySet = false;
             if ( (int)objectList().count() > 0 )
             {
@@ -3453,33 +3454,33 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, 
 
     if ( rows > 1 )
     {
-      height = ( ( height - 80 ) / rows ) - 20;
-      begin_top = 40;
+        height = ( ( height - 80 ) / rows ) - 20;
+        begin_top = 40;
     }
     if ( cols > 1 )
     {
-      width = (width -5) / cols;
-      begin_left = 5;
+        width = (width -5) / cols;
+        begin_left = 5;
     }
     int top = begin_top;
     int left = begin_left;
     for (int r = 0; r < rows; r++ )
     {
-      for (int c = 0; c < cols; c++ )
-      {
-        page = doc->pageList().at( step.m_pageNumber );
-        if ( !page )
-          return;
-        painter->setViewport( QRect(left, top, width, height) );
-        drawBackground( painter, rect, page, true );
-        drawPresPage( painter, rect, step );
-        if ( drawBorder )
-            painter->drawRect( rect );
-        step.m_pageNumber++;
-        left += width;
-      }
-      top += height + 20; // some y-space between the slides
-      left = begin_left;
+        for (int c = 0; c < cols; c++ )
+        {
+            page = doc->pageList().at( step.m_pageNumber );
+            if ( !page )
+                return;
+            painter->setViewport( QRect(left, top, width, height) );
+            drawBackground( painter, rect, page, true );
+            drawPresPage( painter, rect, step );
+            if ( drawBorder )
+                painter->drawRect( rect );
+            step.m_pageNumber++;
+            left += width;
+        }
+        top += height + 20; // some y-space between the slides
+        left = begin_left;
     }
 
 }
@@ -3650,8 +3651,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     int cols = 1;
     if ( !printer->previewOnly() )
     {
-      rows = printer->option("kde-kpresenter-printrows").toInt();
-      cols = printer->option("kde-kpresenter-printcolumns").toInt();
+        rows = printer->option("kde-kpresenter-printrows").toInt();
+        cols = printer->option("kde-kpresenter-printcolumns").toInt();
     }
     int const slides_per_page = rows * cols;
 
