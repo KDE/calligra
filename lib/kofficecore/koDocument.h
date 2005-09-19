@@ -366,7 +366,7 @@ public:
     /**
      *  Paints the whole document into the given painter object.
      *
-     *  @param painter     The painter object into that should be drawn.
+     *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
      *  @param transparent If true then the entire rectangle is erased before painting.
      *  @param view        The KoView is needed to fiddle about with the active widget, when painting children.
@@ -385,7 +385,7 @@ public:
     /**
      *  Paints all of the documents children into the given painter object.
      *
-     *  @param painter     The painter object into that should be drawn.
+     *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
      *  @param view        The KoView is needed to fiddle about with the active widget.
      *  @param zoomX       The zoom value to be applied to X coordinates when painting.
@@ -399,7 +399,7 @@ public:
      *  Paint a given child. Normally called by paintChildren().
      *
      *  @param child       The child to be painted.
-     *  @param painter     The painter object into that should be drawn.
+     *  @param painter     The painter object onto which will be drawn.
      *  @param view        The KoView is needed to fiddle about with the active widget.
      *  @param zoomX       The zoom value to be applied to X coordinates when painting.
      *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
@@ -414,7 +414,7 @@ public:
      *  paint the children.
      *  It's this method that %KOffice Parts have to implement.
      *
-     *  @param painter     The painter object into that should be drawn on.
+     *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
      *  @param transparent If false the implementing method should fill the background.
      *  @param zoomX       The zoom value to be applied to X coordinates when painting.
