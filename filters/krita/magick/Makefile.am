@@ -21,6 +21,9 @@ INCLUDES= \
 service_DATA = krita_magick_import.desktop krita_magick_export.desktop
 servicedir = $(kde_servicesdir)
 
+kdelnk_DATA = krita_magick.desktop
+kdelnkdir = $(kde_appsdir)/Office
+
 libkritamagickimport_la_SOURCES = magickimport.cpp
 libkritamagickexport_la_SOURCES = magickexport.cpp
 
