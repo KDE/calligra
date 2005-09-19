@@ -308,12 +308,6 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	double sw = gd.snap.width();
 	double sh = gd.snap.height();
 
-	// work around bug in KoUnitDoubleSpinBox
-	fw = KoUnit::fromUserValue( fw, unit );
-	fh = KoUnit::fromUserValue( fh, unit );
-	sw = KoUnit::fromUserValue( sw, unit );
-	sh = KoUnit::fromUserValue( sh, unit );
-
 	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), page );
 	m_gridChBox->setChecked( gd.isShow );
 	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), page );

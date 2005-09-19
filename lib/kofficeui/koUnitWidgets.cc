@@ -130,7 +130,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
     QSpinBox::setValidator( m_validator );
     setAcceptLocalizedNumbers( true );
     setUnit( unit );
-    changeValue( KoUnit::ptToUnit( value, unit ) );
+    changeValue( value );
 }
 
 void
