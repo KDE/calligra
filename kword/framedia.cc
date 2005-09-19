@@ -695,7 +695,7 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     tabLayout->addWidget( runSideGroup );
 
-    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance Between Frame && Text (%1)").arg(doc->unitName()), tab2 );
+    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance Between Frame && Text"), tab2 );
     if ( frame )
         m_raDistConfigWidget->setValues( QMAX(0.00, frame->runAroundLeft()),
                                          QMAX(0.00, frame->runAroundRight()),
@@ -967,8 +967,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         Absolute
     */
 
-    // TODO after 1.4: remove the unit from the label
-    grp1 = new QGroupBox( i18n("Position (%1)").arg(doc->unitName()), tab4 );
+    grp1 = new QGroupBox( i18n("Position").arg(doc->unitName()), tab4 );
     QGridLayout* pGrid = new QGridLayout( grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
@@ -1018,8 +1017,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     grid4->addMultiCellWidget( grp1, row, row, 0,1 );
 
     if(frame) {
-        // TODO after 1.4: remove the unit from the label
-        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins (%1)").arg(doc->unitName()), tab4 );
+        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins").arg(doc->unitName()), tab4 );
         m_paddingConfigWidget->setValues( QMAX(0.00, frame->paddingLeft()),
                                           QMAX(0.00, frame->paddingRight()),
                                           QMAX(0.00, frame->paddingTop()),
@@ -1148,8 +1146,7 @@ void KWFrameDia::initGeometrySettings()
 
             f=allFrames.next();
         }
-        // TODO port to KoUnitDoubleSpinBox
-        // and TODO show a special value when frames have a different width/height
+        // TODO show a special value when frames have a different width/height
         if ( sw->isEnabled() )
             sw->setValue( KoUnit::toUserValue( commonWidth, doc->unit() ) );
         if ( sh->isEnabled() )
