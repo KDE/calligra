@@ -767,7 +767,7 @@ void KivioCanvas::dragEnterEvent( QDragEnterEvent *e )
         (*it)->move(m_origPoint.x(), m_origPoint.y());
       }
 
-      update();
+      repaint();
     }
   }
 }
@@ -792,7 +792,7 @@ void KivioCanvas::dragMoveEvent( QDragMoveEvent *e )
 
   m_origPoint = mousePos;
 
-  update();
+  repaint();
 }
 
 /**
@@ -818,7 +818,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     it = m_dragObjectList.remove(it);
   }
 
-  update();
+  repaint();
   view()->pluginManager()->activateDefaultTool();
 }
 
@@ -840,7 +840,7 @@ void KivioCanvas::dragLeaveEvent( QDragLeaveEvent * )
     it = m_dragObjectList.remove(it);
   }
 
-  update();
+  repaint();
 }
 
 void KivioCanvas::drawSelectedStencilsXOR()
