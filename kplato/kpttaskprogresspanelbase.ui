@@ -476,14 +476,14 @@
     <includehint>ktimewidget.h</includehint>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>
-    <includehint>kplato::kptdurationwidget.h</includehint>
-    <includehint>kplato::kptdurationwidget.h</includehint>
+    <includehint>kptdurationwidget.h</includehint>
+    <includehint>kptdurationwidget.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>
-    <includehint>kplato::kptdurationwidget.h</includehint>
+    <includehint>kptdurationwidget.h</includehint>
 </includehints>
 </UI>

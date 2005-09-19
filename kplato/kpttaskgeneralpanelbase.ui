@@ -527,6 +527,6 @@
     <includehint>ktextedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>kplato::kptdurationwidget.h</includehint>
+    <includehint>kptdurationwidget.h</includehint>
 </includehints>
 </UI>
