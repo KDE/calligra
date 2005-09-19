@@ -133,7 +133,7 @@ void KoStyleManager::setupWidget(const QPtrList<KoParagStyle> & styleList)
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
-                                                 KDialog::marginHint(), KDialog::spacingHint() );
+                                                 0, KDialog::spacingHint() );
     QPtrListIterator<KoParagStyle> style( styleList );
     numStyles = styleList.count();
     m_stylesList = new QListBox( frame1, "stylesList" );
