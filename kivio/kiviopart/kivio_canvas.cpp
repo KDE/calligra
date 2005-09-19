@@ -810,8 +810,11 @@ void KivioCanvas::dropEvent( QDropEvent *e )
   QValueList<Kivio::Object*>::iterator itEnd = m_dragObjectList.end();
   QValueList<Kivio::Object*>::iterator it = m_dragObjectList.begin();
 
+  view()->unselectAllStencils();
+
   while(it != itEnd) {
     view()->activePage()->addStencil(*it);
+    view()->activePage()->selectStencil(*it);
     it = m_dragObjectList.remove(it);
   }
 
