@@ -34,6 +34,7 @@
 #include <qtooltip.h>
 
 #include <koCharSelectDia.h>
+#include <koUnitWidgets.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -831,32 +832,32 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
         indentGrid->addWidget( lLimit, 1,0 );
     }
 
-    QLabel * lLeft = new QLabel( i18n("&Left (%1):").arg(unitName), indentFrame );
+    QLabel * lLeft = new QLabel( i18n("&Left:"), indentFrame );
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 2, 0 );
 
-    eLeft = new KDoubleNumInput( indentFrame );
-    eLeft->setRange( 0, 9999, 1, false);
+    eLeft = new KoUnitDoubleSpinBox( indentFrame, 0, 9999, 1, 0.0, m_unit );
+    //eLeft->setLineStep( KoUnit::toPoint( 1.0 ) );
     lLeft->setBuddy( eLeft );
     indentGrid->addWidget( eLeft, 2, 1 );
     connect( eLeft, SIGNAL( valueChanged(double ) ), this, SLOT( leftChanged( double ) ) );
 
-    QLabel * lRight = new QLabel( i18n("&Right (%1):").arg(unitName), indentFrame );
+    QLabel * lRight = new QLabel( i18n("&Right:"), indentFrame );
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 3, 0 );
 
-    eRight = new KDoubleNumInput( indentFrame );
-    eRight->setRange( 0, 9999, 1, false);
+    eRight = new KoUnitDoubleSpinBox( indentFrame, 0, 9999, 1, 0.0, m_unit );
+    //eRight->setLineStep( KoUnit::toPoint( 1.0 ) );
     lRight->setBuddy( eRight );
     indentGrid->addWidget( eRight, 3, 1 );
     connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
 
-    QLabel * lFirstLine = new QLabel( i18n("&First line (%1):").arg(unitName), indentFrame );
+    QLabel * lFirstLine = new QLabel( i18n("&First line:"), indentFrame );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 4, 0 );
 
-    eFirstLine = new KDoubleNumInput( indentFrame );
-    eFirstLine->setRange( -9999, 9999, 1, false);
+    eFirstLine = new KoUnitDoubleSpinBox( indentFrame, -9999, 9999, 1, 0.0, m_unit );
+    //eFirstLine->setLineStep( 28.3464567 );
     lFirstLine->setBuddy( eFirstLine );
     connect( eFirstLine, SIGNAL( valueChanged( double ) ), this, SLOT( firstChanged( double ) ) );
     indentGrid->addWidget( eFirstLine, 4, 1 );

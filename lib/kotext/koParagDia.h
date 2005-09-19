@@ -55,6 +55,7 @@ class QWidget;
 class KDoubleNumInput;
 class KComboBox;
 class QVBoxLayout;
+class KoUnitDoubleSpinBox;
 
 /**
  * This is the base class for any widget [usually used in a tab]
@@ -126,7 +127,8 @@ private slots:
 private:
     void updateLineSpacing( KoParagLayout::SpacingType _type );
 
-    KDoubleNumInput *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
+    KDoubleNumInput *eBefore, *eAfter, *eSpacing;
+    KoUnitDoubleSpinBox *eLeft, *eRight, *eFirstLine;
     QComboBox *cSpacing;
     KPagePreview *prev1;
     KoUnit::Unit m_unit;
