@@ -132,6 +132,7 @@ class Object{
     /// Is the object selected
     virtual bool selected() const { return m_selected; }
 
+    /// Check if @p point exists inside the objects @see boundingBox()
     virtual int contains(const KoPoint& point);
     virtual bool intersects(const KoRect& rect);
 

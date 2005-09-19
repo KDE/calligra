@@ -85,6 +85,9 @@ class PolylineObject : public Object
     /// Draws a polyline to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 
+    /// Check if @p point exists on any of the polyline's lines
+    virtual int contains(const KoPoint& point);
+
   private:
     QValueVector<KoPoint> m_pointVector;
 };

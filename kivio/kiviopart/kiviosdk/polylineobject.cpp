@@ -24,6 +24,8 @@
 #include <kozoomhandler.h>
 #include <koRect.h>
 
+#include "tkmath.h"
+
 namespace Kivio {
 
 PolylineObject::PolylineObject()
@@ -153,6 +155,30 @@ void PolylineObject::resizeInPercent(double percentWidth, double percentHeight)
     newPoint.setY(newPoint.y() * percentHeight);
     (*it) = newPoint;
   }
+}
+
+int PolylineObject::contains(const KoPoint& point)
+{
+  unsigned int i = 0;
+  KoPoint point1, point2;
+  uint count = m_pointVector.count();
+
+  count -= 1; // As we need current + 1;
+
+  while(i < count) {
+    point1 = m_pointVector[i];
+    point2 = m_pointVector[i + 1];
+
+    if(collisionLine(point1.x(), point1.y(),
+       point2.x(), point2.y(), point.x(), point.y(), 1))
+    {
+      return CTBody;
+    }
+
+    i++;
+  }
+
+  return CTNone;
 }
 
 }
