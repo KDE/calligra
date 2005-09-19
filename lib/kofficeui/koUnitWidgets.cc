@@ -141,11 +141,12 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
       KoUnitDoubleBase( unit, precision ),
     m_lowerInPoints( lower ), m_upperInPoints( upper ), m_stepInPoints( step )
 {
+    m_unit = KoUnit::U_PT;
     m_validator = new KoUnitDoubleValidator( this, this );
     QSpinBox::setValidator( m_validator );
     setAcceptLocalizedNumbers( true );
     setUnit( unit );
-    changeValue( KoUnit::ptToUnit( value, unit ) );
+    changeValue( value );
 }
 
 void

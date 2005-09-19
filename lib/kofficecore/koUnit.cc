@@ -93,7 +93,7 @@ double KoUnit::ptToUnit( const double ptValue, const Unit unit )
     case U_MM:
         return POINT_TO_MM( ptValue );
     case U_CM:
-        return POINT_TO_CC( ptValue );
+        return POINT_TO_CM( ptValue );
     case U_DM:
         return POINT_TO_DM( ptValue );
     case U_INCH:
