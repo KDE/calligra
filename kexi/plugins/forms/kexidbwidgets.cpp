@@ -1480,8 +1480,10 @@ void KexiImageBox::insertFromFile()
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
 		this, 0, i18n("Insert Image From File"));
 #else
-	QString fileName = KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, i18n("Insert Image From File")).pathOrURL();
+	KURL url( KFileDialog::getImageOpenURL(
+		":lastVisitedImagePath", this, i18n("Insert Image From File")) );
+	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
+
 	//! @todo download the file if remote, then set fileName properly
 #endif
 	if (fileName.isEmpty())
