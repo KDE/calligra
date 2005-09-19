@@ -403,14 +403,6 @@
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

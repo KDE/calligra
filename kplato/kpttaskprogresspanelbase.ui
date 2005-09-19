@@ -473,17 +473,8 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kdatetimewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kptdurationwidget.h</includehint>
-    <includehint>kptdurationwidget.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
     <includehint>kptdurationwidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
 </includehints>
 </UI>
