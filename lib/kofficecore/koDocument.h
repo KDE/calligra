@@ -414,9 +414,9 @@ public:
      *  paint the children.
      *  It's this method that %KOffice Parts have to implement.
      *
-     *  @param painter     The painter object into that should be drawn.
+     *  @param painter     The painter object into that should be drawn on.
      *  @param rect        The rect that should be used in the painter object.
-     *  @param transparent If true then the entire rectangle is erased before painting.
+     *  @param transparent If false the implementing method should fill the background.
      *  @param zoomX       The zoom value to be applied to X coordinates when painting.
      *  @param zoomY       The zoom value to be applied to Y coordinates when painting.
      *
