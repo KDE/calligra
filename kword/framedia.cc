@@ -967,7 +967,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         Absolute
     */
 
-    grp1 = new QGroupBox( i18n("Position").arg(doc->unitName()), tab4 );
+    grp1 = new QGroupBox( i18n("Position"), tab4 );
     QGridLayout* pGrid = new QGridLayout( grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
@@ -1017,7 +1017,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     grid4->addMultiCellWidget( grp1, row, row, 0,1 );
 
     if(frame) {
-        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins").arg(doc->unitName()), tab4 );
+        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins"), tab4 );
         m_paddingConfigWidget->setValues( QMAX(0.00, frame->paddingLeft()),
                                           QMAX(0.00, frame->paddingRight()),
                                           QMAX(0.00, frame->paddingTop()),
