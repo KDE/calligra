@@ -997,6 +997,10 @@ protected:
      * @see #saveChildren for internal children
      */
     virtual bool saveExternalChildren();
+    /**
+     * Sets the number of pages.
+     */
+    void setPageCount(int p) { m_pageCount=p; }
 
 private slots:
     void slotChildChanged( KoChild *c );
@@ -1007,12 +1011,10 @@ private slots:
 private:
     static KService::Ptr readNativeService( KInstance *instance );
     KService::Ptr nativeService();
-
     bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );
     bool savePreview( KoStore* store );
     bool saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter );
-    void setPageCount(int p) { m_pageCount=p; }
     class Private;
     Private *d;
     KService::Ptr m_nativeService;
