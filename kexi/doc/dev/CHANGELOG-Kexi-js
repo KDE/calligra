@@ -11,6 +11,16 @@
 ---------------------------------------------------
 
 CCMAIL: dkite@shaw.ca
+
+2005-09-17..20
+KexiProject
+- createInternalStructures() added; semi-internal (not well suited for kexidb itself) 
+  structures like kexi__blobs table are created now if not yet exist
+- internal kexi__blobs table introduced: for BLOB storage
+General
+- some i18n strings fixed
+- KEXI_NO_AUTOFIELD_WIDGET, KEXI_NO_IMAGEBOX_WIDGET temp. compile time options added
+
 2005-09-16
 Forms
 - FormIO: some fixes in method's naming

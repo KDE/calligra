@@ -111,6 +111,22 @@ Description: If defined, KexiGradientWidget is used as form's background.
 Currently disabled due to problems with performance and child widget's palettes.
 
 
+* KEXI_NO_SUBFORM
+Type: defined/undefined, temporary
+Default: undefined
+Description: If defined, subform widget will not be available
+
+* KEXI_NO_AUTOFIELD_WIDGET
+Type: defined/undefined, temporary
+Default: undefined
+Description: If defined, atofield (KexiDBFieldEdit) widget will not be available, 
+nor dragging fields from "data source" will be available
+
+* KEXI_NO_IMAGEBOX_WIDGET
+Type: defined/undefined, temporary
+Default: undefined
+Description: If defined, image box (KexiImageBox) widget will not be available
+
 ==== Obsolete, don't use ====
 
 * KDOCKWIDGET_P

@@ -572,6 +572,8 @@ FORMS:
 --add filter property (using KImageEffect)
 --add QFrame container
 --make image-related actions undoable/redoable in design time
+-property pane: shrink widget name displayed at the top by adding "..." to avoid problems
+ with pane's size when selected widget has very long name
 
 ImportWizard:
 -store "Recent Paths" for browsed directory file 

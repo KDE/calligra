@@ -698,6 +698,7 @@ void KexiMainWindowImpl::initActions()
 //	d->action_open_recent = KStdAction::openRecent( this, SLOT(slotProjectOpenRecent(const KURL&)), actionCollection(), "project_open_recent" );
 
 //#ifdef KEXI_SHOW_UNIMPLEMENTED
+#ifndef KEXI_NO_UNFINISHED
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"),
 		actionCollection(), "project_open_recent");
 	connect(d->action_open_recent->popupMenu(),SIGNAL(activated(int)),
@@ -711,9 +712,9 @@ void KexiMainWindowImpl::initActions()
 //	d->action_open_recent->popupMenu()->insertSeparator();
 //	d->action_open_recent_more_id = d->action_open_recent->popupMenu()
 //		->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
-//#else
-//	d->action_open_recent = d->dummy_action;
-//#endif
+#else
+	d->action_open_recent = d->dummy_action;
+#endif
 
 	d->action_save = KStdAction::save( this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
 //	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
@@ -981,7 +982,7 @@ void KexiMainWindowImpl::initActions()
 
 #ifndef KEXI_NO_FEEDBACK_AGENT
 #ifdef FEEDBACK_CLASS
-	new KAction(i18n("Give feedback"), "messagebox_info", 0,
+	new KAction(i18n("Give feedback..."), "messagebox_info", 0,
 		this, SLOT(slotStartFeedbackAgent()), actionCollection(), "help_start_feedback_agent");
 #endif
 #endif

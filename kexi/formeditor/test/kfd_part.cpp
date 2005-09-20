@@ -213,8 +213,8 @@ KFormDesignerPart::setupActions()
 	layoutMenu->insert(new KAction(i18n("&Horizontally"), QString::null, KShortcut(0), m_manager, SLOT(layoutHBox()), actionCollection(), "layout_hbox"));
 	layoutMenu->insert(new KAction(i18n("&Vertically"), QString::null, KShortcut(0), m_manager, SLOT(layoutVBox()), actionCollection(), "layout_vbox"));
 	layoutMenu->insert(new KAction(i18n("In &Grid"), QString::null, KShortcut(0), m_manager, SLOT(layoutGrid()), actionCollection(), "layout_grid"));
-	layoutMenu->insert(new KAction(i18n("By Lines"), QString::null, KShortcut(0), m_manager, SLOT(layoutHFlow()), actionCollection(), "layout_hflow"));
-	layoutMenu->insert(new KAction(i18n("By Columns"), QString::null, KShortcut(0), m_manager, SLOT(layoutVFlow()), actionCollection(), "layout_vflow"));
+	layoutMenu->insert(new KAction(i18n("By &Rows"), QString::null, KShortcut(0), m_manager, SLOT(layoutHFlow()), actionCollection(), "layout_hflow"));
+	layoutMenu->insert(new KAction(i18n("By &Columns"), QString::null, KShortcut(0), m_manager, SLOT(layoutVFlow()), actionCollection(), "layout_vflow"));
 	layoutMenu->insert(new KAction(i18n("Horizontally in a &Splitter"), QString::null, KShortcut(0), m_manager, SLOT(layoutHSplitter()), actionCollection(), "layout_hsplitter"));
 	layoutMenu->insert(new KAction(i18n("Verti&cally in a Splitter"), QString::null, KShortcut(0), m_manager, SLOT(layoutVSplitter()), actionCollection(), "layout_vsplitter"));
 	new KAction(i18n("&Ungroup widgets"), QString::null, KShortcut(0), m_manager, SLOT(breakLayout()), actionCollection(), "break_layout");

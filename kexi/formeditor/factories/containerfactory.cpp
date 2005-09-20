@@ -410,8 +410,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wHFlow->setClassName("HFlow");
 	wHFlow->setName(i18n("Lines Layout"));
 	wHFlow->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "lineLayout"));
-	wHFlow->setDescription(i18n("A simple container to group widgets by lines"));
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "rowLayout"));
+	wHFlow->setDescription(i18n("A simple container to group widgets by rows"));
 	addClass(wHFlow);
 
 	KFormDesigner::WidgetInfo *wVFlow = new KFormDesigner::WidgetInfo(this);

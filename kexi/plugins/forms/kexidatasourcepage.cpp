@@ -120,6 +120,12 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	dsLabel->setBuddy(m_dataSourceCombo);
 	vlyr->addWidget(m_dataSourceCombo);
 
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+	m_availableFieldsLabel = 0;
+	m_addField = 0;
+	m_fieldListView = 0;
+	vlyr->addStretch();
+#else
 	vlyr->addSpacing(8);
 	QFrame *separator = new QFrame(this);
 	separator->setFrameShape(QFrame::HLine);
@@ -164,11 +170,12 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 //	m_fieldListView->header()->show();
 	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
 	vlyr->addWidget(m_fieldListView);
+	connect(m_fieldListView, SIGNAL(selectionChanged()), this, SLOT(slotFieldListViewSelectionChanged()));
+#endif
 
 	connect(m_dataSourceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(slotDataSourceTextChanged(const QString &)));
 	connect(m_dataSourceCombo, SIGNAL(dataSourceSelected()), this, SLOT(slotDataSourceSelected()));
 	connect(m_sourceFieldCombo, SIGNAL(selected()), this, SLOT(slotFieldSelected()));
-	connect(m_fieldListView, SIGNAL(selectionChanged()), this, SLOT(slotFieldListViewSelectionChanged()));
 
 	clearDataSourceSelection();
 	slotFieldListViewSelectionChanged();
@@ -197,8 +204,10 @@ void KexiDataSourcePage::clearDataSourceSelection()
 //	}
 	m_clearDSButton->setEnabled(false);
 	m_gotoButton->setEnabled(false);
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	m_addField->setEnabled(false);
 	m_fieldListView->clear();
+#endif
 	m_insideClearDataSourceSelection = false;
 }
 
@@ -222,6 +231,7 @@ void KexiDataSourcePage::slotGotoSelected()
 
 void KexiDataSourcePage::slotInsertSelectedFields()
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	if (!m_fieldListView->schema())
 		return;
 	QStringList selectedFields;
@@ -236,6 +246,7 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 
 	emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query", 
 		m_fieldListView->schema()->name(), selectedFields);
+#endif
 }
 
 void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
@@ -244,9 +255,11 @@ void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 	if (!enable) {
 		clearDataSourceSelection();
 	}
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	m_fieldListView->setEnabled(enable);
 //	m_addField->setEnabled(enable);
 	m_availableFieldsLabel->setEnabled(enable);
+#endif
 }
 
 void KexiDataSourcePage::slotDataSourceSelected()
@@ -260,7 +273,9 @@ void KexiDataSourcePage::slotDataSourceSelected()
 		KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
 			m_dataSourceCombo->project()->dbConnection(), name, mime=="kexi/table");
 		if (tableOrQuery->table() || tableOrQuery->query()) {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 			m_fieldListView->setSchema( tableOrQuery );
+#endif
 			dataSourceFound = true;
 			m_sourceFieldCombo->setTableOrQuery(name, mime=="kexi/table");
 		}
@@ -273,10 +288,13 @@ void KexiDataSourcePage::slotDataSourceSelected()
 	}
 	m_clearDSButton->setEnabled(dataSourceFound);
 	m_gotoButton->setEnabled(dataSourceFound);
-	if (dataSourceFound)
+	if (dataSourceFound) {
 		slotFieldListViewSelectionChanged();
-	else
+	} else {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 		m_addField->setEnabled(false);
+#endif
+	}
 
 	emit formDataSourceChanged(mime, name);
 }
@@ -371,6 +389,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 
 void KexiDataSourcePage::slotFieldListViewSelectionChanged()
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	//update "add field" button's state
 	for (QListViewItemIterator it(m_fieldListView); it.current(); ++it) {
 		if (it.current()->isSelected()) {
@@ -379,6 +398,7 @@ void KexiDataSourcePage::slotFieldListViewSelectionChanged()
 		}
 	}
 	m_addField->setEnabled(false);
+#endif
 }
 
 #include "kexidatasourcepage.moc"

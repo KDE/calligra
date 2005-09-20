@@ -691,6 +691,13 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 destroys it. Does not make any change at the backend. */
 		void removeTableSchemaInternal(KexiDB::TableSchema *tableSchema);
 
+//TODO: move this somewhere to low level class (MIGRATION?)
+		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
+		 with name \a tableName exists in the database.
+		 \return false if it does not exist or error occured.
+		 The lookup is case insensitive. */
+		virtual bool drv_containsTable( const QString &tableName ) = 0;
+
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, ConnectionData &conn_data );
@@ -733,13 +740,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 The method should return true only if there was no error on getting database names 
 		 list from the server. */
 		virtual bool drv_getTablesList( QStringList &list ) = 0;
-
-//TODO: move this somewhere to low level class (MIGRATION?)
-		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
-		 with name \a tableName exists in the database.
-		 \return false if it does not exist or error occured.
-		 The lookup is case insensitive. */
-		virtual bool drv_containsTable( const QString &tableName ) = 0;
 
 		/*! For optional reimplemenation: asks server if database \a dbName exists.
 		 This method is used internally in databaseExists(). The default  implementation

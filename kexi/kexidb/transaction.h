@@ -29,7 +29,7 @@ namespace KexiDB {
 class Connection;
 
 /*! Internal prototype for storing transaction handles for Transaction object.
- Note for driver developers: reimplement this class for driver that
+ Only for driver developers: reimplement this class for driver that
  support transaction handles.
 */
 class KEXI_DB_EXPORT TransactionData
@@ -48,8 +48,8 @@ class KEXI_DB_EXPORT TransactionData
 		uint refcount;
 };
 
-/*! This class encapsulates transaction handle.
-	Transaction handle is sql driver-dependent,
+//! This class encapsulates transaction handle.
+/*! Transaction handle is sql driver-dependent,
 	but outside Transaction is visible as universal container 
 	for any handler implementation.
 	
@@ -94,8 +94,8 @@ class KEXI_DB_EXPORT Transaction : public QObject
 	friend class Connection;
 };
 
-/*! Helper class for using inside methods for given connection. 
-	It can be used in two ways:
+//! Helper class for using inside methods for given connection. 
+/*! It can be used in two ways:
 	- start new transaction in constructor and rollback on destruction (1st constructor),
 	- use already started transaction and rollback on destruction (2nd constructor).
 	In any case, if transaction is committed or rolled back outside this TransactionGuard
@@ -126,12 +126,15 @@ class KEXI_DB_EXPORT TransactionGuard
 		/*! Constructor #2: Uses already started transaction. */
 		TransactionGuard( const Transaction& trans );
 
-		/*! Constructor #2: Uses already started transaction. */
+		/*! Constructor #3: Creates TransactionGuard without transaction assinged. 
+		 setTransaction() can be used later to do so. */
 		TransactionGuard();
 
 		/*! Rollbacks not commited transaction. */
 		~TransactionGuard();
 
+		/*! Assigns transaction \a trans to this guard. 
+		 Previously assigned transaction will be unassigned from this guard. */
 		void setTransaction( const Transaction& trans ) { m_trans = trans; }
 
 		/*! Comits the guarded transaction. 

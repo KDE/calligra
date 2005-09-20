@@ -112,7 +112,10 @@ KexiProject::open()
 		return false;
 	}
 
-	return initProject();
+	if (!initProject())
+		return false;
+
+	return createInternalStructures(/*insideTransaction*/true);
 }
 
 tristate
@@ -151,18 +154,10 @@ KexiProject::create(bool forceOverwrite)
 
 	//<add some data>
 	KexiDB::Transaction trans = m_connection->beginTransaction();
+	if (trans.isNull())
+		return false;
 
-	//create global BLOB container
-	KexiDB::InternalTableSchema *t_blobs = new KexiDB::InternalTableSchema("kexi__blobs");
-	t_blobs->addField( new KexiDB::Field("o_id", KexiDB::Field::Integer, 
-		KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) )
-	.addField( new KexiDB::Field("o_data", KexiDB::Field::BLOB) )
-	.addField( new KexiDB::Field("o_name", KexiDB::Field::Text ) )
-	.addField( new KexiDB::Field("o_caption", KexiDB::Field::Text ) )
-	.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull, 
-		KexiDB::Field::NoOptions, 0, 0 ) );
-
-	if (!m_connection->createTable( t_blobs, false/*!replaceExisting*/ ))
+	if (!createInternalStructures(/*!insideTransaction*/false))
 		return false;
 
 	//add some metadata
@@ -183,6 +178,37 @@ KexiProject::create(bool forceOverwrite)
 	//</add some data>
 
 	return initProject();
+}
+
+bool KexiProject::createInternalStructures(bool insideTransaction)
+{
+	KexiDB::TransactionGuard tg;
+	if (insideTransaction) {
+		tg.setTransaction( m_connection->beginTransaction() );
+		if (tg.transaction().isNull())
+			return false;
+	}
+
+	//*** create global BLOB container, if not present
+	if (!m_connection->drv_containsTable("kexi__blobs")) {
+		KexiDB::InternalTableSchema *t_blobs = new KexiDB::InternalTableSchema("kexi__blobs");
+		t_blobs->addField( new KexiDB::Field("o_id", KexiDB::Field::Integer, 
+			KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) )
+		.addField( new KexiDB::Field("o_data", KexiDB::Field::BLOB) )
+		.addField( new KexiDB::Field("o_name", KexiDB::Field::Text ) )
+		.addField( new KexiDB::Field("o_caption", KexiDB::Field::Text ) )
+		.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull, 
+			KexiDB::Field::NoOptions, 0, 0 ) );
+
+		if (!m_connection->createTable( t_blobs, false/*!replaceExisting*/ ))
+			return false;
+	}
+
+	if (insideTransaction) {
+		if (tg.transaction().active() && !tg.commit())
+			return false;
+	}
+	return true;
 }
 
 bool

@@ -219,6 +219,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setDescription(i18n("A widget for displaying text"));
 	addClass(wi);
 
+#ifndef KEXI_NO_IMAGEBOX_WIDGET
 	wi = new KexiDataAwareWidgetInfo(
 		this, "stdwidgets", "KexiPictureLabel" /*we're inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("pixmaplabel");
@@ -231,6 +232,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wi);
 
 	setInternalProperty("KexiImageBox", "dontStartEditingOnInserting", "1");
+#endif
 
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
 	wi->setPixmap("check");
@@ -242,6 +244,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setDescription(i18n("A check box with text label"));
 	addClass(wi);
 
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	KexiDataAwareWidgetInfo *wFieldEdit = new KexiDataAwareWidgetInfo(this);
 	wFieldEdit->setPixmap("edit");
 	wFieldEdit->setClassName("KexiDBFieldEdit");
@@ -250,6 +253,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "autoField"));
 	wFieldEdit->setDescription(i18n("A widget containing an automatically chosen editor and a label to edit value database field of any type."));
 	addClass(wFieldEdit);
+#endif
 
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateWidget");
@@ -301,20 +305,20 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wIntSpinBox->setClassName("KexiDBIntSpinBox");
 	wIntSpinBox->addAlternateClassName("QSpinBox", true);
 	wIntSpinBox->addAlternateClassName("KIntSpinBox", true);
-	wIntSpinBox->setName(i18n("Integer Spin Box"));
+	wIntSpinBox->setName(i18n("Integer Number Spin Box"));
 	wIntSpinBox->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "intSpinBox"));
-	wIntSpinBox->setDescription(i18n("A spin box widget to enter integers"));
+	wIntSpinBox->setDescription(i18n("A spin box widget to input and display integer numbers"));
 	addClass(wIntSpinBox);
 
 	KexiDataAwareWidgetInfo *wDoubleSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets");
 	wDoubleSpinBox->setPixmap("spin");
 	wDoubleSpinBox->setClassName("KexiDBDoubleSpinBox");
 	wDoubleSpinBox->addAlternateClassName("KDoubleSpinBox", true);
-	wDoubleSpinBox->setName(i18n("Decimal Spin Box"));
+	wDoubleSpinBox->setName(i18n("Floating-point Number Spin Box"));
 	wDoubleSpinBox->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dblSpinBox"));
-	wDoubleSpinBox->setDescription(i18n("A spin box widget to enter decimals"));
+	wDoubleSpinBox->setDescription(i18n("A spin box widget to input and display floating-point numbers"));
 	addClass(wDoubleSpinBox);
 
 	// inherited
@@ -396,10 +400,14 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	}
 	else if(c == "KexiLabel")
 		w = new KexiLabel(text, p, n);
+#ifndef KEXI_NO_IMAGEBOX_WIDGET
 	else if(c == "KexiImageBox")
 		w = new KexiImageBox(designMode, p, n);
+#endif
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	else if(c == "KexiDBFieldEdit")
 		w = new KexiDBFieldEdit(p, n, designMode);
+#endif
 	else if(c == "KexiDBCheckBox")
 		w = new KexiDBCheckBox(text, p, n);
 	else if(c == "KexiDBTimeEdit")

@@ -223,6 +223,27 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 
 		bool initProject();
 
+		/*! Kexi itself can define a number of internal database objects (mostly data structures), 
+		 usually tables for it's own purposes.
+		 Even while at KexiDB library level, such "system" tables, like "kexi__objects", "kexi__objectdata"
+		 are created automatically on database project creation, this is not enough: there are objects
+		 needed specifically for Kexi but not for other applications utilizing KexiDB library.
+		 Example table created here for now is "kexi__blobs". 
+
+		 This method is called on create() and open(): creates necessary objects 
+		 if they are not yet existing. This especially allows to create to create these objects
+		 (on open) within a project made with previous Kexi version not supporting 
+		 all currently defined structurtes. We're trying to be here as much backward compatible as possible.
+		 For this purpose, here's the complete list of currently created objects:
+		 - "kexi__blobs" - a table containing BLOBs data taht can be accessed globally at Kexi projects
+		   from within any database-aware view (table views, forms, reports, etc.)
+		 
+		 @param insideTransaction Embed entire creation process inside a transaction
+
+		 \return true on successful object's creation. Objects are created only once, they are not overwritten.
+		*/
+		bool createInternalStructures(bool insideTransaction);
+
 /* moved to Object
 		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
 		virtual void setError( const QString &msg );

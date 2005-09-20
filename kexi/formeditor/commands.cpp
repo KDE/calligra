@@ -983,7 +983,7 @@ CreateLayoutCommand::name() const
 		case Container::VSplitter:
 			return i18n("Group Widgets Vertically in a Splitter");
 		case Container::HFlow:
-			return i18n("Group Widgets By Lines");
+			return i18n("Group Widgets By Rows");
 		case Container::VFlow:
 			return i18n("Group Widgets Vertically By Columns");
 		default:
