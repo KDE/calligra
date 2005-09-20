@@ -104,8 +104,7 @@ public:
         m_doNotSaveExtDoc( false ),
         m_current( false ),
         m_storeInternal( false ),
-        m_bLoading( false ),
-	m_pageCount( 0 )
+        m_bLoading( false )
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
@@ -209,7 +208,7 @@ void KoBrowserExtension::print()
 }
 
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KParts::ReadWritePart( parent, name )
+    : KParts::ReadWritePart( parent, name ), m_pageCount(1)
 {
     if(s_documentList==0L)
         s_documentList=new QPtrList<KoDocument>;

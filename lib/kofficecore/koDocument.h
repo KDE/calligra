@@ -835,7 +835,7 @@ public:
      * @internal (public for KoMainWindow)
      */
     void setMimeTypeAfterLoading( const QString& mimeType );
-    int  pageCount() { return m_pageCount; }
+    int  pageCount() const { return m_pageCount; } 
 
 signals:
     /**
