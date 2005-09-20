@@ -125,6 +125,12 @@ void PolylineObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
   painter.setPen(pen().zoomedPen(zoomHandler));
   painter.setBrush(brush());
   painter.drawPolyline(pointArray);
+
+  if(selected()) {
+    for(int i = 0; i < pointArray.size(); ++i) {
+      paintResizePoint(painter, pointArray[i]);
+    }
+  }
 }
 
 void PolylineObject::move(double xOffset, double yOffset)
@@ -157,11 +163,23 @@ void PolylineObject::resizeInPercent(double percentWidth, double percentHeight)
   }
 }
 
-int PolylineObject::contains(const KoPoint& point)
+CollisionFeedback PolylineObject::contains(const KoPoint& point)
 {
   unsigned int i = 0;
   KoPoint point1, point2;
   uint count = m_pointVector.count();
+  CollisionFeedback feedback;
+  feedback.type = CTNone;
+
+  while(i < count) {
+    if(hitResizePoint(m_pointVector[i], point)) {
+      feedback.type = CTResizePoint;
+      feedback.resizePointId = i;
+      return feedback;
+    }
+
+    ++i;
+  }
 
   count -= 1; // As we need current + 1;
 
@@ -172,13 +190,19 @@ int PolylineObject::contains(const KoPoint& point)
     if(collisionLine(point1.x(), point1.y(),
        point2.x(), point2.y(), point.x(), point.y(), 1))
     {
-      return CTBody;
+      feedback.type = CTBody;
+      return feedback;
     }
 
-    i++;
+    ++i;
   }
 
-  return CTNone;
+  return feedback;
+}
+
+void PolylineObject::moveResizePoint(int pointId, const KoPoint& offset)
+{
+  m_pointVector[pointId] += offset;
 }
 
 }

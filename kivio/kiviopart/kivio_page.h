@@ -48,7 +48,7 @@ class DCOPObject;
 #include <koPoint.h>
 
 #include "kivio_stencil.h"
-#include <object.h>
+#include "object.h"
 #include <koffice_export.h>
 class KivioPainter;
 class KPrinter;
@@ -134,7 +134,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     int generateStencilIds( int );
 
     KivioStencil *checkForStencil( KoPoint *, int *, double, bool);
-    Kivio::Object* checkForCollision(const KoPoint& point, int& collisionType);
+    Kivio::Object* checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback);
 
 
     KivioLayer *curLayer()const { return m_pCurLayer; }

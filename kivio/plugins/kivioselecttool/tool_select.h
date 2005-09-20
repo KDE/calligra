@@ -23,8 +23,9 @@
 #include <qvaluelist.h>
 
 #include <koPoint.h>
-#include <koRect.h>
+
 #include "kivio_mousetool.h"
+#include "object.h"
 
 class KivioView;
 class KivioPage;
@@ -33,28 +34,6 @@ class QKeyEvent;
 class KPopupMenu;
 class KRadioAction;
 class KAction;
-
-class KivioStencil;
-
-namespace Kivio {
-  class Object;
-}
-
-class KivioSelectDragData
-{
-  public:
-    KoRect rect;
-};
-
-enum {
-    stCut=1,
-    stCopy,
-    stPaste,
-    stSendToBack,
-    stBringToFront,
-    stGroup,
-    stUngroup
-};
 
 class SelectTool : public Kivio::MouseTool
 {
@@ -70,12 +49,8 @@ class SelectTool : public Kivio::MouseTool
   public slots:
     void setActivated(bool a);
 
-  signals:
-    void operationDone();
-
   protected slots:
     void editText(QPtrList<KivioStencil>* stencils);
-    void showProperties();
     void editStencilText();
 
   protected:
@@ -94,28 +69,24 @@ class SelectTool : public Kivio::MouseTool
     bool startRubberBanding(const QPoint&);
 
     void move(const QPoint& pos);
-    void endOperation();
+    void endMove();
 
-    void continueDragging(const QPoint&, bool ignoreGridGuides = false);
+    void resize(const QPoint& pos);
+    void endResize();
+
     void continueCustomDragging(const QPoint&);
     void continueResizing(const QPoint&, bool ignoreGridGuides = false);
     void continueRubberBanding(const QPoint&);
 
     void endResizing(const QPoint&);
-    void endDragging(const QPoint&);
     void endCustomDragging(const QPoint&);
     void endRubberBanding(const QPoint&);
 
     void showPopupMenu(const QPoint&);
 
     void changeMouseCursor(const QPoint&);
-    int isOverResizeHandle( KivioStencil *pStencil, const double x, const double y );
 
     void keyPress(QKeyEvent* e);
-
-    QPoint m_startPoint, m_releasePoint;
-    KoPoint m_lastPoint;
-    KoPoint m_origPoint;
 
   protected:
     typedef enum Mode {
@@ -127,23 +98,16 @@ class SelectTool : public Kivio::MouseTool
 
   private:
     Mode m_mode;
-    KivioStencil *m_pResizingStencil;
-    KivioStencil *m_pCustomDraggingStencil;
-    int m_resizeHandle;
-    bool m_controlKey;
-    int m_customDragID;
-    QPtrList <KivioSelectDragData> m_lstOldGeometry;
-    KoRect m_selectedRect;
 
     KRadioAction* m_selectAction;
     KAction* m_arrowHeadAction;
     KAction* m_textEditAction;
     KAction* m_textFormatAction;
 
-    bool m_firstTime;
-    int m_collisionType;
+    Kivio::CollisionFeedback m_collisionFeedback;
     KoPoint m_previousPos;
     QValueList<Kivio::Object*> m_origObjectList;
+    Kivio::Object* m_clickedObject;
 };
 
 #endif

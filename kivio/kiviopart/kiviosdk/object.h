@@ -55,15 +55,13 @@ typedef enum {
 typedef enum CollisionType {
   CTNone = 0,
   CTBody,
-  CTResizeTopLeft,
-  CTResizeTop,
-  CTResizeTopRight,
-  CTResizeLeft,
-  CTResizeRight,
-  CTResizeBottomLeft,
-  CTResizeBottom,
-  CTResizeBottomRight,
+  CTResizePoint,
   CTCustom = 1000 // All custom collision types should depend on this value
+};
+
+typedef struct CollisionFeedback {
+  CollisionType type;
+  int resizePointId;
 };
 
 /**
@@ -133,9 +131,15 @@ class Object{
     virtual bool selected() const { return m_selected; }
 
     /// Check if @p point exists inside the objects @see boundingBox()
-    virtual int contains(const KoPoint& point);
+    virtual CollisionFeedback contains(const KoPoint& point);
     virtual bool intersects(const KoRect& rect);
 
+    /// Move resize point @p pointId with @p offset points
+    virtual void moveResizePoint(int pointId, const KoPoint& offset) = 0;
+    /// Paint zoomed resize point @p point
+    virtual void paintResizePoint(QPainter& painter, const QPoint& point);
+    /// Check if @p point is in resize point @p resizePoint
+    virtual bool hitResizePoint(const KoPoint& resizePoint, const KoPoint& point);
 
   private:
     QString m_name;

@@ -643,14 +643,14 @@ KivioStencil *KivioPage::checkForStencil( KoPoint *pPoint, int *collisionType, d
     return NULL;
 }
 
-Kivio::Object* KivioPage::checkForCollision(const KoPoint& point, int& collisionType)
+Kivio::Object* KivioPage::checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback)
 {
   Kivio::Object* object = 0;
   KivioLayer* pLayer = m_lstLayers.last();
 
   while( pLayer )
   {
-    object = pLayer->checkForCollision(point, collisionType);
+    object = pLayer->checkForCollision(point, collisionFeedback);
 
     if(object) {
       return object;

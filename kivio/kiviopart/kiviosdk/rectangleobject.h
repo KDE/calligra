@@ -77,6 +77,9 @@ class RectangleObject : public Object
     /// Draws a rectangle to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 
+    /// Move resize point @p pointId with @p offset points
+    virtual void moveResizePoint(int pointId, const KoPoint& offset);
+
   private:
     KoPoint m_position;
     KoSize m_size;

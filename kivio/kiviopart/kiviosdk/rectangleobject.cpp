@@ -114,4 +114,8 @@ void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
   painter.drawRect(rect);
 }
 
+void RectangleObject::moveResizePoint(int pointId, const KoPoint& offset)
+{
+}
+
 }

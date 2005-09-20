@@ -61,14 +61,9 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
                           actionCollection(), "formatStencil");
   m_arrowHeadAction = new KAction(i18n("Format &Arrowheads..."), 0, 0, view(), SLOT(arrowHeadFormat()),
                                   actionCollection(), "formatConnector");
-  
+
   m_mode = MSelect;
-  m_pResizingStencil = NULL;
-  m_pCustomDraggingStencil = NULL;
-
-  m_lstOldGeometry.setAutoDelete(true);
-
-  m_customDragID = 0;
+  m_clickedObject = 0;
 }
 
 SelectTool::~SelectTool()
@@ -116,7 +111,7 @@ bool SelectTool::processEvent(QEvent* e)
     }
 
     case QEvent::MouseButtonRelease:
-      endOperation();
+      endMove();
       canvas->setFocus();
       return true;
       break;
@@ -150,6 +145,7 @@ void SelectTool::setActivated(bool a)
   } else if(m_selectAction->isChecked()) {
     m_selectAction->setChecked(false);
     view()->canvasWidget()->activePage()->setPaintSelected(true);
+    m_clickedObject = 0;
   }
 }
 
@@ -188,10 +184,9 @@ void SelectTool::select(const QRect &r)
 
 void SelectTool::leftMouseButtonPressed(const QPoint& pos, bool selectMultiple)
 {
-  endOperation();
-  int collisionType = 0;
+  Kivio::CollisionFeedback collisionFeedback;
   KoPoint p = view()->canvasWidget()->mapFromScreen(pos);
-  Kivio::Object* object = view()->activePage()->checkForCollision(p, collisionType);
+  Kivio::Object* object = view()->activePage()->checkForCollision(p, collisionFeedback);
 
   kdDebug() << "Select!" << endl;
 
@@ -219,9 +214,9 @@ void SelectTool::leftMouseButtonPressed(const QPoint& pos, bool selectMultiple)
   view()->canvasWidget()->update();
 
   if(object->selected()) {
-    if(collisionType == CTBody) {
+    if(collisionFeedback.type == CTBody) {
       m_mode = MMove;
-    } else if((collisionType >= CTResizeTopLeft) && (collisionType <= CTResizeBottomRight)) {
+    } else if(collisionFeedback.type == CTResizePoint) {
       m_mode = MResize;
     }
 
@@ -234,7 +229,8 @@ void SelectTool::leftMouseButtonPressed(const QPoint& pos, bool selectMultiple)
     }
 
     m_previousPos = p;
-    m_collisionType = collisionType;
+    m_collisionFeedback = collisionFeedback;
+    m_clickedObject = object;
   }
 
   changeMouseCursor(pos);
@@ -257,34 +253,31 @@ void SelectTool::move(const QPoint& pos)
   m_previousPos = p;
 }
 
-void SelectTool::endOperation()
+void SelectTool::endMove()
 {
   QValueList<Kivio::Object*>::iterator it = m_origObjectList.begin();
   QValueList<Kivio::Object*>::iterator itEnd = m_origObjectList.end();
+  QValueList<Kivio::Object*>::iterator it2 = view()->activePage()->selectedStencils()->begin();
+  QValueList<Kivio::Object*>::iterator itEnd2 = view()->activePage()->selectedStencils()->end();
+  KMacroCommand* macro = new KMacroCommand(i18n("Move Stencil"));
+  bool moved = false;
 
-  if(m_mode == MMove) {
-    QValueList<Kivio::Object*>::iterator it2 = view()->activePage()->selectedStencils()->begin();
-    QValueList<Kivio::Object*>::iterator itEnd2 = view()->activePage()->selectedStencils()->end();
-    KMacroCommand* macro = new KMacroCommand(i18n("Move Stencil"));
-    bool moved = false;
-
-    while((it != itEnd) && (it2 != itEnd2)) {
-      if((*it)->position() != (*it2)->position()) {
-        KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
-            (*it2), (*it)->position(), (*it2)->position(), view()->activePage());
-        macro->addCommand( cmd);
-        moved = true;
-      }
-
-      ++it;
-      ++it2;
+  while((it != itEnd) && (it2 != itEnd2)) {
+    if((*it)->position() != (*it2)->position()) {
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
+          (*it2), (*it)->position(), (*it2)->position(), view()->activePage());
+      macro->addCommand( cmd);
+      moved = true;
     }
 
-    if(moved) {
-      view()->doc()->addCommand(macro);
-    } else {
-      delete macro;
-    }
+    ++it;
+    ++it2;
+  }
+
+  if(moved) {
+    view()->doc()->addCommand(macro);
+  } else {
+    delete macro;
   }
 
   it = m_origObjectList.begin();
@@ -295,6 +288,37 @@ void SelectTool::endOperation()
   }
 
   m_mode = MSelect;
+  m_clickedObject = 0;
+  view()->doc()->updateView(view()->activePage());
+}
+
+void SelectTool::resize(const QPoint& pos)
+{
+  if(!m_clickedObject) {
+    return;
+  }
+
+  KoPoint p = view()->canvasWidget()->mapFromScreen(pos);
+  KoPoint move = p - m_previousPos;
+
+  m_clickedObject->moveResizePoint(m_collisionFeedback.resizePointId, move);
+  m_previousPos = p;
+  view()->canvasWidget()->update();
+  view()->updateToolBars();
+}
+
+void SelectTool::endResize()
+{
+  QValueList<Kivio::Object*>::iterator it = m_origObjectList.begin();
+  QValueList<Kivio::Object*>::iterator itEnd = m_origObjectList.end();
+
+  while(it != itEnd) {
+    delete (*it);
+    it = m_origObjectList.remove(it);
+  }
+
+  m_mode = MSelect;
+  m_clickedObject = 0;
   view()->doc()->updateView(view()->activePage());
 }
 
@@ -303,7 +327,7 @@ void SelectTool::endOperation()
  */
 bool SelectTool::startRubberBanding(const QPoint &pos)
 {
-  KivioCanvas* canvas = view()->canvasWidget();
+/*  KivioCanvas* canvas = view()->canvasWidget();
   // We didn't find a stencil, so unselect everything if we aren't holding the control key down
   if( !m_controlKey )
     canvas->activePage()->unselectAllStencils();
@@ -311,7 +335,7 @@ bool SelectTool::startRubberBanding(const QPoint &pos)
   canvas->startRectDraw( pos, KivioCanvas::Rubber );
   canvas->repaint();
 
-  return true;
+  return true;*/
 }
 
 
@@ -520,6 +544,10 @@ void SelectTool::mouseMove(QMouseEvent* e)
       move(pos);
       break;
 
+    case MResize:
+      resize(pos);
+      break;
+
     default:
       break;
   }
@@ -528,103 +556,6 @@ void SelectTool::mouseMove(QMouseEvent* e)
 void SelectTool::continueRubberBanding(const QPoint &pos)
 {
     view()->canvasWidget()->continueRectDraw( pos, KivioCanvas::Rubber );
-}
-
-
-/**
- * Continues the dragging process of a stencil (moving)
- *
- * How does this work?  Initially we create a list of all the original
- * geometry of all the selected stencils.  We use that to calculate delta
- * movements and snap them to the grid.
- */
-void SelectTool::continueDragging(const QPoint &pos, bool ignoreGridGuides)
-{
-/*  KivioCanvas* canvas = view()->canvasWidget();
-  KoPoint pagePoint = canvas->mapFromScreen( pos );
-
-  double dx = pagePoint.x() - m_origPoint.x();
-  double dy = pagePoint.y() - m_origPoint.y();
-
-  bool snappedX;
-  bool snappedY;
-
-  double newX, newY;
-
-  // Undraw the old stencils
-  if(!m_firstTime) {
-    canvas->drawSelectedStencilsXOR();
-  } else {
-    canvas->activePage()->setPaintSelected(false);
-    canvas->repaint();
-    m_firstTime = false;
-  }
-
-  // Translate to the new position
-  KoPoint p;
-
-  newX = m_selectedRect.x() + dx;
-  newY = m_selectedRect.y() + dy;
-
-  if(!ignoreGridGuides) {
-    // First attempt a snap-to-grid
-    p.setCoords(newX, newY);
-    
-    p = canvas->snapToGrid(p);
-  
-    newX = p.x();
-    newY = p.y();
-  
-    // Now the guides override the grid so we attempt to snap to them
-    p.setCoords(m_selectedRect.x() + dx + m_selectedRect.width(), m_selectedRect.y() + dy + m_selectedRect.height());
-    p = canvas->snapToGuides(p, snappedX, snappedY);
-  
-    if(snappedX) {
-      newX = p.x() - m_selectedRect.width();
-    }
-  
-    if(snappedY) {
-      newY = p.y() - m_selectedRect.height();
-    }
-  
-    p.setCoords(m_selectedRect.x() + dx, m_selectedRect.y() + dy);
-    p = canvas->snapToGuides(p, snappedX, snappedY);
-  
-    if(snappedX) {
-      newX = p.x();
-    }
-  
-    if(snappedY) {
-      newY = p.y();
-    }
-  }
-
-  dx = newX - m_selectedRect.x();
-  dy = newY - m_selectedRect.y();
-
-  KivioSelectDragData *pData;
-  KivioStencil *pStencil = canvas->activePage()->selectedStencils()->first();
-  pData = m_lstOldGeometry.first();
-
-  while( pStencil && pData )
-  {
-    newX = pData->rect.x() + dx;
-    newY = pData->rect.y() + dy;
-
-    if( pStencil->protection()->at( kpX ) == false ) {
-      pStencil->setX(newX);
-    }
-    if( pStencil->protection()->at( kpY ) == false ) {
-      pStencil->setY(newY);
-    }
-
-    pData = m_lstOldGeometry.next();
-    pStencil = canvas->activePage()->selectedStencils()->next();
-  }
-
-  // Draw the stencils
-  canvas->drawSelectedStencilsXOR();
-  view()->updateToolBars();*/
 }
 
 void SelectTool::continueCustomDragging(const QPoint &pos)
@@ -840,107 +771,16 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
 void SelectTool::changeMouseCursor(const QPoint &pos)
 {
   KivioCanvas* canvas = view()->canvasWidget();
-  int collisionType = 0;
+  Kivio::CollisionFeedback collisionFeedback;
   KoPoint p = canvas->mapFromScreen(pos);
-  Kivio::Object* object = view()->activePage()->checkForCollision(p, collisionType);
+  Kivio::Object* object = view()->activePage()->checkForCollision(p, collisionFeedback);
 
-  if((collisionType == CTBody) && object->selected()) {
+  if((collisionFeedback.type == CTBody) && object->selected()) {
     canvas->setCursor(sizeAllCursor);
   } else {
     canvas->setCursor(arrowCursor);
   }
 }
-
-
-/**
- * Tests a box for a point.  Used only by isOverResizeHandle().
- */
-#define RESIZE_BOX_TEST( x, y, bx, by ) \
-x >= bx-three_pixels && \
-x <= bx+three_pixels && \
-y >= by-three_pixels && \
-y <= by+three_pixels
-
-/**
- * Tests if a point is over a stencils
- */
-int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const double x, const double y )
-{
-  double three_pixels = 4.0;
-
-  int available;
-
-  QWMatrix m;
-  double w = pStencil->w();
-  double h = pStencil->h();
-  double w2 = pStencil->w() / 2.0;
-  double h2 = pStencil->h() / 2.0;
-  m.translate(pStencil->x(), pStencil->y());
-  m.translate(w2, h2);
-  m.rotate(pStencil->rotation());
-  m.translate(-w2, -h2);
-
-  // FIXME: this needs to be optimized!!!!
-  KoPoint tl(0 * m.m11() + 0 * m.m21() + m.dx(), 0 * m.m12() + 0 * m.m22() + m.dy());
-  KoPoint t(w2 * m.m11() + 0 * m.m21() + m.dx(), w2 * m.m12() + 0 * m.m22() + m.dy());
-  KoPoint tr(w * m.m11() + 0 * m.m21() + m.dx(), w * m.m12() + 0 * m.m22() + m.dy());
-  KoPoint r(w * m.m11() + h2 * m.m21() + m.dx(), w * m.m12() + h2 * m.m22() + m.dy());
-  KoPoint br(w * m.m11() + h * m.m21() + m.dx(), w * m.m12() + h * m.m22() + m.dy());
-  KoPoint b(w2 * m.m11() + h * m.m21() + m.dx(), w2 * m.m12() + h * m.m22() + m.dy());
-  KoPoint bl(0 * m.m11() + h * m.m21() + m.dx(), 0 * m.m12() + h * m.m22() + m.dy());
-  KoPoint l(0 * m.m11() + h2 * m.m21() + m.dx(), 0 * m.m12() + h2 * m.m22() + m.dy());
-
-  available = pStencil->resizeHandlePositions();
-
-  // Quick reject
-  if( !available )
-    return 0;
-
-
-  // Top left
-  if( available & krhpNW &&
-    RESIZE_BOX_TEST( x, y, tl.x(), tl.y() ) )
-    return 1;
-
-  // Top
-  if( available & krhpN &&
-    RESIZE_BOX_TEST( x, y, t.x(), t.y() ) )
-    return 2;
-
-  // Top right
-  if( available & krhpNE &&
-    RESIZE_BOX_TEST( x, y, tr.x(), tr.y()  ) )
-    return 3;
-
-  // Right
-  if( available & krhpE &&
-    RESIZE_BOX_TEST( x, y, r.x(), r.y() ) )
-    return 4;
-
-  // Bottom right
-  if( available & krhpSE &&
-    RESIZE_BOX_TEST( x, y, br.x(), br.y() ) )
-    return 5;
-
-  // Bottom
-  if( available & krhpS &&
-    RESIZE_BOX_TEST( x, y, b.x(), b.y() ) )
-    return 6;
-
-  // Bottom left
-  if( available & krhpSW &&
-    RESIZE_BOX_TEST( x, y, bl.x(), bl.y() ) )
-    return 7;
-
-  // Left
-  if( available & krhpW &&
-    RESIZE_BOX_TEST( x, y, l.x(), l.y() ) )
-    return 8;
-
-  // Nothing found
-  return 0;
-}
-
 
 void SelectTool::mouseRelease(const QPoint &pos)
 {
@@ -972,7 +812,7 @@ void SelectTool::mouseRelease(const QPoint &pos)
 
 void SelectTool::endRubberBanding(const QPoint &pos)
 {
-  KivioCanvas* canvas = view()->canvasWidget();
+/*  KivioCanvas* canvas = view()->canvasWidget();
   // End the rubber-band drawing
   canvas->endRectDraw();
 
@@ -984,46 +824,7 @@ void SelectTool::endRubberBanding(const QPoint &pos)
     select(canvas->rect());
   }
 
-  view()->updateToolBars();
-}
-
-void SelectTool::endDragging(const QPoint&)
-{
-/*  KivioCanvas* canvas = view()->canvasWidget();
-  canvas->activePage()->setPaintSelected(true);
-  KMacroCommand *macro=new KMacroCommand( i18n("Move Stencil"));
-  KivioStencil *pStencil = canvas->activePage()->selectedStencils()->first();
-  KivioSelectDragData *pData = m_lstOldGeometry.first();
-  bool moved = false;
-
-  while( pStencil && pData )
-  {
-    if((pData->rect.x() != pStencil->rect().x()) || (pData->rect.y() != pStencil->rect().y())) {
-      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
-        pStencil, pData->rect, pStencil->rect(), canvas->activePage());
-      macro->addCommand( cmd);
-
-      if(pStencil->type() == kstConnector) {
-        pStencil->searchForConnections(view()->activePage(), view()->zoomHandler()->unzoomItY(4));
-      }
-
-      moved = true;
-    }
-
-    pData = m_lstOldGeometry.next();
-    pStencil = canvas->activePage()->selectedStencils()->next();
-  }
-
-  if(moved) {
-    canvas->doc()->addCommand( macro );
-  } else {
-    delete macro;
-  }
-
-  canvas->drawSelectedStencilsXOR();
-  canvas->endUnclippedSpawnerPainter();
-  // Clear the list of old geometry
-  m_lstOldGeometry.clear();*/
+  view()->updateToolBars();*/
 }
 
 void SelectTool::endCustomDragging(const QPoint&)
@@ -1144,14 +945,6 @@ void SelectTool::editText(QPtrList<KivioStencil>* stencils)
   
   // Select the text tool (which makes the text dialog pop up)
   static_cast<Kivio::MouseTool*>(p)->applyToolAction(stencils);*/
-}
-
-void SelectTool::showProperties()
-{
-  //FIXME: This needs to be implemented ;)
-  if(view()->activePage()->selectedStencils()->count() == 0) {
-    view()->paperLayoutDlg();
-  }
 }
 
 void SelectTool::editStencilText()

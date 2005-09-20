@@ -41,6 +41,7 @@ class KoXmlWriter;
 
 namespace Kivio {
   class Object;
+  struct CollisionFeedback;
 }
 
 class KivioLayer
@@ -87,7 +88,7 @@ class KivioLayer
     void saveOasis(KoXmlWriter* layerWriter);
 
     Kivio::Object* checkForStencil( KoPoint *, int *, float, bool );
-    Kivio::Object* checkForCollision(const KoPoint& point, int& collisionType);
+    Kivio::Object* checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback);
 
     void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
     void paintContent( QPainter& painter, const QRect& rect, bool transparent, QPoint p0,

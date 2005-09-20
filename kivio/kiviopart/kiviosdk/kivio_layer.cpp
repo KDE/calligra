@@ -396,24 +396,24 @@ Kivio::Object *KivioLayer::checkForStencil( KoPoint *pPoint, int *collisionType,
     return NULL;
 }
 
-Kivio::Object* KivioLayer::checkForCollision(const KoPoint& point, int& collisionType)
+Kivio::Object* KivioLayer::checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback)
 {
   QValueList<Kivio::Object*>::iterator it;
   QValueList<Kivio::Object*>::iterator endIt = m_objectList.end();
   Kivio::Object* object;
-  int tmpCollisionType;
+  Kivio::CollisionFeedback feedback;
 
   for(it = m_objectList.begin(); it != endIt; ++it) {
     object = (*it);
-    tmpCollisionType = object->contains(point);
+    feedback = object->contains(point);
 
-    if(tmpCollisionType > CTNone) {
-      collisionType = tmpCollisionType;
+    if(feedback.type > CTNone) {
+      collisionFeedback = feedback;
       return object;
     }
   }
 
-  collisionType = CTNone;
+  collisionFeedback = feedback;
   return 0;
 }
 

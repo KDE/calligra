@@ -18,10 +18,13 @@
  */
 #include "object.h"
 
+#include <qpainter.h>
+
 #include <kdebug.h>
 
 #include <koPoint.h>
 #include <koRect.h>
+#include <kozoomhandler.h>
 
 namespace Kivio {
 
@@ -69,20 +72,42 @@ void Object::setPen(const Pen& newPen)
   m_pen = newPen;
 }
 
-int Object::contains(const KoPoint& point)
+CollisionFeedback Object::contains(const KoPoint& point)
 {
   KoRect rect = boundingBox();
+  CollisionFeedback feedback;
+  feedback.type = CTNone;
 
   if(rect.contains(point)) {
-    return CTBody;
+    feedback.type = CTBody;
   }
 
-  return CTNone;
+  return feedback;
 }
 
 bool Object::intersects(const KoRect& rect)
 {
   return boundingBox().intersects(rect);
+}
+
+void Object::paintResizePoint(QPainter& painter, const QPoint& point)
+{
+  painter.save();
+  painter.setPen(Qt::black);
+  painter.setBrush(QColor(0, 200, 0));
+  painter.drawRect(point.x() - 3, point.y() - 3, 6, 6);
+  painter.restore();
+}
+
+bool Object::hitResizePoint(const KoPoint& resizePoint, const KoPoint& point)
+{
+  KoZoomHandler zoomHandler;
+  double width = zoomHandler.zoomItX(6);
+  double height = zoomHandler.zoomItY(6);
+
+  KoRect rect(resizePoint.x() - (width * 0.5), resizePoint.y() - (height * 0.5), width, height);
+
+  return rect.contains(point);
 }
 
 }
