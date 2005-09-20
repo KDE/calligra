@@ -835,6 +835,7 @@ public:
      * @internal (public for KoMainWindow)
      */
     void setMimeTypeAfterLoading( const QString& mimeType );
+    int  pageCount() { return m_pageCount; }
 
 signals:
     /**
@@ -1007,11 +1008,12 @@ private:
     bool loadNativeFormatFromStore( const QString& file );
     bool savePreview( KoStore* store );
     bool saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter );
-
+    void setPageCount(int p) { m_pageCount=p; }
     class Private;
     Private *d;
     KService::Ptr m_nativeService;
     bool m_bEmpty;
+    int m_pageCount;
     static QPtrList<KoDocument> *s_documentList;
     static const int s_defaultAutoSave;
 };

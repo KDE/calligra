@@ -104,7 +104,8 @@ public:
         m_doNotSaveExtDoc( false ),
         m_current( false ),
         m_storeInternal( false ),
-        m_bLoading( false )
+        m_bLoading( false ),
+	m_pageCount( 0 )
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
