@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&karbon14;">
+  <!ENTITY package "koffice">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &karbon14; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname></firstname>
+<othername></othername>
+<surname></surname>
+<affiliation>
+<address><email></email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(Major.minor.lesser), it could be used by automation scripts -->
+
+<date>2005-09-04</date>
+<releaseinfo>0.1.0</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&karbon14; is a Scalable Graphics editer for &kde;.
+</para>
+</abstract>
+
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Karbon14</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction"> <title>Introduction</title> <para>
+The documentation for &kappname; was not finished when &kde; was installed on
+this computer.</para> <para>If you need help, please check <ulink
+url="http://www.kde.org">The &kde; Website</ulink> for updates, or by
+submitting your question to <ulink url="mailto:kde@kde.org">The
+&kde; User Mailing list</ulink>.</para> <para><emphasis>The &kde;
+Team</emphasis></para>
+
+&underFDL;
+
+</chapter>
+
+&documentation.index; 
+</book>
+
