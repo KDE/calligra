@@ -72,7 +72,7 @@ void KWConfigFootNoteDia::setupTab3()
     QString comment= i18n ("Configure the separator line. The separator line "
         "is drawn directly above the frame for the footnotes.");
     QWhatsThis::add(page, comment);
-    QVBoxLayout *pageLayout= new QVBoxLayout( page, 11, 6);
+    QVBoxLayout *pageLayout= new QVBoxLayout( page, 0, KDialog::spacingHint());
 
     QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Position"), page );
     comment= i18n ("The separator can be positioned horizontally by picking one "
@@ -104,7 +104,7 @@ void KWConfigFootNoteDia::setupTab3()
             break;
     }
 
-    QGridLayout *layout = new QGridLayout( 0, 1, 1, 0, 6);
+    QGridLayout *layout = new QGridLayout( 0, 1, 1, 0, KDialog::spacingHint());
 
     spWidth = new KoUnitDoubleSpinBox(page, 0, 5, 0.5, 1.0, m_doc->unit(), 1);
     spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
@@ -134,7 +134,7 @@ void KWConfigFootNoteDia::setupTab3()
     layout->addWidget( lWidth, 0, 0 );
     pageLayout->addLayout( layout );
 
-    QHBoxLayout *styleLayout = new QHBoxLayout( 0, 0, 6, "styleLayout");
+    QHBoxLayout *styleLayout = new QHBoxLayout( 0, 0, KDialog::spacingHint(), "styleLayout");
 
     QLabel *styleLabel = new QLabel( i18n("Style:"), page );
     styleLayout->addWidget( styleLabel );

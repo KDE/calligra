@@ -3331,7 +3331,7 @@ void KWView::insertLink()
         }
     }
 
-    if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0), this))
+    if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0), true, this))
     {
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
@@ -6164,7 +6164,7 @@ void KWView::changeLink()
             QString oldLinkName=var->value();
             QString link=oldLinkName;
             QString ref=oldhref;
-            if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0), this))
+            if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0), true, this))
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {
@@ -7586,7 +7586,7 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
 {
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, KDialog::spacingHint() );
 
     QTabWidget *tab = new QTabWidget( page );
     QFrame *pageAll = 0;

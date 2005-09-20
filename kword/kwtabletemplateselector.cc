@@ -546,13 +546,10 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
 {
     m_doc = _doc;
 
-    QGridLayout *grid = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( this, 3, 2, 0, KDialog::spacingHint() );
 
     QWidget *innerHolder = new QWidget( this );
     QGridLayout *innerGrid = new QGridLayout( innerHolder, 2, 1, 0, KDialog::spacingHint() );
-
-    lTemplates = new QLabel( i18n( "Templates" ), this );
-    grid->addWidget( lTemplates, 0, 0 );
 
     lbTemplates = new QListBox( innerHolder );
 
@@ -569,10 +566,10 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     pbCustomize->hide();
     innerGrid->addWidget( pbCustomize, 1, 0 );
 
-    grid->addMultiCellWidget( innerHolder, 1, 2, 0, 0 );
+    grid->addMultiCellWidget( innerHolder, 0, 2, 0, 0 );
 
     preview = new KWTableTemplatePreview( i18n( "Preview" ), m_doc->tableStyleCollection()->findTableStyle("Plain"), this );
-    grid->addWidget( preview, 1, 1 );
+    grid->addWidget( preview, 0, 1 );
 
     bgCustomize = new QButtonGroup( 3, Horizontal, i18n( "Apply To" ), this );
 
@@ -582,11 +579,10 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     cbFirstCol = new QCheckBox( i18n( "First column" ), bgCustomize );
     cbLastCol = new QCheckBox( i18n( "Last column" ), bgCustomize );
 
-    grid->addWidget( bgCustomize, 2, 1 );
+    grid->addWidget( bgCustomize, 1, 1 );
 
-    grid->setRowStretch( 0, 0 );
-    grid->setRowStretch( 1, 1 );
-    grid->setRowStretch( 2, 0 );
+    grid->setRowStretch( 0, 1 );
+    grid->setRowStretch( 1, 0 );
     grid->addColSpacing( 0, innerHolder->width() );
     grid->setColStretch( 0, 0 );
     grid->setColStretch( 1, 1 );

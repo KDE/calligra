@@ -294,7 +294,7 @@ void KoPageLayoutDia::setupTab1()
 {
     QWidget *tab1 = addPage(i18n( "Page Size && &Margins" ));
 
-    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, 0, KDialog::spacingHint() );
 
     QLabel *lpgUnit;
     if ( !( flags & DISABLE_UNIT ) ) {
@@ -481,7 +481,7 @@ void KoPageLayoutDia::setValuesTab1Helper()
 void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
 {
     QWidget *tab2 = addPage(i18n( "H&eader && Footer" ));
-    QGridLayout *grid2 = new QGridLayout( tab2, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid2 = new QGridLayout( tab2, 7, 2, 0, KDialog::spacingHint() );
 
     // ------------- header ---------------
     QGroupBox *gHead = new QGroupBox( 0, Qt::Vertical, i18n( "Head Line" ), tab2 );
@@ -564,7 +564,7 @@ void KoPageLayoutDia::setupTab3()
 {
     QWidget *tab3 = addPage(i18n( "Col&umns" ));
 
-    QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, 0, KDialog::spacingHint() );
 
     QLabel *lColumns = new QLabel( i18n( "Co&lumns:" ), tab3 );
     grid3->addWidget( lColumns, 0, 0 );
@@ -616,7 +616,7 @@ void KoPageLayoutDia::setupTab4()
     QString str = KoUnit::unitName(m_unit);
 
     QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
-    QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, 0, KDialog::spacingHint() );
 
     QButtonGroup *gHeader = new QButtonGroup( 0, Qt::Vertical, i18n( "&Header" ), tab4 );
     gHeader->layout()->setSpacing(KDialog::spacingHint());

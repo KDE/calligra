@@ -330,7 +330,7 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
       /*parent*/ 0, "", true ), pluginOffers( offers )
 {
   QWidget *back = plainPage();
-  QVBoxLayout *layout = new QVBoxLayout( back, marginHint(), spacingHint() );
+  QVBoxLayout *layout = new QVBoxLayout( back, 0, spacingHint() );
 
   QLabel *label = new QLabel( i18n( "&Available sources:" ), back );
   chooser = new QComboBox( false, back );
@@ -391,7 +391,6 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     QVBoxLayout *layout=new QVBoxLayout(back);
 //    QVBox *back = new QVBox( page );
     layout->setSpacing( KDialog::spacingHint() );
-    layout->setMargin( KDialog::spacingHint() );
 
 //    QVBox *row1 = new QVBox( back );
 //    row1->setSpacing( KDialog::spacingHint() );

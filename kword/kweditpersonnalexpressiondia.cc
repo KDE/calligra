@@ -38,7 +38,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     resize( 412, 339 );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QGridLayout* form1Layout = new QGridLayout( page, 1, 1, KDialog::marginHint(), KDialog::spacingHint(), "form1Layout");
+    QGridLayout* form1Layout = new QGridLayout( page, 1, 1, 0, KDialog::spacingHint(), "form1Layout");
 
     QHBoxLayout *horlayout1 = new QHBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout1");
 

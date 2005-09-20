@@ -2079,26 +2079,31 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
     {
         QVBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
         m_indentSpacingWidget = new KoIndentSpacingWidget( unit,_frameWidth,page, "indent-spacing" );
+        m_indentSpacingWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_ALIGN )
     {
         QVBox * page = addVBoxPage( i18n( "General &Layout" ) );
         m_alignWidget = new KoParagAlignWidget( breakLine, page, "align" );
+        m_alignWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_BORDERS )
     {
         QVBox * page = addVBoxPage( i18n( "&Borders" ) );
         m_borderWidget = new KoParagBorderWidget( page, "border" );
+        m_borderWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_NUMBERING )
     {
         QVBox * page = addVBoxPage( i18n( "B&ullets/Numbers" ) );
         m_counterWidget = new KoParagCounterWidget( disableAll , page, "numbers" );
+        m_counterWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_TABS )
     {
         QVBox * page = addVBoxPage( i18n( "&Tabulators" ) );
         m_tabulatorsWidget = new KoParagTabulatorsWidget( unit,_frameWidth, page, "tabs");
+        m_tabulatorsWidget->layout()->setMargin(0);
     }
 
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));

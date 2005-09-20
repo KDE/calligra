@@ -221,7 +221,6 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
@@ -295,7 +294,6 @@ bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
@@ -378,7 +376,6 @@ mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
@@ -449,7 +446,6 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
   QVBoxLayout *lay2 = new QVBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );

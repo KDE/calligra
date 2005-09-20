@@ -219,7 +219,7 @@ void KWTableStyleManager::setupWidget(const QPtrList<KWTableStyle> & styleList)
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
-                                                 KDialog::marginHint(), KDialog::spacingHint() );
+                                                 0, KDialog::spacingHint() );
     QPtrListIterator<KWTableStyle> style( styleList );
     numTableStyles = styleList.count();
     m_stylesList = new QListBox( frame1, "stylesList" );
@@ -269,7 +269,6 @@ void KWTableStyleManager::setupMain()
 {
     QGridLayout *mainLayout = new QGridLayout( main );
     mainLayout->setSpacing( KDialog::spacingHint() );
-    mainLayout->setMargin( KDialog::marginHint() );
 
     preview = new KWTableStylePreview( i18n("Preview"), i18n("Tablestyles preview"), main );
     preview->resize(preview->sizeHint());

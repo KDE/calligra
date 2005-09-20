@@ -336,7 +336,6 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     QVBoxLayout *l = new QVBoxLayout( back );
     l->setAutoAdd(true);
     l->setSpacing( KDialog::spacingHint() );
-    l->setMargin( KDialog::marginHint() );
 
     QHBox *toolbar = new QHBox( back );
 

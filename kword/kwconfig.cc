@@ -207,6 +207,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
 #ifdef HAVE_LIBKSPELL2
     m_spellConfigWidget = new ConfigWidget( _view->broker(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
+    m_spellConfigWidget->layout()->setMargin( 0 );
 #endif
 }
 

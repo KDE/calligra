@@ -8,18 +8,53 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>384</width>
-            <height>410</height>
+            <width>448</width>
+            <height>557</height>
         </rect>
     </property>
-    <grid>
+    <property name="caption">
+        <string>KoDocumentInfoAboutWidget</string>
+    </property>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="spacing">
-            <number>12</number>
+        <property name="margin">
+            <number>0</number>
         </property>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>pixmapLabel</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>56</width>
+                            <height>56</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>leDocFile</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="Line">
             <property name="name">
                 <cstring>line1</cstring>
             </property>
@@ -33,21 +68,7 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="Line" row="3" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout3</cstring>
             </property>
@@ -139,63 +160,63 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="Line">
             <property name="name">
-                <cstring>layout8</cstring>
+                <cstring>line2</cstring>
             </property>
-            <hbox>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout11</cstring>
+            </property>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <spacer row="0" column="2" rowspan="4" colspan="2">
                     <property name="name">
-                        <cstring>pixmapLabel</cstring>
+                        <cstring>spacer3</cstring>
                     </property>
-                    <property name="minimumSize">
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
                         <size>
-                            <width>56</width>
-                            <height>56</height>
+                            <width>90</width>
+                            <height>70</height>
                         </size>
                     </property>
-                </widget>
-                <widget class="KLineEdit">
+                </spacer>
+                <spacer row="4" column="2">
                     <property name="name">
-                        <cstring>leDocFile</cstring>
+                        <cstring>spacer5</cstring>
                     </property>
-                    <property name="text">
-                        <string></string>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
-                    <property name="readOnly">
-                        <bool>true</bool>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
                     </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="4" column="0">
-            <property name="name">
-                <cstring>layout9</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
-                    <property name="text">
-                        <string>Type:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Created:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
+                </spacer>
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
                         <cstring>textLabel5</cstring>
                     </property>
@@ -203,7 +224,25 @@
                         <string>Modified:</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="3" column="1">
+                    <property name="name">
+                        <cstring>labelLastPrinted</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="1">
+                    <property name="name">
+                        <cstring>labelModified</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Created:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
                     <property name="name">
                         <cstring>textLabel4_2</cstring>
                     </property>
@@ -211,15 +250,12 @@
                         <string>Last printed:</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="5" column="1">
                     <property name="name">
-                        <cstring>textLabel6</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Total editing time:</string>
+                        <cstring>labelRevision</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="5" column="0">
                     <property name="name">
                         <cstring>textLabel7</cstring>
                     </property>
@@ -227,90 +263,80 @@
                         <string>Revision number:</string>
                     </property>
                 </widget>
-            </vbox>
-        </widget>
-        <widget class="QLayoutWidget" row="4" column="1">
-            <property name="name">
-                <cstring>layout10</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
+                <widget class="QLabel" row="4" column="1">
                     <property name="name">
-                        <cstring>labelType</cstring>
+                        <cstring>labelEditing</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Total editing time:</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton" row="4" column="3">
+                    <property name="name">
+                        <cstring>pbReset</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>24</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>24</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Reset</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
                     <property name="name">
                         <cstring>labelCreated</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="1">
                     <property name="name">
-                        <cstring>labelModified</cstring>
+                        <cstring>labelType</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>labelLastPrinted</cstring>
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Type:</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <spacer row="5" column="3">
                     <property name="name">
-                        <cstring>layout6</cstring>
+                        <cstring>spacer4</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout5</cstring>
-                            </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>labelEditing</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>labelRevision</cstring>
-                                    </property>
-                                </widget>
-                            </vbox>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>pbReset</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>24</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>32767</width>
-                                    <height>24</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>Reset</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>50</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
         </widget>
-    </grid>
+    </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>leDocFile</tabstop>
     <tabstop>leDocTitle</tabstop>
@@ -321,10 +347,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>ktextedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

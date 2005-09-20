@@ -297,7 +297,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     else if(frameType == FT_TEXT)
         columns = 2;
 
-    grid1 = new QGridLayout( tab1, 0 /*auto create*/, columns, KDialog::marginHint(), KDialog::spacingHint() );
+    grid1 = new QGridLayout( tab1, 0 /*auto create*/, columns, 0, KDialog::spacingHint() );
 
     // Options for all types of frames
     cbCopy = new QCheckBox( i18n("Frame is a copy of the previous frame"),tab1 );
@@ -617,13 +617,12 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 void KWFrameDia::setupTab2() { // TAB Text Runaround
     tab2 = addPage( i18n( "Text Run Around" ) );
 
-    QVBoxLayout *tabLayout = new QVBoxLayout( tab2, 11, 6, "tabLayout");
+    QVBoxLayout *tabLayout = new QVBoxLayout( tab2, 0, KDialog::spacingHint(), "tabLayout");
 
     // First groupbox
     runGroup = new QButtonGroup(  i18n( "Layout of Text in Other Frames" ), tab2);
     runGroup->setColumnLayout( 0, Qt::Vertical );
     runGroup->layout()->setSpacing( KDialog::spacingHint() );
-    runGroup->layout()->setMargin( KDialog::marginHint() );
     QGridLayout *groupBox1Layout = new QGridLayout( runGroup->layout() );
     groupBox1Layout->setAlignment( Qt::AlignTop );
 
@@ -802,7 +801,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     //kdDebug() << "setup tab 3 frameSet"<<endl;
     tab3 = addPage( i18n( "Connect Text Frames" ) );
 
-    QVBoxLayout *tabLayout = new QVBoxLayout( tab3, 11, 6);
+    QVBoxLayout *tabLayout = new QVBoxLayout( tab3, 0, KDialog::spacingHint());
 
     QButtonGroup *myGroup = new QButtonGroup(this);
     myGroup->hide();
@@ -935,7 +934,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     noSignal = true;
 
     tab4 = addPage( i18n( "Geometry" ) );
-    QGridLayout* grid4 = new QGridLayout( tab4, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* grid4 = new QGridLayout( tab4, 5, 1, 0, KDialog::spacingHint() );
 
     floating = new QCheckBox( i18n("Frame is inline"), tab4 );
 
@@ -1164,7 +1163,7 @@ void KWFrameDia::initGeometrySettings()
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
     tab5 = addPage( i18n("Background") );
-    QGridLayout* grid5 = new QGridLayout( tab5, 0 /*auto*/, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* grid5 = new QGridLayout( tab5, 0 /*auto*/, 2, 0, KDialog::spacingHint() );
 
     int row = 0;
     if (!frame ) {
@@ -1241,7 +1240,7 @@ void KWFrameDia::setupTab6() // Border style
 {
     tab6 = addPage( i18n("&Borders") );
 
-    QGridLayout *grid = new QGridLayout( tab6, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab6, 8, 2, 0, KDialog::spacingHint() );
 
     QLabel * lStyle = new QLabel( i18n( "St&yle:" ), tab6 );
     grid->addWidget( lStyle, 0, 0 );
