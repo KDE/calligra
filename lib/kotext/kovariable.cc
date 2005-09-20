@@ -2691,11 +2691,6 @@ void KoStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
         m_subtype = VST_STATISTIC_NB_LINES;
         m_varValue = QVariant( elem.text().toInt() );
     }
-    else if ( localName == "character-count" )
-    {
-        m_subtype = VST_STATISTIC_NB_CHARACTERE;
-        m_varValue = QVariant( elem.text().toInt() );
-    }
     else if ( localName == "sentence-count" )
     {
         m_subtype = VST_STATISTIC_NB_SENTENCE;
