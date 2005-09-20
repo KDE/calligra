@@ -925,7 +925,6 @@ private:
 
     QPtrList<KWFrameSet> m_lstFrameSet;
 
-    int m_pages;
     unsigned int m_itemsLoaded;
     unsigned int m_nrItemsToLoad;
 
