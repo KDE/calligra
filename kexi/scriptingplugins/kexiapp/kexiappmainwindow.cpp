@@ -46,10 +46,7 @@ KexiAppMainWindow::KexiAppMainWindow(KexiMainWindow* mainwindow)
 {
     d->mainwindow = mainwindow;
 
-    addFunction("getConnection", &KexiAppMainWindow::getConnection,
-        Kross::Api::ArgumentList(),
-        ""
-    );
+    addFunction("getConnection", &KexiAppMainWindow::getConnection);
 }
 
 KexiAppMainWindow::~KexiAppMainWindow()
@@ -61,11 +58,6 @@ KexiAppMainWindow::~KexiAppMainWindow()
 const QString KexiAppMainWindow::getClassName() const
 {
     return "Kross::KexiApp::KexiAppMainWindow";
-}
-
-const QString KexiAppMainWindow::getDescription() const
-{
-    return QString("FIXME: Documentation");
 }
 
 Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)

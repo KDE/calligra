@@ -40,196 +40,82 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     , m_connection(connection)
     , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(connection->data()))
 {
-    addFunction("data", &KexiDBConnection::data,
-        Kross::Api::ArgumentList(),
-        QString("Returns the KexiDBConnectionData object that was used to "
-             "create this connection.")
-    );
-    addFunction("driver", &KexiDBConnection::driver,
-        Kross::Api::ArgumentList(),
-        QString("Returns the KexiDBDriver object to which this connection belongs.")
-    );
-    addFunction("connect", &KexiDBConnection::connect,
-        Kross::Api::ArgumentList(),
-        QString("Connects and return true if a connection was established.")
-    );
-    addFunction("isConnected", &KexiDBConnection::isConnected,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if a connection is established.")
-    );
-    addFunction("disconnect", &KexiDBConnection::disconnect,
-        Kross::Api::ArgumentList(),
-        QString("Disconnects and return true if disconnection was successful.")
-    );
+    addFunction("data", &KexiDBConnection::data);
+    addFunction("driver", &KexiDBConnection::driver);
+    addFunction("connect", &KexiDBConnection::connect);
+    addFunction("isConnected", &KexiDBConnection::isConnected);
+    addFunction("disconnect", &KexiDBConnection::disconnect);
 
     addFunction("databaseExists", &KexiDBConnection::databaseExists,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Returns true if a database with the specified name exists.")
-    );
-    addFunction("currentDatabase", &KexiDBConnection::currentDatabase,
-        Kross::Api::ArgumentList(),
-        QString("Returns the name of currently used database for this "
-             "connection, or an empty string if no database is used.")
-    );
-    addFunction("databaseNames", &KexiDBConnection::databaseNames,
-        Kross::Api::ArgumentList(),
-        QString("Returns a list of database names for the currently opened connection.")
-    );
-    addFunction("isDatabaseUsed", &KexiDBConnection::isDatabaseUsed,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if the connection is properly established.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("currentDatabase", &KexiDBConnection::currentDatabase);
+    addFunction("databaseNames", &KexiDBConnection::databaseNames);
+    addFunction("isDatabaseUsed", &KexiDBConnection::isDatabaseUsed);
     addFunction("useDatabase", &KexiDBConnection::useDatabase,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Opens an existing database specified by database name passed "
-             "as an argument.")
-    );
-    addFunction("closeDatabase", &KexiDBConnection::closeDatabase,
-        Kross::Api::ArgumentList(),
-        QString("Closes the currently used database for this connection.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("closeDatabase", &KexiDBConnection::closeDatabase);
 
     addFunction("tableNames", &KexiDBConnection::tableNames,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(bool(false))),
-        QString("Returns the names of all table schemata stored in the currently "
-                "used database. If the boolean value passed as an argument "
-                "is true, internal KexiDB system table names (kexi__*) "
-                "are also returned.")
-    );
-    addFunction("queryNames", &KexiDBConnection::queryNames,
-        Kross::Api::ArgumentList(),
-        QString("Returns the names of all query schemata stored in the currently "
-                "used database.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(bool(false))));
+    addFunction("queryNames", &KexiDBConnection::queryNames);
 
     addFunction("executeQueryString", &KexiDBConnection::executeQueryString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Executes the query specified by the SQL statement passed "
-             "as a string. Returns the cursor "
-             "created for results of this query.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("executeQuerySchema", &KexiDBConnection::executeQuerySchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBQuerySchema"),
-        QString("Executes the query specified by the SQL statement passed "
-             "as a KexiDBQuerySchema object. Returns the cursor "
-             "created for results of this query.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBQuerySchema"));
     addFunction("querySingleString", &KexiDBConnection::querySingleString,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant::UInt", new Kross::Api::Variant(0)),
-        QString("Executes the query specified by the SQL statement passed "
-             "as a string, and returns the first record's field's value.")
-    );
+            << Kross::Api::Argument("Kross::Api::Variant::UInt", new Kross::Api::Variant(0)));
     addFunction("queryStringList", &KexiDBConnection::queryStringList,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(bool(true))),
-        QString("Executes the query specified by the SQL statement passed "
-             "as a string, and returns a stringlist of first record's first field's values.")
-    );
+            << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(bool(true))));
     addFunction("querySingleRecord", &KexiDBConnection::querySingleRecord,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Executes the query specified by the SQL statement passed "
-             "as a string, and returns the first record's valuelist.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
-    addFunction("insertRecord", &KexiDBConnection::insertRecord,
-        Kross::Api::ArgumentList(),
-        QString("Inserts the KexiDBField object passed as an argument.")
-    );
+    addFunction("insertRecord", &KexiDBConnection::insertRecord);
     addFunction("createDatabase", &KexiDBConnection::createDatabase,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Creates new database, named by the passed string argument.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("dropDatabase", &KexiDBConnection::dropDatabase,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Drops the database specified by the passed string argument.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
     addFunction("createTable", &KexiDBConnection::createTable,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(false)),
-        QString("Creates a table as defined by the KexiTableSchema object passed as an argument.")
-    );
+            << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(false)));
     addFunction("dropTable", &KexiDBConnection::dropTable,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Drops the table specified by the KexiDBTableSchema object passed as an argument.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("alterTable", &KexiDBConnection::alterTable,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"),
-        QString("Alters the KexiDBTableSchema object passed as the first argument "
-             "using the KexiDBTableSchema object passed as the second argument.")
-    );
+            << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"));
     addFunction("alterTableName", &KexiDBConnection::alterTableName,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Changes the table name of the KexiDBTableSchema object "
-             "passed as the first argument to the string passed "
-             "as the second argument.")
-    );
+            << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("tableSchema", &KexiDBConnection::tableSchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Returns the KexiDBTableSchema object of the table matching "
-             "to the tablename passed as an argument.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("isEmptyTable", &KexiDBConnection::isEmptyTable,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"),
-        QString("Returns true if there is at least one valid record in the "
-             "as KexiDBTable Schema passed as argument.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"));
 
     addFunction("querySchema", &KexiDBConnection::querySchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Returns the KexiDBQuerySchema object of the query matching "
-             "to the queryname passed as an argument.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
-    addFunction("autoCommit", &KexiDBConnection::autoCommit,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if the \"auto commit\" option is on.")
-    );
+    addFunction("autoCommit", &KexiDBConnection::autoCommit);
     addFunction("setAutoCommit", &KexiDBConnection::setAutoCommit,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        QString("Sets the auto commit option. This does not affect currently "
-             "started transactions and can be changed even when a connection "
-             "is not established.")
-    );
-    addFunction("beginTransaction", &KexiDBConnection::beginTransaction,
-        Kross::Api::ArgumentList(),
-        QString("Creates a new transaction handle and starts a new transaction.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("beginTransaction", &KexiDBConnection::beginTransaction);
     addFunction("commitTransaction", &KexiDBConnection::commitTransaction,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"),
-        QString("Commits the transaction specified by the passed KexiDBTransaction object.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"));
     addFunction("rollbackTransaction", &KexiDBConnection::rollbackTransaction,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"),
-        QString("Rollback the transaction specified by the passed KexiDBTransaction object.")
-    );
-    addFunction("defaultTransaction", &KexiDBConnection::defaultTransaction,
-        Kross::Api::ArgumentList(),
-        QString("Return the KEXIDBTransaction object for the default transaction "
-             "for this connection.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"));
+    addFunction("defaultTransaction", &KexiDBConnection::defaultTransaction);
     addFunction("setDefaultTransaction", &KexiDBConnection::setDefaultTransaction,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"),
-        QString("Sets the default transaction that will be used as context for "
-             "operations on data in the opened database for this connection.")
-    );
-    addFunction("transactions", &KexiDBConnection::transactions,
-        Kross::Api::ArgumentList(),
-        QString("Returns a list of currently active KexiDBTransaction objects.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"));
+    addFunction("transactions", &KexiDBConnection::transactions);
 
-    addFunction("parser", &KexiDBConnection::parser,
-        Kross::Api::ArgumentList(),
-        QString("Returns a KexiDBParser object.")
-    );
+    addFunction("parser", &KexiDBConnection::parser);
 }
 
 KexiDBConnection::~KexiDBConnection()
@@ -239,14 +125,6 @@ KexiDBConnection::~KexiDBConnection()
 const QString KexiDBConnection::getClassName() const
 {
     return "Kross::KexiDB::KexiDBConnection";
-}
-
-const QString KexiDBConnection::getDescription() const
-{
-    return QString("KexiDB::Connection wrapper for the database "
-                "connection API to enable queries and updates. "
-                "This class represents a database connection "
-                "established with a given database source.");
 }
 
 ::KexiDB::Connection* KexiDBConnection::connection()

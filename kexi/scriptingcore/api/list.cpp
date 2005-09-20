@@ -38,11 +38,6 @@ const QString List::getClassName() const
     return "Kross::Api::List";
 }
 
-const QString List::getDescription() const
-{
-    return QString("Object to handle QValueList collections.");
-}
-
 const QString List::toString()
 {
     QString s = "[";

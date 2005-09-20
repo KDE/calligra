@@ -58,13 +58,6 @@ const QString KexiDBModule::getClassName() const
     return "Kross::KexiDB::KexiDBModule";
 }
 
-const QString KexiDBModule::getDescription() const
-{
-    return QString("The KexiDB object provides a wrapper for the Kexi::KexiDB "
-                "library and allows using the functionality from within "
-                "scripting languages.");
-}
-
 Kross::Api::Object::Ptr KexiDBModule::get(const QString& name, void* p)
 {
     if(name == "KexiDBConnection") {

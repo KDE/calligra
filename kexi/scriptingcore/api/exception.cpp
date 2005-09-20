@@ -42,11 +42,6 @@ const QString Exception::getClassName() const
     return "Kross::Api::Exception";
 }
 
-const QString Exception::getDescription() const
-{
-    return "Exception object.";
-}
-
 const QString Exception::toString()
 {
     return (m_lineno != -1)

@@ -36,11 +36,6 @@ const QString Dict::getClassName() const
     return "Kross::Api::Dict";
 }
 
-const QString Dict::getDescription() const
-{
-    return QString("Object to handle QMaps.");
-}
-
 const QString Dict::toString()
 {
     QString s = "[";

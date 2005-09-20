@@ -55,16 +55,6 @@ namespace Kross { namespace Python {
             virtual const QString getClassName() const;
 
             /**
-             * Return a detailed description about this object.
-             * Each object should describe itself a bit about
-             * what it is designed for, how to use it and
-             * such stuff.
-             *
-             * \return The description of this class.
-             */
-            virtual const QString getDescription() const;
-
-            /**
              * Pass a call to the object. Objects like \a Class
              * are able to handle call's by just implementating
              * this function.

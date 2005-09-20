@@ -57,65 +57,35 @@ QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
     // Add functions to wrap QObject methods into callable
     // Kross objects.
 
-    addFunction("propertyNames", &QtObject::propertyNames,
-        Kross::Api::ArgumentList(),
-        "Return a list of property names."
-    );
+    addFunction("propertyNames", &QtObject::propertyNames);
     addFunction("hasProperty", &QtObject::hasProperty,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Return true if the property exists else false."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("getProperty", &QtObject::getProperty,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Return the property."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("setProperty", &QtObject::setProperty,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant"),
-        "Set the property."
-    );
+            << Kross::Api::Argument("Kross::Api::Variant"));
 
-    addFunction("slotNames", &QtObject::slotNames,
-        Kross::Api::ArgumentList(),
-        "Return a list of slot names."
-    );
+    addFunction("slotNames", &QtObject::slotNames);
     addFunction("hasSlot", &QtObject::hasSlot,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Return true if the slot exists else false."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("slot", &QtObject::callSlot,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
-    addFunction("signalNames", &QtObject::signalNames,
-        Kross::Api::ArgumentList(),
-        "Return a list of signal names."
-    );
+    addFunction("signalNames", &QtObject::signalNames);
     addFunction("hasSignal", &QtObject::hasSignal,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Return true if the signal exists else false."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("signal", &QtObject::emitSignal,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
     addFunction("connect", &QtObject::connectSignal,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
             << Kross::Api::Argument("Kross::Api::QtObject")
-            << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Connect signal with a QObject slot."
-    );
-
+            << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("disconnect", &QtObject::disconnectSignal,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Disconnect signal from QObject slot."
-    );
-
-    addFunction("signal", &QtObject::emitSignal,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Emit a signal."
-    );
-
-    addFunction("slot", &QtObject::callSlot,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Call a slot."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 }
 
 QtObject::~QtObject()
@@ -125,11 +95,6 @@ QtObject::~QtObject()
 const QString QtObject::getClassName() const
 {
     return "Kross::Api::QtObject";
-}
-
-const QString QtObject::getDescription() const
-{
-    return "Class to wrap QObject instances.";
 }
 
 QObject* QtObject::getObject()

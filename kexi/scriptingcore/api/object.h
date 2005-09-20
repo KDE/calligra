@@ -93,16 +93,6 @@ namespace Kross { namespace Api {
             virtual const QString getClassName() const = 0;
 
             /**
-             * Return a detailed description about this object.
-             * Each object should describe itself a bit about
-             * what it is designed for, how to use it and
-             * such stuff.
-             *
-             * \return The description of this class.
-             */
-            virtual const QString getDescription() const = 0;
-
-            /**
              * \return a string representation of the object or
              * it's content. This method is mainly used for
              * debugging and testing purposes.

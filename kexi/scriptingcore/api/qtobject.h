@@ -70,9 +70,6 @@ namespace Kross { namespace Api {
             /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Object::getDescription()
-            virtual const QString getDescription() const;
-
             /**
              * Return the \a QObject instance this class wraps.
              *
@@ -96,26 +93,38 @@ namespace Kross { namespace Api {
             /// The wrapped QObject.
             QObject* m_object;
 
-            /// QProperty's
+            // QProperty's
+
+            /// Return a list of property names.
             Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);
+            /// Return true if the property exists else false.
             Kross::Api::Object::Ptr hasProperty(Kross::Api::List::Ptr);
+            /// Return a property.
             Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr);
+            /// Set a property.
             Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr);
 
-            /// Slots
+            // Slots
+
+            /// Return a list of slot names.
             Kross::Api::Object::Ptr slotNames(Kross::Api::List::Ptr);
+            /// Return true if the slot exists else false.
             Kross::Api::Object::Ptr hasSlot(Kross::Api::List::Ptr);
+            /// Call a slot.
             Kross::Api::Object::Ptr callSlot(Kross::Api::List::Ptr);
 
-            /// Signals
+            // Signals
+
+            /// Return a list of signal names.
             Kross::Api::Object::Ptr signalNames(Kross::Api::List::Ptr);
+            /// Return true if the signal exists else false.
             Kross::Api::Object::Ptr hasSignal(Kross::Api::List::Ptr);
+            /// Emit a signal.
             Kross::Api::Object::Ptr emitSignal(Kross::Api::List::Ptr);
 
-            /// Connect a QObject signal with a scripting function
+            /// Connect signal with a QObject slot.
             Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
-
-            /// Disconnect a QObject signal from a scripting function
+            /// Disconnect signal from QObject slot.
             Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
 
     };

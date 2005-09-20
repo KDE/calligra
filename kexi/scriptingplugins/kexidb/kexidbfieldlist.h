@@ -48,23 +48,32 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
             ::KexiDB::FieldList* fieldlist() { return m_fieldlist; }
 
         private:
             ::KexiDB::FieldList* m_fieldlist;
 
+            /// \return the number of fields.
             Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
+            /// \return the field specified by the number passed as an argument.
             Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);
+            /// \return a list of all fields.
             Kross::Api::Object::Ptr fields(Kross::Api::List::Ptr);
+            /** \return true if the KexiDBField object passed as an argument is 
+            in the field list. */
             Kross::Api::Object::Ptr hasField(Kross::Api::List::Ptr);
+            /// \return a list of field names.
             Kross::Api::Object::Ptr names(Kross::Api::List::Ptr);
 
+            /// Adds the KexiDBField object passed as an argument to the field list.
             Kross::Api::Object::Ptr addField(Kross::Api::List::Ptr);
+            /** Inserts the KexiDBField object passed as the second argument
+            into the field list at the position defined by the first argument. */
             Kross::Api::Object::Ptr insertField(Kross::Api::List::Ptr);
+            /** Removes the KexiDBField object passed as an argument from the 
+            field list. */
             Kross::Api::Object::Ptr removeField(Kross::Api::List::Ptr);
+            /// Removes all KexiDBField objects from the fieldlist.
             Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
     };
 

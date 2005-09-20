@@ -39,37 +39,17 @@ using namespace Kross::KexiDB;
 KexiDBDriverManager::KexiDBDriverManager()
     : Kross::Api::Class<KexiDBDriverManager>("DriverManager")
 {
-    addFunction("driverNames", &KexiDBDriverManager::driverNames,
-        Kross::Api::ArgumentList(),
-        QString("Returns a stringlist of all available drivernames.")
-    );
+    addFunction("driverNames", &KexiDBDriverManager::driverNames);
     addFunction("driver", &KexiDBDriverManager::driver,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Returns the KexiDBDriver object whose name matches the passed string.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Looks up a drivers list by MIME type of database file. "
-             "Only file-based database drivers are checked. "
-             "The lookup is case insensitive.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
-    addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData,
-        Kross::Api::ArgumentList(),
-        QString("Returns a new KexiDBConnectionData object.")
-    );
-    addFunction("field", &KexiDBDriverManager::field,
-        Kross::Api::ArgumentList(),
-        QString("Returns a new KexiDBField object.")
-    );
+    addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData);
+    addFunction("field", &KexiDBDriverManager::field);
     addFunction("tableSchema", &KexiDBDriverManager::tableSchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Returns a new KexiDBTableSchema object.")
-    );
-    addFunction("querySchema", &KexiDBDriverManager::querySchema,
-        Kross::Api::ArgumentList(),
-        QString("Returns a new KexiDBQuerySchema object.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("querySchema", &KexiDBDriverManager::querySchema);
 }
 
 KexiDBDriverManager::~KexiDBDriverManager()
@@ -79,12 +59,6 @@ KexiDBDriverManager::~KexiDBDriverManager()
 const QString KexiDBDriverManager::getClassName() const
 {
     return "Kross::KexiDB::KexiDBDriverManager";
-}
-
-const QString KexiDBDriverManager::getDescription() const
-{
-    return QString("KexiDB::DriverManager wrapper for database driver "
-                "management, e.g. finding and loading drivers.");
 }
 
 KexiDB::DriverManager& KexiDBDriverManager::driverManager()

@@ -54,10 +54,8 @@ namespace Kross { namespace Api {
              *       child of.
              * \param arglist A list of arguments the callable
              *       object expects if it got called.
-             * \param documentation The documentation to describe
-             *       the callable object.
              */
-            Callable(const QString& name, Object::Ptr parent, ArgumentList arglist, const QString& documentation);
+            Callable(const QString& name, Object::Ptr parent, ArgumentList arglist);
 
             /**
              * Destructor.
@@ -72,16 +70,6 @@ namespace Kross { namespace Api {
              * \return The name of this class.
              */
             virtual const QString getClassName() const;
-
-            /**
-             * Return a detailed description about this object.
-             * Each object should describe itself a bit about
-             * what it is designed for, how to use it and
-             * such stuff.
-             *
-             * \return The description of this class.
-             */
-            virtual const QString getDescription() const;
 
             /**
              * Call the object.
@@ -128,8 +116,6 @@ namespace Kross { namespace Api {
         protected:
             /// List of arguments this callable object supports.
             ArgumentList m_arglist;
-            /// Some documentation to describe the callable object.
-            QString m_documentation;
 
             /// Check the passed arguments against the \a m_arglist and throws an exception if failed.
             void checkArguments(KSharedPtr<List> arguments);

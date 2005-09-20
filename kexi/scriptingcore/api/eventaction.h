@@ -66,12 +66,17 @@ namespace Kross { namespace Api {
         private:
             KAction* m_action;
 
+            /// \return the text associated with this action.
             Kross::Api::Object::Ptr getText(Kross::Api::List::Ptr);
+            /// Sets the text associated with this action.
             Kross::Api::Object::Ptr setText(Kross::Api::List::Ptr);
 
+            /// \return true if this action is enabled else false.
             Kross::Api::Object::Ptr isEnabled(Kross::Api::List::Ptr);
+            /// Enables or disables this action.
             Kross::Api::Object::Ptr setEnabled(Kross::Api::List::Ptr);
 
+            /// Activates the action.
             Kross::Api::Object::Ptr activate(Kross::Api::List::Ptr);
     };
 

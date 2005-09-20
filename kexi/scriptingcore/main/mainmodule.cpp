@@ -55,11 +55,6 @@ const QString MainModule::getClassName() const
     return "Kross::Api::MainModule";
 }
 
-const QString MainModule::getDescription() const
-{
-    return QString("TODO: Documentation");
-}
-
 bool MainModule::hadException()
 {
     return d->exception != 0;

@@ -90,10 +90,3 @@ const QString KexiAppModule::getClassName() const
     return "Kross::KexiApp::KexiAppModule";
 }
 
-const QString KexiAppModule::getDescription() const
-{
-    return QString("The KexiAppModule object provides access to a running Kexi "
-                   "application. This module is only avaiable in from within "
-                   "Kexi embedded scripting code.");
-}
-

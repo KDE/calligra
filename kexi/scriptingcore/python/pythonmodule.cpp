@@ -59,7 +59,7 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
 
     add_varargs_method("_import", &PythonModule::import, "FIXME: Documentation");
 
-    initialize("FIXME: Documentation"); //TODO initialize( object->getDescription().latin1() );
+    initialize("The PythonModule is the __main__ python environment used as global object namespace.");
 }
 
 PythonModule::~PythonModule()

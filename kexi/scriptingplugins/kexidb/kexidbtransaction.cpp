@@ -30,18 +30,9 @@ KexiDBTransaction::KexiDBTransaction(KexiDBConnection* connection, ::KexiDB::Tra
     : Kross::Api::Class<KexiDBTransaction>("KexiDBTransaction", connection)
     , m_transaction(transaction)
 {
-    addFunction("connection", &KexiDBTransaction::connection,
-        Kross::Api::ArgumentList(),
-        QString("Returns the KexiDBConnection object to which this KexiDBTransaction belongs.")
-    );
-    addFunction("isActive", &KexiDBTransaction::isActive,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if the transaction is active (ie. started).")
-    );
-    addFunction("isNull", &KexiDBTransaction::isNull,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if the transaction is uninitialized (null).")
-    );
+    addFunction("connection", &KexiDBTransaction::connection);
+    addFunction("isActive", &KexiDBTransaction::isActive);
+    addFunction("isNull", &KexiDBTransaction::isNull);
 }
 
 KexiDBTransaction::~KexiDBTransaction()
@@ -51,12 +42,6 @@ KexiDBTransaction::~KexiDBTransaction()
 const QString KexiDBTransaction::getClassName() const
 {
     return "Kross::KexiDB::KexiDBTransaction";
-}
-
-const QString KexiDBTransaction::getDescription() const
-{
-    return QString("KexiDB::Transaction wrapper to enable transaction "
-                "handling if the KexiDBDriver supports it.");
 }
 
 ::KexiDB::Transaction& KexiDBTransaction::transaction()

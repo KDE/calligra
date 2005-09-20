@@ -25,10 +25,9 @@
 
 using namespace Kross::Api;
 
-Callable::Callable(const QString& name, Object::Ptr parent, ArgumentList arglist, const QString& documentation)
+Callable::Callable(const QString& name, Object::Ptr parent, ArgumentList arglist)
     : Object(name, parent)
     , m_arglist(arglist)
-    , m_documentation(documentation)
 {
 }
 
@@ -39,11 +38,6 @@ Callable::~Callable()
 const QString Callable::getClassName() const
 {
     return "Kross::Api::Callable";
-}
-
-const QString Callable::getDescription() const
-{
-    return m_documentation;
 }
 
 Object::Ptr Callable::call(const QString& name, List::Ptr arguments)

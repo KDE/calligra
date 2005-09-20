@@ -56,41 +56,68 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
+            /**
+             * \return the \a ::KexiDB::ConnectionData instance this 
+             * class wraps.
+             */
             ::KexiDB::ConnectionData* getConnectionData() const;
 
         private:
             ::KexiDB::ConnectionData* m_data;
 
+            /// \return connection name.
             Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            /// Set connection name.
             Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
 
+            /// \return the description.
             Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            /// Set the description.
             Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
 
+            /// \return drivername.
             Kross::Api::Object::Ptr driverName(Kross::Api::List::Ptr);
+            /// Set the drivername.
             Kross::Api::Object::Ptr setDriverName(Kross::Api::List::Ptr);
 
+            /// \return local socket filename.
             Kross::Api::Object::Ptr localSocketFileName(Kross::Api::List::Ptr);
 
             // For serverbased drivers
+
+            /// \return hostname.
             Kross::Api::Object::Ptr hostName(Kross::Api::List::Ptr);
+            /// Set the hostname.
             Kross::Api::Object::Ptr setHostName(Kross::Api::List::Ptr);
+
+            /// \return port
             Kross::Api::Object::Ptr port(Kross::Api::List::Ptr);
+            /// Set port.
             Kross::Api::Object::Ptr setPort(Kross::Api::List::Ptr);
+
+            /// \return password.
             Kross::Api::Object::Ptr password(Kross::Api::List::Ptr);
+            /// Set password.
             Kross::Api::Object::Ptr setPassword(Kross::Api::List::Ptr);
+
+            /// \return username.
             Kross::Api::Object::Ptr userName(Kross::Api::List::Ptr);
+            /// Set username.
             Kross::Api::Object::Ptr setUserName(Kross::Api::List::Ptr);
 
             // For filebased drivers
+
+            /// \return filename.
             Kross::Api::Object::Ptr fileName(Kross::Api::List::Ptr);
+            /// Set filename.
             Kross::Api::Object::Ptr setFileName(Kross::Api::List::Ptr);
+
+            /// \return database path.
             Kross::Api::Object::Ptr dbPath(Kross::Api::List::Ptr);
+            /// \return database filename.
             Kross::Api::Object::Ptr dbFileName(Kross::Api::List::Ptr);
 
+            /// Return a user-friendly string representation.
             Kross::Api::Object::Ptr serverInfoString(Kross::Api::List::Ptr);
     };
 

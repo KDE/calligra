@@ -29,28 +29,15 @@ EventAction::EventAction(const QString& name, Object::Ptr parent, KAction* actio
     : Event<EventAction>(name.isEmpty() ? action->name() : name, parent)
     , m_action(action)
 {
-    addFunction("getText", &EventAction::getText,
-        Kross::Api::ArgumentList(),
-        "Get the text associated with this action."
-    );
+    addFunction("getText", &EventAction::getText);
     addFunction("setText", &EventAction::setText,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        "Sets the text associated with this action."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
-    addFunction("isEnabled", &EventAction::isEnabled,
-        Kross::Api::ArgumentList(),
-        "Returns true if this action is enabled else false."
-    );
+    addFunction("isEnabled", &EventAction::isEnabled);
     addFunction("setEnabled", &EventAction::setEnabled,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"),
-        "Enables or disables this action."
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
 
-    addFunction("activate", &EventAction::activate,
-        Kross::Api::ArgumentList(),
-        "Activates the action."
-    );
+    addFunction("activate", &EventAction::activate);
 }
 
 EventAction::~EventAction()

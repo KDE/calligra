@@ -61,22 +61,31 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
         private:
             ::KexiDB::Cursor* cursor();
             ::KexiDB::Cursor* m_cursor;
 
+            /// Moves current position to the first record and retrieves it.
             Kross::Api::Object::Ptr moveFirst(Kross::Api::List::Ptr);
+            /// Moves current position to the last record and retrieves it.
             Kross::Api::Object::Ptr moveLast(Kross::Api::List::Ptr);
+            /// Moves current position to the next record and retrieves it.
             Kross::Api::Object::Ptr moveNext(Kross::Api::List::Ptr);
+            /// Moves current position to the next record and retrieves it.
             Kross::Api::Object::Ptr movePrev(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr eof(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr bof(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr at(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
 
+            /// Returns true if current position is after last record.
+            Kross::Api::Object::Ptr eof(Kross::Api::List::Ptr);
+            /// Returns true if current position is before first record.
+            Kross::Api::Object::Ptr bof(Kross::Api::List::Ptr);
+
+            /** Returns current internal position of the cursor's query. Records 
+            are numbered from 0; the value -1 means that the cursor does not 
+            point to a valid record. */
+            Kross::Api::Object::Ptr at(Kross::Api::List::Ptr);
+            /// Returns the number of fields available for this cursor.
+            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
+            /// Returns the value stored in column number \a i (counting from 0).
             Kross::Api::Object::Ptr value(Kross::Api::List::Ptr);
     };
 

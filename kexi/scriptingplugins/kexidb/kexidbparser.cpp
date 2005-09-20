@@ -32,48 +32,18 @@ KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parse
     , m_parser(parser)
 {
     addFunction("parse", &KexiDBParser::parse,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Clears previous results and runs the parser on the SQL statement "
-             "passed as an argument.")
-    );
-    addFunction("clear", &KexiDBParser::clear,
-        Kross::Api::ArgumentList(),
-        QString("Clears results.")
-    );
-    addFunction("operation", &KexiDBParser::operation,
-        Kross::Api::ArgumentList(),
-        QString("Returns the resulting operation.")
-    );
-    addFunction("table", &KexiDBParser::table,
-        Kross::Api::ArgumentList(),
-        QString("Returns the KexiDBTableSchema object on a CREATE TABLE operation.")
-    );
-    addFunction("query", &KexiDBParser::query,
-        Kross::Api::ArgumentList(),
-        QString("Returns the KexiDBQuerySchema object on a SELECT operation.")
-    );
-    addFunction("connection", &KexiDBParser::connection,
-        Kross::Api::ArgumentList(),
-        QString("Returns the KexiDBConnection object pointing to the used "
-             "database connection.")
-    );
-    addFunction("statement", &KexiDBParser::statement,
-        Kross::Api::ArgumentList(),
-        QString("Returns the SQL query statement.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("clear", &KexiDBParser::clear);
+    addFunction("operation", &KexiDBParser::operation);
 
-    addFunction("errorType", &KexiDBParser::errorType,
-        Kross::Api::ArgumentList(),
-        QString("Returns the type string of the last error.")
-    );
-    addFunction("errorMsg", &KexiDBParser::errorMsg,
-        Kross::Api::ArgumentList(),
-        QString("Returns the message of the last error.")
-    );
-    addFunction("errorAt", &KexiDBParser::errorAt,
-        Kross::Api::ArgumentList(),
-        QString("Returns the position where the last error occurred.")
-    );
+    addFunction("table", &KexiDBParser::table);
+    addFunction("query", &KexiDBParser::query);
+    addFunction("connection", &KexiDBParser::connection);
+    addFunction("statement", &KexiDBParser::statement);
+
+    addFunction("errorType", &KexiDBParser::errorType);
+    addFunction("errorMsg", &KexiDBParser::errorMsg);
+    addFunction("errorAt", &KexiDBParser::errorAt);
 }
 
 KexiDBParser::~KexiDBParser()
@@ -83,11 +53,6 @@ KexiDBParser::~KexiDBParser()
 const QString KexiDBParser::getClassName() const
 {
     return "Kross::KexiDB::KexiDBParser";
-}
-
-const QString KexiDBParser::getDescription() const
-{
-    return QString("KexiDB::Parser wrapper to parse SQL statements.");
 }
 
 Kross::Api::Object::Ptr KexiDBParser::parse(Kross::Api::List::Ptr args)

@@ -51,65 +51,105 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
             ::KexiDB::Field* field() { return m_field; }
 
         private:
             ::KexiDB::Field* m_field;
 
+            /// \returns the type string for this field, e.g. "Integer" for Integer type.
             Kross::Api::Object::Ptr type(Kross::Api::List::Ptr);
+            /// Sets the type string for this field, e.g. "Integer" for Integer type.
             Kross::Api::Object::Ptr setType(Kross::Api::List::Ptr);
 
+            /** Returns the optional subtype for this field. Subtype is a string 
+            providing additional hint for field's type. E.g. for BLOB type, it 
+            can be a MIME type or certain QVariant type name, for 
+            example: "QPixmap", "QColor" or "QFont". */
             Kross::Api::Object::Ptr subType(Kross::Api::List::Ptr);
+            /// Sets the optional subtype for this field.
             Kross::Api::Object::Ptr setSubType(Kross::Api::List::Ptr);
 
+            /** Returns type group string for this field, e.g. "IntegerGroup" 
+            for IntegerGroup type. */
             Kross::Api::Object::Ptr typeGroup(Kross::Api::List::Ptr);
 
+            /// \return true if the field is autoincrement (e.g. integer/numeric).
             Kross::Api::Object::Ptr isAutoInc(Kross::Api::List::Ptr);
+            /// Sets auto increment flag.
             Kross::Api::Object::Ptr setAutoInc(Kross::Api::List::Ptr);
 
+            /// \return true if the field is member of single-field unique key.
             Kross::Api::Object::Ptr isUniqueKey(Kross::Api::List::Ptr);
+            /** Specifies whether the field has single-field unique constraint 
+            or not. */
             Kross::Api::Object::Ptr setUniqueKey(Kross::Api::List::Ptr);
 
+            /// \return true if the field is member of single-field primary key.
             Kross::Api::Object::Ptr isPrimaryKey(Kross::Api::List::Ptr);
+            /// Specifies whether the field is single-field primary key or not.
             Kross::Api::Object::Ptr setPrimaryKey(Kross::Api::List::Ptr);
 
+            /// \return true if the field is member of single-field foreign key.
             Kross::Api::Object::Ptr isForeignKey(Kross::Api::List::Ptr);
+            /// Sets whether the field has to be declared with single-field foreign key.
             Kross::Api::Object::Ptr setForeignKey(Kross::Api::List::Ptr);
 
+            /// \return true if the field is not allowed to be null.
             Kross::Api::Object::Ptr isNotNull(Kross::Api::List::Ptr);
+            /// Specifies whether the field has single-field unique constraint or not.
             Kross::Api::Object::Ptr setNotNull(Kross::Api::List::Ptr);
 
+            /// \return true if the field is not allowed to be empty.
             Kross::Api::Object::Ptr isNotEmpty(Kross::Api::List::Ptr);
+            /// Specifies whether the field has single-field unique constraint or not.
             Kross::Api::Object::Ptr setNotEmpty(Kross::Api::List::Ptr);
 
+            /// \return true if the field is indexed using single-field database index.
             Kross::Api::Object::Ptr isIndexed(Kross::Api::List::Ptr);
+            /// Specifies whether the field is indexed or not.
             Kross::Api::Object::Ptr setIndexed(Kross::Api::List::Ptr);
 
+            /// \return true if the field is an unsigned integer.
             Kross::Api::Object::Ptr isUnsigned(Kross::Api::List::Ptr);
+            /// Specifies whether the field is an unsigned integer or not.
             Kross::Api::Object::Ptr setUnsigned(Kross::Api::List::Ptr);
 
+            /// \return the name of this field.
             Kross::Api::Object::Ptr name(Kross::Api::List::Ptr);
+            /// Sets the name of this field.
             Kross::Api::Object::Ptr setName(Kross::Api::List::Ptr);
 
+            /// \return the caption of this field.
             Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            /// Sets the caption of this field.
             Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
 
+            /// \return the descriptive text for this field.
             Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            /// Set the description for this field.
             Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
 
+            /// \return the length of text if the field type is text.
             Kross::Api::Object::Ptr length(Kross::Api::List::Ptr);
+            /** Sets the length for this field. Only works for Text 
+            Type (not including LongText). */
             Kross::Api::Object::Ptr setLength(Kross::Api::List::Ptr);
 
+            /** Returns precision for numeric and other fields that have
+            both length and precision (floating point types). */
             Kross::Api::Object::Ptr precision(Kross::Api::List::Ptr);
+            /// Sets the precision for numeric and other fields.
             Kross::Api::Object::Ptr setPrecision(Kross::Api::List::Ptr);
 
+            /** Returns the width of this field (usually in pixels or points).
+            0 (the default) means there is no hint for the width. */
             Kross::Api::Object::Ptr width(Kross::Api::List::Ptr);
+            /// Sets the width of this field.
             Kross::Api::Object::Ptr setWidth(Kross::Api::List::Ptr);
 
+            /// \return the default value this field has.
             Kross::Api::Object::Ptr defaultValue(Kross::Api::List::Ptr);
+            /// Sets the default value this field has.
             Kross::Api::Object::Ptr setDefaultValue(Kross::Api::List::Ptr);
 
     };

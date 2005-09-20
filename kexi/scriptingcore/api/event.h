@@ -64,16 +64,14 @@ namespace Kross { namespace Api {
              * \param function A pointer to the methodfunction that
              *        should handle calls.
              * \param arglist A list of arguments for the function.
-             * \param documentation Some documentation used to describe
-             *        what the function does.
              *
              * \todo Is that template arguments or concrete arguments?
              */
-            void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist, const QString& documentation)
+            void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist = ArgumentList())
             {
                 if(m_functions.contains(name))
                     throw Exception::Ptr( new Exception( QString("Class::addFunction(%1 failed cause there exists already a function with such name.)").arg(name) ) );
-                Event<T> *event = new Event<T>(name, this, function, arglist, documentation);
+                Event<T> *event = new Event<T>(name, this, function, arglist);
                 m_functions.replace(name, event);
             }
 
@@ -83,15 +81,15 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            Event(const QString& name, Object::Ptr parent, const QString& documentation = QString::null)
-                : Callable(name, parent, ArgumentList(), documentation) //FIXME: documentation
+            Event(const QString& name, Object::Ptr parent)
+                : Callable(name, parent, ArgumentList())
                 , m_function(0) {}
 
             /**
              * Constructor.
              */
-            Event(const QString& name, Object::Ptr parent, FunctionPtr function, ArgumentList arglist, const QString& documentation)
-                : Callable(name, parent, arglist, documentation)
+            Event(const QString& name, Object::Ptr parent, FunctionPtr function, ArgumentList arglist)
+                : Callable(name, parent, arglist)
                 , m_function(function) {}
 
             /**

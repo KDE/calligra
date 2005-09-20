@@ -57,10 +57,18 @@ namespace Kross { namespace KexiDB {
             /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
-virtual Kross::Api::Object::Ptr get(const QString& name, void* = 0);
+            /**
+             * Variable module-method use to call transparent some functionality
+             * the module provides.
+             * 
+             * \param name A name passed to the method. This name is used internaly
+             *        to determinate what the caller likes to do. Each implemented
+             *        module have to implement what should be done.
+             * \param p A variable pointer passed to the method. It depends on
+             *        the module and the name what this pointer is.
+             * \return a \a Kross::Api::Object or NULL.
+             */
+            virtual Kross::Api::Object::Ptr get(const QString& name, void* p = 0);
 
     };
 

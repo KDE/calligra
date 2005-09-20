@@ -34,36 +34,19 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
     : Kross::Api::Class<KexiDBDriver>("KexiDBDriver", KexiDBDriverManager::self())
     , m_driver(driver)
 {
-    addFunction("versionMajor", &KexiDBDriver::versionMajor,
-        Kross::Api::ArgumentList(),
-        QString("Return the major version number of this driver.")
-    );
-    addFunction("versionMinor", &KexiDBDriver::versionMinor,
-        Kross::Api::ArgumentList(),
-        QString("Return the minor version number of this driver.")
-    );
+    addFunction("versionMajor", &KexiDBDriver::versionMajor);
+    addFunction("versionMinor", &KexiDBDriver::versionMinor);
 
     addFunction("escapeString", &KexiDBDriver::escapeString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
-        QString("Return a driver-specific escaped SQL string.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("valueToSQL", &KexiDBDriver::valueToSQL,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant"),
-        QString("Return the escaped and convert as second argument passed "
-             "Variant value to the as first argument passed "
-             "KexiDBField::type.")
-    );
+            << Kross::Api::Argument("Kross::Api::Variant"));
 
     addFunction("createConnection", &KexiDBDriver::createConnection,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBConnectionData"),
-        QString("Create a new KexiDBConnection object and return it.")
-    );
-    addFunction("connectionList", &KexiDBDriver::connectionList,
-        Kross::Api::ArgumentList(),
-        QString("Return a list of KexiDBConnection objects.")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBConnectionData"));
+    addFunction("connectionList", &KexiDBDriver::connectionList);
 }
 
 KexiDBDriver::~KexiDBDriver()
@@ -73,12 +56,6 @@ KexiDBDriver::~KexiDBDriver()
 const QString KexiDBDriver::getClassName() const
 {
     return "Kross::KexiDB::KexiDBDriver";
-}
-
-const QString KexiDBDriver::getDescription() const
-{
-    return QString("KexiDB::Driver wrapper to access the generic "
-                "database abstraction functionality provided by KexiDB.");
 }
 
 ::KexiDB::Driver* KexiDBDriver::driver()

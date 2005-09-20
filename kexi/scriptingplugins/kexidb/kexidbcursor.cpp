@@ -30,45 +30,16 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
     : Kross::Api::Class<KexiDBCursor>("KexiDBCursor", connection)
     , m_cursor(cursor)
 {
-    addFunction("moveFirst", &KexiDBCursor::moveFirst,
-        Kross::Api::ArgumentList(),
-        QString("Moves current position to the first record and retrieves it.")
-    );
-    addFunction("moveLast", &KexiDBCursor::moveLast,
-        Kross::Api::ArgumentList(),
-        QString("Moves current position to the last record and retrieves it.")
-    );
-    addFunction("moveNext", &KexiDBCursor::moveNext,
-        Kross::Api::ArgumentList(),
-        QString("Moves current position to the next record and retrieves it.")
-    );
-    addFunction("movePrev", &KexiDBCursor::movePrev,
-        Kross::Api::ArgumentList(),
-        QString("Moves current position to the next record and retrieves it.")
-    );
-    addFunction("eof", &KexiDBCursor::eof,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if current position is after last record.")
-    );
-    addFunction("bof", &KexiDBCursor::bof,
-        Kross::Api::ArgumentList(),
-        QString("Returns true if current position is before first record.")
-    );
-    addFunction("at", &KexiDBCursor::at,
-        Kross::Api::ArgumentList(),
-        QString("Returns current internal position of the cursor's query. "
-             "Records are numbered from 0; the value -1 means that "
-             "the cursor does not point to a valid record.")
-    );
-    addFunction("fieldCount", &KexiDBCursor::fieldCount,
-        Kross::Api::ArgumentList(),
-        QString("Returns the number of fields available for this cursor.")
-    );
-
+    addFunction("moveFirst", &KexiDBCursor::moveFirst);
+    addFunction("moveLast", &KexiDBCursor::moveLast);
+    addFunction("moveNext", &KexiDBCursor::moveNext);
+    addFunction("movePrev", &KexiDBCursor::movePrev);
+    addFunction("eof", &KexiDBCursor::eof);
+    addFunction("bof", &KexiDBCursor::bof);
+    addFunction("at", &KexiDBCursor::at);
+    addFunction("fieldCount", &KexiDBCursor::fieldCount);
     addFunction("value", &KexiDBCursor::value,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"),
-        QString("Returns the value stored in column number \a i (counting from 0).")
-    );
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"));
 }
 
 KexiDBCursor::~KexiDBCursor()
@@ -78,12 +49,6 @@ KexiDBCursor::~KexiDBCursor()
 const QString KexiDBCursor::getClassName() const
 {
     return "Kross::KexiDB::KexiDBCursor";
-}
-
-const QString KexiDBCursor::getDescription() const
-{
-    return QString("KexiDB::Cursor wrapper to provide database "
-                "cursor functionality.");
 }
 
 ::KexiDB::Cursor* KexiDBCursor::cursor()

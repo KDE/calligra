@@ -54,9 +54,6 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
             ::KexiDB::Transaction& transaction();
 
         private:

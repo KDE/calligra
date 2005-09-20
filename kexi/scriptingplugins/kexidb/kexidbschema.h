@@ -49,15 +49,22 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::FieldList* m_fieldlist;
 
         private:
+            /// \return the name of the Schema.
             Kross::Api::Object::Ptr name(Kross::Api::List::Ptr);
+            /// Set the name of the Schema.
             Kross::Api::Object::Ptr setName(Kross::Api::List::Ptr);
 
+            /// \return the caption of the Schema.
             Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            /// Set the caption of the Schema.
             Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
 
+            /// \return a description of the Schema.
             Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            /// Set a description of the Schema.
             Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
 
+            /// \return the KexiDBFieldList object this Schema holds.
             Kross::Api::Object::Ptr fieldlist(Kross::Api::List::Ptr);
     };
 
@@ -71,10 +78,11 @@ namespace Kross { namespace KexiDB {
             KexiDBTableSchema(::KexiDB::TableSchema* tableschema);
             virtual ~KexiDBTableSchema();
             virtual const QString getClassName() const;
-            virtual const QString getDescription() const;
             ::KexiDB::TableSchema* tableschema();
 
         private:
+            /** \return the \a KexiDBQuerySchema object that represents a
+            "SELECT * FROM this_KexiDBTableSchema_object". */
             Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
     };
 
@@ -88,11 +96,12 @@ namespace Kross { namespace KexiDB {
             KexiDBQuerySchema(::KexiDB::QuerySchema* queryschema);
             virtual ~KexiDBQuerySchema();
             virtual const QString getClassName() const;
-            virtual const QString getDescription() const;
             ::KexiDB::QuerySchema* queryschema();
 
         private:
+            /// \return the SQL statement of this query schema.
             Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
+            /// Set the SQL statement of this query schema.
             Kross::Api::Object::Ptr setStatement(Kross::Api::List::Ptr);
     };
 

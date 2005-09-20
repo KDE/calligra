@@ -53,9 +53,6 @@ namespace Kross { namespace KexiApp {
             /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
         private:
             /// Private d-pointer class.
             KexiAppModulePrivate* d;

@@ -37,11 +37,6 @@ const QString Variant::getClassName() const
     return "Kross::Api::Variant";
 }
 
-const QString Variant::getDescription() const
-{
-    return "Object to handle QVariant values.";
-}
-
 const QString Variant::toString()
 {
     return getValue().toString();

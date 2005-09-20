@@ -75,9 +75,6 @@ namespace Kross { namespace Api {
             /// \see Kross::Api::Object::getClassName()
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Object::getDescription()
-            virtual const QString getDescription() const;
-
             /**
              * \return true if the script throwed an exception
              *        else false.

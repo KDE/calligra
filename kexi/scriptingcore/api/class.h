@@ -53,11 +53,9 @@ namespace Kross { namespace Api {
              * \param name The name this class has.
              * \param parent The parent this class is child of
              *        or NULL if this class has no parent.
-             * \param documentation The documentation to describe
-             *       the class.
              */
-            explicit Class(const QString& name, Object::Ptr parent = 0, const QString& documentation = QString::null)
-                : Event<T>(name, parent, documentation)
+            explicit Class(const QString& name, Object::Ptr parent = 0)
+                : Event<T>(name, parent)
             {
             }
 

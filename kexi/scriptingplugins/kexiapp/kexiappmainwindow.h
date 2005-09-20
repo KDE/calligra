@@ -58,13 +58,13 @@ namespace Kross { namespace KexiApp {
             /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
         private:
             /// Private d-pointer class.
             KexiAppMainWindowPrivate* d;
 
+            /** \return the \a Kross::KexiDB::KexiDBConnection object that 
+            belongs to the opened project or throw an exception if there 
+            was no project opened (no connection established). */
             Kross::Api::Object::Ptr getConnection(Kross::Api::List::Ptr);
 
             //Kross::Api::Object::Ptr getActions(Kross::Api::List::Ptr);

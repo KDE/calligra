@@ -51,23 +51,32 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// See \see Kross::Api::Object::getDescription
-            virtual const QString getDescription() const;
-
         private:
             KexiDBConnection* m_connection;
             ::KexiDB::Parser* m_parser;
 
+            /** Clears previous results and runs the parser on the 
+            SQL statement passed as an argument. */
             Kross::Api::Object::Ptr parse(Kross::Api::List::Ptr);
+            /// Clears results.
             Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
+            /// \return the resulting operation.
             Kross::Api::Object::Ptr operation(Kross::Api::List::Ptr);
+
+            /// \return the \a KexiDBTableSchema object on a CREATE TABLE operation.
             Kross::Api::Object::Ptr table(Kross::Api::List::Ptr);
+            /// \return the \a KexiDBQuerySchema object on a SELECT operation."
             Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
+            /// \return the \a KexiDBConnection object pointing to the used database connection.
             Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
+            /// \return the SQL query statement.
             Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
 
+            /// \return the type string of the last error.
             Kross::Api::Object::Ptr errorType(Kross::Api::List::Ptr);
+            /// \return the message of the last error.
             Kross::Api::Object::Ptr errorMsg(Kross::Api::List::Ptr);
+            /// \return the position where the last error occurred.
             Kross::Api::Object::Ptr errorAt(Kross::Api::List::Ptr);
     };
 
