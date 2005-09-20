@@ -1261,7 +1261,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             {
                 // We don't have support for changing the page layout yet, so just take the
                 // number of pages
-		int pages=1
+		int pages=1;
                 QDomElement page;
                 forEachElement( page, tag )
                     ++pages;
