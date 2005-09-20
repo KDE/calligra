@@ -367,7 +367,7 @@ public:
         m_defaultFont = newFont;
     }
 
-    int numPages() const { return m_pages; }
+    int numPages() const { return pageCount(); }
 
     KoPictureCollection *pictureCollection() { return m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
