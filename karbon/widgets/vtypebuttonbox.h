@@ -29,12 +29,11 @@ class VTypeButtonBox : public QHButtonGroup
 	Q_OBJECT
 
 public:
-	enum buttonType
- 	{
-		none = 0,
-		solid = 1,
+	enum buttonType {
+		none     = 0,
+		solid    = 1,
 		gradient = 2,
-		pattern = 3
+		pattern  = 3
  	};
 
 	VTypeButtonBox( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
@@ -46,8 +45,9 @@ public slots:
 	void setStroke();
 
 private:
-	KarbonPart *m_part;
-	bool m_isStrokeManipulator;
+	KarbonPart  *m_part;
+	bool         m_isStrokeManipulator;
+
 	void manipulateFills( int id );
 	void manipulateStrokes( int id );
 };
