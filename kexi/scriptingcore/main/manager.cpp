@@ -182,7 +182,7 @@ const QStringList Manager::getInterpreters()
     list << "kjs";
 #endif
 */
-list << "TestCase";
+//list << "TestCase";
 
     return  list;
 }

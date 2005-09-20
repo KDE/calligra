@@ -51,16 +51,8 @@ KexiScriptEditor::~KexiScriptEditor()
 {
 }
 
-void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
+void KexiScriptEditor::updateHighlightMode()
 {
-    disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-
-    m_scriptcontainer = scriptcontainer;
-    connect(m_scriptcontainer, SIGNAL(lineNo(long)), this, SLOT(setLineNo(long)));
-
-    if(m_scriptcontainer) {
-        KexiEditor::setText(m_scriptcontainer->getCode());
-
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
         KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( document() );
@@ -75,7 +67,18 @@ void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
             }
         }
 #endif
+}
 
+void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
+{
+    disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+
+    m_scriptcontainer = scriptcontainer;
+    connect(m_scriptcontainer, SIGNAL(lineNo(long)), this, SLOT(setLineNo(long)));
+
+    if(m_scriptcontainer) {
+        KexiEditor::setText(m_scriptcontainer->getCode());
+        updateHighlightMode();
     }
     else {
         KexiEditor::setText("");

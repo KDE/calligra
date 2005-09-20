@@ -99,6 +99,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& set, KoProperty:
         QString language = property.value().toString();
         kdDebug() << QString("KexiScriptDesignView::slotPropertyChanged() language=%1").arg(language) << endl;
         d->scriptcontainer->setInterpreterName( language );
+        d->editor->updateHighlightMode();
         setDirty(true);
     }
     else {
