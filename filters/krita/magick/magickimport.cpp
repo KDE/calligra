@@ -67,7 +67,7 @@ KoFilter::ConversionStatus MagickImport::convert(const QCString&, const QCString
         KisImageMagickConverter ib(doc, doc -> undoAdapter());
 
         if (view != 0)
-            view -> progressDisplay() -> setSubject(&ib, false, true);
+            view -> getCanvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
         switch (ib.buildImage(url)) {
             case KisImageBuilder_RESULT_UNSUPPORTED:
