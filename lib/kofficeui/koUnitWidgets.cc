@@ -147,6 +147,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
     setAcceptLocalizedNumbers( true );
     setUnit( unit );
     changeValue( value );
+    setLineStep( 0.5 );
 }
 
 void
@@ -188,6 +189,12 @@ void KoUnitDoubleSpinBox::setMaxValue( double max )
 }
 
 void KoUnitDoubleSpinBox::setLineStep( double step )
+{
+  m_stepInPoints = KoUnit::toUserValue(step, KoUnit::U_PT );
+  KDoubleSpinBox::setLineStep( step );
+}
+
+void KoUnitDoubleSpinBox::setLineStepPt( double step )
 {
   m_stepInPoints = step;
   KDoubleSpinBox::setLineStep( KoUnit::toUserValue( m_stepInPoints, m_unit ) );

@@ -837,7 +837,6 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     indentGrid->addWidget( lLeft, 2, 0 );
 
     eLeft = new KoUnitDoubleSpinBox( indentFrame, 0, 9999, 1, 0.0, m_unit );
-    //eLeft->setLineStep( KoUnit::toPoint( 1.0 ) );
     lLeft->setBuddy( eLeft );
     indentGrid->addWidget( eLeft, 2, 1 );
     connect( eLeft, SIGNAL( valueChanged(double ) ), this, SLOT( leftChanged( double ) ) );
@@ -847,7 +846,6 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     indentGrid->addWidget( lRight, 3, 0 );
 
     eRight = new KoUnitDoubleSpinBox( indentFrame, 0, 9999, 1, 0.0, m_unit );
-    //eRight->setLineStep( KoUnit::toPoint( 1.0 ) );
     lRight->setBuddy( eRight );
     indentGrid->addWidget( eRight, 3, 1 );
     connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
@@ -857,7 +855,6 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     indentGrid->addWidget( lFirstLine, 4, 0 );
 
     eFirstLine = new KoUnitDoubleSpinBox( indentFrame, -9999, 9999, 1, 0.0, m_unit );
-    //eFirstLine->setLineStep( 28.3464567 );
     lFirstLine->setBuddy( eFirstLine );
     connect( eFirstLine, SIGNAL( valueChanged( double ) ), this, SLOT( firstChanged( double ) ) );
     indentGrid->addWidget( eFirstLine, 4, 1 );

@@ -125,8 +125,11 @@ public:
     /// Set maximum value in points.
     void setMaxValue(double max);
 
-    /// Set step size in points.
+    /// Set step size in the current unit.
     void setLineStep(double step);
+
+    /// Set step size in points.
+    void setLineStepPt(double step);
 
 private:
     double m_lowerInPoints; ///< lowest value in points
