@@ -95,10 +95,10 @@ VTransformDocker::update()
 		mainWidget->setEnabled( true );
 		KoRect rect = m_view->part()->document().selection()->boundingBox();
 
-		m_x->setValue( KoUnit::toUserValue( rect.x(), m_view->part()->unit() ) );
-		m_y->setValue( KoUnit::toUserValue( rect.y(), m_view->part()->unit() ) );
-		m_width->setValue( KoUnit::toUserValue( rect.width(), m_view->part()->unit() ) );
-		m_height->setValue( KoUnit::toUserValue( rect.height(), m_view->part()->unit() ) );
+		m_x->setValue( rect.x() );
+		m_y->setValue( rect.y() );
+		m_width->setValue( rect.width() );
+		m_height->setValue( rect.height() );
 	}
 	else
 	{

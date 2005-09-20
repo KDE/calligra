@@ -347,14 +347,12 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 
 void VConfigGridPage::setMaxHorizSnap( double v )
 {
-	KoUnit::Unit unit = m_view->part()->document().unit();
-	m_snapHorizUSpin->setMaxValue( KoUnit::fromUserValue( v, unit ) );
+	m_snapHorizUSpin->setMaxValue( v );
 }
 
 void VConfigGridPage::setMaxVertSnap( double v )
 {
-	KoUnit::Unit unit = m_view->part()->document().unit();
-	m_snapVertUSpin->setMaxValue( KoUnit::fromUserValue( v, unit ) );
+	m_snapVertUSpin->setMaxValue( v );
 }
 
 void VConfigGridPage::slotUnitChanged( int u )
