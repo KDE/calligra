@@ -835,6 +835,10 @@ public:
      * @internal (public for KoMainWindow)
      */
     void setMimeTypeAfterLoading( const QString& mimeType );
+
+    /**
+     *	@return returns the number of pages in the document.
+     */
     int  pageCount() const { return m_pageCount; } 
 
 signals:
