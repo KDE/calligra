@@ -55,17 +55,19 @@ void KexiScriptEditor::updateHighlightMode()
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
+        QString interpreter = m_scriptcontainer->getInterpreterName();
         KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( document() );
         for(uint i = 0; i < hl->hlModeCount(); i++) {
             //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
 
             // We assume Kross and the HighlightingInterface are using same
             // names for the support languages...
-            if (hl->hlModeName(i).contains(m_scriptcontainer->getInterpreterName(), false))  {
+            if (hl->hlModeName(i).contains(interpreter, false))  {
                 hl->setHlMode(i);
-                break;
+                return;
             }
         }
+        hl->setHlMode(0); // 0=None, don't highlight anything.
 #endif
 }
 
