@@ -1561,18 +1561,12 @@ void KPresenterView::screenPause()
 
 void KPresenterView::screenFirst()
 {
-    if ( m_canvas->currentTextObjectView() )
-#if 0
-        m_canvas->currentTextObjectView()->home();
-#else
-    ;
-#endif
-    else {
+    m_canvas->deSelectAllObj();
+
         if ( !presStarted )
             skipToPage( 0 );
         else
             gotoPresPage( 1 );
-    }
 }
 
 void KPresenterView::screenPrev( bool gotoPreviousPage )
@@ -1605,18 +1599,12 @@ void KPresenterView::screenNext( bool gotoNextPage )
 
 void KPresenterView::screenLast()
 {
-    if ( m_canvas->currentTextObjectView() )
-#if 0
-        m_canvas->currentTextObjectView()->end();
-#else
-    ;
-#endif
-    else {
+    m_canvas->deSelectAllObj();
+
         if ( !presStarted )
             skipToPage( m_pKPresenterDoc->getPageNums() - 1 );
         else
             gotoPresPage( getNumPresPages() );
-    }
 }
 
 void KPresenterView::screenSkip()
@@ -2747,7 +2735,7 @@ void KPresenterView::setupActions()
                                               actionCollection(), "screen_startfromfirst" );
 
     actionScreenFirst = new KAction( i18n( "&Go to Start" ),
-                                     "start", Key_Home,
+                                     "start", 0,
                                      this, SLOT( screenFirst() ),
                                      actionCollection(), "screen_first" );
 
@@ -2762,7 +2750,7 @@ void KPresenterView::setupActions()
                                     actionCollection(), "screen_next" );
 
     actionScreenLast = new KAction( i18n( "Go to &End" ),
-                                    "finish", Key_End,
+                                    "finish", 0,
                                     this, SLOT( screenLast() ),
                                     actionCollection(), "screen_last" );
 

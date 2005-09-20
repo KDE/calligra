@@ -201,7 +201,6 @@ void KPrCanvas::scrollY( int y )
 
 bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
 {
-
     if ( !o || !e )
         return TRUE;
     if ( m_currentTextObjectView  )
@@ -1304,10 +1303,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         if( objectIsAHeaderFooterHidden(it.current()))
                             continue;
                         it.current()->setSelected( true );
+                        mouseSelectedObject = true;
                     }
                 }
 
-                mouseSelectedObject = true;
                 _repaint( false );
                 emit objectSelectedChanged();
             }
@@ -2101,7 +2100,6 @@ void KPrCanvas::wheelEvent( QWheelEvent *e )
 
 void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
-
     if ( !editMode ) {
         switch ( e->key() ) {
         case Key_Space: case Key_Right: case Key_Down:
@@ -2167,129 +2165,110 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             else
                 KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted."));
         }
-    } else if ( mouseSelectedObject ) {
-        m_hotSpot = KoPoint(0,0);
-        if ( e->state() & ControlButton ) {
-            int offsetx, offsety;
-
-            if( !m_view->kPresenterDoc()->snapToGrid() ) {
-                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
-                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
-            } else {
-                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
-                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
-            }
-
-            if ( !m_keyPressEvent )
-            {
-                moveStartPosKey = m_boundingRect.topLeft();
-            }
-            switch ( e->key() ) {
-            case Key_Up:
-                m_keyPressEvent = true;
-                moveObject( 0, -offsety, false );
-                m_origBRect = m_boundingRect;
+    } 
+    else 
+    {
+        switch ( e->key() )
+        {
+            case Key_Next:
+                m_view->nextPage();
                 break;
-            case Key_Down:
-                m_keyPressEvent = true;
-                moveObject( 0, offsety, false );
-                m_origBRect = m_boundingRect;
+            case Key_Prior:
+                m_view->prevPage();
                 break;
-            case Key_Right:
-                m_keyPressEvent = true;
-                moveObject( offsetx, 0, false );
-                m_origBRect = m_boundingRect;
+            case Key_Home:  // go to first page
+                m_view->screenFirst();
                 break;
-            case Key_Left:
-                m_keyPressEvent = true;
-                moveObject( -offsetx, 0, false );
-                m_origBRect = m_boundingRect;
+            case Key_End:  // go to first page
+                m_view->screenLast();
                 break;
-            default: break;
-            }
-
-        } else {
-            int offsetx, offsety;
-
-            if( !m_view->kPresenterDoc()->snapToGrid() ) {
-                offsetx = 1;
-                offsety = 1;
-            } else {
-                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
-                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
-            }
-
-            if ( !m_keyPressEvent )
-            {
-                moveStartPosKey = m_boundingRect.topLeft();
-            }
-            switch ( e->key() ) {
-            case Key_Up:
-                m_keyPressEvent = true;
-                moveObject( 0, -offsety, false );
-                m_origBRect = m_boundingRect;
+            default: 
                 break;
-            case Key_Down:
-                m_keyPressEvent = true;
-                moveObject( 0, offsety, false );
-                m_origBRect = m_boundingRect;
-                break;
-            case Key_Right:
-                m_keyPressEvent = true;
-                moveObject( offsetx, 0, false );
-                m_origBRect = m_boundingRect;
-                break;
-            case Key_Left:
-                m_keyPressEvent = true;
-                moveObject( -offsetx, 0, false );
-                m_origBRect = m_boundingRect;
-                break;
-            case Key_Delete: case Key_Backspace:
-                m_view->editDelete();
-                break;
-            case Key_Escape:
-                setToolEditMode( TEM_MOUSE );
-                break;
-            default: break;
-            }
         }
-    } else {
-        switch ( e->key() ) {
-        case Key_Next:
-            m_view->nextPage();
-            break;
-        case Key_Prior:
-            m_view->prevPage();
-            break;
-        case Key_Down:
-            m_view->getVScrollBar()->addLine();
-            break;
-        case Key_Up:
-            m_view->getVScrollBar()->subtractLine();
-            break;
-        case Key_Right:
-            m_view->getHScrollBar()->addLine();
-            break;
-        case Key_Left:
-            m_view->getHScrollBar()->subtractLine();
-            break;
-        case Key_Tab:
-            selectNext();
-            break;
-        case Key_Backtab:
-            selectPrev();
-            break;
-        case Key_Home:
-            m_view->getVScrollBar()->setValue( 0 );
-            break;
-        case Key_End:
-            m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->maxValue());
-            break;
-        case Key_Escape:
-            if ( toolEditMode == TEM_ZOOM )
-                setToolEditMode( TEM_MOUSE );
-            break;
-        default: break;
+
+        if ( mouseSelectedObject ) 
+        {
+            m_hotSpot = KoPoint(0,0);
+            int offsetx = 1;
+            int offsety = 1;
+
+            if( !m_view->kPresenterDoc()->snapToGrid() ) 
+            {
+                if ( e->state() & ControlButton ) 
+                {
+                    offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
+                    offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
+                }
+            } 
+            else 
+            {
+                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
+                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
+            }
+
+            if ( !m_keyPressEvent )
+            {
+                moveStartPosKey = m_boundingRect.topLeft();
+            }
+            switch ( e->key() ) 
+            {
+                case Key_Up:
+                    m_keyPressEvent = true;
+                    moveObject( 0, -offsety, false );
+                    m_origBRect = m_boundingRect;
+                    break;
+                case Key_Down:
+                    m_keyPressEvent = true;
+                    moveObject( 0, offsety, false );
+                    m_origBRect = m_boundingRect;
+                    break;
+                case Key_Right:
+                    m_keyPressEvent = true;
+                    moveObject( offsetx, 0, false );
+                    m_origBRect = m_boundingRect;
+                    break;
+                case Key_Left:
+                    m_keyPressEvent = true;
+                    moveObject( -offsetx, 0, false );
+                    m_origBRect = m_boundingRect;
+                    break;
+                case Key_Delete: case Key_Backspace:
+                    m_view->editDelete();
+                    break;
+                case Key_Escape:
+                    setToolEditMode( TEM_MOUSE );
+                    break;
+                default: break;
+            }
+
+        } 
+        else 
+        {
+            switch ( e->key() ) {
+                case Key_Down:
+                    m_view->getVScrollBar()->addLine();
+                    break;
+                case Key_Up:
+                    m_view->getVScrollBar()->subtractLine();
+                    break;
+                case Key_Right:
+                    m_view->getHScrollBar()->addLine();
+                    break;
+                case Key_Left:
+                    m_view->getHScrollBar()->subtractLine();
+                    break;
+                case Key_Tab:
+                    selectNext();
+                    break;
+                case Key_Backtab:
+                    selectPrev();
+                    break;
+                case Key_Escape:
+                    if ( toolEditMode == TEM_ZOOM )
+                        setToolEditMode( TEM_MOUSE );
+                    break;
+                default: break;
+            }
         }
     }
 }
