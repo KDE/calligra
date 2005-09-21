@@ -196,7 +196,7 @@ void ImportWizard::setupdstType()
     vbox->addStretch(1);
 
     QHBoxLayout *hbox = new QHBoxLayout(vbox);
-    hbox->addWidget(new QLabel(i18n("Source database type:"), dstTypePage));
+    hbox->addWidget(new QLabel(i18n("Destination database type:"), dstTypePage));
     dstTypeCombo = new KexiDBDriverComboBox(drvs, true, dstTypePage);
 
     hbox->addWidget( dstTypeCombo );
