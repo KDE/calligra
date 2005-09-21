@@ -182,13 +182,14 @@ CollisionFeedback PolylineObject::contains(const KoPoint& point)
   }
 
   count -= 1; // As we need current + 1;
+  i = 0;
 
   while(i < count) {
     point1 = m_pointVector[i];
     point2 = m_pointVector[i + 1];
 
     if(collisionLine(point1.x(), point1.y(),
-       point2.x(), point2.y(), point.x(), point.y(), 1))
+       point2.x(), point2.y(), point.x(), point.y(), 2))
     {
       feedback.type = CTBody;
       return feedback;
