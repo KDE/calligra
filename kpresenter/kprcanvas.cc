@@ -5548,47 +5548,6 @@ void KPrCanvas::raiseObjs( bool forward )
     m_activePage->raiseObjs( forward );
 }
 
-KCommand *KPrCanvas::setKeepRatioObj( bool p )
-{
-    QPtrList<KPObject> lst;
-    QValueList<bool> listKeepRatio;
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() )
-        {
-            lst.append( it.current() );
-            listKeepRatio.append( it.current()->isKeepRatio());
-        }
-    }
-    if ( lst.isEmpty())
-        return 0L;
-    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Keep Ratio"), listKeepRatio, lst, p,
-                                                     KPrGeometryPropertiesCommand::KeepRatio);
-    cmd->execute();
-    return cmd;
-}
-
-KCommand *KPrCanvas::setProtectSizeObj(bool protect)
-{
-    QPtrList<KPObject> lst;
-    QValueList<bool> listProt;
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() )
-        {
-            lst.append( it.current() );
-            listProt.append( it.current()->isProtect());
-        }
-    }
-    if ( lst.isEmpty())
-        return 0L;
-    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Protect Object"), listProt, lst, protect,
-                                                     KPrGeometryPropertiesCommand::ProtectSize );
-    cmd->execute();
-    return cmd;
-
-}
-
 QPtrList<KPTextObject> KPrCanvas::listOfTextObjs() const
 {
     QPtrList<KPTextObject> lst;
@@ -5703,26 +5662,6 @@ void KPrCanvas::rectSymetricalObjet()
         insRect.moveBy( -insRect.width(), -insRect.height());
         insRect.setSize( 2*insRect.size() );
     }
-}
-
-KCommand *KPrCanvas::setProtectContent( bool b )
-{
-    KMacroCommand *macro = 0L;
-    QPtrList<KPTextObject> list;
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && it.current()->getType()==OT_TEXT)
-        {
-            if ( !macro )
-                macro = new KMacroCommand( i18n("Protect Content"));
-            KPrProtectContentCommand * cmd = new KPrProtectContentCommand( i18n("Protect Content"), b,
-                                                                           static_cast<KPTextObject *>(it.current()),
-                                                                           m_view->kPresenterDoc() );
-            cmd->execute();
-            macro->addCommand( cmd );
-        }
-    }
-    return macro;
 }
 
 void KPrCanvas::closeObject(bool /*close*/)

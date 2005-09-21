@@ -332,9 +332,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void lowerObjs( bool backward );
     void raiseObjs( bool forward );
 
-    KCommand *setKeepRatioObj( bool p );
-    KCommand *setProtectSizeObj(bool protect);
-
     /**
      * Align all selected and not protected objects on the
      * active and on the sticky page according to the AlignType
@@ -345,7 +342,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     QPtrList<KPTextObject> listOfTextObjs() const;
 
     QPixmap getPicturePixmap() const;
-    KCommand *setProtectContent( bool b );
     void closeObject(bool _close);
     void layout();
     void alignVertical( VerticalAlignmentType _type );
