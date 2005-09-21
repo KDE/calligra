@@ -243,32 +243,48 @@ MigrateManager::~MigrateManager()
 
 const QStringList MigrateManager::migrateDriverNames()
 {
-	if (!d_int->lookupDrivers())
+	if (!d_int->lookupDrivers()) {
+		kdDebug() << "MigrateManager::migrateDriverNames() lookupDrivers failed" << endl;
 		return QStringList();
+	}
 	
-	if (d_int->m_services.isEmpty() && d_int->error())
+	if (d_int->m_services.isEmpty()) {
+		kdDebug() << "MigrateManager::migrateDriverNames() MigrateManager::ServicesMap is empty" << endl;
 		return QStringList();
+	}
+
+	if (d_int->error()) {
+		kdDebug() << "MigrateManager::migrateDriverNames() Error: " << d_int->errorMsg() << endl;
+		return QStringList();
+	}
+
 	return d_int->m_services.keys();
 }
 
 QString MigrateManager::lookupByMime(const QString &mimeType)
 {
 	if (!d_int->lookupDrivers()) {
+		kdDebug() << "MigrateManager::lookupByMime() lookupDrivers failed" << endl;
 		setError(d_int);
 		return 0;
 	}
 	
 	KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.lower()];
-	if (!ptr)
+	if (!ptr) {
+		kdDebug() << QString("MigrateManager::lookupByMime(%1) No such mimetype").arg(mimeType) << endl;
 		return QString::null;
+	}
+
 	return ptr->property("X-Kexi-MigrationDriverName").toString();
 }
 
 KexiMigrate* MigrateManager::migrateDriver(const QString& name)
 {
 	KexiMigrate *drv = d_int->migrateDriver(name);
-	if (d_int->error())
+	if (d_int->error()) {
+		kdDebug() << QString("MigrateManager::migrateDriver(%1) Error: %2").arg(name).arg(d_int->errorMsg()) << endl;
 		setError(d_int);
+	}
 	return drv;
 }
 
