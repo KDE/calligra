@@ -81,7 +81,6 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
     newVal = KoUnit::ptToUnit( newVal, m_base->m_unit );
 
-    m_base->changeValue( newVal );
     s = m_base->getVisibleText( newVal );
 
     return result;
