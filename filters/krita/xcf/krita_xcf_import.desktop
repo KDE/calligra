@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita XCF Import Filter
+Name[eo]=Krita XCF importfiltrilo
 Name[es]=Filtro de importación a XCF de Krita
 Name[ga]=Scagaire Iompórtála XCF Krita
 Name[sv]=Krita XCF-importfilter

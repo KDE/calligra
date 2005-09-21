@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KPlato
-Name[eo]=Prokektplanilo
 Name[sv]=Kplato
 Name[xx]=xxKPlatoxx
 Name[zh_TW]=KDE 繪圖
@@ -12,6 +11,7 @@ GenericName[ca]=Gestió de projectes
 GenericName[cy]=Rheoli Cywaith
 GenericName[da]=Projekthåndtering
 GenericName[de]=Projektmanagement
+GenericName[eo]=Projekt-administrado
 GenericName[es]=Gestión de proyecto
 GenericName[et]=Projektihaldus
 GenericName[fr]=Gestion de projets

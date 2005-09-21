@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Karbon14
-Name[eo]=Karbono14
 Name[lo]=ຄາຣ໌ບອບ14
 Name[th]=คาร์บอน14
 Name[xx]=xxKarbon14xx
@@ -17,9 +16,10 @@ GenericName[cy]=Graffeg Graddadwy
 GenericName[da]=Skalérbar grafik
 GenericName[de]=Skalierbare Graphiken
 GenericName[el]=Διανυσματικά γραφικά
-GenericName[eo]=Pligrandigeblaj vektorgrafikoj
+GenericName[eo]=Skaleblaj Grafikoj
 GenericName[es]=Gráficos escalables
 GenericName[et]=Vektorgraafika
+GenericName[eu]=Grafiko eskalagarriak
 GenericName[fi]=Skaalattava grafiikka
 GenericName[fr]=Graphiques vectoriels
 GenericName[he]=גרפיקה מדורגת
