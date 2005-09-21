@@ -517,6 +517,11 @@ void ImportWizard::accept()
 
     kdDebug() << "Creating source driver..." << endl;
     import = mmanager.migrateDriver(srcTypeCombo->currentText());
+    if(!import || manager.error()) {
+        kdDebug() << "Import migrate driver error..." << endl;
+        KMessageBox::error(this, manager.errorMsg());
+        return;
+    }
 
     if(import->progressSupported()) {
       progress->show();
