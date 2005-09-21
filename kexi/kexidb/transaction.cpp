@@ -146,13 +146,13 @@ TransactionGuard::TransactionGuard()
 
 TransactionGuard::~TransactionGuard()
 {
-	if (!m_doNothing && m_trans.connection())
+	if (!m_doNothing && m_trans.active() && m_trans.connection())
 		m_trans.connection()->rollbackTransaction(m_trans);
 }
 
 bool TransactionGuard::commit()
 {
-	if (m_trans.connection()) {
+	if (m_trans.active() && m_trans.connection()) {
 		return m_trans.connection()->commitTransaction(m_trans);
 	}
 	return false;
