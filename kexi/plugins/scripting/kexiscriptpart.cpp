@@ -54,6 +54,7 @@ void KexiScriptPart::initPartActions()
 void KexiScriptPart::initInstanceActions()
 {
 	createSharedAction(Kexi::DesignViewMode, i18n("Execute script"), "exec", 0, "script_execute");
+	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 
 KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)

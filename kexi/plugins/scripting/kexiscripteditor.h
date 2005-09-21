@@ -31,7 +31,7 @@ class KexiScriptContainer;
  * The KexiEditor class embeds text editor
  * for editing scripting code.
  */
-class KexiScriptEditor : protected KexiEditor
+class KexiScriptEditor : public KexiEditor
 {
         Q_OBJECT
 
@@ -59,11 +59,6 @@ class KexiScriptEditor : protected KexiEditor
          * setDirty(false) is set.
          */
         void initialize(KexiScriptContainer* scriptcontainer);
-
-        /**
-          * Useful as we're KexiEditor superclass is protected.
-          */
-        operator KexiViewBase* () const { return (KexiViewBase*)this; }
 
     private slots:
         void slotTextChanged();

@@ -1,9 +1,18 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiscriptpartinst" version="4">
+<kpartgui name="kexiscriptpartinst" version="5">
+
+<MenuBar>
+    <Menu name="edit" noMerge="1">
+        <Separator/>
+        <Action name="script_execute"/>
+        <Action name="script_config_editor"/>
+    </Menu>
+</MenuBar>
 
 <ToolBar name="design" fullWidth="false" noMerge="0">
-   <text>Design</text>
-   <Action name="script_execute"/>
+    <text>Design</text>
+    <Action name="script_execute"/>
+    <Action name="script_config_editor"/>
 </ToolBar>
 
 </kpartgui>

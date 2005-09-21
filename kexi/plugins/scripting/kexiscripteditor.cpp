@@ -37,8 +37,6 @@
 # include <ktexteditor/view.h>
 # include <ktexteditor/document.h>
 # include <ktexteditor/highlightinginterface.h>
-# include <ktexteditor/popupmenuinterface.h>
-# include <ktexteditor/undointerface.h>
 #endif
 
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
@@ -86,13 +84,7 @@ void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
         KexiEditor::setText("");
     }
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-    KTextEditor::UndoInterface* u = KTextEditor::undoInterface( document() );
-    u->clearUndo();
-    u->clearRedo();
-#endif
-
+    clearUndoRedo();
     KexiEditor::setDirty(false);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }

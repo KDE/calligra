@@ -62,6 +62,8 @@ public:
 # include <ktexteditor/editinterface.h>
 # include <ktexteditor/viewcursorinterface.h>
 # include <ktexteditor/popupmenuinterface.h>
+# include <ktexteditor/undointerface.h>
+# include <ktexteditor/configinterface.h>
 
 class KTextEditor_View_KexiSharedActionConnector : public KexiSharedActionConnector
 {
@@ -150,8 +152,6 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 
 KexiEditor::~KexiEditor()
 {
-//not needed, right?	delete d->view;
-//not needed, right?	delete d->doc;
 }
 
 void
@@ -160,21 +160,14 @@ KexiEditor::updateActions(bool activated)
 	KexiViewBase::updateActions(activated);
 }
 
-/*
-void KexiEditor::installEventFilter ( const QObject * filterObj )
+bool KexiEditor::isAdvancedEditor()
 {
-	d->view->installEventFilter( filterObj );
-	QObject::installEventFilter( filterObj );
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+	return false;
+#else
+	return true;
+#endif
 }
-
-bool KexiEditor::eventFilter(QObject *o, QEvent *ev)
-{
-	if(ev->type() == QEvent::KeyPress && o==d->view) {
-		QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
-		kdDebug() << ke->key() << endl;
-	}
-	return KexiViewBase::eventFilter(o,ev);
-}*/
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 // === KexiEditor implementation using KTextEdit only ===
@@ -190,6 +183,11 @@ KexiEditor::setText(const QString &text)
 	const bool was_dirty = dirty();
 	d->view->setText(text);
 	setDirty(was_dirty);
+}
+
+void KexiEditor::slotConfigureEditor()
+{
+	//just don't do anything
 }
 
 void
@@ -210,17 +208,20 @@ KexiEditor::jump(int character)
 	d->view->setCursorPosition(row, col);
 }
 
-void
-KexiEditor::setCursorPosition(int line, int col)
+void KexiEditor::setCursorPosition(int line, int col)
 {
 	d->view->setCursorPosition(line, col);
+}
+
+void KexiEditor::clearUndoRedo()
+{
+	//just don't do anything
 }
 
 #else
 // === KexiEditor implementation using KTextEditor ===
 
-KTextEditor::Document*
-KexiEditor::document()
+KTextEditor::Document* KexiEditor::document()
 {
 	return d->doc;
 }
@@ -250,6 +251,13 @@ KexiEditor::setText(const QString &text)
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
 	eIface->setText(text);
 	setDirty(was_dirty);
+}
+
+void KexiEditor::slotConfigureEditor()
+{
+    KTextEditor::ConfigInterface *config = KTextEditor::configInterface( d->doc );
+    if (config)
+        config->configDialog();
 }
 
 void
@@ -283,7 +291,14 @@ KexiEditor::setCursorPosition(int line, int col)
 	ci->setCursorPosition(line, col);
 }
 
-#endif //!KTEXTEDIT_BASED_SQL_EDITOR
+void KexiEditor::clearUndoRedo()
+{
+	KTextEditor::UndoInterface* u = KTextEditor::undoInterface( document() );
+	u->clearUndo();
+	u->clearRedo();
+}
+
+#endif // KTEXTEDIT_BASED_SQL_EDITOR
 
 
 #include "kexieditor.moc"

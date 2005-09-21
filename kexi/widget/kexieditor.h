@@ -41,34 +41,74 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 	Q_OBJECT
 
 	public:
+		/**
+		* Constructor.
+		* 
+		* \param mainWin The \a KexiMainWindow instance this KexiEditor
+		*        belongs too.
+		* \param parent The parent \a QWidget this KexiEditor is child
+		*        of.  You don't need to free the KexiEditor cause Qt 
+		*        will handle that for us.
+		* \param name The name this KexiEditor has. Used only for debugging.
+		*/
 		KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+
+		/**
+		* Destructor.
+		*/
 		virtual ~KexiEditor();
 
-		QString text();
-		void jump(int character);
-		void setCursorPosition(int line, int col);
+		/**
+		* \return true if internally the KTextEditor::EditorChooser got
+		* used else, if a simple KTextEdit is used, false is returned.
+		*/
+		static bool isAdvancedEditor();
 
-		//void installEventFilter ( const QObject * filterObj );
-		//virtual bool eventFilter(QObject *o, QEvent *ev);
+		/**
+		* \return the text displayed in the editor-widget.
+		*/
+		QString text();
+		
+		/**
+		* Jump to the defined \p character position.
+		*/
+		void jump(int character);
+		
+		/**
+		* Set the cursor position to \p line and \p col .
+		*/
+		void setCursorPosition(int line, int col);
+		
+		/**
+		* Clear all remembered undo/redo-actions. Only
+		* avaiable if \a isAdvancedEditor returns true.
+		*/
+		void clearUndoRedo();
 
 	public slots:
 		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
 		void setText(const QString &text);
+		/*! Display the configuration-dialog. Only avaiable if isAdvancedEditor() returns true. */
+		void slotConfigureEditor();
 
 	protected:
+		/*! Update the actions. This call is redirected to \a KexiViewBase::updateActions */
 		virtual void updateActions(bool activated);
 
-		// functions used by subclasses to acces private pointers
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
+		/*! Used to access the private pointer to the used \a KTextEditor::Document instance. */
 		KTextEditor::Document*  document();
+		/*! Used to access the private pointer to the used \a KTextEditor::View instance. */
 		KTextEditor::View*   docView();
 #endif
 
 	signals:
+		/*! Emitted if the text displayed in the editor changed. */
 		void textChanged();
 
 	private:
+		/*! Private d-pointer class. */
 		KexiEditorPrivate *d;
 };
 
