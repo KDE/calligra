@@ -12,9 +12,15 @@
             <height>87</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>KexiDBTitlePageBase</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QLabel" row="0" column="0">
             <property name="name">

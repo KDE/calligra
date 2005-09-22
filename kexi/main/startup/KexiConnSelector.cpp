@@ -142,6 +142,9 @@ void KexiConnSelectorWidget::disconnectShowSimpleConnButton()
 
 void KexiConnSelectorWidget::showAdvancedConn()
 {
+#ifdef KEXI_SERVER_SUPPORT
+	showSimpleConn(); //safe
+#else
 	if (!d->conn_sel_shown) {
 		d->conn_sel_shown=true;
 		//setup
@@ -177,6 +180,7 @@ void KexiConnSelectorWidget::showAdvancedConn()
 		slotConnectionSelectionChanged();
 	}
 	raiseWidget(m_remote);
+#endif
 }
 
 ConnectionDataLVItem* KexiConnSelectorWidget::addConnectionData( KexiDB::ConnectionData* data )

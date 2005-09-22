@@ -525,7 +525,9 @@ void KexiStartupDialog::setupPageOpenExisting()
 		d->openExistingConnWidget->showSimpleConn();
 	else {
 		d->openExistingConnWidget->showSimpleConn();
+#ifdef KEXI_SERVER_SUPPORT 
 		d->openExistingConnWidget->showAdvancedConn();
+#endif
 	}
 	d->openExistingFileDlg = d->openExistingConnWidget->m_fileDlg;
 	connect(d->openExistingFileDlg,SIGNAL(accepted()),this,SLOT(accept()));
