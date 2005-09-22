@@ -12,6 +12,23 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-09-21..22
+MDB Driver
+- all strings are now properly decoded (object names and data):
+  MDB(UCS2)->MDBTOOLS(UTF8, using libiconv)->KEXI_MDB(QString)
+- non latin1 filenames handling fixed
+- fixed date, date/time types handling (including Y2k problem for years >=1930)
+- fixed currency handling (double type is assumed for now)
+Table View
+- fixed possible crashes for comboboxes within non-db-aware table views
+Table Designer
+- fixed 'subtype' combo refreshing within property editor
+KexiDB
+- DriverManager: to avoid conflicts with other copies of KexiDB, 
+  eg. in ShowImg application, "kexidb_" prefix is required for KexiDB 
+  driver files (KDE modules)
+- some docs and above information added for Doxygen
+
 2005-09-17..20
 KexiProject
 - createInternalStructures() added; semi-internal (not well suited for kexidb itself) 

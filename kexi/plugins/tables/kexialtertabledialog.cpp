@@ -51,7 +51,7 @@
 
 //#define MAX_FIELDS 101 //nice prime number
 
-//! indexes for table columns
+//! indices for table columns
 #define COLUMN_ID_PK 0
 #define COLUMN_ID_NAME 1
 #define COLUMN_ID_TYPE 2
@@ -534,6 +534,8 @@ void KexiAlterTableDialog::removeCurrentPropertySet()
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant& newValue, KexiDB::ResultInfo* /*result*/)
 {
+//	kdDebug() << m_view->selectedItem() << " " << item 
+		//<< " " << d->sets->at( m_view->currentRow() ) << " " << propertySet() << endl;
 	if (colnum==COLUMN_ID_NAME) {//'name'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
 		//if 'type' is not filled yet
@@ -585,12 +587,20 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		const QStringList nlist = KexiDB::typeNamesForGroup(fieldTypeGroup);
 		KoProperty::Property *subTypeProperty = &set["subType"];
 kdDebug() << "++++++++++" << slist << nlist << endl;
+
 		//update subtype list and value
-		subTypeProperty->setListData( slist, nlist );
+		const bool forcePropertySetReload = set["type"].value().toInt() != (int)fieldTypeGroup;
+		if (slist.count()>1) {
+			subTypeProperty->setListData( slist, nlist );
+		}
+		else {
+			subTypeProperty->setListData( 0 );
+		}
 		if (set["primaryKey"].value().toBool()==true) //primary keys require big int
 			fieldType = KexiDB::Field::BigInteger;
-		subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
-		if (updatePropertiesVisibility(fieldType, set)) {
+		if (slist.count()>1)
+			subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
+		if (updatePropertiesVisibility(fieldType, set) || forcePropertySetReload) {
 			//properties' visiblility changed: refresh prop. set
 			propertySetReloaded(true);
 		}

@@ -578,3 +578,8 @@ FORMS:
 ImportWizard:
 -store "Recent Paths" for browsed directory file 
 -set the same path for "destination" file browser as for "source" one
+
+
+MDB Migration:
+- add checks for "no space left on device" error (otherwise Kexi will crash)
+- fix data/time and currency convertion

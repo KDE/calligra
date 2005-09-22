@@ -26,6 +26,7 @@
 
 class KexiDataItemInterface;
 namespace KexiDB {
+	class Field;
 	class QueryColumnInfo;
 }
 
@@ -61,6 +62,9 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 match any item on the list).
 		 Called by KexiTableView and others. */
 		void setValue(const QVariant& value, const QVariant& add = QVariant(), bool removeOld = false);
+
+		//! \return field information for this item
+		virtual KexiDB::Field *field() const = 0;
 
 		//! \return column information for this item
 		virtual KexiDB::QueryColumnInfo* columnInfo() const = 0;

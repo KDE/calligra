@@ -80,7 +80,8 @@ KexiDBFieldEdit::setWidgetType(WidgetType type)
 	m_widgetType_property = type;
 	if(differ) {
 		if(type == Auto) // try to guess type from data source type
-			m_widgetType = widgetTypeForFieldType(columnInfo() ? columnInfo()->field->type() : KexiDB::Field::Text);
+			m_widgetType = widgetTypeForFieldType(
+				columnInfo() ? columnInfo()->field->type() : KexiDB::Field::Text);
 		else
 			m_widgetType = m_widgetType_property;
 		createEditor();

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,7 +77,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 	protected:
 		void initTableColumns(); //!< Called just once.
 		void initTableRows(); //!< Called to have all rows empty.
-		void addRow(const QString &tbl, const QString &field);
+//unused		void addRow(const QString &tbl, const QString &field);
 //		void			restore();
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 		virtual tristate afterSwitchFrom(int mode);

@@ -18,6 +18,7 @@
  */
 
 #include "kexiformdataiteminterface.h"
+#include <kexidb/queryschema.h>
 
 KexiFormDataItemInterface::KexiFormDataItemInterface()
  : KexiDataItemInterface()
@@ -34,4 +35,9 @@ void KexiFormDataItemInterface::undoChanges()
 //	m_disable_signalValueChanged = true;
 	setValueInternal(QString::null, false);
 //	m_disable_signalValueChanged = false;
+}
+
+KexiDB::Field* KexiFormDataItemInterface::field() const
+{
+	return m_columnInfo->field;
 }

@@ -75,6 +75,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		//! \return field information for this item
 		virtual KexiDB::Field *field() const { return m_column->field(); }
 
+		/*! A rich field information for db-aware data. 
+		 For not-db-aware data it is always 0 (use field() instead. */
 		virtual KexiDB::QueryColumnInfo *columnInfo() const { return m_column->fieldinfo; }
 
 		//! Implemented for KexiDataItemInterface.

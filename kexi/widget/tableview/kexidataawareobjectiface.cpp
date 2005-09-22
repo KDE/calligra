@@ -809,17 +809,20 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.");
 
 	//autoincremented field can be omitted (left as null or empty) if we're inserting a new row
-	const bool autoIncColumnCanBeOmitted = m_newRowEditing && m_editor->columnInfo()->field->isAutoIncrement();
+	const bool autoIncColumnCanBeOmitted = m_newRowEditing && m_editor->field()->isAutoIncrement();
+//	const bool autoIncColumnCanBeOmitted = m_newRowEditing && m_editor->columnInfo()->field->isAutoIncrement();
 
 	bool valueChanged = m_editor->valueChanged();
 	bool editCurrentCellAgain = false;
 
 	if (valueChanged) {
 		if (m_editor->valueIsNull()) {//null value entered
-			if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
+//			if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
+			if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!" << endl;
 				res = Validator::Error;
-				msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
+//				msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
+				msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
 					+ "\n\n" + Kexi::msgYouCanImproveData();
 				desc = i18n("The column's constraint is declared as NOT NULL.");
 				editCurrentCellAgain = true;
@@ -834,11 +837,14 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			}
 		}
 		else if (m_editor->valueIsEmpty()) {//empty value entered
-			if (m_editor->columnInfo()->field->hasEmptyProperty()) {
-				if (m_editor->columnInfo()->field->isNotEmpty() && !autoIncColumnCanBeOmitted) {
+//			if (m_editor->columnInfo()->field->hasEmptyProperty()) {
+			if (m_editor->field()->hasEmptyProperty()) {
+//				if (m_editor->columnInfo()->field->isNotEmpty() && !autoIncColumnCanBeOmitted) {
+				if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 					res = Validator::Error;
-					msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
+//					msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
+					msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
 						+ "\n\n" + Kexi::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY.");
 					editCurrentCellAgain = true;
@@ -851,10 +857,12 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 				}
 			}
 			else {
-				if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
+//				if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
+				if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 					res = Validator::Error;
-					msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
+//					msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
+					msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
 						+ "\n\n" + Kexi::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
 					editCurrentCellAgain = true;

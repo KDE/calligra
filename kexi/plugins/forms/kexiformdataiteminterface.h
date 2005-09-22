@@ -68,6 +68,9 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		virtual void setInvalidState( const QString& displayText ) = 0;
 
 		//! \return database column information for this item
+		virtual KexiDB::Field* field() const;
+
+		//! \return database column information for this item
 		virtual KexiDB::QueryColumnInfo* columnInfo() const { return m_columnInfo; }
 
 		/*! Used internally to set database column information.
