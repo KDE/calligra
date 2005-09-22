@@ -53,6 +53,7 @@ using namespace KexiMigration;
 ImportWizard::ImportWizard(QWidget *parent, const char *name)
         : KWizard(parent, name)
 {
+    setCaption(i18n("Database Importing"));
     m_prjSet = 0;
     fileBasedDstWasPresented = false;
     setupFileBasedSrcNeeded = true;
@@ -133,7 +134,7 @@ ImportWizard::~ImportWizard()
 //
 void ImportWizard::setupintro()
 {
-    QVBoxLayout *vbox = new QVBoxLayout(introPage);
+    QVBoxLayout *vbox = new QVBoxLayout(introPage, KDialog::marginHint());
     
     QLabel *lblIntro = new QLabel(introPage);
     lblIntro->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
@@ -146,16 +147,16 @@ void ImportWizard::setupintro()
 void ImportWizard::setupsrcType()
 {
 /*! @todo Would be good if KexiDBDriverComboBox worked for migration drivers */
-    QVBoxLayout *vbox = new QVBoxLayout(srcTypePage);
-    vbox->addStretch(1);
+    QVBoxLayout *vbox = new QVBoxLayout(srcTypePage, KDialog::marginHint());
+//    vbox->addStretch(1);
 
     QHBoxLayout *hbox = new QHBoxLayout(vbox);
-    hbox->addWidget(new QLabel(i18n("Source database type:"), srcTypePage));
+    hbox->addWidget(new QLabel(i18n("Source database type:")+" ", srcTypePage));
 
     srcTypeCombo = new KComboBox(srcTypePage);
     hbox->addWidget(srcTypeCombo);
     hbox->addStretch(1);
-    vbox->addStretch(2);
+    vbox->addStretch(1);
 
     MigrateManager manager;
 
@@ -168,7 +169,7 @@ void ImportWizard::setupsrcType()
 //
 void ImportWizard::setupsrcconn()
 {
-   QVBoxLayout *vbox = new QVBoxLayout(srcConnPage);
+   QVBoxLayout *vbox = new QVBoxLayout(srcConnPage, KDialog::marginHint());
 
    srcConn = new KexiConnSelectorWidget(Kexi::connset(), srcConnPage, "SrcConnSelector");
 
@@ -180,7 +181,7 @@ void ImportWizard::setupsrcconn()
 //
 void ImportWizard::setupsrcdb()
 {
-    QVBoxLayout *vbox = new QVBoxLayout(srcdbPage);
+    QVBoxLayout *vbox = new QVBoxLayout(srcdbPage, KDialog::marginHint());
     Q_UNUSED(vbox);  // arriveSrcDBPage creates widgets on that page
     srcdbname = NULL;
 }
@@ -192,16 +193,16 @@ void ImportWizard::setupdstType()
     KexiDB::DriverManager manager;
     KexiDB::Driver::InfoMap drvs = manager.driversInfo();
 
-    QVBoxLayout *vbox = new QVBoxLayout(dstTypePage);
-    vbox->addStretch(1);
+    QVBoxLayout *vbox = new QVBoxLayout(dstTypePage, KDialog::marginHint());
+//    vbox->addStretch(1);
 
     QHBoxLayout *hbox = new QHBoxLayout(vbox);
-    hbox->addWidget(new QLabel(i18n("Destination database type:"), dstTypePage));
+    hbox->addWidget(new QLabel(i18n("Destination database type:")+" ", dstTypePage));
     dstTypeCombo = new KexiDBDriverComboBox(drvs, true, dstTypePage);
 
     hbox->addWidget( dstTypeCombo );
     hbox->addStretch(1);
-    vbox->addStretch(2);
+    vbox->addStretch(1);
 
 //! @todo hardcoded: find a way to preselect default engine item
     dstTypeCombo->setCurrentText("SQLite3");
@@ -213,6 +214,8 @@ void ImportWizard::setupdstTitle()
 {
 	dstTitlePage = new KexiDBTitlePage(this, "KexiDBTitlePage");
 	dstTitlePage->label->setText(i18n("Destination project's caption:"));
+	dstTitlePage->layout()->setMargin( KDialog::marginHint() );
+	dstTitlePage->updateGeometry();
 	dstNewDBName = dstTitlePage->le_caption;
 }
 
@@ -220,7 +223,7 @@ void ImportWizard::setupdstTitle()
 //
 void ImportWizard::setupdst()
 {
-    QVBoxLayout *vbox = new QVBoxLayout(dstPage);
+    QVBoxLayout *vbox = new QVBoxLayout(dstPage, KDialog::marginHint());
 
     dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstPage, "DstConnSelector");
     //me: Can't connect dstconn->m_fileDlg here, it doesn't exist yet
@@ -248,7 +251,7 @@ void ImportWizard::setupdst()
 //
 void ImportWizard::setupImportType()
 {
-    QVBoxLayout *vbox = new QVBoxLayout(importTypePage);
+    QVBoxLayout *vbox = new QVBoxLayout(importTypePage, KDialog::marginHint());
     importTypeButtonGroup = new QVButtonGroup(importTypePage);
     importTypeButtonGroup->setLineWidth(0);
     vbox->addWidget( importTypeButtonGroup );
@@ -264,7 +267,7 @@ void ImportWizard::setupImportType()
 void ImportWizard::setupfinish()
 {
     finishPage->hide();
-    QVBoxLayout *hbox = new QVBoxLayout(finishPage);
+    QVBoxLayout *hbox = new QVBoxLayout(finishPage, KDialog::marginHint());
     QLabel *lblDone = new QLabel(finishPage);
     
     
