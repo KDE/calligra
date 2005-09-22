@@ -39,11 +39,27 @@ class DriverBehaviour;
 class DriverPrivate;
 
 //! Generic database abstraction.
-/*! This class is a prototype of the database driver.
+/*! This class is a prototype of the database driver for implementations.
  Driver allows new connections to be created, and groups
- these as a parent.
- Before destruction, connections are destructed.
+ these as a parent. 
+ Before destruction, all connections are destructed.
 
+ Notes:
+  - driver must be provided within KDE module file named with "kexidb_" prefix
+  - following line should be placed in driver's implementation:
+    \code
+    KEXIDB_DRIVER_INFO( CLASS_NAME, INTERNAL_NAME );
+    \endcode
+    where:
+    - CLASS_NAME is actual driver's class name, e.g. MySqlDriver
+    - INTERNAL_NAME is driver name's most significant part (without quotation marks), e.g. mysql
+    Above information uses K_EXPORT_COMPONENT_FACTORY macro for KTrader to find the module's entry point.
+    For example, this line declares kexidb_mysqldriver.so module's entry point:
+    \code
+    KEXIDB_DRIVER_INFO( MySqlDriver, mysql );
+    \endcode
+
+ \sa SQLiteDriver MySqlDriver, pqxxSqlDriver
 */
 class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 {

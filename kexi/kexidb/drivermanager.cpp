@@ -102,6 +102,12 @@ bool DriverManagerInternal::lookupDrivers()
 	for(; it != tlist.constEnd(); ++it)
 	{
 		KService::Ptr ptr = (*it);
+		if (!ptr->property("Library").toString().startsWith("kexidb_")) {
+			KexiDBWarn << "DriverManagerInternal::lookupDrivers():"
+				" X-KDE-Library == " << ptr->property("Library").toString()
+				<< ": no \"kexidb_\" prefix -- skipped to avoid potential conflicts!" << endl;
+			continue;
+		}
 		QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 		if (srv_name.isEmpty()) {
 			KexiDBWarn << "DriverManagerInternal::lookupDrivers():"
