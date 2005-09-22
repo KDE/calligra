@@ -23,38 +23,16 @@
 
 #include <keximainwindow.h>
 
-//uncomment this to enable KTextEdit-based editor
-//#define KTEXTEDIT_BASED_SQL_EDITOR
-
-//TODO: detect if KTextEditor returned something, if not- force KTEXTEDIT_BASED_SQL_EDITOR option
-
 #include <qlayout.h>
 #include <qframe.h>
-
 #include <klocale.h>
 #include <kdebug.h>
 
+//uncomment this to enable KTextEdit-based editor
+//#define KTEXTEDIT_BASED_SQL_EDITOR
+
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 # include <ktextedit.h>
-
-class KTextEdit_KexiSharedActionConnector : public KexiSharedActionConnector
-{
-public:
-	KTextEdit_KexiSharedActionConnector( KexiActionProxy* proxy, KTextEdit *obj )
-	 : KexiSharedActionConnector( proxy, obj )
-	{
-		plugSharedAction("edit_cut", SLOT(cut()));
-		plugSharedAction("edit_copy", SLOT(copy()));
-		plugSharedAction("edit_paste", SLOT(paste()));
-		plugSharedAction("edit_clear", SLOT(clear()));
-
-		plugSharedAction("edit_undo", SLOT(undo()));
-		plugSharedAction("edit_redo", SLOT(redo()));
-
-                plugSharedAction("edit_select_all", SLOT(selectAll()));
-	}
-};
-
 #else
 # include <ktexteditor/document.h>
 # include <ktexteditor/view.h>
@@ -64,42 +42,48 @@ public:
 # include <ktexteditor/popupmenuinterface.h>
 # include <ktexteditor/undointerface.h>
 # include <ktexteditor/configinterface.h>
+# include <ktexteditor/highlightinginterface.h>
+#endif
 
-class KTextEditor_View_KexiSharedActionConnector : public KexiSharedActionConnector
+/** Used for the shared action framework to redirect shared actions like
+copy and paste to the editor. */
+class KexiEditorSharedActionConnector : public KexiSharedActionConnector
 {
 public:
-	KTextEditor_View_KexiSharedActionConnector( KexiActionProxy* proxy, KTextEditor::View *obj )
-	 : KexiSharedActionConnector( proxy, obj )
+	KexiEditorSharedActionConnector( KexiActionProxy* proxy, QObject* obj )
+		: KexiSharedActionConnector( proxy, obj )
 	{
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+		plugSharedAction("edit_cut", SLOT(cut()));
+		plugSharedAction("edit_copy", SLOT(copy()));
+		plugSharedAction("edit_paste", SLOT(paste()));
+		plugSharedAction("edit_clear", SLOT(clear()));
+		plugSharedAction("edit_undo", SLOT(undo()));
+		plugSharedAction("edit_redo", SLOT(redo()));
+                plugSharedAction("edit_select_all", SLOT(selectAll()));
+#else
 		QValueList<QCString> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
 			<< "edit_undo" << "edit_redo" << "edit_select_all";
-		plugSharedActionsToExternalGUI(actions, obj);
+		plugSharedActionsToExternalGUI(actions, (KXMLGUIClient*)obj);
+#endif
 	}
 };
-
-#endif
 
 //! @internal
 class KexiEditorPrivate {
 	public:
-		KexiEditorPrivate()
-		 : keyEventFilter_enabled(true)
-		{}
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 		KTextEdit *view;
 #else
 		KTextEditor::Document *doc;
 		KTextEditor::View *view;
 #endif
-		bool keyEventFilter_enabled : 1;
 };
 
-//=====================
-
-KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *name)
- : KexiViewBase(mainWin, parent, name)
- ,d(new KexiEditorPrivate())
+KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+	: KexiViewBase(mainWin, parent, name)
+	, d(new KexiEditorPrivate())
 {
 	QVBoxLayout *layout = new QVBoxLayout(this);
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
@@ -110,11 +94,7 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 	f.setStyleStrategy(QFont::PreferAntialias);
 	f.setPointSize(d->view->font().pointSize());
 	d->view->setFont( f );
-	//other settings
 	d->view->setCheckSpellingEnabled(false);
-
-	KTextEdit_KexiSharedActionConnector c(this, d->view);
-
 #else
 	QFrame *fr = new QFrame(this);
 	fr->setFrameStyle(QFrame::Sunken|QFrame::WinPanel);
@@ -126,12 +106,8 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 	if (!d->doc)
 		return;
 	d->view = d->doc->createView(fr, 0L);
-//	setFocusProxy(d->view);
-//	f->resetContainer("codefolding");
 
-        KTextEditor_View_KexiSharedActionConnector c(this, d->view);
-
-	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( docView() );
+	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
         if(popupInt) {
             QPopupMenu *pop = (QPopupMenu*) mainWin->factory()->container("edit", mainWin);
             if(pop) {
@@ -142,8 +118,8 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
+        KexiEditorSharedActionConnector c(this, d->view);
 	d->view->installEventFilter(this);
-//	QObject::installEventFilter(this);
 
 	layout->addWidget(d->view);
 	setViewWidget(d->view, true/*focus*/);
@@ -154,8 +130,7 @@ KexiEditor::~KexiEditor()
 {
 }
 
-void
-KexiEditor::updateActions(bool activated)
+void KexiEditor::updateActions(bool activated)
 {
 	KexiViewBase::updateActions(activated);
 }
@@ -169,31 +144,64 @@ bool KexiEditor::isAdvancedEditor()
 #endif
 }
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-// === KexiEditor implementation using KTextEdit only ===
-QString
-KexiEditor::text()
+QString KexiEditor::text()
 {
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	return d->view->text();
+#else
+	if (!d->doc)
+		return QString::null;
+	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
+	return eIface->text();
+#endif
 }
 
-void
-KexiEditor::setText(const QString &text)
+void KexiEditor::setText(const QString &text)
 {
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	const bool was_dirty = dirty();
 	d->view->setText(text);
 	setDirty(was_dirty);
+#else
+	if (!d->doc)
+		return;
+	const bool was_dirty = dirty();
+	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
+	eIface->setText(text);
+	setDirty(was_dirty);
+#endif
+}
+
+void KexiEditor::setHighlightMode(const QString& highlightmodename)
+{
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#else
+        KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
+        for(uint i = 0; i < hl->hlModeCount(); i++) {
+            //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
+            if (hl->hlModeName(i).contains(highlightmodename, false))  {
+                hl->setHlMode(i);
+                return;
+            }
+        }
+        hl->setHlMode(0); // 0=None, don't highlight anything.
+#endif
 }
 
 void KexiEditor::slotConfigureEditor()
 {
-	//just don't do anything
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+	//TODO show errormessage?
+#else
+	KTextEditor::ConfigInterface *config = KTextEditor::configInterface( d->doc );
+	if (config)
+		config->configDialog();
+#endif
 }
 
-void
-KexiEditor::jump(int character)
+void KexiEditor::jump(int character)
 {
-	//find row and column for this character
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	const int numRows = d->view->paragraphs();
 	int row = 0, col = 0;
 	for (int ch = 0; row < numRows; row++) {
@@ -204,102 +212,46 @@ KexiEditor::jump(int character)
 		}
 		ch += rowLen;
 	}
-
 	d->view->setCursorPosition(row, col);
-}
-
-void KexiEditor::setCursorPosition(int line, int col)
-{
-	d->view->setCursorPosition(line, col);
-}
-
-void KexiEditor::clearUndoRedo()
-{
-	//just don't do anything
-}
-
 #else
-// === KexiEditor implementation using KTextEditor ===
-
-KTextEditor::Document* KexiEditor::document()
-{
-	return d->doc;
-}
-
-KTextEditor::View*
-KexiEditor::docView()
-{
-	return d->view;
-}
-
-QString
-KexiEditor::text()
-{
-	if (!d->doc)
-		return QString::null;
-	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
-	//kdDebug() << "KexiEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
-	return eIface->text();
-}
-
-void
-KexiEditor::setText(const QString &text)
-{
-	if (!d->doc)
-		return;
-	const bool was_dirty = dirty();
-	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
-	eIface->setText(text);
-	setDirty(was_dirty);
-}
-
-void KexiEditor::slotConfigureEditor()
-{
-    KTextEditor::ConfigInterface *config = KTextEditor::configInterface( d->doc );
-    if (config)
-        config->configDialog();
-}
-
-void
-KexiEditor::jump(int character)
-{
-	//find row and column for this character
 	if (!d->doc)
 		return;
 	KTextEditor::EditInterface *ei = KTextEditor::editInterface(d->doc);
 	const int numRows = ei->numLines();
-
 	int row = 0, col = 0;
 	for (int ch = 0; row < numRows; row++) {
 		const int rowLen = ei->lineLength(row)+1;
-
 		if ((ch + rowLen) > character) {
 			col = character-ch;
 			break;
 		}
 		ch += rowLen;
 	}
-
 	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
 	ci->setCursorPositionReal(row, col);
+#endif
 }
 
-void
-KexiEditor::setCursorPosition(int line, int col)
+void KexiEditor::setCursorPosition(int line, int col)
 {
-	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface( docView() );
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+	d->view->setCursorPosition(line, col);
+#else
+	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface( d->view );
 	ci->setCursorPosition(line, col);
+#endif
 }
 
 void KexiEditor::clearUndoRedo()
 {
-	KTextEditor::UndoInterface* u = KTextEditor::undoInterface( document() );
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+	//TODO how to remove undo/redo from a KTextEdit?
+#else
+	KTextEditor::UndoInterface* u = KTextEditor::undoInterface( d->doc );
 	u->clearUndo();
 	u->clearRedo();
+#endif
 }
-
-#endif // KTEXTEDIT_BASED_SQL_EDITOR
-
 
 #include "kexieditor.moc"
 

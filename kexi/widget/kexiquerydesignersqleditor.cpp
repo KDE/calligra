@@ -21,26 +21,11 @@
 
 #include "kexiquerydesignersqleditor.h"
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-# include <ktexteditor/highlightinginterface.h>
-#endif
-
 KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	KexiMainWindow *mainWin, QWidget *parent, const char *name)
- : KexiEditor(mainWin, parent, name)
+	: KexiEditor(mainWin, parent, name)
 {
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(document());
-	for(uint i=0; i < hl->hlModeCount(); i++)  {
-//		kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-		if (hl->hlModeName(i).contains("sql", false))  {
-			hl->setHlMode(i);
-			break;
-		}
-	}
-#endif
+	setHighlightMode("sql");
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()

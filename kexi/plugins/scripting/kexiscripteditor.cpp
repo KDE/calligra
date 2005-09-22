@@ -32,13 +32,6 @@
 #include <kexidialogbase.h>
 #include <kexiscripting.h>
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-# include <ktexteditor/view.h>
-# include <ktexteditor/document.h>
-# include <ktexteditor/highlightinginterface.h>
-#endif
-
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiEditor(mainWin, parent, name)
     , m_scriptcontainer(0)
@@ -47,26 +40,6 @@ KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, con
 
 KexiScriptEditor::~KexiScriptEditor()
 {
-}
-
-void KexiScriptEditor::updateHighlightMode()
-{
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-        QString interpreter = m_scriptcontainer->getInterpreterName();
-        KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( document() );
-        for(uint i = 0; i < hl->hlModeCount(); i++) {
-            //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-
-            // We assume Kross and the HighlightingInterface are using same
-            // names for the support languages...
-            if (hl->hlModeName(i).contains(interpreter, false))  {
-                hl->setHlMode(i);
-                return;
-            }
-        }
-        hl->setHlMode(0); // 0=None, don't highlight anything.
-#endif
 }
 
 void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
@@ -78,7 +51,9 @@ void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
 
     if(m_scriptcontainer) {
         KexiEditor::setText(m_scriptcontainer->getCode());
-        updateHighlightMode();
+        // We assume Kross and the HighlightingInterface are using same
+        // names for the support languages...
+        setHighlightMode(m_scriptcontainer->getInterpreterName());
     }
     else {
         KexiEditor::setText("");

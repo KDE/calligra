@@ -48,11 +48,6 @@ class KexiScriptEditor : public KexiEditor
         virtual ~KexiScriptEditor();
 
         /**
-         * Update the highlight-mode.
-         */
-        void updateHighlightMode();
-
-        /**
          * Initializes the editor. Call this if you like to start
          * with a clear editor instance. Thinks like the language
          * highlighter will be reset, undo/redo are cleared and

@@ -41,6 +41,7 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 	Q_OBJECT
 
 	public:
+
 		/**
 		* Constructor.
 		* 
@@ -68,9 +69,20 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 		* \return the text displayed in the editor-widget.
 		*/
 		QString text();
-		
+
 		/**
-		* Jump to the defined \p character position.
+		* Set the highlight-mode to \p highlightmodename . If
+		* \a isAdvancedEditor returns false (KTextEdit is used
+		* rather then KTextEditor), then the method just does
+		* nothing. The \p highlightmodename could be any kind
+		* of string like e.g. "python", "kjs" or "sql" 
+		* KTextEditor supports.
+		*/
+		void setHighlightMode(const QString& highlightmodename);
+
+		/**
+		* Find row and column for this \p character and jump to the
+		* position.
 		*/
 		void jump(int character);
 		
@@ -94,14 +106,6 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 	protected:
 		/*! Update the actions. This call is redirected to \a KexiViewBase::updateActions */
 		virtual void updateActions(bool activated);
-
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-		/*! Used to access the private pointer to the used \a KTextEditor::Document instance. */
-		KTextEditor::Document*  document();
-		/*! Used to access the private pointer to the used \a KTextEditor::View instance. */
-		KTextEditor::View*   docView();
-#endif
 
 	signals:
 		/*! Emitted if the text displayed in the editor changed. */
