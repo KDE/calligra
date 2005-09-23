@@ -214,7 +214,7 @@ int BrushProperty::getBrushPropertyChange() const
         {
             flags |= BrushCmd::BrushColor;
         }
-        if ( fillTypeChanged || brush.color() != m_brush.brush.color() )
+        if ( fillTypeChanged || brush.style() != m_brush.brush.style() )
         {
             flags |= BrushCmd::BrushStyle;
         }
