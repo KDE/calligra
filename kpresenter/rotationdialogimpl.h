@@ -2,11 +2,12 @@
 #ifndef __rotationdialogimpl_h__
 #define __rotationdialogimpl_h__
 
-#include "rotationdialog.h"
+#include <kdialogbase.h>
 
 class TextPreview;
+class RotationPropertyUI;
 
-class RotationDialogImpl : public RotationDialogBase
+class RotationDialogImpl : public KDialogBase
 {
     Q_OBJECT
 
@@ -17,17 +18,14 @@ public:
     void setAngle( double angle );
     double angle();
 
-signals:
-    void apply();
-
 protected slots:
     void angleChanged( double );
     void angleMode( int );
-    void applyClicked();
-    void okClicked();
+    void slotOk();
 
 protected:
-    TextPreview *_preview;
+    TextPreview *m_preview;
+    RotationPropertyUI *m_dialog;
 };
 
 

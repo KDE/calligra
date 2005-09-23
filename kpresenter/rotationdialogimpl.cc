@@ -5,53 +5,58 @@
 #include <qbuttongroup.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <knuminput.h>
 
 #include "rotationdialogimpl.h"
+#include "rotationpropertyui.h"
 #include "textpreview.h"
 
 RotationDialogImpl::RotationDialogImpl( QWidget *parent, const char* name )
-    :  RotationDialogBase( parent, name )
+: KDialogBase( parent, name, true, i18n( "Rotation"), Ok|Cancel|Apply, Ok, true )
+, m_dialog( new RotationPropertyUI( this, name ) )
 {
-    _preview = new TextPreview( previewPanel );
-    QHBoxLayout *lay = new QHBoxLayout( previewPanel, previewPanel->lineWidth(), 0 );
-    lay->addWidget( _preview );
+    m_preview = new TextPreview( m_dialog->previewPanel );
+    QHBoxLayout *lay = new QHBoxLayout( m_dialog->previewPanel, m_dialog->previewPanel->lineWidth(), 0 );
+    lay->addWidget( m_preview );
 
-    customInput->setRange( 0, 360, 0.1, TRUE );
-    connect( customRadio, SIGNAL( toggled( bool ) ),
-             customInput, SLOT( setEnabled( bool ) ) );
-    connect( customInput, SIGNAL( valueChanged( double ) ),
+    m_dialog->customInput->setRange( 0, 360, 5.0, TRUE );
+//    connect( m_dialog->customRadio, SIGNAL( toggled( bool ) ),
+//             m_dialog->customInput, SLOT( setEnabled( bool ) ) );
+    connect( m_dialog->customInput, SIGNAL( valueChanged( double ) ),
              this, SLOT( angleChanged( double ) ) );
+    connect( m_dialog->angleGroup, SIGNAL( clicked( int ) ), 
+             this, SLOT( angleMode( int ) ) );
+
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+
+    setMainWidget( m_dialog );
 }
 
-void RotationDialogImpl::applyClicked()
+void RotationDialogImpl::slotOk()
 {
     emit apply();
-}
-
-void RotationDialogImpl::okClicked()
-{
-    applyClicked();
     accept();
 }
 
 void RotationDialogImpl::setAngle( double angle )
 {
-    customInput->setValue( angle );
+    m_dialog->customInput->setValue( angle );
 
     if ( angle == 90
          || angle == 180
          || angle == 270 )
-        angleGroup->setButton( (int)angle );
-    else if ( angle == 0 )
-        angleGroup->setButton( 1 );
+        m_dialog->angleGroup->setButton( (int)angle );
     else
-        angleGroup->setButton( 0 );
+    {
+        m_dialog->angleGroup->setButton( 0 );
+        m_dialog->customInput->setFocus();
+    }
 }
 
 double RotationDialogImpl::angle()
 {
-    int id = angleGroup->id( angleGroup->selected() );
+    int id = m_dialog->angleGroup->id( m_dialog->angleGroup->selected() );
 
     switch( id ) {
     case 1:
@@ -63,13 +68,14 @@ double RotationDialogImpl::angle()
     case 270:
         return 270;
     default:
-        return customInput->value();
+        return m_dialog->customInput->value();
     }
 }
 
 void RotationDialogImpl::angleChanged( double a )
 {
-    _preview->setAngle( a );
+    m_preview->setAngle( a );
+    m_dialog->angleGroup->setButton( 0 );
 }
 
 void RotationDialogImpl::angleMode( int id )
@@ -80,7 +86,12 @@ void RotationDialogImpl::angleMode( int id )
     else if ( id == 90 || id == 180 || id == 270 )
         a = id;
     else
-        a = customInput->value();
-    _preview->setAngle( a );
+        a = m_dialog->customInput->value();
+    disconnect( m_dialog->customInput, SIGNAL( valueChanged( double ) ),
+                this, SLOT( angleChanged( double ) ) );
+    m_dialog->customInput->setValue( a );
+    connect( m_dialog->customInput, SIGNAL( valueChanged( double ) ),
+             this, SLOT( angleChanged( double ) ) );
+    m_preview->setAngle( a );
 }
 #include "rotationdialogimpl.moc"

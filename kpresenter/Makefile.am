@@ -44,7 +44,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPQuadricbezierCurveObjectIface.skel KPQuadricbezierCurveObjectIface.cc \
 	KPCubicbeziercurveObjectIface.skel KPCubicbeziercurveObjectIface.cc \
 	shadowdialog.ui shadowdialogimpl.cc textpreview.cc \
-	rotationdialogimpl.cc rotationdialog.ui \
+	rotationdialogimpl.cc rotationpropertyui.ui \
 	KPFreehandObjectIface.skel KPFreehandObjectIface.cc kprstylemanager.cc \
 	kprbgspellcheck.cc kprhelplinedia.cc \
 	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \

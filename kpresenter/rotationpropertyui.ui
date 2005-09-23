@@ -1,0 +1,173 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>RotationPropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>RotationPropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>363</width>
+            <height>187</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Rotation</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>angleGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Angle</string>
+            </property>
+            <property name="exclusive">
+                <bool>true</bool>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>customRadio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>C&amp;ustom:</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+U</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="KDoubleNumInput">
+                            <property name="name">
+                                <cstring>customInput</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="minValue">
+                                <number>-180</number>
+                            </property>
+                            <property name="maxValue">
+                                <number>180</number>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>zeroRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;0°</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+0</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>ninetyRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;90°</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+9</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>90</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>oneEightyRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>1&amp;80°</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+8</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>180</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>twoSeventyRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>2&amp;70°</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+7</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>270</number>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>previewPanel</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>160</width>
+                    <height>160</height>
+                </size>
+            </property>
+            <property name="frameShape">
+                <enum>Panel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>
