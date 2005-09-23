@@ -62,7 +62,7 @@ messages: rc.cpp
 #	(cd data && $(PREPARETIPS) > ../tips.cpp)
 	EXCLUDE="-path ./formeditor -o -path ./doc \
 	-o -path ./plugins/importwizard -o -path ./tests \
-	-o -path ./scriptingcore -o -path ./scriptingplugins -o path ./plugins/scripting"; \
+	-o -path ./scriptingcore -o -path ./scriptingplugins -o -path ./plugins/scripting"; \
 	LIST="data/*.rc `find . \( \( $$EXCLUDE \) -prune -o -name \*.ui \) -type f | grep -v -e '/\.'`"; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \
