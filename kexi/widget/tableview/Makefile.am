@@ -42,7 +42,7 @@ SUBDIRS = .
 
 # set the include path for X, qt and KDE
 INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core \
-	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore $(all_includes)
+	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/koproperty/ $(all_includes)
 
 METASOURCES = AUTO
 
