@@ -620,6 +620,7 @@ void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
 	part()->toolController()->setActiveTool( tool );
+// FIXME: This needs to be redesigned to work properly!
 // 	m_deleteSelectionAction->setEnabled( dynamic_cast<VSelectNodesTool *>( tool ) == 0 );
 	m_canvas->repaintAll();
 }
