@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon XAML Import Filter
+Name[es]=Filtro de importación a XAML de Karbon
 Name[ga]=Scagaire Iompórtála Karbon XAML
 Name[sv]=Karbon XAML-importfilter
 X-KDE-Export=application/x-karbon

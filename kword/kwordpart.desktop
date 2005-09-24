@@ -36,6 +36,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text,application/v
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
+GenericName[es]=Documentos de texto
 GenericName[ga]=Cáipéisí Téacs
 GenericName[sv]=Textdokument
 Icon=kword
