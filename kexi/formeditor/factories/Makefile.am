@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor \
 	-I$(top_srcdir)/kexi/core \
-	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore $(all_includes)
+	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/kofficecore $(all_includes)
 kde_module_LTLIBRARIES = containers.la stdwidgets.la
 containers_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 containers_la_SOURCES =  containerfactory.cpp
