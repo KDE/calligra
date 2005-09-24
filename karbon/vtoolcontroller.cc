@@ -78,12 +78,20 @@ VToolController::unregisterTool( VTool *tool )
 bool
 VToolController::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {
+	if( !m_activeTool ) {
+		return false;
+	}
+
 	return m_activeTool->mouseEvent( event, p );
 }
 
 bool
 VToolController::keyEvent( QEvent* event )
 {
+	if( !m_activeTool ) {
+		return false;
+	}
+
 	return m_activeTool->keyEvent( event );
 }
 

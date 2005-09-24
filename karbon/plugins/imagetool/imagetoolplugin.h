@@ -23,7 +23,7 @@
 
 #include <qstring.h>
 
-#include <tools/vtool.h>
+#include "vtool.h"
 #include <commands/vcommand.h>
 #include <core/vkarbonplugin.h>
 

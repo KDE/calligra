@@ -33,8 +33,6 @@ noinst_HEADERS = \
 	vspiraltool.h \
 	vstartool.h \
 	vtexttool.h \
-	vtoolcontroller.h \
-	vtool.h \
 	vdefaulttools.h
 
 karbon_defaulttools_la_SOURCES = \
@@ -56,8 +54,6 @@ karbon_defaulttools_la_SOURCES = \
 	vspiraltool.cc \
 	vstartool.cc \
 	vtexttool.cc \
-	vtoolcontroller.cc \
-	vtool.cc \
 	vdefaulttools.cc
 
 karbon_defaulttools_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) ../libkarboncommon.la

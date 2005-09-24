@@ -24,7 +24,7 @@
 #include "koPoint.h"
 #include <qstring.h>
 
-#include <tools/vtool.h>
+#include "vtool.h"
 
 class QCursor;
 

@@ -45,14 +45,14 @@
 #include "vtexttool.h"
 
 typedef KGenericFactory<VDefaultTools> VDefaultToolsFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_defaulttools, VDefaultToolsFactory( "karbonzoomtoolplugin" ) )
+K_EXPORT_COMPONENT_FACTORY( karbon_defaulttools, VDefaultToolsFactory( "karbon_defaulttools" ) )
 
 VDefaultTools::VDefaultTools(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
 	setInstance(VDefaultToolsFactory::instance());
 
-	kdDebug() << "Zoom tool plugin. Class: "
+	kdDebug() << "VDefaultTools. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

@@ -5,12 +5,11 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPALETTE_INCLUDES) $(KOPAIN
 	-I$(srcdir)/dialogs \
 	-I$(srcdir)/dockers \
 	-I$(srcdir)/render \
-	-I$(srcdir)/tools \
 	-I$(srcdir)/visitors \
 	-I$(srcdir)/widgets \
 	$(all_includes)
 
-SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . plugins data pics templates
+SUBDIRS = commands visitors core shapes widgets dialogs dockers render . tools plugins data pics templates
 
 # Filters should link to libkarbonbase or libkarboncommon, NOT to libkarbonpart
 #
@@ -21,7 +20,8 @@ SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . p
 lib_LTLIBRARIES = libkarboncommon.la libkarbonbase.la
 kde_module_LTLIBRARIES = libkarbonpart.la
 
-libkarboncommon_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp karbon_tool_registry.cc karbon_tool_factory.cc
+libkarboncommon_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp karbon_tool_registry.cc karbon_tool_factory.cc	vtoolcontroller.cc vtool.cc
+
 
 libkarbonbase_la_SOURCES = \
 	karbon_view_base.cc \
@@ -36,7 +36,6 @@ libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE)
 	widgets/libkarbonwidgets.la \
 	render/libvpainter.la \
 	render/xrgbrender/libkarbonxrgbrender.la \
-	tools/karbon_defaulttools.la \
 	core/libkarboncore.la \
 	shapes/libkarbonshapes.la \
 	commands/libkarboncommands.la \
@@ -69,7 +68,9 @@ noinst_HEADERS = \
 	karbon_part_iface.h \
 	karbon_view_base.h \
 	karbon_view.h \
-	karbon_drag.h
+	karbon_drag.h \
+	vtoolcontroller.h \
+	vtool.h
 
 messages: rc.cpp
 	$(EXTRACTRC) data/*.rc >> rc.cpp

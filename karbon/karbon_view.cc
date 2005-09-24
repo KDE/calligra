@@ -89,7 +89,7 @@
 #include "vcanvas.h"
 #include "vtoolbox.h"
 #include "karbon_drag.h"
-#include "vselectnodestool.h"
+// #include "vselectnodestool.h"
 
 #include <unistd.h>
 
@@ -620,7 +620,7 @@ void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
 	part()->toolController()->setActiveTool( tool );
-	m_deleteSelectionAction->setEnabled( dynamic_cast<VSelectNodesTool *>( tool ) == 0 );
+// 	m_deleteSelectionAction->setEnabled( dynamic_cast<VSelectNodesTool *>( tool ) == 0 );
 	m_canvas->repaintAll();
 }
 
