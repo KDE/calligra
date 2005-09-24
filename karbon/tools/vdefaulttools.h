@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,49 +15,27 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+
 */
 
-#ifndef __VROTATETOOL_H__
-#define __VROTATETOOL_H__
+#ifndef __DEFAULTTOOLS_H__
+#define __DEFAULTTOOLS_H__
 
-#include "vselection.h"
-#include "vtool.h"
+#include <qstring.h>
 
+#include <kparts/plugin.h>
 
-class VRotateTool : public VTool
+/**
+ * A module that provides the default tools
+ */
+class VDefaultTools : public KParts::Plugin
 {
+	Q_OBJECT
 public:
-	VRotateTool( KarbonPart *part );
-	virtual ~VRotateTool();
-
-	virtual void activate();
-
-	virtual QString name() { return i18n( "Rotate Tool" ); }
-	virtual QString icon() { return "14_rotate"; }
-	virtual QString category() { return "manipulation"; }
-	virtual QString statusText();
-	virtual uint priority() { return 3; }
-
-protected:
-	virtual void draw();
-
-	virtual void mouseButtonPress();
-	virtual void mouseDrag();
-	virtual void mouseDragRelease();
-
-	virtual void cancel();
-
-private:
-	void recalc();
-
-	KoPoint m_center;
-	double m_angle;
-
-	VHandleNode m_activeNode;
-
-	// A list of temporary objects:
-	VObjectList m_objects;
+	VDefaultTools(QObject *parent, const char *name, const QStringList &);
+	virtual ~VDefaultTools();
 };
 
-#endif
+#endif // __DEFAULTTOOLS_H__
+
 

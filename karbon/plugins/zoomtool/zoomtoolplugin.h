@@ -18,54 +18,24 @@
 
 */
 
-#ifndef __VZOOMTOOL_H__
-#define __VZOOMTOOL_H__
+#ifndef __ZOOMTOOLPLUGIN_H__
+#define __ZOOMTOOLPLUGIN_H__
 
-#include "koPoint.h"
 #include <qstring.h>
 
-#include <tools/vtool.h>
-#include <core/vkarbonplugin.h>
+#include <kparts/plugin.h>
 
-class QCursor;
-
-class KarbonViewBase;
-
-class VZoomTool : public VTool, public VKarbonPlugin
+/**
+ * A module that provides a zoom tool.
+ */
+class ZoomToolPlugin : public KParts::Plugin
 {
+	Q_OBJECT
 public:
-	VZoomTool( KarbonViewBase *view, const char *, const QStringList & );
-	~VZoomTool(); 
-
-	virtual void activate();
-	virtual void deactivate();
-
-	virtual QString name() { return i18n( "Zoom Tool" ); }
-	virtual QString contextHelp();
-	virtual QString icon() { return "14_zoom"; }
-	virtual QString statusText();
-
-protected:
-	void draw();
-
-	virtual void mouseButtonPress();
-	virtual void mouseButtonRelease();
-	virtual void mouseDrag();
-	virtual void mouseDragRelease();
-
-	virtual bool keyReleased( Qt::Key key );
-
-	virtual void rightMouseButtonRelease();
-
-	void recalc();
-
-	KoPoint m_current;
-
-private:
-	QCursor* m_minusCursor;
-	QCursor* m_plusCursor;
-
+	ZoomToolPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~ZoomToolPlugin();
 };
 
-#endif
+#endif // __ZOOMTOOLPLUGIN_H__
+
 

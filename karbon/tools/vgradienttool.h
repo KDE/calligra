@@ -30,7 +30,7 @@ class VGradientTabWidget;
 class VGradientTool : public VTool
 {
 public:
-	VGradientTool( KarbonPart *part, const char * );
+	VGradientTool( KarbonPart *part );
 	virtual ~VGradientTool();
 
 	virtual void activate();

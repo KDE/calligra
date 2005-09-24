@@ -150,7 +150,7 @@ protected:
 class VTextTool : public VTool, public VVisitor
 {
 public:
-	VTextTool( KarbonPart *part, const char* name );
+	VTextTool( KarbonPart *part );
 	~VTextTool();
 
 	virtual QString name() { return i18n( "Text Tool" ); }

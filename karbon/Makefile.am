@@ -21,7 +21,7 @@ SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . p
 lib_LTLIBRARIES = libkarboncommon.la libkarbonbase.la
 kde_module_LTLIBRARIES = libkarbonpart.la
 
-libkarboncommon_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp
+libkarboncommon_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp karbon_tool_registry.cc karbon_tool_factory.cc
 
 libkarbonbase_la_SOURCES = \
 	karbon_view_base.cc \

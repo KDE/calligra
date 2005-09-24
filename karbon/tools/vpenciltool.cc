@@ -137,8 +137,8 @@ int VPencilOptionsWidget::currentMode(){
 
 /* ------------------------------------------------------------------------------------------------------------------------*/
 
-VPencilTool::VPencilTool( KarbonPart *part, const char *name )
-	: VTool( part, name )
+VPencilTool::VPencilTool( KarbonPart *part )
+	: VTool( part, "penciltool" )
 {
 	m_Points.setAutoDelete( true );
 	m_optionWidget = new VPencilOptionsWidget( part );

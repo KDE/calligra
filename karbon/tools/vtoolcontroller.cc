@@ -17,25 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "karbon_tool_registry.h"
 #include "karbon_part.h"
 #include <vselection.h>
 #include "vtoolcontroller.h"
-#include "vselecttool.h"
-#include "vselectnodestool.h"
-#include "vrotatetool.h"
-#include "vsheartool.h"
-#include "vellipsetool.h"
-#include "vgradienttool.h"
-#include "vpatterntool.h"
-#include "vpenciltool.h"
-#include "vpolygontool.h"
-#include "vpolylinetool.h"
-#include "vrectangletool.h"
-#include "vroundrecttool.h"
-#include "vsinustool.h"
-#include "vspiraltool.h"
-#include "vstartool.h"
-#include "vtexttool.h"
+#include "vtool.h"
 
 VToolController::VToolController( KarbonPart *part ) : m_part( part )
 {
@@ -46,43 +32,11 @@ VToolController::VToolController( KarbonPart *part ) : m_part( part )
 void
 VToolController::init()
 {
-	m_selectTool		= new VSelectTool( m_part, "" );
-	m_selectNodesTool	= new VSelectNodesTool( m_part, "" );
-	m_rotateTool		= new VRotateTool( m_part, "" );
-	m_shearTool			= new VShearTool( m_part, "" );
-	m_ellipseTool		= new VEllipseTool( m_part );
-	m_gradientTool		= new VGradientTool( m_part, "" );
-	m_patternTool		= new VPatternTool( m_part, "" );
-	m_pencilTool		= new VPencilTool( m_part, "" );
-	m_polygonTool		= new VPolygonTool( m_part );
-	m_polylineTool		= new VPolylineTool( m_part, "" );
-	m_rectangleTool		= new VRectangleTool( m_part );
-	m_roundRectTool		= new VRoundRectTool( m_part );
-	m_sinusTool			= new VSinusTool( m_part );
-	m_spiralTool		= new VSpiralTool( m_part );
-	m_starTool			= new VStarTool( m_part );
-	m_textTool			= new VTextTool( m_part, "" );
-	m_activeTool		= m_selectTool;
+	KarbonToolRegistry::instance()->createTools( m_part->actionCollection(), m_part);
 }
 
 VToolController::~VToolController()
 {
-	delete m_selectTool;
-	delete m_selectNodesTool;
-	delete m_rotateTool;
-	delete m_shearTool;
-	delete m_ellipseTool;
-	delete m_gradientTool;
-	delete m_patternTool;
-	delete m_pencilTool;
-	delete m_polygonTool;
-	delete m_polylineTool;
-	delete m_rectangleTool;
-	delete m_roundRectTool;
-	delete m_sinusTool;
-	delete m_spiralTool;
-	delete m_starTool;
-	delete m_textTool;
 }
 
 void

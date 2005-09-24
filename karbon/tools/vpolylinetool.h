@@ -49,7 +49,7 @@ class VPath;
 class VPolylineTool : public VTool
 {
 	public:
-		VPolylineTool( KarbonPart *part, const char * );
+		VPolylineTool( KarbonPart *part );
 		~VPolylineTool(); 
 
 		virtual void activate();

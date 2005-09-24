@@ -44,8 +44,8 @@ VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient *gradie
 	setFixedSize( baseSize() );
 }
 
-VGradientTool::VGradientTool( KarbonPart *part, const char *name )
-	: VTool( part, name )
+VGradientTool::VGradientTool( KarbonPart *part )
+	: VTool( part, "gradienttool" )
 {
 	m_optionsWidget = new VGradientOptionsWidget( &m_gradient );
 	registerTool( this );

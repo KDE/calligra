@@ -1,3 +1,5 @@
+kde_services_DATA = karbondefaulttools.desktop
+
 INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../commands \
@@ -10,7 +12,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/../visitors \
 	$(all_includes)
 
-noinst_LTLIBRARIES = libkarbontools.la
+kde_module_LTLIBRARIES = karbon_defaulttools.la
 
 noinst_HEADERS = \
 	vcurvefit.h \
@@ -32,9 +34,10 @@ noinst_HEADERS = \
 	vstartool.h \
 	vtexttool.h \
 	vtoolcontroller.h \
-	vtool.h
+	vtool.h \
+	vdefaulttools.h
 
-libkarbontools_la_SOURCES = \
+karbon_defaulttools_la_SOURCES = \
 	vcurvefit.cc \
 	vrotatetool.cc \
 	vselectnodestool.cc \
@@ -54,7 +57,11 @@ libkarbontools_la_SOURCES = \
 	vstartool.cc \
 	vtexttool.cc \
 	vtoolcontroller.cc \
-	vtool.cc
+	vtool.cc \
+	vdefaulttools.cc
 
-libkarbontools_la_METASOURCES = \
+karbon_defaulttools_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) ../libkarboncommon.la
+karbon_defaulttools_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+
+karbon_defaulttools_la_METASOURCES = \
 	AUTO

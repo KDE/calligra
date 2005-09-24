@@ -33,7 +33,7 @@
 #include "vsheartool.h"
 #include <commands/vtransformcmd.h>
 
-VShearTool::VShearTool( KarbonPart *part , const char* name ) : VTool( part, name )
+VShearTool::VShearTool( KarbonPart *part ) : VTool( part, "sheartool" )
 {
 	m_objects.setAutoDelete( true );
 	registerTool( this );

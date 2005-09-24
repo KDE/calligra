@@ -59,7 +59,7 @@ private:
 class VPatternTool : public VTool
 {
 public:
-	VPatternTool( KarbonPart *part, const char * );
+	VPatternTool( KarbonPart *part );
 	virtual ~VPatternTool();
 
 	virtual void activate();

@@ -25,7 +25,7 @@
 class VShearTool : public VTool
 {
 public:
-	VShearTool( KarbonPart *part, const char* name );
+	VShearTool( KarbonPart *part );
 	virtual ~VShearTool();
 
 	virtual void activate();

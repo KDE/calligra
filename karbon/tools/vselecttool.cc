@@ -65,8 +65,8 @@ void VSelectOptionsWidget::modeChange( int mode )
 	m_part->document().setSelectionMode( (VDocument::VSelectionMode)mode );
 } // VSelectOptionsWidget::modeChanged
 
-VSelectTool::VSelectTool( KarbonPart *part, const char* name )
-	: VTool( part, name ), m_state( normal )
+VSelectTool::VSelectTool( KarbonPart *part )
+	: VTool( part, "selecttool" ), m_state( normal )
 {
 	m_lock = false;
 	m_add = true;

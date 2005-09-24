@@ -17,47 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VROTATETOOL_H__
-#define __VROTATETOOL_H__
-
-#include "vselection.h"
+#include "karbon_tool_factory.h"
 #include "vtool.h"
 
-
-class VRotateTool : public VTool
+KarbonAbstractToolFactory::KarbonAbstractToolFactory()
 {
-public:
-	VRotateTool( KarbonPart *part );
-	virtual ~VRotateTool();
+}
 
-	virtual void activate();
-
-	virtual QString name() { return i18n( "Rotate Tool" ); }
-	virtual QString icon() { return "14_rotate"; }
-	virtual QString category() { return "manipulation"; }
-	virtual QString statusText();
-	virtual uint priority() { return 3; }
-
-protected:
-	virtual void draw();
-
-	virtual void mouseButtonPress();
-	virtual void mouseDrag();
-	virtual void mouseDragRelease();
-
-	virtual void cancel();
-
-private:
-	void recalc();
-
-	KoPoint m_center;
-	double m_angle;
-
-	VHandleNode m_activeNode;
-
-	// A list of temporary objects:
-	VObjectList m_objects;
-};
-
-#endif
+KarbonAbstractToolFactory::~KarbonAbstractToolFactory()
+{
+}
 

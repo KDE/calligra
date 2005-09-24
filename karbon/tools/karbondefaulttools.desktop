@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Default Tools
+ServiceTypes=Karbon/CoreModule
+Type=Service
+X-KDE-Library=karbon_defaulttools

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 The Karbon Developers
+   Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,50 +15,55 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+
 */
 
-#ifndef __VSELECTNODESTOOL_H__
-#define __VSELECTNODESTOOL_H__
+#ifndef __VZOOMTOOL_H__
+#define __VZOOMTOOL_H__
 
-#include "vtool.h"
+#include "koPoint.h"
+#include <qstring.h>
 
-class VSelectNodesTool : public VTool
+#include <tools/vtool.h>
+
+class QCursor;
+
+class KarbonViewBase;
+
+class VZoomTool : public VTool
 {
 public:
-	VSelectNodesTool( KarbonPart *part );
-	virtual ~VSelectNodesTool();
+	VZoomTool( KarbonPart* part );
+	~VZoomTool();
 
 	virtual void activate();
+	virtual void deactivate();
 
-	virtual QString name() { return i18n( "Select Nodes Tool" ); }
-	virtual QString icon() { return "14_selectnodes"; }
-	virtual QString category() { return "manipulation"; }
+	virtual QString name() { return i18n( "Zoom Tool" ); }
+	virtual QString contextHelp();
+	virtual QString icon() { return "14_zoom"; }
 	virtual QString statusText();
-	virtual uint priority() { return 2; }
 
 protected:
-	virtual void draw();
-
-	virtual void setCursor() const;
+	void draw();
 
 	virtual void mouseButtonPress();
 	virtual void mouseButtonRelease();
-	virtual void mouseDragRelease();
 	virtual void mouseDrag();
+	virtual void mouseDragRelease();
 
-	virtual bool keyReleased( Qt::Key );
+	virtual bool keyReleased( Qt::Key key );
 
-	virtual void cancel();
-
-private:
-	enum { normal, dragging, moving, movingbezier1, movingbezier2 } m_state;
+	virtual void rightMouseButtonRelease();
 
 	void recalc();
 
-	// A list of temporary objects:
-	VObjectList m_objects;
-
 	KoPoint m_current;
+
+private:
+	QCursor* m_minusCursor;
+	QCursor* m_plusCursor;
+
 };
 
 #endif

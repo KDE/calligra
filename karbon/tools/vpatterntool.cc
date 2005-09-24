@@ -116,8 +116,8 @@ void VPatternWidget::patternSelected( KoIconItem* item )
 	m_deletePatternButton->setEnabled( QFileInfo( m_pattern->tilename() ).isWritable() );
 } // VPatternWidget::patternSelected
 
-VPatternTool::VPatternTool( KarbonPart *part, const char *name )
-	: VTool( part, name )
+VPatternTool::VPatternTool( KarbonPart *part )
+	: VTool( part, "patterntool" )
 {
 	m_optionsWidget = new VPatternWidget( &KarbonFactory::rServer()->patterns(), this );
 	registerTool( this );

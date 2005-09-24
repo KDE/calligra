@@ -44,7 +44,7 @@ private:
 class VSelectTool : public VTool
 {
 public:
-	VSelectTool( KarbonPart *part, const char* name );
+	VSelectTool( KarbonPart *part );
 	virtual ~VSelectTool();
 
 	virtual void activate();

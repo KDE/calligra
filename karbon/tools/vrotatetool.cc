@@ -35,8 +35,8 @@
 
 #include <kdebug.h>
 
-VRotateTool::VRotateTool( KarbonPart *part, const char* name )
-	: VTool( part, name )
+VRotateTool::VRotateTool( KarbonPart *part )
+	: VTool( part, "roundrecttool" )
 {
 	m_objects.setAutoDelete( true );
 	registerTool( this );

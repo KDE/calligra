@@ -24,11 +24,15 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
+#include <kparts/plugin.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_resourceserver.h"
 #include "karbon_aboutdata.h"
+#include "karbon_tool_registry.h"
 
 #include <kdebug.h>
 
@@ -45,6 +49,24 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 		: KoFactory( parent, name )
 {
 	instance();
+
+	KarbonToolRegistry::instance();
+
+	// Load plugins
+	KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Karbon/CoreModule"),
+                                    QString::fromLatin1("Type == 'Service'"));
+
+	KTrader::OfferList::ConstIterator iter;
+
+	for(iter = offers.begin(); iter != offers.end(); ++iter)
+	{
+		KService::Ptr service = *iter;
+		int errCode = 0;
+		KParts::Plugin* plugin =
+		KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
+		if ( plugin )
+			kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+	}
 }
 
 KarbonFactory::~KarbonFactory()

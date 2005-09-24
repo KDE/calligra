@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Karbon/CoreModule
+Comment=Core functionality module for Karbon

@@ -80,7 +80,7 @@ class VPencilOptionsWidget : public KDialogBase
 class VPencilTool : public VTool
 {
 	public:
-		VPencilTool( KarbonPart *part, const char * );
+		VPencilTool( KarbonPart *part );
 		~VPencilTool(); 
 
 		virtual void activate();

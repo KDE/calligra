@@ -37,8 +37,8 @@
 #include <commands/vshapecmd.h>
 #include <widgets/vcanvas.h>
 
-VPolylineTool::VPolylineTool( KarbonPart *part, const char *name )
-	: VTool( part, name )
+VPolylineTool::VPolylineTool( KarbonPart *part )
+	: VTool( part, "polylinetool" )
 {
 	m_bezierPoints.setAutoDelete( true );
 	registerTool( this );

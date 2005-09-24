@@ -556,8 +556,8 @@ VTextOptionsWidget::moveEvent ( QMoveEvent * )
 		m_tool->textChanged();
 }
 
-VTextTool::VTextTool( KarbonPart *part, const char* name )
-		: VTool( part, name )
+VTextTool::VTextTool( KarbonPart *part )
+		: VTool( part, "texttool" )
 {
 	m_optionsWidget = new VTextOptionsWidget( this, 0L );
 	m_text = 0L;
