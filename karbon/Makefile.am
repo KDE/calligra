@@ -36,7 +36,7 @@ libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE)
 	widgets/libkarbonwidgets.la \
 	render/libvpainter.la \
 	render/xrgbrender/libkarbonxrgbrender.la \
-	tools/libkarbontools.la \
+	tools/karbon_defaulttools.la \
 	core/libkarboncore.la \
 	shapes/libkarbonshapes.la \
 	commands/libkarboncommands.la \
