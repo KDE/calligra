@@ -44,10 +44,8 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 		m_projectPartID = KexiDB::TableObjectType;
 	else if(objectName() == "query")
 		m_projectPartID = KexiDB::QueryObjectType;
-#ifdef OOPL_VERSION //tmp
-	else if(objectName() == "html")
-		m_projectPartID = KexiDB::LastObjectType+1; //4?
-#endif
+//	else if(objectName() == "html")
+//		m_projectPartID = KexiDB::WebObjectType;
 	else
 		m_projectPartID = -1; //TODO!!
 

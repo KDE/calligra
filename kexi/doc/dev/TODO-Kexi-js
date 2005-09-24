@@ -583,3 +583,10 @@ ImportWizard:
 MDB Migration:
 - add checks for "no space left on device" error (otherwise Kexi will crash)
 - fix data/time and currency convertion
+
+Combo Box Editor
+- ADD "restrict to list" OPTION: don't copy 1st row's value if there's no value in the combo
+  --> needed for 1st column of Query Designer
+
+KEXIDB:
+- ConnectionData: make local sockets default for unix, instead of tcp/ip

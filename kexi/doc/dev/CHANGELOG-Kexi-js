@@ -11,6 +11,15 @@
 ---------------------------------------------------
 
 CCMAIL: dkite@shaw.ca
+2005-09-24
+General
+- KEXI_STANDALONE compile time definition added
+- description in 'about data' mentions whether it is a standalone or 'bundled' 
+  Kexi version
+- .po files are now prefixed with "standalone_" for standalone versions
+  to avoid conflicts with KOffice installations
+- yes, 1.0 is marked as standalone version
+- custom defines cleaned up
 
 2005-09-21..22
 MDB Driver
@@ -19,7 +28,7 @@ MDB Driver
 - non latin1 filenames handling fixed
 - fixed date, date/time types handling (including Y2k problem for years >=1930)
 - fixed currency handling (double type is assumed for now)
-Table View
+Table View; Data Interface
 - fixed possible crashes for comboboxes within non-db-aware table views
 Table Designer
 - fixed 'subtype' combo refreshing within property editor

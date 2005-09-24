@@ -26,7 +26,15 @@
 #include <kdeversion.h>
 
 static const char *description =
-	I18N_NOOP("Database creation for everyone");
+	I18N_NOOP("Database creation for everyone")
+#ifndef CUSTOM_VERSION
+#ifdef KEXI_STANDALONE
+	"\n\n" I18N_NOOP("This is standalone version of the application distributed outside of KOffice suite.")
+#else
+	"\n\n" I18N_NOOP("This application version is distributed with KOffice suite.")
+#endif
+#endif
+	;
 
 KAboutData *newKexiAboutData()
 {
@@ -58,7 +66,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and user interface research"), "kristof.borrey@skynet.be");
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffee sponsoring"), "tkrass05@hak1.at");
 	aboutData->setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"), I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
-#if defined(OOPL_VERSION) && defined(Q_WS_WIN)
+#if defined(CUSTOM_VERSION) && defined(Q_WS_WIN)
 	aboutData->setProgramLogo(KEXI_APP_LOGO);
 #endif
 	return aboutData;

@@ -4,7 +4,7 @@
     copyright            : (C) 2003 by lucijan busch, Joseph Wenninger
     email                : lucijan@gmx.at, jowenn@kde.org
    
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -153,16 +153,20 @@ static KCmdLineOptions options[] =
 extern "C" int kdemain(int argc, char *argv[])
 {
 	KAboutData *about = newKexiAboutData();
-#ifdef OOPL_VERSION
-# include "oopl_startup.h"
+#ifdef CUSTOM_VERSION
+# include "custom_startup.h"
 #endif
 	KCmdLineArgs::init( argc, argv, about );
 	KCmdLineArgs::addCmdLineOptions( options );
 
 	bool GUIenabled = true;
 	QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindowImpl is created
-//TODO: switch GUIenabled off when needed
+//! @todo switch GUIenabled off when needed
 	KApplication app(true, GUIenabled);
+#ifdef KEXI_STANDALONE
+	KGlobal::locale()->removeCatalogue("kexi");
+	KGlobal::locale()->insertCatalogue("standalone_kexi");
+#endif
 
 	if (GUIenabled) {
 		dummyWidget = new QWidget();
@@ -194,8 +198,8 @@ extern "C" int kdemain(int argc, char *argv[])
 	win->show();
 	app.processEvents();//allow refresh our app
 
-#ifdef OOPL_VERSION
-# include "oopl_exec.h"
+#ifdef CUSTOM_VERSION
+# include "custom_exec.h"
 #endif
 
 	return app.exec();

@@ -10,11 +10,12 @@ for explanation how to conveniently set compile-time options.
 List of available options
 -------------------------
 
-* KEXI_OPTIONS
+* KEXI_STANDALONE
 Type: defined/undefined
-Default: undefined
-Description: Define this if you want override default compile time options 
-to use any of the options described below.
+Default: -
+Description: Can be defined globally in kexi_global.h.
+Defined for standalone Kexi releases (without KOffice, e.g. 1.0) and undefined 
+for releases bundled with KOffice,. e.g. 1.1.
 
 * KEXI_NO_UNFINISHED
 Type: defined/undefined
@@ -127,6 +128,12 @@ Type: defined/undefined, temporary
 Default: undefined
 Description: If defined, image box (KexiImageBox) widget will not be available
 
+* CUSTOM_VERSION
+Type: defined/undefined
+Default: undefined
+Description: Defined means Kexi version compiled for standalone distribution 
+with some minor vendor-specific tweaks. Used for OOPL version.
+
 ==== Obsolete, don't use ====
 
 * KDOCKWIDGET_P
@@ -134,3 +141,9 @@ Type: defined/undefined
 Default: undefined
 Description: If defined, enables a hack for better handling property editor's 
 panel within KexiMainWindowImpl object. 
+
+* KEXI_OPTIONS
+Type: defined/undefined
+Default: undefined
+Description: Define this if you want override default compile time options 
+to use any of the options described below.

@@ -20,6 +20,11 @@
 #ifndef _KEXI_GLOBAL_
 #define _KEXI_GLOBAL_
 
+/*! Only defined for standalone releases, 
+ should be commented out for releases bundled with KOffice. *
+ Affects transaltion file names, e.g. "kexi.po" becomes "standalone_kexi.po". */
+#define KEXI_STANDALONE 1
+
 #include <kexi_export.h>
 #include <config.h>
 

@@ -113,7 +113,11 @@ FormManager::FormManager(QObject *parent,
 	 , m_objectBlockingPropertyEditorUpdating(0)
    , m_isRedoing(false)
 {
+#ifdef KEXI_STANDALONE
+	KGlobal::locale()->insertCatalogue("standalone_kformdesigner");
+#else
 	KGlobal::locale()->insertCatalogue("kformdesigner");
+#endif
 
 	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);

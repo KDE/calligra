@@ -23,8 +23,8 @@
 #ifndef _KEXI_VERSION_
 #define _KEXI_VERSION_
 
-#ifdef OOPL_VERSION /* user-friendly version info */
-# include "oopl_global.h"
+#ifdef CUSTOM_VERSION /* user-friendly version info */
+# include "custom_global.h"
 #else /* default */
 # define KEXI_APP_NAME "Kexi"
 #endif
