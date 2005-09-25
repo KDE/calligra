@@ -217,7 +217,6 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
 void DependencyList::addDependency (const KSpreadPoint &cell1,
     const KSpreadPoint &cell2)
 {
-kdWarning() << "addDependency: " << cell1.row() << "," << cell1.column() << " depends on " << cell2.row() << cell2.column() << endl;
   //cell2 can be in another sheet (inter-sheet dependency)
   KSpreadSheet *sh = cell2.sheet;
   if (!sh)
