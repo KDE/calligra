@@ -121,7 +121,7 @@ void DependencyManager::reset ()
 void DependencyManager::cellChanged (const KSpreadPoint &cell)
 {
   KSpreadCell *c = cell.cell();
-  
+
   // empty or default cell? do nothing
   if( c->isDefault() )
     return;
@@ -129,9 +129,6 @@ void DependencyManager::cellChanged (const KSpreadPoint &cell)
   //if the cell contains the circle error, we mustn't do anything
   if (c->testFlag (KSpreadCell::Flag_CircularCalculation))
     return;
-  
-  //kdDebug(36001) << "updating dependencies for cell (" <<
-  //    c->row() << "," << c->column() << ")" << endl;
   
   //don't re-generate dependencies if we're updating dependencies
   if ( !(c->testFlag (KSpreadCell::Flag_Progress)))
@@ -220,8 +217,7 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
 void DependencyList::addDependency (const KSpreadPoint &cell1,
     const KSpreadPoint &cell2)
 {
-  kdDebug(36001) << "Dep. manager: added a dependency" << endl;
-  
+kdWarning() << "addDependency: " << cell1.row() << "," << cell1.column() << " depends on " << cell2.row() << cell2.column() << endl;
   //cell2 can be in another sheet (inter-sheet dependency)
   KSpreadSheet *sh = cell2.sheet;
   if (!sh)
@@ -255,7 +251,7 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
   //look if the cell has any dependencies
   if (!dependencies.contains (cell))
     return;  //it doesn't - nothing more to do
-  
+
   //first we remove cell-dependencies
   QValueList<KSpreadPoint> cells = dependencies[cell].cells;
   QValueList<KSpreadPoint>::iterator it1;
@@ -299,18 +295,16 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
     if (sh->dependencies()->deps->rangeDeps.contains (*it1))
     {
       QValueList<RangeDependency>::iterator it3;
-      QValueList<RangeDependency> rdeps =
-          sh->dependencies()->deps->rangeDeps[*it1];
-      it3 = rdeps.begin();
+      it3 = sh->dependencies()->deps->rangeDeps[*it1].begin();
       //erase all range dependencies of this cell in this cell-chunk
-      while (it3 != rdeps.end())
+      while (it3 != sh->dependencies()->deps->rangeDeps[*it1].end())
         if (((*it3).cellrow == cell.row()) &&
             ((*it3).cellcolumn == cell.column()))
-          it3 = rdeps.erase (it3);
+          it3 = sh->dependencies()->deps->rangeDeps[*it1].erase (it3);
         else
           ++it3;
       //erase the list if we no longer need it
-      if (rdeps.empty())
+      if (sh->dependencies()->deps->rangeDeps[*it1].empty())
         sh->dependencies()->deps->rangeDeps.erase (*it1);
     }
   }
@@ -332,7 +326,7 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
     return;
   if (!c->isFormula())
     return;
-  
+ 
   //now we need to generate dependencies
   RangeList rl = computeDependencies (cell);
   
@@ -482,7 +476,6 @@ void DependencyList::processDependencies (const RangeList &rangeList)
 void DependencyList::updateCell (const KSpreadPoint &cell) const
 {
   KSpreadCell *c = cell.cell();
-
   //prevent infinite recursion (circular dependencies)
   if (c->testFlag (KSpreadCell::Flag_Progress))
   {
@@ -495,8 +488,6 @@ void DependencyList::updateCell (const KSpreadPoint &cell) const
     c->clearFlag (KSpreadCell::Flag_Progress);
     return;
   }
-  //kdDebug() << "Updating depending cell (" <<
-  //    c->row() << "," << c->column() << ")" << endl;
   //set the computing-dependencies flag
   c->setFlag (KSpreadCell::Flag_Progress);
   
@@ -552,8 +543,6 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
     return RangeList();   //not a formula -> no dependencies
 
   QString expr = c->text();
-  kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<
-    expr << "\"" << endl;
 
   //TODO: when the new parser is in use, KSpreadCell will hold a Formula
   //instance, hence we'll be able to use that one directly
