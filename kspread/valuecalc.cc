@@ -1326,7 +1326,7 @@ static double ccmath_psi(int m)
 static double ccmath_ibes(double v,double x)
 { double y,s,t,tp; int p,m;
   y=x-9.; if(y>0.) y*=y; tp=v*v*.2+25.;
-  if(y<tp){ x/=2.; m=x;
+  if(y<tp){ x/=2.; m=(int)x;
     if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
     else{ if(v>0.) return 0.; else if(v==0.) return 1.;}
     for(p=1,x*=x;;++p){ t*=x/(p*(v+=1.)); s+=t;
@@ -1350,8 +1350,8 @@ static double ccmath_kbes(double v,double x)
   if(x==0.) return HUGE_VAL;
   y=x-10.5; if(y>0.) y*=y; tp=25.+.185*v*v;
   if(y<tp && modf(v+.5,&t)!=0.){ y=1.5+.5*v;
-    if(x<y){ x/=2.; m=x; tp=t=exp(v*log(x)-ccmath_gaml(v+1.));
-      if(modf(v,&y)==0.){ k=y; tp*=v;
+    if(x<y){ x/=2.; m=(int)x; tp=t=exp(v*log(x)-ccmath_gaml(v+1.));
+      if(modf(v,&y)==0.){ k=(int)y; tp*=v;
         f=2.*log(x)-ccmath_psi(1)-ccmath_psi(k+1);
         t/=2.; if(!(k&1)) t= -t; s=f*t;
         for(p=1,x*=x;;++p){ f-=1./p+1./(v+=1.);
@@ -1367,8 +1367,8 @@ static double ccmath_kbes(double v,double x)
        }
      }
     else{ double tq,h,w,z,r;
-      t=12./pow(x,.333); k=t*t; y=2.*(x+k);
-      m=v; v-=m; tp=v*v-.25; v+=1.; tq=v*v-.25;
+      t=12./pow(x,.333); k=(int)(t*t); y=2.*(x+k);
+      m=(int)v; v-=m; tp=v*v-.25; v+=1.; tq=v*v-.25;
       for(s=h=1.,r=f=z=w=0.; k>0 ;--k,y-=2.){
         t=(y*h-(k+1)*z)/(k-1-tp/k); z=h; f+=(h=t);
         t=(y*s-(k+1)*w)/(k-1-tq/k); w=s; r+=(s=t);  }
@@ -1387,7 +1387,7 @@ static double ccmath_kbes(double v,double x)
 static double ccmath_jbes(double v,double x)
 { double y,s,t,tp; int p,m;
   y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
-  if(y<tp){ x/=2.; m=x;
+  if(y<tp){ x/=2.; m=(int)x;
     if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
     else{ if(v>0.) return 0.; else if(v==0.) return 1.;}
     for(p=1,x*= -x;;++p){ t*=x/(p*(v+=1.)); s+=t;
@@ -1410,8 +1410,8 @@ static double ccmath_nbes(double v,double x)
   int p,k,m;
   y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
   if(y<tp){ if(x==0.) return HUGE_VAL;
-    x/=2.; m=x; u=t=exp(v*log(x)-ccmath_gaml(v+1.));
-    if(modf(v,&y)==0.){ k=y; u*=v;
+    x/=2.; m=(int)x; u=t=exp(v*log(x)-ccmath_gaml(v+1.));
+    if(modf(v,&y)==0.){ k=(int)y; u*=v;
       f=2.*log(x)-ccmath_psi(1)-ccmath_psi(k+1);
       t/=a0; x*= -x; s=f*t;
       for(p=1;;++p){ f-=1./p+1./(v+=1.);

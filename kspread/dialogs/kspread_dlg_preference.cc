@@ -391,7 +391,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _indent = config->readNumEntry( "Indent" , 10.0 ) ;
+        _indent = (double)config->readNumEntry( "Indent" , (int)_indent ) ;
         m_bMsgError=config->readBoolEntry( "Msg error" ,false) ;
 	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }

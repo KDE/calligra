@@ -254,7 +254,7 @@ private:
     KSpreadCell*** m_cluster;
     KSpreadCell* m_first;
     bool m_autoDelete;
-    unsigned int m_biggestX, m_biggestY;
+    int m_biggestX, m_biggestY;
 };
 
 class KSpreadColumnCluster

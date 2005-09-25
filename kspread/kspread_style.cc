@@ -162,7 +162,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
 //fo:font-size="13pt" fo:font-style="italic" style:text-underline="double" style:text-underline-color="font-color" fo:font-weight="bold"
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
     {
-        m_fontSize = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ),10.0 );
+        m_fontSize = (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 );
         m_featuresSet |= SFont;
         m_featuresSet |= SFontSize;
         m_featuresSet |= SFontFlag;
@@ -702,23 +702,23 @@ QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType
     return styleName;
 }
 
-QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style, int _precision )
+QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles& /*mainStyles*/, FormatType /*_style*/, int /*_precision*/ )
 {
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style, int _precision )
+QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, FormatType /*_style*/, int /*_precision*/ )
 {
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style, int _precision )
+QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /*_style*/, int /*_precision*/ )
 {
     QString format;
     return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format );
 }
 
-QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style, int _precision )
+QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType /*_style*/, int _precision )
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
@@ -741,7 +741,7 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, F
 }
 
 
-QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style, const QString &_prefix, const QString _suffix, int _precision )
+QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType /*_style*/, const QString &_prefix, const QString _suffix, int _precision )
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -861,7 +861,7 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatT
     return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale );
 }
 
-QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles, FormatType _style )
+QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, FormatType /*_style*/ )
 {
     //TODO
     //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">

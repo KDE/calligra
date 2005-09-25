@@ -181,7 +181,7 @@ KSpreadValue func_radians (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: PI
-KSpreadValue func_pi (valVector args, ValueCalc *calc, FuncExtra *)
+KSpreadValue func_pi (valVector, ValueCalc *calc, FuncExtra *)
 {
   return calc->pi();
 }

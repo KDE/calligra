@@ -1294,8 +1294,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       int start = 0;		// Start of the line we are handling now
       int breakpos = 0;		// The next candidate pos to break the string
       int pos1 = 0;
-      int availableWidth = ( width - 2 * BORDER_SPACE
-			     - leftBorderWidth( _col, _row ) 
+      int availableWidth = (int) ( width - 2 * BORDER_SPACE
+			     - leftBorderWidth( _col, _row )
 			     - rightBorderWidth( _col, _row ) );
 
       do {
@@ -3087,7 +3087,7 @@ void KSpreadCell::paintText( QPainter& painter,
       x = indent + cellRect.x() + d->textX;
     else
       x = indent + cellRect.x() + d->textX
-        - doc->unzoomItX(( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 ));
+        - doc->unzoomItX((int) (( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 )));
     double y;
     if ( angle > 0 )
       y = cellRect.y() + d->textY;

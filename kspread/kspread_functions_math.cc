@@ -437,7 +437,7 @@ KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: product
 KSpreadValue func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res = calc->product (args[0], 0.0);
+  return calc->product (args[0], 0.0);
 }
 
 // Function: kproduct
@@ -955,10 +955,10 @@ KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
   KSpreadValue res (c2, r1);
   
   // perform the multiplication - O(n^3) algorithm
-  for (int row = 0; row < r1; ++row)
-    for (int col = 0; col < c2; ++col) {
+  for (uint row = 0; row < r1; ++row)
+    for (uint col = 0; col < c2; ++col) {
       KSpreadValue val = 0.0;
-      for (int pos = 0; pos < c1; ++pos)
+      for (uint pos = 0; pos < c1; ++pos)
         val = calc->add (val,
             calc->mul (m1.element (pos, row), m2.element (col, pos)));
       res.setElement (col, row, val);

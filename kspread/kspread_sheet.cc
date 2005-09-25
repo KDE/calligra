@@ -2259,7 +2259,7 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
     SetSelectionPercentWorker( bool _b ) : b( _b ) { }
 
     QString getUndoTitle() { return i18n("Format Percent"); }
-    bool testCondition( RowFormat* rw ) {
+    bool testCondition( RowFormat* ) {
         //TODO: no idea what to put here, now that factor's gone :(
         return ( true );
     }
@@ -7155,7 +7155,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         kdDebug()<<"index col :"<<indexCol<<endl;
         ColumnFormat * col = new ColumnFormat( this, indexCol );
         col->copy( layout );
-        col->setWidth( width );
+        col->setWidth( (int) width );
 
         // if ( insertPageBreak )
         //   col->setPageBreak( true )
@@ -7248,7 +7248,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         if ( height != -1 )
         {
             kdDebug() << "Setting row height to " << height << endl;
-            rowL->setHeight( height );
+            rowL->setHeight( (int) height );
             if ( collapse )
                 rowL->setHide( true );
         }

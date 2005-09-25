@@ -290,7 +290,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         }
 
         for( int i=0; i<_page; i++ )
-          KSpreadSheet *t = map()->addNewSheet();
+          map()->addNewSheet();
 
         resetURL();
         setEmpty();
@@ -1514,7 +1514,7 @@ void KSpreadDoc::enableRedo( bool _b )
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
-                               bool transparent, double zoomX, double zoomY )
+                               bool transparent, double zoomX, double /*zoomY*/ )
 {
   //  ElapsedTime et( "KSpreadDoc::paintContent1" );
     //kdDebug(36001) << "KSpreadDoc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
@@ -1541,9 +1541,9 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     QWMatrix matrix = painter.worldMatrix();
     matrix.setMatrix( 1, 0, 0, 1, matrix.dx(), matrix.dy() );
     QRect prect = rect;
-    prect.setWidth( prect.width() * painter.worldMatrix().m11() );
-    prect.setHeight( prect.height() * painter.worldMatrix().m22() );
-    setZoomAndResolution( d_zoom * 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
+    prect.setWidth( (int) (prect.width() * painter.worldMatrix().m11()) );
+    prect.setHeight( (int) (prect.height() * painter.worldMatrix().m22()) );
+    setZoomAndResolution( (int) d_zoom * 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
 
     // paint the content, now zoom is correctly set
     kdDebug(36001)<<"paintContent-------------------------------------\n";

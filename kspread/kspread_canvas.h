@@ -123,7 +123,6 @@ public:
     int markerRow() const;
 
     void updateCellRect( const QRect &_rect );
-    void updateSelection( const QRect& oldSelection, const QPoint& oldMarker );
 
     const QPen& defaultGridPen() const;
 

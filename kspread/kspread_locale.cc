@@ -13,7 +13,10 @@ void KSpreadLocale::load( const QDomElement& element )
     if ( element.hasAttribute( "weekStartsMonday" ) )
     {
 	QString c = element.attribute( "weekStartsMonday" );
-	setWeekStartsMonday( c != "False");
+        if ( c != "False")
+        {
+          setWeekStartDay( 1 /*Monday*/ );
+        }
     }
     if ( element.hasAttribute( "decimalSymbol" ) )
 	setDecimalSymbol( element.attribute( "decimalSymbol" ) );
@@ -57,7 +60,7 @@ QDomElement KSpreadLocale::save( QDomDocument& doc ) const
 {
     QDomElement element = doc.createElement( "locale" );
 
-    element.setAttribute( "weekStartsMonday", weekStartsMonday() ? "True" : "False" );
+    element.setAttribute( "weekStartsMonday", (weekStartDay() == 1) ? "True" : "False" );
     element.setAttribute( "decimalSymbol", decimalSymbol() );
     element.setAttribute( "thousandsSeparator", thousandsSeparator() );
     element.setAttribute( "currencySymbol", currencySymbol() );
@@ -80,7 +83,7 @@ QDomElement KSpreadLocale::save( QDomDocument& doc ) const
 void KSpreadLocale::defaultSystemConfig( )
 {
     KLocale locale("kspread");
-    setWeekStartsMonday( locale.weekStartsMonday());
+    setWeekStartDay( locale.weekStartDay() );
     setDecimalSymbol( locale.decimalSymbol());
     setThousandsSeparator( locale.thousandsSeparator() );
     setCurrencySymbol( locale.currencySymbol() );

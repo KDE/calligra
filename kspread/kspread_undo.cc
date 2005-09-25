@@ -2855,7 +2855,7 @@ void KSpreadUndoStyleCell::undo()
     QValueList<styleCell>::Iterator it2;
     for ( it2 = m_lstStyleCell.begin(); it2 != m_lstStyleCell.end(); ++it2 )
       {
-	KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row);
+	sheet->nonDefaultCell( (*it2).col, (*it2).row);
       }
     sheet->setRegionPaintDirty(m_selection);
     sheet->updateView( m_selection );
@@ -2876,7 +2876,7 @@ void KSpreadUndoStyleCell::redo()
     QValueList<styleCell>::Iterator it2;
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
       {
-	KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row);
+	sheet->nonDefaultCell( (*it2).col, (*it2).row);
       }
     sheet->setRegionPaintDirty(m_selection);
     sheet->updateView();

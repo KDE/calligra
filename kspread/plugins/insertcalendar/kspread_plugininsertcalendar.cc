@@ -50,7 +50,7 @@ typedef KGenericFactory<PluginInsertCalendar> InsertCalendarFactory;
 K_EXPORT_COMPONENT_FACTORY( libkspreadinsertcalendar,  InsertCalendarFactory("kspreadinsertcalendar"))
 
 
-PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args )
+PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char *name, const QStringList& /*args*/ )
 : Plugin(parent,name)
 {
     this->m_kspreadView = NULL;

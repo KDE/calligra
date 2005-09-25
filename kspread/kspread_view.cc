@@ -27,9 +27,9 @@
 #include <kprinter.h> // has to be first
 
 // standard C/C++ includes
+#include <assert.h>
 #include <stdlib.h>
 #include <time.h>
-#include <assert.h>
 
 // Qt includes
 #include <qcursor.h>
@@ -48,7 +48,7 @@
 #include <kfind.h>
 #include <kfinddialog.h>
 #include <kfontdialog.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
 #include <kpassdlg.h>
@@ -3413,14 +3413,14 @@ void KSpreadView::slotSheetRenamed( KSpreadSheet* sheet, const QString& old_name
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotSheetHidden( KSpreadSheet* sheet )
+void KSpreadView::slotSheetHidden( KSpreadSheet* )
 {
   doc()->emitBeginOperation(false);
   updateShowSheetMenu();
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotSheetShown( KSpreadSheet* sheet )
+void KSpreadView::slotSheetShown( KSpreadSheet* )
 {
   doc()->emitBeginOperation(false);
   d->tabBar->setTabs( doc()->map()->visibleSheets() );
@@ -5717,7 +5717,7 @@ void KSpreadView::createStyleFromCell()
 
   while( true )
   {
-    styleName = KLineEditDlg::getText( i18n( "Create Style From Cell" ),
+    styleName = KInputDialog::getText( i18n( "Create Style From Cell" ),
                                        i18n( "Enter name:" ), styleName, &ok, this );
 
     if ( !ok ) // User pushed an OK button.
@@ -5922,7 +5922,7 @@ void KSpreadView::slotRename()
 
   bool ok;
   QString activeName = sheet->sheetName();
-  QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), activeName, &ok, this );
+  QString newName = KInputDialog::getText( i18n("Rename Sheet"),i18n("Enter name:"), activeName, &ok, this );
 
   if( !ok ) return;
 
@@ -5940,7 +5940,7 @@ void KSpreadView::slotRename()
     n = newName.find('$');
     if ( n > -1 ) newName[n] = '_';
 
-    newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
+    newName = KInputDialog::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
 
     if ( !ok ) return;
   }

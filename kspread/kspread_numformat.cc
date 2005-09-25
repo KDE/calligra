@@ -26,13 +26,15 @@ something else (locale()->formatNumber() maybe?) and either use it
 or get rid of it.
 Tomas
 */
+#include <ctype.h>
+#include <math.h>
+
 #include <qdatetime.h>
 #include <qmap.h>
 #include <qstring.h>
-#include <klocale.h>
 
-#include <ctype.h>
-#include <math.h>
+#include <kcalendarsystem.h>
+#include <klocale.h>
 
 #include "kspread_util.h"
 #include "kspread_value.h"
@@ -252,44 +254,44 @@ void resetGlobals()
 
 void initGlobals( KLocale const * const locale )
 {
-  g_Monday    = locale->weekDayName( 1, false );
-  g_Tuesday   = locale->weekDayName( 2, false );
-  g_Wednesday = locale->weekDayName( 3, false );
-  g_Thursday  = locale->weekDayName( 4, false );
-  g_Friday    = locale->weekDayName( 5, false );
-  g_Saturday  = locale->weekDayName( 6, false );
-  g_Sunday    = locale->weekDayName( 7, false );
-  g_Mon       = locale->weekDayName( 1, true );
-  g_Tue       = locale->weekDayName( 2, true );
-  g_Wed       = locale->weekDayName( 3, true );
-  g_Thu       = locale->weekDayName( 4, true );
-  g_Fri       = locale->weekDayName( 5, true );
-  g_Sat       = locale->weekDayName( 6, true );
-  g_Sun       = locale->weekDayName( 7, true );
-  g_January   = locale->monthName(  1, false );
-  g_February  = locale->monthName(  2, false );
-  g_March     = locale->monthName(  3, false );
-  g_April     = locale->monthName(  4, false );
-  g_MayL      = locale->monthName(  5, false );
-  g_June      = locale->monthName(  6, false );
-  g_July      = locale->monthName(  7, false );
-  g_August    = locale->monthName(  8, false );
-  g_September = locale->monthName(  9, false );
-  g_October   = locale->monthName( 10, false );
-  g_November  = locale->monthName( 11, false );
-  g_December  = locale->monthName( 12, false );
-  g_Jan       = locale->monthName(  1, true );
-  g_Feb       = locale->monthName(  2, true );
-  g_Mar       = locale->monthName(  3, true );
-  g_Apr       = locale->monthName(  4, true );
-  g_May       = locale->monthName(  5, true );
-  g_Jun       = locale->monthName(  6, true );
-  g_Jul       = locale->monthName(  7, true );
-  g_Aug       = locale->monthName(  8, true );
-  g_Sep       = locale->monthName(  9, true );
-  g_Oct       = locale->monthName( 10, true );
-  g_Nov       = locale->monthName( 11, true );
-  g_Dec       = locale->monthName( 12, true );
+  g_Monday    = locale->calendar()->weekDayName( 1, false );
+  g_Tuesday   = locale->calendar()->weekDayName( 2, false );
+  g_Wednesday = locale->calendar()->weekDayName( 3, false );
+  g_Thursday  = locale->calendar()->weekDayName( 4, false );
+  g_Friday    = locale->calendar()->weekDayName( 5, false );
+  g_Saturday  = locale->calendar()->weekDayName( 6, false );
+  g_Sunday    = locale->calendar()->weekDayName( 7, false );
+  g_Mon       = locale->calendar()->weekDayName( 1, true );
+  g_Tue       = locale->calendar()->weekDayName( 2, true );
+  g_Wed       = locale->calendar()->weekDayName( 3, true );
+  g_Thu       = locale->calendar()->weekDayName( 4, true );
+  g_Fri       = locale->calendar()->weekDayName( 5, true );
+  g_Sat       = locale->calendar()->weekDayName( 6, true );
+  g_Sun       = locale->calendar()->weekDayName( 7, true );
+  g_January   = locale->calendar()->monthName(  1, 2005, false );
+  g_February  = locale->calendar()->monthName(  2, 2005, false );
+  g_March     = locale->calendar()->monthName(  3, 2005, false );
+  g_April     = locale->calendar()->monthName(  4, 2005, false );
+  g_MayL      = locale->calendar()->monthName(  5, 2005, false );
+  g_June      = locale->calendar()->monthName(  6, 2005, false );
+  g_July      = locale->calendar()->monthName(  7, 2005, false );
+  g_August    = locale->calendar()->monthName(  8, 2005, false );
+  g_September = locale->calendar()->monthName(  9, 2005, false );
+  g_October   = locale->calendar()->monthName( 10, 2005, false );
+  g_November  = locale->calendar()->monthName( 11, 2005, false );
+  g_December  = locale->calendar()->monthName( 12, 2005, false );
+  g_Jan       = locale->calendar()->monthName(  1, 2005, true );
+  g_Feb       = locale->calendar()->monthName(  2, 2005, true );
+  g_Mar       = locale->calendar()->monthName(  3, 2005, true );
+  g_Apr       = locale->calendar()->monthName(  4, 2005, true );
+  g_May       = locale->calendar()->monthName(  5, 2005, true );
+  g_Jun       = locale->calendar()->monthName(  6, 2005, true );
+  g_Jul       = locale->calendar()->monthName(  7, 2005, true );
+  g_Aug       = locale->calendar()->monthName(  8, 2005, true );
+  g_Sep       = locale->calendar()->monthName(  9, 2005, true );
+  g_Oct       = locale->calendar()->monthName( 10, 2005, true );
+  g_Nov       = locale->calendar()->monthName( 11, 2005, true );
+  g_Dec       = locale->calendar()->monthName( 12, 2005, true );
 
   g_dcSymbol  = locale->decimalSymbol()[0];
   g_thSymbol  = locale->thousandsSeparator()[0];

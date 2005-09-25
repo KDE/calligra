@@ -56,7 +56,7 @@ public:
     KLineEdit* cellLink;
 };
 
-LinkDialog::LinkDialog( QWidget* parent, const char* name )
+LinkDialog::LinkDialog( QWidget*, const char* )
   :  KDialogBase( KDialogBase::IconList,i18n( "Insert Link") ,
                   KDialogBase::Ok | KDialogBase::Cancel,
                   KDialogBase::Ok )

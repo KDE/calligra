@@ -40,11 +40,11 @@ bool KSpreadMap::respectCase = true;
 
 KSpreadMap::KSpreadMap ( KSpreadDoc* doc, const char* name)
   : QObject( doc, name ),
+    m_doc( doc ),
     m_initialActiveSheet( 0 ),
     m_initialMarkerColumn( 0 ),
     m_initialMarkerRow( 0 ),
     tableId (1),
-    m_doc( doc ),
     m_dcop( 0 )
 {
   m_lstSheets.setAutoDelete( true );

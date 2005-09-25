@@ -66,10 +66,10 @@ void ValueTester::check( const char *file, int line, const char* msg, bool resul
     QTextStream ts( &message, IO_WriteOnly );
     ts << msg;
     ts << "  Result: ";
-    if( result ) ts << "True"; else "False";
+    if( result ) ts << "True"; else ts << "False";
     ts << ", ";
     ts << "Expected: ";
-    if( expected ) ts << "True"; else "False";
+    if( expected ) ts << "True"; else ts << "False";
     fail( file, line, message );
   }
 }

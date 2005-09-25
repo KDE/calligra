@@ -1710,7 +1710,6 @@ void CellFormatPageFloat::updateFormatType ()
   }
   else if (time->isChecked())
   {
-    int current = listFormat->currentItem();
     newFormatType=Time_format;
     switch (listFormat->currentItem())
     {

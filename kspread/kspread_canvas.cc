@@ -38,33 +38,36 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_util.h"
-#include "kspread_editors.h"
-#include "kspread_map.h"
-#include "kspread_undo.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_global.h"
-#include "kspread_view.h"
-#include "kspread_selection.h"
-#include "kspread_locale.h"
-
-#include <kmessagebox.h>
-#include <kcursor.h>
-#include <kdebug.h>
-#include <krun.h>
-
 #include <assert.h>
+#include <float.h>
 #include <stdlib.h>
-#include <qbuffer.h>
-#include <qlabel.h>
-#include <qdrawutil.h>
+
 #include <qapplication.h>
-#include <qtimer.h>
+#include <qbuffer.h>
+#include <qdrawutil.h>
+#include <qlabel.h>
 #include <qpoint.h>
 #include <qscrollbar.h>
+#include <qtimer.h>
 #include <qtooltip.h>
-#include <float.h>
+
+#include <kcursor.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <krun.h>
+
+#include "kspread_doc.h"
+#include "kspread_editors.h"
+#include "kspread_global.h"
+#include "kspread_locale.h"
+#include "kspread_map.h"
+#include "kspread_selection.h"
+#include "kspread_undo.h"
+#include "kspread_util.h"
+#include "kspread_view.h"
+#include "selections.h"
+
+#include "kspread_canvas.h"
 
 
 class CanvasPrivate

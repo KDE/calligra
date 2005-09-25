@@ -603,16 +603,16 @@ void KSpreadSheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print head line middle
     w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
+        painter.drawText( (int) ( m_pDoc->zoomItX( leftBorderPts() ) +
                           ( m_pDoc->zoomItX( prinsheetWidthPts() ) -
-                            w ) / 2.0,
+                            w ) / 2.0 ),
                           m_pDoc->zoomItY( headFootDistance ),
                           headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
     w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
-                                           prinsheetWidthPts() ) - w,
+                                           prinsheetWidthPts() ) - (int) w,
                           m_pDoc->zoomItY( headFootDistance ),
                           headRight( pageNo, m_pSheet->sheetName() ) );
 
@@ -625,9 +625,9 @@ void KSpreadSheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print foot line middle
     w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
+        painter.drawText( (int) ( m_pDoc->zoomItX( leftBorderPts() ) +
                           ( m_pDoc->zoomItX( prinsheetWidthPts() ) -
-                            w ) / 2.0,
+                            w ) / 2.0 ),
                           m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
                           footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
@@ -635,7 +635,7 @@ void KSpreadSheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     if ( w > 0 )
         painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
                                            prinsheetWidthPts() ) -
-                                           w,
+                                           (int) w,
                           m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
                           footRight( pageNo, m_pSheet->sheetName() ) );
 }

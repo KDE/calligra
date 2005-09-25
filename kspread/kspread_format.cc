@@ -2866,7 +2866,7 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     return row;
 }
 
-bool RowFormat::loadOasis( const QDomElement& row, QDomElement * rowStyle )
+bool RowFormat::loadOasis( const QDomElement& /*row*/, QDomElement * /*rowStyle*/ )
 {
     return true;
 }
