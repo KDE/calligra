@@ -28,7 +28,7 @@ class QSpinBox;
 
 class KoDocumentChild;
 
-class KoToolBox : public QFrame
+class KOFFICEUI_EXPORT KoToolBox : public QFrame
 {
     Q_OBJECT
 public:
