@@ -21,14 +21,14 @@
 #define __KARBON_FACTORY_H__
 
 #include <koFactory.h>
-
+#include <koffice_export.h>
 class KAboutData;
 class KInstance;
 
 class KarbonResourceServer;
 
 
-class KarbonFactory : public KoFactory
+class KARBONCOMMON_EXPORT KarbonFactory : public KoFactory
 {
 	Q_OBJECT
 

@@ -27,6 +27,7 @@
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qfont.h>
+#include <koffice_export.h>
 
 #include "vpath.h"
 #include "vcomposite.h"
@@ -40,7 +41,7 @@ typedef QPtrListIterator<VPath> VPathListIterator;
 #undef Above
 #endif
 
-class VText : public VObject
+class KARBONBASE_EXPORT VText : public VObject
 {
 public:
 	enum Position {

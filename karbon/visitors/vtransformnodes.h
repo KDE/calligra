@@ -21,14 +21,14 @@
 #define __VTRANSFORMNODES_H__
 
 #include <qwmatrix.h>
-
+#include <koffice_export.h>
 #include "vvisitor.h"
 
 
 class VSegment;
 
 
-class VTransformNodes : public VVisitor
+class KARBONBASE_EXPORT VTransformNodes : public VVisitor
 {
 public:
 	VTransformNodes( const QWMatrix& m );

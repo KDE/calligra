@@ -21,12 +21,12 @@
 #define _VGRADIENTWIDGET_H_
 
 #include <qwidget.h>
-
+#include <koffice_export.h>
 class VGradient;
 class QPainter;
 class VColor;
 
-class VGradientWidget : public QWidget
+class KARBONBASE_EXPORT VGradientWidget : public QWidget
 {
 	Q_OBJECT
 

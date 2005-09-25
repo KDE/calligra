@@ -22,7 +22,7 @@
 #define KARBON_TOOL_REGISTRY_H_
 
 #include <qvaluevector.h>
-
+#include <koffice_export.h>
 class KActionCollection;
 class VTool;
 class KarbonPart;
@@ -31,7 +31,7 @@ class KarbonAbstractToolFactory;
 /**
  * A registry where new tool plugins can register themselves.
  */
-class KarbonToolRegistry : private QValueVector<KarbonAbstractToolFactory*>
+class KARBONBASE_EXPORT KarbonToolRegistry : private QValueVector<KarbonAbstractToolFactory*>
 {
 public:
 	virtual ~KarbonToolRegistry();

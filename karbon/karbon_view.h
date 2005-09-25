@@ -28,7 +28,7 @@
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <koUnit.h>
-
+#include <koffice_export.h>
 class DCOPObject;
 class QLabel;
 
@@ -63,7 +63,7 @@ class VCanvas;
 class VTool;
 class VToolBox;
 
-class KarbonView : public KarbonViewBase, public KXMLGUIBuilder
+class KARBONCOMMON_EXPORT KarbonView : public KarbonViewBase, public KXMLGUIBuilder
 {
 	Q_OBJECT
 

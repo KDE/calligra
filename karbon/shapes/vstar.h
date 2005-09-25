@@ -21,7 +21,7 @@
 #define __VSTAR_H__
 
 #include "vcomposite.h"
-
+#include <koffice_export.h>
 /**
  * This shape offers star-like shapes with a lot of parameters :
  *
@@ -44,7 +44,7 @@
  * Inner angle    - extra radius amount for inner radius.
  * Roundness      - uses curves instead of lines for the star shape.
  */
-class VStar : public VPath
+class KARBONBASE_EXPORT VStar : public VPath
 {
 public:
 	enum VStarType

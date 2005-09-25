@@ -23,10 +23,10 @@
 
 #include "kactioncollection.h"
 #include "karbon_part.h"
-
+#include <koffice_export.h>
 class VTool;
 
-class KarbonAbstractToolFactory
+class KARBONBASE_EXPORT KarbonAbstractToolFactory
 {
 public:
 	KarbonAbstractToolFactory();

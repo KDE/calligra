@@ -21,8 +21,9 @@
 #define __VSPIRAL_H__
 
 #include "vcomposite.h"
+#include <koffice_export.h>
 
-class VSpiral : public VPath
+class KARBONBASE_EXPORT VSpiral : public VPath
 {
 public:
 	enum VSpiralType

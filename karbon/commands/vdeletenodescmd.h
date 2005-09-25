@@ -22,11 +22,12 @@
 #define __VNODECMD_H__
 
 #include "vcommand.h"
+#include <koffice_export.h>
 
 class VSegment;
 class VSubpath;
 
-class VDeleteNodeCmd : public VCommand
+class KARBONCOMMAND_EXPORT VDeleteNodeCmd : public VCommand
 {
 public:
 	VDeleteNodeCmd( VDocument *doc );

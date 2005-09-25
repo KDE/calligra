@@ -32,6 +32,7 @@
 
 //#include "vgradient.h"
 #include "vpattern.h"
+#include <koffice_export.h>
 
 class VGradient;
 class VGradientListItem;
@@ -39,7 +40,7 @@ class VClipartIconItem;
 class VObject;
 
 
-class KarbonResourceServer
+class KARBONCOMMON_EXPORT KarbonResourceServer
 {
 
 public:

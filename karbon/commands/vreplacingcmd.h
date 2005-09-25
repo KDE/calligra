@@ -33,7 +33,7 @@ class VSelection;
  * each object as a whole with a new object.
  */
 
-class KARBONBASE_EXPORT VReplacingCmd : public VCommand
+class KARBONCOMMAND_EXPORT VReplacingCmd : public VCommand
 {
 public:
 	virtual void execute();

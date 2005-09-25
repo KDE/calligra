@@ -26,10 +26,10 @@
 #include "vstroke.h"
 
 #include <qvaluevector.h>
-
+#include <koffice_export.h>
 // Stroke object(s)
 
-class VStrokeCmd : public VCommand
+class KARBONCOMMAND_EXPORT VStrokeCmd : public VCommand
 {
 public:
 	VStrokeCmd( VDocument *doc,  const VStroke *, const QString& icon = "14_action" );

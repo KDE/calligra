@@ -22,12 +22,12 @@
 
 #include "vgroup.h"
 #include "vvisitor.h"
-
+#include <koffice_export.h>
 /**
  *  Helper class to draw the outline of a composite path, including (?)
  *  optionally its bezier helper lines, depending on the state.
  */
-class VDrawSelection : public VVisitor
+class KARBONBASE_EXPORT VDrawSelection : public VVisitor
 {
 public:
 	VDrawSelection( const VObjectList& selection, VPainter *painter, bool nodeediting = false )

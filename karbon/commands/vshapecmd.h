@@ -22,7 +22,7 @@
 #define __VSHAPECMD_H__
 
 #include "vcommand.h"
-
+#include <koffice_export.h>
 class VPath;
 
 /*
@@ -31,7 +31,7 @@ class VPath;
  * execution() the shape will be added to the document and selected, upon undoing
  * it will be set to the deleted state.
  */
-class VShapeCmd : public VCommand
+class KARBONCOMMAND_EXPORT VShapeCmd : public VCommand
 {
 public:
 	VShapeCmd( VDocument* doc, const QString& name, VPath* shape, const QString& icon = "14_polygon" );

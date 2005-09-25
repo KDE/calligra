@@ -24,7 +24,7 @@
 #include <qwidget.h>
 #include <qtabwidget.h>
 #include <qlistbox.h>
-
+#include <koffice_export.h>
 #include "vgradient.h"
 
 class KComboBox;
@@ -73,7 +73,7 @@ class VGradientPreview : public QWidget
 		VGradient**     m_lpgradient;
 }; // VGradientPreview
 
-class VGradientTabWidget : public QTabWidget
+class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 {
 	Q_OBJECT
 

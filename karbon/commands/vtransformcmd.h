@@ -34,7 +34,7 @@ class VSegment;
 class VSelection;
 
 
-class KARBONBASE_EXPORT VTransformCmd : public VCommand
+class KARBONCOMMAND_EXPORT VTransformCmd : public VCommand
 {
 public:
 	VTransformCmd( VDocument *doc, const QWMatrix& mat, bool duplicate = false );
@@ -65,34 +65,34 @@ protected:
 };
 
 
-class KARBONBASE_EXPORT VTranslateCmd : public VTransformCmd
+class KARBONCOMMAND_EXPORT VTranslateCmd : public VTransformCmd
 {
 public:
 	VTranslateCmd( VDocument *doc, double d1, double d2, bool duplicate = false );
 };
 
 
-class VScaleCmd : public VTransformCmd
+class KARBONCOMMAND_EXPORT VScaleCmd : public VTransformCmd
 {
 public:
 	VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate = false );
 };
 
 
-class VShearCmd : public VTransformCmd
+class KARBONCOMMAND_EXPORT VShearCmd : public VTransformCmd
 {
 public:
 	VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate = false );
 };
 
 
-class VRotateCmd : public VTransformCmd
+class KARBONCOMMAND_EXPORT VRotateCmd : public VTransformCmd
 {
 public:
 	VRotateCmd( VDocument *doc, const KoPoint& p, double angle, bool duplicate = false );
 };
 
-class VTranslateBezierCmd : public VCommand
+class KARBONCOMMAND_EXPORT VTranslateBezierCmd : public VCommand
 {
 public:
 	VTranslateBezierCmd( VSegment *segment, double d1, double d2, bool firstControl );

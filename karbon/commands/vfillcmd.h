@@ -26,12 +26,12 @@
 #include "vgroup.h"
 
 #include <qvaluevector.h>
-
+#include <koffice_export.h>
 class VSelection;
 
 // Fill object(s)
 
-class VFillCmd : public VCommand
+class KARBONCOMMAND_EXPORT VFillCmd : public VCommand
 {
 public:
 	VFillCmd( VDocument *doc, const VFill &, const QString& icon = "14_action" );

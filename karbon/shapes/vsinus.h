@@ -21,8 +21,9 @@
 #define __VSINUS_H__
 
 #include "vcomposite.h"
+#include <koffice_export.h>
 
-class VSinus : public VPath
+class KARBONBASE_EXPORT VSinus : public VPath
 {
 public:
 	VSinus( VObject* parent, VState state = edit );

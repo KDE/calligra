@@ -22,7 +22,7 @@
 
 
 #include <qscrollview.h>
-
+#include <koffice_export.h>
 class KarbonPartBase;
 class KarbonViewBase;
 class KoRect;
@@ -31,7 +31,7 @@ class VPainter;
 
 // The canvas is a QScrollView.
 
-class VCanvas : public QScrollView
+class KARBONCOMMON_EXPORT VCanvas : public QScrollView
 {
 	Q_OBJECT
 public:
