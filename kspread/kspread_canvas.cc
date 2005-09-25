@@ -65,7 +65,7 @@
 #include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
-#include "selections.h"
+#include "kspread_selection.h"
 
 #include "kspread_canvas.h"
 
