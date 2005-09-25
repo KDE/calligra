@@ -313,7 +313,15 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     if ( ret == KoTemplateChooseDia::File )
     {
 	KURL url( f );
-	return openURL( url );
+	
+	bool ok=openURL(url);
+
+	while (KoDocument::isLoading())
+		kapp->processEvents();
+
+	return ok;
+
+	
     }
 
     if ( ret == KoTemplateChooseDia::Empty )
