@@ -620,8 +620,7 @@ void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
 	part()->toolController()->setActiveTool( tool );
-// FIXME: This needs to be redesigned to work properly!
-// 	m_deleteSelectionAction->setEnabled( dynamic_cast<VSelectNodesTool *>( tool ) == 0 );
+
 	m_canvas->repaintAll();
 }
 
@@ -1228,6 +1227,7 @@ KarbonView::selectionChanged()
 
 		VColor *c = new VColor( m_ColorManager->isStrokeDocker() ? obj->stroke()->color() : obj->fill()->color() );
 		m_ColorManager->setColor( c );
+		m_deleteSelectionAction->setEnabled( true );
 	}
 	else
 	{
@@ -1236,6 +1236,7 @@ KarbonView::selectionChanged()
 			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
 		m_setLineWidth->setEnabled( false );
+		m_deleteSelectionAction->setEnabled( false );
 	}
 	emit selectionChange();
 }
