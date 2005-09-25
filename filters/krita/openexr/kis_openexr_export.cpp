@@ -32,7 +32,6 @@
 #include "kis_layer.h"
 #include "kis_annotation.h"
 #include "kis_types.h"
-#include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"

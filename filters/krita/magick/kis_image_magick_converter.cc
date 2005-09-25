@@ -41,7 +41,7 @@
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 #include "kis_image_magick_converter.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
 #include "kis_paint_device.h"
@@ -71,28 +71,28 @@ namespace {
      * Make this more flexible -- although... ImageMagick
      * isn't that flexible either.
      */
-    KisColorSpace * getColorSpaceForColorType(ColorspaceType type, unsigned long imageDepth = 8) {
+    QString getColorSpaceName(ColorspaceType type, unsigned long imageDepth = 8) {
 
         if (type == GRAYColorspace) {
             if (imageDepth == 8)
-                return KisColorSpaceRegistry::instance() -> get("GRAYA");
+                return "GRAYA";
             else if ( imageDepth == 16 )
-                return KisColorSpaceRegistry::instance() -> get( "GRAYA16" );
+                return "GRAYA16" ;
         }
         else if (type == CMYKColorspace) {
             if (imageDepth == 8)
-                return KisColorSpaceRegistry::instance() -> get("CMYK");
+                return "CMYK";
             else if ( imageDepth == 16 ) {
-                return KisColorSpaceRegistry::instance() -> get( "CMYK16" );
+                return "CMYK16";
             }
         }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
             if (imageDepth == 8)
-                return KisColorSpaceRegistry::instance() -> get("RGBA");
+                return "RGBA";
             else if (imageDepth == 16)
-                return KisColorSpaceRegistry::instance()->get("RGBA16");
+                return "RGBA16";
         }
-        return 0;
+        return "";
 
     }
 
@@ -107,7 +107,7 @@ namespace {
 
     }
 
-    KisProfile * getProfileForProfileInfo(const Image * image, KisColorSpace * cs)
+    KisProfile * getProfileForProfileInfo(const Image * image)
     {
 #ifndef HAVE_MAGICK6
         return 0;
@@ -140,7 +140,7 @@ namespace {
                     return 0;
                 }
 
-                p = new KisProfile(hProfile, rawdata, cs -> colorSpaceType());
+                p = new KisProfile(hProfile, rawdata);
                 Q_CHECK_PTR(p);
             }
             name = GetNextImageProfile(image);
@@ -364,24 +364,34 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         unsigned long imageDepth = image->depth;
         kdDebug() << "Image depth: " << imageDepth << "\n";
 
+        QString csName;
         KisColorSpace * cs = 0;
         ColorspaceType colorspaceType;
         
         // Determine image type -- rgb, grayscale or cmyk
         if (GetImageType(image, &ei) == GrayscaleType || GetImageType(image, &ei) == GrayscaleMatteType) {
             if (imageDepth == 8)
-                cs = KisColorSpaceRegistry::instance() -> get("GRAYA");
+                csName = "GRAYA";
             else if ( imageDepth == 16 )
-                cs = KisColorSpaceRegistry::instance() -> get( "GRAYA16" );
+                csName = "GRAYA16" ;
             colorspaceType = GRAYColorspace;
         }
         else {
             colorspaceType = image->colorspace;
-            cs = getColorSpaceForColorType(image -> colorspace, imageDepth);
+            csName = getColorSpaceName(image -> colorspace, imageDepth);
         }
 
-        if (cs == 0) {
-            kdDebug() << "Krita does not suport colorspace " << image -> colorspace << "\n";
+        KisProfile * profile = getProfileForProfileInfo(image);
+        if (profile)
+        {
+            kdDebug() << "image has embedded profile: " << profile -> productName() << "\n";
+            cs = KisColorSpaceFactoryRegistry::instance() -> get(csName)->createColorSpace(profile);
+        }
+        else
+            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID(csName,""),"");
+
+        if (!cs) {
+            kdDebug() << "Krita does not support colorspace " << image -> colorspace << "\n";
             CloseCacheView(vi);
             DestroyImage(image);
             DestroyExceptionInfo(&ei);
@@ -390,18 +400,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             emit notifyProgressError(this);
             return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
         }
-        kdDebug() << "Image has colorspace: " << cs -> id().id() << "\n";
-
-        KisProfile * profile = getProfileForProfileInfo(image, cs);
-         if (profile)
-             kdDebug() << "Layer has profile: " << profile -> productName() << "\n";
 
         if( ! m_img) {
             m_img = new KisImage(m_doc, image -> columns, image -> rows, cs, "built image");
             Q_CHECK_PTR(m_img);
-
-             if (profile)
-                 m_img -> setProfile(profile);
 
             // XXX I'm assuming seperate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
@@ -441,10 +443,6 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             if (attr != 0) {
                 y_offset = QString(attr->value).toInt();
             }
-
-            if (profile)
-                layer -> setProfile(profile);
-
             m_img->add(layer, 0);
 
             for (Q_UINT32 y = 0; y < image->rows; y ++)
