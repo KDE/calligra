@@ -116,7 +116,7 @@ void KWConfigFootNoteDia::setupTab3()
     spLength->setSuffix(i18n(" %"));
     layout->addWidget( spLength, 0, 1 );
 
-    QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1):").arg("pt"), page );
+    QLabel *lSize = new QLabel( i18n( "&Width:"), page );
     lSize->setBuddy( spWidth );
     comment= i18n ("The width is the thickness of the separator line, set to 0 for no separator line.");
     QWhatsThis::add(lSize, comment);
