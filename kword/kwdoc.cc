@@ -1276,27 +1276,51 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         QDomElement headerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "header-style" );
         QDomElement footerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "footer-style" );
         QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-left" );
-        if ( !headerLeftElem.isNull() ) {
-            kdDebug() << "Found header-left" << endl;
+        QDomElement headerFirstElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-first" ); // hack, not oasis compliant
+        const bool hasFirstHeader = !headerFirstElem.isNull();
+        if ( !headerLeftElem.isNull() )
+        {
             hasEvenOddHeader = true;
-            __hf.header = HF_EO_DIFF; // ###
+            __hf.header = hasFirstHeader ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
             oasisLoader.loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
         }
+        else
+        {
+            __hf.header = hasFirstHeader ? HF_FIRST_DIFF : HF_SAME;
+        }
+        if ( hasFirstHeader )
+        {
+            oasisLoader.loadOasisHeaderFooter( headerFirstElem, hasEvenOddHeader, headerStyle, context );
+        }
+
         QDomElement headerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header" );
-        if ( !headerElem.isNull() ) {
-            kdDebug() << "Found header" << endl;
+        if ( !headerElem.isNull() )
+        {
             oasisLoader.loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
         }
+
+        // -- and now footers
+
         QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-left" );
-        if ( !footerLeftElem.isNull() ) {
-            kdDebug() << "Found footer-left" << endl;
+        QDomElement footerFirstElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-first" ); // hack, not oasis compliant
+        const bool hasFirstFooter = !footerFirstElem.isNull();
+        if ( !footerLeftElem.isNull() )
+        {
             hasEvenOddFooter = true;
-            __hf.footer = HF_EO_DIFF; // ###
+            __hf.footer = hasFirstFooter ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
             oasisLoader.loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
         }
+        else
+        {
+            __hf.footer = hasFirstFooter ? HF_FIRST_DIFF : HF_SAME;
+        }
+        if ( hasFirstFooter )
+        {
+            oasisLoader.loadOasisHeaderFooter( footerFirstElem, hasEvenOddHeader, headerStyle, context );
+        }
         QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
-        if ( !footerElem.isNull() ) {
-            kdDebug() << "Found footer" << endl;
+        if ( !footerElem.isNull() )
+        {
             oasisLoader.loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
         }
     }
