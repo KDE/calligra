@@ -48,9 +48,9 @@ class QWidget;
 class KoTextDocument;
 class KoStyleManagerPrivate;
 
-/******************************************************************/
-/* Class: KoStyleManager                                          */
-/******************************************************************/
+/**
+ * This class provides a dialog for editing named text styles.
+ */
 class KOTEXT_EXPORT KoStyleManager : public KDialogBase
 {
     Q_OBJECT
