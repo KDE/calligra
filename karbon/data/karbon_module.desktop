@@ -2,3 +2,5 @@
 Type=ServiceType
 X-KDE-ServiceType=Karbon/CoreModule
 Comment=Core functionality module for Karbon
+Comment[es]=Módulo de funcionalidad principal para Karbon
+Comment[sv]=Modul med kärnfunktioner för Karbon

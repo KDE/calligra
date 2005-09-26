@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Zoom Tool
+Name[br]=Ostilh Zoom
+Name[es]=Herramienta para zoom
+Name[ga]=Uirlis Súmála
+Name[sv]=Zoomverktyg
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_zoomtoolplugin
