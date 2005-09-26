@@ -899,12 +899,14 @@ VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 {
 	// set up world matrix
 	double affineresult[6];
-	affineresult[0] = ( m_matrix.m11() * affine.m11() ) * m_zoomFactor;
-	affineresult[1] = affine.m12();
-	affineresult[2] = affine.m21();
-	affineresult[3] = ( m_matrix.m22() * affine.m22() ) * m_zoomFactor;
+
+	affineresult[0] = affine.m11() * m_matrix.m11() * m_zoomFactor + affine.m12() * m_matrix.m21();
+	affineresult[1] = (affine.m11() * m_matrix.m12() + affine.m12() * m_matrix.m22() ) * m_zoomFactor;
+	affineresult[2] = (affine.m21() * m_matrix.m11() + affine.m22() * m_matrix.m21() ) * m_zoomFactor;
+	affineresult[3] = affine.m22() * m_matrix.m22() * m_zoomFactor + affine.m21() * m_matrix.m12();
 	affineresult[4] = m_matrix.dx() + affine.dx() * m_zoomFactor;
-	affineresult[5] = m_matrix.dy() - ( affine.dy() ) * m_zoomFactor;
+	affineresult[5] = m_matrix.dy() - affine.dy() * m_zoomFactor;
+
 	/*kdDebug(38000) << "affineresult[0] : " << affineresult[0] << endl;
 	kdDebug(38000) << "affineresult[1] : " << affineresult[1] << endl;
 	kdDebug(38000) << "affineresult[2] : " << affineresult[2] << endl;
