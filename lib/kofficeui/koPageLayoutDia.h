@@ -38,6 +38,7 @@ class QSpinBox;
 class QRadioButton;
 class QCheckBox;
 class KDoubleNumInput;
+class KoUnitDoubleSpinBox;
 
 enum { FORMAT_AND_BORDERS = 1, HEADER_AND_FOOTER = 2, COLUMNS = 4, DISABLE_BORDERS = 8,
        KW_HEADER_AND_FOOTER = 16, DISABLE_UNIT = 32 };
@@ -200,7 +201,7 @@ private:
     QLineEdit *eFootMid;
     QLineEdit *eFootRight;
     QSpinBox *nColumns;
-    KDoubleNumInput *nCSpacing;
+    KoUnitDoubleSpinBox *nCSpacing;
 
     KDoubleNumInput *nHSpacing;
     KDoubleNumInput *nFSpacing;

@@ -40,6 +40,7 @@
 
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <koUnitWidgets.h>
 
 #include <qhbox.h>
 #include <qvgroupbox.h>
@@ -258,7 +259,7 @@ KoHeadFoot KoPageLayoutDia::headFoot() const
 const KoColumns& KoPageLayoutDia::columns()
 {
     m_cl.columns = nColumns->value();
-    m_cl.ptColumnSpacing = KoUnit::fromUserValue( nCSpacing->value(), m_unit  );
+    m_cl.ptColumnSpacing = nCSpacing->value();
     return m_cl;
 }
 
@@ -385,7 +386,7 @@ void KoPageLayoutDia::setupTab1()
     marginsFrame->setColumnLayout( 0, Qt::Vertical );
     marginsFrame->setMargin( KDialog::marginHint() );
     grid1->addWidget( marginsFrame, 3, 0 );
-    
+
     QGridLayout *marginsLayout = new QGridLayout( marginsFrame->layout(), 3, 3,
        KDialog::spacingHint() );
 
@@ -577,14 +578,16 @@ void KoPageLayoutDia::setupTab3()
 
     QString str = KoUnit::unitName( m_unit );
 
-    QLabel *lCSpacing = new QLabel( i18n("Column &spacing (%1):").arg(str), tab3 );
+
+    QLabel *lCSpacing = new QLabel( i18n("Column &spacing:").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
-    nCSpacing = new KDoubleNumInput( tab3, "" );
+    nCSpacing = new KoUnitDoubleSpinBox( tab3 );
+    nCSpacing->setValue(  m_cl.ptColumnSpacing );
+    nCSpacing->setUnit( m_unit );
     lCSpacing->setBuddy( nCSpacing );
     grid3->addWidget( nCSpacing, 3, 0 );
 
-    nCSpacing->setValue( KoUnit::toUserValue( m_cl.ptColumnSpacing, m_unit ) );
     connect( nCSpacing, SIGNAL( valueChanged(double) ),
              this, SLOT( nSpaceChanged( double ) ) );
 
