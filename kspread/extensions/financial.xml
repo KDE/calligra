@@ -552,7 +552,7 @@
     </Function>
 
     <Function>
-      <Name>PV_annuity</Name>
+      <Name>PV_ANNUITY</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Payment per period</Comment>
@@ -567,14 +567,14 @@
 	<Type>Float</Type>
       </Parameter>
      <Help>
-	<Text>The PV_annuity() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_annuity(50000;0.05;20) or $623,111. This function assumes that payments are made at the end of each period.</Text>
-	<Syntax>PV_annuity(amount;interest;periods)</Syntax>
-	<Example>PV_annuity(1000;0.05;5) equals 4329.48</Example>
+	<Text>The PV_ANNUITY() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_ANNUITY(50000;0.05;20) or $623,111. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>PV_ANNUITY(amount;interest;periods)</Syntax>
+	<Example>PV_ANNUITY(1000;0.05;5) equals 4329.48</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>FV_annuity</Name>
+      <Name>FV_ANNUITY</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Payment per period</Comment>
@@ -589,9 +589,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FV_annuity() function returns the future value of a stream of payments given the amount of the payment, the interest rate and the number of periods. For example: If you receive $500 per year for 20 years, and invest it at 8%, the total after 20 years will be FV_annuity(500;0.08;20) or $22,880.98. This function assumes that payments are made at the end of each period.</Text>
-	<Syntax>FV_annuity(amount;interest;periods)</Syntax>
-	<Example>FV_annuity(1000;0.05;5) equals 5525.63</Example>
+	<Text>The FV_ANNUITY() function returns the future value of a stream of payments given the amount of the payment, the interest rate and the number of periods. For example: If you receive $500 per year for 20 years, and invest it at 8%, the total after 20 years will be FV_annuity(500;0.08;20) or $22,880.98. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>FV_ANNUITY(amount;interest;periods)</Syntax>
+	<Example>FV_ANNUITY(1000;0.05;5) equals 5525.63</Example>
       </Help>
     </Function>
 
@@ -657,7 +657,26 @@
       <Help>
 	<Text>The EFFECT() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of EFFECT(.08;12) or 8.3%.</Text>
 	<Syntax>EFFECT(nominal;periods)</Syntax>
-	<Example>EFFECT(0.08;12) equals 0.083</Example>
+  <Example>EFFECT(0.08;12) equals 0.083</Example>
+  <Related>EFFECTIVE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EFFECT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Nominal interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+  <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The EFFECTIVE() function calculates the effective yield for a nominal interest rate (annual rate or APR). It is the same as the EFFECT function.</Text>
+        <Syntax>EFFECTIVE(nominal;periods)</Syntax>
+        <Related>EFFECT</Related>
       </Help>
     </Function>
 

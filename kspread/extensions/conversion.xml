@@ -61,11 +61,25 @@
         <Type range="false">Float</Type>
       </Parameter>
       <Help>
-        <Text>The NUM2STRING() function returns a string value for a given number. This method is intended for using a number in methods which require a string</Text>
+        <Text>The NUM2STRING() function returns a string value for a given number. Note that KSpread can auto-covert numbers to strings if needed, so this function should rarely be needed.</Text>
         <Syntax>NUM2STRING(value)</Syntax>
         <Example>NUM2STRING(10) returns "10"</Example>
         <Example>NUM2STRING(2.05) returns "2.05"</Example>
         <Example>=find("101";NUM2STRING(A1)) (A1 = 2.010102) returns True</Example>
+        <Related>STRING</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>number to convert into string</Comment>
+        <Type range="false">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The STRING() function returns a string value for a given number. It is the same as the NUM2STRING function.</Text>
+        <Related>NUM2STRING</Related>
       </Help>
     </Function>
 
