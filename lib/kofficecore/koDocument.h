@@ -22,6 +22,7 @@
 #ifndef __ko_document_h__
 #define __ko_document_h__
 
+class KoTextDocument;
 namespace std { }
 using namespace std;
 #include <qwmatrix.h>
@@ -837,9 +838,15 @@ public:
     void setMimeTypeAfterLoading( const QString& mimeType );
 
     /**
-     *	@return returns the number of pages in the document.
+     * @return returns the number of pages in the document.
      */
-    int  pageCount() const { return m_pageCount; } 
+    int  pageCount() const { return m_pageCount; }
+
+    /**
+     * @return all kotext-based text objects in the document
+     * This is used by some text-analyzer plugins.
+     */
+    virtual QValueList<KoTextDocument *> allTextDocuments() const;
 
 signals:
     /**

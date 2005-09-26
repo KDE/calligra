@@ -1889,7 +1889,7 @@ void KWDocument::loadEmbedded( const QDomElement &embedded )
         }
         else
             kdError(32001) << "No <SETTINGS> tag in EMBEDDED" << endl;
-        
+
     } else
         kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
 }
@@ -5568,6 +5568,17 @@ QPtrList<KWTextFrameSet> KWDocument::allTextFramesets(bool onlyReadWrite) const
         fit.current()->addTextFrameSets(textFramesets, onlyReadWrite);
     }
     return textFramesets;
+}
+
+QValueList<KoTextDocument *> KWDocument::allTextDocuments() const
+{
+    QValueList<KoTextDocument *> lst;
+    const QPtrList<KWTextFrameSet> textFramesets = allTextFramesets(false);
+    QPtrListIterator<KWTextFrameSet> fit( textFramesets );
+    for ( ; fit.current() ; ++fit ) {
+        lst.append( fit.current()->textObject()->textDocument() );
+    }
+    return lst;
 }
 
 int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite )

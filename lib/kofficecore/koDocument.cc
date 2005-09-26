@@ -2409,5 +2409,10 @@ QString KoDocument::tagNameToDocumentType( const QString& localName )
     return localName;
 }
 
+QValueList<KoTextDocument *> KoDocument::allTextDocuments() const
+{
+    return QValueList<KoTextDocument *>();
+}
+
 #include "koDocument_p.moc"
 #include "koDocument.moc"

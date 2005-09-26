@@ -4420,6 +4420,17 @@ QPtrList<KoTextObject> KPresenterDoc::allTextObjects() const
     return lst;
 }
 
+QValueList<KoTextDocument *> KPresenterDoc::allTextDocuments() const
+{
+    QValueList<KoTextDocument *> lst;
+    const QPtrList<KoTextObject> textObjects = allTextObjects();
+    QPtrListIterator<KoTextObject> it( textObjects );
+    for ( ; it.current() ; ++it ) {
+        lst.append( it.current()->textDocument() );
+    }
+    return lst;
+}
+
 QValueList<KoTextObject *> KPresenterDoc::visibleTextObjects( ) const
 {
     QValueList<KoTextObject *> lst;

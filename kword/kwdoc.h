@@ -428,12 +428,16 @@ public:
     void lowerMainFrames( int pageNum );
     void lowerMainFrames( int pageNum, int lowestZOrder );
 
-    /// \note This method consider _all_ text framesets, even table cells
+    /// \note This method considers _all_ text framesets, even table cells
     QPtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
-    /// \note This method consider _all_ text framesets, even table cells
+    /// \note This method considers _all_ text framesets, even table cells
     int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
-    /// \note This method consider _all_ text framesets, even table cells
+    /// \note This method considers _all_ text framesets, even table cells
     KWFrameSet * textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite );
+
+    /// Reimplementation from KoDocument.
+    /// \note This method considers _all_ text framesets, even table cells
+    virtual QValueList<KoTextDocument *> allTextDocuments() const;
 
 
     /** Gather all the frames which are on a certain page and return them.

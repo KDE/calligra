@@ -389,6 +389,9 @@ class KPresenterDoc : public KoDocument
     QPtrList<KoTextObject> allTextObjects() const;
     QValueList<KoTextObject *> visibleTextObjects( ) const;
 
+    /// Reimplementation from KoDocument.
+    virtual QValueList<KoTextDocument *> allTextDocuments() const;
+
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
 
