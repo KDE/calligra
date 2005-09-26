@@ -23,6 +23,3 @@ krosspython_la_LIBADD = \
 
 METASOURCES = AUTO
 SUBDIRS = CXX scripts .
-
-#TODO install-/modulpath needs to be a runtime-option!
-#modules
