@@ -166,7 +166,8 @@ void KSpreadRegisterMathFunctions()
   repo->add (f);
   f = new Function ("ODD",           func_odd);
   repo->add (f);
-  f = new Function ("POW",           func_pow); // remove in 1.5
+  f = new Function ("POW",         func_pow);
+  f->setParamCount (2);
   repo->add (f);
   f = new Function ("POWER",         func_pow);
   f->setParamCount (2);

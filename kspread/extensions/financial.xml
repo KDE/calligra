@@ -663,7 +663,7 @@
     </Function>
 
     <Function>
-      <Name>EFFECT</Name>
+      <Name>EFFECTIVE</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Nominal interest rate</Comment>

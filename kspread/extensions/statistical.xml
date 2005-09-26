@@ -101,7 +101,27 @@
       <Help>
 	<Text>The CORREL() function calculates the correlation coefficient of two cell ranges.</Text>
 	<Syntax>CORREL(range1; range2)</Syntax>
-	<Example>CORREL(A1:A3; B1:B3)</Example>
+  <Example>CORREL(A1:A3; B1:B3)</Example>
+  <Related>PEARSON</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PEARSON</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The PEARSON() function calculates the correlation coefficient of two cell ranges. It is the same as the CORREL function.</Text>
+	<Syntax>PEARSON(range1; range2)</Syntax>
+  <Example>PEARSON(A1:A3; B1:B3)</Example>
+  <Related>CORREL</Related>
       </Help>
     </Function>
 
@@ -685,10 +705,48 @@
 	<Example>VAR(12;5;7) equals 13</Example>
 	<Example>VAR(15;80;3) equals 1716.333...</Example>
 	<Example>VAR(6;7;8) equals 1</Example>
-	<Related>VARP</Related>
+  <Related>VARIANCE</Related>
+  <Related>VARA</Related>
+  <Related>VARP</Related>
+  <Related>VARPA</Related>
       </Help>
     </Function>
 
+    <Function>
+      <Name>VARIANCE</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The VARIANCE() function calculates the estimates variance based on a sample. It's the same as the VAR function.</Text>
+	<Syntax>VARIANCE(value;value;...)</Syntax>
+	<Example>VARIANCE(12;5;7) equals 13</Example>
+	<Example>VARIANCE(15;80;3) equals 1716.333...</Example>
+	<Example>VARIANCE(6;7;8) equals 1</Example>
+	<Related>VAR</Related>
+	<Related>VARA</Related>
+  <Related>VARP</Related>
+	<Related>VARPA</Related>
+      </Help>
+    </Function>
     <Function>
       <Name>VARA</Name>
       <Type>Float</Type>
@@ -718,7 +776,9 @@
 	<Example>VARA(12;5;7) equals 13</Example>
 	<Example>VARA(15;80;3) equals 1716.333...</Example>
 	<Example>VARA(6;7;8) equals 1</Example>
+	<Related>VAR</Related>
 	<Related>VARP</Related>
+	<Related>VARPA</Related>
       </Help>
     </Function>
 
@@ -752,6 +812,8 @@
 	<Example>VARP(15;80;3) equals 1144.22...</Example>
 	<Example>VARP(6;7;8) equals 0.6666667...</Example>
 	<Related>VAR</Related>
+	<Related>VARA</Related>
+	<Related>VARPA</Related>
       </Help>
     </Function>
 
@@ -784,6 +846,8 @@
 	<Example>VARPA(12;5;7) equals 8.666...</Example>
 	<Example>VARPA(15;80;3) equals 1144.22...</Example>
 	<Example>VARPA(6;7;8) equals 0.6666667...</Example>
+	<Related>VAR</Related>
+	<Related>VARA</Related>
 	<Related>VARP</Related>
       </Help>
     </Function>

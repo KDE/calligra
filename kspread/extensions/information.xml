@@ -70,10 +70,27 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISNUMBER() function returns True if the parameter is a numerical value. Otherwise it returns False.</Text>
+	<Text>The ISNUMBER() function returns True if the parameter is a numerical value. Otherwise it returns False. It's the same as ISNUM.</Text>
 	<Syntax>ISNUMBER(x)</Syntax>
 	<Example>ISNUMBER(12) returns True</Example>
 	<Example>ISNUMBER(hello) returns False</Example>
+  <Related>ISNUM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNUM</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNUM() function returns True if the parameter is a numerical value. Otherwise it returns False. It's the same as ISNUMBER.</Text>
+	<Syntax>ISNUM(x)</Syntax>
+	<Example>ISNUM(12) returns True</Example>
+  <Example>ISNUM(hello) returns False</Example>
+  <Related>ISNUMBER</Related>
       </Help>
     </Function>
 
@@ -145,10 +162,27 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISNONTEXT() function returns True if the parameter is not a string. Otherwise it returns False</Text>
+	<Text>The ISNONTEXT() function returns True if the parameter is not a string. Otherwise it returns False. It's the same as ISNOTTEXT.</Text>
 	<Syntax>ISNONTEXT(x)</Syntax>
 	<Example>ISNONTEXT(12) returns True</Example>
-	<Example>ISNONTEXT("hello") returns False</Example>
+  <Example>ISNONTEXT("hello") returns False</Example>
+  <Related>ISNOTTEXT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNOTTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNOTTEXT() function returns True if the parameter is not a string. Otherwise it returns False. It's the same as ISNONTEXT.</Text>
+	<Syntax>ISNOTTEXT(x)</Syntax>
+	<Example>ISNOTTEXT(12) returns True</Example>
+  <Example>ISNOTTEXT("hello") returns False</Example>
+  <Related>ISNONTEXT</Related>
       </Help>
     </Function>
 
