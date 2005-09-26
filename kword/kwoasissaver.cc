@@ -80,7 +80,10 @@ bool KWOasisSaver::finish()
     KoXmlWriter* contentWriter = m_oasisStore->contentWriter();
     Q_ASSERT( contentWriter );
 
-    writeAutomaticStyles( *contentWriter, m_mainStyles, *m_savingContext );
+    m_savingContext->writeFontFaces( *contentWriter );
+    contentWriter->startElement( "office:automatic-styles" );
+    writeAutomaticStyles( *contentWriter, m_mainStyles, *m_savingContext, false );
+    contentWriter->endElement(); // office:automatic-styles
 
     m_oasisStore->closeContentWriter();
 
@@ -88,7 +91,8 @@ bool KWOasisSaver::finish()
         return false;
     //manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
     m_doc->saveOasisDocumentStyles( m_store, m_mainStyles, *m_savingContext,
-                                    KWDocument::SaveSelected /* simply means not SaveAll */ );
+                                    KWDocument::SaveSelected /* simply means not SaveAll */,
+                                    QByteArray() /* no headers/footers */ );
     if ( !m_store->close() ) // done with styles.xml
         return false;
 
@@ -98,58 +102,54 @@ bool KWOasisSaver::finish()
     return true;
 }
 
-void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context )
+void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context, bool stylesDotXml )
 {
-    context.writeFontFaces( contentWriter );
-    contentWriter.startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST );
+    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
+    styles = mainStyles.styles( KWDocument::STYLE_FRAME, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE );
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-properties"  );
     }
 
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE_COLUMN );
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE_COLUMN, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-column-properties"  );
     }
 
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL );
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
     }
-
-    contentWriter.endElement(); // office:automatic-styles
 }
 
 const char* KWOasisSaver::selectionMimeType()

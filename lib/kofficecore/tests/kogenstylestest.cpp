@@ -91,9 +91,23 @@ int main( int, char** ) {
 
     assert( sapName == secondName );
 
-    assert( coll.styles().count() == 3 );
+    // OK, now add a style marked as for styles.xml
+    KoGenStyle headerStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    headerStyle.addAttribute( "style:master-page-name", "Standard" );
+    headerStyle.addProperty( "style:page-number", "0" );
+    headerStyle.addStyleMap( map1 );
+    headerStyle.addStyleMap( map2 );
+    QString headerStyleName = coll.lookup( headerStyle, "hs" );
+    coll.markStyleForStylesXml( headerStyleName );
+
+    assert( coll.styles().count() == 4 );
     assert( coll.styles( KoGenStyle::STYLE_AUTO ).count() == 2 );
     assert( coll.styles( KoGenStyle::STYLE_USER ).count() == 1 );
+
+    QValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
+    assert( stylesXmlStyles.count() == 1 );
+    KoGenStyles::NamedStyle firstStyle = stylesXmlStyles.first();
+    assert( firstStyle.name == headerStyleName );
 
     TEST_BEGIN( 0, 0 );
     first.writeStyle( &writer, coll, "style:style", firstName, "style:paragraph-properties" );

@@ -138,10 +138,20 @@ QString KoOasisSettings::Items::findConfigItem( const QDomElement& element,
     return QString::null;
 }
 
+
 QString KoOasisSettings::Items::findConfigItem( const QString& item, bool* ok ) const
 {
     return findConfigItem( m_element, item, ok );
 }
+
+#if 0 // does anyone need this one? passing a default value does the job, too
+bool KoOasisSettings::Items::hasConfigItem( const QString& configName ) const
+{
+    bool ok;
+    (void)findConfigItem( configName, &ok );
+    return ok;
+}
+#endif
 
 QString KoOasisSettings::Items::parseConfigItemString( const QString& configName, const QString& defValue ) const
 {

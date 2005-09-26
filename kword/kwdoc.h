@@ -355,7 +355,7 @@ public:
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();
     void completeOasisPasting();
-    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag ) const;
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const;
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
     KWFrameStyleCollection * frameStyleCollection()const  { return m_frameStyleColl;}

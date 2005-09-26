@@ -27,7 +27,7 @@ test -f "$input" || { echo "No such file $input"; exit 1; }
 # Load old native file
 appid=`dcopstart $appname $input`
 test -n "$appid" || { echo "Error starting $appname!"; exit 1; }
-while `dcop $appid Document-0 isLoading` == "true"; do
+while test "`dcop $appid Document-0 isLoading`" != "false"; do
     sleep 1;
 done
 

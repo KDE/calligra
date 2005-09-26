@@ -1219,12 +1219,12 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     }
     m_initialEditing = 0;
 
-    // TODO variable settings
+    // TODO MAILMERGE
+
+    // Variable settings
     // By default display real variable value
     if ( !isReadWrite())
         m_varColl->variableSetting()->setDisplayFieldCode(false);
-
-    // TODO MAILMERGE
 
     KoOasisContext context( this, *m_varColl, oasisStyles, store );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
@@ -2690,6 +2690,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
     savingContext.setStyleNameMap( map );
 
+    QByteArray headerFooterContent;
     if ( saveFlag == SaveAll )
     {
         // Save visual info for the first view, such as the active frameset and cursor position
@@ -2708,6 +2709,40 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
                 }
             }
         }
+
+        // Header and footers save their content into master-styles/master-page, and their
+        // styles into the page-layout automatic-style.
+        // However the paragraph styles used by header/footers need to be known before
+        // hand, to promote them to styles.xml. So we collect them first, which means
+        // storing the content into a buffer.
+        QBuffer buffer( headerFooterContent );
+        buffer.open( IO_WriteOnly );
+        KoXmlWriter headerFooterTmpWriter( &buffer );  // TODO pass indentation level
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+        // ## This loop is duplicated in saveOasisDocumentStyles
+        for ( ; fit.current() ; ++fit ) {
+            const KWFrameSet* fs = fit.current();
+            if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
+                 !fs->isFloating() &&
+                 !fs->isDeleted() &&
+                 fs->type() == FT_TEXT &&
+                 fs->isHeaderOrFooter() )
+            {
+                // Save content
+                headerFooterTmpWriter.startElement( fs->headerFooterTag() ); // e.g. style:header
+                static_cast<const KWTextFrameSet *>(fs)->saveOasisContent( headerFooterTmpWriter, savingContext );
+                headerFooterTmpWriter.endElement();
+            }
+        }
+        // Add trailing '0'  (Qt4: remove)
+        headerFooterContent.resize( headerFooterContent.size() + 1 );
+        headerFooterContent[headerFooterContent.size()-1] = '\0';
+
+        // Now mark all autostyles as "for styles.xml" since headers/footers need them
+        QValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles( KoGenStyle::STYLE_AUTO, true );
+        for ( QValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
+              it != autoStyles.end(); ++it )
+            mainStyles.markStyleForStylesXml( (*it).name );
     }
 
     KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
@@ -2764,7 +2799,10 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
 
-    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles, savingContext );
+    savingContext.writeFontFaces( *contentWriter );
+    contentWriter->startElement( "office:automatic-styles" );
+    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles, savingContext, false );
+    contentWriter->endElement(); // office:automatic-styles
 
     oasisStore.closeContentWriter();
 
@@ -2773,7 +2811,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     if ( !store->open( "styles.xml" ) )
         return false;
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    saveOasisDocumentStyles( store, mainStyles, savingContext, saveFlag );
+    saveOasisDocumentStyles( store, mainStyles, savingContext, saveFlag, headerFooterContent );
     if ( !store->close() ) // done with styles.xml
         return false;
 
@@ -2952,7 +2990,7 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
     settingsWriter.endDocument();
 }
 
-void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag ) const
+void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
@@ -2985,7 +3023,6 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter->endElement(); // office:styles
 
     QString pageLayoutName;
-    QByteArray headerFooters;
     if ( saveFlag == SaveAll )
     {
         stylesWriter->startElement( "office:automatic-styles" );
@@ -3062,17 +3099,11 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         pageLayout.writeStyle( stylesWriter, mainStyles, "style:page-layout", pageLayoutName,
                                "style:page-layout-properties", false /*don't close*/ );
 
-        // Header and footers save their content into master-styles/master-page, but their
-        // styles into the page-layout automatic-style. To avoid splitting that code
-        // in two places (and inconsistent iteration), we save both here, the content
-        // going into
-        buffer.setBuffer( headerFooters );
-        buffer.open( IO_WriteOnly );
         // Ouch another problem: there is only one header style in oasis
         // ##### can't have different borders for even/odd headers...
         bool headerStyleSaved = false;
         bool footerStyleSaved = false;
-        KoXmlWriter headerFooterTmpWriter( &buffer );  // TODO pass indentation level
+        // ## This loop is duplicated in saveOasis
         QPtrListIterator<KWFrameSet> fit = framesetsIterator();
         for ( ; fit.current() ; ++fit ) {
             const KWFrameSet* fs = fit.current();
@@ -3082,19 +3113,17 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
                  fs->type() == FT_TEXT &&
                  fs->isHeaderOrFooter() )
             {
-                // Save content
-                headerFooterTmpWriter.startElement( fs->headerFooterTag() ); // e.g. style:header
-                static_cast<const KWTextFrameSet *>(fs)->saveOasisContent( headerFooterTmpWriter, savingContext );
-                headerFooterTmpWriter.endElement();
-                // Save style
+                // Save header/footer style
                 KWFrame* frame = fs->frame(0);
                 if ( fs->isAHeader() ) {
                     if ( headerStyleSaved )
                         continue;
+                    headerStyleSaved = true;
                     stylesWriter->startElement( "style:header-style" );
                 } else {
                     if ( footerStyleSaved )
                         continue;
+                    footerStyleSaved = true;
                     stylesWriter->startElement( "style:footer-style" );
                 }
 #if 0 // more code reuse, but harder to integrate
@@ -3113,6 +3142,10 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
             }
         }
         stylesWriter->endElement(); // style:page-layout
+
+        // Headers and footers might have created new automatic parag/text styles -> save those
+        KWOasisSaver::writeAutomaticStyles( *stylesWriter, mainStyles, savingContext, true );
+
         stylesWriter->endElement(); // office:automatic-styles
     }
 
@@ -3123,9 +3156,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
 
     if ( isHeaderVisible() || isFooterVisible() ) { // ### TODO save them even when hidden (and not empty)?
-        headerFooters.resize( headerFooters.size() + 1 );
-        headerFooters[headerFooters.size()-1] = '\0';
-        stylesWriter->addCompleteElement( headerFooters.data() );
+        stylesWriter->addCompleteElement( headerFooterContent.data() );
     }
 
     stylesWriter->endElement();
