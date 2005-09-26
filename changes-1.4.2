@@ -74,7 +74,6 @@ Kexi
 * Fix; Kexi cannot be launched from kmenu sometimes (#109025)
 
 KWord
-* Fix: KWord ignores lists indent after importing an Open Document file (#109223)
 * Improved support for text styles in OpenDocument format:
     - Load the "start" and "end" values for fo:text-align: fixes right-aligned paragraphs in OOo loaded as left-aligned in koffice (#112828)
     - Save automatic styles used by headers and footers (mark auto-styles as belonging to styles.xml)  (#112828).
@@ -82,6 +81,8 @@ KWord
     - Support for importing lists with large bullets (#113361)
     - Find styles by display-name when pasting (#112990)
     - Remember 'None' numbering option in paragraph styles (Don't store list-style).
+    - Honor list indent from OpenDocument files (#109223)
+* Fixed layouting bug with large inline tables (#112269)
 
 kspread
 * Fix: Scrolling left/right is very slow (#110551)
