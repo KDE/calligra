@@ -68,40 +68,18 @@ General bugs
   + 104420: Crash after entering a formula.			      1	----
 
 * Painting
-  + 59068: Error show text on cell with right align with text	      1	DONE
-	   overlapped left cell.
-  + 66859: Decimals are in the next horizontal cell		      1 DONE
-  * 77842: Strange text wrapping behavior			      1 DONE
-  + 77843: Vertical text alignment problem			      1 DONE
 
 * Printing
-  + 61452: drawing problem when text overflow the right border        1 DONE
-  + 68190: Empty document generates 2 printed pages (testcase)	      1 DONE
-  + 68977: Embedded KSpread document printing problem		      1 DONE
-  + 70073: printing with kspread gives big black areas		      1 DONE
-  + 72798: selective print comes up with "nothing to print"	      1 DONE
-  + 77962: print range doesn't work into kspread		      1 DONE
-  + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 DONE
-  + 87367: Ugly postscript rendering of cell borders.		      1 DONE
-  + 88252: content larger than column are not print as PDF	      1 DONE
-  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 DONE
-  + 100643: KSpread prints a completely empty page at the end of      1 DONE
-	    the document.
-  + 100992: left border of cells with text, which is wider than the   1 DONE
-	    cell breaks printout
   + 101074: Charts are really small when printed from KSpread	      1 ----
         Fix the zoom issue						done
 	Fix the disappearing legend (KChart bug?)			--
-  + Fix all printing of cell borders.  				      1 DONE
 
 * Format
   + 87471: format of whole column does not change		      2 ----
   + Border on a cell in the cell format dialog -> the line width      1 ----
     does not stick.
-  + Setting of indentation in a cell does not work well.	      1 DONE
 
 * Cut/Copy & Paste
-  + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE
   + 69283: content on middle mouse click			      1 ----
 
 * Load & Save, Import & Export
@@ -115,24 +93,14 @@ General bugs
   + 60458: Inserting a row always creates cell with default number    2 ----
 	   format.
   + 70708: undo of series broken when range contains merged cells     2 ----
-  + 77603: isdate() returns error for field references		      1 DONE
   + 84738: Inserting a new line does not copy right settings to       2 ----
 	   new line.
-  + 86875: KSpread: does not convert automatically between text	      2 ----
-	   and number.
-    * partially done, the rest requires the new formula parser, and it won't
-      be 100% done afterwards, if we use koscript-compat layer for functions
   + 104859: KSpread marks document as modified on opening	      1 ----
 
 * Investigate further if these are important.
   + 48037: 1. Insert special doesn't work			      1 DONE
 	   2. Search and replace doesn't work on formulas.
 	   3. Whishlist for special paste
-	This one is split up into wishes 102025 and 102026.
-  + 52575: Insert data from text file error and other remarks	      1 DONE
-	This bug should be split up into a number of wishes.
-  + 59757: Insert rows does not work				      1 DONE
-  + 61652: Wrong Parse when call a value over many cells	      1 DONE
   + 69285: Pasting directly into the cell edit box is not 	      2 ----
 	   subsequently saved when changing cells.
 
@@ -148,11 +116,9 @@ Things not in bugzilla
   + printouts with zoom other than 100% (it's a missing feature, but  2 ----
     the GUI is there... - page layout, options, Scale Printout )
   + make print range work over more than 1 page			      2 ----
-  + Make it possible to print embedded objects.			      1 DONE
   + Repeated rows and columns don't work if they don't start from     2 ----
     row/column 1.   Also it is not possible to enter just one
     row/column into the dialog, it always has to be a range (2:3).
-    - Make repeated rows/cols work with ranges that don't start at 1  2 DONE
     - Make it possible to enter just one row/column into GUI, don't   2 --
       force a range.
 
@@ -162,7 +128,6 @@ Things not in bugzilla
     insert pictures!
   
 * Plugins
-  + Replace the calendar templates the calendar plugin		      2 DONE
 
 
 
@@ -170,7 +135,6 @@ Things to do after the release of KOffice 1.4
 =============================================
 
 * Bugs
-  + 78642: Function AVERAGEA does not work as documented	      1 ----
   + If you select a row and chooses Data->"Remove columns", then      1 ----
     everything is removed.  I think if entire rows are selected,
     "Remove columns" should be disabled.  Besides, if you undo
@@ -223,12 +187,9 @@ Things to do after the release of KOffice 1.4
 	works, but not very nice (not committed (Norbert)).
         Maybe not as important if we get split view to work correctly.
 
-  + Matrix operations						      2 TOMA
-      I have plans to do these things in a very clean and simple way.
-      The only drawback is that it probably won't be excel-compatible.
-      Further research and/or discussion might be needed here.
-      I'll inform koffice-devel when the right time comes ;)
-
+  + Matrix operations              2 ----
+     Some exist - multiply, determinant. Inverse not implemented.
+  
   + Locked areas (for formulas with a matrix as result)		      2 TOMA
 
 * Major features (big effort)
@@ -307,9 +268,6 @@ Norbert
 
 - Multiple Operations
 + Lookup & Reference functions (LOOKUP needs to fixed)
-+ Date/Time functions
-+ Database functions 
-+ Subtotals
 - more information functions (Excel compatible)
 
 Ariya
@@ -317,7 +275,6 @@ Ariya
 - more "Related Functions" in function help/desc text
 - improve function compatibility with MS Excel
 - dBASE export filter
-- new formula parser/engine
 
 
 OpenCalc - filter
@@ -340,7 +297,7 @@ Missing formulas (compared with XL)
 Statistical:
 
 BETAINV
-BINOMDIST
+BINOMDIST  (different from BINO?)
 CHIINV
 CHITEST
 CRITBINOM
@@ -370,7 +327,6 @@ Lookup:
 
 HLOOKUP
 HYPERLINK
-INDEX
 MATCH
 OFFSET
 TRANSPOSE
@@ -378,9 +334,6 @@ VLOOKUP
 
 
 Logic:
-
-+ FALSE
-+ TRUE
 
 
 Information:
@@ -548,8 +501,4 @@ Torbens TODO-List:
 ------------------
 - Write-Protect cells
 
-
-After koffice-1.3
------------------
--Improve validation (add list) DONE
 
