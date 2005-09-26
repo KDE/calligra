@@ -68,7 +68,8 @@ Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)
         if(connection) {
             Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule("krosskexidb");
             if(! module)
-                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("Failed to load the krosskexidb module.") );
+                throw Kross::Api::Exception::Ptr( 
+                    new Kross::Api::Exception("Could not load \"krosskexidb\" module.") );
             return module->get("KexiDBConnection", connection);
         }
     }

@@ -241,7 +241,7 @@ bool KexiScriptManager::executeFile(const QString& file, QString& error)
 {
     QFile f(file);
     if(! f.open(IO_ReadOnly)) {
-        error = i18n("Failed to read scriptingfile %1").arg(file);
+        error = i18n("<qt>Could not load script file <nobr>\"%1\"</nobr></qt>").arg(file);
         return false;
     }
     QString code = f.readAll();
