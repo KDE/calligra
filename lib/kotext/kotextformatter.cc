@@ -360,7 +360,7 @@ bool KoTextFormatterCore::format()
 
             bool hyphenated = false;
             // Hyphenation: check if we can break somewhere between lastBreak and i
-            if ( settings->hyphenator() )
+            if ( settings->hyphenator() && !c->isCustom() )
             {
                 int wordStart = QMAX(0, lastBreak+1);
                 // Breaking after i isn't possible, i is too far already
@@ -376,7 +376,7 @@ bool KoTextFormatterCore::format()
                 {
                     QString lang = string->at(wordStart).format()->language();
                     char * hyphens = settings->hyphenator()->hyphens( word, lang );
-#if defined(DEBUG_FORMATTER) || defined(DEBUG_HYPHENATION)
+#if defined(DEBUG_HYPHENATION)
                     kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << " maxlen=" << maxlen << endl;
                     kdDebug(32500) << "Parag indexes: wordStart=" << wordStart << " lastBreak=" << lastBreak << " i=" << i << endl;
 #endif
@@ -412,9 +412,16 @@ bool KoTextFormatterCore::format()
 
             // No breakable char found -> break at current char (i.e. before 'i')
             if ( lastBreak < 0 ) {
-                bool formatLine = true;
-                if ( c->lineStart ) // ouch, empty line
+                // Remember if this is the start of a line; testing c->lineStart after breaking
+                // is always true...
+                const bool emptyLine = c->lineStart;
+                if ( emptyLine ) // ouch, empty line
                 {
+                    // This happens when there is a very wide character (e.g. inline table),
+                    // or a very narrow passage between frames. In the second case we'll
+                    // have more room below, in the first case we might not.
+                    // So we look below, and come back if we don't find better.
+
                     // Remember where the biggest availableWidth was, so that if we really
                     // find nowhere for this big character, we'll come back here.
                     if ( availableWidth > maxAvailableWidth.second )
@@ -424,17 +431,33 @@ bool KoTextFormatterCore::format()
                     }
                     // Check if we're at the bottom of the doc, we won't find better then
                     // (and the check further down would abort)
-                    // Instead we go back to where there was most width for it.
                     if ( maxY > -1 && parag->rect().y() + y >= maxY )
                     {
-                        kdDebug(32500) << parag->rect().y() + y << " over maxY=" << maxY
-                                       << " -> final choice for the line: y=" << maxAvailableWidth.first << endl;
-                        y = maxAvailableWidth.first;
-                        if ( availableWidth )
-                            Q_ASSERT( maxAvailableWidth.second != 0 );
-                        lineStart->y = y;
-                        // In this case we want to actually format the line,
-                        // so we don't set emptyLine
+                        // Here we have to distinguish "table wider than document" (#112269)
+                        // and "not enough room for chars next to a big frame".
+                        // In the first case a new page wouldn't help, in the second it would.
+                        // ### Real fix: asking for the max width on a not-yet-created next page.
+                        // For now I just approximate that with the flow width.
+                        if ( c->width >= doc->flow()->width() )
+                        {
+                            // OK we go back to where there was most width for it.
+                            kdDebug(32500) << parag->rect().y() + y << " over maxY=" << maxY
+                                           << " -> final choice for the line: y=" << maxAvailableWidth.first << endl;
+                            y = maxAvailableWidth.first;
+                            if ( availableWidth )
+                                Q_ASSERT( maxAvailableWidth.second != 0 );
+                            lineStart->y = y;
+                            maxAvailableWidth = qMakePair( 0, 0 ); // clear it
+                        }
+                        else
+                        {
+                            // "small" chars and not enough width here, abort and hope for a new page.
+#ifdef DEBUG_FORMATTER
+                            kdDebug(32500) << "We're after maxY, time to stop." << endl;
+#endif
+                            // No solution for now. Hopefully KWord will create more pages...
+                            abort = true;
+                        }
                     }
                     else
                     {
@@ -443,10 +466,12 @@ bool KoTextFormatterCore::format()
                         // ("validHeight" idea). For now we keep the old behavior:
                         y += tmph;
                         kdDebug(32500) << "KoTextFormatter: moving down empty line by h=" << tmph << ": y=" << y << endl;
-                        formatLine = false; // line is not ready yet
+
+                        --i; // so that the ++i in for() is a noop
+                        continue;
                     }
                 }
-                if ( formatLine && i > 0 )
+                if ( !emptyLine && i > 0 )
                 {
                     // (combine lineStart->baseLine/lineStart->h and tmpBaseLine/tmph)
                     int belowBaseLine = QMAX( lineStart->h - lineStart->baseLine, tmph - tmpBaseLine );
@@ -501,10 +526,14 @@ bool KoTextFormatterCore::format()
                 // recalc everything for 'i', it might still not be ok where it is...
                 // (e.g. if there's no room at all on this line)
                 // But we don't want to do this forever, so we check against maxY (if known)
-                if ( formatLine && maxY > -1 )
+                // [except if we come here after "final choice for empty line"!]
+                if ( !emptyLine && maxY > -1 )
                 {
                     if ( parag->rect().y() + y < maxY )
                     {
+#ifdef DEBUG_FORMATTER
+                        kdDebug(32500) << "Re-checking formatting for character " << i << endl;
+#endif
                         --i; // so that the ++i in for() is a noop
                         continue;
                     }
@@ -517,8 +546,8 @@ bool KoTextFormatterCore::format()
                         abort = true;
                     }
                 }
-                // maxY not known -> keep going ('i' remains where it is)
-                // (that's the initial QRT behaviour)
+                // maxY not known (or "final choice for empty line") -> keep going ('i' remains where it is)
+                // (in case of maxY not known, this is the initial QRT behaviour)
             } else {
                 // If breaking means we're after maxY, then we won't do it.
                 // Hopefully KWord will create more pages.

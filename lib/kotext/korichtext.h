@@ -522,7 +522,10 @@ public:
     KoTextFlow();
     virtual ~KoTextFlow();
 
+    // Called by KoTextDocument::setWidth()
     virtual void setWidth( int width );
+
+    // This is the value returned by KoTextDocument::width()
     int width() const { return w; }
 
     //virtual void setPageSize( int ps );

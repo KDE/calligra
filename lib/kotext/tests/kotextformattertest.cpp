@@ -28,6 +28,7 @@ public:
     void oneLineTest();
     void noHeightTest();
     void noWidthEverTest();
+    void tooWideChar();
 
 private:
     KoZoomHandler* zh;
@@ -39,22 +40,33 @@ class TextFlow : public KoTextFlow
 {
 public:
     TextFlow( int availableWidth, int availableHeight )
-        : m_availableWidth( availableWidth ), m_availableHeight( availableHeight )
-        {}
+        : m_availableWidth( availableWidth ), m_availableHeight( availableHeight ),
+          m_leftMargin( 0 )
+    {
+        setWidth( m_availableWidth );
+    }
     virtual int availableHeight() const {
         return m_availableHeight;
+    }
+    void setLeftMargin( int lm ) {
+        m_leftMargin = lm;
     }
     virtual void adjustMargins( int yp, int h, int reqMinWidth, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* ) {
         Q_UNUSED(yp);
         Q_UNUSED(h);
         Q_UNUSED(reqMinWidth);
-        Q_UNUSED(leftMargin);
         Q_UNUSED(rightMargin);
-        pageWidth = m_availableWidth;
+        if ( m_leftMargin ) {
+            leftMargin = m_leftMargin;
+            pageWidth = m_availableWidth - m_leftMargin;
+            kdDebug() << "adjustMargins: returning leftMargin=" << leftMargin << " pageWidth=" << pageWidth << endl;
+        } else
+            pageWidth = m_availableWidth;
     }
 private:
     int m_availableWidth;
     int m_availableHeight;
+    int m_leftMargin;
 };
 
 KoTextFormatterTest::KoTextFormatterTest()
@@ -110,13 +122,35 @@ void KoTextFormatterTest::noWidthEverTest()
     // If it doesn't find any (and hits maxY), then it 'aborts', i.e. no line-breaking,
     // but still goes over each character to set them all correctly; and usually KWord
     // would create a new page and reformat the paragraph
-    doc->setFlow( new TextFlow( 0, 2000 ) );
+    TextFlow* flow = new TextFlow( 1000, 2000 );
+    flow->setLeftMargin( 1000 );
+    doc->setFlow( flow );
+
     doc->clear(true);
     KoTextParag* parag = doc->firstParag();
     parag->append( "abcdefghi" );
     parag->format();
     // The resulting paragraph is NOT marked as formatted. See kotextformatter.cc -r1.79
     assert( !parag->isValid() );
+    doc->clear(false);
+    doc->setFlow( new KoTextFlow ); // default
+}
+
+void KoTextFormatterTest::tooWideChar()
+{
+    kdDebug() << k_funcinfo << endl;
+    // We test the case of formatting where there is not enough width
+    // for the character (e.g. a very large inline table, larger than the document).
+    // Expected result: the formatter goes down until it finds more width,
+    // gives up, and come back up.
+    doc->setFlow( new TextFlow( 10, 2000 ) );
+    doc->clear(true);
+    KoTextParag* parag = doc->firstParag();
+    parag->append( "a" );
+    parag->format();
+    assert( parag->isValid() );
+    assert( parag->lines() == 1 );
+
     doc->clear(false);
     doc->setFlow( new KoTextFlow ); // default
 }
@@ -180,6 +214,7 @@ int main (int argc, char ** argv)
     test.counterAndBigChar();
     test.noHeightTest();
     test.noWidthEverTest();
+    test.tooWideChar();
 
     return 0;
 }
