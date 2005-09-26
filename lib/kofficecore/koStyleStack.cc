@@ -275,6 +275,19 @@ QString KoStyleStack::userStyleName() const
     return "Standard";
 }
 
+QString KoStyleStack::userStyleDisplayName() const
+{
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    while ( it != m_stack.begin() )
+    {
+        --it;
+        //kdDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "display-name") << endl;
+        if ( isUserStyle( *it ) )
+            return (*it).attributeNS( m_styleNSURI, "display-name", QString::null );
+    }
+    return QString::null; // no display name, this can happen since it's optional
+}
+
 void KoStyleStack::setTypeProperties( const char* typeProperties )
 {
     m_propertiesTagName = typeProperties == 0 ? QCString( "properties" ) : ( QCString( typeProperties ) + "-properties" );

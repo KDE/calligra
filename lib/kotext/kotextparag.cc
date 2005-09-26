@@ -2730,6 +2730,9 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
         if ( !styleName.isEmpty() )
         {
             style = styleCollection->findStyle( styleName );
+            // When pasting the style names are random, the display names matter
+            if (!style)
+                style = styleCollection->findTranslatedStyle( context.styleStack().userStyleDisplayName() );
             if (!style)
             {
                 kdError(32500) << "Cannot find style \"" << styleName << "\" - using Standard" << endl;

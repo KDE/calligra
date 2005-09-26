@@ -152,6 +152,12 @@ public:
     QString userStyleName() const;
 
     /**
+     * Return the display name of the style specified by the user,
+     * i.e. not an auto style
+     */
+    QString userStyleDisplayName() const;
+
+    /**
      * Set the type of properties that will be looked for.
      * For instance setTypeProperties("paragraph") will make hasAttribute() and attribute()
      * look into "paragraph-properties".
