@@ -1500,7 +1500,6 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
                   ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
                     || localName == "list" || localName == "numbered-paragraph" ) )  // OASIS
         {
-            kdDebug(32500)<<" list \n";
             lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
         }
         else if ( isTextNS && localName == "section" ) // Temporary support (###TODO)

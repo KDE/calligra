@@ -217,6 +217,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                 m_style = STYLE_CIRCLEBULLET;
                 break;
             case 0x25CF: // large disc -> disc
+            case 0xF0B7: // #113361
                 m_style = STYLE_DISCBULLET;
                 break;
             case 0xE00C: // losange - TODO in kotext. Not in OASIS either (reserved Unicode area!)
@@ -229,6 +230,9 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                          // mapping (both ways) to box for now.
                 m_style = STYLE_BOXBULLET;
                 break;
+            default:
+                kdWarning() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
+                // fallback
             case 0x2794: // arrow
             case 0x2717: // cross
             case 0x2714: // checkmark
@@ -236,11 +240,6 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                 // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
                 m_customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
                 // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
-                break;
-            default:
-                kdWarning() << "Unhandled bullet code 0x" << QString::number( m_customBulletChar.unicode(), 16 ) << endl;
-
-                m_style = STYLE_CIRCLEBULLET;
                 break;
             }
         } else { // can never happen
