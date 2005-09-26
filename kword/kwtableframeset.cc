@@ -3040,7 +3040,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
             return;
         setCurrentCell( fs );
     }
-    else
+    else if ( textframeSet )
     {
         if ( !textframeSet->textObject()->protectContent() )
         {
