@@ -25,7 +25,6 @@ libkspreadcommon_la_SOURCES =  \
         kspread_events.cc  \
         kspread_factory.cc \
         kspread_format.cc \
-        kspread_functions.cc \
         kspread_functions_conversion.cc \
         kspread_functions_database.cc \
         kspread_functions_datetime.cc \
@@ -40,7 +39,6 @@ libkspreadcommon_la_SOURCES =  \
         kspread_functions_text.cc \
         kspread_functions_trig.cc  \
         kspread_handler.cc \
-        kspread_interpreter.cc \
         kspread_locale.cc \
         kspread_map.cc \
         kspread_numformat.cc \
