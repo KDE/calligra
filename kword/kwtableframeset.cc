@@ -891,7 +891,7 @@ bool KWTableFrameSet::hasSelectedFrame()
 
 void KWTableFrameSet::moveBy( double dx, double dy ) {
     bool redraw=false;
-    kdDebug(32004) << "KWTableFrameSet::moveBy(" << dx<<","<<dy<<")\n";
+    kdDebug(32004) << "KWTableFrameSet(" << getName() << ")::moveBy(" << dx<<","<<dy<<")\n";
     //for(unsigned int i=0; i < m_rowPositions.count() ; kdDebug(32004) << "row " << i << ": " << m_rowPositions[i++] << endl);
     if(!(dy > -0.001 && dy < 0.001)) {
         redraw=true;

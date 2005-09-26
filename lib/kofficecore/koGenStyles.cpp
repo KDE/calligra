@@ -53,7 +53,7 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, bool 
             forceNumbering = true;
         }
         styleName = makeUniqueName( styleName, forceNumbering );
-        m_styleNames.insert( styleName, true );
+        m_styleNames.insert( styleName, false );
         it = m_styleMap.insert( style, styleName );
         NamedStyle s;
         s.style = &it.key();
@@ -76,13 +76,24 @@ QString KoGenStyles::makeUniqueName( const QString& base, bool forceNumbering ) 
     return name;
 }
 
-QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type ) const
+
+void KoGenStyles::markStyleForStylesXml( const QString& name )
+{
+    NameMap::iterator it = m_styleNames.find( name );
+    if ( it == m_styleNames.end() ) {
+        kdWarning(30003) << "Style to be marked was not found:" << name << endl;
+        return;
+    }
+    it.data() = true;
+}
+
+QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStylesXml ) const
 {
     QValueList<KoGenStyles::NamedStyle> lst;
     StyleArray::const_iterator it = m_styleArray.begin();
     StyleArray::const_iterator end = m_styleArray.end();
     for ( ; it != end ; ++it ) {
-        if ( (*it).style->type() == type ) {
+        if ( (*it).style->type() == type && m_styleNames[(*it).name] == markedForStylesXml ) {
             //NamedStyle s;
             //s.style = (*it).style;
             //s.name = (*it).name;

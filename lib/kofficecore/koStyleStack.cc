@@ -85,7 +85,7 @@ void KoStyleStack::push( const QDomElement& style )
 {
     m_stack.append( style );
 #ifdef DEBUG_STYLESTACK
-    kdDebug(30003) << "pushed " << style.attribute("style:name") << " -> count=" << m_stack.count() << endl;
+    kdDebug(30003) << "pushed " << style.attributeNS( m_styleNSURI, "name", QString::null ) << " -> count=" << m_stack.count() << endl;
 #endif
 }
 
@@ -267,7 +267,7 @@ QString KoStyleStack::userStyleName() const
     while ( it != m_stack.begin() )
     {
         --it;
-        //kdDebug(30003) << k_funcinfo << (*it).attribute("style:name") << endl;
+        //kdDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "name") << endl;
         if ( isUserStyle( *it ) )
             return (*it).attributeNS( m_styleNSURI, "name", QString::null );
     }

@@ -49,6 +49,11 @@ class KoGenStyle;
  * Since this is used for saving only, it doesn't feature refcounting, nor
  * removal of individual styles.
  *
+ * NOTE: the use of KoGenStyles isn't mandatory, of course. If the application
+ * is already designed with user and automatic styles in mind for a given
+ * set of properties, it can go ahead and save all styles directly (after
+ * ensuring they have unique names).
+ *
  * @author David Faure <faure@kde.org>
  */
 class KOFFICECORE_EXPORT KoGenStyles
@@ -90,8 +95,13 @@ public:
     /**
      * Return all styles of a given type
      * Use this for saving the styles
+     *
+     * @param type the style type, see the KoGenStyle constructor
+     * @param markedForStylesXml if true, return only style marked for styles.xml,
+     * otherwise only those NOT marked for styles.xml.
+     * @see markStyleForStylesXml
      */
-    QValueList<NamedStyle> styles( int type ) const;
+    QValueList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
 
     /**
      * @return an existing style by name
@@ -107,13 +117,31 @@ public:
      */
     KoGenStyle* styleForModification( const QString& name );
 
+    /**
+     * Mark a given automatic style as being needed in styles.xml.
+     * For instance styles used by headers and footers need to go there, since
+     * they are saved in styles.xml, and styles.xml must be independent from content.xml.
+     *
+     * This isn't a KoGenStyle property since it doesn't make the style any different,
+     * it's only the file in which it gets saved which differs; it's still usable
+     * from content.xml of course.
+     * This operation can't be undone; once styles are promoted they can't go back
+     * to being content.xml-only.
+     *
+     * @see styles
+     */
+    void markStyleForStylesXml( const QString& name );
+
 private:
     QString makeUniqueName( const QString& base, bool forceNumbering ) const;
 
     /// style definition -> name
     StyleMap m_styleMap;
 
-    /// name -> style   (used to check for name uniqueness)
+    /// Map with the style name as key.
+    /// This map is mainly used to check for name uniqueness
+    /// (in which case the value of the bool doesn't matter)
+    /// It's also used to flag automatic styles that are needed in styles.xml
     typedef QMap<QString, bool> NameMap;
     NameMap m_styleNames;
 
