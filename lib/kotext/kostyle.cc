@@ -511,6 +511,8 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // Load name
     m_name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
     m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
+    if ( m_displayName.isEmpty() )
+        m_displayName = m_name;
 
     // OOo hack
     //m_bOutline = m_name.startsWith( "Heading" );
