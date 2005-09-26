@@ -122,7 +122,7 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for de
         kdWarning(32500) << "List level style for level " << level << " in list style " << listStyleName << " not found!" << endl;
         return false;
     }
-    kdDebug(32500) << "Pushing list-level-style from list-style " << listStyleName << " level " << level << endl;
+    //kdDebug(32500) << "Pushing list-level-style from list-style " << listStyleName << " level " << level << endl;
     m_listStyleStack.push( listLevelStyle );
     return true;
 }
