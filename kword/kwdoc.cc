@@ -2818,7 +2818,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
 
     savingContext.writeFontFaces( *contentWriter );
     contentWriter->startElement( "office:automatic-styles" );
-    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles, savingContext, false );
+    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles, false );
     contentWriter->endElement(); // office:automatic-styles
 
     oasisStore.closeContentWriter();
@@ -3009,6 +3009,8 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
 
 void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const
 {
+    Q_UNUSED( savingContext ); // maybe we need it later again :)
+
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
@@ -3161,7 +3163,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         stylesWriter->endElement(); // style:page-layout
 
         // Headers and footers might have created new automatic parag/text styles -> save those
-        KWOasisSaver::writeAutomaticStyles( *stylesWriter, mainStyles, savingContext, true );
+        KWOasisSaver::writeAutomaticStyles( *stylesWriter, mainStyles, true );
 
         stylesWriter->endElement(); // office:automatic-styles
     }

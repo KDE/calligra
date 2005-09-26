@@ -62,7 +62,7 @@ public:
     QByteArray data() const;
 
     /// Helper function, also used by KWDocument.
-    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context, bool stylesDotXml );
+    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml );
 
     static const char* selectionMimeType();
 
