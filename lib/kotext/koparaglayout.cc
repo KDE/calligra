@@ -401,8 +401,11 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 //static
 Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const QCString& str )
 {
-    return str == "left" ? Qt::AlignLeft :
+    return
+        str == "left" ? Qt::AlignLeft :
         str == "right" ? Qt::AlignRight :
+        str == "start" ? Qt::AlignLeft :
+        str == "end" ? Qt::AlignRight :
         str == "center" ? Qt::AlignHCenter :
         str == "justify" ? Qt::AlignJustify :
         str == "start" ? Qt::AlignAuto // i.e. direction-dependent
