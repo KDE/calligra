@@ -275,9 +275,9 @@ const KoKWHeaderFooter& KoPageLayoutDia::getKWHeaderFooter()
     else
         kwhf.header = HF_SAME;
 
-    kwhf.ptHeaderBodySpacing = KoUnit::fromUserValue( nHSpacing->value(), m_unit );
-    kwhf.ptFooterBodySpacing = KoUnit::fromUserValue( nFSpacing->value(), m_unit );
-    kwhf.ptFootNoteBodySpacing = KoUnit::fromUserValue( nFNSpacing->value(), m_unit);
+    kwhf.ptHeaderBodySpacing = nHSpacing->value();
+    kwhf.ptFooterBodySpacing = nFSpacing->value();
+    kwhf.ptFootNoteBodySpacing = nFNSpacing->value();
     if ( rfFirst->isChecked() && rfEvenOdd->isChecked() )
         kwhf.footer = HF_FIRST_EO_DIFF;
     else if ( rfFirst->isChecked() )
@@ -579,7 +579,7 @@ void KoPageLayoutDia::setupTab3()
     QString str = KoUnit::unitName( m_unit );
 
 
-    QLabel *lCSpacing = new QLabel( i18n("Column &spacing:").arg(str), tab3 );
+    QLabel *lCSpacing = new QLabel( i18n("Column &spacing:"), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new KoUnitDoubleSpinBox( tab3 );
@@ -638,14 +638,16 @@ void KoPageLayoutDia::setupTab4()
     if ( kwhf.header == HF_EO_DIFF || kwhf.header == HF_FIRST_EO_DIFF )
         rhEvenOdd->setChecked( true );
 
-    QLabel *lHSpacing = new QLabel( i18n("Spacing between header and body (%1):").arg(str), gHeader );
+    QLabel *lHSpacing = new QLabel( i18n("Spacing between header and body:"), gHeader );
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
-    nHSpacing = new KDoubleNumInput( gHeader, "" );
+    nHSpacing = new KoUnitDoubleSpinBox( gHeader, "" );
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
-    nHSpacing->setValue( KoUnit::toUserValue( kwhf.ptHeaderBodySpacing, m_unit ) );
+    nHSpacing->setValue( kwhf.ptHeaderBodySpacing );
+    nHSpacing->setUnit( m_unit );
+
 
     headerGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
@@ -668,14 +670,15 @@ void KoPageLayoutDia::setupTab4()
     if ( kwhf.footer == HF_EO_DIFF || kwhf.footer == HF_FIRST_EO_DIFF )
         rfEvenOdd->setChecked( true );
 
-    QLabel *lFSpacing = new QLabel( i18n("Spacing between footer and body (%1):").arg(str), gFooter );
+    QLabel *lFSpacing = new QLabel( i18n("Spacing between footer and body:"), gFooter );
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
-    nFSpacing = new KDoubleNumInput( gFooter, "" );
+    nFSpacing = new KoUnitDoubleSpinBox( gFooter, "" );
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
-    nFSpacing->setValue(KoUnit::toUserValue( kwhf.ptFooterBodySpacing, m_unit ) );
+    nFSpacing->setValue( kwhf.ptFooterBodySpacing );
+    nFSpacing->setUnit( m_unit );
 
     footerGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
@@ -686,14 +689,15 @@ void KoPageLayoutDia::setupTab4()
     gFootNote->layout()->setMargin(KDialog::marginHint());
     QGridLayout *footNoteGrid = new QGridLayout( gFootNote->layout(), 2, 2 );
 
-    QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body (%1):").arg(str), gFootNote );
+    QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body:"), gFootNote );
     lFNSpacing->setAlignment( AlignRight | AlignVCenter );
     footNoteGrid->addWidget( lFNSpacing, 1, 0 );
 
-    nFNSpacing = new KDoubleNumInput( gFootNote, "" );
+    nFNSpacing = new KoUnitDoubleSpinBox( gFootNote, "" );
     footNoteGrid->addWidget( nFNSpacing, 1, 1 );
 
-    nFNSpacing->setValue(KoUnit::toUserValue( kwhf.ptFootNoteBodySpacing, m_unit ) );
+    nFNSpacing->setValue( kwhf.ptFootNoteBodySpacing );
+    nFNSpacing->setUnit( m_unit );
 
     footNoteGrid->addRowSpacing( 0, KDialog::spacingHint() );
 

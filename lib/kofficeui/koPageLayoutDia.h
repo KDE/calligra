@@ -203,9 +203,9 @@ private:
     QSpinBox *nColumns;
     KoUnitDoubleSpinBox *nCSpacing;
 
-    KDoubleNumInput *nHSpacing;
-    KDoubleNumInput *nFSpacing;
-    KDoubleNumInput *nFNSpacing;
+    KoUnitDoubleSpinBox *nHSpacing;
+    KoUnitDoubleSpinBox *nFSpacing;
+    KoUnitDoubleSpinBox *nFNSpacing;
     QCheckBox *rhFirst;
     QCheckBox *rhEvenOdd;
     QCheckBox *rfFirst;
