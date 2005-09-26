@@ -206,7 +206,7 @@ void KWPgNumVariable::recalc()
 
     if ( m_subtype == VST_PGNUM_TOTAL )
     {
-        m_varValue = QVariant(m_doc->numPages()+m_varColl->variableSetting()->startingPage()-1);
+        m_varValue = QVariant(m_doc->numPages()+m_varColl->variableSetting()->startingPageNumber()-1);
         resize();
     }
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()

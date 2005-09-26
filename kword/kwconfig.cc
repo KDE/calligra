@@ -757,7 +757,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QHBox* hbStartingPage = new QHBox( gbDocumentSettings );
     QLabel* labelStartingPage = new QLabel(i18n("Starting page number:"), hbStartingPage);
 
-    m_oldStartingPage=doc->variableCollection()->variableSetting()->startingPage();
+    m_oldStartingPage=doc->variableCollection()->variableSetting()->startingPageNumber();
     m_variableNumberOffset=new KIntNumInput(hbStartingPage);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);

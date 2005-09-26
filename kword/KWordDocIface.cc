@@ -176,12 +176,12 @@ void KWordDocIface::setShowStatusBar( bool _status )
 
 int KWordDocIface::startingPage()const
 {
-    return doc->variableCollection()->variableSetting()->startingPage();
+    return doc->variableCollection()->variableSetting()->startingPageNumber();
 }
 
 void KWordDocIface::setStartingPage(int nb)
 {
-    doc->variableCollection()->variableSetting()->setStartingPage(nb);
+    doc->variableCollection()->variableSetting()->setStartingPageNumber(nb);
     doc->recalcVariables(VT_PGNUM);
 }
 

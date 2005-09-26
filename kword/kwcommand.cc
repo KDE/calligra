@@ -1568,13 +1568,13 @@ KWChangeStartingPageCommand::KWChangeStartingPageCommand( const QString &name, K
 
 void KWChangeStartingPageCommand::execute()
 {
-    m_doc->variableCollection()->variableSetting()->setStartingPage(newStartingPage);
+    m_doc->variableCollection()->variableSetting()->setStartingPageNumber(newStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
 void KWChangeStartingPageCommand::unexecute()
 {
-    m_doc->variableCollection()->variableSetting()->setStartingPage(oldStartingPage);
+    m_doc->variableCollection()->variableSetting()->setStartingPageNumber(oldStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
