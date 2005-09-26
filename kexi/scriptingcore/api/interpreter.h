@@ -49,12 +49,10 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param manager The \a Manager instance used to
-             *        create this interpreter.
              * \param interpretername The name of the interpreter.
              *        This could be something like "kjs" or "python".
              */
-            Interpreter(Manager* manager, const QString& interpretername);
+            Interpreter(const QString& interpretername);
 
             /**
              * Destructor.
@@ -126,8 +124,6 @@ namespace Kross { namespace Api {
             virtual Script* createScript(ScriptContainer* scriptcontainer) = 0;
 
         protected:
-            /// The Manager class this instance is child of.
-            Manager* m_manager;
             /// Name of this interpreter.
             QString m_interpretername;
             /// List of mimetypes this interpreter supports.

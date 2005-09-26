@@ -24,9 +24,8 @@
 
 using namespace Kross::Api;
 
-Interpreter::Interpreter(Manager* manager, const QString& interpretername)
-    : m_manager(manager)
-    , m_interpretername(interpretername)
+Interpreter::Interpreter(const QString& interpretername)
+    : m_interpretername(interpretername)
 {
 }
 

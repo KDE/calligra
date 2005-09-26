@@ -35,8 +35,8 @@ namespace Kross { namespace Kjs {
 
 }}
 
-KjsInterpreter::KjsInterpreter(Kross::Api::Manager* manager, const QString& interpretername)
-    : Kross::Api::Interpreter(manager, interpretername)
+KjsInterpreter::KjsInterpreter(const QString& interpretername)
+    : Kross::Api::Interpreter(interpretername)
 {
     d = new KjsInterpreterPrivate();
     //d->kjspart = new ::KJSEmbed::KJSEmbedPart(0L, "console", this, "krosskjs");

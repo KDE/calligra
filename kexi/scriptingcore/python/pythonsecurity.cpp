@@ -57,7 +57,7 @@ PythonSecurity::~PythonSecurity()
 void PythonSecurity::initRestrictedPython()
 {
     try {
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
         PyObject* pymodule = PyImport_ImportModuleEx(
             "RestrictedPython", // name of the module being imported (may be a dotted name)
             mainmoduledict.ptr(), // reference to the current global namespace
@@ -112,7 +112,7 @@ Py::Object PythonSecurity::_getattr_(const Py::Tuple& args)
 void PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
 {
     try {
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
 
         PyObject* func = PyDict_GetItemString(m_pymodule->getDict().ptr(), "compile_restricted");
         if(! func)

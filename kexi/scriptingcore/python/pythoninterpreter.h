@@ -35,6 +35,7 @@ namespace Kross { namespace Python {
     // Forward declarations.
     class PythonSecurity;
     class PythonModule;
+    class PythonInterpreterPrivate;
 
     /**
      * Python interpreter bridge.
@@ -44,18 +45,12 @@ namespace Kross { namespace Python {
      */
     class PythonInterpreter : public Kross::Api::Interpreter
     {
-            // The friend-classes that need to access the
-            // internal interpreter functionality.
-            friend class PythonModule;
-            friend class PythonScript;
-            friend class PythonSecurity;
-
         public:
 
             /**
              * Constructor.
              */
-            PythonInterpreter(Kross::Api::Manager* manager, const QString& interpretername);
+            PythonInterpreter(const QString& interpretername);
 
             /**
              * Destructor.
@@ -69,23 +64,21 @@ namespace Kross { namespace Python {
             virtual const QStringList mimeTypes();
 
             /**
-             * Return a \a PythonScript instance.
+             * \return a \a PythonScript instance.
              */
             virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
 
-        private:
-            /// The __main__ python module.
-            PythonModule* m_mainmodule;
-            /// The \a PythonSecurity python module to wrap the RestrictedPython functionality.
-            PythonSecurity* m_security;
-
             /**
-             * Python uses so called threads to separate
-             * executions. The PyThreadState holds the
-             * thread we use for this Python bridge.
+             * \return the \a MainModule instance.
              */
-            PyThreadState* m_globalthreadstate;
-            PyThreadState* m_threadstate;
+            PythonModule* mainModule();
+
+        private:
+            /// Internal d-pointer class.
+            PythonInterpreterPrivate* d;
+
+            inline void initialize();
+            inline void finalize();
     };
 
 }}

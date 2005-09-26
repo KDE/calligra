@@ -46,7 +46,7 @@ namespace Kross { namespace Kjs {
             /**
              * Constructor.
              */
-            KjsInterpreter(Kross::Api::Manager* manager, const QString& interpretername);
+            KjsInterpreter(const QString& interpretername);
 
             /**
              * Destructor.

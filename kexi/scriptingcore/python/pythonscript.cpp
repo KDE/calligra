@@ -112,34 +112,21 @@ void PythonScript::initialize()
         moduledict["self"] = PythonExtension::toPyObject( m_scriptcontainer );
         //moduledict["parent"] = PythonExtension::toPyObject( m_manager );
 
-
-
-// Prepare local context.
-QString s =
-    "import sys\n"
-
-    "class Redirect:\n"
-    "  def __init__(self, target):\n"
-    "    self.target = target\n"
-    "  def write(self, s):\n"
-    "    self.target.call(s)\n"
-
-    "if self.has(\"stdout\"):\n"
-    "  sys.stdout = Redirect( self.get(\"stdout\") )\n"
-    "if self.has(\"stderr\"):\n"
-    "  sys.stderr = Redirect( self.get(\"stderr\") )\n"
-
-    "import cStringIO\n"
-    "sys.stdin = cStringIO.StringIO()\n"
-    ;
-Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
-PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
-if(! pyrun)
-    throw Py::Exception(); // throw exception
-Py_XDECREF(pyrun); // free the reference.
-
-
-
+/*
+        // Prepare the local context.
+        QString s =
+            //"import sys\n"
+            "if self.has(\"stdout\"):\n"
+            "  self.stdout = Redirect( self.get(\"stdout\") )\n"
+            "if self.has(\"stderr\"):\n"
+            "  self.stderr = Redirect( self.get(\"stderr\") )\n"
+            ;
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
+        PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
+        if(! pyrun)
+            throw Py::Exception(); // throw exception
+        Py_XDECREF(pyrun); // free the reference.
+*/
 
         // Compile the python script code. It will be later on request
         // executed. That way we cache the compiled code.
@@ -244,11 +231,29 @@ Kross::Api::Object::Ptr PythonScript::execute()
         if(! d->m_module)
             initialize();
 
-        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
+        // the main module dictonary.
+        Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
+        // the local context dictonary.
+        Py::Dict moduledict( d->m_module->getDict().ptr() );
+
+        // Initialize context before execution.
+        QString s =
+            "import sys\n"
+            "if self.has(\"stdout\"):\n"
+            "  sys.stdout = Redirect( self.get(\"stdout\") )\n"
+            "if self.has(\"stderr\"):\n"
+            "  sys.stderr = Redirect( self.get(\"stderr\") )\n"
+            ;
+        PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
+        if(! pyrun)
+            throw Py::Exception(); // throw exception
+        Py_XDECREF(pyrun); // free the reference.
+
+        // Evaluate the already compiled code.
         PyObject* pyresult = PyEval_EvalCode(
             (PyCodeObject*)d->m_code->ptr(),
             mainmoduledict.ptr(),
-            d->m_module->getDict().ptr()
+            moduledict.ptr()
         );
         if(! pyresult)
             throw Py::Exception();
@@ -258,7 +263,6 @@ Kross::Api::Object::Ptr PythonScript::execute()
         kdDebug()<<"PythonScript::execute() result="<<result.as_string().c_str()<<endl;
 #endif
 
-        Py::Dict moduledict( d->m_module->getDict().ptr() );
         for(Py::Dict::iterator it = moduledict.begin(); it != moduledict.end(); ++it) {
             Py::Dict::value_type vt(*it);
             if(PyClass_Check( vt.second.ptr() )) {

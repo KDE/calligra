@@ -24,6 +24,9 @@
 //#include "pythonextension.h"
 #include "../api/variant.h"
 
+#include <kglobal.h>
+#include <kstandarddirs.h>
+
 extern "C"
 {
     /**
@@ -37,29 +40,53 @@ extern "C"
      */
     void* krosspython_instance(Kross::Api::Manager* manager, const QString& interpretername)
     {
-        return new Kross::Python::PythonInterpreter(manager, interpretername);
+//TODO do we need the manager?
+        //return new Kross::Python::PythonInterpreter(manager, interpretername);
+        return new Kross::Python::PythonInterpreter(interpretername);
     }
 };
 
 using namespace Kross::Python;
 
-PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString& interpretername)
-    : Kross::Api::Interpreter(manager, interpretername)
-    , m_globalthreadstate(0)
+namespace Kross { namespace Python {
+
+    /// \internal
+    class PythonInterpreterPrivate
+    {
+        public:
+
+            /// The __main__ python module.
+            PythonModule* mainmodule;
+
+            /// The \a PythonSecurity python module to wrap the RestrictedPython functionality.
+            PythonSecurity* security;
+
+            /**
+             * Python uses so called threads to separate
+             * executions. The PyThreadState holds the
+             * thread we use for this Python bridge.
+             */
+            PyThreadState* globalthreadstate;
+            PyThreadState* threadstate;
+    };
+
+}}
+
+PythonInterpreter::PythonInterpreter(const QString& interpretername)
+    : Kross::Api::Interpreter(interpretername)
+    , d(new PythonInterpreterPrivate())
 {
-    // Options the python interpreter spends.
+    // Initialize the python interpreter.
+    initialize();
+
+    // Options the python interpreter provides.
     m_options.replace(
         "restricted",
         new Option(QString("Restricted"), QString("Enable RestrictedPython module."), QVariant((bool)false))
     );
 
-    //kdDebug() << "Py_GetVersion()=" << Py_GetVersion() << " Py_GetPath()=" << Py_GetPath() << endl;
-
     // Set name of the program.
     Py_SetProgramName(const_cast<char*>("Kross"));
-
-    // Initialize python.
-    Py_Initialize();
 
     // Set arguments.
     char* comm[0];
@@ -68,25 +95,32 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
 
     // Set the python path.
     //PySys_SetPath(Py_GetPath());
+    QString path = Py_GetPath();
+    QStringList dirs = KGlobal::dirs()->findDirs("appdata", "scripts/kross");
+    for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it) {
+        path.append(
+#if defined(Q_WS_WIN)
+                ";" // windows delimiter for python sys-paths.
+#else
+                ":"
+#endif
+                + *it);
+    }
+    PySys_SetPath( const_cast<char*>( path.latin1() ) );
 
-    // First we have to initialize threading if python supports it.
-    PyEval_InitThreads();
-    // The main thread. We don't use it later.
-    m_globalthreadstate = PyThreadState_Swap(NULL);
-    //m_globalthreadstate = PyEval_SaveThread();
-    // We use an own sub-interpreter for each thread.
-    m_threadstate = Py_NewInterpreter();
-    // Note that this application has multiple threads.
-    // It maintains a separate interp (sub-interpreter) for each thread.
-    PyThreadState_Swap(m_threadstate);
-    // Work done, release the lock.
-    PyEval_ReleaseLock();
+    kdDebug() << "Python ProgramName: " << Py_GetProgramName() << endl;
+    kdDebug() << "Python ProgramFullPath: " << Py_GetProgramFullPath() << endl;
+    kdDebug() << "Python Version: " << Py_GetVersion() << endl;
+    kdDebug() << "Python Platform: " << Py_GetPlatform() << endl;
+    kdDebug() << "Python Prefix: " << Py_GetPrefix() << endl;
+    kdDebug() << "Python ExecPrefix: " << Py_GetExecPrefix() << endl;
+    kdDebug() << "Python Path: " << Py_GetPath() << endl;
 
     // Initialize the main module.
-    m_mainmodule = new PythonModule(this);
+    d->mainmodule = new PythonModule(this);
 
     // The main dictonary.
-    Py::Dict moduledict = m_mainmodule->getDict();
+    Py::Dict moduledict = d->mainmodule->getDict();
     //TODO moduledict["KrossPythonVersion"] = Py::Int(KROSS_PYTHON_VERSION);
 
     // Prepare the interpreter.
@@ -96,14 +130,18 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
         // Dirty hack to get sys.argv defined. Needed for e.g. TKinter.
         "sys.argv = ['']\n"
 
-        //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
-        //"sys.stdout = self._bu\n"
-        //"sys.stderr = self._bu\n"
-
         // On the try to read something from stdin always return an empty
         // string. That way such reads don't block our script.
         "import cStringIO\n"
         "sys.stdin = cStringIO.StringIO()\n"
+
+        // Class to redirect something. We use this class e.g. to redirect
+        // <stdout> and <stderr> to a c++ event.
+        "class Redirect:\n"
+        "  def __init__(self, target):\n"
+        "    self.target = target\n"
+        "  def write(self, s):\n"
+        "    self.target.call(s)\n"
 
         // Wrap builtin __import__ method. All import requests are
         // first redirected to our PythonModule.import method and
@@ -130,23 +168,47 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     Py_XDECREF(pyrun); // free the reference.
 
     // Initialize the RestrictedPython module.
-    m_security = new PythonSecurity(this);
+    d->security = new PythonSecurity(this);
 }
 
 PythonInterpreter::~PythonInterpreter()
 {
     // Free the zope security module.
-    delete m_security; m_security = 0;
-
+    delete d->security; d->security = 0;
     // Free the main module.
-    delete m_mainmodule; m_mainmodule = 0;
+    delete d->mainmodule; d->mainmodule = 0;
+    // Finalize the python interpreter.
+    finalize();
+    // Delete the private d-pointer.
+    delete d;
+}
 
+void PythonInterpreter::initialize()
+{
+    // Initialize python.
+    Py_Initialize();
+    // First we have to initialize threading if python supports it.
+    PyEval_InitThreads();
+    // The main thread. We don't use it later.
+    d->globalthreadstate = PyThreadState_Swap(NULL);
+    //d->globalthreadstate = PyEval_SaveThread();
+    // We use an own sub-interpreter for each thread.
+    d->threadstate = Py_NewInterpreter();
+    // Note that this application has multiple threads.
+    // It maintains a separate interp (sub-interpreter) for each thread.
+    PyThreadState_Swap(d->threadstate);
+    // Work done, release the lock.
+    PyEval_ReleaseLock();
+}
+
+void PythonInterpreter::finalize()
+{
     // Lock threads.
     PyEval_AcquireLock();
     // Free the used thread.
-    PyEval_ReleaseThread(m_threadstate);
+    PyEval_ReleaseThread(d->threadstate);
     // Set back to rememberd main thread.
-    PyThreadState_Swap(m_globalthreadstate);
+    PyThreadState_Swap(d->globalthreadstate);
     // Work done, unlock.
     PyEval_ReleaseLock();
     // Finalize python.
@@ -163,3 +225,7 @@ Kross::Api::Script* PythonInterpreter::createScript(Kross::Api::ScriptContainer*
     return new PythonScript(this, scriptcontainer);
 }
 
+PythonModule* PythonInterpreter::mainModule()
+{
+    return d->mainmodule;
+}
