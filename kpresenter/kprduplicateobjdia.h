@@ -27,6 +27,7 @@
 class KIntNumInput;
 class KDoubleNumInput;
 class KPresenterDoc;
+class KoUnitDoubleSpinBox;
 
 class KPrDuplicatObjDia : public KDialogBase
 {
@@ -43,8 +44,8 @@ public:
 protected:
     KIntNumInput *m_nbCopy;
     KDoubleNumInput *m_rotation;
-    KDoubleNumInput *m_increaseX, *m_increaseY;
-    KDoubleNumInput *m_moveX, *m_moveY;
+    KoUnitDoubleSpinBox *m_increaseX, *m_increaseY;
+    KoUnitDoubleSpinBox *m_moveX, *m_moveY;
     KPresenterDoc *m_doc;
 
 };

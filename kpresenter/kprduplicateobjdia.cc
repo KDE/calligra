@@ -32,6 +32,7 @@
 #include <knumvalidator.h>
 #include "kpresenter_doc.h"
 #include <kseparator.h>
+#include <koUnitWidgets.h>
 
 KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, const char *name)
     : KDialogBase( parent, name, true, "", Ok | Cancel, Ok, true )
@@ -57,25 +58,35 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, con
 
     tmp=new KSeparator(page);
 
-    lab=new QLabel(i18n("Increase width (%1):").arg(m_doc->getUnitName()), page);
-    m_increaseX= new KDoubleNumInput( page );
-    m_increaseX->setRange( 0.0, KoUnit::toUserValue( pageRect.width(), unit ), KoUnit::toUserValue( 1, unit ), false);
+    lab=new QLabel(i18n("Increase width:"), page);
+    m_increaseX= new KoUnitDoubleSpinBox( page );
+    m_increaseX->setMinValue(0.0);
+    m_increaseX->setMaxValue(pageRect.width());
+    m_increaseX->changeValue( 1 );
+    m_increaseX->setUnit(unit);
 
-    lab=new QLabel(i18n("Increase height (%1):").arg(m_doc->getUnitName()), page);
-    m_increaseY= new KDoubleNumInput( page );
-    m_increaseY->setRange( 0.0, KoUnit::toUserValue( pageRect.height(), unit ), KoUnit::toUserValue( 1, unit ), false);
-
+    lab=new QLabel(i18n("Increase height:"), page);
+    m_increaseY= new KoUnitDoubleSpinBox( page );
+    m_increaseY->setMinValue(0.0);
+    m_increaseY->setMaxValue(pageRect.height());
+    m_increaseY->changeValue( 1 );
+    m_increaseY->setUnit(unit);
 
     tmp=new KSeparator(page);
-    lab=new QLabel(i18n("Move X (%1):").arg(m_doc->getUnitName()), page);
-    m_moveX= new KDoubleNumInput( page );
-    m_moveX->setRange( 0.0, KoUnit::toUserValue( pageRect.width(), unit ), KoUnit::toUserValue( 1, unit ) , false);
-    m_moveX->setValue( KoUnit::toUserValue( 20.0, unit ) );
+    lab=new QLabel(i18n("Move X:"), page);
+    m_moveX= new KoUnitDoubleSpinBox( page );
+    m_moveX->setMinValue(0.0);
+    m_moveX->setMaxValue(pageRect.width());
+    m_moveX->changeValue( 20.0 );
+    m_moveX->setUnit(unit);
 
-    lab=new QLabel(i18n("Move Y (%1):").arg(m_doc->getUnitName()), page);
-    m_moveY= new KDoubleNumInput( page );
-    m_moveY->setRange( 0.0, KoUnit::toUserValue( pageRect.height(), unit ), KoUnit::toUserValue( 1, unit ), false);
-    m_moveY->setValue( KoUnit::toUserValue( 20.0, unit ) );
+
+    lab=new QLabel(i18n("Move Y:"), page);
+    m_moveY= new KoUnitDoubleSpinBox( page );
+    m_moveY->setMinValue(0.0);
+    m_moveY->setMaxValue(pageRect.height());
+    m_moveY->changeValue( 20.0 );
+    m_moveY->setUnit(unit);
 
     resize( 200,100 );
 }
@@ -92,22 +103,22 @@ double KPrDuplicatObjDia::angle() const
 
 double KPrDuplicatObjDia::increaseX() const
 {
-    return QMAX(0, KoUnit::fromUserValue( m_increaseX->value(), m_doc->getUnit() ));
+    return QMAX(0, m_increaseX->value());
 }
 
 double KPrDuplicatObjDia::increaseY() const
 {
-    return QMAX(0, KoUnit::fromUserValue( m_increaseY->value(), m_doc->getUnit() ));
+    return QMAX(0, m_increaseY->value());
 }
 
 double KPrDuplicatObjDia::moveX() const
 {
-    return QMAX(0, KoUnit::fromUserValue( m_moveX->value(), m_doc->getUnit() ));
+    return QMAX(0, m_moveX->value());
 }
 
 double KPrDuplicatObjDia::moveY() const
 {
-    return QMAX(0, KoUnit::fromUserValue( m_moveY->value(), m_doc->getUnit() ));
+    return QMAX(0, m_moveY->value());
 }
 
 
