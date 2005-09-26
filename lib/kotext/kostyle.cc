@@ -319,8 +319,8 @@ void KoStyleCollection::saveOasisOutlineStyles( KoXmlWriter& writer ) const
         if ( styles[i] ) {
             if ( first ) {
                 writer.startElement( "text:outline-style" );
-	        first = false;
-	    }
+                first = false;
+            }
             writer.startElement( "text:outline-level-style" );
             styles[i]->paragLayout().counter->saveOasisListLevel( writer, true, true );
             writer.endElement();
@@ -582,7 +582,8 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
             // ### kword-specific attribute, see loadOasis
             gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() + 1 );
 
-        if ( m_paragLayout.counter->style() != KoParagCounter::STYLE_NONE )
+        if ( m_paragLayout.counter->numbering() != KoParagCounter::NUM_NONE &&
+             m_paragLayout.counter->style() != KoParagCounter::STYLE_NONE )
         {
             KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
             m_paragLayout.counter->saveOasis( listStyle, true );
