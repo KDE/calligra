@@ -2469,6 +2469,7 @@ void KSpreadView::autoSum()
             return;
         }
     }
+    
 
     // Try to find numbers left
     if ( d->canvas->markerColumn() > 1 )
@@ -2481,7 +2482,7 @@ void KSpreadView::autoSum()
         }
         while ( cell && cell->value().isNumber() );
 
-        if ( c + 1 < d->canvas->markerColumn() )
+        if ( c + 1 < d->canvas->markerColumn() )  
         {
             d->canvas->startChoose( QRect( c + 1, d->canvas->markerRow(), d->canvas->markerColumn() - c - 1, 1 ) );
             return;

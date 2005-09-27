@@ -134,7 +134,8 @@ public:
 
   // Store the number of line when you multirow is used (default is 0)
   int nbLines;
-
+  	  
+  
 private:
   // Don't allow implicit copy.
   CellExtra& operator=( const CellExtra& );
@@ -258,6 +259,7 @@ CellExtra* CellPrivate::extra()
       cellExtra->extraWidth   = 0.0;
       cellExtra->extraHeight  = 0.0;
       cellExtra->nbLines      = 0;
+//      cellExtra->highlight    = QColor(0,0,0);
     }
 
     return cellExtra;
@@ -2014,16 +2016,25 @@ bool KSpreadCell::calc(bool delay)
 // `coordinate' is the origin (the upper left) of the cell in document
 //              coordinates.
 //
+
 void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
                              KSpreadView    *view,
 			     const KoPoint  &coordinate,
                              const QPoint   &cellRef,
-			     bool paintBorderRight, bool paintBorderBottom,
-			     bool paintBorderLeft,  bool paintBorderTop,
+			    /* bool paintBorderRight, bool paintBorderBottom,
+			     bool paintBorderLeft,  bool paintBorderTop,*/
+			     int paintBorder,
 			     QPen & rightPen, QPen & bottomPen,
 			     QPen & leftPen,  QPen & topPen,
+			     
 			     bool drawCursor )
 {
+	
+	bool paintBorderRight = paintBorder & Border_Right;
+	bool paintBorderBottom = paintBorder & Border_Bottom;
+	bool paintBorderLeft = paintBorder & Border_Left;
+	bool paintBorderTop = paintBorder & Border_Top;
+	
   // If we are already painting this cell, then return immediately.
   // This avoids infinite recursion.
   if ( testFlag( Flag_PaintingCell ) )
@@ -2211,6 +2222,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   //
   //  FIXME: I don't like the term "force" here. Find a better one.
   if ( !isObscuringForced() )
+	 // if (!testFlag(Flag_Highlight))
     paintCellBorders( painter, rect, cellRect0,
 		      cellRef,
 		      paintBorderRight, paintBorderBottom,
@@ -2225,6 +2237,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   paintPageBorders( painter, cellRect0, cellRef,
 		    paintBorderRight, paintBorderBottom );
 
+ 
+  
   // 6. Now paint the content, if this cell isn't obscured.
   if ( !isObscured() ) {
 
@@ -2240,6 +2254,11 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 
     // 6c. Paint possible indicator for clipped text.
     paintMoreTextIndicator( painter, cellRect, backgroundColor );
+    
+     //6c. Paint cell highlight
+   /* if (highlightBorder != Border_None)
+	paintCellHighlight ( painter, cellRect, cellRef, highlightBorder, 
+    rightHighlightPen, bottomHighlightPen, leftHighlightPen, topHighlightPen );*/
 
     // 6d. Paint the text in the cell unless:
     //  a) it is empty
@@ -2309,12 +2328,17 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
           QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
 						   obscuringCellRef.y() ) );
 
+	  
 	  //kdDebug(36001) << "  painting obscuring cell "
 	  //		 << obscuringCell->name() << endl;
+	 // QPen highlightPen;
+	  
+	  //Note: Painting of highlight isn't quite right.  If several cells are merged, then the 
+	  //whole merged cell will be painted with the colour of the last cell referenced which is inside the merged range
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef,
-				    true, true, true, true,  // borders
-				    rp, bp, lp, tp );        // new pens
+				    Border_Left|Border_Top|Border_Right|Border_Bottom,
+						    rp, bp, lp, tp); // new pens
           painter.restore();
         }
       }
@@ -2324,6 +2348,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // We are done with the painting, so remove the flag on the cell.
   clearFlag( Flag_PaintingCell );
 }
+
+
 
 // The following code was commented out in the above function.  I'll
 // leave it here in case this functionality is ever re-implemented and
@@ -2355,6 +2381,71 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     }
 #endif
 
+
+/*
+ void KSpreadCell::paintCellHighlight(QPainter& painter,
+			 const KoRect& cellRect,
+			 const QPoint& cellRef,
+			 const int highlightBorder,
+			 const QPen& rightPen,
+			 const QPen& bottomPen,
+			 const QPen& leftPen,
+			 const QPen& topPen
+			)
+{
+	//painter.drawLine(cellRect.left(),cellRect.top(),cellRect.right(),cellRect.bottom());
+	//QPen pen(d->extra()->highlight);
+	//painter.setPen(highlightPen);
+	
+	QBrush nullBrush;
+	painter.setBrush(nullBrush);
+	
+	QRect zoomedCellRect = sheet()->doc()->zoomRect( cellRect );
+	
+	//The highlight rect is just inside the main cell rect
+	//This saves the hassle of repainting nearby cells when the highlight is changed as the highlight areas
+	//do not overlap
+	zoomedCellRect.setLeft(zoomedCellRect.left()+1);
+	//zoomedCellRect.setRight(zoomedCellRect.right()-1);
+	zoomedCellRect.setTop(zoomedCellRect.top()+1);
+	//zoomedCellRect.setBottom(zoomedCellRect.bottom()-1);
+	
+	if ( cellRef.x() != KS_colMax )
+		zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
+	if ( cellRef.y() != KS_rowMax )
+	zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
+	
+	if (highlightBorder & Border_Top)
+	{
+		painter.setPen(topPen);
+		painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.top());
+	}
+	if (highlightBorder & Border_Left)
+	{
+		painter.setPen(leftPen);
+		painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.left(),zoomedCellRect.bottom());
+	}
+	if (highlightBorder & Border_Right)
+	{
+		painter.setPen(rightPen);
+		painter.drawLine(zoomedCellRect.right(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.bottom());
+	}
+	if (highlightBorder & Border_Bottom)
+	{
+		painter.setPen(bottomPen);
+		painter.drawLine(zoomedCellRect.left(),zoomedCellRect.bottom(),zoomedCellRect.right(),zoomedCellRect.bottom());
+	}
+	
+	if (highlightBorder & Border_SizeGrip)
+	{
+		QBrush brush(rightPen.color());
+		painter.setBrush(brush);
+		painter.setPen(rightPen);
+		painter.drawRect(zoomedCellRect.right()-3,zoomedCellRect.bottom()-3,4,4);
+	}
+	
+	//painter.drawRect(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.width(),zoomedCellRect.height());
+}  */
 
 // Paint all the cells that this cell obscures (helper function to paintCell).
 //
@@ -2426,13 +2517,21 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 	//        However, it looks as if we don't need to.  It works anyway.
 	bottomPen         = _bottomPen;
 	paintBorderBottom = _paintBorderBottom;
+	
+	int  paintBorder = Border_None;
+	if (paintBorderLeft) 	paintBorder |= KSpreadCell::Border_Left;
+	if (paintBorderRight) 	paintBorder |= KSpreadCell::Border_Right;
+	if (paintBorderTop)	paintBorder |= KSpreadCell::Border_Top;
+	if (paintBorderBottom)	paintBorder |= KSpreadCell::Border_Bottom;
+	
+	/*KSpreadCell::BorderSides highlightBorder = Border_None;
+	QPen highlightPen;*/
 
 	cell->paintCell( rect, painter, view,
 			 corner,
 			 QPoint( cellRef.x() + x, cellRef.y() + y ),
-			 paintBorderRight, paintBorderBottom,
-			 paintBorderLeft,  paintBorderTop,
-			 rightPen, bottomPen, leftPen, topPen );
+			 paintBorder,
+			 rightPen, bottomPen, leftPen, topPen);
       }
       xpos += cl->dblWidth();
     }

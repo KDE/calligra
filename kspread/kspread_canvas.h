@@ -40,6 +40,7 @@
 #include <koRect.h>
 
 #include "kspread_util.h"
+#include <vector>
 
 #include <koffice_export.h>
 
@@ -66,6 +67,47 @@ class QScrollBar;
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
+
+/**
+ * Holds information about a range of cells to be highlighted as they are referenced
+ * in the formula currently being edited
+ */
+   class HighlightRange
+{
+	public:
+		HighlightRange() : firstCell(0),lastCell(0),color(QColor(0,0,0)) {}
+		HighlightRange(const HighlightRange& rhs) 
+		{	
+			rhs.firstCell ? firstCell=new KSpreadPoint(*(rhs.firstCell)) : firstCell=0;
+			rhs.lastCell  ? lastCell=new KSpreadPoint(*(rhs.lastCell)) : lastCell=0;
+			color=QColor(rhs.color);
+		}
+		virtual ~HighlightRange() {delete firstCell; delete lastCell;
+			firstCell=0;lastCell=0;}
+		
+		KSpreadPoint* firstCell; //First cell in range, will either be in same row or same col as last cell
+		KSpreadPoint* lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells 
+		QColor	 color; //Colour to highlight this range with
+		
+		void getRange(KSpreadRange& rg) 
+		{ 
+			if (!firstCell) 
+			{ 
+				rg=KSpreadRange();
+				return;
+			}
+
+			if (lastCell) 
+			{
+				rg=KSpreadRange(*firstCell,*lastCell); 	
+			}
+			else
+			{
+				rg=KSpreadRange(*firstCell,*firstCell);
+			}
+		} 
+	
+};
 
 class CanvasPrivate;
 
@@ -274,6 +316,30 @@ public:
      * for the autoscroll acceleration
      */
     double autoScrollAccelerationY( int offset );
+    
+    
+    
+    /**
+    * Sets which cell ranges are highlighted and the colours used to highlight them.
+    * This is used to highlight cells referenced in the formula currently being edited for example
+    *
+    */
+    void setHighlightedRanges(std::vector<HighlightRange>* ranges);
+    
+    
+    
+    /**
+    * Resizes a highlighted range, and updates the text in the formula edit box accordingly.
+    * @param range Highlighted range to be resized.  References to this range in the formula edit
+    * box will be changed accordingly.
+    * @param newArea The new area for the highlighted range.  @see resizeHighlightedRange 
+    * normalises this area before applying it to @p range.
+    */
+    void resizeHighlightedRange(HighlightRange* range, const QRect& newArea);
+    
+	
+    
+    
 
 public slots:
     void slotScrollVert( int _value );
@@ -296,6 +362,28 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent * _ev);
     virtual void dropEvent(QDropEvent * _ev);
     virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
+    
+    /**
+     * Retrieves the highlighted ranges at the specified position.
+     * @param col Column index of cell
+     * @param row Row index of cell
+     * @param ranges A vector to be filled with pointers to HighlightRange structures containing information about the ranges
+     * which contain the the given column and row.
+     * @return True if there are any highlighted ranges at the given column and row or false otherwise.
+     */ 
+    bool getHighlightedRangesAt(const int col, const int row, std::vector<HighlightRange*>& ranges);
+	
+    /**
+     * Checks to see if there is a size grip for a highlight range at a given position. 
+     * Note that both X and Y coordinates are UNZOOMED.  To translate from a zoomed coordinate (eg. position of a mouse event) to
+     * an unzoomed coordinate, use KSpreadDoc::unzoomItX and KSpreadDoc::unzoomItY.  The document object
+     * can be accessed via view()->doc()
+     * @param x Unzoomed x coordinate to check
+     * @param y Unzoomed y coordinate to check
+     * @return A pointer to a HighlightRange struct containing information about the range, or null if there is no size grip at 
+     * the specified position.
+     */
+    HighlightRange* highlightRangeSizeGripAt(double x, double y); 
 
 private slots:
     void doAutoScroll();
@@ -367,9 +455,34 @@ private:
   void paintChooseRect(QPainter& painter, const KoRect &viewRect);
 
   void paintNormalMarker(QPainter& painter, const KoRect &viewRect);
+  
+  /**
+  * Paint the highlighted ranges of cells.  When the user is editing a formula in a text box, cells and ranges referenced
+  * in the formula are highlighted on the canvas.
+  * @param painter The painter on which to draw the highlighted ranges
+  * @param viewRect The area currently visible on the canvas
+  */
+  void paintHighlightedRanges(QPainter& painter, const KoRect& viewRect);
+  
+  /**
+  * Calculates the visible region on the canvas occupied by a range of cells on the currently active sheet.
+  * This is used for drawing the thick border around the current selection or highlights around cell range
+  * references.
+  * The results do not take into account the current zoom factor of the sheet,
+  * use KSpreadDoc::zoomRect on @p visibleRect after calling this function to get a new rectangle taking
+  * the zoom level into account.
+  * @param sheetArea The range of cells on the current sheet
+  * @param visibleRect This is set to the visible region occupied by the given range of cells
+  *
+  */
+  void sheetAreaToVisibleRect( const QRect& sheetArea,
+			       KoRect& visibleRect ); 
+  
+  
 
   void retrieveMarkerInfo( const QRect &marker, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
+  
 
 
 

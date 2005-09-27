@@ -81,7 +81,6 @@ QString util_rangeRowName( const QRect &_area)
         .arg(_area.bottom());
 }
 
-
 QString util_rangeName(const QRect &_area)
 {
     return KSpreadCell::name( _area.left(), _area.top() ) + ":" +
@@ -442,6 +441,75 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
     rightFixed = lr.columnFixed;
     topFixed = ul.rowFixed;
     bottomFixed = lr.rowFixed;
+}
+
+QString KSpreadRange::toString()
+{
+	QString result;
+	
+	if (sheet)
+	{
+		result=util_rangeName(sheet,range);		
+	}
+	else
+	{
+		result=util_rangeName(range);
+	}
+	
+	//Insert $ characters to show fixed parts of range
+	
+	int pos=result.find("!")+1;
+	Q_ASSERT(pos != -1);
+	
+	if (leftFixed)
+	{
+		result.insert(pos,'$');
+		pos++; //Takes account of extra character added in
+	}
+	if (topFixed)
+	{
+		result.insert(pos+KSpreadCell::columnName(range.left()).length(),'$');
+	}
+	
+	pos=result.find(":")+1;
+	Q_ASSERT(pos != -1);
+	
+	if (rightFixed)
+	{
+		result.insert(pos,'$');
+		pos++; //Takes account of extra character added in
+	}
+	if (bottomFixed) 
+	{
+		result.insert(pos+KSpreadCell::columnName(range.right()).length(),'$'); 
+	}
+	
+	
+	return result;
+}
+
+void KSpreadRange::getStartPoint(KSpreadPoint* pt)
+{
+	if (!isValid()) return;
+	
+	pt->setRow(startRow());
+	pt->setColumn(startCol());
+	pt->columnFixed=leftFixed;
+	pt->rowFixed=topFixed;
+	pt->sheet=sheet;
+	pt->sheetName=sheetName;
+}
+
+void KSpreadRange::getEndPoint(KSpreadPoint* pt)
+{
+	if (!isValid()) return;
+	
+	pt->setRow(endRow());
+	pt->setColumn(endCol());
+	pt->columnFixed=rightFixed;
+	pt->rowFixed=bottomFixed;
+	pt->sheet=sheet;
+	pt->sheetName=sheetName;
 }
 
 bool KSpreadRange::contains (const KSpreadPoint &cell) const

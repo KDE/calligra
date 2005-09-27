@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qrect.h>
 #include <qdatetime.h>
-
+   
 #include "kspread_global.h"
 #include "kspread_value.h"
 #include <koffice_export.h>
@@ -62,6 +62,8 @@ public:
   int column () const { return pos.x(); };
   void setRow (int r) { pos.setY (r); };
   void setColumn (int c) { pos.setX (c); };
+  
+  
 
   /*
     TODO
@@ -112,15 +114,28 @@ struct KSPREAD_EXPORT KSpreadRange
   bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
   bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
+  /** Fills a KSpreadPoint with info (row,column,sheet) about the first point in the range */
+  void getStartPoint(KSpreadPoint* pt);
+  /** Fills a KSpreadPoint with info (row,column,sheet) about the last point the range */
+  void getEndPoint(KSpreadPoint* pt);
+  
   int startRow () const { return range.top(); };
   int startCol () const { return range.left(); };
   int endRow () const { return range.bottom(); };
   int endCol () const { return range.right(); };
+  
+  void setRange(QRect& newRange) {range=newRange;}
+  void setRange(int newStartCol, int newStartRow, int newEndCol, int newEndRow)
+  { range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }
 
   /** does this range contain the given cell? */
   bool contains (const KSpreadPoint &cell) const;
   /** do these two ranges have at least one common cell? */
   bool intersects (const KSpreadRange &r) const;
+  
+  /** returns a string representation of this range, ie.
+     " SheetName! [StartCell] : [EndCell] " */
+  QString toString();
 
   KSpreadSheet* sheet;
   QString sheetName;

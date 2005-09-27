@@ -74,7 +74,7 @@ It is part of the KOffice project</description>
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>libtool</dbgshell>
+      <dbgshell>../libtool</dbgshell>
       <programargs/>
       <gdbpath/>
       <configGdbScript/>
@@ -153,17 +153,17 @@ It is part of the KOffice project</description>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>
       <includeEnums>true</includeEnums>
-      <includeTypedefs>false</includeTypedefs>
+      <includeTypedefs>true</includeTypedefs>
       <automaticCodeCompletion>true</automaticCodeCompletion>
       <automaticArgumentsHint>true</automaticArgumentsHint>
       <automaticHeaderCompletion>true</automaticHeaderCompletion>
-      <codeCompletionDelay>250</codeCompletionDelay>
+      <codeCompletionDelay>450</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <references>
       <pcs>Qt</pcs>
-      <pcs>KDElibs</pcs>
+      <pcs>KDE Libs</pcs>
     </references>
     <creategettersetter>
       <prefixGet/>
@@ -173,6 +173,11 @@ It is part of the KOffice project</description>
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
+    <qt>
+      <used>true</used>
+      <version>3</version>
+      <root>/usr/lib/qt3</root>
+    </qt>
   </kdevcppsupport>
   <kdevdocumentation>
     <projectdoc>

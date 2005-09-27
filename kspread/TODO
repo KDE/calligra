@@ -65,7 +65,7 @@ General bugs
 
 * Crashes
   + 101915: kspread crashes on exit if there is a chart in the sheet  2 ----
-  + 104420: Crash after entering a formula.			      1	----
+  + 104420: Crash after entering a formula.			      1	done
 
 * Painting
 

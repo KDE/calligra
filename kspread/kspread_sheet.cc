@@ -8712,6 +8712,7 @@ bool ChartChild::loadDocument( KoStore* _store )
 
 KoChart::Part* ChartChild::chart()
 {
+    
     assert( document()->inherits( "KoChart::Part" ) );
     return static_cast<KoChart::Part *>( document() );
 }

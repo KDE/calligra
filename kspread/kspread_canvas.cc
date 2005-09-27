@@ -50,7 +50,6 @@
 #include <qscrollbar.h>
 #include <qtimer.h>
 #include <qtooltip.h>
-
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -137,6 +136,16 @@ class CanvasPrivate
 
     // If the mouse is over some anchor ( in the sense of HTML anchors )
     QString anchor;
+    
+    //Stores information about cells referenced in the formula currently being edited,
+    //Used to highlight relevant cells
+    std::vector<HighlightRange>* highlightedRanges;
+    
+    //The highlighted range being resized by the user (using the size grip, or null if the user
+    //is not resizing a range.
+    HighlightRange* sizingHighlightRange;
+    
+   // bool mouseOverHighlightRangeSizeGrip;
 };
 
 
@@ -158,6 +167,9 @@ KSpreadCanvas::KSpreadCanvas (KSpreadView *_view)
   d->cellEditor = 0;
   d->chooseCell = false;
   d->validationInfo = 0L;
+  d->highlightedRanges = 0;
+  d->sizingHighlightRange = 0;
+ // d->mouseOverHighlightRangeSizeGrip = false;
 
   QWidget::setFocusPolicy( QWidget::StrongFocus );
 
@@ -201,6 +213,7 @@ KSpreadCanvas::~KSpreadCanvas()
 {
   delete d->scrollTimer;
   delete d->validationInfo;
+  delete d->highlightedRanges;
   delete d;
 }
 
@@ -870,6 +883,132 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
   vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( ypos + yOffset() ) );
 }
 
+bool KSpreadCanvas::getHighlightedRangesAt(const int col, const int row, std::vector<HighlightRange*>& ranges)
+{
+	if (!d->highlightedRanges)
+		return false;
+	
+	bool result=false;
+	
+	std::vector<HighlightRange>::iterator iter;
+		
+	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
+	{
+		KSpreadRange rg;
+		iter->getRange(rg);
+		KSpreadPoint pt;
+		pt.setRow(row);
+		pt.setColumn(col);
+		pt.sheet=activeSheet();
+		
+		if (rg.contains(pt))
+		{ 
+			ranges.push_back( &(*iter) );
+			result=true;
+		} 
+	}
+	
+	return result;
+}
+
+void KSpreadCanvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
+{
+	if (!range) return;
+	if (!d->cellEditor) return;
+	if (!d->editWidget) return;
+	
+	QRect normArea=newArea.normalize();
+	
+	if ( (normArea.right() > KS_colMax) || (normArea.bottom() > KS_rowMax) )
+		return;
+	 
+	
+	KSpreadRange rg;
+	range->getRange(rg);
+	
+	if (rg.range == normArea) //Don't update if no change to area
+		return;
+	
+	QString oldRangeRef=rg.toString();
+	
+	int sheetNameEndPos=oldRangeRef.find("!");
+
+	if (sheetNameEndPos == -1) return;
+	
+	oldRangeRef.remove(0,sheetNameEndPos+1); //Remove the sheet name (eg. Sheet1!A1 -> A1)
+	
+	int refSeparator=oldRangeRef.find(":");
+	
+	QString oldPointRef=oldRangeRef.mid(refSeparator+1);
+	//if ( (rg.range.width()==1) && (rg.range.height()==1) )
+	//	oldPointRef=oldRangeRef.mid(refSeparator+1);
+	
+	//Adjust range to fit new area selected by user
+	rg.setRange(normArea);
+	QString newRangeRef=rg.toString();
+	
+	newRangeRef.remove(0,sheetNameEndPos+1); //Remove sheet name, will be same name as for old reference
+	
+	if ( (rg.range.width()==1) && (rg.range.height()==1) )
+		newRangeRef.remove(0,newRangeRef.find(":")+1);
+	
+	kdDebug() << "Old Range Ref - " << oldRangeRef << " -- New Range Ref - " << newRangeRef << endl;
+	
+	QString formulaText=d->cellEditor->text();
+	
+	int pos=formulaText.find(oldRangeRef);
+	int pointPos=formulaText.find(oldPointRef);
+	
+	while ( (pos != -1) || (pointPos != -1))
+	{ 
+		bool validRef=true;
+		
+		if (pos != -1)
+		{
+			//Check that this is not part of a longer reference (eg. if we are looking for A1:A1, don't find A1:A12) 
+			if (formulaText.at ( pos - 1).isLetterOrNumber())
+				validRef=false;
+			
+			if (formulaText.at ( pos + oldRangeRef.length() ).isLetterOrNumber() )
+				validRef=false;
+		}
+		else
+		{
+			if (formulaText.at (pointPos - 1).isLetterOrNumber())
+				validRef=false;
+			
+			QChar ch=formulaText.at(pointPos + oldPointRef.length());
+			
+			if ( (ch.isLetterOrNumber()) || (ch == ':') )
+				validRef=false;
+		}
+			
+		if (validRef) 
+		{ 
+			if (pos != -1)
+				formulaText=formulaText.replace(pos,oldRangeRef.length(),newRangeRef);
+			else 
+				formulaText=formulaText.replace(pointPos,oldPointRef.length(),newRangeRef);	
+		} 
+		
+		kdDebug() << "Formula Text : " << formulaText << endl;
+		
+		if (pos != -1) 
+		{
+			pos = formulaText.find(oldRangeRef,pos+newRangeRef.length());
+			pointPos = formulaText.find(oldPointRef,pos+newRangeRef.length());
+		}
+		else
+		{
+			pos = formulaText.find(oldRangeRef,pointPos+1+newRangeRef.length());
+			pointPos = formulaText.find(oldPointRef,pointPos+1+newRangeRef.length());
+		}
+	}
+	
+	d->cellEditor->setText(formulaText);
+	d->editWidget->setText(formulaText);
+}
+
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
   // Dont allow modifications if document is readonly. Selecting is no modification
@@ -878,7 +1017,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if ( d->dragging )
     return;
-
+  
   if ( d->dragStart.x() != -1 )
   {
     QPoint p ( (int) _ev->pos().x() + (int) xOffset(),
@@ -898,14 +1037,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   KSpreadSheet *sheet = activeSheet();
   if ( !sheet )
     return;
-
-  // Special handling for choose mode.
-  if ( d->chooseCell )
-  {
-    chooseMouseMoveEvent( _ev );
-    return;
-  }
-
+ 
   double dwidth = d->view->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
@@ -919,9 +1051,41 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   int col = sheet->leftColumn( ev_PosX, xpos );
   int row  = sheet->topRow( ev_PosY, ypos );
 
+  
+  if ( !(_ev->state() & Qt::LeftButton) )
+	  d->sizingHighlightRange=0;
+  
+  if (d->sizingHighlightRange)
+  {
+	  KSpreadRange rg;
+	  d->sizingHighlightRange->getRange(rg);
+	  QRect newRange;
+	  newRange.setCoords(rg.range.left(),rg.range.top(),col,row);
+	  
+	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
+	  
+	  setCursor(Qt::CrossCursor);
+	  
+	  return;
+  }
+  
+  //Check for a highlight range size grip and show the user a visual cue if found.
+  if (highlightRangeSizeGripAt(ev_PosX,ev_PosY - ypos))
+  { 
+	  setCursor(Qt::CrossCursor);
+	  return;	  
+  }
+  
+   // Special handling for choose mode.
+  if ( d->chooseCell )
+  {
+	  chooseMouseMoveEvent( _ev );
+	  return;
+  }
+  
   if ( col > KS_colMax || row > KS_rowMax )
   {
-    return;
+	  return;
   }
 
   QRect rct( selectionInfo()->selection() );
@@ -969,7 +1133,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     //Recalculate the cell!
     col  = sheet->leftColumn( ev_PosX - d->view->doc()->unzoomItX( 2 ), xpos );
     row  = sheet->topRow( ev_PosY - d->view->doc()->unzoomItY( 2 ), ypos );
-
+     
     if ( !sheet->isProtected() )
     {
       if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
@@ -1009,6 +1173,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     chooseMouseReleaseEvent( _ev );
     return;
   }
+  
 
   KSpreadSheet *sheet = activeSheet();
   if ( !sheet )
@@ -1139,6 +1304,46 @@ void KSpreadCanvas::processLeftClickAnchor()
     }
 }
 
+HighlightRange* KSpreadCanvas::highlightRangeSizeGripAt(double x, double y) 
+{
+	if (!d->highlightedRanges)
+		return 0;
+	
+	double xpos;
+	double ypos;
+	int col  = activeSheet()->leftColumn( x, xpos );
+	int row  = activeSheet()->topRow( y, ypos );
+	
+	std::vector<HighlightRange*> highlightedRangesUnderMouse;
+
+	if (getHighlightedRangesAt(col,row,highlightedRangesUnderMouse))
+	{
+		std::vector<HighlightRange*>::iterator iter;
+	  
+		for (iter=highlightedRangesUnderMouse.begin();iter != highlightedRangesUnderMouse.end();iter++)
+		{
+			HighlightRange* highlight=*iter;
+		  
+	  	//Is the mouse over the size grip at the bottom-right hand corner of the range?
+			KSpreadRange rg;
+			highlight->getRange(rg);
+	  
+			KoRect visibleRect;
+			sheetAreaToVisibleRect(QRect(rg.startCol(),rg.startRow(),
+					       rg.endCol()-rg.startCol()+1,rg.endRow()-rg.startRow()+1),visibleRect);
+
+			double distFromSizeGripCorner=( sqrt( (visibleRect.right()-x) +
+						(visibleRect.bottom()-y) ) );
+	  
+			if (distFromSizeGripCorner < 5)
+			{
+				return highlight; 
+			}
+		}
+	} 
+	
+	return 0;
+}
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
   if ( _ev->button() == LeftButton )
@@ -1150,22 +1355,37 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     chooseMousePressEvent( _ev );
     return;
   }
-
+  
+  //Get info about where the event occurred - this is duplicated in ::mouseMoveEvent, needs to be separated into one function
   KSpreadSheet *sheet = activeSheet();
 
   if ( !sheet )
-    return;
+	  return;
 
   double dwidth = 0.0;
   double ev_PosX;
   if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
   {
-    dwidth = d->view->doc()->unzoomItX( width() );
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+	  dwidth = d->view->doc()->unzoomItX( width() );
+	  ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   }
   else
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+	  ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+  
+  // In which cell did the user click ?
+  double xpos;
+  double ypos;
+  int col  = sheet->leftColumn( ev_PosX, xpos );
+  int row  = sheet->topRow( ev_PosY, ypos );
+  
+  //Check region to see if we are over a highlight range size grip
+ 
+  d->sizingHighlightRange=highlightRangeSizeGripAt(ev_PosX,ev_PosY);
+
+  if (d->sizingHighlightRange)
+		  return;
+  
 
   // We were editing a cell -> save value and get out of editing mode
   if ( d->cellEditor )
@@ -1186,11 +1406,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
-  // In which cell did the user click ?
-  double xpos;
-  double ypos;
-  int col  = sheet->leftColumn( ev_PosX, xpos );
-  int row  = sheet->topRow( ev_PosY, ypos );
+  
 
   {
     // start drag ?
@@ -2935,6 +3151,7 @@ void KSpreadCanvas::deleteEditor (bool saveChanges, bool array)
   else
     d->view->updateEditWidget();
 
+  setHighlightedRanges(0);
   setFocus();
 }
 
@@ -3020,7 +3237,15 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
     d->cellEditor->setFont( tmpFont );
 
     KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
-    d->cellEditor->setGeometry( d->view->doc()->zoomRect( rect ) );
+
+	
+    QRect zoomedRect=d->view->doc()->zoomRect( rect );
+	/*zoomedRect.setLeft(zoomedRect.left()-2);
+	zoomedRect.setRight(zoomedRect.right()+4);
+	zoomedRect.setTop(zoomedRect.top()-1);
+	zoomedRect.setBottom(zoomedRect.bottom()+2);*/
+
+    d->cellEditor->setGeometry( zoomedRect );
     d->cellEditor->setMinimumSize( QSize( d->view->doc()->zoomItX( min_w ), d->view->doc()->zoomItY( min_h ) ) );
     d->cellEditor->show();
     //kdDebug(36001) << "FOCUS1" << endl;
@@ -3028,9 +3253,13 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
     //Don't add focus when we create a new editor and
     //we select text in edit widget otherwise we don't delete
     //selected text.
+  //  startChoose();
+
     if ( addFocus )
         d->cellEditor->setFocus();
-    //kdDebug(36001) << "FOCUS2" << endl;
+
+	setSelectionChangePaintDirty(sheet,selection(),QRect(0,0,0,0));
+	paintUpdates();
   }
 
   return true;
@@ -3511,10 +3740,12 @@ void KSpreadCanvas::paintUpdates()
           cell->makeLayout( painter, x, y );
         }
 
-        bool paintBordersBottom = false;
+       /* bool paintBordersBottom = false;
         bool paintBordersRight = false;
         bool paintBordersLeft = false;
-        bool paintBordersTop = false;
+	bool paintBordersTop = false; */
+	
+	int paintBorder=KSpreadCell::Border_None;
 
         QPen bottomPen( cell->effBottomBorderPen( x, y ) );
         QPen rightPen( cell->effRightBorderPen( x, y ) );
@@ -3525,17 +3756,20 @@ void KSpreadCanvas::paintUpdates()
         // of the cell on the left or if the cell on the right is not painted. In the latter case get
         // the pen that is of more "worth"
         if ( x >= KS_colMax )
-          paintBordersRight = true;
+         // paintBordersRight = true;
+		paintBorder |= KSpreadCell::Border_Right;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x + 1, y ) ) )
           {
-            paintBordersRight = true;
+            //paintBordersRight = true;
+		  paintBorder |= KSpreadCell::Border_Right;
             if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
               rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
           }
         else
         {
-          paintBordersRight = true;
+         // paintBordersRight = true;
+		paintBorder |= KSpreadCell::Border_Right;
           if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
@@ -3543,68 +3777,80 @@ void KSpreadCanvas::paintUpdates()
         // similiar for other borders...
         // bottom border:
         if ( y >= KS_rowMax )
-          paintBordersBottom = true;
+         // paintBordersBottom = true;
+		paintBorder |= KSpreadCell::Border_Bottom;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x, y + 1 ) ) )
           {
             if ( cell->effBottomBorderValue( x, y ) > sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
-              paintBordersBottom = true;
+             // paintBordersBottom = true;
+		    paintBorder |= KSpreadCell::Border_Bottom;
           }
         else
         {
-          paintBordersBottom = true;
-
+          //paintBordersBottom = true;
+		paintBorder |= KSpreadCell::Border_Bottom;
           if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
 
         // left border:
         if ( x == 1 )
-          paintBordersLeft = true;
+         // paintBordersLeft = true;
+		paintBorder |= KSpreadCell::Border_Left;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x - 1, y ) ) )
           {
-            paintBordersLeft = true;
+           // paintBordersLeft = true;
+		  paintBorder |= KSpreadCell::Border_Left;
             if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
               leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
           }
         else
         {
-          paintBordersLeft = true;
+		paintBorder |= KSpreadCell::Border_Left;
           if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
 
         // top border:
         if ( y == 1 )
-          paintBordersTop = true;
+        //  paintBordersTop = true;
+		paintBorder |= KSpreadCell::Border_Top;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x, y - 1 ) ) )
           {
-            paintBordersTop = true;
+          //  paintBordersTop = true;
+		  paintBorder |= KSpreadCell::Border_Top;
             if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
               topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
           }
         else
         {
-          paintBordersTop = true;
+        //  paintBordersTop = true;
+		paintBorder |= KSpreadCell::Border_Top;
           if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
-
-        cell->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                         QPoint( x, y ), paintBordersRight, paintBordersBottom, paintBordersLeft, paintBordersTop,
-                         rightPen, bottomPen, leftPen, topPen );
+	
+	
+	cell->paintCell( unzoomedRect, painter, d->view, dblCorner, QPoint( x, y), paintBorder,
+				 rightPen,bottomPen,leftPen,topPen);
+	
 
       }
       dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight( ) );
     }
     dblCorner.setY( topPos - yOffset() );
     dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth( ) );
-  }
+  }   
 
-  /* now paint the selection and choose selection */
-  paintChooseRect(painter, unzoomedRect);
+  /* now paint the selection */
+  //Nb.  No longer necessary to paint choose selection here as the cell reference highlight
+  //stuff takes care of this anyway
+  
+ // paintChooseRect(painter, unzoomedRect);
+  paintHighlightedRanges(painter, unzoomedRect);
   paintNormalMarker(painter, unzoomedRect);
 
   //restore clip region with children area
@@ -3612,6 +3858,8 @@ void KSpreadCanvas::paintUpdates()
   painter.setClipRegion( rgnComplete );
   paintChildren( painter, matrix );
 }
+
+
 
 void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
 {
@@ -3651,8 +3899,10 @@ void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
   }
 }
 
+	
 void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
 {
+	 
   double positions[4];
   bool paintSides[4];
 
@@ -3706,12 +3956,98 @@ void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
   }
   return;
 }
+    
+    
+void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& viewRect)
+{
+	if (!d->highlightedRanges)
+		return;
+	
+	std::vector<HighlightRange>::iterator iter;
+	
+	QBrush nullBrush;
 
+	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
+	{ 
+		//Only paint ranges or cells on the current sheet
+		if (iter->firstCell->sheet != activeSheet())
+			continue;
+		
+		QRect region;
+		
+		region.setTop(iter->firstCell->row());
+		region.setLeft(iter->firstCell->column());
+		
+		if (iter->lastCell) //is this a range (lastCell != 0) or a single cell (lastCell == 0) ?
+		{
+			region.setBottom(iter->lastCell->row());
+			region.setRight(iter->lastCell->column());	
+		}
+		else
+		{
+			region.setBottom(region.top());
+			region.setRight(region.left());
+		}
+		
+		//Sanity-check: If the top-left corner is lower and/or further right than the bottom-right corner,
+		//the user has entered an invalid region and we should go to the next range.
+		if (!region.isValid())
+			continue;
+		
+		//double positions[4];
+		//bool paintSides[4];
+		KoRect unzoomedRect;
+		
+		sheetAreaToVisibleRect(region,unzoomedRect);
+		//Convert region from sheet coordinates to canvas coordinates for use with the painter
+		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
+		
+		QPen highlightPen(iter->color);
+		painter.setPen(highlightPen);
+		
+		//Adjust the canvas coordinate - rect to take account of zoom level
+		
+		QRect zoomedRect;
+		
+		zoomedRect.setCoords (	d->view->doc()->zoomItX(unzoomedRect.left()),
+					d->view->doc()->zoomItY(unzoomedRect.top()),
+					d->view->doc()->zoomItX(unzoomedRect.right()),
+					d->view->doc()->zoomItY(unzoomedRect.bottom()) );
+		
+		//Now adjust the highlight rectangle is slightly inside the cell borders (this means that multiple highlighted cells 
+		//look nicer together as the borders do not clash)
+		
+		zoomedRect.setLeft(zoomedRect.left()+2);
+		zoomedRect.setTop(zoomedRect.top()+2);
+		zoomedRect.setRight(zoomedRect.right()-2);
+		zoomedRect.setBottom(zoomedRect.bottom()-1);
+		
+		painter.setBrush(nullBrush);
+		painter.drawRect(zoomedRect);
+		
+		//Now draw the size grip (the little rectangle on the bottom right-hand corner of the range which the user can 
+		//click and drag to resize the region)
+		
+		
+		QBrush sizeGripBrush(iter->color);
+		QPen   sizeGripPen(Qt::white);
+		
+		painter.setPen(sizeGripPen);
+		painter.setBrush(sizeGripBrush);
+		
+		painter.drawRect(zoomedRect.right()-3,zoomedRect.bottom()-3,6,6);
+		
+	}
+}
+    
 void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 {
 
   if( d->chooseCell )
-    return;
+    	return;
+
+  if (d->cellEditor)
+	return;
 
   double positions[4];
   bool paintSides[4];
@@ -3812,13 +4148,70 @@ void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   }
 }
 
+void KSpreadCanvas::sheetAreaToVisibleRect( const QRect& sheetArea,
+					    KoRect& visibleRect ) 
+{
+	KSpreadSheet* sheet=activeSheet();
+	
+	if (!sheet)
+		return;
+	
+	double dwidth=d->view->doc()->unzoomItX(width());
+	double xpos;
+	double x;
+	
+	if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+	{
+		xpos = dwidth - sheet->dblColumnPos( sheetArea.right() ) + xOffset();
+		x    = dwidth - sheet->dblColumnPos( sheetArea.left() ) + xOffset();
+	}
+	else
+	{
+		xpos = sheet->dblColumnPos( sheetArea.left() ) - xOffset();
+		x    = sheet->dblColumnPos( sheetArea.right() ) - xOffset();
+	}
+	
+	double ypos = sheet->dblRowPos(sheetArea.top())-yOffset();
+	
+	const ColumnFormat *columnFormat = sheet->columnFormat( sheetArea.right() );
+	double tw = columnFormat->dblWidth( );
+	double w = x - xpos + tw;
+
+	double y = sheet->dblRowPos( sheetArea.bottom() ) - yOffset();
+	const RowFormat* rowFormat = sheet->rowFormat( sheetArea.bottom() );
+	double th = rowFormat->dblHeight( );
+	double h = ( y - ypos ) + th;
+
+	/* left, top, right, bottom */
+	if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+	{
+		visibleRect.setLeft(xpos - tw );
+		visibleRect.setRight(xpos - tw + w );
+	}
+	else
+	{
+		visibleRect.setLeft(xpos );
+		visibleRect.setRight(xpos + w );
+	}
+	visibleRect.setTop(ypos);
+	visibleRect.setBottom(ypos + h);	
+}
 
 void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
                                         const KoRect &viewRect,
                                         double positions[],
                                         bool paintSides[] )
-{
-  KSpreadSheet * sheet = activeSheet();
+{ 
+	
+	KSpreadSheet* sheet=activeSheet();
+	
+	if (!sheet) return;
+	
+	KoRect visibleRect;
+	sheetAreaToVisibleRect(marker,visibleRect);
+	
+	
+ /* KSpreadSheet * sheet = activeSheet();
   if ( !sheet )
     return;
 
@@ -3847,7 +4240,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double th = rowFormat->dblHeight( );
   double h = ( y - ypos ) + th;
 
-  /* left, top, right, bottom */
+	//left, top, right, bottom 
   if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     positions[0] = xpos - tw;
@@ -3859,13 +4252,13 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
     positions[2] = xpos + w;
   }
   positions[1] = ypos;
-  positions[3] = ypos + h;
+	positions[3] = ypos + h;*/
 
   /* these vars are used for clarity, the array for simpler function arguments  */
-  double left = positions[0];
-  double top = positions[1];
-  double right = positions[2];
-  double bottom = positions[3];
+	double left = visibleRect.left();
+	double top = visibleRect.top();
+	double right = visibleRect.right();
+	double bottom = visibleRect.bottom();
 
   /* left, top, right, bottom */
   paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
@@ -5549,5 +5942,79 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
       }
     }
 }
+
+void KSpreadCanvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
+{
+	//Clear existing highlighted ranges
+		
+	if (d->highlightedRanges)
+	{
+		std::vector<HighlightRange>::iterator iter;
+		
+		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
+		{
+			if (iter->lastCell)
+			{
+				KSpreadRange rg(*(iter->firstCell),*(iter->lastCell));
+			
+				
+				rg.sheet->setRegionPaintDirty(rg.range);
+			}
+			else
+			{
+				QRect cellRect(iter->firstCell->column(),iter->firstCell->row(),
+				       1,1);
+			
+				iter->firstCell->sheet->setRegionPaintDirty(cellRect);
+			}
+		}
+					
+		delete d->highlightedRanges;
+	}
+		
+	if (cells==0)
+		d->highlightedRanges=0;
+	else
+	{
+		//Set the highlight flag for the specified cells, set the highlight color and add them to the dirty list for 
+		//later repainting
+		d->highlightedRanges=new std::vector<HighlightRange>(*cells);
+		
+		/*std::vector<HighlightRange>::iterator iter;
+		
+		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
+		{
+			if (iter->lastCell)
+			{
+				
+				KSpreadRange rg(*(iter->firstCell),*(iter->lastCell));
+				/*QRect range=rg.range;
+				range.setWidth(range.width()+1);
+				range.setHeight(range.height()+1);*/
+				/*rg.sheet->setRegionPaintDirty(rg.range);
+			}
+			else
+			{
+				QRect cellRect(iter->firstCell->column(),iter->firstCell->row(),
+				       1,1);
+			
+				iter->firstCell->sheet->setRegionPaintDirty(cellRect);
+			}
+			//iter->cell->setFlag(KSpreadCell::Flag_DisplayDirty);
+		}
+		
+				*/	
+	}
+	
+	//activeSheet()->setRegionPaintDirty(visibleCells());
+	
+	paintUpdates();
+	
+	
+	
+	
+}
+
+
 
 #include "kspread_canvas.moc"

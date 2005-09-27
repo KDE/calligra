@@ -1727,10 +1727,12 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
       QPoint cellRef( x, y );
 
-      bool paintBordersBottom = false;
+    /*  bool paintBordersBottom = false;
       bool paintBordersRight = false;
       bool paintBordersLeft = false;
-      bool paintBordersTop = false;
+      bool paintBordersTop = false; */
+      
+      int paintBorder=KSpreadCell::Border_None;
 
       QPen rightPen( cell->effRightBorderPen( x, y ) );
       QPen leftPen( cell->effLeftBorderPen( x, y ) );
@@ -1741,17 +1743,18 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // of the cell on the left or if the cell on the right is not painted. In the latter case get
       // the pen that is of more "worth"
       if ( x >= KS_colMax )
-        paintBordersRight = true;
+        //paintBordersRight = true;
+	      paintBorder |= KSpreadCell::Border_Right;
       else
         if ( x == regionRight )
         {
-          paintBordersRight = true;
+		paintBorder |= KSpreadCell::Border_Right;
           if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
       else
       {
-        paintBordersRight = true;
+	      paintBorder |= KSpreadCell::Border_Right;
         if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
           rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
@@ -1759,58 +1762,65 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // similiar for other borders...
       // bottom border:
       if ( y >= KS_rowMax )
-        paintBordersBottom = true;
+	      paintBorder |= KSpreadCell::Border_Bottom;
       else
         if ( y == regionBottom )
         {
-          paintBordersBottom = true;
+		paintBorder |= KSpreadCell::Border_Bottom;
           if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
       else
       {
-        paintBordersBottom = true;
+	      paintBorder |= KSpreadCell::Border_Bottom;
         if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
           bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
 
       // left border:
       if ( x == 1 )
-        paintBordersLeft = true;
+	      paintBorder |= KSpreadCell::Border_Left;
       else
         if ( x == regionLeft )
         {
-          paintBordersLeft = true;
+		paintBorder |= KSpreadCell::Border_Left;
           if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
       else
       {
-        paintBordersLeft = true;
+	      paintBorder |= KSpreadCell::Border_Left;
         if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
           leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
 
       // top border:
       if ( y == 1 )
-        paintBordersTop = true;
+	      paintBorder |= KSpreadCell::Border_Top;
       else
         if ( y == regionTop )
         {
-          paintBordersTop = true;
+		paintBorder |= KSpreadCell::Border_Top;
           if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
       else
       {
-        paintBordersTop = true;
+	      paintBorder |= KSpreadCell::Border_Top;
         if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
           topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
 
-      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
+  /*    cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
                        cellRef, paintBordersRight, paintBordersBottom, paintBordersLeft,
-                       paintBordersTop, rightPen, bottomPen, leftPen, topPen, false );
+      paintBordersTop, rightPen, bottomPen, leftPen, topPen, false ); */
+      
+      KSpreadCell::BorderSides highlightBorder=KSpreadCell::Border_None;
+      QPen highlightPen;
+      
+      cell->paintCell(viewRegion,painter,view,dblCurrentCellPos,cellRef,paintBorder,
+		      rightPen,bottomPen,leftPen,topPen,false);
+		      
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
     }

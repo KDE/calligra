@@ -284,6 +284,18 @@ public:
      * @see #copyFormat
      */
     void copyAll( KSpreadCell *cell);
+    
+    enum BorderSides
+    {
+	    Border_None		=0x00,
+	    Border_Left		=0x01,
+	    Border_Right	=0x02,
+	    Border_Top		=0x04,
+	    Border_Bottom	=0x08,
+	    Border_SizeGrip  	=0x10 	//the size grip is the little square on the bottom right-hand corner of a highlighted range of cells
+			    		//which the user can click and drag to resize the range and change which cells are included.
+			    		//this is not used with normal borders
+    };
 
     /**
      * Paints the cell.
@@ -295,28 +307,31 @@ public:
      * @param coordinate coordinates on the painter where the top left corner
      *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
-     * @param paintBorderRight whether to draw the right border too.
-     * @param paintBorderBottom whether to draw the bottom border too.
-     * @param paintBorderLeft whether to draw the left border too.
-     * @param paintBorderTop whether to draw the top border too.
-     * @param rightPen pen to use to draw the right border if @p paintBorderRight is true
-     * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom is true
-     * @param leftPen pen to use to draw the left border if @p paintBorderLeft is true
-     * @param topPen pen to use to draw the top border if @p paintBorderTop is true
+     * @param paintBorder a combination of flags from the KSpreadCell::BorderSides enum which specifies which cell borders to paint
+     * @param rightPen pen to use to draw the right border if @p paintBorder includes the Border_Right flag
+     * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom includes the Border_Bottom flag
+     * @param leftPen pen to use to draw the left border if @p paintBorderLeft includes the Border_Left flag
+     * @param topPen pen to use to draw the top border if @p paintBorderTop includes the Border_Top flag
+     * @param highlightBorder a combination of flags from the KSpreadCell::BorderSides enum which specifies the highlight borders to paint
+     * @param highlightPen if @p highlightBorder is not Border_None, this specifies the pen to draw the cell highlights with
      * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const KoRect & rect, QPainter & painter,
                     KSpreadView * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
-                    bool paintBorderRight,
+                   /* bool paintBorderRight,
                     bool paintBorderBottom,
                     bool paintBorderLeft,
-                    bool paintBorderTop,
+		    bool paintBorderTop,*/
+		    int paintBorder,
+		    
                     QPen & rightPen,
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
+		    
                     bool drawCursor = true );
+   
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -353,9 +368,9 @@ public:
     double dblHeight( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
-     * @return a QRect for this cell (i.e., a 1x1 rect)
+     * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect
      */
-    QRect cellRect();
+    QRect cellRect();  
 
     /**
      * @return true if the cell should be printed in a print out.
@@ -745,6 +760,8 @@ public:
      * return align X when align is undefined
      */
     int defineAlignX();
+    
+
 
 
     /**
@@ -772,7 +789,8 @@ public:
       Flag_CircularCalculation   = 0x02000000,
       Flag_DependancyError       = 0x04000000,
       Flag_PaintingCell          = 0x08000000, // On during painting
-      Flag_TextFormatDirty       = 0x10000000
+      Flag_TextFormatDirty       = 0x10000000,
+     // Flag_Highlight		 = 0x20000000
     };
 
     void clearFlag( CellFlags flag );
@@ -832,8 +850,9 @@ public:
    * CellTooShortY
    * When it's True when mouseover it, the tooltip displays the full value
    * it's true when text size is bigger that cell height
-   */
 
+   */
+    
 protected:
     /**
      * @reimp
@@ -891,13 +910,26 @@ protected:
     void loadOasisValidationCondition( QString &valExpression );
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );
     void loadOasisConditional( QDomElement * style );
-
+    
+    
+    
 private:
 
     CellPrivate* d;
     // static const char* s_dataTypeToString[];
 
     /* helper functions to the paintCell(...) function */
+ /*   void paintCellHighlight(QPainter& painter,
+			    const KoRect& cellRect,
+			    const QPoint& cellRef,
+			    const int highlightBorder,
+			    const QPen& rightPen,
+			    const QPen& bottomPen,
+			    const QPen& leftPen,
+			    const QPen& topPen
+			   );*/
+   
+    
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, 
 			   const QPoint &cellRef,
@@ -936,6 +968,7 @@ private:
                                  const QPoint &cellRef );
 
 
+   
 
   /** handle the fact that a cell has been updated - calls cellUpdated()
   in the parent Sheet object */

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>,
-   2003 Philipp Müller <philipp.mueller@gmx.de>
+   2003 Philipp Mller <philipp.mueller@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -498,20 +498,27 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                 if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
+	      
+	      int paintBorder=KSpreadCell::Border_None;
+	      if (paintBordersLeft) paintBorder |= KSpreadCell::Border_Left;
+	      if (paintBordersRight) paintBorder |= KSpreadCell::Border_Right;
+	      if (paintBordersTop) paintBorder |= KSpreadCell::Border_Top;
+	      if (paintBordersBottom) paintBorder |= KSpreadCell::Border_Bottom;
+	      
+	      int highlightBorder=KSpreadCell::Border_None;
+	      QPen highlightPen;
 
             if ( m_pSheet->layoutDirection()==KSpreadSheet::RightToLeft )
               cell->paintCell( rect, painter, NULL,
                                KoPoint( view.width() - xpos -
                                    col_lay->dblWidth(), ypos ), QPoint( x, y ),
-                               paintBordersRight, paintBordersBottom,
-                               paintBordersLeft, paintBordersTop,
-                               rightPen, bottomPen, leftPen, topPen );
+                               paintBorder,
+                               rightPen, bottomPen, leftPen, topPen);
             else
               cell->paintCell( rect, painter, NULL,
                                KoPoint( xpos, ypos ), QPoint( x, y ),
-                               paintBordersRight, paintBordersBottom,
-                               paintBordersLeft, paintBordersTop,
-                               rightPen, bottomPen, leftPen, topPen );
+                               paintBorder,
+                               rightPen, bottomPen, leftPen, topPen);
 
             xpos += col_lay->dblWidth();
         }
