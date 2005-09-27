@@ -15,7 +15,9 @@
    the Free Software Foundation, Inc.,51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
+#include <qapplication.h>
+#include <qdockarea.h>
+#include <qdockwindow.h>
 #include <qdict.h>
 #include <qwidget.h>
 #include <qobject.h>
@@ -28,6 +30,7 @@
 #include <kactionclasses.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <koView.h>
 #include <koMainWindow.h>
@@ -77,7 +80,6 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     m_viewActionMenu->insert(a);
 #endif
     m_viewActionMenu->popupMenu()->insertSeparator();
-
 }
 
 
@@ -228,11 +230,9 @@ void KoPaletteManager::save()
     //   * dock location of a docked palette
     //   * float location of a floated palette
     //   * order in which the palettes are docked.
-    KApplication *app = KApplication::kApplication();
-    Q_ASSERT(app);
-
-    KConfig * cfg = app -> config();
+    KConfig * cfg = KGlobal::config();
     Q_ASSERT(cfg);
+    cfg->setGroup("");
 
     // For all palettes windows in the window
 
@@ -272,6 +272,7 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
 {
     Q_ASSERT(m_view);
 
+
     KoPalette * palette = 0;
     switch (style) {
         case (PALETTE_DOCKER):
@@ -302,9 +303,52 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
     if (!palette) return;
 
     //XXX:  Check whether this name occurs in the config list, retrieve the location, set the location
+    
 
-    // For now, just add it to the right and compact the stack
-    m_view->mainWindow()->addDockWindow(palette, location);
+    // Set dockability for this palette
+    KConfig * cfg = KGlobal::config();
+    Q_ASSERT(cfg);
+    cfg->setGroup("");
+
+    m_dockability = (enumKoDockability) cfg->readNumEntry("palettesdockability");
+    kdDebug() << ">>>>>>>>>>>>>>>>> dockability " << m_dockability << "\n";
+
+    // Top and bottom will never accept docks
+    m_view->mainWindow()->topDock()->setAcceptDockWindow(palette, false);
+    m_view->mainWindow()->bottomDock()->setAcceptDockWindow(palette, false);
+
+    // Left and right may accept docks. The height of the screen is important
+    int h = qApp->desktop()->height();
+    switch (m_dockability) {
+        case (DOCK_ENABLED):
+            kdDebug() << "DOCK ENABLED\n";
+
+            m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
+            m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
+            m_view->mainWindow()->addDockWindow(palette, location);
+            break;
+        case (DOCK_DISABLED):
+            kdDebug() << "DOCK DISABLED\n";
+
+            m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
+            m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
+            m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
+            break;
+        case (DOCK_SMART):
+            if (h > 1024) {
+                kdDebug() << "DOCK SMART, > 1024 \n";
+                m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
+                m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
+
+            }
+            else {
+                kdDebug() << "DOCK SMART, < 1024 \n";
+                m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
+                m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
+                m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
+           }
+            break;
+    };
     m_view->mainWindow()->lineUpDockWindows();
 
 }

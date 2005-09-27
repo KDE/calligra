@@ -40,6 +40,10 @@
 	<Action name="view_show_grid"/>
 	<Separator/>
 	<Action name="view_snap_to_grid"/>
+  <Separator/>
+  <Action name="view_palette_action_menu"/>
+  <Separator/>
+
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>

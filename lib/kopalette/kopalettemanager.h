@@ -37,6 +37,12 @@ class KAction;
 class KActionCollection;
 class KToggleAction;
 
+enum enumKoDockability {
+    DOCK_ENABLED = 0, // It's possible to dock the dockers
+    DOCK_DISABLED = 1, // The dockers cannot be docked
+    DOCK_SMART = 2 // On small screens, don't dock, else dock, initially
+};
+
 enum enumKoPaletteStyle {
     PALETTE_DOCKER, // QDockWindow based docker with tabs
     PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
@@ -167,8 +173,9 @@ private:
     KActionCollection       * m_actionCollection;
     KActionMenu             * m_viewActionMenu;
     KToggleAction           * m_toggleShowHidePalettes;
-    bool                    m_allPalettesShown;
-
+    bool                      m_allPalettesShown;
+    enumKoDockability         m_dockability;
+    
     QStringList             * m_widgetNames;
 
     QDict<QWidget>          * m_widgets;
@@ -177,8 +184,8 @@ private:
     QSignalMapper           * m_mapper;
 
     QMap<QString, QString>  * m_defaultMapping; // widget to docker
-    QStringList             m_defaultPaletteOrder; // Order of palette creation
-    QStringList             m_defaultWidgetOrder; // Order of widget addition
+    QStringList               m_defaultPaletteOrder; // Order of palette creation
+    QStringList               m_defaultWidgetOrder; // Order of widget addition
     QMap<QString, QString>  * m_currentMapping; // widget to docker
 };
 
