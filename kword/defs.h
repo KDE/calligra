@@ -28,7 +28,7 @@
 // Try to add new defines and enums in the most appropriate class
 // instead of in this file. Only very global things should be here.
 
-#define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
+#define KWBarIcon( x ) BarIcon( x, KWFactory::instance() )
 
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
 #define DEBUGREGION(reg) { QMemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \

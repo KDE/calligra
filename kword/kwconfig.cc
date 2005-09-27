@@ -98,7 +98,7 @@ KWConfig::KWConfig( KWView* parent )
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               loadIcon("kformula") );
   m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->formulaDocument(),
-                                             this, KWFactory::global()->config(), page5 );
+                                             this, KWFactory::instance()->config(), page5 );
 
   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
                               loadIcon("misc") );
@@ -167,7 +167,7 @@ void KWConfig::slotApply()
     m_formulaPage->apply();
     if (macro)
         m_doc->addCommand( macro );
-    KWFactory::global()->config()->sync();
+    KWFactory::instance()->config()->sync();
 }
 
 void KWConfig::slotDefault()
@@ -203,7 +203,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     : QObject( box->parent(), name )
 {
     m_pView=_view;
-    config = KWFactory::global()->config();
+    config = KWFactory::instance()->config();
 #ifdef HAVE_LIBKSPELL2
     m_spellConfigWidget = new ConfigWidget( _view->broker(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
@@ -237,7 +237,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
  : QObject( box->parent(), name )
 {
     m_pView=_view;
-    config = KWFactory::global()->config();
+    config = KWFactory::instance()->config();
     QVGroupBox* gbInterfaceGroup = new QVGroupBox( i18n("Interface"), box, "GroupBox" );
     gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -461,7 +461,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=_view;
-    config = KWFactory::global()->config();
+    config = KWFactory::instance()->config();
     QVGroupBox* gbMiscGroup = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
     gbMiscGroup->setMargin( KDialog::marginHint() );
     gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -646,7 +646,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 {
     m_pView=_view;
     KWDocument * doc = m_pView->kWordDocument();
-    config = KWFactory::global()->config();
+    config = KWFactory::instance()->config();
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
@@ -905,7 +905,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
 {
     m_pView=_view;
     KWDocument * doc = m_pView->kWordDocument();
-    config = KWFactory::global()->config();
+    config = KWFactory::instance()->config();
     QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
     gbPathGroup->setMargin( KDialog::marginHint() );
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -978,7 +978,7 @@ void ConfigurePathPage::slotDefault()
 {
     QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
-        item->setText(1, KWFactory::global()->dirs()->resourceDirs("expression").join(";"));
+        item->setText(1, KWFactory::instance()->dirs()->resourceDirs("expression").join(";"));
     item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
         item->setText(1, KGlobalSettings::documentPath());
@@ -988,7 +988,7 @@ void ConfigurePathPage::slotDefault()
 #if 0 // KWORD_HORIZONTAL_LINE
     item = m_pPathView->findItem(i18n("Horizontal Line Path"), 0);
     if ( item )
-        item->setText(1, KWFactory::global()->dirs()->resourceDirs("horizontalLine").join(";") );
+        item->setText(1, KWFactory::instance()->dirs()->resourceDirs("horizontalLine").join(";") );
 #endif
 }
 

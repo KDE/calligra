@@ -28,7 +28,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkwordpart, KWFactory )
 
 
-KInstance* KWFactory::s_global = 0;
+KInstance* KWFactory::s_instance = 0;
 KAboutData* KWFactory::s_aboutData = 0;
 
 KWFactory::KWFactory( QObject* parent, const char* name )
@@ -36,15 +36,15 @@ KWFactory::KWFactory( QObject* parent, const char* name )
 {
   // Create our instance, so that it becomes KGlobal::instance if the
   // main app is KWord.
-  (void) global();
+  (void) instance();
 }
 
 KWFactory::~KWFactory()
 {
     delete s_aboutData;
     s_aboutData=0;
-    delete s_global;
-    s_global=0L;
+    delete s_instance;
+    s_instance=0L;
 }
 
 KParts::Part* KWFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
@@ -67,24 +67,24 @@ KAboutData* KWFactory::aboutData()
     return s_aboutData;
 }
 
-KInstance* KWFactory::global()
+KInstance* KWFactory::instance()
 {
-    if ( !s_global )
+    if ( !s_instance )
     {
-      s_global = new KInstance( aboutData() );
+      s_instance = new KInstance( aboutData() );
 
-      s_global->dirs()->addResourceType( "kword_template",
+      s_instance->dirs()->addResourceType( "kword_template",
 				         KStandardDirs::kde_default("data") + "kword/templates/");
-      s_global->dirs()->addResourceType( "expression", KStandardDirs::kde_default("data") + "kword/expression/");
-      s_global->dirs()->addResourceType( "horizontalLine", KStandardDirs::kde_default("data") + "kword/horizontalline/");
+      s_instance->dirs()->addResourceType( "expression", KStandardDirs::kde_default("data") + "kword/expression/");
+      s_instance->dirs()->addResourceType( "horizontalLine", KStandardDirs::kde_default("data") + "kword/horizontalline/");
 
-      s_global->dirs()->addResourceType( "toolbar",
+      s_instance->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      s_global->dirs()->addResourceType( "toolbar",
+      s_instance->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "kformula/pics/");
-      s_global->iconLoader()->addAppDir("koffice");
+      s_instance->iconLoader()->addAppDir("koffice");
     }
-    return s_global;
+    return s_instance;
 }
 
 #include "kwfactory.moc"

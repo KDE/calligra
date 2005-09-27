@@ -173,14 +173,14 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_tableTemplateColl = new KWTableTemplateCollection();
     m_pictureCollection = new KoPictureCollection();
 
-    m_personalExpressionPath = KWFactory::global()->dirs()->resourceDirs("expression");
+    m_personalExpressionPath = KWFactory::instance()->dirs()->resourceDirs("expression");
     m_picturePath= KGlobalSettings::documentPath();
 
 #if 0 // KWORD_HORIZONTAL_LINE
-    m_horizontalLinePath = KWFactory::global()->dirs()->resourceDirs("horizontalLine");
+    m_horizontalLinePath = KWFactory::instance()->dirs()->resourceDirs("horizontalLine");
 #endif
 
-    setInstance( KWFactory::global(), false );
+    setInstance( KWFactory::instance(), false );
 
     m_gridX = m_gridY = 10.0;
     m_indent = MM_TO_POINT( 10.0 );
@@ -261,7 +261,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     initConfig();
 
     // Get default font from the KWord config file
-    KConfig *config = KWFactory::global()->config();
+    KConfig *config = KWFactory::instance()->config();
     config->setGroup("Document defaults" );
     QString defaultFontname=config->readEntry("DefaultFont");
     if ( !defaultFontname.isEmpty() )
@@ -323,7 +323,7 @@ KWDocument::~KWDocument()
 
 void KWDocument::initConfig()
 {
-  KConfig *config = KWFactory::global()->config();
+  KConfig *config = KWFactory::instance()->config();
   if( config->hasGroup("KSpell kword" ) )
   {
       config->setGroup( "KSpell kword" );
@@ -425,7 +425,7 @@ void KWDocument::saveConfig()
     {
         // Only save the config that is manipulated by the UI directly.
         // The config from the config dialog is saved by the dialog itself.
-        KConfig *config = KWFactory::global()->config();
+        KConfig *config = KWFactory::instance()->config();
         config->setGroup( "Interface" );
         config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
         config->writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
@@ -503,7 +503,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     if (flags==KoDocument::InitDocEmpty)
     {
-        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
+        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
         resetURL();
         initUnit();
         ok = loadNativeFormat( fileName );
@@ -524,7 +524,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     QString file;
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KWFactory::global(), file,
+        KWFactory::instance(), file,
         dlgtype, "kword_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
         resetURL();
@@ -538,7 +538,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         //kdDebug() << "KWDocument::initDoc opening URL " << url.prettyURL() << endl;
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
+        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
         resetURL();
         initUnit();
         ok = loadNativeFormat( fileName );
@@ -553,7 +553,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 void KWDocument::initUnit()
 {
     //load default unit setting - this is only used for new files (from templates) or empty files
-    KConfig *config = KWFactory::global()->config();
+    KConfig *config = KWFactory::instance()->config();
 
     if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
         m_unit = KoUnit::U_INCH;
@@ -584,7 +584,7 @@ void KWDocument::initEmpty()
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
-    QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
+    QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
     bool ok = loadNativeFormat( fileName );
     if ( !ok )
         showLoadingErrorDialog();
@@ -5700,7 +5700,7 @@ void KWDocument::changeBgSpellCheckingState( bool b )
 {
     enableBackgroundSpellCheck( b );
     reactivateBgSpellChecking();
-    KConfig *config = KWFactory::global()->config();
+    KConfig *config = KWFactory::instance()->config();
     config->setGroup("KSpell kword" );
     config->writeEntry( "SpellCheck", (int)b );
 }
@@ -5926,7 +5926,7 @@ void KWDocument::updateDirectCursorButton()
 void KWDocument::setInsertDirectCursor(bool _b)
 {
     m_bInsertDirectCursor=_b;
-    KConfig *config = KWFactory::global()->config();
+    KConfig *config = KWFactory::instance()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "InsertDirectCursor", _b );
     updateDirectCursorButton();
