@@ -30,6 +30,7 @@
 
 class KSpreadView;
 class KDoubleNumInput;
+class KoUnitDoubleSpinBox;
 
 class KSpreadResizeRow: public KDialogBase
 {
@@ -45,7 +46,7 @@ protected slots:
 
 protected:
   KSpreadView* m_pView;
-  KDoubleNumInput *m_pHeight;
+  KoUnitDoubleSpinBox *m_pHeight;
 };
 
 class KSpreadResizeColumn: public KDialogBase
@@ -62,7 +63,7 @@ protected slots:
 
 protected:
   KSpreadView* m_pView;
-  KDoubleNumInput *m_pWidth;
+  KoUnitDoubleSpinBox *m_pWidth;
 };
 
 #endif

@@ -38,7 +38,7 @@
 #include <kspread_locale.h>
 #include <kspread_undo.h>
 #include <kspread_view.h>
-
+#include <koUnitWidgets.h>
 #include <qlabel.h>
 
 KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
@@ -60,11 +60,10 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     label1->setText( i18n( "Height:" ) );
     hLay->addWidget( label1 );
 
-    m_pHeight = new KDoubleNumInput( page );
-    m_pHeight->setPrecision( 2 );
-    m_pHeight->setValue( KoUnit::toUserValue( rowHeight,
-                                           m_pView->doc()->getUnit() ) );
-    m_pHeight->setSuffix( m_pView->doc()->getUnitName() );
+    m_pHeight = new KoUnitDoubleSpinBox( page );
+    m_pHeight->setValue( rowHeight );
+    m_pHeight->setUnit( m_pView->doc()->getUnit() );
+
     hLay->addWidget( m_pHeight );
 
     QWidget *hSpacer = new QWidget( page );
@@ -78,13 +77,13 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     m_pHeight->setFocus();
 
     //store the visible value, for later check for changes
-    rowHeight = KoUnit::fromUserValue( m_pHeight->value(), m_pView->doc()->getUnit() );
+    rowHeight = m_pHeight->value();
 }
 
 void KSpreadResizeRow::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
-    double height = KoUnit::fromUserValue( m_pHeight->value(), m_pView->doc()->getUnit() );
+    double height = m_pHeight->value();
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
     if ( fabs( height - rowHeight ) > DBL_EPSILON )
@@ -107,8 +106,7 @@ void KSpreadResizeRow::slotOk()
 
 void KSpreadResizeRow::slotDefault()
 {
-    double height = KoUnit::toUserValue( heightOfRow,m_pView->doc()->getUnit() );
-    m_pHeight->setValue( height );
+    m_pHeight->setValue( POINT_TO_MM( heightOfRow ) );
 }
 
 KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name )
@@ -130,10 +128,10 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     label1->setText( i18n( "Width:" ) );
     hLay->addWidget( label1 );
 
-    m_pWidth = new KDoubleNumInput( page );
-    m_pWidth->setPrecision( 2 );
-    m_pWidth->setValue( KoUnit::toUserValue( columnWidth, m_pView->doc()->getUnit() ) );
-    m_pWidth->setSuffix( m_pView->doc()->getUnitName() );
+    m_pWidth = new KoUnitDoubleSpinBox( page );
+    m_pWidth->setValue( columnWidth );
+    m_pWidth->setUnit( m_pView->doc()->getUnit() );
+
     hLay->addWidget( m_pWidth );
 
     QWidget *hSpacer = new QWidget( page );
@@ -147,13 +145,13 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     m_pWidth->setFocus();
 
     //store the visible value, for later check for changes
-    columnWidth = KoUnit::fromUserValue( m_pWidth->value(), m_pView->doc()->getUnit() );
+    columnWidth = m_pWidth->value();
 }
 
 void KSpreadResizeColumn::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
-    double width = KoUnit::fromUserValue( m_pWidth->value(), m_pView->doc()->getUnit() );
+    double width = m_pWidth->value();
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
     if ( fabs( width - columnWidth ) > DBL_EPSILON )
@@ -177,8 +175,7 @@ void KSpreadResizeColumn::slotOk()
 
 void KSpreadResizeColumn::slotDefault()
 {
-    double width = KoUnit::toUserValue( colWidth, m_pView->doc()->getUnit() );
-    m_pWidth->setValue( width );
+    m_pWidth->setValue( POINT_TO_MM(colWidth ) );
 }
 
 
