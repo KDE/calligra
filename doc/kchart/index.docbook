@@ -101,7 +101,7 @@ the usual startup dialog where you can choose between different
 templates or load existing chart documents.
 </para>
 <screenshot>
-<screeninfo>KChart Startup Dialog</screeninfo>
+<screeninfo>&kchart; Startup Dialog</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="kchart-startupdialog.png" format="PNG"/>
@@ -123,7 +123,7 @@ For now we will start with the default template. Select the
 this template should already be selected when you launch &kchart;.
 </para>
 <para>
-If you decide to start &kchart; with a selected template as defult
+If you decide to start &kchart; with a selected template as default
 you can also select this option at the bottom of the dialog.
 </para>
 <para>
@@ -131,7 +131,7 @@ Now click on the <guimenu>OK</guimenu> button to start with
 a bar chart.
 </para>
 <screenshot>
-<screeninfo>KChart User Interface</screeninfo>
+<screeninfo>&kchart; User Interface</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="kchart-default.png" format="PNG"/>
@@ -223,7 +223,7 @@ choose it in the second step. If the chart type has no sub types,
 this step will be skipped automatically.
 </para>
 <para>
-If you deside to change the sub type later, you can do this
+If you decide to change the sub type later, you can do this
 in the appropriate configuration dialog which will be shown
 later.
 </para>
@@ -343,7 +343,7 @@ To get to the chart configuration dialog, select <menuchoice>
 <sect2 id="config-rowcol">
 <title>Row and Column Swapping</title>
 <screenshot>
-<screeninfo>Configuration page 1 - row/column swapping</screeninfo>
+<screeninfo>Configuration page 1 - Row/column swapping</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="kchart-config1.png" format="PNG"/>
@@ -699,7 +699,7 @@ use. Experienced users will likely use the full option dialog
 we used in this example.
 </para>
 <para>
-Simply accept the options by clicking on the <guimenu>OK</guimenu>
+Simply accept the settings by clicking on the <guimenu>OK</guimenu>
 button.
 </para>
 </sect3>
@@ -729,19 +729,19 @@ Just experiment further, this way you will get to know a lot
 of the &kchart; application.
 </para>
 <para>
-Finally you can save the application from the <guimenu>File</guimenu>
-menu and quit with
+Finally you can save the chart from the <guimenu>File</guimenu>
+menu and quit &kchart; with
 <menuchoice><guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice>
 </para>
 </sect2>
 <sect2>
-<title>Exporting to Graphic Formats: SVG, PNG, JPG, Krita, Karbon14, Gimp and
+<title>Exporting to Graphic Formats: SVG, PNG, JPG, &krita;, &karbon14;, Gimp and
 more</title>
 <para>
 For further processing, the chart can also be exported as a graphics file.
-Many formats are available. Using either PNG, SVG, JPG or Krita will likely
+Many formats are available. Using either PNG, SVG, JPG or &krita; will likely
 produce the best result.
 </para>
 <para>
@@ -766,7 +766,7 @@ from the menu and select the desired file format from the filter box.
 <title>Using &kchart; in &kspread;</title>
 
 <para>
-In addition to standalone operation, &kchart; is designed to use with
+In addition to standalone operation, &kchart; is designed to be used with
 &kspread;. This chapter describes how to create and manipulate charts
 from within &kspread;.
 </para>
@@ -781,7 +781,7 @@ advantage of all the &kchart; features by double clicking on the
 chart area. This is necessary to get to all advanced configuration
 options. Keep in mind that the data editor is not available when
 &kchart; is embedded into &kspread;. This is obvious since &kspread;
-servers, from the &kchart;'s point of view, as a powerful data
+serves, from &kchart;'s point of view, as a powerful data
 provider.
 </para>
 <para>
@@ -818,7 +818,7 @@ Next click on the <guilabel>Chart</guilabel> button
 format="PNG"/></imageobject></inlinemediaobject> to create the chart.
 </para></listitem>
 
-<listitem><para>Select the options you want from the chart Wizard. The
+<listitem><para>Select the options you want from the chart wizard. The
 chart Wizard will pop up after you insert the chart.</para></listitem>
 
 </itemizedlist>
@@ -903,7 +903,7 @@ graph. It also determines the size of the slices in a pie chart.
 <guimenu>File</guimenu>
 <guimenuitem>Save</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document to the current file.</action> If the chart
+<listitem><para><action>Saves the chart to the current file.</action> If the chart
 has not yet been saved the file dialog is shown.</para></listitem>
 </varlistentry>
 <varlistentry>
@@ -929,7 +929,7 @@ has not yet been saved the file dialog is shown.</para></listitem>
 <guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens a document with any supported format.
-The document does not become the imported file.</action>
+The original document will not be modified.</action>
 </para></listitem>
 </varlistentry>
 
@@ -939,8 +939,8 @@ The document does not become the imported file.</action>
 <guimenuitem>Export...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Saves a document to any supported format.</action>
-The document does not become the exported file. You can also choose
-among many image formats like PNG, SVG, Krita, Gimp or JPG.
+The original document will not be modified. You can also choose
+among many image formats like PNG, SVG, &krita;, Gimp or JPG.
 </para></listitem>
 </varlistentry>
 
@@ -949,8 +949,8 @@ among many image formats like PNG, SVG, Krita, Gimp or JPG.
 <guimenu>File</guimenu>
 <guimenuitem>Import Data...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Imports CSV values from a file, much like
-the CSV import in KSpread. Note that you can specify various
+<listitem><para><action>Imports values from a CSV (Comma Separated Values) file, much like
+the CSV import in K&kspread;. Note that you can specify various
 options and different separators (not just commas).</action>
 </para></listitem>
 </varlistentry>
@@ -1039,7 +1039,7 @@ the file icon.</para></note></listitem>
 <guimenu>Edit</guimenu>
 <guimenuitem>Edit Data...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Table for entering the data.</action></para>
+<listitem><para><action>Opens the &dataeditor;.</action></para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -1206,7 +1206,7 @@ and the dialog should disappear. The shortcut is now entered.
 
 <para>Pressing the keys <userinput><keycombo
 action="seq">&Alt;&Ctrl;<keycap>W</keycap></keycombo></userinput>
-now opens the Wizard.</para>
+now opens the wizard.</para>
 </sect2>
 
 
@@ -1287,7 +1287,7 @@ click on <userinput><guilabel>OK</guilabel></userinput>
 &kchart;
 </para>
 <para>
-Program copyright 1998-2005 the KChart Team
+Program copyright 1998-2005 the &kchart; Team
 </para>
 <para>
 Original Authors:
