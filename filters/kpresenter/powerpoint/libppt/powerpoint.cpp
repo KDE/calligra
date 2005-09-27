@@ -19,12 +19,18 @@
 
 #include "powerpoint.h"
 #include "presentation.h"
+#include "slide.h"
 #include "pole.h"
+#include "objects.h"
 
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 
+#include <vector>
+#include <map>
+
+#include <kdebug.h>
 #include <stdio.h>
 
 // Use anonymous namespace to cover following functions
@@ -78,6 +84,7 @@ const unsigned int Record::id = 0; // invalid of-course
 Record::Record()
 {
   stream_position = 0;
+  record_instance = 0;
   record_parent = 0;
 }
 
@@ -89,7 +96,10 @@ Record* Record::create( unsigned type )
 {
   Record* record = 0;
   
-  if( type == DocumentContainer::id )
+  if( type == BookmarkCollectionContainer::id )
+    record = new BookmarkCollectionContainer();
+  
+  else if( type == DocumentContainer::id )
     record = new DocumentContainer();
     
   else if( type == EnvironmentContainer::id )
@@ -107,9 +117,15 @@ Record* Record::create( unsigned type )
   else if( type == ExEmbedContainer::id )
     record = new ExEmbedContainer();    
     
+  else if( type == ExLinkContainer::id )
+    record = new ExLinkContainer();    
+      
   else if( type == FontCollectionContainer::id )
     record = new FontCollectionContainer();
     
+  else if( type == HandoutContainer::id )
+    record = new HandoutContainer();
+  
   else if( type == HeadersFootersContainer::id )
     record = new HeadersFootersContainer();
     
@@ -140,6 +156,9 @@ Record* Record::create( unsigned type )
   else if( type == SrKinsokuContainer::id )
     record = new SrKinsokuContainer();    
     
+  else if( type == SummaryContainer::id )
+    record = new SummaryContainer();    
+      
   else if( type == OutlineViewInfoContainer::id )
     record = new OutlineViewInfoContainer();   
     
@@ -163,9 +182,30 @@ Record* Record::create( unsigned type )
     
   else if( type == ViewInfoContainer::id )
     record = new ViewInfoContainer();  
+
     
-    
-       
+  else if( type == msofbtDgContainer::id )
+    record = new msofbtDgContainer();  
+  
+  else if( type == msofbtSpgrContainer::id )
+    record = new msofbtSpgrContainer();  
+
+  else if( type == msofbtSpContainer::id )
+    record = new msofbtSpContainer();  
+
+  else if( type == msofbtDggContainer::id )
+    record = new msofbtDggContainer();  
+
+  else if( type == msofbtBstoreContainer::id )
+    record = new msofbtBstoreContainer(); 
+  
+ else if( type == msofbtSolverContainer::id )
+    record = new msofbtSolverContainer(); 
+
+
+  else if( type == BookmarkEntityAtom::id )
+    record = new BookmarkEntityAtom();
+         
   else if( type == CStringAtom::id )
     record = new CStringAtom();
     
@@ -187,6 +227,9 @@ Record* Record::create( unsigned type )
   else if( type == ExHyperlinkAtom::id )
     record = new ExHyperlinkAtom();   
     
+  else if( type == ExLinkAtom::id )
+    record = new ExLinkAtom();   
+    
   else if( type == ExObjListAtom::id )
     record = new ExObjListAtom();  
     
@@ -205,8 +248,8 @@ Record* Record::create( unsigned type )
   else if( type == NotesAtom::id )
     record = new NotesAtom();  
     
-  else if( type == PersistPtrIncrementalBlockAtom::id )
-    record = new PersistPtrIncrementalBlockAtom();     
+  else if( type == PersistIncrementalBlockAtom::id )
+    record = new PersistIncrementalBlockAtom();     
           
   else if( type == Record1043::id )
     record = new Record1043 (); 
@@ -227,12 +270,21 @@ Record* Record::create( unsigned type )
       
   else if( type == SlideViewInfoAtom::id )
     record = new SlideViewInfoAtom();   
+      
+  else if( type == SSDocInfoAtom ::id )
+    record = new SSDocInfoAtom(); 
+      
+  else if( type == SSlideLayoutAtom ::id )
+    record = new SSlideLayoutAtom();       
     
   else if( type == SSSlideInfoAtom ::id )
     record = new SSSlideInfoAtom();   
      
   else if( type == TextHeaderAtom ::id )
     record = new TextHeaderAtom();   
+    
+  else if( type == TextBookmarkAtom ::id )
+    record = new TextBookmarkAtom();     
      
   else if( type == TextBytesAtom::id )
     record = new TextBytesAtom ();  
@@ -261,8 +313,83 @@ Record* Record::create( unsigned type )
   else if( type == ViewInfoAtom::id )
     record = new ViewInfoAtom();     
     
-  return record;
-}
+  else if( type == msofbtDgAtom::id )
+    record = new msofbtDgAtom() ;  
+
+  else if( type == msofbtSpgrAtom::id )
+    record = new msofbtSpgrAtom() ;  
+
+  else if( type == msofbtSpAtom::id )
+    record = new msofbtSpAtom() ;  
+
+  else if( type == msofbtOPTAtom::id )
+    record = new msofbtOPTAtom() ;  
+
+  else if( type == msofbtChildAnchorAtom::id )
+    record = new msofbtChildAnchorAtom() ;  
+
+  else if( type == msofbtClientAnchorAtom::id )
+    record = new msofbtClientAnchorAtom() ;  
+  
+  else if( type == msofbtClientDataAtom::id )
+    record = new msofbtClientDataAtom() ;
+
+  else if( type == msofbtClientTextboxAtom::id )
+    record = new msofbtClientTextboxAtom() ;
+
+  else if( type == msofbtDggAtom::id )
+    record = new msofbtDggAtom() ;
+
+  else if( type == msofbtColorMRUAtom::id )
+    record = new msofbtColorMRUAtom() ;
+
+  else if( type == msofbtSplitMenuColorsAtom::id )
+    record = new msofbtSplitMenuColorsAtom() ;
+
+  else if( type == msofbtBSEAtom::id )
+    record = new msofbtBSEAtom() ;
+
+  else if( type == msofbtCLSIDAtom::id )
+    record = new msofbtCLSIDAtom() ;
+
+  else if( type == msofbtRegroupItemsAtom::id )
+    record = new msofbtRegroupItemsAtom() ;
+
+  else if( type == msofbtColorSchemeAtom::id )
+    record = new msofbtColorSchemeAtom() ;
+
+  else if( type == msofbtClientTextboxAtom::id )
+    record = new msofbtClientTextboxAtom() ;
+
+  else if( type == msofbtAnchorAtom::id )
+    record = new msofbtAnchorAtom() ;
+
+  else if( type == msofbtOleObjectAtom::id )
+    record = new msofbtOleObjectAtom() ;
+
+  else if( type == msofbtDeletedPsplAtom::id )
+    record = new msofbtDeletedPsplAtom() ;
+
+  else if( type == msofbtConnectorRuleAtom::id )
+    record = new msofbtConnectorRuleAtom() ;
+
+  else if( type == msofbtAlignRuleAtom::id )
+    record = new msofbtAlignRuleAtom() ;
+
+  else if( type == msofbtArcRuleAtom::id )
+    record = new msofbtArcRuleAtom() ;
+
+  else if( type == msofbtClientRuleAtom::id )
+    record = new msofbtClientRuleAtom() ;
+
+  else if( type == msofbtCalloutRuleAtom::id )
+    record = new msofbtCalloutRuleAtom() ;
+
+  else if( type == msofbtSelectionAtom::id )
+    record = new msofbtSelectionAtom() ;
+
+return record;
+};
 
 void Record::setParent( Record* parent )
 {
@@ -284,6 +411,16 @@ unsigned Record::position() const
   return stream_position;
 }
 
+void Record::setInstance( unsigned instance )
+{
+  record_instance = instance;
+}
+
+unsigned Record::instance() const
+{
+  return record_instance;
+}
+
 void Record::setData( unsigned, const unsigned char* )
 {
 }
@@ -298,6 +435,63 @@ void Record::dump( std::ostream& ) const
 Container::Container()
 {
 }
+
+// ========== BookmarkCollectionContainer ==========
+
+const unsigned int BookmarkCollectionContainer::id = 2019;
+
+BookmarkCollectionContainer::BookmarkCollectionContainer()
+{
+}
+
+// ========== msofbtDggContainer ==========
+
+const unsigned int msofbtDggContainer::id = 61440; /* F000 */
+
+msofbtDggContainer::msofbtDggContainer()
+{
+}
+
+// ========== msofbtBstoreContainer ==========
+
+const unsigned int msofbtBstoreContainer::id = 61441; /* F001 */
+
+msofbtBstoreContainer::msofbtBstoreContainer()
+{
+}
+
+// ========== msofbtDgContainer ==========
+
+const unsigned int msofbtDgContainer::id = 61442; /* F002 */
+
+msofbtDgContainer::msofbtDgContainer()
+{
+}
+
+// ========== msofbtSpgrContainer ==========
+
+const unsigned int msofbtSpgrContainer::id = 61443; /* F003*/
+
+msofbtSpgrContainer::msofbtSpgrContainer()
+{
+}
+
+// ========== msofbtSpContainer ==========
+
+const unsigned int msofbtSpContainer::id = 61444; /* F004 */
+
+msofbtSpContainer::msofbtSpContainer()
+{
+}
+
+// ========== msofbtSolverContainer ==========
+
+const unsigned int msofbtSolverContainer::id = 61445; /* F005 */
+
+msofbtSolverContainer::msofbtSolverContainer()
+{
+}
+
 
 // ========== DocumentContainer ==========
 
@@ -331,6 +525,7 @@ FontCollectionContainer::FontCollectionContainer()
 {
 }
 
+
 // ========== ExObjListContainer ==========
 
 const unsigned int ExObjListContainer::id = 1033;
@@ -354,7 +549,6 @@ const unsigned int SlideBaseContainer::id = 1004;
 SlideBaseContainer::SlideBaseContainer()
 {
 }
-
 
 // ========== SlideListWithTextContainer ==========
 
@@ -388,6 +582,14 @@ SorterViewInfoContainer::SorterViewInfoContainer()
 {
 }
 
+// ========== HandoutContainer ==========
+
+const unsigned int HandoutContainer::id = 4041;
+
+HandoutContainer::HandoutContainer()
+{
+}
+
 // ========== ListContainer ==========
 
 const unsigned int ListContainer::id = 2000;
@@ -401,6 +603,14 @@ ListContainer::ListContainer()
 const unsigned int ExEmbedContainer::id = 4044;
 
 ExEmbedContainer::ExEmbedContainer()
+{
+}
+
+// ========== ExLinkContainer ==========
+
+const unsigned int ExLinkContainer::id = 4046;
+
+ExLinkContainer::ExLinkContainer()
 {
 }
 
@@ -460,7 +670,7 @@ ProgBinaryTagContainer::ProgBinaryTagContainer()
 {
 }
 
-// ========== ProgBinaryTagContainer ==========
+// ========== ProgStringTagContainer ==========
 
 const unsigned int ProgStringTagContainer::id = 5001;
 
@@ -481,6 +691,14 @@ PPDrawingGroupContainer::PPDrawingGroupContainer()
 const unsigned int PPDrawingContainer::id = 1036;
 
 PPDrawingContainer::PPDrawingContainer()
+{
+}
+
+// ========== SummaryContainer ==========
+
+const unsigned int SummaryContainer::id = 1026;
+
+SummaryContainer::SummaryContainer()
 {
 }
 
@@ -666,64 +884,78 @@ void DocumentAtom::setNotesMasterPersist( int notesMasterPersist )
 {
   d->notesMasterPersist = notesMasterPersist; 
 }
+
 int DocumentAtom::handoutMasterPersist() const
 {
   return d->handoutMasterPersist;
 }
+
 void DocumentAtom::setHandoutMasterPersist(int handoutMasterPersist)  
 {
   d->handoutMasterPersist = handoutMasterPersist; 
 }  
+
 int DocumentAtom::firstSlideNum() const
 {
   return d->firstSlideNum; 
 }
+
 void DocumentAtom::setFirstSlideNum( int firstSlideNum )
 {
   d->firstSlideNum = firstSlideNum;
 }  
+
 int DocumentAtom::slideSizeType() const
 {
   return d->slideSizeType; 
 }
+
 void DocumentAtom::setSlideSizeType( int slideSizeType )
 {
   d->slideSizeType = slideSizeType; 
 }  
+
 int DocumentAtom::saveWithFonts() const
 {
   return d->saveWithFonts; 
 }
+
 void DocumentAtom::setSaveWithFonts( int saveWithFonts )
 {
   d->saveWithFonts = saveWithFonts; 
 }  
+
 int DocumentAtom::omitTitlePlace() const
 {
   return d->omitTitlePlace; 
 }
+
 void DocumentAtom::setOmitTitlePlace( int omitTitlePlace )
 {
   d->omitTitlePlace = omitTitlePlace; 
 }  
+
 int DocumentAtom::rightToLeft() const
 {
   return d->rightToLeft; 
 }
+
 void DocumentAtom::setRightToLeft( int rightToLeft )
 {
   d->rightToLeft = rightToLeft; 
 }  
+
 int DocumentAtom::showComments() const
 {
   return d->showComments; 
 }
+
 void DocumentAtom::setShowComments( int showComments)
 {
   d->showComments = showComments; 
 }  
  
-void DocumentAtom::setData( unsigned size, const unsigned char* data )
+void DocumentAtom::setData( unsigned , const unsigned char* data )
 {
   setSlideWidth( readU32( data+0 ) );
   setSlideHeight( readU32( data+4 ) );
@@ -738,9 +970,7 @@ void DocumentAtom::setData( unsigned size, const unsigned char* data )
   setSaveWithFonts(data[36]); 
   setOmitTitlePlace(data[37]); 
   setRightToLeft(data[38]); 
-  setShowComments(data[39]); 
-  
-  
+  setShowComments(data[39]);     
 }
 
 void DocumentAtom::dump( std::ostream& out ) const
@@ -826,10 +1056,12 @@ void TextCharsAtom::setUString( const UString& ustr )
 void TextCharsAtom::setData( unsigned size, const unsigned char* data )
 {
   UString str;
-  for( unsigned k=0; k<size; k++ )
+  for( unsigned k=0; k<size/2; k++ )
   {
     unsigned uchar = readU16( data + k*2 );
+    if (uchar == 0x22) uchar = 0x20; 
     str.append( UString(uchar) );
+
   }
   setUString( str );
 }
@@ -883,7 +1115,7 @@ void GuideAtom::setPos(int pos)
   d->pos= pos;
 }
 
-void GuideAtom::setData( unsigned size, const unsigned char* data )
+void GuideAtom::setData( unsigned , const unsigned char* data )
 {
   setType( readS32( data + 0 ) );
   setPos( readS32( data + 4 ) );
@@ -894,6 +1126,134 @@ void GuideAtom::dump( std::ostream& out ) const
   out << "GuideAtom" << std::endl;
   out << "type " << type() << std::endl;
   out << "pos " << pos() << std::endl;
+}
+
+
+// ========== SSlideLayoutAtom  ==========
+
+const unsigned int SSlideLayoutAtom::id = 1015;
+
+class SSlideLayoutAtom ::Private
+{
+public:
+  int geom;
+  int placeholderId;  
+};
+
+SSlideLayoutAtom::SSlideLayoutAtom ()
+{
+  d = new Private;
+  d->geom = 0;
+  d->placeholderId = 0;
+}
+
+SSlideLayoutAtom::~SSlideLayoutAtom ()
+{
+  delete d;
+}
+
+int SSlideLayoutAtom::geom() const
+{
+  return d->geom;
+}
+
+void SSlideLayoutAtom::setGeom(int geom)
+{
+  d->geom= geom;
+}
+
+int SSlideLayoutAtom::placeholderId() const
+{
+  return d->placeholderId;
+}
+
+void SSlideLayoutAtom::setPlaceholderId(int placeholderId)
+{
+  d->placeholderId= placeholderId;
+}
+
+void SSlideLayoutAtom ::setData( unsigned , const unsigned char* data )
+{
+  setGeom( readS32( data + 0 ) );
+  setPlaceholderId(  data [4] );
+}
+
+void SSlideLayoutAtom ::dump( std::ostream& out ) const
+{
+  out << "SSlideLayoutAtom" << std::endl;
+  out << "geom " << geom() << std::endl;
+  out << "placeholderId " << placeholderId() << std::endl;
+}
+
+// ========== ExLinkAtom  ==========
+
+const unsigned int ExLinkAtom::id = 4049;
+  
+class ExLinkAtom ::Private
+{
+public:
+  int exObjId;
+  int flags;  
+  int unavailable; 
+};
+
+ExLinkAtom::ExLinkAtom ()
+{
+  d = new Private;
+  d->exObjId = 0;
+  d->flags = 0;
+  d->unavailable = 0;
+}
+
+ExLinkAtom::~ExLinkAtom ()
+{
+  delete d;
+}
+
+int ExLinkAtom::exObjId() const
+{
+  return d->exObjId;
+}
+
+void ExLinkAtom::setExObjId(int exObjId)
+{
+  d->exObjId= exObjId;
+}
+
+int ExLinkAtom::flags() const
+{
+  return d->flags;
+}
+
+void ExLinkAtom::setFlags(int flags)
+{
+  d->flags= flags;
+}
+
+int ExLinkAtom::unavailable() const
+{
+  return d->unavailable;
+}
+
+void ExLinkAtom::setUnavailable(int unavailable)
+{
+  d->unavailable= unavailable;
+}
+
+void ExLinkAtom ::setData( unsigned , const unsigned char* data )
+{
+  setExObjId( readU32( data + 0 ) );
+  setFlags( readU16( data + 4 ) );
+  setUnavailable(  data [6] );
+  
+}
+
+void ExLinkAtom ::dump( std::ostream& out ) const
+{
+  out << "ExLinkAtom" << std::endl;
+  out << "exObjId " << exObjId() << std::endl;
+  out << "flags " << flags() << std::endl;
+  out << "unavailable " << unavailable() << std::endl;  
 }
 
 // ========== NotesAtom  ==========
@@ -939,7 +1299,7 @@ void NotesAtom::setFlags(int flags)
   d->flags= flags;
 }
 
-void NotesAtom ::setData( unsigned size, const unsigned char* data )
+void NotesAtom ::setData( unsigned , const unsigned char* data )
 {
   setSlideId( readS32( data + 0 ) );
   setFlags( readU16( data + 4 ) );
@@ -951,6 +1311,7 @@ void NotesAtom ::dump( std::ostream& out ) const
   out << "slideId " << slideId() << std::endl;
   out << "flags " << flags() << std::endl;
 }
+
 
 // ========== ExObjListAtom  ==========
 
@@ -983,7 +1344,7 @@ void ExObjListAtom::setObjectIdSeed(int objectIdSeed)
   d->objectIdSeed= objectIdSeed;
 }
 
-void ExObjListAtom ::setData( unsigned size, const unsigned char* data )
+void ExObjListAtom ::setData( unsigned , const unsigned char* data )
 { // check later for valid value
   setObjectIdSeed( readU32( data + 0 ) ); 
 }
@@ -1062,7 +1423,7 @@ void ExEmbedAtom::setIsTable(int isTable)
   d->isTable= isTable;
 }
 
-void ExEmbedAtom ::setData( unsigned size, const unsigned char* data )
+void ExEmbedAtom ::setData( unsigned , const unsigned char* data )
 {
   setFollowColorScheme( readS32( data + 0 ) );
   setCantLockServerB( data [4] );
@@ -1170,7 +1531,7 @@ void ExOleObjAtom::setIsBlank(int isBlank)
   d->isBlank= isBlank;
 }
 
-void ExOleObjAtom ::setData( unsigned size, const unsigned char* data )
+void ExOleObjAtom ::setData( unsigned , const unsigned char* data )
 {
   setDrawAspect( readU32( data + 0 ) );
   setType( readS32( data + 4 ) );
@@ -1189,26 +1550,121 @@ void ExOleObjAtom ::dump( std::ostream& out ) const
   out << "subType " << subType() << std::endl;
   out << "objID " << objID() << std::endl;
   out << "objStgDataRef " << objStgDataRef() << std::endl;
-  out << "isBlank " << isBlank() << std::endl;
+  out << "isBlank " << isBlank() << std::endl;  
+}
+
+// ========== ExHyperlinkAtom  ==========
+
+const unsigned int ExHyperlinkAtom::id = 4051;
   
+class ExHyperlinkAtom ::Private
+{
+public:
+  int objID; 
+};
+
+ExHyperlinkAtom ::ExHyperlinkAtom ()
+{
+  d = new Private;
+  d->objID = 0;
+}
+
+ExHyperlinkAtom ::~ExHyperlinkAtom ()
+{
+  delete d;
+}
+
+int ExHyperlinkAtom ::objID() const
+{
+  return d->objID;
+}
+
+void ExHyperlinkAtom ::setObjID(int objID)
+{
+  d->objID = objID;
+}
+
+void ExHyperlinkAtom::setData( unsigned , const unsigned char* data )
+{
+  setObjID( readU32( data + 0 ) );
+}
+
+void ExHyperlinkAtom ::dump( std::ostream& out ) const
+{
+  out << "ExHyperlinkAtom" << std::endl;
+  out << "objID " << objID() << std::endl;   
 }
 
 
-// ========== PersistPtrIncrementalBlockAtom ==========
+// ========== PersistIncrementalBlockAtom ==========
 
-const unsigned int PersistPtrIncrementalBlockAtom::id = 6002;
+const unsigned int PersistIncrementalBlockAtom::id = 6002;
 
-PersistPtrIncrementalBlockAtom::PersistPtrIncrementalBlockAtom()
+class PersistIncrementalBlockAtom::Private
 {
+public:
+  std::vector<unsigned long> references;
+  std::vector<unsigned long> offsets;
+};
+
+PersistIncrementalBlockAtom::PersistIncrementalBlockAtom()
+{
+  d = new Private;
 }
 
-PersistPtrIncrementalBlockAtom::~PersistPtrIncrementalBlockAtom()
+PersistIncrementalBlockAtom::~PersistIncrementalBlockAtom()
 {
+  delete d;
 }
 
-void PersistPtrIncrementalBlockAtom ::dump( std::ostream& out ) const
+unsigned PersistIncrementalBlockAtom::entryCount() const
 {
-  out << "PersistPtrIncrementalBlockAtom - not yet implemented" << std::endl;
+  return d->references.size();
+}
+
+unsigned long PersistIncrementalBlockAtom::reference( unsigned index ) const
+{
+  unsigned long r = 0;
+  if( index < d->references.size() )
+    r = d->references[index];
+  return r;
+}
+
+unsigned long PersistIncrementalBlockAtom::offset( unsigned index ) const
+{
+  unsigned long ofs = 0;
+  if( index < d->offsets.size() )
+    ofs = d->offsets[index];
+  return ofs;
+}
+
+void PersistIncrementalBlockAtom ::setData( unsigned size, const unsigned char* data )
+{
+  d->references.clear();
+  d->offsets.clear();
+
+  int ofs = 0;
+  while( ofs < size )
+  {
+    long k = readU32( data+ ofs );
+    unsigned count = k>>20;
+    unsigned start = k&0xfffff;
+    ofs += 4;
+    for( int c=0; c < count; c++, ofs+=4 )
+    {
+      if( ofs >= size ) break;
+      long of = readU32( data + ofs );
+      d->references.push_back( start+c );
+      d->offsets.push_back( of );
+    }
+  }
+}
+
+void PersistIncrementalBlockAtom ::dump( std::ostream& out ) const
+{
+  out << "PersistIncrementalBlockAtom" << std::endl;
+  for( unsigned i = 0; i < entryCount(); i++ )
+    out << " Ref #" << reference(i) << "  at offset " << offset(i) << std::endl;
 } 
 
 
@@ -1255,15 +1711,15 @@ void HeadersFootersAtom::setFlags(int flags)
   d->flags= flags;
 }
 
-void HeadersFootersAtom::setData( unsigned size, const unsigned char* data )
+void HeadersFootersAtom::setData( unsigned , const unsigned char* data )
 {
   setFormatId( readS16( data + 0 ) );
   setFlags( readU16( data + 2 ) );
 }
 
-void HeadersFootersAtom ::dump( std::ostream& out ) const
+void HeadersFootersAtom::dump( std::ostream& out ) const
 {
-  out << "NotesAtom" << std::endl;
+  out << "HeadersFootersAtom" << std::endl;
   out << "formatId " << formatId() << std::endl;
   out << "flags " << flags() << std::endl;
 }
@@ -1276,28 +1732,28 @@ const unsigned int ColorSchemeAtom::id = 2032;
 class ColorSchemeAtom ::Private
 {
 public:
-  int Background;
-  int TextAndLines; 
-  int Shadows; 
-  int TitleText; 
-  int Fills; 
-  int Accent; 
-  int AccentAndHyperlink; 
-  int AccentAndFollowedHyperlink; 
+  int background;
+  int textAndLines; 
+  int shadows; 
+  int titleText; 
+  int fills; 
+  int accent; 
+  int accentAndHyperlink; 
+  int accentAndFollowedHyperlink; 
   
 };
 
 ColorSchemeAtom::ColorSchemeAtom ()
 {
   d = new Private; 
-  d->Background = 0 ;
-  d->TextAndLines = 0; 
-  d->Shadows = 0 ; 
-  d->TitleText = 0 ; 
-  d->Fills = 0; 
-  d->Accent = 0; 
-  d->AccentAndHyperlink = 0; 
-  d->AccentAndFollowedHyperlink = 0; 
+  d->background = 0 ;
+  d->textAndLines = 0; 
+  d->shadows = 0 ; 
+  d->titleText = 0 ; 
+  d->fills = 0; 
+  d->accent = 0; 
+  d->accentAndHyperlink = 0; 
+  d->accentAndFollowedHyperlink = 0; 
 }
 
 
@@ -1306,87 +1762,87 @@ ColorSchemeAtom::~ColorSchemeAtom ()
   delete d;
 }
 
-int ColorSchemeAtom::Background() const
+int ColorSchemeAtom::background() const
 {
-  return d->Background; 
+  return d->background; 
 }
  
-void ColorSchemeAtom::setBackground( int Background )
+void ColorSchemeAtom::setBackground( int background )
 { 
-  d->Background = Background; 
+  d->background = background; 
 }  
 
-int ColorSchemeAtom::TextAndLines() const
+int ColorSchemeAtom::textAndLines() const
 {
-  return d->TextAndLines; 
+  return d->textAndLines; 
 }
 
-void ColorSchemeAtom::setTextAndLines( int TextAndLines )
+void ColorSchemeAtom::setTextAndLines( int textAndLines )
 {
-  d->TextAndLines = TextAndLines; 
+  d->textAndLines = textAndLines; 
 }
 
-int ColorSchemeAtom::Shadows() const
+int ColorSchemeAtom::shadows() const
 {
-  return d->Shadows; 
+  return d->shadows; 
 }  
 
-void ColorSchemeAtom::setShadows( int Shadows )
+void ColorSchemeAtom::setShadows( int shadows )
 {
-  d->Shadows = Shadows; 
+  d->shadows = shadows; 
 }
   
-int ColorSchemeAtom::TitleText() const
+int ColorSchemeAtom::titleText() const
 {
-  return d->TitleText; 
+  return d->titleText; 
 } 
 
-void ColorSchemeAtom::setTitleText( int TitleText )
+void ColorSchemeAtom::setTitleText( int titleText )
 {
-  d->TitleText = TitleText; 
+  d->titleText = titleText; 
 }
    
-int ColorSchemeAtom::Fills() const
+int ColorSchemeAtom::fills() const
 {
-  return d->Fills; 
+  return d->fills; 
 }  
 
-void ColorSchemeAtom::setFills( int Fills )
+void ColorSchemeAtom::setFills( int fills )
 {
-  d->Fills = Fills; 
+  d->fills = fills; 
 }  
 
-int ColorSchemeAtom::Accent() const
+int ColorSchemeAtom::accent() const
 {
-  return d->Accent; 
+  return d->accent; 
 }  
 
-void ColorSchemeAtom::setAccent( int Accent )
+void ColorSchemeAtom::setAccent( int accent )
 {
-  d->Accent = Accent; 
+  d->accent = accent; 
 }  
 
-int ColorSchemeAtom::AccentAndHyperlink() const
+int ColorSchemeAtom::accentAndHyperlink() const
 {
-  return d->AccentAndHyperlink; 
+  return d->accentAndHyperlink; 
 }  
 
-void ColorSchemeAtom::setAccentAndHyperlink ( int AccentAndHyperlink )
+void ColorSchemeAtom::setAccentAndHyperlink ( int accentAndHyperlink )
 {
-  d->AccentAndHyperlink  = AccentAndHyperlink; 
+  d->accentAndHyperlink  = accentAndHyperlink; 
 }  
 
-int ColorSchemeAtom::AccentAndFollowedHyperlink() const
+int ColorSchemeAtom::accentAndFollowedHyperlink() const
 {
-  return d->AccentAndFollowedHyperlink; 
+  return d->accentAndFollowedHyperlink; 
 }  
 
-void ColorSchemeAtom::setAccentAndFollowedHyperlink( int AccentAndFollowedHyperlink )
+void ColorSchemeAtom::setAccentAndFollowedHyperlink( int accentAndFollowedHyperlink )
 { 
-  d->AccentAndFollowedHyperlink = AccentAndFollowedHyperlink; 
+  d->accentAndFollowedHyperlink = accentAndFollowedHyperlink; 
 }
 
-void ColorSchemeAtom ::setData( unsigned size, const unsigned char* data )
+void ColorSchemeAtom ::setData( unsigned , const unsigned char* data )
 {
   setBackground( readS32( data + 0 ) );
   setTextAndLines( readU32( data + 4 ) );
@@ -1402,13 +1858,13 @@ void ColorSchemeAtom ::setData( unsigned size, const unsigned char* data )
 void ColorSchemeAtom ::dump( std::ostream& out ) const
 {
   out << "ColorSchemeAtom" << std::endl;
-  out << "Background " << Background() << std::endl;
-  out << "Shadows " << Shadows() << std::endl;
-  out << "TitleText " << TitleText() << std::endl;
-  out << "Fills " << Fills() << std::endl;
-  out << "Accent " << Accent() << std::endl;
-  out << "AccentAndHyperlink " << AccentAndHyperlink() << std::endl;
-  out << "AccentAndFollowedHyperlink " << AccentAndFollowedHyperlink() << std::endl;
+  out << "background " << background() << std::endl;
+  out << "shadows " << shadows() << std::endl;
+  out << "titleText " << titleText() << std::endl;
+  out << "fills " << fills() << std::endl;
+  out << "accent " << accent() << std::endl;
+  out << "accentAndHyperlink " << accentAndHyperlink() << std::endl;
+  out << "accentAndFollowedHyperlink " << accentAndFollowedHyperlink() << std::endl;
 }
 
 // ========== CurrentUserAtom  ==========
@@ -1418,11 +1874,11 @@ const unsigned int CurrentUserAtom::id = 4086;
 class CurrentUserAtom ::Private
 {
 public:
-  int Size;
-  int Magic; 
-  int OffsettoCurrentEdit; 
-  int LenUserName; 
-  int DocFileVersion; 
+  int size;
+  int magic; 
+  int offsetToCurrentEdit; 
+  int lenUserName; 
+  int docFileVersion; 
   int majorVersion; 
   int minorVersion; 
 };
@@ -1430,11 +1886,11 @@ public:
 CurrentUserAtom::CurrentUserAtom ()
 {
   d = new Private; 
-  d->Size = 0 ;
-  d->Magic = 0 ;
-  d->OffsettoCurrentEdit = 0; 
-  d->LenUserName = 0 ; 
-  d->DocFileVersion = 0 ; 
+  d->size = 0 ;
+  d->magic = 0 ;
+  d->offsetToCurrentEdit = 0; 
+  d->lenUserName = 0 ; 
+  d->docFileVersion = 0 ; 
   d->majorVersion = 0; 
   d->minorVersion = 0; 
 }
@@ -1444,54 +1900,54 @@ CurrentUserAtom::~CurrentUserAtom ()
   delete d;
 }
 
-int CurrentUserAtom::Size() const
+int CurrentUserAtom::size() const
 {
-  return d->Size; 
+  return d->size; 
 }
  
-void CurrentUserAtom::setSize( int Size )
+void CurrentUserAtom::setSize( int size )
 { 
-  d->Size = Size; 
+  d->size = size; 
 }  
 
-int CurrentUserAtom::Magic() const
+int CurrentUserAtom::magic() const
 {
-  return d->Magic; 
+  return d->magic; 
 }
  
-void CurrentUserAtom::setMagic( int Magic )
+void CurrentUserAtom::setMagic( int magic )
 { 
-  d->Magic = Magic; 
+  d->magic = magic; 
 }  
 
-int CurrentUserAtom::OffsettoCurrentEdit() const
+int CurrentUserAtom::offsetToCurrentEdit() const
 {
-  return d->OffsettoCurrentEdit; 
+  return d->offsetToCurrentEdit; 
 }
  
-void CurrentUserAtom::setOffsettoCurrentEdit( int OffsettoCurrentEdit )
+void CurrentUserAtom::setOffsetToCurrentEdit( int offsetToCurrentEdit )
 { 
-  d->OffsettoCurrentEdit = OffsettoCurrentEdit; 
+  d->offsetToCurrentEdit = offsetToCurrentEdit; 
 }  
 
-int CurrentUserAtom::LenUserName() const
+int CurrentUserAtom::lenUserName() const
 {
-  return d->LenUserName; 
+  return d->lenUserName; 
 }
  
-void CurrentUserAtom::setLenUserName( int LenUserName )
+void CurrentUserAtom::setLenUserName( int lenUserName )
 { 
-  d->LenUserName = LenUserName; 
+  d->lenUserName = lenUserName; 
 }  
 
-int CurrentUserAtom::DocFileVersion() const
+int CurrentUserAtom::docFileVersion() const
 {
-  return d->DocFileVersion; 
+  return d->docFileVersion; 
 }
  
-void CurrentUserAtom::setDocFileVersion( int DocFileVersion )
+void CurrentUserAtom::setDocFileVersion( int docFileVersion )
 { 
-  d->DocFileVersion = DocFileVersion; 
+  d->docFileVersion = docFileVersion; 
 }  
 
 int CurrentUserAtom::majorVersion() const
@@ -1514,11 +1970,11 @@ void CurrentUserAtom::setMinorVersion( int minorVersion )
   d->minorVersion = minorVersion; 
 }  
 
-void CurrentUserAtom ::setData( unsigned size, const unsigned char* data )
+void CurrentUserAtom ::setData( unsigned , const unsigned char* data )
 {
   setSize( readU32( data + 0 ) );
   setMagic( readU32( data + 4 ) );
-  setOffsettoCurrentEdit( readU32( data + 8 ) );
+  setOffsetToCurrentEdit( readU32( data + 8 ) );
   setLenUserName( readU16( data + 12 ) );
   setDocFileVersion( readU32( data + 14 ) );
   setMajorVersion(  data[18] );
@@ -1527,13 +1983,14 @@ void CurrentUserAtom ::setData( unsigned size, const unsigned char* data )
 
 void CurrentUserAtom ::dump( std::ostream& out ) const
 {
-  out << "Size" << Size() << std::endl;
-  out << "Magic " << Magic() << std::endl;
-  out << "OffsettoCurrentEdit " << OffsettoCurrentEdit() << std::endl;
-  out << "LenUserName " << LenUserName() << std::endl;
-  out << "DocFileVersion " << DocFileVersion() << std::endl;
-  out << "majorVersion " << majorVersion() << std::endl;
-  out << "minorVersion " << minorVersion() << std::endl;
+  out << "  CurrentUserAtom" << std::endl;
+  out << "  size " << size() << std::endl;
+  out << "  magic " << magic() << std::endl;
+  out << "  offsetToCurrentEdit " << offsetToCurrentEdit() << std::endl;
+  out << "  lenUserName " << lenUserName() << std::endl;
+  out << "  docFileVersion " << docFileVersion() << std::endl;
+  out << "  majorVersion " << majorVersion() << std::endl;
+  out << "  minorVersion " << minorVersion() << std::endl;
 }
 
 
@@ -1547,6 +2004,9 @@ public:
   int lastSlideId;
   int majorVersion; 
   int minorVersion;
+  unsigned long offsetLastEdit;
+  unsigned long offsetPersistDir;
+  unsigned long documentRef;
 };
 
 UserEditAtom::UserEditAtom()
@@ -1554,8 +2014,7 @@ UserEditAtom::UserEditAtom()
   d = new Private;
   d->lastSlideId = 0;
   d->majorVersion = 0;
-  d->minorVersion = 0;
-  
+  d->minorVersion = 0;  
 }
 
 UserEditAtom::~UserEditAtom()
@@ -1593,20 +2052,181 @@ void UserEditAtom::setMinorVersion( int minorVersion )
   d->minorVersion = minorVersion;
 }
 
-void UserEditAtom::setData( unsigned size, const unsigned char* data )
+unsigned long UserEditAtom::offsetLastEdit() const
+{
+  return d->offsetLastEdit;
+}
+
+void UserEditAtom::setOffsetLastEdit( unsigned long ofs )
+{
+  d->offsetLastEdit = ofs;
+}
+
+unsigned long UserEditAtom::offsetPersistDir() const
+{
+  return d->offsetPersistDir;
+}
+
+void UserEditAtom::setOffsetPersistDir( unsigned long ofs ) const
+{
+  d->offsetPersistDir = ofs;
+}
+
+unsigned long UserEditAtom::documentRef() const 
+{
+  return d->documentRef;
+}
+
+void UserEditAtom::setDocumentRef( unsigned long ref ) const 
+{
+  d->documentRef = ref;
+}
+
+void UserEditAtom::setData( unsigned , const unsigned char* data )
 {
   setLastSlideId( readU32( data + 0 ) );
   setMinorVersion( readU16( data + 4 ) );
   setMajorVersion( readU16( data + 6 ) );
-  
+  setOffsetLastEdit( readU32( data + 8 ) );
+  setOffsetPersistDir( readU32( data + 12 ) );
+  setDocumentRef( readU32( data + 16 ) );
 }
 
 void UserEditAtom::dump( std::ostream& out ) const
 {
-  out << "UserEditAtom" << std::endl;
-  out << "LastSlideID " << lastSlideId() << std::endl;
-  out << "MajorVersion " << majorVersion() << std::endl;
-  out << "MinorVersion " << minorVersion() << std::endl;
+  out << "  UserEditAtom" << std::endl;
+  out << "  LastSlideID " << lastSlideId() << std::endl;
+  out << "  MajorVersion " << majorVersion() << std::endl;
+  out << "  MinorVersion " << minorVersion() << std::endl;
+  out << "  Offset Last Edit " << offsetLastEdit() << std::endl;
+  out << "  Offset Persist Dir " << offsetPersistDir() << std::endl;
+  out << "  Document Ref " << documentRef() << std::endl;
+}
+
+// ========== TextBookmarkAtom ==========
+
+const unsigned int TextBookmarkAtom::id = 4007;
+
+class TextBookmarkAtom::Private
+{
+public:
+  int begin;
+  int end; 
+  int bookmarkID;
+};
+
+TextBookmarkAtom::TextBookmarkAtom()
+{
+  d = new Private;
+  d->begin = 0;
+  d->end = 0;
+  d->bookmarkID = 0;
+}
+
+TextBookmarkAtom::~TextBookmarkAtom()
+{
+  delete d;
+}
+
+int TextBookmarkAtom::begin() const
+{
+  return d->begin;
+}
+
+void TextBookmarkAtom::setBegin( int begin )
+{
+  d->begin = begin;
+}
+
+int TextBookmarkAtom::end() const
+{
+  return d->end;
+}
+
+void TextBookmarkAtom::setEnd( int end )
+{
+  d->end = end;
+}
+
+int TextBookmarkAtom::bookmarkID() const
+{
+  return d->bookmarkID;
+}
+
+void TextBookmarkAtom::setBookmarkID( int bookmarkID )
+{
+  d->bookmarkID = bookmarkID;
+}
+
+void TextBookmarkAtom::setData( unsigned , const unsigned char* data )
+{
+  setBegin( readU32( data + 0 ) );
+  setEnd( readU32( data + 4 ) );
+  setBookmarkID( readU32( data + 8 ) );  
+}
+
+void TextBookmarkAtom::dump( std::ostream& out ) const
+{
+  out << "TextBookmarkAtom" << std::endl;
+  out << "begin " << begin() << std::endl;
+  out << "end " << end() << std::endl;
+  out << "bookmarkID " << bookmarkID() << std::endl;
+}
+
+// ========== BookmarkEntityAtom ==========
+
+const unsigned int BookmarkEntityAtom::id = 4048;
+
+class BookmarkEntityAtom::Private
+{
+public:
+  int bookmarkID;
+  int bookmarkName;
+};
+
+BookmarkEntityAtom::BookmarkEntityAtom()
+{
+  d = new Private;
+  d->bookmarkID = 0;
+  d->bookmarkName = 0;
+}
+
+BookmarkEntityAtom::~BookmarkEntityAtom()
+{
+  delete d;
+}
+
+int BookmarkEntityAtom::bookmarkID() const
+{
+  return d->bookmarkID;
+}
+
+void BookmarkEntityAtom::setBookmarkID( int bookmarkID )
+{
+  d->bookmarkID = bookmarkID;
+}
+
+int BookmarkEntityAtom::bookmarkName() const
+{
+  return d->bookmarkName;
+}
+
+void BookmarkEntityAtom::setBookmarkName( int bookmarkName )
+{
+  d->bookmarkName = bookmarkName;
+}
+
+void BookmarkEntityAtom::setData( unsigned , const unsigned char* data )
+{
+  setBookmarkID( readU32( data + 0 ) );
+  setBookmarkName( readU16( data + 4 ) );
+}
+
+void BookmarkEntityAtom::dump( std::ostream& out ) const
+{
+  out << "BookmarkEntityAtom" << std::endl;
+  out << "bookmarkID " << bookmarkID() << std::endl;
+  out << "bookmarkName " << bookmarkName() << std::endl;
 }
 
 // ========== SSDocInfoAtom ==========
@@ -1616,29 +2236,29 @@ const unsigned int SSDocInfoAtom::id = 1025;
 class SSDocInfoAtom::Private
 {
 public:
-  int PenColorRed;
-  int PenColorGreen;
-  int PenColorBlue;
-  int PenColorIndex;
-  int RestartTime;
-  int StartSlide; 
-  int EndSlide;
-  int NamedShow;
-  int Flags;
+  int penColorRed;
+  int penColorGreen;
+  int penColorBlue;
+  int penColorIndex;
+  int restartTime;
+  int startSlide; 
+  int endSlide;
+  int namedShow;
+  int flags;
 };
 
 SSDocInfoAtom::SSDocInfoAtom()
 {
   d = new Private;
-  d->PenColorRed = 0;
-  d->PenColorGreen = 0;
-  d->PenColorBlue = 0;
-  d->PenColorIndex = 0;
-  d->RestartTime = 0;
-  d->StartSlide = 0;
-  d->EndSlide = 0;
-  d->NamedShow = 0;
-  d->Flags = 0;  
+  d->penColorRed = 0;
+  d->penColorGreen = 0;
+  d->penColorBlue = 0;
+  d->penColorIndex = 0;
+  d->restartTime = 0;
+  d->startSlide = 0;
+  d->endSlide = 0;
+  d->namedShow = 0;
+  d->flags = 0;  
 }
 
 SSDocInfoAtom::~SSDocInfoAtom()
@@ -1646,93 +2266,97 @@ SSDocInfoAtom::~SSDocInfoAtom()
   delete d;
 }
 
-int SSDocInfoAtom::PenColorRed() const
+int SSDocInfoAtom::penColorRed() const
 {
-  return d->PenColorRed;
-}
-void SSDocInfoAtom::setPenColorRed( int PenColorRed )
-{
-  d->PenColorRed = PenColorRed;
+  return d->penColorRed;
 }
 
-int SSDocInfoAtom::PenColorGreen() const
+void SSDocInfoAtom::setPenColorRed( int penColorRed )
 {
-  return d->PenColorGreen;
-}
-void SSDocInfoAtom::setPenColorGreen( int PenColorGreen )
-{
-  d->PenColorGreen = PenColorGreen;
+  d->penColorRed = penColorRed;
 }
 
-int SSDocInfoAtom::PenColorBlue() const
+int SSDocInfoAtom::penColorGreen() const
 {
-  return d->PenColorBlue;
-}
-void SSDocInfoAtom::setPenColorBlue( int PenColorBlue )
-{
-  d->PenColorBlue = PenColorBlue;
+  return d->penColorGreen;
 }
 
-int SSDocInfoAtom::PenColorIndex() const
+void SSDocInfoAtom::setPenColorGreen( int penColorGreen )
 {
-  return d->PenColorIndex;
-}
-void SSDocInfoAtom::setPenColorIndex( int PenColorIndex )
-{
-  d->PenColorIndex = PenColorIndex;
+  d->penColorGreen = penColorGreen;
 }
 
-int SSDocInfoAtom::RestartTime() const
+int SSDocInfoAtom::penColorBlue() const
 {
-  return d->RestartTime;
+  return d->penColorBlue;
 }
 
-void SSDocInfoAtom::setRestartTime( int RestartTime )
+void SSDocInfoAtom::setPenColorBlue( int penColorBlue )
 {
-  d->RestartTime = RestartTime;
+  d->penColorBlue = penColorBlue;
 }
 
-int SSDocInfoAtom::StartSlide() const
+int SSDocInfoAtom::penColorIndex() const
 {
-  return d->StartSlide;
+  return d->penColorIndex;
 }
 
-void SSDocInfoAtom::setStartSlide( int StartSlide )
+void SSDocInfoAtom::setPenColorIndex( int penColorIndex )
 {
-  d->StartSlide = StartSlide;
+  d->penColorIndex = penColorIndex;
 }
 
-int SSDocInfoAtom::EndSlide() const
+int SSDocInfoAtom::restartTime() const
 {
-  return d->EndSlide;
+  return d->restartTime;
 }
 
-void SSDocInfoAtom::setEndSlide( int EndSlide )
+void SSDocInfoAtom::setRestartTime( int restartTime )
 {
-  d->EndSlide = EndSlide;
+  d->restartTime = restartTime;
 }
 
-int SSDocInfoAtom::NamedShow() const
+int SSDocInfoAtom::startSlide() const
 {
-  return d->NamedShow;
+  return d->startSlide;
 }
 
-void SSDocInfoAtom::setNamedShow( int NamedShow )
+void SSDocInfoAtom::setStartSlide( int startSlide )
 {
-  d->NamedShow = NamedShow;
+  d->startSlide = startSlide;
 }
 
-int SSDocInfoAtom::Flags() const
+int SSDocInfoAtom::endSlide() const
 {
-  return d->Flags;
+  return d->endSlide;
 }
 
-void SSDocInfoAtom::setFlags( int Flags )
+void SSDocInfoAtom::setEndSlide( int endSlide )
 {
-  d->Flags = Flags;
+  d->endSlide = endSlide;
 }
 
-void SSDocInfoAtom::setData( unsigned size, const unsigned char* data )
+int SSDocInfoAtom::namedShow() const
+{
+  return d->namedShow;
+}
+
+void SSDocInfoAtom::setNamedShow( int namedShow )
+{
+  d->namedShow = namedShow;
+}
+
+int SSDocInfoAtom::flags() const
+{
+  return d->flags;
+}
+
+void SSDocInfoAtom::setFlags( int flags )
+{
+  d->flags = flags;
+}
+
+void SSDocInfoAtom::setData( unsigned , const unsigned char* data )
 {
   setPenColorRed( data[0]  );
   setPenColorGreen( data[1] );
@@ -1742,22 +2366,21 @@ void SSDocInfoAtom::setData( unsigned size, const unsigned char* data )
   setStartSlide( readS16( data + 8 ) );
   setEndSlide( readS16( data + 10 ) );
   setNamedShow( readU16( data + 12 ) ); // 2 bytes repeat 32x
-  setFlags( readU16( data + 76 ) ); // offset correct ?
-  
+  setFlags( readU16( data + 76 ) ); // offset correct ?  
 }
 
 void SSDocInfoAtom::dump( std::ostream& out ) const
 {
   out << "UserEditAtom" << std::endl;
-  out << "PenColorRed " << PenColorRed() << std::endl;
-  out << "PenColorGreen " << PenColorGreen() << std::endl;
-  out << "PenColorBlue " << PenColorBlue() << std::endl;
-  out << "PenColorIndex " << PenColorIndex() << std::endl;
-  out << "RestartTime " << RestartTime() << std::endl;
-  out << "StartSlide " << StartSlide() << std::endl;
-  out << "EndSlide " << EndSlide() << std::endl;
-  out << "NamedShow " << NamedShow() << std::endl;
-  out << "Flags " << Flags() << std::endl;
+  out << "penColorRed " << penColorRed() << std::endl;
+  out << "penColorGreen " << penColorGreen() << std::endl;
+  out << "penColorBlue " << penColorBlue() << std::endl;
+  out << "penColorIndex " << penColorIndex() << std::endl;
+  out << "restartTime " << restartTime() << std::endl;
+  out << "startSlide " << startSlide() << std::endl;
+  out << "endSlide " << endSlide() << std::endl;
+  out << "namedShow " << namedShow() << std::endl;
+  out << "Flags " << flags() << std::endl;
 }
 
 // ========== SrKinsokuAtom ==========
@@ -1765,6 +2388,10 @@ void SSDocInfoAtom::dump( std::ostream& out ) const
 const unsigned int SrKinsokuAtom::id = 4050;
 
 SrKinsokuAtom::SrKinsokuAtom()
+{
+}
+
+SrKinsokuAtom::~SrKinsokuAtom()
 {
 }
 
@@ -1845,7 +2472,7 @@ void SlideViewInfoAtom::setSnapToShape(int snapToShape)
   d->snapToGrid= snapToShape;
 }
 
-void SlideViewInfoAtom ::setData( unsigned size, const unsigned char* data )
+void SlideViewInfoAtom ::setData( unsigned , const unsigned char* data )
 {
   setShowGuides(data[0]);
   setSnapToGrid(data[1]);
@@ -1867,18 +2494,18 @@ const unsigned int ViewInfoAtom::id = 1021;
 class ViewInfoAtom ::Private
 {
 public:
-  int CurScaleXNum;
-  int CurScaleXDen;  
-  int CurScaleYNum; 
-  int CurScaleYDen; 
-  int PrevScaleXNum;
-  int PrevScaleXDen;  
-  int PrevScaleYNum; 
-  int PrevScaleYDen; 
-  int ViewSizeX;
-  int ViewSizeY;  
-  int OriginX; 
-  int OriginY; 
+  int curScaleXNum;
+  int curScaleXDen;  
+  int curScaleYNum; 
+  int curScaleYDen; 
+  int prevScaleXNum;
+  int prevScaleXDen;  
+  int prevScaleYNum; 
+  int prevScaleYDen; 
+  int viewSizeX;
+  int viewSizeY;  
+  int originX; 
+  int originY; 
   int varScale; 
   int draftMode; 
   int padding; 
@@ -1887,18 +2514,18 @@ public:
 ViewInfoAtom::ViewInfoAtom ()
 {
   d = new Private;
-  d->CurScaleXNum = 0;
-  d->CurScaleXDen = 0;
-  d->CurScaleYNum = 0;
-  d->CurScaleYDen = 0;
-  d->PrevScaleXNum = 0;
-  d->PrevScaleXDen = 0;
-  d->PrevScaleYNum = 0;
-  d->PrevScaleYDen = 0;
-  d->ViewSizeX = 0;
-  d->ViewSizeY = 0;
-  d->OriginX = 0;
-  d->OriginY = 0;
+  d->curScaleXNum = 0;
+  d->curScaleXDen = 0;
+  d->curScaleYNum = 0;
+  d->curScaleYDen = 0;
+  d->prevScaleXNum = 0;
+  d->prevScaleXDen = 0;
+  d->prevScaleYNum = 0;
+  d->prevScaleYDen = 0;
+  d->viewSizeX = 0;
+  d->viewSizeY = 0;
+  d->originX = 0;
+  d->originY = 0;
   d->varScale = 0; 
   d->draftMode = 0; 
   d->padding = 0;
@@ -1939,129 +2566,127 @@ void ViewInfoAtom::setPadding(int padding)
   d->padding= padding;
 }
 
-int ViewInfoAtom::ViewSizeX() const
+int ViewInfoAtom::viewSizeX() const
 {
-  return d->ViewSizeX;
+  return d->viewSizeX;
 }
 
-void ViewInfoAtom::setViewSizeX(int ViewSizeX)
+void ViewInfoAtom::setViewSizeX(int viewSizeX)
 {
-  d->ViewSizeX= ViewSizeX;
+  d->viewSizeX= viewSizeX;
 }
 
-int ViewInfoAtom::ViewSizeY() const
+int ViewInfoAtom::viewSizeY() const
 {
-  return d->ViewSizeY;
+  return d->viewSizeY;
 }
 
-void ViewInfoAtom::setViewSizeY(int ViewSizeY)
+void ViewInfoAtom::setViewSizeY(int viewSizeY)
 {
-  d->ViewSizeY= ViewSizeY;
+  d->viewSizeY= viewSizeY;
 }
 
-int ViewInfoAtom::OriginX() const
+int ViewInfoAtom::originX() const
 {
-  return d->OriginX;
+  return d->originX;
 }
 
-void ViewInfoAtom::setOriginX(int OriginX)
+void ViewInfoAtom::setOriginX(int originX)
 {
-  d->OriginX= OriginX;
+  d->originX= originX;
 }
 
-int ViewInfoAtom::OriginY() const
+int ViewInfoAtom::originY() const
 {
-  return d->OriginY;
+  return d->originY;
 }
 
-void ViewInfoAtom::setOriginY (int OriginY)
+void ViewInfoAtom::setOriginY (int originY)
 {
-  d->OriginY= OriginY;
+  d->originY= originY;
 }
 
-
-int ViewInfoAtom::PrevScaleXNum() const
+int ViewInfoAtom::prevScaleXNum() const
 {
-  return d->PrevScaleXNum;
+  return d->prevScaleXNum;
 }
 
-void ViewInfoAtom::setPrevScaleXNum(int PrevScaleXNum)
+void ViewInfoAtom::setPrevScaleXNum(int prevScaleXNum)
 {
-  d->PrevScaleXNum= PrevScaleXNum;
+  d->prevScaleXNum= prevScaleXNum;
 }
 
-int ViewInfoAtom::PrevScaleXDen() const
+int ViewInfoAtom::prevScaleXDen() const
 {
-  return d->PrevScaleXDen;
+  return d->prevScaleXDen;
 }
 
-void ViewInfoAtom::setPrevScaleXDen(int PrevScaleXDen)
+void ViewInfoAtom::setPrevScaleXDen(int prevScaleXDen)
 {
-  d->PrevScaleXDen= PrevScaleXDen;
+  d->prevScaleXDen= prevScaleXDen;
 }
 
-int ViewInfoAtom::PrevScaleYNum() const
+int ViewInfoAtom::prevScaleYNum() const
 {
-  return d->PrevScaleYNum;
+  return d->prevScaleYNum;
 }
 
-void ViewInfoAtom::setPrevScaleYNum(int PrevScaleYNum)
+void ViewInfoAtom::setPrevScaleYNum(int prevScaleYNum)
 {
-  d->PrevScaleYNum= PrevScaleYNum;
+  d->prevScaleYNum= prevScaleYNum;
 }
 
-int ViewInfoAtom::PrevScaleYDen() const
+int ViewInfoAtom::prevScaleYDen() const
 {
-  return d->PrevScaleYDen;
+  return d->prevScaleYDen;
 }
 
-void ViewInfoAtom::setPrevScaleYDen(int PrevScaleYDen)
+void ViewInfoAtom::setPrevScaleYDen(int prevScaleYDen)
 {
-  d->PrevScaleYDen= PrevScaleYDen;
+  d->prevScaleYDen= prevScaleYDen;
 }
 
-
-int ViewInfoAtom::CurScaleXNum() const
+int ViewInfoAtom::curScaleXNum() const
 {
-  return d->CurScaleXNum;
+  return d->curScaleXNum;
 }
 
-void ViewInfoAtom::setCurScaleXNum(int CurScaleXNum)
+void ViewInfoAtom::setCurScaleXNum(int curScaleXNum)
 {
-  d->CurScaleXNum= CurScaleXNum;
+  d->curScaleXNum= curScaleXNum;
 }
 
-int ViewInfoAtom::CurScaleXDen() const
+int ViewInfoAtom::curScaleXDen() const
 {
-  return d->CurScaleXDen;
+  return d->curScaleXDen;
 }
 
-void ViewInfoAtom::setCurScaleXDen(int CurScaleXDen)
+void ViewInfoAtom::setCurScaleXDen(int curScaleXDen)
 {
-  d->CurScaleXDen= CurScaleXDen;
+  d->curScaleXDen= curScaleXDen;
 }
 
-int ViewInfoAtom::CurScaleYNum() const
+int ViewInfoAtom::curScaleYNum() const
 {
-  return d->CurScaleYNum;
+  return d->curScaleYNum;
 }
 
-void ViewInfoAtom::setCurScaleYNum(int CurScaleYNum)
+void ViewInfoAtom::setCurScaleYNum(int curScaleYNum)
 {
-  d->CurScaleYNum= CurScaleYNum;
+  d->curScaleYNum= curScaleYNum;
 }
 
-int ViewInfoAtom::CurScaleYDen() const
+int ViewInfoAtom::curScaleYDen() const
 {
-  return d->CurScaleYDen;
+  return d->curScaleYDen;
 }
 
-void ViewInfoAtom::setCurScaleYDen(int CurScaleYDen)
+void ViewInfoAtom::setCurScaleYDen(int curScaleYDen)
 {
-  d->CurScaleYDen= CurScaleYDen;
+  d->curScaleYDen= curScaleYDen;
 }
 
-void ViewInfoAtom ::setData( unsigned size, const unsigned char* data )
+void ViewInfoAtom ::setData( unsigned , const unsigned char* data )
 {
   setCurScaleXNum(readS32( data + 0));
   setCurScaleXDen(readS32( data + 4 ));
@@ -2083,18 +2708,18 @@ void ViewInfoAtom ::setData( unsigned size, const unsigned char* data )
 void ViewInfoAtom ::dump( std::ostream& out ) const
 {
   out << "ViewInfoAtom" << std::endl;
-  out << "CurScaleXNum " << CurScaleXNum() << std::endl;
-  out << "CurScaleXDen " << CurScaleXDen() << std::endl;
-  out << "CurScaleYNum " << CurScaleYNum() << std::endl;
-  out << "CurScaleYDen " << CurScaleYDen() << std::endl;
-  out << "PrevScaleXNum " << PrevScaleXNum() << std::endl;
-  out << "PrevScaleXDen " << PrevScaleXNum() << std::endl;
-  out << "PrevScaleYNum " << PrevScaleYNum() << std::endl;
-  out << "PrevScaleYDen " << PrevScaleYNum() << std::endl;  
-  out << "ViewSizeX " << ViewSizeX() << std::endl;
-  out << "ViewSizeY " << ViewSizeY() << std::endl;   
-  out << "OriginX " << OriginX() << std::endl;
-  out << "OriginY " << OriginY() << std::endl;   
+  out << "curScaleXNum " << curScaleXNum() << std::endl;
+  out << "curScaleXDen " << curScaleXDen() << std::endl;
+  out << "curScaleYNum " << curScaleYNum() << std::endl;
+  out << "curScaleYDen " << curScaleYDen() << std::endl;
+  out << "prevScaleXNum " << prevScaleXNum() << std::endl;
+  out << "prevScaleXDen " << prevScaleXNum() << std::endl;
+  out << "prevScaleYNum " << prevScaleYNum() << std::endl;
+  out << "prevScaleYDen " << prevScaleYNum() << std::endl;  
+  out << "viewSizeX " << viewSizeX() << std::endl;
+  out << "viewSizeY " << viewSizeY() << std::endl;   
+  out << "originX " << originX() << std::endl;
+  out << "originY " << originY() << std::endl;   
   out << "varScale " << varScale() << std::endl;  
   out << "draftMode " << draftMode() << std::endl;  
   out << "padding " << padding() << std::endl;  
@@ -2292,7 +2917,6 @@ void SlideAtom::setNotesId(int notesId)
   d->notesId = notesId;
 }
 
-
 int SlideAtom::flags() const
 {
   return d->flags;
@@ -2303,14 +2927,13 @@ void SlideAtom::setFlags( int flags)
   d->flags = flags;
 }
 
-void SlideAtom::setData( unsigned size, const unsigned char* data )
+void SlideAtom::setData( unsigned , const unsigned char* data )
 {
   setLayoutGeom(readS32( data + 0 ) ); 
   setLayoutPlaceholderId (data[4], data[5], data[6], data[7], data[8], data[9], data[10],data[11]);
   setMasterId( readS32( data + 12 ) );
   setNotesId( readS32( data + 16 ) );
-  setFlags( readU16( data + 20 ) );
-  
+  setFlags( readU16( data + 20 ) );  
 }
 
 void SlideAtom::dump( std::ostream& out ) const
@@ -2422,7 +3045,7 @@ void SSSlideInfoAtom ::setsoundRef(int soundRef)
   d->soundRef = soundRef;
 }
 
-void SSSlideInfoAtom ::setData( unsigned size, const unsigned char* data )
+void SSSlideInfoAtom ::setData( unsigned , const unsigned char* data )
 {
   settransType( readU32( data + 0 ) );
   setspeed(readS32( data + 4 ));
@@ -2435,6 +3058,7 @@ void SSSlideInfoAtom ::setData( unsigned size, const unsigned char* data )
 void SSSlideInfoAtom ::dump( std::ostream& out ) const
 {  
   out << "SSSlideInfoAtom" << std::endl;
+  out << "transType " << transType() << std::endl;
   out << "speed " << speed() << std::endl;
   out << "direction " << direction() << std::endl;
   out << "slideTime " << slideTime() << std::endl;
@@ -2449,13 +3073,13 @@ const unsigned int TextHeaderAtom::id = 3999;
 class TextHeaderAtom ::Private
 {
 public:
-  int txType; 
+  int textType; 
 };
 
 TextHeaderAtom ::TextHeaderAtom ()
 {
   d = new Private;
-  d->txType = 0;
+  d->textType = 0;
 }
 
 TextHeaderAtom ::~TextHeaderAtom ()
@@ -2463,37 +3087,38 @@ TextHeaderAtom ::~TextHeaderAtom ()
   delete d;
 }
 
-int TextHeaderAtom ::txType() const
+int TextHeaderAtom ::textType() const
 {
-  return d->txType;
+  return d->textType;
 }
 
-void TextHeaderAtom ::setTxType(int txType)
+void TextHeaderAtom ::setTextType( int type )
 {
-  d->txType = txType;
+  d->textType = type;
 }
 
 void TextHeaderAtom ::setData( unsigned size, const unsigned char* data )
 {
-  setTxType( readU32( data + 0 ) );
-  
+  if( size < 4 ) return;
+  setTextType( readU32( data + 0 ) );
 }
 
 void TextHeaderAtom ::dump( std::ostream& out ) const
 {  
   out << "TextHeaderAtom" << std::endl;
-  out << "txType " << txType() << std::endl;
+  out << " textType " << textType() << std::endl;
 }
 
-// ========== TextBytesAtom   ==========
+// ==========  TextBytesAtom   ==========
 
 const unsigned int TextBytesAtom ::id = 4008;
   
 class TextBytesAtom::Private
 {
 public:   
- UString ustring; 
+  UString ustring; 
 };
+
 
 UString TextBytesAtom::ustring() const
 {
@@ -2529,51 +3154,8 @@ void TextBytesAtom::setData( unsigned size, const unsigned char* data )
 
 void TextBytesAtom ::dump( std::ostream& out ) const
 {
-  
   out << "TextBytesAtom" << std::endl;
   out << "String : [" << ustring() << "]" << std::endl;
-}
-
-// ========== ExHyperlinkAtom  ==========
-
-const unsigned int ExHyperlinkAtom::id = 4051;
-  
-class ExHyperlinkAtom ::Private
-{
-public:
-  int objID; 
-};
-
-ExHyperlinkAtom ::ExHyperlinkAtom ()
-{
-  d = new Private;
-  d->objID = 0;
-}
-
-ExHyperlinkAtom ::~ExHyperlinkAtom ()
-{
-  delete d;
-}
-
-int ExHyperlinkAtom ::objID() const
-{
-  return d->objID;
-}
-
-void ExHyperlinkAtom ::setObjID(int objID)
-{
-  d->objID = objID;
-}
-
-void ExHyperlinkAtom::setData( unsigned size, const unsigned char* data )
-{
-  setObjID( readU32( data + 0 ) );
-}
-
-void ExHyperlinkAtom ::dump( std::ostream& out ) const
-{
-  out << "ExHyperlinkAtom" << std::endl;
-  out << "objID " << objID() << std::endl;   
 }
 
 
@@ -2608,7 +3190,7 @@ void TextSpecInfoAtom ::setTxSpecInfo(int txSpecInfo)
   d->txSpecInfo = txSpecInfo;
 }
 
-void TextSpecInfoAtom::setData( unsigned size, const unsigned char* data )
+void TextSpecInfoAtom::setData( unsigned , const unsigned char* data )
 {
   setTxSpecInfo( readU32( data + 0 ) );
 }
@@ -2621,7 +3203,7 @@ void TextSpecInfoAtom ::dump( std::ostream& out ) const
 
 // ========== SlidePersistAtom   ==========
 
-const unsigned int SlidePersistAtom ::id = 1011;
+const unsigned int SlidePersistAtom::id = 1011;
   
 class SlidePersistAtom::Private
 {
@@ -2700,6 +3282,8 @@ void SlidePersistAtom::setReserved( int reserved )
 
 void SlidePersistAtom::setData( unsigned size, const unsigned char* data )
 {
+  if( size < 20 ) return;
+
   setPsrReference( readU32( data + 0 ) );
   setFlags( readU32( data + 4 ) );
   setNumberTexts( readS32( data + 8 ) );
@@ -2717,20 +3301,944 @@ void SlidePersistAtom  ::dump( std::ostream& out ) const
   out << "reserved " << reserved() << " always 0."<<std::endl;
 }
 
+// ========== msofbtDgAtom  ==========
+
+const unsigned int msofbtDgAtom::id = 61448; /* F008 */
+
+msofbtDgAtom ::msofbtDgAtom ()
+{
+}
+
+msofbtDgAtom ::~msofbtDgAtom ()
+{
+}
+
+void msofbtDgAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtDgAtom " << std::endl;
+}
+
+// ========== msofbtSpgrAtom  ==========
+
+const unsigned int msofbtSpgrAtom::id = 61449; /* F009 */
+
+msofbtSpgrAtom ::msofbtSpgrAtom ()
+{
+}
+
+msofbtSpgrAtom ::~msofbtSpgrAtom ()
+{
+}
+
+void msofbtSpgrAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtSpgrAtom " << std::endl;
+}
+
+// ========== msofbtSpAtom  ==========
+
+const unsigned int msofbtSpAtom::id = 61450; /* F00A */
+
+class msofbtSpAtom::Private
+{
+public:
+  unsigned long shapeId;
+  unsigned long persistentFlag;
+  bool background;
+  bool hFlip; 
+  bool vFlip;
+};
+
+msofbtSpAtom ::msofbtSpAtom ()
+{
+  d = new Private;
+  d->shapeId = 0;
+  d->persistentFlag = 0;
+  d->background = false;
+  d->hFlip = false; 
+  d->vFlip = false;
+}
+
+msofbtSpAtom ::~msofbtSpAtom ()
+{
+  delete d;
+}
+
+unsigned long msofbtSpAtom::shapeId() const
+{
+  return d->shapeId;
+}
+
+void msofbtSpAtom::setShapeId( unsigned long id )
+{
+  d->shapeId = id;
+}
+
+const char* msofbtSpAtom::shapeTypeAsString() const
+{
+  switch( instance() )
+  {
+    case 0:  return "msosptMin"; 
+    case 1:  return "msosptRectangle"; 
+    case 2:  return "msosptRoundRectangle"; 
+    case 3:  return "msosptEllipse"; 
+    case 4:  return "msosptDiamond"; 
+    case 5:  return "msosptIsoscelesTriangle"; 
+    case 6:  return "msosptRightTriangle"; 
+    case 7:  return "msosptParallelogram"; 
+    case 8:  return "msosptTrapezoid"; 
+    case 9:  return "msosptHexagon"; 
+    case 10:  return "msosptOctagon"; 
+    case 11:  return "msosptPlus"; 
+    case 12:  return "msosptStar"; 
+    case 13:  return "msosptArrow"; 
+    case 14:  return "msosptThickArrow"; 
+    case 15:  return "msosptHomePlate"; 
+    case 16:  return "msosptCube"; 
+    case 17:  return "msosptBalloon"; 
+    case 18:  return "msosptSeal"; 
+    case 19:  return "msosptArc"; 
+    case 20:  return "msosptLine"; 
+    case 21:  return "msosptPlaque"; 
+    case 22:  return "msosptCan ="; 
+    case 23:  return "msosptDonut"; 
+    case 24:  return "msosptTextSimple"; 
+    case 25:  return "msosptTextOctagon"; 
+    case 26:  return "msosptTextHexagon"; 
+    case 27:  return "msosptTextCurve"; 
+    case 28:  return "msosptTextOnRing"; 
+    case 29:  return "msosptTextRing"; 
+    case 30:  return "msosptTextOnCurve"; 
+    case 31:  return "msosptTextOnRing";
+    case 32:  return "msosptStraightConnector1"; 	
+    case 75:  return "msosptPictureFrame";
+    case 74:  return "msosptHeart"; 
+    case 96:  return "msosptSmileyFace";
+    case 202: return "msosptTextBox";
+    default: break;
+  }; 
+  return "Unknown";
+}
+
+unsigned long msofbtSpAtom::persistentFlag() const
+{
+  return d->persistentFlag;
+}
+
+void msofbtSpAtom::setPersistentFlag( unsigned long persistentFlag )
+{
+  d->persistentFlag = persistentFlag;
+}
+
+bool msofbtSpAtom::isBackground() const
+{
+  return d->background;
+}
+
+void msofbtSpAtom::setBackground( bool bg )
+{
+  d->background = bg;
+}
+
+bool msofbtSpAtom::isVerFlip() const
+{
+  return d->vFlip;
+}
+
+void msofbtSpAtom::setVerFlip( bool vFlip )
+{
+  d->vFlip = vFlip;
+}
+
+bool msofbtSpAtom::isHorFlip() const
+{
+  return d->hFlip;
+}
+
+void msofbtSpAtom::setHorFlip( bool hFlip )
+{
+  d->hFlip = hFlip;
+}
+
+void msofbtSpAtom::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 8 ) return;
+
+  setShapeId( readU32( data + 0 ) );
+  setPersistentFlag( readU32( data + 4 ) );
+
+  unsigned flag = readU16( data + 4 );
+  setBackground( flag & 0x800 );
+  setVerFlip( flag & 0x80 );
+  setHorFlip( flag & 0x40 );  
+}
+
+void msofbtSpAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtSpAtom " << std::endl;
+}
+
+// ========== msofbtOPTAtom  ==========
+
+const unsigned int msofbtOPTAtom::id = 61451; /* F00B */
+
+class msofbtOPTAtom::Private
+{
+public:
+  std::vector<unsigned> ids;
+  std::vector<unsigned long> values;
+};
+
+msofbtOPTAtom ::msofbtOPTAtom ()
+{
+  d = new Private;
+}
+
+msofbtOPTAtom ::~msofbtOPTAtom ()
+{
+  delete d;
+}
+
+unsigned msofbtOPTAtom ::propertyCount() const
+{
+  return d->ids.size();
+}
+
+unsigned msofbtOPTAtom ::propertyId( unsigned index ) const
+{
+  return d->ids[index];
+}
+
+unsigned long msofbtOPTAtom ::propertyValue( unsigned index ) const
+{
+  return d->values[index];
+}
+
+void msofbtOPTAtom::setProperty( unsigned id, unsigned long val )
+{
+  d->ids.push_back( id );
+  d->values.push_back( val );
+}
+
+void msofbtOPTAtom::setData( unsigned size, const unsigned char* data )
+{
+  unsigned i = 0;
+  unsigned comp_len = 0;
+
+  d->ids.clear();
+  d->values.clear();
+
+  while( i < size )
+  {
+    unsigned x = readU16( data+i );
+    unsigned int id = x & 0x3fff;
+    bool comp = x & 0x8000;
+    unsigned long val = readU32( data + i + 2 );
+    if( comp ) 
+      comp_len += val;
+    i += 6;
+    setProperty( id, val );
+  }
+}
+
+void msofbtOPTAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtOPTAtom " << std::endl;
+}
+
+
+// ========== msofbtChildAnchorAtom  ==========
+
+const unsigned int msofbtChildAnchorAtom::id = 61455; /* F00F */
+
+msofbtChildAnchorAtom ::msofbtChildAnchorAtom ()
+{
+}
+
+msofbtChildAnchorAtom ::~msofbtChildAnchorAtom ()
+{
+}
+
+void msofbtChildAnchorAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtChildAnchorAtom " << std::endl;
+}
+
+// ========== msofbtClientAnchorAtom  ==========
+
+const unsigned int msofbtClientAnchorAtom::id = 61456; /* F010 */
+
+class msofbtClientAnchorAtom::Private
+{
+public:
+	int left; 
+	int top;
+	int right; 
+	int bottom; 
+};
+
+msofbtClientAnchorAtom::msofbtClientAnchorAtom  ()
+{
+  d = new Private;
+  d->left = 0;
+  d->top = 0; 
+  d->right=0; 
+  d->bottom=0; 
+ }
+
+msofbtClientAnchorAtom ::~msofbtClientAnchorAtom  ()
+{
+  delete d;
+}
+
+int msofbtClientAnchorAtom ::left() const
+{
+  return d->left;
+}
+
+void msofbtClientAnchorAtom ::setLeft( int left )
+{
+  d->left = left;
+}
+
+int msofbtClientAnchorAtom ::top() const
+{
+  return d->top;
+}
+
+void msofbtClientAnchorAtom ::setTop( int top )
+{
+  d->top = top; 
+}
+
+int msofbtClientAnchorAtom ::right() const
+{
+  return d->right; 
+}
+
+void msofbtClientAnchorAtom ::setRight( int right )
+{ 
+  d->right = right; 
+}
+
+int msofbtClientAnchorAtom ::bottom() const
+{
+  return d->bottom;
+}
+
+void msofbtClientAnchorAtom ::setBottom( int bottom )
+{
+  d->bottom = bottom; 
+}
+
+void msofbtClientAnchorAtom ::setData( unsigned , const unsigned char* data )
+{
+  setTop( readU16( data + 0 ) );
+  setLeft( readU16( data + 2 ) );
+  setRight( readU16( data + 4 ) );
+  setBottom( readU16( data + 6 ) );  
+}
+
+void msofbtClientAnchorAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtClientAnchorAtom " << std::endl;
+  out << "left " << left() << std::endl;
+  out << "top " << top() << std::endl;
+  out << "right " << right() << std::endl;
+  out << "bottom " << bottom() << std::endl;
+
+}
+
+// ========== msofbtClientDataAtom  ==========
+
+const unsigned int msofbtClientDataAtom::id = 61457; /* F011 */
+
+class msofbtClientDataAtom::Private
+{
+public:
+  unsigned placementId;
+  unsigned placeholderId;
+};
+
+msofbtClientDataAtom::msofbtClientDataAtom ()
+{
+  d = new Private;
+  d->placementId = 0;
+  d->placeholderId = 0;
+}
+
+msofbtClientDataAtom::~msofbtClientDataAtom ()
+{
+  delete d;
+}
+
+unsigned msofbtClientDataAtom::placementId() const
+{
+  return d->placementId;
+}
+
+void msofbtClientDataAtom::setPlacementId( unsigned id )
+{
+  d->placementId = id;
+}
+
+unsigned msofbtClientDataAtom::placeholderId() const
+{
+  return d->placeholderId;
+}
+
+void msofbtClientDataAtom::setPlaceholderId( unsigned id )
+{
+  d->placeholderId = id;
+}
+
+const char* msofbtClientDataAtom::placeholderIdAsString() const
+{
+  switch( d->placeholderId )
+  {
+    case 0:  return "None"; 
+    case 1:  return "Master title"; 
+    case 2:  return "Master body"; 
+    case 3:  return "Master centered title"; 
+    case 4:  return "Master notes slide image"; 
+    case 5:  return "Master notes body image"; 
+    case 6:  return "Master date"; 
+    case 7:  return "Master slide number"; 
+    case 8:  return "Master footer"; 
+    case 9:  return "Master header"; 
+    case 10:  return "Master subtitle"; 
+    case 11:  return "Generic text object"; 
+    case 12:  return "Title"; 
+    case 13:  return "Body"; 
+    case 14:  return "Notes body"; 
+    case 15:  return "Centered title"; 
+    case 16:  return "Subtitle"; 
+    case 17:  return "Vertical text title"; 
+    case 18:  return "Vertical text body"; 
+    case 19:  return "Notes slide image"; 
+    case 20:  return "Object"; 
+    case 21:  return "Graph"; 
+    case 22:  return "Table"; 
+    case 23:  return "Clip Art"; 
+    case 24:  return "Organization Chart"; 
+    case 25:  return "Media Clip"; 
+    default: break;
+  };
+
+  return "Unknown";
+}
+  
+
+//  00 00 c3 0b ===>   OEPlaceholderAtom
+//  08 00 00 00 
+//  00 00 00 00 ===> Placement ID 
+//  0f          ====> Placeholder ID
+//  00         =====> Size of placeholder
+//  9e 00
+
+void msofbtClientDataAtom::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 12 ) return;
+  setPlacementId( readU16( data+8 ) );
+  setPlaceholderId( data[12]-1 );
+}
+
+void msofbtClientDataAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtClientDataAtom " << std::endl;
+}
+
+// ========== msofbtDggAtom  ==========
+
+const unsigned int msofbtDggAtom::id = 61446; /* F011 */
+
+msofbtDggAtom ::msofbtDggAtom ()
+{
+}
+
+msofbtDggAtom ::~msofbtDggAtom ()
+{
+}
+
+void msofbtDggAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtDggAtom " << std::endl;
+}
+
+// ========== msofbtClientTextboxAtom  ==========
+
+const unsigned int msofbtClientTextboxAtom::id = 61453; /* F00D */
+
+class msofbtClientTextboxAtom::Private
+{
+public:
+  UString ustring;
+};
+
+msofbtClientTextboxAtom::msofbtClientTextboxAtom()
+{
+  d = new Private;
+}
+
+msofbtClientTextboxAtom::~msofbtClientTextboxAtom()
+{
+  delete d;
+}
+  
+UString msofbtClientTextboxAtom::ustring() const
+{
+  return d->ustring;
+}
+
+void msofbtClientTextboxAtom::setUString( const UString& ustr )
+{
+  d->ustring = ustr;
+}
+
+void msofbtClientTextboxAtom::setData( unsigned size, const unsigned char* data )
+{
+  UString str;
+  for( unsigned k=0; k<size/2; k++ )
+  {
+    unsigned uchar = readU16( data + k*2 );
+    str.append( UString(uchar) );
+  }
+  setUString( str );
+}
+  
+void msofbtClientTextboxAtom::dump( std::ostream& out ) const
+{
+  out << "msofbtClientTextboxAtom" << std::endl;
+  out << "String : [" << ustring() << "]" << std::endl;
+}
+
+/*
+msofbtClientTextboxAtom ::msofbtClientTextboxAtom ()
+{
+}
+
+msofbtClientTextboxAtom ::~msofbtClientTextboxAtom ()
+{
+}
+
+void msofbtClientTextboxAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtClientTextboxAtom " << std::endl;
+}
+*/
+
+// ========== msofbtDeletedPsplAtom  ==========
+
+const unsigned int msofbtDeletedPsplAtom::id = 61725; /* F11D */
+
+msofbtDeletedPsplAtom ::msofbtDeletedPsplAtom ()
+{
+}
+
+msofbtDeletedPsplAtom ::~msofbtDeletedPsplAtom ()
+{
+}
+
+void msofbtDeletedPsplAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtDeletedPsplAtom " << std::endl;
+}
+
+// ========== msofbtAnchorAtom  ==========
+
+const unsigned int msofbtAnchorAtom::id = 61454; /* F00E */
+
+msofbtAnchorAtom ::msofbtAnchorAtom ()
+{
+}
+
+msofbtAnchorAtom ::~msofbtAnchorAtom ()
+{
+}
+
+void msofbtAnchorAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtAnchorAtom " << std::endl;
+}
+
+// ========== msofbtColorMRUAtom  ==========
+
+const unsigned int msofbtColorMRUAtom::id = 61722; /* F11A */
+
+msofbtColorMRUAtom ::msofbtColorMRUAtom ()
+{
+}
+
+msofbtColorMRUAtom ::~msofbtColorMRUAtom ()
+{
+}
+
+void msofbtColorMRUAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtColorMRUAtom " << std::endl;
+}
+
+// ========== msofbtOleObjectAtom  ==========
+
+const unsigned int msofbtOleObjectAtom::id = 61727; /* F11F */
+
+msofbtOleObjectAtom ::msofbtOleObjectAtom ()
+{
+}
+
+msofbtOleObjectAtom ::~msofbtOleObjectAtom ()
+{
+}
+
+void msofbtOleObjectAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtOleObjectAtom " << std::endl;
+}
+
+// ========== msofbtSplitMenuColorsAtom  ==========
+
+const unsigned int msofbtSplitMenuColorsAtom::id = 61726; /* F11E */
+
+class msofbtSplitMenuColorsAtom::Private
+{
+public:
+  unsigned fillColor;
+  unsigned lineColor;
+  unsigned shadowColor;
+  unsigned threeDColor;
+};
+
+msofbtSplitMenuColorsAtom ::msofbtSplitMenuColorsAtom ()
+{
+  d = new Private;
+  d->fillColor = 0;
+  d->lineColor = 0;
+  d->shadowColor = 0;
+  d->threeDColor = 0;
+}
+
+msofbtSplitMenuColorsAtom ::~msofbtSplitMenuColorsAtom ()
+{ 
+  delete d; 
+}
+
+unsigned msofbtSplitMenuColorsAtom::fillColor() const
+{
+  return d->fillColor;
+}
+
+void msofbtSplitMenuColorsAtom::setFillColor( unsigned fillColor )
+{
+  d->fillColor = fillColor;
+}
+
+unsigned msofbtSplitMenuColorsAtom::lineColor() const
+{
+  return d->lineColor;
+}
+
+void msofbtSplitMenuColorsAtom::setLineColor( unsigned lineColor )
+{
+  d->lineColor = lineColor;
+}
+
+unsigned msofbtSplitMenuColorsAtom::shadowColor() const
+{
+  return d->shadowColor;
+}
+
+void msofbtSplitMenuColorsAtom::setShadowColor( unsigned shadowColor )
+{
+  d->shadowColor = shadowColor;
+}
+
+unsigned msofbtSplitMenuColorsAtom::threeDColor() const
+{
+  return d->threeDColor;
+}
+
+void msofbtSplitMenuColorsAtom::setThreeDColor( unsigned threeDColor )
+{
+  d->threeDColor = threeDColor;
+}
+
+void msofbtSplitMenuColorsAtom::setData( unsigned , const unsigned char* data )
+{
+  setFillColor( readU32( data+0 ) );
+  setLineColor( readU32( data+4 ) );
+  setShadowColor( readU32( data+8 ) );
+  setThreeDColor( readU32( data+12 ) );
+}
+
+void msofbtSplitMenuColorsAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtSplitMenuColorsAtom " << std::endl;
+  out << "fillColor" << fillColor() << std::endl; 
+  out << "lineColor" << lineColor() << std::endl; 
+  out << "shadowColor" << shadowColor() << std::endl; 
+  out << "threeDColor" << threeDColor() << std::endl; 
+}
+
+// ========== msofbtBSEAtom  ==========
+
+const unsigned int msofbtBSEAtom::id = 61447; /* F007 */
+
+msofbtBSEAtom ::msofbtBSEAtom ()
+{
+}
+
+msofbtBSEAtom ::~msofbtBSEAtom ()
+{
+}
+
+void msofbtBSEAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtBSEAtom " << std::endl;
+}
+
+// ========== msofbtCLSIDAtom  ==========
+
+const unsigned int msofbtCLSIDAtom::id = 61462; /* F016 */
+
+msofbtCLSIDAtom ::msofbtCLSIDAtom ()
+{
+}
+
+msofbtCLSIDAtom ::~msofbtCLSIDAtom ()
+{
+}
+
+void msofbtCLSIDAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtCLSIDAtom " << std::endl;
+}
+
+// ========== msofbtRegroupItemsAtom  ==========
+
+const unsigned int msofbtRegroupItemsAtom::id = 61720; /* F118 */
+
+msofbtRegroupItemsAtom ::msofbtRegroupItemsAtom ()
+{
+}
+
+msofbtRegroupItemsAtom ::~msofbtRegroupItemsAtom ()
+{
+}
+
+void msofbtRegroupItemsAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtRegroupItemsAtom " << std::endl;
+}
+
+// ========== msofbtColorSchemeAtom  ==========
+
+const unsigned int msofbtColorSchemeAtom::id = 61728; /* F120 */
+
+msofbtColorSchemeAtom ::msofbtColorSchemeAtom ()
+{
+}
+
+msofbtColorSchemeAtom ::~msofbtColorSchemeAtom ()
+{
+}
+
+void msofbtColorSchemeAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtColorSchemeAtom " << std::endl;
+}
+
+// ========== msofbtConnectorRuleAtom  ==========
+
+const unsigned int msofbtConnectorRuleAtom::id = 61458; /* F012 */
+
+msofbtConnectorRuleAtom ::msofbtConnectorRuleAtom ()
+{
+}
+
+msofbtConnectorRuleAtom ::~msofbtConnectorRuleAtom ()
+{
+}
+
+void msofbtConnectorRuleAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtConnectorRuleAtom " << std::endl;
+}
+
+// ========== msofbtAlignRuleAtom  ==========
+
+const unsigned int msofbtAlignRuleAtom::id = 61459; /* F013 */
+
+class msofbtAlignRuleAtom ::Private
+{
+public:
+  int ruid; 
+  int align; 
+  int cProxies; 
+};
+
+
+msofbtAlignRuleAtom ::msofbtAlignRuleAtom ()
+{  d = new Private;
+   d->ruid = 0;
+   d->align = 0; 
+   d->cProxies = 0; 
+}
+
+msofbtAlignRuleAtom ::~msofbtAlignRuleAtom ()
+{ 
+   delete d; 
+}
+
+int msofbtAlignRuleAtom::ruid() const
+{
+  return d->ruid;
+}
+
+void msofbtAlignRuleAtom::setRuid( int ruid )
+{
+  d->ruid = ruid;
+}
+
+int msofbtAlignRuleAtom::align() const
+{
+  return d->align;
+}
+
+void msofbtAlignRuleAtom::setAlign( int ruid )
+{
+  d->ruid = ruid;
+}
+
+int msofbtAlignRuleAtom::cProxies() const
+{
+  return d->cProxies;
+}
+
+void msofbtAlignRuleAtom::setCProxies( int cProxies )
+{
+  d->cProxies = cProxies;
+}
+
+void msofbtAlignRuleAtom::setData( unsigned , const unsigned char* data )
+{
+  setRuid( readU32( data+0 ) );
+  setAlign( readU32( data+4 ) );
+  setCProxies( readU32( data+8 ) );  
+}
+
+void msofbtAlignRuleAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtAlignRuleAtom " << std::endl;
+  out << "ruid" << ruid() <<  std::endl;
+  out << "align " << align() <<  std::endl;
+  out << "cProxies " << cProxies() <<  std::endl;
+}
+
+
+// ========== msofbtArcRuleAtom  ==========
+
+const unsigned int msofbtArcRuleAtom::id = 61460; /* F014 */
+
+msofbtArcRuleAtom ::msofbtArcRuleAtom ()
+{
+}
+
+msofbtArcRuleAtom ::~msofbtArcRuleAtom ()
+{
+}
+
+void msofbtArcRuleAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtArcRuleAtom " << std::endl;
+}
+
+// ========== msofbtClientRuleAtom  ==========
+
+const unsigned int msofbtClientRuleAtom::id = 61461; /* F015 */
+
+msofbtClientRuleAtom ::msofbtClientRuleAtom ()
+{
+}
+
+msofbtClientRuleAtom ::~msofbtClientRuleAtom ()
+{
+}
+
+void msofbtClientRuleAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtClientRuleAtom " << std::endl;
+}
+
+// ========== msofbtCalloutRuleAtom  ==========
+
+const unsigned int msofbtCalloutRuleAtom::id = 61463; /* F017 */
+
+msofbtCalloutRuleAtom ::msofbtCalloutRuleAtom ()
+{
+}
+
+msofbtCalloutRuleAtom ::~msofbtCalloutRuleAtom ()
+{
+}
+
+void msofbtCalloutRuleAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtCalloutRuleAtom " << std::endl;
+}
+
+// ========== msofbtSelectionAtom  ==========
+
+const unsigned int msofbtSelectionAtom::id = 61465; /* F019 */
+
+msofbtSelectionAtom ::msofbtSelectionAtom ()
+{
+}
+
+msofbtSelectionAtom ::~msofbtSelectionAtom ()
+{
+}
+
+void msofbtSelectionAtom ::dump( std::ostream& out ) const
+{
+  out << "msofbtSelectionAtom " << std::endl;
+}
+
 // ========== PPTReader ==========
 
 class PPTReader::Private
 {
 public:
-  int test;
-  POLE::Stream* stream;
+  Libppt::Presentation* presentation;  // put result here
+
+  POLE::Stream* userStream;     // "/Current User"
+  POLE::Stream* docStream;      // "/PowerPoint Document"
+
+  std::vector<long> persistenceList;
+  std::map<int,Libppt::Slide*> slideMap;
+  Libppt::Slide* currentSlide;
+  unsigned currentTextType;
+  unsigned currentTextId;
+
+  GroupObject* currentGroup;
+  Object* currentObject;
+  bool isShapeGroup;
 };
 
 
 PPTReader::PPTReader()
 {
   d = new Private;
-  d->test = 0;
+  d->presentation = 0;
+
+  d->userStream = 0;
+  d->docStream = 0;
+
+  d->persistenceList.clear();
+  d->slideMap.clear();
+  d->currentSlide = 0;
+  d->currentTextType = 0;
+  d->currentTextId = 0;
+  d->isShapeGroup = false;
 }
 
 PPTReader::~PPTReader()
@@ -2738,71 +4246,448 @@ PPTReader::~PPTReader()
   delete d;
 }
 
-void PPTReader::handleRecord( Record* record )
-{
-  if( !record ) return;
-
-  // take care of indentation
-  int indent = 1;
-  for( const Record* r = record->parent(); r; indent += 4 )
-    r = r->parent();  
-  char* spaces = new char[indent+1];
-  for( int c = 0; c < indent; c++ )
-    spaces[c] = ' ';
-  spaces[indent] = 0;  
-  
-  std::ostringstream t;
-  record->dump( t );
-  std::string d = t.str();
-  std::cout << spaces;
-  for( unsigned i = 0; i < d.size(); i++ )
-    if( d[i] != '\n' )
-      std::cout << d[i];    
-    else
-      std::cout << std::endl << spaces;
-  
-  delete [] spaces;
-}
-
 bool PPTReader::load( Presentation* pr, const char* filename )
 {
+  bool result = false;
+  
+  // initialization
+  d->presentation = pr;
+  d->docStream = 0;
+  d->userStream = 0;
+  d->persistenceList.clear();
+  d->slideMap.clear();
+  d->currentSlide = 0;
+  d->currentTextType = 0;
+  d->currentTextId = 0;
+  d->currentGroup = 0;
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+
   POLE::Storage storage( filename );
   if( !storage.open() )
   {
     std::cerr << "Cannot open " << filename << std::endl;
-    return false;
   }
-  
-  std::cout << "Loading file " << filename << std::endl;
-
-  d->stream = new POLE::Stream( &storage, "/PowerPoint Document" );
-  if( d->stream->fail() )
+  else
   {
-    std::cerr << filename << " is not PowerPoint presentation" << std::endl;
-    delete d->stream;
-    d->stream = 0;
-    return false;
+    // file is MS Office document
+    // check whether it's PowerPoint presentation of not
+    std::cout << "Loading file " << filename << std::endl;
+    d->docStream = new POLE::Stream( &storage, "/PowerPoint Document" );
+    d->userStream = new POLE::Stream( &storage, "/Current User" );
+    
+    if( d->docStream->fail() || d->userStream->fail() )
+    {
+      // not PowerPoint, we need to quit
+      storage.close();
+      std::cerr << filename << " is not PowerPoint presentation" << std::endl;
+      delete d->docStream;
+      d->docStream = 0;
+      return false;
+    }
+    else
+    {
+      // so here is PowerPoint stuff
+      loadUserEdit();
+
+      d->presentation->clear();
+      loadMaster();
+      loadSlides();
+      loadDocument();
+
+      result = true;
+      std::cout << std::endl <<  filename << " loaded. Done." << std::endl;
+    }
+    
+    // clean-up
+    storage.close();
+    delete d->docStream;
+    delete d->userStream;
+    d->presentation = 0;
+    d->docStream = 0;
+    d->userStream = 0;
+    d->persistenceList.clear();
+    d->slideMap.clear();
+    d->currentSlide = 0;
+    d->currentTextType = 0;
+    d->currentTextId = 0;
+    d->currentGroup = 0;
+    d->currentObject = 0;
+    d->isShapeGroup = false;
   }
 
-  unsigned long stream_size = d->stream->size();
-  std::cout << "stream size " << stream_size << std::endl;
-   
-  while( d->stream->tell() < stream_size )
-    loadRecord( 0 );
-
-  delete d->stream;
-  d->stream = 0;
-  
-  storage.close();
-
-  pr->clear();
-  
-  std::cout << std::endl <<  filename << " loaded. Done." << std::endl;
-
-  return false;
+  return result;
 }
 
+void PPTReader::loadUserEdit()
+{
+  unsigned char buffer[128];
+  unsigned long currentUserEditAtom = 0;
+  std::vector<unsigned long> userEditList;
+  std::vector<unsigned long> lastEditList;
+  std::vector<unsigned long> persistDirList;
+  std::vector<unsigned long> usefulPersistDirList;
+  std::map<int,unsigned long> persistenceMap;
 
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Parsing Current User information" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  // read one record from "/Current User" stream
+  d->userStream->seek( 0 );
+  unsigned bytes_read = d->userStream->read( buffer, 8 );
+  if( bytes_read != 8 ) return;
+  unsigned long type = readU16( buffer + 2 );
+  unsigned long size = readU32( buffer + 4 );
+
+  // sanity checks
+  if( ( size < 20  ) || ( size > sizeof(buffer)  ) )
+  {
+    std::cerr << "ERROR: CurrentUserAtom is not recognized" << std::endl;
+    return;
+  }
+
+  // the first in "/Current User" must be CurrentUserAtom
+  if( type != CurrentUserAtom::id )
+  {
+    std::cerr << "ERROR: First in /Current User is not CurrentUserAtom" << std::endl;
+    return;
+  }
+  else
+  {
+    d->userStream->read( buffer, size );
+    CurrentUserAtom* atom = new CurrentUserAtom;
+    atom->setData( size, buffer );
+    currentUserEditAtom = atom->offsetToCurrentEdit();
+#ifdef LIBPPT_DEBUG
+#if 0
+    d->userStream->read( buffer, atom->lenUserName()*2 );
+    std::cout << "Found username: ";
+    for( unsigned b=0; b<atom->lenUserName()*2; b+=2 )
+      std::cout << (char)buffer[b];
+    std::cout << std::endl;
+#endif
+    atom->dump( std::cout );
+#endif
+    delete atom;
+  }
+
+
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Scanning for all UserEdit atoms" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  d->docStream->seek( 0 );
+  unsigned long stream_size = d->docStream->size();
+  while( d->docStream->tell() < stream_size )
+  {
+    // get record type and data size
+    unsigned long pos = d->docStream->tell();
+    unsigned bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) break;
+
+    unsigned long type = readU16( buffer + 2 );
+    unsigned long size = readU32( buffer + 4 );
+    unsigned long nextpos = d->docStream->tell() + size;
+    
+    // we only care for UserEditAtom
+    if( type == UserEditAtom::id )
+    if( size < sizeof(buffer) )
+    {
+      d->docStream->read( buffer, size );
+      UserEditAtom* atom = new UserEditAtom;
+      atom->setData( size, buffer );
+      userEditList.push_back( pos );
+      lastEditList.push_back( atom->offsetLastEdit() );
+      persistDirList.push_back( atom->offsetPersistDir() );
+#ifdef LIBPPT_DEBUG
+      std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+#endif       
+      atom->dump( std::cout );
+      delete atom;
+    }
+
+    d->docStream->seek( nextpos );
+  }
+
+#ifdef LIBPPT_DEBUG
+  std::cout << "Found: " << userEditList.size() << " UserEdit atom(s) " << std::endl;
+#endif
+
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Constructing UserEdit list" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  bool stop = true;
+  do
+  {
+    stop = true;
+
+#ifdef LIBPPT_DEBUG
+    std::cout << "Searching for UserEdit at offset " << currentUserEditAtom << std::endl;
+#endif
+    // search current user edit
+    for( unsigned k=0; k < userEditList.size(); k++ )
+      if( userEditList[k] = currentUserEditAtom )
+      {
+        stop = false;
+        usefulPersistDirList.push_back( persistDirList[k] );
+        currentUserEditAtom = lastEditList[k];
+#ifdef LIBPPT_DEBUG
+        std::cout << "  found... ";
+        std::cout << " persistence at offset " << persistDirList[k];
+        if( lastEditList[k] != 0 )
+          std::cout << "  previous is " << lastEditList[k];
+        std::cout << std::endl;
+#endif
+        break;
+      }
+  }
+  while( !stop && (currentUserEditAtom!=0) );
+
+  // sanity check
+  if( usefulPersistDirList.size() == 0 )
+  {
+    std::cerr << "ERROR: No useful UserEdit information !" << std::endl;
+    return;
+  }
+
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Searching for persistence information" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  unsigned max = 0;
+
+  for( unsigned j = 0; j < usefulPersistDirList.size(); j++ )
+  {
+    unsigned long offset = usefulPersistDirList[j];
+
+    d->docStream->seek( 0 );
+    while( d->docStream->tell() < stream_size )
+    {
+      unsigned long pos = d->docStream->tell();
+      unsigned bytes_read = d->docStream->read( buffer, 8 );
+      if( bytes_read != 8 ) break;
+  
+      unsigned long type = readU16( buffer + 2 );
+      unsigned long size = readU32( buffer + 4 );
+      unsigned long nextpos = d->docStream->tell() + size;
+      
+      // we only care for PersistIncrementalBlockAtom
+      if( pos = offset )
+      if( type == PersistIncrementalBlockAtom::id )
+      {
+        unsigned char* buf = new unsigned char[ size ];
+        d->docStream->read( buf, size );
+        PersistIncrementalBlockAtom* atom = new PersistIncrementalBlockAtom;        
+        atom->setData( size, buf );
+        delete [] buf;
+
+#ifdef LIBPPT_DEBUG
+        std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+        atom->dump( std::cout );
+#endif       
+
+        for( unsigned m = 0; m < atom->entryCount(); m++ )
+        {
+          unsigned long ref = atom->reference(m);
+          unsigned long ofs = atom->offset(m);
+          // if it is already there, ignore !!
+          if( !persistenceMap.count( ref ) )
+            persistenceMap[ref] = ofs;
+          max = (ref > max) ? ref : max;
+        }
+        delete atom;
+      }
+  
+      d->docStream->seek( nextpos );
+    }
+  }
+
+  // convert to a good list
+  for( unsigned n = 0; n <= max; n++ )
+  {
+    unsigned long ofs = -1;
+    if( persistenceMap.count( n ) )
+      ofs = persistenceMap[n];
+    d->persistenceList.push_back( ofs );
+  }
+
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Final persistence list" << std::endl;
+  for( unsigned nn = 1; nn < d->persistenceList.size(); nn++ )
+    std::cout << " #" << nn << ": "  << d->persistenceList[nn] << std::endl;
+  std::cout << std::endl;
+#endif
+
+}
+
+void PPTReader::loadMaster()
+{
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Loading master" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  d->docStream->seek( 0 );
+  unsigned long stream_size = d->docStream->size();
+  while( d->docStream->tell() < stream_size )
+  {
+    unsigned char buffer[8];
+    unsigned long pos = d->docStream->tell();
+    unsigned bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) break;
+
+    unsigned long type = readU16( buffer + 2 );
+    unsigned long size = readU32( buffer + 4 );
+    unsigned long nextpos = d->docStream->tell() + size;
+    
+    // we only care for MainMasterContainer....
+    if( type == MainMasterContainer::id )
+    if( indexPersistence( pos ) )
+    {
+#ifdef LIBPPT_DEBUG
+      std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+      std::cout << std::endl;
+#endif       
+      Slide* master = new Slide( d->presentation );
+      d->presentation->setMasterSlide( master );
+      d->currentSlide = master;
+      MainMasterContainer* container = new MainMasterContainer;
+      handleContainer( container, type, size );
+      delete container;
+    }
+
+    d->docStream->seek( nextpos );
+  }
+  d->currentSlide = 0;
+}
+
+void PPTReader::loadSlides()
+{
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Loading all slide containers" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  int totalSlides = 0;
+
+  d->docStream->seek( 0 );
+  unsigned long stream_size = d->docStream->size();
+  while( d->docStream->tell() < stream_size )
+  {
+    unsigned char buffer[8];
+    unsigned long pos = d->docStream->tell();
+    unsigned bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) break;
+
+    unsigned long type = readU16( buffer + 2 );
+    unsigned long size = readU32( buffer + 4 );
+    unsigned long nextpos = d->docStream->tell() + size;
+
+    unsigned k = 0;
+    
+    // we only care for SlideContainer....
+    if( type == SlideContainer::id )
+    if( k = indexPersistence( pos ) )
+    {
+      // create a new slide, make it current
+      Slide* s = new Slide( d->presentation );
+      d->slideMap[ k ] = s;
+      d->presentation->appendSlide( s );
+      d->currentSlide = s;
+      d->currentTextId = 0;
+      d->currentTextType = TextObject::Body;
+
+#ifdef LIBPPT_DEBUG
+      std::cout << "SLIDE #" << totalSlides+1 << std::endl;
+      std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+      std::cout << "Reference #" << k << std::endl;
+      std::cout << std::endl;
+#endif       
+
+      // process all atoms inside
+      SlideContainer* container = new SlideContainer;
+      handleContainer( container, type, size );
+      delete container;
+
+      totalSlides++;
+    }
+
+    d->docStream->seek( nextpos );
+  }
+
+
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Total: " << totalSlides << " slides" << std::endl;
+#endif       
+}
+
+void PPTReader::loadDocument()
+{
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl;
+  std::cout << "Loading document content" << std::endl;
+  std::cout << "================================================" << std::endl;  
+#endif
+
+  d->currentSlide = 0;
+  d->currentGroup = 0;
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+
+  d->docStream->seek( 0 );
+  unsigned long stream_size = d->docStream->size();
+  while( d->docStream->tell() < stream_size )
+  {
+    unsigned char buffer[8];
+    unsigned long pos = d->docStream->tell();
+    unsigned bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) break;
+
+    unsigned long type = readU16( buffer + 2 );
+    unsigned long size = readU32( buffer + 4 );
+    unsigned long nextpos = d->docStream->tell() + size;
+    
+    // we only care for DocumentContainer....
+    if( type == DocumentContainer::id )
+    if( indexPersistence( pos ) )
+    {
+#ifdef LIBPPT_DEBUG
+      std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+      std::cout << std::endl;
+#endif       
+      DocumentContainer* container = new DocumentContainer;
+      container->setPosition( pos );
+      handleContainer( container, type, size );
+      delete container;
+    }
+
+    d->docStream->seek( nextpos );
+  }
+
+}
+
+int PPTReader::indexPersistence( unsigned long ofs )
+{
+  for( unsigned k=1; k < d->persistenceList.size(); k++ )
+    if( d->persistenceList[k] == ofs )
+      return k;
+
+  return 0;
+}
 
 void PPTReader::loadRecord( Record* parent )
 {
@@ -2810,59 +4695,676 @@ void PPTReader::loadRecord( Record* parent )
   unsigned char buffer[65536];
 
   // get record type and data size
-  unsigned long pos = d->stream->tell();
-  unsigned bytes_read = d->stream->read( buffer, 8 );
+  unsigned long pos = d->docStream->tell();
+  unsigned bytes_read = d->docStream->read( buffer, 8 );
   if( bytes_read != 8 ) return;
     
+  unsigned instance = readU16( buffer ) >> 4;
   unsigned long type = readU16( buffer + 2 );
   unsigned long size = readU32( buffer + 4 );
-  unsigned long nextpos = d->stream->tell() + size;
-
-  // take care of indentation
-  int indent = 1;
-  for( const Record* r = parent; r; indent += 4 )
-    r = r->parent();  
-  char* spaces = new char[indent+1];
-  for( int c = 0; c < indent; c++ )
-    spaces[c] = ' ';
-  spaces[indent] = 0;  
-  
-  // basic information for troubleshooting
-  std::cout << std::endl;
-  std::cout << spaces;
-  std::cout << "Record " << type;
-  std::cout << " pos=" << pos;
-  std::cout << " size=" << size;
-  std::cout << std::endl;
+  unsigned long nextpos = d->docStream->tell() + size;
 
   // create the record using the factory
   Record* record = Record::create( type );
   if( record )
   {
-    // container or record?
-    if( record->isContainer() )
+    record->setParent( parent );
+    record->setPosition( pos );
+    record->setInstance( instance );
+
+    if( !record->isContainer() )
     {
-      record->setParent( parent );
-      record->setPosition( pos );
-      std::cout << spaces << record->name() << std::endl;
-      while( d->stream->tell() < nextpos )
-        loadRecord( record );    
+      d->docStream->read( buffer, size );
+      record->setData( size, buffer );
+      handleRecord( record, type );
     }
     else
-    {
-      // load actual record data
-      d->stream->read( buffer, size );
-      
-      // setup the record and invoke handler
-      record->setParent( parent );
-      record->setData( size, buffer );
-      record->setPosition( pos );
-      handleRecord( record );
-      delete record;
-    }
+      handleContainer( static_cast<Container*>( record ), type, size );
+
+    delete record;
   }
   
-  d->stream->seek( nextpos );
-  delete [] spaces;
+  d->docStream->seek( nextpos );
 }
 
+void PPTReader::handleRecord( Record* record, int type )
+{
+  if( !record ) return;
+
+  switch( type )
+  {
+    case SlidePersistAtom::id:
+      handleSlidePersistAtom( static_cast<SlidePersistAtom*>(record) ); break;
+    case TextHeaderAtom::id:
+      handleTextHeaderAtom( static_cast<TextHeaderAtom*>(record) ); break;
+    case TextCharsAtom::id:
+      handleTextCharsAtom( static_cast<TextCharsAtom*>(record) ); break;
+    case TextBytesAtom::id:
+      handleTextBytesAtom( static_cast<TextBytesAtom*>(record) ); break;
+
+    case msofbtSpgrAtom::id:
+      handleEscherGroupAtom( static_cast<msofbtSpgrAtom*>(record) ); break;
+    case msofbtSpAtom::id:
+      handleEscherSpAtom( static_cast<msofbtSpAtom*>(record) ); break;
+   case msofbtOPTAtom::id:
+      handleEscherPropertiesAtom( static_cast<msofbtOPTAtom*>(record) ); break; 
+   case msofbtClientDataAtom::id:
+      handleEscherClientDataAtom( static_cast<msofbtClientDataAtom*>(record) ); break;
+    case msofbtClientAnchorAtom::id:
+      handleEscherClientAnchorAtom( static_cast<msofbtClientAnchorAtom*>(record) ); break;
+    case msofbtClientTextboxAtom::id:
+      handleEscherTextBoxAtom( static_cast<msofbtClientTextboxAtom*>(record) ); break;
+
+    default: break;
+  }
+}
+
+void PPTReader::handleContainer( Container* container, int type, unsigned size )
+{
+  if( !container ) return;
+  if( !container->isContainer() ) return;
+
+  unsigned long nextpos = d->docStream->tell() + size - 6;
+
+  switch( type )
+  {
+    case msofbtDgContainer::id:
+      handleDrawingContainer( static_cast<msofbtDgContainer*>(container), size ); break;
+    case msofbtSpgrContainer::id:
+      handleEscherGroupContainer( static_cast<msofbtSpgrContainer*>(container), size ); break;
+    case msofbtSpContainer::id:
+      handleSPContainer( static_cast<msofbtSpContainer*>(container), size ); break;
+    default:
+      while( d->docStream->tell() < nextpos )
+        loadRecord( container );    
+  }
+}
+
+void PPTReader::handleSlidePersistAtom( SlidePersistAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+
+  int id = atom->slideId();
+  unsigned ref = atom->psrReference();
+
+  d->currentSlide = d->slideMap[ ref ];
+  d->currentTextId = 0;
+  d->currentTextType = TextObject::Body;
+
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl<< "Slide id = " << id << std::endl;
+#endif
+}
+
+void PPTReader::handleTextHeaderAtom( TextHeaderAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide )  return;
+
+  d->currentTextId++;
+  d->currentTextType = atom->textType();
+}
+
+void PPTReader::handleTextCharsAtom( TextCharsAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide )  return;
+  if( !d->currentTextId ) return;
+
+  int placeId = d->currentTextId-1;
+  TextObject* text = d->currentSlide->textObject( placeId );
+  if( !text )
+  {
+    std::cerr << "No place for text object! " << placeId << std::endl;
+    return;
+  }
+
+  text->setType( d->currentTextType );
+  text->setText( atom->ustring() );
+
+  if( d->currentTextType == TextObject::Title )
+    d->currentSlide->setTitle( atom->ustring() );
+  if( d->currentTextType == TextObject::CenterTitle )
+    d->currentSlide->setTitle( atom->ustring() );
+
+#ifdef LIBPPT_DEBUG
+  std::cout << "  Text Object " << atom->ustring().ascii();
+  std::cout << " placed at " << placeId << std::endl;
+#endif
+
+}
+
+void PPTReader::handleTextBytesAtom( TextBytesAtom* atom ) 
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide )  return;
+  if( !d->currentTextId ) return;
+
+  int placeId = d->currentTextId-1;
+  TextObject* text = d->currentSlide->textObject( placeId );
+  if( !text )
+  {
+    std::cerr << "No place for text object! " << placeId << std::endl;
+    return;
+  }
+
+  text->setType( d->currentTextType );
+  text->setText( atom->ustring() );
+
+  if( d->currentTextType == TextObject::Title )
+    d->currentSlide->setTitle( atom->ustring() );
+  if( d->currentTextType == TextObject::CenterTitle )
+    d->currentSlide->setTitle( atom->ustring() );
+
+#ifdef LIBPPT_DEBUG
+  std::cout << "  Text Object " << atom->ustring().ascii();
+  std::cout << " placed at " << placeId << std::endl;
+#endif
+
+}
+
+std::string spaces( int x )
+{
+  std::string str;
+  for( unsigned i=0; i<x; i++ )
+    str += ' ';
+  return str;
+}
+
+void dumpGroup( GroupObject* obj, unsigned indent );
+
+void dumpObject( Object* obj, unsigned indent )
+{
+  std::cout << spaces(indent) << "Top: " << obj->top() << std::endl;
+  std::cout << spaces(indent) << "Left: " << obj->left() << std::endl;
+
+  if( obj->isGroup() )
+  {
+    std::cout << spaces(indent) << "This is a group" << std::endl;
+    GroupObject* gr = static_cast<GroupObject*>(obj);
+    dumpGroup( gr, indent+2 );
+  }
+}
+
+void dumpGroup( GroupObject* obj, unsigned indent )
+{
+  for( unsigned i=0; i <obj->objectCount(); i++ )
+  {
+    std::cout << spaces(indent) << "Object #" << i+1 << std::endl;
+    Object* o = obj->object(i);
+    dumpObject( o, indent+2 );
+  }
+}
+
+void dumpSlide( Slide* slide )
+{
+  std::cout << "Slide: " << slide->title().ascii() << std::endl;
+  GroupObject* root = slide->rootObject();
+  dumpGroup( root, 0 );
+  std::cout << std::endl;
+}
+
+
+void PPTReader::handleDrawingContainer( msofbtDgContainer* container, unsigned size )
+{
+  if( !container ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+
+  d->currentGroup = new GroupObject();
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+
+  unsigned long nextpos = d->docStream->tell() + size - 6;
+  while( d->docStream->tell() < nextpos )
+    loadRecord( container );
+
+  for( unsigned i=0; i<d->currentGroup->objectCount(); i++ )
+  {
+    Object* obj = d->currentGroup->object(i);
+    if( ( i == 0 ) && ( obj->isGroup() ) )
+    {
+      d->currentGroup->takeObject( obj );
+      d->currentSlide->setRootObject( (GroupObject*)obj );
+      break;
+    }
+  }
+
+  delete d->currentGroup;
+  d->currentGroup = 0;
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+}
+
+void PPTReader::handleEscherGroupContainer( msofbtSpgrContainer* container, unsigned size )
+{
+  if( !container ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+
+  GroupObject* lastGroup = d->currentGroup;
+
+  d->currentGroup = new GroupObject();
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+  
+  unsigned long nextpos = d->docStream->tell() + size - 6;
+  while( d->docStream->tell() < nextpos )
+    loadRecord( container );    
+
+  lastGroup->addObject( d->currentGroup ); // FIXME only if patriarch
+  d->currentGroup = lastGroup;
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+}
+
+void PPTReader::handleSPContainer( msofbtSpContainer* container, unsigned size )
+{
+  if( !container ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+
+  d->isShapeGroup = false;
+
+  unsigned long nextpos = d->docStream->tell() + size - 6;
+  while( d->docStream->tell() < nextpos )
+    loadRecord( container );    
+
+  if( d->currentObject )
+  if( !d->isShapeGroup )
+    d->currentGroup->addObject( d->currentObject );
+
+  d->currentObject = 0;
+  d->isShapeGroup = false;
+}
+
+void PPTReader::handleEscherGroupAtom( msofbtSpgrAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+
+  // set rect bound of current group
+
+  // this is shape for the group, no need to 
+  d->isShapeGroup = true;
+}
+
+void PPTReader::handleEscherSpAtom( msofbtSpAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+
+  DrawObject* drawObject = new DrawObject;
+  
+  drawObject->setBackground( atom->isBackground() );
+   
+  unsigned sh = DrawObject::None;
+  switch( atom->instance() )
+  {
+    case msofbtSpAtom::msosptRectangle: sh = DrawObject::Rectangle; break;
+    case msofbtSpAtom::msosptRoundRectangle: sh = DrawObject::RoundRectangle; break;
+    case msofbtSpAtom::msosptEllipse: sh = DrawObject::Ellipse; break;
+    case msofbtSpAtom::msosptDiamond: sh = DrawObject::Diamond; break;
+    case msofbtSpAtom::msosptIsoscelesTriangle: sh = DrawObject::IsoscelesTriangle; break;
+    case msofbtSpAtom::msosptRightTriangle: sh = DrawObject::RightTriangle; break;
+    case msofbtSpAtom::msosptParallelogram: sh = DrawObject::Parallelogram; break;
+    case msofbtSpAtom::msosptTrapezoid: sh = DrawObject::Trapezoid; break; 
+    case msofbtSpAtom::msosptHexagon: sh = DrawObject::Hexagon; break;
+    case msofbtSpAtom::msosptOctagon: sh = DrawObject::Octagon; break; 
+
+    case msofbtSpAtom::msosptArrow: sh = DrawObject::LeftArrow; break;
+    case msofbtSpAtom::msosptDownArrow: sh = DrawObject::DownArrow; break;
+    case msofbtSpAtom::msosptUpArrow: sh = DrawObject::UpArrow; break;
+    case msofbtSpAtom::msosptLeftArrow: sh = DrawObject::LeftArrow; break;
+   
+    case msofbtSpAtom::msosptLine: sh = DrawObject::Line; break;
+    case msofbtSpAtom::msosptSmileyFace: sh = DrawObject::Smiley; break;
+    case msofbtSpAtom::msosptHeart: sh = DrawObject::Heart; break;
+    case msofbtSpAtom::msosptMin: sh = DrawObject::FreeLine; break;
+
+    default: break;
+  }
+
+  drawObject->setShape( sh );
+/*  
+   if (atom->isVerFlip() == true)   
+       d->currentObject->setProperty( "draw:mirror-vertical", "true");        
+
+   if (atom->isHorFlip() == true)
+       d->currentObject->setProperty( "draw:mirror-horizontal", "true");        
+*/
+   d->currentObject = drawObject;
+   
+      if (atom->isVerFlip() == true)   
+       d->currentObject->setProperty( "draw:mirror-vertical", "true");        
+
+   if (atom->isHorFlip() == true)
+       d->currentObject->setProperty( "draw:mirror-horizontal", "true");        
+
+
+}
+
+void PPTReader::handleEscherClientDataAtom( msofbtClientDataAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+  if( !d->currentObject ) return;
+
+  TextObject* textObject = 0;
+  if( !d->currentObject->isText() )
+  {
+    textObject = new TextObject();
+    textObject->convertFrom( d->currentObject );
+    delete d->currentObject;
+    d->currentObject = textObject;
+  }
+  else
+    textObject = static_cast<TextObject*>( d->currentObject );
+
+  switch( atom->placeholderId() )
+  {
+    case msofbtClientDataAtom::MasterTitle:
+    case msofbtClientDataAtom::Title:
+      textObject->setType( TextObject::Title ); break;
+
+    case msofbtClientDataAtom::MasterBody:
+    case msofbtClientDataAtom::MasterSubtitle:
+    case msofbtClientDataAtom::Body:
+    case msofbtClientDataAtom::Subtitle:
+      textObject->setType( TextObject::Body ); break;
+
+    case msofbtClientDataAtom::MasterCenteredTitle:
+    case msofbtClientDataAtom::CenteredTitle:
+      textObject->setType( TextObject::CenterTitle ); break;
+
+    default:
+      textObject->setType( TextObject::Other ); break;
+      break;
+  }
+
+  textObject->setId( atom->placementId() );
+}
+
+void PPTReader::handleEscherClientAnchorAtom( msofbtClientAnchorAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+  if( !d->currentObject ) return;
+
+  d->currentObject->setLeft( atom->left()*25.4/576  );
+  d->currentObject->setTop( atom->top()*25.4/576  );
+  d->currentObject->setWidth( (atom->right()-atom->left())*25.4/576  );
+  d->currentObject->setHeight( (atom->bottom()-atom->top())*25.4/576  );
+}
+
+void PPTReader::handleEscherTextBoxAtom( msofbtClientTextboxAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentGroup ) return;
+  if( !d->currentObject ) return;
+  
+  TextObject* textObject = 0;
+  if( !d->currentObject->isText() )
+  {
+    textObject = new TextObject();
+    textObject->convertFrom( d->currentObject );
+    delete d->currentObject;
+    d->currentObject = textObject;
+  }
+  else
+    textObject = static_cast<TextObject*>( d->currentObject );
+    
+  textObject->setType( TextObject::Other ); 
+  textObject->setText( atom->ustring() );
+}
+
+Color convertFromLong( unsigned long i )
+{
+  unsigned r = (i & 0xff);
+  unsigned g = (i>>8) & 0xff;
+  unsigned b = (i>>16) & 0xff;
+  return Color( r, g, b );
+}
+
+void PPTReader::handleEscherPropertiesAtom( msofbtOPTAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+  if( !d->currentObject ) return;
+
+  for( unsigned c=0; c<atom->propertyCount(); c++ )
+  {
+    unsigned pid = atom->propertyId(c);
+    signed long pvalue = atom->propertyValue(c);
+    
+    switch( pid )
+    {
+      case msofbtOPTAtom::FillColor: 
+        d->currentObject->setProperty( "draw:fill-color", convertFromLong(pvalue) );
+        break;
+      case msofbtOPTAtom::LineColor:  
+        d->currentObject->setProperty( "svg:stroke-color", convertFromLong(pvalue) );
+        break;
+      case msofbtOPTAtom::LineWidth:
+        d->currentObject->setProperty( "svg:stroke-width", pvalue*(25.4/(12700*72) ));
+        break;     
+      case msofbtOPTAtom::Rotation: 
+        { double deg = pvalue/65536.00 ;    
+          if (deg > 180.00)  deg = 360.00 - deg; // in range (-180,180) deg 
+                    d->currentObject->setProperty( "libppt:rotation", (deg*0.0174533) ) ;// rad
+        } break;
+      case msofbtOPTAtom::FillType:
+        switch( pvalue )
+        {
+          case msofbtOPTAtom::FillSolid:
+            d->currentObject->setProperty( "draw:fill", "solid"); break;
+          case msofbtOPTAtom::FillPattern:
+            d->currentObject->setProperty( "draw:fill", "solid"); break;
+          default:
+            d->currentObject->setProperty( "draw:fill", "solid"); break;
+        }
+        break;
+      case msofbtOPTAtom::LineDashing:
+        switch( pvalue )
+        {
+          case msofbtOPTAtom::LineSolid :
+            {d->currentObject->setProperty( "draw:stroke", "solid"); 
+             //qDebug("=====================solid================");
+            } break;
+          case msofbtOPTAtom::LineDashSys :
+          {  
+             d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_2"); 
+             //qDebug("===================== solid================");
+          }  break;
+          case msofbtOPTAtom::LineDotSys :
+          {  
+             d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_3");
+             //qDebug("===================== dash 2================");
+          }  break;
+          case msofbtOPTAtom::LineDashDotSys :
+          {  
+             d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_2"); 
+             //qDebug("===================== dash 3================");
+          }  break;
+          case msofbtOPTAtom::LineDashDotDotSys :
+          {  d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_2");
+             //qDebug("===================== dash 4================");
+          } break;
+          case msofbtOPTAtom::LineDotGEL :
+          {  d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_2");
+             //qDebug("===================== dash 5================");
+          } break;
+          case msofbtOPTAtom::LineDashGEL :
+          {  d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_4"); 
+             //qDebug("===================== dash 6================");
+          } break;
+          case msofbtOPTAtom::LineLongDashGEL :
+          {  d->currentObject->setProperty( "draw:stroke", "dash");
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_6"); 
+              //qDebug("=====================dash 7================");
+          } break;
+          case msofbtOPTAtom::LineDashDotGEL :
+          {  d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_5"); 
+             //qDebug("=====================dash 8================");
+          }  break;  
+          case msofbtOPTAtom::LineLongDashDotGEL :
+          {  d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_7");
+             //qDebug("=====================dash 9================");
+          } break;
+          case msofbtOPTAtom::LineLongDashDotDotGEL  :
+          {  d->currentObject->setProperty( "draw:stroke", "dash"); 
+             d->currentObject->setProperty( "draw:stroke-dash", "Dash_20_8");   
+             //qDebug("=====================dash 10================"); 
+          } break;
+          default:
+             d->currentObject->setProperty( "draw:stroke", "solid"); break;
+        } break;
+      case msofbtOPTAtom::FlagNoLineDrawDash:   
+        {   if (pvalue == 589824 ) 
+          d->currentObject->setProperty( "libppt:invisibleLine", true ); 
+        } break; 
+
+      case msofbtOPTAtom::LineStartArrowhead:   
+      { 
+        switch( pvalue )
+        {
+          case msofbtOPTAtom::LineNoEnd : break; 
+          case msofbtOPTAtom::LineArrowEnd :
+          d->currentObject->setProperty( "draw:marker-start", "msArrowEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowStealthEnd :
+          d->currentObject->setProperty( "draw:marker-start", "msArrowStealthEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowDiamondEnd :
+          d->currentObject->setProperty( "draw:marker-start", "msArrowDiamondEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowOvalEnd :
+          d->currentObject->setProperty( "draw:marker-start", "msArrowOvalEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowOpenEnd :
+          d->currentObject->setProperty( "draw:marker-start", "msArrowOpenEnd_20_5" ); break; 
+          default :  break; 
+        }
+      } break; 
+
+     case msofbtOPTAtom::LineStartArrowWidth:
+      {  
+        switch ( pvalue ) 
+        { 
+         case msofbtOPTAtom::LineNarrowArrow :
+          d->currentObject->setProperty( "draw:marker-start-width", 0.2 ); break; 
+          case msofbtOPTAtom::LineMediumWidthArrow :
+          d->currentObject->setProperty( "draw:marker-start-width", 0.3 ); break; 
+          case msofbtOPTAtom::LineWideArrow :
+          d->currentObject->setProperty( "draw:marker-start-width", 0.4 ); break; 
+          default :  break;          
+        }
+      } break;  
+
+      case msofbtOPTAtom::LineEndArrowhead:   
+      {   
+        switch( pvalue )
+        {
+          case msofbtOPTAtom::LineNoEnd : break; 
+          case msofbtOPTAtom::LineArrowEnd :
+          d->currentObject->setProperty( "draw:marker-end", "msArrowEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowStealthEnd :
+          d->currentObject->setProperty( "draw:marker-end", "msArrowStealthEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowDiamondEnd :
+          d->currentObject->setProperty( "draw:marker-end", "msArrowDiamondEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowOvalEnd :
+          d->currentObject->setProperty( "draw:marker-end", "msArrowOvalEnd_20_5" ); break; 
+          case msofbtOPTAtom::LineArrowOpenEnd :
+          d->currentObject->setProperty( "draw:marker-end", "msArrowOpenEnd_20_5" ); break; 
+          default :  break;          
+        } 
+      } break; 
+
+      
+/*
+      case msofbtOPTAtom::LineStartArrowLength:
+      {   
+        switch ( pvalue ) 
+        { 
+         case msofbtOPTAtom::LineShortArrow :
+          d->currentObject->setProperty( "draw:marker-end-length", "0.2cm" ); break; 
+          case msofbtOPTAtom::LineMediumLenArrow :
+          d->currentObject->setProperty( "draw:marker-end-length", "0.4cm" ); break; 
+          case msofbtOPTAtom::LineLongArrow :
+          d->currentObject->setProperty( "draw:marker-end-length", "0.6cm" ); break; 
+          default :  break;          
+        }
+      } break; 
+*/
+      case msofbtOPTAtom::LineEndArrowWidth: 
+      {   
+        switch ( pvalue ) 
+        { 
+         case msofbtOPTAtom::LineNarrowArrow :
+          d->currentObject->setProperty( "draw:marker-end-width", 0.2 ); break; 
+          case msofbtOPTAtom::LineMediumWidthArrow :
+          d->currentObject->setProperty( "draw:marker-end-width", 0.3 ); break; 
+          case msofbtOPTAtom::LineWideArrow :
+          d->currentObject->setProperty( "draw:marker-end-width", 0.4 ); break; 
+          default :  break;          
+        }
+      } break; 
+/*
+      case msofbtOPTAtom::LineEndArrowLength:
+      {   
+        switch ( pvalue ) 
+        { 
+         case msofbtOPTAtom::LineShortArrow :
+          d->currentObject->setProperty( "draw:marker-end-length", "0.2cm" ); break; 
+          case msofbtOPTAtom::LineMediumLenArrow :
+          d->currentObject->setProperty( "draw:marker-end-length", "0.4cm" ); break; 
+          case msofbtOPTAtom::LineLongArrow :
+          d->currentObject->setProperty( "draw:marker-end-length", "0.6cm" ); break; 
+          default :  break;          
+        }
+      } break; 
+*/
+ #if 0
+      case msofbtOPTAtom::ShadowColor:
+      { 
+        d->currentObject->setProperty( "draw:shadow-color", convertFromLong(pvalue) );
+      } break; 
+      case msofbtOPTAtom::ShadowOpacity:
+      { 
+        d->currentObject->setProperty( "draw:shadow-opacity", 100.0-(pvalue/(65536.0)) ); 
+      } break; 
+      case msofbtOPTAtom::ShadowOffsetX:
+      { 
+        d->currentObject->setProperty("draw:shadow-offset-x",(pvalue*2.54/(12700*72))); 
+      } break; 
+      case msofbtOPTAtom::ShadowOffsetY:
+      { 
+        d->currentObject->setProperty("draw:shadow-offset-y",(pvalue*2.54/(12700*72))); 
+      } break; 
+#endif      
+    } // switch pid
+   
+  } // for
+
+}  // handleEscherPropertiesAtom

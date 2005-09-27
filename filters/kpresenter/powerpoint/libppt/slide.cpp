@@ -16,3 +16,98 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, US
 */
+
+#include "slide.h"
+#include "presentation.h"
+#include "ustring.h"
+#include "objects.h"
+
+#include <vector>
+#include <iostream>
+
+
+using namespace Libppt;
+
+class Slide::Private
+{
+public:
+  Presentation* presentation;
+  UString title;
+  GroupObject* rootObject;
+};
+
+Slide::Slide( Presentation* pr )
+{
+  d = new Private;
+  d->presentation = pr;
+  d->rootObject = new GroupObject;
+}
+  
+Slide::~Slide()
+{
+  delete d->rootObject;
+  delete d;
+}
+
+void Slide::clear()
+{
+  d->title = UString::null;
+  setRootObject( 0 );
+  d->rootObject = new GroupObject;
+}
+
+UString Slide::title() const
+{
+  return d->title;
+}
+
+void Slide::setTitle( const UString& t )
+{
+  UChar* s = new UChar[t.length()];
+  int len = 0;
+
+  // filter crazy characters
+  for( int i=0; i<t.length(); i++ )
+    if( t[i] != UChar(11) )
+      s[len++] = t[i];
+
+  d->title = UString( s, len );
+  delete [] s;
+}
+
+GroupObject *Slide::rootObject()
+{
+  return d->rootObject;
+}
+
+void Slide::setRootObject( GroupObject* root )
+{
+  delete d->rootObject;
+  d->rootObject = root;
+}
+
+TextObject* recursiveSearch( GroupObject* group, unsigned placeId )
+{
+  if( group )
+    for( unsigned i=0; i<group->objectCount(); i++ )
+    {
+      Object* object = group->object(i);
+      if( object->isText() )
+      {
+        TextObject* textObject = static_cast<TextObject*>(object);
+        if( textObject)
+          if( textObject->id() == placeId )
+            return textObject;
+      }
+      if( object->isGroup() )
+        return recursiveSearch( static_cast<GroupObject*>(object), placeId );
+    }
+
+  return 0;
+}
+
+
+TextObject* Slide::textObject( unsigned placeId )
+{
+  return recursiveSearch( d->rootObject, placeId );
+}

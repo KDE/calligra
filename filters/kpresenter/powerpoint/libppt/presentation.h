@@ -20,8 +20,11 @@
 #ifndef LIBPPT_PRESENTATION
 #define LIBPPT_PRESENTATION
 
+
 namespace Libppt
 {
+
+class Slide;
 
 class Presentation
 {
@@ -46,6 +49,26 @@ public:
    * Loads the presentation file. Returns false if error occurred.
    */
   bool load( const char* filename );
+
+  /*
+   * Appends a new slide.
+   */
+  void appendSlide( Slide* slide );
+
+  /*
+   * Returns the number of slides in this presentation. A newly created
+   * presentation has no slide, i.e. slideCount() returns 0.
+   */
+  unsigned slideCount() const;
+
+  /*
+   * Returns a slide at given index. If index is invalid (e.g. larger
+   * than total number of slides), this function returns NULL.
+   */
+  Slide* slide( unsigned index );
+
+  Slide* masterSlide();
+  void setMasterSlide( Slide* master );
 
 private:
   // no copy or assign

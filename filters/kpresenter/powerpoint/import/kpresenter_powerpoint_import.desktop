@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Microsoft PowerPoint Import Filter for KPresenter
+X-KDE-Export=application/vnd.oasis.opendocument.presentation
+X-KDE-Import=application/mspowerpoint
+X-KDE-Weight=1
+X-KDE-Library=libpowerpointimport
+ServiceTypes=KOfficeFilter

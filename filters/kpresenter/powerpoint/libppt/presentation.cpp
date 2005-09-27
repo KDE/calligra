@@ -18,30 +18,40 @@
 */
 
 #include "presentation.h"
+#include "slide.h"
 #include "powerpoint.h"
+
+#include <vector>
 
 using namespace Libppt;
 
 class Presentation::Private
 {
 public:
-  int test;
+  Slide* masterSlide;
+  std::vector<Slide*> slides;
 };
 
 Presentation::Presentation()
 {
   d = new Private;
-  d->test = 0;
+  d->masterSlide = 0;
 }
   
 Presentation::~Presentation()
 {
+  clear();
   delete d;
 }
 
 void Presentation::clear()
 {
-  // TODO
+  // FIXME use iterator
+  for( unsigned i=0; i<slideCount(); i++ )
+    delete slide( i );
+  d->slides.clear();
+  delete d->masterSlide;
+  d->masterSlide = 0;
 }
   
 bool Presentation::load( const char* filename )
@@ -50,4 +60,31 @@ bool Presentation::load( const char* filename )
   bool result = reader->load( this, filename );
   delete reader;
   return result;  
+}
+
+void Presentation::appendSlide( Slide* slide )
+{
+  d->slides.push_back( slide );
+}
+
+unsigned Presentation::slideCount() const
+{
+  return d->slides.size();
+}
+
+Slide* Presentation::slide( unsigned index )
+{
+  if( index >= slideCount() ) return (Slide*)0;
+  return d->slides[index];
+}
+
+Slide* Presentation::masterSlide()
+{
+  return d->masterSlide;
+}
+
+void Presentation::setMasterSlide( Slide* masterSlide )
+{
+  delete d->masterSlide;
+  d->masterSlide = masterSlide;
 }
