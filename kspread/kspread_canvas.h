@@ -478,6 +478,15 @@ private:
   void sheetAreaToVisibleRect( const QRect& sheetArea,
 			       KoRect& visibleRect ); 
   
+  /** 
+  * Calculates the physical region on the canvas widget occupied by a range of cells on
+  * the currently active sheet.
+  * Unlike @see sheetAreaToVisibleRect , scrolling the view does not affect sheetAreaToRect.
+  *
+  * @param sheetArea The range of cells on the current sheet
+  * @param visibleRect This is set to the physical region occupied by the given range of cells
+  */
+  void sheetAreaToRect( const QRect& sheetArea, KoRect& rect );
   
 
   void retrieveMarkerInfo( const QRect &marker, const KoRect &viewRect,

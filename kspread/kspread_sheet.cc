@@ -8054,8 +8054,11 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
             ChartChild *ch = new ChartChild( doc(), this );
             if ( ch->load( e ) )
                 insertChild( ch );
-            else
+            else 
+	    {
+		ch->setDeleted(true);
                 delete ch;
+	    }
         }
 
         n = n.nextSibling();
@@ -8251,8 +8254,11 @@ void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
     if ( wiz && wiz->show())
         insertChild( ch );
-    else
+    else 
+    {
+	    ch->setDeleted(true);
         delete ch;
+    }
 }
 
 void KSpreadSheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )

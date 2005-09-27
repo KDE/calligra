@@ -1069,8 +1069,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 	  return;
   }
   
+ /* kdDebug() << "ev_PosX " << ev_PosX << endl;
+  kdDebug() << "ev_PosY " << ev_PosY << endl;
+  kdDebug() << "xOffset " << xOffset() << endl;
+  kdDebug() << "yOffset " << yOffset() << endl;*/
+  
   //Check for a highlight range size grip and show the user a visual cue if found.
-  if (highlightRangeSizeGripAt(ev_PosX,ev_PosY - ypos))
+  if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   { 
 	  setCursor(Qt::CrossCursor);
 	  return;	  
@@ -1329,7 +1334,7 @@ HighlightRange* KSpreadCanvas::highlightRangeSizeGripAt(double x, double y)
 			highlight->getRange(rg);
 	  
 			KoRect visibleRect;
-			sheetAreaToVisibleRect(QRect(rg.startCol(),rg.startRow(),
+			sheetAreaToRect(QRect(rg.startCol(),rg.startRow(),
 					       rg.endCol()-rg.startCol()+1,rg.endRow()-rg.startRow()+1),visibleRect);
 
 			double distFromSizeGripCorner=( sqrt( (visibleRect.right()-x) +
@@ -4146,6 +4151,26 @@ void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
       }
     }
   }
+}
+
+void KSpreadCanvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect) 
+{ 
+	KSpreadSheet* sheet=activeSheet();
+		
+	if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+	{ 
+		rect.setLeft(sheet->dblColumnPos( sheetArea.right()+1 ) );
+		rect.setRight(sheet->dblColumnPos( sheetArea.left() ));
+	} 
+	else
+	{ 
+		rect.setLeft(sheet->dblColumnPos( sheetArea.left() ));
+		rect.setRight(sheet->dblColumnPos( sheetArea.right()+1 ));
+	}
+
+	rect.setTop(sheet->dblRowPos(sheetArea.top()));
+	rect.setBottom(sheet->dblRowPos(sheetArea.bottom()+1));
+	
 }
 
 void KSpreadCanvas::sheetAreaToVisibleRect( const QRect& sheetArea,
