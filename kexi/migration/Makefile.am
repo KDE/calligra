@@ -24,9 +24,7 @@ libkeximigrate_la_LIBADD = \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
 	$(top_builddir)/kexi/main/libkeximain.la
 
-libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO) \
--L$(PQXX_LIBDIR) -L$(PG_LIBDIR)
-
+libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO)
 
 noinst_HEADERS = importwizard.h migratemanager_p.h
 
