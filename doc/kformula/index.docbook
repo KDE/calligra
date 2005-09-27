@@ -154,7 +154,7 @@ like:</para>
 <important>
 <para>See the <link linkend="fonts">Mathematical Fonts</link> section
 for font installation details. You must install the bakoma or esstix fonts
-to get these results
+to get these results.
 </para>
 </important>
 
@@ -201,7 +201,7 @@ is shown below.
 <guimenuitem>New</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Creates a new &kformula; 
-document</action></para></listitem>
+document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -210,10 +210,10 @@ document</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Open</guimenuitem>
+<guimenuitem>Open...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens a previously saved 
-document</action></para></listitem>
+document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -221,7 +221,7 @@ document</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Open Recent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>displays a selection of recently saved documents you can open</action></para></listitem>
+<listitem><para><action>displays a selection of recently saved documents you can open.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -232,15 +232,15 @@ document</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Save</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document</action></para></listitem>
+<listitem><para><action>Saves the document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Save As</guimenuitem>
+<guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document with a name you provide</action></para></listitem>
+<listitem><para><action>Saves the document with a name you provide.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -248,7 +248,7 @@ document</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Reload</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Reloads the more recently opened document</action></para></listitem>
+<listitem><para><action>Reloads the more recently opened document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -256,7 +256,7 @@ document</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Import</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Imports formulas from other formats</action></para></listitem>
+<listitem><para><action>Imports formulas from other formats.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -264,7 +264,7 @@ document</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Export</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Exports the current document in another format</action></para></listitem>
+<listitem><para><action>Exports the current document in another format.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -273,9 +273,9 @@ document</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Print</guimenuitem>
+<guimenuitem>Print...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Prints the document</action></para></listitem>
+<listitem><para><action>Prints the document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -283,7 +283,7 @@ document</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Print Preview...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Shows how the printed document will appear</action></para></listitem>
+<listitem><para><action>Shows how the printed document will appear.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -292,7 +292,7 @@ document</action></para></listitem>
 <guimenuitem>Document Information...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Provides a dialog box where you can enter your name,
-email address and a short description about the document</action></para></listitem>
+email address and a short description about the document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -301,7 +301,7 @@ email address and a short description about the document</action></para></listit
 <guimenuitem>Mail...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Invokes &kmail; so you can email the file.
-Note: You still have to attach the file to the email</action></para></listitem>
+Note: You still have to attach the file to the email.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -312,7 +312,7 @@ Note: You still have to attach the file to the email</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Close</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Closes the current document</action></para></listitem>
+<listitem><para><action>Closes the current document.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -323,7 +323,7 @@ Note: You still have to attach the file to the email</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits</action> &kformula;</para></listitem>
+<listitem><para><action>Quits</action> &kformula;.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -342,7 +342,7 @@ Note: You still have to attach the file to the email</action></para></listitem>
 <guimenuitem>Undo</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Undoes an action. You can revert to the state that existed
-before your last change</action></para></listitem>
+before your last change.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -354,7 +354,7 @@ before your last change</action></para></listitem>
 <guimenuitem>Redo</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Undoes an undo. Reverse the action of Undo. This will restore the change
-you originally made</action></para></listitem>
+you originally made.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -451,7 +451,7 @@ section for details.</para>
 <keycombo action="simul">&Ctrl;<keycap>2</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Root</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts the square root.</action></para></listitem>
@@ -463,7 +463,7 @@ section for details.</para>
 <keycombo action="simul">&Ctrl;<keycap>3</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Fraction</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a fraction.</action></para></listitem>
@@ -472,7 +472,7 @@ section for details.</para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Bracket</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a pair of brackets, &ie; ( ). You can also just 
@@ -482,13 +482,13 @@ type ( to insert a pair of brackets.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;<keycap>3</keycap></keycombo>
+<keycombo action="simul">&Ctrl;<keycap>5</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Integral</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts the integral sign</action></para></listitem>
+<listitem><para><action>Inserts the integral sign.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -497,10 +497,10 @@ type ( to insert a pair of brackets.</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>7</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Sum</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts the summation sign 
+<listitem><para><action>Inserts the summation sign.
 (sigma).</action></para></listitem>
 </varlistentry>
 
@@ -510,7 +510,7 @@ type ( to insert a pair of brackets.</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>4</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Product</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts the product sign.</action></para></listitem>
@@ -522,7 +522,7 @@ type ( to insert a pair of brackets.</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>8</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Matrix...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a matrix. A dialog box pops up, with the default size being 3x3.
@@ -532,7 +532,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add 1x2 Matrix</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a two rowed column vector.</action></para></listitem>
@@ -541,7 +541,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Overline</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts an overline in this box.</action></para></listitem>
@@ -550,7 +550,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Underline</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts an underline in this box.</action></para></listitem>
@@ -559,7 +559,7 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Multiline</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a new line each time you type Enter in the square.</action></para></listitem>
@@ -571,12 +571,12 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <keycombo action="simul">&Ctrl;<keycap>U</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Upper Index</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Adds an upper index like so:         </action><inlinemediaobject><imageobject>
 	    <imagedata fileref="upper-index.png" format="PNG"/>
-	  </imageobject></inlinemediaobject></para></listitem>
+	  </imageobject></inlinemediaobject>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -585,12 +585,12 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
 </shortcut>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Lower Index</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Adds a lower index:  </action><inlinemediaobject><imageobject>
 	    <imagedata fileref="lower-index.png" format="PNG"/>
-	  </imageobject></inlinemediaobject></para>
+	  </imageobject></inlinemediaobject>.</para>
 <note><para> See the <link linkend="indices">Definite Integrals and
 Indices</link> section for details about indices.</para></note></listitem>
 </varlistentry>
@@ -599,18 +599,18 @@ Indices</link> section for details about indices.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Negative Thin Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a small reduced space, here between the o and the e:</action><inlinemediaobject><imageobject>
 	    <imagedata fileref="negative_thin_space.png" format="PNG"/>
-	  </imageobject></inlinemediaobject></para></listitem>
+	  </imageobject></inlinemediaobject>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Thin Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a small space.</action></para></listitem>
@@ -619,7 +619,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Medium Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a space that is one and a half times wider.</action></para></listitem>
@@ -629,7 +629,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Thick Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a double space.</action></para></listitem>
@@ -638,7 +638,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Element</guimenu>
-<guisubmenu>Add...</guisubmenu>
+<guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Quad Space</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a quadruple wide space.</action></para></listitem>
@@ -703,7 +703,7 @@ Indices</link> section for details about indices.</para></note></listitem>
 <guimenu>Element</guimenu>
 <guimenuitem>Size</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Allows to set the size of the font (from 6 to 72)</action></para></listitem>
+<listitem><para><action>Allows to set the size of the font (from 6 to 72).</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -764,7 +764,7 @@ Print and print preview are here also.</action></para></listitem>
 <guisubmenu>Toolbars</guisubmenu>
 <guimenuitem>Edit (KFormula)</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggles the edit toolbar.Here are clickable icons for 
+<listitem><para><action>Toggles the edit toolbar. Here are clickable icons for 
 cut and paste as well as Undo and Redo.</action></para></listitem>
 </varlistentry>
 
@@ -775,7 +775,7 @@ cut and paste as well as Undo and Redo.</action></para></listitem>
 <guimenuitem>Add (KFormula)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>This toolbar contains all the mathematical elements such 
-as Sum, Integral, Exponent &etc;.</action></para></listitem>
+as Sum, Integral, Exponent &etc;</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -784,7 +784,7 @@ as Sum, Integral, Exponent &etc;.</action></para></listitem>
 <guisubmenu>Toolbars</guisubmenu>
 <guimenuitem>Font (KFormula)</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>This toolbar contains the font settings (size, bold, italic,etc.).</action></para></listitem>
+<listitem><para><action>This toolbar contains the font settings (size, bold, italic, &etc;).</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -815,7 +815,7 @@ icons that pertain to matrix creation and editing.</action></para></listitem>
 <guimenuitem>Syntax highlighting</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Checking this item determines if the numbers will be 
-displayed in color</action></para></listitem>
+displayed in color.</action></para></listitem>
 </varlistentry>
 
 
@@ -924,7 +924,7 @@ the right pane.
 
 <listitem><para>
 Click on <userinput><guilabel>Apply</guilabel></userinput> and then
-click on <userinput><guilabel>OK</guilabel></userinput>
+click on <userinput><guilabel>OK</guilabel></userinput>.
 </para></listitem>
 </itemizedlist>
 
@@ -1205,7 +1205,7 @@ You need these fonts in particular: cmbx10, cmex10, cmmi10,
 cmr10, cmsy10, msam10 and msbm10. Install them into your system
 and make sure you have the install path set as a FontPath in your
 X11 configuration, then completely restart your X Server, if you
-use a display manager like kdm, you should also restart kdm.
+use a display manager like &kdm;, you should also restart kdm.
 Pressing <keycombo action="simul">&Ctrl; &Alt; <keycap>Backspace</keycap>
 </keycombo> at the login should do the trick.
 If unsure, do a complete reboot.
