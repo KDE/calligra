@@ -75,6 +75,7 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	m_opacity->setRange( 0, 100, 1, true );
 	m_opacity->setValue( 100 );
 	group->setMinimumWidth( 300 );
+	m_opacity->setSuffix(i18n("%"));
 
 	// signals and slots:
 	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
