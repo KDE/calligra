@@ -2003,11 +2003,11 @@ void KSpreadUndoChangeAreaTextCell::undo()
             {
               cell->setCellText( (*it).text );
               found = true;
-            }            
-          if( !found )   
+            }
+          if( !found )
             cell->setCellText( "", true );
         }
-        
+
     }
     else
     {
@@ -2053,11 +2053,11 @@ void KSpreadUndoChangeAreaTextCell::redo()
             {
               cell->setCellText( (*it).text );
               found = true;
-            }            
-          if( !found )   
+            }
+          if( !found )
             cell->setCellText( "", true );
         }
-        
+
     }
     else
     {

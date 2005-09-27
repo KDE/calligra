@@ -29,6 +29,7 @@ class ColumnFormat;
 class RowFormat;
 
 #include "kspread_global.h"
+#include "kspread_doc.h"
 
 #include <koUnit.h>
 #include <koPageLayout.h>
@@ -111,7 +112,7 @@ private:
 class KSpreadUndoAction
 {
 public:
-    KSpreadUndoAction( KSpreadDoc *_doc ) { m_pDoc = _doc; }
+    KSpreadUndoAction( KSpreadDoc *_doc ) { m_pDoc = _doc; m_pDoc->setModified(true); }
     virtual ~KSpreadUndoAction() { }
 
     virtual void undo() = 0;
@@ -120,8 +121,6 @@ public:
     KSpreadDoc* doc()const { return m_pDoc; }
 
     QString getName()const {return name ;}
-
-// #### To be private
 
 protected:
     KSpreadDoc *m_pDoc;
