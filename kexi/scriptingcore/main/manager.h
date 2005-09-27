@@ -41,6 +41,7 @@ namespace Kross { namespace Api {
     class EventSignal;
     class ScriptContainer;
     class ManagerPrivate;
+    class InterpreterInfo;
 
     /**
      * The Manager class is the main entry point to work with
@@ -76,6 +77,19 @@ namespace Kross { namespace Api {
                 static Manager m_manager = Manager();
                 return &m_manager;
             }
+
+            /**
+             * \return a map with \a InterpreterInfo* instances
+             * used to describe interpreters.
+             */
+            QMap<QString, InterpreterInfo*> getInterpreterInfos();
+
+            /**
+             * \return the \a InterpreterInfo* matching to the defined
+             * \p interpretername or NULL if there does not exists such
+             * a interpreter.
+             */
+            InterpreterInfo* getInterpreterInfo(const QString& interpretername);
 
             /**
              * Return the existing \a ScriptContainer with scriptname

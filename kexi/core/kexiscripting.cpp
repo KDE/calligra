@@ -29,6 +29,7 @@
 #ifdef KEXI_KROSS_SUPPORT
 # include <scriptingcore/main/manager.h>
 # include <scriptingcore/main/scriptcontainer.h>
+# include <scriptingcore/api/interpreter.h>
 # include <scriptingcore/api/exception.h>
 #endif
 
@@ -121,6 +122,42 @@ void KexiScriptContainer::setCode(const QString& code)
 #else
     d->code = code;
 #endif
+}
+
+QMap<QString, KexiScriptContainer::Option*> KexiScriptContainer::getOptions()
+{
+    QMap<QString, KexiScriptContainer::Option*> options;
+#ifdef KEXI_KROSS_SUPPORT
+    Kross::Api::InterpreterInfo* info =
+        Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->scriptcontainer->getInterpreterName() );
+    if(info) {
+        Kross::Api::InterpreterInfo::Option::Map optionmap = info->getOptions();
+        Kross::Api::InterpreterInfo::Option::Map::Iterator it( optionmap.begin() );
+        for(; it != optionmap.end(); ++it) {
+            KexiScriptContainer::Option* o = new KexiScriptContainer::Option();
+            o->name = it.data()->name;
+            o->comment = it.data()->comment;
+            o->value = it.data()->value;
+            options.replace(it.key(), o);
+        }
+    } else kdWarning() << "KexiScriptContainer::getOptions(): No such interpreterinfo" << endl;
+#endif
+    return options;
+}
+
+bool KexiScriptContainer::setOption(const QString& key, QVariant value)
+{
+#ifdef KEXI_KROSS_SUPPORT
+    Kross::Api::InterpreterInfo* info =
+        Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->scriptcontainer->getInterpreterName() );
+    if(info) {
+        if(info->hasOption(key)) {
+            d->scriptcontainer->setOption(key, value);
+            return true;
+        } else kdWarning() << QString("KexiScriptContainer::setOption(%1, %2): No such option").arg(key).arg(value.toString()) << endl;
+    } else kdWarning() << QString("KexiScriptContainer::setOption(%1, %2): No such interpreterinfo").arg(key).arg(value.toString()) << endl;
+#endif
+    return false;
 }
 
 QString KexiScriptContainer::getLastError()

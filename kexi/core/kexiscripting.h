@@ -22,6 +22,7 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+#include <qvariant.h>
 
 // Forward declarations.
 class KexiScriptContainerPrivate;
@@ -82,6 +83,32 @@ class KEXICORE_EXPORT KexiScriptContainer : public QObject
         * \param code The scripting code.
         */
         void setCode(const QString& code);
+
+        /**
+        * This class is used as configurable option the
+        * \a KexiScriptContainer instance provides.
+        */
+        class Option
+        {
+            public:
+                /// The short name of the option.
+                QString name;
+                /// A description of the option.
+                QString comment;
+                /// The value the option has.
+                QVariant value;
+        };
+
+        /**
+        * \return a map of all \a Option instances this 
+        * \a KexiScriptContainer instance provides.
+        */
+        QMap<QString, Option*> getOptions();
+
+        /**
+        * Set the option defined with \p key to the QVariant \p value .
+        */
+        bool setOption(const QString& key, QVariant value);
 
         /**
         * \return the last error or QString::null if there was no error.

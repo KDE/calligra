@@ -20,12 +20,8 @@
 #include "pythonscript.h"
 #include "pythonmodule.h"
 #include "pythoninterpreter.h"
-//#include "../api/object.h"
-//#include "../api/list.h"
-//#include "../main/manager.h"
+#include "pythonsecurity.h"
 #include "../main/scriptcontainer.h"
-//#include "../api/qtobject.h"
-//#include "../api/interpreter.h"
 
 #include <kdebug.h>
 
@@ -131,16 +127,17 @@ void PythonScript::initialize()
         // Compile the python script code. It will be later on request
         // executed. That way we cache the compiled code.
         PyObject* code = 0;
-        bool restricted = ((PythonInterpreter*)m_interpreter)->getOption("restricted", QVariant((bool)true)).toBool();
+        bool restricted = m_scriptcontainer->getOption("restricted", QVariant(true), true).toBool();
+        kdDebug() << QString("PythonScript::initialize() name=%1 restricted=%2").arg(m_scriptcontainer->getName()).arg(restricted) << endl;
         if(restricted) {
+
             // Use the RestrictedPython module wrapped by the PythonSecurity class.
-/*TODO
-            code = m_interpreter->m_security->compile_restricted(
+            code = dynamic_cast<PythonInterpreter*>(m_interpreter)->securityModule()->compile_restricted(
                 m_scriptcontainer->getCode(),
                 m_scriptcontainer->getName(),
                 "exec"
             );
-*/
+
         }
         else {
             /*

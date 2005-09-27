@@ -88,6 +88,12 @@ class KexiScriptDesignView : public KexiViewBase
         KexiScriptDesignViewPrivate* d;
 
         /**
+         * Update the \a KoProperty::Property::Dict propertymap of the
+         * interpreter-dependend options.
+         */
+        void updateProperties();
+
+        /**
          * Load the data from XML source and fill the internally
          * used \a Kross::Api::ScriptContainer instance.
          */

@@ -38,11 +38,9 @@ extern "C"
      * function will be used to return an instance of the
      * \a PythonInterpreter implementation.
      */
-    void* krosspython_instance(Kross::Api::Manager* manager, const QString& interpretername)
+    void* krossinterpreter(Kross::Api::InterpreterInfo* info)
     {
-//TODO do we need the manager?
-        //return new Kross::Python::PythonInterpreter(manager, interpretername);
-        return new Kross::Python::PythonInterpreter(interpretername);
+        return new Kross::Python::PythonInterpreter(info);
     }
 };
 
@@ -72,18 +70,12 @@ namespace Kross { namespace Python {
 
 }}
 
-PythonInterpreter::PythonInterpreter(const QString& interpretername)
-    : Kross::Api::Interpreter(interpretername)
+PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
+    : Kross::Api::Interpreter(info)
     , d(new PythonInterpreterPrivate())
 {
     // Initialize the python interpreter.
     initialize();
-
-    // Options the python interpreter provides.
-    m_options.replace(
-        "restricted",
-        new Option(QString("Restricted"), QString("Enable RestrictedPython module."), QVariant((bool)false))
-    );
 
     // Set name of the program.
     Py_SetProgramName(const_cast<char*>("Kross"));
@@ -215,11 +207,6 @@ void PythonInterpreter::finalize()
     Py_Finalize();
 }
 
-const QStringList PythonInterpreter::mimeTypes()
-{
-    return QStringList() << "text/x-python" << "application/x-python";
-}
-
 Kross::Api::Script* PythonInterpreter::createScript(Kross::Api::ScriptContainer* scriptcontainer)
 {
     return new PythonScript(this, scriptcontainer);
@@ -229,3 +216,9 @@ PythonModule* PythonInterpreter::mainModule()
 {
     return d->mainmodule;
 }
+
+PythonSecurity* PythonInterpreter::securityModule()
+{
+    return d->security;
+}
+

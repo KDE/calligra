@@ -38,11 +38,11 @@ class KexiScriptDesignViewPrivate
         /// The \a KexiScriptContainer used as facade for the Kross functionality.
         KexiScriptContainer* scriptcontainer;
 
-        /// The \a KoProperty::Set used in the propertyeditor.
-        KoProperty::Set* propertyset;
-
         /// The \a KexiScriptEditor to edit the scripting code.
         KexiScriptEditor* editor;
+
+        /// The \a KoProperty::Set used in the propertyeditor.
+        KoProperty::Set* propertyset;
 };
 
 KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
@@ -57,6 +57,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     d->propertyset = new KoProperty::Set(this, "KexiScripting");
 
     QStringList interpreters = scriptmanager->getInterpreters();
+
     KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
     KoProperty::Property* prop = new KoProperty::Property(
         "language", // name
@@ -68,6 +69,8 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     );
     //prop->setVisible(false);
     d->propertyset->addProperty(prop);
+
+    updateProperties();
 
     QBoxLayout* layout = new QVBoxLayout(this);
     d->editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
@@ -91,6 +94,27 @@ KexiScriptDesignView::~KexiScriptDesignView()
     delete d;
 }
 
+void KexiScriptDesignView::updateProperties()
+{
+    //TODO d->propertyset->removePropertyGroup("Options");
+
+    QMap<QString, KexiScriptContainer::Option*> options = d->scriptcontainer->getOptions();
+    QMap<QString, KexiScriptContainer::Option*>::Iterator it( options.begin() );
+    for(; it != options.end(); ++it) {
+        KexiScriptContainer::Option* option = it.data();
+        KoProperty::Property* prop = new KoProperty::Property(
+            it.key().latin1(), // id
+            option->value, // value
+            option->name, // caption
+            option->comment, // description
+            KoProperty::Boolean //KoProperty::Auto // type
+        );
+        d->propertyset->addProperty(prop, "Options");
+    }
+
+    propertySetSwitched(); // update property-editor
+}
+
 KoProperty::Set* KexiScriptDesignView::propertySet()
 {
     return d->propertyset;
@@ -105,11 +129,15 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& set, KoProperty:
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
         d->editor->setHighlightMode( language );
-        setDirty(true);
+        updateProperties();
     }
     else {
-        kdWarning() << QString("KexiScriptDesignView::slotPropertyChanged() unknown property '%1'.").arg(property.name()) << endl;
+        if(! d->scriptcontainer->setOption(property.name(), property.value())) {
+            kdWarning() << QString("KexiScriptDesignView::slotPropertyChanged() unknown property '%1'.").arg(property.name()) << endl;
+            return;
+        }
     }
+    setDirty(true);
 }
 
 bool KexiScriptDesignView::loadData()

@@ -35,8 +35,8 @@ namespace Kross { namespace Kjs {
 
 }}
 
-KjsInterpreter::KjsInterpreter(const QString& interpretername)
-    : Kross::Api::Interpreter(interpretername)
+KjsInterpreter::KjsInterpreter(Kross::Api::InterpreterInfo* info)
+    : Kross::Api::Interpreter(info)
 {
     d = new KjsInterpreterPrivate();
     //d->kjspart = new ::KJSEmbed::KJSEmbedPart(0L, "console", this, "krosskjs");
@@ -49,13 +49,10 @@ KjsInterpreter::~KjsInterpreter()
     delete d;
 }
 
-const QStringList KjsInterpreter::mimeTypes()
-{
-    return QStringList() << "application/x-javascript";
-}
-
 Kross::Api::Script* KjsInterpreter::createScript(Kross::Api::ScriptContainer* scriptcontainer)
 {
+    //application/x-javascript
+
     //TODO
     return 0;
 }

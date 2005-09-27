@@ -60,6 +60,12 @@ namespace Kross { namespace Api {
             */
             QString m_interpretername;
 
+            /**
+            * Map of options that overwritte the \a InterpreterInfo::Option::Map
+            * standard options.
+            */
+            QMap<QString, QVariant> m_options;
+
     };
 
 }}
@@ -105,6 +111,21 @@ void ScriptContainer::setInterpreterName(const QString& name)
 {
     finalize();
     d->m_interpretername = name;
+}
+
+const QVariant& ScriptContainer::getOption(const QString name, QVariant defaultvalue, bool recursive)
+{
+kdDebug()<<"############################# getOption name="<<name<<" value="<<d->m_options[name]<<endl;
+    if(d->m_options.contains(name))
+        return d->m_options[name];
+    Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->m_interpretername );
+    return info ? info->getOptionValue(name, defaultvalue) : defaultvalue;
+}
+
+bool ScriptContainer::setOption(const QString name, const QVariant& value)
+{
+kdDebug()<<"############################# setOption name="<<name<<" value="<<value<<endl;
+    d->m_options.replace(name, value);
 }
 
 Object::Ptr ScriptContainer::execute()

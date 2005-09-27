@@ -32,13 +32,12 @@
 #include <kdebug.h>
 #include <klibloader.h>
 
-using namespace Kross::Api;
-
 extern "C"
 {
-    typedef int (*def_interpreter_func)(Kross::Api::Manager*, const QString&);
     typedef Kross::Api::Object* (*def_module_func)(Kross::Api::Manager*);
 }
+
+using namespace Kross::Api;
 
 namespace Kross { namespace Api {
 
@@ -46,11 +45,8 @@ namespace Kross { namespace Api {
     class ManagerPrivate
     {
         public:
-            /// List of interpreter instances.
-            QMap<QString, Interpreter*> interpreter;
-
-            /// To dynamicly load libraries.
-            KLibrary* library;
+            /// List of \a InterpreterInfo instances.
+            QMap<QString, InterpreterInfo*> interpreterinfos;
 
             /// Loaded modules.
             QMap<QString, Module::Ptr> modules;
@@ -62,15 +58,36 @@ Manager::Manager()
     : MainModule("Kross") // the manager has the name "Kross"
     , d( new ManagerPrivate() )
 {
-    d->library = 0;
+#ifdef KROSS_PYTHON_LIBRARY
+    InterpreterInfo::Option::Map pythonoptions;
+    pythonoptions.replace("restricted",
+        new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false))
+    );
+    d->interpreterinfos.replace("python",
+        new InterpreterInfo("python",
+            KROSS_PYTHON_LIBRARY, // library
+            QStringList() << "text/x-python" << "application/x-python", // mimetypes
+            pythonoptions // options
+        )
+    );
+#endif
 }
 
 Manager::~Manager()
 {
-    for(QMap<QString, Interpreter*>::Iterator iit = d->interpreter.begin(); iit != d->interpreter.end(); ++iit)
-        delete iit.data();
-
+    for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
+        delete it.data();
     delete d;
+}
+
+QMap<QString, InterpreterInfo*> Manager::getInterpreterInfos()
+{
+    return d->interpreterinfos;
+}
+
+InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
+{
+    return d->interpreterinfos[interpretername];
 }
 
 ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
@@ -91,98 +108,25 @@ ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
 {
-    if(d->interpreter.contains(interpretername))
-        return d->interpreter[interpretername];
+    setException(0); // clear previous exceptions
 
-    Interpreter* interpreter = 0;
-    setException(0);
-
-    if(interpretername == "python") {
-
-#ifdef KROSS_PYTHON_LIBRARY
-        // At least on linux it's needed to dlopen the libpython
-        // with RTLD_GLOBAL else python-scripts that use e.g.
-        // "from qt import *" would result in python-traceback's
-        // with undefined symbol messages. This is a long time
-        // known issue with imported libs that import other libs.
-        // Till today QLibrary failed to spend the possibility to
-        // load libs with RTLD_GLOBAL while KLibrary does the job
-        // fine. So, at least on linux we have to stick with
-        // KLibrary or go the hard and unportable dlopen() way.
-        // And yes, I tried the at http://docs.python.org/ext/link-reqs.html
-        // described ways as well, but they and -rdynamic doesn't
-        // helped in that case.
-        // See also http://mats.imk.fraunhofer.de/pipermail/pykde/2004-April/007645.html
-
-        if(d->library) {
-            kdWarning() << "The krosspython library is already loaded." << endl;
-        }
-        else {
-            // Load the krosspython library.
-            KLibLoader *libloader = KLibLoader::self();
-
-            d->library = libloader->globalLibrary( KROSS_PYTHON_LIBRARY );
-            if(! d->library) {
-                setException( new Exception("Failed to load the krosspython library.") );
-                return 0;
-            }
-        }
-
-        // Get the extern "C" krosspython_instance function.
-        def_interpreter_func interpreter_func;
-        interpreter_func = (def_interpreter_func) d->library->symbol("krosspython_instance");
-        if(! interpreter_func) {
-            setException( new Exception("Failed to load symbol in krosspython library.") );
-        }
-        else {
-            // and execute the extern krosspython_instance function.
-            interpreter = (Kross::Api::Interpreter*) (interpreter_func)(this, "python");
-            if(! interpreter) {
-                setException( new Exception("Failed to load PythonInterpreter instance from krosspython library.") );
-            }
-            else {
-                // Job done. The library is loaded and our Interpreter* points
-                // to the external Kross::Python::PythonInterpreter* instance.
-                kdDebug()<<"Successfully loaded PythonInterpreter instance from krosspython library."<<endl;
-            }
-        }
-
-        // finally unload the library.
-        d->library->unload();
-        d->library = 0;
-#endif
-    }
-/*
-    else if(interpretername == "kjs") {
-#ifdef KROSS_KJS_LIBRARY
-        interpreter = new Kross::Kjs::KjsInterpreter(this, "kjs");
-#endif
-    }
-*/
-    else {
+    if(! d->interpreterinfos.contains(interpretername)) {
         setException( new Exception(QString("No such interpreter '%1'").arg(interpretername)) );
+        return 0;
     }
 
-    if(interpreter)
-        d->interpreter.replace(interpretername, interpreter);
-
-    return interpreter;
+    return d->interpreterinfos[interpretername]->getInterpreter();
 }
 
 const QStringList Manager::getInterpreters()
 {
     QStringList list;
 
-#ifdef KROSS_PYTHON_LIBRARY
-    list << "python";
-#endif
+    QMap<QString, InterpreterInfo*>::Iterator it( d->interpreterinfos.begin() );
+    for(; it != d->interpreterinfos.end(); ++it)
+        list << it.key();
 
-/*
-#ifdef KROSS_KJS_LIBRARY
-    list << "kjs";
-#endif
-*/
-//list << "TestCase";
+list << "TestCase";
 
     return  list;
 }

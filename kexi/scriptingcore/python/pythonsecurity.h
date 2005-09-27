@@ -78,14 +78,19 @@ namespace Kross { namespace Python {
              * \param source The python scripting code.
              * \param filename The filename used on errormessages.
              * \param mode Compilemode, could be 'exec' or 'eval' or 'single'.
-             * \return The compiled \a PythonCode object on success else NULL.
+             * \return The compiled \python code object on success else 
+             *         NULL. The caller owns the resulting object and needs
+             *         to take care to decrease the ref-counter it not needed
+             *         any longer.
              */
-/* PyCodeObject* */ void compile_restricted(const QString& source, const QString& filename, const QString& mode);
+            PyObject* compile_restricted(const QString& source, const QString& filename, const QString& mode);
 
+#if 0
             //TODO
             void compile_restricted_function(const Py::Tuple& args, const QString& body, const QString& name, const QString& filename, const Py::Object& globalize = Py::None());
             void compile_restricted_exec(const QString& source, const QString& filename = "<string>");
             void compile_restricted_eval(const QString& source, const QString& filename = "<string>");
+#endif
 
         private:
             /// We keep a pointer to the used \a PythonInterpreter.

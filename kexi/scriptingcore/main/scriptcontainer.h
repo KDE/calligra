@@ -106,6 +106,22 @@ namespace Kross { namespace Api {
             void setInterpreterName(const QString&);
 
             /**
+             * \return the value of the option defined with \p name .
+             * If there doesn't exists an option with such a name,
+             * the \p defaultvalue is returned. If \p recursive is
+             * true then first the \a ScriptContainer options are
+             * seeked for the matching \p name and if not found
+             * the \a Manager options are seeked for the \p name and
+             * if not found either the \p defaultvalue is returned.
+             */
+            const QVariant& getOption(const QString name, QVariant defaultvalue = QVariant(), bool recursive = false);
+
+            /**
+             * Set the \a Interpreter::Option value.
+             */
+            bool setOption(const QString name, const QVariant& value);
+
+            /**
              * Execute the script container.
              */
             Object::Ptr execute();

@@ -50,18 +50,12 @@ namespace Kross { namespace Python {
             /**
              * Constructor.
              */
-            PythonInterpreter(const QString& interpretername);
+            PythonInterpreter(Kross::Api::InterpreterInfo* info);
 
             /**
              * Destructor.
              */
             virtual ~PythonInterpreter();
-
-            /**
-             * Return a list of mimetypes the Python-Interpreter supports.
-             * See \see Kross::Api::Interpreter::execute
-             */
-            virtual const QStringList mimeTypes();
 
             /**
              * \return a \a PythonScript instance.
@@ -72,6 +66,11 @@ namespace Kross { namespace Python {
              * \return the \a MainModule instance.
              */
             PythonModule* mainModule();
+
+            /**
+             * \return the \a PythonSecurity instance.
+             */
+            PythonSecurity* securityModule();
 
         private:
             /// Internal d-pointer class.

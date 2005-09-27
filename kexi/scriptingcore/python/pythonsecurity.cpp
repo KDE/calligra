@@ -91,7 +91,6 @@ void PythonSecurity::initRestrictedPython()
             throw Py::Exception();
 
         kdDebug()<<"!!!!!!!!!!!!!! PythonSecurity::PythonSecurity SUCCESS !!!!!!!!!!!!!!!!!"<<endl;
-
     }
     catch(Py::Exception& e) {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize PythonSecurity module: %1").arg(Py::value(e).as_string().c_str())) );
@@ -109,8 +108,11 @@ Py::Object PythonSecurity::_getattr_(const Py::Tuple& args)
     return Py::None();
 }
 
-void PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
+PyObject* PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
 {
+    if(! m_pymodule)
+        initRestrictedPython(); // throws exception if failed
+
     try {
         Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
 
@@ -137,7 +139,7 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
         );
         if(! pycode)
             throw Py::Exception();
-        Py::Object code(pycode, true);
+        Py::Object code(pycode);
 /*
         kdDebug()<<"$---------------------------------------------------"<<endl;
         Py::List ml = mainmoduledict;
@@ -157,7 +159,7 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
         }
         kdDebug()<<"$---------------------------------------------------"<<endl;
 
-
+        return pycode;
     }
     catch(Py::Exception& e) {
         Py::Object errobj = Py::value(e);
@@ -165,6 +167,7 @@ void PythonSecurity::compile_restricted(const QString& source, const QString& fi
     }
 }
 
+#if 0
 void PythonSecurity::compile_restricted_function(const Py::Tuple& /*args*/, const QString& /*body*/, const QString& /*name*/, const QString& /*filename*/, const Py::Object& /*globalize*/)
 {
     //TODO
@@ -179,4 +182,5 @@ void PythonSecurity::compile_restricted_eval(const QString& /*source*/, const QS
 {
     //TODO
 }
+#endif
 

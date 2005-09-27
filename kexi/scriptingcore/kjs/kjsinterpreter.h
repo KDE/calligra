@@ -46,20 +46,12 @@ namespace Kross { namespace Kjs {
             /**
              * Constructor.
              */
-            KjsInterpreter(const QString& interpretername);
+            KjsInterpreter(Kross::Api::InterpreterInfo* info);
 
             /**
              * Destructor.
              */
             virtual ~KjsInterpreter();
-
-            /**
-             * Return a list of mimetypes the KJS-Interpreter
-             * supports.
-             *
-             * See \see Kross::Api::Interpreter::execute()
-             */
-            virtual const QStringList mimeTypes();
 
             /**
              * Return a \a PythonScript instance.

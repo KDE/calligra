@@ -32,6 +32,111 @@ namespace Kross { namespace Api {
     class Manager;
     class ScriptContainer;
     class Script;
+    class Interpreter;
+
+    /**
+     * While the \a Interpreter is the implemented interpreter this class
+     * is used to provide some abstract informations about each interpreter
+     * we are able to use within the \a Manager singelton.
+     */
+    class InterpreterInfo
+    {
+        public:
+
+            /**
+             * Each interpreter is able to define options we could
+             * use to manipulate the interpreter behaviour.
+             */
+            class Option
+            {
+                public:
+                    /// Map of options.
+                    typedef QMap<QString, Option*> Map;
+
+                    /**
+                     * Constructor.
+                     * 
+                     * \param name The name the option has. This is the
+                     *        displayed title and isn't used internaly.
+                     * \param comment A comment that describes the option.
+                     * \param value The QVariant value this option has.
+                     */
+                    Option(const QString& name, const QString& comment, const QVariant& value)
+                        : name(name), comment(comment), value(value) {}
+                    /// The short name of the option.
+                    QString name;
+                    /// A description of the option.
+                    QString comment;
+                    /// The value the option has.
+                    QVariant value;
+            };
+
+            /**
+             * Constructor.
+             */
+            InterpreterInfo(const QString& interpretername, const QString& library, QStringList mimetypes, Option::Map options);
+
+            /**
+             * Destructor.
+             */
+            ~InterpreterInfo();
+
+            /**
+             * Return the name of the interpreter.
+             *
+             * \return Name of the interpreter, for
+             *         example "python" or "kjs".
+             */
+            const QString& getInterpretername();
+
+            /**
+             * List of mimetypes this interpreter supports.
+             *
+             * \return QStringList with mimetypes like
+             *         "application/x-javascript".
+             */
+            const QStringList getMimeTypes();
+
+            /**
+             * \return true if an \a Option with that \p key exists else false.
+             */
+            bool hasOption(const QString& key);
+
+            /**
+             * \return the option defined with \p name .
+             */
+            Option* getOption(const QString name);
+
+            /**
+             * \return the value of the option defined with \p name . If there 
+             * doesn't exists an option with such a name, the \p defaultvalue 
+             * is returned.
+             */
+            const QVariant& getOptionValue(const QString name, QVariant defaultvalue = QVariant());
+
+            /**
+             * \return a map of options.
+             */
+            Option::Map getOptions();
+
+            /**
+             * \return the \a Interpreter instance this \a InterpreterInfo
+             * is the describer for.
+             */
+            Interpreter* getInterpreter();
+
+        private:
+            /// The name the interpreter has. Could be something like "python" or "kjs".
+            QString m_interpretername;
+            /// The name of the library to load for the interpreter.
+            QString m_library;
+            /// List of mimetypes this interpreter supports.
+            QStringList m_mimetypes;
+            /// A \a Option::Map with options.
+            Option::Map m_options;
+            /// The \a Interpreter instance.
+            Interpreter* m_interpreter;
+    };
 
     /**
      * Base class for interpreters.
@@ -49,69 +154,15 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param interpretername The name of the interpreter.
-             *        This could be something like "kjs" or "python".
+             * \param info is the \a InterpreterInfo instance
+             *        that describes this interpreter.
              */
-            Interpreter(const QString& interpretername);
+            Interpreter(InterpreterInfo* info);
 
             /**
              * Destructor.
              */
             virtual ~Interpreter();
-
-            /**
-             * Each interpreter is able to define options we could
-             * use to manipulate the interpreter behaviour.
-             */
-            class Option
-            {
-                public:
-                    /// Map of options.
-                    typedef QMap<QString, Option*> Map;
-                    /// Constructor.
-                    Option(const QString& name, const QString& comment, const QVariant& value)
-                        : m_name(name), m_comment(comment), m_value(value) {}
-                    /// The short name of the option.
-                    QString m_name;
-                    /// A description of the option.
-                    QString m_comment;
-                    /// The value the option has.
-                    QVariant m_value;
-            };
-
-            /**
-             * Return the value of the \a Interpreter::Option instance
-             * defined with name. If there doesn't exists an option
-             * with such a name, the defaultvalue is returned.
-             */
-            const QVariant& getOption(const QString name, const QVariant& defaultvalue = QVariant());
-
-            /**
-             * Return a \a Interpreter::Option::Map of avaible
-             * \a Interpreter::Option  instances.
-             */
-            Option::Map getOptions();
-
-            /**
-             * Set the \a Interpreter::Option value.
-             */
-            bool setOption(const QString name, const QVariant& value);
-
-            /**
-             * Return the name of the interpreter.
-             *
-             * \return Name of the interpreter, for
-             *         example "python" or "kjs".
-             */
-            const QString& getInterpretername();
-
-            /**
-             * List of mimetypes this interpreter supports.
-             *
-             * \return QStringList with mimetypes like
-             *         "application/x-javascript".
-             */
-            virtual const QStringList mimeTypes() = 0;
 
             /**
              * Create and return a new interpreter dependend
@@ -124,12 +175,8 @@ namespace Kross { namespace Api {
             virtual Script* createScript(ScriptContainer* scriptcontainer) = 0;
 
         protected:
-            /// Name of this interpreter.
-            QString m_interpretername;
-            /// List of mimetypes this interpreter supports.
-            QStringList m_mimetypes;
-            /// Map of \a Option instances. Interpreter-implementations use them.
-            Option::Map m_options;
+            /// The \a InterpreterInfo instance this interpreter belongs to.
+            InterpreterInfo* m_interpreterinfo;
     };
 
 }}
