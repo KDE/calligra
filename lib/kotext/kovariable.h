@@ -53,13 +53,8 @@ class KOTEXT_EXPORT KoVariableSettings
     KoVariableSettings();
     virtual ~KoVariableSettings();
 
-    // don't remove startingPage or startingPageNumber! - Clarence
-
-    int startingPage()const { return m_startingPageNumber; }
-    void setStartingPage(int num) { m_startingPageNumber=num; }
-
-    int startingPageNumber()const { return startingPage(); }
-    void setStartingPageNumber(int num) { setStartingPage(num); }
+    int startingPageNumber()const { return m_startingPageNumber; }
+    void setStartingPageNumber(int num) { m_startingPageNumber=num; }
 
     bool displayLink() const{ return m_displayLink; }
     void setDisplayLink( bool b) { m_displayLink=b; }
@@ -520,7 +515,7 @@ public:
 
 protected:
     short int m_subtype;
-    int m_correctTime;
+    int m_correctTime; // in minutes
 };
 
 

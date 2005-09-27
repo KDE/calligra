@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,6 +51,8 @@
 #include <qvaluelist.h>
 #include <qdom.h>
 #include <qradiobutton.h>
+
+#include "duration.h"
 
 class KoVariableSettings::KoVariableSettingPrivate
 {
@@ -1306,7 +1309,9 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
         klocaleFormat = true;
     }
     writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisDateStyle(context.mainStyles(), value, klocaleFormat ) );
-    writer.addAttribute( "text:date-adjust", m_correctDate );
+
+    if ( m_correctDate != 0 )
+        writer.addAttribute( "text:date-adjust", daysToISODuration( m_correctDate ) );
     writer.endElement();
 }
 
@@ -1332,7 +1337,9 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
         m_subtype = VST_DATE_CREATE_FILE;
     else if ( localName.startsWith( "modification" ) )
         m_subtype = VST_DATE_MODIFY_FILE;
-    m_correctDate = elem.attributeNS( KoXmlNS::text, "date-adjust", QString::null ).toInt();
+    const QString adjustStr = elem.attributeNS( KoXmlNS::text, "date-adjust", QString::null );
+    if ( !adjustStr.isEmpty() )
+        m_correctDate = ISODurationToDays( adjustStr );
 }
 
 QStringList KoDateVariable::actionTexts()
@@ -1521,15 +1528,18 @@ void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
         if ( fixed )
             m_varValue = QVariant( dt.time() );
         m_subtype = fixed ? VST_TIME_FIX : VST_TIME_CURRENT;
-        m_correctTime = elem.attributeNS( KoXmlNS::text, "time-adjust", QString::null ).toInt();
+        QString adjustStr = elem.attributeNS( KoXmlNS::text, "time-adjust", QString::null );
+        if ( !adjustStr.isEmpty() )
+            m_correctTime = ISODurationToMinutes( adjustStr );
     }
 }
 
 void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     writer.startElement( "text:time" );
-    if ( m_correctTime != 0 )
-        writer.addAttribute( "text:time-adjust", m_correctTime );
+    if ( m_correctTime != 0 ) {
+        writer.addAttribute( "text:time-adjust", minutesToISODuration( m_correctTime ) );
+    }
     if (m_subtype == VST_TIME_FIX )
     {
         writer.addAttribute( "text:fixed", "true" );
