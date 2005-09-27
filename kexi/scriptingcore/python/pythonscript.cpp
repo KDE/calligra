@@ -127,7 +127,7 @@ void PythonScript::initialize()
         // Compile the python script code. It will be later on request
         // executed. That way we cache the compiled code.
         PyObject* code = 0;
-        bool restricted = m_scriptcontainer->getOption("restricted", QVariant(true), true).toBool();
+        bool restricted = m_scriptcontainer->getOption("restricted", QVariant(false), true).toBool();
         kdDebug() << QString("PythonScript::initialize() name=%1 restricted=%2").arg(m_scriptcontainer->getName()).arg(restricted) << endl;
         if(restricted) {
 
