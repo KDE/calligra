@@ -520,7 +520,7 @@ public:
 
 protected:
     short int m_subtype;
-    int m_correctTime;
+    int m_correctTime; // in minutes
 };
 
 
