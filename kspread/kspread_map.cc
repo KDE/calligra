@@ -215,7 +215,6 @@ bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 
 QDomElement KSpreadMap::save( QDomDocument& doc )
 {
-    kdDebug()<<" QDomElement KSpreadMap::save( QDomDocument& doc )******\n";
     QDomElement mymap = doc.createElement( "map" );
   // Save visual info for the first view, such as active sheet and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
@@ -244,13 +243,11 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   QPtrListIterator<KSpreadSheet> it( m_lstSheets );
   for( ; it.current(); ++it )
   {
-      kdDebug()<<" before to save sheet \n";
     QDomElement e = it.current()->saveXML( doc );
     if ( e.isNull() )
       return e;
     mymap.appendChild( e );
   }
-  kdDebug()<<" end saving map \n";
   return mymap;
 }
 

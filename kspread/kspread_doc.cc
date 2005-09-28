@@ -496,7 +496,6 @@ QDomDocument KSpreadDoc::saveXML()
         for (; it.current(); ++it )
             static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
     }
-    kdDebug()<<" QDomDocument KSpreadDoc::saveXML() \n";
 
     QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
     QDomElement spread = doc.documentElement();
@@ -611,10 +610,8 @@ QDomDocument KSpreadDoc::saveXML()
 
     QDomElement s = styleManager()->save( doc );
     spread.appendChild( s );
-    kdDebug()<<" before saving map \n";
     QDomElement e = map()->save( doc );
     spread.appendChild( e );
-    kdDebug()<<" After saving map \n";
 
     setModified( false );
 
@@ -825,7 +822,7 @@ void KSpreadDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
     if ( !configurationSettings.isNull() )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+        //kdDebug()<<" ignorelist :"<<ignorelist<<endl;
         d->spellListIgnoreAll = QStringList::split( ',', ignorelist );
     }
 }
@@ -1545,8 +1542,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     QRect prect = rect;
     prect.setWidth( (int) (prect.width() * painter.worldMatrix().m11()) );
     prect.setHeight( (int) (prect.height() * painter.worldMatrix().m22()) );
-    setZoomAndResolution( (int) d_zoom * 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    kdDebug()<<" prect :"<<prect<<endl;
+    setZoomAndResolution( (int) ( d_zoom * 100 ), KoGlobal::dpiX(), KoGlobal::dpiY() );
     // paint the content, now zoom is correctly set
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
@@ -1574,7 +1570,6 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     int right_col = sheet->rightColumn( unzoomItX( rect.right() ) );
     int top_row = sheet->topRow( unzoomItY( rect.y() ), ypos );
     int bottom_row = sheet->bottomRow( unzoomItY( rect.bottom() ) );
-
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );

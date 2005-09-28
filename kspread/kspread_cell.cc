@@ -4964,12 +4964,10 @@ QDomElement KSpreadCell::save( QDomDocument& doc,
 			       int _x_offset, int _y_offset,
 			       bool force, bool copy, bool era )
 {
-    kdDebug()<<" kspreadcell save  \n";
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
     cell.setAttribute( "row", d->row - _y_offset );
     cell.setAttribute( "column", d->column - _x_offset );
-    kdDebug()<<" cell pos : row "<<( d->row - _y_offset )<<" column :"<<(d->column - _x_offset )<<endl;
     //
     // Save the formatting information
     //
@@ -5106,7 +5104,6 @@ QDomElement KSpreadCell::save( QDomDocument& doc,
             cell.appendChild( text );
         }
     }
-    kdDebug()<<" cell finish \n";
     if ( cell.hasChildNodes() || cell.attributes().length() > 2 ) // don't save empty tags
         // (the >2 is due to "row" and "column" attributes)
         return cell;
