@@ -5481,7 +5481,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
     if ( !textP.isNull() )
     {
+        kdDebug()<<" cell text !!!!!!!!!!!!!!\n";
         text = textP.text(); // our text, could contain formating for value or result of formul
+        kdDebug()<<" text !!!!!!!!!!!!!!!!!!!!!! :"<<text<<endl;
         setCellText( text );
         setValue( text );
 

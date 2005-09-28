@@ -218,6 +218,7 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 //
 /////////////
 
+
 QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle )
 {
     kdDebug()<<"void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )***************\n";
@@ -226,7 +227,8 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     KSpreadFormat::Align a = KSpreadFormat::Undefined;
     if ( hasProperty( PFont,true ) || hasNoFallBackProperties( PFont ) )
     {
-        //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
+        //fo:font-size="13pt" fo:font-style="italic" style:text-underline="sing
+        //le" style:text-underline-color="font-color" fo:font-weight="bold"
         saveOasisFontCellStyle( currentCellStyle, m_pStyle->font() );
     }
 
@@ -372,20 +374,21 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
 
 void KSpreadFormat::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font )
 {
-    currentCellStyle.addProperty( "style:font-name", _font.family() );
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+    currentCellStyle.addProperty( "style:font-name", _font.family(),tt );
     if ( _font.bold() )
-        currentCellStyle.addProperty("fo:font-weight","bold" );
+        currentCellStyle.addProperty("fo:font-weight","bold",tt );
     if ( _font.italic() )
-        currentCellStyle.addProperty("fo:font-style", "italic" );
+        currentCellStyle.addProperty("fo:font-style", "italic",tt );
     if ( _font.strikeOut() )
-        currentCellStyle.addProperty("style:text-crossing-out", "single-line" );
+        currentCellStyle.addProperty("style:text-crossing-out", "single-line",tt );
 
     if ( _font.underline() )
     {
-        currentCellStyle.addProperty( "style:text-underline", "single" );
-        currentCellStyle.addProperty( "style:text-underline-color", "font-color" );
+        currentCellStyle.addProperty( "style:text-underline", "single",tt );
+        currentCellStyle.addProperty( "style:text-underline-color", "font-color",tt );
     }
-    currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize() );
+    currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize(),tt );
 }
 
 QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row, bool force, bool copy )

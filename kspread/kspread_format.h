@@ -115,7 +115,6 @@ public:
     virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle ,int _col, int _row , bool force = false, bool copy = false);
     virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle );
     void saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font );
-
     bool loadFontOasisStyle( KoStyleStack & font );
     ////////////////////////////////
     //
