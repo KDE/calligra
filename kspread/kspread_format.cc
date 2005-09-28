@@ -1089,6 +1089,7 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 {
 
     //kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
+    font.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
 
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
         setTextFontFamily( font.attributeNS( KoXmlNS::fo, "font-family" ) );
