@@ -1087,14 +1087,15 @@ bool KSpreadFormat::load( const QDomElement & f, PasteMode pm, bool paste )
 
 bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 {
-
-    //kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
     font.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+    //TODO remember to change type properties
 
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
         setTextFontFamily( font.attributeNS( KoXmlNS::fo, "font-family" ) );
+
     if ( font.hasAttributeNS( KoXmlNS::fo, "color" ) )
         setTextColor( QColor( font.attributeNS( KoXmlNS::fo, "color" ) ) );
+
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
         setTextFontSize( (int) KoUnit::parseValue( font.attributeNS( KoXmlNS::fo, "font-size" ),10.0 ) );
     else
@@ -1105,17 +1106,24 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
         kdDebug(30518) << "italic" << endl;
         setTextFontItalic( true ); // only thing we support
     }
-    if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) && ( font.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold") )
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" )
+         && ( font.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold") )
         setTextFontBold( true ); // only thing we support
-    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
+
+    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" )
+         || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
         setTextFontUnderline( true ); // only thing we support
-    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) && ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" ))
+
+    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" )
+         && ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" ))
         setTextFontStrike( true ); // only thing we support
+
     if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
     {
         // TODO: possible values: fixed, variable
     }
-    // TODO:
+
+    // TODO: for the future when we will use kotext
     // text-underline-color
     return true;
 }
