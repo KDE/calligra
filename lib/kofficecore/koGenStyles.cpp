@@ -215,6 +215,16 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         }
         writer->endElement();
     }
+    i = KoGenStyle::ParagraphType;
+    if ( !m_properties[i].isEmpty() ) {
+        writer->startElement( "style:paragraph-properties" );
+        it = m_properties[i].begin();
+        for ( ; it != m_properties[i].end(); ++it ) {
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
+                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+        }
+        writer->endElement();
+    }
     // And now the style maps
     for ( uint i = 0; i < m_maps.count(); ++i ) {
         bool writeit = true;
@@ -259,6 +269,11 @@ void KoGenStyle::printDebug() const
     }
     i = TextType;
     kdDebug() << m_properties[i].count() << " text properties." << endl;
+    for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
+        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+    }
+    i = ParagraphType;
+    kdDebug() << m_properties[i].count() << " paragraph properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
         kdDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
