@@ -1265,18 +1265,18 @@ void KPTextObject::recalcPageNum( KPrPage *page )
         {
             switch ( var->subType() ) {
             case KPrPgNumVariable::VST_PGNUM_CURRENT:
-                var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
+                var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPageNumber()-1);
                 break;
             case KPrPgNumVariable::VST_CURRENT_SECTION:
                 var->setSectionTitle( page->pageTitle() );
                 break;
             case KPrPgNumVariable::VST_PGNUM_PREVIOUS:
                 var->setPgNum( QMAX( pgnum -1 , 0) +
-                               kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+                               kPresenterDocument()->getVariableCollection()->variableSetting()->startingPageNumber());
                 break;
             case KPrPgNumVariable::VST_PGNUM_NEXT:
                 var->setPgNum( QMIN( (int)m_doc->getPageNums(), pgnum+1 ) +
-                               kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+                               kPresenterDocument()->getVariableCollection()->variableSetting()->startingPageNumber());
                 break;
             default:
                 break;

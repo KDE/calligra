@@ -101,7 +101,7 @@ void KPrPgNumVariable::recalc()
 {
     if ( m_subtype == VST_PGNUM_TOTAL )
     {
-        m_varValue = QVariant( (int)(m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1));
+        m_varValue = QVariant( (int)(m_doc->getPageNums()+m_varColl->variableSetting()->startingPageNumber()-1));
         resize();
     }
     // But we don't want to keep a width of -1 ...

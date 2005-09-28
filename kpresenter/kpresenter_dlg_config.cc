@@ -644,7 +644,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     autoSave->setSuffix( i18n("min") );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
-    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
+    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPageNumber();
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);

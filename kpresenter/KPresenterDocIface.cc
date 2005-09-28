@@ -101,12 +101,12 @@ void KPresenterDocIface::recalcVariables(const QString &varName)
 
 int KPresenterDocIface::startingPage()
 {
-    return doc->getVariableCollection()->variableSetting()->startingPage();
+    return doc->getVariableCollection()->variableSetting()->startingPageNumber();
 }
 
 void KPresenterDocIface::setStartingPage(int nb)
 {
-    doc->getVariableCollection()->variableSetting()->setStartingPage(nb);
+    doc->getVariableCollection()->variableSetting()->setStartingPageNumber(nb);
     doc->recalcVariables(VT_PGNUM);
 }
 
