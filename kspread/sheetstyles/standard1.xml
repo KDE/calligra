@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE spreadsheet-snippet>
+<spreadsheet-snippet>
+<cell row="1" column="1" >
+<format bgcolor="#dcfffd">
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="2" column="1" >
+<format bgcolor="#dcfffd">
+<font size="12" family="Times" bold="yes" weight="75" italic="yes" />
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="3" column="1" >
+<format bgcolor="#dcfffd">
+<font size="12" family="Times" bold="yes" weight="75" italic="yes" />
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="1" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="4" column="1" >
+<format>
+<left-border>
+<pen width="1" style="0" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+
+<cell row="1" column="2" >
+<format bgcolor="#dcfffd">
+<font size="12" family="Times" bold="yes" weight="75" italic="yes" />
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="2" column="2" >
+<format bgcolor="#fcffec">
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="3" column="2" >
+<format bgcolor="#fcffec">
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="1" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="4" column="2" >
+<format>
+<left-border>
+<pen width="1" style="0" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+
+<cell row="1" column="3" >
+<format bgcolor="#dcfffd">
+<font size="12" family="Times" bold="yes" weight="75" italic="yes" />
+<left-border>
+<pen width="1" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="2" column="3" >
+<format bgcolor="#fcffec">
+<left-border>
+<pen width="1" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="3" column="3" >
+<format bgcolor="#fcffec">
+<left-border>
+<pen width="1" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="1" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="4" column="3" >
+<format>
+<left-border>
+<pen width="1" style="0" color="#000000" />
+</left-border>
+<top-border>
+<pen width="2" style="1" color="#000000" />
+</top-border>
+</format>
+</cell>
+
+
+<cell row="1" column="4" >
+<format>
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="1" style="0" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="2" column="4" >
+<format>
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="1" style="0" color="#000000" />
+</top-border>
+</format>
+</cell>
+<cell row="3" column="4" >
+<format>
+<left-border>
+<pen width="2" style="1" color="#000000" />
+</left-border>
+<top-border>
+<pen width="1" style="0" color="#000000" />
+</top-border>
+</format>
+</cell>
+</spreadsheet-snippet>
