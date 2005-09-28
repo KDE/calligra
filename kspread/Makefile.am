@@ -108,7 +108,7 @@ kde_services_DATA = kspreadpart.desktop
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_readonly.rc
 
-SUBDIRS = dialogs tests . plugins pics dtd toolbar extensions tablestyles templates 
+SUBDIRS = dialogs tests . plugins pics dtd toolbar extensions sheetstyles templates 
 
 parser:
 	flex lex.l

@@ -65,11 +65,11 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     vbox->addWidget( m_label );
 
 
-    QStringList lst = KSpreadFactory::global()->dirs()->findAllResources( "table-styles", "*.ksts", TRUE );
+    QStringList lst = KSpreadFactory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", TRUE );
 
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
-    {
+    {	    
 	KSimpleConfig cfg( *it, TRUE );
 	cfg.setGroup( "Sheet-Style" );
 
@@ -97,13 +97,18 @@ KSpreadFormatDlg::~KSpreadFormatDlg()
 }
 
 void KSpreadFormatDlg::slotActivated( int index )
-{
-    QString img = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ index ].image );
+{ 
+	enableButtonOK(true);
+	
+    QString img = KSpreadFactory::global()->dirs()->findResource( "sheet-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
     {
 	QString str( i18n( "Could not find image %1." ) );
 	str = str.arg( m_entries[ index ].image );
-	KMessageBox::error( this, str );
+	KMessageBox::error( this, str ); 
+	
+	enableButtonOK(false);
+	
 	return;
     }
 
@@ -113,6 +118,9 @@ void KSpreadFormatDlg::slotActivated( int index )
 	QString str( i18n( "Could not load image %1." ) );
 	str = str.arg( img );
 	KMessageBox::error( this,str );
+	
+	enableButtonOK(false);
+	
 	return;
     }
 
@@ -121,12 +129,13 @@ void KSpreadFormatDlg::slotActivated( int index )
 
 void KSpreadFormatDlg::slotOk()
 {
+  
     m_view->doc()->emitBeginOperation( false );
 
-    QString xml = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ m_combo->currentItem() ].xml );
+    QString xml = KSpreadFactory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentItem() ].xml );
     if ( xml.isEmpty() )
     {
-	QString str( i18n( "Could not find table-style XML file '%1'." ) );
+	QString str( i18n( "Could not find sheet-style XML file '%1'." ) );
 	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
 	KMessageBox::error( this, str );
 	return;
@@ -140,7 +149,7 @@ void KSpreadFormatDlg::slotOk()
 
     if ( !parseXML( doc ) )
     {
-	QString str( i18n( "Parsing error in table-style XML file %1." ) );
+	QString str( i18n( "Parsing error in sheet-style XML file %1." ) );
 	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
 	KMessageBox::error( this, str );
 	return;
