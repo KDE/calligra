@@ -2381,9 +2381,6 @@ void KSpreadView::activateFormulaEditor()
 
 void KSpreadView::updateReadWrite( bool readwrite )
 {
-#ifdef __GNUC_
-#warning TODO
-#endif
     // d->cancelButton->setEnabled( readwrite );
     // d->okButton->setEnabled( readwrite );
   d->editWidget->setEnabled( readwrite );
