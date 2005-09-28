@@ -5180,11 +5180,9 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 QString KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, bool force, bool copy)
 {
-    kdDebug()<<" QString KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles)***********\n";
     QString formatCellStyle = KSpreadFormat::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row(), force, copy );
     if ( d->hasExtra() && d->extra()->conditions )
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
-    kdDebug()<<" formatCellStyle :"<<formatCellStyle<<endl;
     return formatCellStyle;
 }
 
@@ -5246,13 +5244,13 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
     if ( isFormula() )
     {
-      kdDebug() << "Formula found" << endl;
+        //kdDebug() << "Formula found" << endl;
       QString formula( convertFormulaToOasisFormat( text() ) );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
     {
-        kdDebug()<<"Link found \n";
+        //kdDebug()<<"Link found \n";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by "#"
@@ -5439,7 +5437,7 @@ QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) cons
 
 void KSpreadCell::loadOasisConditional( QDomElement * style )
 {
-    kdDebug()<<" void KSpreadCell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
+    //kdDebug()<<" void KSpreadCell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
     if ( style )//safe
     {
         //TODO fixme it doesn't work :(((
@@ -5467,11 +5465,10 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     kdDebug()<<" table:style-name :"<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        //kdDebug()<<"bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )****************************** loadOasisConditionsal\n";
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles ) str :"<<str<<endl;
         QDomElement * style = oasisStyles.styles()[str];
-        kdDebug()<<" style :"<<style<<endl;
+        //kdDebug()<<" style :"<<style<<endl;
         KoStyleStack styleStack;
         styleStack.push( *style );
         styleStack.setTypeProperties( "table-cell" );
@@ -5481,9 +5478,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
     if ( !textP.isNull() )
     {
-        kdDebug()<<" cell text !!!!!!!!!!!!!!\n";
         text = textP.text(); // our text, could contain formating for value or result of formul
-        kdDebug()<<" text !!!!!!!!!!!!!!!!!!!!!! :"<<text<<endl;
         setCellText( text );
         setValue( text );
 
@@ -5699,10 +5694,10 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
         QString str = element.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
-        kdDebug()<<" data-style-name !"<<str<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[str].formatStr<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[str].prefix<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
+        //kdDebug()<<" data-style-name !"<<str<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[str].formatStr<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[str].prefix<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
         setPrefix( oasisStyles.dataFormats()[str].prefix );
         setPostfix( oasisStyles.dataFormats()[str].suffix );
         setFormatType( KSpreadStyle::formatType( oasisStyles.dataFormats()[str].formatStr ) );
@@ -5712,7 +5707,6 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 
 void KSpreadCell::loadOasisValidation( const QString& validationName )
 {
-    kdDebug()<<"validationName:"<<validationName<<endl;
     QDomElement element = sheet()->doc()->loadingInfo()->validation( validationName);
     if (d->hasExtra())
       delete d->extra()->validity;
@@ -5970,7 +5964,6 @@ void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug()<<" value :"<<value<<endl;
     if ( d->extra()->validity->m_allow == Allow_Date )
     {
         d->extra()->validity->dateMin = QDate::fromString( value );
