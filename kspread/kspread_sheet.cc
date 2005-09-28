@@ -1074,7 +1074,7 @@ void KSpreadSheet::setArrayFormula (int _row, int _column, int rows, int cols,
       }
   if (nomodify)
     NO_MODIFICATION_POSSIBLE;
-  
+
   // add undo
   if ( !doc()->undoLocked() )
   {
@@ -6491,6 +6491,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
 
 QDomElement KSpreadSheet::saveXML( QDomDocument& dd )
 {
+    kdDebug()<<" QDomElement KSpreadSheet::saveXML( QDomDocument& dd )********\n";
     QDomElement sheet = dd.createElement( "table" );
     sheet.setAttribute( "name", d->name );
 
@@ -6623,18 +6624,21 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& dd )
     sheet.setAttribute( "printPageLimitX", d->print->pageLimitX() );
     sheet.setAttribute( "printPageLimitY", d->print->pageLimitY() );
 
+    kdDebug()<<" before to save cell \n";
     // Save all cells.
     KSpreadCell* c = d->cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
         if ( !c->isDefault() )
         {
+            kdDebug()<<" save cell \n";
             QDomElement e = c->save( dd );
             if ( !e.isNull() )
                 sheet.appendChild( e );
         }
     }
 
+    kdDebug()<<" before to save row \n";
     // Save all RowFormat objects.
     RowFormat* rl = d->rows.first();
     for( ; rl; rl = rl->next() )
@@ -6647,6 +6651,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& dd )
             sheet.appendChild( e );
         }
     }
+    kdDebug()<<" before to save col \n";
 
     // Save all ColumnFormat objects.
     ColumnFormat* cl = d->columns.first();
@@ -6661,6 +6666,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& dd )
         }
     }
 
+    kdDebug()<<" before to save child\n";
     QPtrListIterator<KoDocumentChild> chl( doc()->children() );
     for( ; chl.current(); ++chl )
     {
@@ -6682,7 +6688,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& dd )
             sheet.appendChild( e );
         }
     }
-
+    kdDebug()<<" end QDomElement KSpreadSheet::saveXML( QDomDocument& dd )****\n";
     return sheet;
 }
 
@@ -8054,7 +8060,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
             ChartChild *ch = new ChartChild( doc(), this );
             if ( ch->load( e ) )
                 insertChild( ch );
-            else 
+            else
 	    {
 		ch->setDeleted(true);
                 delete ch;
@@ -8254,7 +8260,7 @@ void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
     if ( wiz && wiz->show())
         insertChild( ch );
-    else 
+    else
     {
 	    ch->setDeleted(true);
         delete ch;
@@ -8718,7 +8724,7 @@ bool ChartChild::loadDocument( KoStore* _store )
 
 KoChart::Part* ChartChild::chart()
 {
-    
+
     assert( document()->inherits( "KoChart::Part" ) );
     return static_cast<KoChart::Part *>( document() );
 }

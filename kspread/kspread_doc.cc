@@ -313,7 +313,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     if ( ret == KoTemplateChooseDia::File )
     {
 	KURL url( f );
-	
+
 	bool ok=openURL(url);
 
 	while (KoDocument::isLoading())
@@ -321,7 +321,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 	return ok;
 
-	
+
     }
 
     if ( ret == KoTemplateChooseDia::Empty )
@@ -496,6 +496,7 @@ QDomDocument KSpreadDoc::saveXML()
         for (; it.current(); ++it )
             static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
     }
+    kdDebug()<<" QDomDocument KSpreadDoc::saveXML() \n";
 
     QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
     QDomElement spread = doc.documentElement();
@@ -610,9 +611,10 @@ QDomDocument KSpreadDoc::saveXML()
 
     QDomElement s = styleManager()->save( doc );
     spread.appendChild( s );
-
+    kdDebug()<<" before saving map \n";
     QDomElement e = map()->save( doc );
     spread.appendChild( e );
+    kdDebug()<<" After saving map \n";
 
     setModified( false );
 
@@ -1544,7 +1546,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     prect.setWidth( (int) (prect.width() * painter.worldMatrix().m11()) );
     prect.setHeight( (int) (prect.height() * painter.worldMatrix().m22()) );
     setZoomAndResolution( (int) d_zoom * 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
-
+    kdDebug()<<" prect :"<<prect<<endl;
     // paint the content, now zoom is correctly set
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
@@ -1731,7 +1733,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       bool paintBordersRight = false;
       bool paintBordersLeft = false;
       bool paintBordersTop = false; */
-      
+
       int paintBorder=KSpreadCell::Border_None;
 
       QPen rightPen( cell->effRightBorderPen( x, y ) );
@@ -1814,13 +1816,13 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
   /*    cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
                        cellRef, paintBordersRight, paintBordersBottom, paintBordersLeft,
       paintBordersTop, rightPen, bottomPen, leftPen, topPen, false ); */
-      
+
       KSpreadCell::BorderSides highlightBorder=KSpreadCell::Border_None;
       QPen highlightPen;
-      
+
       cell->paintCell(viewRegion,painter,view,dblCurrentCellPos,cellRef,paintBorder,
 		      rightPen,bottomPen,leftPen,topPen,false);
-		      
+
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
     }
