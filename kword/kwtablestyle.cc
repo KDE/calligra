@@ -94,7 +94,7 @@ KWTableStyle* KWTableStyleCollection::findTranslatedTableStyle( const QString & 
     return 0L;
 }
 
-KWTableStyle* KWTableStyleCollection::findStyleShortCut( const QString & _shortCut )
+KWTableStyle* KWTableStyleCollection::findStyleByShortcut( const QString & _shortCut )
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )

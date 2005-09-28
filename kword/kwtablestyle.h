@@ -51,7 +51,7 @@ public:
      * find table style based on the translated name @p name
      */
     KWTableStyle* findTranslatedTableStyle( const QString & name );
-    KWTableStyle* findStyleShortCut( const QString & _shortCut );
+    KWTableStyle* findStyleByShortcut( const QString & _shortCut );
 
     /**
      * Return style number @p i.

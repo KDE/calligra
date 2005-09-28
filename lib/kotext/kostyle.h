@@ -62,8 +62,8 @@ public:
      * find style based on the translated name @p name
      */
     KoParagStyle* findTranslatedStyle( const QString & name ) const;
-    // ### TODO: rename findStyleByShortcut
-    KoParagStyle* findStyleShortCut( const QString & _shortCut ) const;
+
+    KoParagStyle* findStyleByShortcut( const QString & _shortCut ) const;
     /**
      * Return style number @p i.
      */

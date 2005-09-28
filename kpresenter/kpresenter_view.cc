@@ -5379,7 +5379,7 @@ void KPresenterView::updateStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KoParagStyle* tmp = m_pKPresenterDoc->styleCollection()->findStyleShortCut( (*it)->name() );
+            KoParagStyle* tmp = m_pKPresenterDoc->styleCollection()->findStyleByShortcut( (*it)->name() );
             if ( tmp )
                 shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
@@ -5442,7 +5442,7 @@ void KPresenterView::slotStyleSelected()
     if ( actionName.startsWith( "shortcut_style_" ) )//see lib/kotext/kostyle.cc
     {
         kdDebug(33001) << "KPresenterView::slotStyleSelected " << actionName << endl;
-        textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyleShortCut( actionName) );
+        textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyleByShortcut( actionName) );
     }
 }
 

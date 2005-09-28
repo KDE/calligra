@@ -196,7 +196,7 @@ KoParagStyle* KoStyleCollection::findTranslatedStyle( const QString & _name ) co
 }
 
 
-KoParagStyle* KoStyleCollection::findStyleShortCut( const QString & _shortCut ) const
+KoParagStyle* KoStyleCollection::findStyleByShortcut( const QString & _shortCut ) const
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )

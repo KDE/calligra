@@ -2083,7 +2083,7 @@ void KWView::updateStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KoParagStyle* tmp = m_doc->styleCollection()->findStyleShortCut( (*it)->name() );
+            KoParagStyle* tmp = m_doc->styleCollection()->findStyleByShortcut( (*it)->name() );
             if ( tmp )
                 shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
@@ -2153,7 +2153,7 @@ void KWView::updateFrameStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KWFrameStyle* tmp = m_doc->frameStyleCollection()->findStyleShortCut( (*it)->name() );
+            KWFrameStyle* tmp = m_doc->frameStyleCollection()->findStyleByShortcut( (*it)->name() );
             if ( tmp )
                 shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
@@ -2227,7 +2227,7 @@ void KWView::updateTableStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KWTableStyle* tmp = m_doc->tableStyleCollection()->findStyleShortCut( (*it)->name() );
+            KWTableStyle* tmp = m_doc->tableStyleCollection()->findStyleByShortcut( (*it)->name() );
             if ( tmp )
                 shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
@@ -4302,7 +4302,7 @@ void KWView::slotStyleSelected()
     if ( actionName.startsWith( "shortcut_style_" ) )//see lib/kotext/kostyle.cc
     {
         kdDebug() << "KWView::slotStyleSelected " << actionName << endl;
-        textStyleSelected( m_doc->styleCollection()->findStyleShortCut( actionName) );
+        textStyleSelected( m_doc->styleCollection()->findStyleByShortcut( actionName) );
     }
 }
 
@@ -4363,7 +4363,7 @@ void KWView::slotFrameStyleSelected()
     if ( actionName.startsWith( "shortcut_framestyle_" ) )//see kwframestyle.cc
     {
         //kdDebug() << "KWView::slotFrameStyleSelected " << styleStr << endl;
-        frameStyleSelected( m_doc->frameStyleCollection()->findStyleShortCut( actionName) );
+        frameStyleSelected( m_doc->frameStyleCollection()->findStyleByShortcut( actionName) );
     }
 }
 
@@ -4436,7 +4436,7 @@ void KWView::slotTableStyleSelected()
     QString actionName = QString::fromLatin1(sender()->name());
     if ( actionName.startsWith( "shortcut_tablestyle_" ) )
     {
-        tableStyleSelected( m_doc->tableStyleCollection()->findStyleShortCut( actionName) );
+        tableStyleSelected( m_doc->tableStyleCollection()->findStyleByShortcut( actionName) );
     }
 }
 

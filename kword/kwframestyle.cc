@@ -53,7 +53,7 @@ void KWFrameStyleCollection::clear()
     m_lastStyle = 0L;
 }
 
-KWFrameStyle* KWFrameStyleCollection::findStyleShortCut( const QString & _shortCut )
+KWFrameStyle* KWFrameStyleCollection::findStyleByShortcut( const QString & _shortCut )
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )

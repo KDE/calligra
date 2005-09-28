@@ -50,7 +50,7 @@ public:
      * find frame style based on the translated name @p name
      */
     KWFrameStyle* findTranslatedFrameStyle( const QString & name );
-    KWFrameStyle* findStyleShortCut( const QString & _shortCut );
+    KWFrameStyle* findStyleByShortcut( const QString & _shortCut );
     /**
      * Return style number @p i.
      */
