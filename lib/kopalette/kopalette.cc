@@ -62,15 +62,9 @@ KoPalette::KoPalette(QWidget * parent, const char * name)
     KConfig * cfg = KGlobal::config();
     Q_ASSERT(cfg);
     cfg->setGroup("");
-    kdDebug() << ">>>>>>>>>>>>>>>>>>>>>>" << cfg->readEntry("palettes") << "\n";
-    kdDebug() << cfg->readNumEntry("palettefontsize") << "\n";
-    kdDebug() << cfg->readNumEntry("palettesdockability") << "\n";
-    
     m_font  = KGlobalSettings::generalFont();
     float ps = m_font.pointSize() * 0.7;
-    kdDebug () << ">>>>>>>>>>>>> Fontsize: " << ps << "\n";
     ps = cfg->readNumEntry("palettefontsize");
-    kdDebug () << ">>>>>>>>>>>>> Fontsize now: " << ps << "\n";
     
     m_font.setPointSize((int)ps);
     setFont(m_font);

@@ -311,7 +311,6 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
     cfg->setGroup("");
 
     m_dockability = (enumKoDockability) cfg->readNumEntry("palettesdockability");
-    kdDebug() << ">>>>>>>>>>>>>>>>> dockability " << m_dockability << "\n";
 
     // Top and bottom will never accept docks
     m_view->mainWindow()->topDock()->setAcceptDockWindow(palette, false);
@@ -321,14 +320,12 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
     int h = qApp->desktop()->height();
     switch (m_dockability) {
         case (DOCK_ENABLED):
-            kdDebug() << "DOCK ENABLED\n";
 
             m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
             m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
             m_view->mainWindow()->addDockWindow(palette, location);
             break;
         case (DOCK_DISABLED):
-            kdDebug() << "DOCK DISABLED\n";
 
             m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
             m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
@@ -336,13 +333,11 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
             break;
         case (DOCK_SMART):
             if (h > 1024) {
-                kdDebug() << "DOCK SMART, > 1024 \n";
                 m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
                 m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
 
             }
             else {
-                kdDebug() << "DOCK SMART, < 1024 \n";
                 m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
                 m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
                 m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
