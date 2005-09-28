@@ -184,12 +184,20 @@ Cell vertical alignment: middle
       fo:margin-left="0in" style:vertical-align="middle"/>
     </style:style>
 
+
 Cell vertical alignment: bottom
     <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default">
       <style:table-cell-properties fo:text-align="center" 
       style:text-align-source="fix" style:repeat-content="none" 
       fo:margin-left="0in" style:vertical-align="bottom"/>
     </style:style>
+
+    <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties fo:font-size="16pt" fo:font-style="italic" fo:font-weight="bold"/>
+    </style:style>
+
 
 Unprotected cell
     <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
