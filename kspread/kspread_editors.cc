@@ -242,7 +242,9 @@ int KSpreadTextEditorHighlighter::highlightParagraph(const QString& text, int /*
 				if (cellRef.find(':' ) != -1)
 				{
 					KSpreadRange rg(cellRef,_sheet->workbook(),_sheet);
-					cellRefValid=rg.isValid();
+					//Check that the syntax of the range is valid and that 
+					//the range is not an invalid rectangle.
+					cellRefValid=(rg.isValid());
 				}
 				else
 				{

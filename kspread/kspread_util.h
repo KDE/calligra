@@ -111,7 +111,7 @@ struct KSPREAD_EXPORT KSpreadRange
     bottomFixed = lr.rowFixed;
   }
 
-  bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
+  bool isValid() const;
   bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
   /** Fills a KSpreadPoint with info (row,column,sheet) about the first point in the range */

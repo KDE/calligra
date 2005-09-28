@@ -4717,7 +4717,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
     QWidget::keyPressEvent( _ev );
   }
   else
-    QApplication::sendEvent( d->canvas, _ev );
+   	QApplication::sendEvent( d->canvas, _ev );
 }
 
 KoDocument * KSpreadView::hitTest( const QPoint &pos )
@@ -4874,14 +4874,20 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
 	return;
-    int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"editdelete"));
+    
+    //Removed popup warning dialog because
+    // a) It is annoying from a user's persepective
+    // b) The behaviour should be consistant with other KOffice apps 
+    
+    /*int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"editdelete"));
     if ( ret == KMessageBox::Continue )
     {
-      doc()->emitBeginOperation(false);
-      d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
-      d->popupChildObject = 0;
-      doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
-    }
+      
+}*/
+    doc()->emitBeginOperation(false);
+    d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
+    d->popupChildObject = 0;
+    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::popupColumnMenu( const QPoint & _point )

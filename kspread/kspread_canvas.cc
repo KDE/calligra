@@ -4022,9 +4022,9 @@ void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& view
 		//Now adjust the highlight rectangle is slightly inside the cell borders (this means that multiple highlighted cells 
 		//look nicer together as the borders do not clash)
 		
-		zoomedRect.setLeft(zoomedRect.left()+2);
-		zoomedRect.setTop(zoomedRect.top()+2);
-		zoomedRect.setRight(zoomedRect.right()-2);
+		zoomedRect.setLeft(zoomedRect.left()+1);
+		zoomedRect.setTop(zoomedRect.top()+1);
+		zoomedRect.setRight(zoomedRect.right()-1);
 		zoomedRect.setBottom(zoomedRect.bottom()-1);
 		
 		painter.setBrush(nullBrush);

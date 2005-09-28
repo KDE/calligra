@@ -522,6 +522,14 @@ bool KSpreadRange::intersects (const KSpreadRange &r) const
   return range.intersects (r.range);
 }
 
+bool KSpreadRange::isValid() const
+{ 
+	return  ( range.left() >= 0 ) && 
+		( range.right() >= 0 ) && 
+		( sheet != 0 || sheetName.isEmpty() ) &&
+		( range.isValid() ) ; 
+}
+
 bool util_isAllSelected(const QRect &selection)
 {
   return ( selection.top() == 1 && selection.bottom() == KS_rowMax
