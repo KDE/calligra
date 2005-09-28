@@ -61,6 +61,7 @@ class QCheckBox;
 class KColorButton;
 class QComboBox;
 class KComboBox;
+class KoUnitDoubleSpinBox;
 
 class KSpreadCustomStyle;
 class KSpreadStyleManager;
@@ -338,14 +339,14 @@ protected:
     QRadioButton *standard;
     QCheckBox *multi;
     QCheckBox *vertical;
-    KDoubleNumInput *width;
-    KDoubleNumInput *height;
+    KoUnitDoubleSpinBox *width;
+    KoUnitDoubleSpinBox *height;
     CellFormatDlg *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
     QCheckBox *mergeCell;
     KIntNumInput *angleRotation;
-    KDoubleNumInput *m_indent;
+    KoUnitDoubleSpinBox *m_indent;
     bool m_bOptionText;
 };
 

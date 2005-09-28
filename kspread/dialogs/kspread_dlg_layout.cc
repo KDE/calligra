@@ -55,7 +55,7 @@
 #include <qcheckbox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-
+#include <koUnitWidgets.h>
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * )
   : QFrame( parent )
@@ -2882,12 +2882,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
-    m_indent = new KDoubleNumInput( grp );
-    m_indent->setRange( KoUnit::toUserValue( 0.0,   dlg->getDoc()->getUnit() ),
-			KoUnit::toUserValue( 400.0, dlg->getDoc()->getUnit() ),
-			KoUnit::toUserValue( 10.0,  dlg->getDoc()->getUnit()));
-    m_indent->setValue ( KoUnit::toUserValue( dlg->indent, 
-					      dlg->getDoc()->getUnit() ) );
+    m_indent = new KoUnitDoubleSpinBox( grp, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->getUnit() );
     grid2->addWidget(m_indent, 1, 0);
     grid3->addWidget(grp, 2, 1);
 
@@ -2900,11 +2895,11 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     tmpLabel->setText(i18n("Width:"));
     grid2->addWidget(tmpLabel, 1, 0);
 
-    width = new KDoubleNumInput( grp );
-    width->setPrecision ( 2 );
-    width->setValue ( KoUnit::toUserValue( dlg->widthSize, dlg->getDoc()->getUnit() ) );
+    width = new KoUnitDoubleSpinBox( grp );
+    width->setValue ( dlg->widthSize );
+    width->setUnit( dlg->getDoc()->getUnit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
-    dlg->widthSize = KoUnit::fromUserValue( width->value(), dlg->getDoc()->getUnit() );
+    dlg->widthSize = width->value();
 
     if ( dlg->isRowSelected )
         width->setEnabled(false);
@@ -2920,11 +2915,11 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     tmpLabel->setText(i18n("Height:"));
     grid2->addWidget(tmpLabel, 1, 2);
 
-    height=new KDoubleNumInput( grp );
-    height->setPrecision( 2 );
-    height->setValue( KoUnit::toUserValue( dlg->heightSize, dlg->getDoc()->getUnit() ) );
+    height=new KoUnitDoubleSpinBox( grp );
+    height->setValue( dlg->heightSize );
+    height->setUnit(  dlg->getDoc()->getUnit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
-    dlg->heightSize = KoUnit::fromUserValue( height->value(), dlg->getDoc()->getUnit() );
+    dlg->heightSize = height->value();
 
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
@@ -3056,10 +3051,8 @@ void CellFormatPagePosition::apply( KSpreadCustomStyle * style )
     style->changeRotateAngle( (-angleRotation->value()) );
 
   if ( m_indent->isEnabled()
-       && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
-						dlg->getDoc()->getUnit() ) )
-    style->changeIndent( KoUnit::fromUserValue( m_indent->value(),
-						dlg->getDoc()->getUnit() ) );
+       && dlg->indent != m_indent->value() )
+    style->changeIndent( m_indent->value() );
 }
 
 void CellFormatPagePosition::apply( ColumnFormat *_obj )
@@ -3096,8 +3089,7 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
          c = sheet->getNextCellDown(c->column(), c->row()) )
     {
       if ( m_indent->isEnabled()
-	   && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
-						    dlg->getDoc()->getUnit()) )
+	   && dlg->indent != m_indent->value() )
 
       {
         c->clearProperty( KSpreadCell::PIndent );
@@ -3186,8 +3178,7 @@ void CellFormatPagePosition::apply( RowFormat *_obj )
          c = sheet->getNextCellRight(c->column(), c->row()) )
     {
       if ( m_indent->isEnabled()
-	   && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
-						    dlg->getDoc()->getUnit()) )
+	   && dlg->indent != m_indent->value() )
       {
         c->clearProperty(KSpreadCell::PIndent);
         c->clearNoFallBackProperties( KSpreadCell::PIndent );
@@ -3289,10 +3280,8 @@ void CellFormatPagePosition::applyFormat( KSpreadFormat * _obj )
   if ( dlg->textRotation!=angleRotation->value() )
     _obj->setAngle( (-angleRotation->value() ) );
   if ( m_indent->isEnabled()
-       && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
-						dlg->getDoc()->getUnit() ) )
-    _obj->setIndent( KoUnit::fromUserValue( m_indent->value(),
-					    dlg->getDoc()->getUnit() ) );
+       && dlg->indent != m_indent->value() )
+    _obj->setIndent( m_indent->value() );
 }
 
 double CellFormatPagePosition::getSizeHeight()
@@ -3300,7 +3289,7 @@ double CellFormatPagePosition::getSizeHeight()
   if ( defaultHeight->isChecked() )
       return 20.0;
   else
-      return KoUnit::fromUserValue( height->value(), dlg->getDoc()->getUnit() );
+      return height->value();
 }
 
 double CellFormatPagePosition::getSizeWidth()
@@ -3308,7 +3297,7 @@ double CellFormatPagePosition::getSizeWidth()
   if ( defaultWidth->isChecked() )
         return 60.0;
   else
-        return KoUnit::fromUserValue( width->value(), dlg->getDoc()->getUnit() );
+        return width->value();
 }
 
 KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)
