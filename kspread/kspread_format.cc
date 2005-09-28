@@ -385,7 +385,10 @@ void KSpreadFormat::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const 
 
     if ( _font.underline() )
     {
-        currentCellStyle.addProperty( "style:text-underline", "single",tt );
+        //style:text-underline-style="solid" style:text-underline-width="auto"
+        currentCellStyle.addProperty( "style:text-underline-style", "solid",tt );
+        //copy from oo-129
+        currentCellStyle.addProperty( "style:text-underline-width", "auto",tt );
         currentCellStyle.addProperty( "style:text-underline-color", "font-color",tt );
     }
     currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize(),tt );
