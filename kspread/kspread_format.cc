@@ -1200,10 +1200,33 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         }
     }
 
+    //Text properties
     loadFontOasisStyle( styleStack ); // specific font style
+    //End Text properties
 
-    //TODO reorganize code to avoid to switch typeproperties
-    styleStack.setTypeProperties( "" ); // default
+    //Paragraph properties
+    styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+    if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
+    {
+        kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
+        setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
+    }
+    //kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
+    {
+        QString s = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
+        if ( s == "center" )
+            setAlign( KSpreadFormat::Center );
+        else if ( s == "end" )
+            setAlign( KSpreadFormat::Right );
+        else if ( s == "start" )
+            setAlign( KSpreadFormat::Left );
+        else if ( s == "justify" ) // TODO in KSpread!
+            setAlign( KSpreadFormat::Center );
+    }
+    //end paragraph properties
+
+    styleStack.setTypeProperties( "" ); // Default
 
     // TODO:
     //   diagonal: fall + goup
@@ -1226,30 +1249,8 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     {
         setVerticalText( true );
     }
-    if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
-    {
-        kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
-        setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
-    }
 
-    styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-    kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
-    {
-        QString s = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
-        if ( s == "center" )
-            setAlign( KSpreadFormat::Center );
-        else if ( s == "end" )
-            setAlign( KSpreadFormat::Right );
-        else if ( s == "start" )
-            setAlign( KSpreadFormat::Left );
-        else if ( s == "justify" ) // TODO in KSpread!
-            setAlign( KSpreadFormat::Center );
-    }
-
-    styleStack.setTypeProperties( "" ); // Default
-
-    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
+    //kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
         setBgColor( QColor( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) ) );
