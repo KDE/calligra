@@ -408,6 +408,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
             currentCellStyle.addAttribute( "style:parent-style-name", m_pStyle->parent()->name() );
     }
 
+    //text attributes
     if ( hasProperty( PFont, true ) || hasNoFallBackProperties( PFont ) || force )
     {
         //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
@@ -416,10 +417,12 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( ( hasProperty( PTextPen, true ) || hasNoFallBackProperties( PTextPen ) || force )
          && textPen( _col, _row ).color().isValid() )
     {
-        currentCellStyle.addProperty( "fo:color", textColor( _col, _row ).name() );
+        currentCellStyle.addProperty( "fo:color", textColor( _col, _row ).name() , KoGenStyle::TextType);
         //format.appendChild( util_createElement( "pen", textPen( _col, _row ), doc ) );
     }
+
     //FIXME fallback ????
+    // paragraph attributes.
     KSpreadFormat::Align alignX = KSpreadFormat::Undefined;
     if ( hasProperty( PAlign, true ) || hasNoFallBackProperties( PAlign ) || force  )
     {
@@ -431,14 +434,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
             value = "end";
         else if ( alignX == KSpreadFormat::Left )
             value = "start";
-        currentCellStyle.addProperty( "fo:text-align", value );
-    }
-
-    if (  hasProperty( PAlignY, true ) || hasNoFallBackProperties( PAlignY ) || force  )
-    {
-        KSpreadFormat::AlignY align = alignY( _col, _row );
-        if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
-            currentCellStyle.addProperty( "style:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+        currentCellStyle.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
     if (hasProperty( PIndent, true ) || hasNoFallBackProperties( PIndent ) || force )
@@ -446,11 +442,22 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
         double indent = getIndent( _col, _row );
         if ( indent > 0.0 )
         {
-            currentCellStyle.addPropertyPt("fo:margin-left", indent );
+            currentCellStyle.addPropertyPt("fo:margin-left", indent,  KoGenStyle::ParagraphType );
             if ( alignX == KSpreadFormat::Undefined )
-                currentCellStyle.addProperty("fo:text-align", "start" );
+                currentCellStyle.addProperty("fo:text-align", "start", KoGenStyle::ParagraphType );
         }
     }
+    // end paragraph attributes.
+
+
+    // cell attributes
+    if (  hasProperty( PAlignY, true ) || hasNoFallBackProperties( PAlignY ) || force  )
+    {
+        KSpreadFormat::AlignY align = alignY( _col, _row );
+        if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
+            currentCellStyle.addProperty( "style:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+    }
+
 
     if ( hasProperty( PAngle, true ) || hasNoFallBackProperties( PAngle ) || force )
     {
@@ -1195,6 +1202,9 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 
     loadFontOasisStyle( styleStack ); // specific font style
 
+    //TODO reorganize code to avoid to switch typeproperties
+    styleStack.setTypeProperties( "" ); // default
+
     // TODO:
     //   diagonal: fall + goup
     //   fo:direction="ltr"
@@ -1222,6 +1232,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
     }
 
+    styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
     kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
     {
@@ -1235,6 +1246,8 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         else if ( s == "justify" ) // TODO in KSpread!
             setAlign( KSpreadFormat::Center );
     }
+
+    styleStack.setTypeProperties( "" ); // Default
 
     kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
 
