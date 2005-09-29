@@ -104,7 +104,7 @@ class GuiApp:
         self.dialog.show()
 
     def doSave(self):
-        from types import *
+        import types
 
         file = self.file.get()
         print "Try to save project documentation to file: %s" % file
