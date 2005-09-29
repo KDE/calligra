@@ -225,9 +225,10 @@ public:
         DefaultType = 0,
         /**
          *  TextType is always text-properties.
-         *  This is because only paragraph styles contain two types of properties
+	 	 *  ParagType is always paragraph-properties.
          */
         TextType,
+		ParagraphType,		
         ChildElement, ///< @internal
         N_NumTypes ///< @internal
     };
