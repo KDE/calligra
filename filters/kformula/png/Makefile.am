@@ -1,16 +1,16 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-libkfopngexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
-libkfopngexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
+libkfosvgexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
+libkfosvgexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
 
 ####### Files
 
-kde_module_LTLIBRARIES = libkfopngexport.la
+kde_module_LTLIBRARIES = libkfosvgexport.la
 
-libkfopngexport_la_SOURCES = pngexport.cc pngexportdia.cc
+libkfosvgexport_la_SOURCES = svgexport.cc
 
-noinst_HEADERS = pngexport.h pngexportdia.h
+noinst_HEADERS = svgexport.h
 
 ######## Debug
 #check_PROGRAMS = texlauncher
@@ -21,5 +21,5 @@ noinst_HEADERS = pngexport.h pngexportdia.h
 
 METASOURCES = AUTO
 
-service_DATA = kformula_png_export.desktop
+service_DATA = kformula_svg_export.desktop
 servicedir = $(kde_servicesdir)

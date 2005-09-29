@@ -1,1 +1,1 @@
-SUBDIRS = png latex mathml
+SUBDIRS = png latex mathml svg
