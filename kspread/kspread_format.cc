@@ -381,8 +381,7 @@ void KSpreadFormat::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const 
     if ( _font.italic() )
         currentCellStyle.addProperty("fo:font-style", "italic",tt );
     if ( _font.strikeOut() )
-        currentCellStyle.addProperty("style:text-crossing-out", "single-line",tt );
-
+        currentCellStyle.addProperty("style:text-line-through-style", "solid",tt );
     if ( _font.underline() )
     {
         //style:text-underline-style="solid" style:text-underline-width="auto"
@@ -1117,12 +1116,13 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
          && ( font.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold") )
         setTextFontBold( true ); // only thing we support
 
-    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" )
-         || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
+    //TODO add "style:text-underline-width" "style:text-underline-color"
+    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline-style" )
+         || font.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
         setTextFontUnderline( true ); // only thing we support
 
-    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" )
-         && ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" ))
+    if ( font.hasAttributeNS( KoXmlNS::style, "text-line-through-style" )
+         /*&& ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" )*/)
         setTextFontStrike( true ); // only thing we support
 
     if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
