@@ -121,10 +121,10 @@ class GuiApp:
                     f.write("<h2>%s</h2>" % d[5:])
                     f.write("<ul>")
                     for (key,value) in result:
-                        if isinstance(value,ListType):
+                        if isinstance(value,types.ListType):
                             f.write("<li>%s:<br />" % key)
                             for v in value:
-                                if isinstance(v,TupleType):
+                                if isinstance(v,types.TupleType):
                                     f.write("%s: %s<br />" % tuple(v))
                                 else:
                                     f.write("%s<br />" % v)
