@@ -2,8 +2,11 @@
 Encoding=UTF-8
 Icon=
 Name=Karbon14 WVG Export Filter
+Name[br]=Sil ezporzh WVG evit Karbon14
 Name[es]=Filtro de exportación a WVG de Karbon14
 Name[ga]=Scagaire Easpórtála WVG Karbon14
+Name[pt]=Filtro de Exportação de WVG para o Karbon14
+Name[pt_BR]=Filtro de Exportação de WVG para o Karbon14
 Name[sv]=Karbon14 WVG-exportfilter
 ServiceTypes=KOfficeFilter
 Type=Service

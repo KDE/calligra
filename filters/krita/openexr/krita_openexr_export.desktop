@@ -1,10 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita OpenEXR Export Filter
+Name[br]=Sil ezporzh OpenEXR evit Krita
 Name[eo]=Eksportfiltrilo de Krita OpenEXR
 Name[es]=Filtro de exportación a OpenEXR de Krita
 Name[et]=Krita OpenEXR-i ekspordifilter
 Name[ga]=Scagaire Easpórtála OpenEXR Krita
+Name[pt]=Filtro de Exportação de OpenEXR do Krita
+Name[pt_BR]=Filtro de Exportação de OpenEXR do Krita
 Name[sv]=Krita OpenEXR-exportfilter
 Name[xx]=xxKrita OpenEXR Export Filterxx
 X-KDE-Export=image/x-exr

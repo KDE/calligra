@@ -1,9 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita XCF Export Filter
+Name[br]=Sil ezporzh XCF evit Krita
 Name[eo]=Krita XCF eksportfiltrilo
 Name[es]=Filtro de exportación a XCF de Krita
 Name[ga]=Scagaire Easpórtála XCF Krita
+Name[pt]=Filtro de Exportação de XCF para o Krita
+Name[pt_BR]=Filtro de Exportação de XCF para o Krita
 Name[sv]=Krita XCF-exportfilter
 Name[xx]=xxKrita XCF Export Filterxx
 X-KDE-Export=image/x-xcf-gimp

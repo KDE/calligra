@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=Microsoft PowerPoint Import Filter for KPresenter
+Name[es]=Filtro de importación de Microsoft PowerPoint para KPresenter
+Name[ga]=Scagaire Iompórtála Microsoft PowerPoint le haghaidh KSpread
+Name[pt]=Filtro de Importação do Microsoft PowerPoint para o KPresenter
+Name[pt_BR]=Filtro de Importação do Microsoft PowerPoint para o KPresenter
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/mspowerpoint
 X-KDE-Weight=1
