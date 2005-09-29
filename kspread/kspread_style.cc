@@ -151,6 +151,8 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_featuresSet |= SFormatType;
         }
     }
+
+    styleStack.setTypeProperties( "text" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
         m_fontFamily = styleStack.attributeNS( KoXmlNS::style, "font-name" );
@@ -206,7 +208,10 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     {
         m_fontFlags |= FBold;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline" ))
+
+    //TODO "style:text-underline-width"/""style:text-underline-color"
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline-style" )
+         || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ))
     {
         m_fontFlags |= FUnderline;
         m_featuresSet |= SFontFlag;
@@ -222,13 +227,15 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         //TODO
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" )
+         /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
     {
         m_fontFlags |= FStrike;
         m_featuresSet |= SFontFlag;
     }
 
 
+    styleStack.setTypeProperties( "paragraph" );
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
     {
 
@@ -244,6 +251,8 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_alignX = KSpreadFormat::Undefined;
         m_featuresSet |= SAlignX;
     }
+
+    styleStack.setTypeProperties( "table-cell" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
         str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
