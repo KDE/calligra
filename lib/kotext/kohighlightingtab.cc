@@ -59,37 +59,37 @@ KoHighlightingTab::~KoHighlightingTab()
 {
 }
 
-KoTextFormat::UnderlineType KoHighlightingTab::getUnderline()
+KoTextFormat::UnderlineType KoHighlightingTab::getUnderline() const
 {
     return static_cast<KoTextFormat::UnderlineType>( underlineStyleKComboBox->currentItem() );
 }
 
-KoTextFormat::UnderlineStyle KoHighlightingTab::getUnderlineStyle()
+KoTextFormat::UnderlineStyle KoHighlightingTab::getUnderlineStyle() const
 {
     return static_cast<KoTextFormat::UnderlineStyle>( underlineLineStyleKComboBox->currentItem() );
 }
 
-QColor KoHighlightingTab::getUnderlineColor()
+QColor KoHighlightingTab::getUnderlineColor() const
 {
     return underlineKColorButton->color();
 }
 
-KoTextFormat::StrikeOutType KoHighlightingTab::getStrikethrough()
+KoTextFormat::StrikeOutType KoHighlightingTab::getStrikethrough() const
 {
     return static_cast<KoTextFormat::StrikeOutType>( strikethroughStyleKComboBox->currentItem() );
 }
 
-KoTextFormat::StrikeOutStyle KoHighlightingTab::getStrikethroughStyle()
+KoTextFormat::StrikeOutStyle KoHighlightingTab::getStrikethroughStyle() const
 {
     return static_cast<KoTextFormat::StrikeOutStyle>( strikethroughLineStyleKComboBox->currentItem() );
 }
 
-bool KoHighlightingTab::getWordByWord()
+bool KoHighlightingTab::getWordByWord() const
 {
     return underlineWordByWordCheckBox->isOn();
 }
 
-KoTextFormat::AttributeStyle KoHighlightingTab::getCapitalisation()
+KoTextFormat::AttributeStyle KoHighlightingTab::getCapitalisation() const
 {
     return static_cast<KoTextFormat::AttributeStyle>( capitalisationButtonGroup->selectedId() );
 }
@@ -148,3 +148,4 @@ void KoHighlightingTab::slotStrikethroughChanged( int item )
     underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( underlineStyleKComboBox->currentItem() > 0 ) );
     emit strikethroughChanged(  item );
 }
+

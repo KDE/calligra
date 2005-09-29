@@ -43,7 +43,7 @@ KoLayoutTab::~KoLayoutTab()
 {
 }
 
-KoTextFormat::VerticalAlignment KoLayoutTab::getSubSuperScript()
+KoTextFormat::VerticalAlignment KoLayoutTab::getSubSuperScript() const
 {
     switch ( positionButtonGroup->selectedId() )
     {
@@ -60,7 +60,7 @@ KoTextFormat::VerticalAlignment KoLayoutTab::getSubSuperScript()
     }
 }
 
-int KoLayoutTab::getOffsetFromBaseline()
+int KoLayoutTab::getOffsetFromBaseline() const
 {
     switch ( positionButtonGroup->selectedId() )
     {
@@ -77,7 +77,7 @@ int KoLayoutTab::getOffsetFromBaseline()
     }
 }
 
-double KoLayoutTab::getRelativeTextSize()
+double KoLayoutTab::getRelativeTextSize() const
 {
     switch ( positionButtonGroup->selectedId() )
     {
@@ -94,7 +94,7 @@ double KoLayoutTab::getRelativeTextSize()
     }
 }
 
-bool KoLayoutTab::getAutoHyphenation()
+bool KoLayoutTab::getAutoHyphenation() const
 {
     return hyphenateCheckBox->isOn();
 }

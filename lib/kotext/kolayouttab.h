@@ -31,10 +31,10 @@ public:
     KoLayoutTab( bool withSubSuperScript, QWidget* parent=0, const char* name=0, WFlags fl=0 );
     ~KoLayoutTab();
 
-    KoTextFormat::VerticalAlignment getSubSuperScript();
-    int getOffsetFromBaseline();
-    double getRelativeTextSize();
-    bool getAutoHyphenation();
+    KoTextFormat::VerticalAlignment getSubSuperScript() const;
+    int getOffsetFromBaseline() const;
+    double getRelativeTextSize() const;
+    bool getAutoHyphenation() const;
 
     void setSubSuperScript( KoTextFormat::VerticalAlignment subSuperScript, int offset, double relativeSize );
     void setAutoHyphenation( bool state );

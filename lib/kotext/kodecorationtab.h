@@ -32,11 +32,11 @@ public:
     KoDecorationTab( QWidget* parent=0, const char* name=0, WFlags fl=0 );
     ~KoDecorationTab();
 
-    QColor getTextColor();
-    QColor getBackgroundColor();
-    double getShadowDistanceX();
-    double getShadowDistanceY();
-    QColor getShadowColor();
+    QColor getTextColor() const;
+    QColor getBackgroundColor() const;
+    double getShadowDistanceX() const;
+    double getShadowDistanceY() const;
+    QColor getShadowColor() const;
 
     void setTextColor( const QColor &color );
     void setBackgroundColor( const QColor &color );

@@ -54,12 +54,12 @@ KoLanguageTab::~KoLanguageTab()
 {
 }
 
-QString KoLanguageTab::getLanguage()
+QString KoLanguageTab::getLanguage() const
 {
     return languageKComboBox->currentText();
 }
 
-void KoLanguageTab::setLanguage( QString item )
+void KoLanguageTab::setLanguage( const QString &item )
 {
     languageKComboBox->setCurrentText( item );
 }

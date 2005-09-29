@@ -32,8 +32,8 @@ public:
     KoLanguageTab( KSpell2::Broker::Ptr broker = 0, QWidget* parent=0, const char* name=0, WFlags fl=0 );
     ~KoLanguageTab();
 
-    QString getLanguage();
-    void setLanguage( QString item );
+    QString getLanguage() const;
+    void setLanguage( const QString &item );
 
 signals:
     void languageChanged( int item );

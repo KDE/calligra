@@ -137,7 +137,7 @@ void KoFontDiaPreview::setSubSuperscript( int subSuper, int offset, double relat
     update();
 }
 
-QString KoFontDiaPreview::formatCapitalisation( QString string )
+QString KoFontDiaPreview::formatCapitalisation( const QString &string )
 {
     switch ( m_capitalisation )
     {

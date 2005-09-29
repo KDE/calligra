@@ -48,31 +48,31 @@ KoDecorationTab::~KoDecorationTab()
 {
 }
 
-QColor KoDecorationTab::getTextColor()
+QColor KoDecorationTab::getTextColor() const
 {
     return textKColorButton->color();
 }
 
-QColor KoDecorationTab::getBackgroundColor()
+QColor KoDecorationTab::getBackgroundColor() const
 {
     return backgroundKColorButton->color();
 }
 
-double KoDecorationTab::getShadowDistanceX()
+double KoDecorationTab::getShadowDistanceX() const 
 {
     short int sd = shadowDirectionButtonGroup->selectedId();
     double dist = shadowDistanceKDoubleNumInput->value();
     return shadowDistanceX( sd, dist );
 }
 
-double KoDecorationTab::getShadowDistanceY()
+double KoDecorationTab::getShadowDistanceY() const
 {
     short int sd = shadowDirectionButtonGroup->selectedId();
     double dist = shadowDistanceKDoubleNumInput->value();
     return shadowDistanceY( sd, dist );
 }
 
-QColor KoDecorationTab::getShadowColor()
+QColor KoDecorationTab::getShadowColor() const
 {
     return shadowKColorButton->color();
 }

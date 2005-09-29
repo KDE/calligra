@@ -75,7 +75,7 @@ private:
     int m_offset;
     double m_relativeSize;
 
-    QString formatCapitalisation( QString string );
+    QString formatCapitalisation( const QString &string );
     void drawUnderline( int x, int y, int width, int thickness, QColor & color, QPainter *p );
     void drawUnderlineWave( int x, int y, int width, int thickness, QColor & color, QPainter *p );
     void drawStrikethrough( int x, int y, int width, int thickness, QPainter *p );

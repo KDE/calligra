@@ -33,13 +33,13 @@ public:
     KoHighlightingTab( QWidget* parent=0, const char* name=0, WFlags fl=0 );
     ~KoHighlightingTab();
 
-    KoTextFormat::UnderlineType getUnderline();
-    KoTextFormat::UnderlineStyle getUnderlineStyle();
-    QColor getUnderlineColor();
-    KoTextFormat::StrikeOutType getStrikethrough();
-    KoTextFormat::StrikeOutStyle getStrikethroughStyle();
-    bool getWordByWord();
-    KoTextFormat::AttributeStyle getCapitalisation();
+    KoTextFormat::UnderlineType getUnderline() const;
+    KoTextFormat::UnderlineStyle getUnderlineStyle() const;
+    QColor getUnderlineColor() const;
+    KoTextFormat::StrikeOutType getStrikethrough() const;
+    KoTextFormat::StrikeOutStyle getStrikethroughStyle() const;
+    bool getWordByWord() const;
+    KoTextFormat::AttributeStyle getCapitalisation() const;
 
     void setUnderline( KoTextFormat::UnderlineType item );
     void setUnderlineStyle( KoTextFormat::UnderlineStyle item );
@@ -64,3 +64,4 @@ protected slots:
 };
 
 #endif
+
