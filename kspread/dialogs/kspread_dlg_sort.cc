@@ -156,7 +156,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   page2Layout->addWidget( firstKeyBox, 0, 1 );
 
   QButtonGroup * orientationGroup = new QButtonGroup( m_page2, "orientationGroup" );
-  orientationGroup->setTitle( i18n( "Orientation" ) );
+  orientationGroup->setTitle( i18n( "Data Orientation" ) );
   orientationGroup->setColumnLayout(0, Qt::Vertical );
   orientationGroup->layout()->setSpacing( KDialog::spacingHint() );
   orientationGroup->layout()->setMargin( KDialog::marginHint() );
@@ -164,50 +164,56 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   orientationGroupLayout->setAlignment( Qt::AlignTop );
 
   m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
-  m_sortColumn->setText( i18n( "&Column" ) );
+  m_sortColumn->setText( i18n( "Data in &Columns (Across)" ) );
   m_sortColumn->setChecked( true );
 
   orientationGroupLayout->addWidget( m_sortColumn, 0, 0 );
 
   m_sortRow = new QRadioButton( orientationGroup, "m_sortRow" );
-  m_sortRow->setText( i18n( "&Row" ) );
+  m_sortRow->setText( i18n( "Data in &Rows (Down)" ) );
 
   orientationGroupLayout->addWidget( m_sortRow, 1, 0 );
 
   page2Layout->addWidget( orientationGroup, 0, 0 );
 
   m_copyLayout = new QCheckBox( m_page2, "m_copyLayout" );
-  m_copyLayout->setText( i18n( "Copy &layout" ) );
+  m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
 
   page2Layout->addMultiCellWidget( m_copyLayout, 2, 2, 0, 1 );
 
   m_firstRowHeader = new QCheckBox( m_page2, "m_copyLayout" );
-  m_firstRowHeader->setText( i18n( "&First row contains header" ) );
+  m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
 
   page2Layout->addMultiCellWidget( m_firstRowHeader, 3, 3, 0, 1 );
 
   m_respectCase = new QCheckBox( m_page2, "m_copyLayout" );
-  m_respectCase->setText( i18n( "Respect case" ) );
+  m_respectCase->setText( i18n( "Case sensitive sort" ) );
   m_respectCase->setChecked( true );
 
   page2Layout->addMultiCellWidget( m_respectCase, 4, 4, 0, 1 );
 
 
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
-  resultToBox->setTitle( i18n( "Put Results To" ) );
+  resultToBox->setTitle( i18n( "Location To Store Sort Results" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
   resultToBox->layout()->setSpacing( KDialog::spacingHint() );
   resultToBox->layout()->setMargin( KDialog::marginHint() );
+  
+  
   QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox->layout() );
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
+  QLabel * destinationSheet=new QLabel(resultToBox,"destinationSheet");
+  destinationSheet->setText("Destination Sheet:");
+  resultToBoxLayout->addWidget(destinationSheet);
+  
   m_outputSheet = new QComboBox( false, resultToBox, "m_outputSheet" );
   resultToBoxLayout->addWidget( m_outputSheet );
   QSpacerItem * spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   resultToBoxLayout->addItem( spacer );
 
-  QLabel * startingCellLabel = new QLabel( resultToBox, "startingCellLabel" );
-  startingCellLabel->setText( i18n( "Starting cell:" ) );
+  QLabel * startingCellLabel = new QLabel( resultToBox, "destinationCellLabel" );
+  startingCellLabel->setText( i18n( "Destination Cell:" ) );
   resultToBoxLayout->addWidget( startingCellLabel );
 
   m_outputCell = new QLineEdit( resultToBox, "m_outputCell" );
@@ -304,7 +310,16 @@ void KSpreadSortDlg::init()
 
     int right = r.right();
     for (int i = r.left(); i <= right; ++i)
-      m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+    {  
+	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
+	    QString colName=i18n(" (Column %1)").arg(KSpreadCell::columnName(i));
+	    
+	    if (!guessName.isEmpty())
+	    	m_listColumn += guessName + colName;
+	    else
+		m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+    }
+     // m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
   }
   // Entire rows selected ?
   else if ( util_isRowSelected(r) )
@@ -314,7 +329,15 @@ void KSpreadSortDlg::init()
 
     int bottom = r.bottom();
     for (int i = r.top(); i <= bottom; ++i)
-      m_listRow += i18n("Row %1").arg(i);
+    {
+	    QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
+	    QString rowName=i18n(" (Row %1)").arg(i);
+	    
+	    if (!guessName.isEmpty())
+	    	m_listRow += guessName + rowName;
+	    else
+		m_listRow += i18n("Row %1").arg(i);
+    }
   }
   else
   {
@@ -338,10 +361,26 @@ void KSpreadSortDlg::init()
     int right  = r.right();
     int bottom = r.bottom();
     for (int i = r.left(); i <= right; ++i)
-      m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+    {  
+	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
+	    QString colName=i18n(" (Column %1)").arg(KSpreadCell::columnName(i));
+	    
+	    if (!guessName.isEmpty())
+		    m_listColumn += guessName + colName;
+	    else
+		    m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+    }
 
-    for (int i = r.top(); i <= bottom; ++i)
-      m_listRow += i18n("Row %1").arg(i);
+    for (int i = r.top(); i <= bottom; ++i) 
+    {
+	    QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
+	    QString rowName=i18n(" (Row %1)").arg(i);
+	    
+	    if (!guessName.isEmpty())
+		    m_listRow += guessName + rowName;
+	    else
+		    m_listRow += i18n("Row %1").arg(i);
+    }
   }
 
   // Initialize the combo box
@@ -409,7 +448,7 @@ void KSpreadSortDlg::slotOk()
   KSpreadSheet * sheet = m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
   if ( !sheet )
   {
-    KMessageBox::error( this, i18n("The selected output table does not exist.") );
+    KMessageBox::error( this, i18n("The destination sheet does not exist.") );
     m_outputSheet->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
     m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -419,7 +458,7 @@ void KSpreadSortDlg::slotOk()
   KSpreadPoint outputPoint( m_outputCell->text() );
   if ( !outputPoint.isValid() || outputPoint.isSheetKnown() )
   {
-    KMessageBox::error( this, i18n("The output cell is invalid.") );
+    KMessageBox::error( this, i18n("The destination cell does not exist.") );
     m_outputCell->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
     m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -437,7 +476,7 @@ void KSpreadSortDlg::slotOk()
          || ( w >= r.left() && w <= r.right() )
          || ( h >= r.top()  && h <= r.bottom() ) )
     {
-      KMessageBox::error( this, i18n("The output region must not overlap with the source region.") );
+      KMessageBox::error( this, i18n("If the destination and source regions are different, they must not overlap.") );
       m_outputCell->setFocus();
       m_pView->slotUpdateView( m_pView->activeSheet() );
       // TODO: set right tab

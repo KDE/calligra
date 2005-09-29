@@ -4794,6 +4794,56 @@ struct SetSelectionAlignWorker
     }
 };
 
+QString KSpreadSheet::guessColumnTitle(QRect& area, int col)
+{
+	//Verify range
+	KSpreadRange rg;
+	rg.setRange(area);
+	rg.sheet=this;
+			
+	if ( (!rg.isValid()) || (col < area.left()) || (col > area.right()))
+		return QString();
+	
+	//The current guess logic is fairly simple - if the top row of the given area
+	//appears to contain headers (ie. there is text in each column) the text in the column at 
+	//the top row of the area is returned.
+	
+	for (int i=area.left();i<=area.right();i++)
+	{
+		KSpreadValue cellValue=value(i,area.top());
+	
+		if (!cellValue.isString())
+			return QString();
+	}
+	
+	KSpreadValue cellValue=value(col,area.top());
+	return cellValue.asString();
+}
+
+QString KSpreadSheet::guessRowTitle(QRect& area, int row)
+{
+	//Verify range
+	KSpreadRange rg;
+	rg.setRange(area);
+	rg.sheet=this;
+	
+	if ( (!rg.isValid()) || (row < area.top()) || (row > area.bottom()) )
+		return QString();
+	
+	//The current guess logic is fairly simple - if the leftmost column of the given area
+	//appears to contain headers (ie. there is text in each row) the text in the row at 
+	//the leftmost column of the area is returned.
+	for (int i=area.top();i<=area.bottom();i++)
+	{
+		KSpreadValue cellValue=value(area.left(),i);
+	
+		if (!cellValue.isString())
+			return QString();
+	}
+	
+	KSpreadValue cellValue=value(area.left(),row);
+	return cellValue.asString();
+}
 
 void KSpreadSheet::setSelectionAlign( KSpreadSelection* selectionInfo,
                                       KSpreadFormat::Align _align )
