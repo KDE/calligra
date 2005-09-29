@@ -147,6 +147,7 @@ void KWViewMode::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLa
     vRuler->setPageLayout( layout );
 }
 
+// static
 KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
 {
     Q_ASSERT(doc);
@@ -363,8 +364,8 @@ KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // sta
     if(f) fs=f->frameSet();
 
     if (!fs || fs->type() != FT_TEXT) { // no suitable frameset found
-        KWView *view = doc->getAllViews().first(); // try the one I am editing..
-        if(view) {
+        if(doc->getAllViews().count() > 0) {
+            KWView *view = doc->getAllViews().first(); // try the one I am editing..
             KWFrameSetEdit *fse = view->getGUI()->canvasWidget()->currentFrameSetEdit();
             if(fse) fs = fse->frameSet(); // selected frame
         }
