@@ -25,6 +25,7 @@
 #include <qvariant.h>
 #include <qwhatsthis.h>
 
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
@@ -80,6 +81,7 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     // signals and slots connections
     connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( buttonHelp, SIGNAL(clicked() ), this, SLOT( helpButtonClicked() ) );
     connect( textWidget, SIGNAL( cursorPositionChanged( int, int ) ),
              this, SLOT( cursorPositionChanged( int, int ) ) );
 }
@@ -101,6 +103,11 @@ void FormulaString::accept()
     else {
         KMessageBox::sorry( this, errorList.join( "\n" ), i18n( "Parser Error" ) );
     }
+}
+
+void FormulaString::helpButtonClicked()
+{
+  kapp->invokeHelp( "formula-strings", "kformula" );
 }
 
 void FormulaString::cursorPositionChanged( int para, int pos )

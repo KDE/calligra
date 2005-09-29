@@ -49,6 +49,7 @@ public:
 protected slots:
 
     virtual void accept ();
+    void helpButtonClicked();
 
     void cursorPositionChanged ( int para, int pos );
 
