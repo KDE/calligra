@@ -3457,7 +3457,7 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step )
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( step.m_pageNumber );
     QRect rect = page->getZoomPageRect();
-    drawBackground( painter, rect, page, true );
+    drawBackground( painter, rect, page, false );
     drawPresPage( painter, rect, step );
 }
 
