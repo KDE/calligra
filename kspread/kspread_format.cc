@@ -1226,7 +1226,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     }
     //end paragraph properties
 
-    styleStack.setTypeProperties( "" ); // Default
+    styleStack.setTypeProperties( "table-cell" ); // Default
 
     // TODO:
     //   diagonal: fall + goup
