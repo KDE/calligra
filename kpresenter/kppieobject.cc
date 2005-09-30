@@ -41,8 +41,8 @@ KPPieObject::KPPieObject()
     : KP2DObject()
 {
     pieType = PT_PIE;
-    p_angle = 720; //45 * 16
-    p_len = 1440; //90 * 16
+    p_angle = 45 * 16;
+    p_len = 270 * 16;
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
 }

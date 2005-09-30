@@ -891,7 +891,7 @@ void configureToolsPage::slotDefault()
     PieValueCmd::PieValues pieValues;
     pieValues.pieType = PT_PIE;
     pieValues.pieAngle = 45 * 16;
-    pieValues.pieLength = 90 * 16;
+    pieValues.pieLength = 270 * 16;
 }
 
 configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, char *name )
