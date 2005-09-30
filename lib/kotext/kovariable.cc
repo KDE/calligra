@@ -992,7 +992,9 @@ void KoVariable::save( QDomElement &parentElem )
     QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
     variableElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
-    //// Of course, saving the key is ugly. We'll drop this when switching to the OO format.
+
+    //// Of course, saving the key is ugly. We'll drop this when
+    //// switching to the OO format.
     typeElem.setAttribute( "key", m_varFormat->key() );
     typeElem.setAttribute( "text", text(true) );
     if ( correctValue() != 0)
@@ -1216,6 +1218,7 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
 {
     QDomElement elem = varElem.ownerDocument().createElement( "DATE" );
     varElem.appendChild( elem );
+
     QDate date = m_varValue.toDate(); // works with Date and DateTime
     date = date.addDays( -m_correctDate );//remove correctDate value otherwise value stored is bad
     elem.setAttribute( "year", date.year() );
@@ -1475,6 +1478,7 @@ void KoTimeVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
+
     QTime time = m_varValue.toTime();
     time = time.addSecs(-60*m_correctTime);
     elem.setAttribute( "hour", time.hour() );
@@ -2616,12 +2620,22 @@ void KoPageVariable::setSectionTitle( const QString& _title )
 }
 
 
+// ----------------------------------------------------------------
+//                   class KoStatisticVariable
+
+
 bool KoStatisticVariable::m_extendedType = false;
-KoStatisticVariable::KoStatisticVariable( KoTextDocument *textdoc,  short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+
+
+KoStatisticVariable::KoStatisticVariable( KoTextDocument *textdoc,
+					  short int subtype,
+					  KoVariableFormat *varFormat,
+					  KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat, _varColl ),
       m_subtype( subtype )
 {
 }
+
 
 QStringList KoStatisticVariable::actionTexts()
 {
@@ -2640,6 +2654,7 @@ QStringList KoStatisticVariable::actionTexts()
     return lst;
 }
 
+
 void KoStatisticVariable::setVariableSubType( short int subtype )
 {
     m_subtype = subtype;
@@ -2648,20 +2663,35 @@ void KoStatisticVariable::setVariableSubType( short int subtype )
     setVariableFormat(fc->format("NUMBER") );
 }
 
+
 QStringList KoStatisticVariable::subTypeList()
 {
     return KoStatisticVariable::actionTexts();
 }
 
+
 void KoStatisticVariable::saveVariable( QDomElement& varElem )
 {
-    //Now we use oasis format => don't use it.
+    QDomElement  elem = varElem.ownerDocument().createElement( "STATISTIC" );
+    varElem.appendChild( elem );
+
+    elem.setAttribute( "type",  QString::number(m_subtype) );
+    elem.setAttribute( "value", QString::number(m_varValue.toInt()) );
 }
+
 
 void KoStatisticVariable::load( QDomElement &elem )
 {
-    //Now we use oasis format
+    KoVariable::load( elem );
+
+    QDomElement e = elem.namedItem( "STATISTIC" ).toElement();
+    if ( !e.isNull() ) {
+	// FIXME: Error handling.
+	m_subtype  = e.attribute( "type" ).toInt();
+	m_varValue = e.attribute( "value" ).toInt();
+    }
 }
+
 
 void KoStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {

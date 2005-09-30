@@ -34,15 +34,32 @@
 class QDomElement;
 // Always add new types at the _end_ of this list (but before VT_ALL of course).
 // (and update KWView::setupActions)
-enum VariableType { VT_NONE = -1,
-                    VT_DATE = 0, VT_DATE_VAR_KWORD10 = 1,
-                    VT_TIME = 2, VT_TIME_VAR_KWORD10 = 3,
-                    VT_PGNUM = 4,
-                    VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK = 9,
-                    VT_NOTE = 10, VT_FOOTNOTE = 11, VT_STATISTIC = 12,
-                    VT_ALL=256 };
+enum VariableType {
+    VT_NONE             = -1,
 
-enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
+    VT_DATE             = 0,
+    VT_DATE_VAR_KWORD10 = 1,
+    VT_TIME             = 2,
+    VT_TIME_VAR_KWORD10 = 3,
+    VT_PGNUM            = 4,
+    // No number 5
+    VT_CUSTOM           = 6,
+    VT_MAILMERGE        = 7,
+    VT_FIELD            = 8,
+    VT_LINK             = 9,
+    VT_NOTE             = 10, 
+    VT_FOOTNOTE         = 11, 
+    VT_STATISTIC        = 12,
+
+    VT_ALL              = 256
+};
+
+enum VariableFormat { 
+    VF_DATE   = 0, 
+    VF_TIME   = 1, 
+    VF_STRING = 2, 
+    VF_NUM    = 3 
+};
 
 class KoVariable;
 class KoOasisSettings;
@@ -210,6 +227,7 @@ private:
     QString m_strFormat;
 };
 
+
 /**
  * Implementation of the string format
  */
@@ -223,6 +241,7 @@ public:
     virtual void load( const QCString & /*key*/ ) {}
 };
 
+
 class KOTEXT_EXPORT KoVariableNumberFormat : public KoVariableFormat
 {
 public:
@@ -232,6 +251,7 @@ public:
     virtual QCString getKey( const QString& props ) const;
     virtual void load( const QCString & /*key*/ ) {}
 };
+
 
 /**
  * The collection of formats for variables.
@@ -329,12 +349,15 @@ public:
 };
 
 
-// ----------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------
+//                KoVariable and derived classes
+
 
 class KoDocument;
 class KoVariable;
 class QDomElement;
 class KoTextFormat;
+
 
 /**
  * A KoVariable is a custom item, i.e. considered as a single character.
@@ -356,9 +379,11 @@ public:
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
     virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset,  bool drawingShadow);
+
     /**
-     * Called by drawCustomItem. Some special variables can reimplement drawCustomItem
-     * to change the parameters passed to drawCustomItemHelper
+     * Called by drawCustomItem. Some special variables can
+     * reimplement drawCustomItem to change the parameters passed to
+     * drawCustomItemHelper
      */
     void drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, const QColorGroup& cg, bool selected, int offset, KoTextFormat* fmt, const QFont& font, QColor textColor, bool drawingShadow );
 
@@ -430,6 +455,7 @@ protected:
     Private *d;
 };
 
+
 /**
  * Date-related variables
  */
@@ -474,6 +500,7 @@ protected:
     int m_correctDate;
 };
 
+
 /**
  * Time-related variables
  */
@@ -517,6 +544,7 @@ protected:
     short int m_subtype;
     int m_correctTime; // in minutes
 };
+
 
 
 /**
@@ -604,6 +632,7 @@ protected:
     KoDocument *m_doc;
 };
 
+
 class KOTEXT_EXPORT KoMailMergeVariable : public KoVariable
 {
 public:
@@ -625,6 +654,7 @@ public:
 
 protected:
 };
+
 
 /**
  * "current page number" and "number of pages" variables
@@ -665,6 +695,7 @@ protected:
     short int m_subtype;
 };
 
+
 class KOTEXT_EXPORT KoLinkVariable : public KoVariable
 {
 public:
@@ -698,6 +729,7 @@ protected:
     QString m_url;
 };
 
+
 // A custom item that display a small yellow rect. Right-clicking on it shows the comment.
 class KOTEXT_EXPORT KoNoteVariable : public KoVariable
 {
@@ -726,12 +758,26 @@ protected:
     QDate m_createdNoteDate;
 };
 
+
 class KOTEXT_EXPORT KoStatisticVariable : public KoVariable
 {
 public:
-    KoStatisticVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
+    KoStatisticVariable( KoTextDocument *textdoc, short int subtype,
+			 KoVariableFormat *varFormat, 
+			 KoVariableCollection *_varColl);
 
-    enum { VST_STATISTIC_NB_WORD = 0, VST_STATISTIC_NB_SENTENCE = 1, VST_STATISTIC_NB_LINES = 2, VST_STATISTIC_NB_CHARACTERE = 3,VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE = 4, VST_STATISTIC_NB_SYLLABLE = 5, VST_STATISTIC_NB_FRAME = 6, VST_STATISTIC_NB_EMBEDDED = 7,  VST_STATISTIC_NB_PICTURE = 8, VST_STATISTIC_NB_TABLE = 9 };
+    enum { 
+	VST_STATISTIC_NB_WORD                      = 0, 
+	VST_STATISTIC_NB_SENTENCE                  = 1, 
+	VST_STATISTIC_NB_LINES                     = 2, 
+	VST_STATISTIC_NB_CHARACTERE                = 3,
+	VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE = 4, 
+	VST_STATISTIC_NB_SYLLABLE                  = 5, 
+	VST_STATISTIC_NB_FRAME                     = 6, 
+	VST_STATISTIC_NB_EMBEDDED                  = 7,  
+	VST_STATISTIC_NB_PICTURE                   = 8, 
+	VST_STATISTIC_NB_TABLE                     = 9 
+    };
 
     virtual VariableType type() const
     { return VT_STATISTIC; }
