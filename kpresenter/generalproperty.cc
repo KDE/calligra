@@ -53,7 +53,6 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
     }
 
     m_ui->positionGroup->setTitle( i18n( "Position (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
-    m_ui->sizeGroup->setTitle( i18n( "Size (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
 
     connect( m_ui->protect, SIGNAL( toggled( bool ) ), this, SLOT( slotProtectToggled( bool ) ) );
     connect( m_ui->keepRatio, SIGNAL( toggled( bool ) ), this, SLOT( slotKeepRatioToggled( bool ) ) );
@@ -206,7 +205,6 @@ void GeneralProperty::slotReset()
 void GeneralProperty::slotProtectToggled( bool state )
 {
     m_ui->positionGroup->setEnabled( !state );
-    m_ui->sizeGroup->setEnabled( !state );
 }
 
 

@@ -309,6 +309,8 @@ KCommand * PropertyEditor::getCommand()
 
 void PropertyEditor::setupTabs()
 {
+    setupTabGeneral();
+
     int flags = m_objectProperties->getPropertyFlags();
 
     if ( flags & KPObjectProperties::PtPen )
@@ -331,8 +333,6 @@ void PropertyEditor::setupTabs()
 
     if ( flags & KPObjectProperties::PtText )
         setupTabText();
-
-    setupTabGeneral();
 }
 
 
