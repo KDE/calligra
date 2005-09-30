@@ -128,6 +128,7 @@
 #include "dialogs/kspread_dlg_validity.h"
 #include "dialogs/link.h"
 #include "dialogs/sheet_properties.h"
+#include "dialogs/kspread_dlg_find.h"
 
 // KSpread DCOP
 #include "KSpreadViewIface.h"
@@ -2466,7 +2467,7 @@ void KSpreadView::autoSum()
             return;
         }
     }
-    
+
 
     // Try to find numbers left
     if ( d->canvas->markerColumn() > 1 )
@@ -2479,7 +2480,7 @@ void KSpreadView::autoSum()
         }
         while ( cell && cell->value().isNumber() );
 
-        if ( c + 1 < d->canvas->markerColumn() )  
+        if ( c + 1 < d->canvas->markerColumn() )
         {
             d->canvas->startChoose( QRect( c + 1, d->canvas->markerRow(), d->canvas->markerColumn() - c - 1, 1 ) );
             return;
@@ -3867,7 +3868,7 @@ void KSpreadView::gotoCell()
 
 void KSpreadView::find()
 {
-    KFindDialog dlg( this, "Find", d->findOptions, d->findStrings );
+    KSpreadFindDlg dlg( this, "Find", d->findOptions, d->findStrings );
     dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
     dlg.setHasCursor( true );
     if ( KFindDialog::Accepted != dlg.exec() )
@@ -4039,7 +4040,7 @@ void KSpreadView::findPrevious()
 
 void KSpreadView::replace()
 {
-    KReplaceDialog dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
+    KSpreadSearchDlg dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
     dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
     dlg.setHasCursor( true );
     if ( KReplaceDialog::Accepted != dlg.exec() )
@@ -4874,15 +4875,15 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
 	return;
-    
+
     //Removed popup warning dialog because
     // a) It is annoying from a user's persepective
-    // b) The behaviour should be consistant with other KOffice apps 
-    
+    // b) The behaviour should be consistant with other KOffice apps
+
     /*int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"editdelete"));
     if ( ret == KMessageBox::Continue )
     {
-      
+
 }*/
     doc()->emitBeginOperation(false);
     d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
@@ -6002,14 +6003,14 @@ void KSpreadView::setText (const QString & _text, bool array)
     // non-array version
     int x = d->canvas->markerColumn();
     int y = d->canvas->markerRow();
-  
+
     doc()->emitBeginOperation( false );
     d->activeSheet->setText( y, x, _text );
     KSpreadCell * cell = d->activeSheet->cellAt( x, y );
-  
+
     if ( cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula() )
       doc()->addStringCompletion( _text );
-  
+
     doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
   }
 }
