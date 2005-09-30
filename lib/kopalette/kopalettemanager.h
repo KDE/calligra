@@ -127,11 +127,6 @@ public:
      */
     virtual void removeWidget(const QString & name);
 
-    /**
-     * Saves the current palette configuration to the application config object.
-     */
-    virtual void save();
-
 
     /**
      * Create an empty palette in the given style. with the given name and caption. If
@@ -165,7 +160,17 @@ public slots:
     virtual void slotReset();
 
 protected:
+
     bool eventFilter( QObject *o, QEvent *e );
+
+private:
+
+
+    /**
+     * Saves the current palette configuration to the application config object.
+     */
+    virtual void save();
+
 
 private:
 

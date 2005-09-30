@@ -30,6 +30,7 @@ KoToolBoxPalette::KoToolBoxPalette(QWidget * parent, const char * name)
     m_page = new QToolBox(this);
     m_page->setFont(m_font);
     setMainWidget(m_page);
+    m_style = PALETTE_TOOLBOX;
 }
 
 KoToolBoxPalette::~KoToolBoxPalette()

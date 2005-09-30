@@ -27,6 +27,8 @@
 #include <qfont.h>
 #include <qlayout.h>
 #include <koffice_export.h>
+
+#include "kopalettemanager.h"
 /**
  * A floating palette that allows the adding and removing of widgets
  * to its organzing principle.
@@ -45,6 +47,9 @@ public:
 
 public:
 
+    void setStyle(enumKoPaletteStyle style) { m_style = style; };
+    enumKoPaletteStyle style() { return m_style; };
+
     virtual void plug(QWidget * widget, const QString & name, int position) = 0;
     virtual void unplug(const QWidget * widget) = 0;
     virtual void showPage(QWidget *w) = 0;
@@ -57,10 +62,11 @@ protected:
 
     virtual void setMainWidget(QWidget * widget);
     QFont m_font;
-
+    enumKoPaletteStyle m_style;
+    
 private:
     QWidget * m_page;
-
+    
 };
 
 #endif //_KO_PALETTE_

@@ -28,6 +28,7 @@
 
 #include <kopalette.h>
 #include <kotabpalette.h>
+#include "kopalettemanager.h"
 
 KoTabPalette::KoTabPalette(QWidget * parent, const char * name)
     : KoPalette(parent, name)
@@ -39,6 +40,7 @@ KoTabPalette::KoTabPalette(QWidget * parent, const char * name)
     m_page->setMargin(1);
     //m_page->setTabReorderingEnabled(true);
     setMainWidget(m_page);
+    m_style = PALETTE_DOCKER;
 }
 
 KoTabPalette::~KoTabPalette()

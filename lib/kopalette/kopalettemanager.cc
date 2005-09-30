@@ -72,13 +72,12 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     m_toggleShowHidePalettes->setCheckedState(i18n("Show all Palette Windows"));
     m_viewActionMenu->insert(m_toggleShowHidePalettes);
 
-#if 0
     KAction * a = new KAction(i18n("Restore Palettes"),
                   0, this,
                   SLOT(slotReset()),
                   this, "restorePalettes");
     m_viewActionMenu->insert(a);
-#endif
+
     m_viewActionMenu->popupMenu()->insertSeparator();
 }
 
@@ -86,6 +85,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 KoPaletteManager::~KoPaletteManager()
 {
     save();
+    
     delete m_viewActionMenu;
     delete m_widgetNames;
     delete m_widgets;
@@ -105,6 +105,8 @@ void KoPaletteManager::addWidget(QWidget * widget,
 
     if (!widget) return;
 
+    //kdDebug() << "adding widget " << name << " to palette " << paletteName << "\n";
+
     QWidget * w = m_widgets->find(name);
     if (w != 0 )
     {
@@ -117,7 +119,6 @@ void KoPaletteManager::addWidget(QWidget * widget,
         palette = createPalette(paletteName, widget->caption(), style);
         m_defaultPaletteOrder.append( paletteName + "," + QString::number(style));
     }
-
 
     KToggleAction * a = new KToggleAction(i18n("Hide") + " " + widget->caption(), 0, m_mapper, SLOT(map()), m_actionCollection);
     a->setCheckedState(i18n("Show") + " " + widget->caption());
@@ -136,11 +137,13 @@ void KoPaletteManager::addWidget(QWidget * widget,
     // Fill the current mappings
     m_widgetNames->append(name);
     m_currentMapping->insert(name, paletteName);
+
 }
 
 
 void KoPaletteManager::slotReset()
 {
+    //kdDebug() << "Resetting palettes\n";
     // Clear all old palettes
     m_palettes->setAutoDelete( true );
     m_palettes->clear();
@@ -170,7 +173,7 @@ void KoPaletteManager::slotReset()
 
         if (p == 0) {
             // Funny -- we should have a consistent set of palettes without holes!
-            p = createPalette(paletteName, "", PALETTE_DOCKER);
+            createPalette(paletteName, "", PALETTE_DOCKER);
         }
 
         p->plug(w, widgetName, -1); // XXX: This is not good: we should add it in the same place as originally placed
@@ -219,68 +222,19 @@ void KoPaletteManager::removeWidget(const QString & name)
 
 }
 
-
-void KoPaletteManager::save()
-{
-    // XXX: Save to the configuration
-    // We save:
-    //   * which tab at which place in which palette
-    //   * which tab is hidden
-    //   * whether a palette is floating or docked
-    //   * dock location of a docked palette
-    //   * float location of a floated palette
-    //   * order in which the palettes are docked.
-    KConfig * cfg = KGlobal::config();
-    Q_ASSERT(cfg);
-    cfg->setGroup("");
-
-    // For all palettes windows in the window
-
-    QString palettes;
-
-    for (QMap<QString,QString>::Iterator it = m_currentMapping->begin(); it != m_currentMapping->end(); ++it) {
-        QString widgetName = it.key();
-        QString paletteName = it.data();
-        QWidget * w = m_widgets->find(widgetName);
-        KoPalette * p = m_palettes->find(paletteName);
-        bool hidden = p->isHidden(w);
-
-
-        int i = p->indexOf(w);
-#if 0
-        kdDebug() << "Saving: " << paletteName
-            << " pos: " << p->place() << "," << p->x() << "," << p->y() << "," << p->width() << "," << p->height()
-            << ", widgetName " << widgetName
-            << ", index " << i
-            << ", hidden: " << hidden << "\n";
-#endif
-        palettes.append(widgetName + ","
-            + paletteName + ","
-            + p->place() + ","
-            + p->x() + ","
-            + p->y() + ","
-            + p->width() + ","
-            + p->height() + ","
-            + QString::number(i) + "," + QString::number(hidden ? 0:1) + ";");
-    }
-
-    cfg->writeEntry("palettes", palettes);
-
-}
-
 KoPalette * KoPaletteManager::createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style)
 {
+    //kdDebug() << "creating palette " << name << "\n";
     Q_ASSERT(m_view);
-
 
     KoPalette * palette = 0;
     switch (style) {
         case (PALETTE_DOCKER):
-            palette = new KoTabPalette(m_view/*->mainWindow()*/, name.latin1());
+            palette = new KoTabPalette(m_view, name.latin1());
             break;
         case (PALETTE_TOOLBOX):
         default:
-            palette = new KoToolBoxPalette(m_view/*->mainWindow()*/, name.latin1());
+            palette = new KoToolBoxPalette(m_view, name.latin1());
             break;
 
     };
@@ -290,26 +244,48 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
     palette->setCaption(caption);
     m_palettes->insert(name, palette);
     placePalette(name);
-
+    
     return palette;
 }
 
 void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
 {
     Q_ASSERT(!name.isNull());
-
+    //kdDebug() << "placing palette " << name << "\n";
     KoPalette * palette = m_palettes->find(name);
 
     if (!palette) return;
 
     //XXX:  Check whether this name occurs in the config list, retrieve the location, set the location
-    
-
-    // Set dockability for this palette
     KConfig * cfg = KGlobal::config();
     Q_ASSERT(cfg);
-    cfg->setGroup("");
+    if (cfg->hasGroup("palette-" + name)) {
+        cfg->setGroup("palette-" + name);
+        QString dockarea = cfg->readEntry("dockarea", "right");
+        QString caption = cfg->readEntry("caption", "");
+        int height = cfg->readNumEntry("height", 120);
+        int place = cfg->readNumEntry("place", 0);
+        int width = cfg->readNumEntry("width", 200);
+        int x = cfg->readNumEntry("x", 0);
+        int y = cfg->readNumEntry("y", 0);
+        
+        palette->setGeometry(x, y, width, height);
 
+        if (dockarea == "left" && place == 0) {
+            //kdDebug() << "placing the palette in the left dock\n";
+            location = Qt::DockLeft;
+        }
+        else if (dockarea == "right" && place == 0) {
+            //kdDebug() << "Placing the palette in the right dock\n";
+            location = Qt::DockRight;
+        }
+        else {
+            //kdDebug() << "Floating the palette\n";
+            location = DockTornOff;
+        }
+    }
+
+    cfg->setGroup("");
     m_dockability = (enumKoDockability) cfg->readNumEntry("palettesdockability");
 
     // Top and bottom will never accept docks
@@ -320,22 +296,23 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
     int h = qApp->desktop()->height();
     switch (m_dockability) {
         case (DOCK_ENABLED):
-
+            //kdDebug() << "dock enabled\n";
             m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
             m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
             m_view->mainWindow()->addDockWindow(palette, location);
             break;
         case (DOCK_DISABLED):
-
+            //kdDebug() << "dock disabled\n";
             m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
             m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
             m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
             break;
         case (DOCK_SMART):
+            //kdDebug() << "dock smart\n";
             if (h > 1024) {
                 m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
                 m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
-
+                m_view->mainWindow()->addDockWindow(palette, location);
             }
             else {
                 m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
@@ -397,5 +374,55 @@ bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
     }
     return false;
 }
+
+
+
+void KoPaletteManager::save()
+{
+    // XXX: Save to the configuration
+    // We save:
+    //   * which tab at which place in which palette
+    //   * which tab is hidden
+    //   * whether a palette is floating or docked
+    //   * dock location of a docked palette
+    //   * float location of a floated palette
+    //   * order in which the palettes are docked.
+    
+    KConfig * cfg = KGlobal::config();
+    Q_ASSERT(cfg);
+    cfg->setGroup("");
+
+    QString paletteNames;
+    QString widgets;
+    
+    // Save the list of palettes
+    QDictIterator<KoPalette> it(*m_palettes);
+    
+    for (; it.current(); ++it) {
+        paletteNames.append(it.currentKey() + ",");
+
+        KoPalette * p = m_palettes->find(it.currentKey());
+        
+        cfg->setGroup("palette-" + it.currentKey());
+
+        if ( p->area() == m_view->mainWindow()->leftDock() ) {
+            cfg->writeEntry("dockarea", "left");
+        }
+        else {
+            cfg->writeEntry("dockarea", "right");
+        }
+        cfg->writeEntry("place", p->place());
+        cfg->writeEntry("x", p->x());
+        cfg->writeEntry("y", p->y());
+        cfg->writeEntry("height", p->height());
+        cfg->writeEntry("width", p->width());
+        cfg->writeEntry("palettestyle", p->style());
+        cfg->writeEntry("caption", p->caption());
+    }
+    cfg->setGroup("GENERAL");
+    
+    cfg->writeEntry("palettes", paletteNames);
+}
+
 
 #include "kopalettemanager.moc"
