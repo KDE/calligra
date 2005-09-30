@@ -40,8 +40,9 @@ public:
 
     virtual void plug(QWidget * widget, const QString & name, int position = INT_MAX);
     virtual void unplug(const QWidget * widget);
-        void showPage(QWidget *w);
-        void makeVisible(bool v);
+    void showPage(QWidget *w);
+    void makeVisible(bool v);
+    virtual void hidePage(QWidget * w);
     int indexOf(QWidget *w);
     bool isHidden(QWidget *w);
     void togglePageHidden(QWidget *w);

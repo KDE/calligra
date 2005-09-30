@@ -47,6 +47,7 @@ public:
     virtual void unplug(const QWidget * widget);
     void showPage(QWidget *w);
     void makeVisible(bool v);
+    virtual void hidePage(QWidget * w);
     int indexOf(QWidget *w);
     bool isHidden(QWidget *w);
     virtual void togglePageHidden(QWidget *w);
