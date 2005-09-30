@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Name=Zoom Tool
 Name[br]=Ostilh Zoom
+Name[cy]=Erfyn Chwyddo
 Name[es]=Herramienta para zoom
 Name[ga]=Uirlis Súmála
 Name[pt]=Ferramenta de Ampliação
 Name[pt_BR]=Ferramenta de Ampliação
 Name[sv]=Zoomverktyg
+Name[xx]=xxZoom Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_zoomtoolplugin

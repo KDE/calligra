@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter KWord Filter
+Name[br]=Sil KWord KPresenter
 Name[cs]=Filtr pro převod KPresenter->KWord
 Name[da]=KPresenter KWord-filter
 Name[de]=KPresenter KWord-Filter
