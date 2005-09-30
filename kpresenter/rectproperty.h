@@ -51,6 +51,10 @@ protected:
 protected slots:
     void slotReset();
     void slotRndChanged();
+    void combineToggled( bool on);
+
+private:
+    int formerVerticalValue;
 };
 
 #endif /* RECTPROPERTY_H */

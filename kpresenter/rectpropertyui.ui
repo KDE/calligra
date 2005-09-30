@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>RectPropertyUI</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,101 +8,136 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>262</width>
-            <height>182</height>
+            <width>271</width>
+            <height>297</height>
         </rect>
     </property>
     <property name="caption">
         <string>Rect</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>layout3</cstring>
             </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="RectPreview" row="2" column="0" rowspan="1" colspan="2">
+                <property name="spacing">
+                    <number>0</number>
+                </property>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>rectPreview</cstring>
+                        <cstring>layout2</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>xRndLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Vertical declination:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>xRndInput</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>yRndLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Horizontal declination:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>yRndInput</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>yRndInput</cstring>
+                            </property>
+                            <property name="suffix">
+                                <string> %</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="lineStep">
+                                <number>4</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>xRndInput</cstring>
+                            </property>
+                            <property name="suffix">
+                                <string> %</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="lineStep">
+                                <number>4</number>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>combineButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="minimumSize">
                         <size>
-                            <width>200</width>
-                            <height>100</height>
+                            <width>16</width>
+                            <height>0</height>
                         </size>
                     </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>xRndLabel</cstring>
+                    <property name="maximumSize">
+                        <size>
+                            <width>16</width>
+                            <height>32767</height>
+                        </size>
                     </property>
                     <property name="text">
-                        <string>V&amp;ertical declination:</string>
+                        <string></string>
                     </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>xRndInput</cstring>
+                    <property name="toggleButton">
+                        <bool>true</bool>
                     </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>yRndLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Horizontal declination:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>yRndInput</cstring>
+                    <property name="on">
+                        <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="KIntNumInput" row="1" column="1">
-                    <property name="name">
-                        <cstring>yRndInput</cstring>
-                    </property>
-                    <property name="value">
-                        <number>0</number>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                    <property name="referencePoint">
-                        <number>0</number>
-                    </property>
-                    <property name="suffix">
-                        <string>%</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="0" column="1">
-                    <property name="name">
-                        <cstring>xRndInput</cstring>
-                    </property>
-                    <property name="value">
-                        <number>0</number>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                    <property name="referencePoint">
-                        <number>0</number>
-                    </property>
-                    <property name="suffix">
-                        <string>%</string>
-                    </property>
-                </widget>
-            </grid>
+            </hbox>
         </widget>
-    </grid>
+        <widget class="RectPreview">
+            <property name="name">
+                <cstring>rectPreview</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>100</height>
+                </size>
+            </property>
+        </widget>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>
@@ -124,17 +159,11 @@
 </customwidgets>
 <images>
     <image name="image0">
-        <data format="PNG" length="826">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b00000301494441541895b59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a09283782c80000000049454e44ae426082</data>
+        <data format="PNG" length="824">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002ff49444154388db59531681c4714863f992dde820cb370815b50600f54e8ca0ba43970712a8fb838438a3895634813d238a5ab80e314ae4d0a812060a4226017c27221c8a9da6b8c4fe0e00d28b0571cec82043b85611f78c12966efa4bb8bc085f29a6567df7cef9f7fdeccaec571cc2cbaddee47ae21e2385e5b9b815f1ebcfcd8de6a63ad25cb338af7c52741acb5a4a729a3d723a82ec6bd99d267bf3f23fc1c4cab2442d14a915986e792fdfa59569766573049417784f1b12e8267954dab24b78714450a28beaf941f847c2a14e70a0841035a2d45d641eb027213c210c69756320767794684d6508bef0befde1a860796e4c402333542b4256c0f0cdd1e50b97191458be6e0e27d81563a87c643d8fb2d7793d685d696413cc8a6cae46f65f7d79c7c62b87b4f2e15fd0fb0d302be0fefde4a0d557a5f35e90f84e0334014d590f855c9de4ecee17e4eb319d1ff3a00ec02f8c67299f283307c61e7d06fbf1782d082588a33e1cf1705fd81cf773f3601e1f9bec59e2f4b5c7ef5209f0ac95f16630cfd818067c103b586dd274a726229cee0fe8380d191cb4d1267d3d58aa1de7d258ceae5d7d0a78fdd269a86f0c52d414c49bbe3762c9b686de41560d7a72e41c4795a6486a78f95e4c4151481d686efbe7b3398ac58b1a23868b8c474aaa8068c8e714a8dd06c1af2a9e5d1c38c641c909dba6e08237f19b358a7ac5cf3479bc2e41f257e55d2ffc6a73833746f09e186cfa387904f2cbffc90a2aa9886d0e99464d3c5965b512cebd01f1800f67672e2a392fb0f023a3d883a053ffddcc2340dd65ab452b6074dc2cd15c1cbceb863daed413e353cdfcfd97d92333a12da6d0181ec3443cf753ef3cdd092de0e116ff1a02cdc157338ca9d7b8269461cfee1ba2139b9286e1a427f10110f2d561555b076d18a39383d4d99a4c0cd0b787f20747b214962c8266e3cdcf0e97c59126ec2f6edd089f40a92f115e0d1eb11ba238461dd6a15f32b53666de841965bb203575a3cc15a48c64a965fe57105e3635db8fa96dcffc431172b5d715d7103dc3fea7f015f373c8ee3b57f0135105a0fae7717960000000049454e44ae426082</data>
     </image>
 </images>
-<tabstops>
-    <tabstop>xRndInput</tabstop>
-    <tabstop>yRndInput</tabstop>
-</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>rectpreview.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>
