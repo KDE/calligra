@@ -2655,12 +2655,23 @@ QStringList KoStatisticVariable::subTypeList()
 
 void KoStatisticVariable::saveVariable( QDomElement& varElem )
 {
-    //Now we use oasis format => don't use it.
+    QDomElement  elem = varElem.ownerDocument().createElement( "STATISTIC" );
+    varElem.appendChild( elem );
+
+    elem.setAttribute( "type",  QString::number(m_subtype) );
+    elem.setAttribute( "value", QString::number(m_varValue.toInt()) );
 }
 
 void KoStatisticVariable::load( QDomElement &elem )
 {
-    //Now we use oasis format
+    KoVariable::load( elem );
+
+    QDomElement e = elem.namedItem( "STATISTIC" ).toElement();
+    if ( !e.isNull() ) {
+	// FIXME: Error handling.
+	m_subtype  = e.attribute( "type" ).toInt();
+	m_varValue = e.attribute( "value" ).toInt();
+    }
 }
 
 void KoStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
