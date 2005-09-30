@@ -33,7 +33,6 @@ KAboutData * newKPresenterAboutData()
                                            version, description, KAboutData::License_LGPL,
                                            I18N_NOOP("(c) 1998-2005, The KPresenter Team"), 0,
                                            "http://www.koffice.org/kpresenter/");
-    aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
     aboutData->addAuthor("Laurent Montel", I18N_NOOP("current maintainer"), "montel@kde.org");
     aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
     aboutData->addAuthor("David Faure", 0, "faure@kde.org");
@@ -42,6 +41,8 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor("Thorsten Zachmann", 0, "t.zachmann@zagge.de");
     aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
     aboutData->addAuthor("Percy Leonhardt", 0, "percy@eris23.de");
+    aboutData->addAuthor("Thomas Zander", 0, "");
+    aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
     return aboutData;
 }
 
