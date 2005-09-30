@@ -7140,6 +7140,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
     layout.loadOasisStyleProperties( styleStack, oasisStyles );
+	styleStack.setTypeProperties( "table-row" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
     {
         height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1 );

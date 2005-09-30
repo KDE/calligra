@@ -151,6 +151,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_featuresSet |= SFormatType;
         }
     }
+	styleStack.setTypeProperties( "text" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
         m_fontFamily = styleStack.attributeNS( KoXmlNS::style, "font-name" );
@@ -206,7 +207,8 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     {
         m_fontFlags |= FBold;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline" ))
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline-style" )
+         || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ))
     {
         m_fontFlags |= FUnderline;
         m_featuresSet |= SFontFlag;
@@ -221,14 +223,14 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     {
         //TODO
     }
-
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" )
+         /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
     {
         m_fontFlags |= FStrike;
         m_featuresSet |= SFontFlag;
     }
 
-
+	styleStack.setTypeProperties( "paragraph" );
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
     {
 
@@ -244,6 +246,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_alignX = KSpreadFormat::Undefined;
         m_featuresSet |= SAlignX;
     }
+	styleStack.setTypeProperties( "table-cell" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
         str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
@@ -994,7 +997,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
             value = "start";
             break;
         }
-        style.addProperty( "fo:text-align", value );
+        style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
     if ( featureSet( SAlignY ) && alignY() != KSpreadFormat::Middle )
@@ -1032,7 +1035,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
 
     if ( featureSet( SIndent ) )
     {
-        style.addPropertyPt("fo:margin-left", m_indent );
+        style.addPropertyPt("fo:margin-left", m_indent, KoGenStyle::ParagraphType );
         //FIXME
         //if ( a == KSpreadFormat::Undefined )
         //currentCellStyle.addProperty("fo:text-align", "start" );
@@ -1109,28 +1112,31 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     }
     if ( featureSet( SFontFamily ) )
     {
-        style.addProperty("style:font-name", m_fontFamily );
+        style.addProperty("style:font-name", m_fontFamily, KoGenStyle::TextType  );
     }
     if ( featureSet( SFontSize ) )
     {
-        style.addPropertyPt("fo:font-size",m_fontSize  );
+        style.addPropertyPt("fo:font-size",m_fontSize, KoGenStyle::TextType   );
     }
 
     if (m_fontFlags & (uint) FBold )
-        style.addProperty("fo:font-weight","bold" );
+        style.addProperty("fo:font-weight","bold", KoGenStyle::TextType  );
     if ( m_fontFlags & (uint) FItalic )
-        style.addProperty("fo:font-style", "italic" );
+        style.addProperty("fo:font-style", "italic", KoGenStyle::TextType  );
     if ( m_fontFlags & (uint) FUnderline )
     {
-        style.addProperty( "style:text-underline", "single" );
-        style.addProperty( "style:text-underline-color", "font-color" );
-    }
+        //style:text-underline-style="solid" style:text-underline-width="auto"
+        style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
+        //copy from oo-129
+        style.addProperty( "style:text-underline-width", "auto", KoGenStyle::TextType );
+        style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
+    }	    
     if ( m_fontFlags & (uint) FStrike )
-        style.addProperty("style:text-crossing-out", "single-line" );
+    	style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );    
 
     if ( featureSet( STextPen ) && m_textPen.color().isValid() )
     {
-        style.addProperty("fo:color", m_textPen.color().name() );
+        style.addProperty("fo:color", m_textPen.color().name(), KoGenStyle::TextType );
     }
     if ( featureSet( SBackgroundBrush ) )
     {

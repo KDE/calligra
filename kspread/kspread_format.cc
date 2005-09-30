@@ -372,20 +372,23 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
 
 void KSpreadFormat::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font )
 {
-    currentCellStyle.addProperty( "style:font-name", _font.family() );
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+    currentCellStyle.addProperty( "style:font-name", _font.family(),tt );
     if ( _font.bold() )
-        currentCellStyle.addProperty("fo:font-weight","bold" );
+        currentCellStyle.addProperty("fo:font-weight","bold",tt );
     if ( _font.italic() )
-        currentCellStyle.addProperty("fo:font-style", "italic" );
+        currentCellStyle.addProperty("fo:font-style", "italic",tt );
     if ( _font.strikeOut() )
-        currentCellStyle.addProperty("style:text-crossing-out", "single-line" );
-
+        currentCellStyle.addProperty("style:text-line-through-style", "solid",tt );
     if ( _font.underline() )
     {
-        currentCellStyle.addProperty( "style:text-underline", "single" );
-        currentCellStyle.addProperty( "style:text-underline-color", "font-color" );
+        //style:text-underline-style="solid" style:text-underline-width="auto"
+        currentCellStyle.addProperty( "style:text-underline-style", "solid",tt );
+        //copy from oo-129
+        currentCellStyle.addProperty( "style:text-underline-width", "auto",tt );
+        currentCellStyle.addProperty( "style:text-underline-color", "font-color",tt );
     }
-    currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize() );
+    currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize(),tt );
 }
 
 QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row, bool force, bool copy )
@@ -405,12 +408,12 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( hasProperty( PFont, true ) || hasNoFallBackProperties( PFont ) || force )
     {
         //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
-        saveOasisFontCellStyle( currentCellStyle, textFont( _col, _row ) );
+        saveOasisFontCellStyle( currentCellStyle, textFont( _col, _row ), KoGenStyle::TextType );
     }
     if ( ( hasProperty( PTextPen, true ) || hasNoFallBackProperties( PTextPen ) || force )
          && textPen( _col, _row ).color().isValid() )
     {
-        currentCellStyle.addProperty( "fo:color", textColor( _col, _row ).name() );
+        currentCellStyle.addProperty( "fo:color", textColor( _col, _row ).name()  , KoGenStyle::TextType);
         //format.appendChild( util_createElement( "pen", textPen( _col, _row ), doc ) );
     }
     //FIXME fallback ????
@@ -425,7 +428,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
             value = "end";
         else if ( alignX == KSpreadFormat::Left )
             value = "start";
-        currentCellStyle.addProperty( "fo:text-align", value );
+        currentCellStyle.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
     if (  hasProperty( PAlignY, true ) || hasNoFallBackProperties( PAlignY ) || force  )
@@ -442,7 +445,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
         {
             currentCellStyle.addPropertyPt("fo:margin-left", indent );
             if ( alignX == KSpreadFormat::Undefined )
-                currentCellStyle.addProperty("fo:text-align", "start" );
+                currentCellStyle.addProperty("fo:text-align", "start", KoGenStyle::ParagraphType  );
         }
     }
 
@@ -1082,7 +1085,8 @@ bool KSpreadFormat::load( const QDomElement & f, PasteMode pm, bool paste )
 bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 {
 
-    //kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
+     font.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+	//kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
         setTextFontFamily( font.attributeNS( KoXmlNS::fo, "font-family" ) );
@@ -1190,17 +1194,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     //   style:condition="cell-content()=15"
     //     => style:apply-style-name="Result" style:base-cell-address="Sheet6.A5"/>
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
-    {
-        bool ok = false;
-        int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
-        if ( ok && ( a != 0 ))
-            setAngle( -a );
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "direction" ) )
-    {
-        setVerticalText( true );
-    }
+	styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
     if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
         kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
@@ -1220,6 +1214,20 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         else if ( s == "justify" ) // TODO in KSpread!
             setAlign( KSpreadFormat::Center );
     }
+
+	styleStack.setTypeProperties( "table-cell" ); // Default
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
+    {
+        bool ok = false;
+        int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
+        if ( ok && ( a != 0 ))
+            setAngle( -a );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "direction" ) )
+    {
+        setVerticalText( true );
+    }
+
 
     kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
 
