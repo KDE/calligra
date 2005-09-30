@@ -189,4 +189,3 @@ class Dialog:
 
 	def addList(self, parentwidget, caption, items):
 		return self.dialog.List(self.dialog, parentwidget.widget, caption, items)
-

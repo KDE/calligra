@@ -137,16 +137,12 @@ class GuiApp:
 			result += "</ul>"
 		elif isinstance(value, types.ListType):
 			for item in value:
-				i = self.toHTML(item)
-				if i != "":
-					result += "%s" % i
+				result += "%s" % self.toHTML(item)
 		else:
 			result += "%s" % value
 		return result
 
 	def doSave(self):
-		import types
-
 		file = self.file.get()
 		print "Try to save project documentation to file: %s" % file
 
