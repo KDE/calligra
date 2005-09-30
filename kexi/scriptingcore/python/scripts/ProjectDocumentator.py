@@ -58,6 +58,23 @@ class DataProvider:
                 v = getattr(tableschema,i)()
                 if v != None and v != "":
                     ti.append( (i,v) )
+            tf = []
+            for field in tableschema.fieldlist().fields():
+                tfi = []
+                for n in ("caption","description","type","subType","typeGroup","length","defaultValue"):
+                    v = getattr(field,n)()
+                    if v != None and v != "":
+                        tfi.append( (n,v) )
+                props = []
+                for n in ("PrimaryKey","ForeignKey","AutoInc","UniqueKey","NotNull", "NotEmpty","Indexed","Unsigned"):
+                    v = getattr(field,"is%s" % n)()
+                    if v != None and v != "" and v != False and v != 0:
+                        props.append( "%s " % n )
+                if len(props) > 0:
+                    tfi.append( ("properties",props) )
+
+                tf.append( (field.name(), tfi) )
+            ti.append( ("fields", tf) )
             if len(ti) > 0:
                 result.append( (t, ti) )
         return result
@@ -67,7 +84,7 @@ class DataProvider:
         for q in self.connection.queryNames():
             queryschema = self.connection.querySchema(q)
             qi = []
-            for i in ("name", "caption", "description"):
+            for i in ("name", "caption", "description", "statement"):
                 v = getattr(queryschema,i)()
                 if v != None and v != "":
                     qi.append( (i,v) )
@@ -103,6 +120,30 @@ class GuiApp:
 
         self.dialog.show()
 
+    def toHTML(self, value):
+        import types
+        result = ""
+        if isinstance(value, types.TupleType):
+            result += "<ul>"
+            if len(value) == 1:
+                result += "<li>%s</li>" % value
+            elif len(value) == 2:
+                result += "<li>%s: %s</li>" % (value[0], self.toHTML(value[1]))
+            elif len(value) > 2:
+                for item in value:
+                    i = self.toHTML(item)
+                    if i != "":
+                        result += "<li>%s</li>" % i
+            result += "</ul>"
+        elif isinstance(value, types.ListType):
+            for item in value:
+                i = self.toHTML(item)
+                if i != "":
+                    result += "%s" % i
+        else:
+            result += "%s" % value
+        return result
+
     def doSave(self):
         import types
 
@@ -116,22 +157,10 @@ class GuiApp:
 
         for d in dir(self.dataprovider):
             if d.startswith("print"):
-                result = getattr(self.dataprovider,d)()
-                if result != None and len(result) > 0:
+                value = getattr(self.dataprovider,d)()
+                if value != None and len(value) > 0:
                     f.write("<h2>%s</h2>" % d[5:])
-                    f.write("<ul>")
-                    for (key,value) in result:
-                        if isinstance(value,types.ListType):
-                            f.write("<li>%s:<br />" % key)
-                            for v in value:
-                                if isinstance(v,types.TupleType):
-                                    f.write("%s: %s<br />" % tuple(v))
-                                else:
-                                    f.write("%s<br />" % v)
-                            f.write("</li>")
-                        else:
-                            f.write("<li>%s: %s</li>" % (key,value))
-                    f.write("</ul>")
+                    f.write( self.toHTML(value) )
 
         f.close()
 
