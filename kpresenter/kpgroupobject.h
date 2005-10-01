@@ -103,6 +103,7 @@ public:
 protected:
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+    virtual void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
 
     void updateSizes( double fx, double fy );
     void updateCoords( double dx, double dy );
