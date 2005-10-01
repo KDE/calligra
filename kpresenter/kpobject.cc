@@ -1686,10 +1686,11 @@ bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSav
     {
         int tmpX = int( ( *it ).x() * 10000 );
         int tmpY = int( ( *it ).y() * 10000 );
-        //if ( !listOfPoint.isEmpty() )
+        // no space allows before first element
+        if ( !listOfPoint.isEmpty() )
             listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-        //else
-        //    listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+        else
+            listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
         maxX = QMAX( maxX, tmpX );
         maxY = QMAX( maxY, tmpY );
     }
@@ -1978,7 +1979,7 @@ void KP2DObject::saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenS
         {
             QBrush brush( getBrush() );
             //todo FIXME when text object doesn't have a background
-            if( brush != QBrush() )
+            if( brush.style() != Qt::NoBrush )
             {
                 KoOasisStyles::saveOasisFillStyle( styleObjectAuto, mainStyles, brush );
             }
