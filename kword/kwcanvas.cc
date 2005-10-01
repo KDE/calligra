@@ -311,28 +311,28 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
 {
     if( !m_doc->isReadWrite()) {
         switch( e->key() ) {
-        case Key_Down:
+        case Qt::Key_Down:
             setContentsPos( contentsX(), contentsY() + 10 );
             break;
-        case Key_Up:
+        case Qt::Key_Up:
             setContentsPos( contentsX(), contentsY() - 10 );
             break;
-        case Key_Left:
+        case Qt::Key_Left:
             setContentsPos( contentsX() - 10, contentsY() );
             break;
-        case Key_Right:
+        case Qt::Key_Right:
             setContentsPos( contentsX() + 10, contentsY() );
             break;
-        case Key_PageUp:
+        case Qt::Key_PageUp:
             setContentsPos( contentsX(), contentsY() - visibleHeight() );
             break;
-        case Key_PageDown:
+        case Qt::Key_PageDown:
             setContentsPos( contentsX(), contentsY() + visibleHeight() );
             break;
-        case Key_Home:
+        case Qt::Key_Home:
             setContentsPos( contentsX(), 0 );
             break;
-        case Key_End:
+        case Qt::Key_End:
             setContentsPos( contentsX(), contentsHeight() - visibleHeight() );
             break;
         default:
@@ -2595,25 +2595,25 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
                 {
                     switch ( keyev->key() ) {
-                        case Key_P: // 'P' -> paragraph debug
+                        case Qt::Key_P: // 'P' -> paragraph debug
                             printRTDebug( 0 );
                             keyev->accept();
                             break;
-                        case Key_V: // 'V' -> verbose parag debug
+                        case Qt::Key_V: // 'V' -> verbose parag debug
                             printRTDebug( 1 );
                             keyev->accept();
                             break;
-                        case Key_F: // 'F' -> frames debug
+                        case Qt::Key_F: // 'F' -> frames debug
                             m_doc->printDebug();
                             kdDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << " " <<
                                 ( m_currentFrameSetEdit ? m_currentFrameSetEdit->frameSet()->className() : "" ) << endl;
                             keyev->accept();
                             break;
-                        case Key_S: // 'S' -> styles debug
+                        case Qt::Key_S: // 'S' -> styles debug
                             m_doc->printStyleDebug();
                             keyev->accept();
                             break;
-                        case Key_M: // 'M' -> mark debug output
+                        case Qt::Key_M: // 'M' -> mark debug output
                             {
                                 const QDateTime dtMark ( QDateTime::currentDateTime() );
                                 kdDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
@@ -2635,11 +2635,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                 // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
                 if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & ShiftButton) == 0 )
-                     && ( keyev->key() == Key_PageUp || keyev->key() == Key_PageDown ) )
+                     && ( keyev->key() == Qt::Key_PageUp || keyev->key() == Key_PageDown ) )
                 {
-                    viewportScroll( keyev->key() == Key_PageUp );
+                    viewportScroll( keyev->key() == Qt::Key_PageUp );
                 }
-                else if ( keyev->key() == Key_Escape  )
+                else if ( keyev->key() == Qt::Key_Escape  )
                 {
                     if ( m_mouseMode != MM_EDIT )
                         // Abort frame creation
@@ -2664,13 +2664,13 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 }
 
                 // Because of the dependency on the control key, we need to update the mouse cursor here
-                if ( keyev->key() == Key_Control )
+                if ( keyev->key() == Qt::Key_Control )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
                     viewport()->setCursor( m_doc->getMouseCursor( normalPoint, keyev->stateAfter() ) );
                 }
-                else if ( (keyev->key() == Key_Delete || keyev->key() ==Key_Backspace )
+                else if ( (keyev->key() == Qt::Key_Delete || keyev->key() ==Key_Backspace )
                           && m_doc->getFirstSelectedFrame() && !m_printing )
                 {
                     m_gui->getView()->editDeleteFrame();
@@ -2679,7 +2679,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             case QEvent::KeyRelease:
             {
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-                if ( keyev->key() == Key_Control )
+                if ( keyev->key() == Qt::Key_Control )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );

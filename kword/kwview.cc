@@ -476,13 +476,13 @@ void KWView::setupActions()
     actionCreateLinkedFrame->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
 
     actionRaiseFrame = new KAction( i18n( "Ra&ise Frame" ), "raise",
-                                    CTRL +SHIFT+ Key_R, this, SLOT( raiseFrame() ),
+                                    Qt::CTRL +Qt::SHIFT+ Qt::Key_R, this, SLOT( raiseFrame() ),
                                     actionCollection(), "raiseframe" );
     actionRaiseFrame->setToolTip( i18n( "Raise the currently selected frame so that it appears above all the other frames" ) );
     actionRaiseFrame->setWhatsThis( i18n( "Raise the currently selected frame so that it appears above all the other frames. This is only useful if frames overlap each other. If multiple frames are selected they are all raised in turn." ) );
 
     actionLowerFrame = new KAction( i18n( "&Lower Frame" ), "lower",
-                                    CTRL +SHIFT+ Key_L, this, SLOT( lowerFrame() ),
+                                    Qt::CTRL +Qt::SHIFT+ Qt::Key_L, this, SLOT( lowerFrame() ),
                                     actionCollection(), "lowerframe" );
     actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
     actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
@@ -556,13 +556,13 @@ void KWView::setupActions()
 
     // -------------- Insert menu
     actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
-                        ALT + SHIFT + Key_C,
+                        Qt::ALT + Qt::SHIFT + Qt::Key_C,
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
     actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
     actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
-    actionInsertFrameBreak = new KAction( QString::null, CTRL + Key_Return,
+    actionInsertFrameBreak = new KAction( QString::null, Qt::CTRL + Qt::Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
     if ( m_doc->processingType() == KWDocument::WP ) {
@@ -651,28 +651,28 @@ void KWView::setupActions()
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( actionInsertExpression);
 
-    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F10 /*same as kpr*/,
+    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Qt::Key_F10 /*same as kpr*/,
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
     actionToolsCreateText->setToolTip( i18n( "Create a new text frame." ) );
     actionToolsCreateText->setWhatsThis( i18n( "Create a new text frame." ) );
 
     actionToolsCreateText->setExclusiveGroup( "tools" );
-    actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Key_F4,
+    actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Qt::Key_F4,
                                        this, SLOT( insertFormula() ),
                                        actionCollection(), "tools_formula" );
     actionInsertFormula->setToolTip( i18n( "Insert a formula into a new frame." ) );
     actionInsertFormula->setWhatsThis( i18n( "Insert a formula into a new frame." ) );
 
     actionInsertTable = new KAction( i18n( "&Table..." ), "inline_table",
-                        Key_F5,
+                        Qt::Key_F5,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
     actionInsertTable->setToolTip( i18n( "Create a table." ) );
     actionInsertTable->setWhatsThis( i18n( "Create a table.<br><br>The table can either exist in a frame of its own or inline." ) );
 
     actionToolsCreatePix = new KToggleAction( i18n( "P&icture..." ), "frame_image", // or inline_image ?
-                                              SHIFT + Key_F5 /*same as kpr*/,
+                                              Qt::SHIFT + Qt::Key_F5 /*same as kpr*/,
                                               this, SLOT( insertPicture() ),
                                               actionCollection(), "insert_picture" );
     actionToolsCreatePix->setToolTip( i18n( "Create a new frame for a picture." ) );
@@ -691,13 +691,13 @@ void KWView::setupActions()
 
 
     // ------------------------- Format menu
-    actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
+    actionFormatFont = new KAction( i18n( "&Font..." ), Qt::ALT + Qt::CTRL + Qt::Key_F,
                                     this, SLOT( formatFont() ),
                                     actionCollection(), "format_font" );
     actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
 
-    actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
+    actionFormatParag = new KAction( i18n( "&Paragraph..." ), Qt::ALT + Qt::CTRL + Qt::Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
     actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc." ) );
@@ -723,7 +723,7 @@ void KWView::setupActions()
     actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
 
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), Qt::ALT + Qt::CTRL + Qt::Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
     actionFormatStylist->setToolTip( i18n( "Change attributes of styles." ) );
@@ -734,8 +734,8 @@ void KWView::setupActions()
     connect( actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( textSizeSelected( int ) ) );
 
-    actionFontSizeIncrease = new KAction( i18n("Increase Font Size"), "fontsizeup", CTRL + Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
-    actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), "fontsizedown", CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
+    actionFontSizeIncrease = new KAction( i18n("Increase Font Size"), "fontsizeup", Qt::CTRL + Qt::Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
+    actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), "fontsizedown", Qt::CTRL + Qt::Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
 
 #ifdef KFONTACTION_HAS_CRITERIA_ARG
     actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
@@ -766,33 +766,33 @@ void KWView::setupActions()
 
     // ----------------------- More format actions, for the toolbar only
 
-    actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
+    actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", Qt::CTRL + Qt::Key_B,
                                            this, SLOT( textBold() ),
                                            actionCollection(), "format_bold" );
-    actionFormatItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Key_I,
+    actionFormatItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", Qt::CTRL + Qt::Key_I,
                                            this, SLOT( textItalic() ),
                                            actionCollection(), "format_italic" );
-    actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
+    actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", Qt::CTRL + Qt::Key_U,
                                            this, SLOT( textUnderline() ),
                                            actionCollection(), "format_underline" );
     actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "text_strike", 0 ,
                                            this, SLOT( textStrikeOut() ),
                                            actionCollection(), "format_strike" );
 
-    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Key_L,
+    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", Qt::CTRL + Qt::Key_L,
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
     actionFormatAlignLeft->setExclusiveGroup( "align" );
     actionFormatAlignLeft->setChecked( TRUE );
-    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", CTRL + ALT + Key_C,
+    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::CTRL + Qt::ALT + Qt::Key_C,
                                          this, SLOT( textAlignCenter() ),
                                          actionCollection(), "format_aligncenter" );
     actionFormatAlignCenter->setExclusiveGroup( "align" );
-    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Key_R,
+    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", Qt::CTRL + Qt::ALT + Qt::Key_R,
                                         this, SLOT( textAlignRight() ),
                                         actionCollection(), "format_alignright" );
     actionFormatAlignRight->setExclusiveGroup( "align" );
-    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Key_J,
+    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
     actionFormatAlignBlock->setExclusiveGroup( "align" );
@@ -1109,20 +1109,20 @@ void KWView::setupActions()
 
 
     // ------------------- Actions with a key binding and no GUI item
-    new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
+    new KAction( i18n( "Insert Non-Breaking Space" ), Qt::CTRL+Qt::Key_Space,
                  this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
-    new KAction( i18n( "Insert Non-Breaking Hyphen" ), CTRL+SHIFT+Key_Minus,
+    new KAction( i18n( "Insert Non-Breaking Hyphen" ), Qt::CTRL+Qt::SHIFT+Qt::Key_Minus,
                  this, SLOT( slotNonbreakingHyphen() ), actionCollection(), "nonbreaking_hyphen" );
-    new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
+    new KAction( i18n( "Insert Soft Hyphen" ), Qt::CTRL+Qt::Key_Minus,
                  this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
-    new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
+    new KAction( i18n( "Line Break" ), Qt::SHIFT+Qt::Key_Return,
                  this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
     new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
-    new KAction( i18n( "Increase Numbering Level" ), ALT+Key_Right,
+    new KAction( i18n( "Increase Numbering Level" ), Qt::ALT+Qt::Key_Right,
                  this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
-    new KAction( i18n( "Decrease Numbering Level" ), ALT+Key_Left,
+    new KAction( i18n( "Decrease Numbering Level" ), Qt::ALT+Qt::Key_Left,
                  this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
 
 
