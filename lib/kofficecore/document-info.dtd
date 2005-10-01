@@ -54,13 +54,22 @@ A third page, "log" is planned for the future.
   This includes an optional title for the document, and an optional abstract.
 -->
 <!ELEMENT about
-    (abstract?, title?, keyword?, subject?)>
+    (abstract?, title?, keyword?, subject?, initial-creator?,
+  editing-cycles?, creation-date?, date?)>
 <!ELEMENT abstract
     (#PCDATA)>
 <!--title already defined above-->
 <!ELEMENT keyword
     (#PCDATA)>
 <!ELEMENT subject
+    (#PCDATA)>
+<!ELEMENT initial-creator
+    (#PCDATA)>
+<!ELEMENT editing-cycles
+    (#PCDATA)>
+<!ELEMENT creation-date
+    (#PCDATA)>
+<!ELEMENT date
     (#PCDATA)>
 
 <!--
