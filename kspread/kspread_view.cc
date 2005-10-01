@@ -3871,10 +3871,6 @@ void KSpreadView::find()
     KSpreadFindDlg dlg( this, "Find", d->findOptions, d->findStrings );
     dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
     dlg.setHasCursor( true );
-    QWidget *newWidget = dlg.findExtension();
-    QVBoxLayout *topLayout = new QVBoxLayout(newWidget);
-    QLabel *m_findLabel = new QLabel(i18n("&Text to find:"), newWidget);
-    topLayout->addWidget( m_findLabel );
     if ( KFindDialog::Accepted != dlg.exec() )
         return;
 
