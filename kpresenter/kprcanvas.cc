@@ -220,14 +220,14 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
     {
         QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
         if ( m_currentTextObjectView &&
-                (keyev->key()==Key_Home ||keyev->key()==Key_End
-                 || keyev->key()==Key_Tab || keyev->key()==Key_Prior
-                 || keyev->key()==Key_Next || keyev->key() == Key_Backtab) )
+                (keyev->key()==Qt::Key_Home ||keyev->key()==Key_End
+                 || keyev->key()==Qt::Key_Tab || keyev->key()==Key_Prior
+                 || keyev->key()==Qt::Key_Next || keyev->key() == Key_Backtab) )
         {
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
         }
-        else if ( !m_currentTextObjectView && keyev->key()==Key_Tab  )
+        else if ( !m_currentTextObjectView && keyev->key()==Qt::Key_Tab  )
         {
             keyPressEvent(keyev);
             return true;
@@ -242,11 +242,11 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
         {
             switch ( keyev->key() ) {
-            case Key_P: // 'P' -> paragraph debug
+            case Qt::Key_P: // 'P' -> paragraph debug
                 printRTDebug( 0 );
                 keyev->accept();
                 break;
-            case Key_V: // 'V' -> verbose parag debug
+            case Qt::Key_V: // 'V' -> verbose parag debug
                 printRTDebug( 1 );
                 keyev->accept();
                 break;
@@ -2076,39 +2076,39 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
     if ( !editMode ) {
         switch ( e->key() ) {
-        case Key_Space: case Key_Right: case Key_Down:
+        case Qt::Key_Space: case Key_Right: case Key_Down:
             setSwitchingMode( false );
             m_view->screenNext();
             break;
-        case Key_Next:
+        case Qt::Key_Next:
             setSwitchingMode( false );
             m_view->screenNext( true );
             break;
-        case Key_Backspace: case Key_Left: case Key_Up:
+        case Qt::Key_Backspace: case Key_Left: case Key_Up:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
             m_view->screenPrev();
             break;
-        case Key_Prior:
+        case Qt::Key_Prior:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
             m_view->screenPrev( true );
             break;
-        case Key_Escape: case Key_Q: case Key_X:
+        case Qt::Key_Escape: case Key_Q: case Key_X:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
             m_view->screenStop();
             break;
-        case Key_G:
+        case Qt::Key_G:
             // setSwitchingMode( false ) not needed as it is allready done in slotGotoPage;
             if ( !spManualSwitch() )
                 m_view->stopAutoPresTimer();
             slotGotoPage();
             break;
-        case Key_Home:  // go to first page
+        case Qt::Key_Home:  // go to first page
             setSwitchingMode( false );
             presGotoFirstPage();
             if ( !spManualSwitch() ) {
@@ -2116,7 +2116,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                 m_setPageTimer = true;
             }
             break;
-        case Key_End:  // go to last page
+        case Qt::Key_End:  // go to last page
             setSwitchingMode( false );
             if ( m_presentationSlidesIterator != m_presentationSlides.end() ) {
                 gotoPage( *(--m_presentationSlides.end()) );
@@ -2129,7 +2129,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
         default: break;
         }
     } else if ( editNum ) {
-        if ( e->key() == Key_Escape ) {
+        if ( e->key() == Qt::Key_Escape ) {
             exitEditMode();
         }
         else if ( m_currentTextObjectView )
@@ -2144,16 +2144,16 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
     {
         switch ( e->key() )
         {
-            case Key_Next:
+            case Qt::Key_Next:
                 m_view->nextPage();
                 break;
-            case Key_Prior:
+            case Qt::Key_Prior:
                 m_view->prevPage();
                 break;
-            case Key_Home:  // go to first page
+            case Qt::Key_Home:  // go to first page
                 m_view->screenFirst();
                 break;
-            case Key_End:  // go to first page
+            case Qt::Key_End:  // go to first page
                 m_view->screenLast();
                 break;
             default: 
@@ -2185,26 +2185,26 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             }
             switch ( e->key() ) 
             {
-                case Key_Up:
+                case Qt::Key_Up:
                     m_keyPressEvent = true;
                     moveObject( 0, -offsety );
                     break;
-                case Key_Down:
+                case Qt::Key_Down:
                     m_keyPressEvent = true;
                     moveObject( 0, offsety );
                     break;
-                case Key_Right:
+                case Qt::Key_Right:
                     m_keyPressEvent = true;
                     moveObject( offsetx, 0 );
                     break;
-                case Key_Left:
+                case Qt::Key_Left:
                     m_keyPressEvent = true;
                     moveObject( -offsetx, 0 );
                     break;
-                case Key_Delete: case Key_Backspace:
+                case Qt::Key_Delete: case Key_Backspace:
                     m_view->editDelete();
                     break;
-                case Key_Escape:
+                case Qt::Key_Escape:
                     setToolEditMode( TEM_MOUSE );
                     break;
                 default: break;
@@ -2213,25 +2213,25 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
         else 
         {
             switch ( e->key() ) {
-                case Key_Down:
+                case Qt::Key_Down:
                     m_view->getVScrollBar()->addLine();
                     break;
-                case Key_Up:
+                case Qt::Key_Up:
                     m_view->getVScrollBar()->subtractLine();
                     break;
-                case Key_Right:
+                case Qt::Key_Right:
                     m_view->getHScrollBar()->addLine();
                     break;
-                case Key_Left:
+                case Qt::Key_Left:
                     m_view->getHScrollBar()->subtractLine();
                     break;
-                case Key_Tab:
+                case Qt::Key_Tab:
                     selectNext();
                     break;
-                case Key_Backtab:
+                case Qt::Key_Backtab:
                     selectPrev();
                     break;
-                case Key_Escape:
+                case Qt::Key_Escape:
                     if ( toolEditMode == TEM_ZOOM )
                         setToolEditMode( TEM_MOUSE );
                     break;
@@ -2249,7 +2249,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
     {
         if ( mouseSelectedObject )
         {
-            if(e->key()==Key_Up || e->key()==Key_Down || e->key()==Key_Right || e->key()==Key_Left)
+            if(e->key()==Qt::Key_Up || e->key()==Key_Down || e->key()==Key_Right || e->key()==Key_Left)
             {
                 if ( !e->isAutoRepeat() )
                 {

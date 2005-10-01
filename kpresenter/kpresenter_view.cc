@@ -2184,7 +2184,7 @@ void KPresenterView::setupActions()
              actionEditPaste, SLOT( setEnabled( bool ) ) );
     m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
 
-    actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Key_Delete,
+    actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Qt::Key_Delete,
                                     this, SLOT( editDelete() ),
                                     actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
@@ -2259,7 +2259,7 @@ void KPresenterView::setupActions()
 
     // ---------------- insert actions
 
-    actionInsertPage = new KAction( i18n( "&Slide..." ), "slide", Key_F2,
+    actionInsertPage = new KAction( i18n( "&Slide..." ), "slide", Qt::Key_F2,
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page" );
 
@@ -2267,7 +2267,7 @@ void KPresenterView::setupActions()
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page_popup" );
 
-    actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", SHIFT+Key_F5,
+    actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", Qt::SHIFT+Qt::Key_F5,
                                        this, SLOT( insertPicture() ),
                                        actionCollection(), "insert_picture" );
 
@@ -2309,7 +2309,7 @@ void KPresenterView::setupActions()
                                         actionCollection(), "tools_pie" );
     actionToolsPie->setExclusiveGroup( "tools" );
 
-    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Key_F10, // same shortcut as KWord
+    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Qt::Key_F10, // same shortcut as KWord
                                          this, SLOT( toolsText() ),
                                          actionCollection(), "tools_text" );
     actionToolsText->setExclusiveGroup( "tools" );
@@ -2324,7 +2324,7 @@ void KPresenterView::setupActions()
                                              actionCollection(), "tools_diagramm" );
     actionToolsDiagramm->setExclusiveGroup( "tools" );
 
-    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", Key_F5 /*same as kword*/,
+    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", Qt::Key_F5 /*same as kword*/,
                                           this, SLOT( toolsTable() ),
                                           actionCollection(), "tools_table" );
     actionToolsTable->setExclusiveGroup( "tools" );
@@ -2417,15 +2417,15 @@ void KPresenterView::setupActions()
     connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
              this, SLOT( fontSelected( const QString & ) ) );
 
-    actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
+    actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Qt::Key_B,
                                         this, SLOT( textBold() ),
                                         actionCollection(), "text_bold" );
 
-    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Key_I,
+    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Qt::Key_I,
                                           this, SLOT( textItalic() ),
                                           actionCollection(), "text_italic" );
 
-    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
+    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Qt::Key_U,
                                              this, SLOT( textUnderline() ),
                                              actionCollection(), "text_underline" );
 
@@ -2439,23 +2439,23 @@ void KPresenterView::setupActions()
     actionTextColor->setDefaultColor(QColor());
 
 
-    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
+    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Qt::Key_L,
                                              this, SLOT( textAlignLeft() ),
                                              actionCollection(), "text_alignleft" );
     actionTextAlignLeft->setExclusiveGroup( "align" );
     actionTextAlignLeft->setChecked( true );
 
-    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Key_C,
+    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Qt::Key_C,
                                                this, SLOT( textAlignCenter() ),
                                                actionCollection(), "text_aligncenter" );
     actionTextAlignCenter->setExclusiveGroup( "align" );
 
-    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Key_R,
+    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Qt::Key_R,
                                               this, SLOT( textAlignRight() ),
                                               actionCollection(), "text_alignright" );
     actionTextAlignRight->setExclusiveGroup( "align" );
 
-    actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Key_J,
+    actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Qt::Key_J,
                                               this, SLOT( textAlignBlock() ),
                                               actionCollection(), "text_alignblock" );
     actionTextAlignBlock->setExclusiveGroup( "align" );
@@ -2485,11 +2485,11 @@ void KPresenterView::setupActions()
             actionFormatNumber->insert( act );
     }
     actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::reverseLayout() ?"format_decreaseindent" : "format_increaseindent",
-                                       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
+                                       CTRL + Qt::Key_Plus, this, SLOT( textDepthPlus() ),
                                        actionCollection(), "text_depthPlus" );
 
     actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::reverseLayout() ?"format_increaseindent" : "format_decreaseindent",
-                                        CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
+                                        CTRL + Qt::Key_Minus, this, SLOT( textDepthMinus() ),
                                         actionCollection(), "text_depthMinus" );
 
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
@@ -2515,10 +2515,10 @@ void KPresenterView::setupActions()
                                            actionCollection(), "extra_arrangepopup" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
-                                    CTRL+SHIFT+Key_R, this, SLOT( extraRaise() ),
+                                    CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
                                     actionCollection(), "extra_raise" );
 
-    actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", CTRL +SHIFT+ Key_L,
+    actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", CTRL +Qt::SHIFT+ Qt::Key_L,
                                     this, SLOT( extraLower() ),
                                     actionCollection(), "extra_lower" );
 
@@ -2649,7 +2649,7 @@ void KPresenterView::setupActions()
 
 
     actionScreenStart = new KAction( i18n( "&Start" ),
-                                     "2rightarrow", Key_F12,
+                                     "2rightarrow", Qt::Key_F12,
                                      this, SLOT( screenStart() ),
                                      actionCollection(), "screen_start" );
 
@@ -2664,12 +2664,12 @@ void KPresenterView::setupActions()
                                      actionCollection(), "screen_first" );
 
     actionScreenPrev = new KAction( i18n( "&Previous Slide" ),
-                                    "back", Key_Prior,
+                                    "back", Qt::Key_Prior,
                                     this, SLOT( screenPrev() ),
                                     actionCollection(), "screen_prev" );
 
     actionScreenNext = new KAction( i18n( "&Next Slide" ),
-                                    "forward", Key_Next,
+                                    "forward", Qt::Key_Next,
                                     this, SLOT( screenNext() ),
                                     actionCollection(), "screen_next" );
 
@@ -2747,7 +2747,7 @@ void KPresenterView::setupActions()
 
 
     actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
-                                           ALT + SHIFT + Key_C,
+                                           ALT + Qt::SHIFT + Qt::Key_C,
                                            this, SLOT( insertSpecialChar() ),
                                            actionCollection(), "insert_specialchar" );
 
@@ -2766,7 +2766,7 @@ void KPresenterView::setupActions()
                         actionCollection(), "extra_autocorrection" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
 
-    actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
+    actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Qt::Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
 
@@ -2845,7 +2845,7 @@ void KPresenterView::setupActions()
     actionViewZoom->setEditable(true);
     changeZoomMenu( );
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Qt::Key_S,
                                        this, SLOT( extraStylist() ),
                                        actionCollection(), "format_stylist" );
 
@@ -2866,20 +2866,20 @@ void KPresenterView::setupActions()
     actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
 
     // ------------------- Actions with a key binding and no GUI item
-    new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
+    new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Qt::Key_Space,
                  this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
-    new KAction( i18n( "Insert Non-Breaking Hyphen" ), CTRL+SHIFT+Key_Minus,
+    new KAction( i18n( "Insert Non-Breaking Hyphen" ), CTRL+Qt::SHIFT+Qt::Key_Minus,
                  this, SLOT( slotNonbreakingHyphen() ), actionCollection(), "nonbreaking_hyphen" );
-    new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
+    new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Qt::Key_Minus,
                  this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
-    new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
+    new KAction( i18n( "Line Break" ), Qt::SHIFT+Qt::Key_Return,
                  this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
     new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
                  this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
-    new KAction( i18n( "Increase Numbering Level" ), ALT+Key_Right,
+    new KAction( i18n( "Increase Numbering Level" ), ALT+Qt::Key_Right,
                  this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
-    new KAction( i18n( "Decrease Numbering Level" ), ALT+Key_Left,
+    new KAction( i18n( "Decrease Numbering Level" ), ALT+Qt::Key_Left,
                  this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
 
 
@@ -3466,7 +3466,7 @@ void KPresenterView::getPageMouseWheelEvent( QWheelEvent *e )
 
 void KPresenterView::keyPressEvent( QKeyEvent *e )
 {
-    if ( e->key() == Key_Delete && !m_canvas->currentTextObjectView() )
+    if ( e->key() == Qt::Key_Delete && !m_canvas->currentTextObjectView() )
         editDelete();
     else
         QApplication::sendEvent( m_canvas, e );
