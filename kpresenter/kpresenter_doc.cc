@@ -825,7 +825,6 @@ void KPresenterDoc::enableEmbeddedParts( bool f )
 
 QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 {
-    KPBackGround *kpbackground = 0;
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if ( saveOnlyPage != -1 && i != saveOnlyPage )
@@ -1582,9 +1581,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     m_loadingInfo = new KPRLoadingInfo;
     ignoreSticky = FALSE;
     emit sigProgress( 0 );
-    int activePage=0;
     lastObj = -1;
-    bool allSlides = false;
     // clean
     if ( _clean ) {
         __pgLayout = KoPageLayout::standardLayout();
@@ -1663,6 +1660,13 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         if ( !master ) //last test...
             master = oasisStyles.masterPages()["Default"];
     }
+
+    if ( master == 0 )
+    {
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No master-style found inside office:master-styles." ) );
+        return false;
+    }
+
     kdDebug()<<" load sticky oasis object \n";
     if ( master )
         kdDebug()<<" master.isNull() :"<<master->isNull()<<endl;
@@ -4719,7 +4723,7 @@ void KPresenterDoc::insertFile(const QString & file )
         static_cast<KPresenterView*>(it2.current())->skipToPage(newPos);
 }
 
-void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm)
+void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag * /* _parag */,  KPTextObject * /* frm */ )
 {
     //m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
 }
