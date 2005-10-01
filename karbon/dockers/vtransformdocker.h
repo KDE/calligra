@@ -39,6 +39,10 @@ public slots:
 private slots:
 	void translate();
 	void scale();
+	void enableSignals( bool enable );
+	void shearX();
+	void shearY();
+	void rotate();
 
 private:
 	KarbonPart *m_part;
@@ -47,6 +51,9 @@ private:
 	KoUnitDoubleSpinBox *m_y;
 	KoUnitDoubleSpinBox *m_width;
 	KoUnitDoubleSpinBox *m_height;
+	KDoubleSpinBox *m_rotate;
+	KoUnitDoubleSpinBox *m_shearX;
+	KoUnitDoubleSpinBox *m_shearY;
 };
 
 #endif

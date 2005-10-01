@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qwidget.h>
 #include <qwmatrix.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <koMainWindow.h>
@@ -48,38 +49,83 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 	mainLayout->addWidget( xLabel, 1, 0 );
 	m_x = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_x, 1, 1 );
+	QToolTip::add( m_x, i18n("Set x-position of actual selection") );
 
 	//Y: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* yLabel = new QLabel( i18n ( "Y:" ), this );
-	mainLayout->addWidget( yLabel, 2, 0 );
+	mainLayout->addWidget( yLabel, 1, 2 );
 	m_y = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_y, 2, 1 );
+	mainLayout->addWidget( m_y, 1, 3 );
+	QToolTip::add( m_y, i18n("Set y-position of actual selection") );
 
 	//Width: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* wLabel = new QLabel( i18n ( "W:" ), this );
-	mainLayout->addWidget( wLabel, 1, 2 );
+	mainLayout->addWidget( wLabel, 2, 0 );
 	m_width = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_width, 1, 3 );
+	mainLayout->addWidget( m_width, 2, 1 );
+	QToolTip::add( m_width, i18n("Set width of actual selection") );
 
 	//Height: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* hLabel = new QLabel( i18n ( "H:" ), this );
 	mainLayout->addWidget( hLabel, 2, 2 );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_height, 2, 3 );
+	QToolTip::add( m_height, i18n("Set height of actual selection") );
 
 	//TODO: Add Rotation, Shear
+	//ROTATE: (TODO: Set 5000 limit to real Karbon14 limit)
+	QLabel* rLabel = new QLabel( i18n ( "R:" ), this );
+	mainLayout->addWidget( rLabel, 4, 0 );
+	m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, 1, this );
+	mainLayout->addWidget( m_rotate, 4, 1 );
+	QToolTip::add( m_rotate, i18n("Rotate actual selection") );
 
+	//X-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
+	QLabel* sxLabel = new QLabel( i18n ( "SX:" ), this );
+	mainLayout->addWidget( sxLabel, 3, 0 );
+	m_shearX = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	mainLayout->addWidget( m_shearX, 3, 1 );
+	QToolTip::add( m_shearX, i18n("Shear actual selection in x-direction") );
+
+	//Y-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
+	QLabel* syLabel = new QLabel( i18n ( "SY:" ), this );
+	mainLayout->addWidget( syLabel, 3, 2 );
+	m_shearY = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	mainLayout->addWidget( m_shearY, 3, 3 );
+	QToolTip::add( m_shearY, i18n("Shear actual selection in y-direction") );
 
 	update();
 }
 
 void
+VTransformDocker::enableSignals( bool enable )
+{
+	if( enable )
+	{
+		connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+		connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+		connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+		connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) ); 
+		connect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
+		connect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
+		connect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
+	}
+	else
+	{
+		disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+		disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
+		disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+		disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+		disconnect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
+		disconnect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
+		disconnect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
+	}
+}
+
+void
 VTransformDocker::update()
 {
-	disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	enableSignals( false );
 
 	int objcount = m_view->part()->document().selection()->objects().count();
 	if ( objcount>0 )
@@ -101,10 +147,11 @@ VTransformDocker::update()
 		setEnabled( false );
 	}
 
-	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) ); 
+	m_shearX->changeValue(0.0);
+	m_shearY->changeValue(0.0);
+	m_rotate->setValue(0.0);
+
+	enableSignals( true );
 }
 
 void
@@ -145,20 +192,69 @@ VTransformDocker::scale()
 void 
 VTransformDocker::setUnit( KoUnit::Unit unit )
 {
-	disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	enableSignals( false );
 
 	m_x->setUnit( unit );
 	m_y->setUnit( unit );
 	m_width->setUnit( unit );
 	m_height->setUnit( unit );
+	m_shearX->setUnit( unit );
+	m_shearY->setUnit( unit );
 
-	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+	enableSignals( true );
+}
+
+void 
+VTransformDocker::shearX()
+{
+	double shear = m_shearX->value();
+
+	if( shear != 0.0 )
+	{
+		KoRect rect = m_view->part()->document().selection()->boundingBox();
+		shear /= double(rect.width()*0.5);
+		VShearCmd *cmd = new VShearCmd( &m_view->part()->document(), rect.center(), shear, 0 );
+		m_view->part()->addCommand( cmd );
+		m_part->repaintAllViews( true );
+		disconnect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
+		m_shearX->changeValue(0.0);
+		connect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
+	}
+}
+
+void 
+VTransformDocker::shearY()
+{
+	double shear = m_shearY->value();
+
+	if( shear != 0.0 )
+	{
+		KoRect rect = m_view->part()->document().selection()->boundingBox();
+		shear /= double(rect.height()*0.5);
+		VShearCmd *cmd = new VShearCmd( &m_view->part()->document(), rect.center(), 0, shear );
+		m_view->part()->addCommand( cmd );
+		m_part->repaintAllViews( true );
+		disconnect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
+		m_shearY->changeValue(0.0);
+		connect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
+	}
+}
+
+void
+VTransformDocker::rotate()
+{
+	double angle = m_rotate->value();
+	
+	if( angle != 0.0 )
+	{
+		KoPoint center = m_view->part()->document().selection()->boundingBox().center();
+		VRotateCmd *cmd = new VRotateCmd(  &m_view->part()->document(), center, angle );
+		m_view->part()->addCommand( cmd );
+		m_part->repaintAllViews( true );
+		disconnect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
+		m_rotate->setValue(0.0);
+		connect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
+	}
 }
 
 #include "vtransformdocker.moc"
