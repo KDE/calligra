@@ -309,7 +309,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             if ( doc->showGrid() && !doc->gridToFront())
                 drawGrid( &bufPainter, crect);
 
-            if ( doc->showHelplines() && !doc->helpLineToFront() && editMode)
+            if ( doc->showHelplines() && !doc->helpLineToFront() )
             {
                 drawHelplines( &bufPainter, crect);
                 drawHelpPoints( &bufPainter, crect);
@@ -814,7 +814,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         }
                     }
                     else {
-                        deSelectAllObj();
                         modType = MT_NONE;
                         if( editMode && m_view->kPresenterDoc()->showHelplines())
                         {
