@@ -1112,6 +1112,7 @@ don't put a </?xml...> at the end of the file!).
             9... Link (uses LINK)
             10... Note (uses NOTE)
             11... Footnote (uses FOOTNOTE)
+	    12... Statictic (uses STATISTIC)
 
         key  the description of the variable format used to display this variable.
             The first 4 letters identify the class of format:
@@ -1297,6 +1298,28 @@ For the QtSQL-power-plugin, the contents of DATASOURCE is
     notetype CDATA #REQUIRED
     numberingtype CDATA #REQUIRED
     frameset CDATA #REQUIRED>
+
+
+<!--    A statistic variable.
+        value...    A number (e.g. "1", "2")
+        type...	    A type of statistic variable 
+	            "0" Number of word
+		    "1" Number of sentence
+		    "2" Number of lines
+		    "3" Number of characters
+		    "4" Number of characters without space
+		    "5" Number of syllable
+		    "6" Number of frame
+		    "7"	Number of embedded object
+		    "8" Number of picture
+		    "9" Number of table
+ ->
+<!ELEMENT STATISTIC
+    EMPTY>
+<!ATTLIST FOOTNOTE
+    value CDATA #REQUIRED
+    type CDATA #REQUIRED>
+
 
 <!--
         Picture collection. This list holds the keys of all the picture
