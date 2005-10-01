@@ -1313,10 +1313,10 @@ For the QtSQL-power-plugin, the contents of DATASOURCE is
 		    "7"	Number of embedded object
 		    "8" Number of picture
 		    "9" Number of table
- ->
+-->
 <!ELEMENT STATISTIC
     EMPTY>
-<!ATTLIST FOOTNOTE
+<!ATTLIST STATISTIC
     value CDATA #REQUIRED
     type CDATA #REQUIRED>
 
