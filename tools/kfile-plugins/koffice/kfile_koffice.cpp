@@ -46,7 +46,8 @@ KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
     makeMimeTypeInfo( "application/x-kchart" );
     makeMimeTypeInfo( "application/x-kivio" );
     makeMimeTypeInfo( "application/x-krita" );
-
+    makeMimeTypeInfo( "application/x-kformula" );
+    
     /*makeMimeTypeInfo( "application/vnd.kde.kword" );
     makeMimeTypeInfo( "application/vnd.kde.kpresenter" );
     makeMimeTypeInfo( "application/vnd.kde.kspread" );
