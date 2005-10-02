@@ -7224,12 +7224,20 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisStyles );
+				bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
 				int cols = 1;
                 if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-                    if( ok )
+                   if ( !haveStyle )
+                    {
+                        //just increment it
+                        columnIndex +=cols - 1;
+                    }
+					else
+ 					{
+					if( ok )
 					{
                         for( int i = 0; i < cols; i++ )
                         {
@@ -7259,12 +7267,16 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 }    
 				else
 				{
+					if ( haveStyle )
+					{
 						for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
 						{
 								KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
 								target->copyAll( cell );
 						}
+					}
 				}
+			}
 			}
         }
         cellNode = cellNode.nextSibling();
