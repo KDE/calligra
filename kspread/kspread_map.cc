@@ -277,8 +277,8 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
         QDomElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
-            kdDebug()<<"  KSpreadMap::loadOasis tableElement is not null \n";
-            kdDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
+            //kdDebug()<<"  KSpreadMap::loadOasis tableElement is not null \n";
+            //kdDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
             if( sheetElement.nodeName() == "table:table" )
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )

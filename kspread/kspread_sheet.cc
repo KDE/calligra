@@ -7057,7 +7057,7 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
-        //todo
+        //TODO
         kdDebug()<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "print" ) )
@@ -7263,7 +7263,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
             kdDebug()<<" visible row not implemented/supported : "<<visible<<endl;
 
     }
-    kdDebug()<<" height !!!!!!!!!!!!!!!!!!!!!!! :"<<height<<endl;
+    //kdDebug()<<" height !!!!!!!!!!!!!!!!!!!!!!! :"<<height<<endl;
     //code from opencalc filter, I don't know why it's necessary.
     if ( isLast )
     {
@@ -7540,12 +7540,13 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 {
                     addText( text, xmlWriter );
                     xmlWriter.startElement( "text:page-count" );
-                    xmlWriter.addTextNode( "99" );
+                    xmlWriter.addTextNode( "99" ); //TODO I think that it can be different from 99
                     xmlWriter.endElement();
                 }
                 else if ( var == "<date>" )
                 {
                     addText( text, xmlWriter );
+                    //text:p><text:date style:data-style-name="N2" text:date-value="2005-10-02">02/10/2005</text:date>, <text:time>10:20:12</text:time></text:p> "add style" => create new style
 #if 0 //FIXME
                     QDomElement t = dd.createElement( "text:date" );
                     t.setAttribute( "text:date-value", "0-00-00" );
@@ -7846,6 +7847,8 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
            detectDirection = false;
            d->layoutDirection = LeftToRight;
         }
+        else
+            kdDebug()<<" Direction not implemented : "<<layoutDir<<endl;
     }
     if( detectDirection )
        checkContentDirection( d->name );
@@ -7896,68 +7899,68 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
     }
     if( sheet.hasAttribute( "printGrid" ) )
     {
-        d->print->setPrintGrid( (int)sheet.attribute("printGrid").toInt( &ok ) );
+        d->print->setPrintGrid( (bool)sheet.attribute("printGrid").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printCommentIndicator" ) )
     {
-        d->print->setPrintCommentIndicator( (int)sheet.attribute("printCommentIndicator").toInt( &ok ) );
+        d->print->setPrintCommentIndicator( (bool)sheet.attribute("printCommentIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printFormulaIndicator" ) )
     {
-        d->print->setPrintFormulaIndicator( (int)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
+        d->print->setPrintFormulaIndicator( (bool)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "hide" ) )
     {
-        d->hide = (int)sheet.attribute("hide").toInt( &ok );
+        d->hide = (bool)sheet.attribute("hide").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "showFormula" ) )
     {
-        d->showFormula = (int)sheet.attribute("showFormula").toInt( &ok );
+        d->showFormula = (bool)sheet.attribute("showFormula").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     //Compatibility with KSpread 1.1.x
     if( sheet.hasAttribute( "formular" ) )
     {
-        d->showFormula = (int)sheet.attribute("formular").toInt( &ok );
+        d->showFormula = (bool)sheet.attribute("formular").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "showFormulaIndicator" ) )
     {
-        d->showFormulaIndicator = (int)sheet.attribute("showFormulaIndicator").toInt( &ok );
+        d->showFormulaIndicator = (bool)sheet.attribute("showFormulaIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "borders" ) )
     {
-        d->showPageBorders = (int)sheet.attribute("borders").toInt( &ok );
+        d->showPageBorders = (bool)sheet.attribute("borders").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "lcmode" ) )
     {
-        d->lcMode = (int)sheet.attribute("lcmode").toInt( &ok );
+        d->lcMode = (bool)sheet.attribute("lcmode").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if ( sheet.hasAttribute( "autoCalc" ) )
     {
-        d->autoCalc = ( int )sheet.attribute( "autoCalc" ).toInt( &ok );
+        d->autoCalc = ( bool )sheet.attribute( "autoCalc" ).toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "columnnumber" ) )
     {
-        d->showColumnNumber = (int)sheet.attribute("columnnumber").toInt( &ok );
+        d->showColumnNumber = (bool)sheet.attribute("columnnumber").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "hidezero" ) )
     {
-        d->hideZero = (int)sheet.attribute("hidezero").toInt( &ok );
+        d->hideZero = (bool)sheet.attribute("hidezero").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "firstletterupper" ) )
     {
-        d->firstLetterUpper = (int)sheet.attribute("firstletterupper").toInt( &ok );
+        d->firstLetterUpper = (bool)sheet.attribute("firstletterupper").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
 

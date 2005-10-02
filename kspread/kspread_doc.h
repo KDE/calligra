@@ -130,7 +130,7 @@ public:
    */
   ~KSpreadDoc();
 
-  enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL, STYLE_TEXT_CELL, STYLE_PARAG_CELL, STYLE_PAGEMASTER, STYLE_USERSTYLE, STYLE_DEFAULTSTYLE,  STYLE_NUMERIC_NUMBER};
+  enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL,  STYLE_PAGEMASTER, STYLE_USERSTYLE, STYLE_DEFAULTSTYLE,  STYLE_NUMERIC_NUMBER};
 
 
   /**
@@ -150,7 +150,7 @@ public:
   KSpread::ValueFormatter *formatter () const;
   KSpread::ValueConverter *converter () const;
   KSpread::ValueCalc *calc () const;
-  
+
   /**
    * Adds a command to the command history. The command itself
    * would not be executed.
@@ -556,7 +556,7 @@ public:
    * hourglass
    */
   virtual void emitBeginOperation();
-  
+
   /**
    * Mark the end of an operation and triggers repaints/calculations.
    * See above comment to emitBeginOperation(bool).
@@ -649,8 +649,8 @@ signals:
 
 protected slots:
   void commandExecuted();
-  void documentRestored();  
-  
+  void documentRestored();
+
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
 
