@@ -4434,7 +4434,7 @@ void PPTReader::loadUserEdit()
 #endif
     // search current user edit
     for( unsigned k=0; k < userEditList.size(); k++ )
-      if( userEditList[k] = currentUserEditAtom )
+      if( (userEditList[k] = currentUserEditAtom) )
       {
         stop = false;
         usefulPersistDirList.push_back( persistDirList[k] );
@@ -4482,7 +4482,7 @@ void PPTReader::loadUserEdit()
       unsigned long nextpos = d->docStream->tell() + size;
       
       // we only care for PersistIncrementalBlockAtom
-      if( pos = offset )
+      if( pos == offset ) //TODO VERIFY IT
       if( type == PersistIncrementalBlockAtom::id )
       {
         unsigned char* buf = new unsigned char[ size ];
@@ -4600,7 +4600,7 @@ void PPTReader::loadSlides()
     
     // we only care for SlideContainer....
     if( type == SlideContainer::id )
-    if( k = indexPersistence( pos ) )
+    if( (k = indexPersistence( pos )) )
     {
       // create a new slide, make it current
       Slide* s = new Slide( d->presentation );
@@ -4683,7 +4683,7 @@ void PPTReader::loadDocument()
 int PPTReader::indexPersistence( unsigned long ofs )
 {
   for( unsigned k=1; k < d->persistenceList.size(); k++ )
-    if( d->persistenceList[k] == ofs )
+    if( (d->persistenceList[k] == ofs) )
       return k;
 
   return 0;
@@ -4870,7 +4870,7 @@ void PPTReader::handleTextBytesAtom( TextBytesAtom* atom )
 std::string spaces( int x )
 {
   std::string str;
-  for( unsigned i=0; i<x; i++ )
+  for( int i=0; i<x; i++ )
     str += ' ';
   return str;
 }

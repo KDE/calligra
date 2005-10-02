@@ -96,7 +96,7 @@ TextObject* recursiveSearch( GroupObject* group, unsigned placeId )
       {
         TextObject* textObject = static_cast<TextObject*>(object);
         if( textObject)
-          if( textObject->id() == placeId )
+          if( textObject->id() == (int)placeId )
             return textObject;
       }
       if( object->isGroup() )
@@ -111,3 +111,4 @@ TextObject* Slide::textObject( unsigned placeId )
 {
   return recursiveSearch( d->rootObject, placeId );
 }
+
