@@ -281,8 +281,7 @@ QByteArray PowerPointImport::createManifest()
 
 void PowerPointImport::processEllipse (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -340,8 +339,7 @@ void PowerPointImport::processRectangle (DrawObject* drawObject, KoXmlWriter* xm
 
 void PowerPointImport::processRoundRectangle (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -426,8 +424,7 @@ void PowerPointImport::processRoundRectangle (DrawObject* drawObject, KoXmlWrite
 
 void PowerPointImport::processDiamond (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -466,8 +463,7 @@ void PowerPointImport::processDiamond (DrawObject* drawObject, KoXmlWriter* xmlW
 
 void PowerPointImport::processTriangle (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -579,8 +575,7 @@ void PowerPointImport::processTriangle (DrawObject* drawObject, KoXmlWriter* xml
 
 void PowerPointImport::processTrapezoid (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -661,8 +656,7 @@ void PowerPointImport::processTrapezoid (DrawObject* drawObject, KoXmlWriter* xm
 
 void PowerPointImport::processParallelogram (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -778,8 +772,7 @@ void PowerPointImport::processParallelogram (DrawObject* drawObject, KoXmlWriter
 
 void PowerPointImport::processHexagon (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -843,8 +836,7 @@ void PowerPointImport::processHexagon (DrawObject* drawObject, KoXmlWriter* xmlW
 
 void PowerPointImport::processOctagon (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -924,8 +916,7 @@ void PowerPointImport::processOctagon (DrawObject* drawObject, KoXmlWriter* xmlW
 
 void PowerPointImport::processArrow (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -1006,8 +997,7 @@ void PowerPointImport::processArrow (DrawObject* drawObject, KoXmlWriter* xmlWri
 
 void PowerPointImport::processLine (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter) return;
 
   QString x1Str = QString("%1mm").arg( drawObject->left() );
   QString y1Str = QString("%1mm").arg( drawObject->top() );
@@ -1039,8 +1029,7 @@ void PowerPointImport::processLine (DrawObject* drawObject, KoXmlWriter* xmlWrit
 
 void PowerPointImport::processSmiley (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject ||!xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -1105,8 +1094,7 @@ void PowerPointImport::processSmiley (DrawObject* drawObject, KoXmlWriter* xmlWr
 
 void PowerPointImport::processHeart (DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -1146,8 +1134,7 @@ void PowerPointImport::processHeart (DrawObject* drawObject, KoXmlWriter* xmlWri
 
 void PowerPointImport::processFreeLine (DrawObject* drawObject, KoXmlWriter* xmlWriter)
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject ||!xmlWriter ) return;
 
   QString widthStr = QString("%1mm").arg( drawObject->width() );
   QString heightStr = QString("%1mm").arg( drawObject->height() );
@@ -1168,8 +1155,7 @@ void PowerPointImport::processFreeLine (DrawObject* drawObject, KoXmlWriter* xml
 void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
  
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter ) return;
 
   drawingObjectCounter++;
   
@@ -1238,8 +1224,7 @@ void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXm
 
 void PowerPointImport::processGroupObjectForBody( GroupObject* groupObject, KoXmlWriter* xmlWriter )
 {
-  if( !groupObject ) return;
-  if( !xmlWriter ) return;
+  if( !groupObject || !xmlWriter ) return;
   if( !groupObject->objectCount() ) return;
 
   xmlWriter->startElement( "draw:g" );
@@ -1256,8 +1241,7 @@ void PowerPointImport::processGroupObjectForBody( GroupObject* groupObject, KoXm
 
 void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWriter* xmlWriter )
 {
-  if( !textObject ) return;
-  if( !xmlWriter ) return;
+  if( !textObject || !xmlWriter ) return;
 
   QString classStr = "subtitle";
   if( textObject->type() == TextObject::Title )
@@ -1287,8 +1271,7 @@ void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWr
 
 void PowerPointImport::processObjectForBody( Object* object, KoXmlWriter* xmlWriter )
 {
-  if( !object ) return;
-  if( !xmlWriter ) return;
+  if( !object ||  !xmlWriter) return;
 
   if( object->isText() )
     processTextObjectForBody( static_cast<TextObject*>(object), xmlWriter );
@@ -1300,8 +1283,7 @@ void PowerPointImport::processObjectForBody( Object* object, KoXmlWriter* xmlWri
 
 void PowerPointImport::processSlideForBody( unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter )
 {
-  if( !slide ) return;
-  if( !xmlWriter ) return;
+  if( !slide || !xmlWriter ) return;
 
   QString nameStr = string( slide->title() ).string();
   if( nameStr.isEmpty() )
@@ -1329,8 +1311,7 @@ void PowerPointImport::processSlideForBody( unsigned slideNo, Slide* slide, KoXm
 
 void PowerPointImport::processSlideForStyle( unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter )
 {
-  if( !slide ) return;
-  if( !xmlWriter ) return;
+  if( !slide || !xmlWriter ) return;
 
   GroupObject* root = slide->rootObject();
   if( root )
@@ -1344,8 +1325,7 @@ void PowerPointImport::processSlideForStyle( unsigned slideNo, Slide* slide, KoX
 
 void PowerPointImport::processObjectForStyle( Object* object, KoXmlWriter* xmlWriter )
 {
-  if( !object ) return;
-  if( !xmlWriter ) return;
+  if( !object || !xmlWriter  ) return;
 
   if( object->isText() )
     processTextObjectForStyle( static_cast<TextObject*>(object), xmlWriter );
@@ -1357,17 +1337,15 @@ void PowerPointImport::processObjectForStyle( Object* object, KoXmlWriter* xmlWr
 
 void PowerPointImport::processTextObjectForStyle( TextObject* textObject, KoXmlWriter* xmlWriter )
 {
-  if( !textObject ) return;
-  if( !xmlWriter ) return;
+  if( !textObject || !xmlWriter ) return;
 }
 
 void PowerPointImport::processGroupObjectForStyle( GroupObject* groupObject, KoXmlWriter* xmlWriter )
 {
-  if( !groupObject ) return;
-  if( !xmlWriter ) return;
+  if( !groupObject ||!xmlWriter ) return;
 }
 
-QString hexname( Color c )
+QString hexname( const Color &c )
 {
   QColor qc( c.red, c.green, c.blue );
   return qc.name();
@@ -1375,8 +1353,7 @@ QString hexname( Color c )
 
 void PowerPointImport::processDrawingObjectForStyle( DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
-  if( !drawObject ) return;
-  if( !xmlWriter ) return;
+  if( !drawObject || !xmlWriter) return;
 
   drawingObjectCounter++;
   QString styleName = QString("gr%1").arg( drawingObjectCounter );
