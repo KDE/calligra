@@ -20,8 +20,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-    Boston, MA 02111-1307, USA.
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 /*This local copy has been added to be able to hide the preview pane of the font chooser. A patch has been made in kdelibs since 3.5. This local copy can be disposed of when we require kdelibs 3.5 and higher*/
