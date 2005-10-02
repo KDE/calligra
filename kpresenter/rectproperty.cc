@@ -23,94 +23,10 @@
 #include <qspinbox.h>
 #include <qtoolbutton.h>
 
+#include <koImageResource.h>
+
 #include "rectpropertyui.h"
 #include "rectpreview.h"
-
-namespace {
-    /* XPM -- copyright The Gimp */
-    const char *chain_broken_24[] = {
-    /* columns rows colors chars-per-pixel */
-    "9 24 10 1",
-    "  c black",
-    ". c #020204",
-    "X c #5A5A5C",
-    "o c gray43",
-    "O c #8F8F91",
-    "+ c #9A9A98",
-    "@ c #B5B5B6",
-    "# c #D0D0D1",
-    "$ c #E8E8E9",
-    "% c None",
-    /* pixels */
-    "%%.....%%",
-    "%.o##@X.%",
-    "%.+...$.%",
-    "%.#.%.#.%",
-    "%.#.%.#.%",
-    "%.@.%.#.%",
-    "%.+...#.%",
-    "%.O.o.O.%",
-    "%%..@..%%",
-    "%%%.#.%%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%%.#.%%%",
-    "%%..#..%%",
-    "%.o.@.O.%",
-    "%.@...@.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.#...$.%",
-    "%.o$#$@.%",
-    "%%.....%%"
-    };
-    
-    /* XPM  -- copyright The Gimp */
-    const char *chain_24[] = {
-    /* columns rows colors chars-per-pixel */
-    "9 24 10 1",
-    "  c black",
-    ". c #020204",
-    "X c #5A5A5C",
-    "o c gray43",
-    "O c #8F8F91",
-    "+ c #9A9A98",
-    "@ c #B5B5B6",
-    "# c #D0D0D1",
-    "$ c #E8E8E9",
-    "% c None",
-    /* pixels */
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%.....%%",
-    "%.o##@X.%",
-    "%.+...$.%",
-    "%.#.%.#.%",
-    "%.#.%.#.%",
-    "%.@.%.#.%",
-    "%.+...#.%",
-    "%.O.o.O.%",
-    "%%..@..%%",
-    "%%%.#.%%%",
-    "%%%.#.%%%",
-    "%%..#..%%",
-    "%.o.@.O.%",
-    "%.@...@.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.#...$.%",
-    "%.o$#$@.%",
-    "%%.....%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%"
-    };
-
-
-}
 
 RectProperty::RectProperty( QWidget *parent, const char *name, RectValueCmd::RectValues &rectValue )
 : QWidget( parent, name )
@@ -119,7 +35,8 @@ RectProperty::RectProperty( QWidget *parent, const char *name, RectValueCmd::Rec
     formerVerticalValue = 0;
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->addWidget( m_ui = new RectPropertyUI( this ) );
-    m_ui->combineButton->setPixmap(chain_24);
+    KoImageResource kir;
+    m_ui->combineButton->setPixmap(kir.chain());
 
     connect( m_ui->xRndInput, SIGNAL( valueChanged( int ) ), this, SLOT( slotRndChanged() ) );
     connect( m_ui->yRndInput, SIGNAL( valueChanged( int ) ), this, SLOT( slotRndChanged() ) );
@@ -205,6 +122,7 @@ void RectProperty::slotReset()
 
 void RectProperty::combineToggled( bool on)
 {
+    KoImageResource kir;
     if( on ) {
         formerVerticalValue = getYRnd();
         m_ui->yRndInput->setValue( getXRnd() );
@@ -212,7 +130,7 @@ void RectProperty::combineToggled( bool on)
                 m_ui->xRndInput, SLOT( setValue ( int ) ));
         connect(m_ui->xRndInput, SIGNAL( valueChanged ( int ) ),
                 m_ui->yRndInput, SLOT( setValue ( int ) ));
-        m_ui->combineButton->setPixmap(chain_24);
+        m_ui->combineButton->setPixmap(kir.chain());
     }
     else {
         disconnect(m_ui->yRndInput, SIGNAL( valueChanged ( int ) ),
@@ -221,7 +139,7 @@ void RectProperty::combineToggled( bool on)
                 m_ui->yRndInput, SLOT( setValue ( int ) ));
         if(formerVerticalValue != 0)
             m_ui->yRndInput->setValue( formerVerticalValue );
-        m_ui->combineButton->setPixmap(chain_broken_24);
+        m_ui->combineButton->setPixmap(kir.chainBroken());
     }
 }
 
