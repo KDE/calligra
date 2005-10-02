@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,9 +41,50 @@ class KPTChartDataSetItem;
 class KPTTimeScale;
 class KPTNumberScale;
 
+template<class type>
+class KPTCanvasValueList : public QValueList<type*> {
+    public:
+        KPTCanvasValueList() {}
+        void hide() {
+            while (!this->isEmpty())
+                hide(this->first());
+        }
+        void hide(type *item) {
+            if (item->isVisible()) {
+                item->hide();
+                m_hidden.append(item);
+                remove(item);
+            }
+        }
+        void show(type *item) {
+            if (!item->isVisible()) {
+                item->show();
+                append(item);
+                m_hidden.remove(item);
+            }
+        }
+        type *getItem(QCanvas *canvas=0) {
+            type *item = NULL;
+            if (m_hidden.isEmpty()) {
+                item = new type(canvas);
+                m_hidden.append(item);
+            }
+            else
+            {
+                item = m_hidden.first();
+            }
+            Q_ASSERT(item);
+            return item;
+        }
+    private:
+        QValueList<type*> m_hidden;
+};
+
 class KPTChartCanvasView : public QCanvasView
 {
-   Q_OBJECT
+    Q_OBJECT
+
+    
 public:
     KPTChartCanvasView(QWidget *parent, const char * name = 0);
     ~KPTChartCanvasView();
@@ -82,48 +124,14 @@ protected:
     virtual void contentsContextMenuEvent(QContextMenuEvent *e);
 
 private:
-    template<class type>
-    class CanvasPtrList : public QPtrList<type> {
-        public:
-            CanvasPtrList() {}
-            void hide() {
-                while (this->count() > 0)
-                    hide(this->getFirst());
-            }
-            void hide(type *item) {
-                if (item->isVisible()) {
-                    item->hide();
-                    m_hidden.append(item);
-                    removeRef(item);
-                }
-            }
-            void show(type *item) {
-                if (!item->isVisible()) {
-                    item->show();
-                    append(item);
-                    m_hidden.removeRef(item);
-                }
-            }
-            type *getItem(QCanvas *canvas=0) {
-                type *item = m_hidden.getFirst();
-                if (item == 0) {
-                    item = new type(canvas);
-                    m_hidden.append(item);
-                }
-                return item;  
-            }
-        private:
-            QPtrList<type> m_hidden;    
-    };
-
     QCanvasText *m_description;
-    CanvasPtrList<QCanvasLine> m_xGridLines;
-    CanvasPtrList<QCanvasLine> m_yGridLines;
-    CanvasPtrList<QCanvasLine> m_horisontalLines;
+    KPTCanvasValueList<QCanvasLine> m_xGridLines;
+    KPTCanvasValueList<QCanvasLine> m_yGridLines;
+    KPTCanvasValueList<QCanvasLine> m_horisontalLines;
     QCanvasLine *m_yZeroLine;
 
-    CanvasPtrList<QCanvasLine> m_lines;
-    CanvasPtrList<QCanvasRectangle> m_bars;
+    KPTCanvasValueList<QCanvasLine> m_lines;
+    KPTCanvasValueList<QCanvasRectangle> m_bars;
 };
 
 } // KPlato namespace
