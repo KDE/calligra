@@ -4072,6 +4072,7 @@ void KSpreadView::replace()
     if ( !doc()->undoLocked() )
     {
         QRect region( d->findPos, d->findEnd );
+        //TODO create undo/redo for comment
         KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( doc(), activeSheet(), region );
         doc()->addCommand( undo );
     }
@@ -4111,7 +4112,10 @@ void KSpreadView::slotReplace( const QString &newText, int, int, int )
 
     // ...now I remember, update it!
     cell->setDisplayDirtyFlag();
-    cell->setCellText( newText );
+    if ( d->typeValue = KSpreadFindOption::Value )
+        cell->setCellText( newText );
+    else if ( d->typeValue = KSpreadFindOption::Note )
+        cell->setComment( newText );
     cell->clearDisplayDirtyFlag();
 }
 
