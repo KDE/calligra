@@ -211,4 +211,17 @@ Protected sheet
     table:automatic-print-range="false">
     ....
     </table:table>
-     
+    
+Repeate-header-rows:
+        <table:table-header-rows>
+          <table:table-row table:style-name="ro1">
+            <table:table-cell table:number-columns-repeated="2"/>
+            <table:table-cell table:style-name="Default"/>
+            <table:table-cell table:number-columns-repeated="3"/>
+          </table:table-row>
+          <table:table-row table:style-name="ro1">
+            <table:table-cell table:number-columns-repeated="3"/>
+            <table:table-cell table:style-name="ce1" table:number-columns-repeated="3"/>
+          </table:table-row>
+        </table:table-header-rows>
+ 
