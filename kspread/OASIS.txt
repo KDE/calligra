@@ -224,4 +224,11 @@ Repeate-header-rows:
             <table:table-cell table:style-name="ce1" table:number-columns-repeated="3"/>
           </table:table-row>
         </table:table-header-rows>
+
+Repeate header columns
+----------------------
+        <table:table-header-columns>
+          <table:table-column table:style-name="co1" table:number-columns-repeated="2" table:default-cell-style-name="ce5"/>
+          <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+        </table:table-header-columns>
  
