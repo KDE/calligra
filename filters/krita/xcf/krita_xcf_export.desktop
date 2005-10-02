@@ -8,6 +8,7 @@ Name[ga]=Scagaire Easpórtála XCF Krita
 Name[pt]=Filtro de Exportação de XCF para o Krita
 Name[pt_BR]=Filtro de Exportação de XCF para o Krita
 Name[sv]=Krita XCF-exportfilter
+Name[tr]=Krita XCF Dışa Aktarma Süzgeci
 Name[xx]=xxKrita XCF Export Filterxx
 X-KDE-Export=image/x-xcf-gimp
 ServiceTypes=KOfficeFilter
