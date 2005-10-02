@@ -252,7 +252,7 @@ remembering to keep the directory structure intact.</para></tip>
 </sect1>
 
 <sect1 id="ms-export">
-<title>Exporting &kpresenter; presentations a <trademark>Memory
+<title>Exporting &kpresenter; presentations to a <trademark>Memory
 Stick</trademark></title>
 <para>
 Some Sony projectors have the ability to run a presentation directly
@@ -331,7 +331,7 @@ The <guilabel>Path</guilabel> is the directory in which your presentation will
 be exported to as directories (<filename>DCIM</filename> and
 <filename>MSSONY</filename>, see the <link
 linkend="ms-export-directory-structure">directory structure
-diagram</link> above) will be created. If you able to, you may wish to export
+diagram</link> above) will be created. If you are able to, you may wish to export
 directly
 to the <trademark>Memory Stick</trademark>, in which case you would enter the
 location of the medium here.
@@ -459,7 +459,7 @@ dialog.</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>We want the background to look attractive, so lets add a background
+<para>We want the background to look attractive, so let's add a background
 gradient by using the drop-down menu, and then selecting the gradient colors by
 clicking the colored boxes. Of course, you may choose to use an image as a
 background by clicking the <guilabel>Picture</guilabel> tab: feel free to
