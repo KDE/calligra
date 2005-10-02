@@ -7192,6 +7192,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
             kdDebug()<<" str :"<<str<<endl;
     }
 
+	//number == number of row to be copy. But we must copy cell too.
     for ( int i = 0; i < number; ++i )
     {
         kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
@@ -7223,20 +7224,48 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisStyles );
-
+				int cols = 1;
                 if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
-                    int cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+                    cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
                     if( ok )
-                        for( int i = 1; i < cols; i++ )
+					{
+                        for( int i = 0; i < cols; i++ )
                         {
-                            ++columnIndex;
-                            KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
-                            target->copyAll( cell );
+							if( i != 0 )
+							{
+                            	++columnIndex;
+                            	KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
+                            	target->copyAll( cell );
+							}
+							//copy contains of cell of each col
+							for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
+							{
+									KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
+									target->copyAll( cell );
+							}
                         }
-                }
-            }
+					}
+					else
+					{
+							//just one cell
+							for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
+							{
+									KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
+									target->copyAll( cell );
+							}
+					}
+                }    
+				else
+				{
+						for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
+						{
+								KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
+								target->copyAll( cell );
+						}
+				}
+			}
         }
         cellNode = cellNode.nextSibling();
     }
