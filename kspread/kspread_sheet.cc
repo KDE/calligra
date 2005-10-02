@@ -7800,14 +7800,52 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
 
         xmlWriter.startElement( "table:table-row" );
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( rowStyle, "ro" ) );
+        int repeated = 1;
+        if ( !rowAsCell( i, maxRows ) )
+        {
+            bool hide = row->isHide();
+            int j = i + 1;
+            while ( j <= maxRows )
+            {
+                const RowFormat *nextRow = rowFormat( j );
+                KoGenStyle nextStyle( KSpreadDoc::STYLE_ROW, "table-row" );
+                nextStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
+                nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-        if ( row->isHide() )
-            xmlWriter.addAttribute( "table:visibility", "collapse" );
-
-        saveOasisCells(  xmlWriter, mainStyles, i, maxCols, valStyle );
-
+                //FIXME all the time repeate == 2
+                if ( ( nextStyle==rowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxRows ) )
+                    ++repeated;
+                else
+                    break;
+                ++j;
+            }
+            i += repeated-1; /*it's double incremented into loop for*/
+            if ( row->isHide() )
+                xmlWriter.addAttribute( "table:visibility", "collapse" );
+            if (  repeated > 1 )
+                xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
+        }
+        else
+        {
+            if ( row->isHide() )
+                xmlWriter.addAttribute( "table:visibility", "collapse" );
+            saveOasisCells(  xmlWriter, mainStyles, i, maxCols, valStyle );
+        }
         xmlWriter.endElement();
     }
+}
+
+bool KSpreadSheet::rowAsCell( int row, int maxCols )
+{
+    int i = 1;
+    while ( i <= maxCols )
+    {
+        KSpreadCell* cell = cellAt( i, row );
+        if ( !cell->isDefault() )
+            return true;
+        i++;
+    }
+    return false;
 }
 
 void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, KSpreadGenValidationStyles &valStyle )

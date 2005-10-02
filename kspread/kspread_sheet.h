@@ -288,7 +288,7 @@ public:
      * @see #sheetName
      */
     bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
-    
+
     KSpreadMap* workbook();
     KSpreadDoc* doc();
 
@@ -515,14 +515,14 @@ public:
 
     /**
     * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
-    * This is used, for example, by the Data Sort dialog, to guess the names of columns 
+    * This is used, for example, by the Data Sort dialog, to guess the names of columns
     * within the selected area.  An empty string may be returned if guessColumnTitle does not think
     * that column @p col has a title.
     * @param area The area within the sheet to guess from
-    * @param col The column to find the title (or 'header') for. 
+    * @param col The column to find the title (or 'header') for.
     */
     QString guessColumnTitle(QRect& area, int col);
-    
+
     /**
     * Attempts to guess the title (or 'header') of a row, within a given area of the sheet
     * This is used, for example, by the Data Sort dialog, to guess the names of rows within the selected area.
@@ -531,7 +531,7 @@ public:
     * @param row The row to find the title (or 'header') for.
     */
     QString guessRowTitle(QRect& area, int row);
-    
+
     /**
      * Sets the contents of the cell at row,column to text
      * @param updateDepends set to false to disable updating the dependencies
@@ -1239,6 +1239,8 @@ protected:
     void addText( const QString & text, KoXmlWriter & writer ) const;
 
     void maxRowCols( int & maxCols, int & maxRows );
+
+    bool rowAsCell( int row, int maxCols );
 
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
