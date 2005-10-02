@@ -191,6 +191,7 @@ public:
     long findOptions;
     QStringList findStrings;
     QStringList replaceStrings;
+    KSpreadFindOption::searchTypeValue typeValue;
 
     // Current "find" operation
     KFind* find;
@@ -1379,6 +1380,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d->findOptions = 0;
     d->findLeftColumn = 0;
     d->findRightColumn = 0;
+    d->typeValue = KSpreadFindOption::Value;
     d->find = 0;
     d->replace = 0;
 
@@ -3877,6 +3879,8 @@ void KSpreadView::find()
     // Save for next time
     d->findOptions = dlg.options();
     d->findStrings = dlg.findHistory();
+    d->typeValue = dlg.searchType();
+
 
     // Create the KFind object
     delete d->find;
@@ -3937,7 +3941,10 @@ void KSpreadView::findNext()
     {
         if ( findObj->needData() )
         {
-            findObj->setData( cell->text() );
+            if ( d->typeValue == KSpreadFindOption::Note )
+                findObj->setData( cell->comment( cell->column(), cell->row() ) );
+            else
+                findObj->setData( cell->text() );
             d->findPos = QPoint( cell->column(), cell->row() );
             //kdDebug() << "setData(cell " << d->findPos << ")" << endl;
         }
@@ -3996,6 +4003,8 @@ KSpreadCell* KSpreadView::findNextCell()
             cell = sheet->cellAt( col, row );
             if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
                 cell = 0L;
+            if ( d->typeValue == KSpreadFindOption::Note && cell && cell->comment(col, row).isEmpty())
+                cell = 0L;
             if ( forw ) ++col;
             else --col;
         }
@@ -4049,6 +4058,7 @@ void KSpreadView::replace()
     d->findOptions = dlg.options();
     d->findStrings = dlg.findHistory();
     d->replaceStrings = dlg.replacementHistory();
+    d->typeValue = dlg.searchType();
 
     delete d->find;
     delete d->replace;

@@ -36,6 +36,10 @@ class KSpreadFindOption : public QObject
     KSpreadFindOption( QWidget *parent);
     bool searchInAllSheet() const;
 
+    enum searchTypeValue { Value, Note};
+
+    searchTypeValue searchType() const;
+
 private slots:
     void slotMoreOptions();
 
@@ -57,6 +61,7 @@ class KSpreadFindDlg : public KFindDialog
     KSpreadFindDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), bool hasSelection = false );
     ~KSpreadFindDlg();
     bool searchInAllSheet() const;
+    KSpreadFindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
 
  private slots:
     void slotAjustSize();
@@ -72,6 +77,7 @@ class KSpreadSearchDlg : public KReplaceDialog
     KSpreadSearchDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList(), bool hasSelection = false );
     ~KSpreadSearchDlg();
     bool searchInAllSheet() const;
+    KSpreadFindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
 
  private slots:
     void slotAjustSize();

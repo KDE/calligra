@@ -57,6 +57,18 @@ KSpreadFindOption::KSpreadFindOption( QWidget *parent)
     emit adjustSize();
 }
 
+KSpreadFindOption::searchTypeValue KSpreadFindOption::searchType() const
+{
+    int pos = m_searchIn->currentItem();
+    if ( pos == 0 )
+        return Value;
+    else if ( pos == 1 )
+        return Note;
+    else
+        return Value;
+}
+
+
 void KSpreadFindOption::slotMoreOptions()
 {
     if ( m_findExtension->isHidden() )
