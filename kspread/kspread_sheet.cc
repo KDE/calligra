@@ -7320,33 +7320,54 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisStyles );
+                bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
 
                 int cols = 1;
                 if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-                    if( ok )
+                    if ( !haveStyle )
                     {
-                        for( int i = 0; i < cols; i++ )
+                        //just increment it
+                        columnIndex +=cols - 1;
+                    }
+                    else
+                    {
+                        if( ok )
                         {
-
-                            if ( i != 0 )
+                            for( int i = 0; i < cols; i++ )
                             {
-                                ++columnIndex;
-                                KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
-                                target->copyAll( cell );
+
+                                if ( i != 0 )
+                                {
+                                    ++columnIndex;
+                                    KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
+                                    target->copyAll( cell );
+                                }
+                                //copy contains of cell of each col
+                                for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
+                                {
+                                    KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
+                                    target->copyAll( cell );
+                                }
+
                             }
-                            //copy contains of cell of each col
+                        }
+                        else
+                        {
+                            //just one cell
                             for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
                             {
                                 KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
                                 target->copyAll( cell );
                             }
-
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if ( haveStyle )
                     {
                         //just one cell
                         for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
@@ -7354,15 +7375,6 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                             KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
                             target->copyAll( cell );
                         }
-                    }
-                }
-                else
-                {
-                    //just one cell
-                    for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
-                    {
-                        KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
-                        target->copyAll( cell );
                     }
                 }
             }
