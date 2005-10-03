@@ -6,7 +6,7 @@ METASOURCES = AUTO
 check_PROGRAMS = kotextformattertest kobordertest kovariabletest
 
 LDADD = ../libkotext.la
-LDFLAGS = $(KDE_RPATH) $(all_libraries)
+AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 kobordertest_SOURCES = kobordertest.cpp
 kotextformattertest_SOURCES = kotextformattertest.cpp
