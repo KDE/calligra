@@ -1,3 +1,68 @@
-Bug fixes:
+* General:
+
+ - Palettes now remember their position between sessions (Krita, Kivio, Karbon)
+ - Palettes now have a smart mode where they start floating on small screens and
+   docked on larger screens
+ - ToolBox is no longer duplicated for every view
+
+* Bug fixes:
 
  - Statistic variables are not saved in KWord format (#111478)
+
+
+** Krita:
+ - Krita now compiles on NetBSD
+ - Fix rotation bugs
+ - When "Select Similar Colors" a transparant area, add only transparant areas instead 
+   of the entire image to the selection.
+ - Fix loading and saving of grayscale images
+ - Fix ImageMagick 16/8 bit image confusion when loading and saving.
+ - BUG: 110296 Display is now restored on cancel
+ - many crash fixes
+ 
+* Features:
+
+
+** Krita:
+ - Add histograms
+ - Histograms for images with more than 8-bit to the channel can be zoomed
+ - Add histogram docker
+ - Many filters are now colorspace independent
+ - Add CMYK (8 and 16 bit)
+ - Add 16-bit grayscale
+ - Image separation feature
+ - Add openEXR support
+ - Separate painting styles from tools; now every tool, from freehand to star can use any
+   painting style (eraser, brush, pen, airbrush...)
+ - Create better and more modern selection visualisation
+ - Put brush, gradient, pattern and paint style in popups in a toolbar, reducing the amount
+   of space Krita needs for its dockers
+ - Make hardness of tablet pressure curve configurable
+ - Many performance improvements to the backend (allocation cache, transform cache)
+ - Use color profiles everywhere
+ - New curves widget for color adjustments
+ - Add feather selection feature
+ - Pasted clipboard contents are placed in the middle of the image initially
+ - Brush shape is shown as an outline cursor when painting freehand
+ - Krita now adds itself to the Open With menu in Konqueror
+ - support more modes from GImp image hose brushes
+ - Much work on documentation
+ - Allow the user to choose between contiguous fill behaviour in combination with selections. 
+   Either fill the entire selection, or floodfill the image, but taking the selection into 
+   account (default behaviour).
+ - Add a 16-bit float half format RGB colourspace and change the OpenEXR filters to use it. 
+   Will probably add the option to load into 32-bit float as that should be faster.
+ - 16-bit XYZ is now the fallback colormodel when a particular colormodel doesn't implement
+   a certain function
+ - Filter gallery feature
+ - Add an option to the colorpicker to pick colors not just from the active or
+   from all visible layers, but from any layer, while still working on this layer.
+ - Tools and most menu items now are disabled when a layer is invisible or locked.
+ - Add noise reduction filter
+ - Made scrolling with a scrollwheel work better
+ - Add round corners filter
+ - Add sobel filter
+ - Made crop tool much more usable
+ - Add small tiles filter
+ - Add pixellize filter
+ - Remove the text brush

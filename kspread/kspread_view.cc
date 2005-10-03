@@ -71,7 +71,7 @@
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
 #include <kotabbar.h>
-#include <koToolBox.h>
+#include <kspread_toolbox.h>
 #include <koTemplateCreateDia.h>
 #include <kozoomaction.h>
 

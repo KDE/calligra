@@ -20,6 +20,7 @@
 
 #include <qtoolbutton.h>
 #include <qptrvector.h>
+#include <qtoolbar.h>
 
 #include <ktoolbar.h>
 

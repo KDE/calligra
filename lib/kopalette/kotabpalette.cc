@@ -13,8 +13,6 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc.,  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-
-
  */
 
 
@@ -62,25 +60,21 @@ void KoTabPalette::unplug(const QWidget * w)
 void KoTabPalette::showPage(QWidget *w)
 {
     m_page->showPage(w);
-    show();
 }
 
 void KoTabPalette::makeVisible(bool v)
 {
+    kdDebug() << "make visible called for " << name() << ", " << v << "\n";
     if (v && m_page->count() > 0)
         show();
     else
         hide();
-
 }
-
 
 int KoTabPalette::indexOf(QWidget *w)
 {
     if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
         int i = m_page->indexOf(w);
-        //kdDebug() << "Hidden widget: " << w->name() << ", position: " << 0 - i << "\n";
-
         return -i;
     }
     else {

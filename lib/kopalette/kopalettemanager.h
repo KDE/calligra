@@ -75,8 +75,13 @@ namespace {
  * more types.
  *
  * TODO:
- * + loading, saving and resetting of configuration
- * + show/hide dockwindows menu entries
+ *        - Drag & Drop
+ *        - Restore order of tabs in a docker
+ *        - Restore order of dockers in a dock area
+ *        - Set initial position of floating dockers on first startup
+ *        - Remember whether all dockers are hidden, or not
+ *        - Restoration of the application default state
+ *        - Make it impossible to close a floating palette window with alt-f4
  */
 class KOPALETTE_EXPORT KoPaletteManager : public QObject {
 
