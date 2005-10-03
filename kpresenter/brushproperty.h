@@ -67,7 +67,8 @@ protected:
     QWidgetStack *m_stack;
     BrushPropertyUI *m_brushUI;
     GradientPropertyUI *m_gradientUI;
-    PBPreview *m_preview;
+    PBPreview *m_preview_color;
+    PBPreview *m_preview_gradient;
 
     BrushCmd::Brush m_brush;
 

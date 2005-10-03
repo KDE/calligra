@@ -36,12 +36,13 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     : QWidget( parent, name )
     , m_brush( brush )
 {
-    QGridLayout *layout = new QGridLayout( this, 1, 1, 11, 6 );
+    QGridLayout *layout = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_typeCombo = new KComboBox( this );
     layout->addWidget( m_typeCombo, 0, 1 );
-    m_typeCombo->insertItem( i18n( "Brush" ) );
+    m_typeCombo->insertItem( i18n( "Single Color" ) );
     m_typeCombo->insertItem( i18n( "Gradient" ) );
+    m_typeCombo->insertItem( i18n( "Transparant" ) );
 
     QLabel *typeLabel = new QLabel( i18n( "&Type:" ), this );
     layout->addWidget( typeLabel, 0, 0 );
@@ -54,7 +55,6 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
 
     m_brushUI = new BrushPropertyUI( m_stack );
 
-    m_brushUI->styleCombo->insertItem( i18n( "No Background Fill" ) );
     m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 100 ) );
     m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 94 ) );
     m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 88 ) );
@@ -70,6 +70,10 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Crossing Lines" ) );
 
+    m_preview_color = new PBPreview( m_brushUI->previewPanel, 0, PBPreview::Brush );
+    QHBoxLayout *hbox = new QHBoxLayout( m_brushUI->previewPanel );
+    hbox->addWidget(m_preview_color);
+
     connect( m_brushUI->styleCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotBrushChanged() ) );
     connect( m_brushUI->colorChooser, SIGNAL( changed( const QColor& ) ),
@@ -78,14 +82,18 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     m_stack->addWidget( m_brushUI, 0 );
 
     m_gradientUI = new GradientPropertyUI( m_stack );
-    m_gradientUI->styleCombo->insertItem( i18n( "Horizontal Gradient" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Vertical Gradient" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Diagonal Gradient 1" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Diagonal Gradient 2" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Circle Gradient" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Rectangle Gradient" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "PipeCross Gradient" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Pyramid Gradient" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Horizontal" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Vertical" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Diagonal 1" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Diagonal 2" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Circle" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Rectangle" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "PipeCross" ) );
+    m_gradientUI->styleCombo->insertItem( i18n( "Pyramid" ) );
+
+    m_preview_gradient = new PBPreview( m_gradientUI->previewPanel, 0, PBPreview::Gradient );
+    hbox = new QHBoxLayout( m_gradientUI->previewPanel );
+    hbox->addWidget(m_preview_gradient);
 
     connect( m_gradientUI->styleCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotBackColorTypeChanged() ) );
@@ -101,9 +109,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
              this, SLOT( slotYFactorChanged() ) );
 
     m_stack->addWidget( m_gradientUI, 1 );
-
-    m_preview = new PBPreview( this, 0, PBPreview::Brush );
-    layout->addMultiCellWidget( m_preview, 2, 2, 0, 1 );
+    m_stack->addWidget( new QFrame(), 2 ); // the transparant case
 
     slotReset();
 }
@@ -116,7 +122,10 @@ BrushProperty::~BrushProperty()
 
 FillType BrushProperty::getFillType() const
 {
-    return (FillType) m_typeCombo->currentItem();
+    int selected = m_typeCombo->currentItem();
+    if(selected == 2)
+        selected = 0;
+    return (FillType) selected;
 }
 
 
@@ -127,51 +136,50 @@ QBrush BrushProperty::getQBrush() const
     switch ( m_brushUI->styleCombo->currentItem() )
     {
         case 0:
-            brush.setStyle( NoBrush );
-            break;
-        case 1:
             brush.setStyle( SolidPattern );
             break;
-        case 2:
+        case 1:
             brush.setStyle( Dense1Pattern );
             break;
-        case 3:
+        case 2:
             brush.setStyle( Dense2Pattern );
             break;
-        case 4:
+        case 3:
             brush.setStyle( Dense3Pattern );
             break;
-        case 5:
+        case 4:
             brush.setStyle( Dense4Pattern );
             break;
-        case 6:
+        case 5:
             brush.setStyle( Dense5Pattern );
             break;
-        case 7:
+        case 6:
             brush.setStyle( Dense6Pattern );
             break;
-        case 8:
+        case 7:
             brush.setStyle( Dense7Pattern );
             break;
-        case 9:
+        case 8:
             brush.setStyle( HorPattern );
             break;
-        case 10:
+        case 9:
             brush.setStyle( VerPattern );
             break;
-        case 11:
+        case 10:
             brush.setStyle( CrossPattern );
             break;
-        case 12:
+        case 11:
             brush.setStyle( BDiagPattern );
             break;
-        case 13:
+        case 12:
             brush.setStyle( FDiagPattern );
             break;
-        case 14:
+        case 13:
             brush.setStyle( DiagCrossPattern );
             break;
     }
+    if( m_typeCombo->currentItem() == 2)
+        brush.setStyle( QBrush::NoBrush );
 
     brush.setColor( m_brushUI->colorChooser->color() );
 
@@ -193,7 +201,7 @@ QColor BrushProperty::getGColor2()const
 
 BCType BrushProperty::getGType()const
 {
-    return (BCType)( m_gradientUI->styleCombo->currentItem() + 1 );
+    return (BCType)( m_gradientUI->styleCombo->currentItem() +1 );
 }
 
 
@@ -220,11 +228,6 @@ int BrushProperty::getBrushPropertyChange() const
     int flags = 0;
     bool fillTypeChanged = getFillType() != m_brush.fillType;
 
-    if ( fillTypeChanged )
-    {
-        flags |= BrushCmd::BrushGradientSelect;
-    }
-
     if ( getFillType() == FT_BRUSH )
     {
         QBrush brush = getQBrush();
@@ -235,6 +238,10 @@ int BrushProperty::getBrushPropertyChange() const
         if ( fillTypeChanged || brush.style() != m_brush.brush.style() )
         {
             flags |= BrushCmd::BrushStyle;
+        }
+        if ( fillTypeChanged )
+        {
+            flags |= BrushCmd::BrushGradientSelect;
         }
     }
     else
@@ -262,6 +269,10 @@ int BrushProperty::getBrushPropertyChange() const
         if ( fillTypeChanged || getGYFactor() != m_brush.yfactor )
         {
             flags |= BrushCmd::GradientYFactor;
+        }
+        if ( fillTypeChanged )
+        {
+            flags |= BrushCmd::BrushGradientSelect;
         }
     }
     return flags;
@@ -327,56 +338,56 @@ void BrushProperty::setQBrush( const QBrush &brush )
     switch ( brush.style() )
     {
         case NoBrush:
-            m_brushUI->styleCombo->setCurrentItem( 0 );
+            // TODO
             break;
         case SolidPattern:
-            m_brushUI->styleCombo->setCurrentItem( 1 );
+            m_brushUI->styleCombo->setCurrentItem( 0 );
             break;
         case Dense1Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 2 );
+            m_brushUI->styleCombo->setCurrentItem( 1 );
             break;
         case Dense2Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 3 );
+            m_brushUI->styleCombo->setCurrentItem( 2 );
             break;
         case Dense3Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 4 );
+            m_brushUI->styleCombo->setCurrentItem( 3 );
             break;
         case Dense4Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 5 );
+            m_brushUI->styleCombo->setCurrentItem( 4 );
             break;
         case Dense5Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 6 );
+            m_brushUI->styleCombo->setCurrentItem( 5 );
             break;
         case Dense6Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 7 );
+            m_brushUI->styleCombo->setCurrentItem( 6 );
             break;
         case Dense7Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 8 );
+            m_brushUI->styleCombo->setCurrentItem( 7 );
             break;
         case HorPattern:
-            m_brushUI->styleCombo->setCurrentItem( 9 );
+            m_brushUI->styleCombo->setCurrentItem( 8 );
             break;
         case VerPattern:
-            m_brushUI->styleCombo->setCurrentItem( 10 );
+            m_brushUI->styleCombo->setCurrentItem( 9 );
             break;
         case CrossPattern:
-            m_brushUI->styleCombo->setCurrentItem( 11 );
+            m_brushUI->styleCombo->setCurrentItem( 10 );
             break;
         case BDiagPattern:
-            m_brushUI->styleCombo->setCurrentItem( 12 );
+            m_brushUI->styleCombo->setCurrentItem( 11 );
             break;
         case FDiagPattern:
-            m_brushUI->styleCombo->setCurrentItem( 13 );
+            m_brushUI->styleCombo->setCurrentItem( 12 );
             break;
         case DiagCrossPattern:
-            m_brushUI->styleCombo->setCurrentItem( 14 );
+            m_brushUI->styleCombo->setCurrentItem( 13 );
             break;
         case CustomPattern:
             break;
     }
 
     m_brushUI->colorChooser->setColor( brush.color() );
-    m_preview->setBrush( brush );
+    m_preview_color->setBrush( brush );
 }
 
 
@@ -390,7 +401,7 @@ void BrushProperty::setGradient( const QColor &_c1, const QColor &_c2, BCType _t
     setUnbalancedEnabled( _unbalanced );
     m_gradientUI->xSlider->setValue( _xfactor );
     m_gradientUI->ySlider->setValue( _yfactor );
-    m_preview->setGradient( _c1, _c2, _t, _unbalanced, _xfactor, _yfactor );
+    m_preview_gradient->setGradient( _c1, _c2, _t, _unbalanced, _xfactor, _yfactor );
 }
 
 
@@ -414,49 +425,49 @@ void BrushProperty::slotReset()
                  m_brush.unbalanced,
                  m_brush.xfactor,
                  m_brush.yfactor );
-    m_typeCombo->setCurrentItem( (int)m_brush.fillType );
-    slotTypeChanged( (int)m_brush.fillType );
+
+    int panelIndex;
+    if( m_brush.fillType == FT_BRUSH && m_brush.brush.style() == QBrush::NoBrush )
+        panelIndex = 2;
+    else
+        panelIndex = (int)m_brush.fillType;
+
+    m_typeCombo->setCurrentItem( panelIndex );
+    slotTypeChanged( panelIndex );
 }
 
 
 void BrushProperty::slotTypeChanged( int pos )
 {
     m_stack->raiseWidget( pos );
-
-    // Brush
-    if ( pos == 0 )
-    {
-        m_preview->setPaintType( PBPreview::Brush );
-    }
-    // Gradient
-    else
-    {
-        m_preview->setPaintType( PBPreview::Gradient );
-    }
+    slotBrushChanged();
 }
 
 
 void BrushProperty::slotBrushChanged()
 {
-    m_preview->setBrush( getQBrush() );
+    m_preview_color->setBrush( getQBrush() );
 }
 
 
 void BrushProperty::slotColor1Changed()
 {
-    m_preview->setColor1( getGColor1() );
+    m_preview_gradient->setColor1( getGColor1() );
 }
 
 
 void BrushProperty::slotColor2Changed()
 {
-    m_preview->setColor2( getGColor2() );
+    m_preview_gradient->setColor2( getGColor2() );
 }
 
 
 void BrushProperty::slotBackColorTypeChanged()
 {
-    m_preview->setBackColorType( getGType() );
+    BCType type = getGType();
+    m_preview_gradient->setBackColorType( type );
+    m_gradientUI->xSlider->setEnabled( type != 1 );
+    m_gradientUI->ySlider->setEnabled( type != 2 );
 }
 
 
@@ -464,19 +475,21 @@ void BrushProperty::slotUnbalancedChanged()
 {
     bool state = getGUnbalanced();
     setUnbalancedEnabled( state );
-    m_preview->setUnbalanced( state );
+    m_preview_gradient->setUnbalanced( state );
+
+    slotBackColorTypeChanged(); // make sure the sliders enabled-ness is up-to-date
 }
 
 
 void BrushProperty::slotXFactorChanged()
 {
-    m_preview->setXFactor( getGXFactor() );
+    m_preview_gradient->setXFactor( getGXFactor() );
 }
 
 
 void BrushProperty::slotYFactorChanged()
 {
-    m_preview->setYFactor( getGYFactor() );
+    m_preview_gradient->setYFactor( getGYFactor() );
 }
 
 #include "brushproperty.moc"

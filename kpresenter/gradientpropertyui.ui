@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>GradientPropertyUI</class>
 <widget class="QWidget">
     <property name="name">
@@ -15,14 +15,67 @@
     <property name="caption">
         <string>Gradient</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget" row="1" column="0">
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout7</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KColorButton" row="1" column="2">
+                    <property name="name">
+                        <cstring>color2Chooser</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>styleCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>styleLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Gradient:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>styleCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>colorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;olors:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>color1Chooser</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>color1Chooser</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout17</cstring>
             </property>
@@ -96,77 +149,15 @@
                 </widget>
             </grid>
         </widget>
-        <spacer row="2" column="0">
+        <widget class="QFrame">
             <property name="name">
-                <cstring>spacer3</cstring>
+                <cstring>previewPanel</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout7</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KColorButton" row="1" column="2">
-                    <property name="name">
-                        <cstring>color2Chooser</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>styleCombo</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>styleLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Style:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>styleCombo</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>colorLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>C&amp;olors:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>color1Chooser</cstring>
-                    </property>
-                </widget>
-                <widget class="KColorButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>color1Chooser</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-            </grid>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
 </customwidgets>
@@ -181,6 +172,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>kcolorbutton.h</includehint>
 </includehints>
 </UI>

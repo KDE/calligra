@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>BrushPropertyUI</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>156</width>
-            <height>79</height>
+            <width>268</width>
+            <height>186</height>
         </rect>
     </property>
     <property name="caption">
@@ -57,29 +57,21 @@
                 <cstring>colorChooser</cstring>
             </property>
         </widget>
-        <spacer row="2" column="1">
+        <widget class="QFrame" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>spacer2</cstring>
+                <cstring>previewPanel</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kcombobox.h</includehint>
     <includehint>kcolorbutton.h</includehint>
 </includehints>
 </UI>
