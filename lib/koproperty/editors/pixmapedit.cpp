@@ -56,6 +56,7 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
 	setHasBorders(false);
 
 	m_edit = new QLabel(this, "m_edit");
+	QToolTip::add(m_edit, i18n("Click to show image preview"));
 	m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_edit->setMinimumHeight(5);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -196,7 +197,7 @@ bool
 PixmapEdit::eventFilter(QObject *o, QEvent *ev)
 {
 	if(o == m_edit) {
-		if(ev->type() == QEvent::MouseButtonPress)  {
+		if(ev->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(ev)->button()==LeftButton) {
 			if(m_previewPixmap.height() <= m_edit->height()
 				&& m_previewPixmap.width() <= m_edit->width())
 				return false;

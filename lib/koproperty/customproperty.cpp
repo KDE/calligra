@@ -36,7 +36,12 @@ using namespace KoProperty;
 
 CustomProperty::CustomProperty(Property *parent)
  : m_property(parent)
-{}
+{
+}
+
+CustomProperty::~CustomProperty()
+{
+}
 
 ///////////////  SizeCustomProperty /////////////////////
 

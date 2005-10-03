@@ -52,8 +52,20 @@
 
 namespace KoProperty {
 
-Factory* Factory::m_factory = 0;
+static KStaticDeleter<Factory> m_factoryDeleter;
+static Factory* m_factory = 0;
 
+CustomPropertyFactory::CustomPropertyFactory(QObject *parent)
+ : QObject(parent)
+{
+}
+
+CustomPropertyFactory::~CustomPropertyFactory()
+{
+}
+
+
+//! @internal
 class FactoryPrivate
 {
 	public:
@@ -69,6 +81,7 @@ class FactoryPrivate
 using namespace KoProperty;
 
 Factory::Factory()
+: QObject(0, "KoProperty Factory")
 {
 	d = new FactoryPrivate();
 }
@@ -79,10 +92,10 @@ Factory::~Factory()
 }
 
 Factory*
-Factory::getInstance()
+Factory::self()
 {
-	if(m_factory == 0)
-		m_factory = new Factory();
+	if(!m_factory)
+		m_factoryDeleter.setObject( m_factory, new Factory() );
 	return m_factory;
 }
 
@@ -92,12 +105,12 @@ void
 Factory::registerEditor(int type, CustomPropertyFactory *creator)
 {
 	if(d->registeredWidgets.contains(type))
-		kopropertywarn << "Type (" << type << ") already registered. Overriding actual createWidget function." << endl;
-	d->registeredWidgets.insert(type, creator);
+		kopropertydbg << "Type (" << type << ") already registered. Overriding actual createWidget function." << endl;
+	d->registeredWidgets.replace(type, creator);
 }
 
 void
-Factory::registerEditor(const QValueList<int> &types, CustomPropertyFactory *creator)
+Factory::registerEditors(const QValueList<int> &types, CustomPropertyFactory *creator)
 {
 	QValueList<int>::ConstIterator endIt = types.constEnd();
 	for(QValueList<int>::ConstIterator it = types.constBegin(); it != endIt; ++it)
@@ -204,7 +217,7 @@ Factory::registerCustomProperty(int type, CustomPropertyFactory *creator)
 }
 
 void
-Factory::registerCustomProperty(const QValueList<int> &types, CustomPropertyFactory *creator)
+Factory::registerCustomProperties(const QValueList<int> &types, CustomPropertyFactory *creator)
 {
 	QValueList<int>::ConstIterator endIt = types.constEnd();
 	for(QValueList<int>::ConstIterator it = types.constBegin(); it != endIt; ++it)
@@ -212,22 +225,22 @@ Factory::registerCustomProperty(const QValueList<int> &types, CustomPropertyFact
 }
 
 CustomProperty*
-Factory::customPropertyForProperty(Property *prop)
+Factory::customPropertyForProperty(Property *parent)
 {
-	int type = prop->type();
+	const int type = parent->type();
 	if (d->registeredCustomProperties.contains(type))
-		return d->registeredCustomProperties[type]->createCustomProperty(type);
+		return d->registeredCustomProperties[type]->createCustomProperty(parent);
 
 	switch(type) {
 		case Size: case Size_Width: case Size_Height:
-			return new SizeCustomProperty(prop);
+			return new SizeCustomProperty(parent);
 		case Point: case Point_X: case Point_Y:
-			return new PointCustomProperty(prop);
+			return new PointCustomProperty(parent);
 		case Rect: case Rect_X: case Rect_Y: case Rect_Width: case Rect_Height:
-			return new RectCustomProperty(prop);
+			return new RectCustomProperty(parent);
 		case SizePolicy: case SizePolicy_HorStretch: case SizePolicy_VerStretch:
 		case SizePolicy_HorData: case SizePolicy_VerData:
-			return new SizePolicyCustomProperty(prop);
+			return new SizePolicyCustomProperty(parent);
 		default:
 			return 0;
 	}

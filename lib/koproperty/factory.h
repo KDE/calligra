@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,8 @@
 #define KPROPERTY_FACTORY_H
 
 #include "koproperty_global.h"
+#include <kstaticdeleter.h> 
+#include <qobject.h> 
 
 template<class U> class QValueList;
 
@@ -32,17 +34,17 @@ class CustomProperty;
 class Property;
 class FactoryPrivate;
 
-/*! A pointer to factory function which creates and returns widget for a given property type.*/
-typedef Widget *(*createWidget) (Property*);
-typedef CustomProperty *(*createCustomProperty) (int);
+///*! A pointer to factory function which creates and returns widget for a given property type.*/
+//typedef Widget *(*createWidget) (Property*);
+//typedef CustomProperty *(*createCustomProperty) (Property*);
 
-class KOPROPERTY_EXPORT CustomPropertyFactory
+class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
 {
 	public:
-		CustomPropertyFactory() {}
-		virtual ~CustomPropertyFactory() {}
+		CustomPropertyFactory(QObject *parent);
+		virtual ~CustomPropertyFactory();
 
-		virtual CustomProperty*  createCustomProperty(int type) = 0;
+		virtual CustomProperty* createCustomProperty(Property *parent) = 0;
 		virtual Widget* createCustomWidget(Property *prop) = 0;
 };
 
@@ -75,44 +77,51 @@ class KOPROPERTY_EXPORT CustomPropertyFactory
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
  */
-class KOPROPERTY_EXPORT Factory
+class KOPROPERTY_EXPORT Factory : public QObject
 {
 	public:
-		/*! Registers property editor factory function for a type.
-		This factory functions are considered before defaults
-		when  widgetForProperty() is called.*/
-		//void registerEditor(int type, createWidget creator);
-		//void registerEditor(const QValueList<int> &types, createWidget creator);
+		/*! Registers a custom property factory \a creator for handling property editor for \a type.
+		This custom factory will be used before defaults when widgetForProperty() is called. 
+		\a creator is not owned by this Factory object, but it's good idea 
+		to instantiate CustomPropertyFactory object itself as a child of Factory parent. For example:
+		\code
+			MyCustomPropertyFactory *f = new MyCustomPropertyFactory(KoProperty::Factory::self());
+			KoProperty::Factory::self()->registerEditor( MyCustomType, f );
+		\endcode */
 		void registerEditor(int type, CustomPropertyFactory *creator);
-		void registerEditor(const QValueList<int> &types, CustomPropertyFactory *creator);
+
+		/*! Registers custom property factory \a creator for handling property editor for \a types.
+		 @see registerEditor(). */
+		void registerEditors(const QValueList<int> &types, CustomPropertyFactory *creator);
 
 		/*! Creates and returns the editor for given property type.
 		Warning: editor and viewer widgets won't have parent widget. Property editor
 		cares about reparenting and deletion of returned widgets in machines.
 		If \a createWidget is false, just create child properties, not widget.*/
-		Widget*  widgetForProperty(Property *property);
+		Widget* widgetForProperty(Property *property);
 
-		/*! Registers a function that creates a CustomProperty.
+		/*! Registers a custom property factory that handles a CustomProperty of a type \a type.
 		 This function will be called every time a property of \a type is created. */
-		//void registerCustomProperty(int type, createCustomProperty creator);
-		//void registerCustomProperty(const QValueList<int> &types, createCustomProperty creator);
 		void registerCustomProperty(int type, CustomPropertyFactory *creator);
-		void registerCustomProperty(const QValueList<int> &types, CustomPropertyFactory *creator);
 
-		/*! This function is called in Property::Property() to create (optionnal)
+		/*! Registers a custom property factory that handles a CustomProperty for \a types.
+		 @see registerCustomProperty() */
+		void registerCustomProperties(const QValueList<int> &types, CustomPropertyFactory *creator);
+
+		/*! This function is called in Property::Property() to create (optional)
 		  custom property. It creates the custom property for built-in types, or
-		  calls one of createCustomProperty function registered before for other types. */
-		CustomProperty*   customPropertyForProperty(Property *prop);
+		  calls one of createCustomProperty function previously registered for other types. */
+		CustomProperty* customPropertyForProperty(Property *parent);
 
-		/*! \return a pointer to a property machine factory instance.*/
-		static Factory*  getInstance();
+		/*! \return a pointer to a property factory instance.*/
+		static Factory* self();
 
 	private:
 		Factory();
 		~Factory();
 
-		static Factory *m_factory;
-		FactoryPrivate   *d;
+		FactoryPrivate *d;
+		friend class KStaticDeleter;
 };
 
 }

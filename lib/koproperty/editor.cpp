@@ -549,7 +549,7 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 	Widget *widget = d->widgetCache[property];
 
 	if(!widget) {
-		widget = Factory::getInstance()->widgetForProperty(property);
+		widget = Factory::self()->widgetForProperty(property);
 		d->widgetCache[property] = widget;
 		widget->setProperty(0); // to force reloading property later
 		widget->hide();
@@ -656,7 +656,8 @@ Editor::showUndoButton( bool show )
 	}
 
 	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
-	d->undoButton->move(geometry.x() + geometry.width() -(d->currentWidget->hasBorders()?1:0)/*editor is moved by 1 to left*/
+	d->undoButton->move(geometry.x() + geometry.width() 
+		-((d->currentWidget && d->currentWidget->hasBorders())?1:0)/*editor is moved by 1 to left*/
 		- d->undoButton->width(), p.y());
 //  if (d->currentWidget) {
 //	  d->currentWidget->move(d->currentWidget->x(), p.y());

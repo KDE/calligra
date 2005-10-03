@@ -33,7 +33,7 @@ class Property;
   In the constructor, you should create the child properties (if needed).
   Then, you need to implement the functions concerning values.\n
 
-  Examples of custom properties implementation can be found in src/customproperty.cpp.
+  Examples of custom properties implementation can be found in customproperty.cpp.
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
 */
@@ -41,7 +41,7 @@ class KOPROPERTY_EXPORT CustomProperty
 {
 	public:
 		CustomProperty(Property *parent);
-		virtual ~CustomProperty() {}
+		virtual ~CustomProperty();
 
 		/*! This function is called by \ref Property::setValue() when
 		a custom property is set.
@@ -56,7 +56,7 @@ class KOPROPERTY_EXPORT CustomProperty
 		You should return property's value, taken from parent's value.*/
 		virtual QVariant value() const = 0;
 
-		/*! Tells whether CustomProperty should be use to get the property's value.
+		/*! Tells whether CustomProperty should be used to get the property's value.
 		You should return true for child properties, and false for others. */
 		virtual bool handleValue() const { return false; }
 

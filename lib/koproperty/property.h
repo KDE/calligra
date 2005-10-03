@@ -358,7 +358,7 @@ class KOPROPERTY_EXPORT Property
 		int sortingKey() const;
 
 	protected:
-		QValueList<Set*> sets() const;
+//unused?		QValueList<Set*> sets() const;
 
 		void addSet(Set *set);
 

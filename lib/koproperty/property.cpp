@@ -29,7 +29,9 @@
 #endif
 
 #include <qobject.h>
+#include <qptrdict.h>
 #include <qasciidict.h>
+#include <qguardedptr.h>
 
 namespace KoProperty {
 
@@ -42,7 +44,7 @@ class PropertyPrivate
 		PropertyPrivate()
 		:  listData(0), changed(false), storable(true), readOnly(false), visible(true),
 		 autosync(-1), custom(0), useCustomProperty(true),
-		 parent(0), children(0), relatedProperties(0),
+		 sets(0), parent(0), children(0), relatedProperties(0),
 		 sortingKey(0)
 		{
 		}
@@ -52,6 +54,7 @@ class PropertyPrivate
 			delete children;
 			delete relatedProperties;
 			delete custom;
+			delete sets;
 		}
 
 	int type;
@@ -76,7 +79,12 @@ class PropertyPrivate
 	//! Flag used to allow CustomProperty to use setValue()
 	bool useCustomProperty;
 
-	QValueList<Set*>  sets;
+	//! Used when a single set is assigned for the property
+	QGuardedPtr<Set> set;
+	//! Used when multiple sets are assigned for the property
+	QPtrDict< QGuardedPtr<Set> > *sets;
+//	QValueList<Set*>  sets;
+
 	Property  *parent;
 	QValueList<Property*>  *children;
 	//! list of properties with the same name (when intersecting buffers)
@@ -164,7 +172,7 @@ Property::Property(const QCString &name, const QVariant &value,
 	else
 		d->type = type;
 
-	d->custom = Factory::getInstance()->customPropertyForProperty(this);
+	d->custom = Factory::self()->customPropertyForProperty(this);
 }
 
 Property::Property(const QCString &name, const QStringList &keys, const QStringList &strings,
@@ -180,7 +188,7 @@ Property::Property(const QCString &name, const QStringList &keys, const QStringL
 //	d->valueList = new QMap<QString, QVariant>();
 //	*(d->valueList) = createValueListFromStringLists(keys, values);
 
-	d->custom = Factory::getInstance()->customPropertyForProperty(this);
+	d->custom = Factory::self()->customPropertyForProperty(this);
 }
 
 Property::Property(const QCString &name, ListData* listData, //const QMap<QString, QVariant> &v_valueList,
@@ -196,7 +204,7 @@ Property::Property(const QCString &name, ListData* listData, //const QMap<QStrin
 //	d->valueList = new QMap<QString, QVariant>();
 //	*(d->valueList) = v_valueList;
 
-	d->custom = Factory::getInstance()->customPropertyForProperty(this);
+	d->custom = Factory::self()->customPropertyForProperty(this);
 }
 
 Property::Property()
@@ -351,11 +359,19 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		prevValue = d->value;
 	d->value = value;
 
-	QValueList<Set*>::ConstIterator endIt = d->sets.constEnd();
-	for(QValueList<Set*>::ConstIterator it = d->sets.constBegin(); it != endIt; ++it) {
-		emit (*it)->propertyChanged(**it, *this, prevValue);
-		emit (*it)->propertyChanged(**it, *this);
-		emit (*it)->propertyChanged();
+	if (d->sets) {
+		for (QPtrDictIterator< QGuardedPtr<Set> > it(*d->sets); it.current(); ++it) {
+			if (it.current()) {//may be destroyed in the meantime
+				emit (*it.current())->propertyChanged(**it.current(), *this, prevValue);
+				emit (*it.current())->propertyChanged(**it.current(), *this);
+				emit (*it.current())->propertyChanged();
+			}
+		}
+	}
+	else if (d->set) {
+		emit d->set->propertyChanged(*d->set, *this, prevValue);
+		emit d->set->propertyChanged(*d->set, *this);
+		emit d->set->propertyChanged();
 	}
 }
 
@@ -368,9 +384,15 @@ Property::resetValue()
 	if(d->parent && d->parent->value() == d->parent->oldValue())
 		d->parent->d->changed = false;
 
-	QValueList<Set*>::ConstIterator endIt = d->sets.constEnd();
-	for(QValueList<Set*>::ConstIterator it = d->sets.constBegin(); it != endIt; ++it)
-		emit (*it)->propertyReset(**it, *this);
+	if (d->sets) {
+		for (QPtrDictIterator< QGuardedPtr<Set> > it(*d->sets); it.current(); ++it) {
+			if (it.current()) //may be destroyed in the meantime
+				emit (*it.current())->propertyReset(**it.current(), *this);
+		}
+	}
+	else if (d->set) {
+		emit d->set->propertyReset(*d->set, *this);
+	}
 }
 
 //const QMap<QString, QVariant>*
@@ -539,7 +561,7 @@ Property::operator= (const Property &property)
 	}
 	if(property.d->children) {
 		if(property.d->custom) {
-			d->custom = Factory::getInstance()->customPropertyForProperty(this);
+			d->custom = Factory::self()->customPropertyForProperty(this);
 			// updates all children value, using CustomProperty
 			setValue(property.d->value);
 		}
@@ -610,18 +632,39 @@ Property::addChild(Property *prop)
 	prop->d->parent = this;
 }
 
+/*unused?
 QValueList<Set*>
 Property::sets() const
 {
 	return d->sets;
 }
+*/
 
 void
 Property::addSet(Set *set)
 {
-	QValueList<Set*>::iterator it = qFind( d->sets.begin(), d->sets.end(), set);
-	if(it == d->sets.end()) // not in our list
-		d->sets.append(set);
+	if (!set)
+		return;
+
+	if (!d->set) {//simple case
+		d->set = set;
+		return;
+	}
+	if ((Set*)d->set==set)
+		return;
+	QGuardedPtr<Set> *pset = d->sets ? d->sets->find(set) : 0;
+	if (pset && (Set*)*pset == set)
+		return;
+	if (!d->sets) {
+		d->sets = new QPtrDict< QGuardedPtr<Set> >( 101 );
+		d->sets->setAutoDelete(true);
+	}
+
+	d->sets->replace(set, new QGuardedPtr<Set>( set ));
+
+//	QValueList<Set*>::iterator it = qFind( d->sets.begin(), d->sets.end(), set);
+//	if(it == d->sets.end()) // not in our list
+//		d->sets.append(set);
 }
 
 const QValueList<Property*>*
