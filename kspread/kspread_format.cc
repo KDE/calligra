@@ -408,7 +408,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( hasProperty( PFont, true ) || hasNoFallBackProperties( PFont ) || force )
     {
         //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
-        saveOasisFontCellStyle( currentCellStyle, textFont( _col, _row ), KoGenStyle::TextType );
+        saveOasisFontCellStyle( currentCellStyle, textFont( _col, _row ) );
     }
     if ( ( hasProperty( PTextPen, true ) || hasNoFallBackProperties( PTextPen ) || force )
          && textPen( _col, _row ).color().isValid() )

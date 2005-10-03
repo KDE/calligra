@@ -7237,34 +7237,35 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                     }
 					else
  					{
-					if( ok )
-					{
-                        for( int i = 0; i < cols; i++ )
-                        {
-							if( i != 0 )
-							{
-                            	++columnIndex;
-                            	KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
-                            	target->copyAll( cell );
-							}
-							//copy contains of cell of each col
-							for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
-							{
-									KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
-									target->copyAll( cell );
-							}
-                        }
-					}
-					else
-					{
-							//just one cell
-							for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
-							{
-									KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
-									target->copyAll( cell );
-							}
-					}
-                }    
+						if( ok )
+						{
+                        	for( int i = 0; i < cols; i++ )
+                        	{
+								if( i != 0 )
+								{
+                            		++columnIndex;
+                            		KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
+	                            	target->copyAll( cell );
+								}
+									//copy contains of cell of each col
+								for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
+								{
+										KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
+										target->copyAll( cell );
+								}
+ 	                       }
+						}
+						else
+						{
+								//just one cell
+								for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
+								{
+										KSpreadCell* target = nonDefaultCell( columnIndex, newRow );
+										target->copyAll( cell );
+								}
+						}
+    	            }    
+				}
 				else
 				{
 					if ( haveStyle )
@@ -7275,8 +7276,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
 								target->copyAll( cell );
 						}
 					}
-				}
-			}
+				}	
 			}
         }
         cellNode = cellNode.nextSibling();
