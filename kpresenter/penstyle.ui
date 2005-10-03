@@ -134,7 +134,7 @@
                 <cstring>widthInput</cstring>
             </property>
             <property name="suffix">
-                <string>pt</string>
+                <string> pt</string>
             </property>
         </widget>
     </grid>

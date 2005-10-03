@@ -47,11 +47,11 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
              this, SLOT( slotPenChanged() ) );
 
     m_ui->styleCombo->insertItem( i18n( "No Outline" ) );
-    m_ui->styleCombo->insertItem( i18n( "Solid Line" ) );
-    m_ui->styleCombo->insertItem( i18n( "Dash Line ( ---- )" ) );
-    m_ui->styleCombo->insertItem( i18n( "Dot Line ( **** )" ) );
-    m_ui->styleCombo->insertItem( i18n( "Dash Dot Line ( -*-* )" ) );
-    m_ui->styleCombo->insertItem( i18n( "Dash Dot Dot Line ( -**- )" ) );
+    m_ui->styleCombo->insertItem( "__________" );
+    m_ui->styleCombo->insertItem( "__ __ __ __" );
+    m_ui->styleCombo->insertItem( "_ _ _ _ _ _" );
+    m_ui->styleCombo->insertItem( "__ _ __ _ __" );
+    m_ui->styleCombo->insertItem( "__ _ _ __ _" );
 
     m_ui->widthInput->setRange( 1, 10,  1, false);
 

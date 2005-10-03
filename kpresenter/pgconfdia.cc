@@ -68,7 +68,7 @@ void PgConfDia::setupPageGeneral()
 				       "allows you to configure a <em>drawing pen</em> that can "
 				       "be used during the display of the presentation to add "
 				       "additional information or to emphasise particular points.</p>") );
-    QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, KDialog::spacingHint() );
     generalLayout->setAutoAdd( true );
 
     QVButtonGroup *switchGroup = new QVButtonGroup( i18n("&Transition Type"), generalPage );
@@ -113,7 +113,7 @@ void PgConfDia::setupPageGeneral()
 
     // presentation pen (color and width)
 
-    QGroupBox* penGroup = new QGroupBox( 1, Qt::Horizontal, i18n("Presentation Pen") , generalPage );
+    QGroupBox* penGroup = new QGroupBox( i18n("Presentation Pen") , generalPage );
     QWhatsThis::add( penGroup, i18n("<p>This part of the dialog allows you to configure the "
 				    "<em>drawing mode</em>, which allows you to add additional "
 				    "information, emphasise particular content, or to correct "
@@ -121,18 +121,17 @@ void PgConfDia::setupPageGeneral()
 				    "using the mouse.</p>"
 				    "<p>You can configure the color of the drawing pen and the "
 				    "width of the pen.</p>" ) );
-    penGroup->setInsideSpacing( KDialog::spacingHint() );
-    penGroup->setInsideMargin( KDialog::marginHint() );
-    penGroup->setFlat(true);
+    QGridLayout *grid = new QGridLayout(penGroup, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 
-    new QLabel( i18n( "Color:" ), penGroup );
+    grid->addWidget( new QLabel( i18n( "Color:" ), penGroup ), 0, 0 );
     penColor = new KColorButton( m_doc->presPen().color(), m_doc->presPen().color(), penGroup );
+    grid->addWidget( penColor, 0, 1 );
 
-    new QLabel( i18n( "Width:" ), penGroup );
-    penWidth = new KIntNumInput( 1, penGroup );
+    grid->addWidget( new QLabel( i18n( "Width:" ), penGroup ), 1, 0 );
+    penWidth = new QSpinBox( 1, 10, 1, penGroup );
     penWidth->setSuffix( i18n(" pt") );
-    penWidth->setRange( 1, 10, 1 );
     penWidth->setValue( m_doc->presPen().width() );
+    grid->addWidget( penWidth, 1, 1 );
 
     QWidget* spacer = new QWidget( generalPage );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
@@ -145,7 +144,7 @@ void PgConfDia::setupPageSlides()
 				      "are used in the presentation. Slides that are not "
 				      "selected will not be displayed during the slide "
 				      "show.</p>") );
-    QGridLayout *slidesLayout = new QGridLayout( slidesPage,7 , 2 );
+    QGridLayout *slidesLayout = new QGridLayout( slidesPage,7 , 2, 0, KDialog::spacingHint());
 
 
     QButtonGroup *group=new QVButtonGroup( slidesPage );

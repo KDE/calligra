@@ -37,8 +37,8 @@ class QComboBox;
 class QColor;
 class QListView;
 class QRadioButton;
+class QSpinBox;
 
-class KIntNumInput;
 class KColorButton;
 class QSlider;
 
@@ -66,7 +66,7 @@ protected:
     QCheckBox *infiniteLoop, *presentationDuration;
     QRadioButton *m_manualButton, *m_autoButton;
     KColorButton* penColor;
-    KIntNumInput* penWidth;
+    QSpinBox* penWidth;
     QComboBox *m_customSlideCombobox;
     QListView *slides;
     QRadioButton *m_customSlide, *m_selectedSlide;
