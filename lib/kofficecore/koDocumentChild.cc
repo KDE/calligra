@@ -420,7 +420,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
 
     const QString ref = document()->isStoredExtern() ? document()->url().url() : "./"+ name;
     kdDebug(30003) << "KoDocumentChild::saveOasis saving reference to embedded document as " << ref << endl;
-    xmlWriter.addAttribute( "xlink:href", "#" + ref );
+    xmlWriter.addAttribute( "xlink:href", /*"#" + */ref );
 }
 
 QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
