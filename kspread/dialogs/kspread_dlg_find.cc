@@ -29,7 +29,7 @@
 KSpreadFindOption::KSpreadFindOption( QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(parent);
-    m_moreOptions = new QPushButton( i18n( "More Options>>" ), parent );
+    m_moreOptions = new QPushButton( i18n( "More Options >>" ), parent );
     layout->addWidget(  m_moreOptions );
 
     connect( m_moreOptions, SIGNAL( clicked () ), this, SLOT( slotMoreOptions() ) );
@@ -74,12 +74,12 @@ void KSpreadFindOption::slotMoreOptions()
     if ( m_findExtension->isHidden() )
     {
         m_findExtension->show();
-        m_moreOptions->setText( i18n( "More Options>>" ));
+        m_moreOptions->setText( i18n( "More Options <<" ));
     }
     else
     {
         m_findExtension->hide();
-        m_moreOptions->setText( i18n( "More Options <<" ));
+        m_moreOptions->setText( i18n( "More Options >>" ));
     }
     emit adjustSize();
 }
