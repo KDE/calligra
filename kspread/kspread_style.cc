@@ -303,7 +303,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         m_featuresSet |= SDontPrintText;
 
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "direction" ) && ( styleStack.attributeNS( KoXmlNS::fo, "direction" )=="ttb" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) && ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
     {
         setProperty( PVerticalText );
         m_featuresSet |= SVerticalText;
@@ -1011,7 +1011,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         style.addProperty( "fo:wrap-option", "wrap" );
     if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
     {
-        style.addProperty( "fo:direction", "ttb" );
+        style.addProperty( "style:direction", "ttb" );
         style.addProperty( "style:rotation-angle", "0" );
     	style.addProperty( "style:rotation-align", "none" );
 	}
