@@ -74,77 +74,77 @@ private:
     KSpreadCanvas* m_pCanvas;
 };
 
-/** 
-	Colours cell references in formulas.  Installed by KSpreadTextEditor instances in 
+/**
+	Colours cell references in formulas.  Installed by KSpreadTextEditor instances in
 	the constructor.
  */
 class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
-{ 
+{
 	//Q_OBJECT
-			
-	public: 	
-	/** 
+
+	public:
+	/**
 	 *	Constructs a KSpreadTextEditorHighlighter to colour-code cell references in a QTextEdit.
 	 *
 	 *	@param textEdit The QTextEdit widget which the highlighter should operate on
-	 *	@param sheet The active KSpreadSheet object 
+	 *	@param sheet The active KSpreadSheet object
 	 */
 		KSpreadTextEditorHighlighter(QTextEdit* textEdit,KSpreadSheet* sheet);
-		virtual ~KSpreadTextEditorHighlighter(){} 
-	
+		virtual ~KSpreadTextEditorHighlighter(){}
+
 	/**
 		 *	Called automatically by KTextEditor to highlight text when modified.
 	 */
-		virtual int highlightParagraph(const QString& text, int endStateOfLastPara);	
-		
+		virtual int highlightParagraph(const QString& text, int endStateOfLastPara);
+
 	/*
 		 *	Overload of cellRefAt(pos), outCellColor receives the colour of the text at the specified position
 		 *	@param pos Position of the cell reference in the text.  This can be next to or in any of the characters that make up the
 		 *	reference.
 		 *	@param outCellColor Set to the colour of the cell reference in the QTextEdit widget which the highlighter is installed on.
-	 
+
 		KSpreadCell* cellRefAt(int pos, QColor& outCellColor);
 	//Returns the cell reference at a given position in the text
 		KSpreadCell* cellRefAt(int pos) {QColor clr;return cellRefAt(pos,clr);}  */
-	
+
 	/**
-		 *	Gets information about the references found in the formula (cell,colour)	
+		 *	Gets information about the references found in the formula (cell,colour)
 		 *	@param cellRefs A vector of type KSpreadCanvas::HighlightedCell.  Information about the references found in the formula
 		 *	will be added to the end of the vector.
 	 */
-	
+
 		void getReferences(std::vector<HighlightRange>* ranges);
-	
-	
+
+
 	/**	Set spread sheet used for cell reference checking
 		 *	This should be called if the active spreadsheet is changed after the highlighter is constructed.
 	 */
 		void setSheet(KSpreadSheet* sheet) {_sheet=sheet;}
 		KSpreadSheet* sheet() {return _sheet;}
-	
+
 	/**
 		 *	Returns true if the cell references in the formula have changed since the last call
 		 *	to referencesChanged().
 		 *	The first call always returns true.
 	 */
 		bool referencesChanged();
-	
+
 	protected:
-		
+
 	//Array of references already found in text.  This is so that all references to the same cell
 	//share the same colour
-		std::vector<QString> _refs; 
-	
+		std::vector<QString> _refs;
+
 	//These are the default colours used to
 	//highlight cell references
 		std::vector<QColor> _colors;
-	
+
 	//Source for cell reference checking
 		KSpreadSheet* _sheet;
-	
+
 	//Have cell references changed since last call to referencesChanged()?
 		bool _refsChanged;
-}; 
+};
 
 class KSpreadTextEditor : public KSpreadCellEditor
 {
@@ -177,7 +177,7 @@ private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged(int para,int pos);
-    
+
 protected:
     void resizeEvent( QResizeEvent* );
     /**
@@ -195,8 +195,8 @@ private:
     bool m_sizeUpdate;
     uint m_length;
     int  m_fontLength;
-   
-    
+
+
     KSpreadTextEditorHighlighter* m_highlighter;
 };
 
@@ -210,7 +210,6 @@ public:
 public slots:
     void slotAddAreaName( const QString & );
     void slotRemoveAreaName( const QString & );
-
 private:
     KSpreadLocationEditWidget *m_locationWidget;
 };
@@ -222,16 +221,21 @@ private:
  */
 class KSpreadLocationEditWidget : public QLineEdit
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
-	KSpreadView * view() const { return m_pView;}
+    KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
+    KSpreadView * view() const { return m_pView;}
+
+private slots:
+    void slotActivateItem();
+
 protected:
-	virtual void keyPressEvent( QKeyEvent * _ev );
+    virtual void keyPressEvent( QKeyEvent * _ev );
 private:
-	KSpreadView * m_pView;
+    KSpreadView * m_pView;
+    bool activateItem();
 signals:
-	void gotoLocation( int, int );
+    void gotoLocation( int, int );
 };
 
 /**
