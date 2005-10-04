@@ -210,8 +210,8 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     }
 
     //TODO "style:text-underline-width"/""style:text-underline-color"
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline-style" )
-         || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ))
+    if ( ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline-style" ) &&styleStack.attributeNS( KoXmlNS::fo, "text-underline-style" )!="none" )
+         || ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) && styleStack.attributeNS( KoXmlNS::style, "text-underline-style" )!="none") )
     {
         m_fontFlags |= FUnderline;
         m_featuresSet |= SFontFlag;
@@ -227,7 +227,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         //TODO
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) && styleStack.attributeNS( KoXmlNS::style, "text-line-through-style" )!="none"
          /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
     {
         m_fontFlags |= FStrike;

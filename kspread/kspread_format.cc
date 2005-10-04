@@ -1125,11 +1125,12 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
         setTextFontBold( true ); // only thing we support
 
     //TODO add "style:text-underline-width" "style:text-underline-color"
-    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline-style" )
-         || font.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
+    if ( ( font.hasAttributeNS( KoXmlNS::fo, "text-underline-style" ) && font.attributeNS( KoXmlNS::fo, "text-underline-style" ) != "none" )
+         || ( font.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) && font.attributeNS( KoXmlNS::style, "text-underline-style" )!="none" ) )
         setTextFontUnderline( true ); // only thing we support
 
     if ( font.hasAttributeNS( KoXmlNS::style, "text-line-through-style" )
+         && font.attributeNS( KoXmlNS::style, "text-line-through-style" ) != "none"
          /*&& ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" )*/)
         setTextFontStrike( true ); // only thing we support
 
