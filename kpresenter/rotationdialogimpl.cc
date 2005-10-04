@@ -48,8 +48,8 @@ RotationDialogImpl::RotationDialogImpl( QWidget *parent, const char* name )
 
     // Draw the circle of checkboxes.
     QGridLayout *circleLayout = new QGridLayout(m_angleGroup, 4, 5);
-    circleLayout->addItem(new QSpacerItem ( 1, 1 ), 0, 0);
-    circleLayout->addItem(new QSpacerItem ( 1, 1 ), 0, 5);
+    circleLayout->addItem(new QSpacerItem ( 1, 1 , QSizePolicy::MinimumExpanding ), 0, 0);
+    circleLayout->addItem(new QSpacerItem ( 1, 1 , QSizePolicy::MinimumExpanding ), 0, 5);
     CircleToggle *r0 = new CircleToggle(m_angleGroup, "tm", 0);
     CircleToggle *r45 = new CircleToggle(m_angleGroup, "tr", 45);
     CircleToggle *r90 = new CircleToggle(m_angleGroup, "mr", 90);
