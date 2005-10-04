@@ -690,7 +690,10 @@ QPen convertOasisStringToPen( const QString &border )
     QPen pen;
     //string like "0.088cm solid #800000"
     if (border.isEmpty() || border=="none" || border=="hidden") // in fact no border
+	{
+		pen.setStyle( Qt::NoPen );
         return pen;
+	}
     //code from koborder, for the moment kspread doesn't use koborder
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
