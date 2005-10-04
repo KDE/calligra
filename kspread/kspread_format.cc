@@ -1111,9 +1111,12 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
     }
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) && ( font.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold") )
         setTextFontBold( true ); // only thing we support
-    if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
+
+    if ( ( font.hasAttributeNS( KoXmlNS::fo, "text-underline-style" ) && font.attributeNS( KoXmlNS::fo, "text-underline-style" ) != "none" )
+         || ( font.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) && font.attributeNS( KoXmlNS::style, "text-underline-style" )!="none" ) )
         setTextFontUnderline( true ); // only thing we support
-    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) && ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" ))
+	if ( font.hasAttributeNS( KoXmlNS::style, "text-line-through-style" )
+	&& font.attributeNS( KoXmlNS::style, "text-line-through-style" ) != "none")
         setTextFontStrike( true ); // only thing we support
     if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
     {
