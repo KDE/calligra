@@ -179,12 +179,12 @@ public:
            STYLE_AUTO_LIST = 5,
            // 6 is available
            STYLE_NUMERIC_DATE = 7,
-	   STYLE_NUMERIC_TIME = 8,
+           STYLE_NUMERIC_TIME = 8,
            STYLE_NUMERIC_FRACTION = 9,
            STYLE_NUMERIC_PERCENTAGE = 10,
            STYLE_NUMERIC_SCIENTIFIC = 11,
            STYLE_NUMERIC_CURRENCY = 12,
-	   STYLE_NUMERIC_TEXT = 13,
+           STYLE_NUMERIC_TEXT = 13,
            STYLE_HATCH = 14,
            STYLE_GRAPHICAUTO = 15};
 
@@ -224,12 +224,10 @@ public:
          *  (In fact that tag name is the one passed to writeStyle)
          */
         DefaultType = 0,
-        /**
-         *  TextType is always text-properties.
-	 *  ParagType is always paragraph-properties.
-         */
+        /// TextType is always text-properties.
         TextType,
-	ParagraphType,
+        /// ParagraphType is always paragraph-properties.
+        ParagraphType,
         ChildElement, ///< @internal
         N_NumTypes ///< @internal
     };
