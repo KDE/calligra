@@ -185,9 +185,9 @@ Editor::fill()
 
 	d->topItem = new EditorDummyItem(this);
 
-	int i = 0;
+//	int i = 0;
 	StringListMap map = d->set->groups();
-	kopropertydbg << "Editor::fill(): groups = " << map.count() << endl;
+//	kopropertydbg << "Editor::fill(): groups = " << map.count() << endl;
 	if(map.count() == 1) { // one group (default one), so don't show groups
 //		EditorGroupItem *hiddenGroupItem = new EditorGroupItem(d->topItem, "");
 
@@ -545,7 +545,7 @@ Editor::slotSetWillBeDeleted()
 Widget*
 Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 {
-	int type = property->type();
+//	int type = property->type();
 	Widget *widget = d->widgetCache[property];
 
 	if(!widget) {
@@ -704,7 +704,7 @@ Editor::slotCollapsed(QListViewItem *item)
 }
 
 void
-Editor::slotColumnSizeChanged(int section, int, int newS)
+Editor::slotColumnSizeChanged(int /*section*/, int, int /*newS*/)
 {
 	updateEditorGeometry();
 	for (QListViewItemIterator it(this); it.current(); ++it) {
@@ -772,11 +772,11 @@ Editor::setFocus()
 		}
 	}
 	if (d->currentWidget) {
-		kopropertydbg << "d->currentWidget->setFocus()" << endl;
+//		kopropertydbg << "d->currentWidget->setFocus()" << endl;
 		d->currentWidget->setFocus();
 	}
 	else {
-		kopropertydbg << "KListView::setFocus()" << endl;
+//		kopropertydbg << "KListView::setFocus()" << endl;
 		KListView::setFocus();
 	}
 }

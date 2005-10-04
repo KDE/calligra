@@ -50,10 +50,10 @@
 #include <kdebug.h>
 #endif
 
-namespace KoProperty {
+static KStaticDeleter<KoProperty::Factory> m_factoryDeleter;
+static KoProperty::Factory* m_factory = 0;
 
-static KStaticDeleter<Factory> m_factoryDeleter;
-static Factory* m_factory = 0;
+namespace KoProperty {
 
 CustomPropertyFactory::CustomPropertyFactory(QObject *parent)
  : QObject(parent)

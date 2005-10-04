@@ -121,10 +121,9 @@ class KOPROPERTY_EXPORT Factory : public QObject
 		~Factory();
 
 		FactoryPrivate *d;
-		friend class KStaticDeleter;
+		friend class KStaticDeleter<KoProperty::Factory>;
 };
 
 }
 
 #endif
-
