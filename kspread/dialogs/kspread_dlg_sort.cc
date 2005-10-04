@@ -156,7 +156,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   page2Layout->addWidget( firstKeyBox, 0, 1 );
 
   QButtonGroup * orientationGroup = new QButtonGroup( m_page2, "orientationGroup" );
-  orientationGroup->setTitle( i18n( "Data Orientation" ) );
+  orientationGroup->setTitle( i18n( "Layout" ) );
   orientationGroup->setColumnLayout(0, Qt::Vertical );
   orientationGroup->layout()->setSpacing( KDialog::spacingHint() );
   orientationGroup->layout()->setMargin( KDialog::marginHint() );
@@ -164,13 +164,13 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   orientationGroupLayout->setAlignment( Qt::AlignTop );
 
   m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
-  m_sortColumn->setText( i18n( "Data in &Columns (Across)" ) );
+  m_sortColumn->setText( i18n( "Sort &Rows" ) );
   m_sortColumn->setChecked( true );
 
   orientationGroupLayout->addWidget( m_sortColumn, 0, 0 );
 
   m_sortRow = new QRadioButton( orientationGroup, "m_sortRow" );
-  m_sortRow->setText( i18n( "Data in &Rows (Down)" ) );
+  m_sortRow->setText( i18n( "Sort &Columns" ) );
 
   orientationGroupLayout->addWidget( m_sortRow, 1, 0 );
 
@@ -183,6 +183,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   m_firstRowHeader = new QCheckBox( m_page2, "m_copyLayout" );
   m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
+  m_firstRowHeader->setChecked(true);
 
   page2Layout->addMultiCellWidget( m_firstRowHeader, 3, 3, 0, 1 );
 
