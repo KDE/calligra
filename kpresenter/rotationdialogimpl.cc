@@ -24,6 +24,7 @@
 #include <qobject.h>
 #include <qevent.h>
 
+#include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -49,14 +50,14 @@ RotationDialogImpl::RotationDialogImpl( QWidget *parent, const char* name )
     QGridLayout *circleLayout = new QGridLayout(m_angleGroup, 4, 5);
     circleLayout->addItem(new QSpacerItem ( 1, 1 ), 0, 0);
     circleLayout->addItem(new QSpacerItem ( 1, 1 ), 0, 5);
-    CircleToggle *r0 = new CircleToggle(m_angleGroup, "/home/zander/images/tm", 0);
-    CircleToggle *r45 = new CircleToggle(m_angleGroup, "/home/zander/images/tr", 45);
-    CircleToggle *r90 = new CircleToggle(m_angleGroup, "/home/zander/images/mr", 90);
-    CircleToggle *r135 = new CircleToggle(m_angleGroup, "/home/zander/images/br", 135);
-    CircleToggle *r180 = new CircleToggle(m_angleGroup, "/home/zander/images/bm", 180);
-    CircleToggle *r225 = new CircleToggle(m_angleGroup, "/home/zander/images/bl", -135);
-    CircleToggle *r270 = new CircleToggle(m_angleGroup, "/home/zander/images/ml", -90);
-    CircleToggle *r315 = new CircleToggle(m_angleGroup, "/home/zander/images/tl", -45);
+    CircleToggle *r0 = new CircleToggle(m_angleGroup, "tm", 0);
+    CircleToggle *r45 = new CircleToggle(m_angleGroup, "tr", 45);
+    CircleToggle *r90 = new CircleToggle(m_angleGroup, "mr", 90);
+    CircleToggle *r135 = new CircleToggle(m_angleGroup, "br", 135);
+    CircleToggle *r180 = new CircleToggle(m_angleGroup, "bm", 180);
+    CircleToggle *r225 = new CircleToggle(m_angleGroup, "bl", -135);
+    CircleToggle *r270 = new CircleToggle(m_angleGroup, "ml", -90);
+    CircleToggle *r315 = new CircleToggle(m_angleGroup, "tl", -45);
     circleLayout->addWidget(r0, 0, 2);
     circleLayout->addWidget(r180, 2, 2);
     circleLayout->addWidget(r45, 0, 3);
@@ -114,8 +115,12 @@ void RotationDialogImpl::angleMode( int angle )
 
 
 CircleToggle::CircleToggle( QWidget *parent, const QString &image, int id )
-    : QLabel( parent ), m_off(image +".png"), m_on (image +"dn.png")
+    : QLabel( parent )
 {
+    KIconLoader il("kpresenter");
+    m_off = il.loadIcon("rotate/" + image, KIcon::NoGroup, 28);
+    m_on = il.loadIcon("rotate/" + image + "dn", KIcon::NoGroup, 28);
+
     m_selected = false;
     m_id = id;
     setMouseTracking(true);
