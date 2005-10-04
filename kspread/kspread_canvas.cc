@@ -5411,11 +5411,11 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadCell* cell = sheet->visibleCellAt( col, row );
     if ( !cell )
         return;
-
+#if 0
     // Quick cut
     if( cell->strOutText().isEmpty() )
         return;
-
+#endif
     // displayed tool tip, which has the following priorities:
     //  - cell content if the cell dimension is too small
     //  - cell comment
