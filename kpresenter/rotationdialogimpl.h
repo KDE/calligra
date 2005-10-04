@@ -28,6 +28,9 @@ class QObject;
 class QEvent;
 class CircleGroup;
 
+/**
+  * A dialog that lets the user interactively choose an angle for rotation.
+  */
 class RotationDialogImpl : public KDialogBase
 {
     Q_OBJECT
@@ -53,20 +56,38 @@ private:
     bool noSignals;
 };
 
+/**
+ * A toggle-button like widget that shows one pixmap when it is checked,
+ *  and another when it is unselected.
+ */
 class CircleToggle : public QLabel
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor.
+     * @param parent the parent widget, as required by Qt.
+     * @param image the named image that we will use. "rotate/" is
+     *      prepended and "dn" is appended for the checked state.
+     * @param id  the id that will be used in the clicked signal
+     */
     CircleToggle(QWidget *parent, const QString &image, int id);
+    /// return the id which is passed in the constructor
     int id() { return m_id; }
 
 signals:
+    /// this signal will be emitted whenever the button becomes checked
     void clicked(int id);
 
 public slots:
+    /**
+     * Check or uncheck the button.  On change the toggle will emit the clicked signal.
+     * @param on the new state of the button.
+     */
     void setChecked(bool on);
 
 protected:
+    /// overwritten method from QWidget.
     void mousePressEvent ( QMouseEvent * e );
 
 private:
@@ -75,15 +96,33 @@ private:
     int m_id;
 };
 
+/**
+ * A button-group equivalent for a set of CircleToggle classes.
+ */
 class CircleGroup : public QFrame
 {
     Q_OBJECT;
 public:
+    /**
+     * Constructor.
+     * @param parent the parent widget, as required by Qt.
+     */
     CircleGroup(QWidget *parent);
+    /**
+     * Set the angle the group is currently representing. If there is a child button
+     * that registred itself (using add()) with an ID that matches the argument angle
+     * that button will be checked.  All other buttons will be disabled.
+     * @param angle the new angle to be represented by this circle
+     */
     void setAngle(int angle);
+    /**
+     * Add a CircleToggle button as one of the representers of this circle.
+     * @param button the button
+     */
     void add(CircleToggle *button);
 
 signals:
+    /// clicked will be emitted when one of the child buttons is clicked.
     void clicked(int id);
 
 private slots:
