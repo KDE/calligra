@@ -5647,9 +5647,12 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         else if( valuetype == "string" )
         {
             QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
-            if ( value.isEmpty() )
+            if ( value.isEmpty() && element.hasAttributeNS( KoXmlNS::office, "string-value" ))
+            {
+                //if there is not string-value entry don't overwrite value stored into <text:p>
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
-            setValue( value );
+                setValue( value );
+            }
             setFormatType (Text_format);
         }
         else
