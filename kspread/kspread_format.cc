@@ -280,7 +280,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     }
     if ((  hasProperty( KSpreadFormat::PVerticalText,true ) || hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )&& m_pStyle->hasProperty( KSpreadStyle::PVerticalText ) )
     {
-        currentCellStyle.addProperty( "fo:direction", "ttb" );
+        currentCellStyle.addProperty( "style:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
         currentCellStyle.addProperty( "style:rotation-align", "none" );
     }
@@ -480,7 +480,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( ( hasProperty( PVerticalText, true ) || hasNoFallBackProperties( PVerticalText )
            || force ) && verticalText( _col, _row ) )
     {
-        currentCellStyle.addProperty( "fo:direction", "ttb" );
+        currentCellStyle.addProperty( "style:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
         currentCellStyle.addProperty( "style:rotation-align", "none" );
     }
@@ -1253,7 +1253,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         if ( ok && ( a != 0 ))
             setAngle( -a );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "direction" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) )
     {
         setVerticalText( true );
     }
