@@ -8,143 +8,105 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>363</width>
-            <height>187</height>
+            <width>356</width>
+            <height>162</height>
         </rect>
     </property>
     <property name="caption">
         <string>Rotation</string>
     </property>
-    <hbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QButtonGroup">
+        <widget class="QSlider" row="1" column="0">
             <property name="name">
-                <cstring>angleGroup</cstring>
+                <cstring>angleSlider</cstring>
             </property>
-            <property name="title">
-                <string>Angle</string>
+            <property name="minValue">
+                <number>-180</number>
             </property>
-            <property name="exclusive">
-                <bool>true</bool>
+            <property name="maxValue">
+                <number>180</number>
             </property>
-            <vbox>
+            <property name="lineStep">
+                <number>5</number>
+            </property>
+            <property name="pageStep">
+                <number>15</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Below</enum>
+            </property>
+            <property name="tickInterval">
+                <number>90</number>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout13</cstring>
+            </property>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>Layout4</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>customRadio</cstring>
-                            </property>
-                            <property name="text">
-                                <string>C&amp;ustom:</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+U</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="KDoubleNumInput">
-                            <property name="name">
-                                <cstring>customInput</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="minValue">
-                                <number>-180</number>
-                            </property>
-                            <property name="maxValue">
-                                <number>180</number>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>zeroRadio</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;0°</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+0</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
+                        <string>Angle:</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="KDoubleNumInput">
                     <property name="name">
-                        <cstring>ninetyRadio</cstring>
+                        <cstring>angleSpinbox</cstring>
                     </property>
-                    <property name="text">
-                        <string>&amp;90°</string>
+                    <property name="enabled">
+                        <bool>true</bool>
                     </property>
-                    <property name="accel">
-                        <string>Alt+9</string>
+                    <property name="value">
+                        <number>0</number>
                     </property>
-                    <property name="buttonGroupId">
-                        <number>90</number>
+                    <property name="minValue">
+                        <number>-180</number>
                     </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>oneEightyRadio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>1&amp;80°</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+8</string>
-                    </property>
-                    <property name="buttonGroupId">
+                    <property name="maxValue">
                         <number>180</number>
                     </property>
+                    <property name="suffix">
+                        <string> °</string>
+                    </property>
+                    <property name="precision">
+                        <number>1</number>
+                    </property>
                 </widget>
-                <widget class="QRadioButton">
+                <spacer>
                     <property name="name">
-                        <cstring>twoSeventyRadio</cstring>
+                        <cstring>spacer16</cstring>
                     </property>
-                    <property name="text">
-                        <string>2&amp;70°</string>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
-                    <property name="accel">
-                        <string>Alt+7</string>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
                     </property>
-                    <property name="buttonGroupId">
-                        <number>270</number>
+                    <property name="sizeHint">
+                        <size>
+                            <width>31</width>
+                            <height>20</height>
+                        </size>
                     </property>
-                </widget>
-            </vbox>
+                </spacer>
+            </hbox>
         </widget>
-        <widget class="QFrame">
+        <widget class="QFrame" row="0" column="1" rowspan="4" colspan="1">
             <property name="name">
                 <cstring>previewPanel</cstring>
             </property>
@@ -161,7 +123,35 @@
                 <enum>Sunken</enum>
             </property>
         </widget>
-    </hbox>
+        <spacer row="3" column="0">
+            <property name="name">
+                <cstring>spacer17</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QFrame" row="0" column="0">
+            <property name="name">
+                <cstring>angleFrame</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <customwidgets>
 </customwidgets>
