@@ -5484,7 +5484,11 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         kdDebug()<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
         isFormula = true;
         QString formula;
-        convertFormula( formula, element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
+		QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
+		//necessary to remove it to load formula from oocalc2.0 (use namespace)
+		if (oasisFormula.startsWith( "oooc:" ) )
+				oasisFormula= oasisFormula.remove( "oooc:" );
+		convertFormula( formula, oasisFormula);
         setCellText( formula );
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
