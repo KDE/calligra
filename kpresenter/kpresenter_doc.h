@@ -580,7 +580,6 @@ protected:
 
     void saveUsedSoundFileToStore( KoStore *_store, QStringList _list );
     void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
-    void addStyles( const QDomElement* style, KoOasisContext & context );
     void fillStyleStack( const QDomElement& object, KoOasisContext & context );
     /*
      * increaseOrder = true by default, put to false when we have group of animation

@@ -2078,33 +2078,24 @@ void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & 
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
         //kdDebug()<<"Add 'presentation:style-name' \n";
-        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )], context );
+        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )] );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         kdDebug()<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
-        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )], context);
+        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
         //kdDebug()<<"Add 'draw:text-style-name' \n";
-        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "text-style-name", QString::null )], context );
+        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "text-style-name", QString::null )] );
     }
     if ( object.hasAttributeNS( KoXmlNS::text, "style-name" ) )
     {
         //kdDebug()<<"Add 'text:style-name' : "<<object.attributeNS( KoXmlNS::text, "style-name", QString::null )<<endl;
-        addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::text, "style-name", QString::null )], context );
+        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::text, "style-name", QString::null )] );
     }
 }
-
-void KPresenterDoc::addStyles( const QDomElement* style, KoOasisContext & context )
-{
-    // this function is necessary as parent styles can have parents themself
-    if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-        addStyles( context.oasisStyles().styles()[style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null )], context );
-    context.addStyles( style );
-}
-
 
 bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
