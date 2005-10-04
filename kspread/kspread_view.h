@@ -89,7 +89,7 @@ public:
 
     /** Destroys the view */
     ~KSpreadView();
-    
+
     KSpreadDoc* doc();
 
     /** Returns the canvas of the view */
@@ -469,7 +469,7 @@ public slots:
      * Shows context menu when tabbar is double-clicked.
      */
     void popupTabBarMenu( const QPoint& );
-    
+
     void handleDamages( const QValueList<KSpread::Damage*>& damages );
 
     void runInternalTests();
@@ -591,13 +591,14 @@ private:
     // don't allow copy or assignment
     KSpreadView( const KSpreadView& );
     KSpreadView& operator=( const KSpreadView& );
-    
-    void initView();    
+
+    void initView();
 
     bool spellSwitchToOtherSheet();
     void spellCleanup();
 
     void endOperation( QRect const & rect );
+    KSpreadCell* nextFindValidCell( int col, int row );
 };
 
 #endif // KSPREAD_VIEW

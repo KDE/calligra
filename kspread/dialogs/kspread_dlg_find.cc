@@ -53,6 +53,19 @@ KSpreadFindOption::KSpreadFindOption( QWidget *parent)
     lst << i18n( "Notes" );
     m_searchIn->insertStringList( lst );
 
+    comboLayout = new QHBoxLayout( m_findExtension );
+    label = new QLabel( i18n( "Search Direction:" ), m_findExtension );
+    comboLayout->addWidget( label );
+
+    m_searchDirection = new QComboBox( m_findExtension );
+    comboLayout->addWidget( m_searchDirection );
+    layout1->addLayout( comboLayout );
+
+    lst.clear();
+    lst << i18n( "Row" );
+    lst << i18n( "Column" );
+    m_searchDirection->insertStringList( lst );
+
     m_findExtension->hide();
     emit adjustSize();
 }
@@ -66,6 +79,17 @@ KSpreadFindOption::searchTypeValue KSpreadFindOption::searchType() const
         return Note;
     else
         return Value;
+}
+
+KSpreadFindOption::searchDirectionValue KSpreadFindOption::searchDirection() const
+{
+    int pos = m_searchDirection->currentItem();
+    if ( pos == 0 )
+        return Row;
+    else if ( pos == 1 )
+        return Column;
+    else
+        return Row;
 }
 
 

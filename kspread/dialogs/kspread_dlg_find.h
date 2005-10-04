@@ -37,8 +37,10 @@ class KSpreadFindOption : public QObject
     bool searchInAllSheet() const;
 
     enum searchTypeValue { Value, Note};
+    enum searchDirectionValue { Row, Column};
 
     searchTypeValue searchType() const;
+    searchDirectionValue searchDirection() const;
 
 private slots:
     void slotMoreOptions();
@@ -51,6 +53,7 @@ private:
     QCheckBox *m_searchInAllSheet;
     QWidget *m_findExtension;
     QComboBox *m_searchIn;
+    QComboBox *m_searchDirection;
 };
 
 class KSpreadFindDlg : public KFindDialog
@@ -62,6 +65,7 @@ class KSpreadFindDlg : public KFindDialog
     ~KSpreadFindDlg();
     bool searchInAllSheet() const;
     KSpreadFindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
+    KSpreadFindOption::searchDirectionValue searchDirection() const { return m_findOptions->searchDirection(); }
 
  private slots:
     void slotAjustSize();

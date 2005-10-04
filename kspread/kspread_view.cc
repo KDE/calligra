@@ -192,7 +192,7 @@ public:
     QStringList findStrings;
     QStringList replaceStrings;
     KSpreadFindOption::searchTypeValue typeValue;
-
+    KSpreadFindOption::searchDirectionValue directionValue;
     // Current "find" operation
     KFind* find;
     KReplace* replace;
@@ -1381,6 +1381,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d->findLeftColumn = 0;
     d->findRightColumn = 0;
     d->typeValue = KSpreadFindOption::Value;
+    d->directionValue = KSpreadFindOption::Row;
     d->find = 0;
     d->replace = 0;
 
@@ -3880,7 +3881,7 @@ void KSpreadView::find()
     d->findOptions = dlg.options();
     d->findStrings = dlg.findHistory();
     d->typeValue = dlg.searchType();
-
+    d->directionValue = dlg.searchDirection();
 
     // Create the KFind object
     delete d->find;
@@ -3957,10 +3958,20 @@ void KSpreadView::findNext()
 
         if ( res == KFind::NoMatch )  {
             // Go to next cell, skipping unwanted cells
-            if ( forw )
-                ++d->findPos.rx();
+            if ( d->directionValue == KSpreadFindOption::Row )
+            {
+                if ( forw )
+                    ++d->findPos.rx();
+                else
+                    --d->findPos.rx();
+            }
             else
-                --d->findPos.rx();
+            {
+               if ( forw )
+                    ++d->findPos.ry();
+                else
+                    --d->findPos.ry();
+             }
             cell = findNextCell();
         }
     }
@@ -3983,6 +3994,16 @@ void KSpreadView::findNext()
     }
 }
 
+KSpreadCell* KSpreadView::nextFindValidCell( int col, int row )
+{
+    KSpreadCell *cell = activeSheet()->cellAt( col, row );
+    if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
+        cell = 0L;
+    if ( d->typeValue == KSpreadFindOption::Note && cell && cell->comment(col, row).isEmpty())
+        cell = 0L;
+    return cell;
+}
+
 KSpreadCell* KSpreadView::findNextCell()
 {
     // getFirstCellRow / getNextCellRight would be faster at doing that,
@@ -3996,29 +4017,51 @@ KSpreadCell* KSpreadView::findNextCell()
     int maxRow = sheet->maxRow();
     //kdDebug() << "findNextCell starting at " << col << "," << row << "   forw=" << forw << endl;
 
-    while ( !cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0) )
+    if ( d->directionValue == KSpreadFindOption::Row )
+    {
+        while ( !cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0) )
+        {
+            while ( !cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn) )
+            {
+                cell = nextFindValidCell( col, row );
+                if ( forw ) ++col;
+                else --col;
+            }
+            if ( cell )
+                break;
+            // Prepare looking in the next row
+            if ( forw )  {
+                col = d->findLeftColumn;
+                ++row;
+            } else {
+                col = d->findRightColumn;
+                --row;
+            }
+            //kdDebug() << "next row: " << col << "," << row << endl;
+        }
+    }
+    else
     {
         while ( !cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn) )
         {
-            cell = sheet->cellAt( col, row );
-            if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
-                cell = 0L;
-            if ( d->typeValue == KSpreadFindOption::Note && cell && cell->comment(col, row).isEmpty())
-                cell = 0L;
-            if ( forw ) ++col;
-            else --col;
+            while ( !cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0) )
+            {
+                cell = nextFindValidCell( col, row );
+                if ( forw ) ++row;
+                else --row;
+            }
+            if ( cell )
+                break;
+            // Prepare looking in the next col
+            if ( forw )  {
+                row = 0;
+                ++col;
+            } else {
+                col = maxRow;
+                --col;
+            }
+            //kdDebug() << "next row: " << col << "," << row << endl;
         }
-        if ( cell )
-            break;
-        // Prepare looking in the next row
-        if ( forw )  {
-            col = d->findLeftColumn;
-            ++row;
-        } else {
-            col = d->findRightColumn;
-            --row;
-        }
-        //kdDebug() << "next row: " << col << "," << row << endl;
     }
     // if ( !cell )
     // No more next cell - TODO go to next sheet (if not looking in a selection)
@@ -4112,9 +4155,9 @@ void KSpreadView::slotReplace( const QString &newText, int, int, int )
 
     // ...now I remember, update it!
     cell->setDisplayDirtyFlag();
-    if ( d->typeValue = KSpreadFindOption::Value )
+    if ( d->typeValue == KSpreadFindOption::Value )
         cell->setCellText( newText );
-    else if ( d->typeValue = KSpreadFindOption::Note )
+    else if ( d->typeValue == KSpreadFindOption::Note )
         cell->setComment( newText );
     cell->clearDisplayDirtyFlag();
 }
