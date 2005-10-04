@@ -223,12 +223,10 @@ public:
          *  (In fact that tag name is the one passed to writeStyle)
          */
         DefaultType = 0,
-        /**
-         *  TextType is always text-properties.
-	 	 *  ParagType is always paragraph-properties.
-         */
+        /// TextType is always text-properties.
         TextType,
-		ParagraphType,		
+        /// ParagraphType is always paragraph-properties.
+        ParagraphType,
         ChildElement, ///< @internal
         N_NumTypes ///< @internal
     };
