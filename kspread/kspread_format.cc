@@ -265,9 +265,11 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( hasProperty( KSpreadFormat::PAngle,true ) || hasNoFallBackProperties( KSpreadFormat::PAngle ) )
     {
         if ( m_pStyle->rotateAngle() != 0 )
+		{
+			currentCellStyle.addProperty( "style:rotation-align", "none" );
             currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
-    }
-
+    	}
+	}
     if ( ( hasProperty( KSpreadFormat::PMultiRow,true ) || hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
          && m_pStyle->hasProperty( KSpreadStyle::PMultiRow ) )
     {
@@ -277,7 +279,8 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     {
         currentCellStyle.addProperty( "fo:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
-    }
+    	currentCellStyle.addProperty( "style:rotation-align", "none" );
+	}
     if ( ( hasProperty( KSpreadFormat::PDontPrintText,true ) || hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) ) && m_pStyle->hasProperty( KSpreadStyle::PDontPrintText ) )
     {
         currentCellStyle.addProperty( "style:print-content", "false");
@@ -452,8 +455,11 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( hasProperty( PAngle, true ) || hasNoFallBackProperties( PAngle ) || force )
     {
         if ( getAngle( _col, _row ) != 0 )
+		{
+			 currentCellStyle.addProperty( "style:rotation-align", "none" );
             currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( _col, _row ) ) );
-    }
+    	}
+	}
 
     if ( ( hasProperty( PMultiRow, true ) || hasNoFallBackProperties( PMultiRow )
            || force ) && multiRow( _col, _row )  )
@@ -466,7 +472,8 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     {
         currentCellStyle.addProperty( "fo:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
-    }
+    	currentCellStyle.addProperty( "style:rotation-align", "none" );
+	}
     if( hasProperty( PDontPrintText, true ) || hasNoFallBackProperties( PDontPrintText ) || force )
     {
         if ( !getDontprintText( _col, _row ) )

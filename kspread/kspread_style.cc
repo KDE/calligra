@@ -1013,7 +1013,8 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         style.addProperty( "fo:direction", "ttb" );
         style.addProperty( "style:rotation-angle", "0" );
-    }
+    	style.addProperty( "style:rotation-align", "none" );
+	}
 #if 0
     if ( featureSet( SFloatFormat ) )
         format.setAttribute( "float", (int) m_floatFormat );
@@ -1031,8 +1032,10 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     }
 #endif
     if ( featureSet( SAngle ) )
+	{
+		style.addProperty( "style:rotation-align", "none" );
         style.addProperty( "style:rotation-angle", QString::number( -1.0 *m_rotateAngle  ) );
-
+	}
     if ( featureSet( SIndent ) )
     {
         style.addPropertyPt("fo:margin-left", m_indent, KoGenStyle::ParagraphType );
