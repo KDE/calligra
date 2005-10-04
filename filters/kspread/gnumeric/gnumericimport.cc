@@ -1909,6 +1909,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
       }
     }
     QDomNode sheets = docElem.namedItem("gmr:Sheets");
+    if ( sheets.isNull() )
+    {
+        //avoid crash with new file format.
+        //TODO allow to load new file format
+        return KoFilter::ParsingError;
+    }
     QDomNode sheet =  sheets.namedItem("gmr:Sheet");
 
     /* This sets the Document information. */
