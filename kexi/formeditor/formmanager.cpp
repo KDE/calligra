@@ -83,13 +83,13 @@ namespace KFormDesigner {
 class PropertyFactory : public KoProperty::CustomPropertyFactory
 {
 	public:
-		PropertyFactory(FormManager *manager) : KoProperty::CustomPropertyFactory(),
+		PropertyFactory(FormManager *manager) : KoProperty::CustomPropertyFactory(manager),
 		 m_manager(manager)
 		{
 		}
 		virtual ~PropertyFactory() {}
 
-		CustomProperty*  createCustomProperty(int type) { return 0;}
+		CustomProperty*  createCustomProperty(Property *parent) { return 0;}
 		Widget* createCustomWidget(Property *prop)
 		{
 			return new KFDPixmapEdit(m_manager, prop);
@@ -143,7 +143,7 @@ FormManager::FormManager(QObject *parent,
 
 	// register kfd custom editors
 	m_propFactory = new PropertyFactory(this);
-	Factory::getInstance()->registerEditor(KoProperty::Pixmap, m_propFactory);
+	Factory::self()->registerEditor(KoProperty::Pixmap, m_propFactory);
 }
 
 FormManager::~FormManager()
