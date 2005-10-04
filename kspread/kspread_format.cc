@@ -267,7 +267,10 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( hasProperty( KSpreadFormat::PAngle,true ) || hasNoFallBackProperties( KSpreadFormat::PAngle ) )
     {
         if ( m_pStyle->rotateAngle() != 0 )
+        {
+            currentCellStyle.addProperty( "style:rotation-align", "none" );
             currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
+        }
     }
 
     if ( ( hasProperty( KSpreadFormat::PMultiRow,true ) || hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
@@ -279,6 +282,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     {
         currentCellStyle.addProperty( "fo:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
+        currentCellStyle.addProperty( "style:rotation-align", "none" );
     }
     if ( ( hasProperty( KSpreadFormat::PDontPrintText,true ) || hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) ) && m_pStyle->hasProperty( KSpreadStyle::PDontPrintText ) )
     {
@@ -461,7 +465,10 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( hasProperty( PAngle, true ) || hasNoFallBackProperties( PAngle ) || force )
     {
         if ( getAngle( _col, _row ) != 0 )
+        {
             currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( _col, _row ) ) );
+            currentCellStyle.addProperty( "style:rotation-align", "none" );
+        }
     }
 
     if ( ( hasProperty( PMultiRow, true ) || hasNoFallBackProperties( PMultiRow )
@@ -475,6 +482,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     {
         currentCellStyle.addProperty( "fo:direction", "ttb" );
         currentCellStyle.addProperty( "style:rotation-angle", "0" );
+        currentCellStyle.addProperty( "style:rotation-align", "none" );
     }
     if( hasProperty( PDontPrintText, true ) || hasNoFallBackProperties( PDontPrintText ) || force )
     {
@@ -533,7 +541,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
         rightBorder = rightBorderPen( _col, _row );
     if ( hasProperty( PTopBorder, true ) || hasNoFallBackProperties( PTopBorder ) || force )
         topBorder = topBorderPen( _col, _row );
-      if ( hasProperty( PBottomBorder, true ) || hasNoFallBackProperties( PBottomBorder ) || force )
+    if ( hasProperty( PBottomBorder, true ) || hasNoFallBackProperties( PBottomBorder ) || force )
         bottomBorder = bottomBorderPen( _col, _row );
     if ( ( leftBorder == rightBorder ) &&
          ( leftBorder == topBorder ) &&
