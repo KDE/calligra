@@ -446,21 +446,21 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
 QString KSpreadRange::toString()
 {
 	QString result;
-	
+
 	if (sheet)
 	{
-		result=util_rangeName(sheet,range);		
+		result=util_rangeName(sheet,range);
 	}
 	else
 	{
 		result=util_rangeName(range);
 	}
-	
+
 	//Insert $ characters to show fixed parts of range
-	
+
 	int pos=result.find("!")+1;
 	Q_ASSERT(pos != -1);
-	
+
 	if (leftFixed)
 	{
 		result.insert(pos,'$');
@@ -470,28 +470,28 @@ QString KSpreadRange::toString()
 	{
 		result.insert(pos+KSpreadCell::columnName(range.left()).length(),'$');
 	}
-	
+
 	pos=result.find(":")+1;
 	Q_ASSERT(pos != -1);
-	
+
 	if (rightFixed)
 	{
 		result.insert(pos,'$');
 		pos++; //Takes account of extra character added in
 	}
-	if (bottomFixed) 
+	if (bottomFixed)
 	{
-		result.insert(pos+KSpreadCell::columnName(range.right()).length(),'$'); 
+		result.insert(pos+KSpreadCell::columnName(range.right()).length(),'$');
 	}
-	
-	
+
+
 	return result;
 }
 
 void KSpreadRange::getStartPoint(KSpreadPoint* pt)
 {
 	if (!isValid()) return;
-	
+
 	pt->setRow(startRow());
 	pt->setColumn(startCol());
 	pt->columnFixed=leftFixed;
@@ -503,7 +503,7 @@ void KSpreadRange::getStartPoint(KSpreadPoint* pt)
 void KSpreadRange::getEndPoint(KSpreadPoint* pt)
 {
 	if (!isValid()) return;
-	
+
 	pt->setRow(endRow());
 	pt->setColumn(endCol());
 	pt->columnFixed=rightFixed;
@@ -523,11 +523,11 @@ bool KSpreadRange::intersects (const KSpreadRange &r) const
 }
 
 bool KSpreadRange::isValid() const
-{ 
-	return  ( range.left() >= 0 ) && 
-		( range.right() >= 0 ) && 
+{
+	return  ( range.left() >= 0 ) &&
+		( range.right() >= 0 ) &&
 		( sheet != 0 || sheetName.isEmpty() ) &&
-		( range.isValid() ) ; 
+		( range.isValid() ) ;
 }
 
 bool util_isAllSelected(const QRect &selection)
@@ -751,7 +751,10 @@ QPen convertOasisStringToPen( const QString &border )
     QPen pen;
     //string like "0.088cm solid #800000"
     if (border.isEmpty() || border=="none" || border=="hidden") // in fact no border
+    {
+        pen.setStyle( Qt::NoPen );
         return pen;
+    }
     //code from koborder, for the moment kspread doesn't use koborder
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
