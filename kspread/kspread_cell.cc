@@ -5507,7 +5507,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
         //necessary to remove it to load formula from oocalc2.0 (use namespace)
         if (oasisFormula.startsWith( "oooc:" ) )
-            oasisFormula= oasisFormula.remove( "oooc:" );
+            oasisFormula= oasisFormula.mid( 5 );
         convertFormula( formula, oasisFormula);
         setCellText( formula );
     }
