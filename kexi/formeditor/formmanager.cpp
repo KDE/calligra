@@ -83,13 +83,15 @@ namespace KFormDesigner {
 class PropertyFactory : public KoProperty::CustomPropertyFactory
 {
 	public:
-		PropertyFactory(FormManager *manager) : KoProperty::CustomPropertyFactory(manager),
-		 m_manager(manager)
+		PropertyFactory(QObject *parent, FormManager *manager) 
+		: KoProperty::CustomPropertyFactory(parent),
+			m_manager(manager)
 		{
 		}
 		virtual ~PropertyFactory() {}
 
-		CustomProperty*  createCustomProperty(Property *parent) { return 0;}
+		CustomProperty* createCustomProperty(Property *) { return 0;}
+
 		Widget* createCustomWidget(Property *prop)
 		{
 			return new KFDPixmapEdit(m_manager, prop);
@@ -142,8 +144,7 @@ FormManager::FormManager(QObject *parent,
 		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 
 	// register kfd custom editors
-	m_propFactory = new PropertyFactory(this);
-	Factory::self()->registerEditor(KoProperty::Pixmap, m_propFactory);
+	Factory::self()->registerEditor(KoProperty::Pixmap, new PropertyFactory(Factory::self(), this));
 }
 
 FormManager::~FormManager()
@@ -153,7 +154,7 @@ FormManager::~FormManager()
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
 	delete m_uiCodeDialog;
 #endif
-	delete m_propFactory;
+//	delete m_propFactory;
 }
 
 void

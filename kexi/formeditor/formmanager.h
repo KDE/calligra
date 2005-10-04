@@ -54,7 +54,6 @@ class Container;
 class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
-class PropertyFactory;
 typedef QPtrList<KAction> ActionList;
 
 //! A class to manage (create/load/save) Forms
@@ -464,7 +463,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		int m_options; //!< @see Options enum
 		int m_contextMenuKey; //!< Id of context menu key (cached)
 
-		PropertyFactory *m_propFactory;
 		void *m_objectBlockingPropertyEditorUpdating;
 		bool m_isRedoing : 1;
 
