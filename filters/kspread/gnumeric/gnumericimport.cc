@@ -804,9 +804,9 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
   if ( count == 0 )
   {
     list1 << "&[TAB]" << "&[DATE]" << "&[PAGE]"
-          << "&[PAGES]";
-    list2 << "<sheet>" << "<date>" << "<page>"
-          << "<pages>";
+    		<< "&[PAGES]"<<"&[TIME]" << "&[FILE]";
+	list2 << "<sheet>" << "<date>" << "<page>"
+          << "<pages>" << "<time>" << "<file>";
     count = list1.count();
   }
 
@@ -818,9 +818,9 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
     {
       kdDebug(30521) << "Found var: " << list1[i] << endl;
       if ( i == 0 )
-        result = result.replace( n, list1[i].length(), table->tableName() );
+        result = result.replace( list1[i], table->tableName() );
       else
-        result = result.replace( n, list1[i].length(), list2[i] );
+        result = result.replace( list1[i], list2[i] );
     }
   }
 
@@ -885,7 +885,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   if ( !foot.isNull() )
   {
     kdDebug(30521) << "Parsing footer: " << foot.attribute("Left") << ", " << foot.attribute("Middle") << ", "
-              << foot.attribute("right") << ", " <<endl;
+              << foot.attribute("Right") << ", " <<endl;
     if ( foot.hasAttribute("Left") )
       footLeft = convertVars( foot.attribute("Left"), table );
     if ( foot.hasAttribute("Middle") )

@@ -1580,6 +1580,8 @@ QString GNUMERICExport::convertVariable( QString headerFooter )
     headerFooter = headerFooter.replace( "<date>", "&[DATE]" );
     headerFooter = headerFooter.replace( "<page>", "&[PAGE]" );
     headerFooter = headerFooter.replace( "<pages>", "&[PAGES]" );
+	headerFooter = headerFooter.replace( "<time>", "&[TIME]" );
+	headerFooter = headerFooter.replace( "<file>", "&[FILE]" );
     return headerFooter;
 }
 
