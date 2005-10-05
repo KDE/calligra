@@ -23,7 +23,7 @@
 
 #include "combobox.h"
 
-template<class U, class T> class QDict;
+template<class U, class T> class QMap;
 
 namespace KoProperty {
 

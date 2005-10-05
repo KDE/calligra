@@ -25,7 +25,7 @@
 
 #include <qvariant.h>
 
-template<class U, class T> class QDict;
+template<class U, class T> class QMap;
 
 class QLabel;
 
