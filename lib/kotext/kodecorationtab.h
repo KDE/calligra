@@ -43,11 +43,11 @@ public:
     void setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
 
 signals:
-    void fontColorChanged( const QColor& color );
-    void backgroundColorChanged( const QColor& color );
-    void shadowColorChanged( const QColor& color );
-    void shadowDistanceChanged( double dist );
-    void shadowDirectionChanged( int direct );
+    void fontColorChanged( const QColor& );
+    void backgroundColorChanged( const QColor&  );
+    void shadowColorChanged( const QColor&  );
+    void shadowDistanceChanged( double );
+    void shadowDirectionChanged( int  );
     void shadowChanged();
 
 protected:

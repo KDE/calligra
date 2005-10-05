@@ -37,11 +37,8 @@ KoDecorationTab::KoDecorationTab( QWidget* parent, const char* name, WFlags fl )
     connect( textKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( fontColorChanged( const QColor& ) ) );
     connect( backgroundKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( backgroundColorChanged( const QColor& ) ) );
     connect( shadowKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( shadowColorChanged( const QColor& ) ) );
-    connect( shadowKColorButton, SIGNAL( changed( const QColor& ) ), this, SIGNAL( shadowColorChanged( ) ) );
     connect( shadowDistanceKDoubleNumInput, SIGNAL( valueChanged( double ) ), this, SIGNAL( shadowDistanceChanged( double ) ) );
-    connect( shadowDistanceKDoubleNumInput, SIGNAL( valueChanged( double ) ), this, SIGNAL( shadowDistanceChanged( ) ) );
     connect( shadowDirectionButtonGroup, SIGNAL( clicked( int ) ), this, SIGNAL( shadowDirectionChanged( int ) ) );
-    connect( shadowDirectionButtonGroup, SIGNAL( clicked( int ) ), this, SIGNAL( shadowDirectionChanged( ) ) );
 }
 
 KoDecorationTab::~KoDecorationTab()
@@ -58,7 +55,7 @@ QColor KoDecorationTab::getBackgroundColor() const
     return backgroundKColorButton->color();
 }
 
-double KoDecorationTab::getShadowDistanceX() const 
+double KoDecorationTab::getShadowDistanceX() const
 {
     short int sd = shadowDirectionButtonGroup->selectedId();
     double dist = shadowDistanceKDoubleNumInput->value();
