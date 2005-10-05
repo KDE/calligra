@@ -103,6 +103,7 @@ KSpreadValue function_sin( const Formula* formula, QValueVector<KSpreadValue> ar
   
   return KSpreadValue( sin( angle.asFloat() ) );
 */
+  return KSpreadValue::errorVALUE();
 }
 
 FunctionRepository::FunctionRepository()
