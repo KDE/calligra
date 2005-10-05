@@ -87,7 +87,7 @@ private:
 
 struct KSPREAD_EXPORT KSpreadRange
 {
-  KSpreadRange() { sheet = 0; range.setLeft( -1 ); }
+  KSpreadRange();
   KSpreadRange( const QString& );
   KSpreadRange( const QString&, KSpreadMap*, KSpreadSheet* default_sheet = 0 );
   KSpreadRange( const KSpreadRange& r ) {

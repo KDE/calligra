@@ -2449,46 +2449,53 @@ void KSpreadView::autoSum()
     if ( d->canvas->editor() )
         return;
 
+	//Get the selected range and remove the current cell from it (as that is
+	//where the result of the autosum will be stored - perhaps change
+	//this behaviour??)
+	KSpreadRange rg;
+	//rg.sheet=activeSheet();
+	QRect sel=selection(false);
+
+	if (sel.height() > 1)
+	{
+		if (marker().y()==sel.top())
+			sel.setTop(sel.top()+1);
+		if (marker().y()==sel.bottom())
+			sel.setBottom(sel.bottom()-1);
+	}
+	else
+	{
+		if (sel.width() > 1)
+		{
+			if (marker().x()==sel.left())
+				sel.setLeft(sel.left()+1);
+
+			if (marker().x()==sel.right())
+				sel.setRight(sel.right()-1);
+		}
+		else
+		{
+			sel=QRect();
+		}
+	}
+
+	if ( (sel.width() > 1) && (sel.height() > 1) )
+		sel=QRect();
+
+	rg.range=sel;
+
     d->canvas->createEditor( KSpreadCanvas::CellEditor );
-    d->canvas->editor()->setText( "=SUM()" );
-    d->canvas->editor()->setCursorPosition( 5 );
 
-    // Try to find numbers above
-    if ( d->canvas->markerRow() > 1 )
-    {
-        KSpreadCell* cell = 0;
-        int r = d->canvas->markerRow();
-        do
-        {
-            cell = activeSheet()->cellAt( d->canvas->markerColumn(), --r );
-        }
-        while ( cell && cell->value().isNumber() );
-
-        if ( r + 1 < d->canvas->markerRow() )
-        {
-            d->canvas->startChoose( QRect( d->canvas->markerColumn(), r + 1, 1, d->canvas->markerRow() - r - 1 ) );
-            return;
-        }
-    }
-
-
-    // Try to find numbers left
-    if ( d->canvas->markerColumn() > 1 )
-    {
-        KSpreadCell* cell = 0;
-        int c = d->canvas->markerColumn();
-        do
-        {
-            cell = activeSheet()->cellAt( --c, d->canvas->markerRow() );
-        }
-        while ( cell && cell->value().isNumber() );
-
-        if ( c + 1 < d->canvas->markerColumn() )
-        {
-            d->canvas->startChoose( QRect( c + 1, d->canvas->markerRow(), d->canvas->markerColumn() - c - 1, 1 ) );
-            return;
-        }
-    }
+	if ( (rg.range.isValid() ) && (!rg.range.isEmpty()) )
+	{
+    		d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
+		d->canvas->deleteEditor(true);
+	}
+	else
+	{
+		d->canvas->editor()->setText( "=SUM( )" );
+    		d->canvas->editor()->setCursorPosition( 5 );
+	}
 }
 
 /*

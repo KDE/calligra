@@ -362,6 +362,16 @@ bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
       ((pos.y() == cell.pos.y()) && (pos.x() < cell.pos.x()));
 }
 
+KSpreadRange::KSpreadRange()
+{
+  	sheet = 0; 
+	range.setLeft( -1 );
+	
+	leftFixed=false;
+	rightFixed=false;
+	topFixed=false;
+	bottomFixed=false;
+}
 KSpreadRange::KSpreadRange(const QString & _str)
 {
     range.setLeft(-1);
