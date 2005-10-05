@@ -1,1 +1,1 @@
-SUBDIRS = kword ooimpress
+SUBDIRS = kword ooimpress powerpoint

@@ -161,6 +161,8 @@ QByteArray PowerPointImport::createStyles()
   stylesWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
   stylesWriter->addAttribute( "xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" );
   stylesWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
+  stylesWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
+  stylesWriter->addAttribute( "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
   stylesWriter->addAttribute( "office:version","1.0" );
 
   // office:styles
@@ -169,10 +171,27 @@ QByteArray PowerPointImport::createStyles()
 
   // office:automatic-styles
   stylesWriter->startElement( "office:automatic-styles" );
+  stylesWriter->startElement( "style:page-layout" );
+  stylesWriter->addAttribute( "style:name","pm1" );
+  stylesWriter->addAttribute( "style:page-usage","all" );
+  stylesWriter->startElement( "style:page-layout-properties" );
+  stylesWriter->addAttribute( "fo:margin-bottom","42pt" );
+  stylesWriter->addAttribute( "fo:margin-left","28pt" );
+  stylesWriter->addAttribute( "fo:margin-right","28pt" );
+  stylesWriter->addAttribute( "fo:margin-top","42pt" );
+  stylesWriter->addAttribute( "fo:page-height","841pt" );
+  stylesWriter->addAttribute( "fo:page-width","595pt" );
+  stylesWriter->addAttribute( "style:print-orientation","portrait" );
+  stylesWriter->endElement();
+  stylesWriter->endElement();
   stylesWriter->endElement();
 
   // office:master-styles
   stylesWriter->startElement( "office:master-styles" );
+  stylesWriter->startElement( "style:master-page" );
+  stylesWriter->addAttribute( "style:name", "Standard" );
+  stylesWriter->addAttribute( "style:page-layout-name", "pm1" );
+  stylesWriter->endElement();
   stylesWriter->endElement();
 
   stylesWriter->endElement();  // office:document-styles
@@ -205,7 +224,7 @@ QByteArray PowerPointImport::createContent()
   contentWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
   contentWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
   contentWriter->addAttribute( "xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" );
-  contentWriter->addAttribute( "xmlns:svg","http://www.w3.org/2000/svg" );
+  contentWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
   contentWriter->addAttribute( "office:version","1.0" );
 
   // office:automatic-styles
