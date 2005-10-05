@@ -2690,6 +2690,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
                             QString* plainText, KoPicture* picture, KWTextFrameSet* fs )
 {
     m_pictureCollection->assignUniqueIds();
+    fixZOrders();
 
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoOasisStore oasisStore( store );
@@ -4414,7 +4415,8 @@ void KWDocument::fixZOrders() {
     for (int pgnum = 0 ; pgnum < pageCount() ; pgnum++) {
         QPtrList<KWFrame> frames = framesInPage(pgnum,true /*sorted by zorder*/);
         // scan this page to see if we need to fixup:
-        // fix up if two frames have the same zOrder.
+        // fix up if two frames have the same zOrder,
+        // or if a zOrder is negative (not allowed by OASIS)
         bool need_fixup = false;
         KWFrame *f = frames.last();
         if ( !f )
@@ -4423,7 +4425,7 @@ void KWDocument::fixZOrders() {
         f = frames.prev();
         for ( ; f ; f=frames.prev() ) {
             if ( !f->frameSet()->isFloating() &&
-                 f->zOrder() == lastZOrder ) {
+                 ( f->zOrder() == lastZOrder || f->zOrder() < 0 ) ) {
                 need_fixup = true;
                 break;
             }
