@@ -28,8 +28,8 @@
 #include <qsyntaxhighlighter.h>
 #include <kcombobox.h>
 
-
 #include <vector>
+#include <klineedit.h>
 
 class KSpreadCell;
 class KSpreadSheet;
@@ -43,7 +43,7 @@ class KSpreadLocationEditWidget;
 
 class QFont;
 class QButton;
-//class KLineEdit;
+
 class KTextEdit;
 
 class KSpreadCellEditor : public QWidget
@@ -219,12 +219,15 @@ private:
  * A widget that allows the user to enter an arbitrary
  * cell location to goto or cell selection to highlight
  */
-class KSpreadLocationEditWidget : public QLineEdit
+class KSpreadLocationEditWidget : public KLineEdit
 {
     Q_OBJECT
 public:
     KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
     KSpreadView * view() const { return m_pView;}
+
+    void addCompletionItem( const QString &_item );
+    void removeCompletionItem( const QString &_item );
 
 private slots:
     void slotActivateItem();
@@ -233,6 +236,7 @@ protected:
     virtual void keyPressEvent( QKeyEvent * _ev );
 private:
     KSpreadView * m_pView;
+    KCompletion completionList;
     bool activateItem();
 signals:
     void gotoLocation( int, int );

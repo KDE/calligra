@@ -717,23 +717,45 @@ KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * 
 void KSpreadComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
 {
     insertItem( _name );
+    m_locationWidget->addCompletionItem( _name );
 }
 
 void KSpreadComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
 {
     for ( int i = 0; i<count(); i++ )
+    {
         if ( text(i)==_name )
         {
             removeItem( i );
-            return;
+            break;
         }
+    }
+    m_locationWidget->removeCompletionItem( _name );
 }
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
                                                       KSpreadView * _view )
-    : QLineEdit( _parent, "KSpreadLocationEditWidget" ),
+    : KLineEdit( _parent, "KSpreadLocationEditWidget" ),
       m_pView(_view)
 {
+    setCompletionObject( &completionList,true );
+    setCompletionMode(KGlobalSettings::CompletionAuto  );
+}
+
+void KSpreadLocationEditWidget::addCompletionItem( const QString &_item )
+{
+    kdDebug()<<"  KSpreadLocationEditWidget::addCompletionItem add :"<<_item<<endl;
+    if ( completionList.items().contains( _item) == 0 )
+    {
+        completionList.addItem( _item );
+        kdDebug()<<" _utem :"<<_item<<endl;
+        kdDebug()<<" completionList.items().count()"<<completionList.items().count()<<endl;
+    }
+}
+
+void KSpreadLocationEditWidget::removeCompletionItem( const QString &_item )
+{
+    completionList.removeItem( _item );
 }
 
 void KSpreadLocationEditWidget::slotActivateItem()
