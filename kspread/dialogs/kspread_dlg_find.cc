@@ -29,7 +29,7 @@
 KSpreadFindOption::KSpreadFindOption( QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(parent);
-    m_moreOptions = new QPushButton( i18n( "More Options >>" ), parent );
+    m_moreOptions = new QPushButton( i18n( "More Options" ), parent );
     layout->addWidget(  m_moreOptions );
 
     connect( m_moreOptions, SIGNAL( clicked () ), this, SLOT( slotMoreOptions() ) );
@@ -37,7 +37,7 @@ KSpreadFindOption::KSpreadFindOption( QWidget *parent)
     m_findExtension = new QWidget( parent );
     layout->addWidget( m_findExtension );
     QVBoxLayout *layout1 = new QVBoxLayout( m_findExtension );
-    m_searchInAllSheet = new QCheckBox( i18n( "Search in All Sheet" ),m_findExtension );
+    m_searchInAllSheet = new QCheckBox( i18n( "Search Entire Sheet" ),m_findExtension );
     layout1->addWidget( m_searchInAllSheet );
 
     QHBoxLayout *comboLayout = new QHBoxLayout( m_findExtension );
@@ -49,7 +49,7 @@ KSpreadFindOption::KSpreadFindOption( QWidget *parent)
     layout1->addLayout( comboLayout );
 
     QStringList lst;
-    lst << i18n( "Value" );
+    lst << i18n( "Cell Values" );
     lst << i18n( "Notes" );
     m_searchIn->insertStringList( lst );
 
@@ -62,8 +62,8 @@ KSpreadFindOption::KSpreadFindOption( QWidget *parent)
     layout1->addLayout( comboLayout );
 
     lst.clear();
-    lst << i18n( "Row" );
-    lst << i18n( "Column" );
+    lst << i18n( "Across then Down" );
+    lst << i18n( "Down then Across" );
     m_searchDirection->insertStringList( lst );
 
     m_findExtension->hide();
@@ -98,12 +98,12 @@ void KSpreadFindOption::slotMoreOptions()
     if ( m_findExtension->isHidden() )
     {
         m_findExtension->show();
-        m_moreOptions->setText( i18n( "More Options <<" ));
+        m_moreOptions->setText( i18n( "Fewer Options" ));
     }
     else
     {
         m_findExtension->hide();
-        m_moreOptions->setText( i18n( "More Options >>" ));
+        m_moreOptions->setText( i18n( "More Options" ));
     }
     emit adjustSize();
 }

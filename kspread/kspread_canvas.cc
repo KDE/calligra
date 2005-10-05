@@ -1064,7 +1064,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
 	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
 
-	  setCursor(Qt::CrossCursor);
+	  setCursor(Qt::SizeFDiagCursor);
 
 	  return;
   }
@@ -1077,7 +1077,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   //Check for a highlight range size grip and show the user a visual cue if found.
   if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   {
-	  setCursor(Qt::CrossCursor);
+	  setCursor(Qt::SizeFDiagCursor);
 	  return;
   }
 
