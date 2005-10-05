@@ -199,8 +199,15 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     KoFilterChain::Ptr chain( 0 );
     // Are we owned by a KoDocument?
     if ( m_document ) {
-        QCString mimeType( m_document->nativeFormatMimeType() );
+        QCString mimeType = m_document->nativeFormatMimeType();
+        QStringList extraMimes = m_document->extraNativeMimeTypes();
+        int i=0, n = extraMimes.count();
         chain = m_graph.chain( this, mimeType );
+        while( !chain && i<n) {
+            mimeType = extraMimes[i].utf8();
+            chain = m_graph.chain( this, mimeType );
+            ++i;
+        }
     }
     else {
         kdError(s_area) << "You aren't supposed to use import() from a filter!" << endl;
