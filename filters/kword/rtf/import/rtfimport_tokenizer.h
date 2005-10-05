@@ -50,6 +50,8 @@ public:
 
     // tokenizer (private) data
 private:
+    int nextChar();
+
     QFile *infile;
     QByteArray fileBuffer;
     QCString tokenText;
