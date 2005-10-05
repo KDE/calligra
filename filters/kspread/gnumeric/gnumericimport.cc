@@ -622,19 +622,19 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  KSpr
                 switch( _style )
                 {
                 case Left:
-                    cell->setLeftBorderPen( pen ); // check if this is really GoUp
+                    cell->setLeftBorderPen( pen );
                     break;
                 case Right:
-                    cell->setRightBorderPen( pen ); // check if this is really GoUp
+                    cell->setRightBorderPen( pen );
                     break;
                 case Top:
-                    cell->setTopBorderPen( pen ); // check if this is really GoUp
+                    cell->setTopBorderPen( pen );
                     break;
                 case Bottom:
-                    cell->setBottomBorderPen( pen ); // check if this is really GoUp
+                    cell->setBottomBorderPen( pen );
                     break;
                 case Diagonal:
-                    cell->setFallDiagonalPen( pen ); // check if this is really GoUp
+                    cell->setFallDiagonalPen( pen ); // check if this is really Fall border
                     break;
                 case Revdiagonal:
                     cell->setGoUpDiagonalPen( pen ); // check if this is really GoUp
@@ -804,9 +804,9 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
   if ( count == 0 )
   {
     list1 << "&[TAB]" << "&[DATE]" << "&[PAGE]"
-          << "&[PAGES]";
+          << "&[PAGES]"<<"&[TIME]" << "&[FILE]";
     list2 << "<sheet>" << "<date>" << "<page>"
-          << "<pages>";
+          << "<pages>" << "<time>" << "<file>";
     count = list1.count();
   }
 
@@ -816,11 +816,13 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
 
     if ( n != -1 )
     {
-      kdDebug(30521) << "Found var: " << list1[i] << endl;
+        kdDebug(30521) << "Found var: " << list1[i] << endl;
+      kdDebug(30521)<<" result before : "<<result<<endl;
       if ( i == 0 )
-        result = result.replace( n, list1[i].length(), table->tableName() );
+        result = result.replace( list1[i], table->tableName() );
       else
-        result = result.replace( n, list1[i].length(), list2[i] );
+        result = result.replace( list1[i], list2[i] );
+      kdDebug(30521)<<" result after :"<<result<<endl;
     }
   }
 
@@ -885,7 +887,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   if ( !foot.isNull() )
   {
     kdDebug(30521) << "Parsing footer: " << foot.attribute("Left") << ", " << foot.attribute("Middle") << ", "
-              << foot.attribute("right") << ", " <<endl;
+              << foot.attribute("Right") << ", " <<endl;
     if ( foot.hasAttribute("Left") )
       footLeft = convertVars( foot.attribute("Left"), table );
     if ( foot.hasAttribute("Middle") )
