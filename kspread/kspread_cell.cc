@@ -5488,6 +5488,8 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 		//necessary to remove it to load formula from oocalc2.0 (use namespace)
 		if (oasisFormula.startsWith( "oooc:" ) )
 				oasisFormula= oasisFormula.mid(5 );
+        else if (oasisFormula.startsWith( "kspr:" ) )
+                oasisFormula= oasisFormula.mid( 5 );
 		convertFormula( formula, oasisFormula);
         setCellText( formula );
     }
