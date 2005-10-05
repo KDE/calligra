@@ -817,12 +817,10 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
     if ( n != -1 )
     {
         kdDebug(30521) << "Found var: " << list1[i] << endl;
-      kdDebug(30521)<<" result before : "<<result<<endl;
       if ( i == 0 )
         result = result.replace( list1[i], table->tableName() );
       else
         result = result.replace( list1[i], list2[i] );
-      kdDebug(30521)<<" result after :"<<result<<endl;
     }
   }
 
@@ -899,8 +897,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   QDomElement head( printInfo.namedItem("gmr:Header").toElement() );
   if ( !head.isNull() )
   {
-    kdDebug(30521) << "Parsing header: " << head.attribute("Left") << ", " << head.attribute("Middle") << ", "
-              << head.attribute("right") << ", "<< endl;
+    kdDebug(30521) << "Parsing header: " << head.attribute("Left") << ", " << head.attribute("Middle") << ", " << head.attribute("Right") << ", "<< endl;
     if ( head.hasAttribute("Left") )
       headLeft = convertVars( head.attribute("Left"), table );
     if ( head.hasAttribute("Middle") )
