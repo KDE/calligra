@@ -23,6 +23,7 @@
 #include "vqpainter.h"
 #include "vstroke.h"
 #include "vcolor.h"
+#include "vfill.h"
 
 #include <qpainter.h>
 #include <qpaintdevice.h>
@@ -152,6 +153,7 @@ VQPainter::fillPath()
 {
 	// we probably dont need filling for qpainter
 	//m_index = 0;
+	m_painter->drawPolygon( m_pa, FALSE, 0, m_index );
 }
 
 void
@@ -182,8 +184,25 @@ VQPainter::setPen( const VStroke &stroke )
 }
 
 void
-VQPainter::setBrush( const VFill & )
+VQPainter::setBrush( const VFill &fill )
 {
+	switch( fill.type() )
+	{
+		case VFill::none:
+			m_painter->setBrush( Qt::NoBrush );
+		break;
+		case VFill::solid:
+			m_painter->setBrush( QBrush( fill.color(), Qt::SolidPattern ) );
+		break;
+		case VFill::grad:
+			// gradients are nor supported by qpainter
+			m_painter->setBrush( Qt::NoBrush );
+		break;
+		case VFill::patt:
+			// pixmap brushes not supported for printing
+			m_painter->setBrush( QBrush( fill.color(), fill.pattern().pixmap() ) );
+		break;
+	}
 }
 
 void
@@ -240,3 +259,23 @@ VQPainter::drawRect( const KoRect &rect )
 	m_painter->drawRect( QRect( rect.x(), rect.y(), rect.width(),  rect.height() ) );
 }
 
+void
+VQPainter::drawImage( const QImage &image, const QWMatrix &affine )
+{
+	QWMatrix matrix = m_painter->worldMatrix();
+	
+	double m11 = affine.m11() * matrix.m11() * m_zoomFactor + affine.m12() * matrix.m21();
+	double m12 = (affine.m11() * matrix.m12() + affine.m12() * matrix.m22() ) * m_zoomFactor;
+	double m21 = (affine.m21() * matrix.m11() + affine.m22() * matrix.m21() ) * m_zoomFactor;
+	double m22 = affine.m22() * matrix.m22() * m_zoomFactor + affine.m21() * matrix.m12();
+	double dx = matrix.dx() + affine.dx() * m_zoomFactor;
+	double dy = matrix.dy() - affine.dy() * m_zoomFactor;
+	
+	QWMatrix world( m11, m12, m21, m22, dx, dy );
+	
+	m_painter->setWorldMatrix( world );
+	
+	m_painter->drawImage( QPoint( 0, 0 ), image );
+	// restore old world matrix
+	m_painter->setWorldMatrix( matrix );
+}
