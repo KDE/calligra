@@ -67,7 +67,6 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     cfg->setGroup("palettes");
     
     m_allPalettesShown = cfg->readBoolEntry("palettesshown", true);
-    //kdDebug() << "ctor palettesshown: " << m_allPalettesShown << "\n";
     KToggleAction * m_toggleShowHidePalettes;
     
     if (m_allPalettesShown) {
@@ -86,9 +85,23 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
         m_toggleShowHidePalettes->setCheckedState(i18n("Hide all Palette Windows"));
     }
-    
-    
     m_viewActionMenu->insert(m_toggleShowHidePalettes);
+    
+    // Recreate the palettes in the saved order
+    QStringList paletteList = QStringList::split(",", cfg->readEntry("palettes"));
+    QStringList::iterator it;
+    for (it = paletteList.begin(); it != paletteList.end(); ++it) {
+        if (cfg->hasGroup("palette-" + (*it))) {
+        
+            cfg->setGroup("palette-" + (*it));
+            
+            enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readNumEntry("style", 0);
+            QString caption = cfg->readEntry("caption", "");
+            
+            createPalette((*it), caption, style); 
+        }
+    }
+    
 /*
     KAction * a = new KAction(i18n("Restore Palettes"),
                   0, this,
@@ -266,18 +279,23 @@ void KoPaletteManager::removeWidget(const QString & name)
 
 KoPalette * KoPaletteManager::createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style)
 {
-    Q_ASSERT(m_view);
-
+   Q_ASSERT(m_view);
     KoPalette * palette = 0;
+
+    palette = m_palettes->find(name);
+    if (palette) return palette;
+
+    
     switch (style) {
         case (PALETTE_DOCKER):
             palette = new KoTabPalette(m_view, name.latin1());
             break;
         case (PALETTE_TOOLBOX):
-        default:
             palette = new KoToolBoxPalette(m_view, name.latin1());
             break;
-
+        default:
+            // This is a custom palette that we cannot create
+            return 0;
     };
 
     if(!palette) return 0;
@@ -379,26 +397,20 @@ void KoPaletteManager::slotTogglePalette(int paletteIndex)
 
 void KoPaletteManager::slotToggleAllPalettes()
 {
-    //kdDebug() << "slotToggleAllPalettes 1: " << m_allPalettesShown << "\n";
     m_allPalettesShown = !m_allPalettesShown;
     
     QDictIterator<KoPalette> it(*m_palettes);
     for (; it.current(); ++it) {
         it.current()->makeVisible(m_allPalettesShown);
     }
-
-    //kdDebug() << "slotToggleAllPalettes 2: " << m_allPalettesShown << "\n";
 }
 
 void KoPaletteManager::showAllPalettes(bool shown)
 {
-    //kdDebug() << "showAllPalettes 1: " << m_allPalettesShown << ", bool shown " << shown << "\n";
-    
     QDictIterator<KoPalette> it(*m_palettes);
     for (; it.current(); ++it) {
         it.current()->makeVisible(shown);
     }
-    //kdDebug() << "showAllPalettes 2: " << m_allPalettesShown << "\n";
 }
 
 bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
@@ -408,7 +420,6 @@ bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
     if(e && e->type() == (QEvent::User + 42)) {
          KParts::PartActivateEvent * pae = dynamic_cast<KParts::PartActivateEvent *>(e);
          if(pae && pae->widget() && pae->widget() == m_view) {
-            //kdDebug() << "eventFilter: " << m_allPalettesShown << "\n";
             if (pae->activated()) {
                 showAllPalettes( m_allPalettesShown );
             }
@@ -437,15 +448,15 @@ void KoPaletteManager::save()
     Q_ASSERT(cfg);
     cfg->setGroup("");
 
-    QString paletteNames;
     QString widgets;
     
     // Save the list of palettes
     QDictIterator<KoPalette> itP(*m_palettes);
     
+    QStringList paletteList;
+    
     for (; itP.current(); ++itP) {
-        paletteNames.append(itP.currentKey() + ",");
-
+        
         KoPalette * p = itP.current();
         
         cfg->setGroup("palette-" + itP.currentKey());
@@ -464,12 +475,32 @@ void KoPaletteManager::save()
         cfg->writeEntry("palettestyle", p->style());
         cfg->writeEntry("caption", p->caption());
         cfg->writeEntry("offset", p->offset());
+
+        // XXX: I dare say that it is immediately visible that I never have had
+        //      any formal training in algorithms. BSAR.
+        if (paletteList.isEmpty()) {
+            paletteList.append(itP.currentKey());
+        }
+        else {
+            QStringList::iterator it;
+            bool inserted = false;
+            for (it = paletteList.begin(); it != paletteList.end(); ++it) {
+                KoPalette * p2 = m_palettes->find((*it));
+                if (p2->y() > p->y()) {
+                    paletteList.insert(it, itP.currentKey());
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) {
+                paletteList.append(itP.currentKey());
+            }
+        }
     }
     
     cfg->setGroup("palettes");
         
-    cfg->writeEntry("palettes", paletteNames);
-    //kdDebug() << "writing config: " << m_allPalettesShown << "\n";
+    cfg->writeEntry("palettes", paletteList.join(","));
     cfg->writeEntry("palettesshown", m_allPalettesShown);
     
     QDictIterator<QWidget> itW(*m_widgets);
