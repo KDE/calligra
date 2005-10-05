@@ -65,8 +65,9 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("palettes");
-    m_allPalettesShown = cfg->readBoolEntry("palettesshown", true);
     
+    m_allPalettesShown = cfg->readBoolEntry("palettesshown", true);
+    //kdDebug() << "ctor palettesshown: " << m_allPalettesShown << "\n";
     KToggleAction * m_toggleShowHidePalettes;
     
     if (m_allPalettesShown) {
@@ -378,21 +379,26 @@ void KoPaletteManager::slotTogglePalette(int paletteIndex)
 
 void KoPaletteManager::slotToggleAllPalettes()
 {
-    kdDebug() << "slotToggleAllPalettes: " << m_allPalettesShown << "\n";
+    //kdDebug() << "slotToggleAllPalettes 1: " << m_allPalettesShown << "\n";
     m_allPalettesShown = !m_allPalettesShown;
+    
     QDictIterator<KoPalette> it(*m_palettes);
     for (; it.current(); ++it) {
         it.current()->makeVisible(m_allPalettesShown);
     }
+
+    //kdDebug() << "slotToggleAllPalettes 2: " << m_allPalettesShown << "\n";
 }
 
 void KoPaletteManager::showAllPalettes(bool shown)
 {
+    //kdDebug() << "showAllPalettes 1: " << m_allPalettesShown << ", bool shown " << shown << "\n";
+    
     QDictIterator<KoPalette> it(*m_palettes);
     for (; it.current(); ++it) {
         it.current()->makeVisible(shown);
     }
-    m_allPalettesShown = shown;
+    //kdDebug() << "showAllPalettes 2: " << m_allPalettesShown << "\n";
 }
 
 bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
@@ -402,8 +408,9 @@ bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
     if(e && e->type() == (QEvent::User + 42)) {
          KParts::PartActivateEvent * pae = dynamic_cast<KParts::PartActivateEvent *>(e);
          if(pae && pae->widget() && pae->widget() == m_view) {
-            if (m_allPalettesShown) {
-                showAllPalettes( pae->activated() );
+            //kdDebug() << "eventFilter: " << m_allPalettesShown << "\n";
+            if (pae->activated()) {
+                showAllPalettes( m_allPalettesShown );
             }
             else {
                 showAllPalettes( false );
@@ -462,7 +469,7 @@ void KoPaletteManager::save()
     cfg->setGroup("palettes");
         
     cfg->writeEntry("palettes", paletteNames);
-    kdDebug() << "palettess shown: " << m_allPalettesShown << "\n";
+    //kdDebug() << "writing config: " << m_allPalettesShown << "\n";
     cfg->writeEntry("palettesshown", m_allPalettesShown);
     
     QDictIterator<QWidget> itW(*m_widgets);

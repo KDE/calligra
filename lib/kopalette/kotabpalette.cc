@@ -64,7 +64,7 @@ void KoTabPalette::showPage(QWidget *w)
 
 void KoTabPalette::makeVisible(bool v)
 {
-    kdDebug() << "make visible called for " << name() << ", " << v << "\n";
+    //kdDebug() << "make visible called for " << name() << ", " << v << "\n";
     if (v && m_page->count() > 0)
         show();
     else
