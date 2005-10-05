@@ -501,7 +501,19 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     bool ok = FALSE;
 
-    if (flags==KoDocument::InitDocEmpty)
+    if ( isEmbedded() )
+    {
+      QString fileName( locate( "kword_template", "Normal/.source/Embedded.kwt" , KWFactory::instance() ) );
+      resetURL();
+      initUnit();
+      ok = loadNativeFormat( fileName );
+      if ( !ok )
+        showLoadingErrorDialog();
+      setEmpty();
+      setModified( FALSE );
+      return ok;
+    }
+    else if (flags==KoDocument::InitDocEmpty)
     {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
         resetURL();
