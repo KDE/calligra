@@ -884,6 +884,8 @@ bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter 
                 if ( !path.isEmpty() )
                     path += '/';
                 path += childDoc->url().path();
+                if ( path.startsWith( "/" ) )
+                    path = path.mid( 1 ); // remove leading '/', no wanted in manifest
             }
             else
             {
@@ -893,7 +895,10 @@ bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter 
             // OOo uses a trailing slash for the path to embedded objects (== directories)
             if ( !path.endsWith( "/" ) )
                 path += '/';
-            manifestWriter->addManifestEntry( path, childDoc->nativeOasisMimeType() );
+            QCString mimetype = childDoc->nativeOasisMimeType();
+            if ( mimetype.isEmpty() )
+                mimetype = childDoc->nativeFormatMimeType();
+            manifestWriter->addManifestEntry( path, mimetype );
         }
     }
     return true;
@@ -1745,13 +1750,15 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
             return false;
         }
         _store->close();
+    } else {
+        kdWarning() << "couldn't open " << url << endl;
     }
 
     _store->pushDirectory();
     // Store as document URL
-    if ( url.startsWith( STORE_PROTOCOL ) )
+    if ( url.startsWith( STORE_PROTOCOL ) ) {
         m_url = KURL( url );
-    else {
+    } else {
         m_url = KURL( INTERNAL_PREFIX + url );
         _store->enterDirectory( url );
     }
@@ -1926,7 +1933,7 @@ int KoDocument::queryCloseExternalChildren()
             if ( doc )
             {
 		bool foo = doc->isStoredExtern();
-		kdDebug(36001) << "========== isStoredExtern() returned " 
+		kdDebug(36001) << "========== isStoredExtern() returned "
 			       << foo << " ==========" << endl;
 
                 if ( foo ) //###TODO: Handle non-native mimetype docs

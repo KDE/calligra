@@ -26,6 +26,7 @@
 #include <koxmlns.h>
 #include <koUnit.h>
 #include <koStore.h>
+#include <koStoreDevice.h>
 
 #include <kparts/partmanager.h>
 
@@ -256,7 +257,12 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
         return res;
     }
 
-    return loadDocumentInternal( store, e, true /*open url*/, true /*oasis*/ );
+    const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
+    if ( !oasis ) {
+        m_tmpURL += "/maindoc.xml";
+        kdDebug() << " m_tmpURL adjusted to " << m_tmpURL << endl;
+    }
+    return loadDocumentInternal( store, e, true /*open url*/, oasis );
 }
 
 bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntry& e, bool doOpenURL, bool oasis )
@@ -282,8 +288,11 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
                 store->enterDirectory( relPath );
                 res = document()->loadOasisFromStore( store );
                 store->popDirectory();
-            } else
+            } else {
+                if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) )
+                    m_tmpURL = KURL( m_tmpURL ).path().mid( 1 );
                 res = document()->loadFromStore( store, m_tmpURL );
+            }
             internalURL = true;
             document()->setStoreInternal( true );
         }
@@ -386,17 +395,26 @@ bool KoDocumentChild::saveOasisToStore( KoStore* store, KoXmlWriter* manifestWri
     const QString name = document()->url().path();
     kdDebug() << k_funcinfo << "saving " << name << endl;
 
-    // To make the children happy cd to the correct directory
-    store->pushDirectory();
-    store->enterDirectory( name );
+    if ( document()->nativeOasisMimeType().isEmpty() ) {
+        // Embedded object doesn't support OASIS OpenDocument, save in the old format.
 
-    if ( !document()->saveOasis( store, manifestWriter ) ) {
-        kdWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
-        return false;
+        if ( !document()->saveToStore( store, name ) )
+            return false;
+    }
+    else
+    {
+        // To make the children happy cd to the correct directory
+        store->pushDirectory();
+        store->enterDirectory( name );
+
+        if ( !document()->saveOasis( store, manifestWriter ) ) {
+            kdWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
+            return false;
+        }
+        // Now that we're done leave the directory again
+        store->popDirectory();
     }
 
-    // Now that we're done leave the directory again
-    store->popDirectory();
     return true;
 }
 
