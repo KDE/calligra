@@ -121,7 +121,6 @@ private:
       * Used by the copy constructor and assignment operator
       */
     void copy( const MReportSection* mReportSection );
-
 };
 
 }

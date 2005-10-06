@@ -1,11 +1,11 @@
 /***************************************************************************
-             mreportengine.cpp  -  Kugar report engine
-             -------------------
-   begin     : Sun Aug 15 1999
-   copyright : (C) 1999 by Mutiny Bay Software
-   email     : info@mutinybaysoftware.com
-   copyright : (C) 2002 Alexander Dymo
-   email     : cloudtemple@mksat.net
+            mreportengine.cpp  -  Kugar report engine
+            -------------------
+  begin     : Sun Aug 15 1999
+  copyright : (C) 1999 by Mutiny Bay Software
+  email     : info@mutinybaysoftware.com
+  copyright : (C) 2002 Alexander Dymo
+  email     : cloudtemple@mksat.net
 ***************************************************************************/
 
 #include <qfile.h>
@@ -60,7 +60,7 @@ MReportEngine::MReportEngine() : QObject()
 }
 
 /** Copy constructor */
-MReportEngine::MReportEngine( const MReportEngine& mReportEngine )  /*: QObject((QObject &) mReportEngine)*/
+MReportEngine::MReportEngine( const MReportEngine& mReportEngine )   /*: QObject((QObject &) mReportEngine)*/
 {
     copy( &mReportEngine );
 }
@@ -87,7 +87,7 @@ MReportEngine::~MReportEngine()
     grandTotal.clear();
     if ( m_pageCollection )
         m_pageCollection->removeRef();
-    kdDebug(31000) << k_funcinfo << endl;
+    kdDebug( 31000 ) << k_funcinfo << endl;
 }
 
 void MReportEngine::addRef()
@@ -269,7 +269,6 @@ MReportSection *MReportEngine::findDetailFooter( int level )
   */
 MPageCollection* MReportEngine::renderReport()
 {
-
     if ( !m_needRegeneration )
         return m_pageCollection;
     if ( m_pageCollection )
@@ -308,7 +307,6 @@ MPageCollection* MReportEngine::renderReport()
         }
     }
 
-
     // Initialize the grand total array
     grandTotal.clear();
     for ( int i = 0; i < rFooter.getCalcFieldCount(); i++ )
@@ -321,6 +319,8 @@ MPageCollection* MReportEngine::renderReport()
     int chkRow = 0;
     int curDetailLevel = 0;
     int prevDetailLevel = -1;
+    int curDetailHeader = -1;
+    int curDetailFooter = -1;
 
     for ( j = 0; j < rowCount; j++ )
     {
@@ -349,6 +349,10 @@ MPageCollection* MReportEngine::renderReport()
             detailValue = fields.namedItem( "level" ).nodeValue();
             curDetailLevel = detailValue.toInt();
 
+            // Reset the header/footer detail levels?
+            curDetailHeader = curDetailLevel > curDetailHeader ? -1 : curDetailHeader;
+            curDetailFooter = curDetailLevel > curDetailFooter ? -1 : curDetailFooter;
+
             // Draw detail footer if appropriate
             if ( curDetailLevel <= prevDetailLevel )
             {
@@ -373,23 +377,52 @@ MPageCollection* MReportEngine::renderReport()
                 }
             }
 
-            // Draw detail header for level curDetailLevel
-            MReportSection *header = findDetailHeader( curDetailLevel );
-            if ( header )
+            MReportDetail *detail = findDetail( detailValue.toInt() );
+            detail->setPageNumber( currPage );
+            detail->setReportDate( currDate );
+
+            int headerHeight = 0;
+            MReportSection * header = findDetailHeader( curDetailLevel );
+            if ( header && curDetailHeader != curDetailLevel )
+                headerHeight = header->getHeight();
+
+            bool repeating = ( currY + detail->getHeight() + headerHeight ) > currHeight ||
+                             ( detail->getRepeat() && currY + heightOfDetails > currHeight );
+            if ( repeating )
             {
-                header->setPageNumber( currPage );
-                header->setReportDate( currDate );
-                if ( ( currY + header->getHeight() ) > currHeight )
+                newPage( pages );
+
+                MReportDetail *sec;
+                for ( sec = details.first(); sec; sec = details.next() )
                 {
-                    newPage( pages );
+                    if ( sec->getLevel() != curDetailLevel && sec->getRepeat() )
+                    {
+                        sec->draw( &p, leftMargin, currY );
+                        currY += sec->getHeight();
+                    }
                 }
-                header->draw( &p, leftMargin, currY );
-                currY += header->getHeight();
             }
 
-            MReportDetail *detail = findDetail( detailValue.toInt() );
-            unsigned int fieldCount = detail->getFieldCount();
+            // Draw detail header for level curDetailLevel
+            // if it hasn't already been drawn
+            if ( curDetailHeader != curDetailLevel || repeating )
+            {
+                MReportSection * header = findDetailHeader( curDetailLevel );
+                if ( header )
+                {
+                    header->setPageNumber( currPage );
+                    header->setReportDate( currDate );
+                    if ( ( currY + header->getHeight() ) > currHeight )
+                    {
+                        newPage( pages );
+                    }
+                    header->draw( &p, leftMargin, currY );
+                    currY += header->getHeight();
+                    curDetailHeader = curDetailLevel;
+                }
+            }
 
+            unsigned int fieldCount = detail->getFieldCount();
             for ( i = 0; i < fieldCount; i++ )
             {
                 // Get the field value
@@ -403,24 +436,6 @@ MPageCollection* MReportEngine::renderReport()
                     int vsize = grandTotal.at( calcIdx ) ->size();
                     grandTotal.at( calcIdx ) ->resize( vsize + 1 );
                     grandTotal.at( calcIdx ) ->at( vsize ) = detailValue.toDouble();
-                }
-            }
-
-            detail->setPageNumber( currPage );
-            detail->setReportDate( currDate );
-            if ( ( currY + detail->getHeight() ) > currHeight ||
-                    ( detail->getRepeat() && currY + heightOfDetails > currHeight ) )
-            {
-                newPage( pages );
-
-                MReportDetail *sec;
-                for ( sec = details.first(); sec; sec = details.next() )
-                {
-                    if ( sec->getLevel() != curDetailLevel && sec->getRepeat() )
-                    {
-                        sec->draw( &p, leftMargin, currY );
-                        currY += sec->getHeight();
-                    }
                 }
             }
 
@@ -676,6 +691,7 @@ void MReportEngine::initTemplate()
     heightOfDetails = 0;
 
 #ifdef Q_WS_WIN
+
     recalcDimensions();
 #endif
 
@@ -743,16 +759,16 @@ void MReportEngine::setReportAttributes( QDomNode* report )
     pageWidth = ps.width();
     pageHeight = ps.height();
 
-    widthDelta = (float)pageWidth / templateWidth;
-    heightDelta = (float)pageHeight / templateheight;
+    widthDelta = ( float ) pageWidth / templateWidth;
+    heightDelta = ( float ) pageHeight / templateheight;
 
-    kdDebug(30001) << "pagewidth: " << pageWidth
-        << " pageheight: " << pageHeight << "\n"
-        << "templateWidth: " << templateWidth
-        << " templateheight: " << templateheight << "\n"
-        << "widthDelta: " << widthDelta
-        << " heightDelta: " << heightDelta
-        << endl;
+    kdDebug( 30001 ) << "pagewidth: " << pageWidth
+    << " pageheight: " << pageHeight << "\n"
+    << "templateWidth: " << templateWidth
+    << " templateheight: " << templateheight << "\n"
+    << "widthDelta: " << widthDelta
+    << " heightDelta: " << heightDelta
+    << endl;
 
     topMargin = scaleDeltaHeight( attributes.namedItem( "TopMargin" ).nodeValue().toInt() );
     bottomMargin = scaleDeltaHeight( attributes.namedItem( "BottomMargin" ).nodeValue().toInt() );
