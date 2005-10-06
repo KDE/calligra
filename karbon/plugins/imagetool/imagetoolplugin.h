@@ -53,6 +53,7 @@ protected:
 
 		virtual void execute();
 		virtual void unexecute();
+		virtual bool changesSelection() const { return true; }
 
 	protected:
 		VImage	*m_image;
