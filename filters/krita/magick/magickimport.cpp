@@ -28,6 +28,8 @@
 #include <kis_image_magick_converter.h>
 #include <kis_dlg_progress.h>
 #include <kis_progress_display_interface.h>
+#include <kis_image.h>
+#include <kis_layer.h>
 
 typedef KGenericFactory<MagickImport, KoFilter> MagickImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickimport, MagickImportFactory("kofficefilters"))
