@@ -1103,9 +1103,10 @@ void KWView::setupActions()
                     "be used to position tabulators among others.<p>Uncheck this to disable "
                     "the rulers from being displayed." ) );
 
-    actionViewShowGrid = new KToggleAction( i18n( "Grid" ), 0,
+    actionViewShowGrid = new KToggleAction( i18n( "Show Grid" ), 0,
                                             this, SLOT( viewGrid() ),
                                             actionCollection(), "view_grid" );
+    actionViewShowGrid->setCheckedState(i18n("Hide Grid"));
 
     actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
                                              this, SLOT(viewSnapToGrid() ),
