@@ -109,7 +109,7 @@ void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
 		m_le_name_autofill=true;
 	if (m_le_name_autofill) {
 		m_le_name_txtchanged_disable = true;
-		le_name->setText( string2Identifier(capt) );
+		le_name->setText( string2Identifier(capt).lower() );
 		m_le_name_txtchanged_disable = false;
 	}
 }

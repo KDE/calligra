@@ -134,9 +134,9 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
 	buttons_flyr->add(m_newObjectToolButton);
 
-	btn = new KexiSmallToolButton(this, sharedAction("edit_delete"));
-	btn->setTextLabel("");
-	buttons_flyr->add(btn);
+	m_deleteObjectToolButton = new KexiSmallToolButton(this, sharedAction("edit_delete"));
+	m_deleteObjectToolButton->setTextLabel("");
+	buttons_flyr->add(m_deleteObjectToolButton);
 
 	m_itemPopup->insertSeparator();
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -229,9 +229,9 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 		QString title_text = bit->text(0).stripWhiteSpace();
 		KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
 		KexiPart::Part* par_part = 0;
-		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceName().isEmpty()) {
+		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceCaption().isEmpty()) {
 			//add part type name
-			title_text +=  (" : " + par_part->instanceName());
+			title_text +=  (" : " + par_part->instanceCaption());
 		}
 		pm->changeTitle(m_itemPopupTitle_id, *bit->pixmap(0), title_text);
 	}
@@ -272,6 +272,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	bool gotgroup = it && !it->item();
  //TODO: also check if the item is not read only
 	setAvailable("edit_delete",gotitem);
+	m_deleteObjectToolButton->setEnabled(gotitem);
 	setAvailable("edit_cut",gotitem);
 	setAvailable("edit_copy",gotitem);
 //	setAvailable("edit_paste",gotgroup);
@@ -296,7 +297,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
 		if (part) {
-			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
+			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceCaption() ));
 			m_newObjectAction->setIcon( part->info()->createItemIcon() );
 //			m_newObjectToolbarAction->setIcon( part->info()->createItemIcon() );
 //			m_newObjectToolbarAction->setText(m_newObjectAction->text());

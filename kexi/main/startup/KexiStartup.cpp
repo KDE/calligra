@@ -659,7 +659,7 @@ QString KexiStartupHandler::detectDriverForFile(
 	QFileInfo finfo(dbFileName);
 	if (dbFileName.isEmpty() || !finfo.isReadable()) {
 		KMessageBox::sorry(parent, i18n(
-			"Could not load project.\nThe file \"%1\" does not exist.").arg(dbFileName));
+			"<qt><p>Could not load project.</p><p>The file <nobr>\"%1\"</nobr> does not exist.</p></qt>").arg(dbFileName));
 		return QString::null;
 	}
 	if (!finfo.isWritable()) {

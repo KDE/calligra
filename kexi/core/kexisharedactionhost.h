@@ -64,7 +64,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 You can reimplement it e.g. like in KexiMainWindowImpl::acceptsSharedActions():
 		 \code
 			return o->inherits("KexiDialogBase") || o->inherits("KexiViewBase");
-		 \code
+		 \endcode
 		 */
 		virtual bool acceptsSharedActions(QObject *o);
 

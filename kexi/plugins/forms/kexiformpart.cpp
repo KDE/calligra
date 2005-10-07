@@ -78,7 +78,12 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	m_registeredPartID = (int)KexiPart::FormObjectType;
 
 	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
-	m_names["instance"] = i18n("Form");
+	m_names["instanceName"] 
+		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+		"Use '_' character instead of spaces. First character should be a..z character. "
+		"If you cannot use latin characters in your language, use english word.", 
+		"form");
+	m_names["instanceCaption"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 	m_newObjectsAreDirty = true;
 
@@ -416,7 +421,8 @@ KexiFormPart::slotPropertyChanged(QWidget *w, const QCString &name, const QVaria
 	}
 	if (d->manager->activeForm()->widget() && name == "geometry") {
 		//fall back to sizeInternal property....
-		d->manager->propertySet()->property("sizeInternal").setValue(value.toRect().size());
+		if (d->manager->propertySet()->contains("sizeInternal"))
+			d->manager->propertySet()->property("sizeInternal").setValue(value.toRect().size());
 	}
 }
 

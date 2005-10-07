@@ -45,7 +45,12 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
 	m_registeredPartID = (int)KexiPart::TableObjectType;
 
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
-	m_names["instance"] = i18n("Table");
+	m_names["instanceName"] 
+		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+		"Use '_' character instead of spaces. First character should be a..z character. "
+		"If you cannot use latin characters in your language, use english word.", 
+		"table");
+	m_names["instanceCaption"] = i18n("Table");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 //js TODO: also add Kexi::TextViewMode when we'll have SQL ALTER TABLE EDITOR!!!
 }

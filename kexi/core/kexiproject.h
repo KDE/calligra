@@ -158,14 +158,15 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 The item will have assigned a new unique caption like e.g. "Table15",
 		 and unique name like "table15", but no specific identifier 
 		 (because id will be assigned on creation at the backend side).
-		 If \a suggestedName is not empty, it will be set as a name 
+		 If \a suggestedCaption is not empty, it will be set as a caption 
 		 (with number suffix, to avoid duplicated, e.g. "employees7" 
-		 for "employees" sugested name)
+		 for "employees" sugested name). Name will be then built based 
+		 on this caption using KexiUtils::string2Identifier().
 
 		 This method is used before creating new object.
 		 \return newly created part item or NULL on any error. */
 		KexiPart::Item* createPartItem(KexiPart::Info *info, 
-			const QString& suggestedName = QString::null );
+			const QString& suggestedCaption = QString::null );
 
 		/*! Adds item \a item after it is succesfully stored as an instance of part
 		 pointed by \a info. Also clears 'neverSaved' flag if \a item.

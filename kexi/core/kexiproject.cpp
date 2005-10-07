@@ -189,19 +189,25 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 			return false;
 	}
 
-	//*** create global BLOB container, if not present
-	if (!m_connection->drv_containsTable("kexi__blobs")) {
-		KexiDB::InternalTableSchema *t_blobs = new KexiDB::InternalTableSchema("kexi__blobs");
-		t_blobs->addField( new KexiDB::Field("o_id", KexiDB::Field::Integer, 
-			KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) )
-		.addField( new KexiDB::Field("o_data", KexiDB::Field::BLOB) )
-		.addField( new KexiDB::Field("o_name", KexiDB::Field::Text ) )
-		.addField( new KexiDB::Field("o_caption", KexiDB::Field::Text ) )
-		.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull, 
-			KexiDB::Field::NoOptions, 0, 0 ) );
+	KexiDB::InternalTableSchema *t_blobs = new KexiDB::InternalTableSchema("kexi__blobs");
+	t_blobs->addField( new KexiDB::Field("o_id", KexiDB::Field::Integer, 
+		KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) )
+	.addField( new KexiDB::Field("o_data", KexiDB::Field::BLOB) )
+	.addField( new KexiDB::Field("o_name", KexiDB::Field::Text ) )
+	.addField( new KexiDB::Field("o_caption", KexiDB::Field::Text ) )
+	.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull, 
+		KexiDB::Field::NoOptions, 0, 0 ) );
 
-		if (!m_connection->createTable( t_blobs, false/*!replaceExisting*/ ))
+	//*** create global BLOB container, if not present
+	if (m_connection->drv_containsTable("kexi__blobs")) {
+		//! just insert this schema
+		m_connection->insertInternalTableSchema(t_blobs);
+	}
+	else {
+		if (!m_connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
+			delete t_blobs;
 			return false;
+		}
 	}
 
 	if (insideTransaction) {
@@ -549,7 +555,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 	return true;
 }
 
-KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString& suggestedName)
+KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString& suggestedCaption)
 {
 	clearError();
 	KexiDB::MessageTitle et(this);
@@ -565,13 +571,13 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	int n;
 	QString new_name;
 	QString base_name;
-	if (suggestedName.isEmpty()) {
+	if (suggestedCaption.isEmpty()) {
 		n = 1;
 		base_name = part->instanceName();
 	}
 	else {
 		n = 0; //means: try not to add 'n'
-		base_name = suggestedName;
+		base_name = KexiUtils::string2Identifier(suggestedCaption).lower();
 	}
 	base_name = KexiUtils::string2Identifier(base_name).lower();
 	KexiPart::ItemDictIterator it(*dict);
@@ -600,7 +606,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	if (n>=1000)
 		return 0;
 
-	QString new_caption = (suggestedName.isEmpty() ? part->instanceName() : suggestedName);
+	QString new_caption( suggestedCaption.isEmpty() ? part->instanceCaption() : suggestedCaption);
 	if (n>=1)
 		new_caption += QString::number(n);
 

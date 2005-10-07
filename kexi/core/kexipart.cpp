@@ -31,6 +31,7 @@
 #include "kexi.h"
 
 #include <kexidb/connection.h>
+#include <kexiutils/identifier.h>
 
 #include <qwidgetstack.h>
 
@@ -80,7 +81,7 @@ void Part::createGUIClients(KexiMainWindow *win)
 		m_guiClient = new GUIClient(m_mainWin, this, false);
 
 		//default actions for part's gui client:
-		KAction *act = new KAction(m_names["instance"]+"...", info()->createItemIcon(), 0, this, 
+		KAction *act = new KAction(m_names["instanceCaption"]+"...", info()->createItemIcon(), 0, this, 
 			SLOT(slotCreate()), m_mainWin->actionCollection(), 
 			KexiPart::nameForCreateAction(*info()));
 		act->plug( m_mainWin->findPopupMenu("insert") );
@@ -344,6 +345,18 @@ QString Part::i18nMessage(const QCString& englishMessage) const
 
 void Part::setupCustomPropertyPanelTabs(KTabWidget *, KexiMainWindow*)
 {
+}
+
+QCString Part::instanceName() const
+{
+	// "instanceName" should be already valid identifier but we're using
+	// KexiUtils::string2Identifier() to be sure translators did it right.
+	return KexiUtils::string2Identifier(m_names["instanceName"]).lower().latin1();
+}
+
+QString Part::instanceCaption() const
+{
+	return m_names["instanceCaption"];
 }
 
 //-------------------------------------------------------------------------

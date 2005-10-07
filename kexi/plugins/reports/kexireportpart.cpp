@@ -45,7 +45,12 @@ KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringL
 	m_registeredPartID = (int)KexiPart::ReportObjectType;
 
 	kexipluginsdbg << "KexiReportPart::KexiReportPart()" << endl;
-	m_names["instance"] = i18n("Report");
+	m_names["instanceName"] 
+		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+		"Use '_' character instead of spaces. First character should be a..z character. "
+		"If you cannot use latin characters in your language, use english word.", 
+		"report");
+	m_names["instanceCaption"] = i18n("Report");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 
 /* @todo add configuration for supported factory groups */

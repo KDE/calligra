@@ -39,7 +39,12 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringL
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::ScriptObjectType;
 
-	m_names["instance"] = i18n("Script");
+	m_names["instanceName"] 
+		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+		"Use '_' character instead of spaces. First character should be a..z character. "
+		"If you cannot use latin characters in your language, use english word.", 
+		"script");
+	m_names["instanceCaption"] = i18n("Script");
 	m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
 }
 

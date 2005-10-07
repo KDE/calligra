@@ -421,7 +421,7 @@ void KexiDialogBase::updateCaption()
 	QString capt = m_item->name();
 	QString fullCapt = capt;
 	if (m_part)
-		fullCapt += (" : " + m_part->instanceName());
+		fullCapt += (" : " + m_part->instanceCaption());
 	if (dirty()) {
 		KMdiChildView::setCaption(fullCapt+"*");
 		KMdiChildView::setTabCaption(capt+"*");
@@ -528,12 +528,28 @@ tristate KexiDialogBase::storeData()
 	KexiViewBase *v = selectedView();
 	if (!v)
 		return false;
+
+#define storeData_ERR \
+	setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's data failed."),"");
+
+	//save changes using transaction
+	KexiDB::Transaction transaction = m_parentWindow->project()->dbConnection()->beginTransaction();
+	if (transaction.isNull()) {
+		storeData_ERR;
+		return false;
+	}
+	KexiDB::TransactionGuard tg(transaction);
+
 	const tristate res = v->storeData();
-	if (~res)
+	if (~res) //trans. will be cancelled
 		return res;
 	if (!res) {
-		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's data failed."),"");
+		storeData_ERR;
 		return res;
+	}
+	if (!tg.commit()) {
+		storeData_ERR;
+		return false;
 	}
 	/* Sets 'dirty' flag on every dialog's view. */
 	setDirty(false);

@@ -58,7 +58,7 @@ enum ObjectTypes {
 };
 
 /**
- * The main class for kexi frontend parts like tables, queries, relations
+ * The main class for kexi frontend parts like tables, queries, forms and reports
  */
 class KEXICORE_EXPORT Part : public QObject
 {
@@ -124,11 +124,17 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
-		/*! i18n'd instance name usable for displaying in gui.
+		/*! i18n'd instance name usable for displaying in gui as object's name.
+		 The name is valid identifier - contains latin1 lowercase characters only.
 		 @todo move this to Info class when the name could be moved as localized property 
 		 to service's .desktop file. */
-		inline QString instanceName() const { return m_names["instance"]; }
-		
+		QCString instanceName() const;
+
+		/*! i18n'd instance name usable for displaying in gui as object's caption.
+		 @todo move this to Info class when the name could be moved as localized property 
+		 to service's .desktop file. */
+		QString instanceCaption() const;
+
 		inline Info *info() const { return m_info; }
 
 		/*! \return part's GUI Client, so you can 

@@ -387,7 +387,7 @@ void updatePropEditorDockWidthInfo() {
 #endif
 			} else {
 				//propEditorToolWindow->show();
-				wnd->makeWidgetDockVisible(propEditor);
+				wnd->makeWidgetDockVisible(propEditorTabWidget);
 /*moved
 #if defined(KDOCKWIDGET_P)
 				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
@@ -1462,7 +1462,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 	#if defined(KDOCKWIDGET_P)
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 //			ds->setKeepSize(true);
-			makeWidgetDockVisible(d->propEditor);
+			makeWidgetDockVisible(d->propEditorTabWidget);
 	//		ds->show();
 		//	ds->resize(400, ds->height());
 	//		ds->setSeparatorPos(400, true);
@@ -1648,7 +1648,7 @@ KexiMainWindowImpl::restoreSettings()
 	d->config->setGroup("MainWindow");
 
 	// Saved settings
-	applyMainWindowSettings( d->config, "MainWindow" );//, instance()->instanceName() );
+	applyMainWindowSettings( d->config, "MainWindow" );
 
 	//small hack - set the default -- bottom
 //	d->config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
@@ -2343,12 +2343,12 @@ KexiMainWindowImpl::slotProjectOpen()
 		QProcess *proc;
     QStringList args;
 		if (!dlg.selectedExistingFile().isEmpty()) {
-//TODO use KRun
+//! @todo use KRun
 			args << qApp->applicationFilePath() << dlg.selectedExistingFile();
 			proc = new QProcess(args, this, "process");
 			proc->setWorkingDirectory( QFileInfo(dlg.selectedExistingFile()).dir(true) );
 		}
-		//TODO: server-based
+		//! @todo server-based
 		if (!proc->start()) {
 			d->showStartProcessMsg(args);
 		}
@@ -2573,7 +2573,7 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 			.arg(d->curDialog->partItem()->name()),
 		i18n("Selected view mode (%1) is not supported by this object type (%2)")
 			.arg(Kexi::nameForViewMode(viewMode))
-			.arg(d->curDialog->part()->instanceName()) );
+			.arg(d->curDialog->part()->instanceCaption()) );
 		d->toggleLastCheckedMode();
 		return false;
 	}
@@ -2873,16 +2873,24 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 
 	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
 	if (dlg->dirty() && !d->forceDialogClosing) {
+		//more accurate tool tips and what's this
+		KGuiItem saveChanges( KStdGuiItem::save() ); 
+		saveChanges.setToolTip(i18n("Save changes"));
+		saveChanges.setWhatsThis(
+			i18n( "Pressing this button will save all recent changes made in \"%1\" object" )
+			.arg(dlg->partItem()->name()) );
+		KGuiItem discardChanges( KStdGuiItem::discard() );
+		discardChanges.setWhatsThis(
+			i18n( "Pressing this button will discard all recent changes made in \"%1\" object" )
+			.arg(dlg->partItem()->name()) );
+
 		//dialog's data is dirty:
 		const int quertionRes = KMessageBox::warningYesNoCancel( this,
-			"<p>"+dlg->part()->i18nMessage(
-				"Design of object \"%1\" has been modified.")
-//			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",
-//			"<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
+			"<p>"+dlg->part()->i18nMessage("Design of object \"%1\" has been modified.")
 			.arg(dlg->partItem()->name())+"</p><p>"+i18n("Do you want to save changes?")+"</p>",
 			QString::null,
-			KStdGuiItem::save(),
-			KStdGuiItem::discard());
+			saveChanges,
+			discardChanges);
 		if (quertionRes==KMessageBox::Cancel) {
 			d->insideCloseDialog = false;
 			d->windowsToClose.clear(); //give up with 'close all'
@@ -3371,7 +3379,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 
 	if (!dontAsk) {
 		if (KMessageBox::No == KMessageBox::warningYesNo(this, "<p>"+i18n("Do you want to remove:")
-			+"</p><p>"+part->instanceName()+" \""+ item->name() + "\"?</p>",
+			+"</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>",
 			0, KStdGuiItem::yes(), KStdGuiItem::no()))//, "askBeforeDeletePartItem"/*config entry*/))
 			return cancelled;
 	}

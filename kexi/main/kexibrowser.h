@@ -129,7 +129,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;
 		KexiBrowserListView *m_list;
-		KexiSmallToolButton* m_newObjectToolButton;
+		KexiSmallToolButton *m_newObjectToolButton, *m_deleteObjectToolButton;
 		bool m_singleClick : 1;
 		bool m_nameEndsWithAsterisk : 1;
 };
