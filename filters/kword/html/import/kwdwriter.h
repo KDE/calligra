@@ -29,7 +29,7 @@
   */
 
 
-class KoZoomHandler;
+class KoTextZoomHandler;
 
 class KWDWriter {
 public: 
@@ -195,7 +195,7 @@ protected:
 	QDomDocument *_doc;
 	QDomDocument *_docinfo;
 	QDomElement _docinfoMain;
-	KoZoomHandler *_zoomhandler;
+	KoTextZoomHandler *_zoomhandler;
 	int tableNo;
 	
 };

@@ -19,11 +19,11 @@
 #include "kwdwriter.h"
 #include <stdlib.h>
 #include "qrect.h"
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <qpaintdevice.h>
 
 KWDWriter::KWDWriter(KoStore *store){
-	_zoomhandler = new KoZoomHandler();
+	_zoomhandler = new KoTextZoomHandler();
 
 	_store=store;
 	_doc= new QDomDocument("DOC");
