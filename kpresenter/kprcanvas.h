@@ -582,11 +582,11 @@ private:
      *
      * @return true when object is moved
      */
-    bool moveObject( int x, int y );
+    bool moveObject( int x, int y, bool doApplyGrid );
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, int _dx, int _dy );
+    void resizeObject( ModifyType _modType, int _dx, int _dy, bool doApplyGrid );
     /// create ResizeCmd
     void finishResizeObject( const QString &name, int mx, int my, bool layout = true );
 

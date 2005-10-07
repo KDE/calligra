@@ -658,7 +658,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     m_savedMousePos = contentsPoint;
 
-    QPoint rasterPoint=applyGrid( e->pos(), true );
+    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+
+    QPoint rasterPoint =  e->pos();
+    if ( doApplyGrid )
+        rasterPoint = applyGrid( e->pos(), true );
 
     exitEditMode();
 
@@ -877,7 +881,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = applyGrid ( e->pos(),true );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid ( e->pos(), true );
                 insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
 
                 m_indexPointArray = 0;
@@ -890,7 +896,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = applyGrid ( e->pos(),true );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid ( e->pos(), true );
 
                 insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
 
@@ -906,7 +914,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = applyGrid ( e->pos(),true );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid ( e->pos(), true );
 
                 insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
 
@@ -924,7 +934,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_POLYGON: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = applyGrid ( e->pos(),true );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid ( e->pos(), true );
                 insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
 
                 m_indexPointArray = 0;
@@ -934,7 +946,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             default: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = applyGrid ( e->pos(),true );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid ( e->pos(), true );
                 insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
             } break;
             }
@@ -983,7 +997,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                                              || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
              && !m_pointArray.isNull() && m_drawCubicBezierCurve ) {
             if ( m_drawLineWithCubicBezierCurve ) {
-                QPoint point = applyGrid( e->pos(), true);
+                QPoint point = e->pos();
+                if ( doApplyGrid )
+                  point = applyGrid ( e->pos(), true );
                 m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(point.x()), m_view->zoomHandler()->unzoomItY(point.y()) );
                 ++m_indexPointArray;
             }
@@ -1229,7 +1245,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, contentsPoint.x(), contentsPoint.y() );
         return;
     }
-    bool state = m_view->kPresenterDoc()->snapToGrid();
+    bool state = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
     int mx = state ? applyGridOnPosX( contentsPoint.x()) : contentsPoint.x();
     int my = state ? applyGridOnPosY( contentsPoint.y()) : contentsPoint.y();
     firstX = state ? applyGridOnPosX( firstX) : firstX;
@@ -1591,22 +1607,26 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.end();
                     }
                 } else if ( modType == MT_MOVE ) {
-                    QPoint gridPoint( applyGrid( contentsPoint, false ) );
-                    if ( moveObject( gridPoint.x() - m_origPos.x(), gridPoint.y() - m_origPos.y() ) )
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                    QPoint gridPoint( contentsPoint );
+                    if ( doApplyGrid )
+                      gridPoint = applyGrid( contentsPoint, false );
+                    if ( moveObject( gridPoint.x() - m_origPos.x(), gridPoint.y() - m_origPos.y(), doApplyGrid ) )
                         m_origPos = gridPoint;
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     int mx = e->x()+diffx();
                     int my = e->y()+diffy();
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
 
-                    if ( m_view->kPresenterDoc()->snapToGrid() )
+                    if ( doApplyGrid )
                     {
-                        mx = applyGridOnPosX( mx );
-                        my = applyGridOnPosY( my );
-                        oldMx = applyGridOnPosX( oldMx );
-                        oldMy = applyGridOnPosY( oldMy );
+                      mx = applyGridOnPosX( mx );
+                      my = applyGridOnPosY( my );
+                      oldMx = applyGridOnPosX( oldMx );
+                      oldMy = applyGridOnPosY( oldMy );
                     }
 
-                    resizeObject( modType, mx - oldMx, my - oldMy );
+                    resizeObject( modType, mx - oldMx, my - oldMy, doApplyGrid );
                 }
             } break;
             case TEM_ZOOM : {
@@ -1664,7 +1684,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                 }
 
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid( e->pos(), true);
                 insRect.setRight( tmp.x() );
                 insRect.setBottom( tmp.y() );
                 limitSizeOfObject();
@@ -1702,7 +1725,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.drawEllipse( tmpRect );
                     }
                 }
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid( e->pos(), true);
                 insRect.setRight( tmp.x() );
                 insRect.setBottom( tmp.y() );
                 limitSizeOfObject();
@@ -1741,7 +1767,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.drawRoundRect( tmpRect, m_view->getRndX(), m_view->getRndY() );
                     }
                 }
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid( e->pos(), true);
                 insRect.setRight( tmp.x() );
                 insRect.setBottom( tmp.y() );
                 limitSizeOfObject();
@@ -1779,7 +1808,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.drawLine( tmpRect.topLeft(), tmpRect.bottomRight() );
                     }
                 }
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid( e->pos(), true);
                 int right = tmp.x();
                 int bottom = tmp.y();
                 if ( e->state() & ShiftButton )
@@ -1825,7 +1857,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         drawPieObject(&p, tmpRect);
                     }
                 }
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid( e->pos(), true);
 
                 insRect.setRight( tmp.x());
                 insRect.setBottom( tmp.y());
@@ -1872,7 +1907,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
                 p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                  tmp = applyGrid( e->pos(), true);
 
                 int posX = tmp.x();
                 int posY = tmp.y();
@@ -1897,7 +1935,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE:{
-                QPoint tmp = applyGrid( e->pos(), true);
+                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                QPoint tmp = e->pos();
+                if ( doApplyGrid )
+                    tmp = applyGrid( e->pos(), true);
 
                 drawCubicBezierCurve( tmp.x(),
                                       tmp.y());
@@ -1907,7 +1948,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             case INS_POLYGON: {
                 drawPolygon( m_view->zoomHandler()->unzoomPoint( m_dragStartPoint ),
                              m_view->zoomHandler()->unzoomPoint( m_dragEndPoint ) ); // erase old polygon
-                QPoint tmp = applyGrid( e->pos(), true);
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                    QPoint tmp = e->pos();
+                    if ( doApplyGrid )
+                    tmp = applyGrid( e->pos(), true);
 
                 m_dragEndPoint = QPoint( tmp.x(),
                                          tmp.y() );
@@ -1959,7 +2003,8 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
 
     if ( ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) && !m_pointArray.isNull() && m_drawPolyline ) {
-        m_dragStartPoint = applyGrid( e->pos(), true);
+        bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+        m_dragStartPoint = doApplyGrid ? applyGrid( e->pos(), true) : e->pos();
         m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()),
                                 m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
         ++m_indexPointArray;
@@ -2185,20 +2230,32 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             switch ( e->key() ) 
             {
                 case Qt::Key_Up:
+                {
                     m_keyPressEvent = true;
-                    moveObject( 0, -offsety );
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
+                    moveObject( 0, -offsety, doApplyGrid );
                     break;
+                }
                 case Qt::Key_Down:
+                {
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     m_keyPressEvent = true;
-                    moveObject( 0, offsety );
+                    moveObject( 0, offsety, doApplyGrid );
                     break;
+                }
                 case Qt::Key_Right:
+                {
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     m_keyPressEvent = true;
-                    moveObject( offsetx, 0 );
+                    moveObject( offsetx, 0, doApplyGrid );
+                }
                     break;
                 case Qt::Key_Left:
+                {
+                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     m_keyPressEvent = true;
-                    moveObject( -offsetx, 0 );
+                    moveObject( -offsetx, 0, doApplyGrid );
+                }
                     break;
                 case Qt::Key_Delete: case Key_Backspace:
                     m_view->editDelete();
@@ -4713,7 +4770,7 @@ void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
 }
 
 
-bool KPrCanvas::moveObject( int x, int y )
+bool KPrCanvas::moveObject( int x, int y, bool doApplyGrid )
 {
     KoRect rect( objectRect( false ) );
 
@@ -4739,7 +4796,7 @@ bool KPrCanvas::moveObject( int x, int y )
         move.setY( pageRect.bottom() - rect.height() );
     }
 
-    KoPoint gridPoint( applyGrid( move ) );
+    KoPoint gridPoint( doApplyGrid ? applyGrid( move ) : move);
     bool moved = false;
     if ( gridPoint != rect.topLeft() )
     {
@@ -4752,7 +4809,7 @@ bool KPrCanvas::moveObject( int x, int y )
     return moved;
 }
 
-void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
+void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy, bool doApplyGrid )
 {
     double dx = m_view->zoomHandler()->unzoomItX( _dx);
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
@@ -4778,8 +4835,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
             dy = pageRect.top() - objRect.top();
         // align to the grid
-        dx = applyGridX( objRect.left() + dx ) - objRect.left();
-        dy = applyGridY( objRect.top() + dy ) - objRect.top();
+        dx = ( doApplyGrid ? applyGridX( objRect.left() + dx ) : ( objRect.left() + dx ) ) - objRect.left();
+        dy = ( doApplyGrid ? applyGridY( objRect.top() + dy ) : ( objRect.top() + dy ) ) - objRect.top();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, -dy );
@@ -4792,7 +4849,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         dy = 0;
         if( (objRect.left() + dx) < (pageRect.left() - 1))
             dx = pageRect.left() - objRect.left();
-        dx = applyGridX( objRect.left() + dx ) - objRect.left();
+        dx = ( doApplyGrid ? applyGridX( objRect.left() + dx ) : ( objRect.left() + dx ) ) - objRect.left();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, -dy );
@@ -4804,8 +4861,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dy = pageRect.bottom() - objRect.bottom();
         if( (objRect.left() + dx) < (pageRect.left() - 1) )
             dx = pageRect.left() - objRect.left();
-        dx = applyGridX( objRect.left() + dx ) - objRect.left();
-        dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
+        dx = ( doApplyGrid ? applyGridX( objRect.left() + dx ) : ( objRect.left() + dx ) ) - objRect.left();
+        dy = ( doApplyGrid ? applyGridY( objRect.bottom() + dy ) : ( objRect.bottom() + dy ) ) - objRect.bottom();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, dy );
@@ -4817,8 +4874,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dx = pageRect.right() - objRect.right();
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
             dy = pageRect.top() - objRect.top();
-        dx = applyGridX( objRect.right() + dx ) - objRect.right();
-        dy = applyGridY( objRect.top() + dy ) - objRect.top();
+        dx = ( doApplyGrid ? applyGridX( objRect.right() + dx ) : (objRect.right() + dx) )- objRect.right();
+        dy = ( doApplyGrid ? applyGridY( objRect.top() + dy ) : (objRect.top() + dy ) ) - objRect.top();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, -dy );
@@ -4829,7 +4886,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         dy = 0;
         if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
-        dx = applyGridX( objRect.right() + dx ) - objRect.right();
+        dx = ( doApplyGrid ? applyGridX( objRect.right() + dx ) : (objRect.right() + dx) ) - objRect.right();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, dy );
@@ -4839,8 +4896,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dy = pageRect.bottom() - objRect.bottom();
         if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
-        dx = applyGridX( objRect.right() + dx ) - objRect.right();
-        dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
+        dx = ( doApplyGrid ? applyGridX( objRect.right() + dx ) : ( objRect.right() + dx ) )- objRect.right();
+        dy = ( doApplyGrid ? applyGridY( objRect.bottom() + dy ) : ( objRect.bottom() + dy ) )- objRect.bottom();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, dy );
@@ -4849,7 +4906,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         dx = 0;
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
             dy = pageRect.top() - objRect.top();
-        dy = applyGridY( objRect.top() + dy) - objRect.top();
+        dy = ( doApplyGrid ? applyGridY( objRect.top() + dy) : ( objRect.top() + dy) ) - objRect.top();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, -dy );
@@ -4861,7 +4918,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         dx = 0;
         if( (objRect.bottom() + dy) > pageRect.bottom() )
             dy = pageRect.bottom() - objRect.bottom();
-        dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
+        dy = ( doApplyGrid ? applyGridY( objRect.bottom() + dy ) : ( objRect.bottom() + dy ) ) - objRect.bottom();
         if ( m_keepRatio && m_ratio != 0.0 )
             calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, dy );

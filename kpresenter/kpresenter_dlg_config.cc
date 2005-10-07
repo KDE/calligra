@@ -558,8 +558,8 @@ void configureMiscPage::slotDefault()
     m_cbPrintNotes->setChecked(true);
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-    resolutionY->setValue( KoUnit::toUserValue( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
-    resolutionX->setValue( KoUnit::toUserValue( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
+    resolutionY->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->getUnit() ) );
+    resolutionX->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->getUnit() ) );
 }
 
 configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget *parent, char *name )
