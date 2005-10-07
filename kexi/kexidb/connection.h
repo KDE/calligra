@@ -582,7 +582,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Simply, method internally fetches last inserted record and returns selected 
 		 field's value. Requirements: field must be of integer type, there must be a
 		 record inserted in current database session (whatever this means).
-		 On error -1ULL is returned.
+		 On error (Q_ULLONG)-1 is returned.
 		 Last inserted record is identified by magical row identifier, usually called 
 		 ROWID (PostgreSQL has it as well as SQLite; 
 		 see DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE). 
@@ -690,6 +690,13 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! @internal Removes \a tableSchema from internal structures and 
 		 destroys it. Does not make any change at the backend. */
 		void removeTableSchemaInternal(KexiDB::TableSchema *tableSchema);
+
+		/*! @internal. Inserts internal table to Connection's structures, so it can be found by name.
+		 This method is used for example in KexiProject to insert information about "kexi__blobs" 
+		 table schema. Use createTable() to physically create table. After createTable() 
+		 calling insertInternalTableSchema() is not required.
+		 Also used internally by newKexiDBSystemTableSchema(const QString& tsname) */
+		void insertInternalTableSchema(TableSchema *tableSchema);
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
@@ -901,7 +908,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
 
 		/*! Internal, for handling autocommited transactions:
-		 begins transaction is one is supported.
+		 begins transaction if one is supported.
 		 \return true if new transaction started
 		 successfully or no transactions are supported at all by the driver
 		 or if autocommit option is turned off.
@@ -1041,8 +1048,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		ConnectionPrivate *d;
 	private:
-		/*! Used internally by newKexiDBSystemTableSchema(const QString& tsname) */
-		void newKexiDBSystemTableSchema(TableSchema *tableSchema);
 
 		Driver *m_driver;
 		bool m_is_connected : 1;

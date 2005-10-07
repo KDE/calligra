@@ -20,6 +20,7 @@
 #include <kexidb/connection.h>
 
 #include "error.h"
+#include "connection_p.h"
 #include "connectiondata.h"
 #include "driver.h"
 #include "driver_p.h"
@@ -45,6 +46,10 @@
 #include <assert.h>
 
 namespace KexiDB {
+
+ConnectionInternal::ConnectionInternal()
+{
+}
 
 //================================================
 //! @internal
@@ -419,14 +424,13 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	//-physically create system tables
-	TableSchema *ts=m_kexiDBSystemtables.first();
-	while (ts) {
-		if (!drv_createTable( ts->name() ))
+	for (QPtrListIterator<TableSchema> it(m_kexiDBSystemtables); it.current(); ++it) {
+		if (!drv_createTable( it.current()->name() ))
 			createDatabase_ERROR;
-		ts = m_kexiDBSystemtables.next();
 	}
 
 	//-create default part info
+	TableSchema *ts;
 	if (!(ts = tableSchema("kexi__parts")))
 		createDatabase_ERROR;
 	FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
@@ -1275,7 +1279,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	if (res) {
 		if (internalTable) {
 			//insert the internal table into structures
-			newKexiDBSystemTableSchema(tableSchema);
+			insertInternalTableSchema(tableSchema);
 		}
 		else {
 			if (previousSchemaStillKept) {
@@ -2327,11 +2331,11 @@ QuerySchema* Connection::querySchema( int queryId )
 TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 {
 	TableSchema *ts = new TableSchema(tsname.lower());
-	newKexiDBSystemTableSchema( ts );
+	insertInternalTableSchema( ts );
 	return ts;
 }
 
-void Connection::newKexiDBSystemTableSchema(TableSchema *tableSchema)
+void Connection::insertInternalTableSchema(TableSchema *tableSchema)
 {
 	tableSchema->setKexiDBSystem(true);
 	m_kexiDBSystemtables.append(tableSchema);
