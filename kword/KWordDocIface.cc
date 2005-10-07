@@ -617,12 +617,13 @@ double KWordDocIface::gridY() const
 
 void KWordDocIface::setGridX( double _gridX )
 {
-    doc->setGridX( _gridX );
+
+    doc->setGridX( QMAX( 0.1, _gridX ) );
 }
 
 void KWordDocIface::setGridY( double _gridY )
 {
-    doc->setGridY( _gridY );
+    doc->setGridY( QMAX( 0.1, _gridY ) );
 }
 
 void KWordDocIface::setShowGrid( bool _b )

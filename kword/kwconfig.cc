@@ -353,8 +353,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 void ConfigureInterfacePage::apply()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    double valX = gridX->value();
-    double valY = gridY->value();
+    double valX = QMAX( 0.1, gridX->value() );
+    double valY = QMAX( 0.1, gridY->value() );
     int nbRecent=recentFiles->value();
 
     bool statusBar=showStatusBar->isChecked();
