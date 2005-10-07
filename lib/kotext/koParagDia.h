@@ -148,7 +148,7 @@ public:
     virtual void save( KoParagLayout & lay );
     //virtual bool isModified();
     virtual QString tabName();
-    
+
     int pageBreaking() const;
     int align() const;
 
@@ -396,7 +396,7 @@ private:
     QLineEdit* sAlignChar;
     QGroupBox* gTabLeader;
     QComboBox* cFilling;
-    KDoubleNumInput* eWidth;
+    KoUnitDoubleSpinBox* eWidth;
     QPushButton* bNew;
     QPushButton* bDelete;
     QPushButton* bDeleteAll;

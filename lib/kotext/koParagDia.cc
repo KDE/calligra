@@ -1789,12 +1789,12 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     TextLabel2->setBuddy( cFilling );
     fillingGrid->addWidget( cFilling, 0, 1 );
 
-    QString unitName = KoUnit::unitName( m_unit );
-    QLabel * TextLabel3 = new QLabel( i18n("&Width (%1):").arg( unitName ), gTabLeader );
+    QLabel * TextLabel3 = new QLabel( i18n("&Width:"), gTabLeader );
     TextLabel3->setAlignment( AlignRight );
     fillingGrid->addWidget( TextLabel3, 1, 0 );
 
-    eWidth = new KDoubleNumInput( gTabLeader );
+    eWidth = new KoUnitDoubleSpinBox( gTabLeader );
+    eWidth->setUnit( m_unit );
     TextLabel3->setBuddy( eWidth );
     fillingGrid->addWidget( eWidth, 1, 1 );
 
@@ -1953,7 +1953,7 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
         default:
             cFilling->setCurrentItem(0);
     }
-    eWidth->setValue( KoUnit::toUserValue( selectedTab->ptWidth, m_unit ) );
+    eWidth->setValue( selectedTab->ptWidth );
     sTabPos->setValue( KoUnit::toUserValue(selectedTab->ptPos, m_unit));
     bDelete->setEnabled(true);
     bDeleteAll->setEnabled(true);
@@ -2018,7 +2018,7 @@ void KoParagTabulatorsWidget::updateFilling(int selected) {
 
 void KoParagTabulatorsWidget::updateWidth() {
     KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
-    selectedTab->ptWidth = QMAX( 0, KoUnit::fromUserValue( eWidth->value(), m_unit ) );
+    selectedTab->ptWidth = QMAX( 0, eWidth->value() );
 }
 
 void KoParagTabulatorsWidget::sortLists() {
