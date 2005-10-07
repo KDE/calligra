@@ -360,15 +360,18 @@ void ConfigureInterfacePage::apply()
     bool statusBar=showStatusBar->isChecked();
     bool scrollBar = showScrollBar->isChecked();
     config->setGroup( "Interface" );
+    bool updateView = false;
     if(valX!=doc->gridX())
     {
         config->writeEntry( "GridX", valX, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridX(valX);
+        updateView= true;
     }
     if(valY!=doc->gridY())
     {
         config->writeEntry( "GridY", valY, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridY(valY);
+        updateView= true;
     }
     double newIndent = indent->value();
     if( newIndent != doc->indentValue() )
@@ -424,6 +427,8 @@ void ConfigureInterfacePage::apply()
     KoUnit::Unit unit = static_cast<KoUnit::Unit>( m_unitCombo->currentItem() );
     // It's already been set in the document, see unitChanged
     config->writeEntry( "Units", KoUnit::unitName( unit ) );
+    if ( updateView )
+        doc->repaintAllViews(false);
 }
 
 void ConfigureInterfacePage::setUnit( KoUnit::Unit unit )
