@@ -344,8 +344,8 @@ void KWDocument::initConfig()
   if(config->hasGroup("Interface" ) )
   {
       config->setGroup( "Interface" );
-      setGridY(QMAX( config->readDoubleNumEntry("GridY",10.0), 0.1));
-      setGridX(QMAX( config->readDoubleNumEntry("GridX",10.0), 0.1));
+      setGridY(QMAX( config->readDoubleNumEntry("GridY",MM_TO_POINT(5.0) ), 0.1));
+      setGridX(QMAX( config->readDoubleNumEntry("GridX",MM_TO_POINT(5.0) ), 0.1));
       setCursorInProtectedArea( config->readBoolEntry( "cursorInProtectArea", true ));
       // Config-file value in mm, default 10 pt
       double indent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
