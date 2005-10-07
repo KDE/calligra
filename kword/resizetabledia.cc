@@ -76,7 +76,7 @@ void KWResizeTableDia::setupTab1()
     }
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
-    rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->unitName()) : i18n( "Width (%1):" ).arg(doc->unitName()), page );
+    rc = new QLabel( type == ROW ? i18n( "Height:" ) : i18n( "Width:" ), page );
     position= new KoUnitDoubleSpinBox( page, 0.01, table->anchorFrameset()->isFloating() ? table->anchorFrameset()->frame(0)->width(): 9999, 1, 0.0, doc->unit(), doc->unit() );
     slotValueChanged( value->value());
     connect( value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
