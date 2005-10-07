@@ -22,6 +22,7 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
+  <Action name="view_grid"/>
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>

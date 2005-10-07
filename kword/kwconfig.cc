@@ -444,8 +444,8 @@ void ConfigureInterfacePage::slotDefault()
     KWDocument * doc = m_pView->kWordDocument();
     m_unitCombo->setCurrentItem( KoUnit::U_CM );
     emit unitChanged( m_unitCombo->currentItem() );
-    gridX->setValue( KoUnit::toUserValue( 10, doc->unit() ) );
-    gridY->setValue( KoUnit::toUserValue( 10, doc->unit() ) );
+    gridX->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ),doc->unit() ) );
+    gridY->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ),doc->unit() ) );
     m_nbPagePerRow->setValue(4);
     double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), doc->unit() );
     indent->setValue( newIndent );

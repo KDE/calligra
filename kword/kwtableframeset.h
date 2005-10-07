@@ -375,6 +375,9 @@ public:
     /** move a row edge (i.e. row can be 0 to getRows()+1) */
     void resizeRow( unsigned int row, double y );
 
+    double columnSize( unsigned int col );
+    double rowSize( unsigned int col );
+
     /** return the number of the column edge closest to x (between 0 and getCols()+1) */
     int columnEdgeAt( double x ) const;
     /** return the number of the row edge closest to x (between 0 and getRows()+1) */

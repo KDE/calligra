@@ -115,6 +115,7 @@ class KWDocument : public KoDocument, public KoZoomHandler
     Q_PROPERTY( double ptColumnSpacing READ ptColumnSpacing )
     Q_PROPERTY( double gridX READ gridX WRITE setGridX )
     Q_PROPERTY( double gridY READ gridY WRITE setGridY )
+    Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
     Q_PROPERTY( double indentValue READ indentValue WRITE setIndentValue )
     Q_PROPERTY( int nbPagePerRow READ nbPagePerRow WRITE setNbPagePerRow )
     Q_PROPERTY( double defaultColumnSpacing READ defaultColumnSpacing WRITE setDefaultColumnSpacing )
@@ -462,6 +463,14 @@ public:
     double gridY()const { return m_gridY; }
     void setGridX(double _gridx);
     void setGridY(double _gridy) { m_gridY = _gridy; }
+
+    void updateGridButton();
+
+    bool showGrid() const { return m_bShowGrid; }
+    void setShowGrid ( bool _grid ) { m_bShowGrid = _grid; }
+
+    bool snapToGrid() const { return m_bSnapToGrid; }
+    void setSnapToGrid( bool _b ) { m_bSnapToGrid = _b; }
 
     // Currently unused. Not sure we want to go that way, now that we have
     // paragLayoutChanged and formatChanged in applyStyleChange.
@@ -1050,6 +1059,9 @@ private:
 #endif
     bool m_bGlobalHyphenation;
     bool m_bGeneratingPreview;
+
+    bool m_bShowGrid;
+    bool m_bSnapToGrid;
 };
 
 

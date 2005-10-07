@@ -202,7 +202,7 @@ public:
 
     int numRows() const;
 
-protected:
+//protected:
     /** Return the spacing between the left border of the canvas and the page. */
     int leftSpacing();
     /** Return the spacing between the top border of the canvas and the page. */

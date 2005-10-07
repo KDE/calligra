@@ -2013,3 +2013,45 @@ void KWRenameBookmarkCommand::unexecute()
 {
     m_doc->renameBookMark( m_newName, m_oldName);
 }
+
+KWResizeColumnCommand::KWResizeColumnCommand( KWTableFrameSet *table, int col, double oldSize, double newSize ):
+    KNamedCommand( i18n("Resize column") ),
+    m_col( col ),
+    m_newSize( newSize ),
+    m_oldSize( oldSize ),
+    m_table( table )
+{
+}
+
+void KWResizeColumnCommand::execute()
+{
+  m_table->resizeColumn(m_col, m_newSize);
+  m_table->kWordDocument()->repaintAllViews();
+}
+
+void KWResizeColumnCommand::unexecute()
+{
+  m_table->resizeColumn(m_col, m_oldSize);
+  m_table->kWordDocument()->repaintAllViews();
+}
+
+KWResizeRowCommand::KWResizeRowCommand( KWTableFrameSet *table, int row, double oldSize, double newSize ):
+    KNamedCommand( i18n("Resize row") ),
+    m_row( row ),
+    m_newSize( newSize ),
+    m_oldSize( oldSize ),
+    m_table( table )
+{
+}
+
+void KWResizeRowCommand::execute()
+{
+  m_table->resizeRow( m_row, m_newSize );
+  m_table->kWordDocument()->repaintAllViews();
+}
+
+void KWResizeRowCommand::unexecute()
+{
+  m_table->resizeRow( m_row, m_oldSize );
+  m_table->kWordDocument()->repaintAllViews();
+}

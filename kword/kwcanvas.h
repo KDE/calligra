@@ -222,6 +222,7 @@ public:
     void resetStatusBarText();
 
 protected:
+    void drawGrid( QPainter &p, const QRect& rect );
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );
 
@@ -331,6 +332,7 @@ private:
     KoDocumentEntry m_partEntry; // when inserting a part
     int m_rowColResized; // when resizing a row or column
     bool m_temporaryStatusBarTextShown; // Indicates if the temporary is shown
+    double m_previousTableSize; //previous column or row size before resizing it
 
     // Table creation support.
     // Having this as a member variable allows to remember and reuse the last settings

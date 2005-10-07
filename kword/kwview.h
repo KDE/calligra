@@ -177,6 +177,8 @@ public:
 
     void refreshMenuExpression();
 
+    void updateGridButton();
+
     void deleteFrame(bool _warning=true);
 
     QPopupMenu * popupMenu( const QString& name );
@@ -399,6 +401,8 @@ public slots:
     void editComment();
     void showDocStructure();
     void showRuler();
+    void viewGrid();
+    void viewSnapToGrid();
 
     void slotSoftHyphen();
     void slotLineBreak();
@@ -562,6 +566,8 @@ private:
     KToggleAction *actionViewEndNotes;
     KToggleAction *actionShowDocStruct;
     KToggleAction *actionShowRuler;
+    KToggleAction *actionViewShowGrid;
+    KToggleAction *actionViewSnapToGrid;
     KToggleAction *actionAllowAutoFormat;
 
     KToggleAction *actionAllowBgSpellCheck;

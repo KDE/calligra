@@ -729,6 +729,16 @@ int KWTableFrameSet::rowEdgeAt( double y ) const
     return m_rowPositions.count() - 1;
 }
 
+double KWTableFrameSet::columnSize( unsigned int col )
+{
+  return m_colPositions[ col ];
+}
+
+double KWTableFrameSet::rowSize( unsigned int row )
+{
+  return m_rowPositions[ row ];
+}
+
 void KWTableFrameSet::resizeColumn( unsigned int col, double x )
 {
     kdDebug() << k_funcinfo << col << "," << x << endl;
@@ -1924,6 +1934,26 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 			    << endl;
             }
 #endif
+
+            // be sure that the right border of the table is drawn even for joined cells
+            if ( !cell && startRow == -1 && cellColumn == (m_colPositions.count()-2 ) && right )
+            {
+              // find the joined cell
+              int col = cellColumn;
+              while ( !cell && col>0 )
+              {
+                col--;
+                cell = getCell(row, col);
+              }
+              if ( cell && cell->isJoinedCell() && ( cell->colSpan() + col -1 ) == cellColumn )
+              {
+                border = &(cell->frame(0)->rightBorder());
+                startRow = row;
+              }
+              else
+                cell = 0;
+            }
+
             // Draw when something changed (different kind of border) or we're at the end
             // This code could be rewritten in a more QRT-like way
             // (iterate and compare with next, instead of the startRow/cell/border hack...)

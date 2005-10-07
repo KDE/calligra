@@ -186,6 +186,8 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
     p.setBrushOrigin( -contentsX(), -contentsY() );
     QRect crect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
     drawFrameSet( fs, &p, crect, true, resetChanged, m_viewMode );
+    if ( m_doc->showGrid() )
+      drawGrid( p, crect );
 }
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
@@ -250,12 +252,14 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
-    if ( isUpdatesEnabled() )
-    {
+  if ( isUpdatesEnabled() )
+  {
         // Note: in drawContents, the painter is already translated to the contents coordinates
-        painter->setBrushOrigin( -contentsX(), -contentsY() );
-        drawDocument( painter, QRect( cx, cy, cw, ch ), m_viewMode );
-    }
+    painter->setBrushOrigin( -contentsX(), -contentsY() );
+    drawDocument( painter, QRect( cx, cy, cw, ch ), m_viewMode );
+    if ( m_doc->showGrid() )
+      drawGrid( *painter, QRect( cx, cy, cw, ch ) );
+  }
 }
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
@@ -473,7 +477,8 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
 void KWCanvas::mpCreate( const QPoint& normalPoint )
 {
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-    applyGrid( docPoint );
+    if ( m_doc->snapToGrid() )
+        applyGrid( docPoint );
     m_insRect.setCoords( docPoint.x(), docPoint.y(), 0, 0 );
     m_deleteMovingRect = false;
 }
@@ -484,7 +489,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
     {
         // Apply grid for the first corner only
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-        applyGrid( docPoint );
+        if ( m_doc->snapToGrid() )
+            applyGrid( docPoint );
         m_insRect.setRect( docPoint.x(), docPoint.y(), 0, 0 );
         m_deleteMovingRect = false;
 
@@ -641,9 +647,15 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 {
                     KWTableFrameSet* table = cell->getGroupManager();
                     if ( m_mouseMeaning == MEANING_RESIZE_COLUMN )
+                    {
                         m_rowColResized = table->columnEdgeAt( docPoint.x() );
+                        m_previousTableSize = table->columnSize( m_rowColResized );
+                    }
                     else
+                    {
                         m_rowColResized = table->rowEdgeAt( docPoint.y() );
+                        m_previousTableSize = table->rowSize( m_rowColResized );
+                    }
                     curTable = table;
                     kdDebug(32002) << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
                 }
@@ -812,6 +824,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     mousep = m_viewMode->viewToNormal( mousep );
 
     KoPoint docPoint = m_doc->unzoomPoint( mousep );
+    noGrid = ( noGrid && m_doc->snapToGrid() ) || ( !noGrid && !m_doc->snapToGrid() );
     // Apply the grid, unless Shift is pressed
     if ( !noGrid )
         applyGrid( docPoint );
@@ -950,13 +963,70 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
 
 void KWCanvas::applyGrid( KoPoint &p )
 {
-    // The 1e-10 here is a workaround for some weird division problem.
-    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
-    // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
+  if ( m_viewMode->type() != "ModeNormal" )
+    return;
+  // The 1e-10 here is a workaround for some weird division problem.
+  // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
+  // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
 
-    // This is a problem when calling applyGrid twice, we get 1 less than the time before.
-    p.setX( static_cast<int>( p.x() / m_doc->gridX() + 1e-10 ) * m_doc->gridX() );
-    p.setY( static_cast<int>( p.y() / m_doc->gridY() + 1e-10 ) * m_doc->gridY() );
+  // This is a problem when calling applyGrid twice, we get 1 less than the time before.
+  p.setX( static_cast<int>( p.x() / m_doc->gridX() + 1e-10 ) * m_doc->gridX() );
+  p.setY( static_cast<int>( p.y() / m_doc->gridY() + 1e-10 ) * m_doc->gridY() );
+  
+  //FIXME It doesn't work in preview mode
+}
+
+void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
+{
+  if ( m_viewMode->type() != "ModeNormal" )
+    return;
+  QPen _pen = QPen( /*m_doc->gridColor()*/QColor("black"), 6, Qt::DotLine  );
+  p.save();
+  p.setPen( _pen );
+
+//   Enable this when applyGrid works in preview mode. 
+//   if ( m_viewMode->pagesPerRow() > 0 ) //preview mode
+//   {
+//     double const x = dynamic_cast<KWViewModePreview*>(m_viewMode)->leftSpacing();
+//     double const y = dynamic_cast<KWViewModePreview*>(m_viewMode)->topSpacing();
+// 
+//     int const paperWidth = m_doc->paperWidth();
+//     int const paperHeight = m_doc->paperHeight();
+// 
+//     int zoomedX,  zoomedY;
+//     double offsetX = m_doc->gridX();
+//     double offsetY = m_doc->gridY();
+// 
+//     for ( int page = 0; page < m_doc->numPages(); page++ )
+//     {
+//       int row = page / m_viewMode->pagesPerRow();
+//       int col = page % m_viewMode->pagesPerRow();
+// 
+//       QRect pageRect( x + col * ( paperWidth + 10 ),
+//                       y + row * ( paperHeight + 10 ),
+//                       paperWidth, paperHeight );
+// 
+//       for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i )+pageRect.left() ) < pageRect.right() && offsetX < rect.right(); i += offsetX )
+//         for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j )+pageRect.top() ) < pageRect.bottom() && offsetY < rect.bottom(); j += offsetY )
+//           if( rect.contains( zoomedX, zoomedY ) )
+//             p.drawPoint( zoomedX, zoomedY );
+//     }
+// 
+//     p.restore();
+//     return;
+//   }
+  QRect pageRect( QPoint(0,0), m_viewMode->contentsSize() );
+
+  int zoomedX,  zoomedY;
+  double offsetX = m_doc->gridX();
+  double offsetY = m_doc->gridY();
+
+  for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
+    for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j )+pageRect.top() ) < pageRect.bottom(); j += offsetY )
+      if( rect.contains( zoomedX, zoomedY ) )
+        p.drawPoint( zoomedX, zoomedY );
+
+  p.restore();
 }
 
 void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
@@ -989,6 +1059,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     //          << " docPoint.x()=" << DEBUGDOUBLE( docPoint.x() )
     //          << " m_hotSpot.x()=" << DEBUGDOUBLE( m_hotSpot.x() ) << endl;
     //          << " p.x=" << DEBUGDOUBLE( p.x() ) << endl;
+    shiftPressed = ( shiftPressed && m_doc->snapToGrid() ) || ( !shiftPressed && !m_doc->snapToGrid() );
     if ( !shiftPressed ) // Shift disables the grid
         applyGrid( p );
     //kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << DEBUGDOUBLE( p.x() )
@@ -1148,6 +1219,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool shiftPressed ) // Mouse
 
     // Resize the rectangle
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    shiftPressed = ( shiftPressed && m_doc->snapToGrid() ) || ( !shiftPressed && !m_doc->snapToGrid() );
     if ( m_mouseMode != MM_CREATE_PIX && !shiftPressed )
         applyGrid( docPoint );
 
@@ -1314,24 +1386,24 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             Q_ASSERT( frame );
             if ( frame )
             {
-                FrameIndex index( frame );
-                kdDebug() << "mrEditFrame: initial minframeheight = " << m_resizedFrameInitialMinHeight << endl;
-                FrameResizeStruct tmpResize( m_resizedFrameInitialSize, m_resizedFrameInitialMinHeight,
-                                             frame->normalize() );
+                    FrameIndex index( frame );
+                    kdDebug() << "mrEditFrame: initial minframeheight = " << m_resizedFrameInitialMinHeight << endl;
+                    FrameResizeStruct tmpResize( m_resizedFrameInitialSize, m_resizedFrameInitialMinHeight,
+                                                frame->normalize() );
 
-                KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize );
-                m_doc->addCommand(cmd);
+                    KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize );
+                    m_doc->addCommand(cmd);
 
-                m_doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
-                if(fs->isAHeader() || fs->isAFooter())
-                {
-                    m_doc->recalcFrames();
-                    frame->updateResizeHandles();
-                }
-                // Especially useful for EPS images: set final size
-                fs->resizeFrame( frame, frame->width(), frame->height(), true );
-                if ( frame && fs->type() == FT_PART )
-                    static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
+                    m_doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
+                    if(fs->isAHeader() || fs->isAFooter())
+                    {
+                        m_doc->recalcFrames();
+                        frame->updateResizeHandles();
+                    }
+                    // Especially useful for EPS images: set final size
+                    fs->resizeFrame( frame, frame->width(), frame->height(), true );
+                    if ( frame && fs->type() == FT_PART )
+                        static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
             }
             delete cmdMoveFrame; // Unused after all
             cmdMoveFrame = 0L;
@@ -1390,7 +1462,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
 
 KCommand *KWCanvas::createTextBox( const KoRect & rect )
 {
-    if ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) {
+    if ( !m_doc->snapToGrid() || ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) ) {
         KWFrame *frame = new KWFrame(0L, rect.x(), rect.y(), rect.width(), rect.height() );
         frame->setNewFrameBehavior(KWFrame::Reconnect);
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
@@ -1410,7 +1482,7 @@ KCommand *KWCanvas::createTextBox( const KoRect & rect )
 void KWCanvas::mrCreateText()
 {
     m_insRect = m_insRect.normalize();
-    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
+    if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frame->setMinFrameHeight( frame->height() ); // so that AutoExtendFrame doesn't resize it down right away
         frame->setNewFrameBehavior(KWFrame::Reconnect);
@@ -1471,7 +1543,7 @@ void KWCanvas::mrCreatePixmap()
 void KWCanvas::mrCreatePart() // mouse release, when creating part
 {
     m_insRect = m_insRect.normalize();
-    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
+    if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         m_doc->insertObject( m_insRect, m_partEntry );
     }
     setMouseMode( MM_EDIT );
@@ -1481,7 +1553,7 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part
 void KWCanvas::mrCreateFormula()
 {
     m_insRect = m_insRect.normalize();
-    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
+    if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
@@ -1498,7 +1570,7 @@ void KWCanvas::mrCreateFormula()
 void KWCanvas::mrCreateTable()
 {
     m_insRect = m_insRect.normalize();
-    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
+    if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         if ( m_table.cols * s_minFrameWidth + m_insRect.x() > m_doc->ptPaperWidth() )
         {
             KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there "
@@ -1575,13 +1647,21 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseReleaseEvent( e, normalPoint, docPoint );
                 else {
-                    if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW )
-                    {
-                        // TODO store undo/redocommand
-                    }
-                    else
-                        mrEditFrame( e, normalPoint );
-                    m_mouseMeaning = MEANING_NONE;
+                  if ( m_mouseMeaning == MEANING_RESIZE_COLUMN )
+                  {
+                    KWResizeColumnCommand *cmd = new KWResizeColumnCommand( curTable, m_rowColResized, m_previousTableSize, docPoint.x() );
+                    m_doc->addCommand(cmd);
+                    cmd->execute();
+                  }
+                  else if ( m_mouseMeaning == MEANING_RESIZE_ROW )
+                  {
+                    KWResizeRowCommand *cmd = new KWResizeRowCommand( curTable, m_rowColResized, m_previousTableSize, docPoint.y() );
+                    m_doc->addCommand(cmd);
+                    cmd->execute();
+                  }
+                  else
+                    mrEditFrame( e, normalPoint );
+                  m_mouseMeaning = MEANING_NONE;
                 }
                 break;
             case MM_CREATE_TEXT:
@@ -2570,7 +2650,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             // Pass event to auto-hide-cursor code (see kcursor.h for details)
             KCursor::autoHideEventFilter( o, e );
         }
-
+        
         switch ( e->type() ) {
             case QEvent::FocusIn:
 		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
@@ -2659,7 +2739,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted."));
                     }
                     else
-                            m_currentFrameSetEdit->keyPressEvent( keyev );
+                        m_currentFrameSetEdit->keyPressEvent( keyev );
                     return TRUE;
                 }
 

@@ -359,6 +359,8 @@ void KWView::initGui()
 
     actionFormatColor->setCurrentColor( Qt::black );
 
+    updateGridButton();
+
     //refresh zoom combobox
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );
@@ -1101,6 +1103,14 @@ void KWView::setupActions()
                     "be used to position tabulators among others.<p>Uncheck this to disable "
                     "the rulers from being displayed." ) );
 
+    actionViewShowGrid = new KToggleAction( i18n( "Grid" ), 0,
+                                            this, SLOT( viewGrid() ),
+                                            actionCollection(), "view_grid" );
+
+    actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
+                                             this, SLOT(viewSnapToGrid() ),
+                                             actionCollection(), "view_snaptogrid" );
+
     actionConfigureCompletion = new KAction( i18n( "Configure C&ompletion..." ), 0,
                         this, SLOT( configureCompletion() ),
                         actionCollection(), "configure_completion" );
@@ -1255,6 +1265,12 @@ void KWView::setupActions()
 void KWView::refreshMenuExpression()
 {
     loadexpressionActions( actionInsertExpression);
+}
+
+void KWView::updateGridButton()
+{
+    actionViewShowGrid->setChecked( m_doc->showGrid() );
+    actionViewSnapToGrid->setChecked ( m_doc->snapToGrid() );
 }
 
 void KWView::loadexpressionActions( KActionMenu * parentMenu)
@@ -6219,6 +6235,21 @@ void KWView::showRuler()
     m_doc->reorganizeGUI();
 }
 
+void KWView::viewGrid()
+{
+    m_doc->setShowGrid( actionViewShowGrid->isChecked() );
+    m_doc->setModified( true );
+    m_doc->updateGridButton();
+    m_doc->repaintAllViews(false);
+}
+
+void KWView::viewSnapToGrid()
+{
+    m_doc->setSnapToGrid( actionViewSnapToGrid->isChecked() );
+    m_doc->setModified( true );
+    m_doc->updateGridButton();
+}
+
 void KWView::slotSoftHyphen()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -6417,6 +6448,7 @@ void KWView::switchModeView()
     // Now update the actions appropriately
     QString mode = m_gui->canvasWidget()->viewMode()->type();
     bool isTextMode = mode == "ModeText";
+    bool isNormalMode = mode == "ModeNormal";
     bool state = !isTextMode;
     actionToolsCreateText->setEnabled(state);
     actionToolsCreatePix->setEnabled(state);
@@ -6432,6 +6464,8 @@ void KWView::switchModeView()
     actionInsertContents->setEnabled( state );
     actionFrameStyle->setEnabled( state );
     actionTableStyle->setEnabled ( state );
+    actionViewShowGrid->setEnabled( isNormalMode );
+    actionViewSnapToGrid->setEnabled ( isNormalMode );
     if ( m_gui->getHorzRuler())
     {
         m_gui->getHorzRuler()->setPageLayoutMenuItemEnabled( state );

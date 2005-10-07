@@ -176,13 +176,16 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_personalExpressionPath = KWFactory::instance()->dirs()->resourceDirs("expression");
     m_picturePath= KGlobalSettings::documentPath();
 
+    m_bShowGrid = false;
+    m_bSnapToGrid = false;
+
 #if 0 // KWORD_HORIZONTAL_LINE
     m_horizontalLinePath = KWFactory::instance()->dirs()->resourceDirs("horizontalLine");
 #endif
 
     setInstance( KWFactory::instance(), false );
 
-    m_gridX = m_gridY = 10.0;
+    m_gridX = m_gridY = MM_TO_POINT( 5.0 );
     m_indent = MM_TO_POINT( 10.0 );
 
     m_iNbPagePerRow = 4;
@@ -375,6 +378,11 @@ void KWDocument::initConfig()
       m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
       m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
       m_bGlobalHyphenation=config->readBoolEntry("hyphenation", false);
+
+      setShowGrid( config->readBoolEntry( "ShowGrid" , true ));
+      setSnapToGrid( config->readBoolEntry( "SnapToGrid", true ));
+      setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
+      setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
   }
   else
       m_zoom = 100;
@@ -438,6 +446,10 @@ void KWDocument::saveConfig()
         config->writeEntry( "Rulers", m_bShowRuler);
         config->writeEntry( "viewmode", m_lastViewMode);
         config->writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
+        config->writeEntry( "ShowGrid" , m_bShowGrid );
+        config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
+        config->writeEntry( "ResolutionX", m_gridX );
+        config->writeEntry( "ResolutionY", m_gridY );
     }
 }
 
@@ -6005,6 +6017,14 @@ void KWDocument::setEmpty()
     KoDocument::setEmpty();
     // Whether loaded from template or from empty doc: this is a new one -> set creation date
     m_varColl->variableSetting()->setCreationDate(QDateTime::currentDateTime());
+}
+
+void KWDocument::updateGridButton()
+{
+  QPtrListIterator<KoView> it( views() );
+  for (; it.current(); ++it )
+    ((KWView*)it.current())->updateGridButton();
+
 }
 
 #include "kwdoc.moc"

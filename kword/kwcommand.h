@@ -875,4 +875,36 @@ protected:
     QString m_newName;
 };
 
+class KWResizeColumnCommand : public KNamedCommand
+{
+public:
+    KWResizeColumnCommand( KWTableFrameSet *table, int col, double oldSize, double newSize );
+
+    ~KWResizeColumnCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KWTableFrameSet *m_table;
+    double m_oldSize;
+    double m_newSize;
+    int m_col;
+};
+
+class KWResizeRowCommand : public KNamedCommand
+{
+  public:
+    KWResizeRowCommand( KWTableFrameSet *table, int row, double oldSize, double newSize );
+
+    ~KWResizeRowCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+  protected:
+    KWTableFrameSet *m_table;
+    double m_oldSize;
+    double m_newSize;
+    int m_row;
+};
+
 #endif
