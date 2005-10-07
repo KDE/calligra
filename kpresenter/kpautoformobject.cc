@@ -33,7 +33,7 @@
 #include <qwmatrix.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <math.h>
 using namespace std;
 
@@ -157,7 +157,7 @@ double KPAutoformObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
+void KPAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
                               int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;

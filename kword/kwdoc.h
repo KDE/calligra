@@ -86,7 +86,7 @@ class KWBookMark;
 #include "defs.h" // for MouseMeaning
 
 #include <koDocument.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koUnit.h>
 #include <koPictureKey.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
@@ -101,7 +101,7 @@ class KWPartFrameSet;
 /* Class: KWDocument                                           */
 /******************************************************************/
 
-class KWDocument : public KoDocument, public KoZoomHandler
+class KWDocument : public KoDocument, public KoTextZoomHandler
 {
     Q_OBJECT
     Q_PROPERTY( int numPages READ numPages )

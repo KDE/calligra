@@ -53,7 +53,7 @@ KWTableTemplatePreview::KWTableTemplatePreview( const QString& title, KWTableSty
     : QGroupBox( title, parent, name )
 {
     m_emptyStyle = _emptyStyle;
-    m_zoomHandler = new KoZoomHandler;
+    m_zoomHandler = new KoTextZoomHandler;
     m_textdoc = new KWTextDocument( m_zoomHandler );
     tableTemplate = 0L;
     origTableTemplate = 0L;

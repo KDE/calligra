@@ -20,7 +20,7 @@
 #include "kotextobject.h"
 #include "kotextparag.h"
 #include "koparagcounter.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kocommand.h"
 #include "kostyle.h"
 #include "koFontDia.h"
@@ -56,7 +56,7 @@ public:
     bool abortFormatting;
 };
 
-KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
+KoTextObject::KoTextObject( KoTextZoomHandler *zh, const QFont& defaultFont,
                             const QString &defaultLanguage, bool hyphenation,
                             KoParagStyle* defaultStyle, int tabStopWidth,
                             QObject* parent, const char *name )

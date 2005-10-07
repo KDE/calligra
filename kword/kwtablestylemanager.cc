@@ -51,7 +51,7 @@
 KWTableStylePreview::KWTableStylePreview( const QString& title, const QString& text, QWidget* parent, const char* name )
     : QGroupBox( title, parent, name )
 {
-    m_zoomHandler = new KoZoomHandler;
+    m_zoomHandler = new KoTextZoomHandler;
     QFont font = KoGlobal::defaultFont();
     m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor(),KGlobal::locale()->language(), false ) );
     KoTextParag * parag = m_textdoc->firstParag();

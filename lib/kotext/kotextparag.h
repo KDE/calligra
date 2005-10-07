@@ -277,9 +277,9 @@ public:
     void setTabList( const KoTabulatorList &tabList );
 
     /** Return the X for the shadow distance in pixels (zoomed) */
-    int shadowX( KoZoomHandler *zh ) const;
+    int shadowX( KoTextZoomHandler *zh ) const;
     /** Return the Y for the shadow distance in pixels (zoomed) */
-    int shadowY( KoZoomHandler *zh ) const;
+    int shadowY( KoTextZoomHandler *zh ) const;
     /** Return the Y for the shadow distance in pt */
     double shadowDistanceY() const;
 
@@ -296,12 +296,12 @@ public:
     QMap<int, int>& tabCache() { return m_tabCache; }
 
     /** @return the parag rect, in pixels. This takes care of some rounding problems */
-    QRect pixelRect( KoZoomHandler* zh ) const;
+    QRect pixelRect( KoTextZoomHandler* zh ) const;
 
     /** draw underline and double underline. Static because it's used
      *  for draw double/simple in variable.
      */
-     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y, int h, QChar firstChar );
+     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y, int h, QChar firstChar );
 
     /** a bit more clever than KoTextString::toString, e.g. with numbered lists */
     QString toString( int from = 0, int length = 0xffffffff) const;
@@ -339,7 +339,7 @@ protected:
     void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
                                   KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, bool drawingShadow );
+                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow );
 
     /// Bitfield for drawFormattingChars's "whichFormattingChars" param
     enum { FormattingSpace = 1, FormattingBreak = 2, FormattingEndParag = 4, FormattingTabs = 8,
@@ -354,7 +354,7 @@ protected:
                                       bool drawSelections,
                                       KoTextFormat *format, const QMemArray<int> &selectionStarts,
                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg,
-                                      bool rightToLeft, int line, KoZoomHandler* zh,
+                                      bool rightToLeft, int line, KoTextZoomHandler* zh,
                                       int whichFormattingChars );
 
 protected:

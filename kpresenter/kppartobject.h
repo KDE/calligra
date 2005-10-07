@@ -41,7 +41,7 @@ public:
     virtual ObjType getType() const { return OT_PART; }
     virtual QString getTypeString() const { return i18n("Embedded Object"); }
 
-    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
+    virtual void draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
 
     void activate( QWidget *_widget );
@@ -59,7 +59,7 @@ protected:
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
 
     void updateChildGeometry();
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
+    virtual void paint( QPainter *_painter,KoTextZoomHandler*_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
 
     bool _enableDrawing;

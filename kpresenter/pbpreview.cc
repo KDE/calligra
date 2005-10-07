@@ -22,14 +22,14 @@
 
 #include <qpainter.h>
 
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include "kpresenter_utils.h"
 
 PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
     : QFrame( parent, name )
 {
     //FIXME zoom
-    _zoomHandler=new KoZoomHandler();
+    _zoomHandler=new KoTextZoomHandler();
     paintType = _paintType;
     pen = KPPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );

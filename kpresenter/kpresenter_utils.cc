@@ -29,7 +29,7 @@
 #include "kppieobject.h"
 
 #include <koxmlns.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koPoint.h>
 
 #include <qpainter.h>

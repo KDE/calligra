@@ -29,8 +29,7 @@
 
 //KDE Include
 #include <kconfig.h>
-//#include <kozoomhandler.h>
-#include "kozoomhandler.h"
+#include <kotextzoomhandler.h>
 
 //Formula include
 #include "kformuladefs.h"
@@ -50,7 +49,7 @@ class SymbolTable;
  * All distances are stored in point. Most methods return pixel
  * values.
  */
-class ContextStyle : public KoZoomHandler
+class ContextStyle : public KoTextZoomHandler
 {
 public:
 

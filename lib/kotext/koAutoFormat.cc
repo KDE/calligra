@@ -26,7 +26,6 @@
 #include "koparagcounter.h"
 #include <koDocument.h>
 #include <koSearchDia.h>
-#include <kozoomhandler.h>
 #include <koGlobal.h>
 
 #include <kdeversion.h>

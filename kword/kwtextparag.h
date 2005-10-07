@@ -90,7 +90,7 @@ protected:
                                       bool drawSelections,
                                       KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg,
-                                      bool rightToLeft, int line, KoZoomHandler* zh,
+                                      bool rightToLeft, int line, KoTextZoomHandler* zh,
                                       int whichFormattingChars );
 
 };

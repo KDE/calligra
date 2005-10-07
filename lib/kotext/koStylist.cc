@@ -22,19 +22,16 @@
 #include "koStylist.h"
 #include "koStylist.moc"
 #include <koFontDia.h>
+#include <koGlobal.h>
+
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kdebug.h>
 
 #include <qtabwidget.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-
-#include <klocale.h>
-//#include <kotextdocument.h>
-#include <kiconloader.h>
-#include <kdebug.h>
-//#include "kotextparag.h"
-#include "kozoomhandler.h"
-#include <koGlobal.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
 
@@ -683,13 +680,10 @@ KoStyleFontTab::KoStyleFontTab( QWidget * parent )
 	fontTabContainer->addTab( m_highlightingTab, i18n( "Highlighting" ) );
 	fontTabContainer->addTab( m_layoutTab, i18n( "Layout" ) );
 	fontTabContainer->addTab( m_languageTab, i18n( "Language" ) );
-
-	m_zoomHandler = new KoZoomHandler;
 }
 
 KoStyleFontTab::~KoStyleFontTab()
 {
-    delete m_zoomHandler;
 }
 
 void KoStyleFontTab::update()

@@ -70,7 +70,7 @@ class KoLineWidthAction;
 class KoCharSelectDia;
 class KoTextFormat;
 class KoTextObject;
-class KoZoomHandler;
+class KoTextZoomHandler;
 
 class KCommand;
 class KMacroCommand;
@@ -140,7 +140,7 @@ public:
     void showStyle( const QString & styleName );
     void updateStyleList();
 
-    KoZoomHandler *zoomHandler() const;
+    KoTextZoomHandler *zoomHandler() const;
 
     //used this function when we when to print/create web presentation etc...
     //=>we unzoom it.

@@ -455,7 +455,7 @@ void KWDocument::saveConfig()
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
+    KoTextZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
     if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() )
         formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
 }

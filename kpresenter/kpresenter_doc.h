@@ -32,7 +32,7 @@ class DCOPObject;
 class KCommand;
 class KMacroCommand;
 class KoCommandHistory;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KoAutoFormat;
 class KoUnit;
 class KoVariable;
@@ -68,7 +68,7 @@ class KoSavingContext;
 #include <koPictureCollection.h>
 #include "kpgradientcollection.h"
 #include <koUnit.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
 #include <kocommandhistory.h>
 
@@ -303,7 +303,7 @@ class KPresenterDoc : public KoDocument
 
     void addCommand( KCommand * cmd );
 
-    KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
+    KoTextZoomHandler* zoomHandler() const { return m_zoomHandler; }
     QFont defaultFont() const { return m_defaultFont; }
     void setDefaultFont( const QFont & newFont) {
         m_defaultFont = newFont;
@@ -654,7 +654,7 @@ protected:
     bool ignoreSticky;
 
     KoCommandHistory * m_commandHistory;
-    KoZoomHandler* m_zoomHandler;
+    KoTextZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;
 

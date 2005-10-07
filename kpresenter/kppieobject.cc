@@ -23,7 +23,7 @@
 #include "kpresenter_utils.h"
 #include "KPPieObjectIface.h"
 
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kooasiscontext.h>
 #include <koStyleStack.h>
 #include <koxmlns.h>
@@ -233,7 +233,7 @@ double KPPieObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
+void KPPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                          int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     double ow = ext.width();
@@ -317,7 +317,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
             end = KoPoint( ext.width() / 2.0 + end.x(), ext.height() / 2.0 - end.y() );
 
 
-            
+
             if ( lineBegin != L_NORMAL )
                 drawFigureWithOffset( lineBegin, _painter, start,
                             pen2.color(), pen.pointWidth(), s_angle, _zoomHandler, true );

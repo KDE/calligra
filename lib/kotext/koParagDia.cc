@@ -23,6 +23,7 @@
 #include "kotextformat.h"
 #include "kotextparag.h"
 #include "kotextdocument.h"
+#include "kotextzoomhandler.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -40,7 +41,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <knumvalidator.h>
-#include <kozoomhandler.h>
 #include <koGlobal.h>
 #include <qgroupbox.h>
 #include <knuminput.h>
@@ -734,7 +734,7 @@ KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidg
     : QGroupBox( title, parent, name )
 {
     setMinimumHeight(80);
-    m_zoomHandler = new KoZoomHandler;
+    m_zoomHandler = new KoTextZoomHandler;
     QFont font = KoGlobal::defaultFont();
     m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor(), KGlobal::locale()->language(), false ) );
     //m_textdoc->setWidth( KoTextZoomHandler::ptToLayoutUnitPt( 1000 ) );

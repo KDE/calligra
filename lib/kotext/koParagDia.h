@@ -34,6 +34,7 @@
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
 #include <koffice_export.h>
+class KoTextZoomHandler;
 class KButtonBox;
 class KColorButton;
 class KoTextDocument;
@@ -431,7 +432,7 @@ protected:
     void drawContents( QPainter *painter );
 
     KoTextDocument *m_textdoc;
-    KoZoomHandler *m_zoomHandler;
+    KoTextZoomHandler *m_zoomHandler;
 };
 
 /**

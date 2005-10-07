@@ -41,7 +41,7 @@
 #include <math.h>
 #include <float.h>
 
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koRect.h>
 #include <koSize.h>
 #include <koPoint.h>
@@ -1114,27 +1114,27 @@ KoRect KPObject::getRealRect() const {
 KoRect KPObject::getRepaintRect() const
 {
     KoRect rect( getRealOrig(), getRealSize() );
-    
-    if ( shadowDirection == SD_LEFT || 
-         shadowDirection == SD_LEFT_UP || 
+
+    if ( shadowDirection == SD_LEFT ||
+         shadowDirection == SD_LEFT_UP ||
          shadowDirection == SD_LEFT_BOTTOM )
     {
         rect.setLeft( rect.left() - shadowDistance );
     }
-    if ( shadowDirection == SD_UP || 
-         shadowDirection == SD_LEFT_UP || 
+    if ( shadowDirection == SD_UP ||
+         shadowDirection == SD_LEFT_UP ||
          shadowDirection == SD_RIGHT_UP )
     {
         rect.setTop( rect.top() - shadowDistance );
     }
-    if ( shadowDirection == SD_RIGHT || 
-         shadowDirection == SD_RIGHT_UP || 
+    if ( shadowDirection == SD_RIGHT ||
+         shadowDirection == SD_RIGHT_UP ||
          shadowDirection == SD_RIGHT_BOTTOM )
     {
         rect.setRight( rect.right() + shadowDistance );
     }
-    if ( shadowDirection == SD_BOTTOM || 
-         shadowDirection == SD_LEFT_BOTTOM || 
+    if ( shadowDirection == SD_BOTTOM ||
+         shadowDirection == SD_LEFT_BOTTOM ||
          shadowDirection == SD_RIGHT_BOTTOM )
     {
         rect.setBottom( rect.bottom() + shadowDistance );
@@ -1177,7 +1177,7 @@ KoRect KPObject::rotateRectObject() const
     return r;
 }
 
-void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
+void KPObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
 {
     KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
     rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
@@ -1202,7 +1202,7 @@ bool KPObject::intersects( const KoRect &rect ) const
 QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
                              KPresenterDoc *doc ) const
 {
-    KoZoomHandler * zh = doc->zoomHandler();
+    KoTextZoomHandler * zh = doc->zoomHandler();
     int px = zh->zoomItX(_point.x());
     int py = zh->zoomItY(_point.y());
 
@@ -1346,7 +1346,7 @@ void KPObject::getShadowCoords( double& _x, double& _y ) const
     _x = sx; _y = sy;
 }
 
-void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, SelectionMode mode )
+void KPObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHandler, SelectionMode mode )
 {
     if ( !selected || mode == SM_NONE )
         return;
@@ -1509,7 +1509,7 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
     return ret;
 }
 
-void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KPObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                      int /*pageNum*/, SelectionMode selectionMode, bool drawContour )
 {
     if ( selectionMode != SM_NONE && !drawContour )
@@ -1834,7 +1834,7 @@ double KPShadowObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KPShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();
@@ -2285,7 +2285,7 @@ double KP2DObject::load(const QDomElement &element)
     return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KP2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();

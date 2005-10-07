@@ -19,7 +19,7 @@
 
 #include "koparagcounter.h"
 #include "kotextparag.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
 #include "kooasiscontext.h"

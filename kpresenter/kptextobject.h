@@ -84,11 +84,11 @@ public:
     virtual void loadOasis(const QDomElement &element, KoOasisContext& context, KPRLoadingInfo *info);
     virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const;
 
-    virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+    virtual void paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                         int pageNum, bool drawingShadow, bool drawContour );
-    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor,
+    void paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor,
                 bool resetChanged, bool drawContour );
-    void paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
+    void paintEdited( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                       bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
@@ -189,8 +189,8 @@ protected:
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     virtual void loadKTextObject( const QDomElement &e );
-    void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
-    void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
+    void drawText( QPainter* _painter, KoTextZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
+    void drawParags( QPainter *p, KoTextZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
     void recalcVerticalAlignment();

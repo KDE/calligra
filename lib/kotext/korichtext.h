@@ -101,7 +101,7 @@ struct KoBidiContext;
 //// kotext additions (needed by the #included headers)
 class KCommand;
 class QDomElement;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KoTextFormatter;
 class KoParagVisitor;
 class KoTextDocCommand;

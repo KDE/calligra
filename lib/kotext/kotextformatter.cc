@@ -21,7 +21,7 @@
 #include "kotextparag.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kohyphen/kohyphen.h"
 #include "koparagcounter.h"
 
@@ -86,7 +86,7 @@ KoTextFormatterCore::KoTextFormatterCore( KoTextFormatter* _settings,
 QPair<int, int> KoTextFormatterCore::determineCharWidth()
 {
     int ww, pixelww;
-    KoZoomHandler *zh = doc->formattingZoomHandler();
+    KoTextZoomHandler *zh = doc->formattingZoomHandler();
     if ( c->c != '\t' || c->isCustom() ) {
         KoTextFormat *charFormat = c->format();
         if ( c->isCustom() ) {
@@ -259,7 +259,7 @@ bool KoTextFormatterCore::format()
 
     maxAvailableWidth = qMakePair( 0, 0 );
 
-    KoZoomHandler *zh = doc->formattingZoomHandler();
+    KoTextZoomHandler *zh = doc->formattingZoomHandler();
     int pixelx = zh->layoutUnitToPixelX( x );
     int lastPixelx = 0;
 
@@ -839,7 +839,7 @@ bool KoTextFormatterCore::format()
 }
 
 // Helper for koFormatLine and koBidiReorderLine
-void KoTextFormatterCore::moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
+void KoTextFormatterCore::moveChar( KoTextStringChar& chr, KoTextZoomHandler *zh,
                                     int deltaX, int deltaPixelX )
 {
 #ifndef REF_IS_LU
@@ -852,7 +852,7 @@ void KoTextFormatterCore::moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
 }
 
 KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
-    KoZoomHandler *zh,
+    KoTextZoomHandler *zh,
     KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
@@ -965,7 +965,7 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
 
 // collects one line of the paragraph and transforms it to visual order
 KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
-    KoZoomHandler *zh,
+    KoTextZoomHandler *zh,
     KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {

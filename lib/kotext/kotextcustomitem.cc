@@ -20,7 +20,7 @@
 #include "korichtext.h"
 #include "kotextformat.h"
 #include "kotextparag.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kotextdocument.h"
 #include <kdebug.h>
 #include <kcommand.h>
@@ -72,7 +72,7 @@ KoTextFormat * KoTextCustomItem::format() const
 
 void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
-    KoZoomHandler *zh=textDocument()->paintingZoomHandler();
+    KoTextZoomHandler *zh=textDocument()->paintingZoomHandler();
     //kdDebug(32500)<<" x :"<<_x<<" y :"<<_y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     // Calculate index only once

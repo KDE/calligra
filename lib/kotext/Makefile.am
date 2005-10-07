@@ -5,7 +5,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 lib_LTLIBRARIES = libkotext.la
 libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
-	kozoomhandler.cc koborder.cc \
+	kotextzoomhandler.cpp koborder.cc \
 	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
 	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \
 	kotextobject.cc kotextview.cc koAutoFormat.cc koAutoFormatDia.cc \
@@ -26,5 +26,5 @@ libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la $(LIBKSPELL2) -lk
 METASOURCES = AUTO
 
 # include_HEADERS = 
-#	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
+#	kotextzoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
 #	kotextdocument.h kobgspellcheck.h koCommentDia.h koCreateStyleDia.h

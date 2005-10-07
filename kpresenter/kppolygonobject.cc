@@ -21,7 +21,7 @@
 
 #include "kppolygonobject.h"
 #include "kpgradient.h"
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>
 #include <qregion.h>
@@ -201,7 +201,7 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+void KPPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
                              int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();//pen.width();

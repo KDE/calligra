@@ -28,7 +28,7 @@
 #include "kpgradient.h"
 #include "kppen.h"
 
-class KoZoomHandler;
+class KoTextZoomHandler;
 
 /******************************************************************/
 /* class Pen and Brush preview                                    */
@@ -74,7 +74,7 @@ private:
     LineEnd lineBegin, lineEnd;
     KPGradient *gradient;
     KPGradient *savedGradient;
-    KoZoomHandler *_zoomHandler;
+    KoTextZoomHandler *_zoomHandler;
 };
 
 

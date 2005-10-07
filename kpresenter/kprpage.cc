@@ -49,7 +49,7 @@
 
 #include <koStore.h>
 #include <koStoreDevice.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koxmlns.h>
 #include "koPointArray.h"
 #include "kprtextdocument.h"
@@ -1851,7 +1851,7 @@ void KPrPage::deSelectObj( KPObject *kpobject )
     m_doc->repaint( kpobject );
 }
 
-QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* /*zoomHandler*/,
+QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset,
                                   int saveOnlyPage ) const
 {
     QPtrListIterator<KPObject> oIt(m_objectList);
@@ -1867,7 +1867,6 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
         bool _sticky = this->m_masterPage == 0;
         if (_sticky)
             object.setAttribute("sticky", static_cast<int>(_sticky));
-        //QPoint orig =zoomHandler->zoomPoint(oIt.current()->getOrig());
         if ( saveOnlyPage != -1 )
             yoffset=0;
         //add yoffset to compatibility with koffice 1.1

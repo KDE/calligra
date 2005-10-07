@@ -28,7 +28,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <math.h>
 using namespace std;
 

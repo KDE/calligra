@@ -97,7 +97,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <koPartSelectAction.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kolinestyleaction.h>
 #include <kolinewidthaction.h>
 
@@ -5248,7 +5248,7 @@ void KPresenterView::slotUpdateScrollBarRanges()
     setRanges();
 }
 
-KoZoomHandler *KPresenterView::zoomHandler() const
+KoTextZoomHandler *KPresenterView::zoomHandler() const
 {
     return m_pKPresenterDoc->zoomHandler();
 }

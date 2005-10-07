@@ -45,7 +45,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                                        bool drawSelections,
                                        KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
                                        const QMemArray<int> &selectionEnds, const QColorGroup &cg,
-                                       bool rightToLeft, int line, KoZoomHandler* zh,
+                                       bool rightToLeft, int line, KoTextZoomHandler* zh,
                                        int whichFormattingChars )
 {
     KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();

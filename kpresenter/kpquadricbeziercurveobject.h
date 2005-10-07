@@ -25,7 +25,7 @@
 #include "kppointobject.h"
 
 class QPainter;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class DCOPObject;
 
 class KPQuadricBezierCurveObject : public KPPointObject

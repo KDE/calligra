@@ -35,7 +35,7 @@ template class Q_EXPORT QPtrList<KoTextDocument>;
 class KoStyleCollection;
 class KoXmlWriter;
 class KoGenStyles;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KoTextFormatCollection;
 class KoParagVisitor;
 class KoTextFormatter;
@@ -234,7 +234,7 @@ public:
     /**
      * Construct a text document, i.e. a set of paragraphs
      *
-     * @param zoomHandler The KoZoomHandler instance, to handle the zooming, as the name says :)
+     * @param zoomHandler The KoTextZoomHandler instance, to handle the zooming, as the name says :)
      * We need one here because KoTextFormatter needs one for formatting, currently.
      *
      * @param fc a format collection for this document. Ownership is transferred to the document. ###
@@ -244,13 +244,13 @@ public:
      *  since the constructor can't call the reimplementation. In that case, make sure to call
      *  clear(true) in your constructor; QRT doesn't support documents without paragraphs.
      */
-    KoTextDocument( KoZoomHandler *zoomHandler,
+    KoTextDocument( KoTextZoomHandler *zoomHandler,
                     KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L,
                     bool createInitialParag = true );
 
     /** Return the zoom handler associated with this document,
      * used when formatting. Don't use for any other purpose, it might disappear. */
-    KoZoomHandler * formattingZoomHandler() const { return m_zoomHandler; }
+    KoTextZoomHandler * formattingZoomHandler() const { return m_zoomHandler; }
 
     /**
      * Return the zoom handler currently used for drawing.
@@ -259,7 +259,7 @@ public:
      * (a different one than zoomHandler(), in case it disappears one day,
      * to have different zoom levels in different views)
      */
-    KoZoomHandler * paintingZoomHandler() const { return m_zoomHandler; }
+    KoTextZoomHandler * paintingZoomHandler() const { return m_zoomHandler; }
 
 
     /** Visit all the parts of a selection.
@@ -291,7 +291,7 @@ public:
     /** The main drawing method. Equivalent to KoTextDocument::draw, but reimplemented
      * for wysiwyg */
     KoTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-                              KoZoomHandler* zoomHandler, bool onlyChanged = FALSE,
+                              KoTextZoomHandler* zoomHandler, bool onlyChanged = FALSE,
                               bool drawCursor = FALSE, KoTextCursor *cursor = 0,
                               bool resetChanged = TRUE, uint drawingFlags = KoTextDocument::DrawSelections );
 
@@ -299,7 +299,7 @@ public:
      * Equivalent to KoTextDocument::draw, but modified for wysiwyg */
     void drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                            QPixmap *&doubleBuffer, const QColorGroup &cg,
-                           KoZoomHandler* zoomHandler,
+                           KoTextZoomHandler* zoomHandler,
                            bool drawCursor, KoTextCursor *cursor,
                            bool resetChanged = TRUE,
                            uint drawingFlags = KoTextDocument::DrawSelections );
@@ -335,7 +335,7 @@ signals:
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
-                                  KoZoomHandler* zoomHandler, const QBrush *paper = 0 );
+                                  KoTextZoomHandler* zoomHandler, const QBrush *paper = 0 );
 
     /**
      * Called by loadOasisText. This allows to extend the loading mechanism
@@ -364,7 +364,7 @@ protected:
 private:
     // The zoom handler used when formatting
     // (due to the pixelx/pixelww stuff in KoTextFormatter)
-    KoZoomHandler * m_zoomHandler;
+    KoTextZoomHandler * m_zoomHandler;
     bool m_bDestroying;
     uint m_drawingFlags;
 

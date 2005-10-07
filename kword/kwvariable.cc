@@ -487,7 +487,7 @@ QString KWFootNoteVariable::fieldCode()
 void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int _offset, bool drawingShadow )
 {
     KoTextFormat * fmt = format();
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
 
     // Force drawing as "superscript" - hmm, the formatting will use too big font metrics though.
     QFont font( fmt->screenFont( zh ) );

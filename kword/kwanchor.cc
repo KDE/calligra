@@ -81,7 +81,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
-    KoZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
+    KoTextZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
 
     int paragx = paragraph()->rect().x();
     int paragy = paragraph()->rect().y();
@@ -186,7 +186,7 @@ QSize KWAnchor::size() const
 {
     KoSize kosz = m_frameset->floatingFrameSize( m_frameNum );
     //kdDebug() << "KWAnchor::size in pt: " << kosz.width() << "x" << kosz.height() << endl;
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixY( kosz.height() ) );
     //kdDebug() << "KWAnchor::size in LU: " << sz.width() << "x" << sz.height() << endl;
     if ( sz.isNull() ) // for some reason, we don't know the size yet

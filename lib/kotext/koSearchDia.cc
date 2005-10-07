@@ -25,7 +25,6 @@
 #include <koGlobal.h>
 #include <kotextobject.h>
 #include <kotextview.h>
-#include <kozoomhandler.h>
 
 #include <kcolorbutton.h>
 #include <kcommand.h>

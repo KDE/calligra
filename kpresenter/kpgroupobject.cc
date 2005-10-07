@@ -298,7 +298,7 @@ double KPGroupObject::load( const QDomElement &element, KPresenterDoc *doc)
     return offset;
 }
 
-void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
+void KPGroupObject::draw( QPainter *_painter,KoTextZoomHandler *_zoomhandler,
                           int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     QPtrListIterator<KPObject> it( objects );

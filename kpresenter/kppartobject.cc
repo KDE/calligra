@@ -47,7 +47,7 @@ KPPartObject &KPPartObject::operator=( const KPPartObject & )
 
 void KPPartObject::updateChildGeometry()
 {
-    KoZoomHandler* zh = child->parent()->zoomHandler();
+    KoTextZoomHandler* zh = child->parent()->zoomHandler();
     child->setGeometry( zh->zoomRect( getRect() ), true );
     child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
@@ -58,7 +58,7 @@ void KPPartObject::rotate( float _angle )
     KPObject::rotate( _angle );
 
     child->setRotation( _angle );
-    KoZoomHandler* zh = child->parent()->zoomHandler();
+    KoTextZoomHandler* zh = child->parent()->zoomHandler();
     child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
@@ -93,7 +93,7 @@ void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context,
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
-void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
+void KPPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
                          int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     updateChildGeometry();
@@ -151,13 +151,13 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
 
 void KPPartObject::slot_changed( KoChild *_koChild )
 {
-    KoZoomHandler* zh = child->parent()->zoomHandler();
+    KoTextZoomHandler* zh = child->parent()->zoomHandler();
     KoRect g = zh->unzoomRect( _koChild->geometry() );
     KPObject::setOrig( g.x(), g.y() );
     KPObject::setSize( g.width(), g.height() );
 }
 
-void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
+void KPPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
                           int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     if ( !_enableDrawing ) return;

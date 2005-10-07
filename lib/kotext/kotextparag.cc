@@ -20,7 +20,7 @@
 #include "kotextparag.h"
 #include "kotextdocument.h"
 #include "koparagcounter.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kostyle.h"
 #include "kovariable.h"
 #include <kooasiscontext.h>
@@ -1113,7 +1113,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         textColor = KoTextFormat::defaultTextColor( p );
     p->setPen( QPen( textColor ) );
 
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert( zh );
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
 
@@ -1253,14 +1253,14 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
 int KoTextParag::breakableTopMargin() const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ] );
 }
 
 int KoTextParag::topMargin() const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
         + ( ( prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
@@ -1270,7 +1270,7 @@ int KoTextParag::topMargin() const
 
 int KoTextParag::bottomMargin() const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
         + ( ( joinBorder() && next() && next()->bottomBorder() == m_layout.bottomBorder &&
@@ -1280,7 +1280,7 @@ int KoTextParag::bottomMargin() const
 
 int KoTextParag::leftMargin() const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.width() );
@@ -1288,7 +1288,7 @@ int KoTextParag::leftMargin() const
 
 int KoTextParag::rightMargin() const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     int cw=0;
     if( m_layout.counter && str->isRightToLeft() &&
     	(( m_layout.counter->alignment() == Qt::AlignRight ) || ( m_layout.counter->alignment() == Qt::AlignAuto )))
@@ -1302,14 +1302,14 @@ int KoTextParag::rightMargin() const
 
 int KoTextParag::firstLineMargin() const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
 int KoTextParag::lineSpacing( int line ) const
 {
-    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     // TODO add shadow in KoTextFormatter!
     int shadow = 0; //QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
     if ( m_layout.lineSpacingType == KoParagLayout::LS_SINGLE )
@@ -1369,7 +1369,7 @@ int KoTextParag::lineSpacing( int line ) const
     return 0+shadow;
 }
 
-QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
+QRect KoTextParag::pixelRect( KoTextZoomHandler *zh ) const
 {
     QRect rct( zh->layoutUnitToPixel( rect() ) );
     //kdDebug(32500) << "   pixelRect for parag " << paragId()
@@ -1414,7 +1414,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     // Now draw paragraph border
     if ( m_layout.hasBorder() )
     {
-        KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+        KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
         assert(zh);
 
         bool const drawTopBorder = !prev() || !prev()->joinBorder() || prev()->bottomBorder() != bottomBorder() || prev()->topBorder() != topBorder() || prev()->leftBorder() != leftBorder() || prev()->rightBorder() != rightBorder();
@@ -1646,7 +1646,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
                                    KoTextFormat *format, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
 {
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
 
 #ifdef DEBUG_PAINT
@@ -1781,7 +1781,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, bool drawingShadow )
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow )
 {
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << " : '" << s.mid(start,len) << "'" << endl;
@@ -1887,11 +1887,11 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             if ( sy < 0)
                 posY -= sy;
 	    painter.drawText( startX, posY, str, start, len, dir );
-	}	
+	}
     }
     if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {
 	painter.save();
-	KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+	KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
 	const KoTabulator& tab = m_layout.tabList()[ m_tabCache[ start ] ];
 	int lineWidth = zh->zoomItY( tab.ptWidth );
 	switch ( tab.filling ) {
@@ -1988,7 +1988,7 @@ bool KoTextParag::lineHyphenated( int l ) const
 /** Draw the cursor mark. Reimplemented from KoTextParag to convert coordinates first. */
 void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
 {
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) /*+ cursor->parag()->at( cursor->index() )->pixelxadj*/;
     //kdDebug(32500) << "  drawCursor: LU: [cur]x=" << curx << ", cury=" << cury << " -> PIX: x=" << x << ", y=" << zh->layoutUnitToPixelY( cury ) << endl;
     KoTextParag::drawCursorDefault( painter, cursor, x,
@@ -2052,7 +2052,7 @@ void KoTextParag::setTabList( const KoTabulatorList &tabList )
     m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
-        KoZoomHandler* zh = textDocument()->formattingZoomHandler();
+        KoTextZoomHandler* zh = textDocument()->formattingZoomHandler();
         int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~KoTextParag
         KoTabulatorList::Iterator it = lst.begin();
         unsigned int i = 0;
@@ -2079,7 +2079,7 @@ int KoTextParag::nextTab( int chnum, int x )
         int i = 0;
         if ( string()->isRightToLeft() )
             i = m_layout.tabList().size() - 1;
-        KoZoomHandler* zh = textDocument()->formattingZoomHandler();
+        KoTextZoomHandler* zh = textDocument()->formattingZoomHandler();
 
         while ( i >= 0 && i < (int)m_layout.tabList().size() ) {
             //kdDebug(32500) << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
@@ -2383,7 +2383,7 @@ void KoTextParag::printRTDebug( int info )
 }
 #endif
 
-void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY, int /*h*/, QChar firstChar )
+void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY, int /*h*/, QChar firstChar )
 {
     // This is about drawing underlines and strikeouts
     // So abort immediately if there's none to draw.
@@ -2978,7 +2978,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                                        bool /*drawSelections*/,
                                        KoTextFormat * /*lastFormat*/, const QMemArray<int> &/*selectionStarts*/,
                                        const QMemArray<int> &/*selectionEnds*/, const QColorGroup & /*cg*/,
-                                       bool rightToLeft, int /*line*/, KoZoomHandler* zh,
+                                       bool rightToLeft, int /*line*/, KoTextZoomHandler* zh,
                                        int whichFormattingChars )
 {
     if ( !whichFormattingChars )

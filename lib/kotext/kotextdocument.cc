@@ -19,7 +19,7 @@
 
 #include "kotextdocument.h"
 #include "kotextparag.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kotextformatter.h"
 #include "kotextformat.h"
 #include "koparagcounter.h"
@@ -36,7 +36,7 @@
 //// Note that many methods are implemented in korichtext.cpp
 //// Those are the ones that come from Qt, and that mostly work :)
 
-KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollection *fc,
+KoTextDocument::KoTextDocument( KoTextZoomHandler *zoomHandler, KoTextFormatCollection *fc,
                                 KoTextFormatter *formatter, bool createInitialParag )
     : m_zoomHandler( zoomHandler ),
       m_bDestroying( false ),
@@ -1129,7 +1129,7 @@ static bool is_printer( QPainter *p )
 }
 
 KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-                                          KoZoomHandler* zoomHandler, bool onlyChanged,
+                                          KoTextZoomHandler* zoomHandler, bool onlyChanged,
                                           bool drawCursor, KoTextCursor *cursor,
                                           bool resetChanged, uint drawingFlags )
 {
@@ -1251,7 +1251,7 @@ floating:
 }
 
 void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
-                                              KoZoomHandler* zoomHandler, const QBrush *paper )
+                                              KoTextZoomHandler* zoomHandler, const QBrush *paper )
 {
     if ( !firstParag() )
 	return;
@@ -1297,7 +1297,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 // Called by drawWYSIWYG and the app's drawCursor
 void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
-                                       KoZoomHandler* zoomHandler, bool drawCursor,
+                                       KoTextZoomHandler* zoomHandler, bool drawCursor,
                                        KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
 {
     if ( cw <= 0 || ch <= 0 ) { Q_ASSERT( cw > 0 ); Q_ASSERT( ch > 0 ); return; }

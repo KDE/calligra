@@ -21,7 +21,7 @@
 #define kotextformatter_h
 
 #include "korichtext.h"
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KoHyphenator;
 
 /**
@@ -72,16 +72,16 @@ protected:
     QPair<int, int> determineCharWidth();
 
     KoTextParagLineStart *koFormatLine(
-        KoZoomHandler *zh,
+        KoTextZoomHandler *zh,
         KoTextParag * /*parag*/, KoTextString *string, KoTextParagLineStart *line,
         KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
 
     KoTextParagLineStart *koBidiReorderLine(
-        KoZoomHandler *zh,
+        KoTextZoomHandler *zh,
         KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
         KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
 
-    void moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
+    void moveChar( KoTextStringChar& chr, KoTextZoomHandler *zh,
                    int deltaX, int deltaPixelX );
 
     // Total left margin for a given line

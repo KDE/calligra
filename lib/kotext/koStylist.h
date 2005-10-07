@@ -170,7 +170,6 @@ private:
 	KoHighlightingTab *m_highlightingTab;
 	KoLayoutTab *m_layoutTab;
 	KoLanguageTab *m_languageTab;
-	KoZoomHandler* m_zoomHandler;
 };
 
 /*

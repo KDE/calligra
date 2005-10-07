@@ -20,7 +20,7 @@
 
 #include "kovariable.h"
 #include "kovariable.moc"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "timeformatwidget_impl.h"
 #include "dateformatwidget_impl.h"
 #include "kocommand.h"
@@ -927,7 +927,7 @@ QString KoVariable::text(bool realValue)
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset, bool drawingShadow )
 {
     KoTextFormat * fmt = format();
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     QFont font( fmt->screenFont( zh ) );
     drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, fmt->color(), drawingShadow );
 }
@@ -937,7 +937,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
     // Important: the y value already includes the difference between the parag baseline
     // and the char's own baseline (ascent) (see paintDefault in korichtext.cpp)
     // So we just draw the text there. But we need the baseline for drawFontEffects...
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
 
     p->save();
 
@@ -2471,7 +2471,7 @@ QStringList KoLinkVariable::actionTexts()
 void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset, bool drawingShadow )
 {
     KoTextFormat * fmt = format();
-    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
 
     bool displayLink = m_varColl->variableSetting()->displayLink();
     QFont font( fmt->screenFont( zh ) );

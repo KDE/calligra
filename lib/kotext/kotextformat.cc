@@ -19,7 +19,7 @@
 
 #include "kotextformat.h"
 #include "kotextparag.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "kostyle.h"
 #include "kooasiscontext.h"
 #include <koGenStyles.h>
@@ -1019,9 +1019,9 @@ QColor KoTextFormat::defaultTextColor( QPainter * painter )
     return QApplication::palette().color( QPalette::Active, QColorGroup::Text );
 }
 
-float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
+float KoTextFormat::screenPointSize( const KoTextZoomHandler* zh ) const
 {
-    // ## simplify (needs a change in KoZoomHandler)
+    // ## simplify (needs a change in KoTextZoomHandler)
     int pointSizeLU = KoTextZoomHandler::ptToLayoutUnitPt( pointSize() );
     if ( vAlign() != KoTextFormat::AlignNormal )
         pointSizeLU = (int)( pointSizeLU *relativeTextSize() );
@@ -1051,7 +1051,7 @@ QFont KoTextFormat::refFont() const
     return *d->m_refFont;
 }
 
-QFont KoTextFormat::screenFont( const KoZoomHandler* zh ) const
+QFont KoTextFormat::screenFont( const KoTextZoomHandler* zh ) const
 {
     float pointSize = screenPointSize( zh );
     //kdDebug(32500) << "KoTextFormat::screenFont pointSize=" << pointSize << endl;
@@ -1072,7 +1072,7 @@ QFont KoTextFormat::screenFont( const KoZoomHandler* zh ) const
     return *d->m_screenFont;
 }
 
-const QFontMetrics& KoTextFormat::screenFontMetrics( const KoZoomHandler* zh ) const
+const QFontMetrics& KoTextFormat::screenFontMetrics( const KoTextZoomHandler* zh ) const
 {
     QFont f = screenFont(zh); // don't move inside the if!
 
@@ -1098,7 +1098,7 @@ const QFontMetrics& KoTextFormat::refFontMetrics() const
     return *d->m_refFontMetrics;
 }
 
-QFont KoTextFormat::smallCapsFont( const KoZoomHandler* zh, bool applyZoom ) const
+QFont KoTextFormat::smallCapsFont( const KoTextZoomHandler* zh, bool applyZoom ) const
 {
     QFont font = applyZoom ? screenFont( zh ) : refFont();
     QFontMetrics fm = refFontMetrics(); // only used for proportions, so applyZoom doesn't matter
@@ -1107,7 +1107,7 @@ QFont KoTextFormat::smallCapsFont( const KoZoomHandler* zh, bool applyZoom ) con
     return font;
 }
 
-int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
+int KoTextFormat::charWidth( const KoTextZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
                              const KoTextParag* parag, int i ) const
 {
     ushort unicode = c->c.unicode();
@@ -1391,12 +1391,12 @@ QColor KoTextFormat::shadowColor() const
         return col;
 }
 
-int KoTextFormat::shadowX( KoZoomHandler *zh ) const
+int KoTextFormat::shadowX( KoTextZoomHandler *zh ) const
 {
     return zh->zoomItX( d->m_shadowDistanceX );
 }
 
-int KoTextFormat::shadowY( KoZoomHandler *zh ) const
+int KoTextFormat::shadowY( KoTextZoomHandler *zh ) const
 {
     return zh->zoomItY( d->m_shadowDistanceY );
 }

@@ -21,7 +21,7 @@
 #include "kppointobject.h"
 #include "kpresenter_utils.h"
 #include "kpresenter_doc.h"
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koUnit.h>
 #include <qdom.h>
 #include <qpainter.h>
@@ -190,7 +190,7 @@ bool KPPointObject::isClosed() const
 }
 
 
-void KPPointObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
+void KPPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                            int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     int _w = pen.pointWidth();

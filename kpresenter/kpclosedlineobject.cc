@@ -21,7 +21,7 @@
 
 #include "kpclosedlineobject.h"
 #include "kpgradient.h"
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>
 #include <qregion.h>
@@ -161,7 +161,7 @@ void KPClosedLineObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+void KPClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
                                 int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth();

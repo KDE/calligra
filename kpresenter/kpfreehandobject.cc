@@ -21,7 +21,7 @@
 #include "KPFreehandObjectIface.h"
 #include "kpfreehandobject.h"
 #include "kpresenter_utils.h"
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>

@@ -32,7 +32,7 @@
 #include <qdom.h>
 #include <kdebug.h>
 #include <koUnit.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <math.h>
 #include <kodom.h>
 #include <koxmlns.h>
@@ -194,7 +194,7 @@ double KPLineObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
+void KPLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                           int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     double ow = ext.width();

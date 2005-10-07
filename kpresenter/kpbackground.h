@@ -38,7 +38,7 @@ class QPixmap;
 class KPGradientCollection;
 class QDomDocument;
 class QDomElement;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KPrPage;
 class KoXmlWriter;
 class KoGenStyles;
@@ -132,7 +132,7 @@ public:
 
     // Draw the background.
     // Uses the @p zoomHandler to determine the size of the background
-    void drawBackground( QPainter *_painter, const KoZoomHandler* zoomHandler,
+    void drawBackground( QPainter *_painter, const KoTextZoomHandler* zoomHandler,
                          const QRect& crect, bool _drawBorders );
     // Draw the background. The size of the background is passed explicitly
     void drawBackground( QPainter *_painter, const QSize& ext,

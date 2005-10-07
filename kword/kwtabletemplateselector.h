@@ -40,7 +40,7 @@ class QRect;
 class KWTableTemplate;
 class KWTableTemplateCollection;
 class KoRect;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KWTextDocument;
 class KWDocument;
 class KWTableFrameSet;
@@ -78,7 +78,7 @@ protected:
 
     KWTableStyle *m_emptyStyle;
     KWTextDocument *m_textdoc;
-    KoZoomHandler *m_zoomHandler;
+    KoTextZoomHandler *m_zoomHandler;
     KWTableTemplate *tableTemplate;
     KWTableTemplate *origTableTemplate;
     //necessary when we init preview

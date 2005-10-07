@@ -22,7 +22,7 @@
 #include "kpcubicbeziercurveobject.h"
 #include "KPCubicbeziercurveObjectIface.h"
 #include "kpresenter_utils.h"
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>
@@ -69,7 +69,7 @@ bool KPCubicBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc
 
 const char * KPCubicBezierCurveObject::getOasisElementName() const
 {
-    return "draw:custom-shape"; 
+    return "draw:custom-shape";
 }
 
 void KPCubicBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo* info )

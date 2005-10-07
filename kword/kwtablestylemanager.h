@@ -61,7 +61,7 @@ protected:
     KWTableStyle *tableStyle;
 
     KoTextDocument *m_textdoc;
-    KoZoomHandler *m_zoomHandler;
+    KoTextZoomHandler *m_zoomHandler;
 };
 
 class KWTableStyleListItem

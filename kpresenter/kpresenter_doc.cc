@@ -85,7 +85,7 @@
 
 #include <korichtext.h>
 #include <kotextobject.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kostyle.h>
 #include <kcommand.h>
 #include "KPresenterDocIface.h"
@@ -192,7 +192,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_standardStyle->format().setLanguage( m_globalLanguage);
 
-    m_zoomHandler = new KoZoomHandler;
+    m_zoomHandler = new KoTextZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl = new KPrVariableCollection( new KoVariableSettings(), m_varFormatCollection );
@@ -844,13 +844,13 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
         if ( saveOnlyPage != -1 && saveOnlyPage!=i)
             continue;
         yoffset=i*m_pageList.at(i)->getPageRect().height(); // yoffset is not zoom value !!
-        objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
+        objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, saveOnlyPage );
 
     }
     if ( !_duplicatePage ) //don't copy sticky objects when we duplicate page
     {
         //offset = 0.0 when it's a sticky page.
-        objects=m_masterPage->saveObjects( doc, objects, /*yoffset*/0.0, m_zoomHandler, saveOnlyPage );
+        objects=m_masterPage->saveObjects( doc, objects, /*yoffset*/0.0, saveOnlyPage );
     }
 
     return objects;

@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kimageeffect.h>
 #include <koSize.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
@@ -492,7 +492,7 @@ double KPPixmapObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler)
+void KPPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandler)
 {
     const double ox = orig.x();
     const double oy = orig.y();
@@ -586,7 +586,7 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     return pixmap;
 }
 
-void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KPPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     if ( image.isNull() ) return;

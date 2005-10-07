@@ -72,7 +72,7 @@ public:
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
     virtual void loadOasisGroupObject( KPresenterDoc *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
+    virtual void draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
 
     void addObjects( KPObject * obj );

@@ -42,7 +42,7 @@ KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection 
     init();
 }
 
-KWTextDocument::KWTextDocument( KoZoomHandler * zoomHandler )
+KWTextDocument::KWTextDocument( KoTextZoomHandler * zoomHandler )
     : KoTextDocument( zoomHandler, new KoTextFormatCollection( KGlobalSettings::generalFont() /*unused*/, QColor(), KGlobal::locale()->language(), false), 0L, false ),
       m_textfs( 0 )
 {

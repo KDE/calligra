@@ -73,7 +73,7 @@ void KPBackGround::setBackPicture ( const KoPictureKey& key )
     backPicture = pictureCollection()->findOrLoad(key.filename(), key.lastModified() );
 }
 
-void KPBackGround::drawBackground( QPainter *_painter, const KoZoomHandler* zoomHandler,
+void KPBackGround::drawBackground( QPainter *_painter, const KoTextZoomHandler* zoomHandler,
                                    const QRect& _crect, bool _drawBorders )
 {
     QRect pageRect = zoomHandler->zoomRect( m_page->getPageRect() );

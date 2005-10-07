@@ -139,7 +139,7 @@ public:
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
      * and/or change the resolution, given in DPI.
-     * Uses the KoZoomHandler.
+     * Uses the KoTextZoomHandler.
      */
     void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 

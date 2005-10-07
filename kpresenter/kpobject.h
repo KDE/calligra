@@ -47,7 +47,7 @@ class DCOPObject;
 class QDomDocumentFragment;
 class QDomDocument;
 class QDomElement;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KPresenterDoc;
 class KPTextObject;
 class KoTextObject;
@@ -238,7 +238,7 @@ public:
         { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
     // the main drawing method.
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+    virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int /*pageNum*/, SelectionMode selectionMode, bool drawContour = FALSE );
 
     /**
@@ -264,7 +264,7 @@ public:
     virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const;
 
     KoRect rotateRectObject() const;
-    void rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler);
+    void rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler);
 
     virtual void removeFromObjList()
         { inObjList = false; }
@@ -286,7 +286,7 @@ public:
 
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
-    void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler,
+    void paintSelection( QPainter *_painter,KoTextZoomHandler *_zoomHandler,
                          SelectionMode selectionMode );
 
     /**
@@ -418,7 +418,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+    virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
     virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const;
     QString saveOasisStrokeStyle( KoGenStyles& mainStyles ) const;
@@ -455,7 +455,7 @@ protected:
      *
      * This method isn't pure virtual because some objects implement draw() directly.
      */
-    virtual void paint( QPainter* /* painter */, KoZoomHandler* /* zoomHandler */,
+    virtual void paint( QPainter* /* painter */, KoTextZoomHandler* /* zoomHandler */,
                         int /* pageNum */, bool /* drawingShadow */, bool /* drawContour */ =  FALSE ) {}
     KPPen pen;
 };
@@ -505,7 +505,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+    virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
 
     virtual void flip(bool horizontal );

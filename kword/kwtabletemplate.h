@@ -121,7 +121,7 @@ public:
     void setBottomLeftCorner( KWTableStyle *_tableStyle ) { m_bottomLeftCorner = _tableStyle; }
 
     // SAVING METHODS
-    void save( QDomElement parentElem, KoZoomHandler* zh );
+    void save( QDomElement parentElem, KoTextZoomHandler* zh );
     void saveTableTemplate( QDomElement & parentElem );
 
     // STATIC METHODS

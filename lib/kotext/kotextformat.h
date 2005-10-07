@@ -34,7 +34,7 @@ class KoGenStyle;
 class QFontMetrics;
 class KoCharStyle;
 class KoTextFormatCollection;
-class KoZoomHandler;
+class KoTextZoomHandler;
 class KoTextStringChar;
 class KoTextParag;
 class KoOasisContext;
@@ -252,9 +252,9 @@ public:
     double shadowDistanceY() const { return d->m_shadowDistanceY; }
     QColor shadowColor() const;
     /// Return the amount of pixels for the horizontal shadow distance at a given zoom level
-    int shadowX( KoZoomHandler *zh ) const;
+    int shadowX( KoTextZoomHandler *zh ) const;
     /// Return the amount of pixels for the vertical shadow distance at a given zoom level
-    int shadowY( KoZoomHandler *zh ) const;
+    int shadowY( KoTextZoomHandler *zh ) const;
     void setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
     /// Return css string for the shadow, used when saving
     QString shadowAsCss() const;
@@ -290,7 +290,7 @@ public:
      * @return the point size to use on screen, given @p zh
      * This method takes care of superscript and subscript (smaller font).
      */
-    float screenPointSize( const KoZoomHandler* zh ) const;
+    float screenPointSize( const KoTextZoomHandler* zh ) const;
 
     /**
      * @return the metrics for the reference font, i.e. with the size specified by the user.
@@ -304,7 +304,7 @@ public:
      * given by 'zh'. Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
      */
-    const QFontMetrics& screenFontMetrics( const KoZoomHandler* zh ) const;
+    const QFontMetrics& screenFontMetrics( const KoTextZoomHandler* zh ) const;
 
     /**
      * @return the reference font, i.e. with the size specified by the user.
@@ -317,16 +317,16 @@ public:
      * Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
      */
-    QFont screenFont( const KoZoomHandler* zh ) const;
+    QFont screenFont( const KoTextZoomHandler* zh ) const;
 
-    QFont smallCapsFont( const KoZoomHandler* zh, bool applyZoom ) const;
+    QFont smallCapsFont( const KoTextZoomHandler* zh, bool applyZoom ) const;
 
     /**
      * Return the width of one char in one paragraph.
      * Used by KoTextFormatter twice: once for the 100% zoom pointsize (via charWidthLU),
      * and once for the current zoom pointsize.
      */
-    int charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
+    int charWidth( const KoTextZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
                    const KoTextParag* parag, int i ) const;
 
     /**

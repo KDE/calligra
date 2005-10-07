@@ -39,7 +39,7 @@ public:
     /** A real text document inside a frameset */
     KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L );
     /** A standalone text document, for a preview */
-    KWTextDocument( KoZoomHandler * zoomHandler );
+    KWTextDocument( KoTextZoomHandler * zoomHandler );
 
     ~KWTextDocument();
 

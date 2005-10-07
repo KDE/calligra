@@ -18,7 +18,7 @@
 */
 #include "kppen.h"
 
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 
 KPPen::KPPen()
  : QPen()

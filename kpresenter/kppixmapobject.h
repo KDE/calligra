@@ -76,7 +76,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+    virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int /* page */, SelectionMode selectionMode, bool drawContour = FALSE );
 
     QPixmap getOriginalPixmap();

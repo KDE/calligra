@@ -28,7 +28,7 @@
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <kooasiscontext.h>
 
 using namespace std;
@@ -57,7 +57,7 @@ DCOPObject* KPEllipseObject::dcopObject()
     return dcop;
 }
 
-void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
+void KPEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
                              int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );

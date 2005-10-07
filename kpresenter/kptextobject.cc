@@ -38,7 +38,7 @@
 #include <kotextobject.h>
 #include <kostyle.h>
 #include <kotextformatter.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include "KPTextViewIface.h"
 #include "KPTextObjectIface.h"
 #include <kooasiscontext.h>
@@ -368,7 +368,7 @@ void KPTextObject::shadowCompatibility()
 
 
 // Standard paint method for KP2DObjects.
-void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KPTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                           int pageNum, bool drawingShadow, bool drawContour )
 {
     // Never draw shadow (in text objects, it's a character property, not an object property)
@@ -381,7 +381,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 }
 
 // Special method for drawing a text object that is being edited
-void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KPTextObject::paintEdited( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                                 bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
@@ -394,7 +394,7 @@ void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
 }
 
 // Common functionality for the above 2 methods
-void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+void KPTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                           bool onlyChanged, KoTextCursor* cursor, bool resetChanged,
                           bool drawContour )
 {
@@ -465,7 +465,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 // This method simply draws the paragraphs in the given painter
 // Assumes the painter is already set up correctly.
-void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
+void KPTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     //kdDebug(33001) << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     recalcVerticalAlignment();
@@ -1305,7 +1305,7 @@ void KPTextObject::invalidate()
 }
 
 // For the "paragraph after paragraph" effect
-void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to )
+void KPTextObject::drawParags( QPainter *painter, KoTextZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to )
 {
     // The fast and difficult way would be to call drawParagWYSIWYG
     // only on the paragraphs to be drawn. Then we have duplicate quite some code
@@ -1346,7 +1346,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
 void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
     // The implementation is very related to KWord's KWTextFrameSet::drawCursor
-    KoZoomHandler *zh = m_doc->zoomHandler();
+    KoTextZoomHandler *zh = m_doc->zoomHandler();
     QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
@@ -1754,7 +1754,7 @@ void KPTextObject::recalcVerticalAlignment()
 
 QPoint KPTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
 {
-  KoZoomHandler *zh = m_doc->zoomHandler();
+  KoTextZoomHandler *zh = m_doc->zoomHandler();
   QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
   KoTextParag* parag = cursor->parag();
   QPoint topLeft = parag->rect().topLeft();         // in QRT coords
@@ -2118,7 +2118,7 @@ void KPTextView::drawCursor( bool b )
 QPoint KPTextView::viewToInternal( const QPoint & pos ) const
 {
 #if 0
-    KoZoomHandler* zh = kpTextObject()->kPresenterDocument()->zoomHandler();
+    KoTextZoomHandler* zh = kpTextObject()->kPresenterDocument()->zoomHandler();
     QPoint tmp(pos);
     QWMatrix m;
     m.translate( zh->zoomItX(kpTextObject()->getSize().width() / 2.0),
@@ -2581,7 +2581,7 @@ KPPen KPTextObject::defaultPen() const
 
 QPoint KPTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const
 {
-    KoZoomHandler* zh = kPresenterDocument()->zoomHandler();
+    KoTextZoomHandler* zh = kPresenterDocument()->zoomHandler();
     QPoint iPoint = pos - zh->zoomPoint(
         getOrig() + KoPoint( bLeft(),
                              bTop() + alignmentValue()) );

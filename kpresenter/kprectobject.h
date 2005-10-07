@@ -58,7 +58,7 @@ protected:
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
 
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
+    virtual void paint( QPainter *_painter,KoTextZoomHandler*_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour );
 
     int xRnd, yRnd;

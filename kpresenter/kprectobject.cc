@@ -23,7 +23,7 @@
 #include "kpgradient.h"
 #include "KPRectObjectIface.h"
 
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koUnit.h>
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -149,7 +149,7 @@ QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd,
     return aa;
 }
 
-void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
+void KPRectObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                           int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );

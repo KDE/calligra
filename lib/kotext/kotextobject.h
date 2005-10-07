@@ -193,7 +193,7 @@ public:
      * @param name name for this object
      *
      */
-    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage,
+    KoTextObject( KoTextZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage,
                   bool defaultHyphenation, KoParagStyle* defaultStyle, int tabStopWidth = -1,
                   QObject* parent = 0, const char *name = 0 );
 

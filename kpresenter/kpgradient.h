@@ -26,7 +26,7 @@
 #include "global.h"
 
 class QPainter;
-class KoZoomHandler;
+class KoTextZoomHandler;
 
 /**
  * Class: KPGradient

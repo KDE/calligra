@@ -56,7 +56,7 @@
 
 #include <koparagcounter.h>
 #include <koPoint.h>
-#include <kozoomhandler.h>
+#include <kotextzoomhandler.h>
 #include <koStore.h>
 #include <koStoreDrag.h>
 #include "koPointArray.h"
@@ -279,7 +279,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         bufPainter.setBrushOrigin( -diffx(), -diffy() );
 
         QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
-        
+
         //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << endl;
 
         crect.moveBy( diffx(), diffy() ); // now in contents coordinates
@@ -1541,7 +1541,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         KPObject *kpobject;
         if ( ( !mousePressed || ( m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
              ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
-             toolEditMode == TEM_MOUSE  ) 
+             toolEditMode == TEM_MOUSE  )
         {
             bool cursorAlreadySet = false;
             if ( (int)objectList().count() > 0 )
@@ -2183,8 +2183,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             else
                 KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted."));
         }
-    } 
-    else 
+    }
+    else
     {
         switch ( e->key() )
         {
@@ -2200,24 +2200,24 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             case Qt::Key_End:  // go to first page
                 m_view->screenLast();
                 break;
-            default: 
+            default:
                 break;
         }
 
-        if ( mouseSelectedObject ) 
+        if ( mouseSelectedObject )
         {
             int offsetx = 1;
             int offsety = 1;
 
-            if( !m_view->kPresenterDoc()->snapToGrid() ) 
+            if( !m_view->kPresenterDoc()->snapToGrid() )
             {
-                if ( e->state() & ControlButton ) 
+                if ( e->state() & ControlButton )
                 {
                     offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
                     offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
                 }
-            } 
-            else 
+            }
+            else
             {
                 offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
                 offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
@@ -2227,7 +2227,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             {
                 m_moveStartPosKey = objectRect( false ).topLeft();
             }
-            switch ( e->key() ) 
+            switch ( e->key() )
             {
                 case Qt::Key_Up:
                 {
@@ -2265,8 +2265,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                     break;
                 default: break;
             }
-        } 
-        else 
+        }
+        else
         {
             switch ( e->key() ) {
                 case Qt::Key_Down:
@@ -5278,8 +5278,8 @@ void KPrCanvas::groupObjects()
     m_activePage->groupObjects();
 }
 
-KoRect KPrCanvas::objectRect( bool all ) const 
-{ 
+KoRect KPrCanvas::objectRect( bool all ) const
+{
     return m_activePage->getRealRect( all );
 }
 
