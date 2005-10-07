@@ -204,8 +204,8 @@ KexiReportFactory::editText()
 		text = ((QLabel*)m_widget)->text();
 
 	if(editRichText(m_widget, text)) {
-		changeProperty("textFormat", "RichText", m_container->form());
-		changeProperty("text", text, m_container->form());
+		changeProperty("textFormat", "RichText", m_container);
+		changeProperty("text", text, m_container);
 	}
 
 	if(classname == "Label")
