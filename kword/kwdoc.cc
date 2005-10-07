@@ -185,7 +185,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     setInstance( KWFactory::instance(), false );
 
-    m_gridX = m_gridY = MM_TO_POINT( 5.0 );
+    m_gridX = m_gridY = MM_TO_POINT(5.0 );
     m_indent = MM_TO_POINT( 10.0 );
 
     m_iNbPagePerRow = 4;

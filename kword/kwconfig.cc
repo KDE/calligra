@@ -242,8 +242,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
 
-    double ptGridX=10.0;
-    double ptGridY=10.0;
+    double ptGridX=MM_TO_POINT(5.0 );
+    double ptGridY=MM_TO_POINT(5.0 );
     double ptIndent = MM_TO_POINT(10.0);
     bool oldShowStatusBar = true;
     bool oldPgUpDownMovesCaret = false;
