@@ -379,8 +379,8 @@ void KWDocument::initConfig()
       m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
       m_bGlobalHyphenation=config->readBoolEntry("hyphenation", false);
 
-      setShowGrid( config->readBoolEntry( "ShowGrid" , true ));
-      setSnapToGrid( config->readBoolEntry( "SnapToGrid", true ));
+      setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
+      setSnapToGrid( config->readBoolEntry( "SnapToGrid", false ));
       setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
       setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
   }

@@ -595,3 +595,42 @@ void KWordDocIface::setConfigCapitalizeNameOfDays( bool b)
     doc->autoFormat()->configCapitalizeNameOfDays( b );
 }
 
+bool KWordDocIface::showGrid() const
+{
+    return doc->showGrid();
+}
+
+bool KWordDocIface::snapToGrid() const
+{
+    return doc->snapToGrid();
+}
+
+double KWordDocIface::gridX() const
+{
+    return doc->gridX();
+}
+
+double KWordDocIface::gridY() const
+{
+    return doc->gridY();
+}
+
+void KWordDocIface::setGridX( double _gridX )
+{
+    doc->setGridX( _gridX );
+}
+
+void KWordDocIface::setGridY( double _gridY )
+{
+    doc->setGridY( _gridY );
+}
+
+void KWordDocIface::setShowGrid( bool _b )
+{
+    doc->setShowGrid( _b );
+}
+
+void KWordDocIface::setSnapToGrid( bool _b )
+{
+    doc->setSnapToGrid( _b );
+}

@@ -50,6 +50,16 @@ k_dcop:
     virtual bool showdocStruct() const;
     virtual bool viewFrameBorders() const;
 
+    virtual bool showGrid() const;
+    virtual bool snapToGrid() const;
+
+    virtual void setGridX( double _gridX );
+    virtual void setGridY( double _gridY );
+    virtual void setShowGrid( bool _b );
+    virtual void setSnapToGrid( bool _b );
+    virtual double gridY() const;
+    virtual double gridX() const;
+
     virtual bool viewFormattingChars() const;
     virtual void setViewFormattingChars(bool _b);
 
