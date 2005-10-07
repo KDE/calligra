@@ -1995,9 +1995,11 @@ void KPresenterView::setExtraLineEnd(LineEnd le)
 
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KCommand * cmd( getPenCmd( i18n("Change Outline Style"), KPPen(style),
-                               L_NORMAL, L_NORMAL, PenCmd::Style ) );
+    KPPen tmpPen;
+    tmpPen.setStyle( style );
 
+    KCommand * cmd( getPenCmd( i18n("Change Outline Style"), tmpPen,
+                               L_NORMAL, L_NORMAL, PenCmd::Style ) );
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
     else
@@ -3761,9 +3763,9 @@ void KPresenterView::refreshPageButton()
 void KPresenterView::showObjectRect( const KPObject * object )
 {
     QRect r = zoomHandler()->zoomRect( object->getRealRect() );
-    if ( ! QRect( getCanvas()->diffx(), 
-                  getCanvas()->diffy(), 
-                  getCanvas()->width(), 
+    if ( ! QRect( getCanvas()->diffx(),
+                  getCanvas()->diffy(),
+                  getCanvas()->width(),
                   getCanvas()->height() ).contains( r ) )
     {
         int x = r.left() - 20;
