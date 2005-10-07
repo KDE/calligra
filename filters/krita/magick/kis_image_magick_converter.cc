@@ -185,10 +185,10 @@ namespace {
         
         // Attributes, since we have no hint on if this is an attribute or a profile
         // annotation, we prefix it with 'krita_attribute:'. XXX This needs to be rethought!
-        // The joys of imagemagick. From at least version 6.2.1 (but I assume .0, I just
-        // can't find an older version to check) they changed the src -> attributes
+        // The joys of imagemagick. From at version 6.2.1 (dfaure has 6.2.0 and confirms the
+        // old way of doing things) they changed the src -> attributes
         // to void* and require us to use the iterator functions. So we #if around that, *sigh*
-#if MagickLibVersion >= 0x620
+#if MagickLibVersion >= 0x621
         const ImageAttribute * attr;
         ResetImageAttributeIterator(src);
         while ( (attr = GetNextImageAttribute(src)) ) {
