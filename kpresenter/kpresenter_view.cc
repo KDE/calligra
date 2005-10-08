@@ -2108,6 +2108,7 @@ void KPresenterView::createGUI()
             sidebar->hide();
             actionViewShowSideBar->setChecked(false);
         }
+        else actionViewShowSideBar->setChecked(true);
     }
 
     if ( notebar )
@@ -2118,7 +2119,7 @@ void KPresenterView::createGUI()
             notebar->hide();
             actionViewShowNoteBar->setChecked(false);
         }
-
+        else actionViewShowNoteBar->setChecked(true);
         // HACK This is needed to be able to calculate a good initial size for the notebar
         QTimer::singleShot( 0, this, SLOT( initialLayoutOfSplitter() ) );
     }
