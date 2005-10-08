@@ -81,7 +81,7 @@
 		   FontSize="10" />
 	</PageHeader>
 
-	<Detail Level="0" Height="25" Repeat="false">
+	<Detail Level="0" Height="25" Repeat="false" SelectFrom="tasks">
 		<Field VAlignment="1" HAlignment="0"
 		   CommaSeparator="48" BorderStyle="1" WordWrap="0"
 		   DrawLeft="false" Field="Name" X="2"
@@ -91,7 +91,7 @@
 		   FontWeight="25" InputMask="" Precision="0"
 		   Height="20" Width="330" BackgroundColor="255,255,255"
 		   Currency="51" FontItalic="1" BorderWidth="1"
-		   DrawRight="false" DrawBottom="false" FontSize="12" />
+		   DrawRight="false" DrawBottom="false" FontSize="12" Property="name"/>
 		<Field VAlignment="1" HAlignment="1"
 		   CommaSeparator="48" BorderStyle="1" WordWrap="0"
 		   DrawLeft="false" Field="Duration" X="432"
@@ -101,7 +101,7 @@
 		   FontWeight="25" InputMask="" Precision="0"
 		   Height="20" Width="60" BackgroundColor="255,255,255"
 		   Currency="51" FontItalic="0" BorderWidth="1"
-		   DrawRight="false" DrawBottom="false" FontSize="11" />
+		   DrawRight="false" DrawBottom="false" FontSize="11" Property="duration"/>
 		<Field VAlignment="1" HAlignment="1"
 		   CommaSeparator="48" BorderStyle="1" WordWrap="0"
 		   DrawLeft="false" Field="Plannedcost" X="492"
@@ -111,7 +111,7 @@
 		   FontWeight="25" InputMask="" Precision="0"
 		   Height="20" Width="81" BackgroundColor="255,255,255"
 		   Currency="51" FontItalic="0" BorderWidth="1"
-		   DrawRight="false" DrawBottom="false" FontSize="11" />
+		   DrawRight="false" DrawBottom="false" FontSize="11" Property="plannedcost"/>
 		<Field VAlignment="1" HAlignment="1"
 		   CommaSeparator="52" BorderStyle="1" WordWrap="0"
 		   DrawLeft="false" Field="Start" X="332"
@@ -121,7 +121,7 @@
 		   FontWeight="50" InputMask="" Precision="2"
 		   Height="20" Width="100" BackgroundColor="255,255,255"
 		   Currency="51" FontItalic="0" BorderWidth="1"
-		   DrawRight="false" DrawBottom="false" FontSize="11" />
+		   DrawRight="false" DrawBottom="false" FontSize="11" Property="startdate"/>
 	</Detail>
 
 	<PageFooter PrintFrequency="1" Height="31">
@@ -146,7 +146,7 @@
 		   X="2" Y="0" ForegroundColor="0,0,0"
 		   Text="[Dato]" BorderColor="0,0,0" DateFormat="11"
 		   FontFamily="Courier 10 Pitch" DrawTop="false" FontWeight="50"
-		   Height="20" Type="0" Width="50"
+		   Height="20" Type="0" Width="90"
 		   BackgroundColor="255,255,255" FontItalic="0" BorderWidth="1"
 		   DrawRight="false" DrawBottom="false" FontSize="12" />
 	</PageFooter>

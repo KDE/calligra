@@ -81,7 +81,7 @@
 		   FontSize="10" />
 	</PageHeader>
 
-	<Detail Level="0" Height="24" Repeat="false">
+	<Detail Level="0" Height="24" Repeat="false" SelectFrom="resources">>
 		<Field VAlignment="1" HAlignment="0"
 		   CommaSeparator="48" BorderStyle="1" WordWrap="0"
 		   DrawLeft="false" Field="Name" X="2" Property="name"
