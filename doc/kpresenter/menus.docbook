@@ -306,6 +306,19 @@ who does not have access to &kpresenter;.</para>
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Open</action> a new email message in your selected email client with the current &kpresenter; document attached.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
 <guimenuitem>Create HTML Slideshow...</guimenuitem>
 </menuchoice>
 </term>
@@ -313,6 +326,21 @@ who does not have access to &kpresenter;.</para>
 <para>
 <action>Starts the HTML wizard</action>, which is described in the
 section <xref linkend="html-wizard"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Memory Stick Slideshow...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Starts the Memory Stick dialog</action>, which is described in the
+section <xref linkend="ms-export"/>.
 </para>
 </listitem>
 </varlistentry>
@@ -385,19 +413,6 @@ exactly as it would look if printed.</para>
 <para><action>Allows you to enter information about the document.</action>
 This includes information about the author, and an abstract on the
 documents contents.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>File</guimenu><guimenuitem>Send
-File...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Create a new email message and attach the file so you can
-send it to someone else.</para>
 </listitem>
 </varlistentry>
 
@@ -750,13 +765,37 @@ changes you have made remain unsaved.</para>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Show Navigation Panel</guimenuitem>
+<guimenuitem>Show Sidebar</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Toggle the display of the navigation panel</action> where you can
-see an
-overview of all the slides in your presentation.</para>
+<para><action>Toggle the display of the sidebar</action> where you can
+see an overview of all the slides in your presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Notebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the notebar</action> where you can
+see an overview of all the notes in your presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Slide  Master</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the slide master</action> where you can put objects that you want to appear on each slide in your presentation.</para>
 </listitem>
 </varlistentry>
 
@@ -993,7 +1032,8 @@ before or after the currently selected page.
 </menuchoice>
 </term>
 <listitem>
-<para>FIXME: What to do with this?</para>
+<para><action>Insert an already existing presentation.</action> A standard &kde; file
+open dialog will appear, allowing you to choose a .kpr file which will be inserted after the last slide in your current presentation.</para>
 </listitem>
 </varlistentry>
 
