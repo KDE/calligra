@@ -22,6 +22,13 @@ Be sure to comment it out again when you are done -->
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
@@ -59,7 +66,7 @@ a convenient shortcut to a command that is found in one of the menus.</para>
 </mediaobject>
 </screenshot>
 
-<para>You can move the toolbar around by dragging the handle. Toolbars can
+<para>You can move the toolbar around by dragging the handle, shown here in red. Toolbars can
 be <quote>docked</quote> or attached to any side of the &kpresenter;
 window. If you like, you can also have the toolbar <quote>float</quote> in
 its own window, separated from the main &kpresenter; window as shown in the
