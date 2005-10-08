@@ -21,6 +21,13 @@ Be sure to comment it out again when you are done -->
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
@@ -45,16 +52,13 @@ dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tut01.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guilabel>Choose a Template</guilabel>
+<textobject><phrase>The <guilabel>Create Document</guilabel>
 dialog</phrase></textobject>
 </mediaobject>
 </screenshot>
 
 <para>
-The default option is <guilabel>Start with an empty
-document</guilabel>. Select the template labeled
-<guilabel>Title</guilabel> (highlighted in red) by clicking on it. This
-also selects <guilabel>Create new document from a template</guilabel>.
+Select the template labeled <guilabel>Title</guilabel> (highlighted in blue) by clicking on it. You can check <guilabel>Always start KPresenter with the selected template</guilabel> to make it the default template.  
 </para>
 
 <para>
@@ -74,7 +78,7 @@ object on it, which is a text box.
 
 <para>
 Double-click the text box. The cursor changes to a vertical bar to show
-that you can now type some text.
+that you can now type some text and the background of the edited area becomes grey.
 </para>
 
 <screenshot>
@@ -112,24 +116,24 @@ typing.
 <para>
 Let's now add a new slide to our document. To do so, click the
 <guimenu>Insert</guimenu> menu, and then click on
-<guimenuitem>Page</guimenuitem>.
+<guimenuitem>Slide</guimenuitem>.
 </para>
 
 <screenshot>
-<screeninfo>Inserting a page from the menu</screeninfo>
+<screeninfo>Inserting a slide from the menu</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tut05.png" format="PNG"/></imageobject>
-<textobject><phrase>Inserting a page from the menu</phrase></textobject>
+<textobject><phrase>Inserting a slide from the menu</phrase></textobject>
 </mediaobject>
 </screenshot>
 
 <para>
-This brings up the <guilabel>Insert Page</guilabel> dialog.
+This brings up the <guilabel>Insert Slide</guilabel> dialog.
 </para>
 
 <screenshot>
-<screeninfo>The <guilabel>Insert Page</guilabel> dialog</screeninfo>
+<screeninfo>The <guilabel>Insert Slide</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tut06.png" format="PNG"/></imageobject>
@@ -144,9 +148,9 @@ new page after page 1.
 </para>
 
 <para>
-The <guilabel>Choose</guilabel> dialog comes up so that we can decide
+The <guilabel>Create Document</guilabel> dialog comes up so that we can decide
 what the new slide should look like. This time, double click on the
-<guilabel>One</guilabel> template (highlighted in red.)
+<guilabel>One</guilabel> template (highlighted in blue.)
 </para>
 
 <screenshot>
@@ -161,7 +165,7 @@ page</phrase></textobject>
 <para>
 The new slide now appears in the editing window. To change between pages
 of your presentation, you can select slides in the pane to the left
-(highlighted in red for this screenshot).
+(highlighted in blue for this screenshot).
 </para>
 
 <screenshot>
@@ -173,15 +177,15 @@ of your presentation, you can select slides in the pane to the left
 </screenshot>
 
 <para>
-The newly inserted page has two text boxes. There is one for a title,
+The newly inserted slide has two text boxes. There is one for a title,
 and another to contain a bulleted list of items.
 </para>
 
 <screenshot>
-<screeninfo>The new page</screeninfo>
+<screeninfo>The new slide</screeninfo>
 <mediaobject>
 <imageobject><imagedata fileref="tut09.png" format="PNG"/></imageobject>
-<textobject><phrase>The new page</phrase></textobject>
+<textobject><phrase>The new slide</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -194,10 +198,10 @@ paragraphs, bullets automatically appear in front of them.
 </para>
 
 <screenshot>
-<screeninfo>Adding text to the second page</screeninfo>
+<screeninfo>Adding text to the second slide</screeninfo>
 <mediaobject>
 <imageobject><imagedata fileref="tut10.png" format="PNG"/></imageobject>
-<textobject><phrase>Adding text to the second page</phrase></textobject>
+<textobject><phrase>Adding text to the second slide</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -211,7 +215,7 @@ You can de-select the text box by clicking away from it.
 <title>Insert a picture</title>
 
 <para>
-Let's go back to the first page now. Use the list of slides on the left
+Let's go back to the first slide now. Use the list of slides on the left
 of your screen.
 </para>
 
@@ -243,7 +247,7 @@ takes you up one folder level.
 Find the file named <filename>koffice-logo.png</filename>, which may be
 in a different folder than the one shown in the screenshot below. You
 can also choose any other graphic file if you like! Select the file, and
-click <guibutton>Open</guibutton>.
+click <guibutton>OK</guibutton>.
 </para>
 
 <screenshot>
@@ -255,9 +259,7 @@ click <guibutton>Open</guibutton>.
 </screenshot>
 
 <para>
-The logo graphic is now visible in the top left corner of the editing
-window. There are selection handles (little black squares) visible
-around the border of the graphic.
+You can now draw the logo where you want it to be with the mouse. The logo graphic is then visible where you put it. There are selection handles (little black squares) visible around the border of the graphic.
 </para>
 
 <screenshot>
@@ -270,7 +272,7 @@ around the border of the graphic.
 
 <para>
 Place the mouse cursor anywhere in the middle of the logo, and drag it
-to the middle of the title page.
+to the middle of the title page. Then use the selection handles to resize it correctly.
 </para>
 
 <screenshot>
@@ -360,10 +362,10 @@ blue. To do so, select the title text by double-clicking the text box.
 </para>
 
 <para>
-Change the color to blue by clicking on the <guiicon>dark blue</guiicon>
-icon in the color palette on the right side of the editing window (this
-icon is highlighted in red.)
-</para>
+Change the color to blue by clicking on the <guiicon>dark blue A</guiicon>
+icon in the color palette on the right side of the editing window (this icon has a Color... tooltip) or choose
+the <guimenu>Text</guimenu> menu and then click on
+<guimenuitem>Color...</guimenuitem>.</para>
 
 <screenshot>
 <screeninfo>The color palette</screeninfo>
@@ -374,7 +376,7 @@ icon is highlighted in red.)
 </screenshot>
 
 <para>
-Changing the color of the selected text to blue changes its
+Click OK in the Select Color dialog. Changing the color of the selected text to blue changes its
 appearance. The exact color that highlighted text turns depends on your
 system color scheme.
 </para>
