@@ -87,7 +87,7 @@ bool KPTRelation::load(QDomElement &element, KPTProject &project) {
     else
         m_type = FinishStart;
 
-    m_lag = KPTDuration(); //m_lag.set( KPTDuration(QDateTime::fromString(element.attribute("lag"))) );
+    m_lag = KPTDuration::fromString(element.attribute("lag"));
 
     if (!m_parent->addDependChildNode(this)) {
         kdError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
@@ -123,7 +123,7 @@ void KPTRelation::save(QDomElement &element) const {
             break;
     }
     me.setAttribute("type", type);
-    //me.setAttribute("lag", m_lag.toString());
+    me.setAttribute("lag", m_lag.toString());
 }
 
 #ifndef NDEBUG
