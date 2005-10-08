@@ -267,6 +267,8 @@ signals:
     void tabListChanged( const KoTabulatorList & );
     void unitChanged( KoUnit::Unit );
 
+    void addGuide(const QPoint &, bool, int );
+    void moveGuide( const QPoint &, bool, int );
     void addHelpline(const QPoint &, bool );
     void moveHelpLines( const QPoint &, bool );
 

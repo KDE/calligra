@@ -649,6 +649,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
     }
     else if( d->action == A_HELPLINES )
     {
+        emit addGuide( e->pos(), orientation == Qt::Horizontal, orientation == Qt::Horizontal ? size().height() : size().width() );
         emit addHelpline( e->pos(), orientation == Qt::Horizontal);
         setCursor( ArrowCursor );
     }
@@ -858,7 +859,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             }
             if( d->action == A_HELPLINES )
             {
-                emit moveHelpLines( e->pos(), orientation == Qt::Horizontal);
+                emit moveGuide( e->pos(), true, size().height() );
+                emit moveHelpLines( e->pos(), true );
             }
 
             return;
@@ -913,11 +915,13 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     default: break;
                 }
             }
+
+            if( d->action == A_HELPLINES )
+            {
+                emit moveGuide( e->pos(), false, size().width() );
+                emit moveHelpLines( e->pos(), false );
+            }
         } break;
-    }
-    if( d->action == A_HELPLINES )
-    {
-        emit moveHelpLines( e->pos(), orientation == Qt::Horizontal);
     }
 
     d->oldMx = mx;
