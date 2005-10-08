@@ -312,7 +312,9 @@ void KPTPart::setCommandType(int type) {
         m_baseline = true;
 }
 
-
+void KPTPart::generateWBS() {
+    m_project->generateWBS(1, m_wbsDefinition);
+}
 
 }  //KPlato namespace
 

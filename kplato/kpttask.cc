@@ -209,6 +209,8 @@ bool KPTTask::load(QDomElement &element) {
     m_schedulingError = element.attribute("scheduling-conflict", "0").toInt();
     m_notScheduled = element.attribute("not-scheduled", "0").toInt();
     
+    m_wbs = element.attribute("wbs", "");
+    
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
@@ -295,6 +297,8 @@ void KPTTask::save(QDomElement &element)  {
     me.setAttribute("scheduling-conflict",m_schedulingError);
     me.setAttribute("not-scheduled",m_notScheduled);
 
+    me.setAttribute("wbs", m_wbs);
+    
     m_effort->save(me);
 
     QDomElement el = me.ownerDocument().createElement("progress");

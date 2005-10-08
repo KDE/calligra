@@ -85,6 +85,7 @@ KPTGanttView::KPTGanttView(KPTView *view, QWidget *parent, bool readWrite, const
     m_showCriticalTasks = false; //FIXME
     m_showCriticalPath = false; //FIXME
     m_gantt->setHeaderVisible(true);
+    m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
     m_gantt->setShowHeaderPopupMenu();
@@ -108,7 +109,7 @@ KPTGanttView::KPTGanttView(KPTView *view, QWidget *parent, bool readWrite, const
     
     if (m_gantt->firstChild()) {
         m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
-        
+        m_gantt->firstChild()->listView()->header()->moveSection(1, 0);
         m_gantt->firstChild()->listView()->setFocus();
     }
 }
@@ -371,6 +372,7 @@ void KPTGanttView::modifyProject(KDGanttViewItem *item, KPTNode *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(node->name());
+    item->setListViewText(1, node->wbs());
     item->setStartTime(node->startTime());
     item->setEndTime(node->endTime());
     //item->setOpen(true);
@@ -382,6 +384,7 @@ void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
+    item->setListViewText(1, task->wbs());
     KPTDuration dur = task->duration();
     item->setStartTime(task->startTime());
     item->setEndTime(task->endTime());
@@ -398,7 +401,7 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
-
+    item->setListViewText(1, task->wbs());
     item->setStartTime(task->startTime());
     item->setEndTime(task->endTime());
     //item->setOpen(true);
@@ -492,6 +495,7 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
+    item->setListViewText(1, task->wbs());
     item->setStartTime(task->startTime());
     //item->setOpen(true);
     if (m_showTaskName) {

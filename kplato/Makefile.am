@@ -30,7 +30,9 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kpttaskprogresspanel.cc kpttaskprogresspanelbase.ui \
     kptconfigbehaviorpanel.cc kptconfigbehaviorpanelbase.ui \
     kptconfig.cc kptcontext.cc \
-    kptresourceuseview.cc kptresourcesdialog.cc
+    kptresourceuseview.cc kptresourcesdialog.cc \
+    kptwbsdefinitiondialog.cc kptwbsdefinitionpanel.cc kptwbsdefinitionpanelbase.ui \
+    kptwbsdefinition.cc
 
 # (this is not used)
 noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
@@ -53,8 +55,10 @@ noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
     kpttaskprogresspanel.h \
     kptconfigbehaviorpanel.h \
     kptconfig.h kptcontext.h \
-    kptresourceuseview.h kptresourcesdialog.h
-
+    kptresourceuseview.h kptresourcesdialog.h \
+    kptwbsdefinitiondialog.h kptwbsdefinitionpanel.h \
+    kptwbsdefinition.h
+    
 ## The part
 lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkplatopart.la

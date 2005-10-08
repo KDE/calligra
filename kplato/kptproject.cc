@@ -801,6 +801,18 @@ bool KPTProject::legalChildren(KPTNode *par, KPTNode *child) {
     return legal;
 }
 
+void KPTProject::generateWBS(int count, KPTWBSDefinition &def, QString wbs) {
+    if (type() == Type_Subproject || def.level0Enabled()) {
+        KPTNode::generateWBS(count, def, wbs);
+    } else {
+        QPtrListIterator<KPTNode> it = m_nodes;
+        for (int i=0; it.current(); ++it) {
+            it.current()->generateWBS(++i, def, m_wbs);
+        }
+    }
+}
+
+
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {
 

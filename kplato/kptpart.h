@@ -23,6 +23,7 @@
 
 #include "kpttask.h"
 #include "kptconfig.h"
+#include "kptwbsdefinition.h"
 
 #include <koDocument.h>
 
@@ -75,6 +76,9 @@ public:
     
     KPTConfig &config() { return m_config; }
     
+    void generateWBS();
+    KPTWBSDefinition &wbsDefinition() { return m_wbsDefinition; }
+    
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -91,6 +95,8 @@ private:
     
     KPTConfig m_config;
     KPTContext *m_context;
+    
+    KPTWBSDefinition m_wbsDefinition;
 };
 
 }  //KPlato namespace

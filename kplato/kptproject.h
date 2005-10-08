@@ -197,6 +197,8 @@ public:
      */
     bool isBaselined() const { return m_baselined; }
     
+    void generateWBS(int count, KPTWBSDefinition &def, QString wbs=QString());
+
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;
 

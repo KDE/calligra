@@ -103,6 +103,8 @@ public slots:
     void slotAddSubTask();
     void slotAddMilestone();
     void slotProjectEdit();
+    void slotDefineWBS();
+    void slotGenerateWBS();
     void slotConfigure();
     void slotAddRelation(KPTNode *par, KPTNode *child);
     void slotModifyRelation(KPTRelation *rel);
@@ -205,6 +207,10 @@ private:
     KAction *actionPriorpage;
     KAction *actionNextpage;
     KAction *actionLastpage;
+    
+    // ------ Tools
+    KAction *actionDefineWBS;
+    KAction *actionGenerateWBS;
     
     // ------ Export (testing)
     KAction *actionExportGantt;

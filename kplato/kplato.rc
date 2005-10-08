@@ -59,6 +59,10 @@
             <!--<Separator/>
             <Action name="report_design"/> -->
         </Menu>
+        <Menu name="tools"><text>&amp;Tools</text>
+        <Action name="tools_define_wbs"/>
+        <Action name="tools_generate_wbs"/>
+        </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
         <Action name="configure" group="settings_configure"/>
         </Menu>

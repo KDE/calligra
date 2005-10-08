@@ -37,6 +37,8 @@ KPTTaskDefaultPanel::KPTTaskDefaultPanel(KPTTask &task, KPTStandardWorktime *wor
     namelabel->hide();
     idfield->hide();
     idlabel->hide();
+    wbsfield->hide();
+    wbslabel->hide();
 }
 
 

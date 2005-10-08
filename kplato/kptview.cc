@@ -83,6 +83,7 @@
 #include "kptstandardworktimedialog.h"
 #include "kptcanvasitem.h"
 #include "kptconfigdialog.h"
+#include "kptwbsdefinitiondialog.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
@@ -201,17 +202,21 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
 
     // ------ Tools
-    //new KAction(i18n("Resource Editor..."), "edit_resource", 0, this,
-	//	SLOT(slotEditResource()), actionCollection(), "edit_resource");
-
+    actionDefineWBS = 
+        new KAction(i18n("Define WBS pattern..."), "tools_define_wbs", 0, this,
+        SLOT(slotDefineWBS()), actionCollection(), "tools_generate_wbs");
+    actionGenerateWBS = 
+        new KAction(i18n("Generate WBS Code"), "tools_generate_wbs", 0, this,
+        SLOT(slotGenerateWBS()), actionCollection(), "tools_define_wbs");
+    
     // ------ Export (testing)
     //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
     
     // ------ Settings
-    actionConfigure = new KAction(i18n("Configure..."), "configure", 0, this,
+    actionConfigure = new KAction(i18n("Define..."), "configure", 0, this,
         SLOT(slotConfigure()), actionCollection(), "configure");
-
+    
     // ------ Popup
     actionOpenNode = new KAction(i18n("Edit..."), "node_properties", 0, this,
         SLOT(slotOpenNode()), actionCollection(), "node_properties");
@@ -522,6 +527,20 @@ void KPTView::slotAddMilestone() {
 	}
     delete node;
     delete dia;
+}
+
+void KPTView::slotDefineWBS() {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTWBSDefinitionDialog *dia = new KPTWBSDefinitionDialog(getPart()->wbsDefinition());
+    dia->exec();
+    
+    delete dia;
+}
+
+void KPTView::slotGenerateWBS() {
+    //kdDebug()<<k_funcinfo<<endl;
+    getPart()->generateWBS();
+    slotUpdate(false);
 }
 
 void KPTView::slotConfigure() {

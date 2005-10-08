@@ -66,6 +66,7 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
+    wbsfield->setText(task.wbs());
     
     setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
     if (workTime) {

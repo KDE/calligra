@@ -43,7 +43,7 @@ class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
 class KPTEffort;
-
+class KPTWBSDefinition;
 
 /**
  * This class represents any node in the project, a node can be a project or
@@ -428,6 +428,12 @@ public:
     virtual bool inCriticalPath() { return m_inCriticalPath; }
     virtual bool calcCriticalPath();
     
+    /// Returns the level this node is in the hierarchy. Top node is level 0.
+    virtual int level();
+    /// Generate WBS
+    virtual void generateWBS(int count, KPTWBSDefinition &def, QString wbs=QString());
+    QString wbs() const { return m_wbs; }
+    
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
@@ -512,6 +518,7 @@ protected:
     KPTDateTime m_workEndTime;
 
     bool m_inCriticalPath;
+    QString m_wbs;
     
 private:
     void init();

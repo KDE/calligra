@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kptnode.h"
-
+#include "kptwbsdefinition.h"
 #include "kptresource.h"
 
 #include <qptrlist.h>
@@ -663,6 +663,21 @@ bool KPTNode::calcCriticalPath() {
     return m_inCriticalPath;
 }
 
+int KPTNode::level() {
+    KPTNode *n = getParent();
+    return n ? n->level() + 1 : 0;
+}
+
+void KPTNode::generateWBS(int count, KPTWBSDefinition &def, QString wbs) {
+    m_wbs = wbs + def.code(count, level());
+    kdDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
+    QString w = wbs + def.wbs(count, level());
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (int i=0; it.current(); ++it) {
+        it.current()->generateWBS(++i, def, w);
+    }
+
+}
 
 //////////////////////////   KPTEffort   /////////////////////////////////
 
@@ -787,6 +802,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  Earliest start: "<<earliestStart.toString()<<endl;
     kdDebug()<<indent<<"  Latest finish: " <<latestFinish.toString()<<endl;
     kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
+    kdDebug()<<indent<<"  Level: "<<level()<<endl;
 //    kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
     //kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
 
