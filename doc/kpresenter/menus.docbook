@@ -1058,15 +1058,11 @@ you wish the text to appear.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>FIXME: This name is a little awkward, I didn't know
-what it was. Perhaps 'stencil' might be a better term? Shape would
-work, but it's already used.</para>
 
 <para>Insert a pre-drawn shape, such as an arrow or a connecting
 line.</para>
 
-<para>Click and drag to draw a box stretching from the top left to the
-lower right, where you wish the autoform to display. It will be
+<para>The Insert Autoform dialog appears with two tabs: Arrows and Connections. Click on a form then on OK. On your slide, click and drag to draw a box stretching from the top left to the lower right, where you wish the autoform to display. It will be
 inserted and automatically scaled to the size of your box.</para>
 </listitem>
 </varlistentry>
@@ -1085,8 +1081,8 @@ chart. Some default data will be displayed. Double click to edit the
 data and choose the type of chart to display, using the embedded
 &kchart; editor.</para>
 
-<para>FIXME: KChart has it's own help file, but a brief overview of
-charting in this doc wouldn't go astray either.</para>
+<!--<para>FIXME: KChart has it's own help file, but a brief overview of
+charting in this doc wouldn't go astray either.</para>-->
 </listitem>
 </varlistentry>
 
@@ -1119,7 +1115,7 @@ contents.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>FIXME: This needs a section of it's own</para>
+<!--<para>FIXME: This needs a section of it's own</para>-->
 
 <para>An object is an embeddable file, in one of many formats.</para>
 
@@ -1185,8 +1181,8 @@ section.</para>
 </term>
 <listitem>
 <para><action>Scan an image with a scanner.</action> This requires you have a
-scanner installed. FIXME: Document how to set up a scanner that &kpresenter; can
-use.</para>
+scanner installed. It opens the Acquire Image dialog to allow the use of the scanner.<!--FIXME: Document how to set up a scanner that &kpresenter; can
+use.--></para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -1236,6 +1232,58 @@ press the &Esc; key to cancel, or use
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
+<guimenuitem>Zoom</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Allow you to zoom in or out in the current slide. You can see the zoom factor in the Edit toolbar, in the zoom indicator.</para>
+<screenshot>
+<screeninfo>The <guilabel>zoom factor</guilabel> indicator</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="zoomfactor.png"/>
+</imageobject>
+<textobject>
+<phrase>The <guilabel>zoom factor</guilabel> indicator</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para>Left clicking on the slide will zoom in. Right clicking on the current slide will present you a menu to allow you to zoom in, to zoom out, to zoom the entire slide, the width or the weight or zoom all objects which put back all objects in your view.
+</para>
+<para>This action has the same effect than <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
+</menuchoice> on another form.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Properties</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Open</action> the <guilabel>Properties</guilabel> dialog for the currently selected object on your slide.</para>
+<screenshot>
+<screeninfo>The <guilabel>Properties</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="properties.png"/>
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Properties</guilabel>dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para>The <guilabel>Properties</guilabel> dialog for an object allows you to manipulate it in a
+very detailed manner. You can change several properties for the selected object, like the text color if the object is text or the depth if the object is a picture.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
 <guisubmenu>Arrange Objects</guisubmenu>
 </menuchoice>
 </term>
@@ -1276,25 +1324,6 @@ vertically or horizontally.</para>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Shadow Objects</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>This puts a colored copy of either text or a drawn object behind
-it. You can make nice <quote>dropped shadows</quote> for logos with
-this tool. To work with text, ensure that you have the text
-box selected (you will see the six small black boxes around the
-outline.) You choose the color, select which way the shadow is going to
-fall and select a distance. For text it looks nice if you set the
-distance to two or three. Click <guibutton>Apply</guibutton> to see
-the result.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu>
 <guimenuitem>Group Objects</guimenuitem>
 </menuchoice>
 </term>
@@ -1321,6 +1350,25 @@ if they are just one thing. It glues things together.</para>
 of several pieces, you can unglue it with this tool. Click somewhere
 away from the object to deselect it, then click to select one of its
 parts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Shadow Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>This puts a colored copy of either text or a drawn object behind
+it. You can make nice <quote>dropped shadows</quote> for logos with
+this tool. To work with text, ensure that you have the text
+box selected (you will see the six small black boxes around the
+outline.) You choose the color, select which way the shadow is going to
+fall and select a distance. For text it looks nice if you set the
+distance to two or three. Click <guibutton>Apply</guibutton> to see
+the result.</para>
 </listitem>
 </varlistentry>
 
@@ -1370,18 +1418,6 @@ choosing a color/gradient.</para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Properties</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>The properties dialog for an object allows you to manipulate it in a
-very detailed manner.</para>
-</listitem>
-</varlistentry>
 </variablelist>
 
 </sect1>
@@ -1730,15 +1766,15 @@ force an autocorrection check here.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>
+<!--<para>
 FIXME: Write a working with slideshows section
-</para>
+</para>-->
 <para>You can set up the properties for the entire slide show here,
 including whether to show the duration on screen, which of the slides
 in a presentation to include, and several other global settings.</para>
 
-<para>This is discussed in detail in the FIXME: link to presentation
-section.</para>
+<!--<para>This is discussed in detail in the FIXME: link to presentation
+section.</para>-->
 </listitem>
 </varlistentry>
 
@@ -1746,7 +1782,20 @@ section.</para>
 <term>
 <menuchoice>
 <guimenu>Slide Show</guimenu>
-<guimenuitem>Edit Slide Transition</guimenuitem>
+<guimenuitem>Edit Object Effect...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Choose what effect you want to apply for the highlighted object. This is where
+you can set the order of appearance, how the object will appear, if you want a sound while the object appears and if you want some disappearance effects too.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Edit Slide Transition...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1757,6 +1806,7 @@ will be handled.</para>
 <para>The transition effects you select here are applied on the
 transition <emphasis>from</emphasis> this slide
 <emphasis>to</emphasis> the next.</para>
+
 </listitem>
 </varlistentry>
 
