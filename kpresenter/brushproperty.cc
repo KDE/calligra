@@ -42,7 +42,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     layout->addWidget( m_typeCombo, 0, 1 );
     m_typeCombo->insertItem( i18n( "Single Color" ) );
     m_typeCombo->insertItem( i18n( "Gradient" ) );
-    m_typeCombo->insertItem( i18n( "Transparant" ) );
+    m_typeCombo->insertItem( i18n( "Transparent" ) );
 
     QLabel *typeLabel = new QLabel( i18n( "&Type:" ), this );
     layout->addWidget( typeLabel, 0, 0 );
@@ -109,7 +109,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
              this, SLOT( slotYFactorChanged() ) );
 
     m_stack->addWidget( m_gradientUI, 1 );
-    m_stack->addWidget( new QFrame(), 2 ); // the transparant case
+    m_stack->addWidget( new QFrame(), 2 ); // the transparent case
 
     slotReset();
 }
