@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -90,6 +91,7 @@
 #include <koQueryTrader.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
+#include <koGuideLines.h>
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <tkcoloractions.h>
@@ -657,8 +659,8 @@ void KPresenterView::insertPage()
     }
 
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
-    int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
-                                              dia.radioDifferent->isChecked(), QString::null );
+    m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
+                                     dia.radioDifferent->isChecked(), QString::null );
     setRanges();
 }
 
@@ -2096,6 +2098,18 @@ void KPresenterView::createGUI()
     {
         QObject::connect( m_canvas, SIGNAL( stopAutomaticPresentation() ), this, SLOT( stopAutomaticPresentation() ) );
         QObject::connect( m_canvas, SIGNAL( restartPresentation() ), this, SLOT( restartPresentation() ) );
+
+        connect( getVRuler(), SIGNAL( addGuide( const QPoint &, bool, int ) ),
+                 &( m_canvas->guideLines() ), SLOT( addGuide( const QPoint &, bool, int ) ) );
+        connect( getVRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
+                 &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
+        connect( getHRuler(), SIGNAL( addGuide( const QPoint &, bool, int ) ),
+                 &( m_canvas->guideLines() ), SLOT( addGuide( const QPoint &, bool, int ) ) );
+        connect( getHRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
+                 &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
+        connect( &( m_canvas->guideLines() ), SIGNAL( guideLinesChanged( KoView * ) ),
+                 m_pKPresenterDoc, SLOT( slotGuideLinesChanged( KoView * ) ) );
+        m_canvas->guideLines().setGuideLines( m_pKPresenterDoc->horizHelplines(), m_pKPresenterDoc->vertHelplines() );
     }
 
     if ( sidebar )
@@ -3669,11 +3683,13 @@ void KPresenterView::setupRulers()
     QObject::connect( h_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
 
+#if 0
     QObject::connect( h_ruler, SIGNAL( addHelpline( const QPoint &, bool ) ),
                       this, SLOT( addHelpline( const QPoint &, bool ) ) );
 
     QObject::connect( h_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
                       this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
+#endif
 
 
     connect( h_ruler, SIGNAL( doubleClicked() ), this,
@@ -3688,11 +3704,13 @@ void KPresenterView::setupRulers()
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
                       this, SLOT( openPageLayoutDia() ) );
 
+#if 0
     QObject::connect( v_ruler, SIGNAL( addHelpline(const QPoint &, bool ) ),
                       this, SLOT( addHelpline( const QPoint &, bool ) ) );
 
     QObject::connect( v_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
                       this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
+#endif
 
     connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );

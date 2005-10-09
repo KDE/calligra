@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2002-2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -89,7 +89,9 @@
 #include <unistd.h>
 
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
-    : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
+: QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
+, buffer( size() )
+, m_gl( _view, _view->zoomHandler(), &buffer )
 {
     m_presMenu = 0;
     m_currentTextObjectView=0L;
@@ -188,16 +190,26 @@ KPrCanvas::~KPrCanvas()
 
 void KPrCanvas::scrollX( int x )
 {
-    int oldXOffset = m_xOffset;
+    m_gl.erase( false );
+
+    // Relative movement
+    int dx = m_xOffset - x;
+    // new position
     m_xOffset = x;
-    scroll( oldXOffset - x, 0 );
+    bitBlt( &buffer, dx, 0, &buffer );
+    scroll( dx, 0 );
 }
 
 void KPrCanvas::scrollY( int y )
 {
-    int oldYOffset = m_yOffset;
+    m_gl.erase( false );
+
+    // Relative movement
+    int dy = m_yOffset - y;
+    // new position
     m_yOffset = y;
-    scroll( 0, oldYOffset - y );
+    bitBlt( &buffer, 0, dy, &buffer );
+    scroll( 0, dy );
 }
 
 bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
@@ -272,6 +284,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
     if ( isUpdatesEnabled() )
     {
+        m_gl.erase( false );
         //kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
         QPainter bufPainter;
         bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
@@ -279,8 +292,9 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         bufPainter.setBrushOrigin( -diffx(), -diffy() );
 
         QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
-
-        //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << endl;
+        bufPainter.setClipRect( crect );
+        
+        //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << ", " << size() << endl;
 
         crect.moveBy( diffx(), diffy() ); // now in contents coordinates
         //kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
@@ -311,7 +325,9 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
             if ( doc->showHelplines() && !doc->helpLineToFront() )
             {
+#if 0
                 drawHelplines( &bufPainter, crect);
+#endif
                 drawHelpPoints( &bufPainter, crect);
             }
 
@@ -322,7 +338,9 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
             if ( doc->showHelplines() && doc->helpLineToFront())
             {
+#if 0
                 drawHelplines( &bufPainter, crect);
+#endif
                 drawHelpPoints( &bufPainter, crect);
             }
         }
@@ -358,7 +376,12 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         bufPainter.end();
 
+        if ( editMode && doc->showHelplines() )
+        {
+            m_gl.paint( false );
+        }
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
+
     }
     //else kdDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
 }
@@ -627,6 +650,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     if(!m_view->koDocument()->isReadWrite())
         return;
+
+    if ( m_gl.mousePressEvent( e ) )
+        return;
+    
     m_moveStartPosMouse = objectRect( false ).topLeft();
     if(m_currentTextObjectView)
     {
@@ -1228,6 +1255,9 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
+    if ( m_gl.mouseReleaseEvent( e ) )
+        return;
+
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     if(m_currentTextObjectView)
     {
@@ -1293,7 +1323,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     }
                 }
 
-                _repaint( false );
+                if ( mouseSelectedObject )
+                    _repaint( false );
                 emit objectSelectedChanged();
             }
             if ( m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
@@ -1494,6 +1525,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
+    if ( m_gl.mouseMoveEvent( e ) )
+        return;
+    
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     int oldMx = m_savedMousePos.x();
     int oldMy = m_savedMousePos.y();
@@ -1556,6 +1590,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             }
             if( editMode && m_view->kPresenterDoc()->showHelplines())
             {
+#if 0
                 if( m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()))!=-1)
                 {
                     setCursor ( Qt::sizeVerCursor );
@@ -1567,6 +1602,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     cursorAlreadySet = true;
                 }
                 else if ( m_view->kPresenterDoc()->indexOfHelpPoint(KoPoint( m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()),
+#else
+                if ( m_view->kPresenterDoc()->indexOfHelpPoint(KoPoint( m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()),
+#endif
                                                                              m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy())))!=-1)
                 {
                     kdDebug()<<"canMoveOneObject() :"<<canMoveOneObject()<<endl;
@@ -2118,6 +2156,8 @@ void KPrCanvas::wheelEvent( QWheelEvent *e )
 
 void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
+    if ( editMode && m_gl.keyPressEvent( e ) )
+        return;
     if ( !editMode ) {
         switch ( e->key() ) {
         case Qt::Key_Space: case Key_Right: case Key_Down:
@@ -2353,7 +2393,12 @@ void KPrCanvas::imEndEvent( QIMEvent * e )
 void KPrCanvas::resizeEvent( QResizeEvent *e )
 {
     if ( editMode )
+    {
         QWidget::resizeEvent( e );
+        m_gl.erase();
+        m_gl.resize();
+        m_gl.paint();
+    }
     else
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );

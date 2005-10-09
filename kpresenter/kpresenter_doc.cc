@@ -68,6 +68,7 @@
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
+#include <koGuideLines.h>
 #include <koGenStyles.h>
 #include <koFilterManager.h>
 #include <koStore.h>
@@ -4117,6 +4118,19 @@ void KPresenterDoc::slotRepaintVariable()
     for ( ; it.current(); ++it )
         it.current()->slotRepaintVariable();
     m_masterPage->slotRepaintVariable();
+}
+
+void KPresenterDoc::slotGuideLinesChanged( KoView *view )
+{
+    ( (KPresenterView*)view )->getCanvas()->guideLines().getGuideLines( m_horizHelplines, m_vertHelplines );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        if ( it.current() != view )
+        {
+            ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_horizHelplines, m_vertHelplines );
+        }
+    }
 }
 
 void KPresenterDoc::slotDocumentInfoModifed()

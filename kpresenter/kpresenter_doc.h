@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -530,6 +531,7 @@ public slots:
 
     static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context );
 
+    void slotGuideLinesChanged( KoView *view );
 
 signals:
     void enablePaste( bool );

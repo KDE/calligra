@@ -32,6 +32,7 @@
 #include <qvaluevector.h>
 #include <qtimer.h>
 
+#include <koGuideLines.h>
 #include <koRuler.h>
 #include <koQueryTrader.h>
 #include "koPointArray.h"
@@ -347,6 +348,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void savePicture();
 
     void dropImage( QMimeSource * data, bool resizeImageToOriginalSize = false , int posX = 10, int posX=10 );
+    KoGuideLines & guideLines() { return m_gl; }
 
 public slots:
     void exitEditMode();
@@ -797,6 +799,7 @@ private:
     bool m_keyPressEvent;
     bool m_drawSymetricObject;
 
+    KoGuideLines m_gl;
 };
 
 #endif // __KPRCANVAS__
