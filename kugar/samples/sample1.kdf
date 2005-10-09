@@ -14,7 +14,7 @@
         copies CDATA #REQUIRED>
 ]>
 
-<KugarData Template="sample1.kut">
+<KugarData Template="sample1.ktf">
 	<Row level="0" title="  BRU" version="15.0" platform="x86" copies="1"/>
 	<Row level="0" title="  Caldera Open Linux" version="2.2" platform="x86" copies="3"/>
 	<Row level="0" title="  K Desktop" version="1.1.1" platform="x86" copies="1"/>

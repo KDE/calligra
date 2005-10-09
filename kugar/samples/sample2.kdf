@@ -17,7 +17,7 @@
         lastorder CDATA #REQUIRED>
 ]>
 
-<KugarData Template="sample2.kut">
+<KugarData Template="sample2.ktf">
 	<Row level="0" prddesc="Category 5 HD Jacks (Black)" prdnumber="DCO245OB" onsale="Y" price="5.99" onhand="-100" reorder="100" lastorder="02/25/2000" />
 	<Row level="0" prddesc="Category 5 HD Jacks (Blue)" prdnumber="DCO245OWB" onsale="Y" price="5.99" onhand="534" reorder="100" lastorder="02/25/2000" />
 	<Row level="0" prddesc="Category 5 HD Jacks (Gray)" prdnumber="DCO245OG" onsale="Y" price="5.99" onhand="856" reorder="100" lastorder="02/25/2000" />
