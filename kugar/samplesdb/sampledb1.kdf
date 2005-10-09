@@ -17,7 +17,7 @@
         copies CDATA #IMPLIED>
 ]>
 
-<KugarData Template="sampledb1.kut">
+<KugarData Template="sampledb1.ktf">
     <Row level="0" name="Mandrake" />
     <Row level="1" title="Mandrake linux" version="9.1" platform="x86" copies="2" />
     <Row level="1" title="Mandrake linux" version="9.0" platform="x86" copies="3" />
