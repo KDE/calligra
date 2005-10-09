@@ -2,12 +2,12 @@ Kugar - A report creation tool for KDE.
 
 Current version: 1.3
 
-The current maintainer and the author of Kugar Report Designer
+The current maintainer
 can be reached via Email: treat@kde.org
 or visit http://www.koffice.org/kugar/
 
-The former maintainer and author of Kugar report viewer and konqueror
-part can be reached via Email: cloudtemple@mksat.net
+The former maintainer and the author of Kugar Report Designer
+part can be reached via Email: adymo@kdevelop.org
 
 The former maintainer and author of Kugar report viewer and konqueror
 part can be reached via Email: phil@river-bank.demon.co.uk
@@ -74,10 +74,10 @@ There are three sample templates and matching datafiles in ./samples.
 
 The kugar program takes one or more data files on the commandline.
 
-Example: kugar samples/sample1.kud
+Example: kugar samples/sample1.kdf
 
 To use Konqueror to display a sample, just click on the data file (with the
-.kud extension) from within Konqueror.
+.kdf extension) from within Konqueror.
 
 To create template file run Kugar Report Designer program (kudesigner).
 To add report items and sections use toolbuttons and menus,
