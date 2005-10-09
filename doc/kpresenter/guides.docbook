@@ -30,6 +30,7 @@
 </affiliation>
 </author>
 
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
@@ -81,8 +82,7 @@ configuration:</para>
 used this feature, or if you want to alter specific options. The
 <guibutton>Yes</guibutton> option allows you to use details that you have
 previously entered for your <acronym>HTML</acronym> slideshow, so that you can
-quickly create the
-slideshow without needing to adjust the options.</para>
+quickly create the slideshow without needing to adjust the options.</para>
 </step>
 
 <step>
@@ -100,7 +100,7 @@ slideshow</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>Fill in each field and ensure that the path details are correct, as this
+<para>Fill in each field (the dialog takes the informations from &kcontrol; if they exist) and ensure that the path details are correct, as this
 is where &kpresenter; will save your new <acronym>HTML</acronym> files
 and pictures. Click on the <guibutton>Next</guibutton> when you are
 done.</para>
