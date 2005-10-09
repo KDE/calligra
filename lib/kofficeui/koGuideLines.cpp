@@ -5,8 +5,13 @@
 */
 
 #include "koGuideLines.h"
+#include <qcursor.h>
 #include <qpainter.h>
 #include <qbitmap.h>
+
+#include <klocale.h>
+#include <kpopupmenu.h>
+
 #include <koDocument.h>
 #include <koView.h>
 
@@ -72,6 +77,13 @@ KoGuideLines::KoGuideLines( KoView *view, KoZoomHandler *zoomHandler, QPixmap *b
         };
         m_selectedPattern = new QPixmap( (const char**)image_data_selected );
     }
+#if 0
+    m_glMenu = new KPopupMenu;
+    m_glMenu->insertTitle( i18n( "Guide Line" ) );
+    m_glMenu->insertItem( i18n( "&Delete" ), this, SLOT( deleteGl() ) );
+    m_glMenu->insertSeparator();
+    m_glMenu->insertItem( i18n( "&Set Position..." ), this, SLOT( setPos() ) );
+#endif
 }
 
 
@@ -115,6 +127,12 @@ bool KoGuideLines::mousePressEvent( QMouseEvent* e )
                 changed = true;
             }
         }
+#if 0
+        else if ( e->button() == Qt::RightButton )
+        {
+            m_glMenu->exec( QCursor::pos() );
+        }
+#endif
     }
     else 
     {   
@@ -147,6 +165,7 @@ bool KoGuideLines::mouseMoveEvent( QMouseEvent* e )
         m_lastPoint = e->pos();
         moveSelectedBy( p );
         paint();
+        emit guideLinesChanged( m_view );
         eventProcessed = true;
     }
     else if ( e->button() == Qt::NoButton )
@@ -193,6 +212,7 @@ bool KoGuideLines::mouseReleaseEvent( QMouseEvent* e )
         }
         m_mouseSelected = false;
         eventProcessed = true;
+        emit guideLinesChanged( m_view );
     }
     return eventProcessed;
 }
@@ -208,6 +228,7 @@ bool KoGuideLines::keyPressEvent( QKeyEvent *e )
             if ( hasSelected() )
             {
                 removeSelected();
+                emit guideLinesChanged( m_view );
                 eventProcessed = true;
             }
             break;
@@ -323,6 +344,7 @@ void KoGuideLines::paint( bool updateCanvas )
 void KoGuideLines::setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos )
 {
     erase();
+    unselectAll();
     for ( KoGuideLineData *gd = m_guides.first(); gd; gd = m_guides.next() )
     {
         m_guides.remove( gd );

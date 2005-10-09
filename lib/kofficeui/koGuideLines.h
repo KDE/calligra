@@ -16,6 +16,7 @@
 #include <kozoomhandler.h>
 
 class KoView;
+class KPopupMenu;
 
 class KoGuideLineData
 {
@@ -220,6 +221,14 @@ public slots:
      */
     void addGuide( const QPoint &pos, bool horizontal, int rulerWidth );
 
+signals:
+    /**
+     * @brief Signal that shows that the guide lines are changed
+     *
+     * This signal is emmited when the guide lines are changed ( moved / deleted )
+     */
+    void guideLinesChanged( KoView * view );
+    
 
 private:
     /// the pattern used for painting a guide line
@@ -369,6 +378,8 @@ private:
     QPixmap m_selectedVGuideLine;
     /// pixmap master of a selected horizontal guide
     QPixmap m_selectedHGuideLine;
+    /// TODO
+    KPopupMenu *m_glMenu;
 };
 
 #endif /* KOGUIDELINES_H */
