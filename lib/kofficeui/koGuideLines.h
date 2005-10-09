@@ -173,6 +173,27 @@ public:
      */
     void paint( bool updateCanvas = true );
 
+    /**
+     * @brief Set the guide lines.
+     *
+     * This removes all existing guides and set up ne ones at the positions given.
+     *
+     * @param horizontalPos A list of the position of the horizontal guide lines.
+     * @param verticalPos A list of the position of the vertical guide lines.
+     */
+    void setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos );
+
+    /**
+     * @brief Get the position of the guide lines
+     *
+     * This filles the passed lists with the positions of the guide lines. 
+     * The lists will be emptied before any positions are added.
+     *
+     * @param horizontalPos A list of the position of the horizontal guide lines.
+     * @param verticalPos A list of the position of the vertical guide lines.
+     */
+    void getGuideLines( QValueList<double> &horizontalPos, QValueList<double> &verticalPos );
+
 public slots:
     /**
      * @brief Move Guide

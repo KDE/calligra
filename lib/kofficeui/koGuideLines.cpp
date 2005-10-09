@@ -320,6 +320,51 @@ void KoGuideLines::paint( bool updateCanvas )
 }
 
 
+void KoGuideLines::setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos )
+{
+    erase();
+    for ( KoGuideLineData *gd = m_guides.first(); gd; gd = m_guides.next() )
+    {
+        m_guides.remove( gd );
+    }
+    m_guides.clear();
+
+    QValueList<double>::ConstIterator it = horizontalPos.begin();
+    for ( ; it != horizontalPos.end(); ++it )
+    {
+        KoGuideLineData *gd = new KoGuideLineData( Qt::Horizontal, *it, m_view->canvas()->size() );
+        gd->setSelected( false );
+        m_guides.append( gd );
+    }
+    it = verticalPos.begin();
+    for ( ; it != verticalPos.end(); ++it )
+    {
+        KoGuideLineData *gd = new KoGuideLineData( Qt::Vertical, *it, m_view->canvas()->size() );
+        gd->setSelected( false );
+        m_guides.append( gd );
+    }
+    paint();
+}
+
+
+void KoGuideLines::getGuideLines( QValueList<double> &horizontalPos, QValueList<double> &verticalPos )
+{
+    horizontalPos.clear();
+    verticalPos.clear();
+    for ( KoGuideLineData *gd = m_guides.first(); gd; gd = m_guides.next() )
+    {
+        if ( gd->orientation() == Qt::Horizontal )
+        {
+            horizontalPos.append( gd->position() );
+        }
+        else
+        {
+            verticalPos.append( gd->position() );
+        }
+    }
+}
+
+
 void KoGuideLines::paintGuide( KoGuideLineData *gd, const QSize &size, bool updateCanvas, int dx, int dy )
 {
     if ( gd->orientation() == Qt::Vertical ) 
