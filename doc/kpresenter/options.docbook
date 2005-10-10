@@ -58,6 +58,16 @@
 <sect1  id="configure-completion">
 <title>The <guilabel>Configure Completion</guilabel> Dialog</title>
 
+<screenshot>
+<screeninfo>Configure Completion Dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="completion.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Configure Completion Dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
 <para>-</para>
 
 <para>-</para>
@@ -122,7 +132,13 @@
 <variablelist>
 <varlistentry>
 <term><guilabel>Background object color:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>It changes the background color of the text box. The Text boxes are white by default. If you had a dark
+background color and you wanted to put some white text over it, you
+could color the text box so that you could see what you were
+typing. When you have finished, the area around the text would revert
+to whatever the background color was. The
+<guibutton>Default</guibutton> button restores the original
+settings.</para></listitem>
 </varlistentry>
 
 <varlistentry>

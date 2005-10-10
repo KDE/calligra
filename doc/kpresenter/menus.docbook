@@ -2053,48 +2053,6 @@ linkend="configure-dialog">configure &kpresenter;</link> section for a complete 
 </varlistentry>
 </variablelist>
 
-<!-- <screenshot>
-<screeninfo>Configuring &kpresenter;</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="settings05.png" format="PNG" width="338"/>
-</imageobject>
-<textobject>
-<phrase>Configuring &kpresenter;</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-<para>The <guiicon>Interface</guiicon> icon on the left allows us to
-adjust the time settings on the autosave feature. The bottom two
-sliders allow the Raster settings to be adjusted. This still needs a
-little more work. They control the minimum size of objects (such as
-boxes) drawn on screen. You may find that you cannot make a box smaller than a certain size.</para>
-
-<para>The second icon is labelled Color</para>
-
-<screenshot>
-<screeninfo>Configuring &kpresenter;</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="settings06.png" format="PNG" width="338"/>
-</imageobject>
-<textobject>
-<phrase>Configuring &kpresenter;</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-<para>It changes the background color of the text box as you type text
-in (in the picture, I have made it green. There is a color choice
-dialog box). The Text boxes are white by default. If you had a dark
-background color and you wanted to put some white text over it, you
-could color the text box so that you could see what you were
-typing. When you have finished, the area around the text would revert
-to whatever the background color was. The
-<guibutton>Default</guibutton> button restores the original
-settings.</para> -->
-
 </sect1>
 
 <sect1 id="helpmenu">
