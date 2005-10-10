@@ -197,7 +197,6 @@ KarbonView::~KarbonView()
 	if( shell() )
 	{
 		delete( m_ColorManager );
-		disconnect( m_ColorManager, SIGNAL( colorChanged() ), this, SLOT( colorDockerChanged() ) );
 		delete( m_strokeDocker );
 		delete( m_styleDocker );
 		disconnect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
@@ -1182,14 +1181,6 @@ KarbonView::canvasContentsMoving( int x, int y )
 	}
 }
 
-void KarbonView::colorDockerChanged()
-{
-	if ( m_ColorManager->isStrokeDocker() && m_part && m_part->document().selection() )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_ColorManager->color() ), true );
-	else if( m_part && m_part->document().selection() )
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( m_ColorManager->color() ) ), true );
-}
-
 void
 KarbonView::selectionChanged()
 {
@@ -1225,8 +1216,6 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->updateValue( obj->stroke()->lineWidth() );
 
-		VColor *c = new VColor( m_ColorManager->isStrokeDocker() ? obj->stroke()->color() : obj->fill()->color() );
-		m_ColorManager->setColor( c );
 		m_deleteSelectionAction->setEnabled( true );
 	}
 	else
@@ -1307,11 +1296,11 @@ void KarbonView::createStrokeDock()
 
 void KarbonView::createColorDock()
 {
-    m_ColorManager = new VColorDocker(this);
+    m_ColorManager = new VColorDocker(part(),this);
     //m_ColorManager->setCaption(i18n("Stroke Properties"));
     paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
-
-    connect( m_ColorManager, SIGNAL( colorChanged() ), this, SLOT( colorDockerChanged() ) );
+	
+	connect( this, SIGNAL( selectionChange() ), m_ColorManager, SLOT( update() ) );
 }
 
 void KarbonView::createTransformDock()

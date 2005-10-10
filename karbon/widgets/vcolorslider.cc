@@ -52,6 +52,7 @@ VColorSlider::~VColorSlider()
 
 void VColorSlider::init()
 {
+	m_isDragging = false;
 	QHBoxLayout *layout = new QHBoxLayout( this, 3 );
 
 	m_label = new QLabel( this );
@@ -69,22 +70,21 @@ void VColorSlider::init()
 	connect( m_spinBox, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_spinBox( int ) ) );
 	connect( m_gradientSelect, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_gradientSelect( int ) ) );
 
+	m_gradientSelect->installEventFilter( this );
+
 	layout->activate();
 }
 
-// Sets the description of the slider
 void VColorSlider::setLabel( const QString& label )
 {
 	m_label->setText( label );
 }
 
-// Sets the colors for the slider. Color1 is left, Color2 is right
 void VColorSlider::setColors( const QColor& color1, const QColor& color2 )
 {
 	m_gradientSelect->setColors( color1, color2 );
 }
 
-//Sets the value of the spinbox (and the value of the vcolorslider)
 void VColorSlider::setValue( int value )
 {
 	m_spinBox->setValue( value );
@@ -112,7 +112,9 @@ void VColorSlider::updateFrom_spinBox( int value )
 {
 	if ( value != m_gradientSelect->value() )
 	{
+		disconnect( m_gradientSelect, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_gradientSelect( int ) ) );
 		m_gradientSelect->setValue( value );
+		connect( m_gradientSelect, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_gradientSelect( int ) ) );
 		emit valueChanged( value );
 	}
 }
@@ -121,9 +123,23 @@ void VColorSlider::updateFrom_gradientSelect( int value )
 {
 	if ( value != m_spinBox->value() )
 	{
+		disconnect( m_spinBox, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_spinBox( int ) ) );
 		m_spinBox->setValue( value );
+		connect( m_spinBox, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_spinBox( int ) ) );
 		emit valueChanged( value );
 	}
+}
+
+bool VColorSlider::eventFilter( QObject *obj, QEvent *ev )
+{
+	if( obj == m_gradientSelect ) 
+	{
+		if ( ev->type() == QEvent::MouseButtonPress ) 
+			m_isDragging = true;
+		else if( ev->type() == QEvent::MouseButtonRelease )
+			m_isDragging = false;
+	} 
+	return FALSE;
 }
 
 #include "vcolorslider.moc"

@@ -26,17 +26,20 @@
 #include <klocale.h>
 #include <koMainWindow.h>
 
+#include "karbon_part.h"
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
 #include "vcolor.h"
 #include "vcolorslider.h"
 #include "vselection.h"
+#include "vfillcmd.h"
+#include "vstrokecmd.h"
 
 #include "vcolordocker.h"
 
-VColorDocker::VColorDocker(KarbonView* parent, const char* /*name*/ )
-	: QWidget()
+VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
+	: QWidget(), m_part ( part ), m_view( parent )
 {
 	m_isStrokeDocker = false;
 	setCaption( i18n( "Fill Color" ) );
@@ -97,13 +100,10 @@ VColorDocker::VColorDocker(KarbonView* parent, const char* /*name*/ )
 	mainWidgetLayout->activate();
 	setMaximumHeight( 174 );
 	setMinimumWidth( 194 );
-	
-	m_color = new VColor();
 }
 
 VColorDocker::~VColorDocker()
 {
-	delete m_color;
 }
 
 void VColorDocker::updateRGB()
@@ -112,8 +112,12 @@ void VColorDocker::updateRGB()
 	float g = mGreenSlider->value() / 255.0;
 	float b = mBlueSlider->value() / 255.0;
 
-	m_color->setColorSpace( VColor::rgb, false );
-	m_color->set( r, g, b );
+	m_oldColor = m_color;
+
+	m_color.setColorSpace( VColor::rgb, false );
+	m_color.set( r, g, b );
+
+	changeColor();
 }
 
 void VColorDocker::updateCMYK()
@@ -123,20 +127,64 @@ void VColorDocker::updateCMYK()
 	float y = mYellowSlider->value() / 100.0;
 	float k = mBlackSlider->value() / 100.0;
 
-	m_color->setColorSpace( VColor::cmyk, false );
-	m_color->set( c, m, y, k );
+	m_oldColor = m_color;
+
+	m_color.setColorSpace( VColor::cmyk, false );
+	m_color.set( c, m, y, k );
+
+	changeColor();
 }
 
 void VColorDocker::updateOpacity()
 {
 	float op = mOpacity->value() / 100.0;
-	m_color->setOpacity( op );
+
+	m_oldColor = m_color;
+
+	m_color.setOpacity( op );
+
+	changeColor();
 }
 
 void
 VColorDocker::mouseReleaseEvent( QMouseEvent * )
 {
-	emit colorChanged();
+	changeColor();
+}
+
+void
+VColorDocker::changeColor()
+{
+	// check if objects are selected
+	int objCnt = m_part->document().selection()->objects().count();
+	if( ! objCnt ) 
+		return;
+
+	// do not change the color when still dragging one of the sliders or spinning a spinbox
+	if( mRedSlider->isDragging() || mGreenSlider->isDragging() || mBlueSlider->isDragging() 
+	|| mCyanSlider->isDragging() || mMagentaSlider->isDragging() || mYellowSlider->isDragging() 
+	|| mBlackSlider->isDragging() || mOpacity->isDragging() ) 
+		return;
+
+	bool colorChanged = false;
+
+	// check if the color really changed
+	colorChanged |= (m_oldColor.opacity() != m_color.opacity());
+	colorChanged |= (m_oldColor.colorSpace() != m_color.colorSpace());
+	colorChanged |= (m_oldColor[0] != m_color[0]);
+	colorChanged |= (m_oldColor[1] != m_color[1]);
+	colorChanged |= (m_oldColor[2] != m_color[2]);
+	colorChanged |= (m_oldColor[3] != m_color[3]);
+
+	if( ! colorChanged )
+		return;
+
+	if ( isStrokeDocker() )
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_color ), true );
+	else
+		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( m_color ) ), true );
+
+	m_oldColor = m_color;
 }
 
 void VColorDocker::setFillDocker()
@@ -151,13 +199,7 @@ void VColorDocker::setStrokeDocker()
 	setCaption( i18n( "Stroke Color" ) );
 }
 
-void VColorDocker::setColor( VColor *color )
-{
-	m_color = color;
-	updateSliders();
-}
-
-void VColorDocker::updateSliders()
+void VColorDocker::update()
 {
 	//Disconnect sliders to avoid canvas updating
 	disconnect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
@@ -169,25 +211,34 @@ void VColorDocker::updateSliders()
 	disconnect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
 	disconnect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	
-	//Update sliders
-	switch( m_color->colorSpace() )
+	int objCnt = m_part->document().selection()->objects().count();
+	
+	if( objCnt > 0 )
 	{
-	case VColor::rgb:
-		mRedSlider->setValue( int ( m_color->operator[](0) * 255 ) );
-		mGreenSlider->setValue( int ( m_color->operator[](1) * 255 ) );
-		mBlueSlider->setValue( int ( m_color->operator[](2) * 255 ) );
-		mOpacity->setValue( int ( m_color->opacity() * 100 ) );
-		mTabWidget->showPage( mRGBWidget );
+		VObject *obj = m_part->document().selection()->objects().getFirst();
+
+		m_color = m_oldColor = m_isStrokeDocker ? obj->stroke()->color() : obj->fill()->color();
+
+		//Update sliders
+		switch( m_color.colorSpace() )
+		{
+		case VColor::rgb:
+			mRedSlider->setValue( int ( m_color.operator[](0) * 255 ) );
+			mGreenSlider->setValue( int ( m_color.operator[](1) * 255 ) );
+			mBlueSlider->setValue( int ( m_color.operator[](2) * 255 ) );
+			mOpacity->setValue( int ( m_color.opacity() * 100 ) );
+			mTabWidget->showPage( mRGBWidget );
 		break;
-	case VColor::cmyk:
-		mCyanSlider->setValue( int ( m_color->operator[](0) * 100 ) );
-		mMagentaSlider->setValue( int ( m_color->operator[](1) * 100 ) );
-		mYellowSlider->setValue( int ( m_color->operator[](2) * 100 ) );
-		mBlackSlider->setValue( int ( m_color->operator[](3) * 100 ) );
-		mOpacity->setValue( int ( m_color->opacity() * 100 ) );
-		mTabWidget->showPage( mCMYKWidget );
+		case VColor::cmyk:
+			mCyanSlider->setValue( int ( m_color.operator[](0) * 100 ) );
+			mMagentaSlider->setValue( int ( m_color.operator[](1) * 100 ) );
+			mYellowSlider->setValue( int ( m_color.operator[](2) * 100 ) );
+			mBlackSlider->setValue( int ( m_color.operator[](3) * 100 ) );
+			mOpacity->setValue( int ( m_color.opacity() * 100 ) );
+			mTabWidget->showPage( mCMYKWidget );
 		break;
-	default: break;
+		default: break;
+		}
 	}
 	
 	//Reconnect sliders again

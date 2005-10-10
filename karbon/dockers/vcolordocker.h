@@ -32,19 +32,20 @@ class VColorDocker : public QWidget
 	Q_OBJECT
 
 public:
-	 VColorDocker( KarbonView* parent = 0L, const char* name = 0L );
+	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
 	 virtual ~VColorDocker();
 
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
-	 VColor color() { return *m_color; }
+	 VColor color() { return m_color; }
 
 public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();
-	virtual void setColor( VColor *);
+	virtual void update();
 
 private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
+
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
 	QWidget *mCMYKWidget;
@@ -61,14 +62,15 @@ private slots:
 	void updateCMYK();
 	void updateRGB();
 	void updateOpacity();
-	void updateSliders();
-
-signals:
-	void colorChanged();
+	void changeColor();
 
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
-	VColor *m_color;
+	VColor m_color;
+	VColor m_oldColor;
+private:
+	KarbonPart *m_part;
+	KarbonView *m_view;
 };
 
 #endif
