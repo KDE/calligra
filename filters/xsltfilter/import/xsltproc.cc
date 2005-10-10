@@ -216,7 +216,7 @@ void XSLTProc::addParam(QString name, QString value)
 
 int XSLTProc::parse()
 {
-    int i;
+    int i = 0;
     xsltStylesheetPtr cur = NULL;
     xmlDocPtr doc, style;
 
