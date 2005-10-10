@@ -312,17 +312,11 @@ public:
      * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom includes the Border_Bottom flag
      * @param leftPen pen to use to draw the left border if @p paintBorderLeft includes the Border_Left flag
      * @param topPen pen to use to draw the top border if @p paintBorderTop includes the Border_Top flag
-     * @param highlightBorder a combination of flags from the KSpreadCell::BorderSides enum which specifies the highlight borders to paint
-     * @param highlightPen if @p highlightBorder is not Border_None, this specifies the pen to draw the cell highlights with
      * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const KoRect & rect, QPainter & painter,
                     KSpreadView * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
-                   /* bool paintBorderRight,
-                    bool paintBorderBottom,
-                    bool paintBorderLeft,
-		    bool paintBorderTop,*/
 		    int paintBorder,
 		    
                     QPen & rightPen,

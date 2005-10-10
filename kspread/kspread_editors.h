@@ -109,7 +109,7 @@ class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
 
 	/**
 		 *	Gets information about the references found in the formula (cell,colour)
-		 *	@param cellRefs A vector of type KSpreadCanvas::HighlightedCell.  Information about the references found in the formula
+		 *	@param ranges A vector containing HighlightRage elements.  Information about the references found in the formula
 		 *	will be added to the end of the vector.
 	 */
 
