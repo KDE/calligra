@@ -2202,7 +2202,6 @@ bool KWFrameDia::applyChanges()
                 FramesetSetProtectSizeCommand* cmd = new FramesetSetProtectSizeCommand( fs, QString::null, fs->isProtectSize(), protectSize->isChecked() );
                 macroCmd->addCommand(cmd);
                 cmd->execute();
-
             }
             if ( !fs->isMainFrameset() &&
                 ( ( oldX != sx->value() && sx->isEnabled() )|| ( oldY != sy->value() && sy->isEnabled() ) || ( oldW != sw->value() && sw->isEnabled() ) || ( oldH != sh->value() && sh->isEnabled() ) ) )
