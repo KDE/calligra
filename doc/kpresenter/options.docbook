@@ -15,10 +15,56 @@
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
 <title>Configuring &kpresenter;</title>
+
+<sect1  id="configure-autocorrection">
+<title>The <guilabel>Configure Autocorrection</guilabel> Dialog</title>
+<sect2 id="simple-autocorrection">
+<title><guilabel>Simple Autocorrection</guilabel></title>
+
+<para>-</para>
+
+</sect2>
+<sect2 id="custom-quotes">
+<title><guilabel>Custom Quotes</guilabel></title>
+
+<para>-</para>
+
+</sect2>
+<sect2 id="advanced-autocorrestion">
+<title><guilabel>Advanced Autocorrection</guilabel></title>
+
+<para>-</para>
+
+</sect2>
+<sect2 id="exceptions">
+<title><guilabel>Exceptions</guilabel></title>
+
+<para>-</para>
+
+</sect2>
+</sect1>
+
+<sect1  id="configure-completion">
+<title>The <guilabel>Configure Completion</guilabel> Dialog</title>
+
+<para>-</para>
+
+<para>-</para>
+
+<para>-</para>
+
+</sect1>
 
 <sect1 id="configure-dialog">
 <title>The <guilabel>Configure &kpresenter;</guilabel> Dialog</title>

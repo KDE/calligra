@@ -29,7 +29,13 @@
 <address><email>danny@dannyallen.co.uk</email></address>
 </affiliation>
 </author>
-
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>

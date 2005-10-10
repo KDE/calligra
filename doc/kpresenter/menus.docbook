@@ -1911,7 +1911,7 @@ disable the display of specific toolbars here.</para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<!-- OBSOLETE <varlistentry>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
@@ -1921,7 +1921,7 @@ disable the display of specific toolbars here.</para>
 <listitem>
 <para>FIXME: Find out what this is</para>
 </listitem>
-</varlistentry>
+</varlistentry>-->
 
 <varlistentry>
 <term>
@@ -1959,7 +1959,7 @@ menu.</para>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure Shortcuts</guimenuitem>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1998,22 +1998,30 @@ the dialog.</para>
 
 </listitem>
 </varlistentry>
-</variablelist>
 
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
 <para>Configure Toolbars allows you to add or delete icons on each of
 the toolbars.</para>
 
 <screenshot>
-<screeninfo>Configuring &kpresenter;</screeninfo>
+<screeninfo>Configuring &kpresenter; toolbars</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="settings04.png" format="PNG" width="588"/>
 </imageobject>
 <textobject>
-<phrase>Configuring &kpresenter;</phrase>
+<phrase>Configuring &kpresenter; toolbars</phrase>
 </textobject>
 </mediaobject>
 </screenshot>
+
 
 
 <para>At the top is a Drop Down box to enable you to choose which
@@ -2028,8 +2036,24 @@ when items on both sides are selected. You can move the highlight in
 the right side window up and down with the keyboard arrow keys or by
 clicking on the arrows with the mouse. The Configure &kpresenter; menu
 entry gives two menu boxes.</para>
+</listitem>
+</varlistentry>
 
-<screenshot>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &kpresenter;...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>See the <link
+linkend="configure-dialog">configure &kpresenter;</link> section for a complete explanation of all &kpresenter; settings.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<!-- <screenshot>
 <screeninfo>Configuring &kpresenter;</screeninfo>
 <mediaobject>
 <imageobject>
@@ -2045,8 +2069,7 @@ entry gives two menu boxes.</para>
 adjust the time settings on the autosave feature. The bottom two
 sliders allow the Raster settings to be adjusted. This still needs a
 little more work. They control the minimum size of objects (such as
-boxes) drawn on screen. You may find that you cannot make a box
-smaller than a certain size.</para>
+boxes) drawn on screen. You may find that you cannot make a box smaller than a certain size.</para>
 
 <para>The second icon is labelled Color</para>
 
@@ -2070,7 +2093,7 @@ could color the text box so that you could see what you were
 typing. When you have finished, the area around the text would revert
 to whatever the background color was. The
 <guibutton>Default</guibutton> button restores the original
-settings.</para>
+settings.</para> -->
 
 </sect1>
 
