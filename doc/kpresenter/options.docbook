@@ -72,20 +72,30 @@
 <sect2 id="configure-interface">
 <title><guilabel>Interface</guilabel></title>
 
+<screenshot>
+<screeninfo>Configure Interface</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Configure Interface</phrase></textobject>
+</mediaobject>
+</screenshot>
+
 <variablelist>
 <varlistentry>
 <term><guilabel>Show rulers</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>This is checked by default and both a vertical and horizontal ruler are shown on &kpresenter; slide.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Show status bar</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Toggle the statusbar which is shown by default.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Number of recent files:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Set the number of recent files which will be opened using the <guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem> menu.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -98,6 +108,16 @@
 
 <sect2 id="configure-color">
 <title><guilabel>Color</guilabel></title>
+
+<screenshot>
+<screeninfo>Color</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Color</phrase></textobject>
+</mediaobject>
+</screenshot>
 
 <variablelist>
 <varlistentry>
@@ -116,6 +136,16 @@
 
 <sect2 id="configure-spelling">
 <title><guilabel>Spelling</guilabel></title>
+
+<screenshot>
+<screeninfo>Spelling</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure3.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Spelling</phrase></textobject>
+</mediaobject>
+</screenshot>
 
 <variablelist>
 <title>General Tab</title>
@@ -222,6 +252,16 @@ errors</guilabel> </term>
 <sect2 id="configure-misc">
 <title><guilabel>Misc</guilabel></title>
 
+<screenshot>
+<screeninfo>Misc</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure4.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Misc</phrase></textobject>
+</mediaobject>
+</screenshot>
+
 <variablelist>
 <title><guilabel>Misc</guilabel></title>
 <varlistentry>
@@ -271,6 +311,16 @@ errors</guilabel> </term>
 
 <sect2 id="configure-document">
 <title><guilabel>Document</guilabel></title>
+
+<screenshot>
+<screeninfo>Document</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure5.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Document</phrase></textobject>
+</mediaobject>
+</screenshot>
 
 <variablelist>
 <title><guilabel>Document Defaults</guilabel></title>
@@ -327,6 +377,16 @@ two names? -->
 <sect2 id="configure-tools">
 <title><guilabel>Tools</guilabel></title>
 
+<screenshot>
+<screeninfo>Tools</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Tools</phrase></textobject>
+</mediaobject>
+</screenshot>
+
 <para>FIXME: Does this set defaults, or do these change every time a
 tool setting is altered from anywhere in the app.</para>
 
@@ -335,6 +395,15 @@ tool setting is altered from anywhere in the app.</para>
 <sect2 id="configure-paths">
 <title><guilabel>Paths</guilabel></title>
 
+<screenshot>
+<screeninfo>Paths</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure7.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Paths</phrase></textobject>
+</mediaobject>
+</screenshot>
 <para>-</para>
 
 </sect2>
