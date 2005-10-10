@@ -22,7 +22,7 @@
 #include <qtoolbutton.h>
 #include <qptrvector.h>
 #include <qtoolbar.h>
-
+#include <koffice_export.h>
 #include <ktoolbar.h>
 
 class QWidget;
@@ -40,7 +40,7 @@ class ToolArea;
  * merged one day. However, it doesn't depend on a tool-like class, it aggregates
  * actions.
  */
-class KoToolBox : public KToolBar {
+class KOFFICEUI_EXPORT KoToolBox : public KToolBar {
 
     Q_OBJECT
 
