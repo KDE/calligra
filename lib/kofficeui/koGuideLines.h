@@ -161,7 +161,7 @@ public:
      *
      * Erases the guide lines from the buffer and if set also from the canvas. 
      *
-     * @param updateView If ture it also updates the canvas of the view.
+     * @param updateCanvas If true it also updates the canvas of the view.
      */
     void erase( bool updateCanvas = true );
 
