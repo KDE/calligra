@@ -11,7 +11,7 @@ INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor \
 	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/core \
 	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore $(all_includes)
 
-kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO)
+kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 kformdesigner_LDADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
 
