@@ -20,13 +20,14 @@
 #define KIVIOCONNECTOR_H
 
 #include "polylineobject.h"
+#include <koffice_export.h>
 
 namespace Kivio {
 
 /**
  * Object used for drawing the connections between other objects
  */
-class Connector : public PolylineObject
+class KRITA_EXPORT Connector : public PolylineObject
 {
   public:
     Connector();

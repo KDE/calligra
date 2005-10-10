@@ -22,7 +22,7 @@
 #include <qvaluevector.h>
 
 #include <koPoint.h>
-
+#include <koffice_export.h>
 #include "object.h"
 
 namespace Kivio {
@@ -30,7 +30,7 @@ namespace Kivio {
 /**
  * Draws a polyline
  */
-class PolylineObject : public Object
+class KIVIO_EXPORT PolylineObject : public Object
 {
   public:
     PolylineObject();
