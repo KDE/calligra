@@ -1,21 +1,21 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+   Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
 
 #include <qbuttongroup.h>
 #include <qnamespace.h>
@@ -159,9 +159,9 @@ void KoToolBox::enableTools(bool enable)
 
     for (uint i = 0; i < m_tools.count(); ++i) {
         ToolList * tl = m_tools.at(i);
-    
+
         if (!tl) continue;
-        
+
         ToolList::Iterator it;
         for ( it = tl->begin(); it != tl->end(); ++it )
             if (it != 0 && it.data())
@@ -178,7 +178,7 @@ void KoToolBox::slotSetTool(const QString & toolname)
     for (uint i = 0; i < m_idToActionMap.count(); ++i) {
         KAction * a = m_idToActionMap.at(i);
         if (!a || a->name() != toolname) continue;
-        
+
         m_buttonGroup->setButton(i);
         return;
 
