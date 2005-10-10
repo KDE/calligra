@@ -1098,6 +1098,16 @@ void KWFrameSet::setFloating()
     }
 }
 
+void KWFrameSet::setProtectSize( bool _b)
+{
+    m_protectSize = _b;
+    for(KWFrame *f=frames.first();f;f=frames.next())
+    {
+        if ( f->isSelected() )
+            f->repaintResizeHandles();
+    }
+}
+
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */, bool repaint )
 {
     KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );

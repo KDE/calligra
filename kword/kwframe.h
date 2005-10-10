@@ -797,7 +797,7 @@ public:
     bool hasSelectedFrame();
 
     bool isProtectSize()const { return m_protectSize; }
-    void setProtectSize( bool _b) { m_protectSize = _b;}
+    void setProtectSize( bool _b); 
 
     /**
      * Returns true if the frameset is visible.
