@@ -20,9 +20,6 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
-    <property name="caption">
-        <string>KexiConnSelectorBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -152,9 +149,6 @@
             <property name="text">
                 <string>&amp;Edit...</string>
             </property>
-            <property name="accel">
-                <string>Alt+E</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="2" column="3">
             <property name="name">
@@ -171,9 +165,6 @@
             <property name="text">
                 <string>&amp;Add...</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="2" column="5">
             <property name="name">
@@ -189,9 +180,6 @@
             </property>
             <property name="text">
                 <string>&amp;Remove...</string>
-            </property>
-            <property name="accel">
-                <string>Alt+R</string>
             </property>
         </widget>
         <spacer row="2" column="2">
@@ -323,9 +311,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Back</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
                     </property>
                 </widget>
                 <widget class="QLabel">

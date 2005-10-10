@@ -12,9 +12,6 @@
             <height>203</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KexiNewPrjTypeSelector</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -53,9 +50,6 @@
             </property>
             <property name="text">
                 <string>Always &amp;use files for creating new projects</string>
-            </property>
-            <property name="accel">
-                <string>Alt+U</string>
             </property>
         </widget>
         <spacer row="4" column="0">
