@@ -241,6 +241,12 @@ public:
       QStringList replaceAll;
     } spell;
 
+    struct
+    {
+        KSpreadSheet * currentSheet;
+        KSpreadSheet * firstSheet;
+    } searchInSheets;
+
     // the tools
     struct ToolEntry
     {
@@ -1393,6 +1399,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d->popupListChoose = 0;
     d->popupChildObject = 0;
 
+    d->searchInSheets.currentSheet = 0;
+    d->searchInSheets.firstSheet = 0;
+
+        ;
     // spell-check context
     d->spell.kspell = 0;
     d->spell.macroCmdSpellCheck = 0;
