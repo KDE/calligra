@@ -4308,29 +4308,32 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
     case MEANING_MOUSE_OVER_FOOTNOTE:
         return Qt::PointingHandCursor;
     case MEANING_MOUSE_MOVE:
-        return Qt::sizeAllCursor;
+        if ( frameSet && frameSet->isProtectSize() )
+            return Qt::forbiddenCursor;
+        else
+            return Qt::sizeAllCursor;
     case MEANING_MOUSE_SELECT:
         return KCursor::handCursor();
     case MEANING_ACTIVATE_PART:
         return KCursor::handCursor();
     case MEANING_TOPLEFT:
     case MEANING_BOTTOMRIGHT:
-        if ( frameSet->isProtectSize() )
+        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
             return Qt::forbiddenCursor;
         return Qt::sizeFDiagCursor;
     case MEANING_LEFT:
     case MEANING_RIGHT:
-        if ( frameSet->isProtectSize() )
+        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
             return Qt::forbiddenCursor;
         return Qt::sizeHorCursor;
     case MEANING_BOTTOMLEFT:
     case MEANING_TOPRIGHT:
-        if ( frameSet->isProtectSize() )
+        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
             return Qt::forbiddenCursor;
         return Qt::sizeBDiagCursor;
     case MEANING_TOP:
     case MEANING_BOTTOM:
-        if ( frameSet->isProtectSize() )
+        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
             return Qt::forbiddenCursor;
         return Qt::sizeVerCursor;
     case MEANING_RESIZE_COLUMN:

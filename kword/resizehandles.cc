@@ -22,6 +22,7 @@
 #include "kwcanvas.h"
 #include "kwviewmode.h"
 #include "kwframe.h"
+#include <kapplication.h>
 #include <kdebug.h>
 
 /******************************************************************/
@@ -52,7 +53,7 @@ KWResizeHandle::~KWResizeHandle()
 
 void KWResizeHandle::applyCursorType()
 {
-    if ( frame->frameSet()->isProtectSize() )  {
+    if ( frame->frameSet()->isProtectSize() || frame->frameSet()->isMainFrameset() )  {
         setCursor( Qt::forbiddenCursor );
         return;
     }
@@ -242,13 +243,16 @@ void KWResizeHandle::paintEvent( QPaintEvent * )
 {
     QPainter p;
     p.begin( this );
+    p.setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
+    p.setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
     if ( isResizingEnabled() )
-        p.fillRect( 0, 0, 6, 6, colorGroup().brush( QColorGroup::Highlight ) );
-    else
-    {
-        p.setPen( colorGroup().color( QColorGroup::Highlight ) );
         p.drawRect( 0, 0, 6, 6 );
-        p.fillRect( 1, 1, 4, 4, colorGroup().brush( QColorGroup::Base ) );
+    else //protected frame
+    {
+        p.drawRect( 0, 0, 6, 6 );
+        QBrush brush=kapp->palette().color( QPalette::Active,QColorGroup::Base );
+        p.fillRect( 1, 1, 4, 4, brush );
+
     }
     p.end();
 }
