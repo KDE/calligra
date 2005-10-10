@@ -14,6 +14,7 @@
 
 #include <koPoint.h>
 #include <kozoomhandler.h>
+#include <koffice_export.h>
 
 class KoView;
 class KPopupMenu;
@@ -26,18 +27,18 @@ public:
         
     void resize( const QSize &size );
     
-    Qt::Orientation orientation() { return m_orient; }
+    Qt::Orientation orientation() const { return m_orient; }
     void setOrientation( Qt::Orientation o ) { m_orient = o; }
 
-    double position() { return m_pos; }
+    double position() const { return m_pos; }
     void setPosition( double p ) { m_pos = p; };
 
     QPixmap * buffer() { return &m_buffer; } 
 
-    bool isSelected() { return m_selected; }
+    bool isSelected() const { return m_selected; }
     void setSelected( bool s ) { m_selected = s; }
 
-    bool hasBuffer() { return m_hasBuffer; }
+    bool hasBuffer() const { return m_hasBuffer; }
     void setHasBuffer( bool b ) { m_hasBuffer = b; }
 
 private:
@@ -77,7 +78,7 @@ protected:
 /**
  * @brief Class for handling of guide lines
  */
-class KoGuideLines : public QObject
+class KOFFICEUI_EXPORT KoGuideLines : public QObject
 {
     Q_OBJECT
 public:
