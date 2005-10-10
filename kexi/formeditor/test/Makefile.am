@@ -43,3 +43,4 @@ partdesktop_DATA = kformdesigner_part.desktop
 partrcdir   = $(kde_datadir)/kformdesigner_part
 partrc_DATA = kformdesigner_part.rc kformdesigner_part_shell.rc
 
+KDE_ICON = kformdesigner
