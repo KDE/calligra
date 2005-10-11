@@ -802,11 +802,11 @@ void KWView::setupActions()
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                               this, SLOT( textSuperScript() ),
                                               actionCollection(), "format_super" );
-    actionFormatSuper->setExclusiveGroup( "valign" );
+    //actionFormatSuper->setExclusiveGroup( "valign" );
     actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
                                               this, SLOT( textSubScript() ),
                                               actionCollection(), "format_sub" );
-    actionFormatSub->setExclusiveGroup( "valign" );
+    //actionFormatSub->setExclusiveGroup( "valign" );
 
     actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
 					     QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", 0,
@@ -4891,6 +4891,8 @@ void KWView::textSuperScript()
     }
     if( macroCmd)
         m_doc->addCommand(macroCmd);
+    if (actionFormatSuper->isChecked() )
+        actionFormatSub->setChecked( false );
 }
 
 void KWView::textSubScript()
@@ -4911,6 +4913,8 @@ void KWView::textSubScript()
     }
     if( macroCmd )
         m_doc->addCommand(macroCmd);
+    if (actionFormatSub->isChecked() )
+        actionFormatSuper->setChecked( false );
 }
 
 void KWView::changeCaseOfText()
