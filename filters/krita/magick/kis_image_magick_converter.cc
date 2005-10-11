@@ -336,7 +336,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
         if (ii -> filename[MaxTextExtent - 1]) {
-            emit notifyProgressError(this);
+            emit notifyProgressError();
             return KisImageBuilder_RESULT_PATH;
         }
 
@@ -350,11 +350,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
     if (images == 0) {
         DestroyImageInfo(ii);
         DestroyExceptionInfo(&ei);
-        emit notifyProgressError(this);
+        emit notifyProgressError();
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    emit notifyProgressStage(this, i18n("Importing..."), 0);
+    emit notifyProgressStage(i18n("Importing..."), 0);
 
     m_img = 0;
 
@@ -398,7 +398,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             DestroyExceptionInfo(&ei);
             DestroyImageList(images);
             DestroyImageInfo(ii);
-            emit notifyProgressError(this);
+            emit notifyProgressError();
             return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
         }
 
@@ -456,7 +456,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                     DestroyImageList(images);
                     DestroyImageInfo(ii);
                     DestroyExceptionInfo(&ei);
-                    emit notifyProgressError(this);
+                    emit notifyProgressError();
                     return KisImageBuilder_RESULT_FAILURE;
                 }
 
@@ -550,7 +550,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                     }
                 }
 
-                emit notifyProgress(this, y * 100 / image->rows);
+                emit notifyProgress(y * 100 / image->rows);
 
                 if (m_stop) {
                     CloseCacheView(vi);
@@ -565,12 +565,12 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             layer->move(x_offset, y_offset);
         }
 
-        emit notifyProgressDone(this);
+        emit notifyProgressDone();
         CloseCacheView(vi);
         DestroyImage(image);
     }
 
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
     DestroyImageList(images);
     DestroyImageInfo(ii);
     DestroyExceptionInfo(&ei);
@@ -656,7 +656,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
     if (ii -> filename[MaxTextExtent - 1]) {
-        emit notifyProgressError(this);
+        emit notifyProgressError();
         return KisImageBuilder_RESULT_PATH;
     }
 
@@ -705,7 +705,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
         if (!pp) {
             DestroyExceptionInfo(&ei);
             DestroyImage(image);
-            emit notifyProgressError(this);
+            emit notifyProgressError();
             return KisImageBuilder_RESULT_FAILURE;
 
         }
@@ -819,7 +819,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
             return KisImageBuilder_RESULT_INVALID_ARG;
         }
         
-        emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
+        emit notifyProgressStage(i18n("Saving..."), y * 100 / height);
 
 #ifdef HAVE_MAGICK6
         if (SyncImagePixels(image) == MagickFalse)
@@ -839,14 +839,14 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     WriteImage(ii, image);
     DestroyExceptionInfo(&ei);
     DestroyImage(image);
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
     return KisImageBuilder_RESULT_OK;
 }
 
 void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)
 {
     if (data.isNull() || data.isEmpty()) {
-        emit notifyProgressStage(this, i18n("Loading..."), 0);
+        emit notifyProgressStage(i18n("Loading..."), 0);
         return;
     }
 
@@ -863,20 +863,20 @@ void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)
             DestroyExceptionInfo(&ei);
             DestroyImageInfo(ii);
             job -> kill();
-            emit notifyProgressError(this);
+            emit notifyProgressError();
             return;
         }
 
         DestroyImage(image);
         DestroyExceptionInfo(&ei);
         DestroyImageInfo(ii);
-        emit notifyProgressStage(this, i18n("Loading..."), 0);
+        emit notifyProgressStage(i18n("Loading..."), 0);
     }
 
     Q_ASSERT(data.size() + m_data.size() <= m_size);
     memcpy(&m_data[m_data.size()], data.data(), data.count());
     m_data.resize(m_data.size() + data.count());
-    emit notifyProgressStage(this, i18n("Loading..."), m_data.size() * 100 / m_size);
+    emit notifyProgressStage(i18n("Loading..."), m_data.size() * 100 / m_size);
 
     if (m_stop)
         job -> kill();
@@ -887,7 +887,7 @@ void KisImageMagickConverter::ioResult(KIO::Job *job)
     m_job = 0;
 
     if (job -> error())
-        emit notifyProgressError(this);
+        emit notifyProgressError();
 
     decode(KURL(), true);
 }
@@ -896,7 +896,7 @@ void KisImageMagickConverter::ioTotalSize(KIO::Job * /*job*/, KIO::filesize_t si
 {
     m_size = size;
     m_data.reserve(size);
-    emit notifyProgressStage(this, i18n("Loading..."), 0);
+    emit notifyProgressStage(i18n("Loading..."), 0);
 }
 
 void KisImageMagickConverter::cancel()
