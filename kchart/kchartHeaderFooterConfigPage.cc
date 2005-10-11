@@ -38,57 +38,52 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
+    QGridLayout* layout = new QGridLayout( this, 4, 3 );
+    layout->setSpacing( KDialog::spacingHint() );
+    layout->setMargin( KDialog::marginHint() );
 
-    QGridLayout* layout = new QGridLayout( 1, 3 );
-    toplevel->addLayout( layout );
+    QLabel *lab=new QLabel(i18n("Title:"), this);
+    layout->addWidget(lab,0,0);
 
-    QButtonGroup* gb1 = new QButtonGroup( 0, Qt::Vertical, i18n("Header/Footer"), this );
-    gb1->layout()->setSpacing(KDialog::spacingHint());
-    gb1->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid1 = new QGridLayout(gb1->layout(),3,4);
+    titleEdit=new QLineEdit(this);
+    layout->addWidget(titleEdit,0,1);
 
-    QLabel *lab=new QLabel(i18n("Title:"),gb1);
-    grid1->addWidget(lab,0,0);
+    titleColorButton=new KColorButton(this);
+    layout->addWidget(titleColorButton,0,2);
 
-    titleEdit=new QLineEdit(gb1);
-    grid1->addWidget(titleEdit,0,1);
-
-    titleColorButton=new KColorButton(gb1);
-    grid1->addWidget(titleColorButton,0,2);
-
-    titleFontButton=new QPushButton(i18n("Font..."),gb1);
-    grid1->addWidget(titleFontButton,0,3);
+    titleFontButton=new QPushButton(i18n("Font..."),this);
+    layout->addWidget(titleFontButton,0,3);
     connect( titleFontButton, SIGNAL(clicked()), this, SLOT(changeTitleFont()));
 
-    lab=new QLabel(i18n("Subtitle:"),gb1);
-    grid1->addWidget(lab,1,0);
+    lab=new QLabel(i18n("Subtitle:"),this);
+    layout->addWidget(lab,1,0);
 
-    subtitleEdit=new QLineEdit(gb1);
-    grid1->addWidget(subtitleEdit,1,1);
+    subtitleEdit=new QLineEdit(this);
+    layout->addWidget(subtitleEdit,1,1);
 
-    subtitleColorButton=new KColorButton(gb1);
-    grid1->addWidget(subtitleColorButton,1,2);
+    subtitleColorButton=new KColorButton(this);
+    layout->addWidget(subtitleColorButton,1,2);
 
-    subtitleFontButton=new QPushButton(i18n("Font..."),gb1);
-    grid1->addWidget(subtitleFontButton,1,3);
+    subtitleFontButton=new QPushButton(i18n("Font..."),this);
+    layout->addWidget(subtitleFontButton,1,3);
     connect( subtitleFontButton, SIGNAL(clicked()), this, SLOT(changeSubtitleFont()));
 
-    lab=new QLabel(i18n("Footer:"),gb1);
-    grid1->addWidget(lab,2,0);
+    lab=new QLabel(i18n("Footer:"),this);
+    layout->addWidget(lab,2,0);
 
-    footerEdit=new QLineEdit(gb1);
-    grid1->addWidget(footerEdit,2,1);
+    footerEdit=new QLineEdit(this);
+    layout->addWidget(footerEdit,2,1);
 
-    footerColorButton=new KColorButton(gb1);
-    grid1->addWidget(footerColorButton,2,2);
+    footerColorButton=new KColorButton(this);
+    layout->addWidget(footerColorButton,2,2);
 
-    footerFontButton=new QPushButton(i18n("Font..."),gb1);
+    footerFontButton=new QPushButton(i18n("Font..."),this);
     connect( footerFontButton, SIGNAL(clicked()), this, SLOT(changeFooterFont()));
-    grid1->addWidget(footerFontButton,2,3);
+    layout->addWidget(footerFontButton,2,3);
 
-    layout->addWidget(gb1,0,0);
-    grid1->activate();
+    layout->addItem( new QSpacerItem( 5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding ), 3, 0 );
+
+    layout->activate();
 }
 
 void KChartHeaderFooterConfigPage::init()
