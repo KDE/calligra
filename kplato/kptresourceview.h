@@ -21,6 +21,7 @@
 #define KPTRESOURCEVIEW_H
 
 #include <qsplitter.h>
+#include <qdatetime.h>
 
 class QLayout;
 class KDGanttView;
@@ -88,6 +89,8 @@ private:
     QListView *appList;
     
     KPTNode *m_currentNode;
+    QDate m_start;
+    QDate m_end;
 
 };
 

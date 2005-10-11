@@ -246,6 +246,7 @@ public:
     void saveAppointments(QDomElement &element);
 
     bool isOverbooked() const;
+    bool isOverbooked(const QDate &date) const;
     bool isOverbooked(const KPTDateTime &start, const KPTDateTime &end) const;
 
     double normalRate() const { return cost.normalRate; }
@@ -294,7 +295,7 @@ public:
     KPTCalendar *findCalendar(const QString &id) const;
 
     KPTAppointment appointmentIntervals() const;
-    
+    KPTDuration plannedEffort(const QDate &date) const;
 private:
     KPTProject *m_project;
     QPtrList<KPTAppointment> m_appointments;

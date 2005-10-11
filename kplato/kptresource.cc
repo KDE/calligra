@@ -507,6 +507,10 @@ bool KPTResource::isOverbooked() const {
     return isOverbooked(KPTDateTime(), KPTDateTime());
 }
 
+bool KPTResource::isOverbooked(const QDate &date) const {
+    return isOverbooked(KPTDateTime(date), KPTDateTime(date.addDays(1)));
+}
+
 bool KPTResource::isOverbooked(const KPTDateTime &start, const KPTDateTime &end) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     KPTAppointment a = appointmentIntervals();
@@ -535,6 +539,16 @@ KPTAppointment KPTResource::appointmentIntervals() const {
     }
     return a;
 }
+
+KPTDuration KPTResource::plannedEffort(const QDate &date) const {
+    KPTDuration e;
+    QPtrListIterator<KPTAppointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        e += it.current()->plannedEffort(date);
+    }
+    return e;
+}
+
 //////
 
 KPTAppointmentInterval::KPTAppointmentInterval() {
@@ -937,8 +951,8 @@ KPTDuration KPTAppointment::plannedEffort() const {
 // Returns the planned effort on the date
 KPTDuration KPTAppointment::plannedEffort(const QDate &date) const {
     KPTDuration d;
-    KPTDateTime s(date, QTime());
-    KPTDateTime e(date.addDays(1), QTime());
+    KPTDateTime s(date);
+    KPTDateTime e(date.addDays(1));
     QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
     for (; it.current(); ++it) {
         d += it.current()->effort(s, e);
@@ -949,7 +963,7 @@ KPTDuration KPTAppointment::plannedEffort(const QDate &date) const {
 // Returns the planned effort upto and including the date
 KPTDuration KPTAppointment::plannedEffortTo(const QDate& date) const {
     KPTDuration d;
-    KPTDateTime e(date.addDays(1), QTime());
+    KPTDateTime e(date.addDays(1));
     QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
     for (; it.current(); ++it) {
         d += it.current()->effort(e, true);
