@@ -7152,7 +7152,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     KoStyleStack styleStack;
-    styleStack.setTypeProperties("table-cell"); //style for column is cell format
+    styleStack.setTypeProperties("table-column"); //style for column is cell format
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
         //todo load cell attribute default into this column
@@ -7314,20 +7314,22 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         if( !cellElement.isNull() )
         {
             ++columnIndex;
-            kdDebug()<<"bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
+            //kdDebug()<<"bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
             if( cellElement.localName() == "table-cell" && cellElement.namespaceURI() == KoXmlNS::table)
             {
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisStyles );
                 bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
-
+                //kdDebug()<<" haveStyle ? :"<<haveStyle<<endl;
                 int cols = 1;
                 if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-                    if ( !haveStyle )
+                    //kdDebug()<<" cols :"<<cols<<endl;
+                    //TODO: correct ?????
+                    if ( !haveStyle && ( cell->isEmpty() && cell->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         //just increment it
                         columnIndex +=cols - 1;
