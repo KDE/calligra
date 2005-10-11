@@ -7,6 +7,7 @@ Patterns=*.kexic
 Comment=Data for Database Server Connection
 Comment[eo]=Datumo por konekto al datumbaza servilo
 Comment[es]=Datos para la conexión con el servidor de bases de datos
+Comment[fr]=Données de connexion au serveur de bases de données
 Comment[pt]=Dados de Ligação à Base de Dados
 Comment[pt_BR]=Dados de Ligação à Base de Dados
 Comment[sv]=Data för anslutning till databasserver
