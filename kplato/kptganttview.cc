@@ -86,6 +86,10 @@ KPTGanttView::KPTGanttView(KPTView *view, QWidget *parent, bool readWrite, const
     m_showCriticalPath = false; //FIXME
     m_gantt->setHeaderVisible(true);
     m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
+    // HACK: need changes to kdgantt
+    KDGanttViewTaskItem *item = new KDGanttViewTaskItem(m_gantt);
+    item->listView()->header()->moveSection(1, 0);
+    
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
     m_gantt->setShowHeaderPopupMenu();
@@ -109,7 +113,6 @@ KPTGanttView::KPTGanttView(KPTView *view, QWidget *parent, bool readWrite, const
     
     if (m_gantt->firstChild()) {
         m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
-        m_gantt->firstChild()->listView()->header()->moveSection(1, 0);
         m_gantt->firstChild()->listView()->setFocus();
     }
 }
