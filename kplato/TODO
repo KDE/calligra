@@ -1,18 +1,126 @@
+Some usefull stuff:              
+You can search the source code for FIXME and TODO entries with:
+find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
 
+Using -A and -B with grep gives you some additional context around the particular comment:
+find . -name "*.c*" -o -name "*.h" | xargs grep -A 3 -B 3 -E "(###|TODO|FIXME|todo)"
+
+
+The list is not sorted in any order, allthough more urgent things tend to
+gravitate to the top. Also it is not limited to what should be fixed 
+before the 1.5 release!
+--------------------------------------------------------------------------------
 Status      Description
+--------------------------------------------------------------------------------
+            User manual
+            
+            Cost Breakdown Structure:
+            - Define account class/list and necessary dialogs.
+            - Task cost specification (which shall link to accounts, resources).
+            - Resource cost specification.
+            - Implement calculation of planned cost (part of calculating/scheduling 
+              the project).
+            
+            Find a solution for the durationwidget.
+            It's now a custom widget mainly comprised by QLineEdits.
+            This doesn't work well. One problem is that QLineEdit gives
+            sizehints of approx 14 charachters minimum and we use 2-3, so
+            it messes up layouting.
+            
+            Fix default values for "standard worktime" (and maybe a new name?).
+            This should maybe be part of templates.
+            
+            Remove Networkview.
+
+            Resourceview: Improve
+            
+            Resourceuseview: Scrap existing and use KChart instead.
+            
+            Reports: Review if/how Kugar should be used and
+            design a few usefull reports.
+
+            Task details view: Improve, make it stand-alone? Convert to
+            a "infoview"? (as todos in KDE-PIM?)
+            
+            Implement embedding into other koffice apps.
+            
+            Fix 'embedding' into koshell.
+            
+            Cut, copy, paste: Implement or remove.
+            
+            Start-to-finish relation.
+            
+            Improve menu- and toolbar structure.
+
+            Icons. Would be nice to have a set with a consistent look.
+            
+            Templates
+            
+            Add tooltips and what's this.
+            
+            Better handling of resources during scheduling.
+            - Use Overtime
+            - Allow/prohibit overbooking
+            - Resource leveling
+            - Monte carlo estimation
+            - etc
+            
+            Calendars:
+            - Improve calendars dialogs
+            - Implement hierachical calendars
+            - Timezone handling
+
+            Improve Progress info dialog/presentation.
+            Make it stand-alone, add to task context menu.
+
+            KDGantt:
+            - Static IDs
+            - Presentation of "week-ends" when it doesn't match scale.
+            - Time-now line
+            
+            Settings/configuration
+
+            Implement periodic/repetitive tasks.
+            
+            Implement external events
+            
+            Implementing subproject editor-dialog
+            Subproject is not supported.
+            
+            Handle (re-)calculation of started/finished tasks.
+            
+            Restrict modification of started/finished tasks.
+
+            Autogenerate task id.
+            
+            Interface to PIM
+            - Issue todos and docs
+            - Fetch freebusy info (Prob: how to sync if we recalculate?)
+
+            Decide on the final KPlato file format.
+            For now we have these options:
+              * leave the format the way it is
+              * create a new (OASIS?) specification
+              * use PMXML - http://www.projectoffice.com/xml/xml.asp
+              * or find a better suited "standard" format
+                  http://proj.chbs.dk/specifications/
+
+            
+            Make it possible to form resource teams.
+            
+            Make it possible to request resource allocations from groups.
+            
+            Write good doxygen compatible API docs in the source code!
+            
+            Taskjuggler???
+
+            Remove KPT prefix from all KPlato classes (ask mailing list!)
+
 ------------------------------------------------------------------
+
 Done        Requirements specification
 
 Done        Data structuring and class creation 
-
--           Loading/saving the data structure.
-            Most existing things are saved/loaded,
-            dtd is not up to date/correct, and of course
-            format is open for discussion.
-
--           Menus       Needs improvements
-            
--           Toolbars    Needs improvements
 
 Done        Implementing basic view
 
@@ -31,38 +139,12 @@ Done        Implementing task editor-dialog
 Done        Implementing project editor-dialog 
     
     
--           Implementing subproject editor-dialog
-            Subproject is not supported.
     
 Done        Implementing milestone editor-dialog
             Uses task dialog. Milestone is a task with 0 duration.
     
--           Implementing zooming support for the views
 
--           Merge Taskjuggler and KPlato
-            
--           PERT/Network view
-            A basic one exists. It was made 'quick-and-dirty' 
-            for entering/viewing task relations.
-            
--           Resource view(s)
-            Simple QListView based exists
-                        
--           Task Details view
-            Exists but needs improvement
-            
--           Progress info dialog/presentation
-
-Done        Calendars (basic)
-
-Done        Standard worktime. (basic)
-            (Used for estimation, we need to know what the user means 
-            when he says 1 staffday or 3 staffweeks etc)
-            
 Done        Resources (basic)
-            Resource types
-            Resource teams
-            
             Note: Possibly redesign group/resource so that one resource
                   can be member of multiple groups.
                   
@@ -76,49 +158,17 @@ Done            Finish to finish.
             Based on constraints.
 Done            As soon as possible.
 Done            As late as possible.
-                Must start on.
-                Start not earlier than.
-                Finish not later than.
+Done            Must start on.
+Done            Start not earlier than.
+Done            Finish not later than.
                 
 Done        Based on resource requests to specific resources.
 Done        Allocation of resources and calculates durations accordingly.
--           Based on resource requests to resource groups.
+
             
--           Resource leveling, monte carlo estimation, etc, etc...
-            
--       Icons
-            A few icons for menu/toolbars created, but a lot missing.
-            
--       Reports
-            2 test reports implemented. Uses Kugar report library. 
-            On 'feasibility study' level.
-        
--       Settings/configuration. Nothing done.
-        
         Templates:
 Done    Plain
--       All the others :)
         
--           Command history. 
-            Most commands done.
-        
--           Decide on the final KPlato file format.
-            For now we have these options:
-              * leave the format the way it is
-              * create a new (OASIS?) specification
-              * use PMXML - http://www.projectoffice.com/xml/xml.asp
-              * or find a better suited "standard" format
-                  http://proj.chbs.dk/specifications/
-
 Done        Use KPlato namespace for all KPlato classes
--           Remove KPT prefix from all KPlato classes (ask mailing list!)
 
--           Write good doxygen compatible API docs in the source code!
-
-              
-You can search the source code for FIXME and TODO entries with:
-find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
-
-Using -A and -B with grep gives you some additional context around the particular comment:
-find . -name "*.c*" -o -name "*.h" | xargs grep -A 3 -B 3 -E "(###|TODO|FIXME|todo)"
 
