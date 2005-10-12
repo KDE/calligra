@@ -132,7 +132,7 @@
 <variablelist>
 <varlistentry>
 <term><guilabel>Background object color:</guilabel></term>
-<listitem><para>It changes the background color of the text box. The Text boxes are white by default. If you had a dark
+<listitem><para>It changes the background color of the text box. The Text boxes background is white by default. If you had a dark
 background color and you wanted to put some white text over it, you
 could color the text box so that you could see what you were
 typing. When you have finished, the area around the text would revert
@@ -143,7 +143,7 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Grid color:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>You can change here the grid color which is black as default.</para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -152,6 +152,8 @@ settings.</para></listitem>
 
 <sect2 id="configure-spelling">
 <title><guilabel>Spelling</guilabel></title>
+
+<para>This tab defines the spell checker behavior.</para>
 
 <screenshot>
 <screeninfo>Spelling</screeninfo>
@@ -164,64 +166,28 @@ settings.</para></listitem>
 </screenshot>
 
 <variablelist>
-<title>General Tab</title>
 <varlistentry>
-<term><guilabel>Create root/affix combinations not in
-dictionary</guilabel></term>
+<term><guilabel>Default language</guilabel></term>
 <listitem><para>-</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Consider run-together words as spelling
-errors</guilabel> </term>
+<term><guilabel>Enable background spellchecking</guilabel> </term>
 <listitem><para>-</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Dictionary:</guilabel></term>
+<term><guilabel>Skip all uppercase words</guilabel></term>
 <listitem><para>-</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Encoding</guilabel></term>
+<term><guilabel>Skip run-together words</guilabel></term>
 <listitem><para>-</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Client</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Ignore case when checking words</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Ignore accents when checking words</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Check words with numbers</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Ignore uppercase words</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show misspelled words in document</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-</variablelist>
-
-<variablelist>
-<title><guilabel>IgnoreAll</guilabel> Tab</title>
-<varlistentry>
-<term><guilabel>Word</guilabel></term>
+<term><guilabel>Ignore These Words</guilabel></term>
 <listitem><para>-</para></listitem>
 </varlistentry>
 
@@ -235,33 +201,6 @@ errors</guilabel> </term>
 <listitem><para>-</para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guilabel>Clear Ignore All Word History</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-</variablelist>
-
-<variablelist>
-<title><guilabel>Dictionary</guilabel> Tab</title>
-<varlistentry>
-<term><guilabel>Word</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Add</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Remove</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Clear Dictionary</guilabel></term>
-<listitem><para>-</para></listitem>
-</varlistentry>
 </variablelist>
 </sect2>
 
@@ -282,7 +221,7 @@ errors</guilabel> </term>
 <title><guilabel>Misc</guilabel></title>
 <varlistentry>
 <term><guilabel>Undo/Redo limit:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Set the number of actions you can undo and redo. Default is 30. Maximum is 60 and minimum is 0.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -315,12 +254,12 @@ errors</guilabel> </term>
 <title><guilabel>Grid</guilabel></title>
 <varlistentry>
 <term><guilabel>Resolution X (mm):</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Resolution Y (mm):</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters.</para></listitem>
 </varlistentry>
 </variablelist>
 </sect2>
