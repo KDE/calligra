@@ -48,6 +48,7 @@
 #include "vclipartcmd.h"
 #include "vclosepathcmd.h"
 #include "vdeletecmd.h"
+#include "vdistributecmd.h"
 #include "vfillcmd.h"
 #include "vgroupcmd.h"
 #include "vstrokecmd.h"
@@ -562,6 +563,62 @@ KarbonView::selectionAlignVerticalBottom()
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_BOTTOM ), true );
 }
 
+void 
+KarbonView::selectionDistributeHorizontalCenter()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_CENTER ), true );
+}
+
+void 
+KarbonView::selectionDistributeHorizontalGap()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_GAP ), true );
+}
+
+void 
+KarbonView::selectionDistributeHorizontalLeft()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_LEFT ), true );
+}
+
+void 
+KarbonView::selectionDistributeHorizontalRight()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_RIGHT ), true );
+}
+
+void 
+KarbonView::selectionDistributeVerticalCenter()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_CENTER ), true );
+}
+
+void 
+KarbonView::selectionDistributeVerticalGap()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_GAP ), true );
+}
+
+void 
+KarbonView::selectionDistributeVerticalBottom()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_BOTTOM ), true );
+}
+
+void 
+KarbonView::selectionDistributeVerticalTop()
+{
+	part()->addCommand( 
+		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_TOP ), true );
+}
+
 void
 KarbonView::selectionBringToFront()
 {
@@ -887,6 +944,39 @@ KarbonView::initActions()
 		i18n( "Align Bottom" ), "aobottom", 0, this,
 		SLOT( selectionAlignVerticalBottom() ),
 		actionCollection(), "object_align_vertical_bottom" );
+
+	new KAction(
+		i18n( "Distribute Center (Horizontal)" ), "", 0, this,
+		SLOT( selectionDistributeHorizontalCenter() ),
+		actionCollection(), "object_distribute_horizontal_center" );
+	new KAction(
+		i18n( "Distribute Gaps (Horizontal)" ), "", 0, this,
+		SLOT( selectionDistributeHorizontalGap() ),
+		actionCollection(), "object_distribute_horizontal_gap" );
+	new KAction(
+		i18n( "Distribute Left Borders" ), "", 0, this,
+		SLOT( selectionDistributeHorizontalLeft() ),
+		actionCollection(), "object_distribute_horizontal_left" );
+	new KAction(
+		i18n( "Distribute Right Borders" ), "", 0, this,
+		SLOT( selectionDistributeHorizontalRight() ),
+		actionCollection(), "object_distribute_horizontal_right" );
+	new KAction(
+		i18n( "Distribute Center (Vertical)" ), "", 0, this,
+		SLOT( selectionDistributeVerticalCenter() ),
+		actionCollection(), "object_distribute_vertical_center" );
+	new KAction(
+		i18n( "Distribute Gaps (Vertical)" ), "", 0, this,
+		SLOT( selectionDistributeVerticalGap() ),
+		actionCollection(), "object_distribute_vertical_gap" );
+	new KAction(
+		i18n( "Distribute Bottom Borders" ), "", 0, this,
+		SLOT( selectionDistributeVerticalBottom() ),
+		actionCollection(), "object_distribute_vertical_bottom" );
+	new KAction(
+		i18n( "Distribute Top Borders" ), "", 0, this,
+		SLOT( selectionDistributeVerticalTop() ),
+		actionCollection(), "object_distribute_vertical_top" );
 
 	m_showRulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_show_ruler" );
 #if KDE_IS_VERSION(3,2,90)

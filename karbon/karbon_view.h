@@ -134,6 +134,15 @@ public slots:
 	void selectionAlignVerticalCenter();
 	void selectionAlignVerticalBottom();
 
+	void selectionDistributeHorizontalCenter();
+	void selectionDistributeHorizontalGap();
+	void selectionDistributeHorizontalLeft();
+	void selectionDistributeHorizontalRight();
+	void selectionDistributeVerticalCenter();
+	void selectionDistributeVerticalGap();
+	void selectionDistributeVerticalBottom();
+	void selectionDistributeVerticalTop();
+
 	void fileImportGraphic();
 
 	void groupSelection();

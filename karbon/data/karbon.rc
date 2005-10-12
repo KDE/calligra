@@ -64,6 +64,18 @@
 			<Action name="object_align_vertical_center"/>
 			<Action name="object_align_vertical_bottom"/>
 		</Menu>
+		<Menu name="object_distribute">
+			<text>&amp;Distribute</text>
+			<Action name="object_distribute_horizontal_center"/>
+			<Action name="object_distribute_horizontal_gap"/>
+			<Action name="object_distribute_horizontal_left"/>
+			<Action name="object_distribute_horizontal_right"/>
+			<Separator/>
+			<Action name="object_distribute_vertical_center"/>
+			<Action name="object_distribute_vertical_gap"/>
+			<Action name="object_distribute_vertical_top"/>
+			<Action name="object_distribute_vertical_bottom"/>
+		</Menu>
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 		<Action name="close_path"/>
