@@ -7152,14 +7152,13 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     KoStyleStack styleStack;
-    styleStack.setTypeProperties("table-column"); //style for column is cell format
+    styleStack.setTypeProperties("table-column"); //style for column
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
-        //todo load cell attribute default into this column
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-        kdDebug()<<" default-cell-style-name :"<<str<<endl;
+        //kdDebug()<<" default-cell-style-name :"<<str<<endl;
         QDomElement *style = oasisStyles.styles()[str];
-        kdDebug()<<"default column style :"<<style<<endl;
+        //kdDebug()<<"default column style :"<<style<<endl;
         if ( style )
         {
             styleStack.push( *style );
@@ -7197,7 +7196,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 
 
     if ( number>30 )
-        number = 30; //todo fixme !
+        number = 30; //TODO fixme !
 
     for ( int i = 0; i < number; ++i )
     {
