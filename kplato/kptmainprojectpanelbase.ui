@@ -160,6 +160,9 @@
                     <property name="text">
                         <string>End date:</string>
                     </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
+                    </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
@@ -167,6 +170,9 @@
                     </property>
                     <property name="text">
                         <string>Start date:</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
                     </property>
                 </widget>
             </grid>
