@@ -7056,7 +7056,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     KoStyleStack styleStack;
-    styleStack.setTypeProperties("table-cell"); //style for column is cell format
+    styleStack.setTypeProperties("table-column"); //style for column
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
         //todo load cell attribute default into this column
@@ -7230,7 +7230,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 {
                     bool ok = false;
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-                   if ( !haveStyle )
+                   if ( !haveStyle && ( cell->isEmpty() && cell->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         //just increment it
                         columnIndex +=cols - 1;
