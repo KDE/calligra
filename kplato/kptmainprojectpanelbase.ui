@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>441</width>
+            <width>478</width>
             <height>340</height>
         </rect>
     </property>
@@ -50,6 +50,9 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Choose...</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
                             </property>
                         </widget>
                     </hbox>
@@ -273,6 +276,12 @@
         <receiver>KPTMainProjectPanelBase</receiver>
         <slot>slotBaseline()</slot>
     </connection>
+    <connection>
+        <sender>chooseLeader</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotChooseLeader()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>namefield</tabstop>
@@ -310,6 +319,10 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>
