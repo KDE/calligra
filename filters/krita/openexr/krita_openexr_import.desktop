@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=Krita OpenEXR Import Filter
 Name[br]=Sil enporzh OpenEXR evit Krita
+Name[da]=Krita OpenEXR-importfilter
 Name[eo]=Importfiltrilo de Krita OpenEXR
 Name[es]=Filtro de importación a OpenEXR de Krita
 Name[et]=Krita OpenEXR-i impordifilter

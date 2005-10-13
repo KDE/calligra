@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Microsoft PowerPoint Import Filter for KPresenter
+Name[da]=Microsoft Powerpoint import-filter for KPresenter
 Name[es]=Filtro de importación de Microsoft PowerPoint para KPresenter
 Name[fr]=Filtre d'importation Microsoft PowerPoint pour KPresenter
 Name[ga]=Scagaire Iompórtála Microsoft PowerPoint le haghaidh KSpread
