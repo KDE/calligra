@@ -21,6 +21,7 @@
 #include "kwframe.h"
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
 
 class KWDocument;
 
@@ -29,7 +30,6 @@ class KWDocument;
  *  an instance of this class is created for.
  */
 class KWFrameList {
-    // TODO we need to fix the case of multipage frames... somehow.
 public:
     /**
      * Constructor.
@@ -41,14 +41,12 @@ public:
     /**
      * Fetches the frames below the frame this frameList is for.
      */
-     // TODO refactor to return the ptrlist
-    bool framesBelow(QPtrList<KWFrame> &);
+    QValueList<KWFrame *> framesBelow();
 
     /**
      * Fetches the frames on top of the frame this frameList is for.
      */
-     // TODO refactor to return the ptrlist
-    bool framesOnTop(QPtrList<KWFrame> &);
+    QValueList<KWFrame *> framesOnTop();
 
     /**
      * Update the z-ordering around the frame we host the framelist for.
@@ -114,8 +112,8 @@ public:
 
 private:
     static KWFrameList *getFirstFrameList(KWDocument *doc);
-    void updateZOrderFor(QPtrList<KWFrame> frames);
-    void setFrames(QPtrList<KWFrame> frames);
+    void updateZOrderFor(const QPtrList<KWFrame> &frames);
+    void setFrames(const QPtrList<KWFrame> &frames);
 
     ZOrderedFrameList m_frames;
     KWDocument *m_doc;

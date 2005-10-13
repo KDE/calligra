@@ -4171,11 +4171,12 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
             if (border) *border=false;
             return f;
         }
-    } else {
+    }
+    else {
         Q_ASSERT (frame->frameStack());
-        QPtrList<KWFrame> frames;
-        frame->frameStack()->framesBelow(frames);
-        for (KWFrame *f = frames.last(); f;f=frames.prev()) {
+        QValueList<KWFrame*> frames = frame->frameStack()->framesBelow();
+        for(int index = frames.count()-1; index >= 0; index--) {
+            KWFrame *f = *(frames.at(index));
             if (f->frameAtPos(nPoint,true)) {
                 if(border) *border=true;
                 return f;

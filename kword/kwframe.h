@@ -27,7 +27,6 @@
 #include <koPicture.h>
 #include <koRect.h>
 #include <qbrush.h>
-#include <qptrlist.h>
 #include <qptrvector.h>
 #include "kwstyle.h"
 #include "koborder.h"

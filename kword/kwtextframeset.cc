@@ -953,10 +953,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
         // Principle: for every frame on top at this height, we'll move from and to
         // towards each other. The text flows between 'from' and 'to'
         Q_ASSERT( theFrame->frameStack() );
-        QPtrList<KWFrame> onTop;
-        theFrame->frameStack()->framesOnTop(onTop);
-        QPtrListIterator<KWFrame> fIt( onTop );
-        for ( ; fIt.current() && from < to ; ++fIt )
+        QValueList<KWFrame*> onTop = theFrame->frameStack()->framesOnTop();
+        for (QValueListIterator<KWFrame*> fIt = onTop.begin(); from < to && fIt != onTop.end(); ++fIt )
         {
             if ( (*fIt)->runAround() == KWFrame::RA_BOUNDINGRECT )
             {
@@ -1253,10 +1251,8 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     for ( ; frameIt.current(); ++frameIt )
     {
         Q_ASSERT( frameIt.current()->frameStack() );
-        QPtrList<KWFrame> onTop;
-        frameIt.current()->frameStack()->framesOnTop(onTop);
-        QPtrListIterator<KWFrame> fIt( onTop );
-        for ( ; fIt.current() ; ++fIt )
+        QValueList<KWFrame*> onTop = frameIt.current()->frameStack()->framesOnTop();
+        for (QValueListIterator<KWFrame*> fIt = onTop.begin(); fIt != onTop.end(); ++fIt )
         {
             if ( (*fIt)->runAround() == KWFrame::RA_SKIP )
             {

@@ -1588,8 +1588,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     }
 
     if ( drawUnderlyingFrames && frame && frame->frameStack()) {
-        QPtrList<KWFrame> below;
-        frame->frameStack()->framesBelow(below);
+        QValueList<KWFrame*> below = frame->frameStack()->framesBelow();
         if(!below.isEmpty() )
         {
             // Double-buffering - not when printing
@@ -1616,10 +1615,9 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #ifdef DEBUG_DRAW
             kdDebug(32001) << "  frame->framesBelow(): " << frame->framesBelow().count() << endl;
 #endif
-            QPtrListIterator<KWFrame> it( below );
-            for ( ; it.current() ; ++it )
+            for (QValueListIterator<KWFrame*> it = below.begin(); it != below.end(); ++it )
             {
-                KWFrame* f = it.current();
+                KWFrame* f = (*it);
 
 #ifdef DEBUG_DRAW
                 kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
@@ -1991,10 +1989,8 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 
         Q_ASSERT( frame->frameStack() );
 
-        QPtrList<KWFrame> onTop;
-        frame->frameStack()->framesOnTop( onTop );
-        QPtrListIterator<KWFrame> fIt( onTop );
-        for ( ; fIt.current() ; ++fIt )
+        QValueList<KWFrame *> onTop = frame->frameStack()->framesOnTop();
+        for (QValueListIterator<KWFrame*> fIt = onTop.begin(); fIt != onTop.end(); ++fIt )
         {
             KWFrame* frameOnTop = (*fIt);
             assert( frameOnTop->frameSet() );
@@ -2146,9 +2142,8 @@ void KWFrameSet::printDebug()
         kdDebug() << "     Z Order: " << frame->zOrder() << endl;
 
         if( frame->frameStack() ) {
-            QPtrList<KWFrame> onTop, below;
-            frame->frameStack()->framesOnTop(onTop);
-            frame->frameStack()->framesBelow(below);
+            QValueList<KWFrame*> onTop = frame->frameStack()->framesOnTop();
+            QValueList<KWFrame*> below = frame->frameStack()->framesBelow();
 
             kdDebug() << "     Frames below: " << below.count()
                       << ", frames on top: " << onTop.count() << endl;

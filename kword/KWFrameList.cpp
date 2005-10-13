@@ -29,13 +29,12 @@ KWFrameList::KWFrameList(KWDocument *doc, KWFrame *theFrame) {
     update();
 }
 
-bool KWFrameList::framesBelow(QPtrList<KWFrame> &frames) {
+QValueList<KWFrame *> KWFrameList::framesBelow() {
+    QValueList<KWFrame *> frames;
 //kdDebug() << "framesBelow " << endl;
     int index = m_frames.findRef(m_frame);
     if (index == -1)
-        return false;
-
-    frames.clear();
+        return frames;
 
     int count = 0;
     KWFrame *frame = m_frames.first();
@@ -45,16 +44,15 @@ bool KWFrameList::framesBelow(QPtrList<KWFrame> &frames) {
         frame = m_frames.next();
     }
 
-    return true;
+    return  frames;
 }
 
-bool KWFrameList::framesOnTop(QPtrList<KWFrame> &frames) {
+QValueList<KWFrame *> KWFrameList::framesOnTop() {
 //kdDebug() << "framesOnTop " << endl;
+    QValueList<KWFrame *> frames;
     int index = m_frames.findRef(m_frame);
     if (index == -1)
-        return false;
-
-    frames.clear();
+        return frames;
 
     KWFrame *frame = m_frames.next();
     while( frame ) {
@@ -62,10 +60,10 @@ bool KWFrameList::framesOnTop(QPtrList<KWFrame> &frames) {
         frame = m_frames.next();
     }
 
-    return true;
+    return frames;
 }
 
-void KWFrameList::setFrames(QPtrList<KWFrame> frames) {
+void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
     m_frames.clear();
     if ( m_doc->viewMode() && !m_doc->viewMode()->hasFrames() )
         return;
@@ -121,7 +119,7 @@ void KWFrameList::update() {
     updateZOrderFor(m_doc->framesInPage( pageNumber, false ));
 }
 
-void KWFrameList::updateZOrderFor(QPtrList<KWFrame> frames) {
+void KWFrameList::updateZOrderFor(const QPtrList<KWFrame> &frames) {
 #ifdef DEBUG_SPEED
     kdDebug(32001) << "KWFrameList::updateZOrderFor " << frames.count() << " frames"<< endl;
     QTime dt;
@@ -129,15 +127,16 @@ void KWFrameList::updateZOrderFor(QPtrList<KWFrame> frames) {
     int numberAdded = 0;
 #endif
 
-    KWFrame *frame = frames.first();
-    while( frame ) {
+    QPtrListIterator<KWFrame> iter(frames);
+    while( iter.current() ) {
+        KWFrame *frame = iter.current();
         Q_ASSERT( frame->frameStack() );
 
         frame->frameStack()->setFrames(frames);
 #ifdef DEBUG_SPEED
         numberAdded += frame->frameStack()->m_frames.count();
 #endif
-        frame = frames.next();
+        ++iter;
     }
 
 #ifdef DEBUG_SPEED
