@@ -84,6 +84,7 @@ KWFrame::KWFrame(KWFrame * frame)
     //kdDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
     copySettings( frame );
     m_minFrameHeight=0;
+    m_frameStack = 0; // lazy initialisation.
 }
 
 KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra )
@@ -127,7 +128,7 @@ KWFrame::~KWFrame()
     //kdDebug(32001) << "KWFrame::~KWFrame " << this << endl;
     if (m_selected)
         removeResizeHandles();
-    //delete m_frameStack;  Why o why does the framestack deletion crash kword??
+    delete m_frameStack;
     m_frameStack = 0;
 }
 
