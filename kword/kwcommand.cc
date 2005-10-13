@@ -29,6 +29,7 @@
 #include "kwanchor.h"
 #include "kwvariable.h"
 #include "kwoasisloader.h"
+#include "KWFrameList.h"
 
 #include <kotextobject.h>
 #include <koOasisStyles.h>
@@ -1010,6 +1011,7 @@ void KWFramePropertiesCommand::execute()
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
     frame->copySettings(m_frameAfter);
+    frame->frameStack()->update();
 
     KWDocument * doc = frameSet->kWordDocument();
     if(doc)
@@ -1032,6 +1034,7 @@ void KWFramePropertiesCommand::unexecute()
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
     frame->copySettings(m_frameBefore);
+    frame->frameStack()->update();
     KWDocument * doc = frameSet->kWordDocument();
     if(doc)
     {

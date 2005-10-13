@@ -63,6 +63,7 @@
 #include "paragvisitors.h"
 #include "kwoasisloader.h"
 #include "kwoasissaver.h"
+#include "KWFrameList.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -2493,6 +2494,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
 
             KWFrame* frameCopy = frame->getCopy();
             frame->setZOrder( newZOrder );
+            frame->frameStack()->update();
 
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame);
             if(!macroCmd)
