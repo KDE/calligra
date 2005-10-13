@@ -45,7 +45,11 @@
 #include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
+
+#ifdef Q_WS_WIN //todo: remove
+	#error remove ifdef
 #include "kexiblobbuffer.h"
+#endif
 
 #include <assert.h>
 
@@ -251,8 +255,10 @@ KexiProject::createConnection()
 	}
 
 	//re-init BLOB buffer
+#ifdef Q_WS_WIN //todo: remove
+	#error remove
 	KexiBLOBBuffer::setConnection(m_connection);
-
+#endif
 	return true;
 }
 
