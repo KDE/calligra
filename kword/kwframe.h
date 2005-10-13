@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +32,6 @@
 #include "kwstyle.h"
 #include "koborder.h"
 
-
 class KoStyleStack;
 class KCommand;
 class KWAnchor;
@@ -59,15 +59,16 @@ class DCOPObject;
 class KoXmlWriter;
 class KoSavingContext;
 class KoTextDocument;
+class KWFrameList;
 
 /**
  * small utility class representing a sortable (by z-order) list of frames
  * you can use sort() and inSort(item)
- **/
-class KWFrameList: public QPtrList<KWFrame>
+ */
+class ZOrderedFrameList : public QPtrList<KWFrame>
 {
 protected:
-	virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b);
+    virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b);
 };
 
 /**
@@ -177,23 +178,8 @@ public:
     void setZOrder( int z ) { m_zOrder = z; }
     int zOrder() const { return m_zOrder; }
 
-    /** For KWFrameSet::updateFrames only. Clear list of frames on top of this one.
-     */
-    void clearFramesOnTop() { m_framesOnTop.clear(); }
-    void clearFramesBelow() { m_framesBelow.clear(); }
-
-    /** For KWFrameSet::updateFrames only. Add a frame on top of this one.
-     * Note that order doesn't matter in that list, it's for clipping only. */
-    void addFrameOnTop( KWFrame* fot ) { m_framesOnTop.append( fot ); }
-
-    /**
-     * order DOES matter for this one tho. this one is for transparency & selection.
-     **/
-    void addFrameBelow( KWFrame* fbl ) { m_framesBelow.append( fbl ); }
-    void sortFramesBelow() { m_framesBelow.sort(); }
-
-    const QPtrList<KWFrame>& framesOnTop() const { return m_framesOnTop; }
-    const QPtrList<KWFrame>& framesBelow() const { return m_framesBelow; }
+    KWFrameList* frameStack() { return m_frameStack; }
+    void setFrameStack(KWFrameList *fl) { m_frameStack = fl; }
 
     /** All borders can be custom drawn with their own colors etc.
      */
@@ -344,8 +330,10 @@ private:
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 
     QPtrList<KWResizeHandle> handles;
-    KWFrameList m_framesOnTop; ///< List of frames on top of us, those we shouldn't overwrite
-    KWFrameList m_framesBelow; ///< List of frames below us. needed for selection code & transparency
+    /** List of frames we have below and on top of us.
+     * Frames on top we should never overwrite.  Frames below us needd for selection code &
+     * transparancy */
+    KWFrameList *m_frameStack;
     KWFrameSet *m_frameSet;
 
     /** Prevent operator=

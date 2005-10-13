@@ -33,6 +33,7 @@
 #include "KWordFormulaFrameSetEditIface.h"
 #include "KWordPictureFrameSetIface.h"
 #include "KWordHorizontalLineFrameSetIface.h"
+#include "KWFrameList.h"
 
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
@@ -57,19 +58,19 @@
 
 //#define DEBUG_DRAW
 
-
 /******************************************************************/
-/* Class: KWFrameList                                             */
+/* Class: ZOrderedFrameList                                       */
 /******************************************************************/
 
-int KWFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
+int ZOrderedFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
 {
-           int za = ((KWFrame *)a)->zOrder();
-           int zb = ((KWFrame *)b)->zOrder();
-           if (za == zb) return 0;
-           if (za < zb) return -1;
-           return 1;
+    int za = ((KWFrame *)a)->zOrder();
+    int zb = ((KWFrame *)b)->zOrder();
+    if (za == zb) return 0;
+    if (za < zb) return -1;
+    return 1;
 }
+
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -114,12 +115,11 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_borderTop( QColor(), KoBorder::SOLID, 0 ),
       m_borderBottom( QColor(), KoBorder::SOLID, 0 ),
       handles(),
-      m_framesOnTop(),
-      m_framesBelow(),
       m_frameSet( fs )
 {
     //kdDebug(32001) << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     handles.setAutoDelete(true);
+    m_frameStack = 0; // lazy initialisation.
 }
 
 KWFrame::~KWFrame()
@@ -127,6 +127,8 @@ KWFrame::~KWFrame()
     //kdDebug(32001) << "KWFrame::~KWFrame " << this << endl;
     if (m_selected)
         removeResizeHandles();
+    //delete m_frameStack;  Why o why does the framestack deletion crash kword??
+    m_frameStack = 0;
 }
 
 void KWFrame::setBackgroundColor( const QBrush &_color )
@@ -903,8 +905,9 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
         return;
 
     //kdDebug(32001) << k_funcinfo << getName() << " adding frame" <<  _frame << " recalc=" << recalc << endl;
-    frames.append( _frame );
+    KWFrameList::createFrameList(_frame, m_doc);
     _frame->setFrameSet(this);
+    frames.append( _frame );
     if(recalc)
         updateFrames();
 }
@@ -915,6 +918,12 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
     KWFrame *frm = frames.at( _num );
     Q_ASSERT( frm );
     frames.take( _num );
+    KWFrameList *stack = frm->frameStack();
+    if( stack ) {
+        stack->update(); // will update the other frames on the page.
+        frm->setFrameStack(0);
+        delete stack;
+    }
     if ( !remove )
     {
         if (frm->isSelected()) // get rid of the resize handles
@@ -1258,9 +1267,8 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
         frame->moveTopLeft( pos );
 
         updateFrames();
-        kWordDocument()->updateFramesOnTopOrBelow( frame->pageNum() );
-        if ( oldPageNum != frame->pageNum() )
-            kWordDocument()->updateFramesOnTopOrBelow( oldPageNum );
+        if( frame->frameStack() )
+            frame->frameStack()->updateAfterMove( oldPageNum );
 
         if ( frame->isSelected() )
             frame->updateResizeHandles();
@@ -1579,70 +1587,74 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
         frameColorGroup.setBrush( QColorGroup::Base, bgBrush );
     }
 
-    if ( drawUnderlyingFrames && frame && !frame->framesBelow().isEmpty() )
-    {
-        // Double-buffering - not when printing
-        QPainter* doubleBufPainter = painter;
-        QPixmap* pix = 0L;
-        if ( painter->device()->devType() != QInternal::Printer )
+    if ( drawUnderlyingFrames && frame && frame->frameStack()) {
+        QPtrList<KWFrame> below;
+        frame->frameStack()->framesBelow(below);
+        if(!below.isEmpty() )
         {
-            pix = m_doc->doubleBufferPixmap( outerCRect.size() );
-            doubleBufPainter = new QPainter;
-            doubleBufPainter->begin( pix );
-            // Initialize the pixmap to the page background color
-            // (if the frame is over the page margins, no underlying frame will paint anything there)
-            doubleBufPainter->fillRect( 0, 0, outerCRect.width(), outerCRect.height(), QApplication::palette().active().brush( QColorGroup::Base ) );
-
-            // The double-buffer pixmap has (0,0) at outerCRect.topLeft(), so we need to
-            // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
-            doubleBufPainter->translate( -outerCRect.x(), -outerCRect.y() );
-#ifdef DEBUG_DRAW
-//            kdDebug(32001) << "  ... using double buffering. Portion covered: " << outerCRect << endl;
-#endif
-        }
-
-        // Transparency handling
-#ifdef DEBUG_DRAW
-        kdDebug(32001) << "  frame->framesBelow(): " << frame->framesBelow().count() << endl;
-#endif
-        QPtrListIterator<KWFrame> it( frame->framesBelow() );
-        for ( ; it.current() ; ++it )
-        {
-            KWFrame* f = it.current();
-
-#ifdef DEBUG_DRAW
-            kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
-#endif
-            QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect( viewMode ) ) );
-            if ( !viewFrameCRect.isEmpty() )
+            // Double-buffering - not when printing
+            QPainter* doubleBufPainter = painter;
+            QPixmap* pix = 0L;
+            if ( painter->device()->devType() != QInternal::Printer )
             {
+                pix = m_doc->doubleBufferPixmap( outerCRect.size() );
+                doubleBufPainter = new QPainter;
+                doubleBufPainter->begin( pix );
+                // Initialize the pixmap to the page background color
+                // (if the frame is over the page margins, no underlying frame will paint anything there)
+                doubleBufPainter->fillRect( 0, 0, outerCRect.width(), outerCRect.height(), QApplication::palette().active().brush( QColorGroup::Base ) );
+
+                // The double-buffer pixmap has (0,0) at outerCRect.topLeft(), so we need to
+                // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
+                doubleBufPainter->translate( -outerCRect.x(), -outerCRect.y() );
 #ifdef DEBUG_DRAW
-                kdDebug(32001) << "  viewFrameRect=" << viewFrameCRect << " calling drawFrameAndBorders." << endl;
+    //            kdDebug(32001) << "  ... using double buffering. Portion covered: " << outerCRect << endl;
 #endif
-                f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewFrameCRect, cg, false, resetChanged,
-                                                    edit, viewMode, 0L, false );
             }
-        }
 
-        if ( frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom() )
-            drawPadding( frame, doubleBufPainter, outerCRect, cg, viewMode );
-        doubleBufPainter->save();
+            // Transparency handling
 #ifdef DEBUG_DRAW
-        kdDebug(32001) << "  translating by " << translationOffset.x() << ", " << translationOffset.y() << " before drawFrameContents" << endl;
+            kdDebug(32001) << "  frame->framesBelow(): " << frame->framesBelow().count() << endl;
 #endif
-        doubleBufPainter->translate( translationOffset.x(), translationOffset.y() ); // This assume that viewToNormal() is only a translation
-        // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
-        drawFrameContents( frame, doubleBufPainter, fcrect, frameColorGroup, false, resetChanged, edit, viewMode );
-        doubleBufPainter->restore();
+            QPtrListIterator<KWFrame> it( below );
+            for ( ; it.current() ; ++it )
+            {
+                KWFrame* f = it.current();
 
-        if ( painter->device()->devType() != QInternal::Printer )
-        {
-            doubleBufPainter->end();
 #ifdef DEBUG_DRAW
-            kdDebug(32001) << "  painting double-buf pixmap at position " << outerCRect.topLeft() << " (real painter pos:" << painter->xForm( outerCRect.topLeft() ) << ")" << endl;
+                kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
 #endif
-            painter->drawPixmap( outerCRect.topLeft(), *pix );
-            delete doubleBufPainter;
+                QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect( viewMode ) ) );
+                if ( !viewFrameCRect.isEmpty() )
+                {
+#ifdef DEBUG_DRAW
+                    kdDebug(32001) << "  viewFrameRect=" << viewFrameCRect << " calling drawFrameAndBorders." << endl;
+#endif
+                    f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewFrameCRect, cg, false, resetChanged,
+                                                        edit, viewMode, 0L, false );
+                }
+            }
+
+            if ( frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom() )
+                drawPadding( frame, doubleBufPainter, outerCRect, cg, viewMode );
+            doubleBufPainter->save();
+#ifdef DEBUG_DRAW
+            kdDebug(32001) << "  translating by " << translationOffset.x() << ", " << translationOffset.y() << " before drawFrameContents" << endl;
+#endif
+            doubleBufPainter->translate( translationOffset.x(), translationOffset.y() ); // This assume that viewToNormal() is only a translation
+            // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
+            drawFrameContents( frame, doubleBufPainter, fcrect, frameColorGroup, false, resetChanged, edit, viewMode );
+            doubleBufPainter->restore();
+
+            if ( painter->device()->devType() != QInternal::Printer )
+            {
+                doubleBufPainter->end();
+#ifdef DEBUG_DRAW
+                kdDebug(32001) << "  painting double-buf pixmap at position " << outerCRect.topLeft() << " (real painter pos:" << painter->xForm( outerCRect.topLeft() ) << ")" << endl;
+#endif
+                painter->drawPixmap( outerCRect.topLeft(), *pix );
+                delete doubleBufPainter;
+            }
         }
     }
     else
@@ -1977,7 +1989,11 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         // cvs log says this is about frame borders... hmm.
         /// ### if ( onlyChanged )
 
-        QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
+        Q_ASSERT( frame->frameStack() );
+
+        QPtrList<KWFrame> onTop;
+        frame->frameStack()->framesOnTop( onTop );
+        QPtrListIterator<KWFrame> fIt( onTop );
         for ( ; fIt.current() ; ++fIt )
         {
             KWFrame* frameOnTop = (*fIt);
@@ -2128,8 +2144,17 @@ void KWFrameSet::printDebug()
         kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
         kdDebug() << "     SheetSide "<< frame->sheetSide() << endl;
         kdDebug() << "     Z Order: " << frame->zOrder() << endl;
-        kdDebug() << "     Frames below: " << frame->framesBelow().count()
-                  << " frames on top: " << frame->framesOnTop().count() << endl;
+
+        if( frame->frameStack() ) {
+            QPtrList<KWFrame> onTop, below;
+            frame->frameStack()->framesOnTop(onTop);
+            frame->frameStack()->framesBelow(below);
+
+            kdDebug() << "     Frames below: " << below.count()
+                      << ", frames on top: " << onTop.count() << endl;
+        }
+        else
+            kdDebug() << "     no frameStack set." << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
         if(frame->isSelected())
             kdDebug() << " *   Page "<< frame->pageNum() << endl;

@@ -38,6 +38,7 @@
 #include "kwbookmark.h"
 #include "kwvariable.h"
 #include "kwoasissaver.h"
+#include "KWFrameList.h"
 
 #include <koparagcounter.h>
 #include <koVariableDlgs.h>
@@ -951,7 +952,10 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
     {
         // Principle: for every frame on top at this height, we'll move from and to
         // towards each other. The text flows between 'from' and 'to'
-        QPtrListIterator<KWFrame> fIt( theFrame->framesOnTop() );
+        Q_ASSERT( theFrame->frameStack() );
+        QPtrList<KWFrame> onTop;
+        theFrame->frameStack()->framesOnTop(onTop);
+        QPtrListIterator<KWFrame> fIt( onTop );
         for ( ; fIt.current() && from < to ; ++fIt )
         {
             if ( (*fIt)->runAround() == KWFrame::RA_BOUNDINGRECT )
@@ -1248,7 +1252,10 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     frameIt.toFirst();
     for ( ; frameIt.current(); ++frameIt )
     {
-        QPtrListIterator<KWFrame> fIt( frameIt.current()->framesOnTop() );
+        Q_ASSERT( frameIt.current()->frameStack() );
+        QPtrList<KWFrame> onTop;
+        frameIt.current()->frameStack()->framesOnTop(onTop);
+        QPtrListIterator<KWFrame> fIt( onTop );
         for ( ; fIt.current() ; ++fIt )
         {
             if ( (*fIt)->runAround() == KWFrame::RA_SKIP )
@@ -2267,7 +2274,8 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     }
 
     updateFrames();
-    m_doc->updateFramesOnTopOrBelow( lastFrame->pageNum() );
+    Q_ASSERT(frame(0) && frame(0)->frameStack());
+    frame(0)->frameStack()->update();
     /// We don't want to start from the beginning every time !
     ////m_doc->invalidate();
 
@@ -2346,7 +2354,8 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     KWFrameSet * fs = theFrame->frameSet();
     Q_ASSERT( fs == this );
     fs->updateFrames(); // update e.g. available height
-    m_doc->updateFramesOnTopOrBelow( theFrame->pageNum() );
+    Q_ASSERT(frame(0) && frame(0)->frameStack());
+    frame(0)->frameStack()->update();
 
     theFrame->updateRulerHandles();
 

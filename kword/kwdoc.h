@@ -444,7 +444,7 @@ public:
     /** Gather all the frames which are on a certain page and return them.
      * The list is ordered. @see KWFrameSet::framesInPage
      * @param pageNum the number of the page
-     * @param sorted if true the list is ordered. should be true always.
+     * @param sorted if true the list is ordered per z-order. should be true always.
      */
     QPtrList<KWFrame> framesInPage( int pageNum , bool sorted=true) const;
 
@@ -456,7 +456,6 @@ public:
     int maxZOrder( int pageNum ) const;
 
     void updateAllFrames( int flags = 0xff /* see KWFrameSet::UpdateFramesFlags */ );
-    void updateFramesOnTopOrBelow( int pageNum = -1 /* all */ );
 
     // The grid is in _pt_ now
     double gridX()const { return m_gridX; }

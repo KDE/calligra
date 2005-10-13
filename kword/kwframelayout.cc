@@ -1,4 +1,5 @@
 #include "kwframelayout.h"
+#include "KWFrameList.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include <qtimer.h>
@@ -410,8 +411,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         fsit.key()->updateFrames();
 
     // ## TODO: only if something changed? (resizing, new frames, or deleted frames...)
-    for ( int pg = fromPage ; pg <= toPage ; ++pg )
-        m_doc->updateFramesOnTopOrBelow( pg );
+    KWFrameList::recalcFrames(m_doc, fromPage, toPage);
 
     if ( mainTextFrameResized != -1 && mainTextFrameSet->type() == FT_TEXT ) {
 #ifdef DEBUG_FRAMELAYOUT

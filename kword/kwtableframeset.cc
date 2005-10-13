@@ -34,6 +34,7 @@ DESCRIPTION
 #include "kwview.h"
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
+#include "KWFrameList.h"
 
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
@@ -115,10 +116,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
 
     if ( dx || dy ) {
         updateFrames();
-        int newPageNumber = getCell(0,0)->frame(0)->pageNum();
-        m_doc->updateFramesOnTopOrBelow( newPageNumber );
-        if ( oldPageNumber != newPageNumber )
-            m_doc->updateFramesOnTopOrBelow( oldPageNumber );
+        getCell(0,0)->frame(0)->frameStack()->updateAfterMove( oldPageNumber );
     }
 }
 

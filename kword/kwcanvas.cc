@@ -29,6 +29,7 @@
 #include "kwcommand.h"
 #include "kwtabletemplate.h"
 #include "kwtextdocument.h"
+#include "KWFrameList.h"
 
 #include <qbuffer.h>
 #include <qtimer.h>
@@ -1167,6 +1168,8 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
                     repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
                     // Move resize handles to new position
                     frame->updateResizeHandles();
+                    if(frame->frameStack())
+                    frame->frameStack()->update();
                 }
             }
         }
@@ -1190,12 +1193,6 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
             }
         }
     }
-
-    // Frames have moved -> update the "frames on top" lists
-    //m_doc->updateAllFrames();
-    // Not yet in fact. If we relayout the text every time it's too slow.
-    // But we can fix the clipping easily
-    m_doc->updateFramesOnTopOrBelow( topPage );
 
     repaintContents( repaintRegion.boundingRect(), FALSE );
 
