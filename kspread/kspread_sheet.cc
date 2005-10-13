@@ -7805,18 +7805,28 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         styleCurrent.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
         styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
+        //style default layout for column
+        KoGenStyle styleColCurrent( KSpreadDoc::STYLE_CELL, "table-cell" );
+        column->saveOasisCellStyle(styleColCurrent,mainStyles );
+        QString nameDefaultCellStyle = mainStyles.lookup( styleColCurrent, "ce" );
+
+
         bool hide = column->isHide();
         int j = i + 1;
         int repeated = 1;
         while ( j <= maxCols )
         {
-            const ColumnFormat *nextColumn = columnFormat( j );
+            ColumnFormat *nextColumn = columnFormat( j );
             KoGenStyle nextStyle( KSpreadDoc::STYLE_COLUMN, "table-column" );
             nextStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
             nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
+            KoGenStyle nextStyleCol( KSpreadDoc::STYLE_CELL, "table-cell" );
+            nextColumn->saveOasisCellStyle(nextStyleCol,mainStyles );
+            QString nextNameDefaultCellStyle = mainStyles.lookup( nextStyleCol, "ce" );
+
             //FIXME all the time repeate == 2
-            if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) )
+            if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) && ( nextNameDefaultCellStyle == nameDefaultCellStyle ) )
                 ++repeated;
             else
                 break;
@@ -7824,10 +7834,9 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         }
         xmlWriter.startElement( "table:table-column" );
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
-        KoGenStyle styleColCurrent( KSpreadDoc::STYLE_CELL, "table-cell" );
-        column->saveOasisCellStyle(styleColCurrent,mainStyles );
         //FIXME doesn't create format if it's default format
-        xmlWriter.addAttribute( "table:default-cell-style-name", mainStyles.lookup( styleColCurrent, "ce" ) );//TODO fixme create style from cell
+
+        xmlWriter.addAttribute( "table:default-cell-style-name", nameDefaultCellStyle );//TODO fixme create style from cell
         if ( hide )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
 
