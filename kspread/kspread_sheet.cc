@@ -7156,9 +7156,9 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-        //kdDebug()<<" default-cell-style-name :"<<str<<endl;
+        kdDebug()<<" default-cell-style-name :"<<str<<endl;
         QDomElement *style = oasisStyles.styles()[str];
-        //kdDebug()<<"default column style :"<<style<<endl;
+        kdDebug()<<"default column style :"<<style<<endl;
         if ( style )
         {
             styleStack.push( *style );
@@ -7200,10 +7200,11 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 
     for ( int i = 0; i < number; ++i )
     {
-        kdDebug()<<"index col :"<<indexCol<<endl;
+        kdDebug()<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<collapsed<<endl;
         ColumnFormat * col = new ColumnFormat( this, indexCol );
         col->copy( layout );
-        col->setWidth( (int) width );
+        if ( width != -1 ) //safe
+            col->setWidth( (int) width );
 
         // if ( insertPageBreak )
         //   col->setPageBreak( true )
@@ -7290,18 +7291,17 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
     //number == number of row to be copy. But we must copy cell too.
     for ( int i = 0; i < number; ++i )
     {
-        kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
-        kdDebug()<<" number :"<<number<<endl;
+        kdDebug()<<" create non defaultrow format :"<<rowIndex<<" repeate : "<<number<<" height :"<<height<<endl;
         RowFormat * rowL = nonDefaultRowFormat( rowIndex );
         rowL->copy( layout );
-        kdDebug()<<"height :"<<height<<endl;
         if ( height != -1 )
         {
             kdDebug() << "Setting row height to " << height << endl;
             rowL->setHeight( (int) height );
-            if ( collapse )
-                rowL->setHide( true );
         }
+        if ( collapse )
+            rowL->setHide( true );
+
         ++rowIndex;
     }
 
