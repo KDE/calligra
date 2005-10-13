@@ -52,7 +52,7 @@ Q_OBJECT
 public:
     /*! Creates wizard's instance. \a result will be set to imported project's filename, on success
      and to null value on failure or cancellation. */
-    ImportWizard(QWidget *parent, QVariant* result = 0);
+    ImportWizard(QWidget *parent = 0, QVariant* result = 0);
     virtual ~ImportWizard();
 
 public slots:
