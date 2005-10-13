@@ -177,7 +177,7 @@ public:
     KWDeleteCustomItemVisitor() : KoParagVisitor() { }
     virtual bool visit( KoTextParag *parag, int start, int end )
     {
-        kdDebug() << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
+        kdDebug(32001) << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
         for ( int i = start ; i < end ; ++i )
         {
             KoTextStringChar * ch = parag->at( i );
@@ -1003,7 +1003,7 @@ KWFramePropertiesCommand::~KWFramePropertiesCommand()
 
 void KWFramePropertiesCommand::execute()
 {
-    kdDebug() << "KWFrameChangeParamCommand::execute" << endl;
+    kdDebug(32001) << "KWFrameChangeParamCommand::execute" << endl;
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
     Q_ASSERT( frameSet );
 
@@ -1025,7 +1025,7 @@ void KWFramePropertiesCommand::execute()
 
 void KWFramePropertiesCommand::unexecute()
 {
-    kdDebug() << "KWFrameChangeParamCommand::unexecute" << endl;
+    kdDebug(32001) << "KWFrameChangeParamCommand::unexecute" << endl;
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
     Q_ASSERT( frameSet );
 
@@ -1055,7 +1055,7 @@ KWFrameSetInlineCommand::KWFrameSetInlineCommand( const QString &name, KWFrameSe
 
 void KWFrameSetInlineCommand::setValue( bool value )
 {
-    kdDebug() << "KWFrameSetInlineCommand::execute" << endl;
+    kdDebug(32001) << "KWFrameSetInlineCommand::execute" << endl;
     if ( value )
     {
         // Make frame(set) floating
@@ -1233,7 +1233,7 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWTableFrameSet
 
 void KWDeleteTableCommand::execute()
 {
-    kdDebug() << "KWDeleteTableCommand::execute" << endl;
+    kdDebug(32001) << "KWDeleteTableCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->removeFrameSet(m_pTable);
     m_pTable->setVisible( false );
@@ -1248,7 +1248,7 @@ void KWDeleteTableCommand::execute()
 
 void KWDeleteTableCommand::unexecute()
 {
-    kdDebug() << "KWDeleteTableCommand::unexecute" << endl;
+    kdDebug(32001) << "KWDeleteTableCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     m_pTable->setVisible( true );
     doc->addFrameSet(m_pTable);
@@ -1278,7 +1278,7 @@ KWInsertColumnCommand::~KWInsertColumnCommand()
 
 void KWInsertColumnCommand::execute()
 {
-    kdDebug() << "KWInsertColumnCommand::execute" << endl;
+    kdDebug(32001) << "KWInsertColumnCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     // a insert column = KWTableFrameSet::m_sDefaultColWidth, see kwtableframeset.cc
     if (m_pTable->boundingRect().right() + KWTableFrameSet::m_sDefaultColWidth >= static_cast<int>(m_maxRight))
@@ -1305,7 +1305,7 @@ void KWInsertColumnCommand::execute()
 
 void KWInsertColumnCommand::unexecute()
 {
-    kdDebug() << "KWInsertColumnCommand::unexecute" << endl;
+    kdDebug(32001) << "KWInsertColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     doc->frameSelectedChanged();
@@ -1340,7 +1340,7 @@ KWInsertRowCommand::~KWInsertRowCommand()
 
 void KWInsertRowCommand::execute()
 {
-    kdDebug() << "KWInsertRowCommand::execute" << endl;
+    kdDebug(32001) << "KWInsertRowCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     if(m_inserted)
         m_pTable->reInsertRow(*m_rr);
@@ -1356,7 +1356,7 @@ void KWInsertRowCommand::execute()
 
 void KWInsertRowCommand::unexecute()
 {
-    kdDebug() << "KWInsertRowCommand::unexecute" << endl;
+    kdDebug(32001) << "KWInsertRowCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
 
     doc->terminateEditing(m_pTable);
@@ -1386,7 +1386,7 @@ KWRemoveRowCommand::~KWRemoveRowCommand()
 
 void KWRemoveRowCommand::execute()
 {
-    kdDebug() << "KWRemoveRowCommand::execute" << endl;
+    kdDebug(32001) << "KWRemoveRowCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
@@ -1401,7 +1401,7 @@ void KWRemoveRowCommand::execute()
 
 void KWRemoveRowCommand::unexecute()
 {
-    kdDebug() << "KWRemoveRowCommand::unexecute" << endl;
+    kdDebug(32001) << "KWRemoveRowCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     m_pTable->reInsertRow(*m_rr);
     doc->updateAllFrames();
@@ -1426,7 +1426,7 @@ KWRemoveColumnCommand::~KWRemoveColumnCommand()
 
 void KWRemoveColumnCommand::execute()
 {
-    kdDebug() << "KWRemoveColumnCommand::execute" << endl;
+    kdDebug(32001) << "KWRemoveColumnCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
@@ -1440,7 +1440,7 @@ void KWRemoveColumnCommand::execute()
 
 void KWRemoveColumnCommand::unexecute()
 {
-    kdDebug() << "KWRemoveColumnCommand::unexecute" << endl;
+    kdDebug(32001) << "KWRemoveColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     m_pTable->reInsertCol(*m_rc);
     doc->updateAllFrames();
@@ -1464,7 +1464,7 @@ KWSplitCellCommand::KWSplitCellCommand( const QString &name, KWTableFrameSet * _
 
 void KWSplitCellCommand::execute()
 {
-    kdDebug() << "KWSplitCellCommand::execute" << endl;
+    kdDebug(32001) << "KWSplitCellCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     //kdDebug()<<"split Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colEnd<<" m_rowBegin :"<<m_rowBegin<<" m_colEnd :"<<m_colEnd<<endl;
@@ -1477,7 +1477,7 @@ void KWSplitCellCommand::execute()
 
 void KWSplitCellCommand::unexecute()
 {
-    kdDebug() << "KWSplitCellCommand::unexecute" << endl;
+    kdDebug(32001) << "KWSplitCellCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
@@ -1495,7 +1495,7 @@ void KWSplitCellCommand::unexecute()
                     //don't store first cell
                     if( !(j==m_rowBegin && i==m_colBegin))
                     {
-                        kdDebug()<<"store cell row :"<<j<<" col :"<<i<<endl;
+                        kdDebug(32001)<<"store cell row :"<<j<<" col :"<<i<<endl;
                         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( j,i ));
                         m_ListFrameSet.append(cell);
                     }
@@ -1535,7 +1535,7 @@ KWJoinCellCommand::~KWJoinCellCommand()
 
 void KWJoinCellCommand::execute()
 {
-    kdDebug() << "KWJoinCellCommand::execute" << endl;
+    kdDebug(32001) << "KWJoinCellCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd,m_rowEnd);
@@ -1547,7 +1547,7 @@ void KWJoinCellCommand::execute()
 
 void KWJoinCellCommand::unexecute()
 {
-    kdDebug() << "KWJoinCellCommand::unexecute" << endl;
+    kdDebug(32001) << "KWJoinCellCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->splitCell(m_rowEnd-m_rowBegin+1, m_colEnd-m_colBegin+1,m_colBegin,m_rowBegin,m_ListFrameSet,m_copyFrame);
