@@ -301,24 +301,6 @@ KexiRelationWidget *KexiQueryDesignerGuiEditor::relationView() const
 	return d->relations;
 }
 
-/*
-void
-KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
-{
-	kexipluginsdbg << "KexiQueryDesignerGuiEditor::addRow(" << tbl << ", " << field << ")" << endl;
-	KexiTableItem *item = d->data->createItem(); //new KexiTableItem(0);
-	(*item)[0] = tbl;
-	(*item)[1] = field;
-	(*item)[2] = QVariant(true, 1);
-//null	(*item)[3] =
-	d->data->append(item);
-
-	//TODO: this should deffinitly not go here :)
-//	m_table->updateContents();
-
-	setDirty(true);
-}*/
-
 KexiQueryPart::TempData *
 KexiQueryDesignerGuiEditor::tempData() const
 {
@@ -367,6 +349,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		if (set) {
 			QString tableName = (*set)["table"].value().toString().stripWhiteSpace();
 			QString fieldName = (*set)["field"].value().toString();
+			QString fieldAndTableName = fieldName;
+			if (!tableName.isEmpty())
+				fieldAndTableName.prepend(tableName+".");
 			bool fieldVisible = (*set)["visible"].value().toBool();
 			QString criteriaStr = (*set)["criteria"].value().toString();
 			QCString alias = (*set)["alias"].value().toCString();
@@ -380,7 +365,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 					return false;
 				}
 				//build relational expression for column variable
-        KexiDB::VariableExpr *varExpr = new KexiDB::VariableExpr(fieldName);
+				KexiDB::VariableExpr *varExpr = new KexiDB::VariableExpr(fieldAndTableName);
 				criteriaExpr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, varExpr, token, criteriaExpr);
 				//critera ok: add it to WHERE section
 				if (whereExpr)
@@ -532,7 +517,13 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 				parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query definition loading failed."), i18n("Query data may be corrupted."));
 				return false;
 			}
-			showFieldsForQuery( static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData()) );
+			// Invalid queries case: 
+			// KexiDialogBase::switchToViewMode() first opens DesignViewMode,
+			// and then KexiQueryPart::loadSchemaData() doesn't allocate QuerySchema object
+			// do we're carefully looking at parentDialog()->schemaData()
+			KexiDB::QuerySchema * q =	dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+			if (q)
+				showFieldsForQuery( q );
 			//todo: load global query properties
 		}
 	}
@@ -545,9 +536,9 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 			//todo
 			if (tempData()->query) {
 				//there is a query schema to show
-				showTablesAndConnectionsForQuery( tempData()->query );
+				showTablesForQuery( tempData()->query );
 				//-show fields
-				showFieldsForQuery( tempData()->query );
+				showFieldsAndRelationsForQuery( tempData()->query );
 			}
 		}
 		//todo: load global query properties
@@ -602,46 +593,74 @@ tristate KexiQueryDesignerGuiEditor::storeData()
 	return res;
 }
 
-void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query)
+//void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query)
+void KexiQueryDesignerGuiEditor::showTablesForQuery(KexiDB::QuerySchema *query)
 {
 	d->relations->clear();
 	d->slotTableAdded_enabled = false; //speedup
 
-	//-show tables:
-	//(todo: instead of hiding all tables and showing some tables,
+	//! @todo: instead of hiding all tables and showing some tables,
 	// show only these new and hide these unncecessary; the same for connections)
 	for (KexiDB::TableSchema::ListIterator it(*query->tables()); it.current(); ++it) {
 		d->relations->addTable( it.current() );
-	}
-	//-show relationships:
-	KexiDB::Relationship *rel;
-	for (KexiDB::Relationship::ListIterator it(*query->relationships()); (rel=it.current()); ++it) {
-		SourceConnection conn;
-//@todo: now only sigle-field relationships are implemented!
-		KexiDB::Field *masterField = rel->masterIndex()->fields()->first();
-		KexiDB::Field *detailsField = rel->detailsIndex()->fields()->first();
-		conn.masterTable = masterField->table()->name(); //<<<TODO
-		conn.masterField = masterField->name();
-		conn.detailsTable = detailsField->table()->name();
-		conn.detailsField = detailsField->name();
-		d->relations->addConnection( conn );
 	}
 
 	d->slotTableAdded_enabled = true;
 	updateColumnsData();
 }
 
+void KexiQueryDesignerGuiEditor::addConnection(
+	KexiDB::Field *masterField, KexiDB::Field *detailsField)
+{
+	SourceConnection conn;
+	conn.masterTable = masterField->table()->name(); //<<<TODO
+	conn.masterField = masterField->name();
+	conn.detailsTable = detailsField->table()->name();
+	conn.detailsField = detailsField->name();
+	d->relations->addConnection( conn );
+}
+
 void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
+{
+	showFieldsOrRelationsForQueryInternal(query, true, false);
+}
+
+void KexiQueryDesignerGuiEditor::showRelationsForQuery(KexiDB::QuerySchema *query)
+{
+	showFieldsOrRelationsForQueryInternal(query, false, true);
+}
+
+void KexiQueryDesignerGuiEditor::showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query)
+{
+	showFieldsOrRelationsForQueryInternal(query, true, true);
+}
+
+void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
+	KexiDB::QuerySchema *query, bool showFields, bool showRelations)
 {
 	const bool was_dirty = dirty();
 
-	QDict<KexiDB::BinaryExpr> criterias(101, false);
-	//collect information about criterias:
-	//--this must be top level chain of AND's
+	//1. Show explicity declared relations:
+	if (showRelations) {
+		KexiDB::Relationship *rel;
+		for (KexiDB::Relationship::ListIterator it(*query->relationships()); 
+			(rel=it.current()); ++it)
+		{
+//! @todo: now only sigle-field relationships are implemented!
+			KexiDB::Field *masterField = rel->masterIndex()->fields()->first();
+			KexiDB::Field *detailsField = rel->detailsIndex()->fields()->first();
+			addConnection(masterField, detailsField);
+		}
+	}
+
+	//2. Collect information about criterias
+	// --this must be top level chain of AND's
+	// --this will also show joins as: [table1.]field1 = [table2.]field2
+	QDict<KexiDB::BaseExpr> criterias(101, false);
 	KexiDB::BaseExpr* e = query->whereExpression();
 	KexiDB::BaseExpr* eItem = 0;
 	while (e) {
-		if (e->toBinary() && e->toBinary()->token()==AND) {
+		if (e->toBinary() && e->token()==AND) {
 			eItem = e->toBinary()->left();
 			e = e->toBinary()->right();
 		}
@@ -649,23 +668,65 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 			eItem = e;
 			e = 0;
 		}
-		kexidbg << eItem->toString() << endl;
-		if (eItem->toBinary() && eItem->exprClass()==KexiDBExpr_Relational
-			&& eItem->toBinary()->left()->toVariable())
-		{
-			//this is: variable , op , argument
-			//store:
-			criterias.insert(eItem->toBinary()->left()->toVariable()->name, eItem->toBinary());
-		}
-	}
 
-	//add fields
+		//eat parentheses (special case)
+		while (eItem && eItem->toUnary() && eItem->token()=='(')
+			eItem = eItem->toUnary()->arg();
+
+		if (!eItem)
+			continue;
+
+		kexidbg << eItem->toString() << endl;
+		KexiDB::BinaryExpr* binary = eItem->toBinary();
+		if (binary && eItem->exprClass()==KexiDBExpr_Relational) {
+			KexiDB::Field *leftField, *rightField;
+			if (eItem->token()=='=' 
+				&& binary->left()->toVariable()
+				&& binary->right()->toVariable()
+				&& (leftField = query->field( binary->left()->toString() ))
+				&& (rightField = query->field( binary->right()->toString() )))
+			{
+//! @todo move this check to parser on QuerySchema creation
+//!       or to QuerySchema creation (WHERE expression should be then simplified
+//!       by removing joins
+
+				//this is relationship defined as following JOIN: [table1.]field1 = [table2.]field2
+				if (showRelations) {
+//! @todo testing primary key here is too simplified; maybe look ar isForeignKey() or indices..
+//! @todo what about multifield joins?
+					if (leftField->isPrimaryKey())
+						addConnection(leftField /*master*/, rightField /*details*/);
+					else
+						addConnection(rightField /*master*/, leftField /*details*/);
+//! @todo addConnection() should have "bool oneToOne" arg, for 1-to-1 relations
+				}
+			}
+			else if (binary->left()->toVariable()) {
+				//this is: variable , op , argument
+				//store variable -> argument:
+				criterias.insert(binary->left()->toVariable()->name, binary->right());
+			}
+			else if (binary->right()->toVariable()) {
+				//this is: argument , op , variable
+				//store variable -> argument:
+				criterias.insert(binary->right()->toVariable()->name, binary->left());
+			}
+		}
+	} //while
+
+	if (!showFields)
+		return;
+
+	//3. show fields
 	uint row_num = 0;
 	KexiDB::Field *field;
-	for (KexiDB::Field::ListIterator it(*query->fields()); (field = it.current()); ++it, row_num++) {
+	for (KexiDB::Field::ListIterator it(*query->fields()); 
+		(field = it.current()); ++it, row_num++)
+	{
 		//add row
 		QString tableName, fieldName, columnAlias, criteriaString;
 		KexiDB::BinaryExpr *criteriaExpr = 0;
+		KexiDB::BaseExpr *criteriaArgument = 0;
 		if (field->isQueryAsterisk()) {
 			if (field->table()) {//single-table asterisk
 				tableName = field->table()->name();
@@ -691,16 +752,21 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 			else {
 				tableName = field->table()->name();
 				fieldName = field->name();
-				criteriaExpr = criterias[fieldName];
+				criteriaArgument = criterias[fieldName];
+				if (!criteriaArgument) {//try table.field
+					criteriaArgument = criterias[tableName+"."+fieldName];
+				}
+				if (criteriaArgument) //criteria expression is just a parent of argument
+					criteriaExpr = criteriaArgument->parent()->toBinary();
 			}
 		}
 		KexiTableItem *newItem = createNewRow(tableName, fieldName); //, columnAlias);
 		if (criteriaExpr) {
-//TODO: fix for !INFIX operators
+//! @todo fix for !INFIX operators
 			if (criteriaExpr->token()=='=')
-				criteriaString = criteriaExpr->right()->toString();
+				criteriaString = criteriaArgument->toString();
 			else
-				criteriaString = criteriaExpr->tokenToString() + " " + criteriaExpr->right()->toString();
+				criteriaString = criteriaExpr->tokenToString() + " " + criteriaArgument->toString();
 			(*newItem)[COLUMN_ID_CRITERIA] = criteriaString;
 		}
 		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
@@ -736,8 +802,13 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 //	}
 	if (xml.isEmpty()) {
 		//in a case when query layout was not saved, build layout by hand
-		showTablesAndConnectionsForQuery( 
-			static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData()) );
+		// -- dynamic cast because of a need for handling invalid queries 
+		//    (as in KexiQueryDesignerGuiEditor::afterSwitchFrom()):
+		KexiDB::QuerySchema * q =	dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+		if (q) {
+			showTablesForQuery( q );
+			showRelationsForQuery( q );
+		}
 		return true;
 	}
 

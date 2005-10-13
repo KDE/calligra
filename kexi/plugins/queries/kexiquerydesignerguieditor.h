@@ -135,8 +135,18 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Stores layout of relation GUI diagram. */
 		bool storeLayout();
 
-		void showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query);
+		void showTablesForQuery(KexiDB::QuerySchema *query);
+		//! @internal
+		void showFieldsOrRelationsForQueryInternal(
+			KexiDB::QuerySchema *query, bool showFields, bool showRelations);
+		//! convenience method equal to showFieldsOrRelationsForQueryInternal(query, true, true)
+		void showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query);
+		//! convenience method equal to showFieldsOrRelationsForQueryInternal(query, true, false)
 		void showFieldsForQuery(KexiDB::QuerySchema *query);
+		//! convenience method equal to showFieldsOrRelationsForQueryInternal(query, false, true)
+		void showRelationsForQuery(KexiDB::QuerySchema *query);
+
+		void addConnection(KexiDB::Field *masterField, KexiDB::Field *detailsField);
 
 		void slotPropertyChanged(KoProperty::Set& list, KoProperty::Property& property);
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,6 +66,7 @@ class KexiQueryDesignerSQLViewPrivate
 		 , heightForStatusMode(-1)
 		 , heightForHistoryMode(-1)
 		 , eventFilterForSplitterEnabled(true)
+		 , justSwitchedFromNoViewMode(false)
 		{
 		}
 		KexiQueryDesignerSQLEditor *editor;
@@ -88,6 +89,8 @@ class KexiQueryDesignerSQLViewPrivate
 		bool action_toggle_history_was_checked : 1;
 		//! helper for eventFilter()
 		bool eventFilterForSplitterEnabled : 1;
+		//! helper for beforeSwitchTo()
+		bool justSwitchedFromNoViewMode : 1;
 };
 
 //===================
@@ -215,25 +218,30 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 		}
 		else {
 			const bool designViewWasVisible = parentDialog()->viewForMode(mode)!=0;
-			if (designViewWasVisible && compareSQL(d->origStatement, d->editor->text())) {
+			//should we check SQL text?
+			if (designViewWasVisible 
+				&& !d->justSwitchedFromNoViewMode //unchanged, but we should check SQL text
+				&& compareSQL(d->origStatement, d->editor->text())) {
 				//statement unchanged! - nothing to do
 				temp->queryChangedInPreviousView = false;
 			}
 			else {
-				//parse SQL text
+				//yes: parse SQL text
 				if (!slotCheckQuery()) {
-					if (KMessageBox::warningYesNo(this, "<p>"+i18n("The query you entered is incorrect.")
+					if (KMessageBox::No==KMessageBox::warningYesNo(this, "<p>"+i18n("The query you entered is incorrect.")
 						+"</p><p>"+i18n("Do you want to cancel any changes made to this SQL text?")+"</p>"
-						+"</p><p>"+i18n("Answering \"No\" allows you to make corrections.")+"</p>")==KMessageBox::No)
+						+"</p><p>"+i18n("Answering \"No\" allows you to make corrections.")+"</p>"))
 					{
 						return cancelled;
 					}
-					else {
-						//do not change original query
-						temp->queryChangedInPreviousView = false;
-						return true;
-					}
+					//do not change original query - it's invalid
+					temp->queryChangedInPreviousView = false;
+					//this view is no longer _just_ switched from "NoViewMode"
+					d->justSwitchedFromNoViewMode = false;
+					return true;
 				}
+				//this view is no longer _just_ switched from "NoViewMode"
+				d->justSwitchedFromNoViewMode = false;
 				//replace old query schema with new one
 				delete temp->query; //safe?
 				temp->query = d->parsedQuery;
@@ -270,6 +278,12 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 {
 	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 //	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
+	if (mode==Kexi::NoViewMode) {
+		//User opened text view _directly_. 
+		//This flag is set to indicate for beforeSwitchTo() that even if text has not been changed,
+		//SQL text should be invalidated.
+		d->justSwitchedFromNoViewMode = true;
+	}
 	KexiQueryPart::TempData * temp = tempData();
 	KexiDB::QuerySchema *query = temp->query;
 	if (!query) {//try to just get saved schema, instead of temporary one
@@ -442,7 +456,7 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 	}
 	else {
 		//query is not ok
-#if 0
+//#if 0
 	//TODO: allow saving invalid queries
 	//TODO: just ask this question:
 		query = new KexiDB::SchemaData(); //just empty
@@ -457,9 +471,9 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 			m_dialog->setId( query->id() );
 			ok = storeDataBlock( d->editor->text(), "sql" );
 		}
-#else
-		ok = false;
-#endif
+//#else
+		//ok = false;
+//#endif
 	}
 	if (!ok) {
 		delete query;

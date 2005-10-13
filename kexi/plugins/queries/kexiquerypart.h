@@ -55,7 +55,8 @@ class KexiQueryPart : public KexiPart::Part
 
 //		virtual KexiPart::DataSource *dataSource();
 
-		class TempData : public KexiDialogTempData, public KexiDB::Connection::TableSchemaChangeListenerInterface
+		class TempData : public KexiDialogTempData, 
+		                 public KexiDB::Connection::TableSchemaChangeListenerInterface
 		{
 			public:
 				TempData(KexiDialogBase* parent, KexiDB::Connection *conn);
@@ -67,9 +68,10 @@ class KexiQueryPart : public KexiPart::Part
 
 				KexiDB::QuerySchema *query;
 				KexiDB::Connection *conn;
-				/*! true, if \a query member has changed in previous view. Used on view switching.
-				 We're checking this flag to see if we should rebuild internal structure for DesignViewMode
-				 of regenerate sql text in TextViewMode after switch from other view. */
+				/*! true, if \a query member has changed in previous view. 
+				 Used on view switching. We're checking this flag to see if we should 
+				 rebuild internal structure for DesignViewMode of regenerated sql text 
+				 in TextViewMode after switch from other view. */
 				bool queryChangedInPreviousView : 1;
 		};
 
@@ -87,7 +89,8 @@ class KexiQueryPart : public KexiPart::Part
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, 
+			const KexiDB::SchemaData& sdata, int viewMode);
 };
 
 #if 0

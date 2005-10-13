@@ -171,8 +171,9 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 			//-just make a copy:
 			return KexiPart::Part::loadSchemaData(dlg, sdata, viewMode);
 		}
-		/* set this to true on data loading loadSchemaData() to indicate that TextView mode could be used
-		   instead of DataView or DesignView, because there are problems with opening object. */
+		/* Set this to true on data loading loadSchemaData() to indicate that TextView mode 
+		 could be used instead of DataView or DesignView, because there are problems 
+		 with opening object. */
 		temp->proposeOpeningInTextViewModeBecauseOfProblems = true;
 		//todo
 		return 0;
