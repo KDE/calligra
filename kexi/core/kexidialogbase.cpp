@@ -267,9 +267,15 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 {
 	m_parentWindow->acceptPropertySetEditing();
 
-	if (newViewMode==Kexi::TextViewMode && !viewForMode(Kexi::DesignViewMode) && supportsViewMode(Kexi::DesignViewMode)) {
+	const bool designModePreloadedForTextModeHack = 
+		newViewMode==Kexi::TextViewMode 
+		&& !viewForMode(Kexi::DesignViewMode) 
+		&& supportsViewMode(Kexi::DesignViewMode);
+
+	tristate res = true;
+	if (designModePreloadedForTextModeHack) {
 		/* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
-		tristate res = switchToViewMode( Kexi::DesignViewMode );
+		res = switchToViewMode( Kexi::DesignViewMode );
 		if (!res || ~res)
 			return res;
 	}
@@ -284,7 +290,10 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 		return false;
 
 	if (view) {
-		tristate res = view->beforeSwitchTo(newViewMode, dontStore);
+		res = true;
+		if (!designModePreloadedForTextModeHack) {
+			res = view->beforeSwitchTo(newViewMode, dontStore);
+		}
 		if (~res || !res)
 			return res;
 		if (!dontStore && view->dirty()) {
@@ -314,18 +323,24 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 		m_creatingViewsMode = -1;
 		addView(newView, newViewMode);
 	}
-	tristate res = newView->beforeSwitchTo(newViewMode, dontStore);
+	const int prevViewMode = m_currentViewMode;
+	res = true;
+	if (designModePreloadedForTextModeHack) {
+		m_currentViewMode = Kexi::NoViewMode; //SAFE?
+	}
+	res = newView->beforeSwitchTo(newViewMode, dontStore);
 	if (!res) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl;
 		return false;
 	}
-	const int prevViewMode = m_currentViewMode;
 	m_currentViewMode = newViewMode;
 	m_newlySelectedView = newView;
 	if (prevViewMode==Kexi::NoViewMode)
 		m_newlySelectedView->setDirty(false);
-	res = newView->afterSwitchFrom(prevViewMode);
+
+	res = newView->afterSwitchFrom(
+			designModePreloadedForTextModeHack ? Kexi::NoViewMode : prevViewMode);
 	if (!res) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl;

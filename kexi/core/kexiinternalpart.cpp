@@ -92,7 +92,7 @@ KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const char* partName, 
 	const char* widgetClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-	QWidget *parent, const char *objName, const QVariant& arg)
+	QWidget *parent, const char *objName, QVariant* arg)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part)
@@ -141,7 +141,7 @@ KexiDialogBase* KexiInternalPart::createKexiDialogInstance(
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const char* partName, 
 	const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-	const char *objName, const QVariant& arg)
+	const char *objName, QVariant* arg)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {

@@ -45,6 +45,7 @@
 #include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
+#include "kexiblobbuffer.h"
 
 #include <assert.h>
 
@@ -249,6 +250,9 @@ KexiProject::createConnection()
 		return false;
 	}
 
+	//re-init BLOB buffer
+	KexiBLOBBuffer::setConnection(m_connection);
+
 	return true;
 }
 
@@ -258,8 +262,8 @@ KexiProject::closeConnection()
 {
 	if (!m_connection)
 		return;
-		
-	delete m_connection;
+
+	delete m_connection; //this will also clear connection for BLOB buffer
 	m_connection = 0;
 }
 
@@ -491,13 +495,18 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 		return false;
 	}
 	KexiDB::TransactionGuard tg( *m_connection );
-	if (!tg.transaction().active())
-		return false;
-	if (!m_connection->removeObject( item.identifier() )) {
+	if (!tg.transaction().active()) {
+		setError(m_connection);
 		return false;
 	}
-	if (!tg.commit())
+	if (!m_connection->removeObject( item.identifier() )) {
+		setError(m_connection);
 		return false;
+	}
+	if (!tg.commit()) {
+		setError(m_connection);
+		return false;
+	}
 	emit itemRemoved(item);
 	//now: remove this item from cache
 	if (part->info()) {
@@ -520,7 +529,8 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 			return false;
 		}
 		if (this->item(item.mime(), newName)!=0) {
-			setError( i18n("Could not use this name. Object with name \"%1\" already exists.").arg(newName) );
+			setError( i18n("Could not use this name. Object with name \"%1\" already exists.")
+				.arg(newName) );
 			return false;
 		}
 	}

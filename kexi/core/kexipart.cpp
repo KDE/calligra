@@ -32,6 +32,7 @@
 
 #include <kexidb/connection.h>
 #include <kexiutils/identifier.h>
+#include <kexiutils/utils.h>
 
 #include <qwidgetstack.h>
 
@@ -213,9 +214,9 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	sdata.setCaption( item.caption() );
 	sdata.setDescription( item.description() );
 
-//js TODO: apply settings for caption displaying method; there can be option for
-//- displaying item.caption() as caption, if not empty, without instanceName
-//- displaying the same as above in tabCaption (or not)
+/*! @todo js: apply settings for caption displaying method; there can be option for
+ - displaying item.caption() as caption, if not empty, without instanceName
+ - displaying the same as above in tabCaption (or not) */
 //	dlg->setCaption( capt );
 //	dlg->setTabCaption( item.name() );
 	dlg->setId(item.identifier()); //not needed, but we did it
@@ -238,7 +239,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 				&& dlg->tempData()->proposeOpeningInTextViewModeBecauseOfProblems)
 			{
 				//ask
-//TODO: use message handler for this to enable non-gui apps
+				KexiUtils::removeWaitCursor();
+//! @todo use message handler for this to enable non-gui apps
 				if (KMessageBox::No==KMessageBox::questionYesNo(0, 
 					((viewMode == Kexi::DesignViewMode) 
 					 ? i18n("Object \"%1\" could not be opened in Design View.")
@@ -263,7 +265,6 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 		}
 	}
 
-//	bool cancelled;
 	bool switchingFailed = false;
 	tristate res = dlg->switchToViewMode( viewMode );
 	if (!res) {
