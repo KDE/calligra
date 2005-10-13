@@ -151,16 +151,16 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 //		virtual void	closeEvent(QCloseEvent *);
 
 		/*! Creates standard actions like new, open, save ... */
-		void		initActions();
+		void initActions();
 
 		/*! Creates user project-wide actions */
-		void		initUserActions();
+		void initUserActions();
 
 		/*! Sets up the window from user settings (e.g. mdi mode). */
-		void		restoreSettings();
+		void restoreSettings();
 
 		/*! Writes user settings back. */
-		void		storeSettings();
+		void storeSettings();
 
 		/*! Invalidates availability of all actions for current application state. */
 		void invalidateActions();
@@ -181,6 +181,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Opens project pointed by \a projectData, \return true on success.
 		 Application state (e.g. actions) is updated. */
 		bool openProject(KexiProjectData *projectData);
+
+		/*! Helper. Opens project pointed by \a fileName.
+		 If \a fileName is empty, a dialog with projects available 
+		 for connection \a cdata is opened. */
+		void openProject(const QString& fileName, KexiDB::ConnectionData *cdata);
 
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated.

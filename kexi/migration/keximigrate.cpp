@@ -156,13 +156,19 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	}
 
 	//Right, were connected..create the tables
-	for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
+	for(QPtrListIterator<TableSchema> it (m_tableSchemas); it.current() != 0 ;) {
 		/*! @todo check this earlier: on creating table list! */
-		if (m_migrateData->dest->driver()->isSystemObjectName( ts.current()->name() ))
+		KexiDB::TableSchema *ts = it.current();
+		if (m_migrateData->dest->driver()->isSystemObjectName( ts->name() ))
 			continue;
-		if(!m_migrateData->dest->createTable( ts.current() )) {
-			kdDebug() << "Failed to create a table" << ts.current() << endl;
+		if(m_migrateData->dest->createTable( ts )) {
+			++it;
+		}
+		else {
+			kdDebug() << "Failed to create a table " << ts->name() << endl;
 			m_migrateData->dest->debugError();
+			m_tableSchemas.remove(ts);
+			delete ts;
 			failure = true;
 		}
 	}

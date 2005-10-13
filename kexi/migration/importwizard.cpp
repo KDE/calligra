@@ -50,10 +50,13 @@ using namespace KexiMigration;
 
 //===========================================================
 //
-ImportWizard::ImportWizard(QWidget *parent, const char *name)
-        : KWizard(parent, name)
+ImportWizard::ImportWizard(QWidget *parent, QVariant* result)
+ : KWizard(parent)
+ , m_result(result)
 {
     setCaption(i18n("Database Importing"));
+    if (m_result)
+        *m_result = QVariant();
     m_prjSet = 0;
     fileBasedDstWasPresented = false;
     setupFileBasedSrcNeeded = true;
@@ -462,33 +465,26 @@ void ImportWizard::progressUpdated(int percent) {
 void ImportWizard::accept()
 {
     KexiUtils::WaitCursor wait;
-    QGuardedPtr<KexiDB::Connection> kexi_conn;
-    KexiMigration::Data* md;
-    KexiMigrate* import;
-    KexiDB::ConnectionData *cdata;
-    bool kd;
     
-    md = new KexiMigration::Data();
-    
-    QString dbname;
-
     kdDebug() << "Creating managers..." << endl;
     // Start with a driver manager
     KexiDB::DriverManager manager;
-    MigrateManager mmanager;
 
     kdDebug() << "Creating destination driver..." << endl;
     // Get a driver to the destination database
     KexiDB::Driver *driver = manager.driver(dstTypeCombo->currentText());
-
 
     //Check for errors
     if (!driver || manager.error())
     {
         kdDebug() << "Manager error..." << endl;
         manager.debugError();
+        return;
     }
 
+    KexiDB::ConnectionData *cdata;
+    bool cdataOwned = false;
+    QString dbname;
     if (dstConn->selectedConnectionData())
     {
         //server-based project
@@ -500,7 +496,8 @@ void ImportWizard::accept()
     {
         //file-based project
         kdDebug() << "File Destination..." << endl;
-        cdata = new KexiDB::ConnectionData;
+        cdata = new KexiDB::ConnectionData();
+        cdataOwned = true;
         cdata->caption = dstNewDBName->text();
         cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
         dbname = dstConn->selectedFileName();
@@ -516,10 +513,17 @@ void ImportWizard::accept()
 
     kdDebug() << "Creating connection to destination..." << endl;
     //Create connections to the kexi database
-    kexi_conn = driver->createConnection(*cdata);
+    QGuardedPtr<KexiDB::Connection> kexi_conn = driver->createConnection(*cdata);
+    if(!kexi_conn || driver->error()) {
+        kdDebug() << "Creating destination connection error..." << endl;
+        KMessageBox::error(this, driver->errorMsg());
+        return;
+    }
 
     kdDebug() << "Creating source driver..." << endl;
-    import = mmanager.migrateDriver(srcTypeCombo->currentText());
+    MigrateManager migrateManager;
+
+    KexiMigrate* import = migrateManager.migrateDriver(srcTypeCombo->currentText());
     if(!import || manager.error()) {
         kdDebug() << "Import migrate driver error..." << endl;
         KMessageBox::error(this, manager.errorMsg());
@@ -534,48 +538,55 @@ void ImportWizard::accept()
     }
 
     kdDebug() << "Setting import data.." << endl;
+    bool keepData;
     if (importTypeButtonGroup->selectedId() == 0)
     {
         kdDebug() << "Structure and data selected" << endl;
-        kd = true;
+        keepData = true;
     }
     else if (importTypeButtonGroup->selectedId() == 1)
     {
         kdDebug() << "structure only selected" << endl;
-        kd = false;
+        keepData = false;
     }
     else
     {
         kdDebug() << "Neither radio button is selected (not possible?) presume keep data" << endl;
-        kd = true;
+        keepData = true;
     }
     
+    KexiMigration::Data* md = new KexiMigration::Data();
     if(fileBasedSrc) {
       KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
       conn_data->setFileName(srcConn->selectedFileName());
-      
       md->source = conn_data;
       md->sourceName = "";
       md->dest = kexi_conn;
       md->destName = dbname;
-      md->keepData = kd;
+      md->keepData = keepData;
       import->setData(md);
     }
     else 
     {
       md->source = srcConn->selectedConnectionData();
-      md->sourceName = srcdbname->selectedProjectData()->databaseName();
+			md->sourceName = srcdbname->selectedProjectData()->databaseName();
       md->dest = kexi_conn;
       md->destName = dbname;
-      md->keepData = kd;
+      md->keepData = keepData;
       import->setData(md);
+//! @todo Aah, this is so C-like. Move to performImport().
     }
     kdDebug() << "Performing import..." << endl;
     KexiUtils::removeWaitCursor();
-    if (import->performImport())
-    {
+    if (import->performImport()) {
         KWizard::accept(); //tmp, before adding "final page"
         KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));
+        if (m_result) {
+            if (fileBasedDst) {
+//! @todo also pass result when using server connection as target
+                *m_result = dbname;
+            }
+        }
     }
     else
     {

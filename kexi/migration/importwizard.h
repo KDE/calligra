@@ -50,7 +50,9 @@ class KEXIMIGR_EXPORT ImportWizard : public KWizard
 {
 Q_OBJECT
 public:
-    ImportWizard(QWidget *parent = 0, const char *name = 0);
+    /*! Creates wizard's instance. \a result will be set to imported project's filename, on success
+     and to null value on failure or cancellation. */
+    ImportWizard(QWidget *parent, QVariant* result = 0);
     virtual ~ImportWizard();
 
 public slots:
@@ -62,24 +64,8 @@ protected slots:
     void pageSelected(const QString &);
     virtual void accept();
     void helpClicked();
+
 private:
-    QWidget *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *importTypePage, *finishPage;
-
-    QVButtonGroup *importTypeButtonGroup ;
-    KexiDBTitlePage* dstTitlePage;
-
-    KComboBox *srcTypeCombo;
-    KexiDBDriverComboBox *dstTypeCombo;
-
-    KexiConnSelectorWidget *srcConn, *dstConn;
-    KLineEdit *dstNewDBName;
-    KexiProjectSelectorWidget *srcdbname;
-
-    QLabel *lblfinishTxt;
-    bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented, setupFileBasedSrcNeeded;
-    KexiProjectSet* m_prjSet;
-    KProgress *progress;
-
     void setupintro();
     void setupsrcType();
     void setupsrcconn();
@@ -99,6 +85,24 @@ private:
     void arriveDstTitlePage();
     void arriveDstPage();
     void arriveFinishPage();
+
+    QWidget *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *importTypePage, *finishPage;
+
+    QVButtonGroup *importTypeButtonGroup ;
+    KexiDBTitlePage* dstTitlePage;
+
+    KComboBox *srcTypeCombo;
+    KexiDBDriverComboBox *dstTypeCombo;
+
+    KexiConnSelectorWidget *srcConn, *dstConn;
+    KLineEdit *dstNewDBName;
+    KexiProjectSelectorWidget *srcdbname;
+
+    QLabel *lblfinishTxt;
+    bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented, setupFileBasedSrcNeeded;
+    KexiProjectSet* m_prjSet;
+    KProgress *progress;
+    QVariant *m_result;
 };
 
 }
