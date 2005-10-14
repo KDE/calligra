@@ -19,10 +19,12 @@
 */
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qtooltip.h>
 
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kpushbutton.h>
 
 #include "form.h"
 #include "objecttreeview.h"
@@ -54,26 +56,23 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
 	QVBoxLayout *vbox = new QVBoxLayout();
 	l->addLayout(vbox, 0, 1);
-	QToolButton *up = new QToolButton(frame);
-	up->setIconSet(BarIconSet("1uparrow"));
-	up->setTextLabel(i18n("Move Widget Up"), true);
-	m_buttons.insert(BUp, up);
-	vbox->addWidget(up);
-	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
+	m_btnUp = new KPushButton(SmallIconSet("1uparrow"), i18n("Move Up"), frame);
+	QToolTip::add( m_btnUp, i18n("Move Widget Up") );
+	vbox->addWidget(m_btnUp);
+	connect(m_btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-	QToolButton *down = new QToolButton(frame);
-	down->setIconSet(BarIconSet("1downarrow"));
-	down->setTextLabel(i18n("Move Widget Down"), true);
-	vbox->addWidget(down);
-	m_buttons.insert(BDown, down);
-	connect(down, SIGNAL(clicked()), this, SLOT(MoveItemDown()));
+	m_btnDown = new KPushButton(SmallIconSet("1downarrow"), i18n("Move Down"), frame);
+	QToolTip::add( m_btnDown, i18n("Move Widget Down") );
+	vbox->addWidget(m_btnDown);
+	connect(m_btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
 	vbox->addStretch();
 
 	m_check = new QCheckBox(i18n("Handle tab stops automatically"), frame, "tabstops_check");
 	connect(m_check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
 	l->addMultiCellWidget(m_check, 1, 1, 0, 1);
 
-	setInitialSize(QSize(400, 250), true);
+	updateGeometry();
+	setInitialSize(QSize(500+m_btnUp->width(), QMAX(400,m_treeview->height())));
 }
 
 TabStopDialog::~TabStopDialog()
@@ -124,17 +123,21 @@ int TabStopDialog::exec(Form *form)
 }
 
 void
-TabStopDialog::MoveItemUp()
+TabStopDialog::moveItemUp()
 {
+	if (!m_treeview->selectedItem())
+		return;
 	QListViewItem *before = m_treeview->selectedItem()->itemAbove();
 	before->moveItem(m_treeview->selectedItem());
 	updateButtons(m_treeview->selectedItem());
 }
 
 void
-TabStopDialog::MoveItemDown()
+TabStopDialog::moveItemDown()
 {
 	QListViewItem *item = m_treeview->selectedItem();
+	if (!item)
+		return;
 	item->moveItem( item->nextSibling());
 	updateButtons(item);
 }
@@ -142,24 +145,16 @@ TabStopDialog::MoveItemDown()
 void
 TabStopDialog::updateButtons(QListViewItem *item)
 {
-	if(!item)
-	{
-		m_buttons[BUp]->setEnabled(false);
-		m_buttons[BDown]->setEnabled(false);
-		return;
-	}
-
-	m_buttons[BUp]->setEnabled( (item->itemAbove() && m_treeview->isEnabled()
+	m_btnUp->setEnabled( item && (item->itemAbove() && m_treeview->isEnabled()
 	/*&& (item->itemAbove()->parent() == item->parent()))*/ ));
-	m_buttons[BDown]->setEnabled( item->nextSibling() && m_treeview->isEnabled() );
+	m_btnDown->setEnabled( item && item->nextSibling() && m_treeview->isEnabled() );
 }
 
 void
 TabStopDialog::slotRadioClicked(bool isOn)
 {
 	m_treeview->setEnabled(!isOn);
-	m_buttons[BUp]->setEnabled(!isOn);
-	m_buttons[BDown]->setEnabled(!isOn);
+	updateButtons( m_treeview->selectedItem() );
 }
 
 bool

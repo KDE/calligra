@@ -20,13 +20,12 @@
 #ifndef TABSTOPEDIT_DIALOG_H
 #define TABSTOPEDIT_DIALOG_H
 
-#include <qintdict.h>
-#include <qtoolbutton.h>
 #include <kdialogbase.h>
 
 class QListViewItem;
 class QCheckBox;
 class QToolButton;
+class KPushButton;
 
 namespace KFormDesigner {
 
@@ -46,17 +45,16 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 
 	public slots:
 		int exec(KFormDesigner::Form *form);
-		void MoveItemUp();
-		void MoveItemDown();
+		void moveItemUp();
+		void moveItemDown();
 		void updateButtons(QListViewItem*);
 		void slotRadioClicked(bool isOn);
 
 		bool autoTabStops() const;
 
 	protected:
-		enum {BUp = 10, BDown};
 		ObjectTreeView   *m_treeview;
-		QIntDict<QToolButton>  m_buttons;
+		KPushButton *m_btnUp, *m_btnDown;
 		QCheckBox *m_check;
 };
 

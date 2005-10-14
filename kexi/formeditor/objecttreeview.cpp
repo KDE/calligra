@@ -162,7 +162,8 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 {
 	m_form = 0;
 	addColumn(i18n("Name"), 130);
-	addColumn(i18n("Class"), 100);
+//	addColumn(i18n("Class"), 100);
+	addColumn(i18n("Widget's type", "Type"), 100);
 
 	installEventFilter(this);
 
