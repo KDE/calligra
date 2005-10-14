@@ -453,16 +453,16 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     KoUnit::Unit unit = doc->getUnit();
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
     resolutionX->setValue( KoUnit::toUserValue( doc->getGridX(), unit ) );
-    resolutionX->setRange( KoUnit::toUserValue(10.0 , unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue(1, unit ), false);
+    resolutionX->setRange( KoUnit::toUserValue(5.0 , unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue(1, unit ), false);
 
     grid->addWidget(resolutionX,1,0);
-
+    
     lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->getUnitName()), tmpQGroupBox);
     grid->addWidget(lab,2,0);
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
     resolutionY->setValue( KoUnit::toUserValue( doc->getGridY(), unit ) );
-    resolutionY->setRange( KoUnit::toUserValue(10.0,unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue( 1,unit ), false);
+    resolutionY->setRange( KoUnit::toUserValue(5.0,unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue( 1,unit ), false);
 
     grid->addWidget(resolutionY, 3, 0);
     box->addWidget(tmpQGroupBox);

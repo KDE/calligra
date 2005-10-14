@@ -306,13 +306,13 @@ void KPrPage::loadOasis(KoOasisContext & context )
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-objects-visible" ) )
     {
         const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-objects-visible" );
-        m_displayObjectFromMasterPage = str == "true" ? true : false;
+        m_displayObjectFromMasterPage = ( str == "true" ) ? true : false;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-visible" ) )
     {
         const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-visible" );
-        m_useMasterBackground = str == "true" ? true : false;
+        m_useMasterBackground = ( str == "true" ) ? true : false;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "visibility" ) )
@@ -364,6 +364,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
         QString tmp = styleStack.attributeNS( KoXmlNS::presentation, "display-footer" );
         setFooter(tmp =="true" ? true : false);
     }
+    //TODO presentation:display-date-time; presentation:display-page-number
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "transition-style"))
     {
         //kdDebug()<<" have a presentation:transition-style------------\n";
@@ -528,8 +529,8 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
 {
     KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
-    stylepageauto.addProperty( "presentation:background-visible", m_useMasterBackground == true ? "true" : "false" );
-    stylepageauto.addProperty( "presentation:background-objects-visible", m_displayObjectFromMasterPage == true ? "true" : "false" );
+    stylepageauto.addProperty( "presentation:background-visible", ( m_useMasterBackground == true ) ? "true" : "false" );
+    stylepageauto.addProperty( "presentation:background-objects-visible", ( m_displayObjectFromMasterPage == true ) ? "true" : "false" );
     QString transition = saveOasisPageEffect();
     if ( !transition.isEmpty() )
     {
