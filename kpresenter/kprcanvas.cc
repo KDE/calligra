@@ -876,7 +876,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 // we don't support rotating multiple objects yet
                 deSelectAllObj();
 
-                if ( kpobject )
+                if ( kpobject && !kpobject->isProtect())
                 {
                     m_rotateObject = kpobject;
                     m_angleBeforeRotate = kpobject->getAngle();

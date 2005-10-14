@@ -2082,7 +2082,7 @@ KCommand *KPrPage::rotateSelectedObjects( float _newAngle, bool addAngle )
     {
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer() )
             continue;
-        if( it.current()->isSelected() )
+        if( it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
         }
