@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="114">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="115">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -39,6 +39,7 @@
   <Action name="view_shownotebar"/>
   <Separator/>
   <Action name="view_master"/>
+  <Separator/>
   <Action name="view_header"/>
   <Action name="view_footer"/>
   <Separator/>
