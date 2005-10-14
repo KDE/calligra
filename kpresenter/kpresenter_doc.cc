@@ -3639,6 +3639,7 @@ void KPresenterDoc::setHeader( bool b )
         terminateEditing(_header);
         deSelectObj(_header);
     }
+	m_masterPage->setHeader( b, false );
     updateHeaderFooterButton();
     repaint(b);
 }
@@ -3652,6 +3653,7 @@ void KPresenterDoc::setFooter( bool b )
         terminateEditing(_footer);
         deSelectObj(_footer);
     }
+	m_masterPage->setFooter( b, false );
     updateHeaderFooterButton();
     repaint(b);
 }

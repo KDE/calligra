@@ -2457,16 +2457,18 @@ KCommand * KPrPage::setImageEffect(ImageEffect eff, QVariant param1, QVariant pa
     return imageEffectCmd;
 }
 
-void KPrPage::setHeader( bool b )
+void KPrPage::setHeader( bool b, bool _updateDoc )
 {
     m_bHasHeader = b;
-    m_doc->setHeader(b);
+	if ( _updateDoc )
+    	m_doc->setHeader(b);
 }
 
-void KPrPage::setFooter( bool b )
+void KPrPage::setFooter( bool b, bool _updateDoc )
 {
     m_bHasFooter = b;
-    m_doc->setFooter( b );
+	if ( _updateDoc )
+    	m_doc->setFooter( b );
 }
 
 void KPrPage::setUseMasterBackground( bool useMasterBackground )
