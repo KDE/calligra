@@ -235,7 +235,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
 
     indent->setSuffix( suffix );
-    indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
+    indent->setLabel(i18n("Text indentation depth:"));
 
     box->addWidget(indent);
 
