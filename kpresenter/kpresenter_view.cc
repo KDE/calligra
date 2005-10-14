@@ -2175,7 +2175,7 @@ void KPresenterView::initGui()
 
 void KPresenterView::updateDisplayObjectMasterPageButton()
 {
-    actionDisplayObjectFromMasterPage->setChecked( m_canvas->activePage()->displayObjectFromMasterPage());
+    actionDisplayObjectFromMasterPage->setChecked( !m_canvas->activePage()->displayObjectFromMasterPage());
 }
 
 void KPresenterView::updateHeaderFooterButton()
@@ -3049,18 +3049,18 @@ void KPresenterView::setupActions()
                                          this, SLOT( customSlideShow() ),
                                          actionCollection(), "custom_slide_show" );
 
-    actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Display Object From Master Page" ), 0,
+    actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Hide Object From Master Page" ), 0,
                                          this, SLOT( displayObjectFromMasterPage() ),
                                          actionCollection(), "display_object_from_master_page" );
-    actionDisplayObjectFromMasterPage->setCheckedState(i18n("Hide Object From Master Page"));
+    actionDisplayObjectFromMasterPage->setCheckedState(i18n("Display Object From Master Page"));
 
 }
 
 void KPresenterView::displayObjectFromMasterPage()
 {
     bool state=actionDisplayObjectFromMasterPage->isChecked();
-    m_canvas->activePage()->setDisplayObjectFromMasterPage( state );
-    KPrDisplayObjectFromMasterPage * cmd =new KPrDisplayObjectFromMasterPage( state ? i18n("Display Object From Master Page") : i18n("Hide Object From Master Page"), m_pKPresenterDoc, m_canvas->activePage(), state);
+    m_canvas->activePage()->setDisplayObjectFromMasterPage( !state );
+    KPrDisplayObjectFromMasterPage * cmd =new KPrDisplayObjectFromMasterPage( state ? i18n("Hide Object From Master Page") : i18n("Display Object From Master Page"), m_pKPresenterDoc, m_canvas->activePage(), !state);
     m_pKPresenterDoc->addCommand(cmd);
     m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
 }
