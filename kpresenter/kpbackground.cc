@@ -131,7 +131,7 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     if ( m_page->useMasterBackground() )
     {
         element=doc.createElement("BACKMASTER");
-	element.setAttribute("displayMasterPageObject", static_cast<int>( m_page->displayObjectFromMasterPage() ));
+        element.setAttribute("displayMasterPageObject", static_cast<int>( m_page->displayObjectFromMasterPage() ));
         page.appendChild(element);
     }
     else

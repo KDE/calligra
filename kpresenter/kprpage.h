@@ -533,8 +533,8 @@ public:
 
     bool hasHeader() const { return m_bHasHeader; }
     bool hasFooter() const { return m_bHasFooter; }
-    void setHeader( bool b );
-    void setFooter( bool b );
+    void setHeader( bool b, bool _updateDoc = true );
+    void setFooter( bool b, bool _updateDoc = true );
 
     void setDisplayObjectFromMasterPage( bool _b );
     bool displayObjectFromMasterPage() const { return m_displayObjectFromMasterPage;}
