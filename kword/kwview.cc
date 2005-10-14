@@ -4844,7 +4844,8 @@ void KWView::slotCounterStyleSelected()
             c.setStyle( style );
             if ( c.isBullet() )
                 c.setSuffix( QString::null );
-            // else the suffix remains the default, '.'
+            else
+                c.setSuffix( "." );
             // TODO save this setting, to use the last one selected in the dialog?
             // (same for custom bullet char etc.)
 
