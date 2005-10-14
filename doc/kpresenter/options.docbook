@@ -95,7 +95,7 @@
 <variablelist>
 <varlistentry>
 <term><guilabel>Show rulers</guilabel></term>
-<listitem><para>This is checked by default and both a vertical and horizontal ruler are shown on &kpresenter; slide.</para></listitem>
+<listitem><para>This is checked by default and both a vertical and horizontal ruler are shown on &kpresenter; slide. When unchecked, the rulers are not shown anymore on any slide.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -105,12 +105,12 @@
 
 <varlistentry>
 <term><guilabel>Number of recent files:</guilabel></term>
-<listitem><para>Set the number of recent files which will be opened using the <guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem> menu.</para></listitem>
+<listitem><para>Set the number of recent files which will be opened using the <guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem> menu. Default is to remember 10 filenames. The maximum you can set is 20 and the mminimum is 1.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Paragraph indent by toolbar buttons:</guilabel></term>
-<listitem><para>-</para></listitem>
+<term><guilabel>Text indentation depth:</guilabel></term>
+<listitem><para>This setting is used in the <guimenu>Text</guimenu> menu by <guimenuitem>Increase Depth</guimenuitem> and <guimenuitem>Decrease Depth</guimenuitem> menu items to change the indentation depth. Default is 1 centimeter.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -137,7 +137,7 @@ background color and you wanted to put some white text over it, you
 could color the text box so that you could see what you were
 typing. When you have finished, the area around the text would revert
 to whatever the background color was. The
-<guibutton>Default</guibutton> button restores the original
+<guibutton>Defaults</guibutton> button restores the original
 settings.</para></listitem>
 </varlistentry>
 
