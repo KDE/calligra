@@ -205,13 +205,15 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	QString default_storage = "file";
 	setBackEnabled(m_db_title, false);
 #endif
-	if (default_storage.lower()=="file") {
-		m_prjtype_sel->chk_always->setChecked(true);
-		showPage(m_db_title);
-	} else if (default_storage.lower()=="server") {
+	if (default_storage.lower()=="server") {
 		m_prjtype_sel->lv_types->setSelected(d->lvi_server, true);
 		m_prjtype_sel->chk_always->setChecked(true);
+		m_conn_sel->showAdvancedConn();
 		showPage(m_conn_sel);
+	}
+	else { //"file"
+		m_prjtype_sel->chk_always->setChecked(true);
+		showPage(m_db_title);
 	}
 }
 

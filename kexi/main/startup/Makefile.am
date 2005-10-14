@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 noinst_LTLIBRARIES = libkeximainstartup.la
 
 libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
-	KexiNewFileDBWidget.ui KexiOpenExistingFile.ui \
+	KexiOpenExistingFile.ui \
 	KexiNewPrjTypeSelector.ui KexiDBTitlePageBase.ui \
 	KexiServerDBNamePage.ui \
 	KexiDBTitlePage.cpp \

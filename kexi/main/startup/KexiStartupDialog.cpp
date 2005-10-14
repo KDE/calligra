@@ -355,7 +355,9 @@ void KexiStartupDialog::setupPageTemplates()
 
 	QVBoxLayout *tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 
-	QLabel *lbl_blank = new QLabel( i18n("Kexi will create a new blank database. Click \"OK\" button to proceed."), templPageFrame );
+	QLabel *lbl_blank = new QLabel( 
+		i18n("Kexi will create a new blank database. Click \"OK\" button to proceed."), templPageFrame );
+	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
