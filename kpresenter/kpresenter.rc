@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="113">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="114">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -293,6 +293,7 @@
   <Action name="edit_delpage"/>
   <Separator/>
   <Action name="display_object_from_master_page"/>
+  <Action name="display_background"/>
   <Separator/> 
   <Action name="view_header"/>
   <Action name="view_footer"/>

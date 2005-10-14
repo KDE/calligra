@@ -724,3 +724,13 @@ bool KPresenterPageIface::displayObjectFromMasterPage() const
 {
     return m_page->displayObjectFromMasterPage();
 }
+
+void KPresenterPageIface::setDisplayBackground( bool _b )
+{
+    m_page->setDisplayBackground( _b );
+}
+
+bool KPresenterPageIface::displayBackground() const
+{
+    return m_page->displayBackground();
+}

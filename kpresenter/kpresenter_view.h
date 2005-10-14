@@ -151,6 +151,8 @@ public:
     void updateHeaderFooterButton();
     void updateDisplayObjectMasterPageButton();
 
+    void updateDisplayBackgroundButton();
+
     void updateHelpLineButton();
 
     void updateGridButton();
@@ -461,6 +463,7 @@ public slots:
     void customSlideShow();
 
     void displayObjectFromMasterPage();
+    void displayBackground();
 
 public:
     // create GUI
@@ -497,7 +500,7 @@ public:
     /**
      * @brief Show the rect where object lies
      *
-     * It will move the screen to the top right corner of object 
+     * It will move the screen to the top right corner of object
      * when it is not allready totaly visible on the screen.
      *
      * @param object which should be shown
@@ -1091,8 +1094,10 @@ private:
     KSelectAction *actionFormatStyle;
 
     KToggleAction *actionAllowAutoFormat;
-    
+
     KToggleAction *actionDisplayObjectFromMasterPage;
+
+    KToggleAction *actionDisplayBackgroundPage;
 
     KAction *actionFormatStylist;
 

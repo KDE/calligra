@@ -3681,6 +3681,13 @@ void KPresenterDoc::setDisplayObjectMasterPage( bool b )
     repaint(b);
 }
 
+void KPresenterDoc::setDisplayBackground( bool b )
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        ((KPresenterView*)it.current())->updateDisplayBackgroundButton();
+    repaint(b);
+}
 
 void KPresenterDoc::setHeader( bool b )
 {

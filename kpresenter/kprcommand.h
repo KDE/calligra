@@ -934,6 +934,19 @@ protected:
     bool newValue;
 };
 
+class KPrDisplayBackgroundPage : public KNamedCommand
+{
+public:
+    KPrDisplayBackgroundPage( const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue);
+    ~KPrDisplayBackgroundPage(){};
+    void execute();
+    void unexecute();
+protected:
+    KPresenterDoc *m_doc;
+    KPrPage *m_page;
+    bool newValue;
+};
+
 class KPrHideShowHeaderFooter : public KNamedCommand
 {
 public:

@@ -86,28 +86,31 @@ void KPBackGround::drawBackground( QPainter *_painter, const KoTextZoomHandler* 
 
 void KPBackGround::drawBackground( QPainter *_painter, const QSize& ext, const QRect& crect, bool _drawBorders )
 {
-    _painter->save();
-    switch ( backType )
+    if ( m_page->displayBackground() )
     {
-    case BT_COLOR:
-        drawBackColor( _painter, ext, crect );
-        break;
-    case BT_CLIPART:
-    case BT_PICTURE:
-    {
-        if ( backView == BV_CENTER )
+        _painter->save();
+        switch ( backType )
+        {
+        case BT_COLOR:
             drawBackColor( _painter, ext, crect );
-        drawBackPix( _painter, ext, crect );
-        break;
-    }
-    default:
-        break;
-    }
+            break;
+        case BT_CLIPART:
+        case BT_PICTURE:
+        {
+            if ( backView == BV_CENTER )
+                drawBackColor( _painter, ext, crect );
+            drawBackPix( _painter, ext, crect );
+            break;
+        }
+        default:
+            break;
+        }
 
-    if ( _drawBorders )
-        drawBorders( _painter, ext, crect );
+        if ( _drawBorders )
+            drawBorders( _painter, ext, crect );
 
-    _painter->restore();
+        _painter->restore();
+    }
 }
 
 void KPBackGround::reload()

@@ -84,6 +84,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
     , m_bHasFooter( false )
     , m_useMasterBackground( false )
     , m_displayObjectFromMasterPage( true )
+    , m_displayBackground( true )
     , m_pageEffect( PEF_NONE )
     , m_pageEffectSpeed( ES_MEDIUM )
     , m_soundEffect( false )
@@ -294,6 +295,8 @@ void KPrPage::load( const QDomElement &element )
     }
 }
 
+//TODO: implement display/hide background into old file format
+
 void KPrPage::loadOasis(KoOasisContext & context )
 {
     m_kpbackground->loadOasis( context );
@@ -312,7 +315,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-visible" ) )
     {
         const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-visible" );
-        m_useMasterBackground = ( str == "true" ) ? true : false;
+        m_displayBackground = ( str == "true" ) ? true : false;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "visibility" ) )
@@ -529,7 +532,13 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
 {
     KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
-    stylepageauto.addProperty( "presentation:background-visible", ( m_useMasterBackground == true ) ? "true" : "false" );
+
+
+    //presentation:background-visible is for visible background and not "use or not" master page
+    // for master page it's a style and a heritage
+    //TODO implement : m_useMasterBackground == true
+
+    stylepageauto.addProperty( "presentation:background-visible", ( m_displayBackground == true ) ? "true" : "false" );
     stylepageauto.addProperty( "presentation:background-objects-visible", ( m_displayObjectFromMasterPage == true ) ? "true" : "false" );
     QString transition = saveOasisPageEffect();
     if ( !transition.isEmpty() )
@@ -2477,3 +2486,11 @@ void KPrPage::setDisplayObjectFromMasterPage( bool _b )
     m_displayObjectFromMasterPage = _b;
     m_doc->setDisplayObjectMasterPage( _b );
 }
+
+void KPrPage::setDisplayBackground( bool _b )
+{
+    m_displayBackground = _b;
+    m_doc->setDisplayBackground( _b );
+}
+
+

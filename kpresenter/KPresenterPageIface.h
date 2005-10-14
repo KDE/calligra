@@ -131,6 +131,8 @@ k_dcop:
     void setDisplayObjectFromMasterPage( bool _b );
     bool displayObjectFromMasterPage() const;
 
+    void setDisplayBackground( bool _b );
+    bool displayBackground() const;
 
 private:
     KPrPage *m_page;

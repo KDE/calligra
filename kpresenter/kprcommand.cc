@@ -2234,6 +2234,27 @@ void KPrDisplayObjectFromMasterPage::unexecute()
 }
 
 
+KPrDisplayBackgroundPage::KPrDisplayBackgroundPage(const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue)
+    :KNamedCommand(name),
+     m_doc( _doc ),
+     m_page(_page),
+     newValue(_newValue)
+{
+}
+
+void KPrDisplayBackgroundPage::execute()
+{
+    m_page->setDisplayBackground( newValue );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
+}
+
+void KPrDisplayBackgroundPage::unexecute()
+{
+    m_page->setDisplayBackground( !newValue );
+    m_doc->updateSideBarItem( m_doc->masterPage() );
+}
+
+
 KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, KPrPage *_page,
                                                   bool _newValue, KPTextObject *_textObject):
     KNamedCommand(name),

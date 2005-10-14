@@ -539,6 +539,9 @@ public:
     void setDisplayObjectFromMasterPage( bool _b );
     bool displayObjectFromMasterPage() const { return m_displayObjectFromMasterPage;}
 
+    void setDisplayBackground( bool _b );
+    bool displayBackground() const { return m_displayBackground; }
+
     QString oasisNamePage( int posPage ) const;
 
 private:
@@ -564,6 +567,8 @@ private:
 
 
     bool m_displayObjectFromMasterPage;
+
+    bool m_displayBackground;
 
     /**
      * The page effect

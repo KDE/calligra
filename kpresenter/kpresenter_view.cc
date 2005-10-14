@@ -2178,6 +2178,11 @@ void KPresenterView::updateDisplayObjectMasterPageButton()
     actionDisplayObjectFromMasterPage->setChecked( !m_canvas->activePage()->displayObjectFromMasterPage());
 }
 
+void KPresenterView::updateDisplayBackgroundButton()
+{
+    actionDisplayBackgroundPage->setChecked( !m_canvas->activePage()->displayBackground() );
+}
+
 void KPresenterView::updateHeaderFooterButton()
 {
     actionViewHeader->setChecked( m_canvas->activePage()->hasHeader());
@@ -3054,6 +3059,11 @@ void KPresenterView::setupActions()
                                          actionCollection(), "display_object_from_master_page" );
     actionDisplayObjectFromMasterPage->setCheckedState(i18n("Display Object From Master Page"));
 
+
+    actionDisplayBackgroundPage = new KToggleAction( i18n( "Hide Background" ), 0,
+                                         this, SLOT( displayBackground() ),
+                                         actionCollection(), "display_background" );
+    actionDisplayBackgroundPage->setCheckedState(i18n("Display Backgound"));
 }
 
 void KPresenterView::displayObjectFromMasterPage()
@@ -3065,6 +3075,14 @@ void KPresenterView::displayObjectFromMasterPage()
     m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
 }
 
+void KPresenterView::displayBackground()
+{
+    bool state=actionDisplayBackgroundPage->isChecked();
+    m_canvas->activePage()->setDisplayBackground( !state );
+    KPrDisplayBackgroundPage * cmd =new KPrDisplayBackgroundPage( state ? i18n("Hide Background") : i18n("Display Background"), m_pKPresenterDoc, m_canvas->activePage(), !state);
+    m_pKPresenterDoc->addCommand(cmd);
+    m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
+}
 
 void KPresenterView::customSlideShow()
 {

@@ -279,6 +279,7 @@ class KPresenterDoc : public KoDocument
     void setFooter( bool b );
 
     void setDisplayObjectMasterPage( bool b );
+    void setDisplayBackground( bool b );
 
     bool isHeader(const KPObject *obj)const;
     bool isFooter(const KPObject *obj)const;
