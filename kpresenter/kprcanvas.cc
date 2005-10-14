@@ -293,7 +293,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
         bufPainter.setClipRect( crect );
-        
+
         //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << ", " << size() << endl;
 
         crect.moveBy( diffx(), diffy() ); // now in contents coordinates
@@ -550,7 +550,8 @@ void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep st
     //objects in current page
     drawObjectsPres( painter, page->objectList(), step );
     //draw master page object
-    drawObjectsPres( painter, page->masterPage()->objectList(), step );
+    if (  page->masterPage() && page->displayObjectFromMasterPage() )
+        drawObjectsPres( painter, page->masterPage()->objectList(), step );
 }
 
 
@@ -653,7 +654,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     if ( m_gl.mousePressEvent( e ) )
         return;
-    
+
     m_moveStartPosMouse = objectRect( false ).topLeft();
     if(m_currentTextObjectView)
     {
@@ -819,7 +820,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 else
                 {
                     KPrPage *masterPage = m_activePage->masterPage();
-                    if ( masterPage )
+                    if ( masterPage && m_activePage->displayObjectFromMasterPage() )
                     {
                         kpobject = masterPage->getObjectAt( docPoint, true );
 
@@ -1527,7 +1528,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
     if ( m_gl.mouseMoveEvent( e ) )
         return;
-    
+
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     int oldMx = m_savedMousePos.x();
     int oldMy = m_savedMousePos.y();
@@ -3484,7 +3485,8 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     drawAllObjectsInPage( &p, _list, pgnum );
 
     //draw sticky object
-    drawAllObjectsInPage( &p, page->masterPage()->objectList(), pgnum );
+    if ( page->masterPage() && page->displayObjectFromMasterPage() )
+        drawAllObjectsInPage( &p, page->masterPage()->objectList(), pgnum );
 
     editMode = _editMode;
     p.end();
@@ -3603,14 +3605,16 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
 
     QPtrList<KPObject> allObjects( page->objectList() );
 
-    QPtrListIterator<KPObject> it( page->masterPage()->objectList() );
-    for ( ; it.current(); ++it ) {
-        if ( objectIsAHeaderFooterHidden( it.current() ) )
-            continue;
-        else
-            allObjects.append( it.current() );
+    if ( page->displayObjectFromMasterPage() )
+    {
+        QPtrListIterator<KPObject> it( page->masterPage()->objectList() );
+        for ( ; it.current(); ++it ) {
+            if ( objectIsAHeaderFooterHidden( it.current() ) )
+                continue;
+            else
+                allObjects.append( it.current() );
+        }
     }
-
     //TODO add global presentation speed
     m_effectHandler = new EffectHandler( m_step, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     if ( m_effectHandler->doEffect() )
