@@ -1552,6 +1552,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
 	if ( editMode ) {
 	  m_view->setRulerMousePos( e->x(), e->y() );
+        if ( toolEditMode == TEM_ROTATE )
+        {
+            setCursor( KPresenterUtils::rotateCursor() );
+            if ( !mousePressed )
+                return;
+        }
 
         KPObject *kpobject;
         if ( ( !mousePressed || ( m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
