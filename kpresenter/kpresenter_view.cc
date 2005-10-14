@@ -4096,7 +4096,15 @@ void KPresenterView::viewShowNoteBar()
 
 void KPresenterView::viewSlideMaster()
 {
-    setEditMaster( actionViewSlideMaster->isChecked() );
+    bool state =  actionViewSlideMaster->isChecked();
+    setEditMaster( state );
+    //not activate action when slide master is displaying
+    state = !state;
+    actionViewHeader->setEnabled( state );
+    actionViewFooter->setEnabled( state );
+    actionDisplayBackgroundPage->setEnabled( state );
+    actionDisplayObjectFromMasterPage->setEnabled( state );
+
 }
 
 void KPresenterView::setEditMaster( bool editMaster )
