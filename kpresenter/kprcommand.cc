@@ -2296,11 +2296,12 @@ void KPrFlipObjectCommand::flipObjects()
 
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPObject> &objects,
-                                                            bool newValue, KgpType type )
+                                                            bool newValue, KgpType type,KPresenterDoc *_doc )
 : KNamedCommand( name )
 , m_objects( objects )
 , m_newValue( newValue )
 , m_type( type )
+, m_doc( _doc )
 {
     QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
@@ -2315,12 +2316,13 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name,
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
                                                             QPtrList<KPObject> &objects, bool newValue,
-                                                            KgpType type)
+                                                            KgpType type, KPresenterDoc *_doc)
 : KNamedCommand( name )
 , m_oldValue( lst )
 , m_objects( objects )
 , m_newValue( newValue )
 , m_type( type )
+, m_doc ( _doc )
 {
     QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
@@ -2340,7 +2342,11 @@ void KPrGeometryPropertiesCommand::execute()
     for ( ; it.current() ; ++it )
     {
         if ( m_type == ProtectSize )
+		{
             it.current()->setProtect( m_newValue );
+			if ( it.current()->isSelected() )
+					m_doc->repaint( it.current() );
+		}
         else if ( m_type == KeepRatio)
             it.current()->setKeepRatio( m_newValue );
     }
@@ -2352,7 +2358,11 @@ void KPrGeometryPropertiesCommand::unexecute()
     for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
         obj = m_objects.at( i );
         if ( m_type == ProtectSize )
+		{
             obj->setProtect( *m_oldValue.at(i) );
+			if ( obj->isSelected() )
+					m_doc->repaint( obj );
+		}
         else if ( m_type == KeepRatio)
             obj->setKeepRatio( *m_oldValue.at(i) );
     }

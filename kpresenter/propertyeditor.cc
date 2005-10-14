@@ -241,7 +241,7 @@ KCommand * PropertyEditor::getCommand()
             {
                 KCommand *cmd= new KPrGeometryPropertiesCommand( i18n( "Protect Object" ), m_objects,
                                                                  generalValue.m_protect == STATE_ON,
-                                                                 KPrGeometryPropertiesCommand::ProtectSize );
+                                                                 KPrGeometryPropertiesCommand::ProtectSize ,m_doc);
 
                 if ( !macro )
                 {
@@ -255,7 +255,7 @@ KCommand * PropertyEditor::getCommand()
             {
                 KCommand *cmd= new KPrGeometryPropertiesCommand( i18n( "Keep Ratio" ), m_objects,
                                                                  generalValue.m_keepRatio == STATE_ON,
-                                                                 KPrGeometryPropertiesCommand::KeepRatio );
+                                                                 KPrGeometryPropertiesCommand::KeepRatio,m_doc );
                 if ( !macro )
                 {
                     macro = new KMacroCommand( i18n( "Apply Properties" ) );

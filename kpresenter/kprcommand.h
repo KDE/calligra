@@ -955,9 +955,9 @@ class KPrGeometryPropertiesCommand : public KNamedCommand
 public:
     enum KgpType { ProtectSize, KeepRatio};
     KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPObject> &objects,
-                                  bool newValue, KgpType type );
+                                  bool newValue, KgpType type, KPresenterDoc *_doc );
     KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst, QPtrList<KPObject> &objects,
-                                  bool newValue, KgpType type );
+                                  bool newValue, KgpType type, KPresenterDoc *_doc );
     ~KPrGeometryPropertiesCommand();
 
     virtual void execute();
@@ -968,6 +968,7 @@ protected:
     QPtrList<KPObject> m_objects;
     bool m_newValue;
     KgpType m_type;
+	KPresenterDoc *m_doc;
 };
 
 class KPrProtectContentCommand : public KNamedCommand
