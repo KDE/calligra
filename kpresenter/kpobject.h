@@ -76,6 +76,8 @@ public:
         { orig = _point; }
     virtual void setOrig( double _x, double _y )
         { orig = KoPoint( _x, _y ); }
+    void setOrigBeforeMoving(KoPoint & _point)
+        { origBeforeMoving =_point; }
     virtual void moveBy( const KoPoint &_point )
         { orig = orig + _point; }
     virtual void moveBy( double _dx, double _dy )
@@ -180,6 +182,8 @@ public:
         { return ext; }
     virtual KoPoint getOrig() const
         { return orig; }
+    KoPoint getOrigBeforeMoving() const
+        { return origBeforeMoving; }
     KoRect getRect() const
         { return KoRect( getOrig(), getSize() ); }
 
@@ -348,6 +352,7 @@ protected:
 
     float angle;
     KoPoint orig;
+    KoPoint origBeforeMoving;
     KoSize ext;
     int shadowDistance;
     ShadowDirection shadowDirection;

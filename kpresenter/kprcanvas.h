@@ -738,6 +738,9 @@ private:
     /// ratio of the object ( width / height )
     double m_ratio;
 
+    //---- stuff needed for moving ----
+    bool m_isMoving;
+
     //---- stuff needed for rotating ----
     /// object which gets rotated
     KPObject *m_rotateObject;

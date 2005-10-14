@@ -134,6 +134,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         setAcceptDrops( true );
         m_ratio = 0.0;
         m_keepRatio = false;
+        m_isMoving = false;
         mouseSelectedObject = false;
         selectedObjectPosition = -1;
         m_setPageTimer = true;
@@ -1343,6 +1344,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             {
                 m_activePage->repaintObj();
             }
+            m_isMoving = false;
         }
             break;
         case MT_RESIZE_UP:
@@ -1652,6 +1654,19 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.end();
                     }
                 } else if ( modType == MT_MOVE ) {
+                  if ( !m_isMoving )
+                  {
+                    QPtrListIterator<KPObject> it( m_activePage->objectList() );
+                    for ( ; it.current() ; ++it )
+                    {
+                      if( it.current()->isSelected() && !it.current()->isProtect() )
+                      {
+                        KoPoint p = it.current()->getOrig();
+                        it.current()->setOrigBeforeMoving( p );
+                      }
+                    }
+                    m_isMoving = true;
+                  }
                     bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     QPoint gridPoint( contentsPoint );
                     if ( doApplyGrid )
@@ -2308,8 +2323,62 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                     m_view->editDelete();
                     break;
                 case Qt::Key_Escape:
-                    setToolEditMode( TEM_MOUSE );
-                    break;
+                {
+                  if ( mousePressed && toolEditMode == TEM_MOUSE )
+                  {
+                    switch (modType)
+                    {
+                      case MT_RESIZE_UP:
+                      case MT_RESIZE_DN:
+                      case MT_RESIZE_LF:
+                      case MT_RESIZE_RT:
+                      case MT_RESIZE_LU:
+                      case MT_RESIZE_LD:
+                      case MT_RESIZE_RU:
+                      case MT_RESIZE_RD:
+                      {
+                        QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( m_resizeObject->getRepaintRect() );
+                        m_resizeObject->setOrig( m_rectBeforeResize.topLeft() );
+                        m_resizeObject->setSize( m_rectBeforeResize.size() );
+                        drawContour = false;
+                        m_view->kPresenterDoc()->repaint( oldBoundingRect );
+                        m_view->kPresenterDoc()->repaint( m_resizeObject );
+                        m_ratio = 0.0;
+                        m_keepRatio = false;
+                        m_resizeObject = 0;
+                        mousePressed = false;
+                        modType = MT_NONE;
+                        return;
+                      }
+                      case MT_MOVE:
+                      {
+                        drawContour = false;
+                        QPtrListIterator<KPObject> it( m_activePage->objectList() );
+                        for ( ; it.current() ; ++it )
+                        {
+                          //don't move a header/footer
+                          if ( it.current()== m_view->kPresenterDoc()->header() || it.current()== m_view->kPresenterDoc()->footer())
+                            continue;
+                          if ( it.current()->isSelected() && !it.current()->isProtect()) {
+
+                            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( it.current()->getRepaintRect() );
+                            it.current()->setOrig( it.current()->getOrigBeforeMoving() );
+                            m_view->kPresenterDoc()->repaint( oldBoundingRect );
+                            m_view->kPresenterDoc()->repaint( it.current() );
+                          }
+                        }
+                        mousePressed = false;
+                        modType = MT_NONE;
+                        m_isMoving = false;
+                        return;
+                      }
+                      default:
+                        break;
+                    }
+                  }
+                  setToolEditMode( TEM_MOUSE );
+                  break;
+                }
                 default: break;
             }
         }
