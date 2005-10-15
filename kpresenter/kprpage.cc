@@ -1874,7 +1874,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
             continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
-        bool _sticky = this->m_masterPage == 0;
+        bool _sticky = ( this->m_masterPage == 0 );
         if (_sticky)
             object.setAttribute("sticky", static_cast<int>(_sticky));
         if ( saveOnlyPage != -1 )

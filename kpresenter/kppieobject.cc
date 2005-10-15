@@ -223,6 +223,9 @@ double KPPieObject::load(const QDomElement &element)
             tmp=e.attribute("value").toInt();
         p_len=tmp;
     }
+    else
+        p_len=1440; //necessary to reinitialise p_len
+    //I don't know who change default value
     e=element.namedItem("PIETYPE").toElement();
     if(!e.isNull()) {
         int tmp=0;
