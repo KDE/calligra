@@ -2029,11 +2029,15 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 
 			     bool drawCursor )
 {
+	
+	//kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
 
 	bool paintBorderRight = paintBorder & Border_Right;
 	bool paintBorderBottom = paintBorder & Border_Bottom;
 	bool paintBorderLeft = paintBorder & Border_Left;
 	bool paintBorderTop = paintBorder & Border_Top;
+
+  //kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
 
   // If we are already painting this cell, then return immediately.
   // This avoids infinite recursion.

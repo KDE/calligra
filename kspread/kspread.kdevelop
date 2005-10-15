@@ -111,7 +111,7 @@ It is part of the KOffice project</description>
       <prio>0</prio>
     </make>
     <run>
-      <directoryradio>executable</directoryradio>
+      <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <mainprogram>kspread</mainprogram>
       <programargs/>
@@ -163,7 +163,6 @@ It is part of the KOffice project</description>
     </codecompletion>
     <references>
       <pcs>Qt</pcs>
-      <pcs>KDE Libs</pcs>
     </references>
     <creategettersetter>
       <prefixGet/>

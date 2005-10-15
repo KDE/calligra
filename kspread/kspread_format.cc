@@ -3265,14 +3265,14 @@ void ColumnFormat::setHide( bool _hide )
 	    // Lower maximum size by width of column
 	    m_pSheet->adjustSizeMaxX ( - dblWidth() );
 	    m_bHide = _hide; //hide must be set after we requested the width
-            m_pSheet->emit_updateColumn( this, m_iColumn );
+          //  m_pSheet->emit_updateColumn( this, m_iColumn );
 	}
 	else
         {
 	    // Rise maximum size by width of column
 	    m_bHide = _hide; //unhide must be set before we request the width
 	    m_pSheet->adjustSizeMaxX ( dblWidth() );
-            m_pSheet->emit_updateColumn( this, m_iColumn );
+         //   m_pSheet->emit_updateColumn( this, m_iColumn );
         }
     }
 }

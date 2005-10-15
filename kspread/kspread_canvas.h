@@ -68,48 +68,8 @@ class QScrollBar;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-/**
- * Holds information about a range of cells to be highlighted as they are referenced
- * in the formula currently being edited
- */
-   class HighlightRange
-{
-	public:
-		HighlightRange() : firstCell(0),lastCell(0),color(QColor(0,0,0)) {}
-		HighlightRange(const HighlightRange& rhs) 
-		{	
-			rhs.firstCell ? firstCell=new KSpreadPoint(*(rhs.firstCell)) : firstCell=0;
-			rhs.lastCell  ? lastCell=new KSpreadPoint(*(rhs.lastCell)) : lastCell=0;
-			color=QColor(rhs.color);
-		}
-		virtual ~HighlightRange() {delete firstCell; delete lastCell;
-			firstCell=0;lastCell=0;}
-		
-		KSpreadPoint* firstCell; //First cell in range, will either be in same row or same col as last cell
-		KSpreadPoint* lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells 
-		QColor	 color; //Colour to highlight this range with
-		
-		void getRange(KSpreadRange& rg) 
-		{ 
-			if (!firstCell) 
-			{ 
-				rg=KSpreadRange();
-				return;
-			}
-
-			if (lastCell) 
-			{
-				rg=KSpreadRange(*firstCell,*lastCell); 	
-			}
-			else
-			{
-				rg=KSpreadRange(*firstCell,*firstCell);
-			}
-		} 
-	
-};
-
 class CanvasPrivate;
+class HighlightRange;
 
 /**
  * The canvas builds a part of the GUI of KSpread.
@@ -330,6 +290,7 @@ public:
     
     /**
     * Resizes a highlighted range, and updates the text in the formula edit box accordingly.
+    *
     * @param range Highlighted range to be resized.  References to this range in the formula edit
     * box will be changed accordingly.
     * @param newArea The new area for the highlighted range.  @see resizeHighlightedRange 

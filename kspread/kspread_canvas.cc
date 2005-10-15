@@ -67,6 +67,7 @@
 #include "kspread_selection.h"
 
 #include "kspread_canvas.h"
+#include "highlight_range.h"
 
 
 class CanvasPrivate
@@ -3975,18 +3976,18 @@ void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& view
 	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 	{
 		//Only paint ranges or cells on the current sheet
-		if (iter->firstCell->sheet != activeSheet())
+		if (iter->firstCell()->sheet != activeSheet())
 			continue;
 
 		QRect region;
 
-		region.setTop(iter->firstCell->row());
-		region.setLeft(iter->firstCell->column());
+		region.setTop(iter->firstCell()->row());
+		region.setLeft(iter->firstCell()->column());
 
-		if (iter->lastCell) //is this a range (lastCell != 0) or a single cell (lastCell == 0) ?
+		if (iter->lastCell()) //is this a range (lastCell != 0) or a single cell (lastCell == 0) ?
 		{
-			region.setBottom(iter->lastCell->row());
-			region.setRight(iter->lastCell->column());
+			region.setBottom(iter->lastCell()->row());
+			region.setRight(iter->lastCell()->column());
 		}
 		else
 		{
@@ -4007,7 +4008,7 @@ void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& view
 		//Convert region from sheet coordinates to canvas coordinates for use with the painter
 		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
-		QPen highlightPen(iter->color);
+		QPen highlightPen(iter->color());
 		painter.setPen(highlightPen);
 
 		//Adjust the canvas coordinate - rect to take account of zoom level
@@ -4034,7 +4035,7 @@ void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& view
 		//click and drag to resize the region)
 
 
-		QBrush sizeGripBrush(iter->color);
+		QBrush sizeGripBrush(iter->color());
 		QPen   sizeGripPen(Qt::white);
 
 		painter.setPen(sizeGripPen);
@@ -5978,19 +5979,19 @@ void KSpreadCanvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 
 		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 		{
-			if (iter->lastCell)
+			if (iter->lastCell())
 			{
-				KSpreadRange rg(*(iter->firstCell),*(iter->lastCell));
+				KSpreadRange rg(*(iter->firstCell()),*(iter->lastCell()));
 
 
 				rg.sheet->setRegionPaintDirty(rg.range);
 			}
 			else
 			{
-				QRect cellRect(iter->firstCell->column(),iter->firstCell->row(),
+				QRect cellRect(iter->firstCell()->column(),iter->firstCell()->row(),
 				       1,1);
 
-				iter->firstCell->sheet->setRegionPaintDirty(cellRect);
+				iter->firstCell()->sheet->setRegionPaintDirty(cellRect);
 			}
 		}
 

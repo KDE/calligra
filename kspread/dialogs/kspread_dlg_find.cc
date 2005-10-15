@@ -50,7 +50,7 @@ KSpreadFindOption::KSpreadFindOption( QWidget *parent)
 
     QStringList lst;
     lst << i18n( "Cell Values" );
-    lst << i18n( "Notes" );
+    lst << i18n( "Comments" );
     m_searchIn->insertStringList( lst );
 
     comboLayout = new QHBoxLayout( m_findExtension );

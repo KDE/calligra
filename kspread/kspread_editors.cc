@@ -37,6 +37,7 @@
 #include <qregexp.h>
 #include <kdebug.h>
 
+#include "highlight_range.h"
 
 
 /********************************************
@@ -174,8 +175,8 @@ void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* ce
 
 			KSpreadPoint* pt=new KSpreadPoint(_refs[i],_sheet->workbook(),_sheet);
 
-			hc.firstCell=pt;
-			hc.lastCell=0;
+			hc.setFirstCell(pt);
+			hc.setLastCell(0);
 
 
 		}
@@ -185,16 +186,16 @@ void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* ce
 			KSpreadRange rg(_refs[i],_sheet->workbook(),_sheet);
 
 			//kdDebug() << "Range from ref " << _refs[i] << endl;
-			hc.firstCell=new KSpreadPoint();//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
-			hc.lastCell=new KSpreadPoint();//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
+			hc.setFirstCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
+			hc.setLastCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
 
-			rg.getStartPoint(hc.firstCell);
-			rg.getEndPoint(hc.lastCell);
+			rg.getStartPoint(hc.firstCell());
+			rg.getEndPoint(hc.lastCell());
 		}
 
 
 
-		hc.color=_colors[i%_colors.size()];
+		hc.setColor(_colors[i%_colors.size()]);
 		cellRefs->push_back(hc);
 	}
 }
@@ -351,7 +352,7 @@ KSpreadTextEditor::~KSpreadTextEditor()
   canvas()->endChoose();
 }
 
-void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int pos)
+void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
 {
 //	m_highlighter->cellRefAt(pos);
 
