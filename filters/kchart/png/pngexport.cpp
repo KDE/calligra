@@ -78,7 +78,7 @@ PngExport::convert(const QCString& from, const QCString& to)
     else {
 	kdDebug() << "PNG Export: Couldn't run export dialog." << endl;
     }
-
+    delete  exportDialog;
     return KoFilter::OK;
 }
 
