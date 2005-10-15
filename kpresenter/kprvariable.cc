@@ -129,6 +129,8 @@ void KPrStatisticVariable::recalc()
                        m_subtype == VST_STATISTIC_NB_LINES ||
                        m_subtype == VST_STATISTIC_NB_CHARACTERE);
     KPrPage *page = m_doc->activePage();
+    if( !page) //when we load file active page is null
+	    return;
     QPtrListIterator<KPObject> objIt( page->objectList() );
 
     for ( objIt.toFirst(); objIt.current(); ++objIt )
