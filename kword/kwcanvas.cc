@@ -910,6 +910,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     {
         // Keep copy of old rectangle, for repaint()
         QRect oldRect = m_viewMode->normalToView( frame->outerRect(m_viewMode) );
+        if ( !m_frameResized )
+          m_boundingRect = frame->rect();
 
         frameSet->resizeFrameSetCoords( frame, newLeft, newTop, newRight, newBottom, false /*not final*/ );
         /*frame->setLeft(newLeft);
@@ -2722,7 +2724,45 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         // Abort frame creation
                         setMouseMode( MM_EDIT );
                     else
+                    {
+                      if ( m_frameMoved && cmdMoveFrame)
+                      {
+                        cmdMoveFrame->unexecute();
+                        delete cmdMoveFrame;
+                        cmdMoveFrame = 0;
+                        m_frameMoved = false;
+                        m_mousePressed = false; //we don't want things to happen in KWCanvas::contentsMouseReleaseEvent
+                        m_ctrlClickOnSelectedFrame = false;
+                        m_gui->getView()->updateFrameStatusBarItem();
+                        setMouseMode( MM_EDIT );
+                      }
+                      else if ( m_frameResized )
+                      {
+                        KWFrame *frame = m_doc->getFirstSelectedFrame();
+                        if (!frame) { // can't happen, but never say never
+                          kdWarning(32001) << "KWCanvas::eventFilter: no frame selected!" << endl;
+                          return TRUE;
+                        }
+                        KWFrameSet* frameSet = frame->frameSet();
+                        QRect oldRect = m_viewMode->normalToView( frame->outerRect(m_viewMode) );
+                        frameSet->resizeFrameSetCoords( frame, m_boundingRect.left(), m_boundingRect.top(), m_boundingRect.right(), m_boundingRect.bottom(), false /*not final*/ );
+                        delete cmdMoveFrame; // Unused after all
+                        cmdMoveFrame = 0L;
+                        m_frameResized = false;
+                        m_mousePressed = false; //we don't want things to happen in KWCanvas::contentsMouseReleaseEvent
+                        m_ctrlClickOnSelectedFrame = false;
+                        // Move resize handles to new position
+                        frame->updateResizeHandles();
+                        // Calculate new rectangle for this frame
+                        QRect newRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
+                        // Repaint only the changed rects (oldRect U newRect)
+                        repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
+                        m_gui->getView()->updateFrameStatusBarItem();
+                        setMouseMode( MM_EDIT );
+                      }
+                      else
                         selectAllFrames( false );
+                    }
                 }
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )

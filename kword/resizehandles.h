@@ -61,6 +61,7 @@ protected:
 
 private:
     bool mousePressed;
+    bool mouseResizingHasBegan;
     int oldX, oldY;
     KWCanvas *m_canvas;
     Direction direction;

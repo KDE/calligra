@@ -221,6 +221,8 @@ public:
     /// Resets the status bar text
     void resetStatusBarText();
 
+    bool isFrameResized() { return m_frameResized; }
+
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
     void applyGrid( KoPoint &p );

@@ -35,6 +35,7 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
     //kdDebug() << "KWResizeHandle::KWResizeHandle this=" << this << " frame=" << frm << endl;
     Q_ASSERT( frame );
     mousePressed = FALSE;
+    mouseResizingHasBegan = FALSE;
     setMouseTracking( TRUE );
     //setBackgroundMode( PaletteHighlight );
     if ( isResizingEnabled() )
@@ -93,6 +94,10 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
     if ( !isResizingEnabled() )
         return;
 
+    if ( m_canvas->isFrameResized() && !mouseResizingHasBegan )
+      return;
+
+    mouseResizingHasBegan = true;
     bool shiftPressed = e->state() & ShiftButton;
     switch ( direction ) {
     case LeftUp:
@@ -165,6 +170,7 @@ void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
     mousePressed = false;
+    mouseResizingHasBegan = false;
     QPoint vPoint( x() + e->x(), y() + e->y() );
     QPoint nPoint = m_canvas->viewMode()->viewToNormal( vPoint );
     m_canvas->mrEditFrame( e, nPoint );
