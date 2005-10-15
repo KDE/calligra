@@ -42,6 +42,7 @@
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 #include "kis_image_magick_converter.h"
+#include "kis_meta_registry.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
@@ -386,10 +387,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         if (profile)
         {
             kdDebug() << "image has embedded profile: " << profile -> productName() << "\n";
-            cs = KisColorSpaceFactoryRegistry::instance() -> get(csName)->createColorSpace(profile);
+            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
         }
         else
-            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID(csName,""),"");
+            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
 
         if (!cs) {
             kdDebug() << "Krita does not support colorspace " << image -> colorspace << "\n";

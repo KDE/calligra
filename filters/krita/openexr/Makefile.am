@@ -3,12 +3,8 @@ AM_CPPFLAGS= \
 	-I$(top_srcdir)/krita \
 	-I$(top_srcdir)/krita/core \
 	-I$(top_srcdir)/krita/sdk \
-	-I$(top_srcdir)/krita/core/resources \
-	-I$(top_srcdir)/krita/core/strategy \
 	-I$(top_srcdir)/krita/core/tiles \
-	-I$(top_srcdir)/krita/core/visitors \
-	-I$(top_srcdir)/krita/core/color_strategy \
-	-I$(top_srcdir)/krita/core/paintop \
+	-I$(top_srcdir)/krita/kritacolor \
 	-I$(top_srcdir)/krita/ui \
 	-I$(top_srcdir)/krita/modules/rgb_f32 \
 	-I$(top_srcdir)/krita/modules/rgb_f16half \

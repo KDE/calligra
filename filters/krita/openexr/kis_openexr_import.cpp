@@ -37,6 +37,7 @@
 #include "kis_openexr_import.h"
 #include "kis_doc.h"
 #include "kis_image.h"
+#include "kis_meta_registry.h"
 #include "kis_layer.h"
 #include "kis_annotation.h"
 #include "kis_colorspace_factory_registry.h"
@@ -97,7 +98,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    KisRgbF16HalfColorSpace *cs = static_cast<KisRgbF16HalfColorSpace *>((KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBAF16HALF", ""),"")));
+    KisRgbF16HalfColorSpace *cs = static_cast<KisRgbF16HalfColorSpace *>((KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBAF16HALF", ""),"")));
          
     if (cs == 0) {
         return KoFilter::InternalError;
