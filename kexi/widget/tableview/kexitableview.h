@@ -116,11 +116,11 @@ public:
 		bool rowHighlightingEnabled : 1;
 
 		/*! true if selection of a row should be kept when a user moved mouse 
-     pointer over other rows. Makes only sense when rowHighlightingEnabled is true. 
-      True by default. It is set to false for comboboxpopup table to mimic original combobox look & feel. */
+		 pointer over other rows. Makes only sense when rowHighlightingEnabled is true. 
+		 True by default. It is set to false for comboboxpopup table to mimic original combobox look and feel. */
 		bool persistentSelections : 1;
 
-    /*! color for row highlight, default is intermediate between
+		/*! color for row highlight, default is intermediate between
 		 KGlobalSettings::alternateBackgroundColor() and base color. */
 		QColor rowHighlightingColor;
 		

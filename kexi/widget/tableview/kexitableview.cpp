@@ -2179,6 +2179,7 @@ static bool overrideEditorShortcutNeeded(QKeyEvent *e)
 
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 {
+	const int k = e->key();
 	KAction *action = m_sharedActions[action_name];
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
@@ -2195,15 +2196,15 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 	//check default shortcut (when user app has no action shortcuts defined
 	// but we want these shortcuts to still work)
 	if (action_name=="data_save_row")
-		return (e->key() == Key_Return || e->key() == Key_Enter) && e->state()==ShiftButton;
+		return (k == Key_Return || k == Key_Enter) && e->state()==ShiftButton;
 	if (action_name=="edit_delete_row")
-		return e->key() == Key_Delete && e->state()==ControlButton;
+		return k == Key_Delete && e->state()==ControlButton;
 	if (action_name=="edit_delete")
-		return e->key() == Key_Delete && e->state()==NoButton;
+		return k == Key_Delete && e->state()==NoButton;
 	if (action_name=="edit_edititem")
-		return e->key() == Key_F2 && e->state()==NoButton;
+		return k == Key_F2 && e->state()==NoButton;
 	if (action_name=="edit_insert_empty_row")
-		return e->key() == Key_Insert && e->state()==(ShiftButton | ControlButton);
+		return k == Key_Insert && e->state()==(ShiftButton | ControlButton);
 
 	return false;
 }
@@ -2214,6 +2215,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		return;
 //	kdDebug() << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
 
+	const int k = e->key();
 	const bool ro = isReadOnly();
 	QWidget *w = focusWidget();
 //	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view() && w!=m_editor)) {
@@ -2240,11 +2242,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	}
 
 	if(m_editor) {// if a cell is edited, do some special stuff
-		if (e->key() == Key_Escape) {
+		if (k == Key_Escape) {
 			cancelEditor();
 			e->accept();
 			return;
-		} else if (e->key() == Key_Return || e->key() == Key_Enter) {
+		} else if (k == Key_Return || k == Key_Enter) {
 			if (columnType(m_curCol) == KexiDB::Field::Boolean) {
 				boolToggled();
 			}
@@ -2263,7 +2265,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 	}
 
-	if(e->key() == Key_Return || e->key() == Key_Enter)
+	if(k == Key_Return || k == Key_Enter)
 	{
 		emit itemReturnPressed(m_currentItem, m_curRow, m_curCol);
 	}
@@ -2292,8 +2294,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 	}
 
-	switch (e->key())
-	{
 /*	case Key_Delete:
 		if (e->state()==Qt::ControlButton) {//remove current row
 			deleteCurrentRow();
@@ -2303,46 +2303,35 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 		break;*/
 
-	case Key_Shift:
-	case Key_Alt:
-	case Key_Control:
-	case Key_Meta:
+	if (k == Key_Shift || k == Key_Alt || k == Key_Control || k == Key_Meta) {
 		e->ignore();
-		break;
-	case Key_Up:
-		if (nobtn) {
-			selectPrevRow();
-			e->accept();
-			return;
-		}
-		break;
-	case Key_Down:
-		if (nobtn) {
+	}
+	else if (k == Key_Up && nobtn) {
+		selectPrevRow();
+		e->accept();
+		return;
+	}
+	else if (k == Key_Down && nobtn) {
 //			curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow + 1);
-			selectNextRow();
-			e->accept();
-			return;
-		}
-		break;
-	case Key_PageUp:
-		if (nobtn) {
+		selectNextRow();
+		e->accept();
+		return;
+	}
+	else if (k == Key_PageUp && nobtn) {
 //			curRow -= visibleHeight() / d->rowHeight;
 //			curRow = QMAX(0, curRow);
-			selectPrevPage();
-			e->accept();
-			return;
-		}
-		break;
-	case Key_PageDown:
-		if (nobtn) {
+		selectPrevPage();
+		e->accept();
+		return;
+	}
+	else if (k == Key_PageDown && nobtn) {
 //			curRow += visibleHeight() / d->rowHeight;
 //			curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow);
-			selectNextPage();
-			e->accept();
-			return;
-		}
-		break;
-	case Key_Home:
+		selectNextPage();
+		e->accept();
+		return;
+	}
+	else if (k == Key_Home) {
 		if (d->appearance.fullRowSelection) {
 			//we're in row-selection mode: home key always moves to 1st row
 			curRow = 0;//to 1st row
@@ -2359,8 +2348,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				curCol = 0;
 			}
 		}
-		break;
-	case Key_End:
+	}
+	else if (k == Key_End) {
 		if (d->appearance.fullRowSelection) {
 			//we're in row-selection mode: home key always moves to last row
 			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
@@ -2377,28 +2366,29 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				curCol = columns()-1;//to last col
 			}
 		}
-		break;
-	case Key_Backspace:
-		if (nobtn && !ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
+	}
+	else if (k == Key_Backspace && nobtn) {
+		if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
 			createEditor(curRow, curCol, QString::null, true);
-		break;
-	case Key_Space:
+	}
+	else if (k == Key_Space) {
 		if (nobtn && !ro && columnEditable(curCol)) {
 			if (columnType(curCol) == KexiDB::Field::Boolean) {
 				boolToggled();
-				break;
 			}
 			else
 				printable = true; //just space key
 		}
-	case Key_Escape:
+	}
+	else if (k == Key_Escape) {
 		if (nobtn && m_rowEditing) {
 			cancelRowEdit();
 			return;
 		}
-	default:
+	}
+	else {
 		//others:
-		if (nobtn && (e->key()==Key_Tab || e->key()==Key_Right)) {
+		if (nobtn && (k==Key_Tab || k==Key_Right)) {
 //! \todo add option for stopping at 1st column for Key_left
 			//tab
 			if (acceptEditor()) {
@@ -2412,10 +2402,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol++;
 			}
 		}
-		else if ((e->state()==ShiftButton && e->key()==Key_Tab)
-		 || (nobtn && e->key()==Key_Backtab)
-		 || (e->state()==ShiftButton && e->key()==Key_Backtab)
-		 || (nobtn && e->key()==Key_Left)
+		else if ((e->state()==ShiftButton && k==Key_Tab)
+		 || (nobtn && k==Key_Backtab)
+		 || (e->state()==ShiftButton && k==Key_Backtab)
+		 || (nobtn && k==Key_Left)
 			) {
 //! \todo add option for stopping at last column
 			//backward tab
@@ -2430,10 +2420,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol--;
 			}
 		}
-		else if ( nobtn && (e->key()==Key_Enter || e->key()==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
+		else if ( nobtn && (k==Key_Enter || k==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
 			startEditOrToggleValue();
 		}
-		else if (nobtn && e->key()==d->contextMenuKey) { //Key_Menu:
+		else if (nobtn && k==d->contextMenuKey) { //Key_Menu:
 			showContextMenu();
 		}
 		else {
@@ -2446,7 +2436,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 
 			kdDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
 			if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
-				kdDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(e->key(),0,16) <<endl;
+				kdDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k,0,16) <<endl;
 //				e->ignore();
 				QScrollView::keyPressEvent(e);
 				return;

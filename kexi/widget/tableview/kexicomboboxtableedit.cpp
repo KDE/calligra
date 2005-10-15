@@ -517,7 +517,10 @@ void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
 bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 {
 	const int k = ke->key();
-	if (ke->state()==NoButton && k==Key_F4) {//show popup
+	if ((ke->state()==NoButton && k==Key_F4)
+		|| (ke->state()==AltButton && k==Key_Down))
+	{
+		//show popup
 		slotButtonClicked();
 		return true;
 	}

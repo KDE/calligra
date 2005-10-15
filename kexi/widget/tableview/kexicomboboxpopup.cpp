@@ -235,7 +235,9 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 		if (e->type()==QEvent::KeyPress) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int k = ke->key();
-			if (ke->state()==NoButton && (k==Key_Escape || k==Key_F4)) {
+			if ((ke->state()==NoButton && (k==Key_Escape || k==Key_F4))
+				|| (ke->state()==AltButton && k==Key_Up))
+			{
 				hide();
 				emit cancelled();
 				return true;
