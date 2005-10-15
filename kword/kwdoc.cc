@@ -2729,6 +2729,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME ); // for "current time"
+    recalcVariables( VT_STATISTIC );
     m_syntaxVersion = CURRENT_SYNTAX_VERSION; // ### clean this up once we remove the old format
 
     KoGenStyles mainStyles;
@@ -3297,6 +3298,7 @@ QDomDocument KWDocument::saveXML()
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME ); // for "current time"
+    recalcVariables( VT_STATISTIC );
     QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
     QDomElement kwdoc = doc.documentElement();
     kwdoc.setAttribute( "editor", "KWord" );
