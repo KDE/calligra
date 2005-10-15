@@ -20,3 +20,4 @@ public:
 };
 
 #endif // __PNGEXPORT_H__
+

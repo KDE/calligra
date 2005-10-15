@@ -39,8 +39,8 @@ public:
 		  QWidget *parent=0L, const char *name=0L );
     ~PNGExportDia();
 
-    int  width();
-    int  height();
+    int  width() const;
+    int  height() const;
 
 #if 0
 public slots:
@@ -74,3 +74,4 @@ private:
 
 
 #endif // PNGEXPORTDIA_H
+

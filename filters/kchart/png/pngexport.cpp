@@ -83,4 +83,5 @@ PngExport::convert(const QCString& from, const QCString& to)
 }
 
 
-#include <pngexport.moc>
+#include "pngexport.moc"
+

@@ -116,13 +116,13 @@ void PNGExportDia::setupGUI()
 // ----------------------------------------------------------------
 //                          public methods
 
-int PNGExportDia::width()
+int PNGExportDia::width() const
 {
     return m_widthEdit->value();
 }
 
 
-int PNGExportDia::height()
+int PNGExportDia::height() const
 {
     return m_heightEdit->value();
 }
@@ -268,3 +268,4 @@ void PNGExportDia::slotOk()
 #endif
 
 #include "pngexportdia.moc"
+
