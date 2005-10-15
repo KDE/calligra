@@ -42,57 +42,61 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 {
 	setCaption( i18n( "Transform" ) );
 
-	QGridLayout *mainLayout = new QGridLayout( this, 4, 4 );
+	QGridLayout *mainLayout = new QGridLayout( this, 5, 5 );
 
 	//X: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* xLabel = new QLabel( i18n ( "X:" ), this );
-	mainLayout->addWidget( xLabel, 1, 0 );
+	mainLayout->addWidget( xLabel, 0, 0 );
 	m_x = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_x, 1, 1 );
+	mainLayout->addWidget( m_x, 0, 1 );
 	QToolTip::add( m_x, i18n("Set x-position of actual selection") );
 
 	//Y: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* yLabel = new QLabel( i18n ( "Y:" ), this );
-	mainLayout->addWidget( yLabel, 1, 2 );
+	mainLayout->addWidget( yLabel, 0, 2 );
 	m_y = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_y, 1, 3 );
+	mainLayout->addWidget( m_y, 0, 3 );
 	QToolTip::add( m_y, i18n("Set y-position of actual selection") );
 
 	//Width: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* wLabel = new QLabel( i18n ( "W:" ), this );
-	mainLayout->addWidget( wLabel, 2, 0 );
+	mainLayout->addWidget( wLabel, 1, 0 );
 	m_width = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_width, 2, 1 );
+	mainLayout->addWidget( m_width, 1, 1 );
 	QToolTip::add( m_width, i18n("Set width of actual selection") );
 
 	//Height: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* hLabel = new QLabel( i18n ( "H:" ), this );
-	mainLayout->addWidget( hLabel, 2, 2 );
+	mainLayout->addWidget( hLabel, 1, 2 );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_height, 2, 3 );
+	mainLayout->addWidget( m_height, 1, 3 );
 	QToolTip::add( m_height, i18n("Set height of actual selection") );
 
 	//TODO: Add Rotation, Shear
 	//ROTATE: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* rLabel = new QLabel( i18n ( "R:" ), this );
-	mainLayout->addWidget( rLabel, 4, 0 );
+	mainLayout->addWidget( rLabel, 3, 0 );
 	m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, 1, this );
-	mainLayout->addWidget( m_rotate, 4, 1 );
+	mainLayout->addWidget( m_rotate, 3, 1 );
 	QToolTip::add( m_rotate, i18n("Rotate actual selection") );
 
 	//X-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* sxLabel = new QLabel( i18n ( "SX:" ), this );
-	mainLayout->addWidget( sxLabel, 3, 0 );
+	mainLayout->addWidget( sxLabel, 2, 0 );
 	m_shearX = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_shearX, 3, 1 );
+	mainLayout->addWidget( m_shearX, 2, 1 );
 	QToolTip::add( m_shearX, i18n("Shear actual selection in x-direction") );
 
 	//Y-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* syLabel = new QLabel( i18n ( "SY:" ), this );
-	mainLayout->addWidget( syLabel, 3, 2 );
+	mainLayout->addWidget( syLabel, 2, 2 );
 	m_shearY = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
-	mainLayout->addWidget( m_shearY, 3, 3 );
+	mainLayout->addWidget( m_shearY, 2, 3 );
 	QToolTip::add( m_shearY, i18n("Shear actual selection in y-direction") );
+
+	mainLayout->setRowStretch( 4, 1 );
+	mainLayout->setColStretch( 1, 1 );
+	mainLayout->setColStretch( 3, 1 );
 
 	update();
 }

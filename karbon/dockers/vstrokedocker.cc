@@ -99,6 +99,8 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	mainLayout->addWidget( m_joinGroup, 2, 1 );
 	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
+	mainLayout->setRowStretch( 3, 1 );
+	mainLayout->setColStretch( 1, 1 );
 	mainLayout->activate();
 
 	updateDocker();
