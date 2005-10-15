@@ -364,9 +364,9 @@ bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
 
 KSpreadRange::KSpreadRange()
 {
-  	sheet = 0; 
+  	sheet = 0;
 	range.setLeft( -1 );
-	
+
 	leftFixed=false;
 	rightFixed=false;
 	topFixed=false;
@@ -554,6 +554,12 @@ bool util_isColumnSelected(const QRect &selection)
 bool util_isRowSelected(const QRect &selection)
 {
   return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
+}
+
+bool util_isRowOrColumnSelected(const QRect &selection)
+{
+    return ( (selection.left() == 1) && (selection.right() == KS_colMax)
+             || (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
 }
 
 //used in KSpreadView::slotRename

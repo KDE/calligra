@@ -4185,7 +4185,7 @@ void KSpreadView::conditional()
 {
   QRect rect( d->selectionInfo->selection() );
 
-  if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
+  if ( util_isRowOrColumnSelected(selection()))
   {
     KMessageBox::error( this, i18n("Area is too large.") );
   }
