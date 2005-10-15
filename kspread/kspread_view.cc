@@ -1402,7 +1402,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d->searchInSheets.currentSheet = 0;
     d->searchInSheets.firstSheet = 0;
 
-        ;
     // spell-check context
     d->spell.kspell = 0;
     d->spell.macroCmdSpellCheck = 0;
@@ -3906,6 +3905,9 @@ void KSpreadView::find()
     d->find = new KFind( dlg.pattern(), dlg.options(), this );
     d->replace = 0L;
 
+    d->searchInSheets.currentSheet = activeSheet();
+    d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
+
     initFindReplace();
     findNext();
 }
@@ -3922,7 +3924,7 @@ void KSpreadView::initFindReplace()
             this, SLOT( findNext() ) );
 
     bool bck = d->findOptions & KFindDialog::FindBackwards;
-    KSpreadSheet* currentSheet = activeSheet();
+    KSpreadSheet* currentSheet = d->searchInSheets.currentSheet;
 
     QRect region = ( d->findOptions & KFindDialog::SelectedText )
                    ? d->selectionInfo->selection()
@@ -4013,7 +4015,7 @@ void KSpreadView::findNext()
 
 KSpreadCell* KSpreadView::nextFindValidCell( int col, int row )
 {
-    KSpreadCell *cell = activeSheet()->cellAt( col, row );
+    KSpreadCell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
     if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
         cell = 0L;
     if ( d->typeValue == KSpreadFindOption::Note && cell && cell->comment(col, row).isEmpty())
@@ -4026,7 +4028,7 @@ KSpreadCell* KSpreadView::findNextCell()
     // getFirstCellRow / getNextCellRight would be faster at doing that,
     // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
 
-    KSpreadSheet* sheet = activeSheet();
+    KSpreadSheet* sheet = d->searchInSheets.currentSheet;
     KSpreadCell* cell = 0L;
     bool forw = ! ( d->findOptions & KFindDialog::FindBackwards );
     int col = d->findPos.x();
@@ -4133,7 +4135,7 @@ void KSpreadView::replace()
     {
         QRect region( d->findPos, d->findEnd );
         //TODO create undo/redo for comment
-        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( doc(), activeSheet(), region );
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, region );
         doc()->addCommand( undo );
     }
 
@@ -4153,7 +4155,7 @@ void KSpreadView::replace()
 
 void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
 {
-    d->canvas->gotoLocation( d->findPos, activeSheet() );
+    d->canvas->gotoLocation( d->findPos, d->searchInSheets.currentSheet );
     KDialogBase *baseDialog=0L;
     if ( d->find )
         baseDialog = d->find->findNextDialog();
@@ -4168,7 +4170,7 @@ void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/,
 void KSpreadView::slotReplace( const QString &newText, int, int, int )
 {
     // Which cell was this again?
-    KSpreadCell *cell = activeSheet()->cellAt( d->findPos );
+    KSpreadCell *cell = d->searchInSheets.currentSheet->cellAt( d->findPos );
 
     // ...now I remember, update it!
     cell->setDisplayDirtyFlag();
