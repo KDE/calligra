@@ -224,7 +224,7 @@ void OoImpressExport::createDocumentMeta( QDomDocument & docmeta )
     QDomNode meta = docmeta.createElement( "office:meta" );
 
     QDomElement generator = docmeta.createElement( "meta:generator" );
-    generator.appendChild( docmeta.createTextNode( "KPresenter 1.3" ) );
+    generator.appendChild( docmeta.createTextNode( "KPresenter 1.5" ) );
     meta.appendChild( generator );
 
     QDomNode i = m_documentinfo.namedItem( "document-info" );

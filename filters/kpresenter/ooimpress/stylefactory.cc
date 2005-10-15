@@ -657,11 +657,24 @@ bool PageMasterStyle::operator==( const PageMasterStyle & pageMasterStyle ) cons
 
 PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint index )
 {
-    // some defaults that won't be overwritten because they
-    // are not available in KPresenter
-    m_bg_visible = "true";
-    m_bg_objects_visible = "true";
-
+    QDomElement backMaster = e.namedItem( "BACKMASTER" ).toElement();
+    if( !backMaster.isNull())
+    {
+        int tmp=0;
+	if(backMaster.hasAttribute("displayBackground"))
+		tmp = backMaster.attribute("displayBackground").toInt();
+	 m_bg_visible = (tmp==1) ? "true" : "false";	
+	 tmp = 0;
+         if(backMaster.hasAttribute("displayMasterPageObject"))
+	 	tmp = backMaster.attribute("displayMasterPageObject").toInt();
+	 m_bg_objects_visible = (tmp==1) ? "true" : "false";	 
+    }
+    else
+    {
+    	m_bg_visible = "true";
+    	m_bg_objects_visible = "true";
+    }
+    
     m_name = QString( "dp%1" ).arg( index );
 
     // check if this is an empty page tag
