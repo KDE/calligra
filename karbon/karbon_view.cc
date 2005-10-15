@@ -256,6 +256,9 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
 		part()->toolController()->setActiveView( this );
+		// set selectTool by default
+		m_toolbox->slotPressButton( 0 );
+		
 		return m_toolbox;
 	}
 
