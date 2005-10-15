@@ -521,7 +521,7 @@ QDomDocument KPresenterDoc::saveXML()
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME );
-
+    recalcVariables( VT_STATISTIC );
     QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
     QDomElement presenter=doc.documentElement();
     presenter.setAttribute("editor", "KPresenter");
@@ -1029,7 +1029,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME );
-
+    recalcVariables( VT_STATISTIC );
     KoGenStyles mainStyles;
     KoSavingContext savingContext( mainStyles, 0, false, KoSavingContext::Store );
 
