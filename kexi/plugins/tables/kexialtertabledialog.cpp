@@ -66,7 +66,10 @@ class KexiAlterTableDialogPrivate
 		 , dontAskOnStoreData(false)
 		 , slotTogglePrimaryKeyCalled(false)
 		 , primaryKeyExists(false)
-		{}
+		 , slotPropertyChanged_primaryKey_enabled(true)
+		 , slotPropertyChanged_subType_enabled(true)
+		{
+		}
 
 		~KexiAlterTableDialogPrivate() {
 			delete sets;
@@ -88,6 +91,10 @@ class KexiAlterTableDialogPrivate
 		bool slotTogglePrimaryKeyCalled : 1;
 
 		bool primaryKeyExists : 1;
+		//! Used in slotPropertyChanged() to avoid infinite recursion
+		bool slotPropertyChanged_primaryKey_enabled : 1;
+		//! Used in slotPropertyChanged() to avoid infinite recursion
+		bool slotPropertyChanged_subType_enabled : 1;
 };
 
 //----------------------------------------------
@@ -596,8 +603,14 @@ kdDebug() << "++++++++++" << slist << nlist << endl;
 		else {
 			subTypeProperty->setListData( 0 );
 		}
-		if (set["primaryKey"].value().toBool()==true) //primary keys require big int
-			fieldType = KexiDB::Field::BigInteger;
+		if (set["primaryKey"].value().toBool()==true) {
+			//primary keys require big int, so if selected type is not integer- remove PK
+			if (fieldTypeGroup != KexiDB::Field::IntegerGroup) {
+				m_view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
+				set["primaryKey"] = QVariant(false, 1);
+//! @todo should we display (passive?) dialog informing about cleared pkey?
+			}
+		}
 		if (slist.count()>1)
 			subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
 		if (updatePropertiesVisibility(fieldType, set) || forcePropertySetReload) {
@@ -680,7 +693,8 @@ void KexiAlterTableDialog::updateActions()
 void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
 	const QCString pname = property.name();
-	if (pname=="primaryKey") {
+	if (pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled) {
+		d->slotPropertyChanged_primaryKey_enabled = false;
 		if (property.value().toBool()) {
 			//primary key implies some rules
 			set["unique"] = QVariant(true,1);
@@ -698,6 +712,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 			KexiDB::Field::typeForString( set["subType"].value().toString() ), set);
 		//properties' visiblility changed: refresh prop. set
 		propertySetReloaded(true/*preservePrevSelection*/);
+		d->slotPropertyChanged_primaryKey_enabled = true;
 	}
 //TODO: perhaps show a hint in help panel telling what happens?
 	else if (property.value().toBool()==false
@@ -708,7 +723,8 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 		if (pname=="notNull")
 			set["allowEmpty"] = QVariant(true,1);
 	}
-	else if (pname=="subType") {
+	else if (pname=="subType" && d->slotPropertyChanged_subType_enabled) {
+		d->slotPropertyChanged_subType_enabled = false;
 		if (set["primaryKey"].value().toBool()==true && property.value().toString()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
 			kdDebug() << "INVALID " << property.value().toString() << endl;
 //			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
@@ -723,6 +739,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 			//properties' visiblility changed: refresh prop. set
 			propertySetReloaded(true);
 		}
+		d->slotPropertyChanged_subType_enabled = true;
 	}
 	else {//prop==true:
 		if (property.value().toBool()==true && pname=="autoIncrement") {
