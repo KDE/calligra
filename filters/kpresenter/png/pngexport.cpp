@@ -93,7 +93,7 @@ PngExport::convert(const QCString& from, const QCString& to)
     if ( view ) // no view if embedded document
     {
         KPrCanvas * canvas = view->getCanvas();
-        canvas->drawPageInPix( pixmap, 0, true, width,height );
+        canvas->drawPageInPix( pixmap, view->getCurrPgNum()-1, 0, true, width,height );
     }
     else //when it's embedded we use just it.
     {
