@@ -3794,9 +3794,9 @@ void KPresenterView::refreshPageButton()
     pgNext->setEnabled( state );
     actionScreenLast->setEnabled(state);
     actionScreenNext->setEnabled(state);
-    actionViewHeader->setChecked( m_canvas->activePage()->hasHeader() );
-    actionViewFooter->setChecked( m_canvas->activePage()->hasFooter() );
-
+    updateHeaderFooterButton();
+    updateDisplayObjectMasterPageButton();
+    updateDisplayBackgroundButton();
 }
 
 void KPresenterView::showObjectRect( const KPObject * object )
