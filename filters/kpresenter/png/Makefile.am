@@ -3,7 +3,7 @@
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/kpresenter \
         -I$(top_srcdir)/lib/kotext \
-	-I$(top_srcdir)/filters/libdialogfilter \	
+	-I$(top_srcdir)/filters/libdialogfilter \
 	$(all_includes)
 
 ####### Files
