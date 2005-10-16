@@ -3789,18 +3789,22 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect,
 
     int pageNum = m_pageList.findRef( page );
 
-    page->background()->drawBackground( &painter, zoomHandler(), rect, false );
+    if ( page->displayBackground() )
+        page->background()->drawBackground( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
     QPtrListIterator<KPObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
         it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
-    it= m_masterPage->objectList();
-    //draw sticky obj
-    for ( ; it.current() ; ++it )
+    if ( page->displayObjectFromMasterPage() )
     {
-        if( (it.current()==_header && !page->hasHeader())||(it.current()==_footer && !page->hasFooter()))
-            continue;
-        it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
+        it= m_masterPage->objectList();
+        //draw sticky obj
+        for ( ; it.current() ; ++it )
+        {
+            if( (it.current()==_header && !page->hasHeader())||(it.current()==_footer && !page->hasFooter()))
+                continue;
+            it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
+        }
     }
 }
 
