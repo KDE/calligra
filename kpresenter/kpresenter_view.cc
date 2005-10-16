@@ -2158,6 +2158,8 @@ void KPresenterView::initGui()
         sb->show();
     showZoom( zoomHandler()->zoom() );
     updateHeaderFooterButton();
+    updateDisplayObjectMasterPageButton();
+    updateDisplayBackgroundButton();
 
     actionAllowAutoFormat->setChecked( m_pKPresenterDoc->allowAutoFormat() );
     actionViewFormattingChars->setChecked( m_pKPresenterDoc->viewFormattingChars() );
