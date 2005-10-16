@@ -36,7 +36,7 @@ KRITADIR = krita
 endif
 
 
-SUBDIRS = generic_wrapper liboofilter $(KSPREADDIR) $(KCHARTDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
+SUBDIRS = generic_wrapper libdialogfilter liboofilter $(KSPREADDIR) $(KCHARTDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
 
 messages:
 	$(EXTRACTRC) `find . -name \*.ui` > rc.cpp

@@ -14,7 +14,7 @@
 #include "kchart_part.h"
 
 #include "pngexport.h"
-#include "pngexportdia.h"
+#include <pngexportdia.h>
 
 typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
