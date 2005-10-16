@@ -1,1 +1,1 @@
-SUBDIRS = png kword ooimpress powerpoint
+SUBDIRS = png svg kword ooimpress powerpoint
