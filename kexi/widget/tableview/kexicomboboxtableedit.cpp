@@ -525,12 +525,15 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 		return true;
 	}
 	else if (editorActive) {
+		int highlightedOrSelectedRow = d->popup->tableView()->highlightedRow();
+		if (highlightedOrSelectedRow < 0)
+			highlightedOrSelectedRow = d->popup->tableView()->currentRow();
 		switch (k) {
 		case Key_Up:
 			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectPrevRow();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()-1 );
+					QMAX(highlightedOrSelectedRow-1, 0) );
 				updateTextForHighlightedRow();
 				return true;
 			}
@@ -538,7 +541,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectNextRow();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()+1 );
+					QMIN(highlightedOrSelectedRow+1, d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
 			}
@@ -546,7 +549,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectPrevPage();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()-d->popup->tableView()->rowsPerPage() );
+					QMAX(highlightedOrSelectedRow-d->popup->tableView()->rowsPerPage(), 0) );
 				updateTextForHighlightedRow();
 				return true;
 			}
@@ -554,7 +557,8 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectNextPage();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()+d->popup->tableView()->rowsPerPage() );
+					QMIN(highlightedOrSelectedRow+d->popup->tableView()->rowsPerPage(), 
+					 d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
 			}

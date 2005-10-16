@@ -66,7 +66,7 @@ class KexiComboBoxPopup_KexiTableView : public KexiTableView
 			a.backgroundAltering = false; //TODO add option??
 			a.fullRowSelection = true;
 			a.rowHighlightingEnabled = true;
-      a.persistentSelections = false;
+			a.persistentSelections = false;
 			a.rowHighlightingColor = colorGroup().highlight();
 			a.rowHighlightingTextColor = colorGroup().highlightedText();
 			setAppearance(a);

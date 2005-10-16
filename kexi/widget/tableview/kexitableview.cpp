@@ -4450,13 +4450,28 @@ void KexiTableView::setHighlightedRow(int row)
 		row = QMAX( 0, QMIN(rows()-1, row) );
 		ensureCellVisible(row, -1);
 	}
-	if (d->highlightedRow!=-1)
-		updateRow(d->highlightedRow);
-	if (d->highlightedRow == row)
+	const int previouslyHighlightedRow = d->highlightedRow;
+	if (previouslyHighlightedRow == row) {
+		if (previouslyHighlightedRow!=-1)
+			updateRow(previouslyHighlightedRow);
 		return;
+	}
 	d->highlightedRow = row;
 	if (d->highlightedRow!=-1)
 		updateRow(d->highlightedRow);
+
+	if (previouslyHighlightedRow!=-1)
+		updateRow(previouslyHighlightedRow);
+
+	kdDebug() << "** d->highlightedRow=" << d->highlightedRow 
+		<< " previouslyHighlightedRow=" << previouslyHighlightedRow 
+		<< " m_curRow=" << m_curRow <<endl;
+	if (m_curRow>=0 && (previouslyHighlightedRow==-1 || previouslyHighlightedRow==m_curRow)
+		&& d->highlightedRow!=m_curRow && !d->appearance.persistentSelections)
+	{
+		//currently selected row needs to be repainted
+		updateRow(m_curRow);
+	}
 }
 
 KexiTableItem *KexiTableView::highlightedItem() const
