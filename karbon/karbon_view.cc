@@ -143,14 +143,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
 
-	if( shell() )
-	{
-		//Create Dockers
-		createColorDock();
-		createStrokeDock();
-		createTransformDock();
-	}
-
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
@@ -188,6 +180,17 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_painterFactory = new VPainterFactory;
 	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
 	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
+
+	if( shell() )
+	{
+		//Create Dockers
+		createColorDock();
+		createStrokeDock();
+		createTransformDock();
+		createDocumentTabDock();
+		createLayersTabDock();
+		createHistoryTabDock();
+	}
 
 	zoomChanged();
 }
@@ -248,10 +251,6 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			//create toolbars
 // 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
 // 			mainWindow()->addToolBar( m_selectToolBar );
-
-			createDocumentTabDock();
-			createLayersTabDock();
-			createHistoryTabDock();
 		}
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
