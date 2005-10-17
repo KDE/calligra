@@ -289,6 +289,58 @@ That's it. Now you have a picture on the title page!
 
 </sect1>
 
+<sect1 id="insert-object">
+<title>Insert a KOffice object</title>
+<para>Let's insert another &koffice; object under the picture, for example a chart.</para>
+
+<para>
+Every &koffice; supported document can be embedded in a &kpresenter; slide. Let's choose a chart from &kchart;. To do so, the first step is to click on the
+<guimenu>Insert</guimenu> menu item, and then on
+<guimenuitem>Object</guimenuitem>.
+</para>
+
+<screenshot>
+<screeninfo>The Insert Object menu</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut24.png" format="PNG"/></imageobject>
+<textobject><phrase>The Insert Object menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+A list of the &koffice; available components appears as submenu. Select <guilabel>Chart</guilabel> and then outline with your mouse the area you want to put your chart in on the &kpresenter; slide.
+</para>
+
+<screenshot>
+<screeninfo>Select the area where to put the chart</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject><phrase>Select the area where to put the chart</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<!--TODO check if the Open Document dialog should appear when the chart is created and not a blank chart-->
+
+<para>
+Once you release the mouse button, a blank chart is added on the slide. Whenever you work in the chart, the toolbars and menubar in &kpresenter; main window are replaced by those from &kchart;.
+</para>
+
+<screenshot>
+<screeninfo>&kchart; menus and toolbars embedded</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject><phrase>&kchart; menus and toolbars embedded</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>While you are in the chart, clicking with the &RMB; will bring the &kchart; settings menu which allows you to modify the parameters of the chart. Please see the &kchart; user manual to get more information on how to use &kchart;.</para>
+
+<para>Click anywhere with the &LMB; outside the chart to go back to &kpresenter; slide.</para>
+
+<para>A single click on the chart  will allow you to drag it to change its location and also to drag the borders to make it bigger as with any other &kpresenter; object. Double click on the chart to get into &kchart; mode and modify any of the chart property.</para>
+
+</sect1>
+
 <sect1 id="addshadow">
 <title>Add a shadow to the title text</title>
 
@@ -376,7 +428,7 @@ the <guimenu>Text</guimenu> menu and then click on
 </screenshot>
 
 <para>
-Click OK in the Select Color dialog. Changing the color of the selected text to blue changes its
+Click <guilabel>OK</guilabel> in the Select Color dialog. Changing the color of the selected text to blue changes its
 appearance. The exact color that highlighted text turns depends on your
 system color scheme.
 </para>
