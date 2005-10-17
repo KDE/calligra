@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +44,8 @@
 #include "kwcommand.h"
 #include "kwvariable.h"
 #include "koeditpath.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <kovariable.h>
 #include <kformulaconfigpage.h>
@@ -772,7 +775,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     tabStop = new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
-                                              doc->ptPaperWidth(),
+                                              doc->pageManager()->page(0)->width(),
                                               0.1,
                                               doc->tabStopValue(),
                                               unit );

@@ -16,16 +16,18 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #include "KWordDocIface.h"
 #include "kwtextframeset.h"
 #include "KWordFrameSetIface.h"
 #include "kwdoc.h"
 #include "kwvariable.h"
+#include "KWPageManager.h"
+
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kovariable.h>
 #include <koAutoFormat.h>
+
 KWordDocIface::KWordDocIface( KWDocument *doc_ )
     : KoDocumentIface( doc_ )
 {
@@ -60,7 +62,7 @@ unsigned int KWordDocIface::nbColumns()const
 
 double KWordDocIface::ptPageTop( int pgNum )const
 {
-    return doc->ptPageTop(pgNum);
+    return doc->pageManager()->topOfPage(pgNum);
 }
 
 QString KWordDocIface::unitName()const

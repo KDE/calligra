@@ -1,5 +1,7 @@
 #include "kwframelayout.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include <qtimer.h>
@@ -119,10 +121,11 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     // The main loop is: "for each page". We lay out each page separately.
     for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
     {
-        double top = pageNum * m_doc->ptPaperHeight() + m_doc->ptTopBorder();
-        double bottom = ( pageNum + 1 ) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-        double left = m_doc->ptLeftBorder();
-        double right = m_doc->ptPaperWidth() - m_doc->ptRightBorder();
+        KWPage *page = m_doc->pageManager()->page(pageNum);
+        double top = page->offsetInDocument() + page->topMargin();
+        double bottom = page->offsetInDocument() + page->height() - page->bottomMargin();
+        double left = page->leftMargin();
+        double right = page->width() - page->rightMargin();
         Q_ASSERT( left < right );
         KoRect oldColumnRect = firstColumnRect( mainTextFrameSet, pageNum, numColumns );
 #ifdef DEBUG_FRAMELAYOUT
@@ -564,8 +567,7 @@ void KWFrameLayout::checkFootNotes()
             if ( varY == 0 ) // not able to calculate it yet
                 continue;
             hff->m_minY = varY + /*2 * */ hff->m_spacing + 2 /* some spacing */;
-            int pageNum = static_cast<int>(varY / m_doc->ptPaperHeight());
-            //int pageNum = fnvar->pageNum(); // faster to deduce it from varY
+            int pageNum = m_doc->pageManager()->pageNumber(varY);
             if ( pageNum != hff->m_startAtPage ) {
 #ifdef DEBUG_FRAMELAYOUT
                 kdDebug(32002) << " checkFootNotes: found minY=" << hff->m_minY << " start/end=" << pageNum << " for footnote " << fnvar->text() << endl;

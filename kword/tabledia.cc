@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,8 @@
 #include "kwdoc.h"
 #include "kwtableframeset.h"
 #include "kwtabletemplate.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 #include <kcommand.h>
 
 #include <qlabel.h>
@@ -289,9 +292,10 @@ void KWTableDia::slotOk()
                 if (table->isFloating())
                     // inline table: max offset of containing frame
                     maxRightOffset = table->anchorFrameset()->frame(0)->right();
-                else
-                    // non inline table: max offset of the page
-                    maxRightOffset = doc->ptPaperWidth() - doc->ptRightBorder();
+                else { // non inline table: max offset of the page
+                    KWPage *page = doc->pageManager()->page(table->getCell(0,0)->frame(0));
+                    maxRightOffset = page->width() - page->rightMargin();
+                }
                 if ( !macroCmd )
                     macroCmd = new KMacroCommand( (colsDiff>0 ) ? i18n("Add New Columns to Table") : i18n("Remove Columns From Table") );
                 cmd = 0L;

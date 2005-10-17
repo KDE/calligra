@@ -39,6 +39,8 @@
 #include "kwvariable.h"
 #include "kwoasissaver.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <koparagcounter.h>
 #include <koVariableDlgs.h>
@@ -223,7 +225,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         return frames.getFirst();
     }
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
-    int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
+    int pageNum = m_doc->pageManager()->pageNumber(&dPoint);
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -263,7 +265,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
     }
 
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
-    int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
+    int pageNum = m_doc->pageManager()->pageNumber(&dPoint);
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -480,8 +482,9 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
             return;
 
         int pages = m_doc->numPages();
-        double left = m_doc->ptLeftBorder();
-        double pageWidth = m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ;
+        KWPage *page = m_doc->pageManager()->page(0);
+        double left = page->leftMargin();
+        double pageWidth = page->width() - page->rightMargin() - left;
         double width = pageWidth * m_doc->footNoteSeparatorLineLength() / 100.0;
         int numColumns = m_doc->numColumns();
         for ( int pageNum = 0; pageNum < pages; pageNum++ )
@@ -1944,8 +1947,8 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             // Other frames are resized by the bottom
 
             wantedPosition = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) ) + theFrame->bottom();
-            double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
-            pageBottom -= m_doc->ptBottomBorder();
+            KWPage *page = m_doc->pageManager()->page( theFrame );
+            double pageBottom = page->offsetInDocument() + page->height() - page->bottomMargin();
             double newPosition = QMIN( wantedPosition, pageBottom );
             kdDebug(32002) << "wantedPosition=" << wantedPosition << " pageBottom=" << pageBottom
                            << " -> newPosition=" << newPosition << endl;
@@ -2026,7 +2029,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                (theFrame->newFrameBehavior() == KWFrame::Reconnect
                 && !theFrame->frameSet()->isEndNote())) // end notes are handled by KWFrameLayout
             {
-                wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
+                wantedPosition = wantedPosition - newPosition + theFrame->top() + page->height();
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug(32002) << "Not enough room in this page -> creating new one, with a reconnect frame" << endl;
                 kdDebug(32002) << "new wantedPosition=" << wantedPosition << endl;
@@ -2185,7 +2188,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             // Do all the recalc in one go. Speeds up deleting many pages.
             if ( removed )
                 m_doc->afterRemovePages();
-	}
+        }
     }
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
@@ -2253,8 +2256,8 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
             return true; // abort
         }
 
-        int num = m_doc->appendPage();
-        m_doc->afterAppendPage( num );
+        KWPage *page = m_doc->appendPage();
+        m_doc->afterAppendPage( page->pageNumber() );
         kdDebug(32002) << "now frames count=" << frames.count() << endl;
     }
 
@@ -2266,8 +2269,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
         // Otherwise, create a new frame on next page
         kdDebug(32002) << "createNewPageAndNewFrame creating frame on page " << lastFrame->pageNum()+1 << endl;
         KWFrame *frm = lastFrame->getCopy();
-        frm->moveBy( 0, m_doc->ptPaperHeight() );
-        //frm->setPageNum( lastFrame->pageNum()+1 );
+        frm->moveBy( 0, m_doc->pageManager()->page(frm)->height() );
         addFrame( frm );
     }
 
@@ -2318,8 +2320,8 @@ double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
 
 double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 {
-    double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
-    int page = theFrame->pageNum();
+    KWPage *page = m_doc->pageManager()->page(theFrame);
+    double tmp = page->height() - page->bottomMargin() - page->topMargin() - 40;//default min 40 for page size
     bool header=theFrame->frameSet()->isAHeader();
     if( header ? m_doc->isHeaderVisible():m_doc->isFooterVisible() )
     {
@@ -2330,7 +2332,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
             if(fit.current()->isVisible() && state)
             {
                 KWFrame * frm=fit.current()->frame( 0 );
-                if(frm->pageNum()==page )
+                if(frm->pageNum()==page->pageNumber() )
                 {
                     return (tmp-frm->innerHeight()-footNoteSize( theFrame ));
                 }
@@ -2449,7 +2451,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
 #endif
 
     // Find last page that is visible
-    int maxPage = ( nPointBottom.y() + m_doc->paperHeight() /*equiv. to ceil()*/ ) / m_doc->paperHeight();
+    int maxPage = ( nPointBottom.y() + m_doc->paperHeight(1) /*equiv. to ceil()*/ ) / m_doc->paperHeight(0);
     int maxY = 0;
     if ( maxPage < m_firstPage || maxPage >= (int)m_framesInPage.size() + m_firstPage )
         maxY = ah;
@@ -4085,7 +4087,7 @@ bool KWFootNoteFrameSet::isEndNote() const
 
 void KWFootNoteFrameSet::createInitialFrame( int pageNum )
 {
-    KWFrame *frame = new KWFrame(this, 0, pageNum * m_doc->ptPaperHeight() + 1, 20, 20 );
+    KWFrame *frame = new KWFrame(this, 0, m_doc->pageManager()->topOfPage(pageNum) + 1, 20, 20 );
     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
     frame->setNewFrameBehavior(KWFrame::NoFollowup);
     addFrame( frame );

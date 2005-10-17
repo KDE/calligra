@@ -19,6 +19,7 @@
 #include "kwframe.h"
 #include "kwdoc.h"
 #include "kwviewmode.h"
+#include "KWPageManager.h"
 
 //#define DEBUG_SPEED
 
@@ -107,7 +108,7 @@ void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
 }
 
 void KWFrameList::updateAfterMove(int oldPageNum) {
-    int pageNumber = m_doc->getPageOfRect(*m_frame);
+    int pageNumber = m_doc->pageManager()->pageNumber(m_frame);
     updateZOrderFor(m_doc->framesInPage( pageNumber, false ));
 
     if (pageNumber != oldPageNum)
@@ -115,7 +116,7 @@ void KWFrameList::updateAfterMove(int oldPageNum) {
 }
 
 void KWFrameList::update() {
-    int pageNumber = m_doc->getPageOfRect(*m_frame);
+    int pageNumber = m_doc->pageManager()->pageNumber(m_frame);
     updateZOrderFor(m_doc->framesInPage( pageNumber, false ));
 }
 

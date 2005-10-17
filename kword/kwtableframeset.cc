@@ -1,6 +1,7 @@
 /*
     Copyright (C) 2001, S.R.Haque (srhaque@iee.org).
     This file is part of the KDE project
+    Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -35,6 +36,8 @@ DESCRIPTION
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
@@ -811,8 +814,9 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
         cols = kMax(cols, c.current()->colAfter());
     double colWidth = rect.width() / cols;
     if ( widthMode == TblAuto ) {
-        rect.setLeft( m_doc->ptLeftBorder() );
-        colWidth = (m_doc->ptPaperWidth() - m_doc->ptLeftBorder() - m_doc->ptRightBorder()) / cols;
+        KWPage *page = pageManager()->page(&rect);
+        rect.setLeft( page->leftMargin() );
+        colWidth = (page->width() - page->leftMargin() - page->rightMargin()) / cols;
     }
 
     for(unsigned int i=0; i <= cols;i++) {
@@ -2424,7 +2428,7 @@ void KWTableFrameSet::afterLoadingCell( Cell* cell )
         if(*tmp == 0)
             (*tmp) = cell->frame(0)->top();
         else {
-            if (static_cast<int>(*tmp/m_doc->ptPaperHeight()) < static_cast<int>(cell->frame(0)->top()/m_doc->ptPaperHeight())) {
+            if (static_cast<int>(*tmp/m_doc->pageLayout().ptHeight) < static_cast<int>(cell->frame(0)->top()/m_doc->pageLayout().ptHeight)) {
                 kdDebug(32004) << "This cell is on a new page" << endl;
                 QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
                 while(pageBound != m_pageBoundaries.end() && (*pageBound) < row) ++pageBound;
@@ -2441,7 +2445,7 @@ void KWTableFrameSet::afterLoadingCell( Cell* cell )
         if(*tmp == 0)
             (*tmp) = cell->frame(0)->bottom();
         else { // untested...
-            if (static_cast<int>(*tmp/m_doc->ptPaperHeight()) > static_cast<int>(cell->frame(0)->top()/m_doc->ptPaperHeight())) {
+            if (static_cast<int>(*tmp/m_doc->pageLayout().ptHeight) > static_cast<int>(cell->frame(0)->top()/m_doc->pageLayout().ptHeight)) {
                 kdDebug(32004) << "next cell is on a new page" << endl;
                 QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
                 while(pageBound != m_pageBoundaries.end() && (*pageBound) < row) ++pageBound;

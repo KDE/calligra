@@ -30,6 +30,7 @@
 #include "kwvariable.h"
 #include "kwoasisloader.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
 
 #include <kotextobject.h>
 #include <koOasisStyles.h>
@@ -1786,10 +1787,10 @@ QString KWInsertRemovePageCommand::name() const
 void KWInsertRemovePageCommand::execute()
 {
     if ( m_cmd == Insert ) {
-        m_doc->insertPage( m_pgNum );
+        m_doc->pageManager()->insertPage( m_pgNum );
         m_doc->afterAppendPage( m_pgNum ); // TODO rename to afterInsertPage
     } else { // Remove
-        m_doc->removePage( m_pgNum );
+        m_doc->pageManager()->removePage( m_pgNum );
         m_doc->afterRemovePages();
     }
 }
@@ -1797,10 +1798,10 @@ void KWInsertRemovePageCommand::execute()
 void KWInsertRemovePageCommand::unexecute()
 {
     if ( m_cmd == Insert ) { // remove the page that was inserted
-        m_doc->removePage( m_pgNum+1 );
+        m_doc->pageManager()->removePage( m_pgNum+1 );
         m_doc->afterRemovePages();
     } else { // Re-insert the page that was deleted
-        m_doc->insertPage( m_pgNum-1 );
+        m_doc->pageManager()->insertPage( m_pgNum-1 );
         m_doc->afterAppendPage( m_pgNum-1 ); // TODO rename to afterInsertPage
     }
 }

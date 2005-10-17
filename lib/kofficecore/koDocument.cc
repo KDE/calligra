@@ -208,7 +208,7 @@ void KoBrowserExtension::print()
 }
 
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KParts::ReadWritePart( parent, name ), m_pageCount(1)
+    : KParts::ReadWritePart( parent, name )
 {
     if(s_documentList==0L)
         s_documentList=new QPtrList<KoDocument>;
@@ -2419,6 +2419,11 @@ QString KoDocument::tagNameToDocumentType( const QString& localName )
 QValueList<KoTextDocument *> KoDocument::allTextDocuments() const
 {
     return QValueList<KoTextDocument *>();
+}
+
+KoPageLayout KoDocument::pageLayout(int pageNumber) const
+{
+    return m_pageLayout;
 }
 
 #include "koDocument_p.moc"

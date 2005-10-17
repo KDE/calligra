@@ -718,11 +718,12 @@ public:
     virtual bool isStoredExtern() const;
 
     /**
-     * @return the page layout associated with this document (margins, paper, etc).
+     * @return the page layout associated with this document (margins, pageSize, etc).
+     * Override this if you want to provide different sized pages.
      *
      * @see KoPageLayout
      */
-    KoPageLayout pageLayout() const { return m_pageLayout; }
+    virtual KoPageLayout pageLayout(int pageNumber = 0) const;
 
     /**
      * Performs a cleanup of unneeded backup files
@@ -840,7 +841,7 @@ public:
     /**
      * @return returns the number of pages in the document.
      */
-    int  pageCount() const { return m_pageCount; }
+    virtual int pageCount() const { return 1; }
 
     /**
      * @return all kotext-based text objects in the document
@@ -1004,10 +1005,6 @@ protected:
      * @see #saveChildren for internal children
      */
     virtual bool saveExternalChildren();
-    /**
-     * Sets the number of pages.
-     */
-    void setPageCount(int p) { m_pageCount=p; }
 
 private slots:
     void slotChildChanged( KoChild *c );
@@ -1026,7 +1023,6 @@ private:
     Private *d;
     KService::Ptr m_nativeService;
     bool m_bEmpty;
-    int m_pageCount;
     static QPtrList<KoDocument> *s_documentList;
     static const int s_defaultAutoSave;
 };

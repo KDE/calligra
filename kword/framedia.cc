@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,8 @@
 #include "defs.h"
 #include "kwcommand.h"
 #include "kwtableframeset.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <koSetPropCommand.h>
 
@@ -1073,10 +1076,10 @@ void KWFrameDia::initGeometrySettings()
         // is single frame dia. Fill position strings and checkboxes now.
 
         // Can't use frame->pageNum() here since frameset might be 0
-        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
+        int pageNum = doc->pageManager()->pageNumber(frame);
 
         sx->setValue( KoUnit::toUserValue( frame->x(), doc->unit() ) );
-        sy->setValue( KoUnit::toUserValue( frame->y() - (pageNum * doc->ptPaperHeight()), doc->unit() ) );
+        sy->setValue( KoUnit::toUserValue( frame->y() - doc->pageManager()->topOfPage(pageNum), doc->unit() ) );
         sw->setValue( KoUnit::toUserValue( frame->width(), doc->unit() ) );
         sh->setValue( KoUnit::toUserValue( frame->height(), doc->unit() ) );
 
@@ -2087,8 +2090,8 @@ bool KWFrameDia::applyChanges()
     if(tab4) { // TAB Geometry
         if ( frame ) {
             px = QMAX( 0, sx->value() );
-            int pageNum = QMIN( static_cast<int>( frame->y() / doc->ptPaperHeight() ), doc->numPages() - 1 );
-            py = QMAX( 0, sy->value() ) + pageNum * doc->ptPaperHeight();
+            int pageNum = doc->pageManager()->pageNumber(frame);
+            py = QMAX( 0, sy->value() ) + doc->pageManager()->topOfPage(pageNum);
         }
         pw = QMAX( sw->value(), 0 );
         ph = QMAX( sh->value(), 0 );
@@ -2111,8 +2114,8 @@ bool KWFrameDia::applyChanges()
         if(frame->frameSet() == 0L ) { // if there is no frameset (anymore)
             KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
             _frameSet->addFrame( frame );
-
-            if( !doc->isOutOfPage( rect , frame->pageNum() ) ) {
+            KWPage *page = doc->pageManager()->page(frame);
+            if( page->rect().contains(rect) ) {
                 frame->setRect( px, py, pw, ph );
                 //don't change margins when frame is protected.
                 if ( m_paddingConfigWidget && ( !tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())) )
@@ -2211,7 +2214,7 @@ bool KWFrameDia::applyChanges()
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
                   //        << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
-                if( !doc->isOutOfPage( rect, f->pageNum() ) )
+                if( doc->pageManager()->page(f)->rect().contains(rect) )
                 {
                     FrameIndex index( f );
                     KoRect initialRect = f->normalize();

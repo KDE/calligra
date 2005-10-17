@@ -25,6 +25,7 @@
 #include "kwdoc.h"
 #include "kwcommand.h"
 #include "kwviewmode.h"
+#include "KWPageManager.h"
 
 #include <kovariable.h>
 #include <koxmlwriter.h>
@@ -601,7 +602,7 @@ void KWFootNoteVariable::setDeleted( bool del )
 
 int KWFootNoteVariable::pageNum() const
 {
-    int page = static_cast<int>(varY() / m_doc->ptPaperHeight());
+    int page = m_doc->pageManager()->pageNumber(varY());
     Q_ASSERT( page <= m_doc->numPages()-1 );
     return page;
 }

@@ -24,6 +24,7 @@
 #include "kwloadinginfo.h"
 #include "kwtableframeset.h"
 #include "kwpartframeset.h"
+#include "KWPageManager.h"
 
 #include <koStore.h>
 #include <kooasiscontext.h>
@@ -277,7 +278,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
             double x = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "x", QString::null ) );
             double y = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "y", QString::null ) );
             int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt() - 1;
-            frame->moveTopLeft( KoPoint( x, y + pageNum * m_doc->ptPaperHeight() ) );
+            frame->moveTopLeft( KoPoint( x, y + m_doc->pageManager()->topOfPage(pageNum) ) );
         }
     }
     return frame;

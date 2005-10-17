@@ -20,6 +20,9 @@
 
 #include <koRect.h>
 #include "KWPageManager.h"
+#include "koPageLayout.h"
+
+class KoZoomHandler;
 
 /**
  * This class represents a printed page of the document.
@@ -29,26 +32,43 @@ public:
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSideEnum {Left, Right}; //future:, PageSpread };
 
-    /// return the size of this page in pt, x and y are always 0
-    const KoRect size() const { return m_size; }
     /// set the width of the page in pt
-    void setWidth(const double &x) { m_size.setRight(x); }
+    void setWidth(const double &x);
     /// set the height of the page in pt
-    void setHeight(const double &y) { m_size.setBottom(y); }
+    void setHeight(const double &y);
+    void setTopMargin(const double &x);
+    void setBottomMargin(const double &y);
+    void setLeftMargin(const double &x);
+    void setRightMargin(const double &y);
+
+    double width() const;
+    double height() const;
+    double topMargin() const;
+    double bottomMargin() const;
+    double leftMargin() const;
+    double rightMargin() const;
+
+    // the y coordinate
+    double offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSideEnum
     PageSideEnum pageSide() const { return m_pageSide; }
     /// set the pageSide of this page, see the PageSideEnum
     void setPageSide(PageSideEnum ps) { m_pageSide = ps; }
 
-    int pageNum() const { return m_pageNum; }
+    int pageNumber() const { return m_pageNum; }
+
+    QRect zoomedRect(KoZoomHandler *zoomHandler);
+    const KoRect rect() const;
 
 private:
     // private constructor, only for our friends
-    KWPage(int pageNum);
-    int m_pageNum; ///< first page is 1
-    KoRect m_size;
+    KWPage(KWPageManager *parent, int pageNum);
+    int m_pageNum;
     PageSideEnum m_pageSide;
+    KoPageLayout m_pageLayout;
+
+    KWPageManager *m_parent;
 
 friend class KWPageManager;
 };

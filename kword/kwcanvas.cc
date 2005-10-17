@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,8 @@
 #include "kwtabletemplate.h"
 #include "kwtextdocument.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <qbuffer.h>
 #include <qtimer.h>
@@ -234,9 +237,9 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
         painter->save();
         int pgNum = (*it) - 1;
-        int yOffset = m_doc->pageTop( pgNum );
+        int yOffset = m_doc->zoomItY( m_doc->pageManager()->topOfPage( pgNum ) );
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
-        QRect pageRect( 0, yOffset, m_doc->paperWidth(), m_doc->paperHeight() );
+        QRect pageRect = m_doc->pageManager()->page(pgNum)->zoomedRect(m_doc);
         painter->fillRect( pageRect, white );
 
         painter->translate( 0, -yOffset );
@@ -490,6 +493,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
     {
         // Apply grid for the first corner only
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        int pageNum = m_doc->pageManager()->pageNumber( &docPoint );
         if ( m_doc->snapToGrid() )
             applyGrid( docPoint );
         m_insRect.setRect( docPoint.x(), docPoint.y(), 0, 0 );
@@ -503,8 +507,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             m_insRect.setWidth( m_doc->unzoomItX( width ) );
             m_insRect.setHeight( m_doc->unzoomItY( height ) );
             // Apply reasonable limits
-            width = kMin( width, m_doc->paperWidth() - normalPoint.x() - 5 );
-            height = kMin( height, m_doc->paperHeight()- normalPoint.y() - 5 );
+            width = kMin( width, m_doc->paperWidth(pageNum) - normalPoint.x() - 5 );
+            height = kMin( height, m_doc->paperHeight(pageNum) - normalPoint.y() - 5 );
             // And apply aspect-ratio if set
             if ( m_keepRatio )
             {
@@ -831,9 +835,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         applyGrid( docPoint );
     double x = docPoint.x();
     double y = docPoint.y();
-    int page = static_cast<int>( y / m_doc->ptPaperHeight() );
-    int oldPage = static_cast<int>( frame->top() / m_doc->ptPaperHeight() );
-    Q_ASSERT( oldPage == frame->pageNum() );
+    int page = m_doc->pageManager()->pageNumber(&docPoint);
+    int oldPage = m_doc->pageManager()->pageNumber(frame);
 
     // Calculate new frame coordinates, using minimum sizes, and keeping it in the bounds of the page
     double newLeft = frame->left();
@@ -850,13 +853,13 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         {
             if (newBottom - y < minHeight+5)
                 y = newBottom - minHeight - 5;
-            y = QMAX( y, m_doc->ptPageTop( oldPage ) );
+            y = QMAX( y, m_doc->pageManager()->topOfPage( oldPage ) );
             newTop = y;
         } else if ( bottom && newBottom != y )
         {
             if (y - newTop < minHeight+5)
                 y = newTop + minHeight + 5;
-            y = QMIN( y, m_doc->ptPageTop( oldPage + 1 ) );
+            y = QMIN( y, m_doc->pageManager()->topOfPage( oldPage + 1 ) );
             newBottom = y;
         }
 
@@ -870,7 +873,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         {
             if (x - newLeft < minWidth)
                 x = newLeft + minWidth + 5; // why +5 ?
-            x = QMIN( x, m_doc->ptPaperWidth() );
+            x = QMIN( x, m_doc->pageManager()->pageLayout(page).ptWidth );
             newRight = x;
         }
 
@@ -1048,6 +1051,8 @@ void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
 void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
 {
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KWPageManager *pageManager = m_doc->pageManager();
+    int page = pageManager->pageNumber(&docPoint);
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
     //int page = m_doc->getPageOfRect( m_boundingRect );
@@ -1075,9 +1080,9 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         p.setX( 1 );
         m_boundingRect.moveTopLeft( p );
     }
-    else if ( m_boundingRect.right() > m_doc->ptPaperWidth() - 1 )
+    else if ( m_boundingRect.right() > pageManager->pageLayout( page ).ptWidth - 1 )
     {
-        p.setX( m_doc->ptPaperWidth() - m_boundingRect.width() - 2 );
+        p.setX( pageManager->pageLayout( page ).ptWidth - m_boundingRect.width() - 2 );
         m_boundingRect.moveTopLeft( p );
     }
     // Now try Y
@@ -1095,27 +1100,27 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         p.setY( 1 );
         m_boundingRect.moveTopLeft( p );
     }
-    else if ( m_boundingRect.bottom() > m_doc->numPages() * m_doc->ptPaperHeight() - 1 )
+    else if ( m_boundingRect.bottom() >= pageManager->bottomOfPage(pageManager->lastPageNumber() ) )
     {
         //kdDebug() << "KWCanvas::mmEditFrameMove limiting to last page" << endl;
-        p.setY( m_doc->numPages() * m_doc->ptPaperHeight() - m_boundingRect.height() - 2 );
+        p.setY( pageManager->bottomOfPage(pageManager->lastPageNumber() ) - 2);
         m_boundingRect.moveTopLeft( p );
     }
     // Another annoying case is if the top and bottom points are not in the same page....
-    int topPage = static_cast<int>( m_boundingRect.top() / m_doc->ptPaperHeight() );
-    int bottomPage = static_cast<int>( m_boundingRect.bottom() / m_doc->ptPaperHeight() );
+    int topPage = pageManager->pageNumber( &m_boundingRect.topLeft() );
+    int bottomPage = pageManager->pageNumber( &m_boundingRect.bottomRight() );
     //kdDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
     if ( topPage != bottomPage )
     {
         // Choose the closest page...
         Q_ASSERT( topPage + 1 == bottomPage ); // Not too sure what to do otherwise
-        double topPart = (bottomPage * m_doc->ptPaperHeight()) - m_boundingRect.top();
-        if ( topPart > m_boundingRect.height() / 2 )
+        double topPart = m_boundingRect.bottom() - pageManager->bottomOfPage(topPage);
+        if ( topPart < m_boundingRect.height() / 2 )
             // Most of the rect is in the top page
-            p.setY( bottomPage * m_doc->ptPaperHeight() - m_boundingRect.height() - 1 );
+            p.setY( pageManager->bottomOfPage(topPage) - m_boundingRect.height() - 1 );
         else {
             // Most of the rect is in the bottom page
-            p.setY( bottomPage * m_doc->ptPaperHeight() + 5 /* grmbl, resize handles.... */ );
+            p.setY( pageManager->topOfPage(bottomPage) + 5 /* grmbl, resize handles.... */ );
             topPage = bottomPage;
         }
         //kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
@@ -1213,7 +1218,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool shiftPressed ) // Mouse
     if ( m_deleteMovingRect )
         drawMovingRect( p );
 
-    int page = m_doc->getPageOfRect( m_insRect );
+    int page = m_doc->pageManager()->pageNumber( &m_insRect );
     KoRect oldRect = m_insRect;
 
     // Resize the rectangle
@@ -1227,7 +1232,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool shiftPressed ) // Mouse
 
     // But not out of the page
     KoRect r = m_insRect.normalize();
-    if ( m_doc->isOutOfPage( r, page ) )
+    if ( !m_doc->pageManager()->page(page)->rect().contains(r) )
     {
         m_insRect = oldRect;
         // #### QCursor::setPos( viewport()->mapToGlobal( zoomPoint( m_insRect.bottomRight() ) ) );
@@ -1503,18 +1508,20 @@ void KWCanvas::mrCreatePixmap()
     kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
     // Make sure it's completely on page.
     KoRect picRect( kMin(m_insRect.left(), m_insRect.right()), kMin( m_insRect.top(), m_insRect.bottom()), kAbs( m_insRect.width()), kAbs(m_insRect.height()));
-    if(picRect.right() > m_doc->ptPaperWidth()) {
+    int page = m_doc->pageManager()->pageNumber( &picRect );
+    double pageWidth = m_doc->pageManager()->pageLayout(page).ptWidth;
+    if(picRect.right() > pageWidth) {
         double width = picRect.width();
 
-        m_insRect.setLeft(m_doc->ptPaperWidth() - width);
-        m_insRect.setRight(m_doc->ptPaperWidth());
+        m_insRect.setLeft(pageWidth - width);
+        m_insRect.setRight(pageWidth);
     }
-    int page = static_cast<int>(picRect.top() / m_doc->ptPaperHeight()) + 1;
 
-    if(picRect.bottom() > m_doc->ptPaperHeight() * page) {
+    double pageBottom = m_doc->pageManager()->bottomOfPage(page);
+    if(picRect.bottom() >  pageBottom) {
         double height = picRect.height();
-        picRect.setTop(m_doc->ptPaperHeight() * page - height);
-        picRect.setBottom(m_doc->ptPaperHeight() * page);
+        picRect.setTop(pageBottom - height);
+        picRect.setBottom(pageBottom);
     }
 
     if ( picRect.width() > 0 /*m_doc->gridX()*/ &&picRect.height() > 0 /*m_doc->gridY()*/ && !m_kopicture.isNull() )
@@ -1570,7 +1577,7 @@ void KWCanvas::mrCreateTable()
 {
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
-        if ( m_table.cols * s_minFrameWidth + m_insRect.x() > m_doc->ptPaperWidth() )
+        if ( m_table.cols * s_minFrameWidth + m_insRect.x() > m_doc->pageManager()->pageLayout(0).ptWidth )
         {
             KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there "
                                        "is not enough space available."));
@@ -1601,7 +1608,7 @@ void KWCanvas::mrCreateTable()
 KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to create the table
 {
     KWTableFrameSet *table = new KWTableFrameSet( m_doc, QString::null /*automatic name*/ );
-    int pageNum = static_cast<int>(m_insRect.y() / m_doc->ptPaperHeight());
+    int pageNum = m_doc->pageManager()->pageNumber(&m_insRect.topLeft());
 
     // Create a set of cells with random-size frames.
     for ( unsigned int i = 0; i < m_table.rows; i++ ) {
@@ -1636,8 +1643,10 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
 
         if(m_insRect.bottom()==0 && m_insRect.right()==0) {
             // if the user did not drag, just click; make a 200x150 square for him.
-            m_insRect.setLeft(QMIN(m_insRect.left(), m_doc->ptPaperWidth() - 200));
-            m_insRect.setTop(QMIN(m_insRect.top(), m_doc->ptPaperHeight() - 150));
+            int page = m_doc->pageManager()->pageNumber(&docPoint);
+            KoPageLayout pageLayout = m_doc->pageManager()->pageLayout(page);
+            m_insRect.setLeft(QMIN(m_insRect.left(), pageLayout.ptWidth - 200));
+            m_insRect.setTop(QMIN(m_insRect.top(), pageLayout.ptHeight - 150));
             m_insRect.setBottom(m_insRect.top()+150);
             m_insRect.setRight(m_insRect.left()+200);
         }

@@ -67,6 +67,8 @@ class KWLoadingInfo;
 class KoPicture;
 class KoPictureCollection;
 class KWChild;
+class KWPageManager;
+class KWPage;
 
 class QFont;
 class QStringList;
@@ -104,13 +106,6 @@ class KWPartFrameSet;
 class KWDocument : public KoDocument, public KoTextZoomHandler
 {
     Q_OBJECT
-    Q_PROPERTY( int numPages READ numPages )
-    Q_PROPERTY( double ptTopBorder READ ptTopBorder )
-    Q_PROPERTY( double ptBottomBorder READ ptBottomBorder )
-    Q_PROPERTY( double ptLeftBorder READ ptLeftBorder )
-    Q_PROPERTY( double ptRightBorder READ ptRightBorder )
-    Q_PROPERTY( double ptPaperHeight READ ptPaperHeight )
-    Q_PROPERTY( double ptPaperWidth READ ptPaperWidth )
     Q_PROPERTY( double ptColumnWidth READ ptColumnWidth )
     Q_PROPERTY( double ptColumnSpacing READ ptColumnSpacing )
     Q_PROPERTY( double gridX READ gridX WRITE setGridX )
@@ -272,42 +267,15 @@ public:
     void deleteFrame( KWFrame * frame );
 
     void deleteSelectedFrames();
-
-    /// Those distances are in _pixels_, i.e. with zoom and resolution applied.
-    unsigned int topBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptTop )); }
-    unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
-    unsigned int leftBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptLeft )); }
-    unsigned int rightBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptRight )); }
-    /// \warning don't multiply this value by the number of the page, this leads to rounding problems.
-    unsigned int paperHeight() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptHeight )); }
-    /// \warning don't multiply this value by the number of the page, this leads to rounding problems.
-    unsigned int paperWidth() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptWidth )); }
-    unsigned int columnSpacing() const { return static_cast<unsigned int>(zoomItX( m_pageColumns.ptColumnSpacing )); }
+    unsigned int paperHeight(int pageNum) const;
+    unsigned int paperWidth(int pageNum) const;
     /// Top of the page number pgNum, in pixels (in the normal coord system)
-    unsigned int pageTop( int pgNum /*0-based*/ ) const { return zoomItY( ptPageTop( pgNum ) ); }
-
-    // Those distances are in _pt_, i.e. the real distances, stored in m_pageLayout
-    double ptTopBorder() const { return m_pageLayout.ptTop; }
-    double ptBottomBorder() const { return m_pageLayout.ptBottom; }
-    double ptLeftBorder() const { return m_pageLayout.ptLeft; }
-    double ptRightBorder() const { return m_pageLayout.ptRight; }
-    double ptPaperHeight() const { return m_pageLayout.ptHeight; }
-    double ptPaperWidth() const { return m_pageLayout.ptWidth; }
+    unsigned int pageTop( int pgNum ) const;
     double ptColumnWidth() const;
     double ptColumnSpacing() const { return m_pageColumns.ptColumnSpacing; }
-    double ptPageTop( int pgNum /*0-based*/ ) const { return pgNum * m_pageLayout.ptHeight; }
     double ptFootnoteBodySpacing() const { return m_pageHeaderFooter.ptFootNoteBodySpacing; }
 
     unsigned int numColumns() const { return m_pageColumns.columns; }
-
-    /** Returns 0-based page number where rect is.
-     * @param _rect should be a rect in real pt coordinates.
-     * Use isOutOfPage to check that the rectangle is fully contained in that page.
-     */
-    int getPageOfRect( KoRect & _rect ) const;
-
-    /** Return true if @p r (in real pt coordinates) is out of the page @p page */
-    bool isOutOfPage( KoRect & r, int page ) const;
 
     void repaintAllViews( bool erase = false );
     /** Update all views of this document, area can be cleared before redrawing with the
@@ -368,7 +336,10 @@ public:
         m_defaultFont = newFont;
     }
 
+    // TODO remove numPages method
     int numPages() const { return pageCount(); }
+
+    int pageCount() const;
 
     KoPictureCollection *pictureCollection() { return m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
@@ -383,12 +354,12 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      */
-    void insertPage( int afterPageNum );
+    KWPage* insertPage( int afterPageNum );
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      */
-    int appendPage();
+    KWPage* appendPage();
     /**
      * Call this after appendPage, to get headers/footers on the new page,
      * and all the caches properly updated. This is separate from appendPage
@@ -401,10 +372,12 @@ public:
      * auto-inserting a new page (to avoid infinite loops if not)
      */
     QPtrList<KWFrame> framesToCopyOnNewPage( int afterPageNum ) const;
+
     /**
      * Remove a page. Call afterRemovePages() after removing one or more pages.
      */
     void removePage( int num );
+
     /**
      * Update things after removing one or more pages.
      */
@@ -804,7 +777,7 @@ public:
     void testAndCloseAllFrameSetProtectedContent();
     void updateRulerInProtectContentMode();
 
-    KoPageLayout pageLayout() const;
+    KoPageLayout pageLayout(int pageNumber = 0) const;
 
     QPtrListIterator<KWBookMark> bookmarkIterator() const { return QPtrListIterator<KWBookMark>(m_bookmarkList); }
 
@@ -836,6 +809,8 @@ public:
     void deleteLoadingInfo();
 
     KFormula::DocumentWrapper* formulaDocumentWrapper() { return m_formulaDocumentWrapper; }
+
+    KWPageManager *pageManager() const { return m_pageManager; }
 
 #ifdef HAVE_LIBKSPELL2
     KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
@@ -1061,6 +1036,8 @@ private:
 
     bool m_bShowGrid;
     bool m_bSnapToGrid;
+
+    KWPageManager *m_pageManager;
 };
 
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +65,8 @@
 #include "kwoasisloader.h"
 #include "kwoasissaver.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -1562,14 +1565,15 @@ void KWView::updateFrameStatusBarItem()
             QString unitName = m_doc->unitName();
             KWFrame * frame = m_doc->getFirstSelectedFrame();
             m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
-                                      .arg( frame->frameSet()->getName() )
-                                      .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
-                                      .arg( KoUnit::toUserStringValue((frame->top() - (frame->pageNum() * m_doc->ptPaperHeight())), unit ) )
-                                      .arg( KoUnit::toUserStringValue( frame->right(), unit ) )
-                                      .arg( KoUnit::toUserStringValue( frame->bottom(), unit ) )
-                                      .arg( KoUnit::toUserStringValue( frame->width(), unit ) )
-                                      .arg( KoUnit::toUserStringValue( frame->height(), unit ) )
-                                      .arg( unitName ) );
+                    .arg( frame->frameSet()->getName() )
+                    .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
+                    .arg( KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(
+                                m_doc->pageManager()->pageNumber(frame) ), unit) )
+                    .arg( KoUnit::toUserStringValue( frame->right(), unit ) )
+                    .arg( KoUnit::toUserStringValue( frame->bottom(), unit ) )
+                    .arg( KoUnit::toUserStringValue( frame->width(), unit ) )
+                    .arg( KoUnit::toUserStringValue( frame->height(), unit ) )
+                    .arg( unitName ) );
         } else
             m_sbFramesLabel->setText( i18n( "%1 frames selected" ).arg( nbFrame ) );
     }
@@ -2371,7 +2375,9 @@ void KWView::pasteData( QMimeSource* data )
             }
         }
         else { // providesImage, must be after providesOasis
-            KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+            KoPageLayout pl = m_doc->pageManager()->pageLayout( m_currentPage );
+            KoPoint docPoint( pl.ptLeft,
+                    m_doc->pageManager()->topOfPage( m_currentPage ) + pl.ptTop);
             m_gui->canvasWidget()->pasteImage( data, docPoint );
         }
     }
@@ -3038,13 +3044,13 @@ void KWView::viewZoom( const QString &s )
 
     if ( s == i18n("Zoom to Width") )
     {
-        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
+        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) );
         ok = true;
     }
     else if ( s == i18n("Zoom to Whole Page") )
     {
-        double height = m_doc->resolutionY() * m_doc->ptPaperHeight();
-        double width = m_doc->resolutionX() * m_doc->ptPaperWidth();
+        double height = m_doc->resolutionY() * m_doc->pageManager()->page(m_currentPage)->height();
+        double width = m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->height();
         zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
                      qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) );
         ok = true;
@@ -3123,8 +3129,9 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
 {
     if ( makeInline )
     {
-        const double widthLimit = m_doc->unzoomItX( m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
-        const double heightLimit = m_doc->unzoomItY( m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
+        KWPage *page = m_doc->pageManager()->page(m_currentPage);
+        const double widthLimit = page->width() - page->leftMargin() - page->rightMargin() - 10;
+        const double heightLimit = page->height() - page->topMargin() - page->bottomMargin() - 10;
         fsInline = 0L;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
 
@@ -4101,9 +4108,11 @@ void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
     // of an inline (floating) table, the size of the page for other tables.
     double maxRightOffset;
     if (table->isFloating())    // inline table: max offset of containing frame
-         maxRightOffset = table->anchorFrameset()->frame(0)->right();
-    else                        // non inline table: max offset of the page
-         maxRightOffset = m_doc->ptPaperWidth() - m_doc->ptRightBorder();
+        maxRightOffset = table->anchorFrameset()->frame(0)->right();
+    else {                      // non inline table: max offset of the page
+        KWPage *page = m_doc->pageManager()->page( table->getCell(0,0)->frame(0) );
+        maxRightOffset = page->width() - page->rightMargin();
+    }
 
     KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert Column"),
         table, col,  maxRightOffset);

@@ -59,6 +59,8 @@ class KoXmlWriter;
 class KoSavingContext;
 class KoTextDocument;
 class KWFrameList;
+class KWPageManager;
+class KWPage;
 
 /**
  * small utility class representing a sortable (by z-order) list of frames
@@ -825,6 +827,9 @@ public:
     virtual void setProtectContent ( bool protect ) = 0;
     virtual bool protectContent() const = 0;
 
+    void setPageManager(KWPageManager *pm) { m_pageManager = pm; }
+    KWPageManager* pageManager() const { return m_pageManager; }
+
 signals:
 
     /// Emitted when something has changed in this frameset,
@@ -867,6 +872,7 @@ protected:
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
     KWordFrameSetIface *m_dcop;
+    KWPageManager *m_pageManager;
 };
 
 /******************************************************************/

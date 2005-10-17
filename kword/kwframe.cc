@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +35,7 @@
 #include "KWordPictureFrameSetIface.h"
 #include "KWordHorizontalLineFrameSetIface.h"
 #include "KWFrameList.h"
+#include "KWPage.h"
 
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
@@ -145,19 +147,12 @@ int KWFrame::pageNum() const
         kdDebug() << k_funcinfo << this << " has no frameset!" << endl;
         return 0;
     }
-    return pageNum( m_frameSet->kWordDocument() );
+    return frameSet()->pageManager()->pageNumber(this);
 }
 
 int KWFrame::pageNum( KWDocument* doc ) const
 {
-    if ( y() < 0.1 )
-        return 0;
-    // ### This kind of calculation will break the day we introduce sections
-    // (with different page sizes and orientation).
-    int page = static_cast<int>(y() / doc->ptPaperHeight());
-    return page;
-    // Circular dependency. KWDoc uses pageNum to calculate the number of pages!
-    //return KMIN( page, doc->numPages()-1 );
+    return doc->pageManager()->pageNumber(this);
 }
 
 MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, MouseMeaning defaultMeaning )
@@ -681,11 +676,11 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, con
     if ( !frameSet()->isFloating() )
     { // non-inline frame, anchored to page
         int pgNum = pageNum();
-        double yInPage = top() - pgNum * frameSet()->kWordDocument()->ptPaperHeight();
+        double yInPage = top() - frameSet()->pageManager()->topOfPage(pgNum);
         writer.addAttributePt( "svg:x", left() );
         writer.addAttributePt( "svg:y", yInPage );
         writer.addAttribute( "text:anchor-type", "page" );
-        writer.addAttribute( "text:anchor-page-number", pgNum + 1 ); // OASIS starts at 1
+        writer.addAttribute( "text:anchor-page-number", pgNum + 1); // OASIS starts at 1
         writer.addAttribute( "draw:z-index", zOrder() );
     }
     writer.addAttributePt( "svg:width", width() );
@@ -878,13 +873,14 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
       m_info( FI_BODY ),
       grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
       m_protectSize( false ),
-      m_anchorTextFs( 0L ), m_dcop( 0L )
+      m_anchorTextFs( 0L ), m_dcop( 0L ), m_pageManager( 0 )
 {
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
     m_framesInPage.setAutoDelete( true ); // autodelete the lists in the array (not the frames;)
+    m_pageManager = doc->pageManager();
 }
 
 KWordFrameSetIface* KWFrameSet::dcopObject()
@@ -976,10 +972,9 @@ void KWFrameSet::deleteAllCopies()
 
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
-    int paperHeight = m_doc->paperHeight();
+    int paperHeight = m_doc->pageManager()->pageLayout(0 /* what page should this b? */).ptHeight;
     //kdDebug(32001) << "KWFrameSet::createEmptyRegion " << getName() << endl;
-    QPtrListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
+    for (QPtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect(viewMode) ) );
         //kdDebug(32001) << "KWFrameSet::createEmptyRegion outerRect=" << outerRect << " crect=" << crect << endl;

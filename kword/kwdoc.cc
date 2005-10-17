@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2005 David Faure <faure@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +42,8 @@
 #include "kwoasisloader.h"
 #include "kwoasissaver.h"
 #include "KWFrameList.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -157,7 +160,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     } else {
         m_unit = KoUnit::U_CM;
     }
-    setPageCount( 1 );
+    m_pageManager = new KWPageManager();
+    m_pageManager->appendPage();
     m_loadingInfo = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
     m_processingType = WP;
@@ -501,8 +505,6 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 
 bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
-    setPageCount ( 1 );
-
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
@@ -598,8 +600,6 @@ void KWDocument::initUnit()
 
 void KWDocument::initEmpty()
 {
-    setPageCount ( 1 );
-
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
@@ -618,9 +618,9 @@ void KWDocument::initEmpty()
     setEmpty();
 }
 
-KoPageLayout KWDocument::pageLayout() const
+KoPageLayout KWDocument::pageLayout(int pageNumber /* = 0 */) const
 {
-    return m_pageLayout;
+    return pageManager()->pageLayout(pageNumber);
 }
 
 void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews )
@@ -629,6 +629,8 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
         int numPages = pageCount();
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
         m_pageLayout = _layout;
+        pageManager()->setDefaultPageSize(_layout.ptWidth, _layout.ptHeight);
+        pageManager()->setDefaultPageMargins(_layout.ptTop, _layout.ptLeft, _layout.ptBottom, _layout.ptRight);
         m_pageColumns = _cl;
         m_pageHeaderFooter = _hf;
 
@@ -641,12 +643,15 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
                 kdDebug(32002) << "KWDocument::setPageLayout ensuring that recalcFrames will consider " << numPages << " pages." << endl;
                 // All that matters is that it's on numPages so that all pages will be recalc-ed.
                 // If the text layout then wants to remove some pages, no problem.
-                lastFrame->setY( numPages * ptPaperHeight() + ptTopBorder() );
+                KWPage *page =  pageManager()->page( numPages );
+                lastFrame->setY( page->offsetInDocument() + page->topMargin() );
             }
         }
 
     } else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
+        pageManager()->setDefaultPageSize(_layout.ptWidth, _layout.ptHeight);
+        pageManager()->setDefaultPageMargins(0, 0, 0, 0);
         m_pageLayout = _layout;
         m_pageLayout.ptLeft = 0;
         m_pageLayout.ptRight = 0;
@@ -677,7 +682,8 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
 
 double KWDocument::ptColumnWidth() const
 {
-    return ( ptPaperWidth() - ptLeftBorder() - ptRightBorder() -
+    KoPageLayout pl = pageManager()->pageLayout(0 /* real page nr? */);
+    return ( pl.ptWidth - pl.ptLeft - pl.ptRight -
              ptColumnSpacing() * ( m_pageColumns.columns - 1 ) )
         / m_pageColumns.columns;
 }
@@ -951,19 +957,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
         }
 
         int oldPages = pageCount();
-        unsigned int frms = frameset->getNumFrames();
 
         // Determine number of pages - first from the text frames
         // - BUT NOT from the number of frames. Some people manage to end up with
         // multiple frames of textframeset1 on the same page(!)
-        // setPageCount( static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) ));
-#ifdef DEBUG_PAGES
-        //kdDebug(32002) << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << pageCount() << endl;
-#endif
-        setPageCount( frameset->frame( frms - 1 )->pageNum() + 1 );
-
+        double maxBottom = frameset->frame( frameset->getNumFrames() -1 )->bottom();
         // Then from the other frames ( framesetNum > 0 )
-        double maxBottom = 0;
         for (int m = numFrameSets() - 1; m > 0; m-- )
         {
             KWFrameSet *fs=frameSet(m);
@@ -979,14 +978,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 }
             }
         }
-        int pages2 = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
-#ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::recalcFrames, WP, pageCount()=" << pageCount() << " pages2=" << pages2
-                       << " (coming from maxBottom=" << maxBottom << " and ptPaperHeight=" << ptPaperHeight() << ")"
-                       << endl;
-#endif
-
-        setPageCount ( QMAX( pages2, pageCount() ) );
+        KWPage *last = pageManager()->page(pageManager()->lastPageNumber());
+        double docHeight = last->offsetInDocument() + last->height();
+        while(docHeight <= maxBottom) {
+            last = pageManager()->appendPage();
+            docHeight += last->height();
+        }
 
         if ( toPage == -1 )
             toPage = pageCount() - 1;
@@ -1005,7 +1002,8 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
             recalcVariables( VT_PGNUM );
         }
 
-    } else {
+    }
+    else {
         // DTP mode: calculate the number of pages from the frames.
         double maxBottom=0;
         for (QPtrListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
@@ -1020,12 +1018,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 }
             }
         }
-        setPageCount ( static_cast<int>( ceil( maxBottom / ptPaperHeight() ) ) );
-#ifdef DEBUG_PAGES
-	kdDebug(32002) << "DTP mode: pages = maxBottom("<<maxBottom<<") / ptPaperHeight=" << ptPaperHeight() << " = " << pageCount() << endl;
-#endif
-        if(pageCount() < 1) setPageCount(1);
-
+        KWPage *last = pageManager()->page(pageManager()->lastPageNumber());
+        double docHeight = last->offsetInDocument() + last->height();
+        while(docHeight <= maxBottom) {
+            last = pageManager()->appendPage();
+            docHeight += last->height();
+        }
         if ( toPage == -1 )
             toPage = pageCount() - 1;
         KWFrameList::recalcFrames(this, fromPage, toPage);
@@ -1140,6 +1138,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
             return false;
         }
+        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight);
+        pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
+                m_pageLayout.ptBottom, m_pageLayout.ptRight);
 
         //__hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
         //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
@@ -1218,6 +1219,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_headerVisible = false;
         m_footerVisible = false;
         m_pageLayout = KoPageLayout::standardLayout();
+        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight);
+        pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
+                m_pageLayout.ptBottom, m_pageLayout.ptRight);
     }
 
     createLoadingInfo();
@@ -1284,12 +1288,12 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             {
                 // We don't have support for changing the page layout yet, so just take the
                 // number of pages
-		int pages=1;
+                int pages=1;
                 QDomElement page;
                 forEachElement( page, tag )
                     ++pages;
                 kdDebug() << "DTP mode: found " << pages << "pages" << endl;
-		setPageCount ( pages );
+                //setPageCount ( pages );
             }
             else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
                 oasisLoader.loadFrame( tag, context );
@@ -1404,7 +1408,6 @@ void KWDocument::clear()
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
-    setPageCount ( 1 );
     m_bHasEndNotes = false;
 
     m_varColl->clear();
@@ -1753,8 +1756,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
-        KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
-                                     ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
+        KoPageLayout pl = pageManager()->pageLayout(1);
+        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
+                pl.ptRight, 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1765,8 +1769,9 @@ void KWDocument::endOfLoading()
     if ( !_odd_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
-        KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
-                                     ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
+        KoPageLayout pl = pageManager()->pageLayout(3);
+        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
+                pl.ptRight, 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1776,8 +1781,9 @@ void KWDocument::endOfLoading()
     if ( !_even_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
-        KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
-                                     ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
+        KoPageLayout pl = pageManager()->pageLayout(2);
+        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
+                pl.ptRight, 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1787,9 +1793,9 @@ void KWDocument::endOfLoading()
     if ( !_first_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
-        KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
-                                     ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
-                                     ptRightBorder(), 20 );
+        KoPageLayout pl = pageManager()->pageLayout(1);
+        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
+                pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1799,9 +1805,9 @@ void KWDocument::endOfLoading()
     if ( !_odd_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
-        KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
-                                     ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
-                                     ptRightBorder(), 20 );
+        KoPageLayout pl = pageManager()->pageLayout(3);
+        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
+                pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1811,9 +1817,9 @@ void KWDocument::endOfLoading()
     if ( !_even_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
-        KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
-                                     ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
-                                     ptRightBorder(), 20 );
+        KoPageLayout pl = pageManager()->pageLayout(2);
+        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
+                pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -3923,7 +3929,7 @@ QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const //
     return framesToCopy;
 }
 
-void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
+KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
 {
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "insertPage: afterPageNum=" << afterPageNum << endl;
@@ -3931,6 +3937,7 @@ void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
     if ( processingType() == WP )
         Q_ASSERT( afterPageNum == pageCount() -1 ); // WP mode: can only append.
 
+    double pageHeight = pageManager()->page( afterPageNum )->height();
     // If not appending, move down everything after 'afterPageNum', to make room.
     for ( int pg = pageCount () -1 ; pg > afterPageNum ; --pg )
     {
@@ -3941,10 +3948,10 @@ void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
 #endif
         QPtrListIterator<KWFrame> frameIt( frames );
         for ( ; frameIt.current(); ++frameIt )
-            frameIt.current()->moveBy( 0, ptPaperHeight() );
+            frameIt.current()->moveBy( 0, pageHeight );
     }
 
-    setPageCount ( pageCount() + 1 );
+    KWPage *page = pageManager()->insertPage(afterPageNum+1);
 
     // Fill in the new page
     QPtrList<KWFrame> framesToCopy = framesToCopyOnNewPage( afterPageNum );
@@ -3954,7 +3961,7 @@ void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
         KWFrame * frame = frameIt.current();
 
         KWFrame *newFrame = frame->getCopy();
-        newFrame->moveBy( 0, ptPaperHeight() );
+        newFrame->moveBy( 0, pageHeight );
         //newFrame->setPageNum( frame->pageNum()+1 );
         frame->frameSet()->addFrame( newFrame );
 
@@ -3962,15 +3969,15 @@ void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
             newFrame->setCopy( true );
         //kdDebug(32002) << "   => created frame " << newFrame << " " << *newFrame << endl;
     }
+    return page;
 }
 
-int KWDocument::appendPage()
+KWPage* KWDocument::appendPage()
 {
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::appendPage pageCount()=" << pageCount() << " -> insertPage(" << pageCount()-1 << ")" << endl;
 #endif
-    insertPage( pageCount() - 1 );
-    return pageCount() - 1; // Note that insertPage changes page count!
+    return insertPage( pageCount() - 1 );
 }
 
 void KWDocument::afterAppendPage( int pageNum )
@@ -4055,10 +4062,10 @@ void KWDocument::removePage( int pageNum )
 #endif
         QPtrListIterator<KWFrame> frameIt( frames );
         for ( ; frameIt.current(); ++frameIt )
-            frameIt.current()->moveBy( 0, -ptPaperHeight() );
+            frameIt.current()->moveBy( 0, pageManager()->page(0)->height() );
     }
 
-    setPageCount ( pageCount() -1 );
+    pageManager()->removePage(pageCount()-1);
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::removePage -- -> " << pageCount() << endl;
 #endif
@@ -4091,7 +4098,7 @@ bool KWDocument::tryRemovingPages()
     // Last frame is empty -> try removing last page, and more if necessary
     while ( lastPage > 0 && canRemovePage( lastPage ) )
     {
-        removePage( lastPage ); // this modifies pageCount
+        m_pageManager->removePage( lastPage ); // this modifies pageCount
         if ( lastPage <= pageCount() - 1 )
         {
             kdWarning() << "Didn't manage to remove page " << lastPage << " (still having " << pageCount() << " pages ). Aborting" << endl;
@@ -4125,7 +4132,7 @@ KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, 
 #endif
     KWFrameSet *hostFrameSet=parent->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    int page = QMIN(pageCount()-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
+    int page = pageManager()->pageNumber(&docPoint);
     QPtrList<KWFrame> frames = framesInPage(page);
 
     for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
@@ -4197,7 +4204,7 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
     kdDebug(32001) << "KWDocument::topFrameUnderMouse nPoint=" << nPoint << endl;
 #endif
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    int page = QMIN(pageCount()-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
+    int page = pageManager()->pageNumber(&docPoint);
     QPtrList<KWFrame> frames = framesInPage(page);
 
 #ifdef DEBUG_FRAMESELECT
@@ -4812,21 +4819,6 @@ void KWDocument::removeFrameSet( KWFrameSet *f )
     setModified( true );
 }
 
-int KWDocument::getPageOfRect( KoRect & _rect ) const
-{
-    int page = static_cast<int>(_rect.y() / ptPaperHeight());
-    return QMIN( page, pageCount()-1 );
-}
-
-// Return true if @p r is out of the page @p page
-bool KWDocument::isOutOfPage( KoRect & r, int page ) const
-{
-    return r.x() < 0 ||
-        r.right() > ptPaperWidth() ||
-        r.y() < page * ptPaperHeight() ||
-        r.bottom() > ( page + 1 ) * ptPaperHeight();
-}
-
 void KWDocument::addCommand( KCommand * cmd )
 {
     Q_ASSERT( cmd );
@@ -4868,7 +4860,7 @@ void KWDocument::printDebug()
     kdDebug() << "                 Debug info"<<endl;
     kdDebug() << "Document:" << this <<endl;
     kdDebug() << "Type of document: (0=WP, 1=DTP) " << processingType() <<endl;
-    kdDebug() << "size: x:" << ptLeftBorder()<< ", y:"<<ptTopBorder() << ", w:"<< ptPaperWidth() << ", h:"<<ptPaperHeight()<<endl;
+    //kdDebug() << "size: x:" << ptLeftBorder()<< ", y:"<<ptTopBorder() << ", w:"<< ptPaperWidth() << ", h:"<<ptPaperHeight()<<endl;
     kdDebug() << "Header visible: " << isHeaderVisible() << endl;
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
     kdDebug() << "Units: " << unit() <<endl;
@@ -5902,6 +5894,22 @@ void KWDocument::updateGridButton()
   for (; it.current(); ++it )
     ((KWView*)it.current())->updateGridButton();
 
+}
+
+unsigned int KWDocument::paperHeight(int pageNum) const {
+    return static_cast<unsigned int>(zoomItY( pageManager()->pageLayout(pageNum).ptHeight ));
+}
+
+unsigned int KWDocument::paperWidth(int pageNum) const {
+    return static_cast<unsigned int>(zoomItX( pageManager()->pageLayout(pageNum).ptWidth ));
+}
+
+unsigned int KWDocument::pageTop( int pgNum ) const {
+    return zoomItY( pageManager()->topOfPage( pgNum ) );
+}
+
+int KWDocument::pageCount() const {
+    return pageManager()->pageCount();
 }
 
 #include "kwdoc.moc"

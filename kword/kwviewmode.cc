@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,13 +24,15 @@
 #include "kwdoc.h"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 #include <kdebug.h>
 
 const unsigned short KWViewMode::s_shadowOffset = 3;
 
 QSize KWViewModeNormal::contentsSize()
 {
-    return QSize( m_doc->paperWidth(), m_doc->pageTop( m_doc->numPages() ) /*i.e. bottom of last one*/ );
+    return QSize( m_doc->paperWidth(1), m_doc->pageTop( m_doc->pageCount() ) /*i.e. bottom of last one*/ );
 }
 
 QSize KWViewMode::availableSizeForText( KWTextFrameSet* textfs )
@@ -188,7 +191,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     {
         // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
         int pagetop = m_doc->pageTop( page );
-        int pagewidth = m_doc->paperWidth();
+        int pagewidth = m_doc->paperWidth(1);
         int pageheight = m_doc->pageTop( page+1 ) - pagetop;
         pageRect = QRect( 0, pagetop, pagewidth, pageheight );
 
@@ -241,7 +244,7 @@ int KWViewModePreview::leftSpacing()
         else
             pagesPerRow = m_pagesPerRow;
 
-        int pagesWidth = ( m_spacing + ( m_doc->paperWidth() + m_spacing ) * pagesPerRow );
+        int pagesWidth = ( m_spacing + ( m_doc->paperWidth(1) + m_spacing ) * pagesPerRow );
         if ( pagesWidth < canvas()->visibleWidth() )
             return ( m_spacing + ( canvas()->visibleWidth() / 2 ) - ( pagesWidth / 2 ) );
     }
@@ -252,7 +255,7 @@ int KWViewModePreview::topSpacing()
 {
     if ( canvas() )
     {
-        int pagesHeight = ( m_spacing + ( m_doc->paperHeight() + m_spacing ) * numRows() );
+        int pagesHeight = ( m_spacing + ( m_doc->paperHeight(1) + m_spacing ) * numRows() );
         if ( pagesHeight < canvas()->visibleHeight() )
             return ( m_spacing + ( canvas()->visibleHeight() / 2 ) - ( pagesHeight / 2 ) );
     }
@@ -269,32 +272,32 @@ QSize KWViewModePreview::contentsSize()
     int pages = m_doc->numPages();
     int rows = (pages-1) / m_pagesPerRow + 1;
     int hPages = rows > 1 ? m_pagesPerRow : pages;
-    return QSize( m_spacing + hPages * ( m_doc->paperWidth() + m_spacing ),
-                  m_spacing + rows * ( m_doc->paperHeight() + m_spacing ) /* bottom of last row */ );
+    return QSize( m_spacing + hPages * ( m_doc->paperWidth(1) + m_spacing ),
+                  m_spacing + rows * ( m_doc->paperHeight(1) + m_spacing ) /* bottom of last row */ );
 }
 
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
 {
     // Can't use nPoint.y() / m_doc->paperHeight() since this would be a rounding problem
     double unzoomedY = m_doc->unzoomItY( nPoint.y() );
-    int page = static_cast<int>( unzoomedY / m_doc->ptPaperHeight() ); // quotient
-    double yInPagePt = unzoomedY - page * m_doc->ptPaperHeight();      // and rest
-    int row = page / m_pagesPerRow;
-    int col = page % m_pagesPerRow;
+    KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
+    double yInPagePt = unzoomedY - page->offsetInDocument();// and rest
+    int row = page->pageNumber() / m_pagesPerRow;
+    int col = page->pageNumber() % m_pagesPerRow;
     /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint.x() << "," << nPoint.y()
                 << " unzoomedY=" << unzoomedY
                 << " ptPaperHeight=" << m_doc->ptPaperHeight()
-                << " page=" << page << " row=" << row << " col=" << col
+                << " page=" << page->pageNumber() << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
-    return QPoint( leftSpacing() + col * ( m_doc->paperWidth() + m_spacing ) + nPoint.x(),
-                   topSpacing() + row * ( m_doc->paperHeight() + m_spacing ) + m_doc->zoomItY( yInPagePt ) );
+    return QPoint( leftSpacing() + col * ( m_doc->paperWidth(1) + m_spacing ) + nPoint.x(),
+                   topSpacing() + row * ( m_doc->paperHeight(1) + m_spacing ) + m_doc->zoomItY( yInPagePt ) );
 }
 
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
 {
     // Well, just the opposite of the above.... hmm.... headache....
-    int paperWidth = m_doc->paperWidth();
-    int paperHeight = m_doc->paperHeight();
+    int paperWidth = m_doc->paperWidth(1);
+    int paperHeight = m_doc->paperHeight(1);
     QPoint p( vPoint.x() - leftSpacing(), vPoint.y() - topSpacing() );
     int col = static_cast<int>( p.x() / ( paperWidth + m_spacing ) );
     int xInPage = p.x() - col * ( paperWidth + m_spacing );
@@ -312,8 +315,8 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
-    int paperWidth = m_doc->paperWidth();
-    int paperHeight = m_doc->paperHeight();
+    int paperWidth = m_doc->paperWidth(1);
+    int paperHeight = m_doc->paperHeight(1);
     //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
     QRegion grayRegion( crect );
     for ( int page = 0; page < m_doc->numPages(); page++ )
@@ -402,7 +405,7 @@ QSize KWViewModeText::contentsSize()
     int width = /*m_doc->paperWidth()*/
         m_doc->layoutUnitToPixelX( m_textFrameSet->textDocument()->width() );
 
-    int height = QMAX((int)m_doc->paperHeight(),
+    int height = QMAX((int)m_doc->paperHeight(1),
                       m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) );
     //kdDebug() << "KWViewModeText::contentsSize " << width << "x" << height << endl;
     return QSize( width, height );
