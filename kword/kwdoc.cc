@@ -4098,7 +4098,7 @@ bool KWDocument::tryRemovingPages()
     // Last frame is empty -> try removing last page, and more if necessary
     while ( lastPage > 0 && canRemovePage( lastPage ) )
     {
-        m_pageManager->removePage( lastPage ); // this modifies pageCount
+        removePage( lastPage ); // this modifies pageCount
         if ( lastPage <= pageCount() - 1 )
         {
             kdWarning() << "Didn't manage to remove page " << lastPage << " (still having " << pageCount() << " pages ). Aborting" << endl;
