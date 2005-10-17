@@ -862,7 +862,8 @@ void KWFrame::setFramePadding( double _left, double _top, double _right, double 
 
 void KWFrame::setMinFrameHeight(double h)
 {
-    //kdDebug() << k_funcinfo << m_frameSet->getName() << " " << this << " " << h << endl;
+    //if ( m_frameSet )
+    //    kdDebug() << k_funcinfo << m_frameSet->getName() << " " << this << " " << h << endl;
     m_minFrameHeight = h;
 }
 

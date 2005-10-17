@@ -1667,6 +1667,8 @@ KWFrame* KWTextFrameSet::loadOasisTextFrame( const QDomElement& frameTag, const 
     if ( hasMinHeight ) {
         double height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
         frame->setMinFrameHeight( height );
+        if ( height > frame->height() ) // do apply the min frame height
+            frame->setHeight( height );
     }
 
     // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
