@@ -62,7 +62,9 @@ class KOFFICECORE_EXPORT KPanelKbdSizer : public QObject
         // Exits Sizing mode.
         void exitSizing();
         // Moves panel handle based on key pressed.
-        void resizePanel(int key, int state);
+        void resizePanelFromKey(int key, int state);
+        // Moves panel handle based on deltaX and deltaY.
+        void resizePanel(int dx, int dy, int state);
         // Displays the sizer icon.
         void showIcon();
         // Hides the sizer icon.

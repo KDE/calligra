@@ -22,17 +22,15 @@
 #include <qdockwindow.h>
 #include <qdockarea.h>
 #include <qevent.h>
-#include <qlabel.h>
+#include <qcursor.h>
 #include <qobjectlist.h>
 #include <qwidgetlist.h>
-#include <qbitmap.h>
 
 // KDE includes
 #include <klocale.h>
 #include <kglobal.h>
 #include <kapplication.h>
 #include <kmainwindow.h>
-#include <kiconloader.h>
 #include <kaction.h>
 #include <kdebug.h>
 
@@ -41,23 +39,69 @@
 // TODO: See eventFilter method.
 // #include "kpanelkbdsizer.moc"
 
-class KPanelKbdSizerIcon : public QLabel
+class KPanelKbdSizerIcon : public QCursor
 {
     public:
-        KPanelKbdSizerIcon(QWidget* parent, const char * name = 0, WFlags f = 0) :
-            QLabel(parent, name, f)
+        KPanelKbdSizerIcon() :
+            QCursor(Qt::SizeAllCursor),
+            isActive(false)
         {
-            // Load icon.
-            QPixmap icon = KGlobal::iconLoader()->loadIcon("move", KIcon::Small, 0, true);
-            // kdDebug() << "KPanelKbdSizerIcon::KPanelKbdSizerIcon: icon size = " << icon.size() << endl;
-            resize(icon.size());
-            setPixmap(icon);
-            // Make transparent.
-            // TODO: This only works the first time the icon is shown.  When the icon is moved,
-            // whatever was in its background when first shown, moves with it.  Ugh.  Anybody
-            // know a solution, short of Xorg and composite thingy?
-            setBackgroundMode(Qt::NoBackground);
+            currentPos = QPoint(-1, -1);
         }
+
+        ~KPanelKbdSizerIcon()
+        {
+            hide();
+        }
+
+        void show(const QPoint p) {
+            if (!isActive) {
+                originalPos = QCursor::pos();
+                kapp->setOverrideCursor(*this);
+                isActive = true;
+            }
+            if (p != pos())
+                setPos(p);
+            currentPos = p;
+        }
+
+        void hide() {
+            if (isActive) {
+                kapp->restoreOverrideCursor();
+                QCursor::setPos(originalPos);
+            }
+            isActive = false;
+        }
+
+        void setShape(int shayp)
+        {
+            if (shayp != shape()) {
+                // Must restore and override to get the icon to refresh.
+                if (isActive) kapp->restoreOverrideCursor();
+                QCursor::setShape(shayp);
+                if (isActive) kapp->setOverrideCursor(*this);
+            }
+        }
+
+        // Return the difference between a position and where icon is supposed to be.
+        QSize delta(const QPoint p)
+        {
+            QPoint d = p - currentPos;
+            return QSize(d.x(), d.y());
+        }
+
+        // Return the difference between where the icon is currently positioned and where
+        // it is supposed to be.
+        QSize delta() { return delta(pos()); }
+
+        // True if the sizing icon is visible.
+        bool isActive;
+
+    private:
+        // Icon's current position.
+        QPoint currentPos;
+        // Mouse cursor's original position when icon is shown.
+        QPoint originalPos;
 };
 
 class KPanelKbdSizerPrivate
@@ -70,6 +114,11 @@ class KPanelKbdSizerPrivate
             handleNdx(0),
             icon(0),
             focusedWidget(0) {};
+
+        ~KPanelKbdSizerPrivate()
+        {
+            delete icon;
+        }
 
         // Action that starts panel sizing (defaults to F8), forward and reverse;
         KAction* fwdAction;
@@ -100,6 +149,7 @@ KPanelKbdSizer::KPanelKbdSizer(KMainWindow* parent, const char* name) :
     d->revAction = new KAction(i18n("Resize Panel Reverse"), KShortcut("Shift+F8"),
         0, 0, parent->actionCollection(), "resize_panel_reverse");
     d->revAction->setEnabled(false);
+    d->icon = new KPanelKbdSizerIcon();
     kapp->installEventFilter(this);
 }
 
@@ -108,8 +158,6 @@ KPanelKbdSizer::~KPanelKbdSizer()
     kapp->removeEventFilter(this);
     d->focusedWidget = 0;
     if (d->panel) exitSizing();
-    if (d->icon)
-        if (!d->icon->parent()) delete d->icon;
     delete d;
 }
 
@@ -138,29 +186,45 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
             if (k == KKey(Key_Escape))
                 exitSizing();
             else
-                resizePanel(kev->key(), kev->state());
+                resizePanelFromKey(kev->key(), kev->state());
             // Eat the key.
             return true;
         } else
             return false;
-    } else if (e->type() == QEvent::FocusOut && d->icon && o == d->icon) {
-        d->focusedWidget = 0;       // Do not restore focus to original when sizing began.
-        exitSizing();
-        // Don't eat the event.
     }
-    else if (e->type() == QEvent::Resize && d->icon && o == d->icon->parent()) {
+    else if (d->icon->isActive && e->type() == QEvent::MouseButtonPress) {
+        d->focusedWidget = 0;
+        exitSizing();
+        return true;
+    }
+/*    else if (e->type() == QEvent::MouseMove && d->icon->isActive) {
+        // Lock mouse cursor down.
+        showIcon();
+        dynamic_cast<QMouseEvent *>(e)->accept();
+        return true;
+    }*/
+    else if (e->type() == QEvent::MouseMove && d->icon->isActive && d->panel) {
+        // Resize according to mouse movement.
+        QMouseEvent* me = dynamic_cast<QMouseEvent *>(e);
+        QSize s = d->icon->delta();
+        int dx = s.width();
+        int dy = s.height();
+        resizePanel(dx, dy, me->state());
+        me->accept();
+        showIcon();
+        return true;
+    }
+    else if (e->type() == QEvent::Resize && d->panel && o == d->panel) {
         // TODO: This doesn't always work.  For example, hit the maximize/restore button
         // and the icon won't relocate.
-         showIcon();
+        showIcon();
         // TODO: This causes focus to become random.
         // d->focusedWidget = 0;
         // exitSizing();
     }
-    else if (e->type() == QEvent::LayoutHint && d->icon && o == d->icon->parent()) {
+/*    else if (e->type() == QEvent::LayoutHint && d->icon->isActive) {
          showIcon();
-    }
-    // TODO: If user resizes panel with mouse, icon does not disappear.
-    // standard event processing
+    }*/
     return false;
 }
 
@@ -200,7 +264,8 @@ void KPanelKbdSizer::nextHandle()
         if (panel->inherits("QSplitter"))
             advance = (d->handleNdx >= dynamic_cast<QSplitter *>(panel)->sizes().count());
         else
-            advance = (d->handleNdx > 2);
+            // Undocked windows have only one "handle" (center).
+            advance = (d->handleNdx > 2 || !dynamic_cast<QDockWindow *>(panel)->area());
         if (advance) {
             QWidgetList* allWidgets = getAllPanels();
             allWidgets->findRef(panel);
@@ -239,20 +304,32 @@ void KPanelKbdSizer::prevHandle()
             panel = 0;
             if (allWidgets->current()) panel = allWidgets->prev();
             delete allWidgets;
-            if (panel && panel->inherits("QSplitter"))
-                d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
-            else
-                d->handleNdx = 2;
+            if (panel) {
+                if (panel->inherits("QSplitter"))
+                    d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
+                else {
+                    if (dynamic_cast<QDockWindow *>(panel)->area())
+                        d->handleNdx = 2;
+                    else
+                        d->handleNdx = 1;
+                }
+            }
         }
     } else {
         // Find last panel.
         QWidgetList* allWidgets = getAllPanels();
         panel = allWidgets->last();
         delete allWidgets;
-        if (panel && panel->inherits("QSplitter"))
-            d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
-        else
-            d->handleNdx = 0;
+        if (panel) {
+            if (panel->inherits("QSplitter"))
+                d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
+            else {
+                if (dynamic_cast<QDockWindow *>(panel)->area())
+                    d->handleNdx = 2;
+                else
+                    d->handleNdx = 1;
+            }
+        }
     }
     d->panel = panel;
     if (panel)
@@ -278,12 +355,6 @@ void KPanelKbdSizer::showIcon()
 {
     if (!d->panel) return;
     QPoint p;
-    if (!d->icon) {
-        d->icon = new KPanelKbdSizerIcon(d->panel->topLevelWidget());
-        d->icon->installEventFilter(this);
-    }
-    if (d->icon->parent() != d->panel->topLevelWidget())
-        d->icon->reparent(d->panel->topLevelWidget(), p);
     // kdDebug() << "KPanelKbdSizer::showIcon: topLevelWidget = " << d->panel->topLevelWidget()->name() << endl;
     if (d->panel->inherits("QSplitter")) {
         QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
@@ -291,15 +362,17 @@ void KPanelKbdSizer::showIcon()
         QValueList<int> sizes = splitter->sizes();
         // kdDebug() << "KPanelKbdSizer::showIcon: sizes = " << sizes << endl;
         if (splitter->orientation() == Qt::Horizontal) {
-            p.setX(sizes[handleNdx] + (splitter->handleWidth() / 2) - (d->icon->width() / 2));
-            p.setY((splitter->height() / 2) - (d->icon->height() / 2));
+            d->icon->setShape(Qt::SizeHorCursor);
+            p.setX(sizes[handleNdx] + (splitter->handleWidth() / 2));
+            p.setY(splitter->height() / 2);
         } else {
-            p.setX((splitter->width() / 2) - (d->icon->width() / 2));
-            p.setY(sizes[handleNdx] + (splitter->handleWidth() / 2) - (d->icon->height() / 2));
+            d->icon->setShape(Qt::SizeVerCursor);
+            p.setX(splitter->width() / 2);
+            p.setY(sizes[handleNdx] + (splitter->handleWidth() / 2));
         }
         // kdDebug() << "KPanelKbdSizer::showIcon: p = " << p << endl;
-        p = splitter->mapTo(splitter->topLevelWidget(), p);
-        // kdDebug() << "KPanelKbdSizer::showIcon: mapToParent = " << p << endl;
+        p = splitter->mapToGlobal(p);
+        // kdDebug() << "KPanelKbdSizer::showIcon: mapToGlobal = " << p << endl;
     } else {
         QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
         p = dockWindow->pos();
@@ -309,50 +382,106 @@ void KPanelKbdSizer::showIcon()
             // kdDebug() << "KPanelKbdSizer::showIcon: mapTo = " << p << " of window = " << dockWindow->topLevelWidget()->name() << endl;
             // TODO: How to get the handle width?
             if (d->handleNdx == 1) {
+                d->icon->setShape(Qt::SizeHorCursor);
                 if (dockWindow->area()->orientation() == Qt::Vertical) {
                     if (dockWindow->area()->handlePosition() == QDockArea::Normal)
                         // Handle is to the right of the dock window.
-                        p.setX(p.x() + dockWindow->width() - (d->icon->width() / 2));
-                    else
-                        // Handle is to the left of the dock window.
-                        p.setX(p.x() - (d->icon->width() / 2));
+                        p.setX(p.x() + dockWindow->width());
+                        // else Handle is to the left of the dock window.
                 } else
                     // Handle is to the right of the dock window.
-                    p.setX(p.x() + dockWindow->width() - (d->icon->width() / 2));
-                p.setY(p.y() + (dockWindow->height() / 2) - (d->icon->height() / 2));
+                    p.setX(p.x() + dockWindow->width());
+                p.setY(p.y() + (dockWindow->height() / 2));
             } else {
-                p.setX(p.x() + (dockWindow->width() / 2) - (d->icon->width() / 2));
+                d->icon->setShape(Qt::SizeVerCursor);
+                p.setX(p.x() + (dockWindow->width() / 2));
                 if (dockWindow->area()->orientation() == Qt::Vertical)
                     // Handle is below the dock window.
-                    p.setY(p.y() + dockWindow->height() - (d->icon->height() / 2));
+                    p.setY(p.y() + dockWindow->height());
                 else {
                     if (dockWindow->area()->handlePosition() == QDockArea::Normal)
                         // Handle is below the dock window.
-                        p.setY(p.y() + dockWindow->height() - (d->icon->height() / 2));
-                    else
-                        // Handle is above the dock window.
-                        p.setY(p.y() - (d->icon->height() / 2));
+                        p.setY(p.y() + dockWindow->height());
+                        // else Handle is above the dock window.
                 }
             }
-        } else
-            p = QPoint();       // Undocked.  Position in upperleft corner.
+            p = dockWindow->topLevelWidget()->mapToGlobal(p);
+        } else {
+            d->icon->setShape(Qt::SizeAllCursor);
+            p = QPoint(dockWindow->width() / 2, dockWindow->height() / 2);
+            p = dockWindow->mapToGlobal(p);       // Undocked.  Position in center of window.
+        }
     }
-    // kdDebug() << "KPanelKbdSizer::showIcon: move(p) = " << p << endl;
-    d->icon->move(p);
-    d->icon->show();
-    d->icon->setFocus();
+    // kdDebug() << "KPanelKbdSizer::showIcon: show(p) = " << p << endl;
+    d->icon->show(p);
 }
 
 void KPanelKbdSizer::hideIcon()
 {
-    if (!d->icon) return;
     d->icon->hide();
-    d->icon->reparent(0, QPoint());
 }
 
-void KPanelKbdSizer::resizePanel(int key, int state)
+void KPanelKbdSizer::resizePanel(int dx, int dy, int state)
 {
-    // kdDebug() << "KPanelKdbSizer::resizePanel: key = " << key << " state = " << state << endl;
+    int adj = dx + dy;
+    if (adj == 0) return;
+    // kdDebug() << "KPanelKbdSizer::resizePanel: panel = " << d->panel->name() << endl;
+    if (d->panel->inherits("QSplitter")) {
+        QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
+        int handleNdx = d->handleNdx - 1;
+        QValueList<int> sizes = splitter->sizes();
+        // kdDebug() << "KPanelKbdSizer::resizePanel: before sizes = " << sizes << endl;
+        sizes[handleNdx] = sizes[handleNdx] + adj;
+        // kdDebug() << "KPanelKbdSizer::resizePanel: setSizes = " << sizes << endl;
+        splitter->setSizes(sizes);
+        QApplication::postEvent(splitter, new QEvent(QEvent::LayoutHint));
+    } else {
+        // TODO: How to get the handle width?
+        QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
+        if (dockWindow->area()) {
+            // kdDebug() << "KPanelKbdSizer::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
+            QSize fe = dockWindow->fixedExtent();
+            if (d->handleNdx == 1) {
+                // When vertically oriented and dock area is on right side of screen, pressing
+                // left arrow increases size.
+                if (dockWindow->area()->orientation() == Qt::Vertical &&
+                    dockWindow->area()->handlePosition() == QDockArea::Reverse) adj = -adj;
+                int w = fe.width();
+                if (w < 0) w = dockWindow->width();
+                w = w + adj;
+                if (w > 0 ) dockWindow->setFixedExtentWidth(w);
+            } else {
+                // When horizontally oriented and dock area is at bottom of screen,
+                // pressing up arrow increases size.
+                if (dockWindow->area()->orientation() == Qt::Horizontal &&
+                    dockWindow->area()->handlePosition() == QDockArea::Reverse) adj = -adj;
+                int h = fe.height();
+                if (h < 0) h = dockWindow->height();
+                h = h + adj;
+                if (h > 0) dockWindow->setFixedExtentHeight(h);
+            }
+            dockWindow->updateGeometry();
+            QApplication::postEvent(dockWindow->area(), new QEvent(QEvent::LayoutHint));
+            // kdDebug() << "KPanelKbdSizer::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
+        } else {
+            if (state == Qt::ShiftButton) {
+                QSize s = dockWindow->size();
+                s.setWidth(s.width() + dx);
+                s.setHeight(s.height() + dy);
+                dockWindow->resize(s);
+            } else {
+                QPoint p = dockWindow->pos();
+                p.setX(p.x() + dx);
+                p.setY(p.y() + dy);
+                dockWindow->move(p);
+            }
+        }
+    }
+}
+
+void KPanelKbdSizer::resizePanelFromKey(int key, int state)
+{
+    // kdDebug() << "KPanelKdbSizer::resizePanelFromKey: key = " << key << " state = " << state << endl;
     if (!d->panel) return;
     int dx = 0;
     int dy = 0;
@@ -365,61 +494,10 @@ void KPanelKbdSizer::resizePanel(int key, int state)
         case Qt::Key_Next:      dx = 50;    break;
     }
     int adj = dx + dy;
-    // kdDebug() << "KPanelKbdSizer::resizePanel: adj = " << adj << endl;
-    if (adj != 0) {
-        // kdDebug() << "KPanelKbdSizer::resizePanel: panel = " << d->panel->name() << endl;
-        if (d->panel->inherits("QSplitter")) {
-            QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
-            int handleNdx = d->handleNdx - 1;
-            QValueList<int> sizes = splitter->sizes();
-            // kdDebug() << "KPanelKbdSizer::resizePanel: before sizes = " << sizes << endl;
-            sizes[handleNdx] = sizes[handleNdx] + adj;
-            // kdDebug() << "KPanelKbdSizer::resizePanel: setSizes = " << sizes << endl;
-            splitter->setSizes(sizes);
-            QApplication::postEvent(splitter, new QEvent(QEvent::LayoutHint));
-        } else {
-            // TODO: How to get the handle width?
-            QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
-            if (dockWindow->area()) {
-                // kdDebug() << "KPanelKbdSizer::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
-                QSize fe = dockWindow->fixedExtent();
-                if (d->handleNdx == 1) {
-                    // When vertically oriented and dock area is on right side of screen, pressing
-                    // left arrow increases size.
-                    if (dockWindow->area()->orientation() == Qt::Vertical &&
-                        dockWindow->area()->handlePosition() == QDockArea::Reverse) adj = -adj;
-                    int w = fe.width();
-                    if (w < 0) w = dockWindow->width();
-                    w = w + adj;
-                    if (w > 0 ) dockWindow->setFixedExtentWidth(w);
-                } else {
-                    // When horizontally oriented and dock area is at bottom of screen,
-                    // pressing up arrow increases size.
-                    if (dockWindow->area()->orientation() == Qt::Horizontal &&
-                        dockWindow->area()->handlePosition() == QDockArea::Reverse) adj = -adj;
-                    int h = fe.height();
-                    if (h < 0) h = dockWindow->height();
-                    h = h + adj;
-                    if (h > 0) dockWindow->setFixedExtentHeight(h);
-                }
-                dockWindow->updateGeometry();
-                QApplication::postEvent(dockWindow->area(), new QEvent(QEvent::LayoutHint));
-                // kdDebug() << "KPanelKbdSizer::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
-            } else {
-                if (state == Qt::ShiftButton) {
-                    QSize s = dockWindow->size();
-                    s.setWidth(s.width() + dx);
-                    s.setHeight(s.height() + dy);
-                    dockWindow->resize(s);
-                } else {
-                    QPoint p = dockWindow->pos();
-                    p.setX(p.x() + dx);
-                    p.setY(p.y() + dy);
-                    dockWindow->move(p);
-                }
-            }
-        }
-    } else {
+    // kdDebug() << "KPanelKbdSizer::resizePanelFromKey: adj = " << adj << endl;
+    if (adj != 0)
+        resizePanel(dx, dy, state);
+    else {
         // TODO: This is purely experimental right now.  It is interesting that with this here,
         // I can get focus to palette tabs, but can't do that using normal tab order.
         if (key == Qt::Key_F6) {
