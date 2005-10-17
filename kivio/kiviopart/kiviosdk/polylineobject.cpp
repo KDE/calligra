@@ -201,9 +201,10 @@ CollisionFeedback PolylineObject::contains(const KoPoint& point)
   return feedback;
 }
 
-void PolylineObject::moveResizePoint(int pointId, const KoPoint& offset)
+KoPoint PolylineObject::moveResizePoint(int pointId, const KoPoint& offset)
 {
   m_pointVector[pointId] += offset;
+  return m_pointVector[pointId];
 }
 
 }

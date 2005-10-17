@@ -131,11 +131,11 @@ class Object{
     virtual bool selected() const { return m_selected; }
 
     /// Check if @p point exists inside the objects @see boundingBox()
-    virtual CollisionFeedback contains(const KoPoint& point);
+    virtual CollisionFeedback contains(const KoPoint& point) = 0;
     virtual bool intersects(const KoRect& rect);
 
     /// Move resize point @p pointId with @p offset points
-    virtual void moveResizePoint(int pointId, const KoPoint& offset) = 0;
+    virtual KoPoint moveResizePoint(int pointId, const KoPoint& offset) = 0;
     /// Paint zoomed resize point @p point
     virtual void paintResizePoint(QPainter& painter, const QPoint& point);
     /// Check if @p point is in resize point @p resizePoint

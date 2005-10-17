@@ -70,17 +70,16 @@ void GroupObject::resize(double xOffset, double yOffset)
   KoSize newSize(xOffset, yOffset);
   KoSize oldSize = size();
   newSize += oldSize;
+  setSize(newSize);
+  newSize = size();
   double percentIncreaseW = newSize.width() / oldSize.width();
   double percentIncreaseH = newSize.height() / oldSize.height();
-  setSize(newSize);
 
   QValueList<Kivio::Object*>::iterator it = m_objectList.begin();
   QValueList<Kivio::Object*>::iterator itEnd = m_objectList.end();
 
   for(;it != itEnd; ++it) {
-    if((xOffset > 1e-13) || (yOffset > 1e-13)) {
-      (*it)->resizeInPercent(percentIncreaseW, percentIncreaseH);
-    }
+    (*it)->resizeInPercent(percentIncreaseW, percentIncreaseH);
   }
 }
 
@@ -152,13 +151,11 @@ void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
     (*it)->paint(painter, zoomHandler);
   }
 
-  if(selected()) {
-    painter.setPen(QPen(QColor(0, 200, 0), 0, Qt::DashLine));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(0, 0, zoomHandler->zoomItX(size().width()), zoomHandler->zoomItY(size().height()));
-  }
-
   painter.restore();
+
+  if(selected()) {
+    paintSelection(painter, zoomHandler);
+  }
 }
 
 void GroupObject::addObject(Object* newObject)

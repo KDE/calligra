@@ -301,8 +301,7 @@ void SelectTool::resize(const QPoint& pos)
   KoPoint p = view()->canvasWidget()->mapFromScreen(pos);
   KoPoint move = p - m_previousPos;
 
-  m_clickedObject->moveResizePoint(m_collisionFeedback.resizePointId, move);
-  m_previousPos = p;
+  m_previousPos = m_clickedObject->moveResizePoint(m_collisionFeedback.resizePointId, move);
   view()->canvasWidget()->update();
   view()->updateToolBars();
 }

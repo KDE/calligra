@@ -72,19 +72,6 @@ void Object::setPen(const Pen& newPen)
   m_pen = newPen;
 }
 
-CollisionFeedback Object::contains(const KoPoint& point)
-{
-  KoRect rect = boundingBox();
-  CollisionFeedback feedback;
-  feedback.type = CTNone;
-
-  if(rect.contains(point)) {
-    feedback.type = CTBody;
-  }
-
-  return feedback;
-}
-
 bool Object::intersects(const KoRect& rect)
 {
   return boundingBox().intersects(rect);

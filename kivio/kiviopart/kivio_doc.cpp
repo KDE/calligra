@@ -183,7 +183,7 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return true;
   }
 
-  QString f;
+  QString urlString;
   KoTemplateChooseDia::ReturnType ret;
   KoTemplateChooseDia::DialogType dlgtype;
 
@@ -194,15 +194,15 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     dlgtype = KoTemplateChooseDia::OnlyTemplates;
   }
 
-  ret = KoTemplateChooseDia::choose( KivioFactory::global(), f,
+  ret = KoTemplateChooseDia::choose( KivioFactory::global(), urlString,
                                      dlgtype, "kivio_template", parentWidget );
 
   if( ret == KoTemplateChooseDia::File ) {
-    KURL url(f);
+    KURL url(urlString);
     bool ok = openURL(url);
     return ok;
   } else if ( ret == KoTemplateChooseDia::Template ) {
-    QFileInfo fileInfo( f );
+    QFileInfo fileInfo(urlString);
     QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );

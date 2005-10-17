@@ -74,11 +74,17 @@ class RectangleObject : public Object
      */
     virtual KoRect boundingBox();
 
-    /// Draws a rectangle to the canvas
+    /// Paints a rectangle to the canvas
     virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
 
+    virtual CollisionFeedback contains(const KoPoint& point);
+
     /// Move resize point @p pointId with @p offset points
-    virtual void moveResizePoint(int pointId, const KoPoint& offset);
+    virtual KoPoint moveResizePoint(int pointId, const KoPoint& _offset);
+
+  protected:
+    /// Paints the selection rectangle
+    virtual void paintSelection(QPainter& painter, KoZoomHandler* zoomHandler);
 
   private:
     KoPoint m_position;

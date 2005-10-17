@@ -89,7 +89,7 @@ class KIVIO_EXPORT PolylineObject : public Object
     virtual CollisionFeedback contains(const KoPoint& point);
 
     /// Move resize point @p pointId with @p offset points
-    virtual void moveResizePoint(int pointId, const KoPoint& offset);
+    virtual KoPoint moveResizePoint(int pointId, const KoPoint& offset);
 
   private:
     QValueVector<KoPoint> m_pointVector;
