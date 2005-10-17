@@ -1,14 +1,15 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
-   This library is free software; you can redistribute it and/or
+   This library is free software; you can redistribute it and/m_or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2 of the License, m_or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY m_or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -66,7 +67,7 @@ class KWFourSideConfigWidget : public QGroupBox
 {
     Q_OBJECT
 public:
-    KWFourSideConfigWidget( KWDocument* doc, const QString& title, QWidget*, const char* name = 0 );
+    KWFourSideConfigWidget( KWDocument* m_doc, const QString& title, QWidget*, const char* name = 0 );
 
     bool changed() const { return m_changed; }
 
@@ -84,9 +85,9 @@ public slots:
 private:
     KoUnitDoubleSpinBox *m_inputLeft, *m_inputRight, *m_inputTop, *m_inputBottom;
     QCheckBox *m_synchronize;
-    KWDocument *doc;
+    KWDocument *m_doc;
     bool m_changed;
-    bool noSignal;
+    bool m_noSignal;
 };
 
 /******************************************************************/
@@ -96,10 +97,10 @@ class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    /** Contructor when the dialog is used on creation of frame */
+    /** Contructor when the dialog is used on creation of m_frame */
     KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameSetType _ft);
     KWFrameDia( QWidget *parent, KWFrame *_frame);
-    KWFrameDia( QWidget *parent, QPtrList<KWFrame> allFrames);
+    KWFrameDia( QWidget *parent, QPtrList<KWFrame> m_allFrames);
     //KWFrameDia( QWidget *parent, KWCanvas *_canvas);
 
     //void setCanvas(KWCanvas *_canvas) {canvas =_canvas;}
@@ -150,72 +151,72 @@ protected slots:
     void slotPressEvent(QMouseEvent *_ev);
 private:
     // TAB 1:
-    QWidget *tab1;
-    QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
-    QGroupBox *endOfFrame, *onNewPage, *sideHeads;
-    QCheckBox *cbCopy, *cbAspectRatio, *cbAllFrames;
-    QCheckBox *cbProtectContent;
-    QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *copyRadio;
+    QWidget *m_tab1;
+    QGridLayout *m_grid1, *m_eofGrid, *m_onpGrid, *m_sideGrid;
+    QGroupBox *m_endOfFrame, *m_onNewPage, *m_sideHeads;
+    QCheckBox *m_cbCopy, *m_cbAspectRatio, *m_cbAllFrames;
+    QCheckBox *m_cbProtectContent;
+    QRadioButton *m_rResizeFrame, *m_rAppendFrame, *m_rNoShow, *m_reconnect, *m_noFollowup, *m_copyRadio;
     QLabel *sideTitle1, *sideTitle2;
-    QLineEdit *sideWidth, *sideGap;
-    QComboBox *sideAlign;
+    QLineEdit *m_sideWidth, *m_sideGap;
+    QComboBox *m_sideAlign;
 
     // TAB 2:
-    QWidget *tab2;
-    QRadioButton *rRunNo, *rRunBounding, *rRunSkip;
-    QRadioButton *rRunLeft, *rRunRight, *rRunBiggest;
-    QGroupBox *runGroup, *runSideGroup;
+    QWidget *m_tab2;
+    QRadioButton *m_rRunNo, *m_rRunBounding, *m_rRunSkip;
+    QRadioButton *m_rRunLeft, *m_rRunRight, *m_rRunBiggest;
+    QGroupBox *m_runGroup, *m_runSideGroup;
     KWFourSideConfigWidget* m_raDistConfigWidget;
 
     // TAB 3:
-    QWidget *tab3;
-    QLineEdit *eFrameSetName;
-    QListView *lFrameSList;
-    QRadioButton *rExistingFrameset, *rNewFrameset;
+    QWidget *m_tab3;
+    QLineEdit *m_eFrameSetName;
+    QListView *m_lFrameSList;
+    QRadioButton *m_rExistingFrameset, *m_rNewFrameset;
 
 
     // TAB 4:
-    QWidget *tab4;
-    QGroupBox *grp1;
-    QLabel *lx, *ly, *lw, *lh;
-    KoUnitDoubleSpinBox *sx, *sy, *sw, *sh;
+    QWidget *m_tab4;
+    QGroupBox *m_grp1;
+    QLabel *m_lx, *m_ly, *m_lw, *m_lh;
+    KoUnitDoubleSpinBox *m_sx, *m_sy, *m_sw, *m_sh;
     KWFourSideConfigWidget* m_paddingConfigWidget;
-    QCheckBox *floating;
-    QCheckBox *protectSize;
+    QCheckBox *m_floating;
+    QCheckBox *m_protectSize;
 
     // TAB 5:
-    QWidget *tab5;
+    QWidget *m_tab5;
 
     // TAB 6:
-    QWidget *tab6;
-    QComboBox *cWidth, *cStyle;
-    QPushButton *bLeft, *bRight, *bTop, *bBottom;
-    KColorButton *bColor;
+    QWidget *m_tab6;
+    QComboBox *m_cWidth, *m_cStyle;
+    QPushButton *m_bLeft, *m_bRight, *m_bTop, *m_bBottom;
+    KColorButton *m_bColor;
     KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
-    KoBorderPreview *prev3;
+    KoBorderPreview *m_prev3;
 
     //QComboBox *brushStyle;
-    QCheckBox* transparentCB;
-    KColorButton *brushColor;
+    QCheckBox* m_transparentCB;
+    KColorButton *m_brushColor;
     //KWBrushStylePreview *brushPreview;
-    QCheckBox *overwriteColor;
+    QCheckBox *m_overwriteColor;
 
-    KWFrame *frame;
-    KWFrame *mainFrame;
-    QPtrList<KWFrame> allFrames;
-    KWDocument *doc;
-    FrameSetType frameType;
-    bool frameSetFloating;
-    bool frameSetProtectedSize;
+    KWFrame *m_frame;
+    KWFrame *m_mainFrame;
+    QPtrList<KWFrame> m_allFrames;
+    KWDocument *m_doc;
+    FrameSetType m_frameType;
+    bool m_frameSetFloating;
+    bool m_frameSetProtectedSize;
     bool m_mainFrameSetIncluded;
-    bool m_defaultFrameSetIncluded; // header, footer or footnote
-    double oldX, oldY, oldW, oldH;
-    double heightByWidthRatio;
-    int /*FrameBehavior*/ frameBehavior;
-    KoUnit::Unit frameUnits;
-    QString oldFrameSetName;
-    QBrush newBrushStyle;
-    bool noSignal;
+    bool m_defaultFrameSetIncluded; // header, m_footer m_or m_footnote
+    double m_oldX, m_oldY, m_oldW, m_oldH;
+    double m_heightByWidthRatio;
+    int /*FrameBehavior*/ m_frameBehavior;
+    KoUnit::Unit m_frameUnits;
+    QString m_oldFrameSetName;
+    QBrush m_newBrushStyle;
+    bool m_noSignal;
 };
 
 #endif
