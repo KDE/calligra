@@ -171,7 +171,7 @@ public:
      *
      * Paint the guide lines to the buffer and if set also to the canvas. 
      *
-     * @param updateView If ture it also updates the canvas of the view.
+     * @param updateCanvas If true it also updates the canvas of the view.
      */
     void paint( bool updateCanvas = true );
 
