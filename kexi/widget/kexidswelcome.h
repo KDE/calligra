@@ -25,9 +25,9 @@
 class KexiDataSourceWizard;
 
 /**
- * this page is part of the @ref KexiDataSourceWizard
+ * This page is part of the KexiDataSourceWizard
  * it is the greeting page per default, where people
- * can choose wheather they want to use the wirzard
+ * can choose whether they want to use the wizard or not.
  */
 class KEXIEXTWIDGETS_EXPORT KexiDSWelcome : public QWidget
 {
