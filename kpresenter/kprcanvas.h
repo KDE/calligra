@@ -32,7 +32,7 @@
 #include <qvaluevector.h>
 #include <qtimer.h>
 
-#include <koGuideLines.h>
+#include <koGuides.h>
 #include <koRuler.h>
 #include <koQueryTrader.h>
 #include "koPointArray.h"
@@ -348,7 +348,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void savePicture();
 
     void dropImage( QMimeSource * data, bool resizeImageToOriginalSize = false , int posX = 10, int posX=10 );
-    KoGuideLines & guideLines() { return m_gl; }
+    KoGuides & guideLines() { return m_gl; }
 
 public slots:
     void exitEditMode();
@@ -372,6 +372,14 @@ public slots:
     void picViewOrig1600x1200();
     void picViewOrigFactor();
     void setActivePage( KPrPage* active );
+
+    /**
+     * @brief Set the guide move state
+     *
+     * @param state true set guide move state
+     *              false unset guide move state
+     */
+    void setMoveGuides( bool state );
 
 signals:
 
@@ -802,7 +810,10 @@ private:
     bool m_keyPressEvent;
     bool m_drawSymetricObject;
 
-    KoGuideLines m_gl;
+    /// guides
+    KoGuides m_gl;
+    /// true if we are in guide move state, false otherwise
+    bool m_moveGuides;
 };
 
 #endif // __KPRCANVAS__

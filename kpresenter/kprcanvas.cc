@@ -91,7 +91,8 @@
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
 , buffer( size() )
-, m_gl( _view, _view->zoomHandler(), &buffer )
+, m_gl( _view, _view->zoomHandler() )
+, m_moveGuides( false )    
 {
     m_presMenu = 0;
     m_currentTextObjectView=0L;
@@ -191,8 +192,6 @@ KPrCanvas::~KPrCanvas()
 
 void KPrCanvas::scrollX( int x )
 {
-    m_gl.erase( false );
-
     // Relative movement
     int dx = m_xOffset - x;
     // new position
@@ -203,8 +202,6 @@ void KPrCanvas::scrollX( int x )
 
 void KPrCanvas::scrollY( int y )
 {
-    m_gl.erase( false );
-
     // Relative movement
     int dy = m_yOffset - y;
     // new position
@@ -285,104 +282,115 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
     if ( isUpdatesEnabled() )
     {
-        m_gl.erase( false );
-        //kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
-        QPainter bufPainter;
-        bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
-        bufPainter.translate( -diffx(), -diffy() );
-        bufPainter.setBrushOrigin( -diffx(), -diffy() );
-
-        QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
-        bufPainter.setClipRect( crect );
-
-        //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << ", " << size() << endl;
-
-        crect.moveBy( diffx(), diffy() ); // now in contents coordinates
-        //kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
-
-        if ( editMode || !fillBlack )
-            bufPainter.fillRect( crect, white );
-        else
-            bufPainter.fillRect( crect, black );
-
         KPresenterDoc *doc =m_view->kPresenterDoc();
 
-        KPrPage * page = editMode ? m_activePage : doc->pageList().at( m_step.m_pageNumber );
-        drawBackground( &bufPainter, crect, page, editMode );
-
-        if ( editMode )
+        if ( ! m_moveGuides  )
         {
-            SelectionMode selectionMode;
+            //kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
+            QPainter bufPainter;
+            bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
+            bufPainter.translate( -diffx(), -diffy() );
+            bufPainter.setBrushOrigin( -diffx(), -diffy() );
 
-            if ( toolEditMode == TEM_MOUSE || toolEditMode == TEM_ZOOM )
-                selectionMode = SM_MOVERESIZE;
-            else if ( toolEditMode == TEM_ROTATE )
-                selectionMode = SM_ROTATE;
+            QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
+            bufPainter.setClipRect( crect );
+
+            //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << ", " << size() << endl;
+
+            crect.moveBy( diffx(), diffy() ); // now in contents coordinates
+            //kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
+
+            if ( editMode || !fillBlack )
+                bufPainter.fillRect( crect, white );
             else
-                selectionMode = SM_NONE;
+                bufPainter.fillRect( crect, black );
 
-            if ( doc->showGrid() && !doc->gridToFront())
-                drawGrid( &bufPainter, crect);
+            KPrPage * page = editMode ? m_activePage : doc->pageList().at( m_step.m_pageNumber );
+            drawBackground( &bufPainter, crect, page, editMode );
 
-            if ( doc->showHelplines() && !doc->helpLineToFront() )
+            if ( editMode )
             {
+                SelectionMode selectionMode;
+
+                if ( toolEditMode == TEM_MOUSE || toolEditMode == TEM_ZOOM )
+                    selectionMode = SM_MOVERESIZE;
+                else if ( toolEditMode == TEM_ROTATE )
+                    selectionMode = SM_ROTATE;
+                else
+                    selectionMode = SM_NONE;
+
+                if ( doc->showGrid() && !doc->gridToFront())
+                    drawGrid( &bufPainter, crect);
+
+                if ( doc->showHelplines() && !doc->helpLineToFront() )
+                {
 #if 0
-                drawHelplines( &bufPainter, crect);
+                    drawHelplines( &bufPainter, crect);
 #endif
-                drawHelpPoints( &bufPainter, crect);
+                    drawHelpPoints( &bufPainter, crect);
+                }
+
+                drawEditPage( &bufPainter, crect, page, selectionMode );
+
+                if ( doc->showGrid() && doc->gridToFront())
+                    drawGrid( &bufPainter, crect);
+
+                if ( doc->showHelplines() && doc->helpLineToFront())
+                {
+#if 0
+                    drawHelplines( &bufPainter, crect);
+#endif
+                    drawHelpPoints( &bufPainter, crect);
+                }
+            }
+            else
+            {
+                // Center the slide in the screen, if it's smaller...
+#if 0 // this works but isn't enough - e.g. object effects need the same offsets
+                // so we should store them, but they don't work like diffx/diffy...
+                // (e.g. the painter mustn't be translated when painting the background)
+                QRect desk = KGlobalSettings::desktopGeometry(this);
+                QRect pgRect = m_view->kPresenterDoc()->pageList().at(0)->getZoomPageRect();
+                int offx = 0, offy = 0;
+                if ( desk.width() > pgRect.width() )
+                    offx = ( desk.width() - pgRect.width() ) / 2;
+                if ( desk.height() > pgRect.height() )
+                    offy = ( desk.height() - pgRect.height() ) / 2;
+                bufPainter.translate( offx, offy );
+#endif
+
+                PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, m_effectTimer.isActive(), !goingBack );
+                drawPresPage( &bufPainter, crect, step );
+                if ( m_drawMode && m_drawModeLines.count() )
+                {
+                    bufPainter.save();
+                    bufPainter.setPen( m_view->kPresenterDoc()->presPen() );
+                    for ( unsigned int i = 0; i < m_drawModeLines.count(); ++i )
+                    {
+                        bufPainter.drawPolyline( m_drawModeLines[i] );
+                    }
+                    bufPainter.restore();
+                }
             }
 
-            drawEditPage( &bufPainter, crect, page, selectionMode );
+            bufPainter.end();
+        }
 
-            if ( doc->showGrid() && doc->gridToFront())
-                drawGrid( &bufPainter, crect);
-
-            if ( doc->showHelplines() && doc->helpLineToFront())
-            {
-#if 0
-                drawHelplines( &bufPainter, crect);
-#endif
-                drawHelpPoints( &bufPainter, crect);
-            }
+        
+        if ( editMode && doc->showHelplines() ) 
+        {
+            QPixmap m_guideBuffer( buffer );
+            QPainter guidePainter( &m_guideBuffer, &buffer );
+            guidePainter.translate( -diffx(), -diffy() );
+            guidePainter.setBrushOrigin( -diffx(), -diffy() );
+            m_gl.paintGuides( guidePainter );
+            guidePainter.end();
+            bitBlt( this, paintEvent->rect().topLeft(), &m_guideBuffer, paintEvent->rect() );
         }
         else
         {
-            // Center the slide in the screen, if it's smaller...
-#if 0 // this works but isn't enough - e.g. object effects need the same offsets
-      // so we should store them, but they don't work like diffx/diffy...
-      // (e.g. the painter mustn't be translated when painting the background)
-            QRect desk = KGlobalSettings::desktopGeometry(this);
-            QRect pgRect = m_view->kPresenterDoc()->pageList().at(0)->getZoomPageRect();
-            int offx = 0, offy = 0;
-            if ( desk.width() > pgRect.width() )
-                offx = ( desk.width() - pgRect.width() ) / 2;
-            if ( desk.height() > pgRect.height() )
-                offy = ( desk.height() - pgRect.height() ) / 2;
-            bufPainter.translate( offx, offy );
-#endif
-
-            PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, m_effectTimer.isActive(), !goingBack );
-            drawPresPage( &bufPainter, crect, step );
-            if ( m_drawMode && m_drawModeLines.count() )
-            {
-                bufPainter.save();
-                bufPainter.setPen( m_view->kPresenterDoc()->presPen() );
-                for ( unsigned int i = 0; i < m_drawModeLines.count(); ++i )
-                {
-                  bufPainter.drawPolyline( m_drawModeLines[i] );
-                }
-                bufPainter.restore();
-            }
+            bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
         }
-
-        bufPainter.end();
-
-        if ( editMode && doc->showHelplines() )
-        {
-            m_gl.paint( false );
-        }
-        bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
-
     }
     //else kdDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
 }
@@ -655,7 +663,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     if(!m_view->koDocument()->isReadWrite())
         return;
 
-    if ( m_gl.mousePressEvent( e ) )
+    if ( editMode && m_gl.mousePressEvent( e ) )
         return;
 
     m_moveStartPosMouse = objectRect( false ).topLeft();
@@ -1259,7 +1267,7 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( m_gl.mouseReleaseEvent( e ) )
+    if ( editMode && m_gl.mouseReleaseEvent( e ) )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
@@ -1530,7 +1538,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
-    if ( m_gl.mouseMoveEvent( e ) )
+    if ( editMode && m_gl.mouseMoveEvent( e ) )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
@@ -2473,9 +2481,6 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     if ( editMode )
     {
         QWidget::resizeEvent( e );
-        m_gl.erase();
-        m_gl.resize();
-        m_gl.paint();
     }
     else
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
@@ -5369,6 +5374,11 @@ void KPrCanvas::setActivePage( KPrPage* active )
     Q_ASSERT(active);
     //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* active) :"<<active<<endl;
     m_activePage = active;
+}
+
+void KPrCanvas::setMoveGuides( bool state )
+{
+    m_moveGuides = state;
 }
 
 bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
