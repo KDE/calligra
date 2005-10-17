@@ -50,7 +50,6 @@ using namespace KSpell2;
 class KoBgSpellCheck::Private
 {
 public:
-    bool enabled;
     int marked;
     KoSpell *backSpeller;
     QPtrDict<KoTextParag> paragCache;
@@ -67,7 +66,6 @@ KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
     kdDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
 #endif
     d = new Private;
-    d->enabled = false;
     d->startupChecking = false;
     d->marked = 0;
     d->backSpeller = new KoSpell( broker, this, "KoSpell" );
@@ -99,7 +97,7 @@ void KoBgSpellCheck::registerNewTextObject( KoTextObject *obj )
 
 void KoBgSpellCheck::setEnabled( bool b )
 {
-    d->enabled = b;
+    d->backSpeller->settings()->setBackgroundCheckerEnabled( b );
     if ( b )
         start();
     else
@@ -108,12 +106,12 @@ void KoBgSpellCheck::setEnabled( bool b )
 
 bool KoBgSpellCheck::enabled() const
 {
-    return d->enabled;
+    return d->backSpeller->settings()->backgroundCheckerEnabled();
 }
 
 void KoBgSpellCheck::start()
 {
-    if ( !d->enabled )
+    if ( !enabled() )
         return;
 
     d->startupChecking = true;
