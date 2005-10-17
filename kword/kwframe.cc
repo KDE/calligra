@@ -916,6 +916,14 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
     KWFrame *frm = frames.at( _num );
     Q_ASSERT( frm );
     frames.take( _num );
+    Q_ASSERT( !frames.contains(frm) );
+
+    unsigned int pageNum = frm->pageNum();
+    if(m_framesInPage.count() < pageNum) {
+        QPtrList<KWFrame> *lst = m_framesInPage.at(pageNum - m_firstPage);
+        lst->remove(frm);
+    }
+
     KWFrameList *stack = frm->frameStack();
     if( stack ) {
         stack->update(); // will update the other frames on the page.
@@ -972,7 +980,7 @@ void KWFrameSet::deleteAllCopies()
 
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
-    int paperHeight = m_doc->pageManager()->pageLayout(0 /* what page should this b? */).ptHeight;
+    double paperHeight = m_doc->pageManager()->pageLayout(0 /* what page should this b? */).ptHeight;
     //kdDebug(32001) << "KWFrameSet::createEmptyRegion " << getName() << endl;
     for (QPtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )
     {
