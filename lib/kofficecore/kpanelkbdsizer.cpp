@@ -112,8 +112,7 @@ class KPanelKbdSizerPrivate
             revAction(0),
             panel(0),
             handleNdx(0),
-            icon(0),
-            focusedWidget(0) {};
+            icon(0) {};
 
         ~KPanelKbdSizerPrivate()
         {
@@ -134,9 +133,6 @@ class KPanelKbdSizerPrivate
 
         // Sizing icon.
         KPanelKbdSizerIcon* icon;
-
-        // Widget that had focus when sizing began.
-        QWidget* focusedWidget;
 };
 
 KPanelKbdSizer::KPanelKbdSizer(KMainWindow* parent, const char* name) :
@@ -156,7 +152,6 @@ KPanelKbdSizer::KPanelKbdSizer(KMainWindow* parent, const char* name) :
 KPanelKbdSizer::~KPanelKbdSizer()
 {
     kapp->removeEventFilter(this);
-    d->focusedWidget = 0;
     if (d->panel) exitSizing();
     delete d;
 }
@@ -194,7 +189,6 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
             return false;
     }
     else if (d->icon->isActive && e->type() == QEvent::MouseButtonPress) {
-        d->focusedWidget = 0;
         exitSizing();
         return true;
     }
@@ -220,7 +214,6 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
         // and the icon won't relocate.
         showIcon();
         // TODO: This causes focus to become random.
-        // d->focusedWidget = 0;
         // exitSizing();
     }
 /*    else if (e->type() == QEvent::LayoutHint && d->icon->isActive) {
@@ -256,8 +249,6 @@ QWidgetList* KPanelKbdSizer::getAllPanels()
 void KPanelKbdSizer::nextHandle()
 {
     QWidget* panel = d->panel;
-    // If entering sizing mode, record widget which has the focus.
-    if (!panel) d->focusedWidget = kapp->focusWidget();
     // See if current panel has another handle.  If not, find next panel.
     if (panel) {
         bool advance = true;
@@ -292,8 +283,6 @@ void KPanelKbdSizer::nextHandle()
 void KPanelKbdSizer::prevHandle()
 {
     QWidget* panel = d->panel;
-    // If entering sizing mode, record widget which has the focus.
-    if (!panel) d->focusedWidget = kapp->focusWidget();
     // See if current panel has another handle.  If not, find next panel.
     if (panel) {
         bool rewind = true;
@@ -342,11 +331,6 @@ void KPanelKbdSizer::prevHandle()
 void KPanelKbdSizer::exitSizing()
 {
     // kdDebug() << "KPanelKbdSizer::exitSizing: running." << endl;
-    // Return focus to the widget that had it when resizing began.
-    if (d->focusedWidget) {
-        d->focusedWidget->setFocus();
-        d->focusedWidget = 0;
-    }
     hideIcon();
     d->handleNdx = 0;
     d->panel = 0;
