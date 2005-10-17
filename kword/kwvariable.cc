@@ -167,7 +167,7 @@ KoVariable *KWVariableCollection::createVariable( int type, short int subtype, K
         var = new KWPgNumVariable( textdoc, subtype, varFormat, this, m_doc );
         break;
     case VT_MAILMERGE:
-	var = new KWMailMergeVariable( textdoc, QString::null, coll->format("STRING"), this, m_doc );
+        var = new KWMailMergeVariable( textdoc, QString::null, coll->format("STRING"), this, m_doc );
         break;
     case VT_FOOTNOTE:
         if ( !loadFootNote )
@@ -532,7 +532,7 @@ void KWFootNoteVariable::finalize()
         // abortFormatting is a bool in kotextobject. So we need to return there before
         // starting text layout again.
         m_doc->delayedRecalcFrames( QMIN( pageNum, framePage ) );
-	m_doc->delayedRepaintAllViews();
+        m_doc->delayedRepaintAllViews();
     }
 }
 

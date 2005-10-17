@@ -355,7 +355,7 @@ private:
     // Split cell in table
     struct
     {
-	unsigned int nbCols;
+        unsigned int nbCols;
         unsigned int nbRows;
     }m_tableSplit;
 

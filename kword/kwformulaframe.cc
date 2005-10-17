@@ -102,7 +102,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
 KWordFrameSetIface* KWFormulaFrameSet::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWordFormulaFrameSetIface( this );
+        m_dcop = new KWordFormulaFrameSetIface( this );
 
     return m_dcop;
 }
@@ -325,15 +325,15 @@ QPixmap* KWFormulaFrameSet::m_bufPixmap = 0;
 QPixmap* KWFormulaFrameSet::doubleBufferPixmap( const QSize& s )
 {
     if ( !m_bufPixmap ) {
-	int w = QABS( s.width() );
-	int h = QABS( s.height() );
-	m_bufPixmap = new QPixmap( w, h );
+        int w = QABS( s.width() );
+        int h = QABS( s.height() );
+        m_bufPixmap = new QPixmap( w, h );
     } else {
-	if ( m_bufPixmap->width() < s.width() ||
-	     m_bufPixmap->height() < s.height() ) {
-	    m_bufPixmap->resize( QMAX( s.width(), m_bufPixmap->width() ),
+        if ( m_bufPixmap->width() < s.width() ||
+                m_bufPixmap->height() < s.height() ) {
+            m_bufPixmap->resize( QMAX( s.width(), m_bufPixmap->width() ),
                                  QMAX( s.height(), m_bufPixmap->height() ) );
-	}
+        }
     }
 
     return m_bufPixmap;
@@ -360,7 +360,7 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 DCOPObject* KWFormulaFrameSetEdit::dcopObject()
 {
     if ( !dcop )
-	dcop = new KWordFormulaFrameSetEditIface( this );
+        dcop = new KWordFormulaFrameSetEditIface( this );
     return dcop;
 }
 

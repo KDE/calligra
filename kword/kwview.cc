@@ -313,7 +313,7 @@ KWView::~KWView()
 DCOPObject* KWView::dcopObject()
 {
     if ( !dcop )
-	dcop = new KWordViewIface( this );
+        dcop = new KWordViewIface( this );
 
     return dcop;
 }
@@ -813,7 +813,7 @@ void KWView::setupActions()
     //actionFormatSub->setExclusiveGroup( "valign" );
 
     actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
-					     QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", 0,
+            QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", 0,
                                              this, SLOT( textIncreaseIndent() ),
                                              actionCollection(), "format_increaseindent" );
 
@@ -1097,12 +1097,12 @@ void KWView::setupActions()
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc." ) );
 
-	actionShowRuler = new KToggleAction( i18n( "Show Rulers" ), 0,
-										this, SLOT( showRuler() ),
-										actionCollection(), "show_ruler" );
-	actionShowRuler->setCheckedState(i18n("Hide Rulers"));
-	actionShowRuler->setToolTip( i18n( "Shows or hides rulers." ) );
-	actionShowRuler->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
+    actionShowRuler = new KToggleAction( i18n( "Show Rulers" ), 0,
+            this, SLOT( showRuler() ),
+            actionCollection(), "show_ruler" );
+    actionShowRuler->setCheckedState(i18n("Hide Rulers"));
+    actionShowRuler->setToolTip( i18n( "Shows or hides rulers." ) );
+    actionShowRuler->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
                     "document. The rulers show the position and width of pages and of frames and can "
                     "be used to position tabulators among others.<p>Uncheck this to disable "
                     "the rulers from being displayed." ) );
@@ -1735,11 +1735,11 @@ void KWView::print( KPrinter &prt )
     }
 
     if ( !m_doc->mailMergeDataBase() ) serialLetter=FALSE;
-	else
-	{
-		m_doc->mailMergeDataBase()->refresh(false);
-                if (m_doc->mailMergeDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
-	}
+    else
+    {
+        m_doc->mailMergeDataBase()->refresh(false);
+        if (m_doc->mailMergeDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
+    }
 
     //float left_margin = 0.0;
     //float top_margin = 0.0;
@@ -1805,7 +1805,7 @@ void KWView::print( KPrinter &prt )
         {
             for ( int i = 0; i < m_doc->mailMergeDataBase()->getNumRecords(); ++i ) {
                 m_doc->setMailMergeRecord( i );
-		m_doc->variableCollection()->recalcVariables(VT_MAILMERGE);
+                m_doc->variableCollection()->recalcVariables(VT_MAILMERGE);
                 m_gui->canvasWidget()->print( &painter, &prt );
                 if ( i < m_doc->mailMergeDataBase()->getNumRecords() - 1 )
                     prt.newPage();
@@ -2809,7 +2809,7 @@ void KWView::editCustomVars()
 
 void KWView::editMailMergeDataBase()
 {
-	m_doc->mailMergeDataBase()->showConfigDialog(this);
+    m_doc->mailMergeDataBase()->showConfigDialog(this);
 #if 0
     KWMailMergeEditor *dia = new KWMailMergeEditor( this, m_doc->mailMergeDataBase() );
     dia->exec();
@@ -4586,52 +4586,52 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
     QPtrList<KoTextFormatInterface> lst;
     if (currentTextEdit())
     {
-      if ( !currentTextEdit()->textObject()->protectContent())
-      {
-	// simply return the current textEdit
-	lst.append( currentTextEdit() );
-	kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
-	KWCollectFramesetsVisitor visitor;
-	currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all framesets in the selection
-	const QValueList<KWFrameSet *>& frameset = visitor.frameSets();
-	for ( QValueList<KWFrameSet *>::ConstIterator it = frameset.begin(); it != frameset.end(); ++it )
-	{
-	  if ( (*it)->type() == FT_TABLE )
-	  {
-	    KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( *it );
-	    //kdDebug() << "table found: " << kwtableframeset->getNumFrames() << endl;
-	    int const rows  = kwtableframeset->getRows();
-	    int const cols = kwtableframeset->getCols();
-	    //finding all cells and add them to the interface list
-	    for (int r=0; r<rows; ++r)
-	    {
-	      for (int c=0; c<cols; ++c)
-	      {
-		KWTableFrameSet::Cell *cell = kwtableframeset->getCell(r,c);
-		if (cell)
-		{
-		  kdDebug() << "adding (" << r << "," << c << ")" << endl;
-		  lst.append(cell);
-		}
-	      }
-	    }
-	  }
-	}
-      }
+        if ( !currentTextEdit()->textObject()->protectContent())
+        {
+            // simply return the current textEdit
+            lst.append( currentTextEdit() );
+            kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
+            KWCollectFramesetsVisitor visitor;
+            currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all framesets in the selection
+            const QValueList<KWFrameSet *>& frameset = visitor.frameSets();
+            for ( QValueList<KWFrameSet *>::ConstIterator it = frameset.begin(); it != frameset.end(); ++it )
+            {
+                if ( (*it)->type() == FT_TABLE )
+                {
+                    KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( *it );
+                    //kdDebug() << "table found: " << kwtableframeset->getNumFrames() << endl;
+                    int const rows  = kwtableframeset->getRows();
+                    int const cols = kwtableframeset->getCols();
+                    //finding all cells and add them to the interface list
+                    for (int r=0; r<rows; ++r)
+                    {
+                        for (int c=0; c<cols; ++c)
+                        {
+                            KWTableFrameSet::Cell *cell = kwtableframeset->getCell(r,c);
+                            if (cell)
+                            {
+                                kdDebug() << "adding (" << r << "," << c << ")" << endl;
+                                lst.append(cell);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     else
     {   // it might be that a frame (or several frames) are selected
         // in that case, list the text framesets behind them
-      QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-      QPtrListIterator<KWFrame> it( selectedFrames );
-      for ( ; it.current() ; ++it )
-      {
-	if ( it.current()->frameSet()->type() == FT_TEXT ) {
-	  KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
-	  if ( !lst.contains( fs )&& !fs->protectContent() )
-	    lst.append( fs );
-	}
-      }
+        QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        QPtrListIterator<KWFrame> it( selectedFrames );
+        for ( ; it.current() ; ++it )
+        {
+            if ( it.current()->frameSet()->type() == FT_TEXT ) {
+                KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
+                if ( !lst.contains( fs )&& !fs->protectContent() )
+                    lst.append( fs );
+            }
+        }
     }
     return lst;
 }
@@ -7248,7 +7248,7 @@ void KWView::addPersonalExpression()
     QString tmp=locateLocal("data","kword/expression/perso.xml");
     QFile file( tmp );
     if ( !file.open( IO_ReadOnly ) )
-	return;
+        return;
     QDomDocument doc;
     doc.setContent( &file );
     file.close();
@@ -7328,7 +7328,7 @@ void KWView::addPersonalExpression()
     if ( !file.open( IO_WriteOnly ) )
     {
         kdDebug()<<"Error in addPersonalExpression()\n";
-	return;
+        return;
     }
     file.writeBlock(s,s.length());
     file.close();

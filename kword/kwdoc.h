@@ -557,22 +557,22 @@ public:
       }
 
     static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
-      {
-	QString value;
-	if ( ( value = element.attribute( attributeName ) ) != QString::null )
-	  return value.toInt();
-	else
-	  return defaultValue;
-      }
+    {
+        QString value;
+        if ( ( value = element.attribute( attributeName ) ) != QString::null )
+            return value.toInt();
+        else
+            return defaultValue;
+    }
 
     static double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
-      {
-	QString value;
-	if ( ( value = element.attribute( attributeName ) ) != QString::null )
-	  return value.toDouble();
-	else
-	  return defaultValue;
-      }
+    {
+        QString value;
+        if ( ( value = element.attribute( attributeName ) ) != QString::null )
+            return value.toDouble();
+        else
+            return defaultValue;
+    }
 
 #ifndef NDEBUG
     void printStyleDebug();

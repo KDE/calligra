@@ -46,7 +46,7 @@ DCOPRef KWordTextFrameSetIface::startEditing()
     KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
     canvas->editFrameSet(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWTextFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() );
+            (static_cast<KWTextFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() );
 }
 
 bool KWordTextFrameSetIface::hasSelection() const

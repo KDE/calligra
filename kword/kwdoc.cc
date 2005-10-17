@@ -544,9 +544,9 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     KoTemplateChooseDia::DialogType dlgtype;
 
     if (flags != KoDocument::InitDocFileNew)
-	    dlgtype = KoTemplateChooseDia::Everything;
+        dlgtype = KoTemplateChooseDia::Everything;
     else
-	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
+        dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
 
     QString file;

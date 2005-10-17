@@ -77,8 +77,8 @@ static inline QPixmap loadIcon( const char * name ) {
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
-		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-		KDialogBase::Ok, parent)
+          KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
+          KDialogBase::Ok, parent)
 
 {
   QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface Settings"),

@@ -45,5 +45,5 @@ void KWordPartFrameSetIface::startEditing()
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
     /* return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWPartFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() ); */
+       (static_cast<KWPartFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() ); */
 }

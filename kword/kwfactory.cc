@@ -74,14 +74,14 @@ KInstance* KWFactory::instance()
       s_instance = new KInstance( aboutData() );
 
       s_instance->dirs()->addResourceType( "kword_template",
-				         KStandardDirs::kde_default("data") + "kword/templates/");
+              KStandardDirs::kde_default("data") + "kword/templates/");
       s_instance->dirs()->addResourceType( "expression", KStandardDirs::kde_default("data") + "kword/expression/");
       s_instance->dirs()->addResourceType( "horizontalLine", KStandardDirs::kde_default("data") + "kword/horizontalline/");
 
       s_instance->dirs()->addResourceType( "toolbar",
-				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
+              KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_instance->dirs()->addResourceType( "toolbar",
-				         KStandardDirs::kde_default("data") + "kformula/pics/");
+              KStandardDirs::kde_default("data") + "kformula/pics/");
       s_instance->iconLoader()->addAppDir("koffice");
     }
     return s_instance;

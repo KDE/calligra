@@ -21,13 +21,11 @@
 #include "KWordMailMergeDatabaseIface.h"
 
 KWordMailMergeDatabaseIface::KWordMailMergeDatabaseIface(const QCString &name)
-	:DCOPObject(name)
+    :DCOPObject(name)
 {
-	;
 }
 
 KWordMailMergeDatabaseIface::~KWordMailMergeDatabaseIface()
 {
-	;
 }
 

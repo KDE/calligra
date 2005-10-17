@@ -48,8 +48,8 @@ KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     setupTab1();
     setButtonOK( KGuiItem(
         i18n("&Delete"), "editdelete", type == ROW ?
-    	i18n("Delete the row from the table.") :
-    	i18n("Delete the column from the table.")) );
+        i18n("Delete the row from the table.") :
+        i18n("Delete the column from the table.")) );
 }
 
 void KWDeleteDia::setupTab1()

@@ -85,7 +85,7 @@ KWPartFrameSet::~KWPartFrameSet()
 KWordFrameSetIface* KWPartFrameSet::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWordPartFrameSetIface( this );
+        m_dcop = new KWordPartFrameSetIface( this );
 
     return m_dcop;
 }
@@ -304,7 +304,7 @@ KWPartFrameSetEdit::~KWPartFrameSetEdit()
 DCOPObject* KWPartFrameSetEdit::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWordPartFrameSetEditIface( this );
+        m_dcop = new KWordPartFrameSetEditIface( this );
     return m_dcop;
 }
 

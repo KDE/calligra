@@ -28,15 +28,15 @@
 #include <dcopobject.h>
 #include <koffice_export.h>
 typedef QMap<QString,QString> DbRecord;
-#define KWSLUnspecified		0
-#define KWSLEdit		1
-#define KWSLCreate		2
-#define KWSLOpen		3
-#define KWSLMergePreview	4
-#define KWSLMergeDocument	5
+#define KWSLUnspecified 0
+#define KWSLEdit 1
+#define KWSLCreate 2
+#define KWSLOpen 3
+#define KWSLMergePreview 4
+#define KWSLMergeDocument 5
 
-#define KWSLCreate_text		"create"
-#define KWSLOpen_text		"open"
+#define KWSLCreate_text "create"
+#define KWSLOpen_text "open"
 /******************************************************************
  *
  * Class: KWMailMergeDataSource

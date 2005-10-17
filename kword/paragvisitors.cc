@@ -33,7 +33,7 @@ bool KWCollectFramesetsVisitor::visit( KoTextParag *parag, int start, int end )
       KWAnchor *anchor = dynamic_cast<KWAnchor *>(customitem);
       if (anchor)
       {
-	m_framesets.append(anchor->frameSet());
+          m_framesets.append(anchor->frameSet());
       }
     }
   }

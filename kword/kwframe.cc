@@ -204,8 +204,8 @@ KWFrame *KWFrame::getCopy() {
 
 
 void KWFrame::invalidateParentFrameset() {
-	if (frameSet()->isFloating())
-		frameSet()->anchorFrameset()->invalidate();
+    if (frameSet()->isFloating())
+        frameSet()->anchorFrameset()->invalidate();
 }
 
 void KWFrame::copySettings(KWFrame *frm)
@@ -291,10 +291,10 @@ void KWFrame::updateCursorType()
 
 
 void KWFrame::frameBordersChanged() {
-	invalidateParentFrameset();
-	if (isSelected()) {
-		updateResizeHandles();
-	}
+    invalidateParentFrameset();
+    if (isSelected()) {
+        updateResizeHandles();
+    }
 }
 
 
@@ -886,7 +886,7 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
 KWordFrameSetIface* KWFrameSet::dcopObject()
  {
     if ( !m_dcop )
-	m_dcop = new KWordFrameSetIface( this );
+        m_dcop = new KWordFrameSetIface( this );
 
     return m_dcop;
 }
@@ -2232,7 +2232,7 @@ KWPictureFrameSet::~KWPictureFrameSet() {
 KWordFrameSetIface* KWPictureFrameSet::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWordPictureFrameSetIface( this );
+        m_dcop = new KWordPictureFrameSetIface( this );
 
     return m_dcop;
 }
@@ -2494,7 +2494,7 @@ bool KWHorzLineFrameSet::ownLine() const
 KWordFrameSetIface* KWHorzLineFrameSet::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWHorizontalLineFrameSetIface( this );
+        m_dcop = new KWHorizontalLineFrameSetIface( this );
     return m_dcop;
 }
 

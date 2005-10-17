@@ -43,6 +43,6 @@ DCOPRef KWordFormulaFrameSetIface::startEditing()
     KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
     canvas->editFrameSet( m_formulaFrame );
     return DCOPRef( kapp->dcopClient()->appId(),
-		    ( static_cast<KWFormulaFrameSetEdit *>( canvas->currentFrameSetEdit() ) )
-                    ->dcopObject()->objId() );
+            ( static_cast<KWFormulaFrameSetEdit *>( canvas->currentFrameSetEdit() ) )
+             ->dcopObject()->objId() );
 }

@@ -55,7 +55,7 @@ void KWTextImage::resize()
     if ( !m_image.isNull() ) {
         //KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
         width = m_image.getOriginalSize().width();
-	// width is a 100%-zoom pixel size. We want a LU pixel size -> we simply need 'to LU', i.e. ptToLayoutPt
+        // width is a 100%-zoom pixel size. We want a LU pixel size -> we simply need 'to LU', i.e. ptToLayoutPt
         width = KoTextZoomHandler::ptToLayoutUnitPt( width );
         height = m_image.getOriginalSize().height();
         height = KoTextZoomHandler::ptToLayoutUnitPt( height );

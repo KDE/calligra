@@ -70,7 +70,7 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /******************************************************************/
 
 KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWCanvas *_canvas, KWDocument *_doc,
-			int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName, int format)
+        int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName, int format)
     : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
 {
     m_useMode = _useMode;

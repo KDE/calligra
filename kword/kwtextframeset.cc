@@ -3189,20 +3189,20 @@ void KWTextFrameSetEdit::removeToolTipCompletion()
 
 void KWTextFrameSetEdit::textIncreaseIndent()
 {
-  	kdDebug(32001) << "Increasing list" << endl;
-  	m_canvas->gui()->getView()->textIncreaseIndent();
+    kdDebug(32001) << "Increasing list" << endl;
+    m_canvas->gui()->getView()->textIncreaseIndent();
 }
 
 bool KWTextFrameSetEdit::textDecreaseIndent()
 {
-	if (currentLeftMargin()>0)
-	{
-	  kdDebug(32001) << "Decreasing list" << endl;
-	  m_canvas->gui()->getView()->textDecreaseIndent();
-	  return true;
-	}
-	else
-	  return false;
+    if (currentLeftMargin()>0)
+    {
+        kdDebug(32001) << "Decreasing list" << endl;
+        m_canvas->gui()->getView()->textDecreaseIndent();
+        return true;
+    }
+    else
+        return false;
 }
 
 void KWTextFrameSetEdit::startDrag()

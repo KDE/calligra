@@ -36,14 +36,14 @@ k_dcop:
 
     virtual QStringList availablePlugins()=0; //will not be blocked when configuration dialog is open
     virtual bool isConfigDialogShown()=0; // will not be blocked when the configuration dialog is open
-    
+
     /* first parameter plugin name
        second parameter:
-       		open	:shows the open dialog if possible
-		create	:shows the create dialog if possible
-		silent	:doesn't do any further actions than loading
-	This call will return false, when the plugin couldn't be loaded,
-	the user rejected to change the datasource or the configuration dialog is open
+                open    :shows the open dialog if possible
+                create  :shows the create dialog if possible
+                silent  :doesn't do any further actions than loading
+        This call will return false, when the plugin couldn't be loaded,
+        the user rejected to change the datasource or the configuration dialog is open
     */
     virtual bool loadPlugin(const QString &name,const QString &command)=0;
 };

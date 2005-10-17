@@ -72,7 +72,7 @@ public:
         bool m_marker;
         void calcIfJoinedCell() {
             m_isJoinedCell = ( (m_rows > 1) || (m_cols > 1) );
-	}
+        }
 
     public:
         // constructor
@@ -94,22 +94,22 @@ public:
         void setFirstRow(uint row) { m_row = row; }
         void setFirstCol(uint col) { m_col = col; }
         void setRowSpan(uint rows) {
-	    m_rows = rows;
+            m_rows = rows;
             calcIfJoinedCell();
-       	}
+        }
         void setColSpan(uint cols) {
             m_cols = cols;
             calcIfJoinedCell();
         }
 
         bool isFirstGridPosn(uint row, uint col) const {
-		return (row == m_row) && (col == m_col);
-	}
+            return (row == m_row) && (col == m_col);
+        }
 
-	bool isFirstGridPosnFast(uint row, uint col) const {
-		if(!m_isJoinedCell) return true;
-		return (row == m_row) && (col == m_col);
-	}
+        bool isFirstGridPosnFast(uint row, uint col) const {
+                if(!m_isJoinedCell) return true;
+                return (row == m_row) && (col == m_col);
+        }
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
         /// Called by delFrame when it really deletes a frame (remove=true), to remove it from the table too
         virtual void frameDeleted( KWFrame* frm, bool recalc );
@@ -240,38 +240,38 @@ public:
     template<int VisitStyle = VISIT_CELL>
     class TableIterator {
     public:
-	/**
-	 *	@param The table to iterate over. The current item is set to the Cell
-	 *	at row 0, column 0
-	 */
-	TableIterator (KWTableFrameSet *table);
+        /**
+         *      @param The table to iterate over. The current item is set to the Cell
+         *      at row 0, column 0
+         */
+        TableIterator (KWTableFrameSet *table);
 
-	Cell* toFirstCell ();
+        Cell* toFirstCell ();
         void goToCell(Cell*);
 
-	operator Cell* () const { return m_cell; }
-	Cell * current() const;
-	Cell * operator->() { return m_cell; }
-	Cell * operator++ ();
+        operator Cell* () const { return m_cell; }
+        Cell * current() const;
+        Cell * operator->() { return m_cell; }
+        Cell * operator++ ();
 
     protected:
-	KWTableFrameSet *m_table;
-	void set_limits(uint left, uint right, uint high, uint low)
-	{
+        KWTableFrameSet *m_table;
+        void set_limits(uint left, uint right, uint high, uint low)
+        {
             m_limit[LEFT] = left;
             m_limit[RIGHT] = right;
             m_limit[HIGH] = high;
             m_limit[LOW] = low;
-	}
+        }
     private:
 
-	Cell *m_cell;
-	uint m_row;
-	uint m_col;
+        Cell *m_cell;
+        uint m_row;
+        uint m_col;
 
-	enum Direction {LEFT, RIGHT, HIGH, LOW};
-	static const uint DIRECTION_SIZE = 4;
-	uint m_limit[DIRECTION_SIZE];
+        enum Direction {LEFT, RIGHT, HIGH, LOW};
+        static const uint DIRECTION_SIZE = 4;
+        uint m_limit[DIRECTION_SIZE];
     };
 
     typedef TableIterator<VISIT_CELL> TableIter;
@@ -290,7 +290,7 @@ public:
     class MarkedIterator : public GridIter {
     public:
         MarkedIterator(KWTableFrameSet *table);
-        Cell *operator++();	// overridden from base but not virtual
+        Cell *operator++();     // overridden from base but not virtual
 
     };
 
@@ -671,11 +671,11 @@ KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::operator++ ();
 
 template<int VisitStyle>
 KWTableFrameSet::TableIterator<VisitStyle>::TableIterator(KWTableFrameSet *table) :
-	m_table(table)
+        m_table(table)
 {
-	Q_ASSERT(m_table);
-	set_limits(0, m_table->getCols() - 1, 0, m_table->getRows() - 1);
-	toFirstCell();
+        Q_ASSERT(m_table);
+        set_limits(0, m_table->getCols() - 1, 0, m_table->getRows() - 1);
+        toFirstCell();
 }
 
 // CHECKED specialises the constructor
@@ -686,20 +686,20 @@ KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::TableIterator(KWTableF
 template<int VisitStyle>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
-	m_cell = m_table->getCell(m_limit[HIGH], m_limit[LEFT]);
-	Q_ASSERT(m_cell);
-	m_row = m_cell->firstRow();
-	m_col = m_cell->firstCol();
-	return m_cell;
+        m_cell = m_table->getCell(m_limit[HIGH], m_limit[LEFT]);
+        Q_ASSERT(m_cell);
+        m_row = m_cell->firstRow();
+        m_col = m_cell->firstCol();
+        return m_cell;
 }
 
 template<int VisitStyle>
 void
 KWTableFrameSet::TableIterator<VisitStyle>::goToCell(KWTableFrameSet::Cell *cell)
 {
-	m_cell = cell;
-	m_row = m_cell->firstRow();
-	m_col = m_cell->firstCol();
+        m_cell = cell;
+        m_row = m_cell->firstRow();
+        m_col = m_cell->firstCol();
 }
 
 // CHECKED specialises to first cell
@@ -711,7 +711,7 @@ KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::toFirstCell ();
 template<int VisitStyle>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<VisitStyle>::current() const {
-	return m_cell;
+        return m_cell;
 }
 
 /**

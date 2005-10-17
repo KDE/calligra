@@ -43,7 +43,7 @@ class KColorButton;
 class KDoubleNumInput;
 
 /******************************************************************/
-/* Class: KWBrushStylePreview		                          */
+/* Class: KWBrushStylePreview                                     */
 /******************************************************************/
 class KWBrushStylePreview : public QFrame
 {

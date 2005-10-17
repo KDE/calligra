@@ -196,7 +196,7 @@ void KWEditPersonnalExpression::init(const QString& filename )
 {
     QFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
-	return;
+        return;
 
     kdDebug() << "KWEditPersonnalExpression::init parsing " << filename << endl;
     QDomDocument doc;
@@ -361,7 +361,7 @@ void KWEditPersonnalExpression::saveFile()
     if ( !file.open( IO_WriteOnly ) )
     {
         kdDebug()<<"Error \n";
-	return;
+        return;
     }
     file.writeBlock(s,s.length());
     file.close();

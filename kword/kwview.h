@@ -90,7 +90,7 @@ namespace KSpell2 {
 
 
 /******************************************************************/
-/* Class: KWView						  */
+/* Class: KWView                                                  */
 /******************************************************************/
 
 class KWView : public KoView
@@ -774,7 +774,7 @@ private:
     /// Spell-checking
     struct {
         KoSpell *kospell;
-	KMacroCommand * macroCmdSpellCheck;
+        KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         KoTextIterator * textIterator;
 #ifdef HAVE_LIBKSPELL2
@@ -791,7 +791,7 @@ private:
 };
 
 /******************************************************************/
-/* Class: KWGUI						  */
+/* Class: KWGUI                                                   */
 /******************************************************************/
 
 class KWGUI;

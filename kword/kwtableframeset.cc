@@ -422,7 +422,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             Cell *bottomCell=getCell(startRow+rowSpan-1, activeCell->firstCol());
             bottomCell->frame(0)->setHeight(bottomCell->frame(0)->minFrameHeight() +
                     minHeightOtherCols - minHeightMyCol);
-	    // ### RECURSE ###
+            // ### RECURSE ###
             recalcRows(bottomCell->firstCol(), bottomCell->firstRow());
         }
         if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
@@ -850,7 +850,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
 void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
     if(!theCell->frame(0)) { // sanity check.
         kdDebug(32004) << "errorous table cell!! row:" << theCell->firstRow()
-		<< ", col: " << theCell->firstCol() << endl;
+            << ", col: " << theCell->firstCol() << endl;
         return;
     }
     double x = *m_colPositions.at(theCell->firstCol());
@@ -1028,7 +1028,7 @@ bool KWTableFrameSet::isOneSelected(unsigned int &row, unsigned int &col) {
                 selected = 0;
             else{
                 selected = (Cell*) cell;
-		one  = true;
+                one  = true;
             }
         }
     }
@@ -1060,7 +1060,7 @@ bool KWTableFrameSet::isColSelected(uint col) {
     Row *r;
     // if just one cell of the col is not selected, the col is not selected
     for ( uint i = 0; i < getRows(); i++ ) {
-	r = m_rowArray[i];
+        r = m_rowArray[i];
         if ( !((*r)[col]->frame( 0 )->isSelected()) ) {
 //            kdDebug() << "column " << col << " column is not selected" << endl;
             return false;
@@ -1198,7 +1198,7 @@ void KWTableFrameSet::reInsertRow(RemovedRow &rr)
 void KWTableFrameSet::insertNewRow( uint idx, bool recalc, bool _removeable)
 {
 
-    (void) _removeable;	// unused parameter
+    (void) _removeable; // unused parameter
     unsigned int copyFromRow = idx==0?0:idx-1;
     if(idx==0)
         copyFromRow=1;
@@ -1933,7 +1933,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     kdDebug() << "Different border:" <<
                 ( ( right && cell->frame(0)->rightBorder() != *border) ||
                 ( !right && cell->frame(0)->leftBorder() != *border) )
-			    << endl;
+                    << endl;
             }
 #endif
 
@@ -3164,62 +3164,62 @@ template<>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_CELL>::operator++()
 {
-	if(!m_cell) return 0;
+    if(!m_cell) return 0;
 
-	Cell *ret = m_cell;
+    Cell *ret = m_cell;
 
-	do{
-		// check for end of row first
-		if(m_table->getCell(m_row,m_col)->lastCol() >= m_limit[RIGHT] ) {
-			// now check for end of column
-			if (m_row >= m_limit[LOW]){
-				// at end of traversal
-				m_cell = 0;
-				break;
-			}
-			else {
-				// goto first grid position in next row
-				m_row += 1;
-				m_col = m_limit[LEFT];
-			}
-		}
-		else {
-			// goto next cell in row
-			m_col = m_table->getCell(m_row, m_col)->colAfter();
-		}
+    do{
+        // check for end of row first
+        if(m_table->getCell(m_row,m_col)->lastCol() >= m_limit[RIGHT] ) {
+            // now check for end of column
+            if (m_row >= m_limit[LOW]){
+                // at end of traversal
+                m_cell = 0;
+                break;
+            }
+            else {
+                // goto first grid position in next row
+                m_row += 1;
+                m_col = m_limit[LEFT];
+            }
+        }
+        else {
+            // goto next cell in row
+            m_col = m_table->getCell(m_row, m_col)->colAfter();
+        }
 
-		m_cell = m_table->getCell(m_row,m_col);
-	} while( m_cell && !m_cell->isFirstGridPosnFast(m_row,m_col) );
+        m_cell = m_table->getCell(m_row,m_col);
+    } while( m_cell && !m_cell->isFirstGridPosnFast(m_row,m_col) );
 
-	return ret;
+    return ret;
 }
 
 template<>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_GRID>::operator++()
 {
-	if(!m_cell) return 0;
+    if(!m_cell) return 0;
 
-	Cell *ret = m_cell;
-	// check for end of row
-	if(m_col == m_limit[RIGHT]) {
-		if(m_row == m_limit[LOW]) {	// end of traversal
-			m_row = 0;
-			m_col = 0;
-			m_cell = 0;
-		}
-		else {				// go to next row
-			m_row += 1;
-			m_col = m_limit[LEFT];
-			m_cell = m_table->getCell(m_row, m_col);
-		}
-	}
-	else {					// move to next cell in row
-		m_col += 1;
-		m_cell = m_table->getCell(m_row, m_col);
-	}
+    Cell *ret = m_cell;
+    // check for end of row
+    if(m_col == m_limit[RIGHT]) {
+        if(m_row == m_limit[LOW]) { // end of traversal
+            m_row = 0;
+            m_col = 0;
+            m_cell = 0;
+        }
+        else { // go to next row
+            m_row += 1;
+            m_col = m_limit[LEFT];
+            m_cell = m_table->getCell(m_row, m_col);
+        }
+    }
+    else { // move to next cell in row
+        m_col += 1;
+        m_cell = m_table->getCell(m_row, m_col);
+    }
 
-	return ret;
+    return ret;
 }
 
 KWTableFrameSet::MarkedIterator::MarkedIterator(KWTableFrameSet *table) :

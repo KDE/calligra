@@ -69,7 +69,7 @@ DCOPRef KWordTableFrameSetIface::getCell( int pos )
         return DCOPRef();
 
     return DCOPRef( kapp->dcopClient()->appId(),
-	    i->dcopObject()->objId() );
+            i->dcopObject()->objId() );
 }
 
 DCOPRef KWordTableFrameSetIface::getCell( uint row, uint col )
@@ -77,7 +77,7 @@ DCOPRef KWordTableFrameSetIface::getCell( uint row, uint col )
   if( row>=m_table->getRows() || col>= m_table->getCols())
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-		    m_table->getCell(row,col)->dcopObject()->objId() );
+            m_table->getCell(row,col)->dcopObject()->objId() );
 }
 
 DCOPRef KWordTableFrameSetIface::startEditingCell(uint row, uint col )
@@ -93,5 +93,5 @@ DCOPRef KWordTableFrameSetIface::startEditingCell(uint row, uint col )
         return DCOPRef();
     canvas->checkCurrentEdit(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWTextFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() );
+            (static_cast<KWTextFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() );
 }

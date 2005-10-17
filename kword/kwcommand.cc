@@ -183,14 +183,14 @@ public:
         for ( int i = start ; i < end ; ++i )
         {
             KoTextStringChar * ch = parag->at( i );
-            if ( ch->isCustom() )
-	    {
-	       KoTextCustomItem* item = ch->customItem();
-       item->setDeleted( true );
-            parag->removeCustomItem(i);
-	       KCommand* itemCmd = item->deleteCommand();
-	       if ( itemCmd ) itemCmd->execute();
-	    }
+            if ( ch->isCustom() ) {
+                KoTextCustomItem* item = ch->customItem();
+                item->setDeleted( true );
+                parag->removeCustomItem(i);
+                KCommand* itemCmd = item->deleteCommand();
+                if ( itemCmd )
+                    itemCmd->execute();
+            }
         }
         return true;
     }
@@ -428,12 +428,12 @@ void KWFrameBorderCommand::execute()
                 break;
         }
 
-	if (!cell) {
+        if (!cell) {
             frame->frameBordersChanged();
             if (frame->isSelected())
                 frame->updateResizeHandles();
             //fixme frameBorderChanged for table cells here too ?
-	}
+        }
         else
             cell->table()->refreshSelectedCell();
     }
@@ -486,12 +486,12 @@ void KWFrameBorderCommand::unexecute()
             default:
                 break;
         }
-	if (!cell) {
-		frame->frameBordersChanged();
-		if (frame->isSelected())
-			frame->updateResizeHandles();
-		    //fixme frameBorderChanged for table cells here too ?
-	}
+        if (!cell) {
+            frame->frameBordersChanged();
+            if (frame->isSelected())
+                frame->updateResizeHandles();
+            //fixme frameBorderChanged for table cells here too ?
+        }
         else
             cell->table()->refreshSelectedCell();
 

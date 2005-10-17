@@ -1476,7 +1476,7 @@ KCommand *KWCanvas::createTextBox( const KoRect & rect )
         _frameSet->addFrame( frame );
         m_doc->addFrameSet( _frameSet );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame );
-	if ( checkCurrentEdit(frame->frameSet(), true) )
+        if ( checkCurrentEdit(frame->frameSet(), true) )
             emit currentFrameSetEditChanged();
         return cmd;
     }
@@ -1494,7 +1494,7 @@ void KWCanvas::mrCreateText()
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect Frame"));
         frameDia.exec();
-	if ( checkCurrentEdit(frame->frameSet(), true) )
+        if ( checkCurrentEdit(frame->frameSet(), true) )
             emit currentFrameSetEditChanged();
     }
     setMouseMode( MM_EDIT );
@@ -1760,7 +1760,7 @@ KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
                 frame->setLeftBorder(newBorder);
         }
         frame->updateResizeHandles();
-	frame->frameBordersChanged();
+        frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -1815,7 +1815,7 @@ KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
                 frame->setRightBorder(newBorder);
         }
         frame->updateResizeHandles();
-	frame->frameBordersChanged();
+        frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -1871,7 +1871,7 @@ KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
                 frame->setTopBorder(newBorder);
         }
         frame->updateResizeHandles();
-	frame->frameBordersChanged();
+        frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -1926,7 +1926,7 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
                 frame->setBottomBorder(newBorder);
         }
         frame->updateResizeHandles();
-	frame->frameBordersChanged();
+        frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -2661,12 +2661,12 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
         
         switch ( e->type() ) {
             case QEvent::FocusIn:
-		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
+                //  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
                 break;
             case QEvent::FocusOut:
-		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
+                //  kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
                 if ( m_scrollTimer->isActive() )
@@ -2675,8 +2675,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
             case QEvent::AccelOverride: // was part of KeyPress - changed due to kdelibs BUG!
             {
-		//  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-		//  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                //  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+                //  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
 #ifndef NDEBUG
                 // Debug keys
@@ -2718,8 +2718,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             break;
             case QEvent::KeyPress:
             {
-		//  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-		//  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                //  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+                //  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                 // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
                 if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & ShiftButton) == 0 )

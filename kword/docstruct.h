@@ -227,8 +227,8 @@ public:
 
     void setup();
     void refreshTree(int _type);
-    QSize	minimumSizeHint() const {
-	return QSize( 0, 0 );
+    QSize minimumSizeHint() const {
+        return QSize( 0, 0 );
     }
     bool testExistTypeOfFrame(TypeStructDocItem _type);
     void selectFrameSet();

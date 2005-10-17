@@ -24,8 +24,8 @@
 
 static const KCmdLineOptions options[]=
 {
-	{"+[file]", I18N_NOOP("File to open"),0},
-	KCmdLineLastOption
+    {"+[file]", I18N_NOOP("File to open"),0},
+    KCmdLineLastOption
 };
 
 extern "C" KWORD_EXPORT int kdemain( int argc, char **argv )
@@ -36,7 +36,7 @@ extern "C" KWORD_EXPORT int kdemain( int argc, char **argv )
     KoApplication app;
 
     if (!app.start())
-	return 1;
+        return 1;
     app.exec();
 
     return 0;
