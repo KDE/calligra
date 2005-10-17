@@ -169,16 +169,17 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
         // It would be better to handle these as KShortcut activate() signals, but the problem
         // is that once a QDockWindow is undocked and has focus, the KShortcut activate() signals
         // don't fire anymore.
-        KKey fwdKey = d->fwdAction->shortcut().seq(0).key(0);
-        KKey revKey = d->revAction->shortcut().seq(0).key(0);
+        KShortcut fwdSc = d->fwdAction->shortcut();
+        KShortcut revSc = d->revAction->shortcut();
         QKeyEvent* kev = dynamic_cast<QKeyEvent *>(e);
         KKey k = KKey(kev);
+        KShortcut sc = KShortcut(k);
         // kdDebug() << "KPanelKbdSizer::eventFilter: At key press %d" << k.keyCodeQt() << endl;
-        if (k == fwdKey) {
+        if (sc == fwdSc) {
             nextHandle();
             return true;
         }
-        if (k == revKey) {
+        if (sc == revSc) {
             prevHandle();
             return true;
         }
