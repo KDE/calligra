@@ -10,7 +10,7 @@ Architecture: any
 Depends: ${shlibs:Depends}
 Recommends: kexi-postgresql-driver (= ${Source-Version}), kexi-mysql-driver (= ${Source-Version}), kexi-i18n
 Suggests: kexi-mdb-driver
-Description: tool for manipulating database objects in KDE3
+Description: Integrated data management application for KDE
  Kexi is an integrated environment for managing data. It helps creating 
  database schemas, inserting, querying and processing data.
  .
@@ -22,23 +22,23 @@ Description: tool for manipulating database objects in KDE3
 Package: kexi-postgresql-driver
 Architecture: any
 Depends: kexi (= ${Source-Version}), ${shlibs:Depends}
-Description: kexi PostGreSQL driver
- The PostgreSQL driver for KexiDB databases, and the PostgreSQL 
+Description: PostgreSQL driver for Kexi
+ The PostgreSQL driver for Kexi databases, and the PostgreSQL 
  migration driver for converting arbitrary PostgreSQL databases into 
- KexiDB databases.
+ Kexi databases.
 
 Package: kexi-mysql-driver
 Architecture: any
 Depends: kexi (= ${Source-Version}), ${shlibs:Depends}
-Description: kexi MySQL driver
- The MySQL driver for KexiDB databases, and the MySQL migration driver 
- for converting arbitrary MySQL databases into KexiDB databases.
+Description: MySQL driver for Kexi
+ The MySQL driver for Kexi databases, and the MySQL migration driver 
+ for converting arbitrary MySQL databases into Kexi databases.
 
 Package: libkexi-dev
 Architecture: any
 Depends: kexi (= ${Source-Version}), ${shlibs:Depends}
-Description: kexi development files
- This package is necessary for developing new KexiDB drivers or KexiDB
+Description: Kexi development files
+ This package is necessary for developing new Kexi drivers or Kexi
  migration drivers. It will be needed for compiling drivers that are not
  part of the Kexi distribution (e.g. keximdb for importing MS Access files)
 
