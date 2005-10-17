@@ -267,7 +267,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		const WidgetInfo::Dict classes() const { return m_classesByName; }
 
 		/**
-		 * Creates a widget (and if needed a \ref Container)
+		 * Creates a widget (and if needed a KFormDesigner::Container)
 		 * \return the created widget
 		 * \param classname the classname of the widget, which should get created
 		 * \param parent the parent for the created widget
