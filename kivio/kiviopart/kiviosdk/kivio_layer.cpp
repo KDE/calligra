@@ -296,12 +296,12 @@ void KivioLayer::saveOasis(KoXmlWriter* layerWriter)
 }
 
 void KivioLayer::paintContent( QPainter& painter, const QRect&, bool, QPoint,
-  KoZoomHandler* zoom )
+  KoZoomHandler* zoom, bool paintHandles)
 {
   QValueList<Kivio::Object*>::iterator itEnd = m_objectList.end();
 
   for(QValueList<Kivio::Object*>::iterator it = m_objectList.begin(); it != itEnd; ++it) {
-    (*it)->paint(painter, zoom);
+    (*it)->paint(painter, zoom, paintHandles);
   }
 }
 
@@ -344,56 +344,6 @@ void KivioLayer::paintConnectorTargets( QPainter& painter, const QRect&, bool, Q
 
         pStencil = m_pStencilList->next();
     }*/
-}
-
-void KivioLayer::paintSelectionHandles( QPainter& painter, const QRect&, bool, QPoint, KoZoomHandler* zoom )
-{
-  // FIXME this needs to be implemented differently due to how drawing is handled in Qt4
-/*    KivioIntraStencilData data;
-
-    painter.setFGColor( QColor(0,0,0) );
-
-    data.painter = &painter;
-    data.zoomHandler = zoom;
-
-    Kivio::Object *pStencil = m_pStencilList->first();
-    while( pStencil )
-    {
-        if( pStencil->isSelected() && !pStencil->hidden() )
-            pStencil->paintSelectionHandles( &data );
-
-        pStencil = m_pStencilList->next();
-    }*/
-}
-
-Kivio::Object *KivioLayer::checkForStencil( KoPoint *pPoint, int *collisionType, float threshold, bool selectedOnly )
-{
-  //FIXME Port to Object code
-//     Kivio::Object *pStencil;
-//     int colType;
-// 
-//     pStencil = m_pStencilList->last();
-//     while( pStencil )
-//     {
-//       // If we are only supposed to check the selected stencils, then only do that.  Otherwise
-//       // check them all.
-//       if( (selectedOnly==true && pStencil->isSelected()==true) ||
-//         (selectedOnly==false) )
-//       {
-//         if( (colType = pStencil->checkForCollision( pPoint, threshold )) != kctNone )
-//         {
-//           // Assign the collision type and return
-//           *collisionType = colType;
-//           return pStencil;
-//         }
-//       }
-// 
-//       pStencil = m_pStencilList->prev();
-//     }
-// 
-//     *collisionType = kctNone;
-
-    return NULL;
 }
 
 Kivio::Object* KivioLayer::checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback)

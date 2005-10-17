@@ -87,15 +87,12 @@ class KivioLayer
     QDomElement saveXML( QDomDocument & );
     void saveOasis(KoXmlWriter* layerWriter);
 
-    Kivio::Object* checkForStencil( KoPoint *, int *, float, bool );
     Kivio::Object* checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback);
 
     void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
-    void paintContent( QPainter& painter, const QRect& rect, bool transparent, QPoint p0,
-      KoZoomHandler* zoom );
+    void paintContent(QPainter& painter, const QRect& rect, bool transparent, QPoint p0,
+                      KoZoomHandler* zoom, bool paintHandles = true);
     void paintConnectorTargets( QPainter& painter, const QRect& rect, bool transparent,
-      QPoint p0, KoZoomHandler* zoom );
-    void paintSelectionHandles( QPainter& painter, const QRect& rect, bool transparent,
       QPoint p0, KoZoomHandler* zoom );
 
     KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );

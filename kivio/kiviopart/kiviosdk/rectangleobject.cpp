@@ -101,7 +101,7 @@ KoRect RectangleObject::boundingBox()
   return KoRect(position(), size());
 }
 
-void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QRect rect = zoomHandler->zoomRect(boundingBox());
   QPen zoomedPen = pen().zoomedPen(zoomHandler);
@@ -116,7 +116,7 @@ void RectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 
   painter.drawRect(rect);
 
-  if(selected()) {
+  if(selected() && paintHandles) {
     paintSelection(painter, zoomHandler);
   }
 }

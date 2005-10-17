@@ -53,7 +53,7 @@ class ArcObject : public RectangleObject
     void setLengthAngle(int newAngle);
 
     /// Draw an arc to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 
   private:
     int m_startAngle;

@@ -67,7 +67,7 @@ void RoundedRectangleObject::setYRoundness(int newRoundness)
   m_yRoundness = newRoundness;
 }
 
-void RoundedRectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void RoundedRectangleObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QRect rect = zoomHandler->zoomRect(KoRect(position(), size()));
   painter.setPen(pen().zoomedPen(zoomHandler));

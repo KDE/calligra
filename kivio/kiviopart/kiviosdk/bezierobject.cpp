@@ -46,7 +46,7 @@ ShapeType BezierObject::type()
   return kstBezier;
 }
 
-void BezierObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void BezierObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QValueVector<KoPoint> points = pointVector();
   QValueVector<KoPoint>::iterator it;

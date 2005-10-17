@@ -110,7 +110,7 @@ void PolylineObject::changePoint(unsigned int index, const KoPoint& point)
   m_pointVector[index] = point;
 }
 
-void PolylineObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void PolylineObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QValueVector<KoPoint>::iterator it;
   QValueVector<KoPoint>::iterator itEnd = m_pointVector.end();
@@ -126,7 +126,7 @@ void PolylineObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
   painter.setBrush(brush());
   painter.drawPolyline(pointArray);
 
-  if(selected()) {
+  if(selected() && paintHandles) {
     for(int i = 0; i < pointArray.size(); ++i) {
       paintResizePoint(painter, pointArray[i]);
     }

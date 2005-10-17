@@ -48,7 +48,7 @@ class RoundedRectangleObject : public RectangleObject
     void setYRoundness(int newRoundness);
 
     /// Draws a rounded rectangle to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 
   private:
     int m_xRoundness;

@@ -68,7 +68,7 @@ class GroupObject : public RectangleObject
     virtual void setPen(const Pen& newPen);
 
     /// Reimplement this function to paint Object to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 
     virtual void addObject(Object* newObject);
     virtual QValueList<Object*> objectList() const;

@@ -46,7 +46,7 @@ ShapeType PolygonObject::type()
   return kstPolygon;
 }
 
-void PolygonObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void PolygonObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QValueVector<KoPoint> points = pointVector();
   QValueVector<KoPoint>::iterator it;

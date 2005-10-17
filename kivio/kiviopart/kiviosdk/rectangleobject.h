@@ -75,7 +75,7 @@ class RectangleObject : public Object
     virtual KoRect boundingBox();
 
     /// Paints a rectangle to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 
     virtual CollisionFeedback contains(const KoPoint& point);
 

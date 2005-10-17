@@ -140,7 +140,7 @@ void GroupObject::setPen(const Pen& newPen)
   }
 }
 
-void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   painter.save();
   painter.translate(zoomHandler->zoomItX(position().x()), zoomHandler->zoomItY(position().y()));
@@ -153,7 +153,7 @@ void GroupObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
 
   painter.restore();
 
-  if(selected()) {
+  if(selected() && paintHandles) {
     paintSelection(painter, zoomHandler);
   }
 }

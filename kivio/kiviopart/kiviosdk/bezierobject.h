@@ -40,7 +40,7 @@ class BezierObject : public PolylineObject
     virtual ShapeType type();
 
     /// Draw a bezier curve to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 };
 
 }

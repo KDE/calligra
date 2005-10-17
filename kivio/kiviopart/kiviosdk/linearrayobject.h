@@ -39,7 +39,7 @@ class LineArrayObject : public PolylineObject
     virtual ShapeType type();
 
     /// Draws a line array to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 };
 
 }

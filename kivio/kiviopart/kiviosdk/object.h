@@ -122,7 +122,7 @@ class Object{
     virtual void setPen(const Pen& newPen);
 
     /// Reimplement this function to paint Object to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler) = 0;
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true) = 0;
 
     /// Mark the object as selected
     virtual void setSelected(bool isSelected) { m_selected = isSelected; }

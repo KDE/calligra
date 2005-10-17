@@ -67,7 +67,7 @@ void ArcObject::setLengthAngle(int newAngle)
   m_lengthAngle = newAngle;
 }
 
-void ArcObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void ArcObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QRect rect = zoomHandler->zoomRect(KoRect(position(), size()));
   painter.setBrush(brush());

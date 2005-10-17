@@ -46,7 +46,7 @@ ShapeType LineArrayObject::type()
   return kstLineArray;
 }
 
-void LineArrayObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void LineArrayObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QValueVector<KoPoint> points = pointVector();
   QValueVector<KoPoint>::iterator it;

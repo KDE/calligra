@@ -406,35 +406,10 @@ void KivioPage::paintContent( QPainter& painter, const QRect& rect, bool transpa
 
   while(pLayer) {
     if(pLayer->visible()) {
-      pLayer->paintContent(painter, rect, transparent, p0, zoom);
+      pLayer->paintContent(painter, rect, transparent, p0, zoom, drawHandles);
     }
 
     pLayer = m_lstLayers.next();
-  }
-
-  // Now the second iteration - connection targets
-  // Only draw targets if the zoom is higher than a certain value
-  if( zoom->zoom() >= 50 )
-  {
-    if( drawHandles )
-    {
-      m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-      pLayer = m_lstLayers.first();
-      while( pLayer )
-      {
-        if( pLayer->connectable() ) {
-          pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-        }
-
-        pLayer = m_lstLayers.next();
-      }
-    }
-  }
-
-  // Now the third iteration - selection handles
-  if( drawHandles )
-  {
-    m_pCurLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
   }
 }
 

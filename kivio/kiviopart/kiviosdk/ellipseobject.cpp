@@ -47,7 +47,7 @@ ShapeType EllipseObject::type()
   return kstEllipse;
 }
 
-void EllipseObject::paint(QPainter& painter, KoZoomHandler* zoomHandler)
+void EllipseObject::paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles)
 {
   QRect rect = zoomHandler->zoomRect(KoRect(position(), size()));
   painter.setPen(pen().zoomedPen(zoomHandler));

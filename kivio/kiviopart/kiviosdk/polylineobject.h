@@ -83,7 +83,7 @@ class KIVIO_EXPORT PolylineObject : public Object
     void changePoint(unsigned int index, const KoPoint& point);
 
     /// Draws a polyline to the canvas
-    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler);
+    virtual void paint(QPainter& painter, KoZoomHandler* zoomHandler, bool paintHandles = true);
 
     /// Check if @p point exists on any of the polyline's lines
     virtual CollisionFeedback contains(const KoPoint& point);

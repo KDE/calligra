@@ -818,7 +818,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     it = m_dragObjectList.remove(it);
   }
 
-  repaint();
+  view()->doc()->updateView(view()->activePage());
   view()->pluginManager()->activateDefaultTool();
 }
 
