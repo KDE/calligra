@@ -178,7 +178,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
 		~ContainerFactory();
 
-		virtual QWidget *createWidget(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+		virtual QWidget *createWidget(const QCString & classname, QWidget *w, const char *name, KFormDesigner::Container *,
 			int options = DefaultOptions);
 		virtual bool createMenuActions(const QCString& classname, QWidget *w, QPopupMenu *menu,
 			KFormDesigner::Container *container);
