@@ -19,8 +19,8 @@
 
 #include "kexiscripting.h"
 
-//include <qapplication.h>
 #include <qcursor.h>
+#include <qstylesheet.h>
 #include <qfile.h>
 #include <kdebug.h>
 
@@ -199,12 +199,12 @@ bool KexiScriptContainer::execute()
 void KexiScriptContainer::addStdOut(const QString& s)
 {
 	d->output.append(s);
-	emit addOutput(s);
+	emit addOutput( QStyleSheet::escape(s) );
 }
 
 void KexiScriptContainer::addStdErr(const QString& s)
 {
-	QString t = QString("<b>%1</b>").arg(s);
+	QString t = QString("<b>%1</b>").arg( QStyleSheet::escape(s) );
 	d->output.append(t);
 	emit addOutput(t);
 }
