@@ -45,11 +45,7 @@
 #include "kexidialogbase.h"
 #include "kexi.h"
 #include "keximainwindow.h"
-
-#ifdef Q_WS_WIN //todo: remove
-	#error remove ifdef
 #include "kexiblobbuffer.h"
-#endif
 
 #include <assert.h>
 

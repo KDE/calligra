@@ -13,7 +13,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp \
 	kexidataiteminterface.cpp kexievents.cpp \
 	kexidbshortcutfile.cpp \
-	kexiscripting.cpp
+	kexiscripting.cpp kexiblobbuffer.cpp
 
 #kexipartdatasource.cpp
 
