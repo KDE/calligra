@@ -1495,7 +1495,6 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
             if(daCell && daCell!=firstCell) {
                 listFrameSet.append(daCell);
                 listCopyFrame.append(daCell->frame(0)->getCopy());
-                frames.remove( daCell->frame(0) );
                 daCell->delFrame( daCell->frame(0));
             }
         }
