@@ -717,6 +717,7 @@ private:
 
     //---- stuff needed for moving ----
     bool m_isMoving;
+    KoPoint m_moveStartPoint;
 
     //---- stuff needed for rotating ----
     /// object which gets rotated

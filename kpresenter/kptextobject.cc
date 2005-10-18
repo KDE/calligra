@@ -115,6 +115,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
         textdoc->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPixX( m_doc->tabStopValue() ));
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ), this );
+    textdoc->setFlow( this );
 
     m_doc->backSpeller()->registerNewTextObject( m_textobj );
     pen = defaultPen();

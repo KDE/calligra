@@ -48,7 +48,7 @@ class DCOPObject;
 class KPrPage;
 class KoParagStyle;
 
-class KPTextObject :  public QObject, public KP2DObject
+class KPTextObject :  public QObject, public KP2DObject, public KoTextFlow
 {
     Q_OBJECT
 public:
@@ -137,6 +137,7 @@ public:
 
     void layout();
 
+    /** Reimplemented from KoTextFlow */
     int availableHeight() const;
 
     /** set left margin size */

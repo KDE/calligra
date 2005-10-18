@@ -1510,19 +1510,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.end();
                     }
                 } else if ( modType == MT_MOVE ) {
-                  if ( !m_isMoving )
-                  {
-                    QPtrListIterator<KPObject> it( m_activePage->objectList() );
-                    for ( ; it.current() ; ++it )
+                    if ( !m_isMoving )
                     {
-                      if( it.current()->isSelected() && !it.current()->isProtect() )
-                      {
-                        KoPoint p = it.current()->getOrig();
-                        it.current()->setOrigBeforeMoving( p );
-                      }
+                        m_moveStartPoint = objectRect( false ).topLeft();
+                        m_isMoving = true;
                     }
-                    m_isMoving = true;
-                  }
                     bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     QPoint gridPoint( contentsPoint );
                     if ( doApplyGrid )
@@ -2208,25 +2200,17 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                       }
                       case MT_MOVE:
                       {
-                        drawContour = false;
-                        QPtrListIterator<KPObject> it( m_activePage->objectList() );
-                        for ( ; it.current() ; ++it )
+                        if ( m_isMoving )
                         {
-                          //don't move a header/footer
-                          if ( it.current()== m_view->kPresenterDoc()->header() || it.current()== m_view->kPresenterDoc()->footer())
-                            continue;
-                          if ( it.current()->isSelected() && !it.current()->isProtect()) {
-
-                            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( it.current()->getRepaintRect() );
-                            it.current()->setOrig( it.current()->getOrigBeforeMoving() );
-                            m_view->kPresenterDoc()->repaint( oldBoundingRect );
-                            m_view->kPresenterDoc()->repaint( it.current() );
-                          }
+                          drawContour = false;
+                          KoPoint move( m_moveStartPoint - objectRect( false ).topLeft() );
+                          m_activePage->moveObject( m_view, move, false );
+                          mousePressed = false;
+                          modType = MT_NONE;
+                          m_isMoving = false;
+                          return;
                         }
-                        mousePressed = false;
-                        modType = MT_NONE;
-                        m_isMoving = false;
-                        return;
+                        break;
                       }
                       default:
                         break;
