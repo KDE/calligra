@@ -4158,7 +4158,7 @@ KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, 
 #endif
     KWFrameSet *hostFrameSet=parent->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    int page = pageManager()->pageNumber(&docPoint);
+    int page = pageManager()->pageNumber(docPoint);
     QPtrList<KWFrame> frames = framesInPage(page);
 
     for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
@@ -4230,7 +4230,7 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
     kdDebug(32001) << "KWDocument::topFrameUnderMouse nPoint=" << nPoint << endl;
 #endif
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    int page = pageManager()->pageNumber(&docPoint);
+    int page = pageManager()->pageNumber(docPoint);
     QPtrList<KWFrame> frames = framesInPage(page);
 
 #ifdef DEBUG_FRAMESELECT

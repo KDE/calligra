@@ -147,12 +147,12 @@ int KWFrame::pageNum() const
         kdDebug() << k_funcinfo << this << " has no frameset!" << endl;
         return 0;
     }
-    return frameSet()->pageManager()->pageNumber(this);
+    return frameSet()->pageManager()->pageNumber(rect());
 }
 
 int KWFrame::pageNum( KWDocument* doc ) const
 {
-    return doc->pageManager()->pageNumber(this);
+    return doc->pageManager()->pageNumber(rect());
 }
 
 MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, MouseMeaning defaultMeaning )

@@ -18,6 +18,7 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "koRect.h"
+#include "KWFrame.h"
 
 KWPageManager::KWPageManager() {
     m_firstPage = 0;
@@ -25,27 +26,30 @@ KWPageManager::KWPageManager() {
     m_pageList.setAutoDelete(true);
 }
 
-int KWPageManager::pageNumber(const KoRect *frame) const {
+int KWPageManager::pageNumber(const KoRect &frame) const {
     int page=m_firstPage;
     double startOfpage = 0.0;
     QPtrListIterator<KWPage> pages(m_pageList);
-    while(pages.current() && startOfpage < frame->top()) {
+    while(pages.current() && startOfpage < frame.top()) {
         startOfpage += pages.current()->height();
-        if(startOfpage > frame->top())
+        if(startOfpage > frame.top())
             break;
         page++;
         ++pages;
     }
-    if(!pages.current() || frame->right() > pages.current()->width() ||
-            frame->top() > pages.current()->height() + startOfpage)
+    if(!pages.current() || frame.right() > pages.current()->width() ||
+            frame.top() > pages.current()->height() + startOfpage)
         return -1; // not inside the page...
     return page;
 }
-int KWPageManager::pageNumber(const KoPoint *point) const {
-    return pageNumber(&KoRect(point->x(), point->y(), 0, 0));
+int KWPageManager::pageNumber(const KWFrame* frame) const {
+     return pageNumber(frame->rect());
+}
+int KWPageManager::pageNumber(const KoPoint &point) const {
+    return pageNumber(KoRect(point, point));
 }
 int KWPageManager::pageNumber(const double ptY) const {
-    return pageNumber(&KoRect(0, ptY, 0, 0));
+    return pageNumber(KoRect(0, ptY, 0, 0));
 }
 
 int KWPageManager::pageCount() const {
@@ -62,14 +66,17 @@ KWPage* KWPageManager::page(int pageNum) const {
     kdWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist"<< endl;
     return 0;
 }
-KWPage* KWPageManager::page(const KoRect *frame) const {
+KWPage* KWPageManager::page(const KoRect &frame) const {
     return page(pageNumber(frame));
 }
-KWPage* KWPageManager::page(const KoPoint *point) const {
+KWPage* KWPageManager::page(const KoPoint &point) const {
     return page(pageNumber(point));
 }
 KWPage* KWPageManager::page(double ptY) const {
     return page(pageNumber(ptY));
+}
+KWPage* KWPageManager::page(const KWFrame* frame) const {
+    return page(frame->rect());
 }
 
 void KWPageManager::setStartPage(int startPage) {

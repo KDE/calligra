@@ -44,6 +44,7 @@ List of bugs in OOo-1.9.113 affecting interoperability:
 
 List of bugs in OOo-1.9.113 not affecting interoperability:
  - style:text-underline-type="single" is missing for underlined text, only style is specified (code has workaround)
+ - display-levels not respected in chapters.odt
 
 List of features that KWord has, but OOo doesn't have, and which are in the OpenDocument standard:
  - OOo doesn't load nor save the cursor-position processing instruction 

@@ -225,7 +225,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         return m_frames.getFirst();
     }
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
-    int pageNum = m_doc->pageManager()->pageNumber(&dPoint);
+    int pageNum = m_doc->pageManager()->pageNumber(dPoint);
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -265,7 +265,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
     }
 
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
-    int pageNum = m_doc->pageManager()->pageNumber(&dPoint);
+    int pageNum = m_doc->pageManager()->pageNumber(dPoint);
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {

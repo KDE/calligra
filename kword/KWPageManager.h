@@ -36,9 +36,11 @@ public:
     KWPageManager();
 
     /// return pageNumber of @p frame, pagenumbers for a normal document start at 1.
-    int pageNumber(const KoRect *frame) const;
+    int pageNumber(const KWFrame* frame) const;
+    /// return pageNumber of @p rect, pagenumbers for a normal document start at 1.
+    int pageNumber(const KoRect &rect) const;
     /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
-    int pageNumber(const KoPoint *point) const;
+    int pageNumber(const KoPoint &point) const;
     /** return pageNumber of page with document-offset (in the Y direction) of @p ptY,
      *  pagenumbers for a normal document start at 1.
      */
@@ -50,9 +52,11 @@ public:
     /// return the KWPage of a specific page number
     KWPage* page(int pageNumber) const;
     /// return the KWPage instance where the frame is on.
-    KWPage* page(const KoRect *frame) const;
+    KWPage* page(const KWFrame* frame) const;
+    /// return the KWPage instance where the rect is on.
+    KWPage* page(const KoRect &rect) const;
     /// return the KWPage instance where the point is on.
-    KWPage* page(const KoPoint *point) const;
+    KWPage* page(const KoPoint &point) const;
     /// return the KWPage instance of the y-coordinate in the document.
     KWPage* page(double ptY) const;
 

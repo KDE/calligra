@@ -814,7 +814,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
         cols = kMax(cols, c.current()->colAfter());
     double colWidth = rect.width() / cols;
     if ( widthMode == TblAuto ) {
-        KWPage *page = pageManager()->page(&rect);
+        KWPage *page = pageManager()->page(rect);
         rect.setLeft( page->leftMargin() );
         colWidth = (page->width() - page->leftMargin() - page->rightMargin()) / cols;
     }
