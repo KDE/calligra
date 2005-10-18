@@ -596,7 +596,7 @@ public:
      *
      * @return the cell that decides the format for the cell in question.
      */
-    KSpreadCell *KSpreadCell::ultimateObscuringCell() const;
+    KSpreadCell *ultimateObscuringCell() const;
 
     /**
      * @return the obscuring cell list (might be empty)
