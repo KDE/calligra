@@ -679,7 +679,7 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 {
 	KexiFormView *formView = KexiUtils::findParent<KexiFormView>((QWidget*)m_widget, "KexiFormView"); 
 	if (formView) {
-		changeProperty("pixmapId", id, formView->form());
+		changeProperty("pixmapId", (Q_LLONG)/*! @todo unsafe */id, formView->form());
 		formView->setUnsavedLocalBLOB(m_widget, id);
 	}
 }

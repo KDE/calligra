@@ -26,5 +26,5 @@ kde_services_DATA = kexidb_sqlite2driver.desktop
 
 
 KDE_CXXFLAGS += -DKEXIDB_SQLITE_DRIVER_EXPORT= -D__KEXIDB__= \
-	-include $(top_srcdir)/kexi/kexidb/global.h
+	-DSQLITE2= -include $(top_srcdir)/kexi/kexidb/global.h
 

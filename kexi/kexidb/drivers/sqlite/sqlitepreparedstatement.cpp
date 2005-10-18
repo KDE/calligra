@@ -176,7 +176,7 @@ bool SQLitePreparedStatement::execute()
 		{
 			QByteArray byteArray((*it).toByteArray());
 			res = sqlite3_bind_blob(prepared_st_handle, arg, 
-				(const *)(const char*)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
+				(const char*)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res)
 				//! @todo msg?
 				return false;
