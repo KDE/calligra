@@ -60,7 +60,7 @@ namespace KexiMigration
 			~MySQLMigrate();
 			//Constructor
 			MySQLMigrate();
-			MySQLMigrate::MySQLMigrate(QObject *parent, const char *name, const QStringList& args = QStringList());
+			MySQLMigrate(QObject *parent, const char *name, const QStringList& args = QStringList());
 			
 			KexiDB::Field::Type type(const QString& table, const MYSQL_FIELD* t);
 			
@@ -69,8 +69,8 @@ namespace KexiMigration
 			
 			QStringList examineEnumField(const QString& table,
 			                             const MYSQL_FIELD* fld);
-			void MySQLMigrate::getConstraints(int mysqlConstraints, KexiDB::Field* fld);
-			void MySQLMigrate::getOptions(int flags, KexiDB::Field* fld);
+			void getConstraints(int mysqlConstraints, KexiDB::Field* fld);
+			void getOptions(int flags, KexiDB::Field* fld);
 
 		/*! driver's static version information, it is automatically implemented
 		 in implementation using KEXIDB_DRIVER macro (see driver_p.h) */
