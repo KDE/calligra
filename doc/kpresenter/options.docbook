@@ -226,27 +226,33 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Display links</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are displayed (or not) in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4a.png" format="PNG"/></imageobject></inlinemediaobject> A non displayed link: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4a1.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Underline all links</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>If this is checked, all links will be underlined. The option is checked per default. If it is not checked, the link will not be underlined. A displayed and underlined link: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4b.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Display comments</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Comments are inserted in the text at the cursor using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Comment...</guimenuitem></menuchoice> menu. Comments can only be viewed in editing mode and not in the slide show. If this option is checked (default) then each coment will be shown as a small yellow rectangle. You can then right click on it to edit it, remove it or copy its text. A displayed comment: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4c.png" format="PNG"/>
+</imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
+
 
 <varlistentry>
 <term><guilabel>Display field code</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Print slide notes</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and fifnishing with the Master Page Note. You can see the notes for each slide using the <menuchoice><guimenu>View</guimenu><guimenuitem>Show notebar</guimenuitem></menuchoice> menu.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -294,17 +300,17 @@ settings.</para></listitem>
 <title><guilabel>Document Settings</guilabel></title>
 <varlistentry>
 <term><guilabel>Create backup file</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.kpr.autosave.kpr</filename> in the dir where your file is. This backup file can then be used in case of a problem.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Autosave (min):</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Set the time between two autosaved files. Default is 5 minutes. You can set it from 1 minute to 60 minutes maximum and also to <guilabel>No autosave</guilabel>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Starting page number:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>You can change here the number for the first page. It is set to 1 per default. </para></listitem>
 </varlistentry>
 
 <varlistentry>
