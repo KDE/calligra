@@ -68,6 +68,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 //			, rowDataReadyToFetch(false)
 //#endif
 		{
+			data_owned = false;
 		}
 
 /*#ifdef SQLITE3
@@ -184,7 +185,8 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		else if (type==SQLITE_BLOB) {
 			if (f && f->type()==Field::BLOB) {
 				QByteArray ba;
-				ba.setRawData((const char*)sqlite3_column_blob(prepared_st_handle, i),
+//! @todo efficient enough?
+				ba.duplicate((const char*)sqlite3_column_blob(prepared_st_handle, i),
 					sqlite3_column_bytes(prepared_st_handle, i));
 				return ba;
 			} else
@@ -419,7 +421,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 	const char **col = d->curr_coldata;
 #endif
 	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
-	data.reserve(realCount);
+	data.resize(realCount);
 	if (!m_fieldsExpanded) {//simple version: without types
 		for( uint i=0; i<realCount; i++ ) {
 #ifdef SQLITE2

@@ -60,11 +60,11 @@ namespace KexiDB {
 
 	Example:
 	<pre>
-			  ----------
+	          ----------
 	 ---r1--<|          |
-			 | Table A [uk]----r3---<
+	         | Table A [uk]----r3---<
 	 ---r2--<|          |
-			  ----------
+	          ----------
 	</pre>
 	Table A has two relationships (r1, r2) at details side and one (r3) at master side.
 	[uk] stands for unique key.

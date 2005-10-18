@@ -1,2 +1,1 @@
 #include "../sqlite/sqliteconnection.cpp"
-

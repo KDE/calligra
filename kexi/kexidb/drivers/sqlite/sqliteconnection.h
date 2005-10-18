@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,11 @@ class SQLiteConnection : public Connection
 
 		virtual Cursor* prepareQuery( const QString& statement, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
+
+#ifndef SQLITE2 //TEMP IFDEF!
+		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
+			TableSchema& tableSchema);
+#endif
 
 	protected:
 		/*! Used by driver */

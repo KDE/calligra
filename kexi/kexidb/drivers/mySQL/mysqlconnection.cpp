@@ -87,7 +87,7 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 		return true;
 	}
 
-	d->storeError();
+	d->storeResult();
 //	setError(ERR_DB_SPECIFIC,mysql_error(d->mysql));
 	return false;
 }
@@ -97,7 +97,7 @@ bool MySqlConnection::drv_createDatabase( const QString &dbName) {
 	// mysql_create_db deprecated, use SQL here. 
 	if (drv_executeSQL("CREATE DATABASE " + (dbName)))
 		return true;
-	d->storeError();
+	d->storeResult();
 	return false;
 }
 
@@ -179,6 +179,12 @@ bool MySqlConnection::drv_getTablesList( QStringList &list )
 	return deleteCursor(cursor);
 }
 
+PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
+	const TableSchema& tableSchema)
+{
+	return 0;
+//! @todo:	return new MySqlPreparedStatement(type, *d, tableSchema);
+}
 
 
 #if 0 //old code
@@ -229,8 +235,6 @@ MySqlDB::structure(const QString& table) const
 
 	return dbStruct;
 }
-
-
 
 #endif
 

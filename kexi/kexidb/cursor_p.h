@@ -26,17 +26,15 @@
 
 namespace KexiDB {
 
-/*!
-*/
+#if 0
 /*PRIVATE*/ class /*KEXI_DB_EXPORT*/ CursorData
 {
 	public:
 		CursorData() {};
 		~CursorData() {};
 };
+#endif
 
 } //namespace KexiDB
 
 #endif
-
-

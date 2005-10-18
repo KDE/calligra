@@ -20,6 +20,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef KEXIDB_MYSQLCLIENT_P_H
 #define KEXIDB_MYSQLCLIENT_P_H
 
+#include <kexidb/connection_p.h>
+
 #ifdef Q_WS_WIN
 #include <mysql/config-win.h>
 #endif
@@ -45,38 +47,39 @@ class ConnectionData;
     be shared by any module that needs direct access to the underlying
     database.  Used by the KexiDB and KexiMigration drivers.
  */
-class MySqlConnectionInternal
+class MySqlConnectionInternal : public ConnectionInternal
 {
 	public:
 		MySqlConnectionInternal();
 		~MySqlConnectionInternal();
-		//! Connect to a MySQL database
+
+		//! Connects to a MySQL database
 		bool db_connect(const KexiDB::ConnectionData& data);
-		//! Disconnect from the database
+
+		//! Disconnects from the database
 		bool db_disconnect();
 
-		//! Select a database that is about to be used
+		//! Selects a database that is about to be used
 		bool useDatabase(const QString &dbName = QString::null);
 		
 		//! Execute SQL statement on the database
 		bool executeSQL( const QString& statement );
 
-		//! Stores last result's error status
-		void storeError();
+		//! Stores last operation's result
+		virtual void storeResult();
 
-		//! Escape a table, database or column name
+		//! Escapes a table, database or column name
 		QString escapeIdentifier(const QString& str) const;
 
 		MYSQL *mysql;
-		QString errmsg; //<! server-specific message of last operation
-		int res; //<! result code of last operation on server
+		bool mysql_owned; //!< true if mysql pointer should be freed on destruction
+		QString errmsg; //!< server-specific message of last operation
+		int res; //!< result code of last operation on server
 };
 
 
 //! Internal MySQL cursor data.
-/*! Provides a low-level abstraction for iterating over MySql result sets.
- */
-
+/*! Provides a low-level abstraction for iterating over MySql result sets. */
 class MySqlCursorData : public MySqlConnectionInternal
 {
 	public:
@@ -87,6 +90,7 @@ class MySqlCursorData : public MySqlConnectionInternal
 		, lengths(0)
 		, numRows(0)
 		{
+			mysql_owned = false;
 		}
 		~MySqlCursorData()
 		{

@@ -21,6 +21,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
 #include <kexidb/expression.h>
+#include <kexidb/parser/sqlparser.h>
 
 #include <assert.h>
 
@@ -1010,6 +1011,57 @@ void QuerySchema::setWhereExpression(BaseExpr *expr)
 	delete d->whereExpr;
 	d->whereExpr = expr;
 }
+
+void QuerySchema::addToWhereExpression(KexiDB::Field *field, const QVariant& value, int relation)
+{
+	int token;
+	if (value.isNull())
+		token = SQL_NULL;
+	else if (field->isIntegerType()) {
+		token = INTEGER_CONST;
+	}
+	else if (field->isFPNumericType()) {
+		token = REAL_CONST;
+	}
+	else {
+		token = CHARACTER_STRING_LITERAL;
+//! @todo date, time			
+	}
+	
+	BinaryExpr * newExpr = new BinaryExpr(
+		KexiDBExpr_Relational, 
+		new ConstExpr( token, value ),
+		relation,
+		new VariableExpr((field->table() ? (field->table()->name()+".") : QString::null)+field->name())
+	);
+	if (d->whereExpr) {
+		d->whereExpr = new BinaryExpr(
+			KexiDBExpr_Logical, 
+			d->whereExpr,
+			AND,
+			newExpr
+		);
+	}
+	else {
+		d->whereExpr = newExpr;
+	}
+}
+
+/*
+void QuerySchema::addToWhereExpression(KexiDB::Field *field, const QVariant& value)
+		switch (value.type()) {
+		case Int: case UInt: case Bool: case LongLong: case ULongLong:
+			token = INTEGER_CONST;
+			break;
+		case Double:
+			token = REAL_CONST;
+			break;
+		default:
+			token = CHARACTER_STRING_LITERAL;
+		}
+//! @todo date, time			
+				
+*/
 
 BaseExpr *QuerySchema::whereExpression() const
 {

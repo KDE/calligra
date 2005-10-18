@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 #include "sqlitecursor.h"
+#include "sqlitepreparedstatement.h"
 
 #include "sqlite.h"
 
@@ -40,17 +41,19 @@
 using namespace KexiDB;
 
 SQLiteConnectionInternal::SQLiteConnectionInternal()
-	: data(0),errmsg_p(0),res(SQLITE_OK)
-	, temp_st(0x10000) //
+ : ConnectionInternal()
+ , data(0),errmsg_p(0),res(SQLITE_OK)
+ , temp_st(0x10000) //
 #ifdef SQLITE3
-	, result_name(0)
+ , result_name(0)
 #endif
+ , data_owned(true)
 {
 }
 
 SQLiteConnectionInternal::~SQLiteConnectionInternal() 
 {
-	if (data) {
+	if (data_owned && data) {
 		free( data ); 
 		data = 0;
 	}
@@ -244,5 +247,13 @@ QString SQLiteConnection::serverErrorMsg()
 {
 	return d->errmsg;
 }
+
+#ifndef SQLITE2 //TEMP IFDEF!
+PreparedStatement::Ptr SQLiteConnection::prepareStatement(PreparedStatement::StatementType type, 
+	TableSchema& tableSchema)
+{
+	return new SQLitePreparedStatement(type, *d, tableSchema);
+}
+#endif
 
 #include "sqliteconnection.moc"

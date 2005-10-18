@@ -51,6 +51,10 @@ ConnectionInternal::ConnectionInternal()
 {
 }
 
+ConnectionInternal::~ConnectionInternal()
+{
+}
+
 //================================================
 //! @internal
 class ConnectionPrivate
@@ -1991,11 +1995,13 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
 }
 
-tristate Connection::querySingleRecord(const QString& sql, RowData &data)
+tristate Connection::querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query)
 {
+	assert(sql || query);
+	if (sql)
+		m_sql = *sql + " LIMIT 1"; // is this safe?
 	KexiDB::Cursor *cursor;
-	m_sql = sql + " LIMIT 1"; // is this safe?
-	if (!(cursor = executeQuery( m_sql ))) {
+	if (!(cursor = sql ? executeQuery( m_sql ) : executeQuery( *query ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		return false;
 	}
@@ -2008,6 +2014,16 @@ tristate Connection::querySingleRecord(const QString& sql, RowData &data)
 	}
 	cursor->storeCurrentRow(data);
 	return deleteCursor(cursor);
+}
+
+tristate Connection::querySingleRecord(const QString& sql, RowData &data)
+{
+	return querySingleRecordInternal(data, &sql, 0);
+}
+
+tristate Connection::querySingleRecord(QuerySchema& query, RowData &data)
+{
+	return querySingleRecordInternal(data, 0, &query);
 }
 
 bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
@@ -2804,6 +2820,13 @@ tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema
 		res = it.current()->closeListener();
 	}
 	return res;
+}
+
+PreparedStatement::Ptr Connection::prepareStatement(PreparedStatement::StatementType /*type*/, 
+		TableSchema& /*tableSchema*/)
+{
+	//safe?
+	return 0;
 }
 
 #include "connection.moc"

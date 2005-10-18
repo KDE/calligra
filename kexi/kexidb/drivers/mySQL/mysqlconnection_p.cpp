@@ -39,20 +39,22 @@ namespace NAMESPACE {
 
 /* ************************************************************************** */
 MySqlConnectionInternal::MySqlConnectionInternal()
-	: mysql(0)
+	: ConnectionInternal()
+	, mysql(0)
 	, res(0)
+	, mysql_owned(true)
 {
 }
 
 MySqlConnectionInternal::~MySqlConnectionInternal()
 {
-	if (mysql) {
+	if (mysql_owned && mysql) {
 		mysql_close(mysql);
 		mysql = 0;
 	}
 }
 
-void MySqlConnectionInternal::storeError()
+void MySqlConnectionInternal::storeResult()
 {
 	res = mysql_errno(mysql);
 	errmsg = mysql_error(mysql);
@@ -109,7 +111,7 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 	if(mysql_errno(mysql) == 0)
 		return true;
 
-	storeError(); //store error msg, if any - can be destroyed after disconnect()
+	storeResult(); //store error msg, if any - can be destroyed after disconnect()
 	db_disconnect();
 //	setError(ERR_DB_SPECIFIC,err);
 	return false;
@@ -145,7 +147,7 @@ bool MySqlConnectionInternal::executeSQL(const QString& statement) {
 		return true;
 	}
 
-	storeError();
+	storeResult();
 //	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
 	return false;
 }

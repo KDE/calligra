@@ -36,6 +36,7 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/transaction.h>
 #include <kexidb/driver.h>
+#include <kexidb/preparedstatement.h>
 
 #include <kexiutils/tristate.h>
 
@@ -385,6 +386,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 false on data retrieving failure, and cancelled if there's no single record available. */
 		tristate querySingleRecord(const QString& sql, RowData &data);
 
+		/*! Like tristate querySingleRecord(const QString& sql, RowData &data)
+		 but uses QuerySchema object. */
+		tristate querySingleRecord(QuerySchema& query, RowData &data);
+
 		/*! Executes \a sql query and stores first record's field's (number \a column) string value 
 		 inside \a value. For efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
@@ -705,6 +710,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 The lookup is case insensitive. */
 		virtual bool drv_containsTable( const QString &tableName ) = 0;
 
+		/*! */
+		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
+			TableSchema& tableSchema);
+
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, ConnectionData &conn_data );
@@ -1020,6 +1029,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true if the cursor \a cursor contains column \a column,
 		 else, sets appropriate error with a message and returns false. */
 		bool checkIfColumnExists(Cursor *cursor, uint column);
+
+		/*! @internal used by querySingleRecord() methods. */
+		tristate querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query);
 
 		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;

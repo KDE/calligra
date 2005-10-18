@@ -156,6 +156,7 @@ public:
  token can be: IDENTIFIER, SQL_NULL, CHARACTER_STRING_LITERAL,
  INTEGER_CONST, REAL_CONST
 */
+//! @todo date, time
 class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:

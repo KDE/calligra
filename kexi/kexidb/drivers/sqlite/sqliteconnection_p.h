@@ -20,6 +20,8 @@
 #ifndef KEXIDB_SQLITECONN_P_H
 #define KEXIDB_SQLITECONN_P_H
 
+#include <kexidb/connection_p.h>
+
 #include "sqlite.h"
 
 //for compatibility
@@ -34,7 +36,9 @@
 # define sqlite_libversion sqlite3_libversion
 # define sqlite_libencoding sqlite3_libencoding
 #else
-# define SQLITE2
+# ifndef SQLITE2
+#  define SQLITE2
+# endif
   typedef struct sqlite sqlite_struct;
 # define sqlite_free sqlite_freemem
 #endif
@@ -43,16 +47,17 @@ namespace KexiDB
 {
 
 /*! Internal SQLite connection data. Also used inside SQLiteCursor. */
-class SQLiteConnectionInternal
+class SQLiteConnectionInternal : public ConnectionInternal
 {
 	public:
 		SQLiteConnectionInternal();
-		~SQLiteConnectionInternal();
+		virtual ~SQLiteConnectionInternal();
 
 		//! stores last result's message
-		void storeResult();
+		virtual void storeResult();
 
 		sqlite_struct *data;
+		bool data_owned; //!< true if data pointer should be freed on destruction
 		QString errmsg; //<! server-specific message of last operation
 		char *errmsg_p; //<! temporary: server-specific message of last operation
 		int res; //<! result code of last operation on server

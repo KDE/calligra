@@ -453,6 +453,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! \return WHERE expression or 0 if this query has no WHERE expression */
 		BaseExpr *whereExpression() const;
+	
+		/*! Adds a part to WHERE expression. 
+		 Simplifies creating of WHERE expression, if used instead 
+		 of setWhereExpression(BaseExpr *expr). */
+		void addToWhereExpression(KexiDB::Field *field, const QVariant& value, int relation = '=');
 
 	protected:
 		void init();

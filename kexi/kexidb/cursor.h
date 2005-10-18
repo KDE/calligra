@@ -164,7 +164,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		inline bool containsROWIDInfo() const { return m_containsROWIDInfo; }
 
 		/*! \return a value stored in column number \a i (counting from 0).
-		 This have unspecified behaviour if the cursor is not at valid record.
+		 Is has unspecified behaviour if the cursor is not at valid record.
 		 Note for driver developers: 
 		 If \a i is >= than m_fieldCount, null QVariant value should be returned. 
 		 To return a value typically you can use a pointer to internal structure 

@@ -49,6 +49,9 @@ class MySqlConnection : public Connection
 		virtual QString escapeString( const QString& str) const;
 		virtual QCString escapeString( const QCString& str) const;
 
+		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
+			const TableSchema& tableSchema);
+
 	protected:
 
 		/*! Used by driver */
