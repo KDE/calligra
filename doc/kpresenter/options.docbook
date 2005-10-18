@@ -105,7 +105,7 @@
 
 <varlistentry>
 <term><guilabel>Number of recent files:</guilabel></term>
-<listitem><para>Set the number of recent files which will be opened using the <guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem> menu. Default is to remember 10 filenames. The maximum you can set is 20 and the minimum is 1.</para></listitem>
+<listitem><para>Set the number of recent files which will be opened using the <menuchoice><guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem></menuchoice> menu. Default is to remember 10 filenames. The maximum you can set is 20 and the minimum is 1.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -173,24 +173,22 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Enable background spellchecking</guilabel> </term>
-<listitem><para>If it is checked, it will highlight in red mispelled words according to the dictionary selected above. This is enabled by default.</para></listitem>
-<!--TODO how is it related to Text -> Spellcheck -> Autospellcheck -->
+<listitem><para>If it is checked, it will highlight in red mispelled words according to the dictionary selected above. This is enabled by default. This option has the same effect than <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem></menuchoice> and both are checked/unchecked at the same time.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Skip all uppercase words</guilabel></term>
-<listitem><para>If <guilabel>Enable background checking</guilabel> is enabled and if this option is checked, the all uppercase words will not be checked for spelling.</para></listitem>
-<!--TODO how is it related to Text -> Spellcheck? and how is it related to Enable background spellchecking -->
+<listitem><para>If this option is checked, the all uppercase words will not be checked for spelling. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Skip run-together words</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>If checked, the concatenated words made of existing words are not spell checked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Ignore These Words</guilabel></term>
-<listitem><para>You can have here a list of words you want to ignore in all spellchecking. Use the <guilabel>Add</guilabel> button to add a word in the list.</para></listitem>
+<listitem><para>You can have here a list of words you want to ignore in all spellchecking. Write a word in the field then click on the <guilabel>Add</guilabel> button to add it in the list. All the words in the list will be ignored by the spellchecker.</para></listitem>
 </varlistentry>
 
 <varlistentry>
