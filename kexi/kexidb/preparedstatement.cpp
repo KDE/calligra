@@ -46,10 +46,10 @@ PreparedStatement::~PreparedStatement()
 
 QCString PreparedStatement::generateStatementString()
 {
-	QCString s(512);
+	QCString s(1024);
 	if (m_type == SelectStatement) {
 //! @todo only tables and trivial queries supported for select...
-		s = QString::fromLatin1("SELECT ");
+		s = "SELECT ";
 		bool first = true;
 //		for (uint i=0; i<m_fields->fieldCount(); i++) {
 		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {
@@ -57,7 +57,7 @@ QCString PreparedStatement::generateStatementString()
 				first = false;
 			else
 				s.append(", ");
-			s.append(it.current()->name());
+			s.append(it.current()->name().latin1());
 		}
 		first = true;
 		s.append(" WHERE ");
@@ -77,13 +77,14 @@ QCString PreparedStatement::generateStatementString()
 				continue;
 			}
 			m_whereFields->append(f);
-			s.append((*it)+"=?");
+			s.append((*it).latin1());
+			s.append("=?");
 		}
 	}
 	else if (m_type == InsertStatement && dynamic_cast<TableSchema*>(m_fields)) {
 //! @todo only tables supported for insert; what about views?
 			
-		s = QString::fromLatin1("INSERT INTO ")+dynamic_cast<TableSchema*>(m_fields)->name()
+		s = QCString("INSERT INTO ")+dynamic_cast<TableSchema*>(m_fields)->name().latin1()
 			+" VALUES (";
 		bool first = true;
 //		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {

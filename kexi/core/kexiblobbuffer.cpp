@@ -112,7 +112,7 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
 
 KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, bool _stored,
 	const QString& _name, const QString& _caption, const QString& _mimeType, const QPixmap& pixmap)
- : stored(_stored), name(_name), caption(_caption), mimeType(_mimeType), refs(0), id(ident),
+ : name(_name), caption(_caption), mimeType(_mimeType), refs(0), id(ident), stored(_stored),
  m_pixmapLoaded(new bool(false)/*workaround for pixmap() const*/)
 {
 	if (pixmap.isNull())
@@ -278,7 +278,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 		schema.addField( blobsTable->field("o_name") );
 		schema.addField( blobsTable->field("o_caption") );
 		schema.addField( blobsTable->field("o_mime") );
-		schema.addToWhereExpression(blobsTable->field("o_id"), id);
+		schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((Q_LLONG)id));
 
 		KexiDB::RowData rowData;
 		tristate res = d->conn->querySingleRecord(
