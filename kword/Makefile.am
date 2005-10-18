@@ -66,7 +66,7 @@ kwmailmerge_servicetypedir=$(kde_servicetypesdir)
 ## The kdeinit loadable module and the kword binary
 kdeinit_LTLIBRARIES = kword.la
 bin_PROGRAMS =
-kword_la_SOURCES = main.cc
+kword_la_SOURCES = main.cpp
 kword_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kword_la_LIBADD = $(LIB_KOFFICECORE)
 
