@@ -65,6 +65,22 @@ namespace Kross { namespace Python {
             virtual ~PythonExtension();
 
             /**
+             * Overloaded method to return the string-representation
+             * of this object.
+             *
+             * \return The string representation.
+             */
+            virtual Py::Object str();
+
+            /**
+             * Overloaded method to return the string-representation
+             * of the value this object has.
+             *
+             * \return A string representation of the value.
+             */
+            virtual Py::Object repr();
+
+            /**
              * Overloaded method to handle attribute calls
              * from within python.
              *
@@ -88,6 +104,19 @@ namespace Kross { namespace Python {
              *        that should be returned.
              */
             virtual Py::Object getattr_methods(const char* name);
+
+            /**
+             * Overloaded method to handle setting of attributes
+             * from within python.
+             *
+             * \param name The name of the attribute that
+             *        should be changed.
+             * \param value The value to set to the defined 
+             *        attribute.
+             * \return An indicator if setting the attribute 
+             *         failed (<0) or if succeed (>=0).
+             */
+            virtual int setattr(const char* name, const Py::Object& value);
 
             /**
              * Return the \a Kross::Api::Object this

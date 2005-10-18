@@ -62,6 +62,17 @@ PythonExtension::~PythonExtension()
 #endif
 }
 
+Py::Object PythonExtension::str()
+{
+    QString s = m_object->getName();
+    return toPyObject(s.isEmpty() ? m_object->getClassName() : s);
+}
+
+Py::Object PythonExtension::repr()
+{
+    return toPyObject( m_object->toString() );
+}
+
 Py::Object PythonExtension::getattr(const char* n)
 {
     QString name(n);
@@ -86,7 +97,6 @@ Py::Object PythonExtension::getattr(const char* n)
         QMap<QString, Kross::Api::Object::Ptr> children = m_object->getChildren();
         QMap<QString, Kross::Api::Object::Ptr>::Iterator it( children.begin() );
         for(; it != children.end(); ++it) {
-kdDebug() << "0" << endl;
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
             kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' child='%2'").arg(name).arg(it.key()) << endl;
 #endif
@@ -95,8 +105,8 @@ kdDebug() << "0" << endl;
         return members;
     }
 
-    //if(name == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; return Py::None(); }
-    //if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
+    if(name == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; return Py::None(); }
+    if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
 
     if(name.startsWith("__")) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
@@ -109,7 +119,6 @@ kdDebug() << "0" << endl;
     // to the correct method. It's a dirty hack, but it's the easiest way ;)
     m_methodname = name;
     return Py::PythonExtension<PythonExtension>::getattr_methods("_call_");
-    //return Py::PythonExtension<PythonExtension>::getattr_methods(n);
 }
 
 Py::Object PythonExtension::getattr_methods(const char* n)
@@ -118,8 +127,15 @@ Py::Object PythonExtension::getattr_methods(const char* n)
 #ifdef KROSS_PYTHON_EXTENSION_GETATTRMETHOD_DEBUG
     kdDebug()<<"PythonExtension::getattr_methods name="<<name<<endl;
 #endif
-
     return Py::PythonExtension<PythonExtension>::getattr_methods(n);
+}
+
+int PythonExtension::setattr(const char* name, const Py::Object& value)
+{
+#ifdef KROSS_PYTHON_EXTENSION_SETATTR_DEBUG
+    kdDebug() << QString("PythonExtension::setattr name=%1 value=%2").arg(name).arg(value.as_string().c_str()) << endl;
+#endif
+    return Py::PythonExtension<PythonExtension>::setattr(name, value);
 }
 
 Kross::Api::Object::Ptr PythonExtension::getObject()

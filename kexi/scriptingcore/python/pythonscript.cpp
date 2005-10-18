@@ -128,6 +128,7 @@ void PythonScript::initialize()
         // executed. That way we cache the compiled code.
         PyObject* code = 0;
         bool restricted = m_scriptcontainer->getOption("restricted", QVariant(false), true).toBool();
+
         kdDebug() << QString("PythonScript::initialize() name=%1 restricted=%2").arg(m_scriptcontainer->getName()).arg(restricted) << endl;
         if(restricted) {
 
@@ -252,6 +253,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
             mainmoduledict.ptr(),
             moduledict.ptr()
         );
+
         if(! pyresult)
             throw Py::Exception();
         Py::Object result(pyresult, true);

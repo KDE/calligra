@@ -110,21 +110,25 @@ Py::Object PythonSecurity::_getattr_(const Py::Tuple& args)
 
 PyObject* PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
 {
+kdDebug()<<"PythonSecurity::compile_restricted 1"<<endl;
     if(! m_pymodule)
         initRestrictedPython(); // throws exception if failed
-
+kdDebug()<<"PythonSecurity::compile_restricted 2"<<endl;
     try {
         Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
+kdDebug()<<"PythonSecurity::compile_restricted 3"<<endl;
 
         PyObject* func = PyDict_GetItemString(m_pymodule->getDict().ptr(), "compile_restricted");
         if(! func)
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such function '%1'.").arg("compile_restricted")) );
 
+kdDebug()<<"PythonSecurity::compile_restricted 4"<<endl;
         Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
 
         if(! funcobject.isCallable())
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' is not callable.").arg("compile_restricted")) );
 
+kdDebug()<<"PythonSecurity::compile_restricted 5"<<endl;
         Py::Tuple args(3);
         args[0] = Py::String(source.latin1());
         args[1] = Py::String(filename.latin1());
@@ -132,6 +136,7 @@ PyObject* PythonSecurity::compile_restricted(const QString& source, const QStrin
 
         Py::Object result = funcobject.apply(args);
 
+kdDebug()<<"PythonSecurity::compile_restricted 6"<<endl;
         PyObject* pycode = PyEval_EvalCode(
             (PyCodeObject*)result.ptr(),
             mainmoduledict.ptr(),
@@ -139,7 +144,7 @@ PyObject* PythonSecurity::compile_restricted(const QString& source, const QStrin
         );
         if(! pycode)
             throw Py::Exception();
-        Py::Object code(pycode);
+
 /*
         kdDebug()<<"$---------------------------------------------------"<<endl;
         Py::List ml = mainmoduledict;
@@ -150,6 +155,7 @@ PyObject* PythonSecurity::compile_restricted(const QString& source, const QStrin
         }
 */
         kdDebug()<<"$---------------------------------------------------"<<endl;
+        Py::Object code(pycode);
         kdDebug()<< code.as_string().c_str() << " callable=" << PyCallable_Check(code.ptr()) << endl;
         Py::List l = code.dir();
         for(Py::List::size_type i = 0; i < l.length(); ++i) {
