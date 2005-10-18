@@ -38,16 +38,18 @@ class QString;
 #define NAMESPACE KexiDB
 #endif
 
-namespace NAMESPACE {
+namespace KexiDB {
+    class ConnectionData;
+}
 
-class ConnectionData;
+namespace NAMESPACE {
 
 //! Internal MySQL connection data.
 /*! Provides a low-level API for accessing MySQL databases, that can
     be shared by any module that needs direct access to the underlying
     database.  Used by the KexiDB and KexiMigration drivers.
  */
-class MySqlConnectionInternal : public ConnectionInternal
+class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 {
 	public:
 		MySqlConnectionInternal();
