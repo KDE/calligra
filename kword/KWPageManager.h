@@ -39,6 +39,9 @@ public:
     int pageNumber(const KoRect *frame) const;
     /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
     int pageNumber(const KoPoint *point) const;
+    /** return pageNumber of page with document-offset (in the Y direction) of @p ptY,
+     *  pagenumbers for a normal document start at 1.
+     */
     int pageNumber(double ptY) const;
     /// return total number of pages in this document.
     int pageCount() const;
@@ -53,10 +56,22 @@ public:
     /// return the KWPage instance of the y-coordinate in the document.
     KWPage* page(double ptY) const;
 
+    /**
+     * Return the y-offset in this document of the top of page with @p pageNumber
+     * Note that pageNumber is NOT an offset in the document, but the real number
+     * of the page.
+     * @see setStartPage(int)
+     */
     double topOfPage(int pageNumber) const; // in pt
+    /**
+     * Return the y-offset in this document of the bottom of page with @p pageNumber
+     * Note that pageNumber is NOT an offset in the document, but the real number
+     * of the page.
+     * @see setStartPage(int)
+     */
     double bottomOfPage(int pageNumber) const; // in pt
 
-    /// Set a new startpage for this document, renumbering all pages.
+    /// Set a new startpage for this document, renumbering all pages already added.
     void setStartPage(int startPage);
 
     /**
@@ -82,15 +97,21 @@ public:
     /// Append a new page at the end of the document
     KWPage* appendPage();
 
+    /// Remove the page with @p pageNumber renumbering all pages after pages already added
     void removePage(int pageNumber);
+    /// Remove @p page renumbering all pages after pages already added
     void removePage(KWPage *page);
 
+    /// return the effective pageLayout of @p pageNumber combining the default and the page specific ones
     const KoPageLayout pageLayout(int pageNumber) const;
 
+    /// Set the page size for the whole document changing all pages that don't have a specific size set.
     void setDefaultPageSize(double width, double height);
+    /// Set the margins for the whole document changing all pages that don't have specific margins set.
     void setDefaultPageMargins(double top, double left, double bottom, double right);
 
 private:
+    /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
     /// sorter for numbered pages.
     class PageList : public QPtrList<KWPage> {

@@ -36,19 +36,36 @@ public:
     void setWidth(const double &x);
     /// set the height of the page in pt
     void setHeight(const double &y);
+    /// set height of the top margin in pt
     void setTopMargin(const double &x);
+    /// set height of the bottom margin in pt
     void setBottomMargin(const double &y);
+    /// set width of the left margin in pt
     void setLeftMargin(const double &x);
+    /// set width of the right margin in pt
     void setRightMargin(const double &y);
 
+    /// return the width of this page (in pt)
     double width() const;
+    /// return the height of this page (in pt)
     double height() const;
+    /// return the height of the margin at top (in pt);
     double topMargin() const;
+    /// return the height of the margin at bottom (in pt);
     double bottomMargin() const;
+    /// return the width of the margin at left (in pt);
     double leftMargin() const;
+    /// return the width of the margin at left (in pt);
     double rightMargin() const;
 
     // the y coordinate
+    /**
+     * All Pages are in a document-wide coordinate system that simply puts every page under
+     * the next page and keeps the Y coordinate counting throughout the doc.  The X coordinate
+     * off each page in the document is zero, i.e. aligned to the left.
+     * This method returns the offset of this page in the whole document which means it will
+     * add the height of all the pages that come before this one.
+     */
     double offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSideEnum
@@ -56,13 +73,23 @@ public:
     /// set the pageSide of this page, see the PageSideEnum
     void setPageSide(PageSideEnum ps) { m_pageSide = ps; }
 
+    /// returns the number of this page as it will be shown to the user.
     int pageNumber() const { return m_pageNum; }
 
+    /**
+     * return a QRect with the size of this page in pixels.
+     * @param zoomHandler the zoomhandler knows the current zoom levels. The KWDocument currently
+     *   implements that interface.
+     */
     QRect zoomedRect(KoZoomHandler *zoomHandler);
+    /// return a KoRect with the (pt) sizes of this page. Margins are ignored for this function.
     const KoRect rect() const;
 
 private:
-    // private constructor, only for our friends
+    /** private constructor, only for our friends
+     * @param parent the KWPageManager that we belong to.
+     * @param pageNum the number of the page as the user will see it.
+     */
     KWPage(KWPageManager *parent, int pageNum);
     int m_pageNum;
     PageSideEnum m_pageSide;
