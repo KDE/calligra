@@ -572,8 +572,11 @@ void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context ) const
     else if ( va == AlignSubScript ) textPos = "sub";
     else textPos = "0%";
     textPos += ' ';
-    textPos += QString::number( d->m_relativeTextSize * 100 );
-    textPos += '%';
+    if ( va != AlignNormal )
+    {
+        textPos += QString::number( d->m_relativeTextSize * 100 );
+        textPos += '%';
+    }
     gs.addProperty( "style:text-position", textPos, tt );
 
     if ( m_attributeFont == ATT_SMALL_CAPS )
