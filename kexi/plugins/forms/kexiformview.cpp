@@ -655,7 +655,7 @@ KexiFormView::storeData()
 		//set widget's internal property so it can be saved...
 		const QVariant oldStoredPixmapId( it.key()->property("storedPixmapId") );
 		it.key()->setProperty("storedPixmapId", 
-			QVariant((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID));
+			QVariant((Q_LLONG /* KexiBLOBBuffer::Id_t unsafe - will be fixed in Qt4*/)storedBLOBID));
 		KFormDesigner::ObjectTreeItem *widgetItem = form()->objectTree()->lookup(it.key()->name());
 		if (widgetItem)
 			widgetItem->addModifiedProperty( "storedPixmapId", oldStoredPixmapId );

@@ -1325,10 +1325,10 @@ void PixmapData::setPixmap(const QPixmap& pixmap, const QString& url)
 	//save pixmap's data
 	QBuffer buffer( m_data );
 	buffer.open( IO_WriteOnly );
-	QCString imageType("PNG"); //default?
+	QString imageType("PNG"); //default?
 	if (!m_originalFileName.isEmpty())
 		imageType = KImageIO::type(m_originalFileName);
-	m_pixmap.save( &buffer, (const char*)imageType );
+	m_pixmap.save( &buffer, imageType.latin1() );
 }
 
 QByteArray PixmapData::data() const
