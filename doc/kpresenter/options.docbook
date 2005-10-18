@@ -153,7 +153,7 @@ settings.</para></listitem>
 <sect2 id="configure-spelling">
 <title><guilabel>Spelling</guilabel></title>
 
-<para>This tab defines the spell checker behavior.</para>
+<para>This tab defines the spellchecker behavior.</para>
 
 <screenshot>
 <screeninfo>Spelling</screeninfo>
@@ -173,7 +173,7 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Enable background spellchecking</guilabel> </term>
-<listitem><para>If it is checked, it will highlight in red mispelled words according to the dictionary selected above. This is enabled by default. This option has the same effect than <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem></menuchoice> and both are checked/unchecked at the same time.</para></listitem>
+<listitem><para>If it is checked, it will highlight in red mispelled words according to the dictionary selected above and it will spellcheck words as you type them. This is enabled by default. This option has the same effect than <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem></menuchoice> and both are checked/unchecked at the same time.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -183,7 +183,7 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Skip run-together words</guilabel></term>
-<listitem><para>If checked, the concatenated words made of existing words are not spell checked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para></listitem>
+<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para></listitem>
 </varlistentry>
 
 <varlistentry>
