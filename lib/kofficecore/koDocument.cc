@@ -2421,7 +2421,7 @@ QValueList<KoTextDocument *> KoDocument::allTextDocuments() const
     return QValueList<KoTextDocument *>();
 }
 
-KoPageLayout KoDocument::pageLayout(int pageNumber) const
+KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
 {
     return m_pageLayout;
 }
