@@ -20,7 +20,7 @@
 #include <koApplication.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
-#include "kwaboutdata.h"
+#include "KWAboutData.h"
 
 static const KCmdLineOptions options[]=
 {

@@ -28,7 +28,7 @@
 
 #include <kabc/addressbook.h>
 
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 
 class KWMailMergeKABC: public KWMailMergeDataSource
 {

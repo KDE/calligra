@@ -20,7 +20,7 @@
 
 #include "serialletter_classicplugin.h"
 #include "serialletter_classicplugin.moc"
-#include "mailmerge.h"
+#include "KWMailMergeDataBase.h"
 #include <kinputdialog.h>
 #include <qlabel.h>
 #include <qhbox.h>
@@ -34,7 +34,7 @@
 #include <qtooltip.h>
 #include <kiconloader.h>
 #include <qheader.h>
-#include "kwdoc.h"
+#include "KWDocument.h"
 #include "defs.h"
 
 #define KWSLCPBarIcon( x ) BarIcon( x, db->KWInstance() )

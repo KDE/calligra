@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Original file (mailmerge.h): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Original file (KWMailMergeDataBase.h): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 Joseph Wenninger <jowenn@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include <qlistview.h>
 #include <kdialogbase.h>
 #include <koVariableDlgs.h>
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 #include <qspinbox.h>
 
 class QHBox;

@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "KWordDocIface.h"
-#include "kwtextframeset.h"
+#include "KWTextFrameSet.h"
 #include "KWordFrameSetIface.h"
-#include "kwdoc.h"
-#include "kwvariable.h"
+#include "KWDocument.h"
+#include "KWVariable.h"
 #include "KWPageManager.h"
 
 #include <kapplication.h>

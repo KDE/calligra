@@ -27,7 +27,7 @@
 #include <kspread_doc.h>
 #include <kspread_sheet.h>
 
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 
 class KWMailMergeKSpread: public KWMailMergeDataSource
 {

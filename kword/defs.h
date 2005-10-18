@@ -23,7 +23,7 @@
 #include <qtextstream.h>
 #include <qstring.h>
 #include <koGlobal.h>
-#include "kwfactory.h"
+#include "KWFactory.h"
 
 // Try to add new defines and enums in the most appropriate class
 // instead of in this file. Only very global things should be here.

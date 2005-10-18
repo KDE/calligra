@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 #include <qwidget.h>
 
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 #include "serialletter_qtsql_base.h"
 #include "qtsqlopenwidget.h"
 

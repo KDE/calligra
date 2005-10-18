@@ -19,7 +19,7 @@
 
 #include "KWordTextFrameSetEditIface.h"
 
-#include "kwtextframeset.h"
+#include "KWTextFrameSet.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "defs.h"

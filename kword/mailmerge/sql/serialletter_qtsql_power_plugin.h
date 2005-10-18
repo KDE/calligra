@@ -32,7 +32,7 @@
 #include <qguardedptr.h>
 
 #include "defs.h"
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 #include "serialletter_qtsql_base.h"
 #include "kwqtsqlpower.h"
 #include "serialletter_sqlcursor.h"

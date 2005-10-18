@@ -18,10 +18,10 @@
 */
 
 #include "KWordPartFrameSetIface.h"
-#include "kwdoc.h"
-#include "kwpartframeset.h"
-#include "kwview.h"
-#include "kwcanvas.h"
+#include "KWDocument.h"
+#include "KWPartFrameSet.h"
+#include "KWView.h"
+#include "KWCanvas.h"
 
 #include <kapplication.h>
 #include <kparts/partmanager.h>

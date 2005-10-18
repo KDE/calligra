@@ -25,7 +25,7 @@
 #include <qsqldatabase.h>
 #include <qguardedptr.h>
 
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 #include "qtsqlopenwidget.h"
 
 

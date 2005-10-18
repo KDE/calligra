@@ -16,9 +16,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KWFrameList.h"
-#include "kwframe.h"
-#include "kwdoc.h"
-#include "kwviewmode.h"
+#include "KWFrame.h"
+#include "KWDocument.h"
+#include "KWViewMode.h"
 #include "KWPageManager.h"
 
 //#define DEBUG_SPEED

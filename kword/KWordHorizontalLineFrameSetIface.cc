@@ -19,7 +19,7 @@
 #if 0 // KWORD_HORIZONTAL_LINE
 #include "KWordHorizontalLineFrameSetIface.h"
 #include "KWordPictureFrameSetIface.h"
-#include "kwframe.h"
+#include "KWFrame.h"
 #include <kapplication.h>
 #include <kdebug.h>
 #include <dcopclient.h>

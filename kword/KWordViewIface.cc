@@ -21,9 +21,9 @@
 
 #include <kurl.h>
 
-#include "kwview.h"
-#include "kwcanvas.h"
-#include "kwdoc.h"
+#include "KWView.h"
+#include "KWCanvas.h"
+#include "KWDocument.h"
 
 #include <dcopclient.h>
 

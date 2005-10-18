@@ -18,7 +18,7 @@
 #ifndef kw_framelist_h
 #define kw_framelist_h
 
-#include "kwframe.h"
+#include "KWFrame.h"
 
 #include <qptrlist.h>
 #include <qvaluelist.h>

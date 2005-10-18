@@ -18,8 +18,8 @@
 */
 
 #include "KWordPictureFrameSetIface.h"
-#include "kwframe.h"
-#include "kwdoc.h"
+#include "KWFrame.h"
+#include "KWDocument.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 

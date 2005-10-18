@@ -19,11 +19,11 @@
 
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordViewIface.h"
-#include "kwframe.h"
-#include "kwformulaframe.h"
-#include "kwview.h"
-#include "kwcanvas.h"
-#include "kwdoc.h"
+#include "KWFrame.h"
+#include "KWFormulaFrameSet.h"
+#include "KWView.h"
+#include "KWCanvas.h"
+#include "KWDocument.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "KWordFrameSetIface.h"

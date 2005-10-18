@@ -18,9 +18,9 @@
 */
 
 #include "KWordFrameSetIface.h"
-#include "kwframe.h"
-#include "kwview.h"
-#include "kwdoc.h"
+#include "KWFrame.h"
+#include "KWView.h"
+#include "KWDocument.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 

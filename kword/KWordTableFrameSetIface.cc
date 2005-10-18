@@ -21,13 +21,13 @@
 #include "KWordTextFrameSetIface.h"
 #include "KWordTextFrameSetEditIface.h"
 
-#include "kwframe.h"
-#include "kwtableframeset.h"
+#include "KWFrame.h"
+#include "KWTableFrameSet.h"
 #include <kapplication.h>
 #include <dcopclient.h>
-#include "kwview.h"
-#include "kwdoc.h"
-#include "kwcanvas.h"
+#include "KWView.h"
+#include "KWDocument.h"
+#include "KWCanvas.h"
 
 KWordTableFrameSetIface::KWordTableFrameSetIface( KWTableFrameSet *_frame )
     : KWordFrameSetIface( _frame)

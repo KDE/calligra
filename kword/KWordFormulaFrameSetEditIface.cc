@@ -19,9 +19,9 @@
 
 #include "KWordFormulaFrameSetEditIface.h"
 
-#include "kwframe.h"
-#include "kwformulaframe.h"
-#include "kwdoc.h"
+#include "KWFrame.h"
+#include "KWFormulaFrameSet.h"
+#include "KWDocument.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kformulacontainer.h>

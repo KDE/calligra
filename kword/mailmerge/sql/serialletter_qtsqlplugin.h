@@ -22,7 +22,7 @@
 
 #include <qdom.h>
 #include <qsqlcursor.h>
-#include "mailmerge_interface.h"
+#include "KWMailMergeDataSource.h"
 #include "serialletter_qtsql_base.h"
 #include "qtsqldatasourceeditor.h"
 

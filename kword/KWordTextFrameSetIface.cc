@@ -19,12 +19,12 @@
 
 #include "KWordTextFrameSetIface.h"
 #include "KWordViewIface.h"
-#include "kwtextframeset.h"
+#include "KWTextFrameSet.h"
 #include <KoTextViewIface.h>
-#include "kwview.h"
+#include "KWView.h"
 #include <kotextobject.h>
-#include "kwcanvas.h"
-#include "kwdoc.h"
+#include "KWCanvas.h"
+#include "KWDocument.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "KWordFrameSetIface.h"
