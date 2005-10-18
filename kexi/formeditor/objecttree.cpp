@@ -74,7 +74,7 @@ ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &ol
 
 	if(!m_props.contains(property)) {
 		m_props.insert(property, oldValue);
-		kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " value: " << oldValue << endl;
+		kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue << endl;
 	}
 }
 

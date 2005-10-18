@@ -21,6 +21,7 @@
 #include "kexiformview.h"
 
 #include <qobjectlist.h>
+#include <qfileinfo.h>
 
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
@@ -33,18 +34,19 @@
 #include <kexi.h>
 #include <kexidialogbase.h>
 #include <kexidragobjects.h>
+#include <kexidb/field.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
+#include <kexidb/preparedstatement.h>
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <widget/kexipropertyeditorview.h>
+#include <formeditor/objecttree.h>
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
-
-#include <kexidb/field.h>
 
 #include "kexidbform.h"
 #include "kexiformscrollview.h"
@@ -163,9 +165,11 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 KexiFormView::~KexiFormView()
 {
 	deleteQuery();
-	KexiProject *prj = parentDialog()->mainWin()->project();
-	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-	conn->deleteCursor(m_cursor);
+	if (m_cursor) {
+		KexiProject *prj = parentDialog()->mainWin()->project();
+		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+		conn->deleteCursor(m_cursor);
+	}
 
 	// Important: form window is closed.
 	// Set property set to 0 because there is *only one* instance of a property set class
@@ -601,14 +605,76 @@ KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 tristate
 KexiFormView::storeData()
 {
-	kexipluginsdbg << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+	kexipluginsdbg << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() 
+		<< " [" << parentDialog()->id() << "]" << endl;
+
+	//-- first, store local BLOBs, so identifiers can be updated
+//! @todo remove unused data stored previously
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+	KexiDB::TableSchema *blobsTable = conn->tableSchema("kexi__blobs");
+	if (!blobsTable) { //compatibility check for older Kexi project versions
+//! @todo show message about missing kexi__blobs?
+		return false;
+	}
+	KexiBLOBBuffer *blobBuf = KexiBLOBBuffer::self();
+	for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = m_unsavedLocalBLOBs.constBegin(); 
+		it!=m_unsavedLocalBLOBs.constEnd(); ++it)
+	{
+		kexipluginsdbg << "name=" << it.key()->name() << " dataID=" << it.data() << endl;
+		KexiBLOBBuffer::Handle h( blobBuf->objectForId(it.data(), /*!stored*/false) );
+		if (!h)
+			continue; //no BLOB assigned
+
+		QString originalFileName(h.originalFileName());
+		QFileInfo fi(originalFileName);
+		QString caption(fi.baseName().replace('_', " ").simplifyWhiteSpace());
+////////
+		KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
+			KexiDB::PreparedStatement::InsertStatement, *blobsTable);
+//		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
+		*st << QVariant()/*id*/ << h.data() << originalFileName << caption << h.mimeType();
+		if (!st->execute()) {
+			kexipluginsdbg << " execute error" << endl;
+			return false;
+		}
+///////
+#if 0
+
+		if (!conn->insertRecord(*blobsTable, h.data(), originalFileName, caption, h.mimeType())) {
+//! @todo show message?
+			return false;
+		}
+#endif
+		const Q_ULLONG storedBLOBID = conn->lastInsertedAutoIncValue("o_id", "kexi__blobs");
+		if ((Q_ULLONG)-1 == storedBLOBID) {
+//! @todo show message?
+			return false;
+		}
+		kexipluginsdbg << " storedDataID=" << storedBLOBID << endl;
+		h.setStoredWidthID((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID);
+		//set widget's internal property so it can be saved...
+		const QVariant oldStoredPixmapId( it.key()->property("storedPixmapId") );
+		it.key()->setProperty("storedPixmapId", 
+			QVariant((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID));
+		KFormDesigner::ObjectTreeItem *widgetItem = form()->objectTree()->lookup(it.key()->name());
+		if (widgetItem)
+			widgetItem->addModifiedProperty( "storedPixmapId", oldStoredPixmapId );
+		else
+			kexipluginswarn << "KexiFormView::storeData(): no '" << widgetItem->name() << "' widget found within a form" << endl;
+	}
+//TODO: forall it.key()->setProperty(
+
+	//-- now, save form's XML
 	QString data;
 	if (!KFormDesigner::FormIO::saveFormToString(tempData()->form, data))
 		return false;
 	if (!storeDataBlock(data))
 		return false;
-	tempData()->tempForm = QString();
 
+	//all blobs are now saved
+	m_unsavedLocalBLOBs.clear();
+
+	tempData()->tempForm = QString::null;
 	return true;
 }
 
@@ -991,6 +1057,16 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		foreach_list (KFormDesigner::WidgetListIterator, it, widgetsToSelect)
 			form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
 	}
+}
+
+void
+KexiFormView::setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id)
+{
+//! @todo if there already was data assigned, remember it should be dereferenced
+	if (id==0) 
+		m_unsavedLocalBLOBs.remove(widget);
+	else
+		m_unsavedLocalBLOBs.insert(widget, id);
 }
 
 /*

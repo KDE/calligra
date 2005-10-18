@@ -56,6 +56,7 @@ class Container;
 class ResizeHandleSet;
 class ObjectTreeItem;
 class WidgetPropertySet;
+class Form;
 
 /**
  * This class holds properties of widget classes provided by a factory.
@@ -148,6 +149,16 @@ class KFORMEDITOR_EXPORT WidgetInfo
 
 		WidgetInfo* inheritedClass() const { return m_inheritedClass; }
 
+		/*! Sets custom type \a type for property \a propertyName. 
+		 This allows to override default type, especially when custom property 
+		 and custom property editor item has to be used. */
+		void setCustomTypeForProperty(const char *propertyName, int type);
+
+		/*! \return custom type for property \a propertyName. If no specific custom type has been assigned,
+		 KoProperty::Auto is returned. 
+		 @see setCustomTypeForProperty() */
+		int customTypeForProperty(const char *propertyName) const;
+
 	protected:
 		QCString m_parentFactoryName, m_inheritedClassName; //!< Used for inheriting widgets between factories
 		WidgetInfo* m_inheritedClass;
@@ -164,6 +175,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QString m_saveName;
 		QGuardedPtr<WidgetFactory> m_factory;
 		QAsciiDict<char> *m_propertiesWithDisabledAutoSync;
+		QMap<QCString,int> *m_customTypesForProperty;
 
 	friend class WidgetLibrary;
 };
@@ -229,6 +241,11 @@ class KFORMEDITOR_EXPORT WidgetInfo
     e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
   * "dontStartEditingOnInserting" - if not empty, WidgetFactory::startEditing() will not be executed upon
     widget inseting by a user.
+  * "forceShowAdvancedProperty:{propertyname}" - set it to "1" for "{propertyname}" advanced property 
+    if you want to force it to be visible even if WidgetLibrary::setAdvancedPropertiesVisible(false) 
+    has been called. For example, setting "forceShowAdvancedProperty:pixmap" to "1" 
+    unhides "pixmap" property for a given class.
+
   See StdWidgetFactory::StdWidgetFactory() for properies like
   "Line:orientationSelectionPopup:horizontalIcon".
 
@@ -391,7 +408,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! This function is used to modify a property of a widget (eg after editing it).
 		Please use it instead of w->setProperty() to allow sync inside PropertyEditor.
 		*/
-		void changeProperty(const char *name, const QVariant &value, Container *container);
+		void changeProperty(const char *name, const QVariant &value, Form *form);
 
 		/*! This function is called when the widget is resized,
 		 and the \a editor size needs to be updated. */
@@ -441,7 +458,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QWidget *widget() const;
 
 		/*! Assigns \a value for internal property \a property for a class \a classname.
-		 Internal properties are not stored within objects, but can be just provided
+		 Internal properties are not stored within objects, but can be provided
 		 to describe classes' details. */
 		void setInternalProperty(const QCString& classname, const QCString& property, const QString& value);
 
@@ -469,7 +486,6 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 It's value is inherited from WidgetLibrary. */
 		bool m_showAdvancedProperties;
 
-	private:
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<QWidget> m_editor;
 

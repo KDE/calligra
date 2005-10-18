@@ -26,15 +26,14 @@
 
 namespace KexiUtils {
 
-	/*! \return true if \a s is a valid identifier, ie. starts with a letter or '_' 
-	 and contains only letters, numbers and '_'. */
+	/*! \return true if \a s is a valid identifier, ie. starts with a letter or '_' character
+	 and contains only letters, numbers and '_' character. */
 	KEXIUTILS_EXPORT bool isIdentifier(const QString& s);
 
-	/*! Always returns valid identifier based on \a s.
-	 Non alphanumeric chars (or spaces) are replaced with '_'.
-	 If a number char is at the beginning, '_' is added at start.
-	 Empty strings are not changed.
-	*/
+	/*! \return valid identifier based on \a s.
+	 Non-alphanumeric characters (or spaces) are replaced with '_'.
+	 If a number is at the beginning, '_' is added at start.
+	 Empty strings are not changed. Case remains unchanged. */
 	KEXIUTILS_EXPORT QString string2Identifier(const QString &s);
 
 	/*! \return useful message "Value of "valueName" column must be an identifier.

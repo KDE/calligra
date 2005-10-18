@@ -149,7 +149,9 @@ TODO: put more props. todo - creator, created date, etc. (also to KexiProjectDat
 kexi__blobs
 	o_id integer unsigned primary key auto_increment, //unique project-wide identifier of a BLOB
 	o_data BLOB,
-	o_name varchar(200), //optional, name of the blob, can be e.g. a name of original file the data comes from
+	o_name varchar(200), //optional, name of the blob, 
+	                     //can be e.g. a name of original file the data comes from, 
+	                     //can contain non-latin1 characters
 	o_caption varchar(200), //optional, enriched name, can contain non-latin1 characters
 	o_mime varchar(200) NOT NULL, //MIME type of a BLOB, e.g.  image/jpg
 

@@ -27,6 +27,7 @@
 #include <widget/kexidataawareview.h>
 
 #include "kexiformpart.h"
+#include <core/kexiblobbuffer.h>
 
 class KexiFormPart;
 class KexiMainWindow;
@@ -71,6 +72,20 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		int resizeMode() const { return m_resizeMode; }
 
 		KFormDesigner::Form* form() const;
+
+		/*! Assigns \a id local (static) BLOB's identifier for \a widget widget.
+		 Previously assigned BLOB will be usassigned. 
+		 If \a id is 0, BLOB is unassigned and no new is assigned. 
+
+		 This method is called when a widget supporting BLOB data 
+		 (currently, images from KexiImageBox, within KexiDBFactory) has BLOB assigned by identifier \a id.
+		 BLOB identifiers are defined by KexiBLOBBuffer (KexiBLOBBuffer::self() instance).
+		
+		 The data collected by this method is used on form's design saving (in design mode). 
+		 Local BLOBs are retrieved KexiBLOBBuffer::self() and stored in "kexi__blobs" 'system' table.
+		 Note that db-aware BLOBs (non local) are not handled this way.
+		*/
+		void setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id);
 
 	public slots:
 		/*! Reimplemented to update resize policy. */
@@ -195,6 +210,9 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		 (the position is specified when a widget is inserted with mouse drag & dropping
 		 but not with clicking of 'Insert fields' button from Data Source pane) */
 		QRect m_widgetGeometryForRecentInsertAutoFields;
+
+		//! Used in setUnsavedLocalBLOBs()
+		QMap<QWidget*, KexiBLOBBuffer::Id_t> m_unsavedLocalBLOBs;
 };
 
 #endif

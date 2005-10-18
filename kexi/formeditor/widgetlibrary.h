@@ -140,6 +140,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 of advanced properties. */
 		bool advancedPropertiesVisible() const;
 
+		/*! Sets advanced properties to be visible or not. */
 		void setAdvancedPropertiesVisible(bool set);
 
 		/*! \return The i18n'ed name of the property \a propertyName

@@ -182,6 +182,23 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 
 === General TODO ===
 - avoid using veryvery long names for objects
+- IDEA: Learning module. A special optional pane which shows what commands are sent to server 
+   for learning purposes.
+- IDEA: Server-side wrapper for db connections (very simple) that allows anonymous [1]
+  (or any predefined group of users [2])
+  -- wrapper handles connections by validating *virtual* usernames and passwords for [1] case, 
+     or providing unique virtual user names and passwords for [2] case
+  -- on the server side, wrapper connects to database server (it can be available locally or remotely)
+     using it's private user name and password. Thus, we only need one *physical* user name and password 
+     for multiple users. Virtual names/passwords are mapped to physical one.
+     This is a solution for hosted database servers where it's hard to create as many users 
+     as actually needed.
+  -- Priviledges are mapped as well, and translated. By default, user A could be able to create his/her
+     own database and drop it. He/she couldn't be able to do the same with user's B databases, 
+     until user B allow this. The same for creating tables, and writing data.
+  -- wrapper secures server from too large data sets being sent to server 
+     (parameters need to be configurable)
+  -- it's all dedicated for Kexi; so it's NOT a generic wrapper for any database client.
 
 === USABILITY TODO ===
 -string2Identifier(): convert national chars like 'ó³¿æ' to similar latin-1, instead of '_'
@@ -401,6 +418,33 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
   "*  option -ia searches case-insensitive
      ISO characters are mapped to the nearest lower ASCII equivalent."
 - support for COMPOUND KEYS, ie. keys with 2+ fields; http://en.wikipedia.org/wiki/Compound_key
+- OPTIMIZATION: use PREPARE and EXECUTE statements for some backends, eg. for pgsql:
+	(excerpt from http://www.postgresql.org/docs/8.0/interactive/sql-prepare.html)
+	1. Create a prepared query for an INSERT statement, and then execute it:
+		PREPARE fooplan (int, text, bool, numeric) AS
+			INSERT INTO foo VALUES($1, $2, $3, $4);
+		EXECUTE fooplan(1, 'Hunter Valley', 't', 200.00);
+	2. Create a prepared query for a SELECT statement, and then execute it:
+		PREPARE usrrptplan (int, date) AS
+			SELECT * FROM users u, logs l WHERE u.usrid=$1 AND u.usrid=l.usrid
+			AND l.date = $2;
+		EXECUTE usrrptplan(1, current_date);
+	3. For completnedd, provide KexiDB API for "DEALLOCATE" as well
+- Implement "copy table" feature. 
+  To copy table t1 as t2 with data use: "create table t2 as select * from t1"
+  To copy table t1 as t2 without data use: "create table t2 as select * from t1 limit 0"
+  NOTE: pkeys, triggers, default values are not copied?
+
+- BLOBs in MySQL: max_allowed_packet is 1MiB; read http://dev.mysql.com/doc/mysql/en/blob.html
+ and http://dev.mysql.com/doc/mysql/en/server-parameters.html
+-- http://bugs.mysql.com/bug.php?id=1605 "MySQL protocol (it does not send 'chunked streams'
+for blobs...The client has to read the _entire_ blob into memory."; use:
+ "select substring(document, 1, 10240) from documents where docid='3'"  this to get chunks:
+ "select substring(document, 10241, 10240) from documents where docid='3'"
+ ....
+-- Other approach: store bianrty data using two tables 1st for metainfo about the data, 
+ 2nd for data chunks (e.g. 64KiB each): http://php.dreamwerx.net/forums/viewtopic.php?t=6
+
 
 ?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
 	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
@@ -421,14 +465,13 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
    in SQL editor to place cursor in case of errors
 - add translation method for SQL operators to driver, 
   so SQLite can return "CONCAT" and mysql return "||" for concatenation oeprator, and so on
+- improvement in terms of data recovery: 
+  assume you're entering a long record and db connection is dead before saving...
+  the record could be buffered locally before closing Kexi application... and on next startup, re-sent.
+  This can work in simple cases (when complex transactions are not involved).
 
 === MDB import TODO ===
-crash:
-	keximigrate_mdb_d.dll!mdb_crack_row(MdbTableDef * table=0x01397830, int row_start=1862, int row_end=-30802, MdbField * fields=0x0012c630)  Line 228	C
- 	keximigrate_mdb_d.dll!mdb_read_row(MdbTableDef * table=0x01397830, unsigned int row=22)  Line 265	C
- 	keximigrate_mdb_d.dll!mdb_fetch_row(MdbTableDef * table=0x01397830)  Line 398	C
- 	keximigrate_mdb_d.dll!mdb_read_catalog(MdbHandle * mdb=0x01394ff8, int objtype=-1)  Line 96	C
- 	keximigrate_mdb_d.dll!KexiMigration::MDBMigrate::drv_tableNames(QStringList & tableNames={...})  Line 186	C++
+
 
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
@@ -503,6 +546,8 @@ Migration (Import Project Wizard) TODO:
 - change drivers comboboxes to KexiDBDriverList
   (impl. this one with drv name and description columns)
 - use KexiDB::MessageTitle and KexiDB::MessageHandler for displaying errors
+- close currently opened file-based project if it's the same as imported one
+  (do not save anything)
 
 Reports TODO
 - reuse most of KexiFormPart code in KexiReportPart (eg. creating shared actions)
@@ -574,6 +619,7 @@ FORMS:
 --make image-related actions undoable/redoable in design time
 -property pane: shrink widget name displayed at the top by adding "..." to avoid problems
  with pane's size when selected widget has very long name
+- resize handles are always black: this is bad on black background!
 
 ImportWizard:
 -store "Recent Paths" for browsed directory file 
@@ -590,3 +636,39 @@ Combo Box Editor
 
 KEXIDB:
 - ConnectionData: make local sockets default for unix, instead of tcp/ip
+
+GENERAL:
+- removed conflict between standalone and KOffice version by:
+-- inserting "standalone" word into module names, eg. kexidb_mysqldriver.so -> kexidb_mysqldriver_standalone.so
+-- renaming kexi to kexi-standalone
+- rename "data view mode" to "browse view mode" (as in Filemaker)
+
+MARKETING:
+- add "Created With Kexi" page and a link to it from k-p.org and kexi.pl
+- when releasing new Kexi version publish: A first look at Kexi x.y" page, like this:
+  http://software.newsforge.com/article.pl?sid=05/09/28/1345228
+- short reasoning for using db abstraction layers: 
+  http://developers.slashdot.org/comments.pl?sid=164824&cid=13755151
+
+
+ACCESIBILITY - Mouseless Operation Problems (KOffice 1.4.1):
+- MORE: http://accessibility.kde.org/reports/koffice-1.4.1-accessibility-assessment.pdf
+- It is not possible to select the data type of a
+field in the table editor. Alt+DownArrow does not work.
+- When editing the fields of a table, it is not
+obvious how to flag a field as a primary key. 
+WORKAROUND: Use Popup Context Menu (Menu key) and select Primary Key, OR use Edit | Primary
+Key on the main menu, OR use Property Editor.
+- In the Property Editor, is not obvious how to
+change a boolean property. Alt+DownArrow does not work.
+- It is not possible to change the value of a
+property in the property editor that has a picklist of possible values, for example,
+SubType. Alt+DownArrow does not work.
+- When creating a query, it is not possible to add a table to the query.
+- Not possible to select a column, table,
+totals in Query Columns panel. Alt+DownArrow does not work.
+- It is not possible to add a widget to a form.
+- Pressing Tab key while focus is in the Form
+Editor window, but not on any widgets on the form, crashes Kexi.
+- It is not possible to change the size of a
+widget in the form editor without the mouse.

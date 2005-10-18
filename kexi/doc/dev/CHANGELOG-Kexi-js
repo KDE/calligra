@@ -1,4 +1,4 @@
----------------------------------------------------------
+-------------------------------------------------------------
  Kexi Development CHANGELOG Document
  From js's Point of View
  
@@ -8,9 +8,77 @@
  Copyright (C) 2003-2005 Jaroslaw Staniek js at iidea dot pl
  (C) OpenOffice Polska 2003-2005
  Kexi home page: http://www.kexi-project.org/
----------------------------------------------------
+-------------------------------------------------------------
 
 CCMAIL: dkite@shaw.ca
+
+2005-10-18
+KexiDB
+- Connection::querySingleRecord() improved
+- QuerySchema::addToWhereExpression() added
+- SQLite driver: fixed BLOBs retrieval
+
+2005-10-15
+Table View
+- alt+down shortcut can be used to drop down combo box (previously only F4 worked)
+- combo box editor's popup: 
+  row repainting fixed after current highlighted row has changed
+Table Designer
+- avoid possible infinite recursion
+- selecting non-integer type group using 'type combo' clears PKEY flagm, if set
+
+2005-10-14
+Forms
+- It was not possible to change the tab order of
+widgets in the Edit Tab Order dialog with keyboard.
+
+2005-10-12
+Project Import Wizard
+- usability++: after successful import, the project is opened
+
+Query Designer
+- conditions: ambiguous expressions fixed: 
+  "t1.id > 100" is used instead of "id > 100" in queries like
+  SELECT * FROM t1, t2 WHERE t1.id = t2.id AND t1.id > 100
+- fixed possible crash when invalid query design is loaded in design view
+- fixed switching to design mode after invalid query was opened directly in text mode 
+- eat parentheses on criteria loading, in WHERE conditions like (a.id = value)
+- also accept tableName.fieldName on criteria loading, not only tableName
+- also accept e.g. "2 = variable" as condition, not only "variable = 2"
+- graphical representation of joins is generated back from SQL statement not only 
+  based on explicit query schema's relations but are also retrieved 
+  from "[t1.]f1 = [t2.]f2" expressions within WHERE section
+
+TODO: joins are not visible when switching from design to text mode (and conversely) 
+  when there are no columns selected in FROM section, eg. "select from a, b"
+
+2005-10-06
+KexiCore
+- Fixed autogenerating object names (e.g. tables, queries) based on caption: 
+  latin1 base name can be now chosen by translator
+BUG: 104858
+
+2005-10-05
+KexiDB
+- PreparedStatement introduced
+- mysql, sqlite drivers: avoid double freeing data member in ConnectionInternal implementations
+
+2005-09-27..29
+Forms
+- Images are stored in memory in original form, converting to QPixmap is only performed
+  for displayoing purposes. Such original pixmap can be saved back to file. 
+  Original file name is also kept. KexiImageBox handles pixmap data with QByteArray member
+- KexiBLOBBuffer introduced: Application-wide buffer for local (static) BLOB data like pixmaps.
+  For now only pixmaps are supported. Used on design time before objects are stored.
+  This allows to copy multimegabyte pixmaps within Kexi without unnecessary memory loss.
+- KexiCustomPropertyFactory introduced: handles Kexi-specific property editor items
+
+2005-09-26
+KoProperty lib
+- Editor: possible crash fixed
+- Property: guarded ptrs are used to store pointers to Set objects
+ to avoid dangling pointers
+
 2005-09-24
 General
 - KEXI_STANDALONE compile time definition added

@@ -34,6 +34,8 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 
+#include <core/kexiblobbuffer.h>
+
 class QDateTimeEditor;
 class QToolButton;
 class KDatePicker;
@@ -556,18 +558,45 @@ class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 		QCString m_onClickAction;
 };
 
+
+class KEXIFORMUTILS_EXPORT PixmapData
+{
+	public:
+		PixmapData();
+		~PixmapData();
+
+		QPixmap pixmap() const;
+		void setPixmap(const QPixmap& pixmap, const QString& url = QString::null);
+		QByteArray data() const;
+		void setData(const QByteArray& data, const QString& url = QString::null);
+		bool isEmpty() const;
+		QString originalFileName() const { return m_originalFileName; }
+		void setOriginalFileName(const QString& url);
+		void clear();
+
+	private:
+		QByteArray m_data;
+		QPixmap m_pixmap;
+		QString m_originalFileName;
+};
+
 //! A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
-class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataItemInterface {
+class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataItemInterface
+{
 	Q_OBJECT
 	Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
 	Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
-	Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
+//	Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
+//	Q_PROPERTY( QByteArray pixmapData READ pixmapData WRITE setPixmapData )
+	Q_PROPERTY( uint pixmapId READ pixmapId WRITE setPixmapId DESIGNABLE true STORED false )
+	Q_PROPERTY( uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true )
 	Q_PROPERTY( bool scaledContents READ hasScaledContents WRITE setScaledContents )
 	Q_PROPERTY( bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio )
 	Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
+//	Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
 
 	public:
 		KexiImageBox( bool designMode, QWidget *parent, const char *name = 0 );
@@ -576,7 +605,15 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 
-		virtual QVariant value();
+		virtual QVariant value(); // { return m_value.data(); }
+
+//		QByteArray pixmapData() const { return m_value.data(); }
+
+		QPixmap pixmap() const;
+
+		uint pixmapId() const;
+
+		uint storedPixmapId() const;
 // 
 		virtual void setInvalidState( const QString& displayText );
 
@@ -599,8 +636,6 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 
 		virtual bool isReadOnly() const;
 
-		QPixmap pixmap() const;
-
 		bool hasScaledContents() const;
 
 //		bool designMode() const { return m_designMode; }
@@ -613,7 +648,16 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 
 		KActionCollection* actionCollection() { return &m_actionCollection; }
 
+		/*! \return original file name of image loaded from a file. 
+		 This can be later reused for displaying the image within a collection (to be implemented)
+		 or on saving the image data back to file. */
+//todo		QString originalFileName() const { return m_value.originalFileName(); }
+
 	public slots:
+		void setPixmapId(uint id);
+
+		void setStoredPixmapId(uint id);
+
 		//! Sets the datasource to \a ds
 		virtual void setDataSource( const QString &ds );
 
@@ -621,9 +665,13 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 
 		virtual void setReadOnly(bool set);
 
-		//! Sets \a pixmap for this widget. If the widget has data source set, 
+		//! Sets \a pixmapData data for this widget. If the widget has data source set, 
 		//! the pixmap will be also placed inside of the buffer and saved later.
-		void setPixmap(const QPixmap& pixmap);
+//todo		void setPixmapData(const QByteArray& pixmapData) { m_value.setData(pixmapData); }
+
+		/*! Sets original file name of image loaded from a file. 
+		 @see originalFileName() */
+//todo		void setOriginalFileName(const QString& name) { m_value.setOriginalFileName(name); }
 
 		void setScaledContents(bool set);
 
@@ -636,21 +684,30 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 		void updateActionsAvailability();
 
 		void saveAs();
+
 		void cut();
+
 		void copy();
+
 		void paste();
+
 		virtual void clear();
+
 		void showProperties();
 
 	signals:
 		//! Emitted when value has been changed. Actual value can be obtained using value().
-		void valueChanged(const QPixmap& pixmap);
+		virtual void valueChanged(const QByteArray& data);
+		void idChanged(long id);
 
 	protected slots:
 		void slotAboutToHidePopupMenu();
 		void slotChooserPressed();
 
 	protected:
+		//! \return data depending on the current mode (db-aware or static)
+		QByteArray data() const;
+	
 		virtual void contextMenuEvent ( QContextMenuEvent * e );
 //		virtual void mousePressEvent( QMouseEvent *e );
 		//		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
@@ -658,11 +715,15 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 //		virtual void resizeEvent( QResizeEvent* e );
 
 		//! Sets value \a value for a widget.
-		virtual void setValueInternal( const QVariant& add, bool removeOld );
+		virtual void setValueInternal( const QVariant& add, bool /*removeOld*/ );
 
 		//! Updates i18n'd action strings after datasource change
 		void updateActionStrings();
 		void updatePixmap();
+
+		//! @internal
+		void setData(const KexiBLOBBuffer::Handle& handle);
+
 //		virtual void drawContents ( QPainter *p );
 
 //		virtual void fontChange( const QFont& font );
@@ -677,6 +738,10 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 //		class ImageLabel;
 //		ImageLabel *m_pixmapLabel;
 		QPixmap m_pixmap;
+		QByteArray m_value; //!< for db-aware mode
+//		PixmapData m_value;
+		KexiBLOBBuffer::Handle m_data;
+//		QString m_originalFileName;
 		class Button;
 		Button *m_chooser;
 		KPopupMenu *m_popup;
@@ -690,6 +755,7 @@ class KEXIFORMUTILS_EXPORT KexiImageBox : public QWidget, public KexiFormDataIte
 		bool m_readOnly : 1;
 		bool m_scaledContents : 1;
 		bool m_keepAspectRatio : 1;
+		bool m_insideSetData : 1;
 //		friend class ImageLabel;
 };
 

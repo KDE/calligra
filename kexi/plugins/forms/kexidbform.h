@@ -122,6 +122,8 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		virtual void dragMoveEvent( QDragMoveEvent *e );
 		virtual void dropEvent( QDropEvent *e );
 
+//		virtual void paintEvent( QPaintEvent * );
+
 		//! Points to a currently edited data item. 
 		//! It is cleared when the focus is moved to other 
 		KexiFormDataItemInterface *editedItem;

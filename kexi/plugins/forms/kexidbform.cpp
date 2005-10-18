@@ -477,4 +477,24 @@ void KexiDBForm::dropEvent( QDropEvent *e )
 	emit handleDropEvent(e);
 }
 
+//! @todo: Qt4? XORed resize rectangles instead of black widgets
+/*
+void KexiDBForm::paintEvent( QPaintEvent *e )
+{
+	QPainter p;
+	p.begin(this, true);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+
+	p.setPen(white);
+	p.setRasterOp(XorROP);
+	p.drawLine(e->rect().topLeft(), e->rect().bottomRight());
+
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+	p.end();
+	KexiDBFormBase::paintEvent(e);
+}
+*/
+
 #include "kexidbform.moc"

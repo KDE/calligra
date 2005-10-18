@@ -38,6 +38,7 @@ using namespace KFormDesigner;
 ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
  : QWidget(set->m_widget->parentWidget()), m_set(set)
 {
+//	setBackgroundMode(Qt::NoBackground);
 	m_dragging = false;
 	//m_editing = editing;
 	setEditingMode(editing);
@@ -47,6 +48,7 @@ ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
 	//m_buddy = buddy;
 	//buddy->installEventFilter(this);
 	m_set->m_widget->installEventFilter(this);
+//js	installEventFilter(this);
 
 	updatePos();
 	show();
@@ -103,13 +105,29 @@ void ResizeHandle::updatePos()
 	}
 }
 
-bool ResizeHandle::eventFilter(QObject *, QEvent *ev)
+bool ResizeHandle::eventFilter(QObject *o, QEvent *ev)
 {
-	if ((ev->type() == QEvent::Move) || (ev->type() == QEvent::Resize))
+	if (((ev->type() == QEvent::Move) || (ev->type() == QEvent::Resize)) && o == m_set->m_widget)
 	{
 		//QTimer::singleShot(0,this,SLOT(updatePos()));
 		updatePos();
 	}
+/*	else if (ev->type() == QEvent::Paint && o == this) {
+		QPainter p;
+		p.begin(m_set->m_widget, true);
+		const bool unclipped = testWFlags( WPaintUnclipped );
+		setWFlags( WPaintUnclipped );
+
+		p.setPen(QPen(white, 10));
+		p.setRasterOp(XorROP);
+		p.drawRect( 20, 20, 100, 100 );//m_set->m_widget->x(), m_set->m_widget->y(), 150, 150 );
+		p.drawRect( m_set->m_widget->x(), m_set->m_widget->y(), 150, 150 );
+		if (!unclipped)
+			clearWFlags( WPaintUnclipped );
+		p.end();
+
+		return true;
+	}*/
 	return false;
 }
 

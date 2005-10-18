@@ -749,7 +749,7 @@ child widgets become frozen when checked==true */
 bool
 ContainerFactory::changeText(const QString &text)
 {
-	changeProperty("title", text, m_container);
+	changeProperty("title", text, m_container->form());
 	return true;
 }
 

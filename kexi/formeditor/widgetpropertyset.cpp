@@ -283,12 +283,12 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			const bool oldValueExists = modifiedPropertiesIt!=modifiedProperties->constEnd();
 
 			if(meta->isEnumType()) {
-				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
 				if(qstrcmp(propertyName, "alignment") == 0)  {
 					createAlignProperty(meta, w);
 					continue;
 				}
 
+				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
 				newProp = new Property(propertyName, createValueList(winfo, keys),
 					/* assign current or older value */
 					oldValueExists ? modifiedPropertiesIt.data() : 
@@ -303,7 +303,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 				newProp = new Property(propertyName, 
 					/* assign current or older value */
 					oldValueExists ? modifiedPropertiesIt.data() : w->property(propertyName), 
-					desc, desc);
+					desc, desc, winfo->customTypeForProperty(propertyName));
 				//now set current value, so the old one is stored as old
 				if (oldValueExists) {
 					newProp->setValue( w->property(propertyName) );

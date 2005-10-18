@@ -17,34 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexicsv_importpart.h"
-#include "kexicsvdialog.h"
-#include <core/keximainwindow.h>
+#ifndef KEXICUSTOMPROPFACTORY_P_H
+#define KEXICUSTOMPROPFACTORY_P_H
 
-#include <kgenericfactory.h>
+#include <koproperty/editors/pixmapedit.h>
 
-KexiCSVImportPart::KexiCSVImportPart(QObject *parent, const char *name, const QStringList &args)
- : KexiInternalPart(parent, name, args)
+//! Kexi-specific image editor for property editor's item
+class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 {
-}
+	Q_OBJECT
 
-KexiCSVImportPart::~KexiCSVImportPart()
-{
-}
+	public:
+		KexiImagePropertyEdit(KoProperty::Property *property, 
+			QWidget *parent=0, const char *name=0);
+		virtual ~KexiImagePropertyEdit();
 
-QWidget *KexiCSVImportPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
- QWidget *parent, const char *objName, QVariant* arg )
-{
-	KexiCSVDialog *dlg = new KexiCSVDialog( 
-		(arg && arg->toString()=="file")? KexiCSVDialog::File : KexiCSVDialog::Clipboard, 
-		mainWin, parent, objName );
-	m_cancelled = dlg->cancelled();
-	if (m_cancelled) {
-		delete dlg;
-		dlg = 0;
-	}
-	return dlg;
-}
+		virtual QVariant value() const;
+		virtual void setValue(const QVariant &value, bool emitChange=true);
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_csv_import, 
-	KGenericFactory<KexiCSVImportPart>("kexihandler_csv_import") )
+	public slots:
+		virtual void selectPixmap();
+
+	private:
+};
+
+#endif

@@ -1158,28 +1158,32 @@ void KexiCSVDialog::accept()
 		tableSchema->addField( field );
 	}
 
-#define _ERR2 \
-	project->deleteUnstoredItem(partItem); \
-	conn->removeTableSchemaInternal(tableSchema); \
-	return
-
 	KexiDB::Transaction transaction = conn->beginTransaction();
 	if (transaction.isNull()) {
 		msg.showErrorMessage(conn);
-		_ERR2;
+		_ERR;
 	}
 	KexiDB::TransactionGuard tg(transaction);
 
 	//-create physical table
 	if (!conn->createTable(tableSchema, allowOverwriting)) {
 		msg.showErrorMessage(conn);
-		_ERR2;
+		delete tableSchema;
+		_ERR;
 	}
 
+#define _DROP_TABLE_AND_RETURN \
+	project->deleteUnstoredItem(partItem); \
+	conn->dropTable(tableSchema); /*alsoRemoveSchema*/ \
+	return;
+//	conn->removeTableSchemaInternal(tableSchema); \
+//	return
+
+/*already done in createTable()
 	if (!conn->storeObjectSchemaData( *tableSchema, true )) {
 		msg.showErrorMessage(conn);
 		_ERR2;
-	}
+	}*/
 
 	//-fill table contents
 	QValueList<QVariant> values;
@@ -1203,14 +1207,14 @@ void KexiCSVDialog::accept()
 		}
 		if (!conn->insertRecord(*tableSchema, values)) {
 			msg.showErrorMessage(conn);
-			_ERR2;
+			_DROP_TABLE_AND_RETURN;
 		}
 		values.clear();
 	}
 
 	if (!tg.commit()) {
 		msg.showErrorMessage(conn);
-		_ERR2;
+		_DROP_TABLE_AND_RETURN;
 	}
 
 	//-now we can store the item

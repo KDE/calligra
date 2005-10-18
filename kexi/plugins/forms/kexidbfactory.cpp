@@ -44,6 +44,7 @@
 #include <kexigradientwidget.h>
 #include <keximainwindow.h>
 #include <kexiutils/utils.h>
+#include <widget/kexicustompropertyfactory.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
@@ -229,9 +230,12 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "image"));
 	wi->setDescription(i18n("A widget for displaying images"));
+//	wi->setCustomTypeForProperty("pixmapData", KexiCustomPropertyFactory::PixmapData);
+	wi->setCustomTypeForProperty("pixmapId", KexiCustomPropertyFactory::PixmapId);
 	addClass(wi);
 
 	setInternalProperty("KexiImageBox", "dontStartEditingOnInserting", "1");
+//	setInternalProperty("KexiImageBox", "forceShowAdvancedProperty:pixmap", "1");
 #endif
 
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
@@ -360,7 +364,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["NoLabel"] = i18n("Label Position", "No Label");
 
 	m_propDesc["sizeInternal"] = i18n("Size");
-	m_propDesc["pixmap"] = i18n("Image");
+//	m_propDesc["pixmap"] = i18n("Image");
+	m_propDesc["pixmapId"] = i18n("Image");
 	m_propDesc["scaledContents"] = i18n("Scaled Contents");
 	m_propDesc["keepAspectRatio"] = i18n("Keep Aspect Ratio (short)", "Keep Ratio");
 
@@ -401,8 +406,10 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	else if(c == "KexiLabel")
 		w = new KexiLabel(text, p, n);
 #ifndef KEXI_NO_IMAGEBOX_WIDGET
-	else if(c == "KexiImageBox")
+	else if(c == "KexiImageBox") {
 		w = new KexiImageBox(designMode, p, n);
+		connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
+	}
 #endif
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
 	else if(c == "KexiDBFieldEdit")
@@ -451,8 +458,10 @@ KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMe
 		ac->action("edit_copy")->plug(subMenu);
 		ac->action("edit_paste")->plug(subMenu);
 		ac->action("delete")->plug(subMenu);
-		subMenu->insertSeparator();
-		ac->action("properties")->plug(subMenu);
+		if (ac->action("properties")) {
+			subMenu->insertSeparator();
+			ac->action("properties")->plug(subMenu);
+		}
 	}
 	return false;
 }
@@ -505,8 +514,8 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 			QString text = label->text();
 			if ( editRichText( label, text ) )
 			{
-				changeProperty( "textFormat", "RichText", container );
-				changeProperty( "text", text, container );
+				changeProperty( "textFormat", "RichText", container->form() );
+				changeProperty( "text", text, container->form() );
 			}
 
 			if ( classname == "KexiLabel" )
@@ -587,7 +596,6 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 {
 	//general
 	if (property=="dataSource" || property=="dataSourceMimeType") {
-//		|| (property=="pixmap" && classname!="KexiImageBox")) {
 		return false; //force
 	}
 
@@ -649,7 +657,7 @@ KexiDBFactory::changeText(const QString &text)
 	QCString n = WidgetFactory::widget()->className();
 //	QWidget *w = WidgetFactory::widget();
 	if(n == "KexiDBFieldEdit") {
-		changeProperty("caption", text, m_container);
+		changeProperty("caption", text, m_container->form());
 		return true;
 	}
 	//! \todo check field's geometry
@@ -664,6 +672,16 @@ KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QCString &classna
 
 	if(classname == "KexiDBFieldEdit")
 		editor->setGeometry( static_cast<KexiDBFieldEdit*>(w)->label()->geometry() );
+}
+
+void
+KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
+{
+	KexiFormView *formView = KexiUtils::findParent<KexiFormView>((QWidget*)m_widget, "KexiFormView"); 
+	if (formView) {
+		changeProperty("pixmapId", id, formView->form());
+		formView->setUnsavedLocalBLOB(m_widget, id);
+	}
 }
 
 K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>("kexidbwidgets"))

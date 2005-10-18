@@ -32,7 +32,7 @@ class KexiCSVImportPart : public KexiInternalPart
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */
 		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
-		 QWidget *parent, const char *objName = 0, const QVariant& arg = QVariant());
+		 QWidget *parent, const char *objName = 0, QVariant* arg = 0);
 };
 
 #endif

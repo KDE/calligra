@@ -4463,9 +4463,6 @@ void KexiTableView::setHighlightedRow(int row)
 	if (previouslyHighlightedRow!=-1)
 		updateRow(previouslyHighlightedRow);
 
-	kdDebug() << "** d->highlightedRow=" << d->highlightedRow 
-		<< " previouslyHighlightedRow=" << previouslyHighlightedRow 
-		<< " m_curRow=" << m_curRow <<endl;
 	if (m_curRow>=0 && (previouslyHighlightedRow==-1 || previouslyHighlightedRow==m_curRow)
 		&& d->highlightedRow!=m_curRow && !d->appearance.persistentSelections)
 	{

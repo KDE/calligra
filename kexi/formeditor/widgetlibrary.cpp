@@ -541,13 +541,21 @@ WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
 		if (!d->showAdvancedProperties && property == "focusPolicy")
 			return false;
 	}
-	if (!d->showAdvancedProperties && d->advancedProperties[ property ])
-		return false;
 
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
 	if (!wi)
 		return false;
+	if (!d->showAdvancedProperties && d->advancedProperties[ property ]) {
+		//this is advanced property, should we hide it?
+		if (wi->factory()->internalProperty(classname, "forceShowAdvancedProperty:"+property).isEmpty()
+			&& wi->inheritedClass() 
+			&& wi->inheritedClass()->factory()->internalProperty(classname, "forceShowAdvancedProperty:"+property).isEmpty())
+		{
+			return false; //hide it
+		}
+	}
+
 	if (!wi->factory()->isPropertyVisible(classname, w, property, multiple, isTopLevel))
 		return false;
 	//try from inherited class

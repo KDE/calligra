@@ -83,13 +83,16 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		//virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
+	protected slots:
+		void slotImageBoxIdChanged(long id); /*KexiBLOBBuffer::Id_t*/
+
 	protected:
 		virtual bool changeText(const QString &newText);
 		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
 
 		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &, bool isTopLevel);
-		QWidget *m_widget;
-		KFormDesigner::Container *m_container;
+//		QWidget *m_widget;
+//		KFormDesigner::Container *m_container;
 
 		KAction* m_assignAction;
 };

@@ -601,7 +601,7 @@ StdWidgetFactory::changeText(const QString &text)
 	if(n == "KIntSpinBox")
 		((KIntSpinBox*)w)->setValue(text.toInt());
 	else
-		changeProperty("text", text, m_container);
+		changeProperty("text", text, m_container->form());
 
 	/* By-hand method not needed as sizeHint() can do that for us
 	QFontMetrics fm = w->fontMetrics();
@@ -947,8 +947,8 @@ StdWidgetFactory::editText()
 
 	if(editRichText(widget(), text))
 	{
-		changeProperty("textFormat", "RichText", m_container);
-		changeProperty("text", text, m_container);
+		changeProperty("textFormat", "RichText", m_container->form());
+		changeProperty("text", text, m_container->form());
 	}
 
 	if(classname == "QLabel")

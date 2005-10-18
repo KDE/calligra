@@ -57,6 +57,7 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
  , m_overriddenAlternateNames(0)
  , m_factory(f)
  , m_propertiesWithDisabledAutoSync(0)
+ , m_customTypesForProperty(0)
 {
 }
 
@@ -68,6 +69,7 @@ WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
  , m_overriddenAlternateNames(0)
  , m_factory(f)
  , m_propertiesWithDisabledAutoSync(0)
+ , m_customTypesForProperty(0)
 {
 	m_class = inheritedClassName;
 }
@@ -76,6 +78,7 @@ WidgetInfo::~WidgetInfo()
 {
 	delete m_overriddenAlternateNames;
 	delete m_propertiesWithDisabledAutoSync;
+	delete m_customTypesForProperty;
 }
 
 void WidgetInfo::addAlternateClassName(const QCString& alternateName, bool override)
@@ -120,6 +123,24 @@ tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
 		return cancelled;
 	return flag==(char*)1 ? true : false;
 }
+
+void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
+{
+	if (!propertyName || type==KoProperty::Auto)
+		return;
+	if (!m_customTypesForProperty) {
+		m_customTypesForProperty = new QMap<QCString,int>();
+	}
+	m_customTypesForProperty->replace(propertyName, type);
+}
+
+int WidgetInfo::customTypeForProperty(const char *propertyName) const
+{
+	if (!m_customTypesForProperty || !m_customTypesForProperty->contains(propertyName))
+		return KoProperty::Auto;
+	return (*m_customTypesForProperty)[propertyName];
+}
+
 
 ///// Widget Factory //////////////////////////
 
@@ -469,20 +490,21 @@ WidgetFactory::editorDeleted()
 }
 
 void
-WidgetFactory::changeProperty(const char *name, const QVariant &value, Container *container)
+WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *form)
+//WidgetFactory::changeProperty(const char *name, const QVariant &value, Container *container)
 {
-	if (!container->form()->manager())
+	if (!form->manager())
 		return;
-	if(container->form()->selectedWidgets()->count() > 1)
+	if(form->selectedWidgets()->count() > 1)
 	{ // If eg multiple labels are selected, we only want to change the text of one of them (the one the user cliked on)
 		if(m_widget)
 			m_widget->setProperty(name, value);
 		else
-			container->form()->selectedWidgets()->first()->setProperty(name, value);
+			form->selectedWidgets()->first()->setProperty(name, value);
 	}
 	else
 	{
-		WidgetPropertySet *set = container->form()->manager()->propertySet();
+		WidgetPropertySet *set = form->manager()->propertySet();
 		if(set->contains(name))
 			(*set)[name] = value;
 	}
@@ -569,7 +591,7 @@ WidgetFactory::changeTextInternal(const QString& text)
 bool
 WidgetFactory::changeText(const QString& text)
 {
-	changeProperty( "text", text, m_container );
+	changeProperty( "text", text, m_container->form() );
 	return true;
 }
 

@@ -32,6 +32,7 @@
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
+#include <widget/kexicustompropertyfactory.h>
 
 KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
 	const char* name)
@@ -43,6 +44,11 @@ KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supp
  , m_part(parent)
 {
 	lib()->setAdvancedPropertiesVisible(false);
+
+	// register custom editors and properties
+	KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(Factory::self());
+	Factory::self()->registerCustomProperty(KexiCustomPropertyFactory::PixmapId, factory);
+	Factory::self()->registerEditor(KexiCustomPropertyFactory::PixmapId, factory);
 }
 
 KexiFormManager::~KexiFormManager()

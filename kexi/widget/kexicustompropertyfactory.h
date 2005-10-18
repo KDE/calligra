@@ -17,34 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexicsv_importpart.h"
-#include "kexicsvdialog.h"
-#include <core/keximainwindow.h>
+#ifndef KEXICUSTOMPROPFACTORY_H
+#define KEXICUSTOMPROPFACTORY_H
 
-#include <kgenericfactory.h>
+#include <koproperty/property.h>
+#include <koproperty/factory.h>
 
-KexiCSVImportPart::KexiCSVImportPart(QObject *parent, const char *name, const QStringList &args)
- : KexiInternalPart(parent, name, args)
+//! Kexi-specific custom property factory for KoProperty library
+class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KoProperty::CustomPropertyFactory
 {
-}
+	public:
+		enum PropertyType {
+			PixmapId = KoProperty::UserDefined+0
+		};
 
-KexiCSVImportPart::~KexiCSVImportPart()
-{
-}
+		KexiCustomPropertyFactory(QObject* parent);
+		virtual ~KexiCustomPropertyFactory();
 
-QWidget *KexiCSVImportPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
- QWidget *parent, const char *objName, QVariant* arg )
-{
-	KexiCSVDialog *dlg = new KexiCSVDialog( 
-		(arg && arg->toString()=="file")? KexiCSVDialog::File : KexiCSVDialog::Clipboard, 
-		mainWin, parent, objName );
-	m_cancelled = dlg->cancelled();
-	if (m_cancelled) {
-		delete dlg;
-		dlg = 0;
-	}
-	return dlg;
-}
+		virtual KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *parent);
+		virtual KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_csv_import, 
-	KGenericFactory<KexiCSVImportPart>("kexihandler_csv_import") )
+	private:
+//		FormManager  *m_manager;
+};
+
+#endif
