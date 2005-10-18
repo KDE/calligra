@@ -78,7 +78,7 @@ bool pqxxMigrate::drv_readTableSchema(const QString table)
     if (query("select * from " + table + " limit 1"))
     {
         //Loop round the fields
-        for (uint i = 0; i < m_res->columns(); i++)
+        for (uint i = 0; i < (uint)m_res->columns(); i++)
         {
             KexiDB::Field::Type fldType = type(m_res->column_type(i), m_res->column_name(i));
             m_f = new KexiDB::Field(m_res->column_name(i), fldType);
