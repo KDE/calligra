@@ -1516,7 +1516,7 @@ void KWView::updatePageInfo()
                 m_currentPage = f->pageNum();
         }
         /*kdDebug() << (void*)this << " KWView::updatePageInfo "
-                  << " edit: " << edit << " " << ( edit?edit->frameSet()->getName():QString::null)
+                  << " edit: " << edit << " " << ( edit?edit->frameSet()->name():QString::null)
                   << " currentFrame: " << (edit?edit->currentFrame():0L)
                   << " m_currentPage=" << m_currentPage << " m_sbPageLabel=" << m_sbPageLabel
                   << endl;*/
@@ -1565,7 +1565,7 @@ void KWView::updateFrameStatusBarItem()
             QString unitName = m_doc->unitName();
             KWFrame * frame = m_doc->getFirstSelectedFrame();
             m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
-                    .arg( frame->frameSet()->getName() )
+                    .arg( frame->frameSet()->name() )
                     .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
                     .arg( KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(
                                 m_doc->pageManager()->pageNumber(frame) ), unit) )
@@ -1792,7 +1792,7 @@ void KWView::print( KPrinter &prt )
                 break;
             }
 
-            kdDebug() << "KWView::print preparePrinting " << fit.current()->getName() << endl;
+            kdDebug() << "KWView::print preparePrinting " << fit.current()->name() << endl;
             fit.current()->preparePrinting( &painter, &progress, processedParags );
         }
 #endif
@@ -2462,7 +2462,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     int pageNum= frames.at(0)->pageNum();
     for (QPtrListIterator<KWFrame> fIt( frames ); fIt.current() ; ++fIt ) {
         // include all frames in case of table.
-        KWFrameSet *table = fIt.current()->frameSet()->getGroupManager();
+        KWFrameSet *table = fIt.current()->frameSet()->groupmanager();
         if(table) {
             for (QPtrListIterator<KWFrame> cellIt(table->frameIterator()  ); cellIt.current() ; ++cellIt ) {
                 if(frames.contains(cellIt.current() ) ==0 && cellIt.current()->pageNum()==pageNum)
@@ -2643,7 +2643,7 @@ void KWView::deleteFrame( bool _warning )
             return;
 
         // frame is part of a table?
-        if ( fs->getGroupManager() )
+        if ( fs->groupmanager() )
         {
             int result = KMessageBox::warningContinueCancel(
                 this,
@@ -2655,7 +2655,7 @@ void KWView::deleteFrame( bool _warning )
                 true );
             if (result != KMessageBox::Continue)
                 return;
-            m_doc->deleteTable( fs->getGroupManager() );
+            m_doc->deleteTable( fs->groupmanager() );
             m_gui->canvasWidget()->emitFrameSelectedChanged();
             return;
         }
@@ -2677,7 +2677,7 @@ void KWView::deleteFrame( bool _warning )
                           "Frameset '%1'. "
                           "The contents of this Frameset will not appear "
                           "anymore!\n"
-                          "Are you sure you want to do that?").arg(fs->getName()),
+                          "Are you sure you want to do that?").arg(fs->name()),
                     i18n("Delete Frame"), i18n("&Delete"));
 
                 if (result != KMessageBox::Continue)
@@ -2963,7 +2963,7 @@ void KWView::updateHeader()
                 m_doc->terminateEditing( frameSet );
             else
             {
-                KWTableFrameSet *table = frameSet->frame(0)->frameSet()->getGroupManager();
+                KWTableFrameSet *table = frameSet->frame(0)->frameSet()->groupmanager();
                 if (table)
                 {
                     if (table->isFloating() && table->anchorFrameset()->isAHeader())
@@ -3011,7 +3011,7 @@ void KWView::updateFooter()
                 m_doc->terminateEditing( frameSet );
             else
             {
-                KWTableFrameSet *table = frameSet->frame(0)->frameSet()->getGroupManager();
+                KWTableFrameSet *table = frameSet->frame(0)->frameSet()->groupmanager();
                 if (table)
                 {
                     if (table->isFloating() && table->anchorFrameset()->isAFooter())
@@ -3509,7 +3509,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |
-                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->unit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()), edit->frameSet()->isFootEndNote());
+                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->unit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->groupmanager()), edit->frameSet()->isFootEndNote());
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -4238,7 +4238,7 @@ void KWView::tableSplitCells(int cols, int rows)
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if ( !table && selectedFrames.count() > 0) {
-        table=selectedFrames.at(0)->frameSet()->getGroupManager();
+        table=selectedFrames.at(0)->frameSet()->groupmanager();
     }
 
     if(selectedFrames.count() >1 || table == 0) {
@@ -5494,7 +5494,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
             if(state)
             {
                 actionList.append(separator2);
-                KWFrameSet * parentFs = frameSet->getGroupManager() ? frameSet->getGroupManager() : frameSet;
+                KWFrameSet * parentFs = frameSet->groupmanager() ? frameSet->groupmanager() : frameSet;
                 actionInlineFrame->setChecked(parentFs->isFloating());
                 actionList.append(actionInlineFrame);
             }
@@ -5763,7 +5763,7 @@ void KWView::slotFrameSetEditChanged()
 
     changeFootEndNoteState();
     //frameset different of header/footer
-    state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
+    state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->groupmanager() && !edit->frameSet()->isFootEndNote();
     actionInsertContents->setEnabled(state);
     actionInsertFrameBreak->setEnabled( state );
     updatePageInfo();
@@ -5834,7 +5834,7 @@ void KWView::frameSelectedChanged()
             okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || it.current()->frameSet()->isFloating());
             okForChangeInline &= !(isMainWPFrame || headerFooterFootNote );
 
-            if ( it.current()->frameSet()->getGroupManager() )
+            if ( it.current()->frameSet()->groupmanager() )
                 containsCellFrame = true;
             if ( isMainWPFrame )
                 containsMainFrame = true;
@@ -6147,7 +6147,7 @@ void KWView::inlineFrame()
 {
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWFrameSet * fs = frame->frameSet();
-    KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
+    KWFrameSet * parentFs = fs->groupmanager() ? fs->groupmanager() : fs;
 
     if(actionInlineFrame->isChecked())
     {

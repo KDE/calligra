@@ -82,14 +82,14 @@ void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
     for ( ; it.current() ; ++it )
     {
         KWFrame* daFrame = it.current();
-        // kdDebug(32001) << "frame: " << daFrame->frameSet()->getName() << endl;
+        // kdDebug(32001) << "frame: " << daFrame->frameSet()->name() << endl;
         if ( m_frame == daFrame ) {
             m_frames.append( daFrame );
             continue;
         }
         // Skip 'daFrame' if it belongs to a table.
         // We trust that KWTableFrameSet will not make cells overlap ;)
-        if ( m_frame->frameSet()->getGroupManager() || daFrame->frameSet()->getGroupManager() )
+        if ( m_frame->frameSet()->groupmanager() || daFrame->frameSet()->groupmanager() )
             continue;
         // Skip all frames from the parent frameset, if 'm_frame' is floating
         // ## might need a for loop for the case of inline-inside-inline,

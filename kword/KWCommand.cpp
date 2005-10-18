@@ -435,7 +435,7 @@ void KWFrameBorderCommand::execute()
             //fixme frameBorderChanged for table cells here too ?
         }
         else
-            cell->table()->refreshSelectedCell();
+            cell->groupmanager()->refreshSelectedCell();
     }
 
 
@@ -493,7 +493,7 @@ void KWFrameBorderCommand::unexecute()
             //fixme frameBorderChanged for table cells here too ?
         }
         else
-            cell->table()->refreshSelectedCell();
+            cell->groupmanager()->refreshSelectedCell();
 
     }
 
@@ -746,7 +746,7 @@ void KWFrameResizeCommand::execute()
     frame->setCoords(m_FrameResize.newRect.left(),m_FrameResize.newRect.top(),m_FrameResize.newRect.right(),m_FrameResize.newRect.bottom());
     frame->setMinFrameHeight(m_FrameResize.newMinHeight);
 
-    KWTableFrameSet *table = frame->frameSet()->getGroupManager();
+    KWTableFrameSet *table = frame->frameSet()->groupmanager();
     if (table) {
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         if(cell)
@@ -778,7 +778,7 @@ void KWFrameResizeCommand::unexecute()
     KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
     frame->setCoords(m_FrameResize.oldRect.left(),m_FrameResize.oldRect.top(),m_FrameResize.oldRect.right(),m_FrameResize.oldRect.bottom());
     frame->setMinFrameHeight(m_FrameResize.oldMinHeight);
-    KWTableFrameSet *table = frame->frameSet()->getGroupManager();
+    KWTableFrameSet *table = frame->frameSet()->groupmanager();
     if (table) {
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         if(cell)
@@ -932,7 +932,7 @@ void KWFrameMoveCommand::execute()
         KWFrameSet *frameSet = (*tmp).m_pFrameSet;
         doc = frameSet->kWordDocument();
         KWFrame *frame = frameSet->frame((*tmp).m_iFrameIndex);
-        KWTableFrameSet *table = frameSet->getGroupManager();
+        KWTableFrameSet *table = frameSet->groupmanager();
         if(table)
         {
             KoPoint diff = (*moveIt).newPos - (*moveIt).oldPos;
@@ -966,7 +966,7 @@ void KWFrameMoveCommand::unexecute()
         KWFrameSet *frameSet = (*tmp).m_pFrameSet;
         doc = frameSet->kWordDocument();
         KWFrame *frame = frameSet->frame((*tmp).m_iFrameIndex);
-        KWTableFrameSet *table = frameSet->getGroupManager();
+        KWTableFrameSet *table = frameSet->groupmanager();
         if(table)
         {
             KoPoint diff = (*moveIt).oldPos - (*moveIt).newPos;

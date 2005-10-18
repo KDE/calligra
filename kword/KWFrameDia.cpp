@@ -101,8 +101,8 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
     }
-    setCaption( i18n( "Frame Properties for %1" ).arg( m_frame->frameSet()->getName() ) );
-    KWFrameSet *fs = m_frame->frameSet()->getGroupManager();
+    setCaption( i18n( "Frame Properties for %1" ).arg( m_frame->frameSet()->name() ) );
+    KWFrameSet *fs = m_frame->frameSet()->groupmanager();
     if(fs==0L) fs=m_frame->frameSet();
     m_frameType = fs->type();
     m_frameSetFloating = fs->isFloating();
@@ -148,9 +148,9 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
         return;
     }
     if ( listOfFrames.count() == 1 )
-        setCaption( i18n( "Frame Settings for %1" ).arg( f->frameSet()->getName() ) );
+        setCaption( i18n( "Frame Settings for %1" ).arg( f->frameSet()->name() ) );
 
-    KWFrameSet *fs = f->frameSet()->getGroupManager();
+    KWFrameSet *fs = f->frameSet()->groupmanager();
     if(fs==0L) fs=f->frameSet();
     m_frameType = fs->type();
     bool frameTypeUnset=true;
@@ -165,7 +165,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
 
     f=listOfFrames.next();
     while(f) {
-        fs = f->frameSet()->getGroupManager();
+        fs = f->frameSet()->groupmanager();
         if(fs==0L) fs=f->frameSet();
         if(m_doc->processingType() != KWDocument::WP || m_doc->frameSet(0) != fs) { // don't include the main fs.
             if(!frameTypeUnset && m_frameType != fs->type()) m_frameType= FT_TEXT;
@@ -860,17 +860,17 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
             continue;
         if ( fs->frameSetInfo() == KWFrameSet::FI_FOOTNOTE )
             continue;
-        if ( fs->getGroupManager() )
+        if ( fs->groupmanager() )
             continue;
         if ( fs->isDeleted() )
             continue;
         QListViewItem *item = new QListViewItem( m_lFrameSList );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, fs->getName() );
+        item->setText( 1, fs->name() );
         amount++;
         if( m_frame && m_frame->frameSet() == fs ) {
             m_lFrameSList->setSelected(item, TRUE );
-            m_oldFrameSetName = fs->getName();
+            m_oldFrameSetName = fs->name();
             m_rExistingFrameset->setChecked(true);
         }
     }
@@ -916,7 +916,7 @@ void KWFrameDia::selectNewFrameset(bool on) {
     QString str = frameSetItem->text( 0 );
     KWFrameSet *fs = m_doc->frameSet(str.toInt() - 1);
 
-    frameSetItem->setText(1, fs->getName() );
+    frameSetItem->setText(1, fs->name() );
 }
 
 void KWFrameDia::textNameFrameChanged ( const QString &text )
@@ -1094,7 +1094,7 @@ void KWFrameDia::initGeometrySettings()
 
 #ifdef ALLOW_NON_INLINE_TABLES
         KWFrameSet * fs = m_frame->frameSet();
-        if ( fs && fs->getGroupManager() )
+        if ( fs && fs->groupmanager() )
             m_floating->setText( i18n( "Table is inline" ) );
 #else
         m_floating->hide();
@@ -1109,9 +1109,9 @@ void KWFrameDia::initGeometrySettings()
         bool ps=fs->isProtectSize();
         m_protectSize->setChecked( ps );
 
-        bool table=fs->getGroupManager();
+        bool table=fs->groupmanager();
         if(table)
-            fs=fs->getGroupManager();
+            fs=fs->groupmanager();
         bool inlineframe =fs->isFloating();
         m_floating->setChecked( inlineframe );
 
@@ -1127,8 +1127,8 @@ void KWFrameDia::initGeometrySettings()
                 m_protectSize->setTristate();
                 m_protectSize->setNoChange();
             }
-            if(fs->getGroupManager()) //table
-                fs=fs->getGroupManager();
+            if(fs->groupmanager()) //table
+                fs=fs->groupmanager();
             else
                 table=false;
 
@@ -1817,12 +1817,12 @@ bool KWFrameDia::applyChanges()
                     f->frameSet()->delFrame( f, false );
             }
         } else if(m_rExistingFrameset->isChecked()) { // rename and/or m_reconnect a new frameset for this frame.
-            if(frameSetItem && (fs->getName() != frameSetItem->text( 1 ))) { // rename FS.
+            if(frameSetItem && (fs->name() != frameSetItem->text( 1 ))) { // rename FS.
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Rename Frameset") );
                 // Rename frameset
                 typedef KoSetPropCommand<QString, KWFrameSet, &KWFrameSet::setName> FramesetNameCommand;
-                FramesetNameCommand* cmd = new FramesetNameCommand( fs, i18n( "Rename Frameset" ), fs->getName(), frameSetItem->text( 1 ) );
+                FramesetNameCommand* cmd = new FramesetNameCommand( fs, i18n( "Rename Frameset" ), fs->name(), frameSetItem->text( 1 ) );
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
@@ -1863,7 +1863,7 @@ bool KWFrameDia::applyChanges()
             // check if new name is unique
             for (QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator(); fit.current() ; ++fit ) {
                 if ( !fit.current()->isDeleted() &&  // Allow to reuse a deleted frameset's name
-                     fs != fit.current() && fit.current()->getName() == name) {
+                     fs != fit.current() && fit.current()->name() == name) {
                     if ( m_rNewFrameset->isChecked() )
                         KMessageBox::sorry( this,
                                             i18n( "A new frameset with the name '%1' "
@@ -2158,7 +2158,7 @@ bool KWFrameDia::applyChanges()
         while(f) {
             // The floating attribute applies to the whole frameset...
             KWFrameSet * fs = f->frameSet();
-            KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
+            KWFrameSet * parentFs = fs->groupmanager() ? fs->groupmanager() : fs;
 
             // Floating
             if ( m_floating->isChecked() &&
@@ -2395,7 +2395,7 @@ bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
            i18n( "You are about to m_reconnect the last frame of the "
            "frameset '%1'. "
            "The contents of this frameset will be deleted.\n"
-           "Are you sure you want to do that?").arg(fs->getName()),
+           "Are you sure you want to do that?").arg(fs->name()),
            i18n("Reconnect Frame"), i18n("&Reconnect"));
         if (result != KMessageBox::Continue)
             return false;

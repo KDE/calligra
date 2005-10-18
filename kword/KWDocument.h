@@ -137,7 +137,7 @@ class KWDocument : public KoDocument, public KoTextZoomHandler
 public:
     friend class KWOasisLoader;
 
-    KWDocument( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    KWDocument( QWidget *parentWidget = 0, const char *widname = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KWDocument();
 
     enum ProcessingType {WP = 0, DTP = 1};

@@ -531,11 +531,11 @@ public:
     static KWFrame * settingsFrame( const KWFrame* frame );
 
     /** Iterator over the child frames */
-    const QPtrList<KWFrame> &frameIterator() const { return frames; }
+    const QPtrList<KWFrame> &frameIterator() const { return m_frames; }
     /** Get frame number */
     int frameFromPtr( KWFrame *frame );
     /** Get number of child frames */
-    unsigned int getNumFrames() const { return frames.count(); }
+    unsigned int getNumFrames() const { return m_frames.count(); }
 
     /** Called when the user resizes a frame. Calls resizeFrame. */
     void resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize );
@@ -545,7 +545,7 @@ public:
     virtual void moveFrame( KWFrame* ) {}
 
     /** True if the frameset was deleted (but not destroyed, since it's in the undo/redo) */
-    bool isDeleted() const { return frames.isEmpty(); }
+    bool isDeleted() const { return m_frames.isEmpty(); }
 
     /** Create a framesetedit object to edit this frameset in @p canvas */
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0; }
@@ -773,9 +773,9 @@ public:
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet
      */
-    void setGroupManager( KWTableFrameSet *gm ) { grpMgr = gm; }
+    void setGroupManager( KWTableFrameSet *gm ) { m_groupmanager = gm; }
     /** returns the groupManager this frameset belongs to. A Groupmanager is better known as a table */
-    KWTableFrameSet *getGroupManager()const { return grpMgr; }
+    KWTableFrameSet *groupmanager()const { return m_groupmanager; }
 
     /** table headers can created by the groupmanager, we store the fact that
      this is one in here. */
@@ -803,8 +803,8 @@ public:
     virtual void setVisible( bool v );
 
     /// get/set frameset name. For tables in particular, this _must_ be unique
-    QString getName() const { return m_name; }
-    void setName( const QString &_name );
+    QString name() const { return m_name; }
+    void setName( const QString &name );
 
     /// set frameBehavior on all frames, see KWFrame for specifics
     void setFrameBehavior( KWFrame::FrameBehavior fb );
@@ -855,7 +855,7 @@ protected:
 
 
     KWDocument *m_doc;            // Document
-    QPtrList<KWFrame> frames;        // Our frames
+    QPtrList<KWFrame> m_frames;        // Our frames
 
     // Cached info for optimization
     /// This array provides a direct access to the frames on page N
@@ -866,7 +866,7 @@ protected:
     QPtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?
 
     Info m_info;
-    KWTableFrameSet *grpMgr;
+    KWTableFrameSet *m_groupmanager;
     bool m_removeableHeader, m_visible;
     bool m_protectSize;
     QString m_name;

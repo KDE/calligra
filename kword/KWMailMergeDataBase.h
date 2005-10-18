@@ -149,7 +149,7 @@ class KWMailMergeVariableInsertDia : public KDialogBase
 
   public:
     KWMailMergeVariableInsertDia( QWidget *parent, KWMailMergeDataBase *db );
-    QString getName() const;
+    QString getName() const; // ### unused, can we remove this?
 
   protected slots:
     void slotSelectionChanged();

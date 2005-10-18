@@ -149,8 +149,8 @@ public:
 /******************************************************************/
 const int KWDocument::CURRENT_SYNTAX_VERSION = 3;
 
-KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widname, parent, name, singleViewMode ),
       m_urlIntern()
 {
     KWStatisticVariable::setExtendedType(  true );
@@ -971,7 +971,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
 #ifdef DEBUG_PAGES
-                    kdDebug(32002) << "KWDocument::recalcFrames frameset number " << m << " '" << fs->getName()
+                    kdDebug(32002) << "KWDocument::recalcFrames frameset number " << m << " '" << fs->name()
                                    << "' frame " << n << " bottom=" << fs->frame(n)->bottom() << endl;
 #endif
                     maxBottom = QMAX(maxBottom, fs->frame(n)->bottom());
@@ -1012,7 +1012,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 KWFrameSet * fs = fit.current();
                 for (QPtrListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
 #ifdef DEBUG_PAGES
-                    kdDebug(32002) << " fs=" << fs->getName() << " bottom=" << f.current()->bottom() << endl;
+                    kdDebug(32002) << " fs=" << fs->name() << " bottom=" << f.current()->bottom() << endl;
 #endif
                     maxBottom=QMAX(maxBottom, f.current()->bottom());
                 }
@@ -1848,21 +1848,21 @@ void KWDocument::endOfLoading()
             for (int f=fs->getNumFrames()-1; f>=0; f--) {
                 KWFrame *frame = fs->frame(f);
                 if(frame->height() < s_minFrameHeight) {
-                    kdWarning() << fs->getName() << " frame " << f << " height is so small no text will fit, adjusting (was: "
+                    kdWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
                                 << frame->height() << " is: " << s_minFrameHeight << ")" << endl;
                     frame->setHeight(s_minFrameHeight);
                 }
                 if(frame->width() < s_minFrameWidth) {
-                    kdWarning() << fs->getName() << " frame " << f << " width is so small no text will fit, adjusting (was: "
+                    kdWarning() << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
                                 << frame->width() << " is: " << s_minFrameWidth  << ")" << endl;
                     frame->setWidth(s_minFrameWidth);
                 }
                 if(frame->left() < 0) {
-                    kdWarning() << fs->getName() << " frame " << f << " pos.x is < 0, moving frame" << endl;
+                    kdWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame" << endl;
                     frame->moveBy( 0- frame->left(), 0);
                 }
                 if(frame->right() > m_pageLayout.ptWidth) {
-                    kdWarning() << fs->getName() << " frame " << f << " rightborder outside page ("
+                    kdWarning() << fs->name() << " frame " << f << " rightborder outside page ("
                         << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
                     frame->setRight( m_pageLayout.ptWidth);
                 }
@@ -1875,7 +1875,7 @@ void KWDocument::endOfLoading()
                 fs->addFrame( frame );
             }
         } else if(fs->getNumFrames() == 0) {
-            kdWarning () << "frameset " << i << " " << fs->getName() << " has no frames" << endl;
+            kdWarning () << "frameset " << i << " " << fs->name() << " has no frames" << endl;
             removeFrameSet(fs);
             if ( fs->type() == FT_PART )
                 delete static_cast<KWPartFrameSet *>(fs)->getChild();
@@ -2276,7 +2276,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
                 KWFrameSet *f = fit.current();
                 if( f->type() == FT_TABLE &&
                     f->isVisible() &&
-                    f->getName() == tableName ) {
+                    f->name() == tableName ) {
                     table = static_cast<KWTableFrameSet *> (f);
                     break;
                 }
@@ -2987,7 +2987,7 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
                 KWFrame * frame = frameIt.current();
                 if ( frame->isSelected() )
                 {
-                    kdDebug(32001) << "Selected frame " << frame << " from " << fs->getName() << endl;
+                    kdDebug(32001) << "Selected frame " << frame << " from " << fs->name() << endl;
                     // Two cases to be distinguished here
                     // If it's the first frame of a frameset, then copy the frameset contents and the frame itself
                     // Otherwise copy only the frame information
@@ -3007,7 +3007,7 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
                         if ( frame != firstFrame )
                         {
                             // Frame saved alone -> remember which frameset it's part of
-                            frameElem.setAttribute( "parentFrameset", fs->getName() );
+                            frameElem.setAttribute( "parentFrameset", fs->name() );
                         }
 #endif
                     }
@@ -3396,7 +3396,7 @@ QDomDocument KWDocument::saveXML()
         KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
         if ( edit )
         {
-            docattrs.setAttribute( "activeFrameset", edit->frameSet()->getName() );
+            docattrs.setAttribute( "activeFrameset", edit->frameSet()->name() );
             KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
             if ( textedit && textedit->cursor() ) {
                 KoTextCursor* cursor = textedit->cursor();
@@ -3421,7 +3421,7 @@ QDomDocument KWDocument::saveXML()
                 QDomElement bookElem = doc.createElement( "BOOKMARKITEM" );
                 bookmark.appendChild( bookElem );
                 bookElem.setAttribute( "name", book.current()->bookMarkName());
-                bookElem.setAttribute( "frameset", book.current()->frameSet()->getName());
+                bookElem.setAttribute( "frameset", book.current()->frameSet()->name());
                 bookElem.setAttribute( "startparag", book.current()->startParag()->paragId());
                 bookElem.setAttribute( "endparag", book.current()->endParag()->paragId());
 
@@ -3935,7 +3935,7 @@ QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const //
            - AND the frame is set to be reconnected or copied
            -  */
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::framesToCopyOnNewPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->getName() << endl;
+        kdDebug(32002) << "KWDocument::framesToCopyOnNewPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->name() << endl;
         static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
         kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
@@ -4144,7 +4144,7 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
     // Note: this isn't recursive, so it won't find table cells.
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
-        if ( fit.current()->getName() == name )
+        if ( fit.current()->name() == name )
             return fit.current();
     return 0L;
 }
@@ -4235,7 +4235,7 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
 
 #ifdef DEBUG_FRAMESELECT
     for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
-        kdDebug(32001) << "KWDocument::topFrameUnderMouse frame " << f << " (from " << f->frameSet()->getName() << ") zOrder=" << f->zOrder() << endl;
+        kdDebug(32001) << "KWDocument::topFrameUnderMouse frame " << f << " (from " << f->frameSet()->name() << ") zOrder=" << f->zOrder() << endl;
     }
 #endif
 
@@ -4429,7 +4429,7 @@ KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const 
 
     KWFrame *frameclosetomouse; // the frame that we are going to test to know whether it is a table
 
-    if ( frameclosetomouseright && frameclosetomouseright->frameSet()->getGroupManager() ) {
+    if ( frameclosetomouseright && frameclosetomouseright->frameSet()->groupmanager() ) {
         // ok, we can test the right frame
         frameclosetomouse = frameclosetomouseright;
         result = TABLE_POSITION_RIGHT;
@@ -4442,10 +4442,10 @@ KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const 
 
     // is there a frame close to the cursor?
     if (frameclosetomouse) {
-        if ( frameclosetomouse->frameSet()->getGroupManager() && (!frameundermouse || !frameundermouse->frameSet()->getGroupManager()) ) {
+        if ( frameclosetomouse->frameSet()->groupmanager() && (!frameundermouse || !frameundermouse->frameSet()->groupmanager()) ) {
             // there is a frame, it is a table, and the cursor is NOT on a table ATM
             if (ppTable)
-                *ppTable =frameclosetomouse->frameSet()->getGroupManager();
+                *ppTable =frameclosetomouse->frameSet()->groupmanager();
             // place the cursor to say that we can select row/columns
             return result;
         }
@@ -4826,7 +4826,7 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
 void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
 {
     if(m_lstFrameSet.contains(f) > 0) {
-        kdWarning(32001) << "Frameset " << f << " " << f->getName() << " already in list!" << endl;
+        kdWarning(32001) << "Frameset " << f << " " << f->name() << " already in list!" << endl;
         return;
     }
     m_lstFrameSet.append(f);
@@ -4896,7 +4896,7 @@ void KWDocument::printDebug()
     {
         KWFrameSet * frameset = fit.current();
         kdDebug() << "Frameset " << iFrameset << ": '" <<
-            frameset->getName() << "' (" << frameset << ")" << (frameset->isDeleted()?" Deleted":"")<<endl;
+            frameset->name() << "' (" << frameset << ")" << (frameset->isDeleted()?" Deleted":"")<<endl;
         if ( frameset->isVisible())
             frameset->printDebug();
     }
@@ -5089,9 +5089,9 @@ void KWDocument::deleteSelectedFrames()
         if ( fs->isAFooter() || fs->isAHeader() )
             continue;
         //a table
-        if ( fs->getGroupManager() )
+        if ( fs->groupmanager() )
         {
-            KWTableFrameSet *table=fs->getGroupManager();
+            KWTableFrameSet *table=fs->groupmanager();
             Q_ASSERT(table);
             docItem|=typeItemDocStructure(table->type());
 

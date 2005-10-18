@@ -114,7 +114,6 @@ public:
         /// Called by delFrame when it really deletes a frame (remove=true), to remove it from the table too
         virtual void frameDeleted( KWFrame* frm, bool recalc );
 
-        KWTableFrameSet *table() const { return grpMgr; }
         bool isAboveOrLeftOf( unsigned row, unsigned col ) const;
         bool containsCell( unsigned row, unsigned col ) const;
 

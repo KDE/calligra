@@ -325,7 +325,7 @@ QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
     KWDocument *doc = m_frameSet->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    if ( viewMode && !m_frameSet->getGroupManager() ) {
+    if ( viewMode && !m_frameSet->groupmanager() ) {
         int minBorder = viewMode->drawFrameBorders() ? 1 : 0;
         KWFrame* settingsFrame = m_frameSet->settingsFrame( this );
         outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, minBorder );
@@ -861,7 +861,7 @@ void KWFrame::setFramePadding( double _left, double _top, double _right, double 
 void KWFrame::setMinFrameHeight(double h)
 {
     //if ( m_frameSet )
-    //    kdDebug() << k_funcinfo << m_frameSet->getName() << " " << this << " " << h << endl;
+    //    kdDebug() << k_funcinfo << m_frameSet->name() << " " << this << " " << h << endl;
     m_minFrameHeight = h;
 }
 
@@ -869,16 +869,16 @@ void KWFrame::setMinFrameHeight(double h)
 /* Class: KWFrameSet                                              */
 /******************************************************************/
 KWFrameSet::KWFrameSet( KWDocument *doc )
-    : m_doc( doc ), frames(), m_framesInPage(), m_firstPage( 0 ), m_emptyList(),
+    : m_doc( doc ), m_frames(), m_framesInPage(), m_firstPage( 0 ), m_emptyList(),
       m_info( FI_BODY ),
-      grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
+      m_groupmanager( 0L ), m_removeableHeader( false ), m_visible( true ),
       m_protectSize( false ),
       m_anchorTextFs( 0L ), m_dcop( 0L ), m_pageManager( 0 )
 {
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
-    frames.setAutoDelete( true );
+    m_frames.setAutoDelete( true );
     m_framesInPage.setAutoDelete( true ); // autodelete the lists in the array (not the frames;)
     m_pageManager = doc->pageManager();
 }
@@ -899,24 +899,24 @@ KWFrameSet::~KWFrameSet()
 
 void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 {
-    if ( frames.findRef( _frame ) != -1 )
+    if ( m_frames.findRef( _frame ) != -1 )
         return;
 
-    //kdDebug(32001) << k_funcinfo << getName() << " adding frame" <<  _frame << " recalc=" << recalc << endl;
+    //kdDebug(32001) << k_funcinfo << name() << " adding frame" <<  _frame << " recalc=" << recalc << endl;
     KWFrameList::createFrameList(_frame, m_doc);
     _frame->setFrameSet(this);
-    frames.append( _frame );
+    m_frames.append( _frame );
     if(recalc)
         updateFrames();
 }
 
 void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 {
-    //kdDebug(32001) << k_funcinfo << getName() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << kdBacktrace();
-    KWFrame *frm = frames.at( _num );
+    //kdDebug(32001) << k_funcinfo << name() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << kdBacktrace();
+    KWFrame *frm = m_frames.at( _num );
     Q_ASSERT( frm );
-    frames.take( _num );
-    Q_ASSERT( !frames.contains(frm) );
+    m_frames.take( _num );
+    Q_ASSERT( !m_frames.contains(frm) );
 
     unsigned int pageNum = frm->pageNum();
     if(m_framesInPage.count() < pageNum) {
@@ -940,7 +940,7 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
         // ###### should something similar be done when just removing a frame from the list?
         frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
         delete frm;
-        //kdDebug(32001) << k_funcinfo << frm << " deleted. Now I have " << frames.count() << " frames" << endl;
+        //kdDebug(32001) << k_funcinfo << frm << " deleted. Now I have " << m_frames.count() << " m_frames" << endl;
     }
 
     if ( recalc )
@@ -950,7 +950,7 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 void KWFrameSet::delFrame( KWFrame *frm, bool remove, bool recalc )
 {
     //kdDebug(32001) << "KWFrameSet::delFrame " << frm << " remove=" << remove << endl;
-    int _num = frames.findRef( frm );
+    int _num = m_frames.findRef( frm );
     Q_ASSERT( _num != -1 );
     if ( _num == -1 )
         return;
@@ -960,20 +960,20 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove, bool recalc )
 
 void KWFrameSet::deleteAllFrames()
 {
-    if ( !frames.isEmpty() )
+    if ( !m_frames.isEmpty() )
     {
-        frames.clear();
+        m_frames.clear();
         updateFrames();
     }
 }
 
 void KWFrameSet::deleteAllCopies()
 {
-    if ( frames.count() > 1 )
+    if ( m_frames.count() > 1 )
     {
-        KWFrame * firstFrame = frames.first()->getCopy();
-        frames.clear();
-        frames.append( firstFrame );
+        KWFrame * firstFrame = m_frames.first()->getCopy();
+        m_frames.clear();
+        m_frames.append( firstFrame );
         updateFrames();
     }
 }
@@ -981,7 +981,7 @@ void KWFrameSet::deleteAllCopies()
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
     double paperHeight = m_doc->pageManager()->pageLayout(0 /* what page should this b? */).ptHeight;
-    //kdDebug(32001) << "KWFrameSet::createEmptyRegion " << getName() << endl;
+    //kdDebug(32001) << "KWFrameSet::createEmptyRegion " << name() << endl;
     for (QPtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect(viewMode) ) );
@@ -1100,14 +1100,14 @@ void KWFrameSet::setFloating()
 
         KoTextParag* parag = 0L;
         int index = 0;
-        KoPoint dPoint( frames.first()->topLeft() );
+        KoPoint dPoint( m_frames.first()->topLeft() );
         kdDebug(32001) << "KWFrameSet::setFloating looking for pos at " << dPoint.x() << " " << dPoint.y() << endl;
         frameSet->findPosition( dPoint, parag, index );
         // Create anchor. TODO: refcount the anchors!
         setAnchored( frameSet, parag, index );
         frameSet->layout();
-        frames.first()->updateResizeHandles();
-        m_doc->frameChanged( frames.first() );
+        m_frames.first()->updateResizeHandles();
+        m_doc->frameChanged( m_frames.first() );
         return;
     }
 }
@@ -1115,7 +1115,7 @@ void KWFrameSet::setFloating()
 void KWFrameSet::setProtectSize( bool _b)
 {
     m_protectSize = _b;
-    for(KWFrame *f=frames.first();f;f=frames.next())
+    for(KWFrame *f=m_frames.first();f;f=m_frames.next())
     {
         if ( f->isSelected() )
             f->repaintResizeHandles();
@@ -1171,7 +1171,7 @@ KWAnchor * KWFrameSet::findAnchor( int frameNum )
              && anchor->frameSet() == this && anchor->frameNum() == frameNum )
                 return anchor;
     }
-    kdWarning() << "KWFrameSet::findAnchor anchor not found (frameset='" << getName()
+    kdWarning() << "KWFrameSet::findAnchor anchor not found (frameset='" << name()
                 << "' frameNum=" << frameNum << ")" << endl;
     return 0L;
 }
@@ -1257,7 +1257,7 @@ void KWFrameSet::deleteAnchors()
 
 void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
-    KWFrame * frame = frames.at( frameNum );
+    KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     if ( !frame ) return;
 
@@ -1283,7 +1283,7 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 
 KoRect KWFrameSet::floatingFrameRect( int frameNum )
 {
-    KWFrame * frame = frames.at( frameNum );
+    KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     Q_ASSERT( isFloating() );
 
@@ -1299,21 +1299,21 @@ KoRect KWFrameSet::floatingFrameRect( int frameNum )
 
 KoSize KWFrameSet::floatingFrameSize( int frameNum )
 {
-    KWFrame * frame = frames.at( frameNum );
+    KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     return frame->outerKoRect().size();
 }
 
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
 {
-    KWFrame * frame = frames.at( frameNum );
+    KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     return new KWCreateFrameCommand( QString::null, frame );
 }
 
 KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
 {
-    KWFrame * frame = frames.at( frameNum );
+    KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     return new KWDeleteFrameCommand( QString::null, frame );
 }
@@ -1341,12 +1341,12 @@ KWFrame * KWFrameSet::frameAtPos( double _x, double _y ) const
 KWFrame *KWFrameSet::frame( unsigned int _num ) const
 {
     // QPtrList sucks
-    return const_cast<KWFrameSet*>( this )->frames.at( _num );
+    return const_cast<KWFrameSet*>( this )->m_frames.at( _num );
 }
 
 int KWFrameSet::frameFromPtr( KWFrame *frame )
 {
-    return frames.findRef( frame );
+    return m_frames.findRef( frame );
 }
 
 KWFrame * KWFrameSet::settingsFrame( const KWFrame* frame )
@@ -1368,18 +1368,18 @@ KWFrame * KWFrameSet::settingsFrame( const KWFrame* frame )
 
 void KWFrameSet::updateFrames( int flags )
 {
-    if ( frames.isEmpty() )
+    if ( m_frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
 
     // Not visible ? Don't bother then.
     if ( !isVisible() )
         return;
 
-    //kdDebug(32001) << "KWFrameSet::updateFrames " << this << " " << getName() << endl;
+    //kdDebug(32001) << "KWFrameSet::updateFrames " << this << " " << name() << endl;
 
     if ( flags & UpdateFramesInPage ) {
         // For each of our frames, clear old list of frames on top, and grab min/max page nums
-        m_firstPage = frames.first()->pageNum(); // we know frames is not empty here
+        m_firstPage = m_frames.first()->pageNum(); // we know m_frames is not empty here
         int lastPage = m_firstPage;
         QPtrListIterator<KWFrame> fIt( frameIterator() );
         for ( ; fIt.current(); ++fIt ) {
@@ -1400,7 +1400,7 @@ void KWFrameSet::updateFrames( int flags )
         for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
             m_framesInPage.insert( i, new QPtrList<KWFrame>() );
 
-        // Iterate over frames again, to fill the m_framesInPage array
+        // Iterate over m_frames again, to fill the m_framesInPage array
         fIt.toFirst();
         for ( ; fIt.current(); ++fIt ) {
             int pg = fIt.current()->pageNum();
@@ -1411,7 +1411,7 @@ void KWFrameSet::updateFrames( int flags )
 
     if ( isFloating() )
     {
-        //kdDebug(32001) << "KWFrameSet::updateFrames " << getName() << " is floating" << endl;
+        //kdDebug(32001) << "KWFrameSet::updateFrames " << name() << " is floating" << endl;
         QPtrListIterator<KWFrame> frameIt = frameIterator();
         int frameNum = 0;
         // At the moment there's only one anchor per frameset
@@ -1435,9 +1435,9 @@ bool KWFrameSet::isPaintedBy( KWFrameSet* fs ) const
         if ( parentFs && parentFs->isPaintedBy( fs ) )
             return true;
     }
-    if ( getGroupManager() )
+    if ( groupmanager() )
     {
-        if ( getGroupManager()->isPaintedBy( fs ) )
+        if ( groupmanager()->isPaintedBy( fs ) )
             return true;
     }
     return false;
@@ -1448,7 +1448,7 @@ const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
     if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
     {
 #ifdef DEBUG_DTI
-        kdWarning(32002) << getName() << " framesInPage called for pageNum=" << pageNum << ". "
+        kdWarning(32002) << name() << " framesInPage called for pageNum=" << pageNum << ". "
                     << " Min value: " << m_firstPage
                     << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
 #endif
@@ -1462,7 +1462,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
                                KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "\nKWFrameSet::drawContents " << this << " " << getName()
+    kdDebug(32001) << "\nKWFrameSet::drawContents " << this << " " << name()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
                    << " crect= " << crect
                    << endl;
@@ -1507,7 +1507,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 {
     if ( !frame->isValid() )
     {
-        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame " << frameFromPtr( frame ) << " " << frame << " isn't valid" << endl;
+        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders " << name() << " frame " << frameFromPtr( frame ) << " " << frame << " isn't valid" << endl;
         return;
     }
 
@@ -1515,7 +1515,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
     QRect outerFrameRect( viewMode->normalToView( normalOuterFrameRect ) );
     QRect outerCRect = crect.intersect( outerFrameRect );
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame " << frameFromPtr( frame ) << " " << *frame << endl;
+    kdDebug(32001) << "KWFrameSet::drawFrameAndBorders " << name() << " frame " << frameFromPtr( frame ) << " " << *frame << endl;
     kdDebug(32001) << "                    (outer) normalFrameRect=" << normalOuterFrameRect << " frameRect=" << outerFrameRect << endl;
     kdDebug(32001) << "                    crect=" << crect << " intersec=" << outerCRect << " todraw=" << !outerCRect.isEmpty() << endl;
 #endif
@@ -1564,7 +1564,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
                        settingsFrame, cg, onlyChanged, resetChanged,
                        edit, viewMode, drawUnderlyingFrames );
 
-            if( !getGroupManager() ) // not for table cells
+            if( !groupmanager() ) // not for table cells
                 drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
 
             painter->restore();
@@ -1581,7 +1581,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     if ( outerCRect.isEmpty() )
         return;
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " outerCRect=" << outerCRect << " frameCrect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
+    kdDebug(32001) << "\nKWFrameSet::drawFrame " << name() << " outerCRect=" << outerCRect << " frameCrect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
 #endif
 
     QColorGroup frameColorGroup( cg );
@@ -1625,7 +1625,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
                 KWFrame* f = (*it);
 
 #ifdef DEBUG_DRAW
-                kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
+                kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->name() << " frame " << frameFromPtr( frame ) << endl;
 #endif
                 QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect( viewMode ) ) );
                 if ( !viewFrameCRect.isEmpty() )
@@ -1676,7 +1676,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 void KWFrameSet::drawFrameContents( KWFrame *, QPainter *, const QRect &,
                                     const QColorGroup &, bool, bool, KWFrameSetEdit*, KWViewMode * )
 {
-    kdWarning() << "Default implementation of drawFrameContents called for " << className() << " " << this << " " << getName() << kdBacktrace();
+    kdWarning() << "Default implementation of drawFrameContents called for " << className() << " " << this << " " << name() << kdBacktrace();
 }
 
 bool KWFrameSet::contains( double mx, double my )
@@ -1691,8 +1691,8 @@ bool KWFrameSet::contains( double mx, double my )
 
 MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
 {
-    if ( grpMgr ) // Cells forward the call to the table
-        return grpMgr->getMouseMeaning( nPoint, keyState );
+    if ( m_groupmanager ) // Cells forward the call to the table
+        return m_groupmanager->getMouseMeaning( nPoint, keyState );
 
     bool canMove = isMoveable();
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
@@ -1732,7 +1732,7 @@ MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return;
 
     // Save all the common attributes for framesets.
@@ -1859,8 +1859,8 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
 
 bool KWFrameSet::hasSelectedFrame()
 {
-    for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->isSelected() )
+    for ( unsigned int i = 0; i < m_frames.count(); i++ ) {
+        if ( m_frames.at( i )->isSelected() )
             return true;
     }
 
@@ -1877,7 +1877,7 @@ void KWFrameSet::setVisible( bool v )
 
 bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
 {
-    if ( !m_visible || frames.isEmpty() )
+    if ( !m_visible || m_frames.isEmpty() )
         return false;
     if ( isAHeader() && !m_doc->isHeaderVisible() )
         return false;
@@ -2021,9 +2021,9 @@ bool KWFrameSet::canRemovePage( int num )
         if ( frame->pageNum() == num ) // ## TODO: use framesInPage, see KWTextFrameSet
         {
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
-            if ( ! ( frame->isCopy() && frameIt.current() != frames.first() ) )
+            if ( ! ( frame->isCopy() && frameIt.current() != m_frames.first() ) )
             {
-                //kdDebug(32001) << "KWFrameSet::canRemovePage " << getName() << " frame on page " << num << " -> false" << endl;
+                //kdDebug(32001) << "KWFrameSet::canRemovePage " << name() << " frame on page " << num << " -> false" << endl;
                 return false;
             }
         }
@@ -2040,12 +2040,12 @@ void KWFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
 }
 
 void KWFrameSet::setFrameBehavior( KWFrame::FrameBehavior fb ) {
-    for(KWFrame *f=frames.first();f;f=frames.next())
+    for(KWFrame *f=m_frames.first();f;f=m_frames.next())
         f->setFrameBehavior(fb);
 }
 
 void KWFrameSet::setNewFrameBehavior( KWFrame::NewFrameBehavior nfb ) {
-    for(KWFrame *f=frames.first();f;f=frames.next())
+    for(KWFrame *f=m_frames.first();f;f=m_frames.next())
         f->setNewFrameBehavior(nfb);
 }
 
@@ -2088,7 +2088,7 @@ bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool b
 
 void KWFrameSet::setZOrder()
 {
-    //kdDebug(32001) << "KWFrameSet::setZOrder (to max) " << getName() << endl;
+    //kdDebug(32001) << "KWFrameSet::setZOrder (to max) " << name() << endl;
     QPtrListIterator<KWFrame> fit = frameIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNum(m_doc) ) + 1 );
@@ -2178,7 +2178,7 @@ void KWFrameSetEdit::drawContents( QPainter *p, const QRect &crect,
                                    const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                    KWViewMode *viewMode )
 {
-    //kdDebug(32001) << "KWFrameSetEdit::drawContents " << frameSet()->getName() << endl;
+    //kdDebug(32001) << "KWFrameSetEdit::drawContents " << frameSet()->name() << endl;
     frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode );
 }
 
@@ -2275,7 +2275,7 @@ void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double new
 
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return QDomElement();
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
@@ -2362,10 +2362,10 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 
 void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool /*saveFrames*/ ) const
 {
-    if( frames.isEmpty() ) // Deleted frameset -> don't save
+    if( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return;
-    KWFrame* frame = frames.getFirst();
-    frame->startOasisFrame( writer, context.mainStyles(), getName() ); // draw:frame
+    KWFrame* frame = m_frames.getFirst();
+    frame->startOasisFrame( writer, context.mainStyles(), name() ); // draw:frame
     writer.startElement( "draw:image" );
     writer.addAttribute( "xlink:type", "simple" );
     writer.addAttribute( "xlink:show", "embed" );

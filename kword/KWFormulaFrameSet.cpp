@@ -202,14 +202,14 @@ void KWFormulaFrameSet::drawFrameContents( KWFrame* /*frame*/,
 
 void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
 {
-    if ( frames.isEmpty() )
+    if ( m_frames.isEmpty() )
         return;
 
-    double oldWidth = frames.first()->width();
-    double oldHeight = frames.first()->height();
+    double oldWidth = m_frames.first()->width();
+    double oldHeight = m_frames.first()->height();
 
-    frames.first()->setWidth( width );
-    frames.first()->setHeight( height );
+    m_frames.first()->setWidth( width );
+    m_frames.first()->setHeight( height );
 
     updateFrames();
     kWordDocument()->layout();
@@ -239,7 +239,7 @@ MouseMeaning KWFormulaFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
 
 QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return QDomElement();
     QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
     parentElem.appendChild(framesetElem);
@@ -287,14 +287,14 @@ void KWFormulaFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position
 {
     kdDebug() << k_funcinfo << endl;
     KWFrameSet::moveFloatingFrame( frameNum, position );
-    if ( !frames.isEmpty() ) {
+    if ( !m_frames.isEmpty() ) {
         formula->setDocumentPosition( position.x(), position.y()+formula->baseline() );
     }
 }
 
 int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
 {
-    if ( !frames.isEmpty() )
+    if ( !m_frames.isEmpty() )
     {
         return m_doc->ptToLayoutUnitPixY( formula->baseline() );
     }
@@ -303,7 +303,7 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
 
 void KWFormulaFrameSet::setAnchorFormat( KoTextFormat* format, int /*frameNum*/ )
 {
-    if ( !frames.isEmpty() ) {
+    if ( !m_frames.isEmpty() ) {
         formula->setFontSizeDirect( format->pointSize() );
     }
 }

@@ -117,16 +117,16 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
 
 void KWPartFrameSet::updateChildGeometry( KWViewMode* viewMode )
 {
-    if( frames.isEmpty() ) // Deleted frameset
+    if( m_frames.isEmpty() ) // Deleted frameset
         return;
     if ( viewMode ) {
         // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
-        QRect r = m_doc->zoomRect( *frames.first() ); // in normal coordinates.
+        QRect r = m_doc->zoomRect( *m_frames.first() ); // in normal coordinates.
         KoRect childGeom = m_doc->unzoomRect( viewMode->normalToView( r ) );
         m_child->setGeometry( childGeom.toQRect() ); // rounding problems. TODO: port KoChild to KoRect.
-        //m_child->setGeometry( viewMode->normalToView( m_doc->zoomRect( *frames.first() ) ) );
+        //m_child->setGeometry( viewMode->normalToView( m_doc->zoomRect( *m_frames.first() ) ) );
     } else
-        m_child->setGeometry( frames.first()->toQRect() );
+        m_child->setGeometry( m_frames.first()->toQRect() );
 }
 
 void KWPartFrameSet::slotChildChanged()
@@ -162,7 +162,7 @@ void KWPartFrameSet::slotChildChanged()
 
 QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return QDomElement();
     KWFrameSet::saveCommon( parentElem, saveFrames );
     // Ok, this one is a bit hackish. KWDocument calls us for saving our stuff into
@@ -173,15 +173,15 @@ QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
 
 void KWPartFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool ) const
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     // Save first frame with the whole contents
-    KWFrame* frame = frames.getFirst();
-    frame->startOasisFrame( writer, context.mainStyles(), getName() );
+    KWFrame* frame = m_frames.getFirst();
+    frame->startOasisFrame( writer, context.mainStyles(), name() );
 
     writer.startElement( "draw:object" );
-    // #### let's hope getName() is unique...
-    m_child->saveOasisAttributes( writer, getName() );
+    // #### let's hope name() is unique...
+    m_child->saveOasisAttributes( writer, name() );
 
     writer.endElement(); // draw:object
     writer.endElement(); // draw:frame
@@ -217,7 +217,7 @@ void KWPartFrameSet::startEditing()
         return;
     kdDebug() << k_funcinfo << endl;
     //create undo/redo move command
-    KWFrame* frame = frames.first();
+    KWFrame* frame = m_frames.first();
     if (!frame)
         return;
     FrameIndex index( frame );
@@ -241,7 +241,7 @@ void KWPartFrameSet::endEditing()
 void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     //kdDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y()<<endl;
-    KWFrame * frame = frames.at( frameNum );
+    KWFrame * frame = m_frames.at( frameNum );
     if ( frame )
     {
         KWFrameSet::moveFloatingFrame( frameNum, position );
@@ -280,7 +280,7 @@ void KWPartFrameSet::setDeleted( bool on)
 void KWPartFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 {
     KWFrameSet::delFrame( _num, remove, recalc );
-    if ( frames.isEmpty() )         // then the whole frameset and thus the child is deleted
+    if ( m_frames.isEmpty() )         // then the whole frameset and thus the child is deleted
         m_child->setDeleted();
 }
 

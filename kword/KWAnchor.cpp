@@ -253,7 +253,7 @@ void KWAnchor::save( QDomElement &parentElem )
     //KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     // ## TODO save the frame number as well ? Only the first frame ? to be determined
     // ## or maybe use len=<number of frames>. Difficult :}
-    anchorElem.setAttribute( "instance", m_frameset->getName() );
+    anchorElem.setAttribute( "instance", m_frameset->name() );
 }
 
 void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
@@ -263,7 +263,7 @@ void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
     else // special case for inline tables [which are not alone in their paragraph, see KWTextParag]
     {
         writer.startElement( "draw:frame" );
-        writer.addAttribute( "draw:name", m_frameset->getName() + "-Wrapper" );
+        writer.addAttribute( "draw:name", m_frameset->name() + "-Wrapper" );
         // Mark as wrapper frame. KWTextDocument::loadSpanTag will try to get rid of it upon loading.
         writer.addAttribute( "koffice:is-wrapper-frame", "true" );
         //writer.addAttribute( "draw:style-name", saveOasisFrameStyle( mainStyles ) );

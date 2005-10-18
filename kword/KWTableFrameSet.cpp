@@ -63,7 +63,7 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     m_showHeaderOnAllPages = true;
     m_hasTmpHeaders = false;
     m_active = true;
-    frames.setAutoDelete(false);
+    m_frames.setAutoDelete(false);
     //m_anchor = 0L;
     if ( name.isEmpty() )
         m_name = doc->generateFramesetName( i18n( "Table %1" ) );
@@ -272,7 +272,7 @@ KWTableFrameSet::Cell *KWTableFrameSet::cell( unsigned int row, unsigned int col
         if ( cell )
             return cell;
     }
-//    kdWarning() << getName() << " cell " << row << "," << col << " => returning 0!" << kdBacktrace( 3 ) << endl;
+//    kdWarning() << name() << " cell " << row << "," << col << " => returning 0!" << kdBacktrace( 3 ) << endl;
 //#ifndef NDEBUG
 //    validate();
 //    printArrayDebug();
@@ -290,7 +290,7 @@ KWTableFrameSet::Cell *KWTableFrameSet::cellByPos( double x, double y ) const
 void KWTableFrameSet::recalcCols(int _col,int _row) {
     //kdDebug(32004) << "KWTableFrameSet::recalcCols" << endl;
 
-    // check/set sizes of frames
+    // check/set sizes of m_frames
     unsigned int row=0,col=0;
     if(_col!=-1 && _row!=-1)
     {
@@ -348,11 +348,11 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 // of each cell.
 
 void KWTableFrameSet::recalcRows(int _col, int _row) {
-    kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
+    kdDebug(32004) << name() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
 
 
-    // check/set sizes of frames
+    // check/set sizes of m_frames
     unsigned int row=0,col=0;
     if(_col!=-1 && _row!=-1)
     {
@@ -427,13 +427,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         }
         if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
             activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
-            //kdDebug(32004) << activeCell->getName() << " grew to its minheight: " << activeCell->frame(0)->minFrameHeight() << endl;
+            //kdDebug(32004) << activeCell->name() << " grew to its minheight: " << activeCell->frame(0)->minFrameHeight() << endl;
         } else { // wants to shrink
             double newHeight=kMax(activeCell->frame(0)->minFrameHeight(),minHeightActiveRow);
             if(bottomRow) // I'm a strech cell
                 newHeight=kMax(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minFrameHeight()));
             activeCell->frame(0)->setHeight(newHeight);
-            //kdDebug(32004) << activeCell->getName() << " shrunk to: " << newHeight << endl;
+            //kdDebug(32004) << activeCell->name() << " shrunk to: " << newHeight << endl;
         }
     }
 
@@ -697,7 +697,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             position(cell);
     }
     m_redrawFromCol = getCols();
-    kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows done" << endl;
+    kdDebug(32004) << name() << " KWTableFrameSet::recalcRows done" << endl;
     updateFrames();
 }
 
@@ -903,7 +903,7 @@ bool KWTableFrameSet::hasSelectedFrame()
 
 void KWTableFrameSet::moveBy( double dx, double dy ) {
     bool redraw=false;
-    kdDebug(32004) << "KWTableFrameSet(" << getName() << ")::moveBy(" << dx<<","<<dy<<")\n";
+    kdDebug(32004) << "KWTableFrameSet(" << name() << ")::moveBy(" << dx<<","<<dy<<")\n";
     //for(unsigned int i=0; i < m_rowPositions.count() ; kdDebug(32004) << "row " << i << ": " << m_rowPositions[i++] << endl);
     if(!(dy > -0.001 && dy < 0.001)) {
         redraw=true;
@@ -1120,7 +1120,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, RemovedRow &rr, bool _recalc)
     for ( TableIter cell(this); cell; ++cell ) {
         if ( row >= cell->firstRow() && row < cell->rowAfter()) { // cell is indeed in row
             if(cell->rowSpan() == 1) { // cell is wholly contained within row
-                frames.remove( cell->frame(0) );
+                m_frames.remove( cell->frame(0) );
             } else { // make cell span rowspan less rows
                 cell->setRowSpan(cell->rowSpan()-rowspan);
                 position(cell);
@@ -1163,10 +1163,10 @@ void KWTableFrameSet::reInsertRow(RemovedRow &rr)
         }
    }
 
-   // put back frames that were removed
+   // put back m_frames that were removed
    for(uint i = 0; i < rlen; i++){
-       if( frames.findRef((*r)[i]->frame(0)) == -1 )
-        frames.append( (*r)[i]->frame(0) );
+       if( m_frames.findRef((*r)[i]->frame(0)) == -1 )
+        m_frames.append( (*r)[i]->frame(0) );
    }
 
    // adjust row positions (ignores page boundaries!)a
@@ -1301,7 +1301,7 @@ void KWTableFrameSet::deleteCol(uint col, RemovedColumn &rc)
 
         if(daCell->colSpan() == 1) { // lets remove it
             if(daCell->firstRow() == i) {
-                frames.remove( daCell->frame(0) );
+                m_frames.remove( daCell->frame(0) );
                 m_nr_cells--;
             }
             m_rowArray[i]->m_cellArray.insert(col, 0);
@@ -1366,7 +1366,7 @@ void KWTableFrameSet::reInsertCol(RemovedColumn &rc)
         if(i == daCell->firstRow()) {
             if(removed) {
                 daCell->setColSpan(1);
-                frames.append(daCell->frame(0));
+                m_frames.append(daCell->frame(0));
                 m_nr_cells++;
             }
             else  {
@@ -2101,7 +2101,7 @@ void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progr
 void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool ) const
 {
     writer.startElement( "table:table" );
-    writer.addAttribute( "table:name", getName() );
+    writer.addAttribute( "table:name", name() );
     KoGenStyle tableStyle( KWDocument::STYLE_TABLE, "table" );
     tableStyle.addProperty( "table:align", "margins" );
     tableStyle.addPropertyPt( "style:width", m_colPositions.last()-m_colPositions[0] );
@@ -2383,7 +2383,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     }
 
     Cell *daCell = new Cell( this, row, _col, QString::null /*unused*/ );
-    QString autoName = daCell->getName();
+    QString autoName = daCell->name();
     //kdDebug(32004) << "KWTableFrameSet::loadCell autoName=" << autoName << endl;
     daCell->load( framesetElem, loadFrames );
     daCell->setRowSpan(_rows);
@@ -2458,7 +2458,7 @@ void KWTableFrameSet::afterLoadingCell( Cell* daCell )
     }
 
     if ( m_rowPositions.count() != m_rows + 1 ) {
-        kdDebug() << getName() << " loadCell: m_rowPositions=" << m_rowPositions.count() << " m_rows= " << m_rows << endl;
+        kdDebug() << name() << " loadCell: m_rowPositions=" << m_rowPositions.count() << " m_rows= " << m_rows << endl;
     }
 }
 
@@ -2708,7 +2708,7 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
     KWTextFrameSet( table->m_doc,
                     // Generate frameset name from table_name+row+col
                     i18n("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3")
-                    .arg( table->getName() ).arg(row).arg(col) )
+                    .arg( table->name() ).arg(row).arg(col) )
 {
     m_row = row;
     m_col = col;
@@ -2749,15 +2749,15 @@ bool KWTableFrameSet::Cell::containsCell( unsigned row, unsigned col ) const
 }
 
 void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
-    if(getGroupManager())
-        getGroupManager()->addFrame(_frame, recalc);
+    if(groupmanager())
+        groupmanager()->addFrame(_frame, recalc);
     KWTextFrameSet::addFrame(_frame, recalc);
 }
 
 void KWTableFrameSet::Cell::frameDeleted( KWFrame* frm, bool recalc )
 {
-    if(getGroupManager())
-        getGroupManager()->delFrame( frm, false, recalc );
+    if(groupmanager())
+        groupmanager()->delFrame( frm, false, recalc );
 }
 
 double KWTableFrameSet::Cell::leftBorder() {
@@ -2773,7 +2773,7 @@ double KWTableFrameSet::Cell::rightBorder() {
     double b=frame(0)->rightBorder().width();
     if(b==0.0)
         return 0.0;
-    if(m_col+m_cols==grpMgr->getCols()) // right most cell
+    if(m_col+m_cols==m_groupmanager->getCols()) // right most cell
         return b;
     return (b / 2);
 }
@@ -2791,7 +2791,7 @@ double KWTableFrameSet::Cell::bottomBorder() {
     double b = frame(0)->bottomBorder().width();
     if(b==0.0)
         return 0.0;
-    if(rowAfter() == grpMgr->m_rows) // bottom most cell
+    if(rowAfter() == m_groupmanager->m_rows) // bottom most cell
         return b;
     return (b / 2);
 }
@@ -2803,7 +2803,7 @@ void KWTableFrameSet::Cell::setLeftBorder(KoBorder newBorder) {
 
     if((diff > 0.01 || diff < -0.01) && m_col!=0) {
         diff = diff / 2; // if not outer edge only use halve
-        grpMgr->cell(m_row, m_col-1)->setRightBorder(newBorder);
+        m_groupmanager->cell(m_row, m_col-1)->setRightBorder(newBorder);
     }
     f->setLeft(f->left() - diff);
 }
@@ -2813,9 +2813,9 @@ void KWTableFrameSet::Cell::setRightBorder(KoBorder newBorder) {
     double diff = f->rightBorder().width() - newBorder.width();
     f->setRightBorder(newBorder);
 
-    if((diff > 0.01 || diff < -0.01) && m_col+m_cols!=grpMgr->getCols()) {
+    if((diff > 0.01 || diff < -0.01) && m_col+m_cols!=m_groupmanager->getCols()) {
         diff = diff / 2; // if not outer edge only use halve
-        grpMgr->cell(m_row, m_col+1)->setLeftBorder(newBorder);
+        m_groupmanager->cell(m_row, m_col+1)->setLeftBorder(newBorder);
     }
     f->setRight(f->right() + diff);
 }
@@ -2827,7 +2827,7 @@ void KWTableFrameSet::Cell::setTopBorder(KoBorder newBorder) {
 
     if((diff > 0.01 || diff < -0.01) && m_row!=0) {
         diff = diff / 2; // if not outer edge only use halve
-        grpMgr->cell(m_row-1, m_col)->setBottomBorder(newBorder);
+        m_groupmanager->cell(m_row-1, m_col)->setBottomBorder(newBorder);
     }
     f->setTop(f->top() - diff);
 }
@@ -2837,9 +2837,9 @@ void KWTableFrameSet::Cell::setBottomBorder(KoBorder newBorder) {
     double diff = f->bottomBorder().width() - newBorder.width();
     f->setBottomBorder(newBorder);
 
-    if((diff > 0.01 || diff < -0.01) && rowAfter() != grpMgr->m_rows) {
+    if((diff > 0.01 || diff < -0.01) && rowAfter() != m_groupmanager->m_rows) {
         diff = diff / 2; // if not outer edge only use halve
-        grpMgr->cell(m_row+1, m_col)->setTopBorder(newBorder);
+        m_groupmanager->cell(m_row+1, m_col)->setTopBorder(newBorder);
     }
     f->setBottom(f->bottom() + diff);
 }

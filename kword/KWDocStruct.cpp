@@ -418,9 +418,9 @@ void KWDocStructRootItem::setupArrangement()
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
+        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
         {
-            item = new KListViewItem( this, frameset->getName() );
+            item = new KListViewItem( this, frameset->name() );
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
             textdoc= tmpParag->textDocument();
             parag = static_cast<KWTextParag *>(textdoc->firstParag());
@@ -483,9 +483,9 @@ void KWDocStructRootItem::setupTextFrames()
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
+        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
         {
-            item = new KListViewItem( this, frameset->getName() );
+            item = new KListViewItem( this, frameset->name() );
 
             for ( int j = frameset->getNumFrames() - 1; j >= 0; j-- )
             {
@@ -650,7 +650,7 @@ void KWDocStructRootItem::setupEmbedded()
         if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
         {
             // Use the name of the frameset as the entry for the object.
-            _name=frameset->getName();
+            _name=frameset->name();
             child = new KWDocStructPartItem( this, _name, dynamic_cast<KWPartFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
@@ -750,7 +750,7 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
         switch ( _type )
         {
             case Arrangement:
-                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
+                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
                 {
 
                     tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
@@ -766,7 +766,7 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
                 }
                 break;
             case TextFrames:
-                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
+                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
                     return true;
                 break;
             case FormulaFrames:

@@ -421,7 +421,7 @@ bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
     if(fs==NULL) return false; // assertion
     if(fs==textFrameSet()) return true;
 
-    const KWFrameSet* parentFrameset = fs->getGroupManager() ? fs->getGroupManager() : fs;
+    const KWFrameSet* parentFrameset = fs->groupmanager() ? fs->groupmanager() : fs;
     while ( parentFrameset->isFloating() ) {
         parentFrameset = parentFrameset->anchorFrameset();
         if ( parentFrameset == m_textFrameSet )

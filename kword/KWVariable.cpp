@@ -344,7 +344,7 @@ void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& contex
     //<text:note text:id="ftn1" text:note-class="endnote"><text:note-citation>i</text:note-citation><text:note-body><text:p text:style-name="Endnote"/></text:note-body></text:note>
     //<text:note text:id="ftn2" text:note-class="footnote"><text:note-citation text:label="vv">vv</text:note-citation><text:note-body><text:p text:style-name="Footnote"/></text:note-body></text:note>
     writer.startElement( "text:note" );
-    writer.addAttribute( "text:id",m_frameset->getName() );
+    writer.addAttribute( "text:id",m_frameset->name() );
     writer.addAttribute( "text:note-class", m_noteType == FootNote ? "footnote" : "endnote" );
 
     writer.startElement( "text:note-citation" );
@@ -378,7 +378,7 @@ void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
     footnoteElem.setAttribute( "numberingtype", m_numberingType == Auto ? "auto" : "manual" );
     Q_ASSERT( m_frameset );
     if( m_frameset )
-      footnoteElem.setAttribute( "frameset", m_frameset->getName() );
+      footnoteElem.setAttribute( "frameset", m_frameset->name() );
 }
 
 void KWFootNoteVariable::load( QDomElement &elem )

@@ -26,7 +26,7 @@
 
 
 KWordFrameSetIface::KWordFrameSetIface( KWFrameSet *_frame )
-    : DCOPObject( _frame->getName().utf8() )
+    : DCOPObject( _frame->name().utf8() )
 {
    m_frame = _frame;
 }

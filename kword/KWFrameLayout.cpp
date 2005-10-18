@@ -28,7 +28,7 @@ void KWFrameLayout::HeaderFooterFrameset::debug()
 {
 #ifdef DEBUG_FRAMELAYOUT
     HeaderFooterFrameset* hff = this;
-    kdDebug(32002) << " * " << hff->m_frameset->getName()
+    kdDebug(32002) << " * " << hff->m_frameset->name()
                    << " pages:" << hff->m_startAtPage << "-" << (hff->m_endAtPage==-1?QString("(all)"):QString::number(hff->m_endAtPage))
                    << " page-selection:" << (hff->m_oddEvenAll==HeaderFooterFrameset::Odd ? "Odd" :
                                              hff->m_oddEvenAll==HeaderFooterFrameset::Even ? "Even" : "All")
@@ -42,7 +42,7 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
 {
     int lastFrame = lastFrameNumber( lastPage );
 #ifdef DEBUG_FRAMELAYOUT
-    //kdDebug(32002) << " Final cleanup: frameset " << m_frameset->getName() << ": lastFrame=" << lastFrame << endl;
+    //kdDebug(32002) << " Final cleanup: frameset " << m_frameset->name() << ": lastFrame=" << lastFrame << endl;
 #endif
 
     KWTextFrameSet* fs = m_frameset;
@@ -55,7 +55,7 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
     bool deleted = false;
     while ( (int)fs->getNumFrames() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "  Final cleanup: deleting frame " << fs->getNumFrames() - 1 << " of " << fs->getName() << endl;
+        kdDebug(32002) << "  Final cleanup: deleting frame " << fs->getNumFrames() - 1 << " of " << fs->name() << endl;
 #endif
         fs->delFrame( fs->getNumFrames() - 1 );
         deleted = true;
@@ -141,7 +141,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 it.current()->m_positioned = true;
                 KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                kdDebug(32002) << " Page " << pageNum << ": adding frame " << frameNum << " from " << fs->getName() << endl;
+                kdDebug(32002) << " Page " << pageNum << ": adding frame " << frameNum << " from " << fs->name() << endl;
 #endif
                 KoRect rect;
                 if ( fs->isAHeader() ) // add on top
@@ -197,7 +197,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 totalFootNotesHeight -= it.current()->m_height; // as discussed above
                 KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                kdDebug(32002) << " Page " << pageNum << ": adding footnote frame " << frameNum << " from " << fs->getName() << endl;
+                kdDebug(32002) << " Page " << pageNum << ": adding footnote frame " << frameNum << " from " << fs->name() << endl;
 #endif
                 KoRect rect;
 
@@ -287,7 +287,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 {
                     KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                    kdDebug(32002) << " Page " << pageNum << ": adding endnote frame from " << fs->getName() << endl;
+                    kdDebug(32002) << " Page " << pageNum << ": adding endnote frame from " << fs->name() << endl;
 #endif
                     double frameHeight = it.current()->m_height;
                     if ( it.current()->m_startAtPage < 0 ) // not set yet
@@ -455,13 +455,13 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
             return;
         frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->getName() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNum() << endl;
+        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNum() << endl;
 #endif
     }
     else
     {
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter creating frame for " << headerFooter->getName() << endl;
+        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter creating frame for " << headerFooter->name() << endl;
 #endif
         KWFrame* frame = new KWFrame( headerFooter, rect.x(), rect.y(), rect.width(), rect.height() );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );

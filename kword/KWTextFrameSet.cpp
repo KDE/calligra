@@ -210,7 +210,7 @@ KWTextDocument * KWTextFrameSet::kwTextDocument() const
 void KWTextFrameSet::slotAvailableHeightNeeded()
 {
     Q_ASSERT( isVisible() );
-    kdDebug() << "KWTextFrameSet::slotAvailableHeightNeeded " << getName() << endl;
+    kdDebug() << "KWTextFrameSet::slotAvailableHeightNeeded " << name() << endl;
     updateFrames( 0 ); // only do the available-height determination
 }
 
@@ -222,7 +222,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
     if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
         iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
                          m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
-        return frames.getFirst();
+        return m_frames.getFirst();
     }
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
     int pageNum = m_doc->pageManager()->pageNumber(&dPoint);
@@ -261,7 +261,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         relPos = InsideFrame;
         iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
                          m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
-        return frames.getFirst();
+        return m_frames.getFirst();
     }
 
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
@@ -328,7 +328,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
     if ( pageNum + 1 >= (int)m_framesInPage.size() + m_firstPage )
     {
         // Under last frame of last page!
-        KWFrame *theFrame = frames.getLast();
+        KWFrame *theFrame = m_frames.getLast();
         iPoint.setX( m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ) );
         iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() ) );
 #ifdef DEBUG_DTI
@@ -376,7 +376,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
 #endif
     if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
         dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
-        return frames.getFirst();
+        return m_frames.getFirst();
     }
     KWFrame *lastFrame = 0L;
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
@@ -438,7 +438,7 @@ KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const QPoint &iPoint, KW
 
 QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
 {
-    if ( !isVisible() || frames.isEmpty() )
+    if ( !isVisible() || m_frames.isEmpty() )
         return QPoint();
     //kdDebug() << "KWTextFrameSet::moveToPage currentPgNum=" << currentPgNum << " direction=" << direction << endl;
     int num = currentPgNum + direction;
@@ -456,10 +456,10 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
     }
     // Not found. Go to top of first frame or bottom of last frame, depending on direction
     if ( direction < 0 )
-        return QPoint( 0, m_doc->ptToLayoutUnitPixY( frames.getFirst()->internalY() ) + 2 );
+        return QPoint( 0, m_doc->ptToLayoutUnitPixY( m_frames.getFirst()->internalY() ) + 2 );
     else
     {
-        KWFrame * theFrame = frames.getLast();
+        KWFrame * theFrame = m_frames.getLast();
         return QPoint( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() + theFrame->innerHeight() ) );
     }
 }
@@ -555,7 +555,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
                                 KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames )
 {
     // Detect if text frame needs transparency painting, to save time if it's using SolidPattern
-    // In theory this code should be in kwFrameSet, but currently only text frames obey m_backgroundColor.
+    // In theory this code should be in kwFrameSet, but currently only text m_frames obey m_backgroundColor.
     if ( theFrame )
     {
         bool transparent = theFrame->backgroundColor().style() != Qt::SolidPattern;
@@ -571,7 +571,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     // In this method the painter is translated to the frame's coordinate system
     // (in the first frame (0,0) will be its topleft, in the second frame it will be (0,internalY) etc.
 
-    //kdDebug(32001) << "KWTextFrameSet::drawFrameContents " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
+    //kdDebug(32001) << "KWTextFrameSet::drawFrameContents " << name() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
     if ( theFrame ) // 0L in the text viewmode
     {
@@ -742,7 +742,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         QRegion reg;
         if ( hasFrames ) {
             reg = frameClipRegion( p, theFrame, clip, viewMode );
-            if ( !isFloating() ) // problem with multiparent inline frames
+            if ( !isFloating() ) // problem with multiparent inline m_frames
                 reg &= p->xForm( viewFrameRect );
         }
 
@@ -824,7 +824,7 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::invalidate()
 {
-    //kdDebug() << "KWTextFrameSet::invalidate " << getName() << endl;
+    //kdDebug() << "KWTextFrameSet::invalidate " << name() << endl;
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     textDocument()->invalidate(); // lazy layout, real update follows upon next repaint
 }
@@ -867,7 +867,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 // Helper for adjust*. There are 3 ways to use this method.
 // 1) marginLeft and marginRight set -> determination of left and right margins for adjustMargins
 // 2) marginRight set -> determination of right margin for adjustRMargin
-// 3) breakBegin, breakEnd set -> check whether we should jump over some frames
+// 3) breakBegin, breakEnd set -> check whether we should jump over some m_frames
 //                                                  [when there is not enough space besides them]
 // reqMinWidth is the width that the formatter wants to use (current char/item)
 // validHeight is set to the height where marginLeft/marginRight applies (TODO)
@@ -884,7 +884,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
     if ( parag && !parag->string()->isRightToLeft() && parag->firstLineMargin() > 0 )
         paragLeftMargin += parag->firstLineMargin();
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
+    kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << name() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
                        << (marginLeft && marginRight ? "adjustMargins" : "formatVertically")
                        << " paragLeftMargin=" << paragLeftMargin
@@ -900,7 +900,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
     // be moved down by formatVertically. We anticipate, and look at the bottom of the
     // line rather than the top of it, in order to find the bottom frame (the one
     // in which we'll end up). See TODO file for a real solution.
-    // ## This hack breaks layouting of a big char in two connected frames where
+    // ## This hack breaks layouting of a big char in two connected m_frames where
     // the first one is very small (we don't notice the width being too small)
     int yUsedForFrame = yp + h;
     // Workaround: look at bottom in adjustMargins, look at top in formatVertically
@@ -915,9 +915,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
         // frame == 0 happens when the parag is under the last frame.
         // On an auto-resizable frame, we know the frame will grow so we can go ahead
         // and use its width.
-        if ( !frames.isEmpty() && frames.last()->frameBehavior() == KWFrame::AutoExtendFrame )
+        if ( !m_frames.isEmpty() && m_frames.last()->frameBehavior() == KWFrame::AutoExtendFrame )
         {
-            theFrame = frames.last();
+            theFrame = m_frames.last();
         }
         else
         {
@@ -941,7 +941,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
     // Everything from there is in layout units
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
-    // as still in one piece, and we miss the frames in the 2nd column.
+    // as still in one piece, and we miss the m_frames in the 2nd column.
     int from = 0;
     int to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() );
     if ( pageWidth )
@@ -949,7 +949,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
     bool init = false;
 
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "  getMargins: looking for frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
+    kdDebugBody(32002) << "  getMargins: looking for m_frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
 #endif
     if ( m_doc->viewMode()->shouldAdjustMargins() )
     {
@@ -1056,7 +1056,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
         if ( marginRight )
         {
 #ifdef DEBUG_MARGINS
-            kdDebug(32002) << "    getMargins " << getName()
+            kdDebug(32002) << "    getMargins " << name()
                            << " page width=" << *pageWidth
                            << " to=" << to << endl;
 #endif
@@ -1174,7 +1174,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     int oldY = yp;
 
     // This is called by KoTextFormatter to apply "vertical breaks".
-    // End of frames/pages lead to those "vertical breaks".
+    // End of m_frames/pages lead to those "vertical breaks".
     // What we do, is adjust the Y accordingly,
     // to implement page-break at the paragraph level and at the line level.
     // It's cumulative (the space of one break will be included in the further
@@ -1239,7 +1239,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
             {
                 // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
                 (void) checkVerticalBreak( yp, hp, parag, linesTogether, bottom, bottom );
-                // Some people write a single paragraph over 3 frames! So we have to keep looking, that's why we ignore the return value
+                // Some people write a single paragraph over 3 m_frames! So we have to keep looking, that's why we ignore the return value
             }
 
         }
@@ -1248,8 +1248,8 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
         totalHeight = bottom;
     }
 
-    // Another case for a vertical break is frames with the RA_SKIP flag
-    // Currently looking at all frames on top of all of our frames... maybe optimize better
+    // Another case for a vertical break is m_frames with the RA_SKIP flag
+    // Currently looking at all m_frames on top of all of our m_frames... maybe optimize better
     frameIt.toFirst();
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -1269,14 +1269,14 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
                 {
                     kdDebug(32002) << "KWTextFrameSet::formatVertically breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
                     // We don't "break;" here because there could be another such frame below the first one
-                    // We assume that the frames on top are in order ( top to bottom ), btw.
-                    // They should be, since updateFrames reorders before updating frames-on-top
+                    // We assume that the m_frames on top are in order ( top to bottom ), btw.
+                    // They should be, since updateFrames reorders before updating m_frames-on-top
                 }
             }
         }
     }
 
-    // And the last case for a vertical break is RA_BOUNDINGRECT frames that
+    // And the last case for a vertical break is RA_BOUNDINGRECT m_frames that
     // leave no space by their side for any text (e.g. most tables)
     int breakBegin = 0;
     int breakEnd = 0;
@@ -1284,7 +1284,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     getMargins( yp, hp, reqMinWidth, 0L, 0L, 0L, 0L, &breakBegin, &breakEnd, parag );
     if ( breakEnd )
     {
-        kdDebug(32002) << "KWTextFrameSet("<<getName()<<")::formatVertically no-space case. breakBegin=" << breakBegin
+        kdDebug(32002) << "KWTextFrameSet("<<name()<<")::formatVertically no-space case. breakBegin=" << breakBegin
                        << " breakEnd=" << breakEnd << " hp=" << hp << endl;
         Q_ASSERT( breakBegin <= breakEnd );
         if ( checkVerticalBreak( yp, hp, parag, linesTogether, breakBegin, breakEnd ) )
@@ -1347,7 +1347,7 @@ KWTextFrameSet::~KWTextFrameSet()
     delete m_textobj;
 }
 
-// This struct is used for sorting frames.
+// This struct is used for sorting m_frames.
 // Since pages are one below the other, simply sorting on (y, x) does what we want.
 struct FrameStruct
 {
@@ -1363,7 +1363,7 @@ struct FrameStruct
     }
 
     /*
-    the sorting of all frames in the same frameset is done as all sorting
+    the sorting of all m_frames in the same frameset is done as all sorting
     based on a simple frameOne > frameTwo question.
     Frame frameOne is greater then frameTwo if the center point lies more down then (the whole of)
     frame frameTwo. When they are equal, the X position is considered. */
@@ -1394,15 +1394,15 @@ void KWTextFrameSet::updateFrames( int flags )
 {
     // Not visible ? Don't bother then.
     if ( !isVisible() ) {
-        //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " not visible" << endl;
+        //kdDebug(32002) << "KWTextFrameSet::updateFrames " << name() << " not visible" << endl;
         m_textobj->setVisible(false);
         return;
     }
     m_textobj->setVisible(true);
 
-    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << name() << " frame-count=" << m_frames.count() << endl;
 
-    // Sort frames of this frameset on (y coord, x coord)
+    // Sort m_frames of this frameset on (y coord, x coord)
     // Adjustment on 20-Jun-2002 which does not change the itent of this but moves the
     // sorting from top-left of frame to the whole frame area. (TZ)
 
@@ -1433,13 +1433,13 @@ void KWTextFrameSet::updateFrames( int flags )
     {
         qHeapSort( sortedFrames );
 
-        // Re-fill the frames list with the frames in the right order
-        frames.setAutoDelete( false );
-        frames.clear();
+        // Re-fill the m_frames list with the m_frames in the right order
+        m_frames.setAutoDelete( false );
+        m_frames.clear();
 
         QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
         for ( ; it != sortedFrames.end() ; ++it )
-            frames.append( (*it).frame );
+            m_frames.append( (*it).frame );
     }
 
     double availHeight = 0;
@@ -1447,7 +1447,7 @@ void KWTextFrameSet::updateFrames( int flags )
     double lastRealFrameHeight = 0;
     bool firstFrame = true;
 
-    QPtrListIterator<KWFrame> frameIt( frames );
+    QPtrListIterator<KWFrame> frameIt( m_frames );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame* theFrame = frameIt.current();
@@ -1467,9 +1467,9 @@ void KWTextFrameSet::updateFrames( int flags )
     }
 
     m_textobj->setAvailableHeight( m_doc->ptToLayoutUnitPixY( availHeight ) );
-    //kdDebug(32002) << this << " (" << getName() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight
+    //kdDebug(32002) << this << " (" << name() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight
     //               << " (LU: " << m_doc->ptToLayoutUnitPixY( availHeight ) << ")" << endl;
-    frames.setAutoDelete( true );
+    m_frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames( flags );
 }
@@ -1482,11 +1482,11 @@ int KWTextFrameSet::availableHeight() const
 KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &dPoint ) const
 {
 #ifdef DEBUG_ITD
-    kdDebug() << getName() << " ITD called for relPoint=" << relPoint.x() << "," << relPoint.y() << endl;
+    kdDebug() << name() << " ITD called for relPoint=" << relPoint.x() << "," << relPoint.y() << endl;
 #endif
     if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
         dPoint = relPoint;
-        return frames.getFirst();
+        return m_frames.getFirst();
     }
     // This does a binary search in the m_framesInPage array, with internalY as criteria
     // We only look at the first frame of each page. Refining is done later on.
@@ -1548,7 +1548,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
     if ( !found )
     {
         // Not found (n2 < n1)
-        // We might have missed the frame because n2 has many frames
+        // We might have missed the frame because n2 has many m_frames
         // (and we only looked at the first one).
         mid = n2;
 #ifdef DEBUG_ITD
@@ -1565,7 +1565,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         }
     }
     // search to first of equal items
-    // This happens with copied frames, which have the same internalY
+    // This happens with copied m_frames, which have the same internalY
     int result = mid;
     while ( mid - 1 >= 0 )
     {
@@ -1583,7 +1583,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         }
     }
 
-    // Now iterate over the frames in page 'result' and find the right one
+    // Now iterate over the m_frames in page 'result' and find the right one
     QPtrListIterator<KWFrame> frameIt( *m_framesInPage[result] );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -1627,21 +1627,21 @@ void KWTextFrameSet::printDebug()
     {
       KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );
       if (anc)
-          kdDebug() << "Inline framesets: " << anc->frameSet()->getName() << endl;
+          kdDebug() << "Inline framesets: " << anc->frameSet()->name() << endl;
     }
 }
 #endif
 
 QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets )
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return QDomElement();
 
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
-    if ( grpMgr ) {
-        framesetElem.setAttribute( "grpMgr", grpMgr->getName() );
+    if ( m_groupmanager ) {
+        framesetElem.setAttribute( "m_groupmanager", m_groupmanager->name() );
 
         KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
         framesetElem.setAttribute( "row", cell->firstRow() );
@@ -1721,22 +1721,22 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
 void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const
 {
     // Save first frame with the whole contents
-    KWFrame* frame = frames.getFirst();
-    QString lastFrameName = getName();
+    KWFrame* frame = m_frames.getFirst();
+    QString lastFrameName = name();
     frame->startOasisFrame( writer, context.mainStyles(), lastFrameName );
 
-    QString nextFrameName = getName() + "-";
+    QString nextFrameName = name() + "-";
 
     writer.startElement( "draw:text-box" );
     if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
         writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
-    if ( frames.count() > 1 && saveFrames )
+    if ( m_frames.count() > 1 && saveFrames )
         writer.addAttribute( "draw:chain-next-name", nextFrameName + "2" );
     saveOasisContent( writer, context );
     writer.endElement(); // draw:text-box
     writer.endElement(); // draw:frame
 
-    // Save other frames using chaining
+    // Save other m_frames using chaining
     if ( saveFrames ) // false when called from KWDocument::saveSelectedFrames
     {
         int frameNumber = 2;
@@ -1746,11 +1746,11 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
         {
             const QString frameName = nextFrameName + QString::number( frameNumber );
             frameIter.current()->startOasisFrame( writer, context.mainStyles(), frameName, lastFrameName );
-            lastFrameName = frameName; // this is used for copy-frames
+            lastFrameName = frameName; // this is used for copy-m_frames
             writer.startElement( "draw:text-box" );
             if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
                 writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
-            if ( frameNumber < (int)frames.count() )
+            if ( frameNumber < (int)m_frames.count() )
                 writer.addAttribute( "draw:chain-next-name", nextFrameName + QString::number( frameNumber+1 ) );
             // No contents. Well, OOo saves an empty paragraph, but I'd say that's wrong.
             writer.endElement();
@@ -1801,9 +1801,9 @@ void KWTextFrameSet::finalize()
 {
     KWFrameSet::finalize();
     m_textobj->formatMore( 0 ); // just to get the timer going
-    // This is important in case of auto-resized frames or table cells,
+    // This is important in case of auto-resized m_frames or table cells,
     // which come from an import filter, which didn't give them the right size.
-    // However it shouldn't start _now_ (so we use 0), because e.g. main frames
+    // However it shouldn't start _now_ (so we use 0), because e.g. main m_frames
     // don't have the right size yet (KWFrameLayout not done yet).
 }
 
@@ -1868,25 +1868,25 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     int availHeight = availableHeight();
 #ifdef DEBUG_FORMAT_MORE
     if(lastFormatted)
-        kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
+        kdDebug(32002) << "slotAfterFormatting We need more space in " << name()
                        << " bottom=" << bottom + lastFormatted->rect().height()
                        << " availHeight=" << availHeight << endl;
     else
-        kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
+        kdDebug(32002) << "slotAfterFormatting We need more space in " << name()
                        << " bottom2=" << bottom << " availHeight=" << availHeight << endl;
 #endif
-    if ( frames.isEmpty() )
+    if ( m_frames.isEmpty() )
     {
         kdWarning(32002) << "slotAfterFormatting no more space, but no frame !" << endl;
         return true; // abort
     }
 
-    KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
+    KWFrame::FrameBehavior frmBehavior = m_frames.last()->frameBehavior();
     if ( frmBehavior == KWFrame::AutoExtendFrame && isProtectSize())
         frmBehavior = KWFrame::Ignore;
     if (  frmBehavior ==  KWFrame::AutoCreateNewFrame )
     {
-        KWFrame *theFrame = settingsFrame( frames.last() );
+        KWFrame *theFrame = settingsFrame( m_frames.last() );
         double minHeight = s_minFrameHeight + theFrame->paddingTop() + theFrame->paddingBottom() + 5;
         if ( availHeight < minHeight )
             frmBehavior = KWFrame::Ignore;
@@ -1909,7 +1909,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     {
         if(difference > 0) {
             // There's no point in resizing a copy, so go back to the last non-copy frame
-            KWFrame *theFrame = settingsFrame( frames.last() );
+            KWFrame *theFrame = settingsFrame( m_frames.last() );
             double wantedPosition = 0;
 
             // Footers and footnotes go up
@@ -1944,7 +1944,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 kdDebug() << "slotAfterFormatting didn't manage to get more space for footer/footnote, aborting" << endl;
                 return true; // abort
             }
-            // Other frames are resized by the bottom
+            // Other m_frames are resized by the bottom
 
             wantedPosition = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) ) + theFrame->bottom();
             KWPage *page = m_doc->pageManager()->page( theFrame );
@@ -1963,8 +1963,8 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             kdDebug(32002) << "newPosition=" << newPosition << endl;
 
             bool resized = false;
-            if(theFrame->frameSet()->getGroupManager()) {
-                KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
+            if(theFrame->frameSet()->groupmanager()) {
+                KWTableFrameSet *table = theFrame->frameSet()->groupmanager();
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug(32002) << "is table cell; just setting new minFrameHeight, to " << newPosition - theFrame->top() << endl;
 #endif
@@ -2076,10 +2076,10 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
     // the "break at end of frame" case in formatVertically (!!).
     int difference = availHeight - ( bottom + 2 );
 #ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame). Frameset " << getName() << " availHeight=" << availHeight << " bottom=" << bottom << " ->difference=" << difference << endl;
+    kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame). Frameset " << name() << " availHeight=" << availHeight << " bottom=" << bottom << " ->difference=" << difference << endl;
 #endif
     // There's no point in resizing a copy, so go back to the last non-copy frame
-    KWFrame *theFrame = settingsFrame( frames.last() );
+    KWFrame *theFrame = settingsFrame( m_frames.last() );
 #ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "   frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
 #endif
@@ -2106,13 +2106,13 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
         kdDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + s_minFrameHeight << endl;
 #endif
         wantedPosition = QMAX( wantedPosition, theFrame->top() + s_minFrameHeight );
-        if( theFrame->frameSet()->getGroupManager() ) {
+        if( theFrame->frameSet()->groupmanager() ) {
             if ( wantedPosition != theFrame->bottom()) {
-                KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
+                KWTableFrameSet *table = theFrame->frameSet()->groupmanager();
                 // When a frame can be smaller we don't rescale it if it is a table, since
                 // we don't have the full picture of the change.
                 // We will set the minFrameHeight to the correct value and let the tables code
-                // do the rescaling based on all the frames in the row. (see KWTableFrameSet::recalcRows())
+                // do the rescaling based on all the m_frames in the row. (see KWTableFrameSet::recalcRows())
                 if(wantedPosition != theFrame->top() + theFrame->minFrameHeight()) {
                     theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
 #ifdef DEBUG_FORMAT_MORE
@@ -2170,17 +2170,17 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     }
     // Handle the case where the last frame is empty, so we may want to
     // remove the last page.
-    else if ( frames.count() > 1 && !lastFormatted && frameSetInfo() == KWFrameSet::FI_BODY
-              && bottom < availHeight - m_doc->ptToLayoutUnitPixY( frames.last()->innerHeight() ) )
+    else if ( m_frames.count() > 1 && !lastFormatted && frameSetInfo() == KWFrameSet::FI_BODY
+              && bottom < availHeight - m_doc->ptToLayoutUnitPixY( m_frames.last()->innerHeight() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "slotAfterFormatting too much space (bottom=" << bottom << ", availHeight=" << availHeight << ") , trying to remove last frame" << endl;
 #endif
         // Remove the empty last frame, if it's an auto-created one (e.g. a
         // continuation on the next page). Not when the user just created it!
-        if(frames.last()->frameBehavior() == KWFrame::AutoExtendFrame
-           && frames.last()->minFrameHeight() < 1E-10 ) { // i.e. equal to 0
-            delFrame(frames.last(), true);
+        if(m_frames.last()->frameBehavior() == KWFrame::AutoExtendFrame
+           && m_frames.last()->minFrameHeight() < 1E-10 ) { // i.e. equal to 0
+            delFrame(m_frames.last(), true);
             m_doc->frameChanged( 0L );
         }
         if ( m_doc->processingType() == KWDocument::WP ) {
@@ -2193,7 +2193,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
     else if ( !lastFormatted && bottom + 2 < availHeight &&
-              (frames.last()->frameBehavior() == KWFrame::AutoExtendFrame&& !isProtectSize()) )
+              (m_frames.last()->frameBehavior() == KWFrame::AutoExtendFrame&& !isProtectSize()) )
     {
         slotAfterFormattingTooMuchSpace( bottom );
         *abort = false;
@@ -2215,19 +2215,19 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 // so that a followup frame is created for this one
 bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /*difference*/ )
 {
-    KWFrame* lastFrame = frames.last();
+    KWFrame* lastFrame = m_frames.last();
     // This is only going to help us if the new frame is reconnected. Otherwise bail out.
     if ( !lastFrame || lastFrame->newFrameBehavior() != KWFrame::Reconnect )  {
-        kdDebug(32002) << getName() << " : frame is AutoCreateNewFrame but not Reconnect !?!? Aborting." << endl;
+        kdDebug(32002) << name() << " : frame is AutoCreateNewFrame but not Reconnect !?!? Aborting." << endl;
         m_textobj->setLastFormattedParag( 0 );
         return true; // abort
     }
 
 //#ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "createNewPageAndNewFrame creating new frame in frameset " << getName() << endl;
+    kdDebug(32002) << "createNewPageAndNewFrame creating new frame in frameset " << name() << endl;
 //#endif
-    uint oldCount = frames.count();
-    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNum() << " getpages-1=" << m_doc->numPages()-1 << "   frames count=" << oldCount << endl;
+    uint oldCount = m_frames.count();
+    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNum() << " getpages-1=" << m_doc->numPages()-1 << "   m_frames count=" << oldCount << endl;
 
     // First create a new page for it if necessary
     if ( lastFrame->pageNum() == m_doc->numPages() - 1 )
@@ -2249,7 +2249,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
         // We want to compare the height of one paragraph, not all the missing height.
         int paragHeight = lastFormatted ? lastFormatted->rect().height() : 0;
         kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " parag height:" << paragHeight << endl;
-        if ( heightWeWillGet < paragHeight && !grpMgr )
+        if ( heightWeWillGet < paragHeight && !m_groupmanager )
         {
             kdDebug(32002) << "not enough height on the new page, not worth it" << endl;
             m_textobj->setLastFormattedParag( 0 );
@@ -2258,12 +2258,12 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
 
         KWPage *page = m_doc->appendPage();
         m_doc->afterAppendPage( page->pageNumber() );
-        kdDebug(32002) << "now frames count=" << frames.count() << endl;
+        kdDebug(32002) << "now m_frames count=" << m_frames.count() << endl;
     }
 
     // Maybe creating the new page created the frame in this frameset, then we're done
     // Otherwise let's create it ourselves:
-    if ( frames.count() == oldCount )
+    if ( m_frames.count() == oldCount )
     {
         Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
         // Otherwise, create a new frame on next page
@@ -2280,7 +2280,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     ////m_doc->invalidate();
 
     // Reformat the last paragraph. If it's over the two pages, it will need
-    // the new page (e.g. for inline frames that need internalToDocument to work)
+    // the new page (e.g. for inline m_frames that need internalToDocument to work)
     if ( lastFormatted )
         lastFormatted = lastFormatted->prev();
     else
@@ -2359,7 +2359,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 
     theFrame->updateRulerHandles();
 
-    // Do a full KWFrameLayout if this will have influence on other frames, i.e.:
+    // Do a full KWFrameLayout if this will have influence on other m_frames, i.e.:
     // * if we resized the last main text frame (the one before the first endnote)
     // * if we resized an endnote
     // Delay it though, to get the full height first.
@@ -2383,7 +2383,7 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 {
     KoTextParag * lastParag = textDocument()->lastParag();
     // The problem is that if we format things here, and don't emit afterFormatting,
-    // we won't resize autoresize frames properly etc. (e.g. endnotes)
+    // we won't resize autoresize m_frames properly etc. (e.g. endnotes)
     // Testcase for this problem: werner's footnote-1.doc
     //ensureFormatted( lastParag, false ); // maybe true here would do too? slow if maintextframeset though.
     if ( !lastParag->isValid() )
@@ -2397,18 +2397,18 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
     }
 
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << theFrame << " which isn't a child of ours!" << endl;
-    if ( theFrame->frameSet()!=0L && theFrame->frameSet()->getName()!=0L)
-        kdDebug() << "(this is " << getName() << " and the frame belongs to " << theFrame->frameSet()->getName() << ")" << endl;
+    if ( theFrame->frameSet()!=0L && theFrame->frameSet()->name()!=0L)
+        kdDebug() << "(this is " << name() << " and the frame belongs to " << theFrame->frameSet()->name() << ")" << endl;
     return false;
 }
 
 bool KWTextFrameSet::canRemovePage( int num )
 {
-    //kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage " << num << endl;
+    //kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage " << num << endl;
 
     // No frame on that page ? ok for us then
     if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage ) {
-        //kdDebug() << "No frame on that page. Number of frames: " << getNumFrames() << endl;
+        //kdDebug() << "No frame on that page. Number of m_frames: " << getNumFrames() << endl;
         return true;
     }
 
@@ -2420,10 +2420,10 @@ bool KWTextFrameSet::canRemovePage( int num )
         Q_ASSERT( theFrame->pageNum() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
-        //kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"
+        //kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
         //          << " found a frame on page " << num << " empty:" << isEmpty << endl;
         // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
-        bool isCopy = theFrame->isCopy() && frameIt.current() != frames.first();
+        bool isCopy = theFrame->isCopy() && frameIt.current() != m_frames.first();
         if ( !isCopy && !isEmpty )
             return false;
     }
@@ -2432,8 +2432,8 @@ bool KWTextFrameSet::canRemovePage( int num )
 
 void KWTextFrameSet::delFrame( unsigned int num, bool remove, bool recalc )
 {
-    KWFrame *frm = frames.at( num );
-    kdDebug() << "KWTextFrameSet(" << getName() << ")::delFrame " << frm << " (" << num << ")" << endl;
+    KWFrame *frm = m_frames.at( num );
+    kdDebug() << "KWTextFrameSet(" << name() << ")::delFrame " << frm << " (" << num << ")" << endl;
     if ( frm )
         emit frameDeleted( frm );
     KWFrameSet::delFrame( num, remove, recalc );
@@ -2457,7 +2457,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
         maxY = ah;
     else
     {
-        // Find frames on that page, and keep the max bottom, in internal coordinates
+        // Find m_frames on that page, and keep the max bottom, in internal coordinates
         QPtrListIterator<KWFrame> frameIt( framesInPage( maxPage ) );
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -2465,7 +2465,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
         }
     }
 #ifdef DEBUG_VIEWAREA
-    kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
+    kdDebug(32002) << "KWTextFrameSet (" << name() << ")::updateViewArea maxY now " << maxY << endl;
 #endif
     m_textobj->setViewArea( w, maxY );
     m_textobj->formatMore( 2 );
@@ -2646,7 +2646,7 @@ bool KWTextFrameSet::minMaxInternalOnPage( int pageNum, int& topLU, int& bottomL
     if ( !frameIt.current() )
         return false;
 
-    // Look at all frames in the page, and keep min and max "internalY" positions
+    // Look at all m_frames in the page, and keep min and max "internalY" positions
     double topPt = frameIt.current()->internalY();
     double bottomPt = topPt + frameIt.current()->height();
 
@@ -2709,7 +2709,7 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
 {
     Q_ASSERT( isVisible() );
     Q_ASSERT( m_textobj->isVisible() );
-    //kdDebug() << "highlighting in " << getName() << " parag=" << parag->paragId() << " index=" << index << " repaint=" << repaint << endl;
+    //kdDebug() << "highlighting in " << name() << " parag=" << parag->paragId() << " index=" << index << " repaint=" << repaint << endl;
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint ) {
         // Position the cursor
@@ -3006,7 +3006,7 @@ KoLinkVariable* KWTextFrameSet::linkVariableUnderMouse( const KoPoint& dPoint )
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas ), m_rtl( false )
 {
-    //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
+    //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->name() << endl;
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
     KoTextObject* textobj = fs->textObject();
     connect( textobj, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
@@ -3313,7 +3313,7 @@ bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fro
 
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
-    // Handle moving into inline frames (e.g. formula frames).
+    // Handle moving into inline m_frames (e.g. formula m_frames).
     if ( !( e->state() & ControlButton ) && !( e->state() & ShiftButton ) )
     {
         if (e->state() != Qt::NoButton)
@@ -3813,7 +3813,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         KWMailMergeVariableInsertDia dia( m_canvas, doc->mailMergeDataBase() );
         if ( dia.exec() == QDialog::Accepted )
         {
-            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->variableCollection(),doc );
+            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->variableCollection(),doc );
         }
     }
     else

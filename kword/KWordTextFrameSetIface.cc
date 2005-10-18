@@ -61,7 +61,7 @@ int KWordTextFrameSetIface::numberOfParagraphs()
 
 QString KWordTextFrameSetIface::name() const
 {
-    return m_frametext->getName();
+    return m_frametext->name();
 }
 
 QString KWordTextFrameSetIface::selectedText() const

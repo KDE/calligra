@@ -305,7 +305,7 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
         if ( nextFrame ) {
             fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
             chainNextName = QString::null; // already found, no need to store it
-            kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
+            kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->name() : QString::null ) << endl;
         }
     }
     KWFrame* prevFrame = loadingInfo->chainPrevFrame( frameName );
@@ -314,7 +314,7 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
         if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
             Q_ASSERT( fs == prevFrame->frameSet() );
         fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
-        //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->getName() << endl;
+        //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->name() << endl;
     }
     KWFrame* frame = 0;
     if ( !fs ) {

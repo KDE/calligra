@@ -370,7 +370,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
     {
         KWFrame * frame = m_doc->frameUnderMouse( nPoint );
         KWFrameSet *fs = frame ? frame->frameSet() : 0;
-        KWTableFrameSet *table= fs ? fs->getGroupManager() : 0;
+        KWTableFrameSet *table= fs ? fs->groupmanager() : 0;
         KWDocument::TableToSelectPosition posn;
 
         if ( fs && ( e->state() & ShiftButton ) && table ) { // is table and we hold shift
@@ -448,7 +448,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
         if ( !(m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( fs ) == 0 )&& !fs->isAHeader() && !fs->isAFooter()  )
         {
             // If one cell belongs to a table, we are in fact moving the whole table
-            KWTableFrameSet *table = fs->getGroupManager();
+            KWTableFrameSet *table = fs->groupmanager();
             // We'll have to do better in the long run
             if ( table ) {
                 KWTableFrameSet::Cell *theCell=static_cast<KWTableFrameSet::Cell *>(fs);
@@ -650,7 +650,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 KWTableFrameSet::Cell* cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
                 if ( cell )
                 {
-                    KWTableFrameSet* table = cell->getGroupManager();
+                    KWTableFrameSet* table = cell->groupmanager();
                     if ( m_mouseMeaning == MEANING_RESIZE_COLUMN )
                     {
                         m_rowColResized = table->columnEdgeAt( docPoint.x() );
@@ -942,13 +942,13 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         drawWidth=frame->width();
         drawY=frame->top();
         drawHeight=frame->height();
-        if (frameSet->getGroupManager()) { // is table
+        if (frameSet->groupmanager()) { // is table
             if (!(top || bottom)) { /// full height.
-                drawY=frameSet->getGroupManager()->getBoundingRect().y();
-                drawHeight=frameSet->getGroupManager()->getBoundingRect().height();
+                drawY=frameSet->groupmanager()->getBoundingRect().y();
+                drawHeight=frameSet->groupmanager()->getBoundingRect().height();
             } else if (!(left || right)) { // full width.
-                drawX=frameSet->getGroupManager()->getBoundingRect().x();
-                drawWidth=frameSet->getGroupManager()->getBoundingRect().width();
+                drawX=frameSet->groupmanager()->getBoundingRect().x();
+                drawWidth=frameSet->groupmanager()->getBoundingRect().width();
             }
         }
         //p.drawRect( drawX, drawY, drawWidth, drawHeight );
@@ -1370,7 +1370,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
     //kdDebug() << "KWCanvas::mrEditFrame m_frameMoved=" << m_frameMoved << " m_frameResized=" << m_frameResized << endl;
     if ( firstFrame && ( m_frameMoved || m_frameResized ) )
     {
-        KWTableFrameSet *table = firstFrame->frameSet()->getGroupManager();
+        KWTableFrameSet *table = firstFrame->frameSet()->groupmanager();
         if (table) {
             table->recalcCols();
             table->recalcRows();
@@ -1755,7 +1755,7 @@ KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
             leftFrameBorderChanged=true;
             KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
             if(cell!=0L) // is a table cell
-                tables[cell->getGroupManager()]=frame;
+                tables[cell->groupmanager()]=frame;
             else
                 frame->setLeftBorder(newBorder);
         }
@@ -1810,7 +1810,7 @@ KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
             rightFrameBorderChanged=true;
             KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
             if(cell!=0L) // is a table cell
-                tables[cell->getGroupManager()]=frame;
+                tables[cell->groupmanager()]=frame;
             else
                 frame->setRightBorder(newBorder);
         }
@@ -1866,7 +1866,7 @@ KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
             topFrameBorderChanged=true;
             KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
             if(cell!=0L) // is a table cell
-                tables[cell->getGroupManager()]=frame;
+                tables[cell->groupmanager()]=frame;
             else
                 frame->setTopBorder(newBorder);
         }
@@ -1921,7 +1921,7 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
             bottomFrameBorderChanged=true;
             KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
             if(cell!=0L) // is a table cell
-                tables[cell->getGroupManager()]=frame;
+                tables[cell->groupmanager()]=frame;
             else
                 frame->setBottomBorder(newBorder);
         }
@@ -2124,7 +2124,7 @@ void KWCanvas::copySelectedFrames()
                         if ( frame != firstFrame )
                         {
                             // Frame saved alone -> remember which frameset it's part of
-                            frameElem.setAttribute( "parentFrameset", fs->getName() );
+                            frameElem.setAttribute( "parentFrameset", fs->name() );
                         }
                         if ( fs->type() == FT_PICTURE ) {
                             KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
@@ -2330,7 +2330,7 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
             if ( fs->type() == FT_TABLE )
                 curTable = static_cast<KWTableFrameSet *>(fs);
             else if ( fs->type() == FT_TEXT )
-                curTable = static_cast<KWTextFrameSet *>(fs)->getGroupManager();
+                curTable = static_cast<KWTextFrameSet *>(fs)->groupmanager();
             else
                 curTable = 0L;
             if ( curTable ) {
@@ -2894,7 +2894,7 @@ int KWCanvas::currentTableRow() const
     if ( !edit )
         return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
-    if ( textfs && textfs->getGroupManager() )
+    if ( textfs && textfs->groupmanager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstRow();
     return -1;
 }
@@ -2907,7 +2907,7 @@ int KWCanvas::currentTableCol() const
     if ( !edit )
         return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
-    if ( textfs && textfs->getGroupManager() )
+    if ( textfs && textfs->groupmanager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstCol();
     return -1;
 }
