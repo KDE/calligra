@@ -86,20 +86,6 @@ SvgExport::convert(const QCString& from, const QCString& to)
     kpresenterdoc->paintContent(painter, rect, false);
     painter.end();
     
-#if 0    
-    KPresenterView* view = static_cast<KPresenterView*>( kpresenterdoc->views().getFirst());
-    if ( view ) // no view if embedded document
-    {
-        KPrCanvas * canvas = view->getCanvas();
-        canvas->drawPageInPix( pix, view->getCurrPgNum()-1, 0, true, width,height );
-    }
-    else //when it's embedded we use just it.
-    {
-        //pixmap = QPixmap(width, height);
-        //QPainter  painter(&pixmap);
-        //kpresenterdoc->paintContent(painter, pixmap.rect(), false);
-    }
-#endif
     if ( !picture.save( m_chain->outputFile(), "SVG" ) ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),
                             i18n( "SVG Export Error" ) );
