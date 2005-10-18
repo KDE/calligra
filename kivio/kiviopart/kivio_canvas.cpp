@@ -310,9 +310,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
     QSize dxy = m_pView->zoomHandler()->zoomSize(m_pDoc->grid().freq);
 
-    if(m_pView->zoomHandler()->zoom() >= 150) {
-      dxy = dxy / 2;
-    } else if(m_pView->zoomHandler()->zoom() <= 50) {
+    if(m_pView->zoomHandler()->zoom() <= 50) {
       dxy = dxy * 2;
     }
 
@@ -936,12 +934,6 @@ KoPoint KivioCanvas::snapToGrid(KoPoint point)
 
   KoSize dist = m_pDoc->grid().snap;
   KoSize freq = m_pDoc->grid().freq;
-
-  if(m_pView->zoomHandler()->zoom() >= 150) {
-    freq = freq / 2;
-  } else if(m_pView->zoomHandler()->zoom() <= 50) {
-    freq = freq * 2;
-  }
 
   int dx = qRound(p.x() / freq.width());
   int dy = qRound(p.y() / freq.height());
