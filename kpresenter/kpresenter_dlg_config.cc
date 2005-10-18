@@ -88,7 +88,7 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("colorize", KIcon::SizeMedium) );
     _colorBackground = new configureColorBackground( parent, page );
 
-    page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
+    page = addVBoxPage( i18n("Spelling"), i18n("Spellchecker Behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
     _spellPage=new configureSpellPage(parent, page);
 
