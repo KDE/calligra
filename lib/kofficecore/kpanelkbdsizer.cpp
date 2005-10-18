@@ -112,7 +112,8 @@ class KPanelKbdSizerPrivate
             revAction(0),
             panel(0),
             handleNdx(0),
-            icon(0) {};
+            icon(0),
+            stepSize(10) {};
 
         ~KPanelKbdSizerPrivate()
         {
@@ -133,17 +134,22 @@ class KPanelKbdSizerPrivate
 
         // Sizing icon.
         KPanelKbdSizerIcon* icon;
+
+        // Sizing increment.
+        int stepSize;
 };
 
 KPanelKbdSizer::KPanelKbdSizer(KMainWindow* parent, const char* name) :
     QObject(parent, name)
 {
+    // kdDebug() << "KPanelKbdSizer::KPanelKbdSizer: running." << endl;
     d = new KPanelKbdSizerPrivate;
     d->fwdAction = new KAction(i18n("Resize Panel Forward"), KShortcut("F8"),
         0, 0, parent->actionCollection(), "resize_panel_forward");
-    d->fwdAction->setEnabled(false);
     d->revAction = new KAction(i18n("Resize Panel Reverse"), KShortcut("Shift+F8"),
         0, 0, parent->actionCollection(), "resize_panel_reverse");
+    // "Disable" the shortcuts so we can see them in eventFilter.
+    d->fwdAction->setEnabled(false);
     d->revAction->setEnabled(false);
     d->icon = new KPanelKbdSizerIcon();
     kapp->installEventFilter(this);
@@ -156,11 +162,15 @@ KPanelKbdSizer::~KPanelKbdSizer()
     delete d;
 }
 
+int KPanelKbdSizer::stepSize() const { return d->stepSize; }
+
+void KPanelKbdSizer::setStepSize(int s) { d->stepSize = s; }
+
 bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
 {
     if ( e->type() == QEvent::KeyPress ) {
-        // TODO: This permits only a single-sequence shortcut.  For example, Alt+S,R would not work.
-        // If user configures a multi-sequence shortcut, it is undefined what will happen here.
+        // TODO: This permits only a single-key shortcut.  For example, Alt+S,R would not work.
+        // If user configures a multi-key shortcut, it is undefined what will happen here.
         // It would be better to handle these as KShortcut activate() signals, but the problem
         // is that once a QDockWindow is undocked and has focus, the KShortcut activate() signals
         // don't fire anymore.
@@ -169,7 +179,7 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
         QKeyEvent* kev = dynamic_cast<QKeyEvent *>(e);
         KKey k = KKey(kev);
         KShortcut sc = KShortcut(k);
-        // kdDebug() << "KPanelKbdSizer::eventFilter: At key press %d" << k.keyCodeQt() << endl;
+        // kdDebug() << "KPanelKbdSizer::eventFilter: Key press " << sc << endl;
         if (sc == fwdSc) {
             nextHandle();
             return true;
@@ -210,15 +220,9 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
         return true;
     }
     else if (e->type() == QEvent::Resize && d->panel && o == d->panel) {
-        // TODO: This doesn't always work.  For example, hit the maximize/restore button
-        // and the icon won't relocate.
+        // TODO: This doesn't always work.
         showIcon();
-        // TODO: This causes focus to become random.
-        // exitSizing();
     }
-/*    else if (e->type() == QEvent::LayoutHint && d->icon->isActive) {
-         showIcon();
-    }*/
     return false;
 }
 
@@ -283,7 +287,7 @@ void KPanelKbdSizer::nextHandle()
 void KPanelKbdSizer::prevHandle()
 {
     QWidget* panel = d->panel;
-    // See if current panel has another handle.  If not, find next panel.
+    // See if current panel has another handle.  If not, find previous panel.
     if (panel) {
         bool rewind = true;
         d->handleNdx--;
@@ -330,7 +334,7 @@ void KPanelKbdSizer::prevHandle()
 
 void KPanelKbdSizer::exitSizing()
 {
-    // kdDebug() << "KPanelKbdSizer::exitSizing: running." << endl;
+    // kdDebug() << "KPanelKbdSizer::exiting sizing mode." << endl;
     hideIcon();
     d->handleNdx = 0;
     d->panel = 0;
@@ -470,13 +474,14 @@ void KPanelKbdSizer::resizePanelFromKey(int key, int state)
     if (!d->panel) return;
     int dx = 0;
     int dy = 0;
+    int stepSize = d->stepSize;
     switch (key) {
-        case Qt::Key_Left:      dx = -10;   break;
-        case Qt::Key_Right:     dx = 10;    break;
-        case Qt::Key_Up:        dy = -10;   break;
-        case Qt::Key_Down:      dy = 10;    break;
-        case Qt::Key_Prior:     dx = -50;   break;
-        case Qt::Key_Next:      dx = 50;    break;
+        case Qt::Key_Left:      dx = -stepSize;     break;
+        case Qt::Key_Right:     dx = stepSize;      break;
+        case Qt::Key_Up:        dy = -stepSize;     break;
+        case Qt::Key_Down:      dy = stepSize;      break;
+        case Qt::Key_Prior:     dx = -5 * stepSize; break;
+        case Qt::Key_Next:      dx = 5 * stepSize;  break;
     }
     int adj = dx + dy;
     // kdDebug() << "KPanelKbdSizer::resizePanelFromKey: adj = " << adj << endl;
