@@ -103,25 +103,25 @@ void KWPageManagerTester::getAddPages2() {
     page->setWidth(200);
     page->setHeight(200);
 
-    CHECK(pageManager->pageNumber(&KoRect(0,0,2,2)), 1);
-    CHECK(pageManager->pageNumber(&KoRect(90,90,2,2)), 1);
-    CHECK(pageManager->pageNumber(&KoRect(190,190,9,9)), 1);
+    CHECK(pageManager->pageNumber(KoRect(0,0,2,2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(90,90,2,2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(190,190,9,9)), 1);
 
     page = pageManager->appendPage();
     page->setWidth(600);
     page->setHeight(600);
-    CHECK(pageManager->pageNumber(&KoRect(0,0,2,2)), 1);
-    CHECK(pageManager->pageNumber(&KoRect(90,90,2,2)), 1);
-    CHECK(pageManager->pageNumber(&KoRect(190,190,9,9)), 1);
+    CHECK(pageManager->pageNumber(KoRect(0,0,2,2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(90,90,2,2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(190,190,9,9)), 1);
 
-    CHECK(pageManager->pageNumber(&KoRect(200,200,2,2)), 2);
-    CHECK(pageManager->pageNumber(&KoRect(300,3,2,2)), -1); // right of page 1
-    CHECK(pageManager->pageNumber(&KoRect(2, 690,9,9)), 2);
-    CHECK(pageManager->pageNumber(&KoRect(300,300,10,10)), 2);
-    CHECK(pageManager->pageNumber(&KoRect(600,700,10,10)), -1); // right of page 2
+    CHECK(pageManager->pageNumber(KoRect(200,200,2,2)), 2);
+    CHECK(pageManager->pageNumber(KoRect(300,3,2,2)), -1); // right of page 1
+    CHECK(pageManager->pageNumber(KoRect(2, 690,9,9)), 2);
+    CHECK(pageManager->pageNumber(KoRect(300,300,10,10)), 2);
+    CHECK(pageManager->pageNumber(KoRect(600,700,10,10)), -1); // right of page 2
 
     // KoPoint based
-    CHECK(pageManager->pageNumber(&KoPoint(200,200)), 2);
+    CHECK(pageManager->pageNumber(KoPoint(200,200)), 2);
     // Y based
     CHECK(pageManager->pageNumber(200.0), 2);
     CHECK(pageManager->pageNumber(900.0), -1);
