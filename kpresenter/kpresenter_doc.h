@@ -408,32 +408,12 @@ class KPresenterDoc : public KoDocument
 
     QValueList<double> &horizHelplines() {return m_horizHelplines; }
     QValueList<double> &vertHelplines() {return m_vertHelplines; }
-    QValueList<KoPoint> &helpPoints() {return m_helpPoints; }
 
     void horizHelplines(const QValueList<double> &lines);
     void vertHelplines(const QValueList<double> &lines);
 
-    int indexOfHorizHelpline(double pos);
-    int indexOfVertHelpline(double pos);
-
-    int indexOfHelpPoint( const KoPoint &pos );
-
-    void updateHorizHelpline(int idx, double pos);
-    void updateVertHelpline(int idx, double pos);
-
-    void updateHelpPoint( int idx, const KoPoint &pos );
-
-
     void addHorizHelpline(double pos);
     void addVertHelpline(double pos);
-
-    void addHelpPoint( const KoPoint &pos );
-
-    void removeHorizHelpline(int index);
-    void removeVertHelpline( int index );
-
-    void removeHelpPoint( int index );
-
 
     void updateHelpLineButton();
     void updateGridButton();
@@ -450,9 +430,6 @@ class KPresenterDoc : public KoDocument
 
     bool snapToGrid() const { return m_bSnapToGrid; }
     void setSnapToGrid( bool _b ) { m_bSnapToGrid = _b; }
-
-    bool helpLineToFront() const { return m_bHelplinesToFront; }
-    void setHelpLineToFront( bool _front ) { m_bHelplinesToFront = _front; }
 
     QColor gridColor() const { return m_gridColor; }
     void setGridColor( const QColor & _col ) { m_gridColor = _col; }
@@ -667,8 +644,6 @@ protected:
     bool m_bShowHelplines;
     bool m_bViewFormattingChars;
 
-    bool m_bHelplinesToFront;
-
     bool m_bShowGrid;
 
     bool m_bGridToFont;
@@ -686,8 +661,6 @@ protected:
 private:
     QValueList<double> m_horizHelplines;
     QValueList<double> m_vertHelplines;
-
-    QValueList<KoPoint> m_helpPoints;
 
     QPtrList<KPrPage> m_pageList;
     QPtrList<KPrPage> m_deletedPageList;

@@ -204,7 +204,6 @@ public slots:
 
     void viewGridToFront();
     void viewSnapToGrid();
-    void viewHelpLineToFront();
 
     // insert menu
     void insertPage();
@@ -584,8 +583,6 @@ public:
     void openPopupMenuMenuPage( const QPoint & _point );
     void openPopupMenuSideBar(const QPoint & _point);
 
-    void openPopupMenuHelpLine( const QPoint & _point );
-    void openPopupMenuHelpPoint( const QPoint & _point );
     void openPopupMenuZoom( const QPoint & _point );
 
     void penColorChanged( const KPPen & _pen );
@@ -729,17 +726,8 @@ protected slots:
     void refreshAllVariable();
     void slotViewFormattingChars();
     void slotUpdateScrollBarRanges();
-    void drawTmpHelpLine( const QPoint & pos, bool _horizontal);
-    void addHelpline(const QPoint & pos, bool _horizontal);
-
-    void removeHelpLine();
-    void removeHelpPoint();
-
-    void changeHelpLinePosition();
-    void changeHelpPointPosition();
 
     void addHelpLine();
-    void addHelpPoint();
 
     void refreshRuler( bool state );
     void slotApplyFont();
@@ -922,8 +910,6 @@ private:
     KToggleAction *actionViewShowGrid;
     KToggleAction *actionViewSnapToGrid;
     KToggleAction *actionViewGridToFront;
-    KToggleAction *actionViewHelpLineToFront;
-
 
 
     KAction *actionInsertPage;
@@ -1101,15 +1087,7 @@ private:
 
     KAction *actionFormatStylist;
 
-    KAction *actionRemoveHelpLine;
-    KAction *actionChangeHelpLinePosition;
-
     KAction *actionAddHelpLine;
-
-
-    KAction *actionRemoveHelpPoint;
-    KAction *actionChangeHelpPointPosition;
-    KAction *actionAddHelpPoint;
 
     KAction *actionConfigureCompletion;
 

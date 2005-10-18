@@ -140,7 +140,6 @@
 #include "kppixmapobject.h"
 #include <koCommentDia.h>
 
-#include "kprhelplinedia.h"
 #include "kprduplicateobjdia.h"
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
@@ -2278,11 +2277,6 @@ void KPresenterView::setupActions()
                                              this, SLOT(viewSnapToGrid() ),
                                              actionCollection(), "view_snaptogrid" );
 
-    actionViewHelpLineToFront= new KToggleAction( i18n( "Help Line to Front" ), 0,
-                                                  this, SLOT( viewHelpLineToFront() ),
-                                                  actionCollection(), "view_helplinetofront" );
-
-
     // ---------------- insert actions
 
     actionInsertPage = new KAction( i18n( "&Slide..." ), "slide", Qt::Key_F2,
@@ -2916,33 +2910,9 @@ void KPresenterView::setupActions()
                                      this,SLOT(editComment()),
                                      actionCollection(), "edit_comment");
 
-    actionRemoveHelpLine = new KAction( i18n( "Remove Help Line" ), 0,
-                                        this, SLOT( removeHelpLine() ),
-                                        actionCollection(), "remove_helpline" );
-
-
-    actionChangeHelpLinePosition= new KAction( i18n( "Change Help Line Position..." ), 0,
-                                               this, SLOT( changeHelpLinePosition() ),
-                                               actionCollection(), "change_helplinepos" );
-
     actionAddHelpLine = new KAction( i18n( "Add New Help Line..."), 0,
                                      this, SLOT(addHelpLine()),
                                      actionCollection(), "add_helpline");
-
-
-    actionRemoveHelpPoint = new KAction( i18n( "Remove Help Point" ), 0,
-                                         this, SLOT( removeHelpPoint() ),
-                                         actionCollection(), "remove_helppoint" );
-
-
-    actionChangeHelpPointPosition= new KAction( i18n( "Change Help Point Position..." ), 0,
-                                                this, SLOT( changeHelpPointPosition() ),
-                                                actionCollection(), "change_helppointpos" );
-
-    actionAddHelpLine = new KAction( i18n( "Add New Help Point..."), 0,
-                                     this, SLOT(addHelpPoint()),
-                                     actionCollection(), "add_helppoint");
-
 
     actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
                                        this,SLOT(removeComment()),
@@ -3705,15 +3675,6 @@ void KPresenterView::setupRulers()
     QObject::connect( h_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
 
-#if 0
-    QObject::connect( h_ruler, SIGNAL( addHelpline( const QPoint &, bool ) ),
-                      this, SLOT( addHelpline( const QPoint &, bool ) ) );
-
-    QObject::connect( h_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
-                      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
-#endif
-
-
     connect( h_ruler, SIGNAL( doubleClicked() ), this,
              SLOT( slotHRulerDoubleClicked() ) );
     connect( h_ruler, SIGNAL( doubleClicked(double) ), this,
@@ -3725,14 +3686,6 @@ void KPresenterView::setupRulers()
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
                       this, SLOT( openPageLayoutDia() ) );
-
-#if 0
-    QObject::connect( v_ruler, SIGNAL( addHelpline(const QPoint &, bool ) ),
-                      this, SLOT( addHelpline( const QPoint &, bool ) ) );
-
-    QObject::connect( v_ruler, SIGNAL( moveHelpLines( const QPoint &, bool ) ),
-                      this, SLOT( drawTmpHelpLine( const QPoint &, bool ) ) );
-#endif
 
     connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
@@ -5637,37 +5590,11 @@ void KPresenterView::viewGridToFront()
     m_pKPresenterDoc->repaint(false);
 }
 
-void KPresenterView::viewHelpLineToFront()
-{
-    m_pKPresenterDoc->setHelpLineToFront( actionViewHelpLineToFront->isChecked() );
-    m_pKPresenterDoc->setModified( true );
-    m_pKPresenterDoc->updateHelpLineButton();
-    m_pKPresenterDoc->repaint(false);
-}
-
-void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
-{
-    QPoint newPos( pos.x() -16 , pos.y()-16);
-    m_canvas->tmpDrawMoveHelpLine( newPos,  _horizontal );
-}
-
-void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
-{
-    if ( _horizontal && (pos.y()+m_canvas->diffy()-16) > 0 )
-        m_pKPresenterDoc->addHorizHelpline( zoomHandler()->unzoomItY(pos.y()+m_canvas->diffy()-16));
-    else if ( !_horizontal && (pos.x()+m_canvas->diffx()-16) > 0 )
-        m_pKPresenterDoc->addVertHelpline( zoomHandler()->unzoomItX(pos.x()+m_canvas->diffx()-16));
-    m_canvas->setTmpHelpLinePosX( -1.0 );
-    m_canvas->setTmpHelpLinePosY( -1.0 );
-
-    m_pKPresenterDoc->repaint(false);
-}
 
 void KPresenterView::updateHelpLineButton()
 {
     bool state = m_pKPresenterDoc->showHelplines();
     actionViewShowHelpLine->setChecked( state );
-    actionViewHelpLineToFront->setChecked( m_pKPresenterDoc->helpLineToFront() );
     refreshRuler( state );
 }
 
@@ -5739,50 +5666,9 @@ void KPresenterView::refreshRuler( bool state )
 
 }
 
-void KPresenterView::removeHelpLine()
-{
-    m_canvas->removeHelpLine();
-}
-
-void KPresenterView::changeHelpLinePosition()
-{
-    double pos = 0.0;
-    double limitTop = 0.0;
-    double limitBottom = 0.0;
-    KoRect r=m_canvas->activePage()->getPageRect();
-    if ( m_canvas->tmpHorizHelpLine() != -1)
-    {
-        pos = m_pKPresenterDoc->horizHelplines()[m_canvas->tmpHorizHelpLine()];
-        limitTop = r.top();
-        limitBottom = r.bottom();
-    }
-    else if ( m_canvas->tmpVertHelpLine() != -1)
-    {
-        pos = m_pKPresenterDoc->vertHelplines()[m_canvas->tmpVertHelpLine()];
-        limitTop = r.left();
-        limitBottom = r.right();
-    }
-
-    KPrMoveHelpLineDia *dlg= new KPrMoveHelpLineDia(this, pos, limitTop , limitBottom,  m_pKPresenterDoc);
-    if ( dlg->exec())
-    {
-        if ( dlg->removeLine())
-            m_canvas->removeHelpLine();
-        else
-            m_canvas->changeHelpLinePosition( dlg->newPosition() );
-    }
-    delete dlg;
-}
-
-void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory() || !m_pKPresenterDoc->showHelplines())
-        return;
-    static_cast<QPopupMenu*>(factory()->container("helpline_popup",this))->popup(_point);
-}
-
 void KPresenterView::addHelpLine()
 {
+#if 0 // TODO tz
     KoRect r=m_canvas->activePage()->getPageRect();
 
     KPrInsertHelpLineDia *dlg= new KPrInsertHelpLineDia(this, r,  m_pKPresenterDoc);
@@ -5797,6 +5683,7 @@ void KPresenterView::addHelpLine()
     delete dlg;
     m_pKPresenterDoc->setModified( true );
     m_pKPresenterDoc->repaint( false );
+#endif
 }
 
 void KPresenterView::removeComment()
@@ -5811,48 +5698,6 @@ void KPresenterView::configureCompletion()
     m_pKPresenterDoc->getAutoFormat()->readConfig();
     KoCompletionDia dia( this, 0, m_pKPresenterDoc->getAutoFormat() );
     dia.exec();
-}
-
-void KPresenterView::removeHelpPoint()
-{
-    m_canvas->removeHelpPoint();
-}
-
-void KPresenterView::changeHelpPointPosition()
-{
-    KoRect r=m_canvas->activePage()->getPageRect();
-    KoPoint pos = m_pKPresenterDoc->helpPoints()[m_canvas->tmpHelpPoint()];
-    KPrInsertHelpPointDia *dlg= new KPrInsertHelpPointDia(this, r, m_pKPresenterDoc, pos.x(),pos.y() );
-    if ( dlg->exec())
-    {
-        if( dlg->removePoint() )
-            m_canvas->removeHelpPoint();
-        else
-            m_canvas->changeHelpPointPosition( dlg->newPosition() );
-    }
-    delete dlg;
-}
-
-void KPresenterView::openPopupMenuHelpPoint( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory()|| !m_pKPresenterDoc->showHelplines())
-        return;
-    static_cast<QPopupMenu*>(factory()->container("helppoint_popup",this))->popup(_point);
-}
-
-void KPresenterView::addHelpPoint()
-{
-    KoRect r=m_canvas->activePage()->getPageRect();
-
-    KPrInsertHelpPointDia *dlg= new KPrInsertHelpPointDia(this, r,  m_pKPresenterDoc);
-    if ( dlg->exec())
-    {
-        KoPoint pos = dlg->newPosition();
-        m_pKPresenterDoc->addHelpPoint( pos );
-    }
-    delete dlg;
-    m_pKPresenterDoc->setModified( true );
-    m_pKPresenterDoc->repaint( false );
 }
 
 void KPresenterView::openPopupMenuZoom( const QPoint & _point )

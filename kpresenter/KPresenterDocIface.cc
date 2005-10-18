@@ -447,38 +447,6 @@ void KPresenterDocIface::addHoriHelpLine( double val)
     doc->repaint( false );
 }
 
-double KPresenterDocIface::horizHelpLineValue(int index) const
-{
-    if ( index >= (int)doc->horizHelplines().count())
-        return -1.0;
-    return doc->horizHelplines()[index];
-}
-
-double KPresenterDocIface::vertHelpLineValue(int index) const
-{
-    if ( index >= (int)doc->vertHelplines().count())
-        return -1.0;
-    return doc->vertHelplines()[index];
-}
-
-bool KPresenterDocIface::removeVertHelpLine( int index )
-{
-    if ( index >= (int)doc->vertHelplines().count())
-        return false;
-    doc->removeVertHelpline( index );
-    doc->repaint( false );
-    return true;
-}
-
-bool KPresenterDocIface::removeHorizHelpLine( int index )
-{
-    if ( index >= (int)doc->horizHelplines().count())
-        return false;
-    doc->removeHorizHelpline( index );
-    doc->repaint( false );
-    return true;
-}
-
 unsigned int KPresenterDocIface::nbHorizontalHelpLine() const
 {
     return doc->horizHelplines().count();
@@ -487,35 +455,6 @@ unsigned int KPresenterDocIface::nbHorizontalHelpLine() const
 unsigned int KPresenterDocIface::nbVerticalHelpLine() const
 {
     return doc->vertHelplines().count();
-}
-
-unsigned int KPresenterDocIface::nbHelpPoint() const
-{
-    return doc->helpPoints().count();
-}
-
-bool KPresenterDocIface::moveHorizontalHelpLine( int index, double newPos)
-{
-    if ( index >= (int)doc->horizHelplines().count() )
-        return false;
-    if( newPos < 0 )
-        doc->removeHorizHelpline( index );
-    else
-        doc->updateHorizHelpline( index, newPos);
-    doc->repaint( false );
-    return true;
-}
-
-bool KPresenterDocIface::moveVerticalHelpLine( int index, double newPos)
-{
-    if ( index >= (int)doc->vertHelplines().count() )
-        return false;
-    if( newPos < 0 )
-        doc->removeVertHelpline( index );
-    else
-        doc->updateVertHelpline( index, newPos);
-    doc->repaint( false );
-    return true;
 }
 
 bool KPresenterDocIface::showGrid() const
@@ -567,48 +506,6 @@ void KPresenterDocIface::setGridToFront( bool _front )
         doc->repaint( false );
 }
 
-bool KPresenterDocIface::helpLineToFront() const
-{
-    return doc->helpLineToFront();
-}
-
-void KPresenterDocIface::setHelpLineToFront( bool _front )
-{
-    doc->setHelpLineToFront(_front );
-    doc->updateHelpLineButton();
-    if( showGrid() )
-        doc->repaint( false );
-}
-
-bool KPresenterDocIface::updateHelpPoint( int idx, double posX, double posY ) const
-{
-    if( idx < 0 || idx >= (int)doc->helpPoints().count() )
-        return false ;
-    doc->updateHelpPoint( idx, KoPoint( posX, posY ));
-    if( showHelplines() )
-        doc->repaint( false);
-    return true;
-
-}
-
-void KPresenterDocIface::addHelpPoint( double posX, double posY )
-{
-    doc->addHelpPoint( KoPoint( posX, posY ));
-    if( showHelplines() )
-        doc->repaint( false);
-}
-
-bool KPresenterDocIface::removeHelpPoint( int index )
-{
-    if( index < 0 || index >= (int)doc->helpPoints().count() )
-        return false;
-
-    doc->removeHelpPoint( index );
-    if( showHelplines() )
-        doc->repaint( false);
-    return true;
-}
-
 bool KPresenterDocIface::configAutoSuperScript() const
 {
     return doc->getAutoFormat()->getConfigAutoSuperScript();
@@ -617,20 +514,6 @@ bool KPresenterDocIface::configAutoSuperScript() const
 void KPresenterDocIface::setConfigAutoSuperScript( bool b)
 {
     doc->getAutoFormat()->configAutoSuperScript( b );
-}
-
-double KPresenterDocIface::helpPointPosX( int index ) const
-{
-    if( index < 0 || index >= (int)doc->helpPoints().count() )
-        return -1.0;
-    return doc->helpPoints()[index].x();
-}
-
-double KPresenterDocIface::helpPointPosY( int index ) const
-{
-    if( index < 0 || index >= (int)doc->helpPoints().count() )
-        return -1.0;
-    return doc->helpPoints()[index].y();
 }
 
 void KPresenterDocIface::addIgnoreWordAll( const QString &word)

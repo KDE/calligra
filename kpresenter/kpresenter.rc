@@ -46,7 +46,6 @@
   <Action name="view_formattingchars"/>
   <Separator/>
   <Action name="view_helplines"/>
-  <Action name="view_helplinetofront"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>
@@ -283,7 +282,6 @@
   <Action name="add_helppoint"/>
   <Separator/>
   <Action name="view_helplines"/>
-  <Action name="view_helplinetofront"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>
@@ -672,16 +670,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-</Menu>
-<Menu name="helpline_popup">
- <Action name="remove_helpline"/>
- <Separator/>
- <Action name="change_helplinepos"/>
-</Menu>
-<Menu name="helppoint_popup">
- <Action name="remove_helppoint"/>
- <Separator/>
- <Action name="change_helppointpos"/>
 </Menu>
 <Menu name="zoom_popup">
  <Action name="zoom_plus"/>

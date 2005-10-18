@@ -145,22 +145,8 @@ k_dcop:
 
     void addHoriHelpLine( double val);
 
-    double horizHelpLineValue(int index) const;
-
-    double vertHelpLineValue(int index) const;
-
-    //return false if we can remove help line
-    bool removeVertHelpLine( int index );
-    bool removeHorizHelpLine( int index );
-
-
     unsigned int nbHorizontalHelpLine() const;
     unsigned int nbVerticalHelpLine() const;
-
-    //return false if we can find help line
-    bool moveHorizontalHelpLine( int index, double newPos);
-    bool moveVerticalHelpLine( int index, double newPos);
-
 
     bool showGrid() const;
     void setShowGrid ( bool _grid );
@@ -173,23 +159,6 @@ k_dcop:
 
     bool gridToFront() const;
     void setGridToFront( bool _front );
-
-    bool helpLineToFront() const;
-    void setHelpLineToFront( bool _front );
-
-    //return false when we idx doesn't exist
-    bool updateHelpPoint( int idx, double posX, double posY ) const ;
-
-    //return -1.0 if idx doesn't exist
-    double helpPointPosX( int idx ) const ;
-    double helpPointPosY( int idx ) const ;
-
-    unsigned int nbHelpPoint() const;
-
-    void addHelpPoint( double posX, double posY );
-
-    //return false when index doesn't exist
-    bool removeHelpPoint( int index );
 
     bool configAutoSuperScript() const;
     void setConfigAutoSuperScript( bool b);

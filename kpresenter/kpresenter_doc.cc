@@ -217,7 +217,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_bViewFormattingChars = false;
     m_bShowHelplines = false;
-    m_bHelplinesToFront = false;
     m_bShowGrid = true;
     m_bGridToFont = false;
 
@@ -341,7 +340,6 @@ void KPresenterDoc::saveConfig()
         config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
         config->writeEntry( "ResolutionX", m_gridX );
         config->writeEntry( "ResolutionY", m_gridY );
-        config->writeEntry( "HelpLineToFront" , m_bHelplinesToFront );
     }
 }
 
@@ -370,7 +368,6 @@ void KPresenterDoc::initConfig()
         setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
         setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
 
-        setHelpLineToFront( config->readBoolEntry( "HelpLineToFront" , false ));
         m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
         m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
 
@@ -1300,13 +1297,6 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
         int tmpY = ( int ) ( KoUnit::toMM( *it  )*100 );
         helpLineOasis+="H"+QString::number( tmpY );
     }
-    for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
-    {
-        QString str( "P%1,%2" );
-        int tmpX = ( int ) ( KoUnit::toMM( ( *it ).x()  )*100 );
-        int tmpY = ( int ) ( KoUnit::toMM( ( *it ).y()  )*100 );
-        helpLineOasis+=str.arg( QString::number( tmpX ) ).arg( QString::number( tmpY ) );
-    }
     if ( !helpLineOasis.isEmpty() )
     {
         settingsWriter.addConfigItem("SnapLinesDrawing", helpLineOasis );
@@ -1370,18 +1360,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
     int newPos = text.length()-1; //start to element = 1
     for ( int pos = text.length()-1; pos >=0;--pos )
     {
-        if ( text[pos]=='P' )
-        {
-            //point
-            str = text.mid( pos+1, ( newPos-pos ) );
-            //kdDebug()<<" point element  :"<< str <<endl;
-            QStringList listVal = QStringList::split( ",", str );
-            int posX = ( listVal[0].toInt()/100 );
-            int posY = ( listVal[1].toInt()/100 );
-            m_helpPoints.append( KoPoint( MM_TO_POINT( posX ), MM_TO_POINT( posY )));
-            newPos = pos-1;
-        }
-        else if ( text[pos]=='V' )
+        if ( text[pos]=='V' )
         {
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
@@ -4484,60 +4463,25 @@ void KPresenterDoc::vertHelplines(const QValueList<double> &lines)
     m_vertHelplines = lines;
 }
 
-int KPresenterDoc::indexOfHorizHelpline(double pos)
-{
-    int ret = 0;
-    for(QValueList<double>::Iterator i = m_horizHelplines.begin(); i != m_horizHelplines.end(); ++i, ++ret)
-        if(pos - 4.0 < *i && pos + 4.0 > *i)
-            return ret;
-    return -1;
-}
-
-int KPresenterDoc::indexOfVertHelpline(double pos)
-{
-    int ret = 0;
-    for(QValueList<double>::Iterator i = m_vertHelplines.begin(); i != m_vertHelplines.end(); ++i, ++ret)
-        if(pos - 4.0 < *i && pos + 4.0 > *i)
-            return ret;
-    return -1;
-}
-
-void KPresenterDoc::updateHorizHelpline(int idx, double pos)
-{
-    m_horizHelplines[idx] = pos;
-}
-
-void KPresenterDoc::updateVertHelpline(int idx, double pos)
-{
-    m_vertHelplines[idx] = pos;
-}
-
 void KPresenterDoc::addHorizHelpline(double pos)
 {
     m_horizHelplines.append(pos);
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_horizHelplines, m_vertHelplines );
+    }
 }
 
 void KPresenterDoc::addVertHelpline(double pos)
 {
     m_vertHelplines.append(pos);
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_horizHelplines, m_vertHelplines );
+    }
 }
-
-void KPresenterDoc::removeHorizHelpline(int index)
-{
-    if ( index >= (int)m_horizHelplines.count())
-        kdDebug(33001)<<" index of remove horiz helpline doesn't exist !\n";
-    else
-        m_horizHelplines.remove(m_horizHelplines[index]);
-}
-
-void KPresenterDoc::removeVertHelpline( int index )
-{
-    if ( index >= (int)m_vertHelplines.count())
-        kdDebug(33001)<<" index of remove vertical helpline doesn't exist !\n";
-    else
-        m_vertHelplines.remove(m_vertHelplines[index]);
-}
-
 
 void KPresenterDoc::updateHelpLineButton()
 {
@@ -4560,8 +4504,6 @@ void KPresenterDoc::loadHelpLines( const QDomElement &element )
             m_vertHelplines.append(helplines.attribute("value").toDouble());
         else if ( helplines.tagName()=="Horizontal" )
             m_horizHelplines.append(helplines.attribute("value").toDouble());
-        else if ( helplines.tagName()=="HelpPoint" )
-            m_helpPoints.append( KoPoint( helplines.attribute("posX").toDouble(), helplines.attribute("posY").toDouble()));
         helplines=helplines.nextSibling().toElement();
     }
 }
@@ -4581,14 +4523,6 @@ void KPresenterDoc::saveHelpLines( QDomDocument &doc, QDomElement& element )
         lines.setAttribute("value", *it);
         element.appendChild( lines );
     }
-
-    for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
-    {
-        QDomElement point=doc.createElement("HelpPoint");
-        point.setAttribute("posX", (*it).x());
-        point.setAttribute("posY", (*it).y());
-        element.appendChild( point );
-    }
 }
 
 void KPresenterDoc::updateGridButton()
@@ -4597,37 +4531,6 @@ void KPresenterDoc::updateGridButton()
     for (; it.current(); ++it )
         ((KPresenterView*)it.current())->updateGridButton();
 
-}
-
-void KPresenterDoc::removeHelpPoint( int index )
-{
-    if ( index >= (int)m_helpPoints.count())
-        kdDebug(33001)<<" removeHelpPoint( int index ) : index is bad !\n";
-    else
-        m_helpPoints.remove(m_helpPoints[index]);
-}
-
-void KPresenterDoc::addHelpPoint( const KoPoint &pos )
-{
-    m_helpPoints.append( pos );
-}
-
-void KPresenterDoc::updateHelpPoint( int idx, const KoPoint &pos )
-{
-    if ( idx >= (int)m_helpPoints.count())
-        kdDebug(33001)<<" updateHelpPoint : index is bad !\n";
-    else
-        m_helpPoints[idx] = pos;
-}
-
-int KPresenterDoc::indexOfHelpPoint( const KoPoint &pos )
-{
-    int ret = 0;
-    for(QValueList<KoPoint>::Iterator i = m_helpPoints.begin(); i != m_helpPoints.end(); ++i, ++ret)
-        if( ( pos.x() - 4.0 < (*i).x() && pos.x() + 4.0 > (*i).x())
-            ||( pos.y() - 4.0 < (*i).y() && pos.y() + 4.0 > (*i).y()))
-            return ret;
-    return -1;
 }
 
 void KPresenterDoc::setSpellCheckIgnoreList( const QStringList& lst )

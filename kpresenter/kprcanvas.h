@@ -288,27 +288,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void groupObjects();
 
     unsigned int objNums() const;
-    void removeHelpLine();
-    void changeHelpLinePosition( double newPos);
-
-    int tmpHorizHelpLine() const { return  m_tmpHorizHelpline;}
-    int tmpVertHelpLine() const { return m_tmpVertHelpline;}
-
-    void tmpDrawMoveHelpLine( const QPoint & newPos, bool _horizontal );
-
-    void setTmpHelpLinePosX( double pos) { tmpHelpLinePosX = pos ;}
-    void setTmpHelpLinePosY( double pos) { tmpHelpLinePosY = pos;}
-
-
-
-    void changeHelpPointPosition( KoPoint newPos);
-    void removeHelpPoint();
-
-    int tmpHelpPoint() const { return  m_tmpHelpPoint;}
-
-    void setTmpHelpPointPos( KoPoint pos) { tmpHelpPointPos = pos ;}
-
-    void tmpDrawMoveHelpPoint( const QPoint & newPos );
 
     void ensureVisible( int x, int y, int xmargin, int ymargin );
 
@@ -467,11 +446,6 @@ protected:
      */
     void drawPresPage( QPainter *painter, const QRect &_rect, PresStep step ) const;
 
-    /// draw all helpline
-    void drawHelplines(QPainter *painter, const QRect &rect2) const;
-
-    void drawHelpPoints( QPainter *painter, const QRect &rect2) const;
-
     /// draw grid
     void drawGrid(QPainter *painter, const QRect &rect2) const;
 
@@ -567,11 +541,6 @@ protected:
     void printRTDebug( int info );
 #endif
 
-    void moveHelpLine(const QPoint & pos);
-    void tmpMoveHelpLine( const QPoint & newPos);
-
-    void moveHelpPoint( const QPoint & newPos );
-    
     /** 
      * @brief Scroll the canvas by diff
      *
@@ -797,15 +766,8 @@ private:
     /// start position for move with key
     KoPoint m_moveStartPosKey; 
 
-    int m_tmpHelpPoint;
-    KoPoint tmpHelpPointPos;
-
     KPrPage * m_activePageBeforePresentation;
     int m_zoomBeforePresentation;
-    int m_tmpHorizHelpline;
-    int m_tmpVertHelpline;
-    double tmpHelpLinePosX;
-    double tmpHelpLinePosY;
 
     bool m_keyPressEvent;
     bool m_drawSymetricObject;
