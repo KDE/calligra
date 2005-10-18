@@ -240,7 +240,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
 }
 
 // Helper for load
-static void importTextPosition( const QString& text_position, double fontSize, KoTextFormat::VerticalAlignment& value, double& relativetextsize, int& offset )
+static void importTextPosition( const QString& text_position, double fontSize, KoTextFormat::VerticalAlignment& value, double& relativetextsize, int& offset, KoOasisContext& context )
 {
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
@@ -253,6 +253,14 @@ static void importTextPosition( const QString& text_position, double fontSize, K
         if ( !lst.isEmpty() )
             textSize = lst.front().stripWhiteSpace();
         Q_ASSERT( lst.count() == 1 );
+        // Workaround bug in KOffice-1.4: it saved '0% 66%' for normal text
+        if ( context.generator().startsWith( "KOffice/1.4" )
+             && text_position.startsWith( "0%" ) ) {
+            //kdDebug(32500) << "Detected koffice-1.4 bug in text-position, assuming Normal text" << endl;
+            value = KoTextFormat::AlignNormal;
+            return;
+        }
+
         if ( textPos.endsWith("%") )
         {
             textPos.truncate( textPos.length() - 1 );
@@ -462,7 +470,7 @@ void KoTextFormat::load( KoOasisContext& context )
     d->m_offsetFromBaseLine = 0;
     if( styleStack.hasAttributeNS( KoXmlNS::style, "text-position")) { // OO 3.10.7
         importTextPosition( styleStack.attributeNS( KoXmlNS::style, "text-position"), fn.pointSizeFloat(),
-                            va, d->m_relativeTextSize, d->m_offsetFromBaseLine );
+                            va, d->m_relativeTextSize, d->m_offsetFromBaseLine, context );
     }
     // Small caps, lowercase, uppercase
     m_attributeFont = ATT_NONE;

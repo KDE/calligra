@@ -28,7 +28,7 @@
 KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
                                 KoOasisStyles& styles, KoStore* store )
     : m_doc( doc ), m_store( store ), m_varColl( varColl ), m_styles( styles ),
-      m_cursorTextParagraph( 0 )
+      m_cursorTextParagraph( 0 ), m_metaXmlParsed( false )
 {
     // Ideally this should be done by KoDocument and passed as argument here...
     KoOasisStore oasisStore( store );
@@ -179,4 +179,28 @@ void KoSavingContext::writeFontFaces( KoXmlWriter& writer )
         writer.endElement(); // style:font-face
     }
     writer.endElement(); // office:font-face-decls
+}
+
+QString KoOasisContext::generator() const
+{
+    parseMeta();
+    return m_generator;
+}
+
+void KoOasisContext::parseMeta() const
+{
+    if ( !m_metaXmlParsed && m_store )
+    {
+        QDomDocument metaDoc;
+        KoOasisStore oasisStore( m_store );
+        QString errorMsg;
+        if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
+            QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+            QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
+            QDomElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
+            if ( !generator.isNull() )
+                m_generator = generator.text();
+        }
+        m_metaXmlParsed = true;
+    }
 }

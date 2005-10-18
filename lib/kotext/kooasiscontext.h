@@ -72,6 +72,9 @@ public:
 
     const QDomDocument& manifestDocument() const { return m_manifestDoc; }
 
+    /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
+    QString generator() const;
+
     void fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName );
     void addStyles( const QDomElement* style );
 
@@ -97,6 +100,7 @@ public:
 private:
     /// @return true on success (a list style was found and pushed)
     bool pushListLevelStyle( const QString& listStyleName, const QDomElement& fullListStyle, int level );
+    void parseMeta() const;
 
 private:
     KoDocument* m_doc;
@@ -112,6 +116,10 @@ private:
     int m_cursorTextIndex;
 
     QDomDocument m_manifestDoc;
+
+    mutable QString m_generator;
+    mutable bool m_metaXmlParsed;
+    bool m_unused1;
 
     class Private;
     Private *d;
