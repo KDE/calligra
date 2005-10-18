@@ -1245,7 +1245,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !isReadWrite())
         m_varColl->variableSetting()->setDisplayFieldCode(false);
 
-    KoOasisContext context( this, *m_varColl, oasisStyles, store, settings );
+    KoOasisContext context( this, *m_varColl, oasisStyles, store );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
