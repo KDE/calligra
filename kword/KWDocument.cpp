@@ -1754,12 +1754,12 @@ void KWDocument::endOfLoading()
 
     if ( !_first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
-        //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
+        kdWarning(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
         KoPageLayout pl = pageManager()->pageLayout(1);
         KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
                 pl.ptRight, 20 );
-        //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
+        kdWarning(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1768,10 +1768,12 @@ void KWDocument::endOfLoading()
 
     if ( !_odd_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
+        kdWarning(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
         KoPageLayout pl = pageManager()->pageLayout(3);
         KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
                 pl.ptRight, 20 );
+        kdWarning(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1780,10 +1782,12 @@ void KWDocument::endOfLoading()
 
     if ( !_even_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
+        kdWarning(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
         KoPageLayout pl = pageManager()->pageLayout(2);
         KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
                 pl.ptRight, 20 );
+        kdWarning(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1792,10 +1796,12 @@ void KWDocument::endOfLoading()
 
     if ( !_first_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
+        kdWarning(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
         KoPageLayout pl = pageManager()->pageLayout(1);
         KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
                 pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
+        kdWarning(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1804,10 +1810,12 @@ void KWDocument::endOfLoading()
 
     if ( !_odd_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
+        kdWarning(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
         KoPageLayout pl = pageManager()->pageLayout(3);
         KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
                 pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
+        kdWarning(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1816,10 +1824,12 @@ void KWDocument::endOfLoading()
 
     if ( !_even_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
+        kdWarning(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
         KoPageLayout pl = pageManager()->pageLayout(2);
         KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
                 pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
+        kdWarning(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1834,12 +1844,6 @@ void KWDocument::endOfLoading()
             m_lstFrameSet.remove(i);
         } else if( fs->type()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( fs )->validate();
-        } else if(!fs->getNumFrames()) {
-            kdWarning () << "frameset " << i << " " << fs->getName() << " has no frames" << endl;
-            removeFrameSet(fs);
-            if ( fs->type() == FT_PART )
-                delete static_cast<KWPartFrameSet *>(fs)->getChild();
-            delete fs;
         } else if (fs->type() == FT_TEXT) {
             for (int f=fs->getNumFrames()-1; f>=0; f--) {
                 KWFrame *frame = fs->frame(f);
@@ -1853,7 +1857,29 @@ void KWDocument::endOfLoading()
                                 << frame->width() << " is: " << s_minFrameWidth  << ")" << endl;
                     frame->setWidth(s_minFrameWidth);
                 }
+                if(frame->left() < 0) {
+                    kdWarning() << fs->getName() << " frame " << f << " pos.x is < 0, moving frame" << endl;
+                    frame->moveBy( 0- frame->left(), 0);
+                }
+                if(frame->right() > m_pageLayout.ptWidth) {
+                    kdWarning() << fs->getName() << " frame " << f << " rightborder outside page ("
+                        << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
+                    frame->setRight( m_pageLayout.ptWidth);
+                }
             }
+            if(fs->getNumFrames() == 0) {
+                KWFrame *frame = new KWFrame(fs, m_pageLayout.ptLeft, m_pageLayout.ptTop,
+                        m_pageLayout.ptWidth - m_pageLayout.ptLeft - m_pageLayout.ptRight,
+                        m_pageLayout.ptHeight - m_pageLayout.ptTop - m_pageLayout.ptBottom);
+                kdWarning(32001) << "KWDocument::loadXML main-KWFrame created " << *frame << endl;
+                fs->addFrame( frame );
+            }
+        } else if(fs->getNumFrames() == 0) {
+            kdWarning () << "frameset " << i << " " << fs->getName() << " has no frames" << endl;
+            removeFrameSet(fs);
+            if ( fs->type() == FT_PART )
+                delete static_cast<KWPartFrameSet *>(fs)->getChild(); // ### does this delete the part from the file as well?
+            delete fs;
         }
     }
 
