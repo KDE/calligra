@@ -78,7 +78,7 @@ bool pqxxMigrate::drv_readTableSchema(const QString table)
     if (query("select * from " + table + " limit 1"))
     {
         //Loop round the fields
-        for (int i = 0; i < m_res->columns(); i++)
+        for (uint i = 0; i < m_res->columns(); i++)
         {
             KexiDB::Field::Type fldType = type(m_res->column_type(i), m_res->column_name(i));
             m_f = new KexiDB::Field(m_res->column_name(i), fldType);
@@ -290,8 +290,8 @@ pqxx::oid pqxxMigrate::tableOid(const QString& table)
     static QString otable;
     static pqxx::oid toid;
 
-    pqxx::nontransaction* tran;
-    pqxx::result* tmpres;
+    pqxx::nontransaction* tran = 0;
+    pqxx::result* tmpres = 0;
 
     //Some simple result caching
     if (table == otable)
@@ -353,8 +353,8 @@ bool pqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
     bool pkey;
     int keyf;
 
-    pqxx::nontransaction* tran;
-    pqxx::result* tmpres;
+    pqxx::nontransaction* tran = 0;
+    pqxx::result* tmpres = 0;
 
     try
     {
@@ -440,8 +440,8 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
     bool ukey;
     int keyf;
 
-    pqxx::nontransaction* tran;
-    pqxx::result* tmpres;
+    pqxx::nontransaction* tran = 0;
+    pqxx::result* tmpres = 0;
 
     try
     {
@@ -490,21 +490,21 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 
 //==================================================================================
 //TODO::Implement
-bool pqxxMigrate::autoInc(pqxx::oid table_uid, int col) const
+bool pqxxMigrate::autoInc(pqxx::oid /*table_uid*/, int /*col*/) const
 {
 	return false;
 }
 
 //==================================================================================
 //TODO::Implement
-bool pqxxMigrate::notNull(pqxx::oid table_uid, int col) const
+bool pqxxMigrate::notNull(pqxx::oid /*table_uid*/, int /*col*/) const
 {
 	return false;
 }
 
 //==================================================================================
 //TODO::Implement
-bool pqxxMigrate::notEmpty(pqxx::oid table_uid, int col) const
+bool pqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
 {
 	return false;
 }
