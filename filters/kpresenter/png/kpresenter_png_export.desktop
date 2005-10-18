@@ -2,6 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter PNG Export Filter
+Name[da]=KPresenter PNG-eksportfilter
+Name[pt]=Filtro de Exportação de PNG para o KPresenter
+Name[pt_BR]=Filtro de Exportação de PNG para o KPresenter
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/png
 X-KDE-Weight=1

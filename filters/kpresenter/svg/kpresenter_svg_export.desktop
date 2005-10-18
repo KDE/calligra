@@ -2,6 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter SVG Export Filter
+Name[da]=KPresenter SVG-eksportfilter
+Name[pt]=Filtro de Exportação de SVG para o KPresenter
+Name[pt_BR]=Filtro de Exportação de SVG para o KPresenter
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
