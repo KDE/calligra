@@ -81,12 +81,10 @@ class KoTextIterator;
 class KWTableFrameSet;
 
 class KoSpell;
-#ifdef HAVE_LIBKSPELL2
 #include <kspell2/broker.h>
 namespace KSpell2 {
     class Dialog;
 }
-#endif
 
 
 /******************************************************************/
@@ -121,12 +119,10 @@ public:
     bool viewFrameBorders() const { return m_viewFrameBorders; }
     void setViewFrameBorders(bool b);
 
-#ifdef HAVE_LIBKSPELL2
     /**
      * Returns the KWord global KSpell2 Broker object.
      */
     KSpell2::Broker *broker() const;
-#endif
 
     // Currently unused
     //bool viewTableGrid() const { return m_viewTableGrid; }
@@ -777,13 +773,9 @@ private:
         KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         KoTextIterator * textIterator;
-#ifdef HAVE_LIBKSPELL2
         KSpell2::Dialog *dlg;
-#endif
      } m_spell;
-#ifdef HAVE_LIBKSPELL2
     KSpell2::Broker::Ptr m_broker;
-#endif
 
 
     KWFrameSet *fsInline;

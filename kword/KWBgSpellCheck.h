@@ -27,12 +27,7 @@ class KWTextFrameSet;
 
 #include "kobgspellcheck.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <qobject.h>
-#ifdef HAVE_LIBKSPELL2
 class KWBgSpellCheck : public KoBgSpellCheck
 {
 public:
@@ -45,6 +40,5 @@ private:
     KWDocument *m_doc;
     KWTextFrameSet *m_currentFrame;
 };
-#endif
 
 #endif

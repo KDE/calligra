@@ -54,9 +54,7 @@ class KoVariable;
 class KoVariableFormatCollection;
 class KWVariableCollection;
 class KoTextObject;
-#ifdef HAVE_LIBKSPELL2
 class KWBgSpellCheck;
-#endif
 class KoStyleCollection;
 class KWFrameStyleCollection;
 class KWTableStyleCollection;
@@ -812,9 +810,7 @@ public:
 
     KWPageManager *pageManager() const { return m_pageManager; }
 
-#ifdef HAVE_LIBKSPELL2
     KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
-#endif
 signals:
 
     /// This is emitted by setPageLayout if updateViews=true
@@ -989,9 +985,7 @@ private:
 
     QString m_lastViewMode;
     KWVariableCollection *m_varColl;
-#ifdef HAVE_LIBKSPELL2
     KWBgSpellCheck *m_bgSpellCheck;
-#endif
     KoStyleCollection *m_styleColl;
     KWFrameStyleCollection *m_frameStyleColl;
     KWTableStyleCollection *m_tableStyleColl;

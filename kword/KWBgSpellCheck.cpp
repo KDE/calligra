@@ -27,8 +27,6 @@
 #include "kotextiterator.h"
 #include "kotextobject.h"
 
-#ifdef HAVE_LIBKSPELL2
-
 #include <kspell2/broker.h>
 using namespace KSpell2;
 
@@ -60,6 +58,3 @@ KoTextIterator *KWBgSpellCheck::createWholeDocIterator() const
 
     return new KoTextIterator( objects, 0, 0 );
 }
-
-#endif
-

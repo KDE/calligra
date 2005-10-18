@@ -78,9 +78,7 @@
 #include <kspell.h>
 #include <kstandarddirs.h>
 
-#ifdef HAVE_LIBKSPELL2
 #include <kspell2/settings.h>
-#endif
 
 #include <qfileinfo.h>
 #include <qregexp.h>
@@ -246,9 +244,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_varColl = new KWVariableCollection( new KWVariableSettings(), m_varFormatCollection );
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
-#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck = new KWBgSpellCheck(this);
-#endif
     m_slDataBase = new KWMailMergeDataBase( this );
     slRecordNum = -1;
 
@@ -317,9 +313,7 @@ KWDocument::~KWDocument()
     delete m_varFormatCollection;
     delete m_slDataBase;
     delete dcop;
-#ifdef HAVE_LIBKSPELL2
     delete m_bgSpellCheck;
-#endif
     delete m_styleColl;
     delete m_frameStyleColl;
     delete m_tableStyleColl;
@@ -338,12 +332,10 @@ void KWDocument::initConfig()
 
       // Default is false for spellcheck, but the spell-check config dialog
       // should write out "true" when the user configures spell checking.
-#ifdef HAVE_LIBKSPELL2
       if ( isReadWrite() )
           m_bgSpellCheck->setEnabled(config->readBoolEntry( "SpellCheck", false ));
       else
           m_bgSpellCheck->setEnabled( false );
-#endif
   }
 
   if(config->hasGroup("Interface" ) )
@@ -1253,7 +1245,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !isReadWrite())
         m_varColl->variableSetting()->setDisplayFieldCode(false);
 
-    KoOasisContext context( this, *m_varColl, oasisStyles, store );
+    KoOasisContext context( this, *m_varColl, oasisStyles, store, settings );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
@@ -1907,9 +1899,7 @@ void KWDocument::startBackgroundSpellCheck()
 {
     if ( backgroundSpellCheckEnabled() && isReadWrite() )
     {
-#ifdef HAVE_LIBKSPELL2
         m_bgSpellCheck->start();
-#endif
     }
 }
 
@@ -5303,20 +5293,14 @@ void KWDocument::refreshGUIButton()
 
 void KWDocument::enableBackgroundSpellCheck( bool b )
 {
-#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck->setEnabled(b);
-#endif
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->updateBgSpellCheckingState();
 }
 
 bool KWDocument::backgroundSpellCheckEnabled() const
 {
-#ifdef HAVE_LIBKSPELL2
     return m_bgSpellCheck->enabled();
-#else
-    return false;
-#endif
 }
 
 void KWDocument::reactivateBgSpellChecking()
@@ -5450,9 +5434,7 @@ QString KWDocument::sectionTitle( int pageNum ) const
 void KWDocument::setSpellCheckIgnoreList( const QStringList& lst )
 {
     m_spellCheckIgnoreList = lst;
-#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
-#endif
     setModified( true );
 }
 
@@ -5894,7 +5876,6 @@ void KWDocument::setHorizontalLinePath( const QStringList & lst)
 
 void KWDocument::addWordToDictionary( const QString& word )
 {
-#ifdef HAVE_LIBKSPELL2
     if ( m_bgSpellCheck )
     {
         if( m_spellCheckPersonalDict.findIndex( word ) == -1 )
@@ -5904,7 +5885,6 @@ void KWDocument::addWordToDictionary( const QString& word )
             // Re-check everything to make this word normal again
             reactivateBgSpellChecking();
     }
-#endif
 }
 
 void KWDocument::setEmpty()

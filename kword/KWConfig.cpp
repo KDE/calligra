@@ -50,12 +50,11 @@
 #include <kovariable.h>
 #include <kformulaconfigpage.h>
 
-#ifdef HAVE_LIBKSPELL2
 #include <kspell2/configwidget.h>
 #include <kspell2/settings.h>
 #include <kspell2/broker.h>
 using namespace KSpell2;
-#endif
+
 #include <float.h>
 #include <kmessagebox.h>
 #include <klistview.h>
@@ -90,13 +89,9 @@ KWConfig::KWConfig( KWView* parent )
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
-#ifdef HAVE_LIBKSPELL2
   QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                         loadIcon("spellcheck") );
   m_spellPage = new ConfigureSpellPage(parent, page);
-#else
-  m_spellPage = 0;
-#endif
 
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               loadIcon("kformula") );
@@ -207,16 +202,13 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
 {
     m_pView=_view;
     config = KWFactory::instance()->config();
-#ifdef HAVE_LIBKSPELL2
     m_spellConfigWidget = new ConfigWidget( _view->broker(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
     m_spellConfigWidget->layout()->setMargin( 0 );
-#endif
 }
 
 void ConfigureSpellPage::apply()
 {
-#ifdef HAVE_LIBKSPELL2
   KWDocument* doc = m_pView->kWordDocument();
 
   m_spellConfigWidget->save();
@@ -226,14 +218,11 @@ void ConfigureSpellPage::apply()
   //FIXME reactivate just if there are changes.
   doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
   doc->reactivateBgSpellChecking();
-#endif
 }
 
 void ConfigureSpellPage::slotDefault()
 {
-#ifdef HAVE_LIBKSPELL2
     m_spellConfigWidget->slotDefault();
-#endif
 }
 
 ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )

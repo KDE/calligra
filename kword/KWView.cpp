@@ -127,12 +127,10 @@
 
 #include <stdlib.h>
 
-#ifdef HAVE_LIBKSPELL2
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
 #include "kospell.h"
 using namespace KSpell2;
-#endif
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -144,10 +142,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     dcopObject(); // build it
     fsInline=0L;
     m_spell.kospell = 0;
-#ifdef HAVE_LIBKSPELL2
     m_spell.dlg = 0;
     m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
-#endif
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
     m_border.left.color = black;
@@ -3459,9 +3455,7 @@ void KWView::formatFont()
 
     delete m_fontDlg;
     m_fontDlg = new KoFontDia( *textIface->currentFormat()
-#ifdef HAVE_LIBKSPELL2
                                , m_broker
-#endif
                                , this, "" );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
@@ -3770,7 +3764,6 @@ void KWView::formatFrameSet()
 
 void KWView::slotSpellCheck()
 {
-#ifdef HAVE_LIBKSPELL2
     if (m_spell.kospell) return; // Already in progress
     //m_doc->setReadWrite(false); // prevent editing text - not anymore
     m_spell.macroCmdSpellCheck = 0L;
@@ -3792,7 +3785,6 @@ void KWView::slotSpellCheck()
     m_spell.textIterator = new KoTextIterator( objects, edit, options );
     kdDebug()<<"Created iterator with "<< objects.count() <<endl;
     startKSpell();
-#endif
 }
 
 void KWView::extraAutoFormat()
@@ -5511,7 +5503,6 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 
 void KWView::startKSpell()
 {
-#ifdef HAVE_LIBKSPELL2
     if ( !m_spell.kospell )
         m_spell.kospell = new KoSpell( m_broker, this  );
 
@@ -5535,13 +5526,11 @@ void KWView::startKSpell()
                       this, SLOT( spellAddAutoCorrect (const QString &, const QString &) ) );
 
     m_spell.dlg->show();
-#endif
     //clearSpellChecker();
 }
 
 void KWView::spellCheckerMisspelling( const QString &old, int pos )
 {
-   #ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
@@ -5554,12 +5543,10 @@ void KWView::spellCheckerMisspelling( const QString &old, int pos )
     pos += m_spell.kospell->currentStartIndex();
     kdDebug(32001) << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
     textdoc->textFrameSet()->highlightPortion( parag, pos, old.length(), m_gui->canvasWidget() );
-#endif
 }
 
 void KWView::spellCheckerCorrected( const QString &old, int pos , const QString &corr )
 {
-#ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
@@ -5579,12 +5566,10 @@ void KWView::spellCheckerCorrected( const QString &old, int pos , const QString 
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
     m_spell.macroCmdSpellCheck->addCommand(textobj->replaceSelectionCommand(
         &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
-#endif
 }
 
 void KWView::spellCheckerDone( const QString & )
 {
-#ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerDone" << endl;
     KWTextDocument *textdoc=static_cast<KWTextDocument *>( m_spell.kospell->textDocument() );
     Q_ASSERT( textdoc );
@@ -5592,12 +5577,10 @@ void KWView::spellCheckerDone( const QString & )
         textdoc->textFrameSet()->removeHighlight();
 
     clearSpellChecker();
-#endif
 }
 
 void KWView::clearSpellChecker(bool cancelSpellCheck)
 {
-#ifdef HAVE_LIBKSPELL2
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
 
     delete m_spell.textIterator;
@@ -5619,23 +5602,19 @@ void KWView::clearSpellChecker(bool cancelSpellCheck)
     m_spell.macroCmdSpellCheck=0L;
     m_spell.replaceAll.clear();
     //m_doc->setReadWrite(true);
-#endif
 }
 
 void KWView::spellCheckerCancel()
 {
-#ifdef HAVE_LIBKSPELL2
     kdDebug()<<"void KWView::spellCheckerCancel() \n";
     spellCheckerRemoveHighlight();
     //we add command :( => don't add command and reverte changes
     clearSpellChecker(true);
-#endif
 }
 
 
 void KWView::spellCheckerRemoveHighlight()
 {
-#ifdef HAVE_LIBKSPELL2
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     if ( textobj ) {
         KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
@@ -5645,7 +5624,6 @@ void KWView::spellCheckerRemoveHighlight()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
-#endif
 }
 
 void KWView::spellAddAutoCorrect (const QString & originalword, const QString & newword)
@@ -7416,7 +7394,6 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
-#ifdef HAVE_LIBKSPELL2
     DefaultDictionary *dict = m_broker->defaultDictionary();
     const QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ) )
@@ -7433,7 +7410,6 @@ QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
             }
         }
     }
-#endif
     return listAction;
 }
 
@@ -7467,12 +7443,10 @@ void KWView::slotChildActivated( bool a )
   KoView::slotChildActivated( a );
 }
 
-#ifdef HAVE_LIBKSPELL2
 Broker *KWView::broker() const
 {
     return m_broker;
 }
-#endif
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
