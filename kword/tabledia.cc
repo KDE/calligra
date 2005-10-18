@@ -293,7 +293,7 @@ void KWTableDia::slotOk()
                     // inline table: max offset of containing frame
                     maxRightOffset = table->anchorFrameset()->frame(0)->right();
                 else { // non inline table: max offset of the page
-                    KWPage *page = doc->pageManager()->page(table->getCell(0,0)->frame(0));
+                    KWPage *page = doc->pageManager()->page(table->cell(0,0)->frame(0));
                     maxRightOffset = page->width() - page->rightMargin();
                 }
                 if ( !macroCmd )

@@ -172,14 +172,14 @@ void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 
 void KWDocStructTableItem::selectFrameSet()
 {
-    KWFrame *frame = table->getCell( 0, 0 )->frame( 0 );
+    KWFrame *frame = table->cell( 0, 0 )->frame( 0 );
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
 void KWDocStructTableItem::editFrameSet()
 {
     //activate the first cell
-    gui->canvasWidget()->editTextFrameSet( table->getCell(0,0), 0L, 0 );
+    gui->canvasWidget()->editTextFrameSet( table->cell(0,0), 0L, 0 );
 }
 
 void KWDocStructTableItem::deleteFrameSet()

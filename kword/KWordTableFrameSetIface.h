@@ -42,8 +42,8 @@ k_dcop:
     bool hasSelectedFrame();
     void deselectAll();
     //return reference to a cell
-    DCOPRef getCell( int pos );
-    DCOPRef getCell( uint row, uint col );
+    DCOPRef cell( int pos );
+    DCOPRef cell( uint row, uint col );
     DCOPRef startEditingCell(uint row, uint col );
 
 private:

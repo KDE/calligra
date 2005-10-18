@@ -88,7 +88,7 @@ bool KWResizeTableDia::doResize()
     unsigned int resize= value->value() - 1;
     if ( type == ROW )
     {
-        KWFrame *frm = table->getCell( resize, 0 )->frame(0);
+        KWFrame *frm = table->cell( resize, 0 )->frame(0);
         if (frm)
         {
             FrameIndex index( frm );
@@ -102,7 +102,7 @@ bool KWResizeTableDia::doResize()
     }
     else
     {
-        KWFrame *frm = table->getCell( 0, resize )->frame(0);
+        KWFrame *frm = table->cell( 0, resize )->frame(0);
         if (frm)
         {
             FrameIndex index( frm );
@@ -121,7 +121,7 @@ void KWResizeTableDia::slotValueChanged( int pos)
 {
     if ( type == ROW )
     {
-        KWFrame *frm = table->getCell( pos-1, 0 )->frame(0);
+        KWFrame *frm = table->cell( pos-1, 0 )->frame(0);
         if (frm)
         {
             position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().height()), doc->unit() ) );
@@ -131,7 +131,7 @@ void KWResizeTableDia::slotValueChanged( int pos)
     }
     else
     {
-        KWFrame *frm = table->getCell( 0, pos-1 )->frame(0);
+        KWFrame *frm = table->cell( 0, pos-1 )->frame(0);
         if (frm)
         {
             position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), doc->unit() ) );

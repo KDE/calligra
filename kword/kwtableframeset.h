@@ -327,8 +327,8 @@ public:
                            KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
-    Cell *getCell( unsigned int row, unsigned int col ) const;
-    Cell *getCellByPos( double x, double y ) const;
+    Cell *cell( unsigned int row, unsigned int col ) const;
+    Cell *cellByPos( double x, double y ) const;
 
     enum CellSize {
         TblAuto = 0,
@@ -686,7 +686,7 @@ KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::TableIterator(KWTableF
 template<int VisitStyle>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
-        m_cell = m_table->getCell(m_limit[HIGH], m_limit[LEFT]);
+        m_cell = m_table->cell(m_limit[HIGH], m_limit[LEFT]);
         Q_ASSERT(m_cell);
         m_row = m_cell->firstRow();
         m_col = m_cell->firstCol();

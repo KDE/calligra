@@ -3953,7 +3953,7 @@ int KWView::tableSelectCell(const QString &tableName, uint row, uint col)
     if (row >= table->getRows() || col >= table->getCols())
         return -1;
 
-    KWTableFrameSet::Cell *cell = table->getCell(row, col);
+    KWTableFrameSet::Cell *cell = table->cell(row, col);
 
     KWCanvas *canvas = m_gui->canvasWidget();
     if(!canvas)
@@ -4110,7 +4110,7 @@ void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
     if (table->isFloating())    // inline table: max offset of containing frame
         maxRightOffset = table->anchorFrameset()->frame(0)->right();
     else {                      // non inline table: max offset of the page
-        KWPage *page = m_doc->pageManager()->page( table->getCell(0,0)->frame(0) );
+        KWPage *page = m_doc->pageManager()->page( table->cell(0,0)->frame(0) );
         maxRightOffset = page->width() - page->rightMargin();
     }
 
@@ -4607,7 +4607,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
                     {
                         for (int c=0; c<cols; ++c)
                         {
-                            KWTableFrameSet::Cell *cell = kwtableframeset->getCell(r,c);
+                            KWTableFrameSet::Cell *cell = kwtableframeset->cell(r,c);
                             if (cell)
                             {
                                 kdDebug() << "adding (" << r << "," << c << ")" << endl;
@@ -5962,7 +5962,7 @@ void KWView::updateTableActions( int nbFramesSelected )
         unsigned int row = 0;
         unsigned int col = 0;
         table->getFirstSelected(row, col );
-        bool _protect = table->getCell( row, col )->protectContent();
+        bool _protect = table->cell( row, col )->protectContent();
         actionTableProtectCells->setChecked(_protect);
     }
 }

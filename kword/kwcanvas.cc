@@ -453,7 +453,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
             if ( table ) {
                 KWTableFrameSet::Cell *theCell=static_cast<KWTableFrameSet::Cell *>(fs);
                 for(unsigned int col=0; col < table->getCols(); col++) {
-                    KWTableFrameSet::Cell *c = table->getCell(theCell->firstRow(), col);
+                    KWTableFrameSet::Cell *c = table->cell(theCell->firstRow(), col);
                     m_boundingRect |= *c->frame(0);
                 }
             } else
@@ -570,7 +570,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 {  // in position to select a ROW
                     // here the cursor is on the left of the table. the y is OK, but the x is not,
                     // hence finding a proper x with the table object
-                    KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(normalPoint.y())  );
+                    KWTableFrameSet::Cell *cell = table->cell( table->leftWithoutBorder(), m_doc->unzoomItY(normalPoint.y())  );
                     if (cell)
                     {
                         table->selectRow( cell->firstRow() );
@@ -581,7 +581,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 else
                 { // in position to select a COLUMN
                     // here the cursor is on top of the table. the x is ok, but the y is not.
-                    KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(normalPoint.x()), table->topWithoutBorder()  );
+                    KWTableFrameSet::Cell *cell = table->cell( m_doc->unzoomItX(normalPoint.x()), table->topWithoutBorder()  );
                     if (cell)
                     {
                         table->selectCol( cell->firstCol() );

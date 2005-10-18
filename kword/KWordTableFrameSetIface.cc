@@ -59,7 +59,7 @@ void KWordTableFrameSetIface::deselectAll()
   m_table->deselectAll();
 }
 
-DCOPRef KWordTableFrameSetIface::getCell( int pos )
+DCOPRef KWordTableFrameSetIface::cell( int pos )
 {
     // This method now sucks
     KWTableFrameSet::TableIter i(m_table);
@@ -72,12 +72,12 @@ DCOPRef KWordTableFrameSetIface::getCell( int pos )
             i->dcopObject()->objId() );
 }
 
-DCOPRef KWordTableFrameSetIface::getCell( uint row, uint col )
+DCOPRef KWordTableFrameSetIface::cell( uint row, uint col )
 {
   if( row>=m_table->getRows() || col>= m_table->getCols())
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-            m_table->getCell(row,col)->dcopObject()->objId() );
+            m_table->cell(row,col)->dcopObject()->objId() );
 }
 
 DCOPRef KWordTableFrameSetIface::startEditingCell(uint row, uint col )
@@ -88,7 +88,7 @@ DCOPRef KWordTableFrameSetIface::startEditingCell(uint row, uint col )
     KWDocument *doc=m_table->kWordDocument();
     KWView* view = doc->getAllViews().first();
     KWCanvas* canvas = view->getGUI()->canvasWidget();
-    KWTextFrameSet *m_frametext=m_table->getCell(row,col);
+    KWTextFrameSet *m_frametext=m_table->cell(row,col);
     if( !m_frametext || m_frametext->isDeleted())
         return DCOPRef();
     canvas->checkCurrentEdit(m_frametext, true);

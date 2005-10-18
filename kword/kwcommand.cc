@@ -703,7 +703,7 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
             if ( (i>0) && (j>0) && (i<(rows-1)) && (j<(cols-1)) ) // BODY
                 cell = m_tt->pBodyCell();
 
-            m_tableCommands->addCommand( new KWTableStyleCommand( "Apply tablestyle to cell", m_table->getCell(i,j)->frame(0),cell, false ) );
+            m_tableCommands->addCommand( new KWTableStyleCommand( "Apply tablestyle to cell", m_table->cell(i,j)->frame(0),cell, false ) );
         }
     }
 }
@@ -1500,7 +1500,7 @@ void KWSplitCellCommand::unexecute()
                     if( !(j==m_rowBegin && i==m_colBegin))
                     {
                         kdDebug(32001)<<"store cell row :"<<j<<" col :"<<i<<endl;
-                        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( j,i ));
+                        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->cell( j,i ));
                         m_ListFrameSet.append(cell);
                     }
                 }
@@ -1508,7 +1508,7 @@ void KWSplitCellCommand::unexecute()
             }
         }
     }
-    KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( m_rowBegin,m_colBegin ));
+    KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->cell( m_rowBegin,m_colBegin ));
     m_pTable->joinCells(m_colBegin, m_rowBegin, m_colEnd+m_colBegin-1+cell->colSpan()-1,
         m_rowBegin+m_rowEnd-1+cell->rowSpan()-1);
 
