@@ -38,10 +38,11 @@ class KWDocListViewItem : public QObject,public KListViewItem
 public:
     KWDocListViewItem(QListViewItem *_parent, const QString &_text);
     KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text );
-    virtual void selectFrameSet() {};
-    virtual void editFrameSet() {};
-    virtual void deleteFrameSet() {};
-    virtual void editProperties() {};
+    virtual void selectFrameSet() {}
+    virtual void editFrameSet() {}
+    virtual void deleteFrameSet() {}
+    virtual void editProperties() {}
+    virtual void slotRightButtonClicked( QListViewItem *, const QPoint &, int ) {}
 };
 
 /******************************************************************/
@@ -235,6 +236,8 @@ public:
     void editFrameSet();
     void deleteFrameSet();
     void editProperties();
+public slots:
+    void slotContextMenu(KListView *l, QListViewItem *i, const QPoint &p);
 protected:
     KWDocument *doc;
     KWGUI *gui;

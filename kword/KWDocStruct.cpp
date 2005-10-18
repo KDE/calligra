@@ -703,6 +703,8 @@ void KWDocStructTree::setup()
     refreshTree((int)Tables);
     refreshTree((int)Pictures);
     refreshTree((int)Embedded);
+    connect( this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+        this, SLOT(slotContextMenu(KListView *, QListViewItem *, const QPoint &)) );
 }
 
 void KWDocStructTree::refreshTree(int _type)
@@ -827,6 +829,15 @@ void KWDocStructTree::editProperties()
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
         tmp->editProperties();
+}
+
+void KWDocStructTree::slotContextMenu(KListView *lv, QListViewItem *i, const QPoint &p)
+{
+    if (lv != this)
+        return;
+    KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(i);
+    if (item)
+        item->slotRightButtonClicked(i, p, 0);
 }
 
 
