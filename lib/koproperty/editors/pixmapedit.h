@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_PIXMAPEDIT_H
 #define KPROPERTY_PIXMAPEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 #include <qpixmap.h>
 #include <qvariant.h>
 
