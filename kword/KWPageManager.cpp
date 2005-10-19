@@ -37,8 +37,17 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
         ++pages;
     }
     if(!pages.current() || frame.right() > pages.current()->width() ||
-            frame.top() > pages.current()->height() + startOfpage)
+            frame.top() > pages.current()->height() + startOfpage) {
+#ifdef DEBUG_PAGES
+    if(!pages.current())
+        kdDebug() << "  KWPageManager::pageNumber of "<< frame << " is too high, no page there\n";
+    else if(frame.right() > pages.current()->width())
+        kdDebug() << "  KWPageManager::pageNumber right of "<< frame << " is out of bounds\n";
+    else if(frame.top() > pages.current()->height() + startOfpage)
+        kdDebug() << "  KWPageManager::pageNumber "<< frame << " spans multiple pages\n";
+#endif
         return -1; // not inside the page...
+    }
     return page;
 }
 int KWPageManager::pageNumber(const KoPoint &point) const {

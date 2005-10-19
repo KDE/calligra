@@ -1721,6 +1721,23 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
 void KWDocument::endOfLoading()
 {
+    // insert pages
+    double maxBottom = 0;
+    for (QPtrListIterator<KWFrameSet> fsit = framesetsIterator(); fsit.current() ; ++fsit ) {
+        KWFrameSet *fs = fsit.current();
+        for (QPtrListIterator<KWFrame> fit = fs->frameIterator(); fit.current() ; ++fit ) {
+            KWFrame *frame = fit.current();
+            maxBottom = QMAX(maxBottom, frame->bottom());
+        }
+    }
+    KWPage *last = pageManager()->page(pageManager()->lastPageNumber());
+    double docHeight = last->offsetInDocument() + last->height();
+    while(docHeight <= maxBottom) {
+        kdDebug(32001) << "KWDocument::loadXML appends a page\n";
+        last = pageManager()->appendPage();
+        docHeight += last->height();
+    }
+
     bool _first_footer = false, _even_footer = false, _odd_footer = false;
     bool _first_header = false, _even_header = false, _odd_header = false;
 
@@ -4889,6 +4906,8 @@ void KWDocument::printDebug()
             frameset->name() << "' (" << frameset << ")" << (frameset->isDeleted()?" Deleted":"")<<endl;
         if ( frameset->isVisible())
             frameset->printDebug();
+        else
+            kdDebug() << "  [hidden] #" << frameset->getNumFrames() << " frames" << endl;
     }
 
     for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum )
