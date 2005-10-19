@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef PNGEXPORTDIA_H
-#define PNGEXPORTDIA_H
+#ifndef EXPORTSIZEDIA_H
+#define EXPORTSIZEDIA_H
 
 
 class QCheckBox;
@@ -30,14 +30,14 @@ class KDoubleNumInput;
 #include <kdialogbase.h>
 
 
-class PNGExportDia : public KDialogBase
+class ExportSizeDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    PNGExportDia( int width, int height, 
+    ExportSizeDia( int width, int height, 
 		  QWidget *parent=0L, const char *name=0L );
-    ~PNGExportDia();
+    ~ExportSizeDia();
 
     int  width() const;
     int  height() const;
@@ -73,5 +73,5 @@ private:
 };
 
 
-#endif // PNGEXPORTDIA_H
+#endif // EXPORTSIZEDIA_H
 

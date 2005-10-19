@@ -31,7 +31,7 @@
 #include "kpresenter_view.h"
 #include "kprcanvas.h"
 #include "pngexport.h"
-#include "pngexportdia.h"
+#include "exportsizedia.h"
 
 typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterpngexport, PngExportFactory( "pngexport" ) )
@@ -47,7 +47,7 @@ PngExport::~PngExport()
 
 void PngExport::extraImageAttribute()
 {
-    PNGExportDia  *exportDialog = new PNGExportDia( width, height,
+    ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
     if (exportDialog->exec()) {
 	width  = exportDialog->width();

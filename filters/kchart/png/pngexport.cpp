@@ -14,7 +14,7 @@
 #include "kchart_part.h"
 
 #include "pngexport.h"
-#include <pngexportdia.h>
+#include <exportsizedia.h>
 
 typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
@@ -58,7 +58,7 @@ PngExport::convert(const QCString& from, const QCString& to)
     }
 
     // Draw the actual bitmap.
-    PNGExportDia  *exportDialog = new PNGExportDia(500, 400, 
+    ExportSizeDia  *exportDialog = new ExportSizeDia(500, 400, 
 						   0, "exportdialog");
     if (exportDialog->exec()) {
 	int  width  = exportDialog->width();

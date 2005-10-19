@@ -33,13 +33,13 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 
-#include "pngexportdia.h"
+#include "exportsizedia.h"
 
 
-PNGExportDia::PNGExportDia( int width, int height, 
+ExportSizeDia::ExportSizeDia( int width, int height, 
 			    QWidget *parent, const char *name )
     : KDialogBase( parent, name, true,
-		   i18n("PNG Export Filter Parameters" ), Ok|Cancel )
+		   i18n("Export Filter Parameters" ), Ok|Cancel )
 {
     kapp->restoreOverrideCursor();
 
@@ -58,12 +58,12 @@ PNGExportDia::PNGExportDia( int width, int height,
 }
 
 
-PNGExportDia::~PNGExportDia()
+ExportSizeDia::~ExportSizeDia()
 {
 }
 
 
-void PNGExportDia::setupGUI()
+void ExportSizeDia::setupGUI()
 {
     //resize( size() );
     QWidget *page = new QWidget( this );
@@ -116,13 +116,13 @@ void PNGExportDia::setupGUI()
 // ----------------------------------------------------------------
 //                          public methods
 
-int PNGExportDia::width() const
+int ExportSizeDia::width() const
 {
     return m_widthEdit->value();
 }
 
 
-int PNGExportDia::height() const
+int ExportSizeDia::height() const
 {
     return m_heightEdit->value();
 }
@@ -132,7 +132,7 @@ int PNGExportDia::height() const
 //                            slots
 
 
-void PNGExportDia::widthChanged( int width )
+void ExportSizeDia::widthChanged( int width )
 {
     disconnectAll();
     width = QMIN( width, m_realWidth * 10 );
@@ -149,7 +149,7 @@ void PNGExportDia::widthChanged( int width )
 }
 
 
-void PNGExportDia::heightChanged( int height )
+void ExportSizeDia::heightChanged( int height )
 {
     disconnectAll();
     height = QMIN( height, m_realHeight * 10 );
@@ -166,7 +166,7 @@ void PNGExportDia::heightChanged( int height )
 }
 
 
-void PNGExportDia::percentWidthChanged( double percent )
+void ExportSizeDia::percentWidthChanged( double percent )
 {
     disconnectAll();
     percent = QMIN( percent, 1000 );
@@ -182,7 +182,7 @@ void PNGExportDia::percentWidthChanged( double percent )
 }
 
 
-void PNGExportDia::percentHeightChanged( double percent )
+void ExportSizeDia::percentHeightChanged( double percent )
 {
     disconnectAll();
     percent = QMIN( percent, 1000 );
@@ -198,7 +198,7 @@ void PNGExportDia::percentHeightChanged( double percent )
 }
 
 
-void PNGExportDia::proportionalClicked()
+void ExportSizeDia::proportionalClicked()
 {
     if ( m_proportional->isChecked() ) {
         disconnectAll();
@@ -219,7 +219,7 @@ void PNGExportDia::proportionalClicked()
 //                          private methods
 
 
-void PNGExportDia::connectAll()
+void ExportSizeDia::connectAll()
 {
     connect( m_widthEdit,      SIGNAL( valueChanged(int) ),
              this,             SLOT( widthChanged( int ) ) );
@@ -232,7 +232,7 @@ void PNGExportDia::connectAll()
 }
 
 
-void PNGExportDia::disconnectAll()
+void ExportSizeDia::disconnectAll()
 {
     disconnect( m_widthEdit,      SIGNAL( valueChanged(int) ),
 		this,             SLOT( widthChanged( int ) ) );
@@ -246,7 +246,7 @@ void PNGExportDia::disconnectAll()
 
 
 #if 0
-void PNGExportDia::slotOk()
+void ExportSizeDia::slotOk()
 {
     hide();
     //doc->setZoomAndResolution( 100, 600, 600 );
@@ -267,5 +267,5 @@ void PNGExportDia::slotOk()
 }
 #endif
 
-#include "pngexportdia.moc"
+#include "exportsizedia.moc"
 
