@@ -159,7 +159,6 @@ k_dcop:
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();
-    virtual void initUnit();
 
     bool showScrollBar()const;
     void setShowScrollBar( bool _status );

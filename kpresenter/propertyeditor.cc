@@ -407,7 +407,7 @@ void PropertyEditor::setupTabText()
     if ( m_textProperty == 0 )
     {
         m_textProperty = new TextProperty( this, 0, m_objectProperties->getMarginsStruct(),
-                                           m_doc->getUnit(), m_objectProperties->getProtectContent() );
+                                           m_doc->unit(), m_objectProperties->getProtectContent() );
         addTab( m_textProperty, i18n("Te&xt" ) );
     }
 }
@@ -418,7 +418,7 @@ void PropertyEditor::setupTabGeneral()
     if ( m_generalProperty == 0 )
     {
         GeneralProperty::GeneralValue generalValue = getGeneralValue();
-        m_generalProperty = new GeneralProperty( this, 0, generalValue, m_doc->getUnit() );
+        m_generalProperty = new GeneralProperty( this, 0, generalValue, m_doc->unit() );
         addTab( m_generalProperty, i18n( "&General" ) );
     }
 }

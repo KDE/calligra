@@ -206,6 +206,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     connect( m_doc, SIGNAL( docStructureChanged(int) ),
              this, SLOT( docStructChanged(int)) );
 
+    connect( m_doc, SIGNAL( unitChanged(KoUnit::Unit) ),
+             this, SLOT( slotUnitChanged(KoUnit::Unit) ) );
+
     connect( m_doc, SIGNAL( sig_refreshMenuCustomVariable()),
              this, SLOT( refreshCustomMenu()));
 
@@ -7446,6 +7449,12 @@ void KWView::slotChildActivated( bool a )
 Broker *KWView::broker() const
 {
     return m_broker;
+}
+
+void KWView::slotUnitChanged( KoUnit::Unit unit )
+{
+    getGUI()->getHorzRuler()->setUnit( unit );
+    getGUI()->getVertRuler()->setUnit( unit );
 }
 
 /******************************************************************/

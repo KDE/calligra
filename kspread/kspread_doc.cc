@@ -128,7 +128,6 @@ public:
   QValueList<KSpread::Damage*> damages;
 
   // document properties
-  KoUnit::Unit unit;
   int syntaxVersion;
   bool verticalScrollBar:1;
   bool horizontalScrollBar:1;
@@ -217,11 +216,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
       dcopObject();
 
   // default document properties
-  if ( KGlobal::locale()->measureSystem() == KLocale::Imperial ) {
-    d->unit = KoUnit::U_INCH;
-  } else {
-    d->unit = KoUnit::U_CM;
-  }
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
   d->verticalScrollBar = true;
   d->horizontalScrollBar = true;
@@ -1397,19 +1391,9 @@ void KSpreadDoc::setDontCheckTitleCase( bool b )
   d->dontCheckTitleCase = b;
 }
 
-KoUnit::Unit KSpreadDoc::unit() const
-{
-  return d->unit;
-}
-
-void KSpreadDoc::setUnit( KoUnit::Unit _unit )
-{
-    d->unit = _unit;
-}
-
 QString KSpreadDoc::unitName() const
 {
-  return KoUnit::unitName( d->unit );
+  return KoUnit::unitName( unit() );
 }
 
 void KSpreadDoc::increaseNumOperation()

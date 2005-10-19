@@ -331,6 +331,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateMenuBar()),this, SLOT(updateSideBarMenu()));
+    connect (m_pKPresenterDoc, SIGNAL(unitChanged(KoUnit::Unit)),this, SLOT(slotUnitChanged(KoUnit::Unit)));
 
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
@@ -1240,7 +1241,7 @@ void KPresenterView::extraLayout()
     KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
     KoPageLayout oldLayout = pgLayout;
     KoHeadFoot hf;
-    KoUnit::Unit oldUnit = m_pKPresenterDoc->getUnit();
+    KoUnit::Unit oldUnit = m_pKPresenterDoc->unit();
     KoUnit::Unit unit = oldUnit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS, unit, this ) ) {
@@ -2023,7 +2024,7 @@ void KPresenterView::setExtraPenWidth( double width )
 void KPresenterView::newPageLayout( const KoPageLayout &_layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
-    KoUnit::Unit unit = m_pKPresenterDoc->getUnit(); // unchanged
+    KoUnit::Unit unit = m_pKPresenterDoc->unit(); // unchanged
 
     PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, unit, unit,kPresenterDoc() );
     pgLayoutCmd->execute();
@@ -2637,7 +2638,7 @@ void KPresenterView::setupActions()
     actionExtraPenWidth = new KoLineWidthAction( i18n("Outline Width"), "pen_width",
                                        this, SLOT( extraPenWidth(double) ),
                                        actionCollection(), "extra_penwidth" );
-    actionExtraPenWidth->setUnit( kPresenterDoc()->getUnit() );
+    actionExtraPenWidth->setUnit( kPresenterDoc()->unit() );
     actionExtraPenWidth->setShowCurrentSelection(false);
     connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
              actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
@@ -3655,11 +3656,11 @@ void KPresenterView::setupRulers()
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
     tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
     h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(),
-                           KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->getUnit(), tabChooser );
+                           KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->unit(), tabChooser );
     h_ruler->changeFlags(0);
 
     h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
-    v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0, kPresenterDoc()->getUnit() );
+    v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0, kPresenterDoc()->unit() );
     v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
 
     int hSpace = v_ruler->minimumSizeHint().width();
@@ -4011,9 +4012,9 @@ void KPresenterView::updateObjectStatusBarItem()
             KoSize size = obj->getSize();
             m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 - (width: %2; height: %3)(%4)" )
                                       .arg(obj->getTypeString())
-                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.width(), m_pKPresenterDoc->getUnit())), 2)
-                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.height(), m_pKPresenterDoc->getUnit())), 2)
-                                      .arg(m_pKPresenterDoc->getUnitName())
+                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.width(), m_pKPresenterDoc->unit())), 2)
+                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.height(), m_pKPresenterDoc->unit())), 2)
+                                      .arg(m_pKPresenterDoc->unitName())
                 );
         }
         else
@@ -4635,7 +4636,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                                  KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                  KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
                                  KoParagDia::PD_TABS,
-                                 m_pKPresenterDoc->getUnit(),
+                                 m_pKPresenterDoc->unit(),
                                  lstObjects.first()->getSize().width(),false );
     m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
@@ -4913,9 +4914,9 @@ void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, dou
     KoRuler * hRuler = getHRuler();
     if ( hRuler )
     {
-        hRuler->setFirstIndent( KoUnit::toUserValue( _firstLine, m_pKPresenterDoc->getUnit() ) );
-        hRuler->setLeftIndent( KoUnit::toUserValue( _leftMargin, m_pKPresenterDoc->getUnit() ) );
-        hRuler->setRightIndent( KoUnit::toUserValue( _rightMargin, m_pKPresenterDoc->getUnit() ) );
+        hRuler->setFirstIndent( KoUnit::toUserValue( _firstLine, m_pKPresenterDoc->unit() ) );
+        hRuler->setLeftIndent( KoUnit::toUserValue( _leftMargin, m_pKPresenterDoc->unit() ) );
+        hRuler->setRightIndent( KoUnit::toUserValue( _rightMargin, m_pKPresenterDoc->unit() ) );
         hRuler->setDirection( rtl );
         actionTextDepthMinus->setEnabled( _leftMargin>0);
     }
@@ -5431,7 +5432,7 @@ void KPresenterView::extraStylist()
         if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
             activeStyleName = edit->cursor()->parag()->style()->displayName();
     }
-    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(), m_pKPresenterDoc,
+    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->unit(), m_pKPresenterDoc,
                                                           m_pKPresenterDoc->styleCollection()->styleList(), activeStyleName);
     styleManager->exec();
     delete styleManager;
@@ -6397,6 +6398,12 @@ void KPresenterView::slotChildActivated(bool a)
 Broker *KPresenterView::broker() const
 {
     return m_broker;
+}
+
+void KPresenterView::slotUnitChanged( KoUnit::Unit unit )
+{
+    h_ruler->setUnit( unit );
+    v_ruler->setUnit( unit );
 }
 
 #include "kpresenter_view.moc"

@@ -717,7 +717,7 @@ KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *
 
     m_pl = _sheet->print()->paperLayout();
     m_hf = _sheet->print()->headFootLine();
-    m_unit = doc()->getUnit();
+    m_unit = doc()->unit();
     m_printGrid = _sheet->print()->printGrid();
     m_printCommentIndicator = _sheet->print()->printCommentIndicator();
     m_printFormulaIndicator = _sheet->print()->printFormulaIndicator();
@@ -751,7 +751,7 @@ void KSpreadUndoPaperLayout::undo()
     print->setHeadFootLine( m_hf.headLeft, m_hf.headMid, m_hf.headRight,
                             m_hf.footLeft, m_hf.footMid, m_hf.footRight );
 
-    m_unitRedo = doc()->getUnit();
+    m_unitRedo = doc()->unit();
     doc()->setUnit( m_unit );
 
     m_printGridRedo = print->printGrid();

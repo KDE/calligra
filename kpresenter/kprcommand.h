@@ -300,7 +300,8 @@ protected:
 class LowerRaiseCmd : public KNamedCommand
 {
 public:
-    LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList,
+    LowerRaiseCmd( const QString &_name, const QPtrList<KPObject>& _oldList,
+                   const QPtrList<KPObject>& _newList,
                    KPresenterDoc *_doc, KPrPage *_page );
     ~LowerRaiseCmd();
 

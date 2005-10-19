@@ -87,7 +87,6 @@ class KWBookMark;
 
 #include <koDocument.h>
 #include <kotextzoomhandler.h>
-#include <koUnit.h>
 #include <koPictureKey.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
 
@@ -474,11 +473,6 @@ public:
     void setFramePadding( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
 
-    // The user-chosen global unit
-    QString unitName() const { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit unit() const { return m_unit; }
-    void setUnit( KoUnit::Unit _unit );
-
     void addCommand( KCommand * cmd );
 
     KoCommandHistory * commandHistory() const { return m_commandHistory; }
@@ -712,7 +706,6 @@ public:
 
     void initConfig();
     void saveConfig();
-    void initUnit();
     void startBackgroundSpellCheck();
     void reactivateBgSpellChecking();
 
@@ -913,8 +906,6 @@ private:
 
     ProcessingType m_processingType;
     double m_gridX, m_gridY;
-
-    KoUnit::Unit m_unit;
 
     DCOPObject *dcop;
 

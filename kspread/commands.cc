@@ -436,7 +436,7 @@ PaperLayoutCommand::PaperLayoutCommand( KSpreadSheet *s )
   sheetName = s->sheetName();
   pl = s->print()->paperLayout();
   hf = s->print()->headFootLine();
-  unit = doc->getUnit();
+  unit = doc->unit();
   printGrid = s->print()->printGrid();
   printCommentIndicator = s->print()->printCommentIndicator();
   printFormulaIndicator = s->print()->printFormulaIndicator();
@@ -491,7 +491,7 @@ void PaperLayoutCommand::unexecute()
     print->setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight,
                             hf.footLeft, hf.footMid, hf.footRight );
 
-    unitRedo = doc->getUnit();
+    unitRedo = doc->unit();
     doc->setUnit( unit );
 
     printGridRedo = print->printGrid();

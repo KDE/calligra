@@ -463,6 +463,7 @@ public slots:
 
     void displayObjectFromMasterPage();
     void displayBackground();
+    void slotUnitChanged(KoUnit::Unit);
 
 public:
     // create GUI

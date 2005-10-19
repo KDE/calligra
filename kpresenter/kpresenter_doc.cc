@@ -143,11 +143,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
-    if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-        m_unit = KoUnit::U_INCH;
-    } else {
-        m_unit = KoUnit::U_CM;
-    }
     m_pageWhereLoadObject=0L;
     m_loadingInfo=0L;
     m_tabStop = MM_TO_POINT( 15.0 );
@@ -245,7 +240,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //   _pageLayout.ptTop = 0;
     //   _pageLayout.ptBottom = 0;
 
-    //_pageLayout.unit = KoUnit::U_MM;
     m_indent = MM_TO_POINT( 10.0 );
     m_gridX = MM_TO_POINT( 5.0 );
     m_gridY = MM_TO_POINT( 5.0 );
@@ -302,24 +296,6 @@ void KPresenterDoc::slotDocumentRestored()
 void KPresenterDoc::slotCommandExecuted()
 {
     setModified( true );
-}
-
-void KPresenterDoc::setUnit( KoUnit::Unit _unit )
-{
-    if( m_unit == _unit )
-    {
-        return;
-    }
-
-    m_unit = _unit;
-
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it ) {
-        ((KPresenterView*)it.current())->getHRuler()->setUnit( m_unit );
-        ((KPresenterView*)it.current())->getVRuler()->setUnit( m_unit );
-    }
-
-    emit unitChanged( m_unit );
 }
 
 void KPresenterDoc::saveConfig()
@@ -530,7 +506,7 @@ QDomDocument KPresenterDoc::saveXML()
     paper.setAttribute("ptHeight", m_pageLayout.ptHeight);
 
     paper.setAttribute("orientation", static_cast<int>( m_pageLayout.orientation ));
-    paper.setAttribute("unit", m_unit );
+    paper.setAttribute("unit", unit() );
     paper.setAttribute("tabStopValue", m_tabStop );
 
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
@@ -1140,7 +1116,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis(&settingsWriter, m_unit);
+    KoUnit::saveOasis(&settingsWriter, unit());
     saveOasisSettings( settingsWriter );
 
     settingsWriter.endElement(); // config:config-item-set
@@ -2209,9 +2185,9 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
             macroCmd->addCommand( insertCmd );
             if ( pos != 0 )
             {
-                QPtrList<KPObject> oldList( page->objectList() );
+                const QPtrList<KPObject>& oldList( page->objectList() );
                 // tz TODO this is not 100% correct
-                if ( oldList.count() > pos + zIndex )
+                if ( static_cast<int>( oldList.count() ) > pos + zIndex )
                 {
                     page->takeObject( kppartobject );
                     page->insertObject( kppartobject, pos + zIndex );
@@ -2353,7 +2329,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             else if(elem.hasAttribute("mmHeight"))   //compatibility
                 __pgLayout.ptHeight = MM_TO_POINT( elem.attribute("mmHeight").toDouble() );
             if(elem.hasAttribute("unit"))
-                m_unit = static_cast<KoUnit::Unit>(elem.attribute("unit").toInt());
+                setUnit( static_cast<KoUnit::Unit>(elem.attribute("unit").toInt()) );
             if ( elem.hasAttribute("tabStopValue"))
                 m_tabStop = elem.attribute("tabStopValue").toDouble();
 

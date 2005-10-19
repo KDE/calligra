@@ -197,31 +197,11 @@ public:
   KoCommandHistory* commandHistory();
 
   /**
-   * Returns the unit used to display margins.
-   */
-  KoUnit::Unit unit() const;
-
-  /**
-   * \deprecated Use unit().
-   */
-  KoUnit::Unit getUnit() const { return unit(); }
-
-  /**
-   * Sets the unit used to display margins.
-   */
-  void setUnit( KoUnit::Unit u );
-
-  /**
    * Returns the name of the unit used to display margins.
    * For example, if unit() returns KoUnit::U_MM, then
    * this functions return "mm".
    */
   QString unitName() const;
-
-  /**
-   * \deprecated Use unitName().
-   */
-  QString getUnitName() const { return unitName(); }
 
   /**
    * Returns the syntax version of the currently opened file

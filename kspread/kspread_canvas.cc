@@ -4801,8 +4801,8 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     QString tmpSize;
     if ( m_iResizePos != y )
         tmpSize = i18n("Height: %1 %2").arg( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ),
-                                                               m_pView->doc()->getUnit() ) )
-                                       .arg( m_pView->doc()->getUnitName() );
+                                                               m_pView->doc()->unit() ) )
+                                       .arg( m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Row" );
 
@@ -5591,8 +5591,8 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     if ( m_iResizePos != x )
         tmpSize = i18n("Width: %1 %2")
                   .arg( KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( (sheet->layoutDirection()==KSpreadSheet::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ),
-                                                                           m_pView->doc()->getUnit() )))
-                  .arg( m_pView->doc()->getUnitName() );
+                                                                           m_pView->doc()->unit() )))
+                  .arg( m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Column" );
 

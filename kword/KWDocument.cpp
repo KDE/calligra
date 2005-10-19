@@ -153,11 +153,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 {
     KWStatisticVariable::setExtendedType(  true );
     dcop = 0;
-    if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-        m_unit = KoUnit::U_INCH;
-    } else {
-        m_unit = KoUnit::U_CM;
-    }
     m_pageManager = new KWPageManager();
     m_pageManager->appendPage();
     m_loadingInfo = 0L;
@@ -388,7 +383,13 @@ void KWDocument::initConfig()
   {
       config->setGroup( "Misc" );
       undo=config->readNumEntry("UndoRedo",-1);
+
+      //load default unit setting - this is only used for new files (from templates) or empty files
+      if ( config->hasKey( "Units" ) )
+          setUnit( KoUnit::unit( config->readEntry("Units") ) );
+      setDefaultColumnSpacing( config->readDoubleNumEntry("ColumnSpacing", 3.0) );
   }
+
   if(undo!=-1)
       setUndoRedoLimit(undo);
 
@@ -512,8 +513,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     {
       QString fileName( locate( "kword_template", "Normal/.source/Embedded.kwt" , KWFactory::instance() ) );
       resetURL();
-      initUnit();
-      ok = loadNativeFormat( fileName );
+     ok = loadNativeFormat( fileName );
       if ( !ok )
         showLoadingErrorDialog();
       setEmpty();
@@ -524,7 +524,6 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
         resetURL();
-        initUnit();
         ok = loadNativeFormat( fileName );
         if ( !ok )
             showLoadingErrorDialog();
@@ -550,7 +549,6 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         ok = loadNativeFormat( file );
         if ( !ok )
             showLoadingErrorDialog();
-        initUnit();
         setEmpty();
     } else if ( ret == KoTemplateChooseDia::File ) {
         KURL url( file );
@@ -559,7 +557,6 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
         resetURL();
-        initUnit();
         ok = loadNativeFormat( fileName );
         if ( !ok )
             showLoadingErrorDialog();
@@ -567,27 +564,6 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     }
     setModified( FALSE );
     return ok;
-}
-
-void KWDocument::initUnit()
-{
-    //load default unit setting - this is only used for new files (from templates) or empty files
-    KConfig *config = KWFactory::instance()->config();
-
-    if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-        m_unit = KoUnit::U_INCH;
-    } else {
-        m_unit = KoUnit::U_CM;
-    }
-
-    if(config->hasGroup("Misc") )
-    {
-        config->setGroup( "Misc" );
-        if ( config->hasKey( "Units" ) )
-            setUnit( KoUnit::unit( config->readEntry("Units") ) );
-        setDefaultColumnSpacing( config->readDoubleNumEntry("ColumnSpacing", 3.0) );
-    }
-    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 }
 
 void KWDocument::initEmpty()
@@ -1223,8 +1199,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() )
                        ? DTP : WP;
 
-    // TODO settings (m_unit, spellcheck settings)
-
     m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15);
     QDomElement* defaultParagStyle = oasisStyles.defaultStyle( "paragraph" );
@@ -1352,8 +1326,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         }
     }
 
-    // TODO embedded objects
-
     if ( context.cursorTextParagraph() ) {
         // Maybe, once 1.3-support is dropped, we can get rid of InitialEditing and fetch the
         // values from KoOasisContext? But well, it lives a bit longer.
@@ -1390,8 +1362,6 @@ void KWDocument::clear()
     m_anchorRequests.clear();
     m_footnoteVarRequests.clear();
     m_spellCheckIgnoreList.clear();
-    m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -1586,7 +1556,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         kdWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
 
     // <ATTRIBUTES>
-    m_unit = KoUnit::U_CM;
     QDomElement attributes = word.namedItem( "ATTRIBUTES" ).toElement();
     if ( !attributes.isNull() )
     {
@@ -1595,7 +1564,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
         if ( attributes.hasAttribute( "unit" ) )
-            m_unit = KoUnit::unit( attributes.attribute( "unit" ) );
+            setUnit( KoUnit::unit( attributes.attribute( "unit" ) ) );
         m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
         m_tabStop = KWDocument::getAttribute( attributes, "tabStopValue", MM_TO_POINT(15) );
         m_initialEditing = new InitialEditing();
@@ -3062,7 +3031,7 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
 
     settingsWriter.addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis(&settingsWriter, m_unit);
+    KoUnit::saveOasis(&settingsWriter, unit());
 
     settingsWriter.endElement(); // config:config-item-set
 
@@ -3853,18 +3822,6 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
         KWView* viewPtr = *it;
         if ( viewPtr != _view /*&& viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget()*/ ) {
             viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
-        }
-    }
-}
-
-void KWDocument::setUnit( KoUnit::Unit _unit )
-{
-    m_unit = _unit;
-    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
-        KWView* viewPtr = *it;
-        if ( viewPtr->getGUI() ) {
-            viewPtr->getGUI()->getHorzRuler()->setUnit( m_unit );
-            viewPtr->getGUI()->getVertRuler()->setUnit( m_unit );
         }
     }
 }

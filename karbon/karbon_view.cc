@@ -148,6 +148,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	reorganizeGUI();
 
+        connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( setUnit( KoUnit::Unit ) ) );
+
 	// widgets:
 	m_horizRuler = new VRuler( Qt::Horizontal, this );
 	m_horizRuler->setUnit(p->unit());
@@ -257,7 +259,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		part()->toolController()->setActiveView( this );
 		// set selectTool by default
 		m_toolbox->slotPressButton( 0 );
-		
+
 		return m_toolbox;
 	}
 
@@ -565,59 +567,59 @@ KarbonView::selectionAlignVerticalBottom()
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_BOTTOM ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeHorizontalCenter()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_CENTER ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeHorizontalGap()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_GAP ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeHorizontalLeft()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_LEFT ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeHorizontalRight()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_RIGHT ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeVerticalCenter()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_CENTER ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeVerticalGap()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_GAP ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeVerticalBottom()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_BOTTOM ), true );
 }
 
-void 
+void
 KarbonView::selectionDistributeVerticalTop()
 {
-	part()->addCommand( 
+	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_TOP ), true );
 }
 
@@ -665,13 +667,6 @@ void
 KarbonView::closePath()
 {
 	part()->addCommand( new VClosePathCmd( &part()->document() ), true );
-}
-
-// TODO: remove this one someday:
-void
-KarbonView::dummyForTesting()
-{
-	kdDebug(38000) << "KarbonView::dummyForTesting()" << endl;
 }
 
 void
@@ -1049,13 +1044,13 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 	else
 		px = (mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX());
 
-	if( m_canvas->verticalScrollBar()->isVisible() && ((m_canvas->verticalScrollBar()->value() - m_canvas->pageOffsetY()) > 0))	
+	if( m_canvas->verticalScrollBar()->isVisible() && ((m_canvas->verticalScrollBar()->value() - m_canvas->pageOffsetY()) > 0))
 		py = my;
 	else
 		py = (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY());
 
-	m_horizRuler->updatePointer(px, py); 
-	m_vertRuler->updatePointer(px, py); 
+	m_horizRuler->updatePointer(px, py);
+	m_vertRuler->updatePointer(px, py);
 
 	KoPoint xy;
 	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
@@ -1063,9 +1058,9 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 
 	xy.setX(KoUnit::toUserValue(xy.x(), part()->unit()));
 	xy.setY(KoUnit::toUserValue(xy.y(), part()->unit()));
-	
+
 	m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::_locale->formatNumber(xy.x(), 2)).arg(KGlobal::_locale->formatNumber(xy.y(), 2)) );
-	
+
 	part()->toolController()->setActiveView( this );
 	if( part()->toolController() )
 		return part()->toolController()->mouseEvent( event, p );
@@ -1249,7 +1244,7 @@ KarbonView::canvasContentsMoving( int x, int y )
 			}
 			else
 			{
-				m_horizRuler->setGeometry( hSpace, 0, qRound( 1 + part()->document().width() * zoom() ) - x + m_canvas->pageOffsetX(), vSpace ); 
+				m_horizRuler->setGeometry( hSpace, 0, qRound( 1 + part()->document().width() * zoom() ) - x + m_canvas->pageOffsetX(), vSpace );
 				m_horizRuler->updateVisibleArea((x - m_canvas->pageOffsetX()),0);
 			}
 		}
@@ -1391,7 +1386,7 @@ void KarbonView::createColorDock()
     m_ColorManager = new VColorDocker(part(),this);
     //m_ColorManager->setCaption(i18n("Stroke Properties"));
     paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
-	
+
 	connect( this, SIGNAL( selectionChange() ), m_ColorManager, SLOT( update() ) );
 }
 

@@ -229,11 +229,6 @@ void KWordDocIface::saveConfig()
     doc->saveConfig();
 }
 
-void KWordDocIface::initUnit()
-{
-    doc->initUnit();
-}
-
 bool KWordDocIface::isHeaderVisible() const
 {
     return doc->isHeaderVisible();

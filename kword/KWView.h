@@ -354,6 +354,7 @@ public slots:
     void docStructChanged(int _type);
     void slotHRulerDoubleClicked();
     void slotHRulerDoubleClicked( double );
+    void slotUnitChanged(KoUnit::Unit);
 
     void pageNumChanged();
 

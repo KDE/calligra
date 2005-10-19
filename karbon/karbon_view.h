@@ -101,8 +101,6 @@ public:
 
 	QLabel* statusMessage() const { return m_status; }
 
-	void setUnit( KoUnit::Unit _unit );
-
 	void setCursor( const QCursor & );
 
 	void repaintAll( const KoRect & );
@@ -154,8 +152,7 @@ public slots:
 	void viewZoomIn();
 	void viewZoomOut();
 
-	// TODO: remove this someday:
-	void dummyForTesting();
+	void setUnit( KoUnit::Unit _unit );
 
 	void configure();
 

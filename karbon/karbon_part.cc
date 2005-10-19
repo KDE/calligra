@@ -110,7 +110,6 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
         if (flags==KoDocument::InitDocEmpty)
         {
-                initUnit();
                 return true;
         }
 	QString file;
@@ -137,13 +136,11 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 		bool ok = loadNativeFormat( file );
 		if ( !ok )
 			showLoadingErrorDialog();
-		initUnit();
 		setEmpty();
 		return ok;
 	}
 	else if( result == KoTemplateChooseDia::Empty )
 	{
-		initUnit();
 		return true;
 	}
 	else if( result == KoTemplateChooseDia::File )
@@ -545,48 +542,12 @@ KarbonPart::initConfig()
 	{
 		config->setGroup( "Misc" );
 		undos = config->readNumEntry( "UndoRedo", -1 );
+		if ( config->hasKey( "Units" ) ) {
+                    setUnit( KoUnit::unit( config->readEntry("Units") ) );
+		}
 	}
 	if( undos != -1 )
 		setUndoRedoLimit( undos );
-}
-
-void
-KarbonPart::initUnit()
-{
-	//load unit config after we load file.
-	//load it for new file or empty file
-	KConfig* config = KarbonPart::instance()->config();
-
-
-	if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-		setUnit( KoUnit::U_INCH );
-	} else {
-		setUnit( KoUnit::U_CM );
-	}
-
-	if(config->hasGroup("Misc") ) {
-	        config->setGroup( "Misc" );
-		if ( config->hasKey( "Units" ) ) {
-		         setUnit( KoUnit::unit( config->readEntry("Units") ) );
-		}
-	}
-}
-
-void
-KarbonPart::setUnit( KoUnit::Unit _unit )
-{
-	m_doc.setUnit( _unit );
-	QPtrListIterator<KoView> itr( views() );
-
-	for( ; itr.current(); ++itr )
-	{
-		static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
-	}
-
-	if( m_toolController->activeTool() )
-		m_toolController->activeTool()->refreshUnit();
-
-	emit unitChanged( _unit );
 }
 
 bool
@@ -607,6 +568,15 @@ KarbonPart::addShell( KoMainWindow *shell )
 	KoDocument::addShell( shell );
 }
 
+
+void
+KarbonPart::slotUnitChanged( KoUnit::Unit unit )
+{
+	// VDocument has its own storage of the unit...
+	m_doc.setUnit( unit );
+	if( m_toolController->activeTool() )
+		m_toolController->activeTool()->refreshUnit();
+}
 
 #include "karbon_part.moc"
 

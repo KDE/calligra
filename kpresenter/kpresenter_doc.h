@@ -35,7 +35,6 @@ class KMacroCommand;
 class KoCommandHistory;
 class KoTextZoomHandler;
 class KoAutoFormat;
-class KoUnit;
 class KoVariable;
 class KoVariableFormatCollection;
 class KPrVariableCollection;
@@ -68,7 +67,6 @@ class KoSavingContext;
 #include <koStyleStack.h>
 #include <koPictureCollection.h>
 #include "kpgradientcollection.h"
-#include <koUnit.h>
 #include <kotextzoomhandler.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
 #include <kocommandhistory.h>
@@ -324,11 +322,6 @@ class KPresenterDoc : public KoDocument
     double tabStopValue() const { return m_tabStop; }
     void setTabStopValue ( double _tabStop );
 
-    // The user-chosen global unit
-    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit()const { return m_unit; }
-    void setUnit( KoUnit::Unit _unit );
-
     // in pt
     double getIndentValue()const { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
@@ -518,7 +511,6 @@ signals:
     void sig_updateRuler();
     void sig_terminateEditing( KPTextObject * );
     void sig_updateMenuBar();
-    void unitChanged(KoUnit::Unit);
 
 protected slots:
     void slotDocumentRestored();
@@ -651,7 +643,6 @@ protected:
     double m_indent; // in pt
 
     double m_tabStop;
-    KoUnit::Unit m_unit;
     int m_maxRecentFiles;
     bool m_cursorInProtectectedArea;
     KoVariableFormatCollection *m_varFormatCollection;

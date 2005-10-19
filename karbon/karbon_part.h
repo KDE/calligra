@@ -63,7 +63,7 @@ public:
 	virtual QDomDocument saveXML();
 	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
 
-    virtual void addShell( KoMainWindow *shell );
+	virtual void addShell( KoMainWindow *shell );
 
 	virtual DCOPObject* dcopObject();
 
@@ -100,11 +100,6 @@ public:
 	void initConfig();
 	unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
 
-	QString unitName() const { return KoUnit::unitName( m_doc.unit() ); }
-	KoUnit::Unit unit() const { return m_doc.unit(); }
-	void setUnit( KoUnit::Unit _unit );
-	void initUnit();
-
 	void setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit );
 
 	bool mergeNativeFormat( const QString & file );
@@ -115,15 +110,13 @@ public slots:
 	void repaintAllViews( const KoRect& );
 	void slotDocumentRestored();
 	void slotCommandExecuted( VCommand * );
-
-signals:
-	void unitChanged( KoUnit::Unit unit );
+	void slotUnitChanged( KoUnit::Unit unit );
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 	virtual void removeView( KoView *view );
-    void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
-    void loadOasisSettings( const QDomDocument&settingsDoc );
+	void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
+	void loadOasisSettings( const QDomDocument&settingsDoc );
 
 
 private:

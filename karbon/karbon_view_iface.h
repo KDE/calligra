@@ -51,9 +51,6 @@ k_dcop:
 
 	double zoomFactor() const;
 
-	// TODO: remove this someday:
-	void dummyForTesting();
-
 	void groupSelection();
 	void ungroupSelection();
 	void configure();

@@ -5637,7 +5637,7 @@ void KSpreadView::paperLayoutDlg()
   hf.footRight = print->localizeHeadFootLine( print->footRight() );
   hf.footMid   = print->localizeHeadFootLine( print->footMid()   );
 
-  KoUnit::Unit unit = doc()->getUnit();
+  KoUnit::Unit unit = doc()->unit();
 
   KSpreadPaperLayout * dlg
     = new KSpreadPaperLayout( this, "PageLayout", pl, hf,

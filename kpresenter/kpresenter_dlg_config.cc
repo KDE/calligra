@@ -197,7 +197,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     m_pView=_view;
     config = KPresenterFactory::global()->config();
 
-    KoUnit::Unit unit = m_pView->kPresenterDoc()->getUnit();
+    KoUnit::Unit unit = m_pView->kPresenterDoc()->unit();
 
     oldNbRecentFiles=10;
     double ptIndent = MM_TO_POINT(10.0);
@@ -252,7 +252,7 @@ void configureInterfacePage::apply()
 
     config->setGroup( "Interface" );
 
-    double newIndent = KoUnit::fromUserValue( indent->value(), doc->getUnit() );
+    double newIndent = KoUnit::fromUserValue( indent->value(), doc->unit() );
     if( newIndent != doc->getIndentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -287,7 +287,7 @@ void configureInterfacePage::apply()
 
 void configureInterfacePage::slotDefault()
 {
-    double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
+    double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->unit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
@@ -448,16 +448,16 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     KoRect rect = doc->masterPage()->getPageRect();
-    QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()), tmpQGroupBox);
+    QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->unitName()), tmpQGroupBox);
     grid->addWidget(lab,0,0);
-    KoUnit::Unit unit = doc->getUnit();
+    KoUnit::Unit unit = doc->unit();
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
     resolutionX->setValue( KoUnit::toUserValue( doc->getGridX(), unit ) );
     resolutionX->setRange( KoUnit::toUserValue(5.0 , unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue(1, unit ), false);
 
     grid->addWidget(resolutionX,1,0);
     
-    lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->getUnitName()), tmpQGroupBox);
+    lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->unitName()), tmpQGroupBox);
     grid->addWidget(lab,2,0);
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
@@ -539,8 +539,8 @@ KCommand * configureMiscPage::apply()
         macroCmd->addCommand(cmd);
     }
 
-    doc->setGridValue( KoUnit::fromUserValue( resolutionX->value(), doc->getUnit() ),
-                       KoUnit::fromUserValue( resolutionY->value(), doc->getUnit() ), true);
+    doc->setGridValue( KoUnit::fromUserValue( resolutionX->value(), doc->unit() ),
+                       KoUnit::fromUserValue( resolutionY->value(), doc->unit() ), true);
     doc->repaint( false );
 
     config->sync();
@@ -558,8 +558,8 @@ void configureMiscPage::slotDefault()
     m_cbPrintNotes->setChecked(true);
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-    resolutionY->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->getUnit() ) );
-    resolutionX->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->getUnit() ) );
+    resolutionY->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->unit() ) );
+    resolutionX->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->unit() ) );
 }
 
 configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget *parent, char *name )
@@ -649,13 +649,13 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
 
-    new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
+    new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
     KoRect rect = doc->masterPage()->getPageRect();
 
-    m_tabStopWidth->setRange( KoUnit::toUserValue( MM_TO_POINT(2),doc->getUnit() ) , KoUnit::toUserValue( rect.width(), doc->getUnit() ) , 0.1, false);
-    m_tabStopWidth->setValue( KoUnit::toUserValue( m_oldTabStopWidth, doc->getUnit() ));
+    m_tabStopWidth->setRange( KoUnit::toUserValue( MM_TO_POINT(2),doc->unit() ) , KoUnit::toUserValue( rect.width(), doc->unit() ) , 0.1, false);
+    m_tabStopWidth->setValue( KoUnit::toUserValue( m_oldTabStopWidth, doc->unit() ));
     box->addWidget(gbDocumentSettings);
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), this );
     gbDocumentCursor->setMargin( KDialog::marginHint() );
@@ -735,7 +735,7 @@ KCommand *configureDefaultDocPage::apply()
         macro->addCommand( cmd);
         m_oldStartingPage=newStartingPage;
     }
-    double newTabStop = KoUnit::fromUserValue( m_tabStopWidth->value(), doc->getUnit() );
+    double newTabStop = KoUnit::fromUserValue( m_tabStopWidth->value(), doc->unit() );
     if ( newTabStop != m_oldTabStopWidth)
     {
         if ( !macro )
@@ -753,7 +753,7 @@ void configureDefaultDocPage::slotDefault()
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
     m_variableNumberOffset->setValue(1);
     m_cursorInProtectedArea->setChecked(true);
-    m_tabStopWidth->setValue(KoUnit::toUserValue( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
+    m_tabStopWidth->setValue(KoUnit::toUserValue( MM_TO_POINT(15), m_pView->kPresenterDoc()->unit()));
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
     m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( KGlobal::locale()->language() ) );

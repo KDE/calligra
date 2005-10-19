@@ -102,13 +102,6 @@ KarbonViewIface::zoomFactor() const
 	return m_view->zoom();
 }
 
-// TODO: remove this someday:
-void
-KarbonViewIface::dummyForTesting()
-{
-	m_view->dummyForTesting();
-}
-
 void KarbonViewIface::groupSelection()
 {
 	m_view->groupSelection();

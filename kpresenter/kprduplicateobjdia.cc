@@ -38,7 +38,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, con
     : KDialogBase( parent, name, true, "", Ok | Cancel, Ok, true )
 {
     m_doc=_doc;
-    KoUnit::Unit unit = m_doc->getUnit();
+    KoUnit::Unit unit = m_doc->unit();
 
     KoRect pageRect = m_doc->masterPage()->getPageRect();
 
