@@ -534,17 +534,17 @@ void KWView::setupActions()
     actionViewFrameBorders->setToolTip( i18n( "Turns the border display on and off." ) );
     actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
-    actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
+    actionViewHeader = new KToggleAction( i18n( "Enable Document &Headers" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "format_header" );
-    actionViewHeader->setCheckedState(i18n("Hide &Header"));
+    actionViewHeader->setCheckedState(i18n("Disable Document &Headers"));
     actionViewHeader->setToolTip( i18n( "Shows and hides header display." ) );
     actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
 
-    actionViewFooter = new KToggleAction( i18n( "Show Foo&ter" ), 0,
+    actionViewFooter = new KToggleAction( i18n( "Enable Document Foo&ters" ), 0,
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "format_footer" );
-    actionViewFooter->setCheckedState(i18n("Hide Foo&ter"));
+    actionViewFooter->setCheckedState(i18n("Disable Document Foo&ters"));
     actionViewFooter->setToolTip( i18n( "Shows and hides footer display." ) );
     actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
@@ -2940,7 +2940,7 @@ void KWView::viewHeader()
 {
     bool state = actionViewHeader->isChecked();
     m_doc->setHeaderVisible( state );
-    KWHideShowHeader *cmd=new KWHideShowHeader( state ? i18n("Show Header"):i18n("Hide Header"), m_doc, state);
+    KWHideShowHeader *cmd=new KWHideShowHeader( state ? i18n("Enable Document Headers"):i18n("Disable Document Headers"), m_doc, state);
     m_doc->addCommand(cmd);
     updateHeader();
 }
@@ -2988,7 +2988,7 @@ void KWView::viewFooter()
 {
     bool state=actionViewFooter->isChecked();
     m_doc->setFooterVisible( state );
-    KWHideShowFooter *cmd=new KWHideShowFooter( state ? i18n("Show Footer"):i18n("Hide Footer"), m_doc, state);
+    KWHideShowFooter *cmd=new KWHideShowFooter( state ? i18n("Enable Document Footers"):i18n("Disable Document Footers"), m_doc, state);
     m_doc->addCommand(cmd);
     updateFooter();
 }
