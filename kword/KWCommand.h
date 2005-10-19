@@ -52,7 +52,7 @@ class KWFootNoteVariable;
 // TODO: change most KNamedCommands into KCommands, removing name arguments
 // and implementing name() instead (less memory used).
 
-
+#if 0
 /**
  * Command created when pasting formatted text
  * [relies on KWord's XML structure, so not moved to kotext]
@@ -74,6 +74,7 @@ protected:
     int m_lastIndex;
     KoParagLayout* m_oldParagLayout;
 };
+#endif
 
 /**
  * Command created when pasting oasis-formatted text
