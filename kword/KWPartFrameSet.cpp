@@ -277,9 +277,9 @@ void KWPartFrameSet::setDeleted( bool on)
     m_child->setDeleted( on );
 }
 
-void KWPartFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
+void KWPartFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
 {
-    KWFrameSet::delFrame( _num, remove, recalc );
+    KWFrameSet::deleteFrame( _num, remove, recalc );
     if ( m_frames.isEmpty() )         // then the whole frameset and thus the child is deleted
         m_child->setDeleted();
 }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1131,7 +1132,7 @@ void KWDeleteFrameCommand::execute()
     Q_ASSERT( frame );
     KWDocument* doc = frameSet->kWordDocument();
     doc->terminateEditing( frameSet );
-    frameSet->delFrame( m_frameIndex.m_iFrameIndex );
+    frameSet->deleteFrame( m_frameIndex.m_iFrameIndex );
     //when you delete a frame frame pointer is deleted
     //so used frameChanged with a null pointer.
     doc->frameChanged( 0L );

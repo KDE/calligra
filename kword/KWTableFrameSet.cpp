@@ -1495,7 +1495,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
             if(daCell && daCell!=firstCell) {
                 listFrameSet.append(daCell);
                 listCopyFrame.append(daCell->frame(0)->getCopy());
-                daCell->delFrame( daCell->frame(0));
+                daCell->deleteFrame( daCell->frame(0));
             }
         }
     }
@@ -2757,7 +2757,7 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
 void KWTableFrameSet::Cell::frameDeleted( KWFrame* frm, bool recalc )
 {
     if(groupmanager())
-        groupmanager()->delFrame( frm, false, recalc );
+        groupmanager()->deleteFrame( frm, false, recalc );
 }
 
 double KWTableFrameSet::Cell::leftBorder() {

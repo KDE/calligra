@@ -111,7 +111,7 @@ public:
                 return (row == m_row) && (col == m_col);
         }
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
-        /// Called by delFrame when it really deletes a frame (remove=true), to remove it from the table too
+        /// Called by deleteFrame when it really deletes a frame (remove=true), to remove it from the table too
         virtual void frameDeleted( KWFrame* frm, bool recalc );
 
         bool isAboveOrLeftOf( unsigned row, unsigned col ) const;

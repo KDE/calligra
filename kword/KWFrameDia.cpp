@@ -1806,7 +1806,7 @@ bool KWFrameDia::applyChanges()
                 // disconnect.
                 if(! mayDeleteFrameSet( static_cast<KWTextFrameSet*>(m_frame->frameSet())))
                     return false;
-                m_frame->frameSet()->delFrame( m_frame, false );
+                m_frame->frameSet()->deleteFrame( m_frame, false );
             } else {
                 // first check all frames and ask the user if its ok to disconnect.
                 for(KWFrame *f=m_allFrames.first();f; f=m_allFrames.next()) {
@@ -1814,7 +1814,7 @@ bool KWFrameDia::applyChanges()
                         return false;
                 }
                 for(KWFrame *f=m_allFrames.first();f; f=m_allFrames.next())
-                    f->frameSet()->delFrame( f, false );
+                    f->frameSet()->deleteFrame( f, false );
             }
         } else if(m_rExistingFrameset->isChecked()) { // rename and/or m_reconnect a new frameset for this frame.
             if(frameSetItem && (fs->name() != frameSetItem->text( 1 ))) { // rename FS.
@@ -1832,7 +1832,7 @@ bool KWFrameDia::applyChanges()
                         // m_reconnect.
                         if(! mayDeleteFrameSet( dynamic_cast<KWTextFrameSet*>(m_frame->frameSet())))
                             return false;
-                        m_frame->frameSet()->delFrame( m_frame, false );
+                        m_frame->frameSet()->deleteFrame( m_frame, false );
                     }
                     fs->addFrame(m_frame);
                 }
@@ -1851,7 +1851,7 @@ bool KWFrameDia::applyChanges()
                         KWFrameSet *fs2=f->frameSet();
                         if(! (fs2->isHeaderOrFooter() || fs2->isMainFrameset()) ) {
                             if(fs2 != fs) {  // m_reconnect.
-                                f->frameSet()->delFrame( f, false );
+                                f->frameSet()->deleteFrame( f, false );
                                 fs->addFrame(f);
                             }
                         }

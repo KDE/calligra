@@ -61,7 +61,7 @@ public:
      * @param remove passing true means that there can not be an undo of the action.
      * @param recalc do an updateFrames()
      */
-    virtual void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
+    virtual void deleteFrame( unsigned int _num, bool remove = true, bool recalc = true );
 
     virtual void moveFrame( KWFrame* frame );
 

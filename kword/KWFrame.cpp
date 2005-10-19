@@ -910,7 +910,7 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
         updateFrames();
 }
 
-void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
+void KWFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
 {
     //kdDebug(32001) << k_funcinfo << name() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << kdBacktrace();
     KWFrame *frm = m_frames.at( _num );
@@ -947,15 +947,15 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
         updateFrames();
 }
 
-void KWFrameSet::delFrame( KWFrame *frm, bool remove, bool recalc )
+void KWFrameSet::deleteFrame( KWFrame *frm, bool remove, bool recalc )
 {
-    //kdDebug(32001) << "KWFrameSet::delFrame " << frm << " remove=" << remove << endl;
+    //kdDebug(32001) << "KWFrameSet::deleteFrame " << frm << " remove=" << remove << endl;
     int _num = m_frames.findRef( frm );
     Q_ASSERT( _num != -1 );
     if ( _num == -1 )
         return;
 
-    delFrame( _num, remove, recalc );
+    deleteFrame( _num, remove, recalc );
 }
 
 void KWFrameSet::deleteAllFrames()

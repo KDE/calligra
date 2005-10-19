@@ -57,7 +57,7 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
 #ifdef DEBUG_FRAMELAYOUT
         kdDebug(32002) << "  Final cleanup: deleting frame " << fs->frameCount() - 1 << " of " << fs->name() << endl;
 #endif
-        fs->delFrame( fs->frameCount() - 1 );
+        fs->deleteFrame( fs->frameCount() - 1 );
         deleted = true;
     }
     return deleted;
@@ -391,7 +391,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 #ifdef DEBUG_FRAMELAYOUT
             kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->frameCount() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
 #endif
-            mainTextFrameSet->delFrame( mainTextFrameSet->frameCount() - 1, true, false /*do not updateFrames!*/ );
+            mainTextFrameSet->deleteFrame( mainTextFrameSet->frameCount() - 1, true, false /*do not updateFrames!*/ );
             deleted = true;
         }
         if ( deleted )

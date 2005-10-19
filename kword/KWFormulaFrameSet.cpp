@@ -126,11 +126,11 @@ void KWFormulaFrameSet::addFrame( KWFrame *_frame, bool recalc )
     }
 }
 
-void KWFormulaFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
+void KWFormulaFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
 {
     kdDebug() << k_funcinfo << endl;
     assert( _num == 0 );
-    KWFrameSet::delFrame( _num, remove, recalc );
+    KWFrameSet::deleteFrame( _num, remove, recalc );
     formula->unregisterFormula();
 }
 

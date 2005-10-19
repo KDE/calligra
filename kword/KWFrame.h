@@ -496,16 +496,16 @@ public:
     *   @param remove passing true means that there can not be an undo of the action.
     *   @param recalc do an updateFrames()
     */
-    virtual void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
+    virtual void deleteFrame( unsigned int _num, bool remove = true, bool recalc = true );
 
     /** Delete a frame from the set of frames this frameSet has.
     *   @param frm. The frame that should be deleted
     *   @param remove passing true means that there can not be an undo of the action.
     *   @param recalc do an updateFrames()
     */
-    void delFrame( KWFrame *frm, bool remove = true, bool recalc = true ); // calls the virtual one
+    void deleteFrame( KWFrame *frm, bool remove = true, bool recalc = true ); // calls the virtual one
 
-    /// Called by delFrame when it really deletes a frame (remove=true), to remove it from the table too
+    /// Called by deleteFrame when it really deletes a frame (remove=true), to remove it from the table too
     virtual void frameDeleted( KWFrame* /*frm*/, bool /*recalc*/ ) {}
 
     void deleteAllFrames();

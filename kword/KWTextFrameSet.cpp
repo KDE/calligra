@@ -2178,7 +2178,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         // continuation on the next page). Not when the user just created it!
         if(m_frames.last()->frameBehavior() == KWFrame::AutoExtendFrame
            && m_frames.last()->minFrameHeight() < 1E-10 ) { // i.e. equal to 0
-            delFrame(m_frames.last(), true);
+            deleteFrame(m_frames.last(), true);
             m_doc->frameChanged( 0L );
         }
         if ( m_doc->processingType() == KWDocument::WP ) {
@@ -2428,13 +2428,13 @@ bool KWTextFrameSet::canRemovePage( int num )
     return true;
 }
 
-void KWTextFrameSet::delFrame( unsigned int num, bool remove, bool recalc )
+void KWTextFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
     KWFrame *frm = m_frames.at( num );
-    kdDebug() << "KWTextFrameSet(" << name() << ")::delFrame " << frm << " (" << num << ")" << endl;
+    kdDebug() << "KWTextFrameSet(" << name() << ")::deleteFrame " << frm << " (" << num << ")" << endl;
     if ( frm )
         emit frameDeleted( frm );
-    KWFrameSet::delFrame( num, remove, recalc );
+    KWFrameSet::deleteFrame( num, remove, recalc );
 }
 
 void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QPoint & nPointBottom )

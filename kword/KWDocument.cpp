@@ -4082,7 +4082,7 @@ void KWDocument::removePage( int pageNum )
         KWFrameSet * frameSet = frame->frameSet();
         if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY )
             continue;
-        frameSet->delFrame( frame, true );
+        frameSet->deleteFrame( frame, true );
     }
 
     // If not removing the last one, move up everything after the one we removed.
