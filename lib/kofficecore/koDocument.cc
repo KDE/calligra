@@ -108,6 +108,11 @@ public:
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
+        if ( KGlobal::locale()->measureSystem() == KLocale::Imperial ) {
+            m_unit = KoUnit::U_INCH;
+        } else {
+            m_unit = KoUnit::U_CM;
+        }
     }
 
     QPtrList<KoView> m_views;
@@ -118,6 +123,8 @@ public:
     KoViewWrapperWidget *m_wrapperWidget;
     KoDocumentIface * m_dcopObject;
     KoDocumentInfo *m_docInfo;
+
+    KoUnit::Unit m_unit;
 
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
 
@@ -2424,6 +2431,25 @@ QValueList<KoTextDocument *> KoDocument::allTextDocuments() const
 KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
 {
     return m_pageLayout;
+}
+
+KoUnit::Unit KoDocument::unit() const
+{
+    return d->m_unit;
+}
+
+void KoDocument::setUnit( KoUnit::Unit unit )
+{
+    if ( d->m_unit != unit )
+    {
+        d->m_unit = unit;
+        emit unitChanged( unit );
+    }
+}
+
+QString KoDocument::unitName() const
+{
+    return KoUnit::unitName( unit() );
 }
 
 #include "koDocument_p.moc"

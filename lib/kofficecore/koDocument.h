@@ -31,6 +31,7 @@ using namespace std;
 #include <kurl.h>
 #include <kservice.h>
 #include <koGlobal.h>
+#include <koUnit.h>
 #include <koPageLayout.h>
 #include <koffice_export.h>
 
@@ -846,10 +847,39 @@ public:
     /**
      * @return all kotext-based text objects in the document
      * This is used by some text-analyzer plugins.
+     * @since 1.5
      */
     virtual QValueList<KoTextDocument *> allTextDocuments() const;
 
+    /**
+     * Returns the unit used to display all measures/distances.
+     * @since 1.5
+     */
+    KoUnit::Unit unit() const;
+
+    /**
+     * Sets the unit used to display all measures/distances.
+     * @since 1.5
+     */
+    void setUnit( KoUnit::Unit u );
+
+    /**
+     * Returns the name of the unit used to display all measures/distances.
+     * Use this method for displaying it in the user interface, but use
+     * unit() for everything else (conversions etc.)
+     * @since 1.5
+     */
+    QString unitName() const;
+
 signals:
+
+    /**
+     * This signal is emitted when the unit is changed by setUnit()
+     * It is common to connect views to it, in order to change the displayed units
+     * (e.g. in the rulers)
+     */
+    void unitChanged(KoUnit::Unit);
+
     /**
      * This signal is emitted when a direct or indirect child document changes
      * and needs to be updated in all views.
