@@ -418,7 +418,7 @@ void KWDocStructRootItem::setupArrangement()
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
+        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
         {
             item = new KListViewItem( this, frameset->name() );
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
@@ -483,11 +483,11 @@ void KWDocStructRootItem::setupTextFrames()
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
+        if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
         {
             item = new KListViewItem( this, frameset->name() );
 
-            for ( int j = frameset->getNumFrames() - 1; j >= 0; j-- )
+            for ( int j = frameset->frameCount() - 1; j >= 0; j-- )
             {
                 if ( i == 0 && doc->processingType() == KWDocument::WP )
                 {
@@ -534,7 +534,7 @@ void KWDocStructRootItem::setupFormulaFrames()
     {
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_FORMULA &&
-            frameset->getNumFrames()>0  )
+            frameset->frameCount()>0  )
         {
             _name=i18n("Formula Frame %1").arg(QString::number(i+1));
             child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
@@ -610,7 +610,7 @@ void KWDocStructRootItem::setupPictures()
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_PICTURE && frameset->getNumFrames()>0)
+        if ( frameset->type() == FT_PICTURE && frameset->frameCount()>0)
         {
             _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
             child = new KWDocStructPictureItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
@@ -647,7 +647,7 @@ void KWDocStructRootItem::setupEmbedded()
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
+        if ( frameset->type() == FT_PART && frameset->frameCount()>0)
         {
             // Use the name of the frameset as the entry for the object.
             _name=frameset->name();
@@ -752,7 +752,7 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
         switch ( _type )
         {
             case Arrangement:
-                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
+                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
                 {
 
                     tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
@@ -768,12 +768,12 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
                 }
                 break;
             case TextFrames:
-                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->getNumFrames()>0)
+                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
                     return true;
                 break;
             case FormulaFrames:
                 if ( frameset->type() == FT_FORMULA &&
-                     frameset->getNumFrames()>0  )
+                     frameset->frameCount()>0  )
                     return true;
                 break;
             case Tables:
@@ -785,11 +785,11 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
                 return true;
                 break;
             case Pictures:
-                if ( frameset->type() == FT_PICTURE && frameset->getNumFrames()>0)
+                if ( frameset->type() == FT_PICTURE && frameset->frameCount()>0)
                     return true;
                 break;
             case Embedded:
-                if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
+                if ( frameset->type() == FT_PART && frameset->frameCount()>0)
                     return true;
                 break;
         }

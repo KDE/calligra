@@ -535,7 +535,7 @@ public:
     /** Get frame number */
     int frameFromPtr( KWFrame *frame );
     /** Get number of child frames */
-    unsigned int getNumFrames() const { return m_frames.count(); }
+    unsigned int frameCount() const { return m_frames.count(); }
 
     /** Called when the user resizes a frame. Calls resizeFrame. */
     void resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize );

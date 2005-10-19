@@ -17,7 +17,7 @@ KWFrameLayout::HeaderFooterFrameset::HeaderFooterFrameset( KWTextFrameSet* fs, i
     : m_frameset(fs), m_startAtPage(start), m_endAtPage(end), m_oddEvenAll(oea),
       m_spacing(spacing), m_minY( 0 ), m_positioned( false )
 {
-    if ( fs->getNumFrames() > 0 )
+    if ( fs->frameCount() > 0 )
         m_height = fs->frame(0)->height();
     else
         m_height = 20; // whatever. The text layout will resize it.
@@ -32,7 +32,7 @@ void KWFrameLayout::HeaderFooterFrameset::debug()
                    << " pages:" << hff->m_startAtPage << "-" << (hff->m_endAtPage==-1?QString("(all)"):QString::number(hff->m_endAtPage))
                    << " page-selection:" << (hff->m_oddEvenAll==HeaderFooterFrameset::Odd ? "Odd" :
                                              hff->m_oddEvenAll==HeaderFooterFrameset::Even ? "Even" : "All")
-                   << " frames:" << hff->m_frameset->getNumFrames()
+                   << " frames:" << hff->m_frameset->frameCount()
                    << " height:" << hff->m_height
                    << " spacing:" << hff->m_spacing << endl;
 #endif
@@ -53,11 +53,11 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
         lastFrame = 0;
 
     bool deleted = false;
-    while ( (int)fs->getNumFrames() - 1 > lastFrame ) {
+    while ( (int)fs->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "  Final cleanup: deleting frame " << fs->getNumFrames() - 1 << " of " << fs->name() << endl;
+        kdDebug(32002) << "  Final cleanup: deleting frame " << fs->frameCount() - 1 << " of " << fs->name() << endl;
 #endif
-        fs->delFrame( fs->getNumFrames() - 1 );
+        fs->delFrame( fs->frameCount() - 1 );
         deleted = true;
     }
     return deleted;
@@ -387,11 +387,11 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // there's no frame on the "end notes only" page(s).
         int lastFrame = m_lastMainFramePage * numColumns + (numColumns-1);
         bool deleted = false;
-        while ( (int)mainTextFrameSet->getNumFrames() - 1 > lastFrame ) {
+        while ( (int)mainTextFrameSet->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
-            kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->getNumFrames() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
+            kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->frameCount() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
 #endif
-            mainTextFrameSet->delFrame( mainTextFrameSet->getNumFrames() - 1, true, false /*do not updateFrames!*/ );
+            mainTextFrameSet->delFrame( mainTextFrameSet->frameCount() - 1, true, false /*do not updateFrames!*/ );
             deleted = true;
         }
         if ( deleted )
@@ -449,7 +449,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
 void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect )
 {
-    if ( frameNumber < headerFooter->getNumFrames() ) {
+    if ( frameNumber < headerFooter->frameCount() ) {
         KWFrame* frame = headerFooter->frame( frameNumber );
         if ( *frame == rect )
             return;
@@ -487,7 +487,7 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
 KoRect KWFrameLayout::firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns ) const
 {
     uint frameNum = pageNum * numColumns /*+ col  0 here*/;
-    if ( mainTextFrameSet && frameNum < mainTextFrameSet->getNumFrames() )
+    if ( mainTextFrameSet && frameNum < mainTextFrameSet->frameCount() )
         return * mainTextFrameSet->frame( frameNum );
     else
         return KoRect();
@@ -505,7 +505,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
                      top, ptColumnWidth, bottom - top );
         uint frameNum = pageNum * numColumns + col;
         KWFrame* frame;
-        if ( frameNum < mainTextFrameSet->getNumFrames() ) {
+        if ( frameNum < mainTextFrameSet->frameCount() ) {
             // Resize existing frame
             frame = mainTextFrameSet->frame( frameNum );
             // Special case for last-frame-before-endnotes: don't resize its bottom
@@ -528,7 +528,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
             kdDebug(32002) << " Page " << pageNum << ": creating new main text frame " << frameNum << "(" << frame << ") to " << rect << endl;
 #endif
             mainTextFrameSet->addFrame( frame );
-            Q_ASSERT( frameNum == mainTextFrameSet->getNumFrames()-1 );
+            Q_ASSERT( frameNum == mainTextFrameSet->frameCount()-1 );
             mainTextFrameResized = true;
             mainTextFrameSet->updateFrames( 0xff - KWFrameSet::SortFrames ); // Don't sort frames yet!
         }

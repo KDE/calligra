@@ -490,7 +490,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
             //if ( viewMode->isPageVisible( pageNum ) )
             {
                 uint frameNum = pageNum * numColumns /*+ col  0 here*/;
-                if ( frameNum < getNumFrames() ) // not true on the "endnotes-only" page
+                if ( frameNum < frameCount() ) // not true on the "endnotes-only" page
                 {
                     KWFrame* frame = this->frame( frameNum ); // ## or use framesInPage ?
                     //kdDebug() << " Footnote line: page " << pageNum << " found frame " << frameNum << " drawFootNoteLine=" << frame->drawFootNoteLine() << endl;
@@ -2406,7 +2406,7 @@ bool KWTextFrameSet::canRemovePage( int num )
 
     // No frame on that page ? ok for us then
     if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage ) {
-        //kdDebug() << "No frame on that page. Number of m_frames: " << getNumFrames() << endl;
+        //kdDebug() << "No frame on that page. Number of m_frames: " << frameCount() << endl;
         return true;
     }
 

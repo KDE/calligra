@@ -2656,7 +2656,7 @@ void KWView::deleteFrame( bool _warning )
             return;
         }
 
-        if ( fs->getNumFrames() == 1 && fs->type() == FT_TEXT) {
+        if ( fs->frameCount() == 1 && fs->type() == FT_TEXT) {
             if ( m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( fs ) == 0 )
                 return; // if primairy FS, we can't delete it :)
 
@@ -4591,7 +4591,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
                 if ( (*it)->type() == FT_TABLE )
                 {
                     KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( *it );
-                    //kdDebug() << "table found: " << kwtableframeset->getNumFrames() << endl;
+                    //kdDebug() << "table found: " << kwtableframeset->frameCount() << endl;
                     int const rows  = kwtableframeset->getRows();
                     int const cols = kwtableframeset->getCols();
                     //finding all cells and add them to the interface list

@@ -2135,7 +2135,7 @@ void KWFrameSet::printDebug()
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
         KWFrame * frame = frameIt.current();
         QCString copy = frame->isCopy() ? "[copy]" : "";
-        kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")  " << copy << endl;
+        kdDebug() << " +-- Frame " << j << " of "<< frameCount() << "    (" << frame << ")  " << copy << endl;
         printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
         kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << " side:" << runaroundSide[ frame->runAroundSide() ]<< endl;
@@ -2156,10 +2156,11 @@ void KWFrameSet::printDebug()
         else
             kdDebug() << "     no frameStack set." << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
+        QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNum()) : " [waiting for pages to be created]";
         if(frame->isSelected())
-            kdDebug() << " *   Page "<< frame->pageNum() << endl;
+            kdDebug() << " *   Page "<< page << endl;
         else
-            kdDebug() << "     Page "<< frame->pageNum() << endl;
+            kdDebug() << "     Page "<< page << endl;
     }
 }
 

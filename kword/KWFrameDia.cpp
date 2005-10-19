@@ -2386,7 +2386,7 @@ void KWFrameDia::connectListSelected( QListViewItem *item )
 
 bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
     if(fs==0) return true;
-    if(fs->getNumFrames() > 1) return true;
+    if(fs->frameCount() > 1) return true;
     KoTextParag * parag = fs->textDocument()->firstParag();
     if(parag==0) return true;
     bool isEmpty = parag->next() == 0L && parag->length() == 1;

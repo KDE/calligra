@@ -630,7 +630,7 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
             // Fix things up, when we change the orientation we might accidentally change the number of pages
             // (and frames of the main textframeset might just remain un-moved...)
             KWFrameSet *frameset = m_lstFrameSet.getFirst();
-            KWFrame* lastFrame = frameset->frame( frameset->getNumFrames() - 1 );
+            KWFrame* lastFrame = frameset->frame( frameset->frameCount() - 1 );
             if ( lastFrame && lastFrame->pageNum() + 1 < numPages ) {
                 kdDebug(32002) << "KWDocument::setPageLayout ensuring that recalcFrames will consider " << numPages << " pages." << endl;
                 // All that matters is that it's on numPages so that all pages will be recalc-ed.
@@ -953,15 +953,15 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
         // Determine number of pages - first from the text frames
         // - BUT NOT from the number of frames. Some people manage to end up with
         // multiple frames of textframeset1 on the same page(!)
-        double maxBottom = frameset->frame( frameset->getNumFrames() -1 )->bottom();
+        double maxBottom = frameset->frame( frameset->frameCount() -1 )->bottom();
         // Then from the other frames ( framesetNum > 0 )
         for (int m = numFrameSets() - 1; m > 0; m-- )
         {
             KWFrameSet *fs=frameSet(m);
             if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() && !fs->isFloating() && !fs->isFootEndNote() )
             {
-                for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
-                    //if ( n == fs->getNumFrames()-1 )
+                for (int n = fs->frameCount()-1; n >= 0 ; n--) {
+                    //if ( n == fs->frameCount()-1 )
 #ifdef DEBUG_PAGES
                     kdDebug(32002) << "KWDocument::recalcFrames frameset number " << m << " '" << fs->name()
                                    << "' frame " << n << " bottom=" << fs->frame(n)->bottom() << endl;
@@ -1854,7 +1854,7 @@ void KWDocument::endOfLoading()
         } else if( fs->type()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( fs )->validate();
         } else if (fs->type() == FT_TEXT) {
-            for (int f=fs->getNumFrames()-1; f>=0; f--) {
+            for (int f=fs->frameCount()-1; f>=0; f--) {
                 KWFrame *frame = fs->frame(f);
                 if(frame->height() < s_minFrameHeight) {
                     kdWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
@@ -1876,14 +1876,14 @@ void KWDocument::endOfLoading()
                     frame->setRight( m_pageLayout.ptWidth);
                 }
             }
-            if(fs->getNumFrames() == 0) {
+            if(fs->frameCount() == 0) {
                 KWFrame *frame = new KWFrame(fs, m_pageLayout.ptLeft, m_pageLayout.ptTop,
                         m_pageLayout.ptWidth - m_pageLayout.ptLeft - m_pageLayout.ptRight,
                         m_pageLayout.ptHeight - m_pageLayout.ptTop - m_pageLayout.ptBottom);
                 //kdDebug(32001) << "KWDocument::loadXML main-KWFrame created " << *frame << endl;
                 fs->addFrame( frame );
             }
-        } else if(fs->getNumFrames() == 0) {
+        } else if(fs->frameCount() == 0) {
             kdWarning () << "frameset " << i << " " << fs->name() << " has no frames" << endl;
             removeFrameSet(fs);
             if ( fs->type() == FT_PART )
@@ -4577,7 +4577,7 @@ KWFrame *KWDocument::getFirstSelectedFrame() const
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
-        for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
+        for ( unsigned int j = 0; j < frameSet->frameCount(); j++ ) {
             if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
                 continue;
             if ( frameSet->frame( j )->isSelected() )
@@ -4718,7 +4718,7 @@ void KWDocument::setFramePadding( double l, double r, double t, double b )
     for ( unsigned int i = 0; i < numFrameSets(); i++ ) {
         if ( frameSet( i )->hasSelectedFrame() ) {
             KWFrameSet *frameset = frameSet( i );
-            for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
+            for ( unsigned int j = 0; j < frameset->frameCount(); j++ ) {
                 if ( frameset->frame( j )->isSelected() ) {
                     frameset->frame( j )->setPaddingLeft( l );
                     frameset->frame( j )->setPaddingRight( r );
@@ -4907,7 +4907,7 @@ void KWDocument::printDebug()
         if ( frameset->isVisible())
             frameset->printDebug();
         else
-            kdDebug() << "  [hidden] #" << frameset->getNumFrames() << " frames" << endl;
+            kdDebug() << "  [hidden] #" << frameset->frameCount() << " frames" << endl;
     }
 
     for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum )
