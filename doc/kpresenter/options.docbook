@@ -178,12 +178,21 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Skip all uppercase words</guilabel></term>
-<listitem><para>If this option is checked, the all uppercase words will not be checked for spelling. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para></listitem>
-</varlistentry>
+<listitem><para>If this option is checked, the all uppercase words will not be checked for spelling. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<tip><para>This is useful if the document you are working on uses a large number of acronyms. If this box is left unchecked, most of those acronyms will be incorrectly marked. By placing a mark in this checkbox, &kpresenter; will not mark the acronyms as misspelled.</para></tip>
+</listitem></varlistentry>
 
 <varlistentry>
 <term><guilabel>Skip run-together words</guilabel></term>
-<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para></listitem>
+<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<para>Examples of such words are <emphasis>shutout</emphasis>,
+<emphasis>cannot</emphasis> and <emphasis>blackout</emphasis>.</para>
+<tip>
+<para>Checking this box will help prevent &kpresenter; from
+flagging website and email addresses for spelling errors.  These
+addresses often contain words run together.</para>
+</tip>
+</listitem>
 </varlistentry>
 
 <varlistentry>
@@ -221,12 +230,12 @@ settings.</para></listitem>
 <title><guilabel>Misc</guilabel></title>
 <varlistentry>
 <term><guilabel>Undo/Redo limit:</guilabel></term>
-<listitem><para>Set the number of actions you can undo and redo. Default is 30. Maximum is 60 and minimum is 0.</para></listitem>
+<listitem><para>Set the number of actions you can undo and redo (howmany actions &kpresenter; keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Display links</guilabel></term>
-<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are displayed (or not) in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
+<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible(or not) both in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4a.png" format="PNG"/></imageobject></inlinemediaobject> A non displayed link: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4a1.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
@@ -287,35 +296,43 @@ settings.</para></listitem>
 <title><guilabel>Document Defaults</guilabel></title>
 <varlistentry>
 <term><guilabel>Default font:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Click on the <guibutton>Choose...</guibutton> button, and a new dialog will appear. Use this dialog to choose the default font. This setting determines the default font used by &kpresenter; until further formatting is done. You can revert any text to this default by selecting <menuchoice><guimenu>Text</guimenu><guimenuitem>Default Format</guimenuitem></menuchoice> from the menubar.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Global language:</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools.</para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatic hyphenation</guilabel></term>
+<listitem><para>Check this box if you want &kpresenter; to automatically hyphenate long words when it determines the word wrap in text frames. This is not set as default.</para></listitem>
+</varlistentry>
+
 </variablelist>
 
 <variablelist>
 <title><guilabel>Document Settings</guilabel></title>
 <varlistentry>
 <term><guilabel>Create backup file</guilabel></term>
-<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.kpr.autosave.kpr</filename> in the dir where your file is. This backup file can then be used in case of a problem.</para></listitem>
+<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.kpr.autosave.kpr</filename> in the dir where your file is. This backup file can then be used in case of a problem. The backup file is updated everytime you save your document or everytime there is an autosave.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Autosave (min):</guilabel></term>
-<listitem><para>Set the time between two autosaved files. Default is 5 minutes. You can set it from 1 minute to 60 minutes maximum and also to <guilabel>No autosave</guilabel>.</para></listitem>
+<listitem><para>You can use this to adjust how often &kpresenter; saves a temporary file. If you set this value to  <guilabel>No autosave</guilabel>, &kpresenter; will not autosave. You can adjust the autosave from 1 minute to 60 minutes.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Starting page number:</guilabel></term>
-<listitem><para>You can change here the number for the first page. It is set to 1 per default. </para></listitem>
+<listitem><para>You can change here the number for the first page. It is set to 1 per default. </para>
+<tip><para>This is helpful if you have split a single document into multiple files.</para></tip></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Tab stop (mm):</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Each &kpresenter; document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops.
+As an example. If you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc....</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -323,14 +340,16 @@ settings.</para></listitem>
 <title><guilabel>Cursor</guilabel></title>
 <varlistentry>
 <term><guilabel>Cursor in protected area</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>When this box is checked and you click in a protected frame of your document, a cursor appears. When the mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Direct insert cursor</guilabel></term>
 <!-- FIXME: Is this the same as the type anywhere cursor? if so, why
 two names? -->
-<listitem><para>-</para></listitem>
+<listitem><para>When this box is checked then you can select a section of text using your mouse. Move the mouse to a new place in your document and click once with the middle mouse button and a copy of the selected text is copied and pasted to the new location in the document.</para>
+<para>When there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, manually copy the text in to the clipboard, then manually paste the text in the new location.
+</para></listitem>
 </varlistentry>
 </variablelist>
 </sect2>
