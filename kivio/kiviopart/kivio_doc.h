@@ -26,7 +26,6 @@
 
 #include <koDocument.h>
 #include <koMainWindow.h>
-#include <koUnit.h>
 #include <koGlobal.h>
 
 #include "kivio_config.h"
@@ -112,7 +111,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     QValueList<Kivio::ShapeCollection*> shapeCollectionList() const { return m_shapeCollectionList; }
 
     KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
-    
+
     void addInternalStencilSpawner(KivioStencilSpawner* spawner);
     KivioStencilSpawnerSet* internalSpawnerSet() { return m_pInternalSet; }
 
@@ -131,7 +130,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     static QPtrList<KivioDoc>& documents();
 
-    KoUnit::Unit units()const { return m_units; }
+    // ### kivio calls units() what KoDocument calls unit()
+    KoUnit::Unit units() const { return unit(); }
 
     KivioGridData grid() { return Kivio::Config::grid(); }
 
@@ -155,7 +155,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
     void slotSelectionChanged();
-    void setUnits(KoUnit::Unit);
 
     void setDefaultFont(const QFont& f) { m_font = f; }
 
@@ -173,8 +172,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void sig_pageNameChanged(KivioPage*, const QString&);
     void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
     void sig_updateGrid();
-
-    void unitsChanged(KoUnit::Unit);
 
     void initProgress();
     void progress(int);
@@ -241,7 +238,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     KivioStencilSpawnerSet* m_pInternalSet;
 
-    KoUnit::Unit m_units;
     KivioGridData gridData;
 
     DCOPObject *dcop;

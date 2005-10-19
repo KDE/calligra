@@ -64,15 +64,15 @@ void AddObjectTool::setActivated(bool a)
   }
 }
 
-void AddObjectTool::mousePress(QMouseEvent* e)
+void AddObjectTool::mousePress(QMouseEvent*)
 {
 }
 
-void AddObjectTool::mouseRelease(QMouseEvent* e)
+void AddObjectTool::mouseRelease(QMouseEvent*)
 {
 }
 
-void AddObjectTool::mouseMove(QMouseEvent* e)
+void AddObjectTool::mouseMove(QMouseEvent*)
 {
 }
 

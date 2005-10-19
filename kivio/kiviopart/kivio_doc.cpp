@@ -242,7 +242,7 @@ QDomDocument KivioDoc::saveXML()
   kivio.setAttribute( "editor", "Kivio" );
   kivio.setAttribute( "mime", MIME_TYPE );
 
-  kivio.setAttribute( "units", KoUnit::unitName(m_units) );
+  kivio.setAttribute( "units", unitName() );
   gridData.save(kivio,"grid");
 
   QDomElement viewItemsElement = doc.createElement("ViewItems");
@@ -365,7 +365,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis( settingsWriter, units() );
+    KoUnit::saveOasis( settingsWriter, unit() );
     saveOasisSettings( *settingsWriter );
 
     settingsWriter->endElement(); // config:config-item-set
@@ -458,7 +458,7 @@ void KivioDoc::loadOasisSettings( const QDomDocument&settingsDoc )
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() )
     {
-        setUnits(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         //todo add other config here.
     }
 }
@@ -523,9 +523,9 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   int u = us.toInt(&isInt);
 
   if(!isInt) {
-    setUnits(KoUnit::unit(us));
+    setUnit(KoUnit::unit(us));
   } else {
-    setUnits(Kivio::convToKoUnit(u));
+    setUnit(Kivio::convToKoUnit(u));
   }
 
   if(kivio.hasAttribute("gridIsShow")) {
@@ -779,7 +779,7 @@ bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString id )
 //         {
 //             return true;
 //         }
-// 
+//
 //         pSet = m_pLstSpawnerSets->next();
 //     }
 
@@ -826,7 +826,7 @@ KivioDoc::~KivioDoc()
 
 void KivioDoc::initConfig()
 {
-  m_units = KoUnit::unit(Kivio::Config::unit());
+  setUnit( KoUnit::unit(Kivio::Config::unit()) );
   m_font = KoGlobal::defaultFont();
   m_pageLayout = Kivio::Config::defaultPageLayout();
 }
@@ -877,7 +877,7 @@ bool KivioDoc::checkStencilsForSpawner( KivioStencilSpawner *pSpawner )
 //     KivioPage *pPage;
 //     KivioLayer *pLayer;
 //     KivioStencil *pStencil;
-// 
+//
 //     // Iterate across all the pages
 //     pPage = m_pMap->firstPage();
 //     while( pPage )
@@ -896,13 +896,13 @@ bool KivioDoc::checkStencilsForSpawner( KivioStencilSpawner *pSpawner )
 //                 }
 //                 else if( pStencil->spawner() == pSpawner )
 //                     return true;
-// 
+//
 //                 pStencil = pLayer->objectList()->next();
 //             }
-// 
+//
 //             pLayer = pPage->layers()->next();
 //         }
-// 
+//
 //         pPage = m_pMap->nextPage();
 //     }
 
@@ -945,15 +945,6 @@ KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stenci
 void KivioDoc::addInternalStencilSpawner(KivioStencilSpawner* spawner)
 {
   m_pInternalSet->addSpawner(spawner);
-}
-
-void KivioDoc::setUnits(KoUnit::Unit unit)
-{
-  if (m_units == unit)
-    return;
-
-  m_units = unit;
-  emit unitsChanged(unit);
 }
 
 void KivioDoc::updateView(KivioPage* page)
