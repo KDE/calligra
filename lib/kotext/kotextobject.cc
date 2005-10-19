@@ -2073,7 +2073,6 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
         {
             QDomElement tag = text.toElement();
             if ( tag.isNull() ) continue;
-            context.styleStack().save();
             // The first tag could be a text:p, text:h, text:numbered-paragraph, but also
             // a frame (anchored to page), a TOC, etc. For those, don't try to concat-with-existing-paragraph.
             // For text:numbered-paragraph, find the text:p or text:h inside it.
@@ -2090,11 +2089,20 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
 
             }
             if ( tagToLoad.localName() == "p" || tagToLoad.localName() == "h" ) {
+                context.styleStack().save();
                 context.fillStyleStack( tagToLoad, KoXmlNS::text, "style-name" );
                 lastParagraph->loadOasisSpan( tagToLoad, context, pos );
+                context.styleStack().restore();
+
                 lastParagraph->setChanged( true );
                 lastParagraph->invalidate( 0 );
-                context.styleStack().restore();
+
+                // Now split this parag, to make room for the next paragraphs
+                resultCursor.setParag( lastParagraph );
+                resultCursor.setIndex( pos );
+                resultCursor.splitAndInsertEmptyParag( FALSE, TRUE );
+                removeNewline = true;
+
                 // Done with first parag, remove it and exit loop
                 const_cast<QDomElement &>( bodyElem ).removeChild( tag ); // somewhat hackish
             }
