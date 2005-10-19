@@ -36,8 +36,8 @@
 typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterpngexport, PngExportFactory( "pngexport" ) )
 
-PngExport::PngExport(KoFilter *, const char *, const QStringList&)
-    : KoFilter()
+PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)
+    : ImageExport(fil,name,lst)
 {
 }
 
@@ -45,39 +45,8 @@ PngExport::~PngExport()
 {
 }
 
-
-KoFilter::ConversionStatus
-PngExport::convert(const QCString& from, const QCString& to)
+void PngExport::extraImageAttribute()
 {
-    KoDocument * document = m_chain->inputDocument();
-
-    if ( !document )
-        return KoFilter::StupidError;
-
-    if ( strcmp(document->className(), "KPresenterDoc") != 0)
-    {
-        kdWarning() << "document isn't a KPresenterDoc but a "
-                     << document->className() << endl;
-        return KoFilter::NotImplemented;
-    }
-
-    // Check for proper conversion.
-    if ( from != "application/x-kpresenter" || to != "image/png" )
-    {
-        kdWarning() << "Invalid mimetypes " << to << " " << from << endl;
-        return KoFilter::NotImplemented;
-    }
-    KPresenterDoc * kpresenterdoc = static_cast<const KPresenterDoc *>(document);
-
-    if ( kpresenterdoc->mimeType() != "application/x-kpresenter" )
-    {
-        kdWarning() << "Invalid document mimetype " << kpresenterdoc->mimeType() << endl;
-        return KoFilter::NotImplemented;
-    }
-    KoPageLayout layoutPage= kpresenterdoc->pageLayout();
-    int width =  layoutPage.ptWidth;
-    int height = layoutPage.ptHeight;
-    // Draw the actual bitmap.
     PNGExportDia  *exportDialog = new PNGExportDia( width, height,
 						   0, "exportdialog");
     if (exportDialog->exec()) {
@@ -87,27 +56,18 @@ PngExport::convert(const QCString& from, const QCString& to)
 	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
-    QPixmap   pixmap;
+}
 
-    KPresenterView* view = static_cast<KPresenterView*>( kpresenterdoc->views().getFirst());
-    if ( view ) // no view if embedded document
-    {
-        KPrCanvas * canvas = view->getCanvas();
-        canvas->drawPageInPix( pixmap, view->getCurrPgNum()-1, 0, true, width,height );
-    }
-    else //when it's embedded we use just it.
-    {
-        pixmap = QPixmap(width, height);
-        QPainter  painter(&pixmap);
-        kpresenterdoc->paintContent(painter, pixmap.rect(), false);
-    }
+
+bool PngExport::saveImage( QString fileName)
+{
+    bool ret = pixmap.save( m_chain->outputFile(), "PNG" );
     // Save the image.
-    if ( !pixmap.save( m_chain->outputFile(), "PNG" ) ) {
+    if ( !ret ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),
                             i18n( "PNG Export Error" ) );
     }
-
-    return KoFilter::OK;
+    return ret;
 }
 
 

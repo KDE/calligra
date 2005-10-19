@@ -1,1 +1,1 @@
-SUBDIRS = png svg kword ooimpress powerpoint
+SUBDIRS = libimageexport png svg kword ooimpress powerpoint
