@@ -62,7 +62,7 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
 
     m_pHeight = new KoUnitDoubleSpinBox( page );
     m_pHeight->setValue( rowHeight );
-    m_pHeight->setUnit( m_pView->doc()->getUnit() );
+    m_pHeight->setUnit( m_pView->doc()->unit() );
 
     hLay->addWidget( m_pHeight );
 
@@ -130,7 +130,7 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
 
     m_pWidth = new KoUnitDoubleSpinBox( page );
     m_pWidth->setValue( columnWidth );
-    m_pWidth->setUnit( m_pView->doc()->getUnit() );
+    m_pWidth->setUnit( m_pView->doc()->unit() );
 
     hLay->addWidget( m_pWidth );
 

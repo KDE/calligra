@@ -2882,7 +2882,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
-    m_indent = new KoUnitDoubleSpinBox( grp, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->getUnit() );
+    m_indent = new KoUnitDoubleSpinBox( grp, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->unit() );
     grid2->addWidget(m_indent, 1, 0);
     grid3->addWidget(grp, 2, 1);
 
@@ -2897,7 +2897,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     width = new KoUnitDoubleSpinBox( grp );
     width->setValue ( dlg->widthSize );
-    width->setUnit( dlg->getDoc()->getUnit() );
+    width->setUnit( dlg->getDoc()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->widthSize = width->value();
 
@@ -2905,7 +2905,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
         width->setEnabled(false);
 
     grid2->addWidget(width, 1, 1);
-    defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->getUnit())).arg(dlg->getDoc()->getUnitName()), grp);
+    defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->unit())).arg(dlg->getDoc()->unit()), grp);
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2917,7 +2917,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     height=new KoUnitDoubleSpinBox( grp );
     height->setValue( dlg->heightSize );
-    height->setUnit(  dlg->getDoc()->getUnit() );
+    height->setUnit(  dlg->getDoc()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->heightSize = height->value();
 
@@ -2926,7 +2926,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     grid2->addWidget(height, 1, 3);
 
-    defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->getUnit())).arg(dlg->getDoc()->getUnitName()), grp);
+    defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->unit())).arg(dlg->getDoc()->unit()), grp);
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 

@@ -413,11 +413,11 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
 
 //   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
   valIndent = new KDoubleNumInput( tmpQGroupBox );
-  valIndent->setRange( KoUnit::toUserValue( 0.0, _view->doc()->getUnit() ),
-                       KoUnit::toUserValue( 400.0, _view->doc()->getUnit() ),
-                       KoUnit::toUserValue( 10.0, _view->doc()->getUnit()) );
+  valIndent->setRange( KoUnit::toUserValue( 0.0, _view->doc()->unit() ),
+                       KoUnit::toUserValue( 400.0, _view->doc()->unit() ),
+                       KoUnit::toUserValue( 10.0, _view->doc()->unit()) );
   valIndent->setRange( 0.0, 100.0, 10.0 );
-  valIndent->setValue ( KoUnit::toUserValue( _indent, _view->doc()->getUnit() ) );
+  valIndent->setValue ( KoUnit::toUserValue( _indent, _view->doc()->unit() ) );
   valIndent->setLabel(i18n("&Value of indent:"));
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
@@ -813,7 +813,7 @@ void configureLayoutPage::initCombo()
         unit=config->readNumEntry( "Default unit page" ,0);
     }
 
-    switch (m_pView->doc()->getUnit() )
+    switch (m_pView->doc()->unit() )
     {
     case KoUnit::U_MM:
         unit=0;
