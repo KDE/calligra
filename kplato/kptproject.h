@@ -23,6 +23,7 @@
 
 #include "kptnode.h"
 
+#include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptresource.h"
 
@@ -34,7 +35,6 @@ namespace KPlato
 {
 
 class KPTPart;
-class KPTCalendar;
 class KPTStandardWorktime;
 
 //#define DEBUGPERT
