@@ -2809,11 +2809,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     bool normalList = paragCounter && paragCounter->style() != KoParagCounter::STYLE_NONE && !outline;
     if ( normalList ) // non-heading list
     {
-#ifdef OASIS_USE_NUMBERED_PARAGRAPH
         writer.startElement( "text:numbered-paragraph" );
-#else
-        writer.startElement( "text:list" );
-#endif
+        writer.addAttribute( "text:level", (int)paragCounter->depth() + 1 );
         if ( paragCounter->restartCounter() )
             writer.addAttribute( "text:start-value", paragCounter->startNumber() );
 
@@ -2823,16 +2820,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
         writer.addAttribute( "text:style-name", autoListStyleName );
 
-#ifdef OASIS_USE_NUMBERED_PARAGRAPH
-        writer.addAttribute( "text:level", (int)paragCounter->depth() + 1 );
-#else
-        for ( uint d = 0; d < paragCounter->depth() + 1; ++d ) {
-            writer.startElement( "text:list-item" );
-            if ( d < paragCounter->depth() ) // all but last one
-                writer.startElement( "text:list" );
-        }
-#endif
-        const QString textNumber = m_layout.counter->text( this );
+        QString textNumber = m_layout.counter->text( this );
         if ( !textNumber.isEmpty() )
         {
             // This is to help export filters
@@ -2933,17 +2921,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     }
 
     writer.endElement(); // text:p or text:h
-    if ( normalList ) {
+    if ( normalList )
         writer.endElement(); // text:numbered-paragraph (englobing a text:p)
-#ifndef OASIS_USE_NUMBERED_PARAGRAPH
-        for ( uint d = 0; d < paragCounter->depth() + 1; ++d )
-        {
-            if ( d < paragCounter->depth() ) // all but last one
-                writer.endElement(); // text:list
-            writer.endElement(); // text:list-item
-        }
-#endif
-    }
 }
 
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
