@@ -681,13 +681,19 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
     xmlWriter.addTextNode( QString::number( m_editingCycles ) );
     xmlWriter.endElement();
 
-    xmlWriter.startElement( "meta:creation-date" );
-    xmlWriter.addTextNode( m_creationDate.toString( Qt::ISODate ) );
-    xmlWriter.endElement();
+    if ( m_creationDate.isValid() )
+    {
+        xmlWriter.startElement( "meta:creation-date" );
+        xmlWriter.addTextNode( m_creationDate.toString( Qt::ISODate ) );
+        xmlWriter.endElement();
+    }
 
-    xmlWriter.startElement( "dc:date" );
-    xmlWriter.addTextNode( m_modificationDate.toString( Qt::ISODate ) );
-    xmlWriter.endElement();
+    if ( m_modificationDate.isValid() )
+    {
+        xmlWriter.startElement( "dc:date" );
+        xmlWriter.addTextNode( m_modificationDate.toString( Qt::ISODate ) );
+        xmlWriter.endElement();
+    }
     return true;
 }
 
@@ -767,7 +773,7 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
 // KOffice-1.3 format
 QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
 {
-    saveParameters(); 
+    saveParameters();
     QDomElement e = doc.createElement( "about" );
 
     QDomElement t = doc.createElement( "abstract" );
