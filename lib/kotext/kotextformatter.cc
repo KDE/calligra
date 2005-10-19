@@ -431,7 +431,7 @@ bool KoTextFormatterCore::format()
                     }
                     // Check if we're at the bottom of the doc, we won't find better then
                     // (and the check further down would abort)
-                    if ( maxY > -1 && parag->rect().y() + y >= maxY )
+                    if ( ( maxY > -1 && parag->rect().y() + y >= maxY ) || tmph <= 0 )
                     {
                         // Here we have to distinguish "table wider than document" (#112269)
                         // and "not enough room for chars next to a big frame".
@@ -453,7 +453,10 @@ bool KoTextFormatterCore::format()
                         {
                             // "small" chars and not enough width here, abort and hope for a new page.
 #ifdef DEBUG_FORMATTER
-                            kdDebug(32500) << "We're after maxY, time to stop." << endl;
+                            if ( tmph <= 0 )
+                                kdDebug(32500) << "Line has a height of " << tmph << ", let's stop." << endl;
+                            else
+                                kdDebug(32500) << "We're after maxY, time to stop." << endl;
 #endif
                             // No solution for now. Hopefully KWord will create more pages...
                             abort = true;
