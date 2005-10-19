@@ -19,6 +19,8 @@
 #include "KWPage.h"
 #include "koRect.h"
 
+//#define DEBUG_PAGES
+
 KWPageManager::KWPageManager() {
     m_firstPage = 0;
     m_onlyAllowAppend = false;
@@ -72,7 +74,7 @@ KWPage* KWPageManager::page(int pageNum) const {
             return pages.current();
         ++pages;
     }
-    kdWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist"<< endl;
+    kdWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist ["<< m_firstPage << "-"<< lastPageNumber() << "]"<< endl;
     return 0;
 }
 KWPage* KWPageManager::page(const KoRect &frame) const {
