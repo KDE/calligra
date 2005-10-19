@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 1999-2004 The KSpread Team <koffice-devel@mail.kde.org>
+   Copyright 2005 Robert Knight <robertknight@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,33 +16,31 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-
-   Original Author: Robert Knight <robertknight@gmail.com>
 */
 
 #include "highlight_range.h"
 
-HighlightRange::HighlightRange(const HighlightRange& rhs) 
-		{	
-			rhs._firstCell ? _firstCell=new KSpreadPoint(*(rhs._firstCell )) : _firstCell=0;
-			rhs._lastCell  ? _lastCell=new KSpreadPoint(*(rhs._lastCell )) : _lastCell=0;
-			_color=QColor(rhs._color);
-		}
+HighlightRange::HighlightRange(const HighlightRange& rhs)
+{
+    rhs._firstCell ? _firstCell=new KSpreadPoint(*(rhs._firstCell )) : _firstCell=0;
+    rhs._lastCell  ? _lastCell=new KSpreadPoint(*(rhs._lastCell )) : _lastCell=0;
+    _color=QColor(rhs._color);
+}
 
 void HighlightRange::getRange(KSpreadRange& rg)
-{ 
-			if (!_firstCell) 
-			{ 
-				rg=KSpreadRange();
-				return;
-			}
+{
+    if (!_firstCell)
+    {
+        rg=KSpreadRange();
+        return;
+    }
 
-			if (_lastCell) 
-			{
-				rg=KSpreadRange(*_firstCell,*_lastCell); 	
-			}
-			else
-			{
-				rg=KSpreadRange(*_firstCell,*_firstCell);
-			}
+    if (_lastCell)
+    {
+        rg=KSpreadRange(*_firstCell,*_lastCell); 	
+    }
+    else
+    {
+        rg=KSpreadRange(*_firstCell,*_firstCell);
+    }
 }
