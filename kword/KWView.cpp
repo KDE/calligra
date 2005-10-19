@@ -4102,7 +4102,7 @@ void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
     if (table->isFloating())    // inline table: max offset of containing frame
         maxRightOffset = table->anchorFrameset()->frame(0)->right();
     else {                      // non inline table: max offset of the page
-        KWPage *page = m_doc->pageManager()->page( table->cell(0,0)->frame(0)->rect() );
+        KWPage *page = m_doc->pageManager()->page( table->cell(0,0)->frame(0) );
         maxRightOffset = page->width() - page->rightMargin();
     }
 

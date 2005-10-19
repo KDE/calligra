@@ -22,7 +22,6 @@
 
 #include <qptrlist.h>
 
-class KWFrame;
 class KWPage;
 class KoPoint;
 class KoRect;
@@ -36,7 +35,7 @@ public:
     KWPageManager();
 
     /// return pageNumber of @p frame, pagenumbers for a normal document start at 1.
-    int pageNumber(const KWFrame* frame) const;
+    int pageNumber(const KoRect *rect) const;
     /// return pageNumber of @p rect, pagenumbers for a normal document start at 1.
     int pageNumber(const KoRect &rect) const;
     /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
@@ -51,10 +50,10 @@ public:
     int lastPageNumber() const;
     /// return the KWPage of a specific page number
     KWPage* page(int pageNumber) const;
-    /// return the KWPage instance where the frame is on.
-    KWPage* page(const KWFrame* frame) const;
     /// return the KWPage instance where the rect is on.
     KWPage* page(const KoRect &rect) const;
+    /// return the KWPage instance where the rect or frame is on.
+    KWPage* page(const KoRect *frame) const;
     /// return the KWPage instance where the point is on.
     KWPage* page(const KoPoint &point) const;
     /// return the KWPage instance of the y-coordinate in the document.

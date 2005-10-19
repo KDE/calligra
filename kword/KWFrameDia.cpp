@@ -1076,7 +1076,7 @@ void KWFrameDia::initGeometrySettings()
         // is single frame dia. Fill position strings and checkboxes now.
 
         // Can't use frame->pageNum() here since frameset might be 0
-        int pageNum = m_doc->pageManager()->pageNumber(m_frame->rect());
+        int pageNum = m_doc->pageManager()->pageNumber(m_frame);
 
         m_sx->setValue( KoUnit::toUserValue( m_frame->x(), m_doc->unit() ) );
         m_sy->setValue( KoUnit::toUserValue( m_frame->y() - m_doc->pageManager()->topOfPage(pageNum), m_doc->unit() ) );
@@ -2090,7 +2090,7 @@ bool KWFrameDia::applyChanges()
     if(m_tab4) { // TAB Geometry
         if ( m_frame ) {
             px = QMAX( 0, m_sx->value() );
-            int pageNum = m_doc->pageManager()->pageNumber(m_frame->rect());
+            int pageNum = m_doc->pageManager()->pageNumber(m_frame);
             py = QMAX( 0, m_sy->value() ) + m_doc->pageManager()->topOfPage(pageNum);
         }
         pw = QMAX( m_sw->value(), 0 );

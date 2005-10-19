@@ -18,7 +18,6 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "koRect.h"
-#include "KWFrame.h"
 
 KWPageManager::KWPageManager() {
     m_firstPage = 0;
@@ -42,14 +41,15 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
         return -1; // not inside the page...
     return page;
 }
-int KWPageManager::pageNumber(const KWFrame* frame) const {
-     return pageNumber(frame->rect());
-}
 int KWPageManager::pageNumber(const KoPoint &point) const {
     return pageNumber(KoRect(point, point));
 }
 int KWPageManager::pageNumber(const double ptY) const {
     return pageNumber(KoRect(0, ptY, 0, 0));
+}
+int KWPageManager::pageNumber(const KoRect *rect) const {
+    KoRect tmp(*rect);
+    return pageNumber(tmp);
 }
 
 int KWPageManager::pageCount() const {
@@ -75,8 +75,9 @@ KWPage* KWPageManager::page(const KoPoint &point) const {
 KWPage* KWPageManager::page(double ptY) const {
     return page(pageNumber(ptY));
 }
-KWPage* KWPageManager::page(const KWFrame* frame) const {
-    return page(frame->rect());
+KWPage* KWPageManager::page(const KoRect *rect) const {
+    KoRect tmp(*rect);
+    return page(tmp);
 }
 
 void KWPageManager::setStartPage(int startPage) {
