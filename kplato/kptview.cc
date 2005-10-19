@@ -74,7 +74,6 @@
 #include "kptcommand.h"
 #include "kptrelation.h"
 #include "kptrelationdialog.h"
-#include "kptresourceuseview.h"
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
@@ -123,10 +122,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     m_resourceview = new KPTResourceView( this, m_tab );
     m_tab->addWidget(m_resourceview);
-
-    m_resourceuseview = new KPTResourceUseView( this, m_tab );
-    m_tab->addWidget(m_resourceuseview);
-    m_resourceuseview->initMenu(actionCollection());
     
     m_reportview = new KPTReportView(this, m_tab);
     m_tab->addWidget(m_reportview);
@@ -169,8 +164,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
-
-    actionViewResourceUse = new KAction(i18n("Resource Use"), "resourceuse", 0, this, SLOT(slotViewResourceUse()), actionCollection(), "view_resourceuse");
 
     // ------ Insert
     actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,
@@ -371,12 +364,6 @@ void KPTView::slotViewResources() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_resourceview);
 	m_resourceview->draw(getPart()->getProject());
-}
-
-void KPTView::slotViewResourceUse() {
-    //kdDebug()<<k_funcinfo<<endl;
-    m_tab->raiseWidget(m_resourceuseview);
-    m_resourceuseview->draw(getPart()->getProject());
 }
 
 void KPTView::slotProjectEdit() {
@@ -856,9 +843,6 @@ void KPTView::slotUpdate(bool calculate)
     	m_resourceview->draw(getProject());
 	    m_resourceview->show();
 	}
-	else if (m_tab->visibleWidget() == m_resourceuseview)
-	{
-	}
 	else if (m_tab->visibleWidget() == m_reportview)
 	{
 	}
@@ -913,12 +897,6 @@ void KPTView::slotAboutToShow(QWidget *widget) {
     	m_resourceview->draw(getPart()->getProject());
 	    m_resourceview->show();
 	}
-	else if (widget == m_resourceuseview)
-    {
-        //kdDebug()<<k_funcinfo<<"draw resourceview"<<endl;
-        m_resourceuseview->draw(getProject());
-        m_resourceuseview->show();
-    }
 	else if (widget == m_reportview)
 	{
         //kdDebug()<<k_funcinfo<<"draw reportview"<<endl;
@@ -948,7 +926,6 @@ bool KPTView::setContext(KPTContext &context) {
 
     m_pertview->setContext(context);
     m_resourceview->setContext(context);
-    m_resourceuseview->setContext(context);
     m_reportview->setContext(context);
     
     if (context.currentView == "ganttview") {
@@ -957,8 +934,6 @@ bool KPTView::setContext(KPTContext &context) {
         slotViewPert();
     } else if (context.currentView == "resourceview") {
         slotViewResources();
-    } else if (context.currentView == "resourceuseview") {
-        slotViewResourceUse();
     } else if (context.currentView == "reportview") {
         //slotViewReport();
     }
@@ -974,15 +949,12 @@ void KPTView::getContext(KPTContext &context) const {
         context.currentView = "pertview";
     } else if (m_tab->visibleWidget() == m_resourceview) {
         context.currentView = "resourceview";
-    } else if (m_tab->visibleWidget() == m_resourceuseview) {
-        context.currentView = "resourceuseview";
     } else if (m_tab->visibleWidget() == m_reportview) {
         context.currentView = "reportview";
     }
     m_ganttview->getContext(context);
     m_pertview->getContext(context);
     m_resourceview->getContext(context);
-    m_resourceuseview->getContext(context);
     m_reportview->getContext(context);
 }
 

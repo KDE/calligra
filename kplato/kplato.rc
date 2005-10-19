@@ -33,8 +33,6 @@
             <Separator/>
             <Action name="view_resources"/>
             <Separator/>
-            <Action name="view_resourceuse"/>
-            <Separator/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="add_task"/>
@@ -125,14 +123,5 @@
         <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
-    </Menu>
-    <Menu name="resourceuse_popup">
-        <Action name="resourceuse_load_minute"/>
-        <Action name="resourceuse_load_hour"/>
-        <Action name="resourceuse_load_day"/>
-        <Action name="resourceuse_load_week"/>
-        <Action name="resourceuse_load_month"/>
-        <Separator/>
-        <Action name="resourceuse_accumulated"/>
     </Menu>
 </kpartgui>

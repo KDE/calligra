@@ -1,4 +1,4 @@
-SUBDIRS = chart templates pics reports toolbar
+SUBDIRS = templates pics reports toolbar
 
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib \
            $(all_includes)
@@ -30,7 +30,7 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kpttaskprogresspanel.cc kpttaskprogresspanelbase.ui \
     kptconfigbehaviorpanel.cc kptconfigbehaviorpanelbase.ui \
     kptconfig.cc kptcontext.cc \
-    kptresourceuseview.cc kptresourcesdialog.cc \
+    kptresourcesdialog.cc \
     kptwbsdefinitiondialog.cc kptwbsdefinitionpanel.cc kptwbsdefinitionpanelbase.ui \
     kptwbsdefinition.cc
 
@@ -55,7 +55,7 @@ noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
     kpttaskprogresspanel.h \
     kptconfigbehaviorpanel.h \
     kptconfig.h kptcontext.h \
-    kptresourceuseview.h kptresourcesdialog.h \
+    kptresourcesdialog.h \
     kptwbsdefinitiondialog.h kptwbsdefinitionpanel.h \
     kptwbsdefinition.h
     
@@ -65,8 +65,8 @@ kde_module_LTLIBRARIES = libkplatopart.la
 libkplatopart_la_LDFLAGS = $(KDE_LDFLAGS) $(KDE_PLUGIN)
 libkplatopart_la_LIBADD = $(LIB_KABC) $(LIB_KOFFICEUI) \
                           $(top_builddir)/kdgantt/libkdgantt.la \
-                          $(top_builddir)/kugar/lib/libkugarlib.la \
-                          chart/libkptchart.la
+                          $(top_builddir)/kugar/lib/libkugarlib.la
+
 libkplatopart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module and executable
