@@ -58,7 +58,7 @@ ImageExport::convert(const QCString& from, const QCString& to)
     }
 
     // Check for proper conversion.
-    if ( from != "application/x-kpresenter" || to != "image/png" )
+    if ( from != "application/x-kpresenter" || to != exportFormat() )
     {
         kdWarning() << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;

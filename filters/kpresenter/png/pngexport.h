@@ -31,6 +31,7 @@ public:
     virtual ~PngExport();
     virtual bool saveImage( QString fileName);
     virtual void extraImageAttribute();
+    virtual const char * exportFormat();
 };
 
 #endif // __PNGEXPORT_H__
