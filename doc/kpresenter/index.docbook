@@ -33,11 +33,20 @@
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
+
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2002-01-16</date>
-<releaseinfo>1.10.00</releaseinfo>
+<date>2005-10-19</date>
+<releaseinfo>1.5</releaseinfo>
 
 <copyright>
 <year>1999</year><year>2000</year>
@@ -47,6 +56,11 @@
 <copyright>
 <year>2001</year><year>2002</year>
 <holder>Neil Lucock</holder>
+</copyright>
+
+<copyright>
+<year>2005</year>
+<holder>Anne-Marie Mahfouf</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
@@ -213,6 +227,7 @@ Percy Leonhardt <email>percy@eris23.de</email>
 Documentation based on the work copyright 1999-2000 by Krishna
 Tateneni.  Portions are copyright 2000-2002 Neil Lucock
 <email>neil@nlucock.freeserve.co.uk</email>
+and 2005 Anne-Marie Mahfouf  <email>annemarie.mahfouf@free.fr</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->

@@ -29,28 +29,373 @@
 
 <sect1  id="configure-autocorrection">
 <title>The <guilabel>Configure Autocorrection</guilabel> Dialog</title>
+<para>Auto correction is a system for correcting common typing errors, converting abbreviations to their full spelling and adjusting capitalization. As you could guess from its name, this all occurs automatically, while you are editing your document.</para>
+
+<sect2 id="enabling-autocorrection">
+<title><guilabel>Enabling/Disabling Autocorrection</guilabel></title>
+
+<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
+</para>
+
+<para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
+</para>
+
+<para>To adjust the options for autocorrection, select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection... </guimenuitem></menuchoice> from the menubar.</para>
+
+<para>A dialog window appears to help you set your options, with four tabs: <link linkend="simple-autocorrection">Simple Autocorrection</link>, <link linkend="custom-quotes">Custom Quotes</link>, <link linkend="advanced-autocorrestion">Advanced Autocorrection</link> and <link linkend="exceptions">Exceptions</link>.</para>
+</sect2>
+
 <sect2 id="simple-autocorrection">
 <title><guilabel>Simple Autocorrection</guilabel></title>
 
-<para>-</para>
+<screenshot>
+<screeninfo>Simple Autocorrection</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Simple Autocorrection</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Convert the first letter from the first word of a sentence automatically to uppercase</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically capitalize the first letter after a period. You can tell &kpresenter; when not to alter capitalization in certain instances (ie “Sr.” or “Jr.”. For more details, see the section entitled  <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Convert two uppercase characters to one uppercase and one lowercase character</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically convert a double capital letter (a common typographical error), into a single capital letter. You can tell &kpresenter; when not to alter capitalization in certain instances. For more details, see the section entitled <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Autoformat URLs</guilabel></term>
+<listitem><para>When selected, &kpresenter; will scan text for patterns which suggest a certain section of text is a URL and automatically creates a link.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Suppress Double Spaces</guilabel></term>
+<listitem><para>When checked, &kpresenter; will ignore the second space typed. This prevents users from adding double spaces between words or sentences</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove spaces at the beginning and end of paragraphs</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically remove spaces at the beginning and/or the end of a line of text.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatically do bold and underline formatting</guilabel></term>
+<listitem><para>When selected, &kpresenter; will look for words surrounded by asterisks ( * ). It will remove the asterisks and change the font of all words in between the two asterisks to bold face.</para>
+<para>&kpresenter; will also look for words surrounded by underscores ( _ ). It will remove the underscores and underline all words in between the two underscores.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace 1/2... with ½</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically change 1/2, 1/3 and 3/4 to their single character equivalents.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Use autonumbering for numbered paragraphs</guilabel></term>
+<listitem><para>If you start a paragraph with a number and a symbol ( <emphasis>1)</emphasis>  for example), &kpresenter; will automatically convert that paragraph to a numbered paragraph. All future paragraphs will be consecutively numbered.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace 1st with 1^st</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically change 1st to 1<superscript>st</superscript>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Capitalize names of days</guilabel></term>
+<listitem><para>Automatically capitalize the days of the week (Sunday, Monday, Tuesday, etc...).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Use list-formatting for bulleted paragraphs</guilabel></term>
+<listitem><para>When selected, &kpresenter; will look for lines that begin with <emphasis>- </emphasis>, and automatically convert the paragraph style to a bulleted list.  The bullet is selected with the left button below this option.</para></listitem>
+</varlistentry>
+
+</variablelist>
 
 </sect2>
 <sect2 id="custom-quotes">
 <title><guilabel>Custom Quotes</guilabel></title>
 
-<para>-</para>
+<para>Select the tab labeled <guilabel>Custom Quotes</guilabel></para>
+
+<screenshot>
+<screeninfo>Custom Quotes</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Custom Quotes</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Replace double quotes by typographical quotes</guilabel></term>
+<listitem>
+<para>When selected, this option will replace the standard keyboard double
+quotes, with typographical quotation marks.  If you want to change the
+quotation character, click on one of the buttons. Clicking on
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace single quotes by typographical quotes</guilabel></term>
+<listitem>
+<para>When selected, this option will replace the standard keyboard single
+quotes, with typographical quotation marks.  If you want to change the
+quotation character, click on one of the buttons. Clicking on
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect2>
 <sect2 id="advanced-autocorrestion">
 <title><guilabel>Advanced Autocorrection</guilabel></title>
 
-<para>-</para>
+<para>To switch to the Advanced Autocorrection, click on the tab labeled
+<guilabel>Advanced Autocorrection</guilabel>.</para>
+
+<screenshot>
+<screeninfo>Advanced Autocorrection</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection3.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Advanced Autocorrection</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>This allows you to automatically have &kpresenter; replace one string
+of text with another.  This can be useful for special symbols, commonly
+used abbreviations that you want spelled out, or abbreviations.</para>
+
+<para>&kpresenter; uses different autocorrection strings depending on the language.  
+Set the correct language using the combo box labeled 
+<guilabel>Replacement and exceptions for language</guilabel>.</para>
+
+<para>The check box labeled <guilabel>Enable word replacement</guilabel> is used to 
+toggle on and off the autoreplacement features of &kpresenter;.  If there is no mark in the check box, 
+then &kpresenter; will not perform any autoreplacements from the list in this dialog.</para>
+
+<para>If there is a mark in the check box labeled <guilabel>Replace text with formatting</guilabel> 
+&kpresenter; will not only change the text when it finds a match, but it will change the formatting of the new text. 
+If there is no mark in this check box, then
+&kpresenter; uses the same formatting options for the replaced text as it found in the search text.  For more information 
+on setting the format options for replacement text, see the section on 
+<link linkend="autocorrection-format-options">Changing the format of the autocorrection string</link>.</para>
+
+<sect3>
+<title>Adding an autocorrection string</title>
+
+<para>To add an autocorrection string, simply type the text you want &kpresenter; to
+check for in the text box labeled
+<guilabel>Find</guilabel>, then enter the text you want &kpresenter;
+to substitute in the text box labeled <guilabel>Replace</guilabel>.</para>
+
+
+<note><para>If you want to insert symbols or special characters not available on your
+keyboard, you can click the
+buttons with three periods on them and select a special character from the table provided.</para></note>
+
+<para>When these are entered, click <guibutton>Add</guibutton>. Your text
+strings are now added to the table.</para>
+</sect3>
+
+<sect3>
+<title>Editing an autocorrection string</title>
+<para><emphasis>Changing the text you want to find.</emphasis></para>
+<para>&kpresenter; does not allow you to change the text to search for.
+This is to prevent disastrous mistakes.</para>
+<para>Instead, you must delete the current autocorrection rule and
+add a new text string with the corrected text to find.</para>
+
+<para><emphasis>Changing the text you want to replace.</emphasis></para>
+<para>Begin by clicking once on the string you want to edit.  It will be
+highlighted and the find and replace text will be listed in the text boxes
+above. You can alter the replacement text. When you
+are done, simply select <guibutton>Modify</guibutton>.</para>
+
+</sect3>
+
+<sect3>
+<title>Deleting an autocorrection string.</title>
+
+<para>Simply click on the string you want to delete.  Now click the
+<guibutton>Remove</guibutton> button.  The string is removed.</para>
+
+<warning>
+<para>Be aware that &kpresenter; does not give you a chance to back out once
+you have deleted a string.  Be sure you have selected the correct string
+<emphasis>before</emphasis> you click the <guibutton>Remove</guibutton>
+button.</para>
+</warning>
+</sect3>
+
+<sect3 id="autocorrection-format-options">
+<title>Changing the format of the autocorrection string.</title>
+<note><para>Currently, you must create the autocorrection string <emphasis>before</emphasis> you can format it.</para></note>
+<para>Once the autocorrection string has been created, simply click on it once with the &LMB;.</para>
+<para>Now click on the <guibutton>Change format</guibutton> button.  A small dialog will appear:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="changeformat.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>You can use this dialog to select the format of the replaced text.</para>
+<para>The left column consists of 13 check boxes.  If there is a mark in the check box, then &kpresenter; will change
+any replaced text to match the property selected.
+If no mark is in the check box, &kpresenter; does not consider that property when replacing text.</para>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Family</guilabel></term>
+<listitem>
+<para>Use this combo box to select the font family you want your replacement text to use.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Size</guilabel></term>
+<listitem>
+<para>Use this spin box to set the font size you want &kpresenter; to use for your replaced text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Color</guilabel> and <guilabel>Background Color</guilabel></term>
+<listitem>
+<para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
+you want &kpresenter; to use.  <!--For more information on selecting a color, see the
+section on <link linkend="select-colors">Selecting Colors from the Color Dialog</link>.--></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Bold</guilabel> and <guilabel>Italic</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kpresenter;
+to change the fonts to boldface or italicized fonts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Strikeout</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
+<guilabel>Without</guilabel> to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel>,  or
+<guilabel>Without</guilabel> to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical Alignment</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
+<guilabel>Subscript</guilabel> to determine what font alignment you want &kpresenter; to use.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kpresenter;
+to use shadow text and/or word by word underlining and strikethrough in the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Capitalization:</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
+<guilabel>Small caps</guilabel> to determine what capitalization to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Language:</guilabel></term>
+<listitem>
+<para>You can select the language of the text you will use to replace the found text.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Once you have selected your options, click <guibutton>OK</guibutton> to accept your text options.</para>
+<para>Click <guibutton>Cancel</guibutton> to ignore all changes.</para>
+<para>Click <guibutton>Reset</guibutton> to restore the options dialog box to the initial values prior to making any changes.</para>
+<para>Click <guibutton>Clear</guibutton> to remove all marks from the checked options.</para>
+</sect3>
 
 </sect2>
 <sect2 id="exceptions">
 <title><guilabel>Exceptions</guilabel></title>
 
-<para>-</para>
+<para>There are instances where &kpresenter; will make autocorrection changes
+that are inappropriate.  You can use the fourth tab of this dialog to define
+<emphasis>exceptions</emphasis> to the rules previously discussed.</para>
+<para>The dialog for exceptions is shown below:</para>
+
+<screenshot>
+<screeninfo>Exceptions</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection4.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Exceptions</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>To prevent &kpresenter; from deciding an abbreviation or other text is
+the end of a sentence, simply enter the text fragment in the text box below
+<guilabel>Do not treat as the end of a sentence</guilabel>.  Then click
+<guibutton>Add</guibutton>.</para>
+<para>As an example:  Adding <quote>Jr.</quote> to this dialog prevents</para>
+<para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
+<para>from being changed to:</para>
+<para><quote>Robert Jones Jr. Is a friend of the family.</quote></para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
+and click on the <guibutton>Remove</guibutton> button.</para>
+<para>The second set of boxes performs a similar function to the first except text entered in these boxes will allow two capital letters in a word if it 
+is entered in this text box.</para>
+<para>Simply enter the word in the text box below
+<guilabel>Accept two uppercase letters in</guilabel>.  Then click
+<guibutton>Add</guibutton>.</para>
+<para>As an example:  Adding <quote>CD</quote> to this dialog prevents</para>
+<para><quote>CD</quote></para>
+<para>from being changed to:</para>
+<para><quote>Cd</quote></para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
+and click on the <guibutton>Remove</guibutton> button.</para>
+
+</sect2>
+<sect2 id="manually">
+<title><guilabel>Manually applying autocorrection</guilabel></title>
+
+<para>If autocorrection is turned off in your document, you can manually enable autocorrection.</para>
+<para>To manually apply autocorrection, first configure your options by using the
+<link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
+<para>Then select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>&kpresenter; will start at the beginning of the document and apply all selected autocorrection options to the entire document.</para>
+<para>When &kpresenter; is finished, it will return you to your document for further editing.</para>
+<para>For more information on enabling and disabling autocorrection,
+see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</link>.</para>
 
 </sect2>
 </sect1>
