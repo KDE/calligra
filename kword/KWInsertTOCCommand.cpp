@@ -99,7 +99,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
         if ( frame ) // let's be safe
         {
             parag->append( "\t" );
-            parag->append( QString::number( frame->pageNum() + 1 ) );
+            parag->append( QString::number( frame->pageNumber() + 1 ) );
         }
 
         // Apply style

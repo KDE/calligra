@@ -91,9 +91,9 @@ int KWordFrameSetIface::zOrder() const
     return m_frame->frame(0)->zOrder();
 }
 
-int KWordFrameSetIface::pageNum() const
+int KWordFrameSetIface::pageNumber() const
 {
-    return m_frame->frame(0)->pageNum();
+    return m_frame->frame(0)->pageNumber();
 }
 
 QBrush KWordFrameSetIface::backgroundColor() const

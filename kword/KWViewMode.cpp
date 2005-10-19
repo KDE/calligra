@@ -104,7 +104,7 @@ QPoint KWViewMode::pageCorner( KWCanvas* canvas )
 
     int pageNum = 0;
     if ( frame )
-        pageNum = frame->pageNum();
+        pageNum = frame->pageNumber();
     QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
     QPoint cPoint( normalToView( nPoint ) );
     /*kdDebug() << "KWViewMode::pageCorner frame=" << frame << " pagenum=" << pageNum
@@ -133,7 +133,7 @@ QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
         r = canvas->viewMode()->normalToView( r );
 
         // Calculate page corner (see pageCorner above)
-        int pageNum = frame->pageNum();
+        int pageNum = frame->pageNumber();
         QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
         QPoint cPoint( normalToView( nPoint ) );
 

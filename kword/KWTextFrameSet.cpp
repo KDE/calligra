@@ -585,18 +585,18 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
                 switch ( var->subType() )
                 {
                 case KWPgNumVariable::VST_PGNUM_CURRENT:
-                    //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
+                    //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNumber()+1
                     //          << " and invalidating parag " << var->paragraph() << endl;
-                    var->setPgNum( theFrame->pageNum()  + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
+                    var->setPgNum( theFrame->pageNumber()  + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
                     break;
                 case KWPgNumVariable::VST_CURRENT_SECTION:
-                    var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
+                    var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNumber() ) );
                     break;
                 case KWPgNumVariable::VST_PGNUM_PREVIOUS:
-                    var->setPgNum( QMAX(theFrame->pageNum()-1,0)   + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
+                    var->setPgNum( QMAX(theFrame->pageNumber()-1,0)   + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
                     break;
                 case KWPgNumVariable::VST_PGNUM_NEXT:
-                    var->setPgNum( QMIN(theFrame->pageNum()+1, theFrame->pageNum()+1)  + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
+                    var->setPgNum( QMIN(theFrame->pageNumber()+1, theFrame->pageNumber()+1)  + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
                     break;
                 }
 
@@ -1367,8 +1367,8 @@ struct FrameStruct
     frame frameTwo. When they are equal, the X position is considered. */
     int compare (const KWFrame *frameOne, const KWFrame *frameTwo) const {
         // The first criteria is the page number though!
-        int pageOne = frameOne->pageNum();
-        int pageTwo = frameTwo->pageNum();
+        int pageOne = frameOne->pageNumber();
+        int pageTwo = frameTwo->pageNumber();
         if ( pageOne > pageTwo ) return 4; // frameOne > frameTwo
         if ( pageOne < pageTwo ) return -4; // frameOne < frameTwo
 
@@ -2037,7 +2037,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             }
             else if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
                 if ( theFrame->frameSet()->isEndNote() ) // we'll need a new page
-                    m_doc->delayedRecalcFrames( theFrame->pageNum() );
+                    m_doc->delayedRecalcFrames( theFrame->pageNumber() );
 
                 m_textobj->setLastFormattedParag( 0 );
                 return true; // abort
@@ -2225,10 +2225,10 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     kdDebug(32002) << "createNewPageAndNewFrame creating new frame in frameset " << name() << endl;
 //#endif
     uint oldCount = m_frames.count();
-    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNum() << " getpages-1=" << m_doc->numPages()-1 << "   m_frames count=" << oldCount << endl;
+    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNumber() << " getpages-1=" << m_doc->numPages()-1 << "   m_frames count=" << oldCount << endl;
 
     // First create a new page for it if necessary
-    if ( lastFrame->pageNum() == m_doc->numPages() - 1 )
+    if ( lastFrame->pageNumber() == m_doc->numPages() - 1 )
     {
         // Let's first check if it will give us more space than we
         // already have left in this page. Otherwise we'll loop infinitely.
@@ -2265,7 +2265,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     {
         Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
         // Otherwise, create a new frame on next page
-        kdDebug(32002) << "createNewPageAndNewFrame creating frame on page " << lastFrame->pageNum()+1 << endl;
+        kdDebug(32002) << "createNewPageAndNewFrame creating frame on page " << lastFrame->pageNumber()+1 << endl;
         KWFrame *frm = lastFrame->getCopy();
         frm->moveBy( 0, m_doc->pageManager()->page(frm)->height() );
         addFrame( frm );
@@ -2300,7 +2300,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
 double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
 {
     double tmp =0.0;
-    int page = theFrame->pageNum();
+    int page = theFrame->pageNumber();
     QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -2308,7 +2308,7 @@ double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
            fit.current()->isVisible())
         {
             KWFrame * frm=fit.current()->frame( 0 );
-            if(frm->pageNum()==page )
+            if(frm->pageNumber()==page )
                 tmp += frm->innerHeight()+m_doc->ptFootnoteBodySpacing();
         }
     }
@@ -2330,7 +2330,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
             if(fit.current()->isVisible() && state)
             {
                 KWFrame * frm=fit.current()->frame( 0 );
-                if(frm->pageNum()==page->pageNumber() )
+                if(frm->pageNumber()==page->pageNumber() )
                 {
                     return (tmp-frm->innerHeight()-footNoteSize( theFrame ));
                 }
@@ -2362,10 +2362,10 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     // * if we resized an endnote
     // Delay it though, to get the full height first.
     if ( fs->isMainFrameset() || fs->isEndNote() )
-        m_doc->delayedRecalcFrames( theFrame->pageNum() );
+        m_doc->delayedRecalcFrames( theFrame->pageNumber() );
     // * if we resized a header, footer, or footnote
     else if ( fs->frameSetInfo() != KWFrameSet::FI_BODY )
-        m_doc->recalcFrames( theFrame->pageNum(), -1 ); // warning this can delete theFrame!
+        m_doc->recalcFrames( theFrame->pageNumber(), -1 ); // warning this can delete theFrame!
 
     // m_doc->frameChanged( theFrame );
     // Warning, can't call layout() (frameChanged calls it)
@@ -2414,8 +2414,8 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * theFrame = frameIt.current();
-        //kdDebug() << "canRemovePage: looking at " << theFrame << " pageNum=" << theFrame->pageNum() << endl;
-        Q_ASSERT( theFrame->pageNum() == num );
+        //kdDebug() << "canRemovePage: looking at " << theFrame << " pageNum=" << theFrame->pageNumber() << endl;
+        Q_ASSERT( theFrame->pageNumber() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
         //kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
@@ -3682,7 +3682,7 @@ void KWTextFrameSetEdit::ctrlPgUpKeyPressed()
 {
     if ( m_currentFrame )
     {
-        QPoint iPoint = textFrameSet()->moveToPage( m_currentFrame->pageNum(), -1 );
+        QPoint iPoint = textFrameSet()->moveToPage( m_currentFrame->pageNumber(), -1 );
         if ( !iPoint.isNull() )
             placeCursor( iPoint );
     }
@@ -3692,7 +3692,7 @@ void KWTextFrameSetEdit::ctrlPgDownKeyPressed()
 {
     if ( m_currentFrame )
     {
-        QPoint iPoint = textFrameSet()->moveToPage( m_currentFrame->pageNum(), +1 );
+        QPoint iPoint = textFrameSet()->moveToPage( m_currentFrame->pageNumber(), +1 );
         if ( !iPoint.isNull() )
             placeCursor( iPoint );
     }
@@ -3769,7 +3769,7 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType, KWFootNoteVariable::
 
     // Place the frame on the correct page, but the exact coordinates
     // will be determined by recalcFrames (KWFrameLayout)
-    int pageNum = m_currentFrame->pageNum();
+    int pageNum = m_currentFrame->pageNumber();
     fs->createInitialFrame( pageNum );
 
     insertVariable( var );

@@ -1505,11 +1505,11 @@ void KWView::updatePageInfo()
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit && edit->currentFrame() )
         {
-            m_currentPage = edit->currentFrame()->pageNum();
+            m_currentPage = edit->currentFrame()->pageNumber();
         } else {
             KWFrame* f = m_doc->getFirstSelectedFrame();
             if ( f )
-                m_currentPage = f->pageNum();
+                m_currentPage = f->pageNumber();
         }
         /*kdDebug() << (void*)this << " KWView::updatePageInfo "
                   << " edit: " << edit << " " << ( edit?edit->frameSet()->name():QString::null)
@@ -2455,13 +2455,13 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     QPtrList<KWFrame> frames = m_doc->getSelectedFrames();
     if(frames.count()==0) return;
 
-    int pageNum= frames.at(0)->pageNum();
+    int pageNum= frames.at(0)->pageNumber();
     for (QPtrListIterator<KWFrame> fIt( frames ); fIt.current() ; ++fIt ) {
         // include all frames in case of table.
         KWFrameSet *table = fIt.current()->frameSet()->groupmanager();
         if(table) {
             for (QPtrListIterator<KWFrame> cellIt(table->frameIterator()  ); cellIt.current() ; ++cellIt ) {
-                if(frames.contains(cellIt.current() ) ==0 && cellIt.current()->pageNum()==pageNum)
+                if(frames.contains(cellIt.current() ) ==0 && cellIt.current()->pageNumber()==pageNum)
                     frames.append(cellIt.current());
             }
         }
@@ -2553,7 +2553,7 @@ void KWView::decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<
 int KWView::raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = 10000;
     QValueList<int> zorders;
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(! frameIt.current()->intersects(*frame)) continue; // only frames that I intersect with.
@@ -2566,14 +2566,14 @@ int KWView::raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *fr
     if(newZOrder==10000) return frame->zOrder();
     // Ensure that newZOrder is "free"
     if ( zorders.find( newZOrder ) != zorders.end() )
-        increaseAllZOrdersAbove( newZOrder, frame->pageNum(), frameSelection );
+        increaseAllZOrdersAbove( newZOrder, frame->pageNumber(), frameSelection );
     return newZOrder;
 }
 
 int KWView::lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = -10000;
     QValueList<int> zorders;
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(frameIt.current()->frameSet()->isMainFrameset()) continue; // ignore main frameset.
@@ -2587,13 +2587,13 @@ int KWView::lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *fr
     if(newZOrder==-10000) return frame->zOrder();
     // Ensure that newZOrder is "free"
     if ( zorders.find( newZOrder ) != zorders.end() )
-        decreaseAllZOrdersUnder( newZOrder, frame->pageNum(), frameSelection );
+        decreaseAllZOrdersUnder( newZOrder, frame->pageNumber(), frameSelection );
     return newZOrder;
 }
 
 int KWView::bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = frame->zOrder();
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(! frameIt.current()->intersects(*frame)) continue; // only frames that I intersect with.
@@ -2604,7 +2604,7 @@ int KWView::bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *
 
 int KWView::sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = frame->zOrder();
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(frameIt.current()->frameSet()->isMainFrameset()) continue; // ignore main frameset.
@@ -2730,7 +2730,7 @@ void KWView::createLinkedFrame()
         return; // action is disabled in such a case
     KWFrame* frame = selectedFrames.getFirst();
     KWFrame* newFrame = new KWFrame(0L, frame->x() + m_gui->getVertRuler()->minimumSizeHint().width(), frame->y() + m_gui->getHorzRuler()->minimumSizeHint().height(), frame->width(), frame->height() );
-    newFrame->setZOrder( m_doc->maxZOrder( newFrame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+    newFrame->setZOrder( m_doc->maxZOrder( newFrame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
     newFrame->setCopy(true);
     newFrame->setNewFrameBehavior( KWFrame::Copy );
     frame->frameSet()->addFrame( newFrame );
@@ -3914,7 +3914,7 @@ void KWView::insertFormula( QMimeSource* source )
             frameset->paste( formulaElem );
         }
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
         frameset->addFrame( frame, false );
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
         frameset->finalize(); // done last since it triggers a redraw
@@ -7326,7 +7326,7 @@ void KWView::insertHorizontalLine()
 
             KWFrame *frame = new KWFrame(horizontalLine, 50, 50, edit->textFrameSet()->frame(0)->width(), 10 );
             horizontalLine->addFrame( frame );
-            frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+            frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
             m_doc->addFrameSet( horizontalLine, false );
             horizontalLine->loadPicture( dia->horizontalLineName() );
             edit->insertFloatingFrameSet( horizontalLine, i18n("Insert Horizontal Line") );

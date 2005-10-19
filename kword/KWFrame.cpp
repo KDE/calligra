@@ -140,7 +140,7 @@ void KWFrame::setBackgroundColor( const QBrush &_color )
 }
 
 
-int KWFrame::pageNum() const
+int KWFrame::pageNumber() const
 {
     Q_ASSERT( m_frameSet );
     if ( !m_frameSet ) {
@@ -150,7 +150,7 @@ int KWFrame::pageNum() const
     return frameSet()->pageManager()->pageNumber(this);
 }
 
-int KWFrame::pageNum( KWDocument* doc ) const
+int KWFrame::pageNumber( KWDocument* doc ) const
 {
     return doc->pageManager()->pageNumber(this);
 }
@@ -675,7 +675,7 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, con
 
     if ( !frameSet()->isFloating() )
     { // non-inline frame, anchored to page
-        int pgNum = pageNum();
+        int pgNum = pageNumber();
         double yInPage = top() - frameSet()->pageManager()->topOfPage(pgNum);
         writer.addAttributePt( "svg:x", left() );
         writer.addAttributePt( "svg:y", yInPage );
@@ -918,7 +918,7 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
     m_frames.take( _num );
     Q_ASSERT( !m_frames.contains(frm) );
 
-    unsigned int pageNum = frm->pageNum();
+    unsigned int pageNum = frm->pageNumber();
     if(m_framesInPage.count() < pageNum) {
         QPtrList<KWFrame> *lst = m_framesInPage.at(pageNum - m_firstPage);
         lst->remove(frm);
@@ -1186,7 +1186,7 @@ void KWFrameSet::setFixed()
     // (their z-order didn't matter when they were inline)
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
-        frameIt.current()->setZOrder( m_doc->maxZOrder( frameIt.current()->pageNum(m_doc) ) + 1 );
+        frameIt.current()->setZOrder( m_doc->maxZOrder( frameIt.current()->pageNumber(m_doc) ) + 1 );
 }
 
 KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
@@ -1268,7 +1268,7 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     if ( frame->topLeft() != pos )
     {
         kdDebug(32002) << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
-        int oldPageNum = frame->pageNum();
+        int oldPageNum = frame->pageNumber();
         frame->moveTopLeft( pos );
 
         updateFrames();
@@ -1379,11 +1379,11 @@ void KWFrameSet::updateFrames( int flags )
 
     if ( flags & UpdateFramesInPage ) {
         // For each of our frames, clear old list of frames on top, and grab min/max page nums
-        m_firstPage = m_frames.first()->pageNum(); // we know m_frames is not empty here
+        m_firstPage = m_frames.first()->pageNumber(); // we know m_frames is not empty here
         int lastPage = m_firstPage;
         QPtrListIterator<KWFrame> fIt( frameIterator() );
         for ( ; fIt.current(); ++fIt ) {
-            int pg = fIt.current()->pageNum();
+            int pg = fIt.current()->pageNumber();
             m_firstPage = KMIN( m_firstPage, pg );
             lastPage = KMAX( lastPage, pg );
         }
@@ -1403,7 +1403,7 @@ void KWFrameSet::updateFrames( int flags )
         // Iterate over m_frames again, to fill the m_framesInPage array
         fIt.toFirst();
         for ( ; fIt.current(); ++fIt ) {
-            int pg = fIt.current()->pageNum();
+            int pg = fIt.current()->pageNumber();
             Q_ASSERT( pg <= lastPage );
             m_framesInPage[pg - m_firstPage]->append( fIt.current() );
         }
@@ -2018,7 +2018,7 @@ bool KWFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
-        if ( frame->pageNum() == num ) // ## TODO: use framesInPage, see KWTextFrameSet
+        if ( frame->pageNumber() == num ) // ## TODO: use framesInPage, see KWTextFrameSet
         {
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
             if ( ! ( frame->isCopy() && frameIt.current() != m_frames.first() ) )
@@ -2091,7 +2091,7 @@ void KWFrameSet::setZOrder()
     //kdDebug(32001) << "KWFrameSet::setZOrder (to max) " << name() << endl;
     QPtrListIterator<KWFrame> fit = frameIterator();
     for ( ; fit.current() ; ++fit )
-        fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNum(m_doc) ) + 1 );
+        fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNumber(m_doc) ) + 1 );
 }
 
 void KWFrameSet::setName( const QString &_name )
@@ -2156,7 +2156,7 @@ void KWFrameSet::printDebug()
         else
             kdDebug() << "     no frameStack set." << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
-        QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNum()) : " [waiting for pages to be created]";
+        QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
         if(frame->isSelected())
             kdDebug() << " *   Page "<< page << endl;
         else

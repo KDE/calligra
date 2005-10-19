@@ -522,7 +522,7 @@ void KWFootNoteVariable::finalize()
         return;
 
     KWFrame* footNoteFrame = m_frameset->frame( 0 );
-    int framePage = footNoteFrame->pageNum();
+    int framePage = footNoteFrame->pageNumber();
     if ( framePage != pageNum )
     {
         //kdDebug(32001) << "Footnote var '" << text() << "' at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
@@ -630,8 +630,8 @@ double KWFootNoteVariable::varY() const
     {
         // Ok, the (bottom of the) footnote variable is at dPoint.
         double varY = dPoint.y();
-        //kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNum() << "  varY=" << varY << endl;
-        //int pageNum = containingFrame->pageNum(); // and at page pageNum
+        //kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNumber() << "  varY=" << varY << endl;
+        //int pageNum = containingFrame->pageNumber(); // and at page pageNum
         return varY;
     } else
     {

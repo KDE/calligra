@@ -169,10 +169,10 @@ public:
 
     /** The page on which this frame is (0 based)
      */
-    int pageNum() const;
-    /** Same as pageNum(), but works if the frame hasn't been added to a frameset yet
+    int pageNumber() const;
+    /** Same as pageNumber(), but works if the frame hasn't been added to a frameset yet
      */
-    int pageNum( KWDocument* doc ) const;
+    int pageNumber( KWDocument* doc ) const;
 
     /** The z-order of the frame, relative to the other frames on the same page
      */
@@ -860,7 +860,7 @@ protected:
     // Cached info for optimization
     /// This array provides a direct access to the frames on page N
     QPtrVector< QPtrList<KWFrame> > m_framesInPage;
-    /// always equal to m_framesInPage[0].first()->pageNum() :)
+    /// always equal to m_framesInPage[0].first()->pageNumber() :)
     int m_firstPage;
     /// always empty, for convenience in @ref framesInPage
     QPtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?

@@ -50,7 +50,7 @@ k_dcop:
     virtual double ptPosX() const;
     virtual double ptPosY() const;
     virtual int zOrder() const;
-    virtual int pageNum() const;
+    virtual int pageNumber() const;
     virtual QBrush backgroundColor() const;
     virtual void setBackgroundColor( const QString &_color );
 

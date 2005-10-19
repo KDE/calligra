@@ -1157,7 +1157,7 @@ void KWDeleteFrameCommand::unexecute()
     KWDocument* doc = frameSet->kWordDocument();
     doc->frameChanged( frame );
     // could have been the last frame on a page, so undeleting it needs to recreate the page
-    doc->recalcFrames( frame->pageNum() );
+    doc->recalcFrames( frame->pageNumber() );
     doc->refreshDocStructure(frameSet->type());
     doc->updateRulerFrameStartEnd();
     doc->updateTextFrameSetEdit();
@@ -1957,7 +1957,7 @@ void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParamet
 
     // Re-layout the footnote/endnote frame
     KWFrame* footNoteFrame = m_var->frameSet()->frame( 0 );
-    int framePage = footNoteFrame->pageNum();
+    int framePage = footNoteFrame->pageNumber();
     m_doc->recalcFrames( framePage, -1 );
 
     // Repaint

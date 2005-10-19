@@ -112,7 +112,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     double dx = position.x() - m_colPositions[0];
     double dy = position.y() - m_rowPositions[0];
 
-    int oldPageNumber = cell(0,0)->frame(0)->pageNum();
+    int oldPageNumber = cell(0,0)->frame(0)->pageNumber();
     // TODO multi-page case
 
     moveBy( dx, dy );
@@ -519,7 +519,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 #if 0 // def SUPPORT_MULTI_PAGE_TABLES
 
     //double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
-    unsigned int pageNumber=cell(0,0)->frame(0)->pageNum() +1;
+    unsigned int pageNumber=cell(0,0)->frame(0)->pageNumber() +1;
     unsigned int lineNumber=1;
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
     QValueList<double>::iterator j = m_rowPositions.begin();
@@ -2530,7 +2530,7 @@ bool KWTableFrameSet::canRemovePage( int num ) {
     */
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt ) {
-        if ( frameIt.current()->pageNum() == num ) {
+        if ( frameIt.current()->pageNumber() == num ) {
             return false;
         }
     }
@@ -2849,7 +2849,7 @@ void KWTableFrameSet::Cell::setZOrder()
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
-        (*frameIt)->setZOrder( kWordDocument()->maxZOrder( (*frameIt)->pageNum() ) + 1 );
+        (*frameIt)->setZOrder( kWordDocument()->maxZOrder( (*frameIt)->pageNumber() ) + 1 );
     }
 }
 

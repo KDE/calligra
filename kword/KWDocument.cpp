@@ -631,7 +631,7 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
             // (and frames of the main textframeset might just remain un-moved...)
             KWFrameSet *frameset = m_lstFrameSet.getFirst();
             KWFrame* lastFrame = frameset->frame( frameset->frameCount() - 1 );
-            if ( lastFrame && lastFrame->pageNum() + 1 < numPages ) {
+            if ( lastFrame && lastFrame->pageNumber() + 1 < numPages ) {
                 kdDebug(32002) << "KWDocument::setPageLayout ensuring that recalcFrames will consider " << numPages << " pages." << endl;
                 // All that matters is that it's on numPages so that all pages will be recalc-ed.
                 // If the text layout then wants to remove some pages, no problem.
@@ -911,7 +911,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
         for ( ; fnfsIt.current() ; ++fnfsIt )
         {
             KWFootNoteFrameSet* fnfs = fnfsIt.current();
-            int pageNum = -42; //fnfs->footNoteVariable()->pageNum(); // determined by KWFrameLayout
+            int pageNum = -42; //fnfs->footNoteVariable()->pageNumber(); // determined by KWFrameLayout
             KWFrameLayout::HeaderFooterFrameset* hff = new KWFrameLayout::HeaderFooterFrameset(
                 fnfs, pageNum, pageNum,
                 m_pageHeaderFooter.ptFootNoteBodySpacing,
@@ -2615,7 +2615,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs, KWDocument::CURRENT_SYNTAX_VERSION );
-                frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 +nb ); // make sure it's on top
+                frame->setZOrder( maxZOrder( frame->pageNumber(this) ) + 1 +nb ); // make sure it's on top
                 if ( selectFrames )
                     frame->setSelected(TRUE);
                 nb++;
@@ -3805,7 +3805,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch, QString::null );
     KWFrame *frame = new KWFrame(frameset, rect.x(), rect.y(), rect.width(), rect.height() );
-    frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 ); // make sure it's on top
+    frame->setZOrder( maxZOrder( frame->pageNumber(this) ) + 1 ); // make sure it's on top
     frameset->addFrame( frame );
     addFrameSet( frameset );
     frameset->updateChildGeometry( viewMode() ); // set initial coordinates of 'ch' correctly
@@ -3942,12 +3942,12 @@ QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const //
            - AND the frame is set to be reconnected or copied
            -  */
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::framesToCopyOnNewPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->name() << endl;
+        kdDebug(32002) << "KWDocument::framesToCopyOnNewPage looking at frame " << frame << ", pageNum=" << frame->pageNumber() << " from " << frameSet->name() << endl;
         static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
         kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
-        if ( (frame->pageNum() == afterPageNum ||
-              (frame->pageNum() == afterPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
+        if ( (frame->pageNumber() == afterPageNum ||
+              (frame->pageNumber() == afterPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
              &&
              ( ( frame->newFrameBehavior()==KWFrame::Reconnect && frameSet->type() == FT_TEXT ) ||  // (*)
                ( frame->newFrameBehavior()==KWFrame::Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
@@ -3995,7 +3995,7 @@ KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page
 
         KWFrame *newFrame = frame->getCopy();
         newFrame->moveBy( 0, pageHeight );
-        //newFrame->setPageNum( frame->pageNum()+1 );
+        //newFrame->setPageNum( frame->pageNumber()+1 );
         frame->frameSet()->addFrame( newFrame );
 
         if ( frame->newFrameBehavior()==KWFrame::Copy )
@@ -5345,7 +5345,7 @@ void KWDocument::slotChapterParagraphFormatted( KoTextParag* /*parag*/ )
     Q_ASSERT( frame );
     if ( frame )
         // Remove any information from this page and further pages.
-        m_sectionTitles.resize( frame->pageNum() );
+        m_sectionTitles.resize( frame->pageNumber() );
     */
 
     m_sectionTitles.resize( 0 ); // clear up the entire cache
@@ -5367,7 +5367,7 @@ QString KWDocument::checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet
         KWFrame* frame = frameset->internalToDocument( parag->rect().topLeft(), p );
         Q_ASSERT( frame );
         if ( frame ) {
-            int pgNum = frame->pageNum();
+            int pgNum = frame->pageNumber();
             if( pgNum != pageNum )
                 kdWarning() << "sectionTitle: was looking for pageNum " << pageNum << ", got frame " << frame << " page " << pgNum << endl;
         }

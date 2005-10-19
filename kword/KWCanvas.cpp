@@ -1469,7 +1469,7 @@ KCommand *KWCanvas::createTextBox( const KoRect & rect )
     if ( !m_doc->snapToGrid() || ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) ) {
         KWFrame *frame = new KWFrame(0L, rect.x(), rect.y(), rect.width(), rect.height() );
         frame->setNewFrameBehavior(KWFrame::Reconnect);
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
 
         QString name = m_doc->generateFramesetName( i18n( "Text Frameset %1" ) );
         KWTextFrameSet *_frameSet = new KWTextFrameSet(m_doc, name );
@@ -1490,7 +1490,7 @@ void KWCanvas::mrCreateText()
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frame->setMinFrameHeight( frame->height() ); // so that AutoExtendFrame doesn't resize it down right away
         frame->setNewFrameBehavior(KWFrame::Reconnect);
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect Frame"));
         frameDia.exec();
@@ -1534,7 +1534,7 @@ void KWCanvas::mrCreatePixmap()
         picRect = picRect.normalize();
         KWFrame *frame = new KWFrame(fs, picRect.x(), picRect.y(), picRect.width(),
                                      picRect.height() );
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
         frame->setSelected(TRUE);
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
@@ -1562,7 +1562,7 @@ void KWCanvas::mrCreateFormula()
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
         frameset->addFrame( frame, false );
         m_doc->addFrameSet( frameset );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Formula Frame"), frame );

@@ -109,7 +109,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     m_framesetsToUpdate.clear();
     // Necessary for end notes: find out the last frame of the main textframeset
     KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
-    m_lastMainFramePage = lastMainFrame->pageNum();
+    m_lastMainFramePage = lastMainFrame->pageNumber();
     double lastMainFrameBottom = lastMainFrame->bottom(); // before we change it below!
 #ifdef DEBUG_FRAMELAYOUT
     kdDebug(32002) << "m_lastMainFramePage = " << m_lastMainFramePage << " lastMainFrameBottom=" << lastMainFrameBottom << endl;
@@ -404,7 +404,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 lastMainFrame->setFrameBehavior( KWFrame::AutoExtendFrame );
                 // make sure it gets resized
                 if ( mainTextFrameResized == -1 )
-                    mainTextFrameResized = lastMainFrame->pageNum();
+                    mainTextFrameResized = lastMainFrame->pageNumber();
             }
         }
     }
@@ -455,7 +455,7 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
             return;
         frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNum() << endl;
+        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNumber() << endl;
 #endif
     }
     else
