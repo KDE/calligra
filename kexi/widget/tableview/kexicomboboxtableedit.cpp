@@ -509,64 +509,66 @@ void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
 bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 {
 	const int k = ke->key();
-	if (ke->state()==NoButton && k==Key_F4) {//show popup
+	if ((ke->state()==NoButton && k==Key_F4)
+		|| (ke->state()==AltButton && k==Key_Down))
+	{
+		//show popup
 		slotButtonClicked();
 		return true;
 	}
 	else if (editorActive) {
+
+		// The editor may be active but the pull down menu not existant/visible,
+		// e.g. when the user has pressed a normal button to activate the editor
+		// Don't handle the event here in that case.
+		if (!d->popup || !d->popup->isVisible()) {
+			return false;
+		}
+
+		int highlightedOrSelectedRow = d->popup->tableView()->highlightedRow();
+		if (highlightedOrSelectedRow < 0)
+			highlightedOrSelectedRow = d->popup->tableView()->currentRow();
+
 		switch (k) {
 		case Key_Up:
-			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectPrevRow();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()-1 );
+					QMAX(highlightedOrSelectedRow-1, 0) );
 				updateTextForHighlightedRow();
 				return true;
-			}
 		case Key_Down:
-			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectNextRow();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()+1 );
+					QMIN(highlightedOrSelectedRow+1, d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
-			}
 		case Key_PageUp:
-			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectPrevPage();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()-d->popup->tableView()->rowsPerPage() );
+					QMAX(highlightedOrSelectedRow-d->popup->tableView()->rowsPerPage(), 0) );
 				updateTextForHighlightedRow();
 				return true;
-			}
 		case Key_PageDown:
-			if (d->popup && d->popup->isVisible()) {
 	//			d->popup->tableView()->selectNextPage();
 				d->popup->tableView()->setHighlightedRow( 
-					d->popup->tableView()->highlightedRow()+d->popup->tableView()->rowsPerPage() );
+					QMIN(highlightedOrSelectedRow+d->popup->tableView()->rowsPerPage(), 
+					 d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
-			}
 		case Key_Home:
-			if (d->popup && d->popup->isVisible()) {
 				d->popup->tableView()->setHighlightedRow( 0 );
 				updateTextForHighlightedRow();
 				return true;
-			}
 		case Key_End:
-			if (d->popup && d->popup->isVisible()) {
 				d->popup->tableView()->setHighlightedRow( d->popup->tableView()->rows()-1 );
 				updateTextForHighlightedRow();
 				return true;
-			}
 		case Key_Enter:
 		case Key_Return: //accept
-			if (d->popup && d->popup->isVisible()) {
 				//select row that is highlighted
 				if (d->popup->tableView()->highlightedRow()>=0)
 					d->popup->tableView()->selectRow( d->popup->tableView()->highlightedRow() );
 				//do not return true: allow to process event
-			}
 		default: ;
 		}
 	}
