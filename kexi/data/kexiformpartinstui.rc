@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="10">
+<kpartgui name="kexiformpartinst" version="11">
 
 <MenuBar>
   <Menu name="edit">
@@ -31,10 +31,10 @@
    <Action name="pointer"/>
    <!-- Action name="drag_connection"/ -->
    <Separator/>
-   <Action name="library_widget_KexiDBFieldEdit"/>
-   <Action name="library_widget_KexiLabel"/>
+   <Action name="library_widget_KexiDBAutoField"/>
+   <Action name="library_widget_KexiDBLabel"/>
    <Action name="library_widget_KexiPictureLabel"/>
-	 <Action name="library_widget_KexiImageBox"/>
+   <Action name="library_widget_KexiDBImageBox"/>
    <Action name="library_widget_KexiDBLineEdit"/>
    <Action name="library_widget_KexiDBTextEdit"/>
    <Action name="library_widget_KPushButton"/>
