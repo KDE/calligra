@@ -1274,14 +1274,19 @@ void KoTextView::increaseNumberingLevel( const KoStyleCollection* styleCollectio
     }
     else // non-outline, just a numbered list
     {
-        //if ( !counter )
-        //    return;
         // Try to find a style with this depth, to know if the user wants display-levels etc.
         style = styleCollection->numberedStyleForLevel( level );
         if ( !style ) { // not found. Make the change though.
-            KoParagCounter c( *counter );
-            c.setDepth( level );
-            c.setDisplayLevels( c.displayLevels() + 1 );
+            KoParagCounter c;
+            if (counter) {
+                c = *counter;
+                c.setDepth( level );
+                c.setDisplayLevels( c.displayLevels() + 1 );
+            } else {
+                // Start a simple numbered list.
+                c.setNumbering(KoParagCounter::NUM_LIST);
+                c.setStyle(KoParagCounter::STYLE_NUM);
+            }
             KCommand* command = textObject()->setCounterCommand( m_cursor, c );
             textObject()->emitNewCommand( command );
         }
