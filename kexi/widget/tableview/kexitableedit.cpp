@@ -69,31 +69,9 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 	m_rightMargin = 0;//TODO
 }
 
-/*KexiTableEdit::KexiTableEdit(QVariant value, QWidget* parent, const char* name)
-: QWidget(parent, name)
- ,m_origValue(value), 
- ,m_field(0)
- ,m_type(f.type()) //copied because the rest of code uses m_type
- ,m_view(0)
-{
-	m_type = f.type(); //copied because the rest of code uses m_type
-	m_field = &f;
-	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
-//	installEventFilter(this);
-}*/
-
 KexiTableEdit::~KexiTableEdit()
 {
 }
-
-/* moved to KexiDataItemInterface
-void KexiTableEdit::init(const QVariant& value, const QVariant& add, bool removeOld)
-{
-	clear();
-	m_origValue = value;
-	init(add, removeOld);
-}
-*/
 
 void KexiTableEdit::setViewWidget(QWidget *v)
 {
@@ -113,16 +91,6 @@ void KexiTableEdit::resize(int w, int h)
 		}
 	}
 }
-
-#if 0 //moved
-void KexiTableEdit::showFocus( const QRect& /*r*/ )
-{
-}
-
-void KexiTableEdit::hideFocus()
-{
-}
-#endif
 
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
@@ -155,15 +123,6 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 	return false;
 //	return QWidget::eventFilter(watched, e);
 }
-
-/* moved to KexiDataItemInterface
-bool KexiTableEdit::valueChanged()
-{
-	bool ok;
-	kdDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
-	return (m_origValue != value(ok)) && ok;
-}
-*/
 
 void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
 {
