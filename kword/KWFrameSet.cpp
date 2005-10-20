@@ -29,6 +29,7 @@
 #include "KWordFrameSetIface.h"
 #include "KWFrameList.h"
 #include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -82,15 +83,15 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 
 void KWFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
 {
-    //kdDebug(32001) << k_funcinfo << name() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << kdBacktrace();
+    //kdDebug(32001) << k_funcinfo << name() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << endl; //kdBacktrace();
     KWFrame *frm = m_frames.at( _num );
     Q_ASSERT( frm );
     m_frames.take( _num );
     Q_ASSERT( !m_frames.contains(frm) );
 
-    unsigned int pageNum = frm->pageNumber();
-    if(m_framesInPage.count() < pageNum) {
-        QPtrList<KWFrame> *lst = m_framesInPage.at(pageNum - m_firstPage);
+    unsigned int index = frm->pageNumber() - m_firstPage;
+    if(m_framesInPage.count() >= index) {
+        QPtrList<KWFrame> *lst = m_framesInPage.at(index);
         lst->remove(frm);
     }
 
@@ -150,7 +151,8 @@ void KWFrameSet::deleteAllCopies()
 
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
-    double paperHeight = m_doc->pageManager()->pageLayout(0 /* what page should this b? */).ptHeight;
+    KWPage *page = m_doc->pageManager()->page( frame(0) );
+    double paperHeight = page->height();
     //kdDebug(32001) << "KWFrameSet::createEmptyRegion " << name() << endl;
     for (QPtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )
     {

@@ -440,7 +440,7 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
         return QPoint();
     //kdDebug() << "KWTextFrameSet::moveToPage currentPgNum=" << currentPgNum << " direction=" << direction << endl;
     int num = currentPgNum + direction;
-    int pages = m_doc->numPages();
+    int pages = m_doc->pageCount();
     for ( ; num >= 0 && num < pages ; num += direction )
     {
         //kdDebug() << "KWTextFrameSet::moveToPage num=" << num << " pages=" << pages << endl;
@@ -479,8 +479,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
         if ( m_doc->footNoteSeparatorLineWidth() ==0.0)
             return;
 
-        int pages = m_doc->numPages();
-        KWPage *page = m_doc->pageManager()->page(0);
+        int pages = m_doc->pageCount();
+        KWPage *page = m_doc->pageManager()->page(m_doc->pageManager()->startPage());
         double left = page->leftMargin();
         double pageWidth = page->width() - page->rightMargin() - left;
         double width = pageWidth * m_doc->footNoteSeparatorLineLength() / 100.0;
@@ -2225,14 +2225,15 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     kdDebug(32002) << "createNewPageAndNewFrame creating new frame in frameset " << name() << endl;
 //#endif
     uint oldCount = m_frames.count();
-    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNumber() << " getpages-1=" << m_doc->numPages()-1 << "   m_frames count=" << oldCount << endl;
+    int lastPageNumber = m_doc->pageManager()->lastPageNumber();
+    kdDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNumber() << " lastPageNumber=" << lastPageNumber << "   m_frames count=" << oldCount << endl;
 
     // First create a new page for it if necessary
-    if ( lastFrame->pageNumber() == m_doc->numPages() - 1 )
+    if ( lastFrame->pageNumber() == lastPageNumber )
     {
         // Let's first check if it will give us more space than we
         // already have left in this page. Otherwise we'll loop infinitely.
-        QPtrList<KWFrame> framesToCopy = m_doc->framesToCopyOnNewPage( m_doc->numPages() - 1 );
+        QPtrList<KWFrame> framesToCopy = m_doc->framesToCopyOnNewPage( lastPageNumber );
         QPtrListIterator<KWFrame> frameIt( framesToCopy );
         int heightWeWillGet = 0; // in LU
         for ( ; frameIt.current(); ++frameIt )
@@ -2449,7 +2450,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
 #endif
 
     // Find last page that is visible
-    int maxPage = ( nPointBottom.y() + m_doc->paperHeight(0) /*equiv. to ceil()*/ ) / m_doc->paperHeight(0);
+    int maxPage = m_doc->pageManager()->pageNumber(m_doc->unzoomItY( nPointBottom.y() ));
     int maxY = 0;
     if ( maxPage < m_firstPage || maxPage >= (int)m_framesInPage.size() + m_firstPage )
         maxY = ah;
@@ -3847,7 +3848,7 @@ void KWTextFrameSetEdit::insertWPPage()
     textfs->clearUndoRedoInfo();
     KoTextObject* textobj = textObject();
     KWDocument * doc = frameSet()->kWordDocument();
-    int pages = doc->numPages();
+    int pages = doc->pageCount();
     int columns = doc->numColumns();
     // There could be N columns. In that case we may need to add up to N framebreaks.
     int inserted = 0;
@@ -3856,8 +3857,8 @@ void KWTextFrameSetEdit::insertWPPage()
         macroCmd->addCommand( textfs->insertFrameBreakCommand( cursor() ) );
         textobj->setLastFormattedParag( cursor()->parag() );
         textobj->formatMore( 2 );
-    } while ( pages == doc->numPages() && ++inserted <= columns );
-    if ( pages == doc->numPages() )
+    } while ( pages == doc->pageCount() && ++inserted <= columns );
+    if ( pages == doc->pageCount() )
         kdWarning(32002) << k_funcinfo << " didn't manage to insert a new page! inserted=" << inserted << " columns=" << columns << " pages=" << pages << endl;
 
     doc->addCommand( macroCmd );

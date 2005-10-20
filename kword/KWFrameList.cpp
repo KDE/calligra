@@ -147,7 +147,7 @@ void KWFrameList::updateZOrderFor(const QPtrList<KWFrame> &frames) {
 }
 
 void KWFrameList::recalcAllFrames() {
-    recalcFrames(0, m_doc->numPages());
+    recalcFrames(0, m_doc->pageCount());
 }
 
 void KWFrameList::recalcFrames(int pageFrom, int pageTo) {

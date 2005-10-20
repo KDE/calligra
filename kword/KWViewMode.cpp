@@ -23,6 +23,7 @@
 #include "KWView.h"
 #include "KWDocument.h"
 #include "KWTextFrameSet.h"
+#include "KWFrameSet.h"
 #include "KWTableFrameSet.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
@@ -32,7 +33,8 @@ const unsigned short KWViewMode::s_shadowOffset = 3;
 
 QSize KWViewModeNormal::contentsSize()
 {
-    return QSize( m_doc->paperWidth(1), m_doc->pageTop( m_doc->pageCount() ) /*i.e. bottom of last one*/ );
+    return QSize( m_doc->paperWidth(m_doc->startPage()),
+            m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->pageManager()->lastPageNumber()) ) );
 }
 
 QSize KWViewMode::availableSizeForText( KWTextFrameSet* textfs )
@@ -187,44 +189,47 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
     QRect pageRect;
-    for ( int page = 0; page < m_doc->numPages(); page++ )
-    {
-        // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
-        int pagetop = m_doc->pageTop( page );
-        int pagewidth = m_doc->paperWidth(0);
-        int pageheight = m_doc->pageTop( page+1 ) - pagetop;
-        pageRect = QRect( 0, pagetop, pagewidth, pageheight );
 
+    int lastPage = m_doc->pageManager()->lastPageNumber();
+    double pagePosPt = 0;
+    int topOfPage = 0; // in pixels
+    for ( int pageNr = m_doc->startPage(); pageNr <= lastPage; pageNr++ )
+    {
+        KWPage *page = m_doc->pageManager()->page(pageNr);
+
+        int pageWidth = m_doc->zoomItY( page->width() );
+        int pageHeight = m_doc->zoomItY( pagePosPt + page->height() ) - topOfPage;
+        if(crect.bottom() < topOfPage)
+            break;
+        pageRect = QRect( 0, topOfPage, pageWidth, pageHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
 
-        if ( crect.right() > pagewidth )
-        {
-            // The area on the right of the page
-            QRect rightArea( pagewidth, pagetop, crect.right() - pagewidth + 1, pageheight );
+        if ( crect.right() > pageWidth ) { // The area on the right of the page
+            QRect rightArea( pageWidth, topOfPage, crect.right() - pageWidth + 1, pageHeight );
 
             QRect repaintRect = rightArea.intersect( crect );
             if ( !repaintRect.isEmpty() )
             {
                 painter->fillRect( repaintRect,
-                                   QApplication::palette().active().brush( QColorGroup::Mid ) );
-
+                        QApplication::palette().active().brush( QColorGroup::Mid ) );
 
                 // Draw a shadow
                 int topOffset = ( page==0 ) ? s_shadowOffset : 0; // leave a few pixels on top, only for first page
                 drawRightShadow( painter, crect, pageRect, topOffset );
             }
         }
+        pagePosPt += page->height(); // for next page already..
+        topOfPage += pageHeight;
     }
     // Take care of the area at the bottom of the last page
-    int lastBottom = m_doc->pageTop( m_doc->numPages() );
-    if ( crect.bottom() > lastBottom )
+    if ( crect.bottom() > topOfPage )
     {
-        QRect bottomArea( 0, lastBottom, crect.right() + 1, crect.bottom() - lastBottom + 1 );
+        QRect bottomArea( 0, topOfPage, crect.right() + 1, crect.bottom() - topOfPage + 1 );
         QRect repaintRect = bottomArea.intersect( crect );
         if ( !repaintRect.isEmpty() )
         {
             painter->fillRect( repaintRect,
-                               QApplication::palette().active().brush( QColorGroup::Mid ) );
+                    QApplication::palette().active().brush( QColorGroup::Mid ) );
             // Draw a shadow
             drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
         }
@@ -239,8 +244,8 @@ int KWViewModePreview::leftSpacing()
     if ( canvas() )
     {
         int pagesPerRow;
-        if ( m_doc->numPages() < m_pagesPerRow )
-            pagesPerRow = m_doc->numPages();
+        if ( m_doc->pageCount() < m_pagesPerRow )
+            pagesPerRow = m_doc->pageCount();
         else
             pagesPerRow = m_pagesPerRow;
 
@@ -264,12 +269,12 @@ int KWViewModePreview::topSpacing()
 
 int KWViewModePreview::numRows() const
 {
-    return ( m_doc->numPages() - 1 ) / m_pagesPerRow + 1;
+    return ( m_doc->pageCount() - 1 ) / m_pagesPerRow + 1;
 }
 
 QSize KWViewModePreview::contentsSize()
 {
-    int pages = m_doc->numPages();
+    int pages = m_doc->pageCount();
     int rows = (pages-1) / m_pagesPerRow + 1;
     int hPages = rows > 1 ? m_pagesPerRow : pages;
     return QSize( m_spacing + hPages * ( m_doc->paperWidth(1) + m_spacing ),
@@ -304,8 +309,8 @@ QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
     int row = static_cast<int>( p.y() / ( paperHeight + m_spacing ) );
     int yInPage = p.y() - row * ( paperHeight + m_spacing );
     int page = row * m_pagesPerRow + col;
-    if ( page > m_doc->numPages() - 1 ) // [this happens when moving frames around and going out of the pages]
-        return QPoint( paperWidth, m_doc->pageTop( m_doc->numPages() ) );
+    if ( page > m_doc->lastPage() ) // [this happens when moving frames around and going out of the pages]
+        return QPoint( paperWidth, m_doc->pageTop( m_doc->lastPage() ) );
     else // normal case
         return QPoint( xInPage, yInPage + m_doc->pageTop( page ) );
 }
@@ -319,7 +324,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     int paperHeight = m_doc->paperHeight(1);
     //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
     QRegion grayRegion( crect );
-    for ( int page = 0; page < m_doc->numPages(); page++ )
+    for ( int page = 0; page < m_doc->pageCount(); page++ ) // TODO rewrite to not be base 0
     {
         int row = page / m_pagesPerRow;
         int col = page % m_pagesPerRow;

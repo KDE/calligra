@@ -170,6 +170,8 @@ void KWPageManager::removePage(int pageNumber) {
     removePage(page(pageNumber));
 }
 void KWPageManager::removePage(KWPage *page) {
+    if(!page)
+        return;
     QPtrListIterator<KWPage> pages(m_pageList);
     while(pages.current() && pages.current()->pageNumber() <= page->pageNumber())
         ++pages;

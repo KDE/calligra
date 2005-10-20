@@ -333,10 +333,9 @@ public:
         m_defaultFont = newFont;
     }
 
-    // TODO remove numPages method
-    int numPages() const { return pageCount(); }
-
     int pageCount() const;
+    int startPage() const;
+    int lastPage() const;
 
     KoPictureCollection *pictureCollection() { return m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }

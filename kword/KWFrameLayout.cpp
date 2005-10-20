@@ -239,13 +239,13 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     //fnFrameBehavior = KWFrame::Ignore;
 
                     // Make sure there'll actually be a next page
-                    if ( pageNum == m_doc->numPages()-1 ) {
+                    if ( pageNum == m_doc->pageCount()-1 ) {
 #ifdef DEBUG_FRAMELAYOUT
                         kdDebug(32002) << "Adding a page for the footnote overflow." << endl;
 #endif
                         m_doc->appendPage();
                         m_doc->updateAllFrames();
-                        toPage = m_doc->numPages()-1;
+                        toPage = m_doc->pageCount()-1;
                     }
                 }
 
@@ -312,13 +312,13 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                             break;
                         }
                         // Make sure there'll actually be a next page
-                        if ( pageNum == m_doc->numPages()-1 ) {
+                        if ( pageNum == m_doc->pageCount()-1 ) {
 #ifdef DEBUG_FRAMELAYOUT
                             kdDebug(32002) << "Adding a page for the endnote overflow." << endl;
 #endif
                             m_doc->appendPage();
                             m_doc->updateAllFrames();
-                            toPage = m_doc->numPages()-1;
+                            toPage = m_doc->pageCount()-1;
                         }
                     }
                     else // It'll all fit in this page
@@ -372,7 +372,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         (void)m_doc->tryRemovingPages();
     }
 
-    int pages = m_doc->numPages();
+    int pages = m_doc->pageCount();
     // Final cleanup: delete all frames after lastFrameNumber in each frameset
     QPtrListIterator<HeaderFooterFrameset> it( m_headersFooters );
     for ( ; it.current() ; ++it )
@@ -503,7 +503,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
         // Calculate wanted rect for this frame
         KoRect rect( left + col * ( ptColumnWidth + ptColumnSpacing ),
                      top, ptColumnWidth, bottom - top );
-        uint frameNum = pageNum * numColumns + col;
+        uint frameNum = (pageNum - m_doc->startPage()) * numColumns + col;
         KWFrame* frame;
         if ( frameNum < mainTextFrameSet->frameCount() ) {
             // Resize existing frame

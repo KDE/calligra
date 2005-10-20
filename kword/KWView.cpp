@@ -458,7 +458,7 @@ void KWView::setupActions()
     actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                     this, SLOT( deletePage() ),
                                     actionCollection(), "delete_page" );
-    kdDebug() <<  m_doc->numPages() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
+    kdDebug() <<  m_doc->pageCount() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
 
     (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
@@ -1522,12 +1522,12 @@ void KWView::updatePageInfo()
                   << endl;*/
 
         // To avoid bugs, apply max page number in case a page was removed.
-        m_currentPage = QMIN( m_currentPage, m_doc->numPages()-1 );
+        m_currentPage = QMIN( m_currentPage, m_doc->pageManager()->lastPageNumber());
 
         QString oldText = m_sbPageLabel->text();
         QString newText;
 
-        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->numPages())+' ' : QString::null;
+        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? QString(" ")+i18n("Page %1/%2").arg(m_currentPage).arg(m_doc->pageCount())+' ' : QString::null;
         if ( newText != oldText )
         {
             m_sbPageLabel->setText( newText );
@@ -1543,7 +1543,7 @@ void KWView::pageNumChanged()
 {
      docStructChanged(TextFrames);
      updatePageInfo();
-     int pages = m_doc->numPages();
+     int pages = m_doc->pageCount();
      kdDebug() <<  pages <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
      refreshDeletePageAction();
 }
@@ -1671,7 +1671,7 @@ void KWView::setupPrinter( KPrinter &prt )
 
     prt.setPageSelection( KPrinter::ApplicationSide );
     prt.setCurrentPage( currentPage() + 1 );
-    prt.setMinMax( 1, m_doc->numPages() );
+    prt.setMinMax( 1, m_doc->pageCount() );
 
     KoPageLayout pgLayout = m_doc->pageLayout();
 
@@ -2021,7 +2021,7 @@ void KWView::updateReadWrite( bool readwrite )
 
 void KWView::refreshDeletePageAction()
 {
-    actionDeletePage->setEnabled( m_doc->numPages() > 1 && m_doc->processingType() == KWDocument::DTP );
+    actionDeletePage->setEnabled( m_doc->pageCount() > 1 && m_doc->processingType() == KWDocument::DTP );
 }
 
 void KWView::showMouseMode( int _mouseMode )
@@ -7702,7 +7702,7 @@ void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
 {
     KLocale *locale = KGlobal::locale();
 
-    resultLabel[0]->setText( locale->formatNumber( m_doc->numPages(), 0) );
+    resultLabel[0]->setText( locale->formatNumber( m_doc->pageCount(), 0) );
     int table =0;
     int picture = 0;
     int part = 0;
