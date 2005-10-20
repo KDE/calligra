@@ -251,10 +251,7 @@ KexiProject::createConnection()
 	}
 
 	//re-init BLOB buffer
-#ifdef Q_WS_WIN //todo: remove
-	#error remove
 	KexiBLOBBuffer::setConnection(m_connection);
-#endif
 	return true;
 }
 
