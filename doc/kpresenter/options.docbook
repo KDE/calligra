@@ -748,7 +748,7 @@ two names? -->
 <sect2 id="configure-tools">
 <title><guilabel>Tools</guilabel></title>
 
-<para>This dialog sets the default tools settings. there are 6 tabs in this dialog.</para>
+<para>This dialog sets the default tools settings. There are 6 tabs in this dialog.</para>
 
 <sect3 id="outline">
 <title>Outline</title>
@@ -763,24 +763,27 @@ two names? -->
 </mediaobject>
 </screenshot>
 
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Line</guimenuitem></menuchoice> menu.</para>
+
 <variablelist>
 <varlistentry>
 <term><guilabel>Color</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Set the color of the line. Clicking on the color will bring the standard KDE Select Color dialog.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Style</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Choose the line style from No Outline which will not draw any line to dotted lines and plain line.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Width</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Set the width of the line.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Arrow Style</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Set the styles of the beginning and the end of your line for example you can choose an arrow at the end and a square dot at the beginning.</para></listitem>
 </varlistentry>
 </variablelist>
+<para>The last field displays a preview of your settings.</para>
 </sect3>
 
 <sect3 id="fill">
@@ -815,6 +818,8 @@ two names? -->
 <sect3 id="rectangle">
 <title>Rectangle</title>
 
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Rectangle</guimenuitem></menuchoice> menu.</para>
+
 <screenshot>
 <screeninfo>The Rectangle tab</screeninfo>
 <mediaobject>
@@ -842,6 +847,8 @@ two names? -->
 
 <sect3 id="polygon">
 <title>Polygon</title>
+
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Convex/Concave Polygon</guimenuitem></menuchoice> menu.</para>
 
 <screenshot>
 <screeninfo>The Polygon tab</screeninfo>
@@ -872,6 +879,8 @@ two names? -->
 
 <sect3 id="pie">
 <title>Pie</title>
+
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Pie/Arc/Chord</guimenuitem></menuchoice> menu.</para>
 
 <screenshot>
 <screeninfo>The Pie tab</screeninfo>
