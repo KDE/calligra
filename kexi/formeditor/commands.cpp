@@ -783,7 +783,7 @@ InsertWidgetCommand::execute()
 		);
 	}
 	//assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
-	//(e.g. KexiDBFieldEdit)
+	//(e.g. KexiDBAutoField)
 	if (m_form->designMode() && dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
 		dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)->assignItem(item);
 	}

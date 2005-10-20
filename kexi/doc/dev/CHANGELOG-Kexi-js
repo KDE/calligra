@@ -12,6 +12,12 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-10-19
+Forms
+- image box doesn't provide popup in data view mode when 
+  no data source is assigned
+- Kexi Form widgets code splitted
+
 2005-10-18
 KexiDB
 - Connection::querySingleRecord() improved

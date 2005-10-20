@@ -1197,7 +1197,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			container->form()->objectTree()->addItem(container->objectTree(), item);
 	}
 	//assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
-	//(e.g. KexiDBFieldEdit)
+	//(e.g. KexiDBAutoField)
 	if (container->form()->designMode() && dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
 		dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)->assignItem(item);
 	}

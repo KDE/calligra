@@ -617,6 +617,7 @@ FORMS:
 --add filter property (using KImageEffect)
 --add QFrame container
 --make image-related actions undoable/redoable in design time
+--add 'print' action
 -property pane: shrink widget name displayed at the top by adding "..." to avoid problems
  with pane's size when selected widget has very long name
 - resize handles are always black: this is bad on black background!
@@ -639,7 +640,8 @@ KEXIDB:
 
 GENERAL:
 - removed conflict between standalone and KOffice version by:
--- inserting "standalone" word into module names, eg. kexidb_mysqldriver.so -> kexidb_mysqldriver_standalone.so
+-- inserting "standalone" word into module names, 
+   eg. kexidb_mysqldriver.so -> kexidb_mysqldriver_standalone.so
 -- renaming kexi to kexi-standalone
 - rename "data view mode" to "browse view mode" (as in Filemaker)
 
