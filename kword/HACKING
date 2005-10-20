@@ -188,9 +188,9 @@ FILES:
 
   other features:
     bookmarks:
-        kwcreatebookmarkdia.h/cc    - bookmarks dialogs
-        kwcreatebookmarkdiabase.h/cc    - create a bookmark
-        kwselectbookmarkdiabase.h/cc    - select/rename/delete
+        KWCreateBookmarkDia.h/cc    - bookmarks dialogs
+        KWCreateBookmarkDiaBase.h/cc    - create a bookmark
+        KWSelectBookmarkDiaBase.h/cc    - select/rename/delete
                                         - bookmark
     mailmerge:
         mailmerge.h/cc

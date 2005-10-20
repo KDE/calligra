@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 #include "KWCommand.h"
 #include "KWCreateBookmarkDia.h"
-#include "kwcreatebookmarkdiabase.h"
+#include "KWCreateBookmarkDiaBase.h"
 #include "KWFrame.h"
 
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
