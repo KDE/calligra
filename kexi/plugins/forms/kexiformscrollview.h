@@ -24,7 +24,7 @@
 #include "kexiscrollview.h"
 #include "kexidataprovider.h"
 #include "kexiformeventhandler.h"
-#include "kexidbform.h"
+#include "widgets/kexidbform.h"
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/tableview/kexidataawareobjectiface.h>

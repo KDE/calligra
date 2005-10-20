@@ -46,11 +46,20 @@
 #include <kexiutils/utils.h>
 #include <widget/kexicustompropertyfactory.h>
 
-#include "kexidbform.h"
 #include "kexiformview.h"
-#include "kexilabel.h"
-#include "kexidbwidgets.h"
-#include "kexidbfieldedit.h"
+#include "widgets/kexidbautofield.h"
+#include "widgets/kexidbcheckbox.h"
+#include "widgets/kexidbdateedit.h"
+#include "widgets/kexidbdatetimeedit.h"
+#include "widgets/kexidbdoublespinbox.h"
+#include "widgets/kexidbimagebox.h"
+#include "widgets/kexidbintspinbox.h"
+#include "widgets/kexidblabel.h"
+#include "widgets/kexidblineedit.h"
+#include "widgets/kexidbtextedit.h"
+#include "widgets/kexidbtimeedit.h"
+#include "widgets/kexipushbutton.h"
+#include "widgets/kexidbform.h"
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
@@ -212,8 +221,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi = new KexiDataAwareWidgetInfo(
 		this, "stdwidgets", "QLabel" /*we're inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("label");
-	wi->setClassName("KexiLabel");
+	wi->setClassName("KexiDBLabel");
 	wi->addAlternateClassName("QLabel", true/*override*/);
+	wi->addAlternateClassName("KexiLabel", true/*override*/); //older
 	wi->setName(i18n("Text Label", "Label"));
 	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
@@ -224,8 +234,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi = new KexiDataAwareWidgetInfo(
 		this, "stdwidgets", "KexiPictureLabel" /*we're inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("pixmaplabel");
-	wi->setClassName("KexiImageBox");
+	wi->setClassName("KexiDBImageBox");
 	wi->addAlternateClassName("KexiPictureLabel", true/*override*/);
+	wi->addAlternateClassName("KexiImageBox", true/*override*/); //older
 	wi->setName(i18n("Image Box"));
 	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "image"));
@@ -234,8 +245,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setCustomTypeForProperty("pixmapId", KexiCustomPropertyFactory::PixmapId);
 	addClass(wi);
 
-	setInternalProperty("KexiImageBox", "dontStartEditingOnInserting", "1");
-//	setInternalProperty("KexiImageBox", "forceShowAdvancedProperty:pixmap", "1");
+	setInternalProperty("KexiDBImageBox", "dontStartEditingOnInserting", "1");
+//	setInternalProperty("KexiDBImageBox", "forceShowAdvancedProperty:pixmap", "1");
 #endif
 
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
@@ -251,7 +262,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
 	KexiDataAwareWidgetInfo *wFieldEdit = new KexiDataAwareWidgetInfo(this);
 	wFieldEdit->setPixmap("edit");
-	wFieldEdit->setClassName("KexiDBFieldEdit");
+	wFieldEdit->setClassName("KexiDBAutoField");
+	wi->addAlternateClassName("KexiDBFieldEdit", true/*override*/); //older
 	wFieldEdit->setName(i18n("Auto Field"));
 	wFieldEdit->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "autoField"));
@@ -403,17 +415,17 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 		w = new KexiDBTextEdit(p, n);
 		w->setCursor(QCursor(Qt::ArrowCursor));
 	}
-	else if(c == "KexiLabel")
-		w = new KexiLabel(text, p, n);
+	else if(c == "KexiDBLabel")
+		w = new KexiDBLabel(text, p, n);
 #ifndef KEXI_NO_IMAGEBOX_WIDGET
-	else if(c == "KexiImageBox") {
-		w = new KexiImageBox(designMode, p, n);
+	else if(c == "KexiDBImageBox") {
+		w = new KexiDBImageBox(designMode, p, n);
 		connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
 	}
 #endif
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-	else if(c == "KexiDBFieldEdit")
-		w = new KexiDBFieldEdit(p, n, designMode);
+	else if(c == "KexiDBAutoField")
+		w = new KexiDBAutoField(p, n, designMode);
 #endif
 	else if(c == "KexiDBCheckBox")
 		w = new KexiDBCheckBox(text, p, n);
@@ -443,9 +455,9 @@ KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMe
 		m_assignAction->plug( menu );
 		return true;
 	}
-	else if(classname == "KexiImageBox")
+	else if(classname == "KexiDBImageBox")
 	{
-		KexiImageBox *imageBox = static_cast<KexiImageBox*>(w);
+		KexiDBImageBox *imageBox = static_cast<KexiDBImageBox*>(w);
 		imageBox->updateActionsAvailability();
 		KActionCollection *ac = imageBox->actionCollection();
 		KPopupMenu *subMenu = new KPopupMenu();
@@ -506,8 +518,8 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		ed->setVScrollBarMode(textedit->vScrollBarMode());
 		return true;
 	}
-	else if ( classname == "KexiLabel" ) {
-		KexiLabel *label = static_cast<KexiLabel*>(w);
+	else if ( classname == "KexiDBLabel" ) {
+		KexiDBLabel *label = static_cast<KexiDBLabel*>(w);
 		m_widget = w;
 		if(label->textFormat() == RichText)
 		{
@@ -518,7 +530,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 				changeProperty( "text", text, container->form() );
 			}
 
-			if ( classname == "KexiLabel" )
+			if ( classname == "KexiDBLabel" )
 				w->resize(w->sizeHint());
 		}
 		else
@@ -540,10 +552,10 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		disableFilter(w, container);
 		return true;
 	}
-	else if(classname == "KexiDBFieldEdit") {
-		if(static_cast<KexiDBFieldEdit*>(w)->hasAutoCaption())
+	else if(classname == "KexiDBAutoField") {
+		if(static_cast<KexiDBAutoField*>(w)->hasAutoCaption())
 			return false; // caption is auto, abort editing
-		QLabel *label = static_cast<KexiDBFieldEdit*>(w)->label();
+		QLabel *label = static_cast<KexiDBAutoField*>(w)->label();
 		createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
 		return true;
 	}
@@ -553,8 +565,8 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
 		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
 	}
-	else if(classname == "KexiImageBox") {
-		KexiImageBox *image = static_cast<KexiImageBox*>(w);
+	else if(classname == "KexiDBImageBox") {
+		KexiDBImageBox *image = static_cast<KexiDBImageBox*>(w);
 		image->insertFromFile();
 	}
 	return false;
@@ -585,7 +597,7 @@ KexiDBFactory::autoSaveProperties(const QCString & /*classname*/)
 		//lst << "formName";
 //	if(classname == "KexiDBLineEdit")
 //	lst += "dataSource";
-//	if(classname == "KexiDBFieldEdit")
+//	if(classname == "KexiDBAutoField")
 //		lst << "labelCaption";
 	return lst;
 }
@@ -636,15 +648,15 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 	else if(classname == "KexiDBForm")
 		ok = property!="iconText"
 			&& property!="geometry" /*nonsense for toplevel widget; for size, "size" property is used*/;
-	else if(classname == "KexiLabel")
+	else if(classname == "KexiDBLabel")
 		ok = property!="focusPolicy";
-	else if(classname == "KexiDBFieldEdit") {
+	else if(classname == "KexiDBAutoField") {
 		if (!isTopLevel && property=="caption")
 			return true; //force
 		if (property=="fieldTypeInternal" || property=="fieldCaptionInternal")
 			return false;
 	}
-	else if (classname == "KexiImageBox") {
+	else if (classname == "KexiDBImageBox") {
 		ok = property!="font" && property!="wordbreak";
 	}
 
@@ -656,7 +668,7 @@ KexiDBFactory::changeText(const QString &text)
 {
 	QCString n = WidgetFactory::widget()->className();
 //	QWidget *w = WidgetFactory::widget();
-	if(n == "KexiDBFieldEdit") {
+	if(n == "KexiDBAutoField") {
 		changeProperty("caption", text, m_container->form());
 		return true;
 	}
@@ -670,8 +682,8 @@ KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QCString &classna
 	//QSize s = widget->size();
 	//QPoint p = widget->pos();
 
-	if(classname == "KexiDBFieldEdit")
-		editor->setGeometry( static_cast<KexiDBFieldEdit*>(w)->label()->geometry() );
+	if(classname == "KexiDBAutoField")
+		editor->setGeometry( static_cast<KexiDBAutoField*>(w)->label()->geometry() );
 }
 
 void

@@ -269,7 +269,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 			if (it.current()->widget()->focusPolicy() & QWidget::TabFocus) {
 				//this widget has tab focus:
 				it.current()->widget()->installEventFilter(this);
-				//also filter events for data-aware children of this widget (i.e. KexiDBFieldEdit's editors)
+				//also filter events for data-aware children of this widget (i.e. KexiDBAutoField's editors)
 				QObjectList *children = it.current()->widget()->queryList("QWidget");
 				for (QObjectListIt childrenIt(*children); childrenIt.current(); ++childrenIt) {
 					if (dynamic_cast<KexiFormDataItemInterface*>(childrenIt.current())) {

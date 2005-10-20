@@ -18,29 +18,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXILABEL_H
-#define KEXILABEL_H
+#ifndef KEXIDBLABEL_H
+#define KEXIDBLABEL_H
 
 #include <qimage.h>
 #include <qlabel.h>
 
 #include <kpixmap.h>
 
-#include "kexiformdataiteminterface.h"
-#include "kexidbwidgets.h"
+#include "../kexiformdataiteminterface.h"
+#include "../kexidbtextwidgetinterface.h"
 #include <widget/utils/kexidisplayutils.h>
 
 class QPainter;
 class QTimer;
-class KexiLabel;
-class KexiLabelPrivate;
+class KexiDBLabelPrivate;
 /**
  An extended, data-aware, read-only text label.
  It's text may have a drop-shadow.
 
  @author Christian Nitschkowski, Jaroslaw Staniek
 */
-class KEXIFORMUTILS_EXPORT KexiLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
+class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
 		Q_OBJECT
 		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
 		Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
@@ -49,9 +48,9 @@ class KEXIFORMUTILS_EXPORT KexiLabel : public QLabel, protected KexiDBTextWidget
 		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
 
 	public:
-		KexiLabel( QWidget *parent, const char *name = 0, WFlags f = 0 );
-		KexiLabel( const QString& text, QWidget *parent, const char *name = 0, WFlags f = 0 );
-		virtual ~KexiLabel();
+		KexiDBLabel( QWidget *parent, const char *name = 0, WFlags f = 0 );
+		KexiDBLabel( const QString& text, QWidget *parent, const char *name = 0, WFlags f = 0 );
+		virtual ~KexiDBLabel();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
@@ -91,7 +90,7 @@ class KEXIFORMUTILS_EXPORT KexiLabel : public QLabel, protected KexiDBTextWidget
 		virtual void setText( const QString& text );
 
 		/*! Enable/Disable the shadow effect.
-		 KexiLabel acts just like a normal QLabel when shadow is disabled. */
+		 KexiDBLabel acts just like a normal QLabel when shadow is disabled. */
 		void setShadowEnabled( bool state );
 
 	protected slots:
@@ -117,7 +116,7 @@ class KEXIFORMUTILS_EXPORT KexiLabel : public QLabel, protected KexiDBTextWidget
 
 		KPixmap p_shadowPixmap;
 		QPoint p_shadowPosition;
-		KexiLabelPrivate* p_privateLabel;
+		KexiDBLabelPrivate* p_privateLabel;
 		QTimer* p_timer;
 		bool p_pixmapDirty : 1;
 		bool p_shadowEnabled : 1;

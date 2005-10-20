@@ -19,21 +19,32 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexidbfieldedit.h"
+#include "kexidbautofield.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
-
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kexidbwidgets.h"
+#include "kexidbcheckbox.h"
+#include "kexidbdateedit.h"
+#include "kexidbdatetimeedit.h"
+#include "kexidbdoublespinbox.h"
+#include "kexidbimagebox.h"
+#include "kexidbintspinbox.h"
+#include "kexidblabel.h"
+#include "kexidblineedit.h"
+#include "kexidbtextedit.h"
+#include "kexidbtimeedit.h"
+#include "kexipushbutton.h"
+#include "kexidbform.h"
+
 #include <kexidb/queryschema.h>
 #include <formeditor/utils.h>
 
-#define KexiDBFieldEdit_SPACING 10 //10 pixel for spacing between a label and an editor widget
+#define KexiDBAutoField_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
-KexiDBFieldEdit::KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, 
+KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos, 
 	QWidget *parent, const char *name, bool designMode)
  : QWidget(parent, name)
  , KexiFormDataItemInterface()
@@ -43,7 +54,7 @@ KexiDBFieldEdit::KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosi
 	init(text, type, pos);
 }
 
-KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name, bool designMode)
+KexiDBAutoField::KexiDBAutoField(QWidget *parent, const char *name, bool designMode)
  : QWidget(parent, name)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
@@ -52,12 +63,12 @@ KexiDBFieldEdit::KexiDBFieldEdit(QWidget *parent, const char *name, bool designM
 	init(QString::null/*i18n("Auto Field")*/, Auto, Left);
 }
 
-KexiDBFieldEdit::~KexiDBFieldEdit()
+KexiDBAutoField::~KexiDBAutoField()
 {
 }
 
 void
-KexiDBFieldEdit::init(const QString &text, WidgetType type, LabelPosition pos)
+KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 {
 	m_fieldTypeInternal = KexiDB::Field::InvalidType;
 	m_layout = 0;
@@ -74,7 +85,7 @@ KexiDBFieldEdit::init(const QString &text, WidgetType type, LabelPosition pos)
 }
 
 void
-KexiDBFieldEdit::setWidgetType(WidgetType type)
+KexiDBAutoField::setWidgetType(WidgetType type)
 {
 	const bool differ = (type != m_widgetType_property);
 	m_widgetType_property = type;
@@ -89,7 +100,7 @@ KexiDBFieldEdit::setWidgetType(WidgetType type)
 }
 
 void
-KexiDBFieldEdit::createEditor()
+KexiDBAutoField::createEditor()
 {
 	if(m_editor)
 		delete m_editor;
@@ -129,7 +140,7 @@ KexiDBFieldEdit::createEditor()
 			connect( m_editor, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
 			break;
 		case Image:
-			m_editor = new KexiImageBox(m_designMode, this);
+			m_editor = new KexiDBImageBox(m_designMode, this);
 			connect( m_editor, SIGNAL(valueChanged()), this, SLOT( slotValueChanged() ) );
 			break;
 		default:
@@ -139,7 +150,7 @@ KexiDBFieldEdit::createEditor()
 	}
 
 	if(m_editor) {
-		m_editor->setName( QCString("KexiDBFieldEdit_")+m_editor->className() );
+		m_editor->setName( QCString("KexiDBAutoField_")+m_editor->className() );
 		dynamic_cast<KexiDataItemInterface*>(m_editor)->setParentDataItemInterface(this);
 		KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
 		m_editor->show();
@@ -157,7 +168,7 @@ KexiDBFieldEdit::createEditor()
 }
 
 void
-KexiDBFieldEdit::setLabelPosition(LabelPosition position)
+KexiDBAutoField::setLabelPosition(LabelPosition position)
 {
 	m_lblPosition = position;
 	if(m_layout) {
@@ -179,7 +190,7 @@ KexiDBFieldEdit::setLabelPosition(LabelPosition position)
 			else
 				m_label->show();
 			m_layout->addWidget(m_label);
-			m_layout->addSpacing(KexiDBFieldEdit_SPACING);
+			m_layout->addSpacing(KexiDBAutoField_SPACING);
 			m_layout->addWidget(m_editor);
 			break;
 
@@ -191,7 +202,7 @@ KexiDBFieldEdit::setLabelPosition(LabelPosition position)
 }
 
 void
-KexiDBFieldEdit::setInvalidState( const QString &text )
+KexiDBAutoField::setInvalidState( const QString &text )
 {
 	// Widget with an invalid dataSource is just a QLabel
 	m_widgetType = Auto;
@@ -203,7 +214,7 @@ KexiDBFieldEdit::setInvalidState( const QString &text )
 }
 
 bool
-KexiDBFieldEdit::isReadOnly() const
+KexiDBAutoField::isReadOnly() const
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -213,7 +224,7 @@ KexiDBFieldEdit::isReadOnly() const
 }
 /*
 void
-KexiDBFieldEdit::setReadOnly(bool state)
+KexiDBAutoField::setReadOnly(bool state)
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -221,7 +232,7 @@ KexiDBFieldEdit::setReadOnly(bool state)
 }*/
 
 void
-KexiDBFieldEdit::setValueInternal(const QVariant& add, bool removeOld)
+KexiDBAutoField::setValueInternal(const QVariant& add, bool removeOld)
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -229,7 +240,7 @@ KexiDBFieldEdit::setValueInternal(const QVariant& add, bool removeOld)
 }
 
 QVariant
-KexiDBFieldEdit::value()
+KexiDBAutoField::value()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -238,13 +249,13 @@ KexiDBFieldEdit::value()
 }
 
 void
-KexiDBFieldEdit::slotValueChanged()
+KexiDBAutoField::slotValueChanged()
 {
 	signalValueChanged();
 }
 
 bool
-KexiDBFieldEdit::valueIsNull()
+KexiDBAutoField::valueIsNull()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -253,7 +264,7 @@ KexiDBFieldEdit::valueIsNull()
 }
 
 bool
-KexiDBFieldEdit::valueIsEmpty()
+KexiDBAutoField::valueIsEmpty()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -262,7 +273,7 @@ KexiDBFieldEdit::valueIsEmpty()
 }
 
 bool
-KexiDBFieldEdit::valueChanged()
+KexiDBAutoField::valueChanged()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	kexipluginsdbg << m_origValue  << endl;
@@ -272,7 +283,7 @@ KexiDBFieldEdit::valueChanged()
 }
 
 void
-KexiDBFieldEdit::installListener(KexiDataItemChangesListener* listener)
+KexiDBAutoField::installListener(KexiDataItemChangesListener* listener)
 {
 	KexiFormDataItemInterface::installListener(listener);
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
@@ -281,7 +292,7 @@ KexiDBFieldEdit::installListener(KexiDataItemChangesListener* listener)
 }
 
 bool
-KexiDBFieldEdit::cursorAtStart()
+KexiDBAutoField::cursorAtStart()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -290,7 +301,7 @@ KexiDBFieldEdit::cursorAtStart()
 }
 
 bool
-KexiDBFieldEdit::cursorAtEnd()
+KexiDBAutoField::cursorAtEnd()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -299,7 +310,7 @@ KexiDBFieldEdit::cursorAtEnd()
 }
 
 void
-KexiDBFieldEdit::clear()
+KexiDBAutoField::clear()
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -307,10 +318,10 @@ KexiDBFieldEdit::clear()
 }
 
 void
-KexiDBFieldEdit::setFieldTypeInternal(int kexiDBFieldType)
+KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 {
 	m_fieldTypeInternal = (KexiDB::Field::Type)kexiDBFieldType;
-	WidgetType type = KexiDBFieldEdit::widgetTypeForFieldType(
+	WidgetType type = KexiDBAutoField::widgetTypeForFieldType(
 		m_fieldTypeInternal==KexiDB::Field::InvalidType ? KexiDB::Field::Text : m_fieldTypeInternal);
 
 	if(m_widgetType != type) {
@@ -320,7 +331,7 @@ KexiDBFieldEdit::setFieldTypeInternal(int kexiDBFieldType)
 }
 
 void
-KexiDBFieldEdit::setFieldCaptionInternal(const QString& text)
+KexiDBAutoField::setFieldCaptionInternal(const QString& text)
 {
 	m_fieldCaptionInternal = text;
 	//change text only if autocaption is set and no columnInfo is available
@@ -331,7 +342,7 @@ KexiDBFieldEdit::setFieldCaptionInternal(const QString& text)
 }
 
 void
-KexiDBFieldEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
 	// first, update label's text
@@ -341,7 +352,7 @@ KexiDBFieldEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 	// change widget type depending on field type
 	WidgetType type;
 	if(m_widgetType_property == Auto) {
-		type = KexiDBFieldEdit::widgetTypeForFieldType(cinfo ? cinfo->field->type() : KexiDB::Field::Text);
+		type = KexiDBAutoField::widgetTypeForFieldType(cinfo ? cinfo->field->type() : KexiDB::Field::Text);
 		if(m_widgetType != type) {
 			m_widgetType = type;
 			createEditor();
@@ -354,8 +365,8 @@ KexiDBFieldEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 }
 
 //static
-KexiDBFieldEdit::WidgetType
-KexiDBFieldEdit::widgetTypeForFieldType(KexiDB::Field::Type type)
+KexiDBAutoField::WidgetType
+KexiDBAutoField::widgetTypeForFieldType(KexiDB::Field::Type type)
 {
 	switch(type) {
 		case KexiDB::Field::Integer:
@@ -387,7 +398,7 @@ KexiDBFieldEdit::widgetTypeForFieldType(KexiDB::Field::Type type)
 }
 
 void
-KexiDBFieldEdit::changeText(const QString &text, bool beautify)
+KexiDBAutoField::changeText(const QString &text, bool beautify)
 {
 	QString realText;
 	if (beautify) {
@@ -409,7 +420,7 @@ KexiDBFieldEdit::changeText(const QString &text, bool beautify)
 }
 
 void
-KexiDBFieldEdit::setCaption(const QString &caption)
+KexiDBAutoField::setCaption(const QString &caption)
 {
 	m_caption = caption;
 	if(!m_autoCaption && !caption.isEmpty())
@@ -417,13 +428,13 @@ KexiDBFieldEdit::setCaption(const QString &caption)
 }
 
 /*void
-KexiDBFieldEdit::setCaptionInternal(const QString& text)
+KexiDBAutoField::setCaptionInternal(const QString& text)
 {
 	if(!m_autoCaption && !caption.isEmpty())
 }*/
 
 void
-KexiDBFieldEdit::setAutoCaption(bool autoCaption)
+KexiDBAutoField::setAutoCaption(bool autoCaption)
 {
 	m_autoCaption = autoCaption;
 	if(m_autoCaption) {
@@ -443,12 +454,12 @@ KexiDBFieldEdit::setAutoCaption(bool autoCaption)
 }
 
 void
-KexiDBFieldEdit::setDataSource( const QString &ds ) {
+KexiDBAutoField::setDataSource( const QString &ds ) {
 	KexiFormDataItemInterface::setDataSource(ds);
 }
 
 QSize
-KexiDBFieldEdit::sizeHint() const
+KexiDBAutoField::sizeHint() const
 {
 	if (m_lblPosition == NoLabel)
 		return m_editor ? m_editor->sizeHint() : QWidget::sizeHint();
@@ -458,15 +469,15 @@ KexiDBFieldEdit::sizeHint() const
 		s1 = m_editor->sizeHint();
 	QSize s2(m_label->sizeHint());
 	if (m_lblPosition == Top)
-		return QSize(QMAX(s1.width(), s2.width()), s1.height()+KexiDBFieldEdit_SPACING+s2.height());
+		return QSize(QMAX(s1.width(), s2.width()), s1.height()+KexiDBAutoField_SPACING+s2.height());
 
 //	if (m_lblPosition == Left) 
 	//left
-	return QSize(s1.width()+KexiDBFieldEdit_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
+	return QSize(s1.width()+KexiDBAutoField_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
 }
 
 void
-KexiDBFieldEdit::setFocusPolicy( FocusPolicy policy )
+KexiDBAutoField::setFocusPolicy( FocusPolicy policy )
 {
 	m_focusPolicyChanged = true;
 	QWidget::setFocusPolicy(policy);
@@ -475,4 +486,4 @@ KexiDBFieldEdit::setFocusPolicy( FocusPolicy policy )
 		m_editor->setFocusPolicy(policy);
 }
 
-#include "kexidbfieldedit.moc"
+#include "kexidbautofield.moc"

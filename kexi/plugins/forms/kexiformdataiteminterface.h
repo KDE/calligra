@@ -21,7 +21,6 @@
 #define KEXIFORMDATAITEMINTERFACE_H
 
 #include <kexidataiteminterface.h>
-
 #include <qwidget.h>
 
 namespace KexiDB {
@@ -93,7 +92,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		QCString m_dataSourceMimeType;
 		KexiDB::QueryColumnInfo* m_columnInfo;
 
-	friend class KexiDBFieldEdit;
+	friend class KexiDBAutoField;
 };
 
 #endif

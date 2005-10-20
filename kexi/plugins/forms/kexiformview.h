@@ -78,7 +78,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		 If \a id is 0, BLOB is unassigned and no new is assigned. 
 
 		 This method is called when a widget supporting BLOB data 
-		 (currently, images from KexiImageBox, within KexiDBFactory) has BLOB assigned by identifier \a id.
+		 (currently, images from KexiDBImageBox, within KexiDBFactory) has BLOB assigned by identifier \a id.
 		 BLOB identifiers are defined by KexiBLOBBuffer (KexiBLOBBuffer::self() instance).
 		
 		 The data collected by this method is used on form's design saving (in design mode). 

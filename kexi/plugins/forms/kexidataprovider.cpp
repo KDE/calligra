@@ -30,7 +30,7 @@
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
 
-#include "kexidbform.h"
+#include "widgets/kexidbform.h"
 
 KexiFormDataProvider::KexiFormDataProvider()
  : KexiDataItemChangesListener()

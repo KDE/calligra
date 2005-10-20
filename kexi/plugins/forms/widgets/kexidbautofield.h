@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDBINPUTWIDGET_H
-#define KEXIDBINPUTWIDGET_H
+#ifndef KEXIDBAUTOFIELD_H
+#define KEXIDBAUTOFIELD_H
 
 #include <qwidget.h>
 #include <kexidb/field.h>
@@ -32,7 +32,7 @@ class QLabel;
 
 //! Universal "Auto Field" widget for Kexi forms
 /*! It acts as a container for most data-aware widgets. */
-class KEXIFORMUTILS_EXPORT KexiDBFieldEdit : 
+class KEXIFORMUTILS_EXPORT KexiDBAutoField : 
 	public QWidget,
 	public KexiFormDataItemInterface,
 	public KFormDesigner::DesignTimeDynamicChildWidgetHandler
@@ -54,10 +54,10 @@ class KEXIFORMUTILS_EXPORT KexiDBFieldEdit :
 			MultiLineText, Enum, Image };
 		enum LabelPosition { Left = 300, Top, NoLabel };
 
-		KexiDBFieldEdit(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0, bool designMode = true);
-		KexiDBFieldEdit(QWidget *parent = 0, const char *name = 0, bool designMode = true);
+		KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0, bool designMode = true);
+		KexiDBAutoField(QWidget *parent = 0, const char *name = 0, bool designMode = true);
 
-		virtual ~KexiDBFieldEdit();
+		virtual ~KexiDBAutoField();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }

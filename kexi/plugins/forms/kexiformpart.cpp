@@ -45,7 +45,7 @@
 #include <koproperty/property.h>
 
 #include "kexiformview.h"
-#include "kexidbform.h"
+#include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiactionselectiondialog.h"
 #include "kexiformmanager.h"

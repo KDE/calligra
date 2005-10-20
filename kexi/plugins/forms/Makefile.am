@@ -26,11 +26,12 @@ libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp kexidataawarewidgeti
 	kexidbfieldedit.cpp kexilabel.cpp kexidbwidgets.cpp 
 libkexiformutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiformutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
-	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la
+	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
+	$(top_builddir)/kexi/plugins/forms/widgets/libkexiformutilswidgets.la
 servicesdir=$(kde_servicesdir)/kformdesigner
 services_DATA = kexidbfactory.desktop
 
-SUBDIRS = .
+SUBDIRS = widgets .
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 		-I$(top_srcdir)/kexi/widget/utils \

@@ -48,10 +48,10 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 
-#include "kexidbform.h"
+#include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexidatasourcepage.h"
-#include "kexidbfieldedit.h"
+#include "widgets/kexidbautofield.h"
 
 #define NO_DSWIZARD
 
@@ -968,7 +968,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		KFormDesigner::InsertWidgetCommand *insertCmd
 			= new KFormDesigner::InsertWidgetCommand(form()->toplevelContainer(),
 	//! todo this is hardcoded!
-				"KexiDBFieldEdit",
+				"KexiDBAutoField",
 	//! todo this name can be invalid for expressions: if so, fall back to a default class' prefix!
 			pos, column->aliasOrName()
 		);
@@ -977,8 +977,8 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 
 		KFormDesigner::ObjectTreeItem *newWidgetItem 
 			= form()->objectTree()->dict()->find(insertCmd->widgetName());
-		KexiDBFieldEdit* newWidget 
-			= newWidgetItem ? dynamic_cast<KexiDBFieldEdit*>(newWidgetItem->widget()) : 0;
+		KexiDBAutoField* newWidget 
+			= newWidgetItem ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
 		widgetsToSelect.append(newWidget);
 //#if 0
 		KFormDesigner::CommandGroup *subGroup 

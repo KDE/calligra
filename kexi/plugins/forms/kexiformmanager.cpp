@@ -18,7 +18,7 @@
 */
 
 #include "kexiformmanager.h"
-#include "kexidbform.h"
+#include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
