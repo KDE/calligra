@@ -403,6 +403,34 @@ see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</l
 <sect1  id="configure-completion">
 <title>The <guilabel>Configure Completion</guilabel> Dialog</title>
 
+<para>Autocompletion allows you to type the first few letters of a commonly
+used word (often technical or job specific), and tell &kpresenter; to
+finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>
+<sect2 id="autocomplete-using">
+<title>Using autocompletion</title>
+<para>Using autocompletion could not be easier.  Simply type the first few
+letters of the word you want &kpresenter; to finish, and press
+<keycombo>&Ctrl;<keycap>E</keycap></keycombo>. &kpresenter; will look 
+through the list of autocompletion words and if it finds a word which begins 
+with those letters, it will finish entering the remainder of the word.</para>
+<sect3 id="autocomplete-using-add">
+<title>Adding words to autocompletion</title>
+<para>&kpresenter; maintains a list of words for each user that will be used for autocompletion.</para>
+<para>You can add words to this list one of two ways:</para>
+<itemizedlist>
+<listitem><para>&kpresenter; can automatically add new words to the completion list for later approval.
+This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
+<listitem><para>Individual words can be added to the list by using 
+<link linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
+</itemizedlist>
+</sect3>
+</sect2>
+<sect2 id="autocomplete-dialog">
+<title>Configuring autocomplete</title>
+<para>To configure autocompletion, select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Completion...</guimenuitem></menuchoice>
+from the menubar.  This will bring up a dialog.</para>
+
 <screenshot>
 <screeninfo>Configure Completion Dialog</screeninfo>
 <mediaobject>
@@ -413,11 +441,29 @@ see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</l
 </mediaobject>
 </screenshot>
 
-<para>-</para>
-
-<para>-</para>
-
-<para>-</para>
+<para>The first check box labeled <guilabel>Enable completion</guilabel> is used to toggle autocompletion on and off.</para>
+<para>The second check box, labeled <guilabel>Automatically add new words to completion list</guilabel> will add any word equal to or longer
+than the <guilabel>Minimum word length</guilabel> to the list of proposed autocompletion words.</para>
+<para>The large listbox in the center of the dialog contains the current proposed list of autocompletion words.</para>
+<note><para>Not all words listed in the list box will be immediatly affected by autocompletion when entered into this dialog.</para>
+<para>A word is not part of autocompletion until the list is <emphasis>saved</emphasis> to disk.  At that moment, &kpresenter; 
+will use that saved list for all autocompletion, until the list is replaced with another saved list.</para>
+<para>Some of the words in the autocompletion list may not have been saved yet.</para></note>
+<para>By clicking the <guibutton>Add Completion Entry...</guibutton> button you can add 
+an individual word to the completion list.</para>
+<para>To remove words from the completion list, select the word with the &LMB; from the list, then
+click <guibutton>Remove Completion Entry</guibutton>.</para>
+<para>To save the current list to disk and have &kpresenter; begin using this new list for autocompletion, 
+click <guibutton>Save Completion List</guibutton>.</para>
+<para>Use the spinbox/slider combination labeled <guilabel>Minimum word length:</guilabel> to prevent &kpresenter; 
+from automatically adding short words to the completion list.   You can select any value from 5-100.</para>
+<para>The spinbox/slider combination labeled <guilabel>Maximum number of completion words:</guilabel> can be adjusted to allow more or less words into the autocompletion list.  This option is most important when
+<guilabel>Automatically add words to completion list</guilabel> is enabled.
+This option keeps the list from becoming too cumbersome. You can select any value from 1 to 500.</para>
+<para>If a mark is placed in the check box labeled <guilabel>Append space</guilabel>, then &kpresenter; adds a single space to the 
+end of a word after autocompletion, this means it is not necessary to add the space manually for the next word.</para>
+<para>Click <guibutton>OK</guibutton> to save your options.  Click <guibutton>Cancel</guibutton> to abort all changes.</para>
+</sect2>
 
 </sect1>
 
@@ -702,18 +748,157 @@ two names? -->
 <sect2 id="configure-tools">
 <title><guilabel>Tools</guilabel></title>
 
+<para>This dialog sets the default tools settings. there are 6 tabs in this dialog.</para>
+
+<sect3 id="outline">
+<title>Outline</title>
+
 <screenshot>
-<screeninfo>Tools</screeninfo>
+<screeninfo>The Outline tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure6.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>Tools</phrase></textobject>
+<textobject><phrase>The Outline tab</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>FIXME: Does this set defaults, or do these change every time a
-tool setting is altered from anywhere in the app.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Color</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Style</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Width</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Arrow Style</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+
+<sect3 id="fill">
+<title>Fill</title>
+
+<screenshot>
+<screeninfo>The Fill tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6b.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Fill tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Type</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Style</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Color</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+
+<sect3 id="rectangle">
+<title>Rectangle</title>
+
+<screenshot>
+<screeninfo>The Rectangle tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6c.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Rectangle tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>You can choose to keep the same ratio for the two settings below by having the <inlinemediaobject><imageobject>
+<imagedata fileref="link.png" format="PNG"/></imageobject></inlinemediaobject> icon or to separate the two settiings by using the <inlinemediaobject><imageobject>
+<imagedata fileref="break.png" format="PNG"/></imageobject></inlinemediaobject> icon.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Vertical declination</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Horizontal declination</guilabel></term>
+<listitem><para></para></listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+
+<sect3 id="polygon">
+<title>Polygon</title>
+
+<screenshot>
+<screeninfo>The Polygon tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6d.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Polygon tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Type</guilabel></term>
+<listitem><para>You can choose <guilabel>Polygon</guilabel> or <guilabel>Convex/Concave</guilabel>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Corner</guilabel></term>
+<listitem><para>Set here the number of corners of the polygon.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Sharpness</guilabel></term>
+<listitem><para>Increase or decrease the shapness of the polygon.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings.</para>
+</sect3>
+
+<sect3 id="pie">
+<title>Pie</title>
+
+<screenshot>
+<screeninfo>The Pie tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6e.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Pie tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Type</guilabel></term>
+<listitem><para>You can choose among three options in the dropdown box: Pie, Arc or Chord.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Start Position</guilabel></term>
+<listitem><para>Set here the start position.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Length</guilabel></term>
+<listitem><para>Set the length of your pie.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings.</para>
+</sect3>
 
 </sect2>
 
@@ -729,7 +914,7 @@ tool setting is altered from anywhere in the app.</para>
 <textobject><phrase>Paths</phrase></textobject>
 </mediaobject>
 </screenshot>
-<para>-</para>
+<para>There are two paths that are set here, the Backup Path and the Picture Path. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
 
 </sect2>
 
