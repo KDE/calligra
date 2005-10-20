@@ -9,19 +9,19 @@ kde_module_LTLIBRARIES = libkwordpart.la
 libkwordpart_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormulaFrameSet.cpp \
 		KWFactory.cpp KWDocument.cpp \
 		KWView.cpp  \
-                KWViewMode.cpp \
+		KWViewMode.cpp \
 		KWTextParag.cpp KWTextDocument.cpp \
 		KWTextFrameSet.cpp KWPartFrameSet.cpp \
-                KWTextImage.cpp KWAnchor.cpp \
-                KWConfig.cpp \
+		KWTextImage.cpp KWAnchor.cpp \
+		KWConfig.cpp \
 		KWVariable.cpp \
 		KWFrameDia.cpp KWFootNoteDia.cpp \
-                KWFrameStyle.cpp KWFrameStyleManager.cpp \
-                KWTableStyle.cpp KWTableStyleManager.cpp \
-                KWTableTemplate.cpp KWTableTemplateSelector.cpp KWTableDia.cpp \
-                KWInsertDia.cpp KWDeleteDia.cpp KWDocStruct.cpp \
-                KWInsertTOCCommand.cpp KWStyleManager.cpp KWFindReplace.cpp \
-                KWResizeHandle.cpp KWCommand.cpp \
+		KWFrameStyle.cpp KWFrameStyleManager.cpp \
+		KWTableStyle.cpp KWTableStyleManager.cpp \
+		KWTableTemplate.cpp KWTableTemplateSelector.cpp KWTableDia.cpp \
+		KWInsertDia.cpp KWDeleteDia.cpp KWDocStruct.cpp \
+		KWInsertTOCCommand.cpp KWStyleManager.cpp KWFindReplace.cpp \
+		KWResizeHandle.cpp KWCommand.cpp \
 		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc KWMailMergeDataBase.cpp \
 		KWMailMergeLabelAction.cpp \
 		KWEditPersonnalExpression.cpp \
@@ -39,7 +39,7 @@ libkwordpart_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormula
 		KWBgSpellCheck.cpp KWResizeTableDia.cpp KWFrameLayout.cpp \
 		KWConfigFootNoteDia.cpp KWCreateBookmarkDia.cpp KWImportStyleDia.cpp \
 		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
-	        kwcreatebookmarkdiabase.ui  kwselectbookmarkdiabase.ui \
+		KWCreateBookmarkDiaBase.ui  KWSelectBookmarkDiaBase.ui \
 		KWordHorizontalLineFrameSetIface.cc KWInsertHorizontalLineDia.cpp \
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
