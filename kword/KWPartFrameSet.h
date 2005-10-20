@@ -19,7 +19,7 @@
 #ifndef KWPARTFRAMESET_H
 #define KWPARTFRAMESET_H
 
-#include "KWFrame.h"
+#include "KWFrameSet.h"
 class KWChild;
 class KWFramePartMoveCommand;
 /**

@@ -25,6 +25,7 @@
 #include "KWTableFrameSet.h"
 #include "KWPartFrameSet.h"
 #include "KWFormulaFrameSet.h"
+#include "KWPictureFrameSet.h"
 #include <koparagcounter.h>
 #include "KWTextDocument.h"
 

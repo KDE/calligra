@@ -22,7 +22,7 @@
 #include "KWConfigFootNoteDia.moc"
 #include "KWVariable.h"
 #include "KWCommand.h"
-#include "KWFrame.h"
+#include "KWFrameSet.h"
 
 #include <klocale.h>
 #include <qradiobutton.h>

@@ -28,6 +28,7 @@
 #include "KWCommand.h"
 #include "KWFormulaFrameSet.h"
 #include "KWFrameLayout.h"
+#include "KWPictureFrameSet.h"
 #include "KWPartFrameSet.h"
 #include "KWTableFrameSet.h"
 #include "KWTableStyle.h"

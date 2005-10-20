@@ -40,6 +40,7 @@
 #include "KWEditPersonnalExpression.h"
 #include "KWFormulaFrameSet.h"
 #include "KWFrame.h"
+#include "KWPictureFrameSet.h"
 #include "KWFrameStyle.h"
 #include "KWFrameStyleManager.h"
 #include "KWImportStyleDia.h"

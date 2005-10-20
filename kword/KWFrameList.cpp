@@ -17,6 +17,7 @@
  */
 #include "KWFrameList.h"
 #include "KWFrame.h"
+#include "KWFrameSet.h"
 #include "KWDocument.h"
 #include "KWViewMode.h"
 #include "KWPageManager.h"

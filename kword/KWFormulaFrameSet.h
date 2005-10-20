@@ -20,7 +20,8 @@
 #ifndef KWFORMULAFRAME_H
 #define KWFORMULAFRAME_H
 
-#include "KWFrame.h"
+#include "KWFrameSet.h"
+#include "KWFrameSetEdit.h"
 
 namespace KFormula {
     class FormulaCursor;

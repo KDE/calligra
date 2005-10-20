@@ -19,6 +19,7 @@
 
 #include "KWResizeHandle.h"
 #include "KWDocument.h"
+#include "KWFrameSet.h"
 #include "KWCanvas.h"
 #include "KWViewMode.h"
 #include "KWFrame.h"

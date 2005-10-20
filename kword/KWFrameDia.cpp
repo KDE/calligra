@@ -27,6 +27,7 @@
 #include "KWTableFrameSet.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWPictureFrameSet.h"
 
 #include <koSetPropCommand.h>
 

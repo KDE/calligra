@@ -31,6 +31,8 @@
 #include "KWVariable.h"
 #include "KWOasisLoader.h"
 #include "KWFrameList.h"
+#include "KWFrameSet.h"
+#include "KWPictureFrameSet.h"
 #include "KWPageManager.h"
 
 #include <kotextobject.h>

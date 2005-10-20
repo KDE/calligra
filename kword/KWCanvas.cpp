@@ -33,6 +33,7 @@
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWPictureFrameSet.h"
 
 #include <qbuffer.h>
 #include <qtimer.h>

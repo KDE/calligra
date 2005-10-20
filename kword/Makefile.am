@@ -43,7 +43,7 @@ libkwordpart_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormula
 		KWordHorizontalLineFrameSetIface.cc KWInsertHorizontalLineDia.cpp \
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
-		KWPageManager.cpp
+		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp
 # Remove files out of this list: KWordHorizontalLineFrameSetIface.skel
 
 

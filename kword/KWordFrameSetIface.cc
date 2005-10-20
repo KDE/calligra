@@ -18,7 +18,7 @@
 */
 
 #include "KWordFrameSetIface.h"
-#include "KWFrame.h"
+#include "KWFrameSet.h"
 #include "KWView.h"
 #include "KWDocument.h"
 #include <kapplication.h>

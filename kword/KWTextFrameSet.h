@@ -21,7 +21,8 @@
 #define kwtextframeset_h
 
 #include "korichtext.h"
-#include "KWFrame.h"
+#include "KWFrameSet.h"
+#include "KWFrameSetEdit.h"
 #include <kotextview.h>
 #include <koparaglayout.h>
 #include <koChangeCaseDia.h>
@@ -35,15 +36,20 @@ class DCOPObject;
 #define KWTextFormat KoTextFormat
 #endif
 class KWViewMode;
-class KAction;
+class KWTextDocument;
+class KWordFrameSetIface;
+class KWFrame;
+
+class KoTextObject;
 class KoDataToolInfo;
 class KoVariable;
-class QProgressDialog;
-class KMacroCommand;
-class KWTextDocument;
-class KoTextObject;
-class KWordFrameSetIface;
+
+class KAction;
 class KNamedCommand;
+class KMacroCommand;
+
+class QDragObject;
+class QProgressDialog;
 
 /**
  * Class: KWTextFrameSet
