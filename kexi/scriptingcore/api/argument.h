@@ -137,6 +137,12 @@ namespace Kross { namespace Api {
              */
             QValueList<Argument>& getArguments();
 
+            /**
+             * \return a string of the classnames each argument in the
+             * argumentlist has. Mainly used foir debugging.
+             */
+            QString toString();
+
         private:
             /// Minimal needed parameters.
             uint m_minparams;

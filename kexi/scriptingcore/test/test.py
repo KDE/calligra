@@ -6,13 +6,6 @@
   within Python.
 """
 
-#print "-------------- 1"
-#__import__("hahaha")
-#print "-------------- 2"
-#import blablabla
-#print "-------------- 3"
-
-
 # Class to test the KexiDB functionality.
 class KexiDBClass:
 
@@ -303,6 +296,29 @@ def testActionEvent(self):
     print "################################### 1"
     #action1.call()
     action1.activate()
+
+def testPluginModule():
+    import krosstestpluginmodule
+    print "krosstestpluginmodule => %s %s" % (krosstestpluginmodule,dir(krosstestpluginmodule))
+
+    testobject1 = krosstestpluginmodule.testpluginobject1()
+    print "testpluginobject1 => %s %s" % (testobject1,dir(testobject1))
+
+    print testobject1.func()
+    print "-------------------------------------"
+    print testobject1.overloadedFunc()
+    print "-------------------------------------"
+    print testobject1.overloadedFunc("somestring")
+    print "-------------------------------------"
+    print testobject1.overloadedFunc(22)
+    print "-------------------------------------"
+    print testobject1.overloadedFunc("somestring1","somestring2")
+    print "-------------------------------------"
+    print testobject1.overloadedFunc("somestring",22)
+
+print "########## BEGIN TEST: testpluginmodule ##########"
+testPluginModule()
+print "########## BEGIN TEST: testpluginmodule ##########"
 
 print "########## BEGIN TEST: KexiDB ##########"
 testKexiDB()

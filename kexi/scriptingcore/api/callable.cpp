@@ -70,11 +70,20 @@ Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
     return Object::call(name, arguments);
 }
 
+bool Callable::validArguments(List::Ptr arguments)
+{
+    try {
+        checkArguments(arguments);
+        return true;
+    }
+    catch(Exception::Ptr&) {} // just ignore the exception
+    return false;
+}
 
-void Callable::checkArguments(KSharedPtr<List> arguments)
+void Callable::checkArguments(List::Ptr arguments)
 {
 #ifdef KROSS_API_CALLABLE_CHECKARG_DEBUG
-    kdDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1").arg(getName()) << endl;
+    kdDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1 arguments=%2").arg(getName()).arg(arguments.toString()) << endl;
 #endif
 
     QValueList<Object::Ptr>& arglist = arguments->getValue();
@@ -96,15 +105,29 @@ void Callable::checkArguments(KSharedPtr<List> arguments)
         }
 
         Object::Ptr o = arguments->item(i);
-        QString fcn = farglist[i].getClassName();
-        QString ocn = o->getClassName();
+        QString fcn = farglist[i].getClassName(); // expected argument
+        QString ocn = o->getClassName(); // given argument
 
-        //FIXME
-        //e.g. on 'Kross::Api::Variant::String' vs. 'Kross::Api::Variant'
-        //We should add those ::String part even to the arguments in Kross::KexiDB::*
-
-        if(fcn.find(ocn) != 0)
-            throw Exception::Ptr( new Exception(QString("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn)) );
+        // Check if the type of the passed argument matches to what we 
+        // expect. The given argument could have just the same type like 
+        // the expected argument or could be a specialization of it.
+        bool ok = ocn.startsWith(fcn);
+        if(! ok) {
+            if(ocn.startsWith("Kross::Api::Variant")) {
+                ocn = Variant::getVariantType(o);
+//FIXME: we need a more typesafe way to handle QVariant::type's
+                if(ocn == fcn ||
+                    (
+                        (fcn == "Kross::Api::Variant::Integer" || fcn == "Kross::Api::Variant::UInt") &&
+                        (ocn == "Kross::Api::Variant::Integer" || ocn == "Kross::Api::Variant::UInt")
+                    )
+                ) {
+                    ok = true;
+                }
+            }
+            if(! ok)
+                throw Exception::Ptr( new Exception(QString("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn)) );
+        }
     }
 }
 

@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 noinst_PROGRAMS = krosstest
 
-krosstest_SOURCES = testobject.cpp testaction.cpp testwindow.cpp main.cpp
+krosstest_SOURCES = testobject.cpp testaction.cpp testplugin.cpp testwindow.cpp main.cpp
 
 krosstest_LDADD = \
     $(LIB_QT) \

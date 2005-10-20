@@ -123,6 +123,16 @@ namespace Kross { namespace Api {
             const QStringList getInterpreters();
 
             /**
+             * Add the an external module to the list of loaded
+             * modules.
+             * 
+             * @param module The @a Module instace to add.
+             * @return true if the module was added successfully else
+             *         false.
+             */
+            bool addModule(Module* module);
+
+            /**
              * Load an external module and add it as child to
              * the manager. The given \p modulename is the
              * name of the library we should try to load. Those

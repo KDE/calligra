@@ -131,6 +131,15 @@ list << "TestCase";
     return  list;
 }
 
+bool Manager::addModule(Module* module)
+{
+    QString name = module->getName();
+    if( d->modules.contains(name) )
+        return false;
+    d->modules.replace(name, module);
+    return true;
+}
+
 Module* Manager::loadModule(const QString& modulename)
 {
     Module* module = 0;

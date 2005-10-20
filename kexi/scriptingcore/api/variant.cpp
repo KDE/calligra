@@ -42,6 +42,39 @@ const QString Variant::toString()
     return getValue().toString();
 }
 
+const QString Variant::getVariantType(Object::Ptr object)
+{
+    QVariant value = toVariant(object);
+    switch( value.type() ) {
+
+        case QVariant::CString:
+        case QVariant::String:
+            return "Kross::Api::Variant::String";
+
+        case QVariant::Map:
+            return "Kross::Api::Variant::Dict";
+
+        case QVariant::StringList:
+        case QVariant::List:
+            return "Kross::Api::Variant::List";
+
+        case QVariant::Double:
+            //return "Kross::Api::Variant::Double";
+        case QVariant::UInt: 
+            //return "Kross::Api::Variant::UInt"; // python isn't able to differ between int and uint :-(
+        case QVariant::LongLong:
+        case QVariant::ULongLong:
+        case QVariant::Int:
+            return "Kross::Api::Variant::Integer";
+
+        case QVariant::Bool:
+            return "Kross::Api::Variant::Bool";
+
+        default: //Date, Time, DateTime, ByteArray, BitArray, Rect, Size, Color, Invalid, etc.
+            return "Kross::Api::Variant";
+    }
+}
+
 const QVariant& Variant::toVariant(Object::Ptr object)
 {
     return Object::fromObject<Variant>( object.data() )->getValue();

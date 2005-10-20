@@ -81,3 +81,11 @@ QValueList<Argument>& ArgumentList::getArguments()
     return m_arguments;
 }
 
+QString ArgumentList::toString()
+{
+    QString s;
+    for(QValueList<Argument>::iterator it = m_arguments.begin(); it != m_arguments.end(); ++it)
+        s += (*it).getClassName() + ", ";
+    return s;
+}
+

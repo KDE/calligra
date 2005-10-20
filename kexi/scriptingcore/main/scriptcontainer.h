@@ -119,7 +119,7 @@ namespace Kross { namespace Api {
             /**
              * Set the \a Interpreter::Option value.
              */
-            bool setOption(const QString name, const QVariant& value);
+            void setOption(const QString name, const QVariant& value);
 
             /**
              * Execute the script container.

@@ -64,6 +64,20 @@ namespace Kross { namespace Api {
             virtual const QString toString();
 
             /**
+             * \return a more detailed classname for the passed \p object
+             * variant type.
+             *
+             * \throw TypeException If the \p object isn't a valid
+             *        \a Variant instance.
+             * \param object the variant object we should return a more
+             *        detailed classname for.
+             * \return If as example the passed \p object is a
+             *         QVariant::String then "Kross::Api::Variant::String"
+             *         will be returned.
+             */
+            static const QString getVariantType(Object::Ptr object);
+
+            /**
              * Try to convert the given \a Object into
              * a QVariant.
              *

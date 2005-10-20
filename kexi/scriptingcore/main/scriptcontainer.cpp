@@ -113,7 +113,7 @@ void ScriptContainer::setInterpreterName(const QString& name)
     d->m_interpretername = name;
 }
 
-const QVariant& ScriptContainer::getOption(const QString name, QVariant defaultvalue, bool recursive)
+const QVariant& ScriptContainer::getOption(const QString name, QVariant defaultvalue, bool /*recursive*/)
 {
 kdDebug()<<"############################# getOption name="<<name<<" value="<<d->m_options[name]<<endl;
     if(d->m_options.contains(name))
@@ -122,7 +122,7 @@ kdDebug()<<"############################# getOption name="<<name<<" value="<<d->
     return info ? info->getOptionValue(name, defaultvalue) : defaultvalue;
 }
 
-bool ScriptContainer::setOption(const QString name, const QVariant& value)
+void ScriptContainer::setOption(const QString name, const QVariant& value)
 {
 kdDebug()<<"############################# setOption name="<<name<<" value="<<value<<endl;
     d->m_options.replace(name, value);
