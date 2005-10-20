@@ -48,15 +48,15 @@ public:
     int pageCount() const;
     /// return the highest page number we have in this document.
     int lastPageNumber() const;
-    /// return the KWPage of a specific page number
+    /// return the KWPage of a specific page number. Returns 0 if page does not exist.
     KWPage* page(int pageNumber) const;
-    /// return the KWPage instance where the rect is on.
+    /// return the KWPage instance where the rect is on. Returns 0 if page does not exist.
     KWPage* page(const KoRect &rect) const;
-    /// return the KWPage instance where the rect or frame is on.
+    /// return the KWPage instance where the rect or frame is on. Returns 0 if page does not exist.
     KWPage* page(const KoRect *frame) const;
-    /// return the KWPage instance where the point is on.
+    /// return the KWPage instance where the point is on. Returns 0 if page does not exist.
     KWPage* page(const KoPoint &point) const;
-    /// return the KWPage instance of the y-coordinate in the document.
+    /// return the KWPage instance of the y-coordinate in the document. Returns 0 if page does not exist.
     KWPage* page(double ptY) const;
 
     /**
@@ -76,6 +76,9 @@ public:
 
     /// Set a new startpage for this document, renumbering all pages already added.
     void setStartPage(int startPage);
+
+    /// return the first pagenumber of this document
+    int startPage() const { return m_firstPage; }
 
     /**
      * Register if new pages can only be appended after the last one and not
