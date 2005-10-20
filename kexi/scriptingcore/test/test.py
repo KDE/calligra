@@ -312,6 +312,8 @@ def testPluginModule():
     print "-------------------------------------"
     print testobject1.overloadedFunc(22)
     print "-------------------------------------"
+    print testobject1.overloadedFunc(True)
+    print "-------------------------------------"
     print testobject1.overloadedFunc("somestring1","somestring2")
     print "-------------------------------------"
     print testobject1.overloadedFunc("somestring",22)
@@ -321,7 +323,7 @@ testPluginModule()
 print "########## BEGIN TEST: testpluginmodule ##########"
 
 print "########## BEGIN TEST: KexiDB ##########"
-testKexiDB()
+#testKexiDB()
 print "########## END TEST: KexiDB ##########"
 
 #print "########## BEGIN TEST: QObject ##########"

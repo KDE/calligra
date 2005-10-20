@@ -70,7 +70,7 @@ namespace Kross {
 
         #define KROSS_API_EVENT_CALL_DEBUG
 
-        #define KROSS_API_CALLABLE_CALL_DEBUG
+        //#define KROSS_API_CALLABLE_CALL_DEBUG
         //#define KROSS_API_CALLABLE_CHECKARG_DEBUG
 
         #define KROSS_API_EVENTSLOT_CALL_DEBUG

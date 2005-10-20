@@ -30,7 +30,6 @@ TestPluginObject::TestPluginObject(const QString& name)
 {
     addFunction("func", &TestPluginObject::func);
 
-
     addFunction("overloadedFunc", &TestPluginObject::overloadedFunc2,
         Kross::Api::ArgumentList() 
             << Kross::Api::Argument("Kross::Api::Variant::String"));
@@ -49,9 +48,20 @@ TestPluginObject::TestPluginObject(const QString& name)
             << Kross::Api::Argument("Kross::Api::Variant::String")
             << Kross::Api::Argument("Kross::Api::Variant::Integer"));
 
-//TODO got called only if it's the first function !!!
-addFunction("overloadedFunc", &TestPluginObject::overloadedFunc1);
+    // This function will never be called cause we arn't able to differ
+    // between a Kross::Api::Variant::Integer and a 
+    // Kross::Api::Variant::Bool. There doesn't seem to be an easy
+    // solution to work around this problem. So, take care to differ
+    // only between string, list, dict and numeric...
+    addFunction("overloadedFunc", &TestPluginObject::overloadedFunc6,
+        Kross::Api::ArgumentList() 
+            << Kross::Api::Argument("Kross::Api::Variant::Bool"));
 
+    addFunction("overloadedFunc", &TestPluginObject::overloadedFunc7,
+        Kross::Api::ArgumentList() 
+            << Kross::Api::Argument("Kross::Api::Variant::StringList"));
+
+    addFunction("overloadedFunc", &TestPluginObject::overloadedFunc1);
 }
 
 TestPluginObject::~TestPluginObject()
@@ -99,6 +109,18 @@ Kross::Api::Object::Ptr TestPluginObject::overloadedFunc5(Kross::Api::List::Ptr)
     return 0;
 }
 
+Kross::Api::Object::Ptr TestPluginObject::overloadedFunc6(Kross::Api::List::Ptr)
+{
+    kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::Bool)" << endl;
+    return 0;
+}
+
+Kross::Api::Object::Ptr TestPluginObject::overloadedFunc7(Kross::Api::List::Ptr)
+{
+    kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::StringList)" << endl;
+    return 0;
+}
+
 /************************************************************************
  * TestPluginModule
  */
@@ -107,7 +129,7 @@ TestPluginModule::TestPluginModule(const QString& name)
     : Kross::Api::Module(name)
 {
     addChild( new TestPluginObject("testpluginobject1") );
-    addChild( new TestPluginObject("testpluginobject2") );
+    //addChild( new TestPluginObject("testpluginobject2") );
 }
 
 TestPluginModule::~TestPluginModule()
