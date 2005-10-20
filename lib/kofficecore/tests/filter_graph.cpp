@@ -23,7 +23,7 @@
 #include <kinstance.h>
 #include <kdebug.h>
 
-int main( int /*argc*/, char **/*argv*/ )
+int main( int /*argc*/, char ** /*argv*/ )
 {
     KInstance instance( "filter_graph" );  // we need an instance when using the trader
 
@@ -41,13 +41,21 @@ int main( int /*argc*/, char **/*argv*/ )
     QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
     while ( partIt != partEnd ) {
-        QString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString() );
-        if ( !key.isEmpty() ) {
-            output += "    \"";
-            output += key.latin1();
-            output += "\" [shape=box, style=filled, fillcolor=lightblue];\n";
-            if ( vertices.find( key ) == vertices.end() )
-                vertices.append( key );
+        //kdDebug() << ( *partIt ).service()->desktopEntryName() << endl;
+        QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+        nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+        QStringList::ConstIterator it = nativeMimeTypes.begin();
+        QStringList::ConstIterator end = nativeMimeTypes.end();
+        for ( ; it != end; ++it ) {
+            QString key = *it;
+            //kdDebug() << "    " << key << endl;
+            if ( !key.isEmpty() ) {
+                output += "    \"";
+                output += key.latin1();
+                output += "\" [shape=box, style=filled, fillcolor=lightblue];\n";
+                if ( vertices.find( key ) == vertices.end() )
+                    vertices.append( key );
+            }
         }
         ++partIt;
     }
@@ -57,6 +65,7 @@ int main( int /*argc*/, char **/*argv*/ )
     QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
     for ( ; it != end; ++it ) {
+        kdDebug() << "import " << ( *it )->import << " export " << ( *it )->export_ << endl;
         // First add the "starting points"
         QStringList::ConstIterator importIt = ( *it )->import.begin();
         QStringList::ConstIterator importEnd = ( *it )->import.end();

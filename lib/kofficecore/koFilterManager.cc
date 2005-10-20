@@ -335,9 +335,13 @@ namespace  // in order not to mess with the global namespace ;)
         QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         while ( partIt != partEnd ) {
-            QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
-            if ( !key.isEmpty() )
-                vertices.insert( key, new Vertex( key ) );
+            QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+            nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+            QStringList::ConstIterator it = nativeMimeTypes.begin();
+            QStringList::ConstIterator end = nativeMimeTypes.end();
+            for ( ; it != end; ++it )
+                if ( !(*it).isEmpty() )
+                    vertices.insert( (*it).latin1(), new Vertex( (*it).latin1() ) );
             ++partIt;
         }
 
@@ -493,9 +497,13 @@ QStringList KoFilterManager::mimeFilter()
     Vertex *v = new Vertex( "supercalifragilistic/x-pialadocious" );
     vertices.insert( "supercalifragilistic/x-pialadocious", v );
     while ( partIt != partEnd ) {
-        QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
-        if ( !key.isEmpty() )
-            v->addEdge( vertices[ key ] );
+        QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+        nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+        QStringList::ConstIterator it = nativeMimeTypes.begin();
+        const QStringList::ConstIterator end = nativeMimeTypes.end();
+        for ( ; it != end; ++it )
+            if ( !(*it).isEmpty() )
+                v->addEdge( vertices[ (*it).latin1() ] );
         ++partIt;
     }
     QStringList result = connected( vertices, "supercalifragilistic/x-pialadocious" );

@@ -630,6 +630,8 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
 
 KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
 {
+    // Not sure why this doesn't use KoDocumentEntry::queryByMimeType( const QString & mimetype ),
+    // except maybe to avoid a kounavail being returned...
     const QString constraint( QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimeType ) );
     QValueList<KoDocumentEntry> entries = KoDocumentEntry::query( constraint );
     if ( entries.isEmpty() ) {
@@ -810,9 +812,13 @@ namespace KOffice {
         QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         while ( partIt != partEnd ) {
-            const QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
-            if ( !key.isEmpty() )
-                m_vertices.insert( key, new Vertex( key ) );
+            QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+            nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+            QStringList::ConstIterator it = nativeMimeTypes.begin();
+            QStringList::ConstIterator end = nativeMimeTypes.end();
+            for ( ; it != end; ++it )
+                if ( !(*it).isEmpty() )
+                    m_vertices.insert( (*it).latin1(), new Vertex( (*it).latin1() ) );
             ++partIt;
         }
 
@@ -897,9 +903,13 @@ namespace KOffice {
 
         // Be sure that v gets initialized correctly
         while ( !v && partIt != partEnd ) {
-            QString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString() );
-            if ( !key.isEmpty() )
-                v = m_vertices[ key.latin1() ];
+            QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+            nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+            QStringList::ConstIterator it = nativeMimeTypes.begin();
+            QStringList::ConstIterator end = nativeMimeTypes.end();
+            for ( ; !v && it != end; ++it )
+                if ( !(*it).isEmpty() )
+                    v = m_vertices[ ( *it ).latin1() ];
             ++partIt;
         }
         if ( !v )
@@ -907,13 +917,18 @@ namespace KOffice {
 
         // Now we try to find the "cheapest" KOffice vertex
         while ( partIt != partEnd ) {
-            QString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString() );
-            Vertex* tmp = 0;
-            if ( !key.isEmpty() )
-                tmp = m_vertices[ key.latin1() ];
-
-            if ( tmp && tmp->key() < v->key() )
-                v = tmp;
+            QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+            nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+            QStringList::ConstIterator it = nativeMimeTypes.begin();
+            QStringList::ConstIterator end = nativeMimeTypes.end();
+            for ( ; !v && it != end; ++it ) {
+                QString key = *it;
+                if ( !key.isEmpty() ) {
+                    Vertex* tmp = m_vertices[ key.latin1() ];
+                    if ( tmp && tmp->key() < v->key() )
+                        v = tmp;
+                }
+            }
             ++partIt;
         }
 
