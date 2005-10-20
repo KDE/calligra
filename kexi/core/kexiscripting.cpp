@@ -198,8 +198,9 @@ bool KexiScriptContainer::execute()
 
 void KexiScriptContainer::addStdOut(const QString& s)
 {
-	d->output.append(s);
-	emit addOutput( QStyleSheet::escape(s) );
+        QString t = QStyleSheet::escape(s);
+	d->output.append(t);
+	emit addOutput(t);
 }
 
 void KexiScriptContainer::addStdErr(const QString& s)
