@@ -21,17 +21,13 @@
 #ifndef KEXIFORMSCROLLVIEW_H
 #define KEXIFORMSCROLLVIEW_H
 
-#include "kexiscrollview.h"
 #include "kexidataprovider.h"
 #include "kexiformeventhandler.h"
 #include "widgets/kexidbform.h"
+#include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
-
-namespace KFormDesigner {
-	class Form;
-}
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! This class also implements:

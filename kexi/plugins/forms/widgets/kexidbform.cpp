@@ -31,16 +31,16 @@
 #include "kexiformscrollview.h"
 
 #include <formeditor/objecttree.h>
-#include <kexidataawareobjectiface.h>
-#include <kexiscrollview.h>
+#include <widget/tableview/kexidataawareobjectiface.h>
+#include <widget/kexiscrollview.h>
 
 //! @internal
 class KexiDBForm::Private
 {
 	public:
 		Private()
-		 : orderedFocusWidgetsIterator(orderedFocusWidgets)
-		 , dataAwareObject(0)
+		 : dataAwareObject(0)
+		 , orderedFocusWidgetsIterator(orderedFocusWidgets)
 		 , autoTabStops(false)
 		{
 		}

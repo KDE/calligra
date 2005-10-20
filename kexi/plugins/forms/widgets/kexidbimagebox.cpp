@@ -574,7 +574,7 @@ void KexiDBImageBox::updateActionStrings()
 	m_popup->changeTitle(m_titleID, m_popup->titlePixmap(m_titleID), titleString);
 
 	if (m_chooser) {
-		if (popupMenuAvailable && dataSource().isEmpty()) //this may work in the future (see @todo below)
+		if (popupMenuAvailable() && dataSource().isEmpty()) //this may work in the future (see @todo below)
 			QToolTip::add(m_chooser, i18n("Click to show actions for this Image Box"));
 		else
 			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" Image Box").arg(dataSource()));

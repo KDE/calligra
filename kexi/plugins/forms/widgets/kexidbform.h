@@ -23,7 +23,7 @@
 
 #include <qpixmap.h>
 
-#include <form.h>
+#include <formeditor/form.h>
 #include "../kexiformdataiteminterface.h"
 
 #ifdef KEXI_USE_GRADIENT_WIDGET
