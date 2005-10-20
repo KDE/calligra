@@ -1911,18 +1911,6 @@ disable the display of specific toolbars here.</para>
 </listitem>
 </varlistentry>
 
-<!-- OBSOLETE <varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Type Anywhere Cursor</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>FIXME: Find out what this is</para>
-</listitem>
-</varlistentry>-->
-
 <varlistentry>
 <term>
 <menuchoice>
@@ -1952,8 +1940,26 @@ really long name Inc.</quote>.</para>
 on demand when you choose it from the <guimenu>Text</guimenu>
 menu.</para>
 
+<para>Please see the <link
+linkend="configure-autocorrection">Configure Autocorrection</link> section for a complete explanation.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Completion...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Autocompletion allows you to type the first few letters of a commonly used word (often technical or job specific), and tells KPresenter to finish typing the word for you.</para>
+
+<para>Please see the <link
+linkend="configure-completion">Configure Completion</link> section for a complete explanation.</para>
+</listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term>
@@ -2014,7 +2020,7 @@ the toolbars.</para>
 <screeninfo>Configuring &kpresenter; toolbars</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="settings04.png" format="PNG" width="588"/>
+<imagedata fileref="settings04.png" format="PNG"/>
 </imageobject>
 <textobject>
 <phrase>Configuring &kpresenter; toolbars</phrase>

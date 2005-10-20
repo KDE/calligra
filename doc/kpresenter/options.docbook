@@ -404,8 +404,9 @@ see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</l
 <title>The <guilabel>Configure Completion</guilabel> Dialog</title>
 
 <para>Autocompletion allows you to type the first few letters of a commonly
-used word (often technical or job specific), and tell &kpresenter; to
+used word (often technical or job specific), and tells &kpresenter; to
 finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>
+
 <sect2 id="autocomplete-using">
 <title>Using autocompletion</title>
 <para>Using autocompletion could not be easier.  Simply type the first few
@@ -425,6 +426,7 @@ This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</p
 </itemizedlist>
 </sect3>
 </sect2>
+
 <sect2 id="autocomplete-dialog">
 <title>Configuring autocomplete</title>
 <para>To configure autocompletion, select <menuchoice>
@@ -836,13 +838,14 @@ two names? -->
 <variablelist>
 <varlistentry>
 <term><guilabel>Vertical declination</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Set the vertical declination.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Horizontal declination</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>>Set the horizontal declination.</para></listitem>
 </varlistentry>
 </variablelist>
+<para>The last field displays a preview of your settings.</para>
 </sect3>
 
 <sect3 id="polygon">
@@ -871,7 +874,7 @@ two names? -->
 </varlistentry>
 <varlistentry>
 <term><guilabel>Sharpness</guilabel></term>
-<listitem><para>Increase or decrease the shapness of the polygon.</para></listitem>
+<listitem><para>Increase or decrease the sharpness of the polygon.</para></listitem>
 </varlistentry>
 </variablelist>
 <para>The last field displays a preview of your settings.</para>
