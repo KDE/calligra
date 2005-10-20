@@ -2449,7 +2449,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
 #endif
 
     // Find last page that is visible
-    int maxPage = ( nPointBottom.y() + m_doc->paperHeight(1) /*equiv. to ceil()*/ ) / m_doc->paperHeight(0);
+    int maxPage = ( nPointBottom.y() + m_doc->paperHeight(0) /*equiv. to ceil()*/ ) / m_doc->paperHeight(0);
     int maxY = 0;
     if ( maxPage < m_firstPage || maxPage >= (int)m_framesInPage.size() + m_firstPage )
         maxY = ah;

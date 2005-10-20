@@ -191,7 +191,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     {
         // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
         int pagetop = m_doc->pageTop( page );
-        int pagewidth = m_doc->paperWidth(1);
+        int pagewidth = m_doc->paperWidth(0);
         int pageheight = m_doc->pageTop( page+1 ) - pagetop;
         pageRect = QRect( 0, pagetop, pagewidth, pageheight );
 

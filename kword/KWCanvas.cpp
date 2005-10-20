@@ -1054,6 +1054,8 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     KWPageManager *pageManager = m_doc->pageManager();
     int page = pageManager->pageNumber(docPoint);
+    if(page == -1) // moving left or right out of the page.
+        return;
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
     //int page = m_doc->getPageOfRect( m_boundingRect );
@@ -1114,9 +1116,9 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     if ( topPage != bottomPage )
     {
         // Choose the closest page...
-        Q_ASSERT( topPage + 1 == bottomPage ); // Not too sure what to do otherwise
+        Q_ASSERT( bottomPage == -1 || topPage + 1 == bottomPage ); // Not too sure what to do otherwise
         double topPart = m_boundingRect.bottom() - pageManager->bottomOfPage(topPage);
-        if ( topPart < m_boundingRect.height() / 2 )
+        if ( bottomPage == -1 || topPart < m_boundingRect.height() / 2 )
             // Most of the rect is in the top page
             p.setY( pageManager->bottomOfPage(topPage) - m_boundingRect.height() - 1 );
         else {
@@ -1645,6 +1647,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
         if(m_insRect.bottom()==0 && m_insRect.right()==0) {
             // if the user did not drag, just click; make a 200x150 square for him.
             int page = m_doc->pageManager()->pageNumber(docPoint);
+            if(page == -1)
+                return;
             KoPageLayout pageLayout = m_doc->pageManager()->pageLayout(page);
             m_insRect.setLeft(QMIN(m_insRect.left(), pageLayout.ptWidth - 200));
             m_insRect.setTop(QMIN(m_insRect.top(), pageLayout.ptHeight - 150));
