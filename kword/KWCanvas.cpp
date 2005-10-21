@@ -2883,6 +2883,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
 bool KWCanvas::focusNextPrevChild( bool next)
 {
+    Q_UNUSED(next);
     return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
     // Don't allow to go out of the canvas widget by pressing Tab, but do allow Shift+Tab.
     // if (next) return TRUE;
