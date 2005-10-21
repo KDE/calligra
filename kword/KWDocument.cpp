@@ -456,7 +456,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
         formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
-KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
+KWTextFrameSet * KWDocument::textFrameSet ( unsigned int num ) const
 {
     unsigned int i=0;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -465,7 +465,7 @@ KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
         if(fit.current()->isDeleted()) continue;
         if(fit.current()->type()==FT_TEXT)
         {
-            if(i==_num)
+            if(i==num)
                 return static_cast<KWTextFrameSet*>(fit.current());
             i++;
         }
@@ -591,15 +591,15 @@ KoPageLayout KWDocument::pageLayout(int pageNumber /* = 0 */) const
     return pageManager()->pageLayout(pageNumber);
 }
 
-void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews )
+void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl, const KoKWHeaderFooter& hf, bool updateViews )
 {
     if ( m_processingType == WP ) {
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
-        m_pageLayout = _layout;
-        pageManager()->setDefaultPageSize(_layout.ptWidth, _layout.ptHeight);
-        pageManager()->setDefaultPageMargins(_layout.ptTop, _layout.ptLeft, _layout.ptBottom, _layout.ptRight);
-        m_pageColumns = _cl;
-        m_pageHeaderFooter = _hf;
+        m_pageLayout = layout;
+        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight);
+        pageManager()->setDefaultPageMargins(layout.ptTop, layout.ptLeft, layout.ptBottom, layout.ptRight);
+        m_pageColumns = cl;
+        m_pageHeaderFooter = hf;
 
 #if 0  // I don't think this is needed anymore since we auto-create new pages and all.. (TZ)
         if ( updateViews ) {
@@ -620,14 +620,14 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
 
     } else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
-        pageManager()->setDefaultPageSize(_layout.ptWidth, _layout.ptHeight);
+        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight);
         pageManager()->setDefaultPageMargins(0, 0, 0, 0);
-        m_pageLayout = _layout;
+        m_pageLayout = layout;
         m_pageLayout.ptLeft = 0;
         m_pageLayout.ptRight = 0;
         m_pageLayout.ptTop = 0;
         m_pageLayout.ptBottom = 0;
-        m_pageHeaderFooter = _hf;
+        m_pageHeaderFooter = hf;
     }
 
     // pages have a different size -> update framesInPage
@@ -642,7 +642,7 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
     if ( updateViews )
     {
         // Invalidate document layout, for proper repaint
-        layout();
+        this->layout();
         emit pageLayoutChanged( m_pageLayout );
         updateResizeHandles();
         updateContentsSize();
@@ -986,12 +986,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
     }
 }
 
-bool KWDocument::loadChildren( KoStore *_store )
+bool KWDocument::loadChildren( KoStore *store )
 {
     //kdDebug(32001) << "KWDocument::loadChildren" << endl;
     QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
-        if ( !it.current()->loadDocument( _store ) )
+        if ( !it.current()->loadDocument( store ) )
             return FALSE;
     }
 
@@ -1033,15 +1033,15 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     clear();
     kdDebug(32001) << "KWDocument::loadOasis" << endl;
 
-    KoColumns __columns;
-    __columns.columns = 1;
-    __columns.ptColumnSpacing = m_defaultColumnSpacing;
-    KoKWHeaderFooter __hf;
-    __hf.header = HF_SAME;
-    __hf.footer = HF_SAME;
-    __hf.ptHeaderBodySpacing = 10.0;
-    __hf.ptFooterBodySpacing = 10.0;
-    __hf.ptFootNoteBodySpacing = 10.0;
+    KoColumns columns;
+    columns.columns = 1;
+    columns.ptColumnSpacing = m_defaultColumnSpacing;
+    KoKWHeaderFooter hf;
+    hf.header = HF_SAME;
+    hf.footer = HF_SAME;
+    hf.ptHeaderBodySpacing = 10.0;
+    hf.ptFooterBodySpacing = 10.0;
+    hf.ptFootNoteBodySpacing = 10.0;
 
     QDomElement content = doc.documentElement();
     QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
@@ -1098,9 +1098,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
                 m_pageLayout.ptBottom, m_pageLayout.ptRight);
 
-        //__hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
-        //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
-        //__hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
+        //hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
+        //hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
+        //hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
 
         const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
@@ -1143,20 +1143,20 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
 
-        __columns.columns = 1;
-        __columns.ptColumnSpacing = m_defaultColumnSpacing;
+        columns.columns = 1;
+        columns.ptColumnSpacing = m_defaultColumnSpacing;
 
         const QDomElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
         if ( !columnsElem.isNull() )
         {
-            __columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
-            if ( __columns.columns == 0 )
-                __columns.columns = 1;
+            columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
+            if ( columns.columns == 0 )
+                columns.columns = 1;
             // TODO OASIS OpenDocument supports columns of different sizes, using <style:column style:rel-width="...">
             // (with fo:start-indent/fo:end-indent for per-column spacing)
             // But well, it also allows us to specify a single gap.
             if ( columnsElem.hasAttributeNS( KoXmlNS::fo, "column-gap" ) )
-                __columns.ptColumnSpacing = KoUnit::parseValue( columnsElem.attributeNS( KoXmlNS::fo, "column-gap", QString::null ) );
+                columns.ptColumnSpacing = KoUnit::parseValue( columnsElem.attributeNS( KoXmlNS::fo, "column-gap", QString::null ) );
             // It also supports drawing a vertical line as a separator...
         }
 
@@ -1170,8 +1170,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     else // this doesn't happen with normal documents, but it can happen if copying something,
          // pasting into konq as foo.odt, then opening that...
     {
-        __columns.columns = 1;
-        __columns.ptColumnSpacing = 2;
+        columns.columns = 1;
+        columns.ptColumnSpacing = 2;
         m_headerVisible = false;
         m_footerVisible = false;
         m_pageLayout = KoPageLayout::standardLayout();
@@ -1270,12 +1270,12 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         if ( !headerLeftElem.isNull() )
         {
             hasEvenOddHeader = true;
-            __hf.header = hasFirstHeader ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
+            hf.header = hasFirstHeader ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
             oasisLoader.loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
         }
         else
         {
-            __hf.header = hasFirstHeader ? HF_FIRST_DIFF : HF_SAME;
+            hf.header = hasFirstHeader ? HF_FIRST_DIFF : HF_SAME;
         }
         if ( hasFirstHeader )
         {
@@ -1296,12 +1296,12 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         if ( !footerLeftElem.isNull() )
         {
             hasEvenOddFooter = true;
-            __hf.footer = hasFirstFooter ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
+            hf.footer = hasFirstFooter ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
             oasisLoader.loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
         }
         else
         {
-            __hf.footer = hasFirstFooter ? HF_FIRST_DIFF : HF_SAME;
+            hf.footer = hasFirstFooter ? HF_FIRST_DIFF : HF_SAME;
         }
         if ( hasFirstFooter )
         {
@@ -1330,7 +1330,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     // This sets the columns and header/footer flags, and calls recalcFrames,
     // so it must be done last.
-    setPageLayout( m_pageLayout, __columns, __hf, false );
+    setPageLayout( m_pageLayout, columns, hf, false );
 
     if ( !settings.isNull() )
     {
@@ -1398,16 +1398,16 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     kdDebug(32001) << "KWDocument::loadXML" << endl;
     clear();
 
-    KoPageLayout __pgLayout;
-    KoColumns __columns;
-    __columns.columns = 1;
-    __columns.ptColumnSpacing = m_defaultColumnSpacing;
-    KoKWHeaderFooter __hf;
-    __hf.header = HF_SAME;
-    __hf.footer = HF_SAME;
-    __hf.ptHeaderBodySpacing = 10.0;
-    __hf.ptFooterBodySpacing = 10.0;
-    __hf.ptFootNoteBodySpacing = 10.0;
+    KoPageLayout pgLayout;
+    KoColumns columns;
+    columns.columns = 1;
+    columns.ptColumnSpacing = m_defaultColumnSpacing;
+    KoKWHeaderFooter hf;
+    hf.header = HF_SAME;
+    hf.footer = HF_SAME;
+    hf.ptHeaderBodySpacing = 10.0;
+    hf.ptFooterBodySpacing = 10.0;
+    hf.ptFootNoteBodySpacing = 10.0;
 
     QString value;
     QDomElement word = doc.documentElement();
@@ -1455,34 +1455,34 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QDomElement paper = word.namedItem( "PAPER" ).toElement();
     if ( !paper.isNull() )
     {
-        __pgLayout.format = static_cast<KoFormat>( KWDocument::getAttribute( paper, "format", 0 ) );
-        __pgLayout.orientation = static_cast<KoOrientation>( KWDocument::getAttribute( paper, "orientation", 0 ) );
-        __pgLayout.ptWidth = getAttribute( paper, "width", 0.0 );
-        __pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
-	kdDebug() << " ptWidth=" << __pgLayout.ptWidth << endl;
-	kdDebug() << " ptHeight=" << __pgLayout.ptHeight << endl;
-        if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
+        pgLayout.format = static_cast<KoFormat>( KWDocument::getAttribute( paper, "format", 0 ) );
+        pgLayout.orientation = static_cast<KoOrientation>( KWDocument::getAttribute( paper, "orientation", 0 ) );
+        pgLayout.ptWidth = getAttribute( paper, "width", 0.0 );
+        pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+	kdDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
+	kdDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
+        if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
         {
             // Old document?
-            __pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
-            __pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
-		kdDebug() << " ptWidth=" << __pgLayout.ptWidth << endl;
-		kdDebug() << " ptHeight=" << __pgLayout.ptHeight << endl;
+            pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
+            pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
+		kdDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
+		kdDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
 
             // Still wrong?
-            if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
+            if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
             {
                 setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" )
-                    .arg( __pgLayout.ptWidth ).arg( __pgLayout.ptHeight ) );
+                    .arg( pgLayout.ptWidth ).arg( pgLayout.ptHeight ) );
                 return false;
             }
         }
 
-        __hf.header = static_cast<KoHFType>( KWDocument::getAttribute( paper, "hType", 0 ) );
-        __hf.footer = static_cast<KoHFType>( KWDocument::getAttribute( paper, "fType", 0 ) );
-        __hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
-        __hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
-        __hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
+        hf.header = static_cast<KoHFType>( KWDocument::getAttribute( paper, "hType", 0 ) );
+        hf.footer = static_cast<KoHFType>( KWDocument::getAttribute( paper, "fType", 0 ) );
+        hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
+        hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
+        hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
         m_iFootNoteSeparatorLineLength = getAttribute( paper, "slFootNoteLength", 20);
         m_footNoteSeparatorLineWidth = getAttribute( paper, "slFootNoteWidth",2.0);
         m_footNoteSeparatorLineType = static_cast<SeparatorLineLineType>(getAttribute( paper, "slFootNoteType",0));
@@ -1497,8 +1497,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             else if ( tmp =="left" )
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
-        __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
-        __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
+        columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
+        columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
         // Now part of the app config
         //m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         //if(m_zoom!=100)
@@ -1507,35 +1507,35 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
         // Do not add anything to this block!
-        if ( __pgLayout.ptWidth == 0.0 )
-            __pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
-        if ( __pgLayout.ptHeight == 0.0 )
-            __pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
-        if ( __hf.ptHeaderBodySpacing == 0.0 )
-            __hf.ptHeaderBodySpacing = getAttribute( paper, "ptHeadBody", 0.0 );
-        if ( __hf.ptFooterBodySpacing == 0.0 )
-            __hf.ptFooterBodySpacing = getAttribute( paper, "ptFootBody", 0.0 );
-        if ( __columns.ptColumnSpacing == 0.0 )
-            __columns.ptColumnSpacing = getAttribute( paper, "ptColumnspc", 0.0 );
+        if ( pgLayout.ptWidth == 0.0 )
+            pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
+        if ( pgLayout.ptHeight == 0.0 )
+            pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
+        if ( hf.ptHeaderBodySpacing == 0.0 )
+            hf.ptHeaderBodySpacing = getAttribute( paper, "ptHeadBody", 0.0 );
+        if ( hf.ptFooterBodySpacing == 0.0 )
+            hf.ptFooterBodySpacing = getAttribute( paper, "ptFootBody", 0.0 );
+        if ( columns.ptColumnSpacing == 0.0 )
+            columns.ptColumnSpacing = getAttribute( paper, "ptColumnspc", 0.0 );
 
         // <PAPERBORDERS>
         QDomElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if ( !paperborders.isNull() )
         {
-            __pgLayout.ptLeft = getAttribute( paperborders, "left", 0.0 );
-            __pgLayout.ptTop = getAttribute( paperborders, "top", 0.0 );
-            __pgLayout.ptRight = getAttribute( paperborders, "right", 0.0 );
-            __pgLayout.ptBottom = getAttribute( paperborders, "bottom", 0.0 );
+            pgLayout.ptLeft = getAttribute( paperborders, "left", 0.0 );
+            pgLayout.ptTop = getAttribute( paperborders, "top", 0.0 );
+            pgLayout.ptRight = getAttribute( paperborders, "right", 0.0 );
+            pgLayout.ptBottom = getAttribute( paperborders, "bottom", 0.0 );
 
             // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
-            if ( __pgLayout.ptLeft == 0.0 )
-                __pgLayout.ptLeft = getAttribute( paperborders, "ptLeft", 0.0 );
-            if ( __pgLayout.ptTop == 0.0 )
-                __pgLayout.ptTop = getAttribute( paperborders, "ptTop", 0.0 );
-            if ( __pgLayout.ptRight == 0.0 )
-                __pgLayout.ptRight = getAttribute( paperborders, "ptRight", 0.0 );
-            if ( __pgLayout.ptBottom == 0.0 )
-                __pgLayout.ptBottom = getAttribute( paperborders, "ptBottom", 0.0 );
+            if ( pgLayout.ptLeft == 0.0 )
+                pgLayout.ptLeft = getAttribute( paperborders, "ptLeft", 0.0 );
+            if ( pgLayout.ptTop == 0.0 )
+                pgLayout.ptTop = getAttribute( paperborders, "ptTop", 0.0 );
+            if ( pgLayout.ptRight == 0.0 )
+                pgLayout.ptRight = getAttribute( paperborders, "ptRight", 0.0 );
+            if ( pgLayout.ptBottom == 0.0 )
+                pgLayout.ptBottom = getAttribute( paperborders, "ptBottom", 0.0 );
         }
         else
             kdWarning() << "No <PAPERBORDERS> tag!" << endl;
@@ -1569,7 +1569,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_initialEditing = 0L;
     }
 
-    setPageLayout( __pgLayout, __columns, __hf, false );
+    setPageLayout( pgLayout, columns, hf, false );
 
     variableCollection()->variableSetting()->load(word );
     //by default display real variable value
@@ -1695,19 +1695,19 @@ void KWDocument::endOfLoading()
         docHeight += last->height();
     }
 
-    bool _first_footer = false, _even_footer = false, _odd_footer = false;
-    bool _first_header = false, _even_header = false, _odd_header = false;
+    bool first_footer = false, even_footer = false, odd_footer = false;
+    bool first_header = false, even_header = false, odd_header = false;
 
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         switch( fit.current()->frameSetInfo() ) {
-        case KWFrameSet::FI_FIRST_HEADER: _first_header = true; break;
-        case KWFrameSet::FI_ODD_HEADER: _odd_header = true; break;
-        case KWFrameSet::FI_EVEN_HEADER: _even_header = true; break;
-        case KWFrameSet::FI_FIRST_FOOTER: _first_footer = true; break;
-        case KWFrameSet::FI_ODD_FOOTER: _odd_footer = true; break;
-        case KWFrameSet::FI_EVEN_FOOTER: _even_footer = true; break;
+        case KWFrameSet::FI_FIRST_HEADER: first_header = true; break;
+        case KWFrameSet::FI_ODD_HEADER: odd_header = true; break;
+        case KWFrameSet::FI_EVEN_HEADER: even_header = true; break;
+        case KWFrameSet::FI_FIRST_FOOTER: first_footer = true; break;
+        case KWFrameSet::FI_ODD_FOOTER: odd_footer = true; break;
+        case KWFrameSet::FI_EVEN_FOOTER: even_footer = true; break;
         case KWFrameSet::FI_FOOTNOTE: break;
         default: break;
         }
@@ -1718,7 +1718,7 @@ void KWDocument::endOfLoading()
     // Where to insert the new frames: not at the end, since that breaks oasis-kword.sh
     uint newFramesetsIndex = m_lstFrameSet.isEmpty() ? 0 : 1;
 
-    if ( !_first_header ) {
+    if ( !first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
@@ -1732,7 +1732,7 @@ void KWDocument::endOfLoading()
         m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
-    if ( !_odd_header ) {
+    if ( !odd_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
@@ -1746,7 +1746,7 @@ void KWDocument::endOfLoading()
         m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
-    if ( !_even_header ) {
+    if ( !even_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
@@ -1760,7 +1760,7 @@ void KWDocument::endOfLoading()
         m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
-    if ( !_first_footer ) {
+    if ( !first_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
@@ -1774,7 +1774,7 @@ void KWDocument::endOfLoading()
         m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
-    if ( !_odd_footer ) {
+    if ( !odd_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
@@ -1788,7 +1788,7 @@ void KWDocument::endOfLoading()
         m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
-    if ( !_even_footer ) {
+    if ( !even_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
@@ -2326,19 +2326,19 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
     return 0L;
 }
 
-void KWDocument::loadImagesFromStore( KoStore *_store )
+void KWDocument::loadImagesFromStore( KoStore *store )
 {
-    if ( _store && !m_pictureMap.isEmpty() ) {
-        m_pictureCollection->readFromStore( _store, m_pictureMap );
+    if ( store && !m_pictureMap.isEmpty() ) {
+        m_pictureCollection->readFromStore( store, m_pictureMap );
         m_pictureMap.clear(); // Release memory
     }
 }
 
-bool KWDocument::completeLoading( KoStore *_store )
+bool KWDocument::completeLoading( KoStore *store )
 {
     kdDebug() << k_funcinfo << endl;
     // Old-XML stuff. No-op when loading OASIS.
-    loadImagesFromStore( _store );
+    loadImagesFromStore( store );
     processPictureRequests();
     processAnchorRequests();
     processFootNoteRequests();
@@ -3590,9 +3590,9 @@ QValueList<KoPictureKey> KWDocument::savePictureList()
 }
 
 // KWord-1.3 format
-bool KWDocument::completeSaving( KoStore *_store )
+bool KWDocument::completeSaving( KoStore *store )
 {
-    if ( !_store )
+    if ( !store )
         return TRUE;
 
     QString u = KURL( url() ).path();
@@ -3601,11 +3601,11 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        return m_pictureCollection->saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
+        return m_pictureCollection->saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, store, savePictures );
     }
     else
     {
-        return m_pictureCollection->saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
+        return m_pictureCollection->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
     }
 }
 
@@ -3614,19 +3614,19 @@ int KWDocument::supportedSpecialFormats() const
     return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
 }
 
-void KWDocument::addView( KoView *_view )
+void KWDocument::addView( KoView *view )
 {
-    m_lstViews.append( (KWView*)_view );
-    KoDocument::addView( _view );
+    m_lstViews.append( (KWView*)view );
+    KoDocument::addView( view );
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
         (*it)->deselectAllFrames();
     }
 }
 
-void KWDocument::removeView( KoView *_view )
+void KWDocument::removeView( KoView *view )
 {
-    m_lstViews.remove( static_cast<KWView*>(_view) );
-    KoDocument::removeView( _view );
+    m_lstViews.remove( static_cast<KWView*>(view) );
+    KoDocument::removeView( view );
 }
 
 void KWDocument::addShell( KoMainWindow *shell )
@@ -3643,7 +3643,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 
 // Paint this document when it's embedded
 // This is also used to paint the preview.png that goes into the ZIP file
-void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
+void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool transparent, double zoomX, double zoomY )
 {
     //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
@@ -3657,7 +3657,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
             formulaDocument->setZoomAndResolution( m_zoom, zoomX, zoomY, false, forPrint );
     }
 
-    QRect rect( _rect );
+    QRect rect( rectangle );
     // Translate the painter to avoid the margin
     /*painter.translate( -leftBorder(), -topBorder() );
     rect.moveBy( leftBorder(), topBorder() );*/
@@ -3749,9 +3749,9 @@ KWChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* childDoc )
     return ch;
 }
 
-void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
+void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e )
 {
-    KoDocument* doc = _e.createDoc( this );
+    KoDocument* doc = e.createDoc( this );
     if ( !doc )
         return;
     if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
@@ -3803,12 +3803,12 @@ void KWDocument::slotRecalcFrames() {
         recalcFrames( from );
 }
 
-void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
+void KWDocument::repaintAllViewsExcept( KWView *view, bool erase )
 {
     //kdDebug(32001) << "KWDocument::repaintAllViewsExcept" << endl;
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
         KWView* viewPtr = *it;
-        if ( viewPtr != _view /*&& viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget()*/ ) {
+        if ( viewPtr != view /*&& viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget()*/ ) {
             viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
         }
     }
@@ -4770,11 +4770,11 @@ void KWDocument::setMailMergeRecord( int r )
     slRecordNum = r;
 }
 
-void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
+void KWDocument::getPageLayout( KoPageLayout& layout, KoColumns& cl, KoKWHeaderFooter& hf )
 {
-    _layout = m_pageLayout;
-    _cl = m_pageColumns;
-    _hf = m_pageHeaderFooter;
+    layout = m_pageLayout;
+    cl = m_pageColumns;
+    hf = m_pageHeaderFooter;
 }
 
 void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
@@ -5128,10 +5128,10 @@ void KWDocument::refreshDocStructure(int type)
      emit docStructureChanged(type);
 }
 
-int KWDocument::typeItemDocStructure(FrameSetType _type)
+int KWDocument::typeItemDocStructure(FrameSetType type)
 {
     int typeItem;
-    switch(_type)
+    switch(type)
     {
         case FT_TEXT:
             typeItem=(int)TextFrames;
@@ -5154,9 +5154,9 @@ int KWDocument::typeItemDocStructure(FrameSetType _type)
     return typeItem;
 }
 
-void KWDocument::refreshDocStructure(FrameSetType _type)
+void KWDocument::refreshDocStructure(FrameSetType type)
 {
-    emit docStructureChanged(typeItemDocStructure(_type));
+    emit docStructureChanged(typeItemDocStructure(type));
 }
 
 QBrush KWDocument::resolveBgBrush( const QBrush & brush, QPainter * painter )
@@ -5234,10 +5234,10 @@ void KWDocument::setUndoRedoLimit(int val)
     m_commandHistory->setRedoLimit(val);
 }
 
-void KWDocument::setGridX(double _gridx) {
-    m_gridX = _gridx;
+void KWDocument::setGridX(double gridx) {
+    m_gridX = gridx;
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
-        (*it)->getGUI()->getHorzRuler()->setGridSize(_gridx);
+        (*it)->getGUI()->getHorzRuler()->setGridSize(gridx);
 }
 
 QValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode) const
@@ -5463,9 +5463,9 @@ int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite )
     return textFramesets.findRef( static_cast<KWTextFrameSet*>(fs) );
 }
 
-KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite )
+KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int num, bool onlyReadWrite )
 {
-    return allTextFramesets( onlyReadWrite ).at( _num );
+    return allTextFramesets( onlyReadWrite ).at( num );
 }
 
 void KWDocument::updateTextFrameSetEdit()
@@ -5518,22 +5518,22 @@ void KWDocument::changeFootNoteConfig()
 }
 
 
-void KWDocument::setTabStopValue ( double _tabStop )
+void KWDocument::setTabStopValue ( double tabStop )
 {
-    m_tabStop = _tabStop;
+    m_tabStop = tabStop;
     QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
-        frm->textDocument()->setTabStops( ptToLayoutUnitPixX( _tabStop ));
+        frm->textDocument()->setTabStops( ptToLayoutUnitPixX( tabStop ));
         frm->layout();
     }
     repaintAllViews();
 }
 
-void KWDocument::setGlobalHyphenation( bool _hyphen )
+void KWDocument::setGlobalHyphenation( bool hyphen )
 {
-    m_bGlobalHyphenation = _hyphen;
+    m_bGlobalHyphenation = hyphen;
     // This is only used as a default setting for the default format in new documents;
     // In existing documents the hyphenation comes from the existing formats.
 }
@@ -5628,18 +5628,18 @@ void KWDocument::updateRulerInProtectContentMode()
 }
 
 
-void KWDocument::insertBookMark(const QString &_name, KWTextParag *_startparag,KWTextParag *_endparag, KWFrameSet *_frameSet, int _start, int _end)
+void KWDocument::insertBookMark(const QString &name, KWTextParag *startparag,KWTextParag *endparag, KWFrameSet *frameSet, int start, int end)
 {
-    KWBookMark *book = new KWBookMark( _name, _startparag, _endparag, _frameSet, _start, _end );
+    KWBookMark *book = new KWBookMark( name, startparag, endparag, frameSet, start, end );
     m_bookmarkList.append( book );
 }
 
-void KWDocument::deleteBookMark(const QString &_name)
+void KWDocument::deleteBookMark(const QString &name)
 {
     QPtrListIterator<KWBookMark> book(m_bookmarkList);
     for ( ; book.current() ; ++book )
     {
-        if ( book.current()->bookMarkName()==_name)
+        if ( book.current()->bookMarkName()==name)
         {
             m_bookmarkList.remove(book.current());
             setModified(true);
@@ -5648,16 +5648,16 @@ void KWDocument::deleteBookMark(const QString &_name)
     }
 }
 
-void KWDocument::renameBookMark(const QString &_oldName, const QString &_newName)
+void KWDocument::renameBookMark(const QString &oldName, const QString &newName)
 {
-    if ( _oldName==_newName)
+    if ( oldName==newName)
         return;
     QPtrListIterator<KWBookMark> book(m_bookmarkList);
     for ( ; book.current() ; ++book )
     {
-        if ( book.current()->bookMarkName()==_oldName)
+        if ( book.current()->bookMarkName()==oldName)
         {
-            book.current()->setBookMarkName(_newName );
+            book.current()->setBookMarkName(newName );
             setModified(true);
             break;
         }
@@ -5699,13 +5699,13 @@ QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
     return list;
 }
 
-void KWDocument::paragraphModified(KoTextParag* /*_parag*/, int /*KoTextParag::ParagModifyType*/ /*_type*/, int /*start*/, int /*lenght*/)
+void KWDocument::paragraphModified(KoTextParag* /*parag*/, int /*KoTextParag::ParagModifyType*/ /*type*/, int /*start*/, int /*lenght*/)
 {
-    //kdDebug()<<" _parag :"<<_parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
+    //kdDebug()<<" parag :"<<parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
 }
 
 
-void KWDocument::paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm )
+void KWDocument::paragraphDeleted( KoTextParag *parag, KWFrameSet *frm )
 {
     if ( m_bookmarkList.isEmpty() )
         return;
@@ -5715,10 +5715,10 @@ void KWDocument::paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm )
         if ( bk->frameSet()==frm ) {
             // Adjust bookmark to point to a valid paragraph, below or above the deleted one.
             // The old implementation turned the bookmark into a useless one. OOo simply deletes the bookmark...
-            if ( bk->startParag() == _parag )
-                bk->setStartParag( _parag->next() ? _parag->next() : _parag->prev() );
-            if ( bk->endParag() == _parag )
-                bk->setEndParag( _parag->next() ? _parag->next() : _parag->prev() );
+            if ( bk->startParag() == parag )
+                bk->setStartParag( parag->next() ? parag->next() : parag->prev() );
+            if ( bk->endParag() == parag )
+                bk->setEndParag( parag->next() ? parag->next() : parag->prev() );
         }
     }
 }
@@ -5797,12 +5797,12 @@ void KWDocument::updateDirectCursorButton()
         (*it)->updateDirectCursorButton();
 }
 
-void KWDocument::setInsertDirectCursor(bool _b)
+void KWDocument::setInsertDirectCursor(bool b)
 {
-    m_bInsertDirectCursor=_b;
+    m_bInsertDirectCursor=b;
     KConfig *config = KWFactory::instance()->config();
     config->setGroup( "Interface" );
-    config->writeEntry( "InsertDirectCursor", _b );
+    config->writeEntry( "InsertDirectCursor", b );
     updateDirectCursorButton();
 }
 

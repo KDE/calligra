@@ -68,25 +68,25 @@ KWFrameSet::~KWFrameSet()
     delete m_dcop;
 }
 
-void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
+void KWFrameSet::addFrame( KWFrame *frame, bool recalc )
 {
-    if ( m_frames.findRef( _frame ) != -1 )
+    if ( m_frames.findRef( frame ) != -1 )
         return;
 
-    //kdDebug(32001) << k_funcinfo << name() << " adding frame" <<  _frame << " recalc=" << recalc << endl;
-    KWFrameList::createFrameList(_frame, m_doc);
-    _frame->setFrameSet(this);
-    m_frames.append( _frame );
+    //kdDebug(32001) << k_funcinfo << name() << " adding frame" <<  frame << " recalc=" << recalc << endl;
+    KWFrameList::createFrameList(frame, m_doc);
+    frame->setFrameSet(this);
+    m_frames.append( frame );
     if(recalc)
         updateFrames();
 }
 
-void KWFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
+void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
-    //kdDebug(32001) << k_funcinfo << name() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << endl; //kdBacktrace();
-    KWFrame *frm = m_frames.at( _num );
+    //kdDebug(32001) << k_funcinfo << name() << " deleting frame" <<  num << " remove=" << remove << " recalc=" << recalc << endl; //kdBacktrace();
+    KWFrame *frm = m_frames.at( num );
     Q_ASSERT( frm );
-    m_frames.take( _num );
+    m_frames.take( num );
     Q_ASSERT( !m_frames.contains(frm) );
 
     unsigned int index = frm->pageNumber() - m_firstPage;
@@ -121,12 +121,12 @@ void KWFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
 void KWFrameSet::deleteFrame( KWFrame *frm, bool remove, bool recalc )
 {
     //kdDebug(32001) << "KWFrameSet::deleteFrame " << frm << " remove=" << remove << endl;
-    int _num = m_frames.findRef( frm );
-    Q_ASSERT( _num != -1 );
-    if ( _num == -1 )
+    int num = m_frames.findRef( frm );
+    Q_ASSERT( num != -1 );
+    if ( num == -1 )
         return;
 
-    deleteFrame( _num, remove, recalc );
+    deleteFrame( num, remove, recalc );
 }
 
 void KWFrameSet::deleteAllFrames()
@@ -288,9 +288,9 @@ void KWFrameSet::setFloating()
     }
 }
 
-void KWFrameSet::setProtectSize( bool _b)
+void KWFrameSet::setProtectSize( bool b)
 {
-    m_protectSize = _b;
+    m_protectSize = b;
     for(KWFrame *f=m_frames.first();f;f=m_frames.next())
     {
         if ( f->isSelected() )
@@ -504,9 +504,9 @@ KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint ) const
     return 0L;
 }
 
-KWFrame * KWFrameSet::frameAtPos( double _x, double _y ) const
+KWFrame * KWFrameSet::frameAtPos( double x, double y ) const
 {
-    KoPoint docPoint( _x, _y );
+    KoPoint docPoint( x, y );
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->contains( docPoint ) )
@@ -514,10 +514,10 @@ KWFrame * KWFrameSet::frameAtPos( double _x, double _y ) const
     return 0L;
 }
 
-KWFrame *KWFrameSet::frame( unsigned int _num ) const
+KWFrame *KWFrameSet::frame( unsigned int num ) const
 {
     // QPtrList sucks
-    return const_cast<KWFrameSet*>( this )->m_frames.at( _num );
+    return const_cast<KWFrameSet*>( this )->m_frames.at( num );
 }
 
 int KWFrameSet::frameFromPtr( KWFrame *frame )
@@ -1270,9 +1270,9 @@ void KWFrameSet::setZOrder()
         fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNumber(m_doc) ) + 1 );
 }
 
-void KWFrameSet::setName( const QString &_name )
+void KWFrameSet::setName( const QString &name )
 {
-    m_name = _name;
+    m_name = name;
     m_doc->updateFrameStatusBarItem();
 }
 

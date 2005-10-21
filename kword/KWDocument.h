@@ -95,7 +95,6 @@ class KWBookMark;
 #include <qfont.h>
 #include <qvaluevector.h>
 
-class KWPartFrameSet;
 /******************************************************************/
 /* Class: KWDocument                                           */
 /******************************************************************/
@@ -180,7 +179,7 @@ public:
     QDragObject* dragSelected( QWidget* parent, KWTextFrameSet* fs = 0 );
 
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
-    virtual bool loadChildren( KoStore *_store );
+    virtual bool loadChildren( KoStore *store );
     virtual QDomDocument saveXML();
     void processPictureRequests();
     void processAnchorRequests();
@@ -211,25 +210,25 @@ public:
 
     virtual void setEmpty();
 
-    virtual void addView( KoView *_view );
-    virtual void removeView( KoView *_view );
+    virtual void addView( KoView *view );
+    virtual void removeView( KoView *view );
 
     virtual void addShell( KoMainWindow *shell );
 
-    void insertObject( const KoRect& _rect, KoDocumentEntry& _e );
+    void insertObject( const KoRect& rect, KoDocumentEntry& e );
 
     // Create an embedded document; used by KWPartFrameSet but here because
     // insertChild is protected.
     KWChild* createChildDoc( const KoRect& rect, KoDocument* childDoc );
 
-    void setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews = true );
+    void setPageLayout( const KoPageLayout& layout, const KoColumns& cl, const KoKWHeaderFooter& hf, bool updateViews = true );
 
-    void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
+    void getPageLayout( KoPageLayout& layout, KoColumns& cl, KoKWHeaderFooter& hf );
 
-    KWTextFrameSet * textFrameSet ( unsigned int _num ) const;
-    /// Return the frameset number @p _num
-    KWFrameSet *frameSet( unsigned int _num )
-    { return m_lstFrameSet.at( _num ); }
+    KWTextFrameSet * textFrameSet ( unsigned int num ) const;
+    /// Return the frameset number @p num
+    KWFrameSet *frameSet( unsigned int num )
+    { return m_lstFrameSet.at( num ); }
 
     /// Return the frameset with a given name
     KWFrameSet * frameSetByName( const QString & name );
@@ -276,9 +275,9 @@ public:
 
     void repaintAllViews( bool erase = false );
     /** Update all views of this document, area can be cleared before redrawing with the
-     * _erase flag. (false implied). All views EXCEPT the argument _view are updated ( give 0L for all )
+     * erase flag. (false implied). All views EXCEPT the argument view are updated ( give 0L for all )
      */
-    void repaintAllViewsExcept( KWView *_view, bool _erase = false );
+    void repaintAllViewsExcept( KWView *view, bool erase = false );
 
 
     /**
@@ -416,7 +415,7 @@ public:
     /// \note This method considers _all_ text framesets, even table cells
     int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
     /// \note This method considers _all_ text framesets, even table cells
-    KWFrameSet * textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite );
+    KWFrameSet * textFrameSetFromIndex( unsigned int num, bool onlyReadWrite );
 
     /// Reimplementation from KoDocument.
     /// \note This method considers _all_ text framesets, even table cells
@@ -442,21 +441,21 @@ public:
     // The grid is in _pt_ now
     double gridX()const { return m_gridX; }
     double gridY()const { return m_gridY; }
-    void setGridX(double _gridx);
-    void setGridY(double _gridy) { m_gridY = _gridy; }
+    void setGridX(double gridx);
+    void setGridY(double gridy) { m_gridY = gridy; }
 
     void updateGridButton();
 
     bool showGrid() const { return m_bShowGrid; }
-    void setShowGrid ( bool _grid ) { m_bShowGrid = _grid; }
+    void setShowGrid ( bool grid ) { m_bShowGrid = grid; }
 
     bool snapToGrid() const { return m_bSnapToGrid; }
-    void setSnapToGrid( bool _b ) { m_bSnapToGrid = _b; }
+    void setSnapToGrid( bool b ) { m_bSnapToGrid = b; }
 
     // Currently unused. Not sure we want to go that way, now that we have
     // paragLayoutChanged and formatChanged in applyStyleChange.
     //int applyStyleChangeMask() { return styleMask; }
-    //void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
+    //void setApplyStyleChangeMask( int f ) { styleMask = f; }
 
     // paragLayoutChanged is a set of flags for the parag layout - see the enum in KWParagLayout
     // formatChanged is a set of flags from KoTextFormat
@@ -592,61 +591,61 @@ public:
     // This settings has to be here [instead of KWView] because we need to
     // format paragraphs slightly differently (to add room for the CR char)
     bool viewFormattingChars() const { return m_viewFormattingChars; }
-    void setViewFormattingChars(bool _b) { m_viewFormattingChars=_b; }
+    void setViewFormattingChars(bool b) { m_viewFormattingChars=b; }
 
     bool viewFormattingEndParag() const { return m_viewFormattingEndParag; }
-    void setViewFormattingEndParag(bool _b) { m_viewFormattingEndParag=_b; }
+    void setViewFormattingEndParag(bool b) { m_viewFormattingEndParag=b; }
 
     bool viewFormattingSpace() const { return m_viewFormattingSpace; }
-    void setViewFormattingSpace(bool _b) { m_viewFormattingSpace=_b; }
+    void setViewFormattingSpace(bool b) { m_viewFormattingSpace=b; }
 
     bool viewFormattingTabs() const { return m_viewFormattingTabs; }
-    void setViewFormattingTabs(bool _b) { m_viewFormattingTabs=_b; }
+    void setViewFormattingTabs(bool b) { m_viewFormattingTabs=b; }
 
     bool viewFormattingBreak() const { return m_viewFormattingBreak; }
-    void setViewFormattingBreak(bool _b) { m_viewFormattingBreak=_b; }
+    void setViewFormattingBreak(bool b) { m_viewFormattingBreak=b; }
 
     // Also view properties, but stored, loaded and saved here (lacking a more global object).
     bool viewFrameBorders() const { return m_viewFrameBorders; }
     void setViewFrameBorders( bool b ) { m_viewFrameBorders = b; }
-    void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
+    void setShowRuler(bool ruler){ m_bShowRuler=ruler; }
     bool showRuler() const { return m_bShowRuler; }
 
     bool showStatusBar() const { return m_bShowStatusBar;}
-    void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
+    void setShowStatusBar( bool status ) { m_bShowStatusBar = status;}
 
     bool showScrollBar() const { return m_bShowScrollBar; }
-    void setShowScrollBar( bool _status ) { m_bShowScrollBar = _status;}
+    void setShowScrollBar( bool status ) { m_bShowScrollBar = status;}
 
     bool pgUpDownMovesCaret() const { return m_pgUpDownMovesCaret; }
     void setPgUpDownMovesCaret( bool b ) { m_pgUpDownMovesCaret = b; }
 
     bool showdocStruct() const {return  m_bShowDocStruct;}
-    void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
+    void setShowDocStruct(bool b){m_bShowDocStruct=b;}
 
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
-    void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
+    void setAllowAutoFormat(bool b){ m_bAllowAutoFormat=b; }
 
     bool insertDirectCursor() const { return m_bInsertDirectCursor; }
-    void setInsertDirectCursor(bool _b);
+    void setInsertDirectCursor(bool b);
 
 
     // in pt
     double indentValue()const { return m_indent; }
-    void setIndentValue(double _ind) { m_indent=_ind; }
+    void setIndentValue(double ind) { m_indent=ind; }
 
     int nbPagePerRow() const{ return m_iNbPagePerRow; }
-    void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
+    void setNbPagePerRow(int nb) { m_iNbPagePerRow=nb; }
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
 
-    //void setLastViewMode(const QString &_mode){ m_lastViewMode = _mode;}
+    //void setLastViewMode(const QString &mode){ m_lastViewMode = mode;}
     //QString lastViewMode() const { return m_lastViewMode; }
 
     // in pt
     double defaultColumnSpacing()const{ return m_defaultColumnSpacing ;}
-    void setDefaultColumnSpacing(double _val){ m_defaultColumnSpacing=_val; }
+    void setDefaultColumnSpacing(double val){ m_defaultColumnSpacing=val; }
     /**
      * @returns the document for the formulas
      */
@@ -675,7 +674,7 @@ public:
     void refreshDocStructure(FrameSetType);
     void refreshDocStructure(int);
 
-    int typeItemDocStructure(FrameSetType _type);
+    int typeItemDocStructure(FrameSetType type);
 
     void renameButtonTOC(bool b);
 
@@ -687,10 +686,8 @@ public:
 
     void updateZoomRuler();
 
-    /// \todo ### rename!
-    void hasTOC(bool _b){ m_hasTOC=_b;}
-    /// \todo ### rename!
-    bool isTOC(){return m_hasTOC;}
+    void setTOCPresent(bool b){ m_hasTOC=b;}
+    bool tocPresent(){return m_hasTOC;}
 
     QString sectionTitle( int pageNum ) const;
 
@@ -710,7 +707,7 @@ public:
     virtual DCOPObject* dcopObject();
 
     int undoRedoLimit() const;
-    void setUndoRedoLimit(int _val);
+    void setUndoRedoLimit(int val);
 
     void updateContentsSize(){emit newContentsSize();}
 
@@ -734,7 +731,7 @@ public:
 
 
     double tabStopValue() const { return m_tabStop; }
-    void setTabStopValue ( double _tabStop );
+    void setTabStopValue ( double tabStop );
 
     TableToSelectPosition positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable =0L);
 
@@ -751,30 +748,30 @@ public:
     void setCursorInProtectedArea( bool b );
 
     SeparatorLinePos footNoteSeparatorLinePosition()const { return m_footNoteSeparatorLinePos;}
-    void setFootNoteSeparatorLinePosition(SeparatorLinePos _pos) {m_footNoteSeparatorLinePos = _pos;}
+    void setFootNoteSeparatorLinePosition(SeparatorLinePos pos) {m_footNoteSeparatorLinePos = pos;}
 
     int footNoteSeparatorLineLength() const { return m_iFootNoteSeparatorLineLength;}
-    void setFootNoteSeparatorLineLength( int _length){  m_iFootNoteSeparatorLineLength = _length;}
+    void setFootNoteSeparatorLineLength( int length){  m_iFootNoteSeparatorLineLength = length;}
 
     double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
-    void setFootNoteSeparatorLineWidth( double _width){  m_footNoteSeparatorLineWidth=_width;}
+    void setFootNoteSeparatorLineWidth( double width){  m_footNoteSeparatorLineWidth=width;}
 
     SeparatorLineLineType footNoteSeparatorLineType()const { return m_footNoteSeparatorLineType;}
-    void setFootNoteSeparatorLineType( SeparatorLineLineType _type) {m_footNoteSeparatorLineType = _type;}
+    void setFootNoteSeparatorLineType( SeparatorLineLineType type) {m_footNoteSeparatorLineType = type;}
 
 
-    void insertBookMark(const QString &_name, KWTextParag *_startparag, KWTextParag *_endparag, KWFrameSet *_frameSet, int _start, int _end);
-    void deleteBookMark(const QString &_name);
-    void renameBookMark(const QString &_oldname, const QString &_newName);
+    void insertBookMark(const QString &name, KWTextParag *startparag, KWTextParag *endparag, KWFrameSet *frameSet, int start, int end);
+    void deleteBookMark(const QString &name);
+    void renameBookMark(const QString &oldname, const QString &newName);
 
     KWBookMark * bookMarkByName( const QString & name );
     QStringList listOfBookmarkName(KWViewMode * viewMode)const;
 
-    void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
-    void paragraphModified(KoTextParag* _parag, int /*KoTextParag::ParagModifyType*/ _type, int start, int lenght);
+    void paragraphDeleted( KoTextParag *parag, KWFrameSet *frm);
+    void paragraphModified(KoTextParag* parag, int /*KoTextParag::ParagModifyType*/ type, int start, int lenght);
 
     void initBookmarkList();
-    void loadImagesFromStore( KoStore *_store );
+    void loadImagesFromStore( KoStore *store );
     void loadPictureMap ( QDomElement& domElement );
 
     void testAndCloseAllFrameSetProtectedContent();
@@ -795,17 +792,17 @@ public:
 #endif
 
     QString picturePath()const { return m_picturePath; }
-    void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
+    void setPicturePath( const QString & path ) { m_picturePath = path ; }
 
 
     void updateDirectCursorButton();
 
     QString globalLanguage()const { return m_globalLanguage; }
-    void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
+    void setGlobalLanguage( const QString & lang ){m_globalLanguage = lang;}
     void addWordToDictionary( const QString & );
 
     bool globalHyphenation() const { return m_bGlobalHyphenation; }
-    void setGlobalHyphenation ( bool _hyphen );
+    void setGlobalHyphenation ( bool hyphen );
 
     KWLoadingInfo* createLoadingInfo();
     KWLoadingInfo* loadingInfo() const { return m_loadingInfo; }
@@ -862,8 +859,8 @@ protected:
     QString checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet*, int pageNum ) const;
     KoView* createViewInstance( QWidget* parent, const char* name );
 
-    virtual bool completeLoading( KoStore* _store );
-    virtual bool completeSaving( KoStore *_store );
+    virtual bool completeLoading( KoStore* store );
+    virtual bool completeSaving( KoStore *store );
 
     void loadFrameSets( const QDomElement &framesets );
     void loadStyleTemplates( const QDomElement &styles );

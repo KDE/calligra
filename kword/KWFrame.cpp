@@ -69,12 +69,12 @@ KWFrame::KWFrame(KWFrame * frame)
     m_frameStack = 0; // lazy initialisation.
 }
 
-KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra )
+KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround ra )
     : KoRect( left, top, width, height ),
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
       m_sheetSide( AnySide ),
-      m_runAround( _ra ),
+      m_runAround( ra ),
       m_runAroundSide( RA_BIGGEST ),
       m_frameBehavior( AutoExtendFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
@@ -114,9 +114,9 @@ KWFrame::~KWFrame()
     m_frameStack = 0;
 }
 
-void KWFrame::setBackgroundColor( const QBrush &_color )
+void KWFrame::setBackgroundColor( const QBrush &color )
 {
-    m_backgroundColor = _color;
+    m_backgroundColor = color;
 }
 
 
@@ -294,11 +294,11 @@ void KWFrame::updateRulerHandles(){
 
 }
 
-void KWFrame::setSelected( bool _selected )
+void KWFrame::setSelected( bool selected )
 {
-    //kdDebug(32001) << this << " KWFrame::setSelected " << _selected << endl;
+    //kdDebug(32001) << this << " KWFrame::setSelected " << selected << endl;
     bool s = m_selected;
-    m_selected = _selected;
+    m_selected = selected;
     if ( m_selected )
         createResizeHandles();
     else if ( s )
@@ -834,12 +834,12 @@ double KWFrame::innerHeight() const
     return KMAX( 0.0, height() - m_paddingTop - m_paddingBottom );
 }
 
-void KWFrame::setFramePadding( double _left, double _top, double _right, double _bottom)
+void KWFrame::setFramePadding( double left, double top, double right, double bottom)
 {
-    m_paddingLeft = _left;
-    m_paddingTop = _top;
-    m_paddingRight = _right;
-    m_paddingBottom = _bottom;
+    m_paddingLeft = left;
+    m_paddingTop = top;
+    m_paddingRight = right;
+    m_paddingBottom = bottom;
 }
 
 void KWFrame::setMinFrameHeight(double h)

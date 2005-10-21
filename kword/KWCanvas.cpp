@@ -78,7 +78,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
 
     m_frameInlineType=FT_TABLE;
     m_viewMode = viewMode;
-    cmdMoveFrame=0L;
+    m_moveFrameCommand=0L;
 
     // Default table parameters.
     m_table.rows = 3;
@@ -96,7 +96,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     m_footEndNote.numberingType = KWFootNoteVariable::Auto;
 
 
-    curTable = 0L;
+    m_currentTable = 0L;
     m_printing = false;
     m_deleteMovingRect = false;
     m_resizedFrameInitialMinHeight = 0;
@@ -177,7 +177,7 @@ KWCanvas::~KWCanvas()
         w->hide();
     }
     delete l;
-    delete cmdMoveFrame;
+    delete m_moveFrameCommand;
     delete m_currentFrameSetEdit;
     m_currentFrameSetEdit = 0L;
 }
@@ -421,7 +421,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
                 }
             }
         }
-        curTable = table;
+        m_currentTable = table;
         emit frameSelectedChanged();
     }
 
@@ -470,8 +470,8 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
     m_hotSpot = docPoint - m_boundingRect.topLeft();
     if(frameindexMove.count()!=0)
     {
-        delete cmdMoveFrame;
-        cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+        delete m_moveFrameCommand;
+        m_moveFrameCommand = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
     }
 
     viewport()->setCursor( m_doc->getMouseCursor( nPoint, e ? e->state() : 0 ) );
@@ -575,7 +575,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     if (cell)
                     {
                         table->selectRow( cell->firstRow() );
-                        curTable = table;
+                        m_currentTable = table;
                         emit frameSelectedChanged();
                     }
                 }
@@ -586,7 +586,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     if (cell)
                     {
                         table->selectCol( cell->firstCol() );
-                        curTable = table;
+                        m_currentTable = table;
                         emit frameSelectedChanged();
                     }
                 }
@@ -662,7 +662,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                         m_rowColResized = table->rowEdgeAt( docPoint.y() );
                         m_previousTableSize = table->rowSize( m_rowColResized );
                     }
-                    curTable = table;
+                    m_currentTable = table;
                     kdDebug(32002) << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
                 }
             }
@@ -1295,13 +1295,13 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                     else if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW )
                     {
                         // TODO undo/redo support (esp. in mouse-release)
-                        QRect oldRect( m_viewMode->normalToView( m_doc->zoomRect( curTable->boundingRect() ) ) );
+                        QRect oldRect( m_viewMode->normalToView( m_doc->zoomRect( m_currentTable->boundingRect() ) ) );
                         if ( m_mouseMeaning == MEANING_RESIZE_ROW )
-                            curTable->resizeRow( m_rowColResized, docPoint.y() );
+                            m_currentTable->resizeRow( m_rowColResized, docPoint.y() );
                         else
-                            curTable->resizeColumn( m_rowColResized, docPoint.x() );
+                            m_currentTable->resizeColumn( m_rowColResized, docPoint.x() );
                         // Repaint only the changed rects (oldRect U newRect)
-                        QRect newRect( m_viewMode->normalToView( m_doc->zoomRect( curTable->boundingRect() ) ) );
+                        QRect newRect( m_viewMode->normalToView( m_doc->zoomRect( m_currentTable->boundingRect() ) ) );
                         repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
                     }
                     // mousemove during frame-resizing is handled by the resizehandles directly
@@ -1412,18 +1412,18 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                     if ( frame && fs->type() == FT_PART )
                         static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
             }
-            delete cmdMoveFrame; // Unused after all
-            cmdMoveFrame = 0L;
+            delete m_moveFrameCommand; // Unused after all
+            m_moveFrameCommand = 0L;
         }
         else
         {
-            Q_ASSERT( cmdMoveFrame ); // has been created by mpEditFrame
-            if( cmdMoveFrame )
+            Q_ASSERT( m_moveFrameCommand ); // has been created by mpEditFrame
+            if( m_moveFrameCommand )
             {
                 // Store final positions
                 QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-                QValueList<FrameMoveStruct>::Iterator it = cmdMoveFrame->listFrameMoved().begin();
-                for(KWFrame * frame=selectedFrames.first(); frame && it != cmdMoveFrame->listFrameMoved().end();
+                QValueList<FrameMoveStruct>::Iterator it = m_moveFrameCommand->listFrameMoved().begin();
+                for(KWFrame * frame=selectedFrames.first(); frame && it != m_moveFrameCommand->listFrameMoved().end();
                     frame=selectedFrames.next() )
                 {
                     KWFrameSet * fs = frame->frameSet();
@@ -1438,10 +1438,10 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                     if ( frame && fs->type() == FT_PART )
                         static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
                 }
-                m_doc->addCommand(cmdMoveFrame);
+                m_doc->addCommand(m_moveFrameCommand);
                 m_doc->framesChanged( selectedFrames, m_gui->getView() ); // repaint etc.
 
-                cmdMoveFrame = 0L;
+                m_moveFrameCommand = 0L;
             }
         }
         m_doc->repaintAllViews();
@@ -1662,13 +1662,13 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 else {
                   if ( m_mouseMeaning == MEANING_RESIZE_COLUMN )
                   {
-                    KWResizeColumnCommand *cmd = new KWResizeColumnCommand( curTable, m_rowColResized, m_previousTableSize, docPoint.x() );
+                    KWResizeColumnCommand *cmd = new KWResizeColumnCommand( m_currentTable, m_rowColResized, m_previousTableSize, docPoint.x() );
                     m_doc->addCommand(cmd);
                     cmd->execute();
                   }
                   else if ( m_mouseMeaning == MEANING_RESIZE_ROW )
                   {
-                    KWResizeRowCommand *cmd = new KWResizeRowCommand( curTable, m_rowColResized, m_previousTableSize, docPoint.y() );
+                    KWResizeRowCommand *cmd = new KWResizeRowCommand( m_currentTable, m_rowColResized, m_previousTableSize, docPoint.y() );
                     m_doc->addCommand(cmd);
                     cmd->execute();
                   }
@@ -2044,7 +2044,7 @@ void KWCanvas::tableSelectCell(KWTableFrameSet *table, KWFrameSet *cell)
     if ( m_currentFrameSetEdit )
         terminateCurrentEdit();
     selectFrame( cell->frame(0), TRUE ); // select the frame.
-    curTable = table;
+    m_currentTable = table;
     emit frameSelectedChanged();
 }
 
@@ -2333,13 +2333,13 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT || !onlyText)
         {
             if ( fs->type() == FT_TABLE )
-                curTable = static_cast<KWTableFrameSet *>(fs);
+                m_currentTable = static_cast<KWTableFrameSet *>(fs);
             else if ( fs->type() == FT_TEXT )
-                curTable = static_cast<KWTextFrameSet *>(fs)->groupmanager();
+                m_currentTable = static_cast<KWTextFrameSet *>(fs)->groupmanager();
             else
-                curTable = 0L;
-            if ( curTable ) {
-                m_currentFrameSetEdit = curTable->createFrameSetEdit( this );
+                m_currentTable = 0L;
+            if ( m_currentTable ) {
+                m_currentFrameSetEdit = m_currentTable->createFrameSetEdit( this );
                 static_cast<KWTableFrameSetEdit *>( m_currentFrameSetEdit )->setCurrentCell( fs );
             }
             else
@@ -2771,11 +2771,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         setMouseMode( MM_EDIT );
                     else
                     {
-                      if ( m_frameMoved && cmdMoveFrame)
+                      if ( m_frameMoved && m_moveFrameCommand)
                       {
-                        cmdMoveFrame->unexecute();
-                        delete cmdMoveFrame;
-                        cmdMoveFrame = 0;
+                        m_moveFrameCommand->unexecute();
+                        delete m_moveFrameCommand;
+                        m_moveFrameCommand = 0;
                         m_frameMoved = false;
                         m_mousePressed = false; //we don't want things to happen in KWCanvas::contentsMouseReleaseEvent
                         m_ctrlClickOnSelectedFrame = false;
@@ -2792,8 +2792,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         KWFrameSet* frameSet = frame->frameSet();
                         QRect oldRect = m_viewMode->normalToView( frame->outerRect(m_viewMode) );
                         frameSet->resizeFrameSetCoords( frame, m_boundingRect.left(), m_boundingRect.top(), m_boundingRect.right(), m_boundingRect.bottom(), false /*not final*/ );
-                        delete cmdMoveFrame; // Unused after all
-                        cmdMoveFrame = 0L;
+                        delete m_moveFrameCommand; // Unused after all
+                        m_moveFrameCommand = 0L;
                         m_frameResized = false;
                         m_mousePressed = false; //we don't want things to happen in KWCanvas::contentsMouseReleaseEvent
                         m_ctrlClickOnSelectedFrame = false;

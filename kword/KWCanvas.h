@@ -172,7 +172,7 @@ public:
 
     /// The current table (either because one or more cells are selected,
     /// or because the cursor is in a table cell
-    KWTableFrameSet *getCurrentTable()const { return curTable; }
+    KWTableFrameSet *getCurrentTable()const { return m_currentTable; }
     /// When the cursor is in a table cell, this returns the row
     int currentTableRow() const;
     /// When the cursor is in a table cell, this returns the column
@@ -349,8 +349,8 @@ private:
         QString tableTemplateName;
         KWTableTemplate *tt;
     } m_table;
-    KWTableFrameSet *curTable;
-    KWFrameMoveCommand *cmdMoveFrame;
+    KWTableFrameSet *m_currentTable;
+    KWFrameMoveCommand *m_moveFrameCommand;
 
     // Split cell in table
     struct

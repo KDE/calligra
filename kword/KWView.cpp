@@ -392,7 +392,7 @@ void KWView::initGui()
     updatePageInfo();
     slotFrameSetEditChanged();
     frameSelectedChanged();
-    renameButtonTOC(m_doc->isTOC());
+    renameButtonTOC(m_doc->tocPresent());
     //at the beginning actionBackgroundColor should be active
     actionBackgroundColor->setEnabled(true);
     updateBgSpellCheckingState();
