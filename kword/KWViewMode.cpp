@@ -34,7 +34,7 @@ const unsigned short KWViewMode::s_shadowOffset = 3;
 QSize KWViewModeNormal::contentsSize()
 {
     return QSize( m_doc->paperWidth(m_doc->startPage()),
-            m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->pageManager()->lastPageNumber()) ) );
+            m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
 }
 
 QSize KWViewMode::availableSizeForText( KWTextFrameSet* textfs )
@@ -190,7 +190,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     painter->setBrush( Qt::NoBrush );
     QRect pageRect;
 
-    int lastPage = m_doc->pageManager()->lastPageNumber();
+    int lastPage = m_doc->lastPage();
     double pagePosPt = 0;
     int topOfPage = 0; // in pixels
     for ( int pageNr = m_doc->startPage(); pageNr <= lastPage; pageNr++ )
@@ -269,7 +269,7 @@ int KWViewModePreview::topSpacing()
 
 int KWViewModePreview::numRows() const
 {
-    return ( m_doc->pageCount() - 1 ) / m_pagesPerRow + 1;
+    return ( m_doc->pageCount() ) / m_pagesPerRow + 1;
 }
 
 QSize KWViewModePreview::contentsSize()
@@ -277,8 +277,8 @@ QSize KWViewModePreview::contentsSize()
     int pages = m_doc->pageCount();
     int rows = (pages-1) / m_pagesPerRow + 1;
     int hPages = rows > 1 ? m_pagesPerRow : pages;
-    return QSize( m_spacing + hPages * ( m_doc->paperWidth(1) + m_spacing ),
-                  m_spacing + rows * ( m_doc->paperHeight(1) + m_spacing ) /* bottom of last row */ );
+    return QSize( m_spacing + hPages * ( m_doc->paperWidth(m_doc->startPage()) + m_spacing ),
+                  m_spacing + rows * ( m_doc->paperHeight(m_doc->startPage()) + m_spacing ) /* bottom of last row */ );
 }
 
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
@@ -287,8 +287,8 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
     double unzoomedY = m_doc->unzoomItY( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     double yInPagePt = unzoomedY - page->offsetInDocument();// and rest
-    int row = page->pageNumber() / m_pagesPerRow;
-    int col = page->pageNumber() % m_pagesPerRow;
+    int row = (page->pageNumber() - m_doc->startPage()) / m_pagesPerRow;
+    int col = (page->pageNumber() - m_doc->startPage()) % m_pagesPerRow;
     /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint.x() << "," << nPoint.y()
                 << " unzoomedY=" << unzoomedY
                 << " ptPaperHeight=" << m_doc->ptPaperHeight()
@@ -301,14 +301,14 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
 {
     // Well, just the opposite of the above.... hmm.... headache....
-    int paperWidth = m_doc->paperWidth(1);
-    int paperHeight = m_doc->paperHeight(1);
+    int paperWidth = m_doc->paperWidth(m_doc->startPage());
+    int paperHeight = m_doc->paperHeight(m_doc->startPage());
     QPoint p( vPoint.x() - leftSpacing(), vPoint.y() - topSpacing() );
     int col = static_cast<int>( p.x() / ( paperWidth + m_spacing ) );
     int xInPage = p.x() - col * ( paperWidth + m_spacing );
     int row = static_cast<int>( p.y() / ( paperHeight + m_spacing ) );
     int yInPage = p.y() - row * ( paperHeight + m_spacing );
-    int page = row * m_pagesPerRow + col;
+    int page = row * m_pagesPerRow + col + m_doc->startPage();
     if ( page > m_doc->lastPage() ) // [this happens when moving frames around and going out of the pages]
         return QPoint( paperWidth, m_doc->pageTop( m_doc->lastPage() ) );
     else // normal case
@@ -320,18 +320,22 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
-    int paperWidth = m_doc->paperWidth(1);
-    int paperHeight = m_doc->paperHeight(1);
     //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
     QRegion grayRegion( crect );
-    for ( int page = 0; page < m_doc->pageCount(); page++ ) // TODO rewrite to not be base 0
+    int pageCount = m_doc->pageCount();
+    for ( int counter = 0; counter < pageCount; counter++ )
     {
-        int row = page / m_pagesPerRow;
-        int col = page % m_pagesPerRow;
+        int row = counter / m_pagesPerRow;
+        int col = counter % m_pagesPerRow;
+        int page = m_doc->startPage() + counter;
+        int paperWidth = m_doc->paperWidth(page);
+        int paperHeight = m_doc->paperHeight(page);
         QRect pageRect( leftSpacing() + col * ( paperWidth + m_spacing ),
                         topSpacing() + row * ( paperHeight + m_spacing ),
                         paperWidth, paperHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
+        if( pageRect.top() > crect.bottom())
+            break;
         if ( pageRect.intersects( crect ) )
             grayRegion -= pageRect;
         QRect rightShadow = drawRightShadow( painter, crect, pageRect, s_shadowOffset );
