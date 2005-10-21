@@ -804,17 +804,18 @@ two names? -->
 <variablelist>
 <varlistentry>
 <term><guilabel>Type</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>You can choose between <guilabel>Single Color</guilabel>, <guilabel>Gradient</guilabel> or <guilabel>Transparent</guilabel> as the type.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Style</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Choose the style or the pattern.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Color</guilabel></term>
-<listitem><para></para></listitem>
+<listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard KDE color chooser dialog.</para></listitem>
 </varlistentry>
 </variablelist>
+<para>The last field displays a preview of your settings, provided the color is not white!.</para>
 </sect3>
 
 <sect3 id="rectangle">
@@ -842,7 +843,7 @@ two names? -->
 </varlistentry>
 <varlistentry>
 <term><guilabel>Horizontal declination</guilabel></term>
-<listitem><para>>Set the horizontal declination.</para></listitem>
+<listitem><para>Set the horizontal declination.</para></listitem>
 </varlistentry>
 </variablelist>
 <para>The last field displays a preview of your settings.</para>
