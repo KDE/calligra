@@ -333,8 +333,21 @@ public:
         m_defaultFont = newFont;
     }
 
+    /**
+     * returns the amount of pages in the document.
+     * @see startPage() @see lastPage()
+     */
     int pageCount() const;
+    /**
+     * returns the page number of the first page in this document, this is the page number
+     * that will be shown on prints and used in the TOC and user-variables.
+     * @see pageCount() @see lastPage()
+     */
     int startPage() const;
+    /**
+     * Returns the last page number in this document.
+     * This is effectively the same as startPage() + pageCount().
+     */
     int lastPage() const;
 
     KoPictureCollection *pictureCollection() { return m_pictureCollection; }
