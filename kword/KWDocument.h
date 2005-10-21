@@ -676,8 +676,6 @@ public:
 
     int typeItemDocStructure(FrameSetType type);
 
-    void renameButtonTOC(bool b);
-
     void refreshMenuExpression();
 
     void refreshMenuCustomVariable();
@@ -686,7 +684,9 @@ public:
 
     void updateZoomRuler();
 
-    void setTOCPresent(bool b){ m_hasTOC=b;}
+    /// Mark the document to have a table of contents and update the view-menu-item text
+    void setTocPresent(bool hasToc);
+    /// Returns if the document has a table of contents
     bool tocPresent(){return m_hasTOC;}
 
     QString sectionTitle( int pageNum ) const;

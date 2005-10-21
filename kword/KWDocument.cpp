@@ -5184,11 +5184,11 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
 }
 
 
-void KWDocument::renameButtonTOC(bool b)
+void KWDocument::setTocPresent(bool hasToc)
 {
-    m_hasTOC=b;
+    m_hasTOC=hasToc;
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
-        (*it)->renameButtonTOC(b);
+        (*it)->updateTocActionText(hasToc);
 }
 
 void KWDocument::refreshMenuExpression()

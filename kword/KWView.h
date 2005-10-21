@@ -360,7 +360,7 @@ public slots:
 
     void insertExpression();
 
-    void renameButtonTOC(bool b);
+    void updateTocActionText(bool hasToc);
 
     void changeCaseOfText();
 

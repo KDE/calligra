@@ -38,7 +38,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
-    fs->kWordDocument()->renameButtonTOC(true);
+    fs->kWordDocument()->setTocPresent(true);
 
     KoTextParag *insertionParag = textdoc->paragAt( m_paragId );
     if ( !insertionParag ) {
@@ -119,7 +119,7 @@ KoTextCursor *KWInsertTOCCommand::unexecute( KoTextCursor *c )
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
     removeTOC( fs, c, 0L );
-    fs->kWordDocument()->renameButtonTOC(false);
+    fs->kWordDocument()->setTocPresent(false);
     return c;
 }
 

@@ -392,7 +392,7 @@ void KWView::initGui()
     updatePageInfo();
     slotFrameSetEditChanged();
     frameSelectedChanged();
-    renameButtonTOC(m_doc->tocPresent());
+    updateTocActionText(m_doc->tocPresent());
     //at the beginning actionBackgroundColor should be active
     actionBackgroundColor->setEnabled(true);
     updateBgSpellCheckingState();
@@ -3443,10 +3443,10 @@ void KWView::insertFootNote()
     }
 }
 
-void KWView::renameButtonTOC(bool b)
+void KWView::updateTocActionText(bool hasToc)
 {
    KActionCollection * coll = actionCollection();
-   QString name= b ? i18n("Update Table of &Contents"):i18n("Table of &Contents");
+   QString name= hasToc ? i18n("Update Table of &Contents"):i18n("Table of &Contents");
    coll->action("insert_contents")->setText(name);
 }
 

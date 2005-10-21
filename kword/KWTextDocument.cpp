@@ -101,7 +101,7 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
         context.styleStack().restore();
     }
 
-    m_textfs->kWordDocument()->setTOCPresent( true );
+    m_textfs->kWordDocument()->setTocPresent( true );
 }
 
 bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
