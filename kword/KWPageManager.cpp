@@ -22,7 +22,7 @@
 //#define DEBUG_PAGES
 
 KWPageManager::KWPageManager() {
-    m_firstPage = 0;
+    m_firstPage = 1;
     m_onlyAllowAppend = false;
     m_pageList.setAutoDelete(true);
 }
@@ -42,11 +42,13 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
             frame.top() > pages.current()->height() + startOfpage) {
 #ifdef DEBUG_PAGES
     if(!pages.current())
-        kdDebug() << "  KWPageManager::pageNumber of "<< frame << " is too high, no page there\n";
+        kdDebug(31001) << "  KWPageManager::pageNumber of "<< frame << " is too high, no page there\n";
     else if(frame.right() > pages.current()->width())
-        kdDebug() << "  KWPageManager::pageNumber right of "<< frame << " is out of bounds\n";
+        kdDebug(31001) << "  KWPageManager::pageNumber right of "<< frame << " is out of bounds\n";
     else if(frame.top() > pages.current()->height() + startOfpage)
-        kdDebug() << "  KWPageManager::pageNumber "<< frame << " spans multiple pages\n";
+        kdDebug(31001) << "  KWPageManager::pageNumber "<< frame << " spans multiple pages\n";
+
+kdDebug(31001) << kdBacktrace() << endl;
 #endif
         return -1; // not inside the page...
     }
@@ -75,6 +77,9 @@ KWPage* KWPageManager::page(int pageNum) const {
         ++pages;
     }
     kdWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist ["<< m_firstPage << "-"<< lastPageNumber() << "]"<< endl;
+#ifdef DEBUG_PAGES
+    kdDebug(31001) << kdBacktrace();
+#endif
     return 0;
 }
 KWPage* KWPageManager::page(const KoRect &frame) const {

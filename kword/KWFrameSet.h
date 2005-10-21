@@ -174,6 +174,12 @@ public:
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0; }
 
     /**
+     * Let the caller know which parts of @p emptyRegion we do not claim, and thus the caller is
+     * free to paint on without interfering with later paints from us.
+     * For painting all frames of all framesets the painter needs to find out what area we
+     * will fill with a background color and possibly paint over.
+     * What this method does is fill an QRegion with all the areas we are going to fill, which
+     * typically means we will paint the background of a frame there.
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
      * Framesets that can be transparent should reimplement this and make it a no-op,

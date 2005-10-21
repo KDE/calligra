@@ -152,6 +152,10 @@ void KWFrameSet::deleteAllCopies()
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
     KWPage *page = m_doc->pageManager()->page( frame(0) );
+    if( !page ) {
+        kdWarning(31001) << "The first frame of '" << name() << "' is outside all pages!!" << endl;
+        return;
+    }
     double paperHeight = page->height();
     //kdDebug(32001) << "KWFrameSet::createEmptyRegion " << name() << endl;
     for (QPtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )

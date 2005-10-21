@@ -1369,6 +1369,11 @@ struct FrameStruct
         // The first criteria is the page number though!
         int pageOne = frameOne->pageNumber();
         int pageTwo = frameTwo->pageNumber();
+        if( (pageOne == -1) ^ (pageTwo == -1)) {
+            if( pageOne == -1 )
+                return 5; // undefined is higher than defined.
+            return -5;
+        }
         if ( pageOne > pageTwo ) return 4; // frameOne > frameTwo
         if ( pageOne < pageTwo ) return -4; // frameOne < frameTwo
 

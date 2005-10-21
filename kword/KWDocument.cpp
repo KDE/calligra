@@ -4183,6 +4183,8 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
 #endif
     KoPoint docPoint( unzoomPoint( nPoint ) );
     int page = pageManager()->pageNumber(docPoint);
+    if(page == -1)
+        return 0;
     QPtrList<KWFrame> frames = framesInPage(page);
 
 #ifdef DEBUG_FRAMESELECT
@@ -4211,7 +4213,7 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
         }
     }
     if (border != 0) *border=false;
-    return 0L;
+    return 0;
 }
 
 
@@ -4865,6 +4867,11 @@ void KWDocument::printDebug()
         ++it;
     }
     */
+
+    kdDebug() << "PageManager holds "<< pageCount() << " pages in the range: " << startPage() <<
+        "-" << lastPage() << endl;
+    kdDebug() << "  The height of the doc (in pt) is: " << pageManager()->
+        bottomOfPage(lastPage()) << endl;
 }
 #endif
 

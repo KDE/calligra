@@ -249,7 +249,7 @@ int KWViewModePreview::leftSpacing()
         else
             pagesPerRow = m_pagesPerRow;
 
-        int pagesWidth = ( m_spacing + ( m_doc->paperWidth(1) + m_spacing ) * pagesPerRow );
+        int pagesWidth = ( m_spacing + ( m_doc->paperWidth(m_doc->startPage()) + m_spacing ) * pagesPerRow );
         if ( pagesWidth < canvas()->visibleWidth() )
             return ( m_spacing + ( canvas()->visibleWidth() / 2 ) - ( pagesWidth / 2 ) );
     }
@@ -260,7 +260,7 @@ int KWViewModePreview::topSpacing()
 {
     if ( canvas() )
     {
-        int pagesHeight = ( m_spacing + ( m_doc->paperHeight(1) + m_spacing ) * numRows() );
+        int pagesHeight = ( m_spacing + ( m_doc->paperHeight(m_doc->startPage()) + m_spacing ) * numRows() );
         if ( pagesHeight < canvas()->visibleHeight() )
             return ( m_spacing + ( canvas()->visibleHeight() / 2 ) - ( pagesHeight / 2 ) );
     }
@@ -286,16 +286,22 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
     // Can't use nPoint.y() / m_doc->paperHeight() since this would be a rounding problem
     double unzoomedY = m_doc->unzoomItY( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
+    if( !page) {
+        kdWarning(31001) << "KWViewModePreview::normalToView request for convertion out of te document! Check your input data.. ("<< nPoint << ")" << endl;
+        return QPoint(0,0);
+    }
     double yInPagePt = unzoomedY - page->offsetInDocument();// and rest
     int row = (page->pageNumber() - m_doc->startPage()) / m_pagesPerRow;
     int col = (page->pageNumber() - m_doc->startPage()) % m_pagesPerRow;
     /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint.x() << "," << nPoint.y()
                 << " unzoomedY=" << unzoomedY
-                << " ptPaperHeight=" << m_doc->ptPaperHeight()
+                << " ptPaperHeight=" << m_doc->ptPaperHeight(page->pageNumber())
                 << " page=" << page->pageNumber() << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
-    return QPoint( leftSpacing() + col * ( m_doc->paperWidth(1) + m_spacing ) + nPoint.x(),
-                   topSpacing() + row * ( m_doc->paperHeight(1) + m_spacing ) + m_doc->zoomItY( yInPagePt ) );
+    return QPoint( leftSpacing() + col * ( m_doc->paperWidth(page->pageNumber()) +
+                m_spacing ) + nPoint.x(),
+            topSpacing() + row * ( m_doc->paperHeight(page->pageNumber()) +
+                m_spacing ) + m_doc->zoomItY( yInPagePt ) );
 }
 
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
@@ -411,10 +417,9 @@ QSize KWViewModeText::contentsSize()
     // The width is the one from the text, so that the placement of tabs makes a bit of sense, etc.
     // The minimum height is the one of a normal page though.
 
-    int width = /*m_doc->paperWidth()*/
-        m_doc->layoutUnitToPixelX( m_textFrameSet->textDocument()->width() );
+    int width = m_doc->layoutUnitToPixelX( m_textFrameSet->textDocument()->width() );
 
-    int height = QMAX((int)m_doc->paperHeight(1),
+    int height = QMAX((int)m_doc->paperHeight(m_doc->startPage()),
                       m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) );
     //kdDebug() << "KWViewModeText::contentsSize " << width << "x" << height << endl;
     return QSize( width, height );

@@ -118,6 +118,8 @@ void KWFrameList::updateAfterMove(int oldPageNum) {
 
 void KWFrameList::update() {
     int pageNumber = m_doc->pageManager()->pageNumber(m_frame);
+    if(pageNumber == -1)
+        return;
     updateZOrderFor(m_doc->framesInPage( pageNumber, false ));
 }
 

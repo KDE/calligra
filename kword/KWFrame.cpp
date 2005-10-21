@@ -123,9 +123,13 @@ void KWFrame::setBackgroundColor( const QBrush &_color )
 int KWFrame::pageNumber() const
 {
     Q_ASSERT( m_frameSet );
-    if ( !m_frameSet ) {
+    if( !m_frameSet ) {
         kdDebug() << k_funcinfo << this << " has no frameset!" << endl;
         return 0;
+    }
+    if( !m_frameSet->pageManager() ) {
+        kdWarning() << k_funcinfo << this << " is not a frame that is in use; misses a pageManager!" << endl;
+        return -1;
     }
     return frameSet()->pageManager()->pageNumber(this);
 }
