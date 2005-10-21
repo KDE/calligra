@@ -2732,6 +2732,38 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     viewportScroll( keyev->key() == Qt::Key_PageUp );
                 }
+                // Activate this code (and in focusNextPreviousChild() to allow Shift+Tab
+                // out of document window.  Disabled because it conflicts with Shift+Tab inside a table.
+                // else if ( keyev->key() == Qt::Key_BackTab )
+                //    return FALSE;
+                else if ( keyev->key() == KGlobalSettings::contextMenuKey() ) {
+                    // The popups are not available in readonly mode, since the GUI isn't built...
+                    if(!m_doc->isReadWrite()) return TRUE;
+                    if (m_mouseMode != MM_EDIT) return TRUE;
+                    QPoint p = mapToGlobal(pos()) + QPoint(50, 50);
+                    if ( viewMode()->type()=="ModeText")
+                        m_gui->getView()->openPopupMenuInsideFrame( m_doc->frameSet( 0 )->frame(0), p );
+                    else {
+                        KWFrame* f;
+                        if (m_currentFrameSetEdit) {
+                            f = m_currentFrameSetEdit->currentFrame();
+                            if (f) {
+                                if (keyev->state() == ControlButton)
+                                    m_gui->getView()->openPopupMenuEditFrame( p );
+                                else
+                                    m_gui->getView()->openPopupMenuInsideFrame( f, p );
+                            } else
+                                m_gui->getView()->openPopupMenuChangeAction( p );
+                        } else {
+                            f = m_doc->getFirstSelectedFrame();
+                            if ((f && f->isSelected()) || (keyev->state() == ControlButton))
+                                m_gui->getView()->openPopupMenuEditFrame( p );
+                            else
+                                m_gui->getView()->openPopupMenuChangeAction( p );
+                        }
+                    }
+                    return TRUE;
+                }
                 else if ( keyev->key() == Qt::Key_Escape  )
                 {
                     if ( m_mouseMode != MM_EDIT )
@@ -2849,9 +2881,12 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
     return QScrollView::eventFilter( o, e );
 }
 
-bool KWCanvas::focusNextPrevChild( bool )
+bool KWCanvas::focusNextPrevChild( bool next)
 {
     return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
+    // Don't allow to go out of the canvas widget by pressing Tab, but do allow Shift+Tab.
+    // if (next) return TRUE;
+    // return QWidget::focusNextPrevChild( next );
 }
 
 void KWCanvas::updateCurrentFormat()

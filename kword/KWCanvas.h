@@ -84,7 +84,7 @@ public:
 
     void print( QPainter *painter, KPrinter *printer );
     bool eventFilter( QObject *o, QEvent *e );
-    bool focusNextPrevChild( bool );
+    bool focusNextPrevChild( bool next);
 
     /**
     * set frame border. Sets frame border to newBorder, or to 0 if on==false.
