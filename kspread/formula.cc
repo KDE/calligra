@@ -385,6 +385,7 @@ Formula::Formula()
 {
   d = new Private;
   d->cell = 0;
+  d->sheet = 0;
   clear();
 }
 

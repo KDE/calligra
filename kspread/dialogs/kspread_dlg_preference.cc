@@ -58,7 +58,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  QVBox *page2=addVBoxPage(i18n("Locale Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
+  QVBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
  _localePage=new parameterLocale(parent,page2 );
 
   QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
@@ -138,24 +138,24 @@ parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
 {
     m_pView = _view;
     m_bUpdateLocale=false;
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Parameters"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
 
   KLocale* locale=_view->doc()->locale();
 
   m_language=new QLabel( tmpQGroupBox,"label");
   m_language->setText( i18n("Language: %1").arg( locale->language() ));
   m_number=new QLabel( tmpQGroupBox,"label6");
-  m_number->setText( i18n("Number: %1").arg( locale->formatNumber(12.55) ));
+  m_number->setText( i18n("Default Number Format: %1").arg( locale->formatNumber(12.55) ));
   m_date=new QLabel( tmpQGroupBox,"label1");
-  m_date->setText( i18n("Date: %1").arg( locale->formatDate(QDate(2000,10,23)) ));
+  m_date->setText( i18n("Long Date Format: %1").arg( locale->formatDate( QDate::currentDate() )));
   m_shortDate=new QLabel( tmpQGroupBox,"label5");
-  m_shortDate->setText( i18n("Short date: %1").arg( locale->formatDate(QDate(2000,10,23),true) ));
+  m_shortDate->setText( i18n("Short Date Format: %1").arg( locale->formatDate( QDate::currentDate() ,true) ));
   m_time=new QLabel( tmpQGroupBox,"label2");
-  m_time->setText( i18n("Time: %1").arg( locale->formatTime(QTime(15,10,53)) ));
+  m_time->setText( i18n("Time Format: %1").arg( locale->formatTime( QTime::currentTime() ) ));
   m_money=new QLabel( tmpQGroupBox,"label3");
-  m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
+  m_money->setText( i18n("Currency Format: %1").arg( locale->formatMoney(12.55) ));
 
-  m_updateButton=new QPushButton ( i18n("&Update to Locale System"), tmpQGroupBox);
+  m_updateButton=new QPushButton ( i18n("&Update Locale Settings"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
 
@@ -196,7 +196,7 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
   bool statusBar=true;
   m_oldBackupFile = true;
 
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Configuration"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
 
   config = KSpreadFactory::global()->config();
   int _page=1;
@@ -225,35 +225,35 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
 
   nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
   nbRecentFile->setRange(1, 20, 1);
-  nbRecentFile->setLabel(i18n("&Number of recent files:"));
+  nbRecentFile->setLabel(i18n("&Number of files to show in Recent Files list:"));
 
   autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
   autoSaveDelay->setRange(0, 60, 1);
-  autoSaveDelay->setLabel(i18n("Au&tosave (min):"));
-  autoSaveDelay->setSpecialValueText(i18n("No autosave"));
+  autoSaveDelay->setLabel(i18n("Au&tosave Delay (minutes):"));
+  autoSaveDelay->setSpecialValueText(i18n("Do not save automatically"));
   autoSaveDelay->setSuffix(i18n("min"));
 
-  m_createBackupFile = new QCheckBox( i18n("Create backup file"), tmpQGroupBox );
+  m_createBackupFile = new QCheckBox( i18n("Create Backup Files"), tmpQGroupBox );
   m_createBackupFile->setChecked( m_oldBackupFile );
 
-  showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
+  showVScrollBar=new QCheckBox(i18n("Show &Vertical Scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
-  showHScrollBar=new QCheckBox(i18n("Show &horizontal scrollbar"),tmpQGroupBox);
+  showHScrollBar=new QCheckBox(i18n("Show &Horizontal Scrollbar"),tmpQGroupBox);
   showHScrollBar->setChecked(horizontal);
 
 
-  showColHeader=new QCheckBox(i18n("Show c&olumn header"),tmpQGroupBox);
+  showColHeader=new QCheckBox(i18n("Show C&olumn Header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
-  showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
+  showRowHeader=new QCheckBox(i18n("Show &Row Header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
 
-  showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);
+  showTabBar =new QCheckBox(i18n("Show Ta&bs"),tmpQGroupBox);
   showTabBar->setChecked(tabbar);
 
-  showFormulaBar =new QCheckBox(i18n("Sho&w formula toolbar"),tmpQGroupBox);
+  showFormulaBar =new QCheckBox(i18n("Sho&w Formula toolbar"),tmpQGroupBox);
   showFormulaBar->setChecked(formulaBar);
 
-  showStatusBar =new QCheckBox(i18n("Show stat&usbar"),tmpQGroupBox);
+  showStatusBar =new QCheckBox(i18n("Show Stat&usbar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
 }
 

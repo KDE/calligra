@@ -1796,8 +1796,8 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
                        cellRef, paintBordersRight, paintBordersBottom, paintBordersLeft,
       paintBordersTop, rightPen, bottomPen, leftPen, topPen, false ); */
 
-      KSpreadCell::BorderSides highlightBorder=KSpreadCell::Border_None;
-      QPen highlightPen;
+/*      KSpreadCell::BorderSides highlightBorder=KSpreadCell::Border_None;
+      QPen highlightPen;*/
 
       cell->paintCell(viewRegion,painter,view,dblCurrentCellPos,cellRef,paintBorder,
 		      rightPen,bottomPen,leftPen,topPen,false);
