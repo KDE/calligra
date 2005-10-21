@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Kexi CSV Data Import
+Name[cy]=Mewnforio Data CSV i Kexi
 Name[da]=Kexi CSV dataimport
 Name[eo]=CSV-datum-importado por Kexi
 Name[es]=Importar datos CSV en Kexi

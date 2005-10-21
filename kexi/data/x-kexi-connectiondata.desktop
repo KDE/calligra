@@ -5,6 +5,7 @@ MimeType=application/x-kexi-connectiondata
 Icon=kexi_connectiondata
 Patterns=*.kexic
 Comment=Data for Database Server Connection
+Comment[cy]=Data ar gyfer Cysylltiad Gweinydd Cronfa Ddata
 Comment[eo]=Datumo por konekto al datumbaza servilo
 Comment[es]=Datos para la conexión con el servidor de bases de datos
 Comment[fr]=Données de connexion au serveur de bases de données

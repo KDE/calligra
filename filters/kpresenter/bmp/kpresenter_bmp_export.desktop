@@ -2,6 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter BMP Export Filter
+Name[cy]=Hidlen Allforio BMP KPresenter
+Name[pt]=Filtro de Exportação de BMP para o KPresenter
+Name[pt_BR]=Filtro de Exportação de BMP para o KPresenter
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-bmp
 X-KDE-Weight=1

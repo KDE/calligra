@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi Report Widgets
+Name[cy]=Celfigion Adroddiad i Kexi
 Name[da]=Kexi Rapportkontroller
 Name[de]=Kexi Bericht-Elemente
 Name[el]=Γραφικά συστατικά αναφοράς Kexi

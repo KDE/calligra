@@ -6,6 +6,7 @@ Icon=empty
 Patterns=
 Comment=SQLite3 Database File
 Comment[br]=Restr stlennvon SQLite3
+Comment[cy]=Ffeil Gronfa DdataSQLite3
 Comment[da]=SQLite3 databasefil
 Comment[de]=SQLite3-Datenbankdatei
 Comment[el]=Αρχείο βάσης δεδομένων SQLite3

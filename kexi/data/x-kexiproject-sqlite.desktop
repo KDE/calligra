@@ -6,6 +6,7 @@ Hidden=true
 Icon=kexiproject_sqlite
 Patterns=
 Comment=Kexi Database File-Based Project
+Comment[cy]=Cywaith Ffeil ar gyfer Cronfa Ddata Kexi
 Comment[da]=Kexi database filbaseret projekt
 Comment[de]=Kexi-Datenbankprojekt
 Comment[el]=Έργο Kexi βάσης δεδομένων βασισμένη σε αρχείο

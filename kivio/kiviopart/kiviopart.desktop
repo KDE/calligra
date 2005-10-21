@@ -36,6 +36,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kivio
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
+GenericName[cy]=Siart Llif & Diagram
 GenericName[da]=Flowdiagrammer & diagrammer
 GenericName[de]=Flussdiagramme und Statistiken
 GenericName[el]=Διάγραμμα ροής & απλό διάγραμμα

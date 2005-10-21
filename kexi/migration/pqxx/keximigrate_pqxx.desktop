@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=PostgreSQL
 Name[xx]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
+Comment[cy]=Gyrrydd Mudo PostgreSQL ar gyfer Kexi
 Comment[da]=PostgreSQL Migrationsdriver for Kexi
 Comment[de]=PostgreSQL-Migrationstreiber für Kexi
 Comment[el]=Οδηγός μετάβασης PostgreSQL του Kexi
