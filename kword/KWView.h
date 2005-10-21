@@ -453,6 +453,9 @@ public slots:
 
     void embeddedStoreInternal();
 
+    void goToDocumentStructure();
+    void goToDocument();
+
     void addWordToDictionary();
 
     void deleteFrameSet();
@@ -739,6 +742,9 @@ private:
     KAction *actionAddWordToPersonalDictionary;
 
     KToggleAction *actionInsertDirectCursor;
+
+    KAction *actionGoToDocumentStructure;
+    KAction *actionGoToDocument;
 
 
     KoCharSelectDia *m_specialCharDlg;

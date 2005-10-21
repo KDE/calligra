@@ -1257,6 +1257,13 @@ void KWView::setupActions()
                                             this, SLOT( embeddedStoreInternal() ),
                                             actionCollection(), "embedded_store_internal" );
 
+    actionGoToDocumentStructure=new KAction( i18n( "Go to Document Structure" ), KShortcut("Alt+1"),
+                                             this, SLOT( goToDocumentStructure() ),
+                                             actionCollection(), "goto_document_structure" );
+    actionGoToDocument=new KAction( i18n( "Go to Document" ), KShortcut("Alt+2"),
+                                    this, SLOT( goToDocument() ),
+                                    actionCollection(), "goto_document" );
+
     // For RMB inside a cell, see KWTableFrameSetEdit::showPopup
     // This isn't a dynamic list; it's only plugged/unplugged depending on the context.
     // If you change the contents of that list, check ~KWView.
@@ -7384,6 +7391,23 @@ void KWView::embeddedStoreInternal()
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(frame->frameSet());
     part->storeInternal();
+}
+
+void KWView::goToDocumentStructure()
+{
+    KWDocStruct* docStruct = getGUI()->getDocStruct();
+    if (!docStruct) return;
+    KWDocStructTree* docStructTree = docStruct->getDocStructTree();
+    if (!docStructTree) return;
+    if (!docStructTree->isVisible()) return;
+    docStructTree->setFocus();
+}
+
+void KWView::goToDocument()
+{
+    KWCanvas* canvas = getGUI()->canvasWidget();
+    if (!canvas) return;
+    canvas->setFocus();
 }
 
 void KWView::deleteFrameSet( KWFrameSet * frameset)
