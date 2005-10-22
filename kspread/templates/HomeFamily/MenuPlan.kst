@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE spreadsheet PUBLIC "-//KDE//DTD kspread 1.2//EN" "http://www.koffice.org/DTD/kspread-1.2.dtd">
 <spreadsheet xmlns="http://www.koffice.org/DTD/kspread" mime="application/x-kspread" syntaxVersion="1" editor="KSpread" >
- <locale positivePrefixCurrencySymbol="True" negativeMonetarySignPosition="1" negativePrefixCurrencySymbol="True" fracDigits="2" thousandsSeparator="," dateFormat="%A %d %B %Y" timeFormat="%I:%M:%S %p" monetaryDecimalSymbol="." weekStartsMonday="False" currencySymbol="$" negativeSign="-" positiveSign="" positiveMonetarySignPosition="1" decimalSymbol="." monetaryThousandsSeparator="," dateFormatShort="%m/%d/%y" />
  <defaults row-height="13" col-width="65" />
  <styles>
   <style type="0" name="Default" >
