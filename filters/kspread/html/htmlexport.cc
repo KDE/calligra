@@ -34,6 +34,7 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_doc.h>
+#include <kspread_util.h>
 
 typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "kofficefilters" ) )
@@ -273,9 +274,24 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
       QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
             // FIXME: some formatting seems to be missing with cell->text(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
+            bool link = false;
+
+            if ( !cell->link().isEmpty() )
+            {
+                if ( localReferenceAnchor(cell->link()) )
+                {
+                    text = cell->text();
+                }
+                else
+                {
+                    text = " <A href=\"" + cell->link() + "\">" + cell->text() + "</A>";
+                    link = true;
+                }
+            }
+            else
+                text=cell->strOutText();
 
 
-      text=cell->strOutText();
 #if 0
             switch( cell->content() ) {
       case KSpreadCell::Text:
@@ -341,7 +357,7 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
       if( text.at(0) == '!' ) {
               // this is supposed to be markup, just remove the '!':
         text = text.right(text.length()-1);
-      } else {
+      } else if(!link) {
               // Escape HTML characters.
         text.replace ('&' , strAmp)
             .replace ('<' , strLt)
