@@ -106,7 +106,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
 
     doc -> undoAdapter() -> setUndo(false);
 
-    KisImageSP image = new KisImage(doc, imageWidth, imageHeight, cs, imageName);
+    KisImageSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
 
     if (image == 0) {
         return KoFilter::CreationError;
