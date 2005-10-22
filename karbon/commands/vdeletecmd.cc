@@ -60,10 +60,13 @@ VDeleteCmd::execute()
 void
 VDeleteCmd::unexecute()
 {
+	document()->selection()->clear();
+
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( VObject::normal );
+		itr.current()->setState( VObject::selected );
+		document()->selection()->append( itr.current() );
 	}
 
 	setSuccess( false );

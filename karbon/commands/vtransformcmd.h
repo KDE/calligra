@@ -21,6 +21,7 @@
 #ifndef __VTRANSFORMCMD_H__
 #define __VTRANSFORMCMD_H__
 
+#include <qvaluevector.h>
 #include "vcommand.h"
 #include "vgroup.h"
 #include <koffice_export.h>
@@ -106,6 +107,25 @@ protected:
 	VSegment *m_segment;
 	VSegment *m_segmenttwo;
 	bool	  m_firstControl;
+};
+
+class KARBONCOMMAND_EXPORT VTranslatePointCmd : public VCommand
+{
+public:
+	VTranslatePointCmd( VDocument *doc, double d1, double d2 );
+	virtual ~VTranslatePointCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+
+	virtual void visitVSubpath( VSubpath& path );
+
+protected:
+	void translatePoints();
+
+	QWMatrix m_mat;
+	QMap<VSegment*, QValueVector<int> > m_segPnts;
+	VObjectList m_subpaths;
 };
 
 #endif

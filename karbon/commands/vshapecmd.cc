@@ -37,7 +37,11 @@ VShapeCmd::execute()
 		return;
 
 	if( m_shape->state() == VObject::deleted )
+	{
+		document()->selection()->clear();
 		m_shape->setState( VObject::normal );
+		document()->selection()->append( m_shape );
+	}
 	else
 	{
 		m_shape->setState( VObject::normal );

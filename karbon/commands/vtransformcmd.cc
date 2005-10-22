@@ -76,10 +76,6 @@ VTransformCmd::~VTransformCmd()
 void
 VTransformCmd::execute()
 {
-	if( !m_selection )
-		m_selection = ( document() && document()->selection() )
-			? document()->selection()->clone()
-			: new VSelection();
 	VObjectListIterator itr( m_selection->objects() );
 
 	if( m_duplicate )
@@ -98,11 +94,15 @@ VTransformCmd::execute()
 	}
 	else
 	{
+		// clear selection ...
+		document()->selection()->clear();
 		// transform objects
 		for( ; itr.current() ; ++itr )
 		{
 			visit( *itr.current() );
 		}
+		// ... and re-add all objects incase we are re-executing the command
+		document()->selection()->append( m_selection->objects() );
 	}
 
 	setSuccess( true );
@@ -133,13 +133,13 @@ VTransformCmd::unexecute()
 	}
 	else
 	{
+		document()->selection()->clear();
 		// move objects back to original position
 		visit( *m_selection );
+		document()->selection()->append( m_selection->objects() );
 	}
 	// reset
 	m_mat = m_mat.invert();
-	delete( m_selection );
-	m_selection = 0L;
 	setSuccess( false );
 }
 
@@ -177,8 +177,7 @@ VTransformCmd::visitVSubpath( VSubpath& path )
 	{
 		for( unsigned short i = 0; i < segment->degree(); ++i )
 		{
-			if( segment->pointIsSelected( i ) )
-				segment->setPoint( i, segment->point( i ).transform( m_mat ) );
+			segment->setPoint( i, segment->point( i ).transform( m_mat ) );
 		}
 
 		segment = segment->next();
@@ -350,3 +349,95 @@ VTranslateBezierCmd::unexecute()
 	setSuccess( false );
 }
 
+VTranslatePointCmd::VTranslatePointCmd( VDocument *doc, double d1, double d2 )
+		: VCommand( doc, i18n( "Translate Points" ), "translate" )
+{
+	m_mat.translate( d1, d2 );
+
+	if( document() && document()->selection() )
+	{
+		VObjectListIterator itr( document()->selection()->objects() );
+
+		// collect all points to translate
+		for( ; itr.current() ; ++itr )
+			visit( *itr.current() );
+	
+		if( m_segPnts.size() > 1 || ( m_segPnts.size() == 0 && m_segPnts.begin().data().size() > 1 ) )
+			setName( i18n( "Translate Point" ) );
+	}
+}
+
+VTranslatePointCmd::~VTranslatePointCmd()
+{
+}
+
+void
+VTranslatePointCmd::execute()
+{
+	translatePoints();
+	setSuccess( true );
+}
+
+void
+VTranslatePointCmd::unexecute()
+{
+	m_mat = m_mat.invert();
+	translatePoints();
+	m_mat = m_mat.invert();
+	setSuccess( false );
+}
+
+void
+VTranslatePointCmd::visitVSubpath( VSubpath& path )
+{
+	if( path.state() == VObject::hidden ||
+		path.state() == VObject::normal_locked ||
+		path.state() == VObject::hidden_locked )
+		return;
+
+	VSegment* segment = path.first();
+
+	uint segCnt = m_segPnts.size();
+
+	// save indices of selected points for all segments
+	while( segment )
+	{
+		QValueVector<int> pnts;
+
+		for( unsigned short i = 0; i < segment->degree(); ++i )
+		{
+			if( segment->pointIsSelected( i ) )
+				pnts.push_back( i );
+		}
+		if( pnts.size() )
+			m_segPnts[segment] = pnts;
+
+		segment = segment->next();
+	}
+
+	// save subpaths which have selected points
+	if( segCnt != m_segPnts.size() )
+		m_subpaths.append( &path );
+}
+
+void
+VTranslatePointCmd::translatePoints()
+{
+	QMap<VSegment*, QValueVector<int> >::iterator it, et = m_segPnts.end();
+
+	// iterate over the segments and transform all selected points
+	for( it = m_segPnts.begin(); it != et; ++it )
+	{
+		VSegment *segment = it.key();
+		QValueVector<int> &pnts = it.data();
+
+		int pntCnt = pnts.size();
+		for( int i = 0; i < pntCnt; ++i )
+			segment->setPoint( pnts[i], segment->point( pnts[i] ).transform( m_mat ) );
+	}
+
+	// invalidate all changed subpaths
+	VObjectListIterator itr( m_subpaths );
+	for( ; itr.current(); ++itr )
+		itr.current()->invalidateBoundingBox();
+}

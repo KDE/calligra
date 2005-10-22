@@ -38,6 +38,8 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
+	virtual bool changesSelection() const { return true; }
+
 protected:
 	VSelection	*m_selection;
 };

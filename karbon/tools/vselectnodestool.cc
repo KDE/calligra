@@ -227,11 +227,10 @@ VSelectNodesTool::mouseDragRelease()
 		}
 		else
 		{
-			cmd = new VTranslateCmd(
+			cmd = new VTranslatePointCmd(
 					&view()->part()->document(),
 					qRound( ( last().x() - first().x() ) ),
-					qRound( ( last().y() - first().y() ) ),
-					altPressed() );
+					qRound( ( last().y() - first().y() ) ) );
 		}
 		view()->part()->addCommand( cmd, true );
 		m_state = normal;
