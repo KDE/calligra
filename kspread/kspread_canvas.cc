@@ -54,6 +54,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <krun.h>
+#include <kmimetype.h>
 
 #include "kspread_doc.h"
 #include "kspread_editors.h"
@@ -1289,20 +1290,28 @@ void KSpreadCanvas::processLeftClickAnchor()
     bool isLocalLink = (d->anchor.find("file:") == 0);
     if ( !isRefLink )
     {
-        QString question = i18n("Do you want to open this link to '%1'?\n").arg(d->anchor);
-        if ( isLocalLink )
-        {
-            question += i18n("Note that opening a link to a local file may "
-                             "compromise your system's security.");
-        }
+	QString type=KMimeType::findByURL(d->anchor, 0, isLocalLink)->name();
 
-        // this will also start local programs, so adding a "don't warn again"
-        // checkbox will probably be too dangerous
-        int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
-        if ( choice == KMessageBox::Yes )
-        {
-            (void) new KRun( d->anchor );
-        }
+	if ( KRun::isExecutableFile( d->anchor , type ) )
+	{
+        	//QString question = i18n("Do you want to open this link to '%1'?\n").arg(d->anchor);
+
+          	//question += i18n("Note that opening a link to a local file may "
+                          //   "compromise your system's security.");
+
+		QString question = i18n("This link points to the program or script '%1'.\n"
+					"Malicious programs can harm your computer.  Are you sure that you want to run this program?").arg(d->anchor);
+        	// this will also start local programs, so adding a "don't warn again"
+        	// checkbox will probably be too dangerous
+        	int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
+        	if ( choice != KMessageBox::Yes )
+        	{
+			return;
+            		//(void) new KRun( d->anchor );
+        	}
+	}
+
+	new KRun(d->anchor);
     }
     else
     {
