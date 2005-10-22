@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KPresenter XPM Export Filter
+X-KDE-Import=application/x-kpresenter
+X-KDE-Export=image/x-xpm
+X-KDE-Weight=1
+X-KDE-Library=libkpresenterxpmexport
+ServiceTypes=KOfficeFilter
