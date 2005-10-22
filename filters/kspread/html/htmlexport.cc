@@ -34,6 +34,7 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_doc.h>
+#include <kspread_util.h>
 
 typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "kofficefilters" ) )
@@ -228,170 +229,183 @@ void HTMLExport::closePage( QString &str )
 
 void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRow, int iMaxUsedColumn )
 {
-  QString emptyLines;
+    QString emptyLines;
 
-        // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
-      // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
-  int iMaxRow = sheet->maxRow();
+    // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
+    // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
+    int iMaxRow = sheet->maxRow();
 
-  if( !m_dialog->separateFiles() )
-    str += "<a name=\"" + sheet->sheetName().lower().stripWhiteSpace() + "\">\n";
+    if( !m_dialog->separateFiles() )
+        str += "<a name=\"" + sheet->sheetName().lower().stripWhiteSpace() + "\">\n";
 
-  str += ("<h1>" + sheet->sheetName() + "</h1><br>\n");
+    str += ("<h1>" + sheet->sheetName() + "</h1><br>\n");
 
-      // this is just a bad approximation which fails for documents with less than 50 rows, but
-      // we don't need any progress stuff there anyway :) (Werner)
-  int value=0;
-  int step=iMaxRow > 50 ? iMaxRow/50 : 1;
-  int i=1;
+    // this is just a bad approximation which fails for documents with less than 50 rows, but
+    // we don't need any progress stuff there anyway :) (Werner)
+    int value=0;
+    int step=iMaxRow > 50 ? iMaxRow/50 : 1;
+    int i=1;
 
-  str += "<" + html_table_tag + html_table_options.arg( m_dialog->useBorders() ? "1" : "0" ).arg( m_dialog->pixelsBetweenCells() ) +
-      QString("dir=\"%1\">\n").arg(sheet->isRightToLeft()?"rtl":"ltr");
+    str += "<" + html_table_tag + html_table_options.arg( m_dialog->useBorders() ? "1" : "0" ).arg( m_dialog->pixelsBetweenCells() ) +
+           QString("dir=\"%1\">\n").arg(sheet->isRightToLeft()?"rtl":"ltr");
 
-  unsigned int nonempty_cells_prev=0;
+    unsigned int nonempty_cells_prev=0;
 
-  for ( int currentrow = 1 ; currentrow <= iMaxUsedRow ; ++currentrow, ++i )
-  {
-    if(i>step) {
-      value+=2;
-      emit sigProgress(value);
-      i=0;
-    }
-
-    QString separators;
-    QString line;
-    unsigned int nonempty_cells=0;
-    unsigned int colspan_cells=0;
-
-    for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
+    for ( int currentrow = 1 ; currentrow <= iMaxUsedRow ; ++currentrow, ++i )
     {
-      KSpreadCell * cell = sheet->cellAt( currentcolumn, currentrow, false );
-      colspan_cells=cell->extraXCells();
-      if (cell->needsPrinting())
-        nonempty_cells++;
-      QString text;
-      QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
+        if(i>step) {
+            value+=2;
+            emit sigProgress(value);
+            i=0;
+        }
+
+        QString separators;
+        QString line;
+        unsigned int nonempty_cells=0;
+        unsigned int colspan_cells=0;
+
+        for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
+        {
+            KSpreadCell * cell = sheet->cellAt( currentcolumn, currentrow, false );
+            colspan_cells=cell->extraXCells();
+            if (cell->needsPrinting())
+                nonempty_cells++;
+            QString text;
+            QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
             // FIXME: some formatting seems to be missing with cell->text(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
+            bool link = false;
 
-
-      text=cell->strOutText();
+            if ( !cell->link().isEmpty() )
+            {
+                if ( localReferenceAnchor(cell->link()) )
+                {
+                    text = cell->text();
+                }
+                else
+                {
+                    text = " <A href=\"" + cell->link() + "\">" + cell->text() + "</A>";
+                    link = true;
+                }
+            }
+            else
+                text=cell->strOutText();
 #if 0
             switch( cell->content() ) {
-      case KSpreadCell::Text:
-                  text = cell->text();
-                  break;
-      case KSpreadCell::RichText:
-      case KSpreadCell::VisualFormula:
-                  text = cell->text(); // untested
-                  break;
-      case KSpreadCell::Formula:
-                  cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
-                  text = cell->valueString();
-                  break;
-    }
+            case KSpreadCell::Text:
+                text = cell->text();
+                break;
+            case KSpreadCell::RichText:
+            case KSpreadCell::VisualFormula:
+                text = cell->text(); // untested
+                break;
+            case KSpreadCell::Formula:
+                cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
+                text = cell->valueString();
+                break;
+            }
             text = cell->prefix(currentrow, currentcolumn) + " " + text + " "
-                 + cell->postfix(currentrow, currentcolumn);
+                   + cell->postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
 	    if (text.isRightToLeft() != sheet->isRightToLeft())
-        line += QString(" dir=\"%1\" ").arg(text.isRightToLeft()?"rtl":"ltr");
-      if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
-        line += " bgcolor=\"" + bgcolor.name() + "\"";
+                line += QString(" dir=\"%1\" ").arg(text.isRightToLeft()?"rtl":"ltr");
+            if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
+                line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-      switch((KSpreadCell::Align)cell->defineAlignX())
-      {
-        case KSpreadCell::Left:
-          line+=" align=\"" + html_left +"\"";
-          break;
-        case KSpreadCell::Right:
-          line+=" align=\"" + html_right +"\"";
-          break;
-        case KSpreadCell::Center:
-          line+=" align=\"" + html_center +"\"";
-          break;
-        case KSpreadCell::Undefined:
-          break;
-      }
-      switch((KSpreadCell::AlignY)cell-> alignY(currentrow, currentcolumn))
-      {
-        case KSpreadCell::Top:
-          line+=" valign=\"" + html_top +"\"";
-          break;
-        case KSpreadCell::Middle:
-          line+=" valign=\"" + html_middle +"\"";
-          break;
-        case KSpreadCell::Bottom:
-          line+=" valign=\"" + html_bottom +"\"";
-          break;
-        case KSpreadCell::UndefinedY:
-          break;
-      }
-      line+=" width=\""+QString::number(cell->width())+"\"";
-      line+=" height=\""+QString::number(cell->height())+"\"";
+            switch((KSpreadCell::Align)cell->defineAlignX())
+            {
+            case KSpreadCell::Left:
+                line+=" align=\"" + html_left +"\"";
+                break;
+            case KSpreadCell::Right:
+                line+=" align=\"" + html_right +"\"";
+                break;
+            case KSpreadCell::Center:
+                line+=" align=\"" + html_center +"\"";
+                break;
+            case KSpreadCell::Undefined:
+                break;
+            }
+            switch((KSpreadCell::AlignY)cell-> alignY(currentrow, currentcolumn))
+            {
+            case KSpreadCell::Top:
+                line+=" valign=\"" + html_top +"\"";
+                break;
+            case KSpreadCell::Middle:
+                line+=" valign=\"" + html_middle +"\"";
+                break;
+            case KSpreadCell::Bottom:
+                line+=" valign=\"" + html_bottom +"\"";
+                break;
+            case KSpreadCell::UndefinedY:
+                break;
+            }
+            line+=" width=\""+QString::number(cell->width())+"\"";
+            line+=" height=\""+QString::number(cell->height())+"\"";
 
-      if (cell->extraXCells()>0)
-      {
-        QString tmp;
-        int extra_cells=cell->extraXCells();
-        line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
-        currentcolumn += extra_cells;
-      }
-      text = text.stripWhiteSpace();
-      if( text.at(0) == '!' ) {
-              // this is supposed to be markup, just remove the '!':
-        text = text.right(text.length()-1);
-      } else {
-              // Escape HTML characters.
-        text.replace ('&' , strAmp)
-            .replace ('<' , strLt)
-            .replace ('>' , strGt)
-            .replace (' ' , nbsp);
-      }
-      line += ">\n";
+            if (cell->extraXCells()>0)
+            {
+                QString tmp;
+                int extra_cells=cell->extraXCells();
+                line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
+                currentcolumn += extra_cells;
+            }
+            text = text.stripWhiteSpace();
+            if( text.at(0) == '!' ) {
+                // this is supposed to be markup, just remove the '!':
+                text = text.right(text.length()-1);
+            } else if ( !link ) {
+                // Escape HTML characters.
+                text.replace ('&' , strAmp)
+                    .replace ('<' , strLt)
+                    .replace ('>' , strGt)
+                    .replace (' ' , nbsp);
+            }
+            line += ">\n";
 
-      if (cell->textFontBold(currentcolumn,currentrow))
-      {
-        text.insert(0, "<" + html_bold + ">");
-        text.append("</" + html_bold + ">");
-      }
-      if (cell->textFontItalic(currentcolumn,currentrow))
-      {
-        text.insert(0, "<" + html_italic + ">");
-        text.append("</" + html_italic + ">");
-      }
-      if (cell->textFontUnderline(currentcolumn,currentrow))
-      {
-        text.insert(0, "<" + html_underline + ">");
-        text.append("</" + html_underline + ">");
-      }
-      QColor textColor = cell->textColor(currentcolumn,currentrow);
-      if (textColor.isValid() && textColor.name()!="#000000") // change color only for non-default text
-      {
-        text.insert(0, "<font color=\"" + textColor.name() + "\">");
-        text.append("</font>");
-      }
-      line += "  " + text;
-      line += "\n  </" + html_cell_tag + ">\n";
+            if (cell->textFontBold(currentcolumn,currentrow))
+            {
+                text.insert(0, "<" + html_bold + ">");
+                text.append("</" + html_bold + ">");
+            }
+            if (cell->textFontItalic(currentcolumn,currentrow))
+            {
+                text.insert(0, "<" + html_italic + ">");
+                text.append("</" + html_italic + ">");
+            }
+            if (cell->textFontUnderline(currentcolumn,currentrow))
+            {
+                text.insert(0, "<" + html_underline + ">");
+                text.append("</" + html_underline + ">");
+            }
+            QColor textColor = cell->textColor(currentcolumn,currentrow);
+            if (textColor.isValid() && textColor.name()!="#000000") // change color only for non-default text
+            {
+                text.insert(0, "<font color=\"" + textColor.name() + "\">");
+                text.append("</font>");
+            }
+            line += "  " + text;
+            line += "\n  </" + html_cell_tag + ">\n";
+        }
+
+        if (nonempty_cells == 0 && nonempty_cells_prev == 0) {
+            nonempty_cells_prev = nonempty_cells;
+            // skip line if there's more than one empty line
+            continue;
+        } else {
+            nonempty_cells_prev = nonempty_cells;
+            str += emptyLines;
+            str += "<" + html_row_tag + html_row_options + ">\n";
+            str += line;
+            str += "</" + html_row_tag + ">";
+            emptyLines = QString::null;
+            // Append a CR, but in a temp string -> if no other real line,
+            // then those will be dropped
+            emptyLines += "\n";
+        }
     }
-
-    if (nonempty_cells == 0 && nonempty_cells_prev == 0) {
-      nonempty_cells_prev = nonempty_cells;
-	  // skip line if there's more than one empty line
-      continue;
-    } else {
-      nonempty_cells_prev = nonempty_cells;
-      str += emptyLines;
-      str += "<" + html_row_tag + html_row_options + ">\n";
-      str += line;
-      str += "</" + html_row_tag + ">";
-      emptyLines = QString::null;
-          // Append a CR, but in a temp string -> if no other real line,
-          // then those will be dropped
-      emptyLines += "\n";
-    }
-  }
-  str += "\n</" + html_table_tag + ">\n<br>\n";
+    str += "\n</" + html_table_tag + ">\n<br>\n";
 }
 
 void HTMLExport::createSheetSeparator( QString &str )
