@@ -1289,7 +1289,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             drawRubber = false;
             rubber = rubber.normalize();
             rubber.moveBy(diffx(),diffy());
-            m_view->setZoomRect(rubber, m_zoomRubberDraw );
+            if ( m_zoomRubberDraw )
+            {
+                m_view->setZoomRect( m_view->zoomHandler()->unzoomRect( rubber ) );
+            }
+            else
+            {
+                m_view->zoomPlus();
+            }
             m_zoomRubberDraw = false;
         }
     }break;

@@ -66,6 +66,7 @@ class KoPicture;
 class KoParagStyle;
 class KoLineStyleAction;
 class KoLineWidthAction;
+class KoRect;
 
 class KoCharSelectDia;
 class KoTextFormat;
@@ -652,7 +653,12 @@ public:
      */
     void setPageDuration( int _pgNum );
 
-    void setZoomRect( const QRect & rect, bool drawRubber );
+    /**
+     * @brief Zoom the rect
+     *
+     * @param rect The rect which should be zoomed to.
+     */
+    void setZoomRect( const KoRect & rect );
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 
     void closeTextObject();

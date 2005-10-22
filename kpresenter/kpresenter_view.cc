@@ -5214,28 +5214,20 @@ void KPresenterView::viewZoom( const QString &s )
     m_canvas->repaint();
 }
 
-void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
+void KPresenterView::setZoomRect( const KoRect & rect )
 {
-    int zoom = 100;
-    if( drawRubber )
-    {
-        double height = zoomHandler()->resolutionY() * zoomHandler()->unzoomItY( rect.height() );
-        double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
-        zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
-        //zoom before scroll canvas.
-        KoPoint save( zoomHandler()->unzoomPoint(rect.topLeft()) );
-        m_canvas->setUpdatesEnabled( false );
-        viewZoom( QString::number(zoom ) );
-        m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( save ) );
-        m_canvas->setUpdatesEnabled( true );
-    }
-    else
-    {
-        //just click => increase zoom from 25%
-        zoom = zoomHandler()->zoom() + (int)(zoomHandler()->zoom()*0.25);
-        viewZoom( QString::number(zoom ) );
-    }
+    double height = zoomHandler()->resolutionY() * rect.height();
+    double width = zoomHandler()->resolutionX() * rect.width();
+    int zoom = QMIN( qRound( static_cast<double>( m_canvas->visibleRect().height() * 100 ) / height ),
+            qRound( static_cast<double>( m_canvas->visibleRect().width() * 100 ) / width ) );
+
+    m_canvas->setUpdatesEnabled( false );
+    viewZoom( QString::number( zoom ) );
+
+    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft() ) );
+    m_canvas->setUpdatesEnabled( true );
+    m_canvas->repaint();
 }
 
 void KPresenterView::setZoom( int zoom, bool updateViews )
@@ -5737,7 +5729,8 @@ void KPresenterView::zoomEntirePage()
 
 void KPresenterView::zoomPlus()
 {
-    setZoomRect( QRect(0,0,0,0),false);
+    int zoom = zoomHandler()->zoom() + int( zoomHandler()->zoom() * 0.25 );
+    viewZoom( QString::number( zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
@@ -5752,17 +5745,10 @@ int KPresenterView::getZoomEntirePage() const
 
 void KPresenterView::zoomSelectedObject()
 {
-    if(  m_canvas->isOneObjectSelected())
+    if( m_canvas->isOneObjectSelected() )
     {
         KoRect rect = m_canvas->objectRect( false );
-        double height = zoomHandler()->resolutionY() * rect.height();
-        double width = zoomHandler()->resolutionX() * rect.width();
-        int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                         qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
-        viewZoom( QString::number(zoom ) );
-
-        m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
+        setZoomRect( rect );
     }
 }
 
