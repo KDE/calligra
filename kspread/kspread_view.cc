@@ -38,6 +38,7 @@
 #include <qregexp.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
+#include <qsqldatabase.h>
 
 // KDE includes
 #include <dcopclient.h>
@@ -3854,13 +3855,21 @@ void KSpreadView::multipleOperations()
 void KSpreadView::textToColumns()
 {
   d->canvas->closeEditor();
-  if ( d->selectionInfo->selection().width() > 1 )
+
+  QRect area=d->selectionInfo->selection();
+
+  //Only use the first column
+  area.setRight(area.left());
+ 
+/* if ( d->selectionInfo->selection().width() > 1 )
   {
+	//Only use the first column
+	
     KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
     return;
-  }
+  }*/
 
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", d->selectionInfo->selection(), KSpreadCSVDialog::Column );
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", area, KSpreadCSVDialog::Column );
   if( !dialog.cancelled() )
     dialog.exec();
 }
@@ -4286,6 +4295,15 @@ void KSpreadView::insertFromDatabase()
     d->canvas->closeEditor();
 
     QRect rect = d->selectionInfo->selection();
+
+	QStringList str = QSqlDatabase::drivers();
+ 	if ( str.isEmpty() )
+  	{
+    	KMessageBox::error( this, i18n("No database drivers available.  To use this feature you need "
+				"to install the necessary Qt 3 database drivers.") );
+
+		return;
+  	}
 
     KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
     dlg.exec();

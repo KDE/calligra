@@ -426,11 +426,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   QStringList str = QSqlDatabase::drivers();
   m_driver->insertItem("");
   m_driver->insertStringList( str );
-  if ( str.isEmpty() )
-  {
-    KMessageBox::error( this, i18n("No database drivers available; you need "
-                                   "to compile Qt with the necessary drivers.") );
-  }
+ 
 
   helpButton()->hide();
   setNextEnabled(m_database, false);
