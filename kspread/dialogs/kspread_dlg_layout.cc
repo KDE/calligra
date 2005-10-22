@@ -2905,7 +2905,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
         width->setEnabled(false);
 
     grid2->addWidget(width, 1, 1);
-    defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->unit())).arg(dlg->getDoc()->unit()), grp);
+    defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName()), grp);
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2926,7 +2926,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     grid2->addWidget(height, 1, 3);
 
-    defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->unit())).arg(dlg->getDoc()->unit()), grp);
+    defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName()), grp);
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
