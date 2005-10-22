@@ -173,6 +173,11 @@ public:
 QValueList<KSpreadDoc*> DocPrivate::s_docs;
 int DocPrivate::s_docId = 0;
 
+#define deleteLoadingInfo() { \
+        delete d->m_loadingInfo; \
+        d->m_loadingInfo = 0L; \
+}
+
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
@@ -353,7 +358,10 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     if ( ret == KoTemplateChooseDia::Template )
     {
         resetURL();
+        d->m_loadingInfo = new KSPLoadingInfo;
+        d->m_loadingInfo->setLoadTemplate( true );
         bool ok = loadNativeFormat( f );
+        deleteLoadingInfo();
         if ( !ok )
             showLoadingErrorDialog();
         setEmpty();
@@ -908,14 +916,10 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     delete stylesWriter;;
 }
 
-#define deleteLoadingInfo() { \
-        delete d->m_loadingInfo; \
-        d->m_loadingInfo = 0L; \
-}
-
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
-    d->m_loadingInfo = new KSPLoadingInfo;
+    if ( !d->m_loadingInfo )
+        d->m_loadingInfo = new KSPLoadingInfo;
 
     QTime dt;
     dt.start();

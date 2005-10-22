@@ -26,7 +26,7 @@ class KSpreadSheet;
 class KSPLoadingInfo
 {
 public:
-    KSPLoadingInfo() {}
+    KSPLoadingInfo() { m_loadTemplate = false;}
     ~KSPLoadingInfo() {}
     void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.find( word ) != m_areaNamed.end());}
@@ -35,10 +35,18 @@ public:
 
     void addMarkerSelection( KSpreadSheet *sheet, const QPoint & _point ) { m_markerSelection.insert( sheet, _point );}
 
+    void setLoadTemplate( bool _b ) {
+        m_loadTemplate = _b;
+    }
+    bool loadTemplate() const {
+        return m_loadTemplate;
+    }
+
 private:
     QStringList m_areaNamed;
     QMap<QString,QDomElement> m_validationList;
     QMap<KSpreadSheet*, QPoint> m_markerSelection;
+    bool m_loadTemplate;
 };
 
 #endif /* KPRLOADINGINFO_H */

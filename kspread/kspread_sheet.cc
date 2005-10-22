@@ -7769,11 +7769,14 @@ void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainSty
 bool KSpreadSheet::loadXML( const QDomElement& sheet )
 {
     bool ok = false;
-    d->name = sheet.attribute( "name" );
-    if ( d->name.isEmpty() )
+    if ( !doc()->loadingInfo() ||  !doc()->loadingInfo()->loadTemplate() )
     {
-      doc()->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
-      return false;
+        d->name = sheet.attribute( "name" );
+        if ( d->name.isEmpty() )
+        {
+            doc()->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
+            return false;
+        }
     }
 
     bool detectDirection = true;
