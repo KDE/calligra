@@ -7,11 +7,11 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 
 ####### Files
 
-kde_module_LTLIBRARIES = libimageexport.la
+kde_module_LTLIBRARIES = libkpresenterimageexport.la
 
-libimageexport_la_SOURCES = imageexport.cpp
-libimageexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libimageexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la $(KOFFICE_LIBS)
+libkpresenterimageexport_la_SOURCES = imageexport.cpp
+libkpresenterimageexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
+libkpresenterimageexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	imageexport.h
 
