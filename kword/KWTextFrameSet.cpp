@@ -1644,7 +1644,7 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
     parentElem.appendChild( framesetElem );
 
     if ( m_groupmanager ) {
-        framesetElem.setAttribute( "m_groupmanager", m_groupmanager->name() );
+        framesetElem.setAttribute( "grpMgr", m_groupmanager->name() );
 
         KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
         framesetElem.setAttribute( "row", cell->firstRow() );
