@@ -68,7 +68,6 @@
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
-#include <koGuideLines.h>
 #include <koGenStyles.h>
 #include <koFilterManager.h>
 #include <koStore.h>

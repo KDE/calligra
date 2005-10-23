@@ -91,7 +91,6 @@
 #include <koQueryTrader.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
-#include <koGuideLines.h>
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <tkcoloractions.h>
