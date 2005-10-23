@@ -171,6 +171,17 @@ signals:
      */
     void moveGuides( bool state );
 
+private slots:
+    /**
+     * @brief Execute a dialog to set the position of the guide
+     */
+    void slotChangePosition();
+
+    /**
+     * @brief remove all selected guides
+     */
+    void slotRemove();
+
 private:
     /// Strukt holding the data of a guide line
     struct KoGuideLine 
@@ -290,6 +301,9 @@ private:
     bool m_mouseSelected;
     /// true if a guide is inserted at the moment
     bool m_insertGuide;
+    /// popup menu
+    class Popup;
+    Popup * m_popup;
 };
 
 #endif /* KOGUIDES_H */

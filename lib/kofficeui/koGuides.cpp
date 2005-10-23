@@ -20,23 +20,64 @@
 
 #include "koGuides.h"
 
+#include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+
+#include <klocale.h>
+#include <kpopupmenu.h>
 
 #include <koDocument.h>
 #include <koPoint.h>
 #include <koView.h>
 #include <kozoomhandler.h>
 
+#include "koGuideLineDia.h"
+
+class KoGuides::Popup : public KPopupMenu
+{
+public: 
+    Popup( KoGuides * guides )
+    {
+        m_title = insertTitle( i18n( "Guide Line" ) );
+        m_delete = insertItem( i18n( "&Delete" ), guides, SLOT( slotRemove() ) );
+        m_seperator = insertSeparator();
+        m_pos = insertItem( i18n( "&Set Position..." ), guides, SLOT( slotChangePosition() ) );
+    }
+
+    void update( int count )
+    {
+        if ( count == 1 )
+        {
+            changeTitle( m_title, i18n( "Guide Line" ) );
+            setItemVisible( m_seperator, true );
+            setItemVisible( m_pos, true );
+        }
+        else
+        {
+            changeTitle( m_title, i18n( "Guide Lines" ) );
+            setItemVisible( m_seperator, false );
+            setItemVisible( m_pos, false );
+        }
+    }
+private:
+    int m_title;
+    int m_delete;
+    int m_seperator;
+    int m_pos;
+};
+
 KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler )
 : m_view( view )
 , m_zoomHandler( zoomHandler )    
 {
+    m_popup = new Popup( this );
 }
 
 
 KoGuides::~KoGuides()
 {
+    delete m_popup;
 }
 
 
@@ -95,9 +136,12 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     if ( guideLine )
     {
         m_lastPoint = e->pos();
-        if ( e->button() == Qt::LeftButton )
+        if ( e->button() == Qt::LeftButton || e->button() == Qt::RightButton )
         {
-            m_mouseSelected = true;
+            if ( e->button() == Qt::LeftButton )
+            {
+                m_mouseSelected = true;
+            }
             if ( e->state() & Qt::ControlButton )
             {
                 if ( guideLine->selected )
@@ -137,6 +181,12 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     {
         paint();
     }
+
+    if ( e->button() == Qt::RightButton && hasSelected() )
+    {
+        m_popup->update( m_selectedGuideLines.count() );
+        m_popup->exec( QCursor::pos() );
+    }
     
     return eventProcessed;
 }
@@ -156,7 +206,7 @@ bool KoGuides::mouseMoveEvent( QMouseEvent *e )
         emit guideLinesChanged( m_view );
         eventProcessed = true;
     }
-    else if ( e->button() == Qt::NoButton )
+    else if ( e->state() == Qt::NoButton )
     {
         KoPoint p( mapFromScreen( e->pos() ) );
         KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
@@ -326,6 +376,38 @@ void KoGuides::addGuide( const QPoint &pos, bool /* horizontal */, int rulerWidt
     m_insertGuide = false;
     QMouseEvent e( QEvent::MouseButtonRelease, p, Qt::LeftButton, Qt::LeftButton );
     mouseReleaseEvent( &e );
+}
+
+
+void KoGuides::slotChangePosition()
+{
+    KoPoint p( mapFromScreen( m_lastPoint ) );
+    KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
+
+    const KoPageLayout& pl = m_view->koDocument()->pageLayout();
+    double max = 0.0;
+    if ( guideLine->orientation == Qt::Vertical )
+    {
+        max = QMAX( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
+    }
+    else
+    {
+        max = QMAX( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
+    }
+
+    KoGuideLineDia dia( 0, guideLine->position, 0.0, max, m_view->koDocument()->unit() );
+    if ( dia.exec() == QDialog::Accepted )
+    {
+        guideLine->position = dia.pos();
+        paint();
+    }
+}
+
+
+void KoGuides::slotRemove()
+{
+    removeSelected();
+    paint();
 }
 
 

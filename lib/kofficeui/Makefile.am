@@ -20,7 +20,7 @@ libkofficeui_la_SOURCES = \
 	koCharSelectDia.cc koInsertLink.cc koeditpath.cc kocommandhistory.cpp \
 	koselectaction.cpp kolinewidthaction.cpp kolinestyleaction.cpp \
 	kotoolbutton.cc koImageResource.cc kotoolbox.cc kozoomhandler.cpp \
-    koGuideLines.cpp koGuides.cpp
+    koGuideLines.cpp koGuideLineDia.cpp koGuides.cpp
 
 libkofficeui_la_LDFLAGS	= -version-info 3:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) 
@@ -36,7 +36,7 @@ include_HEADERS = \
 	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
 	kocommandhistory.h  koImageResource.h \
 	koselectaction.h kolinewidthaction.h kolinestyleaction.h kozoomhandler.h \
-    koGuideLines.h koGuides.h
+    koGuideLines.h koGuideLineDia.h koGuides.h
 
 # FIXME: Disabled for now as it breaks the installation process if
 # KOffice is not installed in $KDEDIR
