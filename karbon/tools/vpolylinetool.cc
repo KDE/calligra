@@ -433,7 +433,6 @@ VPolylineTool::cancelStep()
 
 	if ( m_bezierPoints.count() > 6 )
 	{
-		KoPoint p2 = *m_bezierPoints.last();
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
@@ -442,9 +441,8 @@ VPolylineTool::cancelStep()
 		m_bezierPoints.removeLast();
 		m_bezierPoints.append( new KoPoint( p1 ) );
 		m_bezierPoints.append( new KoPoint( p1 ) );
-		KoPoint p = p1 - p2;
 
-		view()->setPos( p );
+		view()->setPos( p1 );
 	}
 	else
 	{

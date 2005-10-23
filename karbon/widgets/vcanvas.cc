@@ -131,7 +131,8 @@ VCanvas::~VCanvas()
 void
 VCanvas::setPos( const KoPoint& p )
 {
-	QCursor::setPos( int( p.x() * m_view->zoom() ), int( p.y() * m_view->zoom() ) );
+	KoPoint p2 = toViewport( p );
+	QCursor::setPos( mapToGlobal( QPoint( int(p2.x()), int(p2.y()) ) ) );
 }
 
 bool
@@ -167,7 +168,7 @@ KoPoint
 VCanvas::toViewport( const KoPoint &p ) const
 {
 	KoPoint p2 = p;
-	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() / m_view->zoom() + pageOffsetX() );
+	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() + pageOffsetX() );
 	if( contentsHeight() > height() )
 		p2.setY( ( contentsHeight() - ( p.y() * m_view->zoom() + contentsY() + pageOffsetY() ) ) );
 	else
