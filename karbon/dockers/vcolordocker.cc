@@ -42,13 +42,13 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	: QWidget(), m_part ( part ), m_view( parent )
 {
 	m_isStrokeDocker = false;
-	setCaption( i18n( "Fill Color" ) );
+	setCaption( i18n( "Color" ) );
 
 	mTabWidget = new QTabWidget( this );
 	
 	/* ##### RGB WIDGET ##### */
 	mRGBWidget = new QWidget( mTabWidget );
-	QGridLayout *mainLayout = new QGridLayout( mRGBWidget, 4, 1 );
+	QGridLayout *mainLayout = new QGridLayout( mRGBWidget, 5, 1 );
 	
 	//RGB
 	mRedSlider = new VColorSlider( i18n( "R:" ), QColor( "red" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
@@ -63,12 +63,14 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
 	connect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) ); 
 
+	mainLayout->setRowStretch( 0, 1 );
+	mainLayout->setRowStretch( 4, 1 );
 	mainLayout->activate();
 	mTabWidget->addTab( mRGBWidget, i18n( "RGB" ) );
 	
 	/* ##### CMYK WIDGET ##### */
 	mCMYKWidget = new QWidget( mTabWidget );
-	QGridLayout *mainCMYKLayout = new QGridLayout( mCMYKWidget, 4, 1);
+	QGridLayout *mainCMYKLayout = new QGridLayout( mCMYKWidget, 6, 1);
 
 	//Sliders
 	mCyanSlider = new VColorSlider( i18n( "C:" ), QColor( "cyan" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
@@ -86,6 +88,8 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mYellowSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
 	connect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
 	
+	mainCMYKLayout->setRowStretch( 0, 1 );
+	mainCMYKLayout->setRowStretch( 5, 1 );
 	mainCMYKLayout->activate();
 	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );
 
@@ -190,13 +194,11 @@ VColorDocker::changeColor()
 void VColorDocker::setFillDocker()
 {
 	m_isStrokeDocker = false;
-	setCaption( i18n( "Fill Color" ) );
 }
 
 void VColorDocker::setStrokeDocker()
 {
 	m_isStrokeDocker = true;
-	setCaption( i18n( "Stroke Color" ) );
 }
 
 void VColorDocker::update()
