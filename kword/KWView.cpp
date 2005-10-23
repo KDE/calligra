@@ -1532,7 +1532,7 @@ void KWView::updatePageInfo()
                   << endl;*/
 
         // To avoid bugs, apply max page number in case a page was removed.
-        m_currentPage = QMIN( m_currentPage, m_doc->pageManager()->lastPageNumber());
+        m_currentPage = QMIN( m_currentPage, m_doc->lastPage());
 
         QString oldText = m_sbPageLabel->text();
         QString newText;
@@ -1680,8 +1680,8 @@ void KWView::setupPrinter( KPrinter &prt )
     m_doc->recalcVariables(  VT_STATISTIC );
 
     prt.setPageSelection( KPrinter::ApplicationSide );
-    prt.setCurrentPage( currentPage() + 1 );
-    prt.setMinMax( 1, m_doc->pageCount() );
+    prt.setCurrentPage( currentPage() );
+    prt.setMinMax( m_doc->startPage(), m_doc->lastPage() );
 
     KoPageLayout pgLayout = m_doc->pageLayout();
 

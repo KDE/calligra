@@ -237,7 +237,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
             printer->newPage();
 
         painter->save();
-        int pgNum = (*it) - 1;
+        int pgNum = (*it);
         int yOffset = m_doc->zoomItY( m_doc->pageManager()->topOfPage( pgNum ) );
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect = m_doc->pageManager()->page(pgNum)->zoomedRect(m_doc);
