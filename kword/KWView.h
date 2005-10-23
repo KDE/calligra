@@ -230,6 +230,7 @@ public slots:
     void editPaste();
     void editSelectAll();
     void editSelectAllFrames();
+    void editSelectCurrentFrame();
     void editFind();
     void editFindNext();
     void editFindPrevious();
@@ -539,6 +540,7 @@ private:
     KAction *actionEditCopy;
     KAction *actionEditPaste;
     KAction *actionEditSelectAll;
+    KAction *actionEditSelectCurrentFrame;
     KAction *actionEditDelFrame;
     KAction *actionCreateLinkedFrame;
     KAction *actionRaiseFrame;

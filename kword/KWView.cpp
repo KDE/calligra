@@ -454,6 +454,9 @@ void KWView::setupActions()
     actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
+    actionEditSelectCurrentFrame = new KAction( i18n( "Select Frame" ), 0,
+        0, this, SLOT( editSelectCurrentFrame() ),
+        actionCollection(), "edit_selectcurrentframe" );
     actionSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
     actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                     this, SLOT( deletePage() ),
@@ -2401,6 +2404,18 @@ void KWView::editSelectAllFrames()
 {
     m_gui->canvasWidget()->selectAllFrames( true );
     frameSelectedChanged();
+}
+
+void KWView::editSelectCurrentFrame()
+{
+    if (!m_gui) return;
+    KWFrameSetEdit* edit = m_gui->canvasWidget()->currentFrameSetEdit();
+    KWFrame* frame = edit->currentFrame();
+    if (!frame) return;
+    if (!frame->isSelected()) {
+        frame->setSelected(true);
+        frameSelectedChanged();
+    }
 }
 
 void KWView::editFind()
@@ -5682,6 +5697,7 @@ void KWView::slotFrameSetEditChanged()
 
     bool state = (edit != 0L) && rw;
     actionEditSelectAll->setEnabled(state);
+    actionEditSelectCurrentFrame->setEnabled(state);
     actionInsertComment->setEnabled( state );
     actionFormatDefault->setEnabled( rw);
     actionFormatFont->setEnabled( rw );
