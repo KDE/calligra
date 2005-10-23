@@ -27,22 +27,22 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 
-#include "pngexport.h"
+#include "jpegexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
+typedef KGenericFactory<JpegExport, KoFilter> jpegExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkchartjpegexport, jpegExportFactory( "jpegexport" ) )
 
-PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)
+JpegExport::JpegExport(KoFilter *fil, const char *name, const QStringList&lst)
     : ImageExport(fil,name,lst)
 {
 }
 
-PngExport::~PngExport()
+JpegExport::~JpegExport()
 {
 }
 
-void PngExport::extraImageAttribute()
+void JpegExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
@@ -50,27 +50,27 @@ void PngExport::extraImageAttribute()
 	width  = exportDialog->width();
 	height = exportDialog->height();
 
-	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
+	kdDebug() << "MNG Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
 }
 
-const char * PngExport::exportFormat()
-{
-	return "image/png";
-}
 
-bool PngExport::saveImage( QString fileName)
+bool JpegExport::saveImage( QString fileName)
 {
-    bool ret = pixmap.save( fileName, "PNG" );
+    bool ret = pixmap.save( fileName, "JPEG" );
     // Save the image.
     if ( !ret ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),
-                            i18n( "PNG Export Error" ) );
+                            i18n( "JPEG Export Error" ) );
     }
     return ret;
 }
 
+const char * JpegExport::exportFormat()
+{
+	        return "image/jpeg";
+}
 
-#include "pngexport.moc"
+#include "jpegexport.moc"
 

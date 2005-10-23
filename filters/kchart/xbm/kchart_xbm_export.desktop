@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KChart XBM Export Filter
+X-KDE-Import=application/x-kchart
+X-KDE-Export=image/x-xbm
+X-KDE-Weight=1
+X-KDE-Library=libkchartxbmexport
+ServiceTypes=KOfficeFilter

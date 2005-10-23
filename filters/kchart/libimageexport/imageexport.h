@@ -17,22 +17,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __PNGEXPORT_H__
-#define __PNGEXPORT_H__
+#ifndef __IMAGEEXPORT_H__
+#define __IMAGEEXPORT_H__
 
-#include "imageexport.h"
+#include <koFilter.h>
 
-class PngExport : public ImageExport
+class QPixmap;
+class ImageExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    PngExport(KoFilter *parent, const char *name, const QStringList&);
-    virtual ~PngExport();
-    virtual bool saveImage( QString fileName);
-    virtual void extraImageAttribute();
-    virtual const char * exportFormat();
+    ImageExport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~ImageExport();
+
+    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual void extraImageAttribute() {};
+    virtual bool saveImage( QString fileName) = 0;
+    virtual const char* exportFormat() = 0;
+protected:
+    int width;
+    int height;
+    QPixmap pixmap;
 };
 
-#endif // __PNGEXPORT_H__
+#endif // __IMAGEEXPORT_H__
 

@@ -5,6 +5,7 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/kchart/kdchart \
 	-I$(top_srcdir)/interfaces \
 	-I$(top_srcdir)/filters/libdialogfilter \
+	-I$(top_srcdir)/filters/kchart/libimageexport \
 	$(all_includes)
 
 ####### Files
@@ -13,7 +14,7 @@ kde_module_LTLIBRARIES = libkchartpngexport.la
 
 libkchartpngexport_la_SOURCES = pngexport.cpp
 libkchartpngexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libkchartpngexport_la_LIBADD = ../../../kchart/libkchartcommon.la ../../../filters/libdialogfilter/libdialogfilter.la $(KOFFICE_LIBS)
+libkchartpngexport_la_LIBADD = ../../../kchart/libkchartcommon.la ../libimageexport/libkchartimageexport.la ../../../filters/libdialogfilter/libdialogfilter.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	pngexport.h 
 

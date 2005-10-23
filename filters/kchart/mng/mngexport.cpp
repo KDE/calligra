@@ -27,22 +27,22 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 
-#include "pngexport.h"
+#include "mngexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
+typedef KGenericFactory<MngExport, KoFilter> mngExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkchartmngexport, mngExportFactory( "mngexport" ) )
 
-PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)
+MngExport::MngExport(KoFilter *fil, const char *name, const QStringList&lst)
     : ImageExport(fil,name,lst)
 {
 }
 
-PngExport::~PngExport()
+MngExport::~MngExport()
 {
 }
 
-void PngExport::extraImageAttribute()
+void MngExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
@@ -50,27 +50,27 @@ void PngExport::extraImageAttribute()
 	width  = exportDialog->width();
 	height = exportDialog->height();
 
-	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
+	kdDebug() << "MNG Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
 }
 
-const char * PngExport::exportFormat()
-{
-	return "image/png";
-}
 
-bool PngExport::saveImage( QString fileName)
+bool MngExport::saveImage( QString fileName)
 {
-    bool ret = pixmap.save( fileName, "PNG" );
+    bool ret = pixmap.save( fileName, "MNG" );
     // Save the image.
     if ( !ret ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),
-                            i18n( "PNG Export Error" ) );
+                            i18n( "MNG Export Error" ) );
     }
     return ret;
 }
 
+const char * MngExport::exportFormat()
+{
+	        return "video/x-mng";
+}
 
-#include "pngexport.moc"
+#include "mngexport.moc"
 

@@ -27,22 +27,22 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 
-#include "pngexport.h"
+#include "bmpexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
+typedef KGenericFactory<BmpExport, KoFilter> bmpExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkchartbmpexport, bmpExportFactory( "bmpexport" ) )
 
-PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)
+BmpExport::BmpExport(KoFilter *fil, const char *name, const QStringList&lst)
     : ImageExport(fil,name,lst)
 {
 }
 
-PngExport::~PngExport()
+BmpExport::~BmpExport()
 {
 }
 
-void PngExport::extraImageAttribute()
+void BmpExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
@@ -55,22 +55,22 @@ void PngExport::extraImageAttribute()
     delete exportDialog;
 }
 
-const char * PngExport::exportFormat()
-{
-	return "image/png";
-}
 
-bool PngExport::saveImage( QString fileName)
+bool BmpExport::saveImage( QString fileName)
 {
-    bool ret = pixmap.save( fileName, "PNG" );
+    bool ret = pixmap.save( fileName, "BMP" );
     // Save the image.
     if ( !ret ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),
-                            i18n( "PNG Export Error" ) );
+                            i18n( "BMP Export Error" ) );
     }
     return ret;
 }
 
+const char * BmpExport::exportFormat()
+{
+	        return "image/x-bmp";
+}
 
-#include "pngexport.moc"
+#include "bmpexport.moc"
 

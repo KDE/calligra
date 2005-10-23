@@ -27,22 +27,22 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 
-#include "pngexport.h"
+#include "xpmexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
+typedef KGenericFactory<XpmExport, KoFilter> xpmExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkchartxpmexport, xpmExportFactory( "xpmexport" ) )
 
-PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)
+XpmExport::XpmExport(KoFilter *fil, const char *name, const QStringList&lst)
     : ImageExport(fil,name,lst)
 {
 }
 
-PngExport::~PngExport()
+XpmExport::~XpmExport()
 {
 }
 
-void PngExport::extraImageAttribute()
+void XpmExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
@@ -50,27 +50,27 @@ void PngExport::extraImageAttribute()
 	width  = exportDialog->width();
 	height = exportDialog->height();
 
-	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
+	kdDebug() << "Xpm Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
 }
 
-const char * PngExport::exportFormat()
-{
-	return "image/png";
-}
 
-bool PngExport::saveImage( QString fileName)
+bool XpmExport::saveImage( QString fileName)
 {
-    bool ret = pixmap.save( fileName, "PNG" );
+    bool ret = pixmap.save( fileName, "XPM" );
     // Save the image.
     if ( !ret ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),
-                            i18n( "PNG Export Error" ) );
+                            i18n( "Xpm Export Error" ) );
     }
     return ret;
 }
 
+const char * XpmExport::exportFormat()
+{
+	        return "image/x-xpm";
+}
 
-#include "pngexport.moc"
+#include "xpmexport.moc"
 
