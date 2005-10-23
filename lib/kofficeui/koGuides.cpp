@@ -182,6 +182,11 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
         paint();
     }
 
+    if ( changed && ! hasSelected() )
+    {
+        emit moveGuides( false );
+    }
+
     if ( e->button() == Qt::RightButton && hasSelected() )
     {
         m_popup->update( m_selectedGuideLines.count() );
