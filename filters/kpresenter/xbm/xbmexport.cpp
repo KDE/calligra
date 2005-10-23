@@ -27,9 +27,6 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 
-#include "kpresenter_doc.h"
-#include "kpresenter_view.h"
-#include "kprcanvas.h"
 #include "xbmexport.h"
 #include "exportsizedia.h"
 
@@ -45,17 +42,19 @@ XbmExport::~XbmExport()
 {
 }
 
-void XbmExport::extraImageAttribute()
+bool XbmExport::extraImageAttribute()
 {
+    bool ret = false;
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
     if (exportDialog->exec()) {
 	width  = exportDialog->width();
 	height = exportDialog->height();
-
+	ret = true;
 	kdDebug() << "Xbm Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
+    return ret;
 }
 
 

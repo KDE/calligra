@@ -53,7 +53,7 @@ ImageExport::convert(const QCString& from, const QCString& to)
     if ( strcmp(document->className(), "KPresenterDoc") != 0)
     {
         kdWarning() << "document isn't a KPresenterDoc but a "
-                     << document->className() << endl;
+                    << document->className() << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -73,25 +73,25 @@ ImageExport::convert(const QCString& from, const QCString& to)
     KoPageLayout layoutPage= kpresenterdoc->pageLayout();
     width =  layoutPage.ptWidth;
     height = layoutPage.ptHeight;
-    extraImageAttribute();
-    
-   
-
-    KPresenterView* view = static_cast<KPresenterView*>( kpresenterdoc->views().getFirst());
-    if ( view ) // no view if embedded document
+    if (extraImageAttribute())
     {
-        KPrCanvas * canvas = view->getCanvas();
-        canvas->drawPageInPix( pixmap, view->getCurrPgNum()-1, 0, true, width,height );
+        KPresenterView* view = static_cast<KPresenterView*>( kpresenterdoc->views().getFirst());
+        if ( view ) // no view if embedded document
+        {
+            KPrCanvas * canvas = view->getCanvas();
+            canvas->drawPageInPix( pixmap, view->getCurrPgNum()-1, 0, true, width,height );
+        }
+        else //when it's embedded we use just it.
+        {
+            pixmap = QPixmap(width, height);
+            QPainter  painter(&pixmap);
+            kpresenterdoc->paintContent(painter, pixmap.rect(), false);
+        }
+        if( !saveImage( m_chain->outputFile()))
+            return KoFilter::CreationError;
+        return KoFilter::OK;
     }
-    else //when it's embedded we use just it.
-    {
-        pixmap = QPixmap(width, height);
-        QPainter  painter(&pixmap);
-        kpresenterdoc->paintContent(painter, pixmap.rect(), false);
-    }
-    saveImage( m_chain->outputFile());
-
-    return KoFilter::OK;
+    return KoFilter::UserCancelled;
 }
 
 

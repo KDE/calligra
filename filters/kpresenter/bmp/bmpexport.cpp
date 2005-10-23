@@ -45,23 +45,25 @@ BmpExport::~BmpExport()
 {
 }
 
-void BmpExport::extraImageAttribute()
+bool BmpExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
-						   0, "exportdialog");
+  						   0, "exportdialog");
+    bool ret = false;
     if (exportDialog->exec()) {
 	width  = exportDialog->width();
 	height = exportDialog->height();
-
+	ret = true;
 	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
+    return ret;
 }
 
 
 bool BmpExport::saveImage( QString fileName)
 {
-    bool ret = pixmap.save( m_chain->outputFile(), "BMP" );
+    bool ret = pixmap.save( fileName, "BMP" );
     // Save the image.
     if ( !ret ) {
         KMessageBox::error( 0, i18n( "Failed to write file." ),

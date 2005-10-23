@@ -30,7 +30,7 @@ public:
     BmpExport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~BmpExport();
     virtual bool saveImage( QString fileName);
-    virtual void extraImageAttribute();
+    virtual bool extraImageAttribute();
     virtual const char * exportFormat();
 };
 

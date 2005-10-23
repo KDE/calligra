@@ -45,8 +45,9 @@ JpegExport::~JpegExport()
 {
 }
 
-void JpegExport::extraImageAttribute()
+bool JpegExport::extraImageAttribute()
 {
+    bool ret = false;
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
 						   0, "exportdialog");
     if (exportDialog->exec()) {
@@ -54,8 +55,10 @@ void JpegExport::extraImageAttribute()
 	height = exportDialog->height();
 
 	kdDebug() << "MNG Export: size = [" << width << "," << height << "]" << endl;
+    	ret = true;
     }
     delete exportDialog;
+    return ret;
 }
 
 
