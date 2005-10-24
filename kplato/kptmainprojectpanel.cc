@@ -19,11 +19,12 @@
 
 #include "kptmainprojectpanel.h"
 
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qbuttongroup.h>
 #include <qdatetime.h>
 #include <qdatetimeedit.h>
+#include <qradiobutton.h>
+#include <qpushbutton.h>
 
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -31,6 +32,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcommand.h>
+#include <kabc/addressee.h>
+#include <kabc/addresseedialog.h>
 
 #include <kdebug.h>
 
@@ -41,7 +44,7 @@ namespace KPlato
 {
 
 KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const char *name)
-    : KPTMainProjectPanelBase(parent, name),
+    : KPTMainProjectPanelImpl(parent, name),
       project(p)
 {
     namefield->setText(project.name());
@@ -119,6 +122,98 @@ KCommand *KPTMainProjectPanel::buildCommand(KPTPart *part) {
     return m;
 }
 
+//-------------------------------------------------------------------
+KPTMainProjectPanelImpl::KPTMainProjectPanelImpl(QWidget *parent, const char *name)
+    :  KPTMainProjectPanelBase(parent, name) {
+
+    // signals and slots connections
+    connect( bStartDate, SIGNAL( clicked() ), this, SLOT( slotStartDateClicked() ) );
+    connect( bEndDate, SIGNAL( clicked() ), this, SLOT( slotEndDateClicked() ) );
+    connect( bStartDate, SIGNAL( clicked() ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( bEndDate, SIGNAL( clicked() ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( descriptionfield, SIGNAL( textChanged() ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( endDate, SIGNAL( changed(QDate) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( endTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( startDate, SIGNAL( changed(QDate) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( startTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( idfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotBaseline() ) );
+    connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
+}
+
+void KPTMainProjectPanelImpl::slotCheckAllFieldsFilled()
+{
+    emit changed();
+    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty() && !leaderfield->text().isEmpty());
+}
+
+
+void KPTMainProjectPanelImpl::slotChooseLeader()
+{
+    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
+    if (!a.isEmpty()) 
+    {
+        leaderfield->setText(a.fullEmail());
+    }
+}
+
+
+void KPTMainProjectPanelImpl::slotStartDateClicked()
+{
+    enableDateTime();    
+}
+
+
+void KPTMainProjectPanelImpl::slotEndDateClicked()
+{
+    enableDateTime();
+}
+
+
+
+void KPTMainProjectPanelImpl::enableDateTime()
+{
+    if (schedulingGroup->selected() == bStartDate)
+    {
+        startTime->setEnabled(true);
+        startDate->setEnabled(true);
+        endTime->setEnabled(false);
+        endDate->setEnabled(false);
+    }
+    if (schedulingGroup->selected() == bEndDate)
+    {
+        startTime->setEnabled(false);
+        startDate->setEnabled(false);
+        endTime->setEnabled(true);
+        endDate->setEnabled(true);
+    }
+}
+
+
+QDateTime KPTMainProjectPanelImpl::startDateTime()
+{
+    return QDateTime(startDate->date(), startTime->time());
+}
+
+
+QDateTime KPTMainProjectPanelImpl::endDateTime()
+{
+    return QDateTime(endDate->date(), endTime->time());
+}
+
+
+void KPTMainProjectPanelImpl::slotBaseline()
+{
+    bool b = baseline->isChecked();
+    namefield->setReadOnly(b);
+    idfield->setReadOnly(b);
+    leaderfield->setReadOnly(b);
+    chooseLeader->setEnabled(!b);
+    schedulingGroup->setEnabled(!b);
+}
 
 }  //KPlato namespace
 

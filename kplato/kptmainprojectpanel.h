@@ -22,6 +22,10 @@
 
 #include "kptmainprojectpanelbase.h"
 
+#include <qdatetime.h>
+
+class QWidget;
+
 class KCommand;
 
 namespace KPlato
@@ -30,8 +34,29 @@ namespace KPlato
 class KPTProject;
 class KPTPart;
 
+class KPTMainProjectPanelImpl : public KPTMainProjectPanelBase {
+    Q_OBJECT
+public:
+    KPTMainProjectPanelImpl(QWidget *parent=0, const char *name=0);
 
-class KPTMainProjectPanel : public KPTMainProjectPanelBase {
+    virtual QDateTime startDateTime();
+    virtual QDateTime endDateTime();
+
+public slots:
+    virtual void slotCheckAllFieldsFilled();
+    virtual void slotChooseLeader();
+    virtual void slotStartDateClicked();
+    virtual void slotEndDateClicked();
+    virtual void enableDateTime();
+    virtual void slotBaseline();
+
+signals:
+    void obligatedFieldsFilled(bool);
+    void changed();
+
+};
+
+class KPTMainProjectPanel : public KPTMainProjectPanelImpl {
     Q_OBJECT
 public:
     KPTMainProjectPanel(KPTProject &project, QWidget *parent=0, const char *name=0);

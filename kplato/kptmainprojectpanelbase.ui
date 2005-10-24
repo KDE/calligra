@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>478</width>
-            <height>340</height>
+            <width>459</width>
+            <height>364</height>
         </rect>
     </property>
     <property name="caption">
@@ -197,98 +197,6 @@
 </widget>
 <customwidgets>
 </customwidgets>
-<connections>
-    <connection>
-        <sender>bStartDate</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotStartDateClicked()</slot>
-    </connection>
-    <connection>
-        <sender>bEndDate</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotEndDateClicked()</slot>
-    </connection>
-    <connection>
-        <sender>bStartDate</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>bEndDate</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>descriptionfield</sender>
-        <signal>textChanged()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>endDate</sender>
-        <signal>changed(QDate)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>endTime</sender>
-        <signal>valueChanged(const QTime&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>startDate</sender>
-        <signal>changed(QDate)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>startTime</sender>
-        <signal>valueChanged(const QTime&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>baseline</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>namefield</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>idfield</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>leaderfield</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>baseline</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotBaseline()</slot>
-    </connection>
-    <connection>
-        <sender>chooseLeader</sender>
-        <signal>clicked()</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotChooseLeader()</slot>
-    </connection>
-</connections>
 <tabstops>
     <tabstop>namefield</tabstop>
     <tabstop>idfield</tabstop>
@@ -302,26 +210,8 @@
     <tabstop>descriptionfield</tabstop>
 </tabstops>
 <includes>
-    <include location="local" impldecl="in implementation">kabc/addresseedialog.h</include>
-    <include location="local" impldecl="in implementation">kabc/addressee.h</include>
     <include location="local" impldecl="in implementation">kptmainprojectpanelbase.ui.h</include>
 </includes>
-<signals>
-    <signal>obligatedFieldsFilled(bool)</signal>
-    <signal>changed()</signal>
-</signals>
-<slots>
-    <slot>slotCheckAllFieldsFilled()</slot>
-    <slot>slotChooseLeader()</slot>
-    <slot>slotStartDateClicked()</slot>
-    <slot>slotEndDateClicked()</slot>
-    <slot>enableDateTime()</slot>
-    <slot>slotBaseline()</slot>
-</slots>
-<functions>
-    <function returnType="QDateTime">startDateTime()</function>
-    <function returnType="QDateTime">endDateTime()</function>
-</functions>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
