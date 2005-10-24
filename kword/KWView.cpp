@@ -7412,11 +7412,7 @@ void KWView::embeddedStoreInternal()
 void KWView::goToDocumentStructure()
 {
     KWDocStruct* docStruct = getGUI()->getDocStruct();
-    if (!docStruct) return;
-    KWDocStructTree* docStructTree = docStruct->getDocStructTree();
-    if (!docStructTree) return;
-    if (!docStructTree->isVisible()) return;
-    docStructTree->setFocus();
+    if (docStruct) docStruct->setFocusHere();
 }
 
 void KWView::goToDocument()

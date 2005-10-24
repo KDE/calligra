@@ -846,6 +846,12 @@ void KWDocStruct::refreshTree(int _type)
     }
 }
 
+void KWDocStruct::setFocusHere()
+{
+    if (tree)
+        if (tree->isVisible()) tree->setFocus();
+}
+
 void KWDocStruct::selectFrameSet()
 {
     tree->selectFrameSet();

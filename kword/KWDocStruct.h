@@ -305,7 +305,6 @@ class KWDocStruct : public QWidget
 
 public:
     KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
-    KWDocStructTree * getDocStructTree()const {return tree;}
     void selectFrameSet();
     void editFrameSet();
     void deleteFrameSet();
@@ -313,6 +312,8 @@ public:
     /** Refresh the specified branches of the tree.  Actual refreshing is deferred
         until the paint event. */
     void refreshTree(int _type);
+    /** Set focus to the tree, if visible. */
+    void setFocusHere();
 
 protected:
     KWDocStructTree *tree;
