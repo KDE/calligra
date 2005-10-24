@@ -32,7 +32,7 @@ class KexiReportFactory : public KFormDesigner::WidgetFactory
 		virtual ~KexiReportFactory();
 
 		virtual QString  name();
-		virtual QWidget *createWidget(const QCString &, QWidget *, const char *, KFormDesigner::Container *,
+		virtual QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
 			int options = DefaultOptions);
 
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,

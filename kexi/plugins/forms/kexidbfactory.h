@@ -68,8 +68,8 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual ~KexiDBFactory();
 
 //		virtual QString	name();
-		virtual QWidget *createWidget(const QCString &, QWidget *, const char *, 
-			KFormDesigner::Container *, int options = DefaultOptions );
+		virtual QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, 
+			KFormDesigner::Container *container, int options = DefaultOptions );
 
 		virtual void createCustomActions(KActionCollection* col);
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
