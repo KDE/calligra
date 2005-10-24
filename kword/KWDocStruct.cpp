@@ -826,6 +826,24 @@ KWDocStruct::KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
     vBox->addWidget( searchBar );
     vBox->addWidget( tree );
     tree->setup();
+    dirtyTreeTypes = 0;
+}
+
+void KWDocStruct::paintEvent ( QPaintEvent * ev)
+{
+    if (dirtyTreeTypes) {
+        tree->refreshTree(dirtyTreeTypes);
+        dirtyTreeTypes = 0;
+    }
+    QWidget::paintEvent(ev);
+}
+
+void KWDocStruct::refreshTree(int _type)
+{
+    if ((dirtyTreeTypes | _type) != dirtyTreeTypes) {
+        dirtyTreeTypes |= _type;
+        update();
+    }
 }
 
 void KWDocStruct::selectFrameSet()

@@ -310,13 +310,18 @@ public:
     void editFrameSet();
     void deleteFrameSet();
     void editProperties();
+    /** Refresh the specified branches of the tree.  Actual refreshing is deferred
+        until the paint event. */
+    void refreshTree(int _type);
+
 protected:
     KWDocStructTree *tree;
     QGridLayout *layout;
+    virtual void paintEvent( QPaintEvent* ev );
 
     KWDocument *doc;
     KWGUI *parent;
-
+    int dirtyTreeTypes;
 };
 
 #endif

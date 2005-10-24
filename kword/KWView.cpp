@@ -5976,7 +5976,7 @@ void KWView::docStructChanged(int _type)
 {
     KWDocStruct *m_pDocStruct=m_gui->getDocStruct();
     if(m_pDocStruct)
-        m_pDocStruct->getDocStructTree()->refreshTree(_type);
+        m_pDocStruct->refreshTree(_type);
     m_doc->recalcVariables(  VT_STATISTIC );
 }
 
