@@ -35,6 +35,7 @@ class QTime;
 namespace KPlato
 {
 
+class KPTAccount;
 class KPTRisk;
 class KPTEffort;
 class KPTAppointment;
@@ -582,10 +583,15 @@ class KPTResourceRequest {
  
         void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) 
             { if (m_resource) m_resource->makeAppointment(start, duration, task); }
+        
+        KPTAccount *account() const { return m_account; }
+        void setAccount(KPTAccount *account) { m_account = account; }
+        
     private:
         KPTResource *m_resource;
         int m_units;
         KPTResourceGroupRequest *m_parent;
+        KPTAccount *m_account;
 
 #ifndef NDEBUG
 public:

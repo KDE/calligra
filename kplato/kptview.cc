@@ -83,6 +83,7 @@
 #include "kptcanvasitem.h"
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
+#include "kptaccountsdialog.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
@@ -177,6 +178,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     actionEditMainProject = new KAction(i18n("Edit Main Project..."), "project_edit", 0, this, SLOT(slotProjectEdit()), actionCollection(), "project_edit");
     actionEditStandardWorktime = new KAction(i18n("Edit Standard Worktime..."), "project_worktime", 0, this, SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
     actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
+    actionEditAccounts = new KAction(i18n("Edit Accounts..."), "project_accounts", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
     actionEditResources = new KAction(i18n("Edit Resources..."), "project_resources", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
     actionCalculate = new KAction(i18n("Calculate"), "project_calculate", 0, this, SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
     
@@ -383,6 +385,18 @@ void KPTView::slotProjectCalendar() {
         KMacroCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
             //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            getPart()->addCommand(cmd); //also executes
+        }
+    }
+    delete dia;
+}
+
+void KPTView::slotProjectAccounts() {
+    KPTAccountsDialog *dia = new KPTAccountsDialog(getProject().accounts());
+    if (dia->exec()) {
+        KCommand *cmd = dia->buildCommand(getPart());
+        if (cmd) {
+            kdDebug()<<k_funcinfo<<"Modifying account(s)"<<endl;
             getPart()->addCommand(cmd); //also executes
         }
     }

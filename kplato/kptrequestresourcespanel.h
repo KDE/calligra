@@ -34,6 +34,7 @@ class KMacroCommand;
 namespace KPlato
 {
 
+class KPTAccount;
 class KPTTask;
 class KPTResourceGroup;
 class KPTResource;
@@ -49,7 +50,7 @@ public:
     ~KPTResourceTableItem() ;
 
     void update();
-    void insert(QTable *table, int row);
+    void insert(QTable *table, int row, QStringList &accounts);
     void ok(KPTResourceGroupRequest *group);
 
     bool isChecked() const { return m_checked; }
@@ -64,6 +65,8 @@ public:
     bool m_checked, m_origChecked;
     QCheckTableItem *m_checkitem;
     KPTResourceRequest *m_request;
+    QComboTableItem *m_accountitem;
+    KPTAccount *m_account;
 };
 
 class KPTGroupLVItem : public QListViewItem {
@@ -72,7 +75,7 @@ public:
     ~KPTGroupLVItem();
 
     void update();
-    void insert(QTable *table);
+    void insert(QTable *table, QStringList &accounts);
     const QPtrList<KPTResourceTableItem> &resources() const { return m_resources; }
     void ok(KPTTask &task);
 
@@ -110,6 +113,7 @@ private:
     KPTStandardWorktime *m_worktime;
     KPTGroupLVItem *selectedGroup;
     bool m_blockChanged;
+    QStringList m_accounts;
     
 };
 

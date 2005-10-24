@@ -378,6 +378,21 @@ private:
     bool m_mine;
 };
 
+class KPTModifyResourceRequestAccountCmd : public KNamedCommand
+{
+public:
+    KPTModifyResourceRequestAccountCmd(KPTPart *part, KPTResourceRequest *request, QString account, QString name=0);
+    ~KPTModifyResourceRequestAccountCmd();
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResourceRequest *m_request;
+    KPTAccount *m_oldaccount;
+    KPTAccount *m_newaccount;
+};
+
 class KPTModifyEffortCmd : public KNamedCommand
 {
 public:

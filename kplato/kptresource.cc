@@ -1145,7 +1145,8 @@ KPTRisk::~KPTRisk() {
 KPTResourceRequest::KPTResourceRequest(KPTResource *resource, int units)
     : m_resource(resource),
       m_units(units),
-      m_parent(0) {
+      m_parent(0),
+      m_account(0) {
     //kdDebug()<<k_funcinfo<<"Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
 }
 
@@ -1164,6 +1165,10 @@ bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
         return false;
     }
     m_units  = element.attribute("units").toInt();
+    QString a = element.attribute("account");
+    if (!a.isEmpty()) {
+        m_account = project->accounts().findAccount(a);
+    }
     return true;
 }
 
@@ -1172,6 +1177,9 @@ void KPTResourceRequest::save(QDomElement &element) {
     element.appendChild(me);
     me.setAttribute("resource-id", m_resource->id());
     me.setAttribute("units", m_units);
+    if (m_account) {
+        me.setAttribute("account", m_account->name());
+    }
 }
 
 int KPTResourceRequest::units() const {

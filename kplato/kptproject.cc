@@ -315,6 +315,11 @@ bool KPTProject::load(QDomElement &element) {
                     kdError()<<k_funcinfo<<"Failed to load standard worktime"<<endl;
                     delete child;
                 }
+            } else if (e.tagName() == "accounts") {
+                // Load accounts
+                if (!m_accounts.load(e)) {
+                    kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
+                }
             }
         }
     }
@@ -345,6 +350,8 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("project-start",startTime().toString());
     me.setAttribute("project-end",endTime().toString());
     me.setAttribute("scheduling",constraintToString());
+    
+    m_accounts.save(me);
     
     // save calendars
     QPtrListIterator<KPTCalendar> calit(m_calendars);

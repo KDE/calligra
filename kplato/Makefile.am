@@ -3,7 +3,9 @@ SUBDIRS = templates pics reports toolbar
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib \
            $(all_includes)
 
-libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
+libkplatopart_la_SOURCES = \
+    kptaccount.cc kptaccountsdialog.cc kptaccountspanel.cc kptaccountspanelbase.ui \
+    kptnode.cc kptproject.cc \
     kptrelation.cc kptresource.cc kpttask.cc \
     kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
     kptdurationwidget.ui relationpanel.ui\
@@ -35,7 +37,9 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptwbsdefinition.cc
 
 # (this is not used)
-noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
+noinst_HEADERS = \
+    kptaccount.h kptaccountsdialog.h kptaccountspanel.h \
+    kptaboutdata.h kptduration.h kptfactory.h \
     kptnode.h kptpart.h kptproject.h kptrelation.h \
     kptresource.h kpttask.h kptview.h \
     kptprojectdialog.h kpttaskdialog.h  \

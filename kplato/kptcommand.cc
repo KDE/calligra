@@ -625,6 +625,28 @@ void KPTRemoveResourceRequestCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+KPTModifyResourceRequestAccountCmd::KPTModifyResourceRequestAccountCmd(KPTPart *part, KPTResourceRequest *request, QString account, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_request(request) {    
+    m_newaccount = part->getProject().accounts().findAccount(account);
+    m_oldaccount = m_request->account();
+    //kdDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
+}
+KPTModifyResourceRequestAccountCmd::~KPTModifyResourceRequestAccountCmd() {
+}
+
+void KPTModifyResourceRequestAccountCmd::execute() {
+    m_request->setAccount(m_newaccount);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTModifyResourceRequestAccountCmd::unexecute() {
+    m_request->setAccount(m_oldaccount);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
 KPTModifyEffortCmd::KPTModifyEffortCmd(KPTPart *part, KPTEffort *effort, KPTDuration oldvalue, KPTDuration newvalue, QString name)
     : KNamedCommand(name),
       m_part(part),

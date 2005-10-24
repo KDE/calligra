@@ -1,0 +1,83 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::KPTAccountsPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KPTAccountsPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>296</width>
+            <height>201</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KPTAccountsPanelBase</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QListView" row="0" column="0" rowspan="1" colspan="3">
+            <column>
+                <property name="text">
+                    <string>Accounts</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Description</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>accountList</cstring>
+            </property>
+            <property name="defaultRenameAction">
+                <enum>Accept</enum>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>removeBtn</cstring>
+            </property>
+            <property name="text">
+                <string>Remove</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>newBtn</cstring>
+            </property>
+            <property name="text">
+                <string>New</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>subBtn</cstring>
+            </property>
+            <property name="text">
+                <string>New subaccount</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

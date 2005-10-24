@@ -43,6 +43,7 @@
             <Action name="project_edit"/>
             <Action name="project_worktime"/>
             <Action name="project_calendar"/>
+            <Action name="project_accounts"/>
             <Action name="project_resources"/>
             <Separator/>
             <Action name="project_calculate"/>

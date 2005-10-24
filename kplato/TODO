@@ -14,7 +14,7 @@ Status      Description
 --------------------------------------------------------------------------------
             User manual
             
-            Cost Breakdown Structure:
+Taken       Cost Breakdown Structure:
             - Define account class/list and necessary dialogs.
             - Task cost specification (which shall link to accounts, resources).
             - Resource cost specification.
@@ -35,6 +35,7 @@ Status      Description
             Resourceview: Improve
             
             Resourceuseview: Scrap existing and use KChart instead.
+            Removed for now. Charting probably not added until after release.
             
             Reports: Review if/how Kugar should be used and
             design a few usefull reports.

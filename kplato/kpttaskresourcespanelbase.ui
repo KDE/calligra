@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>372</width>
-            <height>224</height>
+            <width>445</width>
+            <height>169</height>
         </rect>
     </property>
     <property name="caption">
@@ -80,6 +80,17 @@
                         <property name="text">
                             <string>Resource</string>
                         </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Account</string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
                     </column>
                     <property name="name">
                         <cstring>resourceTable</cstring>
@@ -91,7 +102,7 @@
                         <number>0</number>
                     </property>
                     <property name="numCols">
-                        <number>1</number>
+                        <number>2</number>
                     </property>
                     <property name="readOnly">
                         <bool>true</bool>

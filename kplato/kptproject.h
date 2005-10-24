@@ -23,6 +23,7 @@
 
 #include "kptnode.h"
 
+#include "kptaccount.h"
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptresource.h"
@@ -199,7 +200,10 @@ public:
     
     void generateWBS(int count, KPTWBSDefinition &def, QString wbs=QString());
 
+    KPTAccounts &accounts() { return m_accounts; }
+    
 protected:
+    KPTAccounts m_accounts;
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
     KPTCalendar *m_defaultCalendar;
@@ -218,7 +222,7 @@ protected:
 
     bool legalParents(KPTNode *par, KPTNode *child);
     bool legalChildren(KPTNode *par, KPTNode *child);
-
+    
 private:
     void init();
     
