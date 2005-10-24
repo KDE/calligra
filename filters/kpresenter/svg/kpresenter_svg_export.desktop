@@ -6,6 +6,7 @@ Name[cy]=Hidlen Allforio SVG KPresenter
 Name[da]=KPresenter SVG-eksportfilter
 Name[pt]=Filtro de Exportação de SVG para o KPresenter
 Name[pt_BR]=Filtro de Exportação de SVG para o KPresenter
+Name[sv]=Kpresenter SVG-exportfilter
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
