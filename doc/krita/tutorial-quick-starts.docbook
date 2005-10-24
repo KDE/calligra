@@ -1,0 +1,166 @@
+<sect1 id="tutorial-quick-starts">
+<title>Quick Starts for Dummies</title>
+<sect2 id="crop-image">
+<title><guilabel>Crop an image and save as New</guilabel></title>
+
+<para>Aim: from a picture, crop an area and save that area in a new file</para>
+
+<para>Open &krita; with the original picture.</para>
+
+<screenshot>
+<screeninfo>The original picture</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The original picture</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Select the <guiicon>Select  a rectangular area</guiicon> icon in the &krita; toolbar.</para>
+
+<screenshot>
+<screeninfo>The icon to use</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The icon to use</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Select the area you want to make a new picture with. &krita; makes the ouside area grey.</para>
+
+<screenshot>
+<screeninfo>The selected area</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts3.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The selected area</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The use the <guimenu>Edit</guimenu><guimenuitem>Copy</guimenuitem> menu to copy the selected area or 
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>.</para>
+
+<para>Click again on the Edit menu.</para>
+<para>Use the Paste into new image item.</para>
+
+<screenshot>
+<screeninfo>The View menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts4.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The View menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>&krita; opens a new window with the selected area as new image.</para>
+
+<screenshot>
+<screeninfo>The new image</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts5.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The new image</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Save the new image.</para>
+
+</sect2>
+<sect2 id="draw-rectangle">
+<title><guilabel>Draw a rectangle on your picture</guilabel></title>
+
+<para>Aim: draw a coloured rectangle on your picture</para>
+
+<para>Open &krita; with the original picture. My picture consists in a view of a toolbar in which I want to point an icon by putting a red rectangle around it.</para>
+
+<screenshot>
+<screeninfo>The original picture</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts6.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The original picture</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Enable the <guilabel>Brushes and stuff toolbar</guilabel> using <guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem> menu.</para>
+<para>Also make sure the palettes are viewed. If not, use the <guimenu>View</guimenu><guimenuitem>Palettes</guimenuitem><guimenuitem>View palettes</guimenuitem> menu.</para>
+
+<screenshot>
+<screeninfo>&krita; view</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts7.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>&krita; view</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on the <guiicon>Brush shapes icon</guiicon> in the <guilabel>Brushes and stuff toolbar</guilabel>.</para>
+
+<screenshot>
+<screeninfo>The Brush shapes icon</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts8.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Brush shapes icon</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Select which brush shape you want to use among the predefined brushes.</para>
+
+<screenshot>
+<screeninfo>Selecting a brush shape</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts9.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Selecting a brush shape</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Select the drawing shape in the drawing tool. I choose a rectangle.</para>
+
+<screenshot>
+<screeninfo>Selecting the Draw a rectangle icon</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts10.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Selecting the Draw a rectangle icon</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>In the palette view, select the color you want by clicking on the palette. There are several ways to choose your color by selecting the tab you want.</para>
+
+<screenshot>
+<screeninfo>Choosing the color</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts11.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Choosing the color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Finally draw your shape on your picture and save the new picture!</para>
+
+<screenshot>
+<screeninfo>Drawing</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-quick-starts12.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Drawing</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+</sect2>
+</sect1>

@@ -8,6 +8,7 @@
   <!ENTITY tutorial SYSTEM "tutorial.docbook">
   <!ENTITY tutorial-starting SYSTEM "tutorial-starting.docbook">
   <!ENTITY tutorial-select-layer SYSTEM "tutorial-select-layer.docbook">
+  <!ENTITY tutorial-quick-starts SYSTEM "tutorial-quick-starts.docbook">
   <!ENTITY using SYSTEM "using.docbook">
   <!ENTITY using-selections SYSTEM "using-selections.docbook">
   <!ENTITY commands SYSTEM "commands.docbook">
