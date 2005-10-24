@@ -33,8 +33,26 @@ class KWFrame;
 class KWFrameSet;
 class KWTextParag;
 
+/******************************************************************/
+/* Class: KWOrderedFrameSet                                       */
+/******************************************************************/
+
+/** Provides a way to sort framesets using a QValueList based on their top left corner. */
+class KWOrderedFrameSet
+{
+public:
+    KWOrderedFrameSet(KWFrameSet* fs);
+    KWOrderedFrameSet();    // default constructor
+    bool operator<( KWOrderedFrameSet ofs);
+    KWFrameSet* frameSet() { return m_frameset; }
+
+private:
+    KWFrameSet* m_frameset;
+};
+
 class KWDocListViewItem : public QObject,public KListViewItem
 {
+    Q_OBJECT
 public:
     KWDocListViewItem(QListViewItem *_parent, const QString &_text);
     KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text );
@@ -42,7 +60,10 @@ public:
     virtual void editFrameSet() {}
     virtual void deleteFrameSet() {}
     virtual void editProperties() {}
+
+public slots:
     virtual void slotRightButtonClicked( QListViewItem *, const QPoint &, int ) {}
+    virtual void slotDoubleClicked( QListViewItem * ) {}
 };
 
 /******************************************************************/
@@ -65,6 +86,33 @@ public slots:
 
 protected:
     KWTextParag *parag;
+    KWGUI *gui;
+
+};
+
+/******************************************************************/
+/* Class: KWDocStructFrameSetItem                                 */
+/******************************************************************/
+
+class KWDocStructFrameSetItem : public KWDocListViewItem
+{
+    Q_OBJECT
+public:
+    KWDocStructFrameSetItem( QListViewItem *_parent, const QString &_text,
+        KWFrameSet *_frameset, KWGUI *__parent );
+    KWDocStructFrameSetItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text,
+        KWFrameSet *_frameset, KWGUI*__parent );
+    virtual void selectFrameSet();
+    virtual void editFrameSet();
+    virtual void deleteFrameSet();
+    virtual void editProperties();
+
+public slots:
+    void slotDoubleClicked( QListViewItem *_item );
+    void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
+
+protected:
+    KWFrameSet *frameset;
     KWGUI *gui;
 
 };
@@ -208,6 +256,8 @@ public:
     virtual void setOpen( bool o );
 
 protected:
+    void deleteAllChildren();
+
     KWDocument *doc;
     TypeStructDocItem type;
     KWGUI *gui;
@@ -231,7 +281,6 @@ public:
     QSize minimumSizeHint() const {
         return QSize( 0, 0 );
     }
-    bool testExistTypeOfFrame(TypeStructDocItem _type);
     void selectFrameSet();
     void editFrameSet();
     void deleteFrameSet();
