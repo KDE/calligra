@@ -178,6 +178,7 @@ Editor::fill()
 	hideEditor();
 	KListView::clear();
 	d->itemDict.clear();
+	clearWidgetCache();
 	if(!d->set) {
 		d->insideFill = false;
 		return;

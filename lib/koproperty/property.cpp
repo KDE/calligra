@@ -308,26 +308,27 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		kopropertywarn << "Property::setValue(): COULD NOT SET value to a null property" << endl;
 		return;
 	}
-
+	const QVariant::Type t = d->value.type();
+	const QVariant::Type newt = value.type();
 //	kopropertydbg << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
-	if (d->value.type() != value.type() && !d->value.isNull() && !value.isNull()
-		 && !( (d->value.type()==QVariant::Int && value.type()==QVariant::UInt)
-			   || (d->value.type()==QVariant::UInt && value.type()==QVariant::Int)
-			   || (d->value.type()==QVariant::CString && value.type()==QVariant::String)
-			   || (d->value.type()==QVariant::String && value.type()==QVariant::CString)
+	if (t != newt && !d->value.isNull() && !value.isNull()
+		 && !( (t==QVariant::Int && newt==QVariant::UInt)
+			   || (t==QVariant::UInt && newt==QVariant::Int)
+			   || (t==QVariant::CString && newt==QVariant::String)
+			   || (t==QVariant::String && newt==QVariant::CString)
 		 )) {
 		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << d->value.typeName() << " and " << value.typeName() << endl;
 	}
 
 	//1. Check if the value should be changed
 	bool ch;
-	if (d->value.type() == QVariant::DateTime
-		|| d->value.type() == QVariant::Time) {
+	if (t == QVariant::DateTime
+		|| t == QVariant::Time) {
 		//for date and datetime types: compare with strings, because there
 		//can be miliseconds difference
 		ch = (d->value.toString() != value.toString());
 	}
-	else if (d->value.type() == QVariant::String || d->value.type()==QVariant::CString) {
+	else if (t == QVariant::String || t==QVariant::CString) {
 		//property is changed for string type,
 		//if one of value is empty and other isn't..
 		ch = ( (d->value.toString().isEmpty() != value.toString().isEmpty())

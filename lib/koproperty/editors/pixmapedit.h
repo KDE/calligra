@@ -47,13 +47,16 @@ class KOPROPERTY_EXPORT PixmapEdit : public Widget
 		bool eventFilter(QObject *o, QEvent *ev);
 
 	protected slots:
-		/*! Selects a new pixmap using "open" file dialog. 
+		/*! Helper used by selectPixmap(). Can be also used by subclassess. 
 		 Selected path will be stored in "lastVisitedImagePath" config entry within "Recent Dirs" 
 		 config group of application's settings. This entry can be later reused when file dialogs 
 		 are opened for selecting image files. */
+		QString selectPixmapFileName();
+
+		/*! Selects a new pixmap using "open" file dialog. Can be reimplemented. */
 		virtual void selectPixmap();
 
-	private:
+	protected:
 		QLabel *m_edit;
 		QLabel *m_popup;
 		QPushButton *m_button;

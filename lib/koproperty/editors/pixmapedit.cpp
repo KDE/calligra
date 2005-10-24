@@ -141,8 +141,8 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 		r.topLeft().y()+(r.height()-m_scaledPixmap.height())/2+1, m_scaledPixmap);
 }
 
-void
-PixmapEdit::selectPixmap()
+QString
+PixmapEdit::selectPixmapFileName()
 {
 /*#ifdef PURE_QT
 	QString url = QFileDialog::getOpenFileName();
@@ -165,9 +165,16 @@ PixmapEdit::selectPixmap()
 
 	//! @todo download the file if remote, then set fileName properly
 #endif
+	return fileName;
+}
 
+void
+PixmapEdit::selectPixmap()
+{
+	QString fileName( selectPixmapFileName() );
 	if (fileName.isEmpty())
 		return;
+
 	QPixmap pm;
 	if (!pm.load(fileName)) {
 		//! @todo err msg
