@@ -43,9 +43,8 @@ libkwordpart_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormula
 		KWordHorizontalLineFrameSetIface.cc KWInsertHorizontalLineDia.cpp \
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
-		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp
-# Remove files out of this list: KWordHorizontalLineFrameSetIface.skel
-
+		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp \
+		KWFrameViewManager.cpp
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformulalib.la ./libkwmailmerge_interface.la 

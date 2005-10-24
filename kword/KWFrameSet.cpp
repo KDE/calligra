@@ -47,11 +47,13 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
       m_anchorTextFs( 0L ), m_dcop( 0L ), m_pageManager( 0 )
 {
     // Send our "repaintChanged" signals to the document.
-    connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
+    if(m_doc) {
+        connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
+        m_pageManager = doc->pageManager();
+    }
     m_frames.setAutoDelete( true );
     m_framesInPage.setAutoDelete( true ); // autodelete the lists in the array (not the frames;)
-    m_pageManager = doc->pageManager();
 }
 
 KWordFrameSetIface* KWFrameSet::dcopObject()
