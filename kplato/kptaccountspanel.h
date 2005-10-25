@@ -29,6 +29,7 @@ class QListViewItem;
 class QWidget;
 
 class KCommand;
+class KMacroCommand;
 
 namespace KPlato
 {
@@ -36,6 +37,7 @@ namespace KPlato
 class KPTAccount;
 class KPTAccounts;
 class KPTPart;
+class KPTProject;
 
 class KPTAccountsPanel : public KPTAccountsPanelBase {
     Q_OBJECT
@@ -53,6 +55,7 @@ public slots:
 protected slots:
     void slotChanged();
     void slotSelectionChanged();
+    void slotItemRenamed(QListViewItem *item, int col);
     void slotRemoveBtn();
     void slotNewBtn();
     void slotSubBtn();
@@ -60,8 +63,8 @@ protected slots:
 protected:
     void addItems(QListView *lv, KPTAccounts &acc);
     void addItems(QListViewItem *item, KPTAccount *acc);
-    void save();
-    void save(QListViewItem *item);
+    KCommand *save(KPTPart *part, KPTProject &project);
+    KCommand *save(KPTPart *part, KPTProject &project, QListViewItem *item);
     
 private:
     KPTAccounts &m_accounts;

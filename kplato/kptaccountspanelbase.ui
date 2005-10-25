@@ -13,6 +13,12 @@
             <height>201</height>
         </rect>
     </property>
+    <property name="baseSize">
+        <size>
+            <width>300</width>
+            <height>0</height>
+        </size>
+    </property>
     <property name="caption">
         <string>KPTAccountsPanelBase</string>
     </property>

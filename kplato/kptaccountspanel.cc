@@ -19,11 +19,15 @@
 
 #include "kptaccountspanel.h"
 #include "kptaccount.h"
+#include "kptcommand.h"
+#include "kptproject.h"
 
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qstringlist.h>
+
+#include <klocale.h>
 
 #include <kdebug.h>
 
@@ -69,8 +73,10 @@ KPTAccountsPanel::KPTAccountsPanel(KPTAccounts &acc, QWidget *p, const char *n)
     accountList->setRootIsDecorated(true);
     addItems(accountList, acc);
 
+    slotSelectionChanged();
+    
     connect(accountList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-    connect(accountList, SIGNAL(itemRenamed(QListViewItem*, int)), SLOT(slotChanged()));
+    connect(accountList, SIGNAL(itemRenamed(QListViewItem*, int)), SLOT(slotItemRenamed(QListViewItem*, int)));
     
     connect(removeBtn, SIGNAL(clicked()), SLOT(slotRemoveBtn()));
     connect(newBtn, SIGNAL(clicked()), SLOT(slotNewBtn()));
@@ -100,17 +106,32 @@ void KPTAccountsPanel::addItems(QListViewItem *item, KPTAccount *acc) {
     }
 }
 
-KCommand *KPTAccountsPanel::buildCommand(KPTPart *part) {
-    //TODO
-    return 0;
-}
-
-
 void KPTAccountsPanel::slotChanged() {
     emit changed(true);
 }
 
 void KPTAccountsPanel::slotSelectionChanged() {
+    kdDebug()<<k_funcinfo<<endl;
+    QListViewItem *i = accountList->selectedItem();
+    removeBtn->setEnabled((bool)i);
+    newBtn->setEnabled((bool)i);
+    subBtn->setEnabled((bool)i);
+}
+
+void KPTAccountsPanel::slotItemRenamed(QListViewItem *item, int col) {
+    if (col != 0) {
+        slotChanged();
+        return;
+    }
+    QString text = item->text(0);
+    QListViewItemIterator it(item->listView());
+    for (; it.current(); ++it) {
+        if (it.current() != item && it.current()->text(0) == text) {
+            item->startRename(0);
+            break;
+        }
+    }
+    slotChanged();
 }
 
 void KPTAccountsPanel::slotRemoveBtn() {
@@ -130,70 +151,107 @@ void KPTAccountsPanel::slotRemoveBtn() {
 void KPTAccountsPanel::slotNewBtn() {
     kdDebug()<<k_funcinfo<<endl;
     QListViewItem *item = accountList->selectedItem();
+    if (item && item->text(0).isEmpty()) {
+        return;
+    }
+    QListViewItem *n;
     if (item) {
         if (item->parent()) {
-            new AccountItem(item->parent(), item);
+            n = new AccountItem(item->parent(), item);
         } else {
-            new AccountItem(accountList, item);
+            n = new AccountItem(accountList, item);
         }
     } else {
-        new AccountItem(accountList);
+        n = new AccountItem(accountList);
     }
+    n->startRename(0);
 }
 
 void KPTAccountsPanel::slotSubBtn() {
     kdDebug()<<k_funcinfo<<endl;
     QListViewItem *item = accountList->selectedItem();
+    if (item && item->text(0).isEmpty()) {
+        return;
+    }
+    QListViewItem *n;
     if (item) {
-        new AccountItem(item);
+        n = new AccountItem(item);
     } else {
-        new AccountItem(accountList);
+        n = new AccountItem(accountList);
     }
+    n->startRename(0);
 }
 
-void KPTAccountsPanel::save() {
-    QListViewItem *myChild = accountList->firstChild();
-    for (; myChild; myChild = myChild->nextSibling()) {
-        save(myChild);
-    }
-}
-
-void KPTAccountsPanel::save(QListViewItem *i) {
-    AccountItem *item = static_cast<AccountItem*>(i);
-    if (item->account == 0) {
-        kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
-        KPTAccount *a = new KPTAccount(item->text(0), item->text(1));
-        if (item->parent()) {
-            static_cast<AccountItem*>(item->parent())->account->append(a);
-        } else {
-            m_accounts.append(a);
-        }
-    } else {
-        if (item->text(0) != item->account->name()) {
-        kdDebug()<<k_funcinfo<<"Renamed: "<<item->account->name()<<" to "<<item->text(0)<<endl;
-        item->account->setName(item->text(0));
-        }
-        if (item->text(1) != item->account->description()) {
-            kdDebug()<<k_funcinfo<<"New description: "<<item->account->description()<<" to "<<item->text(1)<<endl;
-            item->account->setDescription(item->text(1));
-        }
-    }
-    QListViewItem *myChild = item->firstChild();
-    for (; myChild; myChild = myChild->nextSibling()) {
-        save(myChild);
-    }
-}
-
-void KPTAccountsPanel::slotOk() {
+KCommand *KPTAccountsPanel::buildCommand(KPTPart *part) {
+    KMacroCommand *cmd = 0;
+    // First remove
     QPtrListIterator<QListViewItem> rit = m_removedItems;
     for (;rit.current(); ++rit) {
         AccountItem *item = static_cast<AccountItem*>(rit.current());
         kdDebug()<<k_funcinfo<<"Removed item"<<endl;
-        m_accounts.remove(item->account);
+        if (!cmd) cmd = new KMacroCommand(i18n("Modify accounts"));
+        cmd->addCommand(new KPTRemoveAccountCmd(part, part->getProject(), item->account));
     }
     m_removedItems.setAutoDelete(true);
-    
-    save();
+    // Then add/modify
+    KCommand *c = save(part, part->getProject());
+    if (c) {
+        if (!cmd) cmd = new KMacroCommand(i18n("Modify accounts"));
+        cmd->addCommand(c);
+    }
+    return cmd;
+}
+
+KCommand *KPTAccountsPanel::save(KPTPart *part, KPTProject &project) {
+    KMacroCommand *cmd=0;
+    QListViewItem *myChild = accountList->firstChild();
+    for (; myChild; myChild = myChild->nextSibling()) {
+        KCommand *c = save(part, project, myChild);
+        if (c) {
+            if (!cmd) cmd = new KMacroCommand("");
+            cmd->addCommand(c);
+        }
+    }
+    return cmd;
+}
+
+KCommand *KPTAccountsPanel::save(KPTPart *part, KPTProject &project, QListViewItem *i) {
+    KMacroCommand *cmd=0;
+    AccountItem *item = static_cast<AccountItem*>(i);
+    if (item->account == 0) {
+        kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+        if (!cmd) cmd = new KMacroCommand("");
+        KPTAccount *a = new KPTAccount(item->text(0), item->text(1));
+        if (item->parent()) {
+            kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+            cmd->addCommand(new KPTAddAccountCmd(part, project, a, item->parent()->text(0)));
+        } else {
+            cmd->addCommand(new KPTAddAccountCmd(part, project, a));
+        }
+    } else {
+        if (item->text(0) != item->account->name()) {
+            if (!cmd) cmd = new KMacroCommand("");
+            kdDebug()<<k_funcinfo<<"Renamed: "<<item->account->name()<<" to "<<item->text(0)<<endl;
+            cmd->addCommand(new KPTRenameAccountCmd(part, item->account, item->text(0)));
+        }
+        if (item->text(1) != item->account->description()) {
+            if (!cmd) cmd = new KMacroCommand("");
+            kdDebug()<<k_funcinfo<<"New description: "<<item->account->description()<<" to "<<item->text(1)<<endl;
+            cmd->addCommand(new KPTModifyAccountDescriptionCmd(part, item->account, item->text(1)));
+        }
+    }
+    QListViewItem *myChild = item->firstChild();
+    for (; myChild; myChild = myChild->nextSibling()) {
+        KCommand *c = save(part, project, myChild);
+        if (c) {
+            if (!cmd) cmd = new KMacroCommand("");
+            cmd->addCommand(c);
+        }
+    }
+    return cmd;
+}
+
+void KPTAccountsPanel::slotOk() {
 }
 
 } //namespace KPlato

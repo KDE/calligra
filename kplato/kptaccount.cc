@@ -31,6 +31,7 @@ namespace KPlato
 
 
 KPTAccount::KPTAccount() {
+    m_accountList.setAutoDelete(true);
 }
 
 KPTAccount::KPTAccount(QString name, QString description)
@@ -41,7 +42,8 @@ KPTAccount::KPTAccount(QString name, QString description)
 }
 
 KPTAccount::~KPTAccount() {
-    kdDebug()<<k_funcinfo<<m_name<<endl;
+    kdDebug()<<k_funcinfo<<m_name<<": "<<m_accountList.count()<<endl;
+    m_accountList.clear();
     removeId();
 }
     
@@ -73,17 +75,16 @@ void KPTAccount::insertChildren() {
     }
 }
 
-void KPTAccount::remove(KPTAccount *account){
+void KPTAccount::take(KPTAccount *account){
     if (account == 0) {
         return;
     }
     if (account->parent() == this) {
         m_accountList.take(m_accountList.findRef(account));
     } else {
-        account->parent()->remove(account);
+        account->parent()->take(account);
     }
     kdDebug()<<k_funcinfo<<account->name()<<endl;
-    delete account;
 }
     
 bool KPTAccount::load(QDomElement &element) {
@@ -143,6 +144,7 @@ KPTAccounts::KPTAccounts() {
 }
 
 KPTAccounts::~KPTAccounts() {
+    m_accountList.clear();
 }
 
 void KPTAccounts::append(KPTAccount *account) {
@@ -155,18 +157,17 @@ void KPTAccounts::append(KPTAccount *account) {
     account->insertChildren();
 }
 
-void KPTAccounts::remove(KPTAccount *account){
+void KPTAccounts::take(KPTAccount *account){
     if (account == 0) {
         return;
     }
     removeId(account->name());
     if (account->parent()) {
-        account->parent()->remove(account);
+        account->parent()->take(account);
         return;
     }
     m_accountList.take(m_accountList.findRef(account));
     kdDebug()<<k_funcinfo<<account->name()<<endl;
-    delete account;
 }
     
 bool KPTAccounts::load(QDomElement &element) {
@@ -240,7 +241,9 @@ bool KPTAccounts::insertId(const KPTAccount *account) {
 }
 
 bool KPTAccounts::removeId(const QString &id) {
-    return m_idDict.remove(id);
+    bool res = m_idDict.remove(id);
+    kdDebug()<<k_funcinfo<<id<<": removed="<<res<<endl;
+    return res;
 }
 
 } //namespace KPlato

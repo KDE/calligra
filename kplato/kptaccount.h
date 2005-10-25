@@ -60,7 +60,7 @@ public:
     void setParent(KPTAccount *parent) { m_parent = parent; }
     void clear() { m_accountList.clear(); }
     void append(KPTAccount *account);
-    void remove(KPTAccount *account);
+    void take(KPTAccount *account);
     void insertChildren();
     
     bool load(QDomElement &element);
@@ -97,7 +97,7 @@ public:
     ~KPTAccounts();
     void clear() { m_accountList.clear(); m_idDict.clear(); }
     void append(KPTAccount *account);
-    void remove(KPTAccount *account);
+    void take(KPTAccount *account);
     
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
