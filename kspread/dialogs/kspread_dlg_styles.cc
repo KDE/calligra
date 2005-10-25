@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Laurent Montel <montel@kde.org>
-             (C) 2003 Norbert Andres <nandres@web.de>  
+             (C) 2003 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -271,7 +271,6 @@ void KSpreadStyleDlg::slotUser2()
     return;
 
   CellFormatDlg dlg( m_view, s, m_styleManager, m_view->doc() );
-
   slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 

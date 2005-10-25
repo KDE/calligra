@@ -317,10 +317,9 @@ public:
     void apply( RowFormat *_row );
     void applyFormat( KSpreadFormat *_obj );
 
-    double getSizeHeight();
-    double getSizeWidth();
-    bool getMergedCellState();
-
+    double getSizeHeight() const;
+    double getSizeWidth() const;
+    bool getMergedCellState() const;
 public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
@@ -594,6 +593,7 @@ public:
 
     KLocale * locale() const { return m_pView->doc()->locale(); }
 
+
     struct CellBorderFormat
     {
       int width;
@@ -651,6 +651,8 @@ public:
     bool bHideFormula;
     bool bHideAll;
     bool bIsProtected;
+
+
 
     double heightSize;
     double widthSize;

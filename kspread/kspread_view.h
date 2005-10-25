@@ -475,6 +475,8 @@ public slots:
     void runInternalTests();
     void runInspector();
 
+    void initialiseMarkerFromSheet( KSpreadSheet *_sheet, const QPoint &point );
+
 protected slots:
     /**
      * Popup menu

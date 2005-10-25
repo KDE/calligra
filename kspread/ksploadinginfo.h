@@ -33,6 +33,8 @@ public:
     void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
     QDomElement validation( const QString &name) { return m_validationList[name];}
 
+    //Use when we load ods file.
+    //Necessary to initialise kspread_view selection
     void addMarkerSelection( KSpreadSheet *sheet, const QPoint & _point ) { m_markerSelection.insert( sheet, _point );}
 
     void setLoadTemplate( bool _b ) {

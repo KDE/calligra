@@ -3860,11 +3860,11 @@ void KSpreadView::textToColumns()
 
   //Only use the first column
   area.setRight(area.left());
- 
+
 /* if ( d->selectionInfo->selection().width() > 1 )
   {
 	//Only use the first column
-	
+
     KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
     return;
   }*/
@@ -6584,6 +6584,11 @@ void KSpreadView::commandExecuted()
 {
   updateEditWidget();
   resultOfCalc();
+}
+
+void KSpreadView::initialiseMarkerFromSheet( KSpreadSheet *_sheet, const QPoint &point )
+{
+    d->savedMarkers.replace( _sheet, point);
 }
 
 QPoint KSpreadView::markerFromSheet( KSpreadSheet *_sheet ) const

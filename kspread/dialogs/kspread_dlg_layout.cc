@@ -2972,7 +2972,7 @@ void CellFormatPagePosition::slotStateChanged(int)
         m_indent->setEnabled(true);
 
 }
-bool CellFormatPagePosition::getMergedCellState()
+bool CellFormatPagePosition::getMergedCellState() const
 {
     return  mergeCell->isChecked();
 }
@@ -3284,7 +3284,7 @@ void CellFormatPagePosition::applyFormat( KSpreadFormat * _obj )
     _obj->setIndent( m_indent->value() );
 }
 
-double CellFormatPagePosition::getSizeHeight()
+double CellFormatPagePosition::getSizeHeight() const
 {
   if ( defaultHeight->isChecked() )
       return 20.0;
@@ -3292,7 +3292,7 @@ double CellFormatPagePosition::getSizeHeight()
       return height->value();
 }
 
-double CellFormatPagePosition::getSizeWidth()
+double CellFormatPagePosition::getSizeWidth() const
 {
   if ( defaultWidth->isChecked() )
         return 60.0;
