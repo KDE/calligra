@@ -4761,8 +4761,7 @@ void PPTReader::handleRecord( Record* record, int type )
 
 void PPTReader::handleContainer( Container* container, int type, unsigned size )
 {
-  if( !container ) return;
-  if( !container->isContainer() ) return;
+  if( !container || !container->isContainer() ) return;
 
   unsigned long nextpos = d->docStream->tell() + size - 6;
 
