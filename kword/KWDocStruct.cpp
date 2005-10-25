@@ -94,6 +94,7 @@ void KWDocListViewItem::deleteAllChildren()
     }
 }
 
+
 /******************************************************************/
 /* Class: KWDocStructParagItem                                    */
 /******************************************************************/
@@ -568,11 +569,15 @@ void KWDocStructRootItem::setupArrangement()
 
 void KWDocStructRootItem::setupTextFrameSets()
 {
-    deleteAllChildren();
+
+    // Delete Empty item from list.
+    QListViewItem* lvItem = firstChild();
+    if (lvItem && (lvItem->text(0) == i18n("Empty"))) delete lvItem;
 
     KWFrameSet *frameset = 0L;
     KWDocStructFrameSetItem *item = 0L;
 
+    // Build a list of framesets ordered by their screen position (top left corner).
     QValueList<KWOrderedFrameSet> orderedFrameSets;
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- ) {
         frameset = doc->frameSet(i);
@@ -583,13 +588,35 @@ void KWDocStructRootItem::setupTextFrameSets()
     }
     qHeapSort(orderedFrameSets);
 
+    // Build a list of frameset pointers from the sorted list.
+    QPtrList<KWFrameSet> frameSetPtrs;
+    for ( uint i = 0; i < orderedFrameSets.count(); i++ )
+        frameSetPtrs.append(orderedFrameSets[i].frameSet());
+
+    // Remove deleted framesets from the listview.
+    item = dynamic_cast<KWDocStructFrameSetItem *>(firstChild());
+    KWDocStructFrameSetItem* delItem;
+    while (item) {
+        delItem = item;
+        item = dynamic_cast<KWDocStructFrameSetItem *>(item->nextSibling());
+        if (frameSetPtrs.containsRef(delItem->frameSet()) == 0) delete delItem;
+    }
+
+    // Add new framesets to the list or update existing ones.
+    KWDocStructFrameSetItem* after = 0L;
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
     {
         frameset = orderedFrameSets[i].frameSet();
+        item = findFrameSetItem(frameset);
         if (item)
-            item = new KWDocStructFrameSetItem( this, item, frameset->name(), frameset, gui );
-        else
-            item = new KWDocStructFrameSetItem( this, frameset->name(), frameset, gui );
+            item->setText(0, frameset->name());
+        else {
+            if (after)
+                item = new KWDocStructFrameSetItem( this, after, frameset->name(), frameset, gui );
+            else
+                item = new KWDocStructFrameSetItem( this, frameset->name(), frameset, gui );
+        }
+        after = item;
         item->setupTextFrames(doc);
     }
 
@@ -689,6 +716,23 @@ void KWDocStructRootItem::setupEmbedded()
     if ( childCount() == 0 )
         ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
+
+KWDocStructFrameSetItem* KWDocStructRootItem::findFrameSetItem(const KWFrameSet* frameset)
+{
+    if ( childCount() > 0 )
+    {
+        QListViewItem *child = firstChild();
+        while( child )
+        {
+            if (dynamic_cast<KWDocStructFrameSetItem *>(child)->frameSet() == frameset)
+                return dynamic_cast<KWDocStructFrameSetItem *>(child);
+            child = child->nextSibling();
+        }
+    }
+    return 0;
+}
+
+
 
 /******************************************************************/
 /* Class: KWDocStructTree                                         */

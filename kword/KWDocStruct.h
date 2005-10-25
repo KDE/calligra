@@ -103,10 +103,12 @@ public:
     virtual void editFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-    void setupTextFrames(KWDocument* doc);
 
     virtual void doubleClicked( QListViewItem *_item );
     virtual void rightButtonClicked( QListViewItem *, const QPoint &, int );
+
+    KWFrameSet* frameSet() { return frameset; };
+    void setupTextFrames(KWDocument* doc);
 
 protected:
     KWFrameSet *frameset;
@@ -239,6 +241,8 @@ public:
     virtual void setOpen( bool o );
 
 protected:
+    KWDocStructFrameSetItem* findFrameSetItem(const KWFrameSet* frameset);
+
     KWDocument *doc;
     TypeStructDocItem type;
     KWGUI *gui;
