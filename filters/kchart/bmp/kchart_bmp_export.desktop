@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart BMP Export Filter
+Name[da]=KChart BMP-eksportfilter
+Name[pt]=Filtro de Exportação de BMP para o KChart
+Name[pt_BR]=Filtro de Exportação de BMP para o KChart
+Name[sv]=Kchart BMP-exportfilter
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-bmp
 X-KDE-Weight=1

@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart XBM Export Filter
+Name[da]=KChart XBM-eksportfilter
+Name[pt]=Filtro de Exportação de XBM para o KChart
+Name[pt_BR]=Filtro de Exportação de XBM para o KChart
+Name[sv]=Kchart XBM-exportfilter
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xbm
 X-KDE-Weight=1

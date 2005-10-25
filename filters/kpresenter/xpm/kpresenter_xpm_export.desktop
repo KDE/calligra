@@ -2,6 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter XPM Export Filter
+Name[da]=KPresenter XPM-eksportfilter
+Name[pt]=Filtro de Exportação de XPM para o KPresenter
+Name[pt_BR]=Filtro de Exportação de XPM para o KPresenter
 Name[sv]=Kpresenter XPM-exportfilter
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-xpm

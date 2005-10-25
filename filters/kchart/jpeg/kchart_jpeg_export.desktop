@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart JPEG Export Filter
+Name[da]=KChart JPEG-eksportfilter
+Name[pt]=Filtro de Exportação de JPEG para o KChart
+Name[pt_BR]=Filtro de Exportação de JPEG para o KChart
+Name[sv]=Kchart JPEG-exportfilter
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/jpeg
 X-KDE-Weight=1

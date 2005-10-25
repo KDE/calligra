@@ -2,6 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter MNG Export Filter
+Name[da]=KPresenter MNG-eksportfilter
+Name[pt]=Filtro de Exportação de MNG para o KPresenter
+Name[pt_BR]=Filtro de Exportação de MNG para o KPresenter
 Name[sv]=Kpresenter MNG-exportfilter
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=video/x-mng
