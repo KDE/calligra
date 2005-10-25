@@ -733,15 +733,13 @@ void KWDocStructTree::setup()
 {
     setRootIsDecorated( true );
     setSorting( -1 );
-    refreshTree((int)TextFrames);
-    refreshTree((int)FormulaFrames);
-    refreshTree((int)Tables);
-    refreshTree((int)Pictures);
-    refreshTree((int)Embedded);
+    refreshTree((int)(TextFrames | FormulaFrames | Tables | Pictures | Embedded));
 }
 
 void KWDocStructTree::refreshTree(int _type)
 {
+    QString curItemText;
+    if (currentItem()) curItemText = currentItem()->text(0);
     if(((int)Arrangement) & _type)
         arrangement->setupArrangement();
     if(((int)TextFrames) & _type)
@@ -754,6 +752,10 @@ void KWDocStructTree::refreshTree(int _type)
         pictures->setupPictures();
     if(((int)Embedded) & _type)
         embedded->setupEmbedded();
+    if (!curItemText.isNull()) {
+        QListViewItem* item = findItem(curItemText, 0);
+        if (item) setCurrentItem(item);
+    }
 }
 
 void KWDocStructTree::selectFrameSet()
