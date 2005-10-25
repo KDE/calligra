@@ -87,7 +87,7 @@ PartResizeHandler::~PartResizeHandler()
 void PartResizeHandler::repaint(QRegion &rgn)
 {
   rgn = rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) );
-  rgn.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
+ // rgn.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
   ((QWidget*)target())->repaint( rgn );
 }
 
@@ -101,7 +101,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
     else if ( ev->type() == QEvent::MouseMove )
     {
         QMouseEvent* e = (QMouseEvent*)ev;
-        QPoint p = d->m_invert.map( d->m_invertParentMatrix.map( e->pos() + QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) ) );
+        QPoint p = d->m_invert.map( d->m_invertParentMatrix.map( e->pos() /*+ QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) */ ) );
         QRegion rgn( d->m_child->frameRegion( d->m_parentMatrix, true ) );
 
         double x1_x, x1_y, x2_x, x2_y;
@@ -255,14 +255,14 @@ bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
         QMouseEvent* e = (QMouseEvent*)ev;
 
         QRegion bound = d->m_dragChild->frameRegion( d->m_parentMatrix, true );
-        QPoint pos = d->m_invertParentMatrix.map( e->pos()  + QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) );
+        QPoint pos = d->m_invertParentMatrix.map( e->pos() /* + QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) */ );
         d->m_dragChild->setGeometry( QRect( d->m_geometryDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
                                              d->m_geometryDragStart.y() + pos.y() - d->m_mouseDragStart.y(),
                                              d->m_geometryDragStart.width(), d->m_geometryDragStart.height() ) );
         d->m_dragChild->setRotationPoint( QPoint( d->m_rotationDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
                                                d->m_rotationDragStart.y() + pos.y() - d->m_mouseDragStart.y() ) );
         bound = bound.unite( d->m_dragChild->frameRegion( d->m_parentMatrix, false ) );
-        bound.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
+      //  bound.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
         ((QWidget*)target())->repaint( bound );
 
         return true;
@@ -343,7 +343,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
 
 KoChild *ContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMouseEvent *ev) {
 
-    pos = ev->pos() + QPoint(m_view->canvasXOffset(), m_view->canvasYOffset());
+    pos = ev->pos(); //+ QPoint(m_view->canvasXOffset(), m_view->canvasYOffset());
 
     KoChild *child = 0;
     KoDocumentChild* docChild = m_view->selectedChild();

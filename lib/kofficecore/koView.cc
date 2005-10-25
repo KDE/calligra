@@ -491,6 +491,7 @@ QWMatrix KoView::matrix() const
 {
   QWMatrix m;
   m.scale( zoom(), zoom() );
+  //m.translate(  canvasXOffset() ,  canvasYOffset() );
   return m;
 }
 
@@ -693,10 +694,16 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   QRect geom = child->geometry();
   double zoom = parentView()->zoom();
   // cast to int gives rounding probs, so we add 0.5 to fix it.
-  m_frame->setGeometry( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - parentView()->canvasXOffset(),
-                        static_cast<int>((double)geom.y() * zoom + 0.5) - parentView()->canvasYOffset(),
+ /* m_frame->setGeometry( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - parentView()->canvasXOffset() ,
+                        static_cast<int>((double)geom.y() * zoom + 0.5) - //parentView()->canvasYOffset() ,
                         static_cast<int>((double)geom.width() * zoom + 0.5),
-                        static_cast<int>((double)geom.height() * zoom + 0.5) );
+                        static_cast<int>((double)geom.height() * zoom + 0.5) );*/
+
+   m_frame->setGeometry( (geom.x() * zoom) - parentView()->canvasXOffset(), (geom.y() * zoom) - parentView()->canvasYOffset(), geom.width() * zoom,
+			geom.height() * zoom);
+  //m_frame->setGeometry(parentView()->matrix().mapRect(geom));
+
+  
 
   m_frame->show();
   m_frame->raise();

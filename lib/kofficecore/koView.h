@@ -239,7 +239,7 @@ public:
    *
    * The matrix changes when calling @ref #setZoom.
    */
-  QWMatrix matrix() const;
+  virtual QWMatrix matrix() const;
 
   /**
    * @return the KoViewChild which is responsible for the @p view or 0.

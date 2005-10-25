@@ -97,7 +97,7 @@ private:
  * documents in your class derived from @ref KoView.
  *
  * Just create one instance per view of this class and parts
- * will megically be moved around on your document.
+ * will magically be moved around on your document.
  *
  * This class acts like an event filter on your view, so the
  * mouse events which are used for parts moving and resizing
