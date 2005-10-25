@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
-   Copyright (C) 2005 Sven Lppken <sven@kde.org>
+   Copyright (C) 2005 Sven Lüppken <sven@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -63,6 +63,7 @@ KoShellWindow::KoShellWindow()
 
   m_pLayout = new QSplitter( centralWidget() );
 
+  // Setup the sidebar
   m_pSidebar = new IconSidePane( m_pLayout );
   m_pSidebar->setSizePolicy( QSizePolicy( QSizePolicy::Maximum,
                              QSizePolicy::Preferred ) );
@@ -71,6 +72,7 @@ KoShellWindow::KoShellWindow()
   m_grpDocuments = m_pSidebar->insertGroup(i18n("Documents"), true, this, SLOT(slotSidebar_Document(int)));
   m_pLayout->setResizeMode(m_pSidebar,QSplitter::FollowSizeHint);
 
+  // Setup the tabbar
   m_pFrame = new KTabWidget( m_pLayout );
   m_pFrame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                             QSizePolicy::Preferred ) );
@@ -88,7 +90,7 @@ KoShellWindow::KoShellWindow()
   QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   int id = 0;
-
+  // Get all available components
   for( ; it != lstComponents.end(); ++it )
   {
       if (!(*it).service()->genericName().isEmpty()) //skip the unavailable part
@@ -97,25 +99,12 @@ KoShellWindow::KoShellWindow()
           continue;
 
       m_mapComponents[ id++ ] = *it;
-
-      // Build list of patterns for all supported KOffice documents...
-      QString nativeMimeType = (*it).service()->property( "X-KDE-NativeMimeType" ).toString();
-      //kdDebug() << nativeMimeType << endl;
-      if ( !nativeMimeType.isEmpty() )
-      {
-        KMimeType::Ptr mime = KMimeType::mimeType( nativeMimeType );
-        if (mime)
-        {
-          if ( !m_filter.isEmpty() )
-            m_filter += " ";
-          m_filter += mime->patterns().join(" ");
-        }
-      }
   }
-   QValueList<int> list;
-   list.append( KoShellSettings::sidebarWidth() );
-   list.append( this->width() - KoShellSettings::sidebarWidth() );
-   m_pLayout->setSizes( list );
+
+  QValueList<int> list;
+  list.append( KoShellSettings::sidebarWidth() );
+  list.append( this->width() - KoShellSettings::sidebarWidth() );
+  m_pLayout->setSizes( list );
 
   connect( this, SIGNAL( documentSaved() ),
            this, SLOT( slotNewDocumentName() ) );
@@ -373,7 +362,7 @@ void KoShellWindow::slotNewDocumentName()
 
 void KoShellWindow::updateCaption()
 {
-    kdDebug() << "KoShellWindow::updateCaption() rootDoc=" << rootDocument() << endl;
+    //kdDebug() << "KoShellWindow::updateCaption() rootDoc=" << rootDocument() << endl;
     KoMainWindow::updateCaption();
     // Let's take this opportunity for setting a correct name for the icon
     // in koolbar
@@ -382,7 +371,7 @@ void KoShellWindow::updateCaption()
     {
       if ( (*it).m_pDoc == rootDocument() )
       {
-        kdDebug() << "updateCaption called for " << rootDocument() << endl;
+        //kdDebug() << "updateCaption called for " << rootDocument() << endl;
         // Get caption from document info (title(), in about page)
         QString name;
         if ( rootDocument()->documentInfo() )
@@ -704,15 +693,6 @@ void KoShellWindow::slotConfigureKeys()
   dlg.configure();
 }
 
-/*
-void KoShellWindow::slotFilePrint()
-{
-  assert( m_activePage != m_lstPages.end() );
-
-  return (*m_activePage).m_vView->printDlg();
-}
-*/
-
 void KoShellWindow::createShellGUI( bool  )
 {
 	guiFactory()->addClient( m_client );
@@ -722,9 +702,9 @@ void KoShellWindow::createShellGUI( bool  )
 ///////////////////
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
-	setXMLFile( "koshellui.rc", true, true );
-    window->mnuSaveAll = new KAction(i18n("Save All"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
-    window->mnuSaveAll->setEnabled(false);
+  setXMLFile( "koshellui.rc", true, true );
+  window->mnuSaveAll = new KAction( i18n("Save All"), 0, window, SLOT( saveAll() ), actionCollection(), "save_all" );
+  window->mnuSaveAll->setEnabled(false);
 }
 
 #include "koshell_shell.moc"

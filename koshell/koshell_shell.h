@@ -123,8 +123,6 @@ private:
   // Map of available parts (the int is the koolbar item id)
   QMap<int,KoDocumentEntry> m_mapComponents;
 
-  QString m_filter;
-
   // Saved between openDocument and setRootDocument
   KoDocumentEntry m_documentEntry;
 
