@@ -79,6 +79,7 @@ class KWFrameStyle;
 class KWTableStyle;
 class KoTextIterator;
 class KWTableFrameSet;
+class KStatusBarLabel;
 
 class KoSpell;
 #include <kspell2/broker.h>
@@ -767,8 +768,8 @@ private:
     int m_currentPage; ///< 0-based current page number
 
     // Statusbar items
-    QLabel * m_sbPageLabel; ///< 'Current page number and page count' label
-    QLabel * m_sbFramesLabel; ///< Info about selected frames
+    KStatusBarLabel * m_sbPageLabel; ///< 'Current page number and page count' label
+    KStatusBarLabel * m_sbFramesLabel; ///< Info about selected frames
 
     // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
     int m_zoomViewModeNormal;

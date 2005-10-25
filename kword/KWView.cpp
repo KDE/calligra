@@ -194,9 +194,13 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     if ( sb ) // No statusbar in e.g. konqueror
     {
         m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
+        m_sbPageLabel->setAlignment( AlignLeft | AlignVCenter );
         addStatusBarItem( m_sbPageLabel, 0 );
+
+        m_sbFramesLabel = new KStatusBarLabel( QString::null, 0, sb );
+        m_sbFramesLabel->setAlignment( AlignLeft | AlignVCenter );
+        addStatusBarItem( m_sbFramesLabel, 1 );
     }
-    m_sbFramesLabel = 0L; // Only added when frames are selected
 
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
@@ -1537,7 +1541,8 @@ void KWView::updatePageInfo()
         QString oldText = m_sbPageLabel->text();
         QString newText;
 
-        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? QString(" ")+i18n("Page %1/%2").arg(m_currentPage).arg(m_doc->pageCount())+' ' : QString::null;
+        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage).arg(m_doc->pageCount())+' ' : QString::null;
+
         if ( newText != oldText )
         {
             m_sbPageLabel->setText( newText );
@@ -1564,17 +1569,12 @@ void KWView::updateFrameStatusBarItem()
     int nbFrame=m_doc->getSelectedFrames().count();
     if ( m_doc->showStatusBar() && sb && nbFrame > 0 )
     {
-        if ( !m_sbFramesLabel )
-        {
-            m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-            addStatusBarItem( m_sbFramesLabel );
-        }
         if ( nbFrame == 1 )
         {
             KoUnit::Unit unit = m_doc->unit();
             QString unitName = m_doc->unitName();
             KWFrame * frame = m_doc->getFirstSelectedFrame();
-            m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
+            m_sbFramesLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (w: %6, h: %7) (%8)" )
                     .arg( frame->frameSet()->name() )
                     .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
                     .arg( KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(
@@ -1585,29 +1585,17 @@ void KWView::updateFrameStatusBarItem()
                     .arg( KoUnit::toUserStringValue( frame->height(), unit ) )
                     .arg( unitName ) );
         } else
-            m_sbFramesLabel->setText( i18n( "%1 frames selected" ).arg( nbFrame ) );
+            m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" ).arg( nbFrame ) );
     }
     else if ( sb && m_sbFramesLabel )
-    {
-        removeStatusBarItem( m_sbFramesLabel );
-        delete m_sbFramesLabel;
-        m_sbFramesLabel = 0L;
-    }
+        m_sbFramesLabel->setText( QString::null );
 }
 
 void KWView::setTemporaryStatusBarText(const QString &text)
 {
-  KStatusBar * sb = statusBar();
-  if (sb )
-  {
-    if ( !m_sbFramesLabel )
-    {
-      m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-      addStatusBarItem( m_sbFramesLabel );
-    }
-    if(m_sbFramesLabel)
-      m_sbFramesLabel->setText(text);
-  }
+    KStatusBar * sb = statusBar();
+    if ( sb && m_sbFramesLabel )
+      m_sbFramesLabel->setText( text );
 }
 
 void KWView::clipboardDataChanged()
@@ -3257,15 +3245,10 @@ void KWView::displayFrameInlineInfo()
                              "SetCursorInsertInlineFrame",true);
 
     KStatusBar * sb = statusBar();
-    if (sb )
+    if ( sb )
     {
-        if ( !m_sbFramesLabel )
-        {
-            m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-            addStatusBarItem( m_sbFramesLabel );
-        }
-        if(m_sbFramesLabel)
-            m_sbFramesLabel->setText( i18n("Set cursor where you want to insert inline frame.") );
+        if( m_sbFramesLabel )
+            m_sbFramesLabel->setText( ' ' + i18n("Set cursor where you want to insert inline frame." ) );
     }
 }
 
