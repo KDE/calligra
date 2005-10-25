@@ -835,23 +835,31 @@ KWDocStruct::KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
     doc = _doc;
     parent = __parent;
 
-    QVBoxLayout* vBox = new QVBoxLayout( this );
+    layout = new QVBoxLayout( this );
 
-    KToolBar* searchBar = new KToolBar( this );
+    searchBar = new KToolBar( this );
     searchBar->setFlat( true );
     searchBar->setMovingEnabled( false );
 
-    KToolBarButton* eraseButton = new KToolBarButton( "locationbar_erase", 0, searchBar );
+    eraseButton = new KToolBarButton( "locationbar_erase", 0, searchBar );
     tree = new KWDocStructTree( this, doc, __parent );
     tree->setAlternateBackground( KGlobalSettings::alternateBackgroundColor() );
-    KListViewSearchLine* searchLine = new KListViewSearchLine( searchBar, tree );
+    searchLine = new KListViewSearchLine( searchBar, tree );
     searchBar->setStretchableWidget( searchLine );
     connect( eraseButton, SIGNAL( clicked() ), searchLine, SLOT( clear() ) );
 
-    vBox->addWidget( searchBar );
-    vBox->addWidget( tree );
+    layout->addWidget( searchBar );
+    layout->addWidget( tree );
     tree->setup();
     dirtyTreeTypes = 0;
+}
+
+KWDocStruct::~KWDocStruct()
+{
+    delete tree;
+    delete eraseButton;
+    delete searchBar;
+    delete layout;
 }
 
 void KWDocStruct::paintEvent ( QPaintEvent * ev)
