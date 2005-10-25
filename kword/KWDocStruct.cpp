@@ -113,13 +113,7 @@ KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewIte
     gui = __parent;
 }
 
-void KWDocStructParagItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        selectFrameSet();
-}
-
-void KWDocStructParagItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructParagItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
     {
@@ -189,16 +183,7 @@ void KWDocStructFrameSetItem::setupTextFrames(KWDocument* doc)
     }
 }
 
-void KWDocStructFrameSetItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this ) {
-        KWFrame* frame = frameset->frame(0);
-        if (frame)
-            gui->canvasWidget()->scrollToOffset( frame->topLeft() );
-    }
-}
-
-void KWDocStructFrameSetItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructFrameSetItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, frameset);
@@ -239,13 +224,7 @@ KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, const QStrin
     gui = __parent;
 }
 
-void KWDocStructFrameItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
-}
-
-void KWDocStructFrameItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructFrameItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, frameset);
@@ -282,18 +261,12 @@ KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, const QStrin
     gui = __parent;
 }
 
-void KWDocStructTableItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTableItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, table);
 }
 
-
-void KWDocStructTableItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        selectFrameSet();
-}
 
 void KWDocStructTableItem::selectFrameSet()
 {
@@ -328,18 +301,12 @@ KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, const QS
     gui = __parent;
 }
 
-void KWDocStructPictureItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructPictureItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, pic);
 }
 
-
-void KWDocStructPictureItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        selectFrameSet();
-}
 
 void KWDocStructPictureItem::selectFrameSet()
 {
@@ -369,16 +336,10 @@ KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, const QS
     gui = __parent;
 }
 
-void KWDocStructFormulaItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructFormulaItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, form);
-}
-
-void KWDocStructFormulaItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        selectFrameSet();
 }
 
 void KWDocStructFormulaItem::selectFrameSet()
@@ -413,18 +374,12 @@ KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, const QString 
     part = _part;
     gui = __parent;
 }
-void KWDocStructPartItem::rightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructPartItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, part);
 }
 
-
-void KWDocStructPartItem::doubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        selectFrameSet();
-}
 
 void KWDocStructPartItem::selectFrameSet()
 {
@@ -757,7 +712,7 @@ KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__pa
     connect( this, SIGNAL( doubleClicked( QListViewItem* ) ),
         this, SLOT( slotDoubleClicked( QListViewItem* ) ) );
     connect( this, SIGNAL( returnPressed( QListViewItem* ) ),
-        this, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+        this, SLOT( slotReturnPressed( QListViewItem* ) ) );
     connect( this, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &,int )),
         this, SLOT( slotRightButtonClicked( QListViewItem *, const QPoint &, int )));
     connect( this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
@@ -826,7 +781,6 @@ void KWDocStructTree::deleteFrameSet()
         tmp->deleteFrameSet();
 }
 
-
 void KWDocStructTree::editProperties()
 {
     QListViewItem * select=currentItem ();
@@ -841,22 +795,31 @@ void KWDocStructTree::slotContextMenu(KListView *lv, QListViewItem *i, const QPo
         return;
     KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(i);
     if (item)
-        item->rightButtonClicked(item, p, 0);
+        item->contextMenu(item, p, 0);
 }
 
 void KWDocStructTree::slotRightButtonClicked( QListViewItem *_item, const QPoint &p, int )
 {
     KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
     if (item)
-        item->rightButtonClicked(item, p, 0);
+        item->contextMenu(item, p, 0);
 }
-
 
 void KWDocStructTree::slotDoubleClicked( QListViewItem *_item )
 {
     KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
     if (item)
-        item->doubleClicked(item);
+        item->selectFrameSet();
+}
+
+void KWDocStructTree::slotReturnPressed( QListViewItem *_item )
+{
+    KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
+    if (item)
+        // TODO: Would like to change this to editFrameSet, which would improve
+        // keyboard accessibility, but some items are not editable, such as pictures
+        // and embedded objects.  Could default to selectFrameSet in those cases only?
+        item->selectFrameSet();
 }
 
 

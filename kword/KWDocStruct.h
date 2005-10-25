@@ -55,15 +55,15 @@ class KWDocListViewItem : public KListViewItem
 public:
     KWDocListViewItem(QListViewItem *_parent, const QString &_text);
     KWDocListViewItem(QListViewItem *_parent, QListViewItem *_after, const QString &_text);
-    KWDocListViewItem(QListView* _parent, const QString &_text);
+    KWDocListViewItem(QListView *_parent, const QString &_text);
     virtual void selectFrameSet() {}
     virtual void editFrameSet() {}
     virtual void deleteFrameSet() {}
     virtual void editProperties() {}
+    virtual void contextMenu(QListViewItem *, const QPoint &, int) {}
 
+protected:
     void deleteAllChildren();
-    virtual void rightButtonClicked( QListViewItem *, const QPoint &, int ) {}
-    virtual void doubleClicked( QListViewItem * ) {}
 };
 
 /******************************************************************/
@@ -78,9 +78,7 @@ public:
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
-
-    virtual void doubleClicked( QListViewItem *_item );
-    virtual void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWTextParag *parag;
@@ -103,9 +101,7 @@ public:
     virtual void editFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-
-    virtual void doubleClicked( QListViewItem *_item );
-    virtual void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
     KWFrameSet* frameSet() { return frameset; };
     void setupTextFrames(KWDocument* doc);
@@ -128,9 +124,7 @@ public:
     virtual void editFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-
-    virtual void doubleClicked( QListViewItem *_item );
-    virtual void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWFrame *frame;
@@ -150,9 +144,7 @@ public:
     virtual void editFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-
-    void doubleClicked( QListViewItem *_item );
-    void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWTableFrameSet *table;
@@ -171,9 +163,7 @@ public:
     virtual void editFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-
-    virtual void doubleClicked( QListViewItem *_item );
-    virtual void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWFormulaFrameSet *form;
@@ -192,9 +182,7 @@ public:
     virtual void selectFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-
-    void doubleClicked( QListViewItem *_item );
-    void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWPictureFrameSet *pic;
@@ -213,9 +201,7 @@ public:
     virtual void editFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
-
-    void doubleClicked( QListViewItem *_item );
-    void rightButtonClicked( QListViewItem *, const QPoint &, int );
+    virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWPartFrameSet *part;
@@ -272,9 +258,10 @@ public:
     void editProperties();
 
 public slots:
-    void slotDoubleClicked( QListViewItem *_item );
-    void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
     void slotContextMenu(KListView *l, QListViewItem *i, const QPoint &p);
+    void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
+    void slotDoubleClicked( QListViewItem *_item );
+    void slotReturnPressed( QListViewItem *_item );
 
 protected:
     KWDocument *doc;
