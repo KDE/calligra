@@ -374,11 +374,28 @@ void KexiTableViewData::setSorting(int column, bool ascending)
 		return;
 	}
 
-	const int t = columns.at(m_key)->field()->type();
-	if (t == KexiDB::Field::Boolean || KexiDB::Field::isNumericType(t))
-		cmpFunc = &KexiTableViewData::cmpInt;
+	const KexiDB::Field *field = columns.at(m_key)->field();
+	const int t = field->type();
+	if (KexiDB::Field::isFPNumericType(t))
+		cmpFunc = &KexiTableViewData::cmpDouble;
+	else if (t==KexiDB::Field::BigInteger) {
+		if (field->isUnsigned())
+			cmpFunc = &KexiTableViewData::cmpULongLong;
+		else
+			cmpFunc = &KexiTableViewData::cmpLongLong;
+	}
+	else if (t == KexiDB::Field::Integer && field->isUnsigned())
+		cmpFunc = &KexiTableViewData::cmpUInt;
+	else if (t == KexiDB::Field::Boolean || KexiDB::Field::isNumericType(t))
+		cmpFunc = &KexiTableViewData::cmpInt; //other integers
+	else if (t == KexiDB::Field::Date)
+		cmpFunc = &KexiTableViewData::cmpDate;
+	else if (t == KexiDB::Field::Time)
+		cmpFunc = &KexiTableViewData::cmpTime;
+	else if (t == KexiDB::Field::DateTime)
+		cmpFunc = &KexiTableViewData::cmpDateTime;
 	else
-		cmpFunc = &KexiTableViewData::cmpStr;
+		cmpFunc = &KexiTableViewData::cmpStr; //text or anything else
 }
 
 int KexiTableViewData::compareItems(Item item1, Item item2)
@@ -386,15 +403,68 @@ int KexiTableViewData::compareItems(Item item1, Item item2)
 	return ((this->*cmpFunc) (item1, item2));
 }
 
+//! compare NULLs : NULL is smaller than everything
+#define CMP_NULLS(item1, item2) \
+	m_leftTmp = ((KexiTableItem *)item1)->at(m_key); \
+	if (m_leftTmp.isNull()) \
+		return -m_order; \
+	m_rightTmp = ((KexiTableItem *)item2)->at(m_key); \
+	if (m_rightTmp.isNull()) \
+		return m_order
+
+#define CAST_AND_COMPARE(casting, item1, item2) \
+	CMP_NULLS(item1, item2); \
+	if (m_leftTmp.casting() < m_rightTmp.casting()) \
+		return -m_order; \
+	if (m_leftTmp.casting() > m_rightTmp.casting()) \
+		return m_order; \
+	return 0
+
 int KexiTableViewData::cmpInt(Item item1, Item item2)
 {
-	return m_order* (((KexiTableItem *)item1)->at(m_key).toInt() - ((KexiTableItem *)item2)->at(m_key).toInt());
+	CAST_AND_COMPARE(toInt, item1, item2);
+}
+
+int KexiTableViewData::cmpUInt(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toUInt, item1, item2);
+}
+
+int KexiTableViewData::cmpLongLong(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toLongLong, item1, item2);
+}
+
+int KexiTableViewData::cmpULongLong(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toULongLong, item1, item2);
+}
+
+int KexiTableViewData::cmpDouble(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toDouble, item1, item2);
+}
+
+int KexiTableViewData::cmpDate(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toDate, item1, item2);
+}
+
+int KexiTableViewData::cmpDateTime(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toDateTime, item1, item2);
+}
+
+int KexiTableViewData::cmpTime(Item item1, Item item2)
+{
+	CAST_AND_COMPARE(toDate, item1, item2);
 }
 
 int KexiTableViewData::cmpStr(Item item1, Item item2)
 {
-	const QString &as =((KexiTableItem *)item1)->at(m_key).toString();
-	const QString &bs =((KexiTableItem *)item2)->at(m_key).toString();
+	CMP_NULLS(item1, item2);
+	const QString &as = m_leftTmp.toString();
+	const QString &bs = m_rightTmp.toString();
 
 	const QChar *a = as.unicode();
 	const QChar *b = bs.unicode();
@@ -402,9 +472,9 @@ int KexiTableViewData::cmpStr(Item item1, Item item2)
 	if ( a == b )
 		return 0;
 	if ( a == 0 )
-		return 1;
-	if ( b == 0 )
 		return -1;
+	if ( b == 0 )
+		return 1;
 
 	unsigned short au;
 	unsigned short bu;
