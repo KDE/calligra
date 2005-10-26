@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>459</width>
-            <height>364</height>
+            <height>337</height>
         </rect>
     </property>
     <property name="caption">
@@ -105,20 +105,6 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>baseline</cstring>
-            </property>
-            <property name="text">
-                <string>Freeze project (set as baseline)</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Checking this will freeze the project</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Checking this will freeze the project</string>
-            </property>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>schedulingGroup</cstring>
@@ -202,16 +188,12 @@
     <tabstop>idfield</tabstop>
     <tabstop>leaderfield</tabstop>
     <tabstop>chooseLeader</tabstop>
-    <tabstop>baseline</tabstop>
     <tabstop>bStartDate</tabstop>
     <tabstop>startTime</tabstop>
     <tabstop>bEndDate</tabstop>
     <tabstop>endTime</tabstop>
     <tabstop>descriptionfield</tabstop>
 </tabstops>
-<includes>
-    <include location="local" impldecl="in implementation">kptmainprojectpanelbase.ui.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>

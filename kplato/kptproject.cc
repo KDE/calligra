@@ -225,7 +225,7 @@ bool KPTProject::load(QDomElement &element) {
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
     
-    m_baselined = (bool)element.attribute("baselined","0").toInt(&ok);
+    //m_baselined = (bool)element.attribute("baselined","0").toInt(&ok);FIXME: Removed for this release  
     
     // Allow for both numeric and text
     QString c = element.attribute("scheduling","0");
@@ -345,7 +345,7 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("id", m_id);
     me.setAttribute("description", m_description);
     
-    me.setAttribute("baselined",(int)m_baselined);
+    //me.setAttribute("baselined",(int)m_baselined); FIXME: Removed for this release  
 
     me.setAttribute("project-start",startTime().toString());
     me.setAttribute("project-end",endTime().toString());

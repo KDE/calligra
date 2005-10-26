@@ -52,7 +52,7 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
 
-    baseline->setChecked(project.isBaselined());
+    //baseline->setChecked(project.isBaselined()); FIXME: Removed for this release
     
     startDate->setDate(project.startTime().date());
     endDate->setDate(project.endTime().date());
@@ -66,7 +66,7 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
         schedulingGroup->setButton(0);
     }    
     enableDateTime();
-    slotBaseline();
+    slotBaseline(); 
     namefield->setFocus();
 }
 
@@ -99,10 +99,11 @@ KCommand *KPTMainProjectPanel::buildCommand(KPTPart *part) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTNodeModifyDescriptionCmd(part, project, descriptionfield->text()));
     }
+/*  FIXME: Removed for this release  
     if (baseline->isChecked() != project.isBaselined()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTProjectModifyBaselineCmd(part, project, baseline->isChecked()));
-    } 
+    } */
     if (bStartDate->state() && project.constraint() != KPTNode::MustStartOn) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTNodeModifyConstraintCmd(part, project, KPTNode::MustStartOn));
@@ -136,11 +137,11 @@ KPTMainProjectPanelImpl::KPTMainProjectPanelImpl(QWidget *parent, const char *na
     connect( endTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( startDate, SIGNAL( changed(QDate) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( startTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) ); FIXME: Removed for this release  
     connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( idfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotBaseline() ) );
+    //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotBaseline() ) ); FIXME: Removed for this release  
     connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
 }
 
@@ -207,7 +208,8 @@ QDateTime KPTMainProjectPanelImpl::endDateTime()
 
 void KPTMainProjectPanelImpl::slotBaseline()
 {
-    bool b = baseline->isChecked();
+    bool b = false;
+    //b = baseline->isChecked(); FIXME: Removed for this release  
     namefield->setReadOnly(b);
     idfield->setReadOnly(b);
     leaderfield->setReadOnly(b);

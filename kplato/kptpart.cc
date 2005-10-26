@@ -135,7 +135,7 @@ KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
     if (m_context)
         m_view->setContext(*m_context);
 
-    m_view->setBaselineMode(getProject().isBaselined());
+    //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release  
     return m_view;
 }
 
