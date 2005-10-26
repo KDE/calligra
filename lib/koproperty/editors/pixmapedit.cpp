@@ -33,6 +33,7 @@
 #include <qimage.h>
 #include <qfiledialog.h>
 #include <qtooltip.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <kimageio.h>
@@ -211,7 +212,13 @@ PixmapEdit::eventFilter(QObject *o, QEvent *ev)
 
 			m_popup->setPixmap(m_previewPixmap.isNull() ? m_pixmap : m_previewPixmap);
 			m_popup->resize(m_previewPixmap.size()+QSize(2*3,2*3));
-			m_popup->move(QCursor::pos()+QPoint(3,15));
+			QPoint pos = QCursor::pos()+QPoint(3,15);
+			QRect screenRect = QApplication::desktop()->availableGeometry( this );
+			if ((pos.x()+m_popup->width()) > screenRect.width())
+				pos.setX(screenRect.width()-m_popup->width());
+			if ((pos.y()+m_popup->height()) > screenRect.height())
+				pos.setY(mapToGlobal(QPoint(0,0)).y()-m_popup->height());
+			m_popup->move(pos);
 			m_popup->show();
 		}
 		else if(ev->type() == QEvent::MouseButtonRelease || ev->type() == QEvent::Hide) {
