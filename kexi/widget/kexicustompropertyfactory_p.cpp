@@ -42,7 +42,7 @@ void KexiImagePropertyEdit::selectPixmap()
 	if (fileName.isEmpty())
 		return;
 	KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap( KURL(fileName) ));
-	setValue(h.id());
+	setValue((uint)/*! @todo unsafe*/h.id());
 #if 0 //will be reenabled for new image collection
 	if(!m_manager->activeForm() || !property())
 		return;
@@ -59,7 +59,7 @@ void KexiImagePropertyEdit::selectPixmap()
 
 QVariant KexiImagePropertyEdit::value() const
 {
-	return m_id;
+	return (uint)/*! @todo unsafe*/m_id;
 }
 
 void KexiImagePropertyEdit::setValue(const QVariant &value, bool emitChange)
