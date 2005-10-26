@@ -33,9 +33,6 @@ class QVBoxLayout;
 class KWFrame;
 class KWFrameSet;
 class KWTextParag;
-class KToolBar;
-class KToolBarButton;
-class KListViewSearchLine;
 
 /******************************************************************/
 /* Class: KWOrderedFrameSet                                       */
@@ -284,7 +281,6 @@ class KWDocStruct : public QWidget
 
 public:
     KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
-    ~KWDocStruct();
     void selectFrameSet();
     void editFrameSet();
     void deleteFrameSet();
@@ -298,9 +294,6 @@ public:
 protected:
     KWDocStructTree *tree;
     QVBoxLayout *layout;
-    KToolBar* searchBar;
-    KToolBarButton* eraseButton;
-    KListViewSearchLine* searchLine;
 
     virtual void paintEvent( QPaintEvent* ev );
 
