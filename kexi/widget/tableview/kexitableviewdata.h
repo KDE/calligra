@@ -429,6 +429,13 @@ protected:
 	virtual int compareItems(Item item1, Item item2);
 	int cmpStr(Item item1, Item item2);
 	int cmpInt(Item item1, Item item2);
+	int cmpUInt(Item item1, Item item2);
+	int cmpLongLong(Item item1, Item item2);
+	int cmpULongLong(Item item1, Item item2);
+	int cmpDouble(Item item1, Item item2);
+	int cmpDate(Item item1, Item item2);
+	int cmpDateTime(Item item1, Item item2);
+	int cmpTime(Item item1, Item item2);
 
 	//! internal: for saveRowChanges() and saveNewRow()
 	bool saveRow(KexiTableItem& item, bool insert, bool repaint);
@@ -458,6 +465,10 @@ protected:
 	int m_autoIncrementedColumn;
 
 	int (KexiTableViewData::*cmpFunc)(void *, void *);
+
+	//! Temporary, used in compare functions like cmpInt(), cmpString() 
+	//! to avoid memory allocations.
+	QVariant m_leftTmp, m_rightTmp;
 };
 
 #endif
