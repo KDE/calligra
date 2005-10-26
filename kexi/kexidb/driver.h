@@ -245,11 +245,15 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		QString escapeIdentifier( const QString& str, int options = EscapeDriver|EscapeAsNecessary) const;
 		QCString escapeIdentifier( const QCString& str, int options = EscapeDriver|EscapeAsNecessary) const;
 
-		
+		//! \return property value for \a propeName available for this driver. 
+		//! If there's no such property defined for driver, Null QVariant value is returned.
 		QVariant propertyValue( const QCString& propName ) const;
 
+		//! \return translated property caption for \a propeName. 
+		//! If there's no such property defined for driver, empty string value is returned.
 		QString propertyCaption( const QCString& propName ) const;
 
+		//! \return a list of property names available for this driver.
 		QValueList<QCString> propertyNames() const;
 
 	protected:

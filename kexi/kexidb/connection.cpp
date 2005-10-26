@@ -32,6 +32,7 @@
 #include "global.h"
 #include "roweditbuffer.h"
 #include "utils.h"
+#include "dbproperties.h"
 #include "parser/parser.h"
 
 #include <kexiutils/utils.h>
@@ -102,6 +103,9 @@ class ConnectionPrivate
 		int m_versionMajor;
 		int m_versionMinor;
 
+		//! Database properties
+		DatabaseProperties* dbProperties;
+
 		//! true if rollbackTransaction() and commitTransaction() shouldn't remove
 		//! the transaction object from m_transactions list; used by closeDatabase()
 		bool m_dont_remove_transactions : 1;
@@ -144,6 +148,7 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	,m_autoCommit(true)
 	,m_destructor_started(false)
 {
+	d->dbProperties = new DatabaseProperties(this);
 	m_tables.setAutoDelete(true);
 	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
 	m_kexiDBSystemtables.setAutoDelete(true);//only system tables
@@ -170,6 +175,7 @@ Connection::~Connection()
 {
 	m_destructor_started = true;
 //	KexiDBDbg << "Connection::~Connection()" << endl;
+	delete d->dbProperties;
 	delete d;
 	d = 0;
 /*	if (m_driver) {
@@ -298,7 +304,7 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 
 	if (list.find( dbName )==list.end()) {
 		if (!ignoreErrors)
-			setError(ERR_OBJECT_NOT_EXISTING, i18n("The database \"%1\" does not exist.").arg(dbName));
+			setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.").arg(dbName));
 		return false;
 	}
 
@@ -318,7 +324,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		QFileInfo file(dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
-				setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file \"%1\" does not exist.").arg(m_data->fileName()) );
+				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.").arg(m_data->fileName()) );
 			return false;
 		}
 		if (!file.isReadable()) {
@@ -502,19 +508,26 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 	if (kexiCompatible && my_dbName.lower()!=anyAvailableDatabaseName().lower()) {
 		//-get global database information
 		int num;
-		static QString notfound_str = i18n("\"%1\" database property not found");
-		if (true!=querySingleNumber(
+		bool ok;
+//		static QString notfound_str = i18n("\"%1\" database property not found");
+		num = d->dbProperties->value("kexidb_major_ver").toInt(&ok);
+		if (!ok)
+			return false;
+		d->m_versionMajor = num;
+/*		if (true!=querySingleNumber(
 			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_major_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
 			return false;
-		}
-		d->m_versionMajor = num;
-		if (true!=querySingleNumber(
+		}*/
+		num = d->dbProperties->value("kexidb_minor_ver").toInt(&ok);
+		if (!ok)
+			return false;
+		d->m_versionMinor = num;
+/*		if (true!=querySingleNumber(
 			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_minor_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
 			return false;
-		}
-		d->m_versionMinor = num;
+		}*/
 
 		//** error if major version does not match
 		if (m_driver->versionMajor()!=KexiDB::versionMajor()) {
@@ -729,6 +742,11 @@ int Connection::versionMajor() const
 int Connection::versionMinor() const
 {
 	return d->m_versionMinor;
+}
+
+DatabaseProperties& Connection::databaseProperties()
+{
+	return *d->dbProperties;
 }
 
 QValueList<int> Connection::queryIds()
@@ -1347,7 +1365,7 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 		|| this->tableSchema(tableSchema->name())!=tableSchema
 		|| this->tableSchema(tableSchema->id())!=tableSchema)
 	{
-		setError(ERR_OBJECT_NOT_EXISTING, errmsg.arg(tableSchema->name())
+		setError(ERR_OBJECT_NOT_FOUND, errmsg.arg(tableSchema->name())
 			+i18n("Unexpected name or identifier."));
 		return false;
 	}
@@ -1393,7 +1411,7 @@ tristate Connection::dropTable( const QString& table )
 	clearError();
 	TableSchema* ts = tableSchema( table );
 	if (!ts) {
-		setError(ERR_OBJECT_NOT_EXISTING, i18n("Table \"%1\" does not exist.")
+		setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist.")
 			.arg(table));
 		return false;
 	}
@@ -1430,7 +1448,7 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 {
 	clearError();
 	if (&tableSchema!=m_tables[tableSchema.id()]) {
-		setError(ERR_OBJECT_NOT_EXISTING, i18n("Unknown table \"%1\"").arg(tableSchema.name()));
+		setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\"").arg(tableSchema.name()));
 		return false;
 	}
 	if (newName.isEmpty() || !KexiUtils::isIdentifier(newName)) {
@@ -1569,7 +1587,7 @@ bool Connection::dropQuery( const QString& query )
 	clearError();
 	QuerySchema* qs = querySchema( query );
 	if (!qs) {
-		setError(ERR_OBJECT_NOT_EXISTING, i18n("Query \"%1\" does not exist.")
+		setError(ERR_OBJECT_NOT_FOUND, i18n("Query \"%1\" does not exist.")
 			.arg(query));
 		return false;
 	}

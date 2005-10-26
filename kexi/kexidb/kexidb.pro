@@ -32,6 +32,7 @@ relationship.cpp \
 roweditbuffer.cpp \
 msghandler.cpp \
 dbobjectnamevalidator.cpp \
+dbproperties.cpp \
 \
 parser/parser.cpp \
 parser/parser_p.cpp \

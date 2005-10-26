@@ -48,6 +48,7 @@ typedef QValueVector<QVariant> RowData;
 class Cursor;
 class ConnectionPrivate;
 class RowEditBuffer;
+class DatabaseProperties;
 
 //! Database connection API, allowing queries and updates.
 /*! This class represents a database connection established with given database source.
@@ -172,6 +173,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		//! It's usually compared to drivers' and KexiDB library version.
 		int versionMajor() const;
 		int versionMinor() const;
+
+		/*! \return DatabaseProperties obejct allowing to read and write global database properties 
+		 for this connection. */
+		DatabaseProperties& databaseProperties();
 
 		/*! \return ids of all table schema names stored in currently 
 		 used database. These ids can be later used as argument for tableSchema().
@@ -425,7 +430,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return true if there is at least one record in \a table. */
 		bool isEmpty( TableSchema& table, bool &success );
 
-//TODO perhaps use Q_ULLONG here?
+//! @todo perhaps use Q_ULLONG here?
 		/*! \return number of records in \a sql query.
 		 Does not fetch any records. -1 is returned on query execution errors (>0 otherwise).
 		 Note: real executed query is: "SELECT COUNT() FROM (\a sql) LIMIT 1" 
@@ -486,7 +491,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 No error is raised if the table does not exist physically 
 		 - its schema is removed even in this case.
 		*/
-//TODO(js): update any structure (e.g. query) that depend on this table!
+//! @todo (js): update any structure (e.g. query) that depend on this table!
 		tristate dropTable( TableSchema* tableSchema );
 
 		/*! It is a convenience function, does exactly the same as 
@@ -495,8 +500,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Alters \a tableSchema using \a newTableSchema in memory and on the db backend. 
 		 \return true on success, cancelled if altering was cancelled. */
-//TODO(js): implement real altering
-//TODO(js): update any structure (e.g. query) that depend on this table!
+//! @todo (js): implement real altering
+//! @todo (js): update any structure (e.g. query) that depend on this table!
 		tristate alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
 
 		/*! Alters table's described \a tableSchema name to \a newName. 
@@ -703,7 +708,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Also used internally by newKexiDBSystemTableSchema(const QString& tsname) */
 		void insertInternalTableSchema(TableSchema *tableSchema);
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
 		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
 		 with name \a tableName exists in the database.
 		 \return false if it does not exist or error occured.
@@ -750,7 +755,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Default implementation puts empty list into \a list and returns true. */
 		virtual bool drv_getDatabasesList( QStringList &list );
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
 		/*! LOW LEVEL METHOD. For reimplemenation: loads low-level list of table names
 		 available for this connection. The names are in lower case.
 		 The method should return true only if there was no error on getting database names 

@@ -88,13 +88,13 @@ void Object::setError( const QString& title, const QString &msg )
 	m_msgTitle = origMsgTitle; //revert 
 }
 
-void Object::setError( KexiDB::Object *obj )
+void Object::setError( KexiDB::Object *obj, const QString& prependMessage )
 {
 	STORE_PREV_ERR;
 
 	if (obj) {
 		m_errno = obj->errorNum();
-		m_errMsg = obj->errorMsg();
+		m_errMsg = prependMessage + " " + obj->errorMsg();
 		m_hasError = obj->error();
 	}
 	if (m_hasError)

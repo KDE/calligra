@@ -38,7 +38,7 @@
 #define ERR_NO_DB_USED 41 //!< when used database was expected in KexiDB::Connection
 #define ERR_OBJECT_EXISTS 50
 #define ERR_OBJECT_THE_SAME 51
-#define ERR_OBJECT_NOT_EXISTING 60
+#define ERR_OBJECT_NOT_FOUND 60
 #define ERR_ACCESS_RIGHTS 70
 #define ERR_TRANSACTION_ACTIVE 80
 #define ERR_NO_TRANSACTION_ACTIVE 90
