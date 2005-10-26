@@ -1024,7 +1024,7 @@ KPTDateTime KPTStandardWorktime::workStartAfter(const KPTDateTime &dt) const {
     QDate date = dt.date();
     if (state(date) == KPTMap::Working && endOfDay(date) > dt.time())
         return dt;
-    date.addDays(1);
+    date = date.addDays(1);
     for (int i = 0; i < 6; ++i) {
         if (state(date) == KPTMap::Working)
             return KPTDateTime(date, startOfDay(date));
