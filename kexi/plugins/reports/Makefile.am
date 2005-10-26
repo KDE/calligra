@@ -17,7 +17,7 @@ kexireportwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.l
 	./libkexireportutils.la
 
 lib_LTLIBRARIES = libkexireportutils.la
-libkexireportutils_la_SOURCES = 
+libkexireportutils_la_SOURCES = \
 	kexireportpart.cpp kexireportview.cpp kexireportform.cpp
 libkexireportutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexireportutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
