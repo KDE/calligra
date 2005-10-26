@@ -21,7 +21,7 @@ kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
 lib_LTLIBRARIES = libkexiformutils.la
 libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp kexidataawarewidgetinfo.cpp \
 	kexidataprovider.cpp kexiformscrollview.cpp kexiformeventhandler.cpp \
-	kexiactionselectiondialog.cpp kexiformmanager.cpp \
+	kexidbtextwidgetinterface.cpp kexiactionselectiondialog.cpp kexiformmanager.cpp \
 	kexidatasourcepage.cpp kexiformpart.cpp kexiformview.cpp
 libkexiformutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiformutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
@@ -45,5 +45,4 @@ METASOURCES = AUTO
 
 include ../Makefile.common
 noinst_HEADERS = kexidataprovider.h kexidbfactory.h \
-	kexiformpart.h kexiformscrollview.h kexiformview.h \
-	kexiwidgetfactory.h
+	kexiformpart.h kexiformscrollview.h kexiformview.h
