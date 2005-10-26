@@ -116,7 +116,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
  : KDialogBase( 
 	KDialogBase::Plain, 
 	i18n( "Importing CSV Data File" ),
-	(mode==File ? User1 : (Mode)0) |Ok|Cancel, 
+	(mode==File ? User1 : (ButtonCode)0) |Ok|Cancel, 
 	Ok,
 	parent, 
 	name ? name : "KexiCSVDialog", 
@@ -1176,7 +1176,7 @@ void KexiCSVDialog::accept()
 	project->deleteUnstoredItem(partItem); \
 	conn->dropTable(tableSchema); /*alsoRemoveSchema*/ \
 	return;
-//	conn->removeTableSchemaInternal(tableSchema); \
+//	conn->removeTableSchemaInternal(tableSchema); 
 //	return
 
 /*already done in createTable()

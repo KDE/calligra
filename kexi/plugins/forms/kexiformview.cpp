@@ -628,7 +628,7 @@ KexiFormView::storeData()
 			KexiDB::PreparedStatement::InsertStatement, *blobsTable);
 //		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
 		*st << QVariant()/*id*/ << h.data() << originalFileName << caption 
-			<< h.mimeType() << h.folderId();
+			<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
 		if (!st->execute()) {
 			kexipluginsdbg << " execute error" << endl;
 			return false;
