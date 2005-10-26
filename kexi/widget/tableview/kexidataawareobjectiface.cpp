@@ -261,7 +261,7 @@ int KexiDataAwareObjectInterface::dataSortedColumn() const
 
 int KexiDataAwareObjectInterface::dataSortingOrder() const
 {
-	return m_data && m_data->sortingOrder();
+	return m_data ? m_data->sortingOrder() : 0;
 }
 
 bool KexiDataAwareObjectInterface::sort()
