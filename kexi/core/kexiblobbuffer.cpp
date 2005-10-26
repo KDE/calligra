@@ -111,8 +111,10 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
 //-----------------
 
 KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, bool _stored,
-	const QString& _name, const QString& _caption, const QString& _mimeType, const QPixmap& pixmap)
- : name(_name), caption(_caption), mimeType(_mimeType), refs(0), id(ident), stored(_stored),
+	const QString& _name, const QString& _caption, const QString& _mimeType, 
+	Id_t _folderId, const QPixmap& pixmap)
+ : name(_name), caption(_caption), mimeType(_mimeType), refs(0), 
+ id(ident), folderId(_folderId), stored(_stored),
  m_pixmapLoaded(new bool(false)/*workaround for pixmap() const*/)
 {
 	if (pixmap.isNull())
@@ -247,6 +249,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QPixmap& pixmap)
 		QString::null, 
 		QString::null, 
 		"image/png", //!< @todo OK? What about jpegs?
+		0, //folder id
 		pixmap);
 
 	insertItem(item);
@@ -255,6 +258,8 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QPixmap& pixmap)
 
 KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 {
+	if (id<=0)
+		return KexiBLOBBuffer::Handle();
 	if (stored) {
 		Item *item = d->storedItems.find(id);
 		if (item || !d->conn)
@@ -278,6 +283,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 		schema.addField( blobsTable->field("o_name") );
 		schema.addField( blobsTable->field("o_caption") );
 		schema.addField( blobsTable->field("o_mime") );
+		schema.addField( blobsTable->field("o_folder_id") );
 		schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((Q_LLONG)id));
 
 		KexiDB::RowData rowData;
@@ -295,9 +301,11 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 			rowData[0].toByteArray(),
 			id, 
 			true, //stored
-			rowData[1].toString(), 
-			rowData[2].toString(), 
-			rowData[3].toString());
+			rowData[1].toString(),
+			rowData[2].toString(),
+			rowData[3].toString(),
+			(Id_t)rowData[4].toInt() //!< @todo folder id: fix Id_t for Qt4
+		);
 
 		insertItem(item);
 		return KexiBLOBBuffer::Handle(item);
@@ -305,6 +313,14 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 	}
 	else
 		return KexiBLOBBuffer::Handle(d->inMemoryItems.find(id));
+}
+
+KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id)
+{
+	KexiBLOBBuffer::Handle h(objectForId(id, false/*!stored*/));
+	if (h)
+		return h;
+	return objectForId(id, true/*stored*/);
 }
 
 void KexiBLOBBuffer::removeItem(Id_t id, bool stored)

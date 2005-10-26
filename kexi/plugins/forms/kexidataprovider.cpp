@@ -67,7 +67,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 			continue;
 #else
 		//tmp: reject widgets within subforms
-		if (KexiUtils::findParent<KexiDBForm>(obj, "KexiSubForm"))
+		if (KexiUtils::findParent<KexiDBForm>(obj, "KexiDBSubForm"))
 			continue;
 #endif
 		QString dataSource( dynamic_cast<KexiFormDataItemInterface*>(obj)->dataSource().lower() );

@@ -78,8 +78,8 @@ KexiFormScrollView::show()
 void
 KexiFormScrollView::slotResizingStarted()
 {
-	if(m_form && m_form->manager())
-		setSnapToGrid(m_form->manager()->snapWidgetsToGrid(), m_form->gridSize());
+	if(m_form && KFormDesigner::FormManager::self())
+		setSnapToGrid(KFormDesigner::FormManager::self()->snapWidgetsToGrid(), m_form->gridSize());
 	else
 		setSnapToGrid(false);
 }

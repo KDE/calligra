@@ -33,8 +33,7 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 	Q_OBJECT
 
 	public:
-		KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
-			const char* name = 0);
+		KexiFormManager(KexiPart::Part *parent, const char* name = 0);
 		virtual ~KexiFormManager();
 
 		virtual KAction* action( const char* name );

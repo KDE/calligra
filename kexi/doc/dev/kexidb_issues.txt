@@ -144,7 +144,7 @@ property="project_desc", value=<string>
 TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 		
 // Global BLOBs Storage (BLOB == BINARY LARGE OBJECT)
-// Designed to store any kind of images, sound and other binary data
+// Designed to store any kind of static images, sound and other binary data
 //Table:
 kexi__blobs
 	o_id integer unsigned primary key auto_increment, //unique project-wide identifier of a BLOB
@@ -154,7 +154,24 @@ kexi__blobs
 	                     //can contain non-latin1 characters
 	o_caption varchar(200), //optional, enriched name, can contain non-latin1 characters
 	o_mime varchar(200) NOT NULL, //MIME type of a BLOB, e.g.  image/jpg
+	o_folder_id integer unsigned //references kexi__gallery_folders.f_id
+	                             //If null, the BLOB only points to virtual "All" folder
+                               //WILL BE USED in Kexi >=1.1
 
+//(not yet implemented, planned for 1.1) 
+//User-defined folders for better BLOBs categorizing. 
+//For simplification, folders have no lowlevel name but only caption.
+//By default there are no physical folders, but only following virtual:
+//-"All" folder
+//-"Used" folder (computation of this takes some time because design of forms 
+//  and reports needs to be parsed)
+//-"Unused" folder (the same note as for "Used)
+//-"By type" folder with "jpeg", "png" subfolders, etc. - available by grepping using BLOB's o_mime
+kexi__gallery_folders
+	f_id integer unsigned primary key auto_increment, //unique id of a folder
+	f_parent_id integer unsigned //references f_id, can be null for top level folders
+	f_caption varchar(200), //optional, enriched name, can contain non-latin1 characters
+	f_notes varchar, //optional notes
 
 -----------------------------------------------------------------
 

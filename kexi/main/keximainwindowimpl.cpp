@@ -3604,7 +3604,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 		return false;
 
 	createKexiProject(projectData); //initialize project
-	d->prj->m_final = true;         //announce that we are in fianl mode
+	d->prj->setFinal(true);         //announce that we are in fianl mode
 
 	if(!d->prj->open())             //try to open database
 		return false;

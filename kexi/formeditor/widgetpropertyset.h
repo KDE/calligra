@@ -45,10 +45,10 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 	Q_OBJECT
 
 	public:
-		WidgetPropertySet(FormManager *manager);
+		WidgetPropertySet(QObject *parent);
 		~WidgetPropertySet();
 
-		FormManager* manager();
+//		FormManager* manager();
 
 		Property&  operator[](const QCString &name);
 

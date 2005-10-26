@@ -20,6 +20,7 @@
 
 #include <form.h>
 #include <formIO.h>
+#include <formmanager.h>
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexipart.h>
@@ -130,8 +131,8 @@ PicLabel::setProperty(const char *name, const QVariant &value)
 
 ////////////////////////////////////////////////////////////////////
 
-KexiSubReport::KexiSubReport(KFormDesigner::FormManager *manager, QWidget *parent, const char *name)
-: QScrollView(parent, name), m_manager(manager), m_form(0), m_widget(0)
+KexiSubReport::KexiSubReport(QWidget *parent, const char *name)
+: QScrollView(parent, name), m_form(0), m_widget(0)
 {
 	setFrameStyle(QFrame::Plain | QFrame::Box);
 	viewport()->setPaletteBackgroundColor(white);
@@ -161,7 +162,7 @@ KexiSubReport::setReportName(const QString &name)
 	m_widget = new QWidget(viewport(), "kexisubreport_widget");
 	m_widget->show();
 	addChild(m_widget);
-	m_form = new Form(m_manager, this->name());
+	m_form = new Form(KexiReportPart::library(), this->name());
 	m_form->createToplevel(m_widget);
 
 	// and load the sub form

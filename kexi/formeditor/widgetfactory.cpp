@@ -493,8 +493,8 @@ void
 WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *form)
 //WidgetFactory::changeProperty(const char *name, const QVariant &value, Container *container)
 {
-	if (!form->manager())
-		return;
+//	if (!form->manager())
+//		return;
 	if(form->selectedWidgets()->count() > 1)
 	{ // If eg multiple labels are selected, we only want to change the text of one of them (the one the user cliked on)
 		if(m_widget)
@@ -504,7 +504,7 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *for
 	}
 	else
 	{
-		WidgetPropertySet *set = form->manager()->propertySet();
+		WidgetPropertySet *set = KFormDesigner::FormManager::self()->propertySet();
 		if(set->contains(name))
 			(*set)[name] = value;
 	}

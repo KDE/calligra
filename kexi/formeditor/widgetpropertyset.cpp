@@ -52,7 +52,7 @@ class WidgetPropertySetPrivate
 {
 	public:
 		WidgetPropertySetPrivate()
-		: manager(0), lastCommand(0), lastGeoCommand(0),
+		: lastCommand(0), lastGeoCommand(0),
 		 isUndoing(false), slotPropertyChangedEnabled(true),
 		 slotPropertyChanged_addCommandEnabled(true),
 		 origActiveColors(0)
@@ -67,7 +67,7 @@ class WidgetPropertySetPrivate
 		QStringList  properties;
 		// list of widgets
 		QGuardedWidgetList widgets;
-		FormManager  *manager;
+//		FormManager  *manager;
 
 		// used to update command's value when undoing
 		PropertyCommand  *lastCommand;
@@ -85,11 +85,11 @@ class WidgetPropertySetPrivate
 };
 }
 
-WidgetPropertySet::WidgetPropertySet(FormManager *manager)
- : QObject(manager, "kfd_widgetPropertySet")
+WidgetPropertySet::WidgetPropertySet(QObject *parent)
+ : QObject(parent, "kfd_widgetPropertySet")
 {
 	d = new WidgetPropertySetPrivate();
-	d->manager = manager;
+//	d->manager = manager;
 
 	connect(&d->set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
 		this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
@@ -104,11 +104,11 @@ WidgetPropertySet::~WidgetPropertySet()
 	delete d;
 }
 
-FormManager*
+/*FormManager*
 WidgetPropertySet::manager()
 {
 	return d->manager;
-}
+}*/
 
 Property&
 WidgetPropertySet::operator[](const QCString &name)
@@ -140,7 +140,7 @@ WidgetPropertySet::clearSet(bool dontSignalShowPropertySet)
 	saveModifiedProperties();
 
 	if (!dontSignalShowPropertySet)
-		d->manager->showPropertySet(0);
+		KFormDesigner::FormManager::self()->showPropertySet(0);
 	d->widgets.clear();
 	d->lastCommand = 0;
 	d->lastGeoCommand = 0;
@@ -157,9 +157,9 @@ void
 WidgetPropertySet::saveModifiedProperties()
 {
 	QWidget * w = d->widgets.first();
-	if(!w || d->widgets.count() > 1 || !d->manager->activeForm() || !d->manager->activeForm()->objectTree())
+	if(!w || d->widgets.count() > 1 || !KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 			return;
-	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(w->name());
 	if(!tree)
 		return;
 
@@ -211,7 +211,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 		connect(w, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
 	}
 
-	d->manager->showPropertySet(this, true/*force*/);
+	KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/);
 }
 
 void
@@ -229,7 +229,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 		classname = d->widgets.first()->className();
 
 	// show only properties shared by widget (properties chosed by factory)
-	bool isTopLevel = d->manager->isTopLevel(w);
+	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(w);
 	for(Set::Iterator it(d->set); it.current(); ++it) {
 		if(!isPropertyVisible(it.currentKey(), isTopLevel, classname))
 			d->set[it.currentKey()].setVisible(false);
@@ -248,20 +248,24 @@ WidgetPropertySet::addWidget(QWidget *w)
 void
 WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 {
-	if (!d->manager || !d->manager->activeForm() || !d->manager->activeForm()->objectTree()) {
+	Form *form;
+	if (!KFormDesigner::FormManager::self() 
+		|| !(form = KFormDesigner::FormManager::self()->activeForm()) 
+		|| !KFormDesigner::FormManager::self()->activeForm()->objectTree())
+	{
 		kdWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!" << endl;
 		return;
 	}
-	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
 	if(!tree)
 		return;
 
 	const QVariantMap* modifiedProperties = tree->modifiedProperties();
 	QVariantMapConstIterator modifiedPropertiesIt;
-	bool isTopLevel = d->manager->isTopLevel(w);
+	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(w);
 	int count = 0;
 	Property *newProp = 0;
-	WidgetInfo *winfo = d->manager->lib()->widgetInfoForClassName(w->className());
+	WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->className());
 
 	QStrList pList = w->metaObject()->propertyNames(true);
 	QStrListIterator it(pList);
@@ -277,7 +281,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			QString desc( d->propCaption[meta->name()] );
 			//! \todo change i18n
 			if (desc.isEmpty())  //try to get property description from factory
-				desc = d->manager->lib()->propertyDescForName(winfo, propertyName);
+				desc = form->library()->propertyDescForName(winfo, propertyName);
 
 			modifiedPropertiesIt = modifiedProperties->find(propertyName);
 			const bool oldValueExists = modifiedPropertiesIt!=modifiedProperties->constEnd();
@@ -336,7 +340,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	(*this)["enabled"].setValue( QVariant(tree->isEnabled(), 3));
 
 	if (winfo) {
-		d->manager->lib()->setPropertyOptions(*this, *winfo, w);
+		form->library()->setPropertyOptions(*this, *winfo, w);
 		//add meta-information
 		d->set.addProperty( newProp = new Property("this:classString", winfo->name()) );
 		newProp->setVisible(false);
@@ -361,7 +365,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			));
 	}*/
 
-	if(d->manager->activeForm() && tree->container()) // we are a container -> layout property
+	if(KFormDesigner::FormManager::self()->activeForm() && tree->container()) // we are a container -> layout property
 		createLayoutProperty(tree);
 }
 
@@ -412,9 +416,9 @@ WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, 
 	}
 */
 
-//	return d->manager->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
-	return d->manager->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
-		 property, multiple, isTopLevel);
+//	return KFormDesigner::FormManager::self()->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
+	return KFormDesigner::FormManager::self()->activeForm()->library()->isPropertyVisible(
+		d->widgets.first()->className(), d->widgets.first(), property, multiple, isTopLevel);
 }
 
 ////////////////  Slots called when properties are modified ///////////////
@@ -422,8 +426,8 @@ WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, 
 void
 WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
 {
-	if(!d->slotPropertyChangedEnabled || !d->manager || !d->manager->activeForm()
-		|| ! d->manager->activeForm()->objectTree())
+	if(!d->slotPropertyChangedEnabled || !KFormDesigner::FormManager::self() || !KFormDesigner::FormManager::self()->activeForm()
+		|| ! KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
 
 	QCString property = p.name();
@@ -460,7 +464,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	}
 
 	 // make sure we are not already undoing -> avoid recursion
-	if(d->isUndoing && !d->manager->isRedoing())
+	if(d->isUndoing && !KFormDesigner::FormManager::self()->isRedoing())
 		return;
 
 	const bool alterLastCommand = d->lastCommand && d->lastCommand->property() == property;
@@ -468,18 +472,18 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	if(d->widgets.count() == 1) // one widget selected
 	{
 		// If the last command is the same, we just change its value
-		if(alterLastCommand && !d->manager->isRedoing())
+		if(alterLastCommand && !KFormDesigner::FormManager::self()->isRedoing())
 			d->lastCommand->setValue(value);
 		else  {
 //			if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
-			if (d->slotPropertyChanged_addCommandEnabled && !d->manager->isRedoing()) {
+			if (d->slotPropertyChanged_addCommandEnabled && !KFormDesigner::FormManager::self()->isRedoing()) {
 				d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
 						d->widgets.first()->property(property), value, property);
-				d->manager->activeForm()->addCommand(d->lastCommand, false);
+				KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 			}
 
 			// If the property is changed, we add it in ObjectTreeItem modifProp
-			ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+			ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
 			if (tree && p.isModified())
 				tree->addModifiedProperty(property, d->widgets.first()->property(property));
 		}
@@ -491,10 +495,10 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 	}
 	else
 	{
-		if(alterLastCommand && !d->manager->isRedoing())
+		if(alterLastCommand && !KFormDesigner::FormManager::self()->isRedoing())
 			d->lastCommand->setValue(value);
 		else {
-			if (d->slotPropertyChanged_addCommandEnabled && !d->manager->isRedoing()) {
+			if (d->slotPropertyChanged_addCommandEnabled && !KFormDesigner::FormManager::self()->isRedoing()) {
 				// We store old values for each widget
 				QMap<QCString, QVariant> list;
 	//			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
@@ -502,14 +506,14 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 					list.insert((*it)->name(), (*it)->property(property));
 
 				d->lastCommand = new PropertyCommand(this, list, value, property);
-				d->manager->activeForm()->addCommand(d->lastCommand, false);
+				KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 			}
 		}
 
 //			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
 		foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 			if (!alterLastCommand) {
-				ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup((*it)->name());
+				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
 				if(tree && p.isModified())
 					tree->addModifiedProperty(property, (*it)->property(property));
 			}
@@ -528,7 +532,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 		return;
 	
 	//is this widget selected? (if so, use property system)
-	const bool widgetIsSelected = d->manager->activeForm()->selectedWidget() == widget;
+	const bool widgetIsSelected = KFormDesigner::FormManager::self()->activeForm()->selectedWidget() == widget;
 
 	d->slotPropertyChanged_addCommandEnabled = false;
 	QMap<QCString, QVariant>::ConstIterator endIt = propValues.constEnd();
@@ -547,7 +551,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 		}
 		else {
 			if (-1!=widget->metaObject()->findProperty(it.key(), true) && widget->property(it.key())!=it.data()) {
-				ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(widget->name());
+				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
 				if (tree)
 					tree->addModifiedProperty(it.key(), widget->property(it.key()));
 				widget->setProperty(it.key(), it.data());
@@ -557,7 +561,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 	}
 	d->lastCommand = 0;
 	if (addToActiveForm)
-		d->manager->activeForm()->addCommand(group, false/*no exec*/);
+		KFormDesigner::FormManager::self()->activeForm()->addCommand(group, false/*no exec*/);
 	d->slotPropertyChanged_addCommandEnabled = true;
 //	}
 }
@@ -568,7 +572,7 @@ WidgetPropertySet::saveEnabledProperty(bool value)
 {
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next()) {
 	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
-		ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup((*it)->name());
+		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
 		if(tree->isEnabled() == value)
 			continue;
 
@@ -599,7 +603,7 @@ WidgetPropertySet::isNameValid(const QString &name)
 	QWidget *w = d->widgets.first();
 	//also update widget's name in QObject member
 	if (!KexiUtils::isIdentifier(name)) {
-		KMessageBox::sorry(d->manager->activeForm()->widget(),
+		KMessageBox::sorry(KFormDesigner::FormManager::self()->activeForm()->widget(),
 			i18n("Could not rename widget. ")
 			+i18n("\"%1\" is not a valid name for a widget.\n").arg(name)
 			+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
@@ -609,8 +613,8 @@ WidgetPropertySet::isNameValid(const QString &name)
 		return false;
 	}
 
-	if (d->manager->activeForm()->objectTree()->lookup(name)) {
-		KMessageBox::sorry( d->manager->activeForm()->widget(),
+	if (KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(name)) {
+		KMessageBox::sorry( KFormDesigner::FormManager::self()->activeForm()->widget(),
 			i18n("Could not rename widget. ")
 			+i18n("A widget with name \"%1\" already exists.\n").arg(name)
 			+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
@@ -632,7 +636,7 @@ WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property&
 	// We use the old value in modifProp for each widget
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())  {
 	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
-		ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup((*it)->name());
+		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
 		if(tree->modifiedProperties()->contains(property.name()))
 			(*it)->setProperty(property.name(), tree->modifiedProperties()->find(property.name()).data());
 	}
@@ -678,8 +682,8 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 				list.append((*it)->name());
 
 			d->lastGeoCommand = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
-			if (d->manager->activeForm())
-				d->manager->activeForm()->addCommand(d->lastGeoCommand, false);
+			if (KFormDesigner::FormManager::self()->activeForm())
+				KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastGeoCommand, false);
 		}
 	}
 
@@ -691,7 +695,7 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 void
 WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 {
-	if (!d->manager->activeForm() || !d->manager->activeForm()->objectTree())
+	if (!KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
 
 	QStringList list;
@@ -702,8 +706,8 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 	QStringList possibleValues = QStringList::fromStrList(*enumKeys);
 	delete enumKeys;
 
-	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(obj->name());
-	bool isTopLevel = d->manager->isTopLevel(obj);
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(obj->name());
+	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(obj);
 
 	if(!possibleValues.grep("AlignHCenter").empty())  {
 		// Create the horizontal alignment property
@@ -767,7 +771,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 void
 WidgetPropertySet::saveAlignProperty(const QString &property)
 {
-	if (!d->manager->activeForm())
+	if (!KFormDesigner::FormManager::self()->activeForm())
 		return;
 
 	QStrList list;
@@ -783,7 +787,7 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 	d->widgets.first()->setProperty("alignment", meta->keysToValue(list));
 
 
-	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
 	if(tree && d->set[property.latin1()].isModified())
 		tree->addModifiedProperty(property.latin1(), d->set[property.latin1()].oldValue());
 
@@ -795,7 +799,7 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 	else {
 		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
 			d->widgets.first()->property("alignment"), meta->keysToValue(list), "alignment");
-		d->manager->activeForm()->addCommand(d->lastCommand, false);
+		KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 	}
 }
 
@@ -805,8 +809,8 @@ void
 WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 {
 	Container *container = item->container();
-	if (!container || !d->manager->activeForm() ||
-		!d->manager->activeForm()->objectTree() || !container->widget())
+	if (!container || !KFormDesigner::FormManager::self()->activeForm() ||
+		!KFormDesigner::FormManager::self()->activeForm()->objectTree() || !container->widget())
 		return;
 	// special containers have no 'layout' property, as it should not be changed
 	QCString className = container->widget()->className();
@@ -820,7 +824,7 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 
 	Property *p = new Property("layout", createValueList(0, list), value,
 		i18n("Container's Layout"), i18n("Container's Layout"));
-	p->setVisible( d->manager->lib()->advancedPropertiesVisible() );
+	p->setVisible( container->form()->library()->advancedPropertiesVisible() );
 	d->set.addProperty(p);
 
 	updatePropertyValue(item, "layout");
@@ -843,9 +847,9 @@ void
 WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value)
 {
 	Container *container=0;
-	if(!d->manager->activeForm() || !d->manager->activeForm()->objectTree())
+	if(!KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
-	ObjectTreeItem *item = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+	ObjectTreeItem *item = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
 	if(!item)
 		return;
 	container = item->container();
@@ -858,7 +862,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 		else if(!d->isUndoing)  {
 			d->lastCommand = new LayoutPropertyCommand(this, d->widgets.first()->name(),
 				d->set["layout"].oldValue(), value);
-			d->manager->activeForm()->addCommand(d->lastCommand, false);
+			KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 		}
 
 		container->setLayout(type);
@@ -866,7 +870,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 		if(show != d->set["layoutMargin"].isVisible())  {
 			d->set["layoutMargin"].setVisible(show);
 			d->set["layoutSpacing"].setVisible(show);
-			d->manager->showPropertySet(this, true/*force*/);
+			KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/);
 		}
 		return;
 	}
@@ -880,7 +884,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 		container->layout()->setSpacing(value.toInt());
 	}
 
-	ObjectTreeItem *tree = d->manager->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
 	if(tree && d->set[ prop.latin1() ].isModified())
 		tree->addModifiedProperty(prop.latin1(), d->set[prop.latin1()].oldValue());
 
@@ -892,7 +896,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 	else  {
 		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
 			d->set[ prop.latin1() ].oldValue(), value, prop.latin1());
-		d->manager->activeForm()->addCommand(d->lastCommand, false);
+		KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 	}
 }
 
@@ -1000,7 +1004,7 @@ WidgetPropertySet::createValueList(WidgetInfo *winfo, const QStringList &list)
 		QString n( d->propValCaption[ (*it).latin1() ] );
 		if (n.isEmpty()) { //try within factory and (maybe) parent factory
 			if (winfo)
-				n = d->manager->lib()->propertyDescForValue( winfo, (*it).latin1() );
+				n = KFormDesigner::FormManager::self()->activeForm()->library()->propertyDescForValue( winfo, (*it).latin1() );
 			if (n.isEmpty())
 				names.append( *it ); //untranslated
 //				map.insert(*it, (*it).latin1()); //untranslated

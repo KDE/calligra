@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libkexiformutilswidgets.la
 libkexiformutilswidgets_la_SOURCES = \
   kexidbautofield.cpp \
   kexidbform.cpp \
+  kexidbsubform.cpp \
   kexidblabel.cpp \
   kexidbimagebox.cpp \
   kexipushbutton.cpp \
@@ -15,7 +16,7 @@ libkexiformutilswidgets_la_SOURCES = \
   kexidbdateedit.cpp \
   kexidblineedit.cpp \
   kexidbcheckbox.cpp \
-  kexidbtextedit.cpp
+  kexidbtextedit.cpp 
 
 libkexiformutilswidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiformutilswidgets_la_LIBADD = 

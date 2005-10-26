@@ -111,7 +111,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	if(toplevel)
 	{
-		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname),
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->library()->displayName(classname),
 			widget()->name(), widget(), this, this);
 		setObjectTree(it);
 
@@ -160,12 +160,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 			m_grab = QPoint(mev->x(), mev->y());
 
 			// we are drawing a connection
-			if(m_form->manager()->isCreatingConnection())  {
+			if(FormManager::self()->isCreatingConnection())  {
 				drawConnection(mev);
 				return true;
 			}
 
-			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) && (!m_form->manager()->isInserting())) // multiple selection mode
+			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) 
+				&& (!FormManager::self()->isInserting())) // multiple selection mode
 			{
 				if(m_form->selectedWidgets()->findRef(m_moving) != -1) // widget is already selected
 				{
@@ -192,10 +193,10 @@ Container::eventFilter(QObject *s, QEvent *e)
 				setSelectedWidget(m_moving, false, (mev->button() == RightButton));
 
 			// we are inserting a widget or drawing a selection rect in the form
-			if((/*s == m_container &&*/ m_form->manager()->isInserting()) || ((s == m_container) && !m_toplevel))
+			if((/*s == m_container &&*/ FormManager::self()->isInserting()) || ((s == m_container) && !m_toplevel))
 			{
 				int tmpx,tmpy;
-				if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)))
+				if(!FormManager::self()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)))
 				{
 					tmpx = mev->x();
 					tmpy = mev->y();
@@ -214,7 +215,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->formWidget())
 					m_form->formWidget()->initBuffer();
 
-				if(!m_form->manager()->isInserting())
+				if(!FormManager::self()->isInserting())
 					m_state = DrawingSelectionRect;
 				return true;
 			}
@@ -227,7 +228,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::MouseButtonRelease:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(m_form->manager()->isInserting()) // we insert the widget at cursor pos
+			if(FormManager::self()->isInserting()) // we insert the widget at cursor pos
 			{
 				if(m_form->formWidget())
 					m_form->formWidget()->clearForm();
@@ -243,7 +244,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			if(mev->button() == RightButton) // Right-click -> context menu
 			{
-				m_form->manager()->createContextMenu(static_cast<QWidget*>(s), this);
+				FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this);
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))// && (m_copyRect.isValid()))
 			{
@@ -264,12 +265,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				m_form->setInteractiveMode(false);
 				// We simulate copy and paste
-				m_form->manager()->copyWidget();
+				FormManager::self()->copyWidget();
 				if(m_form->selectedWidgets()->count() > 1)
-					m_form->manager()->setInsertPoint( mev->pos() );
+					FormManager::self()->setInsertPoint( mev->pos() );
 				else
-					m_form->manager()->setInsertPoint( static_cast<QWidget*>(s)->mapTo(m_container, mev->pos() - m_grab) );
-				m_form->manager()->pasteWidget();
+					FormManager::self()->setInsertPoint( static_cast<QWidget*>(s)->mapTo(m_container, mev->pos() - m_grab) );
+				FormManager::self()->pasteWidget();
 				m_form->setInteractiveMode(true);
 
 				//m_initialPos = QPoint();
@@ -286,7 +287,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::MouseMove:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(m_form->manager()->isInserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton)) ||
+			if(FormManager::self()->isInserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton)) ||
 			(mev->state() == (LeftButton|ControlButton|AltButton)) || (mev->state() == (LeftButton|ShiftButton)) ) )
 			// draw the insert rect
 			{
@@ -294,16 +295,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 				return true;
 			}
 			// Creating a connection, we highlight sender and receiver, and we draw a link between them
-			else if(m_form->manager()->isCreatingConnection() && !m_form->manager()->createdConnection()->sender().isNull())
+			else if(FormManager::self()->isCreatingConnection() && !FormManager::self()->createdConnection()->sender().isNull())
 			{
-				ObjectTreeItem *tree = m_form->objectTree()->lookup(m_form->manager()->createdConnection()->sender());
+				ObjectTreeItem *tree = m_form->objectTree()->lookup(FormManager::self()->createdConnection()->sender());
 				if(!tree || !tree->widget())
 					return true;
 
 				if(m_form->formWidget() && (tree->widget() != s))
 					m_form->formWidget()->highlightWidgets(tree->widget(), static_cast<QWidget*>(s));
 			}
-			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->isCreatingConnection()) // draw the selection rect
+			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !FormManager::self()->isCreatingConnection()) // draw the selection rect
 			{
 				if((mev->state() != LeftButton) || /*m_inlineEditing*/ m_state == InlineEditing)
 					return true;
@@ -328,7 +329,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				return true;
 			}
 			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
-			  && !m_form->manager()->isInserting() && (m_state != CopyingWidget)) // we are dragging the widget(s) to move it
+			  && !FormManager::self()->isInserting() && (m_state != CopyingWidget)) // we are dragging the widget(s) to move it
 			{
 				if(!m_toplevel && m_moving == m_container) // no effect for form
 					return false;
@@ -389,14 +390,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 					w = m_moving;
 				else
 					w = m_form->selectedWidgets()->last();
-				m_form->manager()->lib()->startEditing(w->className(), w, this);
+				m_form->library()->startEditing(w->className(), w, this);
 			}
 			else if(kev->key() == Key_Escape)
 			{
-				if(m_form->manager()->isCreatingConnection())
-					m_form->manager()->stopCreatingConnection();
-				else if(m_form->manager()->isInserting())
-					m_form->manager()->stopInsert();
+				if(FormManager::self()->isCreatingConnection())
+					FormManager::self()->stopCreatingConnection();
+				else if(FormManager::self()->isInserting())
+					FormManager::self()->stopInsert();
 				return true;
 			}
 			else if((kev->key() == Key_Control) && (m_state == MovingWidget))
@@ -409,14 +410,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 				eventFilter(m_moving, mev);
 				delete mev;
 			}
-			else if(kev->key() == m_form->manager()->contextMenuKey())
+			else if(kev->key() == FormManager::self()->contextMenuKey())
 			{
-					m_form->manager()->createContextMenu(static_cast<QWidget*>(s), this, false);
+					FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this, false);
 					return true;
 			}
 			else if (kev->key() == Key_Delete)
 			{
-				m_form->manager()->deleteWidget();
+				FormManager::self()->deleteWidget();
 				return true;
 			}
 			// directional buttons move the widget
@@ -486,7 +487,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 			//m_inlineEditing = true;
 			m_state = InlineEditing;
-			m_form->manager()->lib()->startEditing(w->className(), w, this);
+			m_form->library()->startEditing(w->className(), w, this);
 			return true;
 		}
 
@@ -546,7 +547,7 @@ Container::deleteWidget(QWidget *w)
 		return;
 //	kdDebug() << "Deleting a widget: " << w->name() << endl;
 	m_form->objectTree()->removeItem(w->name());
-	m_form->manager()->deleteWidgetLater( w );
+	FormManager::self()->deleteWidgetLater( w );
 	m_form->setSelectedWidget(m_container);
 }
 
@@ -916,39 +917,39 @@ Container::drawConnection(QMouseEvent *mev)
 {
 	if(mev->button() != LeftButton)
 	{
-		m_form->manager()->resetCreatedConnection();
+		FormManager::self()->resetCreatedConnection();
 		return;
 	}
 	// First click, we select the sender and display menu to choose signal
-	if(m_form->manager()->createdConnection()->sender().isNull())
+	if(FormManager::self()->createdConnection()->sender().isNull())
 	{
-		m_form->manager()->createdConnection()->setSender(m_moving->name());
+		FormManager::self()->createdConnection()->setSender(m_moving->name());
 		if(m_form->formWidget())
 		{
 			m_form->formWidget()->initBuffer();
 			m_form->formWidget()->highlightWidgets(m_moving, 0/*, QPoint()*/);
 		}
-		m_form->manager()->createSignalMenu(m_moving);
+		FormManager::self()->createSignalMenu(m_moving);
 		return;
 	}
 	// the user clicked outside the menu, we cancel the connection
-	if(m_form->manager()->createdConnection()->signal().isNull())
+	if(FormManager::self()->createdConnection()->signal().isNull())
 	{
-		m_form->manager()->stopCreatingConnection();
+		FormManager::self()->stopCreatingConnection();
 		return;
 	}
 	// second click to choose the receiver
-	if(m_form->manager()->createdConnection()->receiver().isNull())
+	if(FormManager::self()->createdConnection()->receiver().isNull())
 	{
-		m_form->manager()->createdConnection()->setReceiver(m_moving->name());
-		m_form->manager()->createSlotMenu(m_moving);
+		FormManager::self()->createdConnection()->setReceiver(m_moving->name());
+		FormManager::self()->createSlotMenu(m_moving);
 		m_container->repaint();
 		return;
 	}
 	// the user clicked outside the menu, we cancel the connection
-	if(m_form->manager()->createdConnection()->slot().isNull())
+	if(FormManager::self()->createdConnection()->slot().isNull())
 	{
-		m_form->manager()->stopCreatingConnection();
+		FormManager::self()->stopCreatingConnection();
 		return;
 	}
 }
@@ -988,7 +989,7 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 	QPoint pos = static_cast<QWidget*>(s)->mapTo(m_container, mev->pos());
 	int gridX = m_form->gridSize();
 	int gridY = m_form->gridSize();
-	if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+	if(!FormManager::self()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
 	{
 		tmpx = pos.x();
 		tmpy = pos.y();
@@ -1016,7 +1017,7 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 	if(m_insertRect.bottom() > m_container->height())
 		m_insertRect.moveBottom(m_container->height());
 
-	if(m_form->manager()->isInserting() && m_insertRect.isValid())
+	if(FormManager::self()->isInserting() && m_insertRect.isValid())
 	{
 		if(m_form->formWidget())
 		{
@@ -1032,7 +1033,7 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
 {
 	// We've been dragging a widget, but Ctrl was hold, so we start copy
 	if(m_state == MovingWidget)  {
-		//m_form->manager()->undo(); // undo last moving
+		//FormManager::self()->undo(); // undo last moving
 		//m_moving->move(m_initialPos);
 		if(m_form->formWidget())  {
 			m_container->repaint();
@@ -1106,7 +1107,7 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 		}
 
 		int tmpx, tmpy;
-		if(!m_form->manager()->snapWidgetsToGrid() || (mev && mev->state() == (LeftButton|ControlButton|AltButton)) )
+		if(!FormManager::self()->snapWidgetsToGrid() || (mev && mev->state() == (LeftButton|ControlButton|AltButton)) )
 		{
 			tmpx = w->x() + dx;
 			tmpy = w->y() + dy;

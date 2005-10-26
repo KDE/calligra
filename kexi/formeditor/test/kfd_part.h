@@ -61,7 +61,9 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		KFormDesignerPart(QWidget *parent, const char *name, bool readOnly=true, const QStringList &args=QStringList());
 		virtual ~KFormDesignerPart();
 
-		KFormDesigner::FormManager*   manager()  { return m_manager; }
+		static KFormDesigner::WidgetLibrary* formsLibrary();
+
+//		KFormDesigner::FormManager*   manager()  { return m_manager; }
 		void setUniqueFormMode(bool enable)  { m_uniqueFormMode = enable; }
 
 		bool closeForm(Form *form);
@@ -97,7 +99,8 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		void setupActions();
 
 	private:
-		KFormDesigner::FormManager  *m_manager;
+		static KFormDesigner::WidgetLibrary* static_formsLibrary;
+//		KFormDesigner::FormManager  *m_manager;
 		QWorkspace  *m_workspace;
 		int  m_count;
 		bool m_uniqueFormMode;

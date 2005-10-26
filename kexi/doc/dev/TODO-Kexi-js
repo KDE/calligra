@@ -470,6 +470,12 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
   the record could be buffered locally before closing Kexi application... and on next startup, re-sent.
   This can work in simple cases (when complex transactions are not involved).
 
+=== KEXIDB TESTS=== 
+- add tests for DatabaseProperties
+- add tests for PreparedStatement
+- add tests for migration
+
+
 === MDB import TODO ===
 
 
@@ -551,6 +557,7 @@ Migration (Import Project Wizard) TODO:
 
 Reports TODO
 - reuse most of KexiFormPart code in KexiReportPart (eg. creating shared actions)
+- line widget should use special resize handle set -- with only two rectangles (Forms too)
 
 KMDI TODO
 - do not execute KMdiMainFrm::switchOffMaximizeModeForMenu() when true==QApplication::closingDown()
@@ -618,6 +625,15 @@ FORMS:
 --add QFrame container
 --make image-related actions undoable/redoable in design time
 --add 'print' action
+--add for movies/animations support using QMovie to KexiDBImageBox 
+  or (most probably) inherit KexiDBImageBox as KexiDBMovieBox
+---KexiBLOBBuffer::pixmap() shouldn't be used but data() should be used to create QMovie object 
+   in each movie widget itself because even if the same QMovie was used in many movie widgets:
+   a) speeds can vary between movie widgets, b) different forms can be opended in different moments
+   so playing starts in different moments, c) one or more movies can be stopped while others not
+---add following related properties: int playbackSpeed (in frames per second, 0==default), 
+   bool autoStart (true==default), playbackControls (false==default), bool loopPlayback (true==default)
+   bool pauseAfterEnd (0==nothing==default)
 -property pane: shrink widget name displayed at the top by adding "..." to avoid problems
  with pane's size when selected widget has very long name
 - resize handles are always black: this is bad on black background!
@@ -674,3 +690,7 @@ totals in Query Columns panel. Alt+DownArrow does not work.
 Editor window, but not on any widgets on the form, crashes Kexi.
 - It is not possible to change the size of a
 widget in the form editor without the mouse.
+
+TODO: 
+- update conn dialog gui
+example: http://www.ntpb.co.uk/kexi/msn.png

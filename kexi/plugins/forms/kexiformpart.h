@@ -31,6 +31,7 @@
 
 namespace KFormDesigner
 {
+	class WidgetLibrary;
 	class FormManager;
 	class Form;
 }
@@ -52,7 +53,10 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 		KexiFormPart(QObject *parent, const char *name, const QStringList &);
 		virtual ~KexiFormPart();
 
-		KFormDesigner::FormManager *manager() const;
+		//! \return a pointer to Forms Widget Library.
+		static KFormDesigner::WidgetLibrary* library();
+
+//		KFormDesigner::FormManager *manager() const;
 		KexiDataSourcePage* dataSourcePage() const;
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
@@ -80,6 +84,8 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
+
+		static KFormDesigner::WidgetLibrary* static_formsLibrary;
 
 	protected slots:
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);

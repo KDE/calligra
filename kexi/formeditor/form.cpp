@@ -87,11 +87,12 @@ FormWidget::~FormWidget()
 
 //--------------------------------------
 
-Form::Form(FormManager *manager, const char *name, bool designMode)
-  : QObject(manager, name)
+Form::Form(WidgetLibrary* library, const char *name, bool designMode)
+  : QObject(library, name)
+  , m_lib(library)
 {
 	d = new FormPrivate();
-	d->manager = manager;
+//	d->manager = manager;
 	d->design = designMode;
 
 	// Init actions
@@ -215,7 +216,7 @@ Form::setDesignMode(bool design)
 		ObjectTreeDict *dict = new ObjectTreeDict( *(d->topTree->dict()) );
 		ObjectTreeDictIterator it(*dict);
 		for(; it.current(); ++it)
-			d->manager->lib()->previewWidget(it.current()->widget()->className(), it.current()->widget(), d->toplevel);
+			m_lib->previewWidget(it.current()->widget()->className(), it.current()->widget(), d->toplevel);
 		delete dict;
 
 		d->widget = d->topTree->widget();
@@ -264,7 +265,7 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 	emitActionSignals(false);
 
 	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
-	if(!d->manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+	if(!FormManager::self()->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 	{
 		w = w->parentWidget();
 		if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
@@ -308,22 +309,22 @@ Form::emitActionSignals(bool withUndoAction)
 {
 	// Update menu and toolbar items
 	if(d->selected.count() > 1)
-		d->manager->emitWidgetSelected(this, true);
+		FormManager::self()->emitWidgetSelected(this, true);
 	else if(d->selected.first() != widget())
-		d->manager->emitWidgetSelected(this, false);
+		FormManager::self()->emitWidgetSelected(this, false);
 	else
-		d->manager->emitFormWidgetSelected(this);
+		FormManager::self()->emitFormWidgetSelected(this);
 
 	if(!withUndoAction)
 		return;
 
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
-		d->manager->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
+		FormManager::self()->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
-		d->manager->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
+		FormManager::self()->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 void
@@ -346,7 +347,7 @@ Form::formDeleted()
 //	emit selectionChanged(0, false);
 //	emitActionSignals(false);
 
-	d->manager->deleteForm(this);
+	FormManager::self()->deleteForm(this);
 	//delete this;
 	deleteLater();
 }
@@ -365,7 +366,7 @@ Form::changeName(const QCString &oldname, const QCString &newname)
 //		i18n("A widget with this name already exists. "
 //			"Please choose another name or rename existing widget."));
 		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
-		d->manager->propertySet()->property("name") = QVariant(oldname);
+		FormManager::self()->propertySet()->property("name") = QVariant(oldname);
 	}
 	else
 	{
@@ -394,7 +395,7 @@ Form::emitChildRemoved(ObjectTreeItem *item)
 void
 Form::addCommand(KCommand *command, bool execute)
 {
-	emit d->manager->dirty(this, true);
+	emit FormManager::self()->dirty(this, true);
 	d->dirty = true;
 	d->history->addCommand(command, execute);
 	if(!execute) // simulate command to activate 'undo' menu
@@ -405,14 +406,14 @@ void
 Form::clearCommandHistory()
 {
 	d->history->clear();
-	d->manager->emitUndoEnabled(false, QString::null); 
-	d->manager->emitRedoEnabled(false, QString::null); 
+	FormManager::self()->emitUndoEnabled(false, QString::null); 
+	FormManager::self()->emitRedoEnabled(false, QString::null); 
 }
 
 void
 Form::slotCommandExecuted()
 {
-	emit d->manager->dirty(this, true);
+	emit FormManager::self()->dirty(this, true);
 	d->dirty = true;
 	// because actions text is changed after the commandExecuted() signal is emitted
 	QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
@@ -424,7 +425,7 @@ Form::emitUndoEnabled()
 {
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
-		d->manager->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
+		FormManager::self()->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 }
 
 void
@@ -432,13 +433,13 @@ Form::emitRedoEnabled()
 {
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
-		d->manager->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
+		FormManager::self()->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 void
 Form::slotFormRestored()
 {
-	emit d->manager->dirty(this, false);
+	emit FormManager::self()->dirty(this, false);
 	d->dirty = false;
 }
 

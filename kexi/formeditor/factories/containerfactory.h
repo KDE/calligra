@@ -155,7 +155,7 @@ class KFORMEDITOR_EXPORT SubForm : public QScrollView
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 	public:
-		SubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
+		SubForm(QWidget *parent, const char *name);
 		~SubForm() {}
 
 		//! \return the name of the subform inside the db
@@ -163,7 +163,7 @@ class KFORMEDITOR_EXPORT SubForm : public QScrollView
 		void      setFormName(const QString &name);
 
 	private:
-		KFormDesigner::FormManager *m_manager;
+//		KFormDesigner::FormManager *m_manager;
 		KFormDesigner::Form   *m_form;
 		QWidget  *m_widget;
 		QString   m_formName;
@@ -211,7 +211,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 	private:
 //		QWidget *m_widget;
 //		KFormDesigner::Container *m_container;
-		KFormDesigner::FormManager  *m_manager;
+//		KFormDesigner::FormManager  *m_manager;
 };
 
 #endif

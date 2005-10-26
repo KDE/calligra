@@ -86,21 +86,21 @@ void
 PropertyCommand::setValue(const QVariant &value)
 {
 	m_value = value;
-	emit m_propSet->manager()->dirty(m_propSet->manager()->activeForm());
+	emit FormManager::self()->dirty(FormManager::self()->activeForm());
 }
 
 void
 PropertyCommand::execute()
 {
-	m_propSet->manager()->activeForm()->selectFormWidget();
+	FormManager::self()->activeForm()->selectFormWidget();
 	m_propSet->setUndoing(true);
 
 	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QCString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key());
+		ObjectTreeItem* item = FormManager::self()->activeForm()->objectTree()->lookup(it.key());
 		if (item) {//we're checking for item!=0 because the name could be of a form widget
-			m_propSet->manager()->activeForm()->setSelectedWidget(item->widget(), true);
+			FormManager::self()->activeForm()->setSelectedWidget(item->widget(), true);
 		}
 	}
 
@@ -111,17 +111,17 @@ PropertyCommand::execute()
 void
 PropertyCommand::unexecute()
 {
-	m_propSet->manager()->activeForm()->selectFormWidget();
+	FormManager::self()->activeForm()->selectFormWidget();
 	m_propSet->setUndoing(true);
 
 	QMap<QCString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QCString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(it.key());
+		ObjectTreeItem* item = FormManager::self()->activeForm()->objectTree()->lookup(it.key());
 		if (!item)
 			continue; //better this than a crash
 		QWidget *widg = item->widget();
-		m_propSet->manager()->activeForm()->setSelectedWidget(widg, true);
+		FormManager::self()->activeForm()->setSelectedWidget(widg, true);
 		//m_propSet->setSelectedWidget(widg, true);
 		if (-1!=widg->metaObject()->findProperty( m_property, TRUE ))
 			widg->setProperty(m_property, it.data());
@@ -166,7 +166,7 @@ GeometryPropertyCommand::execute()
 	// We move every widget in our list by (dx, dy)
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(*it);
+		ObjectTreeItem* item = FormManager::self()->activeForm()->objectTree()->lookup(*it);
 		if (!item)
 			continue; //better this than a crash
 		QWidget *w = item->widget();
@@ -186,7 +186,7 @@ GeometryPropertyCommand::unexecute()
 	// We move every widget in our list by (-dx, -dy) to undo the move
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* item = m_propSet->manager()->activeForm()->objectTree()->lookup(*it);
+		ObjectTreeItem* item = FormManager::self()->activeForm()->objectTree()->lookup(*it);
 		if (!item)
 			continue; //better this than a crash
 		QWidget *w = item->widget();
@@ -199,7 +199,7 @@ void
 GeometryPropertyCommand::setPos(const QPoint& pos)
 {
 	m_pos = pos;
-	emit m_propSet->manager()->dirty(m_propSet->manager()->activeForm());
+	emit FormManager::self()->dirty(FormManager::self()->activeForm());
 }
 
 QString
@@ -609,7 +609,7 @@ LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const QCStr
 	const QVariant &oldValue, const QVariant &value)
  : PropertyCommand(buf, wname, oldValue, value, "layout")
 {
-	m_form = buf->manager()->activeForm();
+	m_form = FormManager::self()->activeForm();
 	ObjectTreeItem* titem = m_form->objectTree()->lookup(wname);
 	if (!titem)
 		return; //better this than a crash
@@ -665,11 +665,11 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container)
 {
 	m_containername = container->widget()->name();
 	m_form = container->form();
-	m_class = container->form()->manager()->selectedClass();
+	m_class = FormManager::self()->selectedClass();
 	m_insertRect = container->m_insertRect;
 	m_point = container->m_insertBegin;
 	m_name = container->form()->objectTree()->generateUniqueName(
-		container->form()->manager()->lib()->namePrefix(m_class).latin1());
+		container->form()->library()->namePrefix(m_class).latin1());
 }
 
 InsertWidgetCommand::InsertWidgetCommand(Container *container,
@@ -683,7 +683,7 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container,
 	m_point = pos;
 	if (namePrefix.isEmpty()) {
 		m_name = container->form()->objectTree()->generateUniqueName(
-			container->form()->manager()->lib()->namePrefix(m_class).latin1() );
+			container->form()->library()->namePrefix(m_class).latin1() );
 	}
 	else {
 		m_name = container->form()->objectTree()->generateUniqueName(
@@ -700,9 +700,8 @@ InsertWidgetCommand::execute()
 	if (!titem)
 		return; //better this than a crash
 	Container *m_container = titem->container();
-	FormManager *manager = m_container->form()->manager();
 	int options = WidgetFactory::DesignViewMode | WidgetFactory::AnyOrientation;
-	if (manager->lib()->internalProperty(m_class, "orientationSelectionPopup")=="1") {
+	if (m_container->form()->library()->internalProperty(m_class, "orientationSelectionPopup")=="1") {
 		if(m_insertRect.isValid()) {
 			if (m_insertRect.width() < m_insertRect.height()) {
 				options |= WidgetFactory::VerticalOrientation;
@@ -715,7 +714,7 @@ InsertWidgetCommand::execute()
 		}
 		if (options & WidgetFactory::AnyOrientation) {
 			options ^= WidgetFactory::AnyOrientation;
-			options |= manager->lib()->showOrientationSelectionPopup(
+			options |= m_container->form()->library()->showOrientationSelectionPopup(
 				m_class, m_container->m_container,
 				m_container->form()->widget()->mapToGlobal(m_point));
 			if (options & WidgetFactory::AnyOrientation)
@@ -725,13 +724,13 @@ InsertWidgetCommand::execute()
 	else
 		options |= WidgetFactory::AnyOrientation;
 
-	QWidget *w = manager->lib()->createWidget(m_class, m_container->m_container, m_name,
+	QWidget *w = m_container->form()->library()->createWidget(m_class, m_container->m_container, m_name,
 		m_container, options);
 
 	if(!w) {
-		manager->stopInsert();
-		WidgetInfo *winfo = manager->lib()->widgetInfoForClassName(m_class);
-		KMessageBox::sorry(manager->activeForm() ? manager->activeForm()->widget() : 0,
+		FormManager::self()->stopInsert();
+		WidgetInfo *winfo = m_container->form()->library()->widgetInfoForClassName(m_class);
+		KMessageBox::sorry(FormManager::self()->activeForm() ? FormManager::self()->activeForm()->widget() : 0,
 				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.")
 				.arg(winfo ? winfo->name() : QString::null));
 		kdWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
@@ -772,14 +771,14 @@ InsertWidgetCommand::execute()
 	w->setBackgroundOrigin(QWidget::ParentOrigin);
 	w->show();
 
-	manager->stopInsert();
+	FormManager::self()->stopInsert();
 
 	// ObjectTreeItem object already exists for widgets which corresponds to a Container
 	// it's already created in Container's constructor
 	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
 	if (!item) { //not yet created...
 		m_container->form()->objectTree()->addItem(m_container->m_tree,
-			item = new ObjectTreeItem(manager->lib()->displayName(m_class), m_name, w, m_container)
+			item = new ObjectTreeItem(m_container->form()->library()->displayName(m_class), m_name, w, m_container)
 		);
 	}
 	//assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
@@ -789,7 +788,7 @@ InsertWidgetCommand::execute()
 	}
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	QValueList<QCString> list(manager->lib()->autoSaveProperties(w->className()));
+	QValueList<QCString> list(m_container->form()->library()->autoSaveProperties(w->className()));
 
 	QValueList<QCString>::ConstIterator endIt = list.constEnd();
 	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it)
@@ -798,8 +797,11 @@ InsertWidgetCommand::execute()
 	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 
 	m_container->setSelectedWidget(w, false);
-	if (manager->lib()->internalProperty(w->className(), "dontStartEditingOnInserting").isEmpty()) {
-		m_form->manager()->lib()->startEditing(w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
+	if (m_container->form()->library()->internalProperty(w->className(), 
+			"dontStartEditingOnInserting").isEmpty())
+	{
+		m_container->form()->library()->startEditing(
+			w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
 	}
 //! @todo update widget's width for entered text's metrics
 	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
@@ -867,7 +869,7 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, WidgetList &list, Form 
 void
 CreateLayoutCommand::execute()
 {
-	WidgetLibrary *lib = m_form->manager()->lib();
+	WidgetLibrary *lib = m_form->library();
 	if(!lib)
 		return;
 	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
@@ -932,7 +934,7 @@ CreateLayoutCommand::execute()
 	}
 
 	container->setSelectedWidget(w, false);
-	m_form->manager()->windowChanged(m_form->widget()); // to reload the ObjectTreeView
+	FormManager::self()->windowChanged(m_form->widget()); // to reload the ObjectTreeView
 }
 
 void
@@ -964,7 +966,7 @@ CreateLayoutCommand::unexecute()
 		return; //better this than a crash
 	QWidget *w = titem->widget();
 	parent->container()->deleteWidget(w); // delete the layout widget
-	m_form->manager()->windowChanged(m_form->widget()); // to reload ObjectTreeView
+	FormManager::self()->windowChanged(m_form->widget()); // to reload ObjectTreeView
 }
 
 QString
@@ -1090,7 +1092,7 @@ PasteWidgetCommand::execute()
 	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
 	if (!titem)
 		return; //better this than a crash
-	Container *m_container = titem->container();
+	Container *container = titem->container();
 	QString errMsg;
 	int errLine;
 	int errCol;
@@ -1114,12 +1116,12 @@ PasteWidgetCommand::execute()
 		QDomElement el = domDoc.namedItem("UI").firstChild().toElement();
 		fixNames(el);
 		if(m_point.isNull())
-			fixPos(el, m_container);
+			fixPos(el, container);
 		else
 			changePos(el, m_point);
 
 		m_form->setInteractiveMode(false);
-		FormIO::loadWidget(m_container, m_form->manager()->lib(), el);
+		FormIO::loadWidget(container, el);
 		m_form->setInteractiveMode(true);
 	}
 	else for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) // more than one widget
@@ -1129,14 +1131,14 @@ PasteWidgetCommand::execute()
 		QDomElement el = n.toElement();
 		fixNames(el);
 		if(!m_point.isNull())
-			moveWidgetBy(el, m_container, m_point);
+			moveWidgetBy(el, container, m_point);
 		else {
-			fixPos(el, m_container);
+			fixPos(el, container);
 			kdDebug() << "jdkjfldfksmfkdfjmqdsklfjdkkfmsqfksdfsm" << endl;
 		}
 
 		m_form->setInteractiveMode(false);
-		FormIO::loadWidget(m_container, m_form->manager()->lib(), el);
+		FormIO::loadWidget(container, el);
 		m_form->setInteractiveMode(true);
 	}
 
@@ -1157,13 +1159,13 @@ PasteWidgetCommand::execute()
 		}
 	}
 
-	m_container->form()->selectFormWidget();
+	container->form()->selectFormWidget();
 	QStringList::ConstIterator endIt = m_names.constEnd();
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it) // We select all the pasted widgets
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(*it);
 		if(item)
-			m_container->setSelectedWidget(item->widget(), true);
+			container->setSelectedWidget(item->widget(), true);
 	}
 }
 
@@ -1173,16 +1175,16 @@ PasteWidgetCommand::unexecute()
 	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
 	if (!titem)
 		return; //better this than a crash
-	Container *m_container = titem->container();
+	Container *container = titem->container();
 	// We just delete all the widgets we have created
 	QStringList::ConstIterator endIt = m_names.constEnd();
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		ObjectTreeItem* titem = m_container->form()->objectTree()->lookup(*it);
+		ObjectTreeItem* titem = container->form()->objectTree()->lookup(*it);
 		if (!titem)
 			continue; //better this than a crash
 		QWidget *w = titem->widget();
-		m_container->deleteWidget(w);
+		container->deleteWidget(w);
 	}
 }
 
@@ -1449,9 +1451,9 @@ DeleteWidgetCommand::unexecute()
 		ObjectTreeItem *parent = m_form->objectTree()->lookup(m_parents[wname]);
 		QDomElement widg = n.toElement();
 		if(parent)
-			FormIO::loadWidget(cont, m_form->manager()->lib(), widg, parent->widget());
+			FormIO::loadWidget(cont, widg, parent->widget());
 		else
-			FormIO::loadWidget(cont, m_form->manager()->lib(), widg);
+			FormIO::loadWidget(cont, widg);
 	}
 	m_form->setInteractiveMode(true);
 }
@@ -1479,15 +1481,15 @@ void
 CutWidgetCommand::execute()
 {
 	DeleteWidgetCommand::execute();
-	m_data = m_form->manager()->m_domDoc.toCString();
-	m_form->manager()->m_domDoc.setContent(m_domDoc.toCString());
+	m_data = FormManager::self()->m_domDoc.toCString();
+	FormManager::self()->m_domDoc.setContent(m_domDoc.toCString());
 }
 
 void
 CutWidgetCommand::unexecute()
 {
 	DeleteWidgetCommand::unexecute();
-	m_form->manager()->m_domDoc.setContent(m_data);
+	FormManager::self()->m_domDoc.setContent(m_data);
 }
 
 QString
@@ -1547,19 +1549,19 @@ void CommandGroup::addCommand(KCommand *command, bool allowExecute)
 
 void CommandGroup::execute()
 {
-	m_propSet->manager()->blockPropertyEditorUpdating(this);
+	FormManager::self()->blockPropertyEditorUpdating(this);
 	for (QPtrListIterator<KCommand> it(m_subCommands->commands()); it.current(); ++it) {
 		if (!m_commandsShouldntBeExecuted[it.current()])
 			it.current()->execute();
 	}
-	m_propSet->manager()->unblockPropertyEditorUpdating(this, m_propSet);
+	FormManager::self()->unblockPropertyEditorUpdating(this, m_propSet);
 }
 
 void CommandGroup::unexecute()
 {
-	m_propSet->manager()->blockPropertyEditorUpdating(this);
+	FormManager::self()->blockPropertyEditorUpdating(this);
 	m_subCommands->unexecute();
-	m_propSet->manager()->unblockPropertyEditorUpdating(this, m_propSet);
+	FormManager::self()->unblockPropertyEditorUpdating(this, m_propSet);
 }
 
 QString CommandGroup::name() const

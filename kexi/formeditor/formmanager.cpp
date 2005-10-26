@@ -83,9 +83,9 @@ namespace KFormDesigner {
 class PropertyFactory : public KoProperty::CustomPropertyFactory
 {
 	public:
-		PropertyFactory(QObject *parent, FormManager *manager) 
-		: KoProperty::CustomPropertyFactory(parent),
-			m_manager(manager)
+		PropertyFactory(QObject *parent) 
+		: KoProperty::CustomPropertyFactory(parent)
+//			m_manager(manager)
 		{
 		}
 		virtual ~PropertyFactory() {}
@@ -94,25 +94,27 @@ class PropertyFactory : public KoProperty::CustomPropertyFactory
 
 		Widget* createCustomWidget(Property *prop)
 		{
-			return new KFDPixmapEdit(m_manager, prop);
+			return new KFDPixmapEdit(prop);
 		}
 
 	private:
-		FormManager  *m_manager;
+//		FormManager  *m_manager;
 };
 
 }
 
 using namespace KFormDesigner;
 
-FormManager::FormManager(QObject *parent,
-	const QStringList& supportedFactoryGroups, int options, const char *name)
+static KStaticDeleter<FormManager> m_managerDeleter;
+FormManager* FormManager::_self = 0L;
+
+FormManager::FormManager(QObject *parent, int options, const char *name)
    : QObject(parent, name)
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
    , m_uiCodeDialog(0)
    , m_options(options)
 #endif
-	 , m_objectBlockingPropertyEditorUpdating(0)
+   , m_objectBlockingPropertyEditorUpdating(0)
    , m_isRedoing(false)
 {
 #ifdef KEXI_STANDALONE
@@ -124,7 +126,7 @@ FormManager::FormManager(QObject *parent,
 	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
 
-	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
+//moved to createWidgetLibrary()	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_propSet = new WidgetPropertySet(this);
 
 	m_editor = 0;
@@ -144,17 +146,32 @@ FormManager::FormManager(QObject *parent,
 		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 
 	// register kfd custom editors
-	Factory::self()->registerEditor(KoProperty::Pixmap, new PropertyFactory(Factory::self(), this));
+	Factory::self()->registerEditor(KoProperty::Pixmap, new PropertyFactory(Factory::self()));
 }
 
 FormManager::~FormManager()
 {
+	m_managerDeleter.setObject(0); //safe
 	delete m_popup;
 	delete m_connection;
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
 	delete m_uiCodeDialog;
 #endif
 //	delete m_propFactory;
+}
+
+
+FormManager* FormManager::self()
+{
+	return _self;
+}
+
+WidgetLibrary* 
+FormManager::createWidgetLibrary(FormManager* m, const QStringList& supportedFactoryGroups)
+{
+	if(!_self)
+		m_managerDeleter.setObject( _self, m );
+	return new WidgetLibrary(_self, supportedFactoryGroups);
 }
 
 void
@@ -176,11 +193,11 @@ FormManager::setObjectTreeView(ObjectTreeView *treeview)
 }
 
 ActionList
-FormManager::createActions(KActionCollection *parent)
+FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
 {
 	m_collection = parent;
 
-	ActionList actions = m_lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QCString &)));
+	ActionList actions = lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QCString &)));
 
 	if (m_options & HideSignalSlotConnections)
 		m_dragConnection = 0;
@@ -227,7 +244,7 @@ FormManager::createActions(KActionCollection *parent)
 	m_style->setMenuAccelsEnabled(true);
 	actions.append(m_style);
 
-	m_lib->addCustomWidgetActions( parent );
+	lib->addCustomWidgetActions( parent );
 
 	return actions;
 }
@@ -628,7 +645,7 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 
 	Form *myform;
 	if(!toForm)
-		myform = new Form(this, form->objectTree()->name().latin1(), 
+		myform = new Form(form->library(), form->objectTree()->name().latin1(), 
 			false/*!designMode, we need to set it early enough*/);
 	else
 		myform = toForm;
@@ -822,7 +839,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	const bool enableLayout = multiple || w == container->widget();
 
 	m_menuWidget = w;
-	QString n = m_lib->displayName(w->className());
+	QString n = container->form()->library()->displayName(w->className());
 //	QValueVector<int> menuIds();
 
 	if (!m_popup) {
@@ -838,7 +855,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		if(w == container->form()->widget())
 			m_popup->insertTitle(SmallIcon("form"), i18n("Form: ") + w->name());
 		else
-			m_popup->insertTitle(SmallIcon(m_lib->icon(w->className())), n + ": " + w->name() );
+			m_popup->insertTitle(SmallIcon(container->form()->library()->icon(w->className())), n + ": " + w->name() );
 	}
 	else
 		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets")
@@ -886,7 +903,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		// add all the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
-			int index = sub->insertItem( SmallIcon(m_lib->icon(it.current()->className().latin1())),
+			int index = sub->insertItem( SmallIcon(container->form()->library()->icon(it.current()->className().latin1())),
 				it.current()->name());
 			if(it.current()->widget() == buddy)
 				sub->setItemChecked(index, true);
@@ -930,7 +947,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 			lastID = m_popup->insertSeparator();
 		}
 		const int oldIndex = m_popup->count()-1;
-		m_lib->createMenuActions(w->className(), w, m_popup, container);
+		container->form()->library()->createMenuActions(w->className(), w, m_popup, container);
 		if (oldIndex == (m_popup->count()-1)) {
 //			for (uint i=oldIndex; i<m_popup->count(); i++) {
 //				int id = m_popup->idAt( i );
@@ -1358,7 +1375,7 @@ FormManager::clearWidgetContent()
 		return;
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		m_lib->clearWidgetContent(w->className(), w);
+		activeForm()->library()->clearWidgetContent(w->className(), w);
 }
 
 void
@@ -1628,7 +1645,7 @@ FormManager::changeFont()
 	QFont font;
 	bool oneFontSelected = true;
 	for (WidgetListIterator it(*wlist); (widget = it.current()); ++it) {
-		if (m_lib->isPropertyVisible(widget->className(), widget, "font")) {
+		if (m_active->library()->isPropertyVisible(widget->className(), widget, "font")) {
 			widgetsWithFontProperty.append(widget);
 			if (oneFontSelected) {
 				if (widgetsWithFontProperty.count()==1)

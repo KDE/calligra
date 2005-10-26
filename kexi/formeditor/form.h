@@ -38,6 +38,7 @@ namespace KFormDesigner {
 
 class Container;
 class WidgetPropertySet;
+class WidgetLibrary;
 class FormManager;
 class ObjectTree;
 class ObjectTreeItem;
@@ -88,7 +89,7 @@ class FormPrivate
 		FormPrivate();
 		~FormPrivate();
 
-		FormManager  *manager;
+//		FormManager  *manager;
 		QGuardedPtr<Container>  toplevel;
 		ObjectTree  *topTree;
 		QGuardedPtr<QWidget> widget;
@@ -140,8 +141,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	public:
 		/*! Creates a simple Form, child of the FormManager \a manager.
 		 */
-		Form(FormManager *manager, const char *name=0, bool designMode = true);
+		Form(WidgetLibrary* library, const char *name=0, bool designMode = true);
 		~Form();
+
+		//! \return A pointer to the WidgetLibrary supporting this form.
+		WidgetLibrary* library() const { return m_lib; }
 
 		/*!
 		 Creates a toplevel widget out of another widget.
@@ -166,8 +170,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! \return the form's toplevel widget, or 0 if designMode() == false.
 		QWidget* widget() const;
 
-		//! \return the FormManager parent of this form.
-		FormManager* manager() const { return d->manager; }
+//		//! \return the FormManager parent of this form.
+//		FormManager* manager() const { return d->manager; }
 
 		/*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
 		    and the widget's Container if it is itself a container.
@@ -376,6 +380,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		void setFormWidget(FormWidget* w);
 	private:
+		WidgetLibrary *m_lib;
 		FormPrivate *d;
 
 		friend class FormManager;

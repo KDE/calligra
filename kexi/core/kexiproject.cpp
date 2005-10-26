@@ -35,6 +35,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/parser/parser.h>
 #include <kexidb/msghandler.h>
+#include <kexidb/dbproperties.h>
 #include <kexiutils/utils.h>
 
 #include "kexiproject.h"
@@ -48,6 +49,48 @@
 #include "kexiblobbuffer.h"
 
 #include <assert.h>
+
+class KexiProject::Private
+{
+	public:
+		Private()
+		 : data(0)
+		 , itemDictsCache(199)
+		 , unstoredItems(199)
+		 , tempPartItemID_Counter(-1)
+		 , sqlParser(0)
+		 , versionMajor(0)
+		 , versionMinor(0)
+		 , final(false)
+		{
+			itemDictsCache.setAutoDelete(true);
+			unstoredItems.setAutoDelete(true);
+		}
+		~Private() {
+			delete data;
+			data=0;
+			delete sqlParser;
+		}
+
+		QGuardedPtr<KexiDB::Connection> connection;
+		QGuardedPtr<KexiProjectData> data;
+		
+		QString error_title;
+
+		//! a cache for item() method, indexed by project part's ids
+		QIntDict<KexiPart::ItemDict> itemDictsCache;
+
+		QPtrDict<KexiPart::Item> unstoredItems;
+		int tempPartItemID_Counter; //!< helper for getting unique 
+		                              //!< temporary identifiers for unstored items
+		KexiDB::Parser* sqlParser;
+
+		int versionMajor;
+		int versionMinor;
+		bool final : 1;
+};
+
+//---------------------------
 
 /*
  Helper for setting temporary error title. 
@@ -70,45 +113,65 @@ class KexiProject::ErrorTitle
 
 KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler)
  : QObject(), Object(handler)
- , m_data(pdata)
- , m_itemDictsCache(199)
- , m_unstoredItems(199)
- , m_tempPartItemID_Counter(-1)
- , m_sqlParser(0)
+ , d(new Private())
 {
+	d->data = pdata;
 //TODO: partmanager is outside project, so can be initialised just once:
-
-	m_itemDictsCache.setAutoDelete(true);
-	m_unstoredItems.setAutoDelete(true);
 	Kexi::partManager().lookup();
-	
-	m_connection = 0;
-	m_final = false;
 }
 
 KexiProject::~KexiProject()
 {
 	closeConnection();
-	delete m_data;
-	m_data=0;
-	delete m_sqlParser;
+	delete d;
+}
+
+KexiDB::Connection *KexiProject::dbConnection() const
+{
+	return d->connection;
+}
+
+KexiProjectData* KexiProject::data() const
+{
+	return d->data;
+}
+
+bool KexiProject::final() const
+{
+	return d->final;
+}
+
+void KexiProject::setFinal(bool set)
+{
+	d->final = set;
+}
+
+int KexiProject::versionMajor() const
+{
+	return d->versionMajor;
+}
+
+int KexiProject::versionMinor() const
+{
+	return d->versionMinor;
 }
 
 bool
 KexiProject::open()
 {
-	kdDebug() << "KexiProject::open(): " << m_data->databaseName() <<" "<< m_data->connectionData()->driverName  << endl;
+	kdDebug() << "KexiProject::open(): " << d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not open project \"%1\"").arg(m_data->databaseName()));
+		i18n("Could not open project \"%1\"").arg(d->data->databaseName()));
 	
 	if (!createConnection()) {
 		kdDebug() << "KexiProject::open(): !createConnection()" << endl;
 		return false;
 	}
-	if (!m_connection->useDatabase(m_data->databaseName()))
+	if (!d->connection->useDatabase(d->data->databaseName()))
 	{
-		kdDebug() << "KexiProject::open(): !m_connection->useDatabase() " << m_data->databaseName() <<" "<< m_data->connectionData()->driverName  << endl;
-		setError(m_connection);
+		kdDebug() << "KexiProject::open(): !d->connection->useDatabase() " 
+			<< d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
+		setError(d->connection);
 		closeConnection();
 		return false;
 	}
@@ -123,38 +186,38 @@ tristate
 KexiProject::create(bool forceOverwrite)
 {
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not create project \"%1\"").arg(m_data->databaseName()));
+		i18n("Could not create project \"%1\"").arg(d->data->databaseName()));
 		
 	if (!createConnection())
 		return false;
-	if (m_connection->databaseExists( m_data->databaseName() )) {
+	if (d->connection->databaseExists( d->data->databaseName() )) {
 		if (!forceOverwrite)
 			return cancelled;
-		if (!m_connection->dropDatabase( m_data->databaseName() )) {
-			setError(m_connection);
+		if (!d->connection->dropDatabase( d->data->databaseName() )) {
+			setError(d->connection);
 			closeConnection();
 			return false;
 		}
-		kdDebug() << "--- DB '" << m_data->databaseName() << "' dropped ---"<< endl;
+		kdDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---"<< endl;
 	}
-	if (!m_connection->createDatabase( m_data->databaseName() )) {
-		setError(m_connection);
+	if (!d->connection->createDatabase( d->data->databaseName() )) {
+		setError(d->connection);
 		closeConnection();
 		return false;
 	}
-	kdDebug() << "--- DB '" << m_data->databaseName() << "' created ---"<< endl;
+	kdDebug() << "--- DB '" << d->data->databaseName() << "' created ---"<< endl;
 	// and now: open
-	if (!m_connection->useDatabase(m_data->databaseName()))
+	if (!d->connection->useDatabase(d->data->databaseName()))
 	{
-		kdDebug() << "--- DB '" << m_data->databaseName() << "' USE ERROR ---"<< endl;
-		setError(m_connection);
+		kdDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---"<< endl;
+		setError(d->connection);
 		closeConnection();
 		return false;
 	}
-	kdDebug() << "--- DB '" << m_data->databaseName() << "' used ---"<< endl;
+	kdDebug() << "--- DB '" << d->data->databaseName() << "' used ---"<< endl;
 
 	//<add some data>
-	KexiDB::Transaction trans = m_connection->beginTransaction();
+	KexiDB::Transaction trans = d->connection->beginTransaction();
 	if (trans.isNull())
 		return false;
 
@@ -162,19 +225,30 @@ KexiProject::create(bool forceOverwrite)
 		return false;
 
 	//add some metadata
-	KexiDB::TableSchema *t_db = m_connection->tableSchema("kexi__db");
-//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
+//! @todo put more props. todo - creator, created date, etc. (also to KexiProjectData)
+	KexiDB::DatabaseProperties &props = d->connection->databaseProperties();
+	if (!props.setValue("kexiproject_major_ver", d->versionMajor)
+		|| !props.setCaption("kexiproject_major_ver", i18n("Project major version"))
+		|| !props.setValue("kexiproject_minor_ver", d->versionMinor)
+		|| !props.setCaption("kexiproject_minor_ver", i18n("Project minor version"))
+		|| !props.setValue("project_caption", d->data->caption())
+		|| !props.setCaption("project_caption", i18n("Project caption"))
+		|| !props.setValue("project_desc", d->data->description())
+		|| !props.setCaption("project_desc", i18n("Project description")) )
+		return false;
+
+/*	KexiDB::TableSchema *t_db = d->connection->tableSchema("kexi__db");
 	//caption:
 	if (!t_db)
 		return false;
 
-	if (!KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_caption", 
-		"db_value", QVariant( m_data->caption() ), KexiDB::Field::Text)
-	 || !KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_desc", 
-		"db_value", QVariant( m_data->description() ), KexiDB::Field::Text) )
+	if (!KexiDB::replaceRow(*d->connection, t_db, "db_property", "project_caption", 
+		"db_value", QVariant( d->data->caption() ), KexiDB::Field::Text)
+	 || !KexiDB::replaceRow(*d->connection, t_db, "db_property", "project_desc", 
+		"db_value", QVariant( d->data->description() ), KexiDB::Field::Text) )
 		return false;
-
-	if (trans.active() && !m_connection->commitTransaction(trans))
+*/
+	if (trans.active() && !d->connection->commitTransaction(trans))
 		return false;
 	//</add some data>
 
@@ -185,9 +259,48 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 {
 	KexiDB::TransactionGuard tg;
 	if (insideTransaction) {
-		tg.setTransaction( m_connection->beginTransaction() );
+		tg.setTransaction( d->connection->beginTransaction() );
 		if (tg.transaction().isNull())
 			return false;
+	}
+
+	//Get information about kexiproject version.
+	//kexiproject version is a version of data layer above kexidb layer.
+	KexiDB::DatabaseProperties &props = d->connection->databaseProperties();
+	bool ok;
+	int storedMajorVersion = props.value("kexiproject_major_ver").toInt(&ok);
+	if (!ok)
+		storedMajorVersion = 0;
+	int storedMinorVersion = props.value("kexiproject_minor_ver").toInt(&ok);
+	if (!ok)
+		storedMinorVersion = 1;
+
+	bool containsKexi__blobsTable = d->connection->drv_containsTable("kexi__blobs");
+
+//! @todo what about read-only db access?
+	if (storedMajorVersion<=0) {
+		d->versionMajor = KEXIPROJECT_VERSION_MAJOR;
+		d->versionMinor = KEXIPROJECT_VERSION_MINOR;
+		//For compatibility for projects created before Kexi 1.0 beta 1:
+		//1. no kexiproject_major_ver and kexiproject_minor_ver -> add them
+		if (!props.setValue("kexiproject_major_ver", d->versionMajor)
+			|| !props.setCaption("kexiproject_major_ver", i18n("Project major version"))
+			|| !props.setValue("kexiproject_minor_ver", d->versionMinor)
+			|| !props.setCaption("kexiproject_minor_ver", i18n("Project minor version")) ) {
+			return false;
+		}
+
+		//2. "kexi__blobs" table had no "o_folder_id" column -> add it (blobs will be lost...)
+		if (containsKexi__blobsTable) {
+			if (!d->connection->executeSQL(QString::fromLatin1("DROP TABLE kexi__blobs")))//lowlevel
+				return false;
+			containsKexi__blobsTable = false;
+		}
+	}
+	if (storedMajorVersion!=d->versionMajor || storedMajorVersion!=d->versionMinor) {
+		//! @todo version differs: should we change something?
+		d->versionMajor = storedMajorVersion;
+		d->versionMinor = storedMinorVersion;
 	}
 
 	KexiDB::InternalTableSchema *t_blobs = new KexiDB::InternalTableSchema("kexi__blobs");
@@ -196,16 +309,20 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 	.addField( new KexiDB::Field("o_data", KexiDB::Field::BLOB) )
 	.addField( new KexiDB::Field("o_name", KexiDB::Field::Text ) )
 	.addField( new KexiDB::Field("o_caption", KexiDB::Field::Text ) )
-	.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull, 
-		KexiDB::Field::NoOptions, 0, 0 ) );
+	.addField( new KexiDB::Field("o_mime", KexiDB::Field::Text, KexiDB::Field::NotNull) )
+	.addField( new KexiDB::Field("o_folder_id", 
+	    KexiDB::Field::Integer, 0, KexiDB::Field::Unsigned) //references kexi__gallery_folders.f_id
+	                                        //If null, the BLOB only points to virtual "All" folder
+	                                        //WILL BE USED in Kexi >=1.1
+	);
 
 	//*** create global BLOB container, if not present
-	if (m_connection->drv_containsTable("kexi__blobs")) {
+	if (containsKexi__blobsTable) {
 		//! just insert this schema
-		m_connection->insertInternalTableSchema(t_blobs);
+		d->connection->insertInternalTableSchema(t_blobs);
 	}
 	else {
-		if (!m_connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
+		if (!d->connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
 			delete t_blobs;
 			return false;
 		}
@@ -221,37 +338,37 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 bool
 KexiProject::createConnection()
 {
-	if (m_connection)
+	if (d->connection)
 		return true;
 
 	clearError();
 //	closeConnection();//for sanity
 	KexiDB::MessageTitle et(this);
 	
-	KexiDB::Driver *driver = Kexi::driverManager().driver(m_data->connectionData()->driverName);
+	KexiDB::Driver *driver = Kexi::driverManager().driver(d->data->connectionData()->driverName);
 	if(!driver) {
 		setError(&Kexi::driverManager());
 		return false;
 	}
 
-	m_connection = driver->createConnection(*m_data->connectionData());
-	if (!m_connection)
+	d->connection = driver->createConnection(*d->data->connectionData());
+	if (!d->connection)
 	{
 		kdDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg()  << endl;
 		setError(driver);
 		return false;
 	}
 
-	if (!m_connection->connect())
+	if (!d->connection->connect())
 	{
-		setError(m_connection);
-		kdDebug() << "KexiProject::createConnection(): error connecting: " << (m_connection ? m_connection->errorMsg() : QString::null) << endl;
+		setError(d->connection);
+		kdDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString::null) << endl;
 		closeConnection();
 		return false;
 	}
 
 	//re-init BLOB buffer
-	KexiBLOBBuffer::setConnection(m_connection);
+	KexiBLOBBuffer::setConnection(d->connection);
 	return true;
 }
 
@@ -259,11 +376,11 @@ KexiProject::createConnection()
 void
 KexiProject::closeConnection()
 {
-	if (!m_connection)
+	if (!d->connection)
 		return;
 
-	delete m_connection; //this will also clear connection for BLOB buffer
-	m_connection = 0;
+	delete d->connection; //this will also clear connection for BLOB buffer
+	d->connection = 0;
 }
 
 bool
@@ -272,18 +389,25 @@ KexiProject::initProject()
 //	emit dbAvailable();
 	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
-	if (!Kexi::partManager().checkProject(m_connection)) {
+	if (!Kexi::partManager().checkProject(d->connection)) {
 		setError(&Kexi::partManager());
 		return false;
 	}
 
-	//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
-	KexiDB::RowData data;
+// !@todo put more props. todo - creator, created date, etc. (also to KexiProjectData)
+	KexiDB::DatabaseProperties &props = d->connection->databaseProperties();
+	QString str( props.value("project_caption").toString() );
+	if (!str.isEmpty())
+		d->data->setCaption( str );
+	str = props.value("project_desc").toString();
+	if (!str.isEmpty())
+		d->data->setDescription( str );
+/*	KexiDB::RowData data;
 	QString sql = "select db_value from kexi__db where db_property='%1'";
-	if (m_connection->querySingleRecord( sql.arg("project_caption"), data ) && !data[0].toString().isEmpty())
-		m_data->setCaption(data[0].toString());
-	if (m_connection->querySingleRecord( sql.arg("project_desc"), data) && !data[0].toString().isEmpty())
-		m_data->setDescription(data[0].toString());
+	if (d->connection->querySingleRecord( sql.arg("project_caption"), data ) && !data[0].toString().isEmpty())
+		d->data->setCaption(data[0].toString());
+	if (d->connection->querySingleRecord( sql.arg("project_desc"), data) && !data[0].toString().isEmpty())
+		d->data->setDescription(data[0].toString());*/
 
 	return true;
 }
@@ -291,7 +415,7 @@ KexiProject::initProject()
 bool
 KexiProject::isConnected()
 {
-	if(m_connection && m_connection->isDatabaseUsed())
+	if(d->connection && d->connection->isDatabaseUsed())
 		return true;
 
 	return false;
@@ -305,11 +429,11 @@ KexiProject::items(KexiPart::Info *i)
 		return 0;
 
 	//trying in cache...
-	KexiPart::ItemDict *dict = m_itemDictsCache[ i->projectPartID() ];
+	KexiPart::ItemDict *dict = d->itemDictsCache[ i->projectPartID() ];
 	if (dict)
 		return dict;
 	//retrieve:
-	KexiDB::Cursor *cursor = m_connection->executeQuery(
+	KexiDB::Cursor *cursor = d->connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
 		+ QString::number(i->projectPartID()));//, KexiDB::Cursor::Buffered);
 //	kdDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
@@ -335,9 +459,9 @@ KexiProject::items(KexiPart::Info *i)
 //		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
 	}
 
-	m_connection->deleteCursor(cursor);
+	d->connection->deleteCursor(cursor);
 //	kdDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
-	m_itemDictsCache.insert( i->projectPartID(), dict );
+	d->itemDictsCache.insert( i->projectPartID(), dict );
 	return dict;
 }
 
@@ -373,7 +497,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 		return;
 	KexiPart::ItemDict *dict = items(info);
 	item->setNeverSaved( false );
-	m_unstoredItems.take(item); //no longer unstored
+	d->unstoredItems.take(item); //no longer unstored
 	dict->insert( item->identifier(), item );
 	//let's update e.g. navigator
 	emit newItemStored(*item);
@@ -410,15 +534,15 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 /*void KexiProject::clearMsg()
 {
 	clearError();
-//	m_error_title=QString::null;
+//	d->error_title=QString::null;
 }
 
 void KexiProject::setError(int code, const QString &msg )
 {
 	Object::setError(code, msg);
 	if (Object::error())
-		ERRMSG(m_error_title, this);
-//		emit error(m_error_title, this);
+		ERRMSG(d->error_title, this);
+//		emit error(d->error_title, this);
 }
 
 
@@ -426,8 +550,8 @@ void KexiProject::setError( const QString &msg )
 {
 	Object::setError(msg);
 	if (Object::error())
-		ERRMSG(m_error_title, this);
-//		emit error(m_error_title, this);
+		ERRMSG(d->error_title, this);
+//		emit error(d->error_title, this);
 }
 
 void KexiProject::setError( KexiDB::Object *obj )
@@ -436,8 +560,8 @@ void KexiProject::setError( KexiDB::Object *obj )
 		return;
 	Object::setError(obj);
 	if (Object::error())
-		ERRMSG(m_error_title, obj);
-//		emit error(m_error_title, obj);
+		ERRMSG(d->error_title, obj);
+//		emit error(d->error_title, obj);
 }
 
 void KexiProject::setError(const QString &msg, const QString &desc)
@@ -493,25 +617,25 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 		//js TODO check for errors
 		return false;
 	}
-	KexiDB::TransactionGuard tg( *m_connection );
+	KexiDB::TransactionGuard tg( *d->connection );
 	if (!tg.transaction().active()) {
-		setError(m_connection);
+		setError(d->connection);
 		return false;
 	}
-	if (!m_connection->removeObject( item.identifier() )) {
-		setError(m_connection);
+	if (!d->connection->removeObject( item.identifier() )) {
+		setError(d->connection);
 		return false;
 	}
 	if (!tg.commit()) {
-		setError(m_connection);
+		setError(d->connection);
 		return false;
 	}
 	emit itemRemoved(item);
 	//now: remove this item from cache
 	if (part->info()) {
-		KexiPart::ItemDict *dict = m_itemDictsCache[ part->info()->projectPartID() ];
+		KexiPart::ItemDict *dict = d->itemDictsCache[ part->info()->projectPartID() ];
 		if (!(dict && dict->remove( item.identifier() )))
-			m_unstoredItems.remove(&item);//remove temp.
+			d->unstoredItems.remove(&item);//remove temp.
 	}
 	return true;
 }
@@ -539,23 +663,23 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
-	KexiDB::TransactionGuard tg( *m_connection );
+	KexiDB::TransactionGuard tg( *d->connection );
 	if (!tg.transaction().active()) {
-		setError(m_connection);
+		setError(d->connection);
 		return false;
 	}
 	if (!part->rename(wnd, item, newName)) {
 		setError(part->lastOperationStatus().message, part->lastOperationStatus().description);
 		return false;
 	}
-	if (!m_connection->executeSQL( "update kexi__objects set o_name="
-		+ m_connection->driver()->valueToSQL( KexiDB::Field::Text, newName )
+	if (!d->connection->executeSQL( "update kexi__objects set o_name="
+		+ d->connection->driver()->valueToSQL( KexiDB::Field::Text, newName )
 		+ " where o_id=" + QString::number(item.identifier()) )) {
-		setError(m_connection);
+		setError(d->connection);
 		return false;
 	}
 	if (!tg.commit()) {
-		setError(m_connection);
+		setError(d->connection);
 		return false;
 	}
 	QCString oldName( item.name().latin1() );
@@ -590,7 +714,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	}
 	base_name = KexiUtils::string2Identifier(base_name).lower();
 	KexiPart::ItemDictIterator it(*dict);
-	QPtrDictIterator<KexiPart::Item> itUnstored(m_unstoredItems);
+	QPtrDictIterator<KexiPart::Item> itUnstored(d->unstoredItems);
 	do {
 		new_name = base_name;
 		if (n>=1)
@@ -620,12 +744,12 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 		new_caption += QString::number(n);
 
 	KexiPart::Item *item = new KexiPart::Item();
-	item->setIdentifier( --m_tempPartItemID_Counter );//temporary
+	item->setIdentifier( --d->tempPartItemID_Counter );//temporary
 	item->setMime(info->mime());
 	item->setName(new_name);
 	item->setCaption(new_caption);
 	item->setNeverSaved(true);
-	m_unstoredItems.insert(item, item);
+	d->unstoredItems.insert(item, item);
 	return item;
 }
 
@@ -633,17 +757,17 @@ void KexiProject::deleteUnstoredItem(KexiPart::Item *item)
 {
 	if (!item)
 		return;
-	m_unstoredItems.remove(item);
+	d->unstoredItems.remove(item);
 }
 
 KexiDB::Parser* KexiProject::sqlParser()
 {
-	if (!m_sqlParser) {
-		if (!m_connection)
+	if (!d->sqlParser) {
+		if (!d->connection)
 			return 0;
-		m_sqlParser = new KexiDB::Parser(m_connection);
+		d->sqlParser = new KexiDB::Parser(d->connection);
 	}
-	return m_sqlParser;
+	return d->sqlParser;
 }
 
 static const QString warningNoUndo = i18n("Warning: entire project's data will be removed.");

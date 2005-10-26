@@ -196,15 +196,15 @@ InsertPageCommand::InsertPageCommand(KFormDesigner::Container *container, QWidge
 void
 InsertPageCommand::execute()
 {
-	KFormDesigner::Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
+	KFormDesigner::Container *container = m_form->objectTree()->lookup(m_containername)->container();
 	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
 	if(m_name.isEmpty()) {
-		m_name = m_container->form()->objectTree()->generateUniqueName(
-			m_container->form()->manager()->lib()->displayName("QWidget").latin1());
+		m_name = container->form()->objectTree()->generateUniqueName(
+			container->form()->library()->displayName("QWidget").latin1());
 	}
 
 	QWidget *page = new QWidget(parent, m_name.latin1());
-	new KFormDesigner::Container(m_container, page, parent);
+	new KFormDesigner::Container(container, page, parent);
 
 	QCString classname = parent->className();
 	if(classname == "KFDTabWidget")
@@ -214,7 +214,7 @@ InsertPageCommand::execute()
 		tab->addTab(page, n);
 		tab->showPage(page);
 
-		KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
+		KFormDesigner::ObjectTreeItem *item = container->form()->objectTree()->lookup(m_name);
 		item->addModifiedProperty("title", n);
 	}
 	else if(classname == "QWidgetStack")
@@ -224,7 +224,7 @@ InsertPageCommand::execute()
 		stack->raiseWidget(page);
 		m_pageid = stack->id(page);
 
-		KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
+		KFormDesigner::ObjectTreeItem *item = container->form()->objectTree()->lookup(m_name);
 		item->addModifiedProperty("id", stack->id(page));
 	}
 }
@@ -268,8 +268,8 @@ InsertPageCommand::name() const
 
 /////// Sub forms ////////////////////////:
 
-SubForm::SubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name)
-: QScrollView(parent, name), m_manager(manager), m_form(0), m_widget(0)
+SubForm::SubForm(QWidget *parent, const char *name)
+: QScrollView(parent, name), m_form(0), m_widget(0)
 {
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -282,7 +282,9 @@ SubForm::setFormName(const QString &name)
 		return;
 
 	QFileInfo info(name);
-	if(!info.exists() || (m_manager->activeForm() && (info.fileName() == m_manager->activeForm()->filename()) ) )
+	if(!info.exists() 
+		|| (KFormDesigner::FormManager::self()->activeForm() 
+			&& (info.fileName() == KFormDesigner::FormManager::self()->activeForm()->filename()) ) )
 		return; // we check if this is valid form
 
 	// we create the container widget
@@ -290,7 +292,8 @@ SubForm::setFormName(const QString &name)
 	m_widget = new QWidget(viewport(), "subform_widget");
 	m_widget->show();
 	addChild(m_widget);
-	m_form = new KFormDesigner::Form(m_manager, this->name());
+	m_form = new KFormDesigner::Form(
+		KFormDesigner::FormManager::self()->activeForm()->library(), this->name());
 	m_form->createToplevel(m_widget);
 
 	// and load the sub form
@@ -455,7 +458,7 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 {
 	if(c == "QButtonGroup")
 	{
-		QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+		QString text = container->form()->library()->textForWidgetName(n, c);
 		QButtonGroup *w = new QButtonGroup(/*i18n("Button Group")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
@@ -468,9 +471,10 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 		tab->setTabReorderingEnabled(true);
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 #endif
-		container->form()->objectTree()->addItem(container->objectTree(), new KFormDesigner::ObjectTreeItem(
-		        container->form()->manager()->lib()->displayName(c), n, tab, container));
-		m_manager = container->form()->manager();
+		container->form()->objectTree()->addItem(container->objectTree(), 
+			new KFormDesigner::ObjectTreeItem(
+				container->form()->library()->displayName(c), n, tab, container));
+//		m_manager = container->form()->manager();
 
 		// if we are loading, don't add this tab
 		if(container->form()->interactiveMode())
@@ -491,7 +495,7 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	}
 	else if(c == "QGroupBox")
 	{
-		QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+		QString text = container->form()->library()->textForWidgetName(n, c);
 		QGroupBox *w = new QGroupBox(/*i18n("Group Box")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
@@ -509,8 +513,9 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 		QWidgetStack *stack = new QWidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-		container->form()->objectTree()->addItem(container->objectTree(), new KFormDesigner::ObjectTreeItem(
-		     container->form()->manager()->lib()->displayName(c), n, stack, container));
+		container->form()->objectTree()->addItem( container->objectTree(), 
+			new KFormDesigner::ObjectTreeItem( 
+				container->form()->library()->displayName(c), n, stack, container));
 
 		if(container->form()->interactiveMode())
 		{
@@ -547,7 +552,7 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 		return w;
 	}
 	else if(c == "SubForm") {
-		SubForm *subform = new SubForm(container->form()->manager(), p, n);
+		SubForm *subform = new SubForm(p, n);
 		return subform;
 	}
 	else if(c == "QSplitter") {
@@ -811,7 +816,8 @@ void ContainerFactory::renameTabPage()
 
 void ContainerFactory::reorderTabs(int oldpos, int newpos)
 {
-	KFormDesigner::ObjectTreeItem *tab = m_manager->activeForm()->objectTree()->lookup(sender()->name());
+	KFormDesigner::ObjectTreeItem *tab 
+		= KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(sender()->name());
 	if(!tab)
 		return;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,28 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KFORMEDITOR_PIXMAPEDIT_H
-#define KFORMEDITOR_PIXMAPEDIT_H
+#include <kgenericfactory.h>
 
-#include <koproperty/editors/pixmapedit.h>
+#include "kexireportpart.h"
 
-namespace KFormDesigner {
-
-class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
-{
-	Q_OBJECT
-
-	public:
-		KFDPixmapEdit(KoProperty::Property *property, QWidget *parent=0, const char *name=0);
-		virtual ~KFDPixmapEdit();
-
-	public slots:
-		virtual void selectPixmap();
-
-	private:
-//		FormManager  *m_manager;
-};
-
-}
-
-#endif
+K_EXPORT_COMPONENT_FACTORY( kexihandler_report, KGenericFactory<KexiReportPart>("kexihandler_report") )

@@ -382,7 +382,7 @@ StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	KFormDesigner::Container *container, int options)
 {
 	QWidget *w=0;
-	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+	QString text = container->form()->library()->textForWidgetName(n, c);
 
 	if(c == "QLabel")
 		w = new QLabel(text, p, n);

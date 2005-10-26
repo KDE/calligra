@@ -31,16 +31,16 @@
 #include <kactioncollection.h>
 #include <kstdaction.h>
 
-#include <container.h>
-#include <form.h>
-#include <formIO.h>
-#include <formmanager.h>
-#include <objecttree.h>
+#include <formeditor/container.h>
+#include <formeditor/form.h>
+#include <formeditor/formIO.h>
+#include <formeditor/formmanager.h>
+#include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexipart.h>
-#include <widgetlibrary.h>
+#include <formeditor/widgetlibrary.h>
 #include <kexigradientwidget.h>
 #include <keximainwindow.h>
 #include <kexiutils/utils.h>
@@ -60,109 +60,12 @@
 #include "widgets/kexidbtimeedit.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
+#include "widgets/kexidbsubform.h"
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
 #include <core/kexi.h>
 
-KexiSubForm::KexiSubForm(Form *parentForm, QWidget *parent, const char *name)
-: QScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
-{
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-	viewport()->setPaletteBackgroundColor(colorGroup().mid());
-}
-/*
-void
-KexiSubForm::paintEvent(QPaintEvent *ev)
-{
-	QScrollView::paintEvent(ev);
-	QPainter p;
-
-	setWFlags(WPaintUnclipped);
-
-	QString txt("Subform");
-	QFont f = font();
-	f.setPointSize(f.pointSize() * 3);
-	QFontMetrics fm(f);
-	const int txtw = fm.width(txt), txth = fm.height();
-
-	p.begin(this, true);
-	p.setPen(black);
-	p.setFont(f);
-	p.drawText(width()/2, height()/2, txt, Qt::AlignCenter|Qt::AlignVCenter);
-	p.end();
-
-	clearWFlags( WPaintUnclipped );
-}
-*/
-void
-KexiSubForm::setFormName(const QString &name)
-{
-	if(m_formName==name)
-		return;
-
-	m_formName = name; //assign, even if the name points to nowhere
-
-	if(name.isEmpty()) {
-		delete m_widget;
-		m_widget = 0;
-		updateScrollBars();
-		return;
-	}
-
-	QWidget *pw = parentWidget();
-	KexiFormView *view = 0;
-	QStringList list;
-	while(pw) {
-		if(pw->isA("KexiSubForm")) {
-			if(list.contains(pw->name())) {
-//! @todo error message
-				return; // Be sure to don't run into a endless-loop cause of recursive subforms.
-			}
-			list.append(pw->name());
-		}
-		else if(! view && pw->isA("KexiFormView"))
-			view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
-		pw = pw->parentWidget();
-	}
-
-	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin()
-		|| !view->parentDialog()->mainWin()->project()->dbConnection())
-		return;
-
-	KexiDB::Connection *conn = view->parentDialog()->mainWin()->project()->dbConnection();
-
-	// we check if there is a form with this name
-	int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
-	if((id == 0) || (id == view->parentDialog()->id())) // == our form
-		return; // because of recursion when loading
-
-	// we create the container widget
-	delete m_widget;
-	m_widget = new KexiDBFormBase(viewport(), "kexisubform_widget");
-	m_widget->show();
-	addChild(m_widget);
-	m_form = new Form(m_parentForm->manager(), this->name());
-	m_form->createToplevel(m_widget);
-
-	// and load the sub form
-	QString data;
-	bool ok = conn->loadDataBlock(id, data, QString::null);
-	if (ok)
-		ok = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
-	if(!ok) {
-		delete m_widget;
-		m_widget = 0;
-		updateScrollBars();
-		m_formName = QString::null;
-		return;
-	}
-	m_form->setDesignMode(false);
-
-	// Install event filters on the whole newly created form
-	KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::name());
-	KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
-}
 
 //////////////////////////////////////////
 
@@ -182,7 +85,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #ifndef KEXI_NO_SUBFORM
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("subform");
-	wSubForm->setClassName("KexiSubForm");
+	wSubForm->setClassName("KexiDBSubForm");
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
@@ -400,11 +303,11 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	kexipluginsdbg << "KexiDBFactory::createWidget() " << this << endl;
 
 	QWidget *w=0;
-	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+	QString text( container->form()->library()->textForWidgetName(n, c) );
 	const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
-	if(c == "KexiSubForm")
-		w = new KexiSubForm(container->form(), p, n);
+	if(c == "KexiDBSubForm")
+		w = new KexiDBSubForm(container->form(), p, n);
 	else if(c == "KexiDBLineEdit")
 	{
 		w = new KexiDBLineEdit(p, n);
@@ -540,12 +443,13 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		}
 		return true;
 	}
-	else if (classname == "KexiSubForm") {
+	else if (classname == "KexiDBSubForm") {
 		// open the form in design mode
 		KexiMainWindow *mainWin = KexiUtils::findParent<KexiMainWindow>(w, "KexiMainWindow");
-		KexiSubForm *subform = static_cast<KexiSubForm*>(w);
+		KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(w);
 		if(mainWin)
 			mainWin->openObject("kexi/form", subform->formName(), Kexi::DesignViewMode);
+		return true;
 	}
 	else if( (classname == "KexiDBDateEdit") || (classname == "KexiDBDateTimeEdit") || (classname == "KexiDBTimeEdit")
 			|| (classname == "KexiDBIntSpinBox") || (classname == "KexiDBDoubleSpinBox") ) {
@@ -564,10 +468,12 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		QRect r( cb->geometry() );
 		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
 		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
+		return true;
 	}
 	else if(classname == "KexiDBImageBox") {
 		KexiDBImageBox *image = static_cast<KexiDBImageBox*>(w);
 		image->insertFromFile();
+		return true;
 	}
 	return false;
 }
@@ -593,7 +499,7 @@ QValueList<QCString>
 KexiDBFactory::autoSaveProperties(const QCString & /*classname*/)
 {
 	QValueList<QCString> lst;
-//	if(classname == "KexiSubForm")
+//	if(classname == "KexiDBSubForm")
 		//lst << "formName";
 //	if(classname == "KexiDBLineEdit")
 //	lst += "dataSource";
@@ -641,7 +547,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 			&& property!="paper"
 #endif
 			;
-	else if(classname == "KexiSubForm")
+	else if(classname == "KexiDBSubForm")
 		ok = property!="dragAutoScroll"
 			&& property!="resizePolicy"
 			&& property!="focusPolicy";
@@ -689,10 +595,15 @@ KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QCString &classna
 void
 KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 {
-	KexiFormView *formView = KexiUtils::findParent<KexiFormView>((QWidget*)m_widget, "KexiFormView"); 
+//old	KexiFormView *formView = KexiUtils::findParent<KexiFormView>((QWidget*)m_widget, "KexiFormView"); 
+
+	// (js) heh, porting to KFormDesigner::FormManager::self() singleton took me entire day of work...
+	KFormDesigner::Form *form = KFormDesigner::FormManager::self()->activeForm();
+	KexiFormView *formView = form ? KexiUtils::findParent<KexiFormView>((QWidget*)form->widget(), "KexiFormView") : 0;
 	if (formView) {
-		changeProperty("pixmapId", (Q_LLONG)/*! @todo unsafe */id, formView->form());
-		formView->setUnsavedLocalBLOB(m_widget, id);
+		changeProperty("pixmapId", (long)/*! @todo unsafe */id, form);
+//old		formView->setUnsavedLocalBLOB(m_widget, id);
+		formView->setUnsavedLocalBLOB(form->selectedWidget(), id);
 	}
 }
 

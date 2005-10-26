@@ -28,6 +28,7 @@
 namespace KFormDesigner
 {
 	class FormManager;
+	class WidgetLibrary;
 	class Form;
 }
 
@@ -38,7 +39,7 @@ namespace KexiDB
 
 //! Kexi Report Plugin
 /*! It just creates a \ref KexiReportView. See there for most of code. */
-class KexiReportPart : public KexiPart::Part
+class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 {
 	Q_OBJECT
 
@@ -46,7 +47,10 @@ class KexiReportPart : public KexiPart::Part
 		KexiReportPart(QObject *parent, const char *name, const QStringList &);
 		virtual ~KexiReportPart();
 
-		KFormDesigner::FormManager *manager() { return m_manager; }
+		//! \return a pointer to Reports Widget Library.
+		static KFormDesigner::WidgetLibrary* library();
+
+//		KFormDesigner::FormManager *manager() { return m_manager; }
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
@@ -73,8 +77,10 @@ class KexiReportPart : public KexiPart::Part
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
+		static KFormDesigner::WidgetLibrary* static_reportsLibrary;
+
 	private:
-		QGuardedPtr<KFormDesigner::FormManager> m_manager;
+//		QGuardedPtr<KFormDesigner::FormManager> m_manager;
 };
 
 #endif

@@ -195,7 +195,7 @@ ObjectTreeView::sizeHint() const
 QString
 ObjectTreeView::pixmapForClass(const QCString &classname)
 {
-	return m_form->manager()->lib()->icon(classname);
+	return m_form->library()->icon(classname);
 }
 
 void
@@ -214,7 +214,7 @@ ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const Q
 	if(!w)
 		return;
 
-	m_form->manager()->createContextMenu(w, m_form->activeContainer());
+	FormManager::self()->createContextMenu(w, m_form->activeContainer());
 }
 
 ObjectTreeViewItem*

@@ -33,10 +33,15 @@
 
 #include <form.h>
 #include <formIO.h>
+#include <widgetlibrary.h>
+
 #include <kexiformmanager.h>
+#include <kexiformpart.h>
 
 #include "kexireportview.h"
 #include "kexireportpart.h"
+
+KFormDesigner::WidgetLibrary* KexiReportPart::static_reportsLibrary = 0L;
 
 KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -53,16 +58,28 @@ KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringL
 	m_names["instanceCaption"] = i18n("Report");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 
+	// Only create form manager if it's not yet created.
+	// KexiFormPart could have created is already.
+	KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
+	if (!formManager) 
+		formManager = new KexiFormManager(this, "kexi_form_and_report_manager");
+
+	// Create and store a handle to report' library. Forms will have their own library too.
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi-report";
-	m_manager = new KexiFormManager(this, supportedFactoryGroups, "report_form_manager");
-//	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, 
-//		KFormDesigner::FormManager::HideEventsInPopupMenu, "report_form_manager");
+	static_reportsLibrary = KFormDesigner::FormManager::createWidgetLibrary(
+		formManager, supportedFactoryGroups);
+	static_reportsLibrary->setAdvancedPropertiesVisible(false);
 }
 
 KexiReportPart::~KexiReportPart()
 {
+}
+
+KFormDesigner::WidgetLibrary* KexiReportPart::library()
+{
+	return static_reportsLibrary;
 }
 
 void
@@ -73,7 +90,8 @@ KexiReportPart::initPartActions()
 void
 KexiReportPart::initInstanceActions()
 {
-	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
+	KFormDesigner::FormManager::self()->createActions(
+		library(), actionCollectionForMode(Kexi::DesignViewMode));
 }
 
 KexiDialogTempData*
@@ -117,8 +135,6 @@ KexiReportPart::TempData::TempData(QObject* parent)
 KexiReportPart::TempData::~TempData()
 {
 }
-
-K_EXPORT_COMPONENT_FACTORY( kexihandler_report, KGenericFactory<KexiReportPart>("kexihandler_report") )
 
 #include "kexireportpart.moc"
 

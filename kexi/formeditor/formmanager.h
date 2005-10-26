@@ -54,7 +54,11 @@ class Container;
 class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
+class FormManager;
 typedef QPtrList<KAction> ActionList;
+
+//! @internal
+//static FormManager* FormManager_static = 0;
 
 //! A class to manage (create/load/save) Forms
 /** This is Form Designer's main class, which is used by external APIs to access FormDesigner.
@@ -71,13 +75,18 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 	public:
 		/*! Constructs FormManager object.
-		 See WidgetLibrary's constructor documentation for information about
-		 \a supportedFactoryGroups parameter.
 		 Using \a options you can control manager's behaviour, see Options. */
-		FormManager(QObject *parent = 0, const QStringList& supportedFactoryGroups = QStringList(),
-			int options = 0, const char *name = 0);
+		FormManager(QObject *parent = 0, int options = 0, const char *name = 0);
 
 		virtual ~FormManager();
+
+		//! Creates widget library for supportedFactoryGroups 
+		//! and initializes FormManager singleton. \a m should be always the same for every call.
+		static WidgetLibrary* createWidgetLibrary(FormManager* m, 
+			const QStringList& supportedFactoryGroups);
+
+		//! Access to FormManager singleton
+		static FormManager* self();
 
 		/*! Options for creating FormManager objects.
 		*   These are really bit-flags and may be or-ed together.
@@ -90,7 +99,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
-		ActionList createActions(KActionCollection *parent);
+		ActionList createActions(WidgetLibrary *lib, KActionCollection *parent);
 
 		/*! Enables or disables actions \a name.
 		 KFD uses KPart's, action collection here.
@@ -102,8 +111,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		bool isPasteEnabled();
 
-		//! \return A pointer to the WidgetLibrary owned by this Manager.
-		WidgetLibrary* lib() const { return m_lib; }
+//		//! \return A pointer to the WidgetLibrary owned by this Manager.
+//		WidgetLibrary* lib() const { return m_lib; }
 
 		//! \return A pointer to the WidgetPropertySet owned by this Manager.
 		WidgetPropertySet* propertySet() const { return m_propSet; }
@@ -418,12 +427,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void emitRedoEnabled(bool enabled, const QString &text);
 
 	private:
+		static FormManager* _self;
+
 		//! Enum for menu items indexes
 		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301,
 			MenuVBox, MenuGrid, MenuHSplitter, MenuVSplitter, MenuNoBuddy = 501 };
 
 		WidgetPropertySet *m_propSet;
-		WidgetLibrary *m_lib;
+//		WidgetLibrary *m_lib;
 		QGuardedPtr<KoProperty::Editor>  m_editor;
 		QGuardedPtr<ObjectTreeView>  m_treeview;
 		// Forms

@@ -85,6 +85,7 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 		class Item;
 	public:
 		//! long integer for unique identifying blobs
+//! @todo Qt4: will be changed
 		typedef long Id_t;
 
 		//! Access to KexiBLOBBuffer singleton
@@ -127,6 +128,8 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 
 				QString mimeType() const { return m_item ? m_item->mimeType : QString::null; }
 
+				Id_t folderId() const { return m_item ? m_item->folderId : 0; }
+
 			protected:
 				//! Constructs a handle based on \a item. Null handle is constructed for null \a item.
 				Handle(Item* item);
@@ -162,10 +165,14 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 		/*! Inserts a new pixmap available in memory, e.g. coming from clipboard. */
 		Handle insertPixmap(const QPixmap& pixmap);
 
-		/*! \return an object for a given \a id. If \a stored is trus, stored BLOBs buffer 
+		/*! \return an object for a given \a id. If \a stored is true, stored BLOBs buffer 
 		 is browsed, otherwise unstored (in memory) BLOBs buffer is browsed.
 		 If no object is cached for this id, null handle is returned. */
 		Handle objectForId(Id_t id, bool stored);
+
+		/*! \return an object for a given \a id. First, unstored object is checked, then unstored, 
+		 if stored was not found. */
+		Handle objectForId(Id_t id);
 
 	protected:
 		/*! Removes an object for a given \a id. If \a stored is true, stored BLOB is removed,
@@ -186,6 +193,7 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 					const QString& name = QString::null,
 					const QString& caption = QString::null,
 					const QString& mimeType = QString::null,
+					Id_t folderId = 0,
 					const QPixmap& pixmap = QPixmap());
 				~Item();
 				QPixmap pixmap() const;
@@ -197,6 +205,7 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 				QString mimeType;
 				uint refs;
 				Id_t id;
+				Id_t folderId;
 				bool stored : 1;
 				QString prettyURL; //!< helper
 			private:

@@ -29,10 +29,10 @@
 
 using namespace KFormDesigner;
 
-KFDPixmapEdit::KFDPixmapEdit(FormManager *manager, KoProperty::Property *property, QWidget *parent, const char *name)
+KFDPixmapEdit::KFDPixmapEdit(KoProperty::Property *property, QWidget *parent, const char *name)
  : KoProperty::PixmapEdit(property, parent, name)
 {
-	m_manager = manager;
+//	m_manager = manager;
 }
 
 KFDPixmapEdit::~KFDPixmapEdit()

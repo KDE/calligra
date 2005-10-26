@@ -218,7 +218,7 @@ QPixmap KexiDBImageBox::pixmap() const
 
 uint KexiDBImageBox::pixmapId() const
 {
-	if (dataSource().isEmpty() && !m_data.stored()) {
+	if (dataSource().isEmpty()) {// && !m_data.stored()) {
 		//not db-aware
 		return m_data.id();
 	}
@@ -229,7 +229,7 @@ void KexiDBImageBox::setPixmapId(uint id)
 {
 	if (m_insideSetData) //avoid recursion
 		return;
-	setData(KexiBLOBBuffer::self()->objectForId( id, /*!unstored*/false ));
+	setData(KexiBLOBBuffer::self()->objectForId( id, /*unstored*/false ));
 	repaint();
 }
 
@@ -353,27 +353,7 @@ void KexiDBImageBox::insertFromFile()
 	}
 	repaint();
 
-/*
-	KPixmap pm;
-	QFile f(fileName);
-
-//	if (!pm.load(fileName)) {
-	bool ok = f.open(IO_ReadOnly);
-	if (ok) {
-		m_value.setData( f.readAll(), fileName );
-		ok = f.status()==IO_Ok;
-		repaint();
-	}
-	f.close();
-	if (!ok) {
-		//! @todo err msg
-		kexipluginswarn << "KexiDBImageBox::insertFromFile(): err. loading pixmap" << endl;
-		return;
-	}
-//	setValueInternal(pm, true);
-
-	//! @todo emit signal for setting "dirty" flag within the design
-	*/
+//! @todo emit signal for setting "dirty" flag within the design
 
 #ifdef Q_WS_WIN
 	//save last visited path

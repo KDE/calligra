@@ -24,10 +24,10 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
-#include "form.h"
+#include <formeditor/form.h>
 
 //! The report top widget
-class KexiReportForm : public QWidget, public KFormDesigner::FormWidget
+class KEXIREPORTUTILS_EXPORT KexiReportForm : public QWidget, public KFormDesigner::FormWidget
 {
 	Q_OBJECT
 

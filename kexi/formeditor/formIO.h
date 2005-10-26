@@ -140,11 +140,11 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static void cleanClipboard(QDomElement &uiElement);
 
 		/*! Loads the widget associated to the QDomElement \a el into the Container \a container,
-		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
+		    with \a parent as parent widget.
 		    If parent = 0, the Container::widget() is used as parent widget.
 		    This is used to copy/paste widgets.
 		*/
-		static void loadWidget(Container *container, WidgetLibrary *lib,
+		static void loadWidget(Container *container,
 			const QDomElement &el, QWidget *parent=0);
 
 		/*! Save an element in the \a domDoc as child of \a parentNode.
@@ -195,7 +195,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static QPixmap loadImage(QDomDocument domDoc, const QString& name);
 
 		/*! Reads the child nodes of a "widget" element. */
-		static void readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib,
+		static void readChildNodes(ObjectTreeItem *tree, Container *container, 
 			const QDomElement &el, QWidget *w);
 
 		/*! Adds an include file name to be saved in the "includehints" part of .ui file,

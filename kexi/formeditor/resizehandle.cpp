@@ -139,7 +139,7 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 	m_y = ev->y();
 	if (startDragging) {
 //	m_form->resizeHandleDraggingStarted(m_set->widget());
-		WidgetFactory *wfactory = m_set->m_form->manager()->lib()->factoryForClassName(m_set->widget()->className());
+		WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->className());
 		if (wfactory)
 			wfactory->resetEditor();
 	}
@@ -161,7 +161,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	int dummyx = ev->x() - m_x;
 	int dummyy = ev->y() - m_y;
 
-	if(m_set->m_form->manager()->snapWidgetsToGrid() && (ev->state() != (LeftButton|ControlButton|AltButton)))
+	if(FormManager::self()->snapWidgetsToGrid() && (ev->state() != (LeftButton|ControlButton|AltButton)))
 	{
 		dummyy = (int) ( ((float)dummyy) / ((float)gridY) + 0.5 );
 		dummyy *= gridY;

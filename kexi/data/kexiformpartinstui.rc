@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="11">
+<kpartgui name="kexiformpartinst" version="12">
 
 <MenuBar>
   <Menu name="edit">
@@ -47,7 +47,7 @@
    <Action name="library_widget_QFrame"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KFDTabWidget"/>
-   <Action name="library_widget_KexiSubForm"/>
+   <Action name="library_widget_KexiDBSubForm"/>
    <Separator/>
    <Action name="library_widget_Spring"/>
    <Separator/>

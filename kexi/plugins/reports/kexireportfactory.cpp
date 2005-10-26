@@ -93,12 +93,12 @@ KexiReportFactory::name()
 }
 
 QWidget*
-KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container,
-	int options)
+KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+	KFormDesigner::Container *container, int options)
 {
 	kexipluginsdbg << "KexiReportFactory::create() " << this << endl;
 
-	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+	QString text( container->form()->library()->textForWidgetName(n, c) );
 
 	if(c == "Label")
 		return new Label(text, p, n);
@@ -107,7 +107,7 @@ KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n, KF
 	else if(c == "ReportLine")
 		return new ReportLine(p, n);
 	else if(c == "KexiSubReport")
-		return new KexiSubReport(container->form()->manager(), p, n);
+		return new KexiSubReport(p, n);
 
 	return 0;
 }

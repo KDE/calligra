@@ -136,6 +136,14 @@
 # define KEXIFORMUTILS_EXPORT //for apps
 #endif
 
+#ifdef MAKE_KEXIREPORTUTILS_LIB
+# define KEXIREPORTUTILS_EXPORT KDE_EXPORT
+#elif defined(KDE_MAKE_LIB)
+# define KEXIREPORTUTILS_EXPORT KDE_IMPORT
+#else
+# define KEXIREPORTUTILS_EXPORT //for apps
+#endif
+
 /* additional default options */
 #ifndef KEXI_NO_CTXT_HELP
 # define KEXI_NO_CTXT_HELP

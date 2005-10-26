@@ -31,7 +31,7 @@
 
 class KexiReportForm;
 
-class KexiReportScrollView : public KexiScrollView
+class KEXIREPORTUTILS_EXPORT KexiReportScrollView : public KexiScrollView
 {
 	Q_OBJECT
 
@@ -59,7 +59,7 @@ class KexiReportScrollView : public KexiScrollView
  One KexiReportView object is instantiated for data view mode (preview == true in constructor),
  and second KexiReportView object is instantiated for design view mode
  (preview == false in constructor). */
-class KexiReportView : public KexiViewBase
+class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiViewBase
 {
 	Q_OBJECT
 

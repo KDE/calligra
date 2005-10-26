@@ -92,6 +92,37 @@ KFDFactory::aboutData()
 	return about;
 }
 
+// copied from kfd_part.cpp
+class KFDPart_FormManager : public KFormDesigner::FormManager
+{
+	public:
+		/*! Constructs FormManager object.
+		 See WidgetLibrary's constructor documentation for information about
+		 \a supportedFactoryGroups parameter.
+		 Using \a options you can control manager's behaviour, see \ref Options. */
+		KFDPart_FormManager(KFormDesignerPart *part, int options = 0, const char *name = 0)
+		 : KFormDesigner::FormManager(part, options, name)
+		 , m_part(part)
+		{
+		}
+
+		virtual KAction* action( const char* name)
+		{
+			return m_part->actionCollection()->action( name );
+		}
+
+		virtual void enableAction( const char* name, bool enable ) {
+			if(m_part->actionCollection()->action( name ))
+				m_part->actionCollection()->action( name )->setEnabled( enable );
+		}
+
+		KFormDesignerPart *m_part;
+};
+
+//////////////
+
+KFormDesigner::WidgetLibrary* KFormDesignerKDevPart::static_formsLibrary = 0L;
+
 KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, bool readOnly, const QStringList &args)
 : Designer(parent, name), m_count(0)
 {
@@ -108,11 +139,14 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
 	m_inShell = (!args.grep("shell").isEmpty());
 
 	QHBox *container = new QHBox(parent, "kfd_container_widget");
-        container->setFocusPolicy(QWidget::ClickFocus);
+	container->setFocusPolicy(QWidget::ClickFocus);
 
 	m_workspace = new QWorkspace(container, "kfd_workspace");
 	m_workspace->show();
-	m_manager = new KFormDesigner::FormManager(this, "kfd_manager");
+	QStringList supportedFactoryGroups;
+/* @todo add configuration for supported factory groups */
+	static_formsLibrary = KFormDesigner::FormManager::createWidgetLibrary( 
+		new KFDPart_FormManager(this, 0, "kfd_manager"), supportedFactoryGroups );
 
 	if(!readOnly)
 	{
@@ -131,29 +165,34 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
 		dockEditor->setCaption(i18n("Properties"));
 		dockEditor->setResizeEnabled(true);
 
-		m_manager->setEditor(editor);
-		m_manager->setObjectTreeView(view);
+		KFormDesigner::FormManager::self()->setEditor(editor);
+		KFormDesigner::FormManager::self()->setObjectTreeView(view);
 
 		setupActions();
 		setModified(false);
 
 		// action stuff
-		connect(m_manager, SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
-		connect(m_manager, SIGNAL(formWidgetSelected(KFormDesigner::Form*)), SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
-		connect(m_manager, SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
-		connect(m_manager, SIGNAL(undoEnabled(bool, const QString&)), SLOT(setUndoEnabled(bool, const QString&)));
-		connect(m_manager, SIGNAL(redoEnabled(bool, const QString&)), SLOT(setRedoEnabled(bool, const QString&)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(undoEnabled(bool, const QString&)), SLOT(setUndoEnabled(bool, const QString&)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(redoEnabled(bool, const QString&)), SLOT(setRedoEnabled(bool, const QString&)));
 
-		connect(m_manager, SIGNAL(dirty(KFormDesigner::Form*, bool)), this, SLOT(slotFormModified(KFormDesigner::Form*, bool)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form*, bool)), this, SLOT(slotFormModified(KFormDesigner::Form*, bool)));
 
-		connect(m_manager, SIGNAL(createFormSlot(KFormDesigner::Form*, const QString&, const QString&)),
+		connect(KFormDesigner::FormManager::self(), SIGNAL(createFormSlot(KFormDesigner::Form*, const QString&, const QString&)),
 			this, SLOT(slotCreateFormSlot(KFormDesigner::Form*, const QString&, const QString &)));
 	}
 
 	container->show();
 	setWidget(container);
-	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), m_manager, SLOT(windowChanged(QWidget*)));
+	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), KFormDesigner::FormManager::self(), SLOT(windowChanged(QWidget*)));
 	slotNoFormSelected();
+}
+
+KFormDesigner::WidgetLibrary* KFormDesignerKDevPart::formsLibrary()
+{
+	return static_formsLibrary;
 }
 
 void
@@ -163,45 +202,45 @@ KFormDesignerKDevPart::setupActions()
 	KStdAction::openNew(this, SLOT(createBlankForm()), actionCollection());
 	KStdAction::save(this, SLOT(save()), actionCollection());
 	KStdAction::saveAs(this, SLOT(saveAs()), actionCollection());
-	KStdAction::cut(m_manager, SLOT(cutWidget()), actionCollection());
-	KStdAction::copy(m_manager, SLOT(copyWidget()), actionCollection());
-	KStdAction::paste(m_manager, SLOT(pasteWidget()), actionCollection());
-	KStdAction::undo(m_manager, SLOT(undo()), actionCollection());
-	KStdAction::redo(m_manager, SLOT(redo()), actionCollection());
-	KStdAction::selectAll(m_manager, SLOT(selectAll()), actionCollection());
-	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), m_manager, SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
-	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), m_manager, SLOT(deleteWidget()), actionCollection(), "edit_delete");
+	KStdAction::cut(KFormDesigner::FormManager::self(), SLOT(cutWidget()), actionCollection());
+	KStdAction::copy(KFormDesigner::FormManager::self(), SLOT(copyWidget()), actionCollection());
+	KStdAction::paste(KFormDesigner::FormManager::self(), SLOT(pasteWidget()), actionCollection());
+	KStdAction::undo(KFormDesigner::FormManager::self(), SLOT(undo()), actionCollection());
+	KStdAction::redo(KFormDesigner::FormManager::self(), SLOT(redo()), actionCollection());
+	KStdAction::selectAll(KFormDesigner::FormManager::self(), SLOT(selectAll()), actionCollection());
+	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
+	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(deleteWidget()), actionCollection(), "edit_delete");
 	new KAction(i18n("Preview Form"), "filequickprint", "Ctrl+T", this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
-	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), actionCollection(), "taborder");
-	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
-	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), m_manager, SLOT(editConnections()), actionCollection(), "form_connections");
+	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), actionCollection(), "taborder");
+	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
+	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editConnections()), actionCollection(), "form_connections");
 
-	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), m_manager, SLOT(layoutHBox()), actionCollection(), "layout_hbox");
-	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), m_manager, SLOT(layoutVBox()), actionCollection(), "layout_vbox");
-	new KAction(i18n("Lay Out Widgets in &Grid"), QString::null, KShortcut(0), m_manager, SLOT(layoutGrid()), actionCollection(), "layout_grid");
-	new KAction(i18n("&Break Layout"), QString::null, KShortcut(0), m_manager, SLOT(breakLayout()), actionCollection(), "break_layout");
+	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox");
+	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox");
+	new KAction(i18n("Lay Out Widgets in &Grid"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid");
+	new KAction(i18n("&Break Layout"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
 
-	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), m_manager, SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
-	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), m_manager, SLOT(sendWidgetToBack()), actionCollection(), "format_lower");
+	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
+	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(sendWidgetToBack()), actionCollection(), "format_lower");
 
 	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets' Positions"), "aopos2grid", actionCollection(), "align_menu");
-	alignMenu->insert( new KAction(i18n("To Left"), "aoleft", KShortcut(0), m_manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
-	alignMenu->insert( new KAction(i18n("To Right"), "aoright", KShortcut(0), m_manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
-	alignMenu->insert( new KAction(i18n("To Top"), "aotop", KShortcut(0), m_manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
-	alignMenu->insert( new KAction(i18n("To Bottom"), "aobottom", KShortcut(0), m_manager, SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
-	alignMenu->insert( new KAction(i18n("To Grid"), "aopos2grid", KShortcut(0), m_manager, SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
+	alignMenu->insert( new KAction(i18n("To Left"), "aoleft", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
+	alignMenu->insert( new KAction(i18n("To Right"), "aoright", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
+	alignMenu->insert( new KAction(i18n("To Top"), "aotop", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
+	alignMenu->insert( new KAction(i18n("To Bottom"), "aobottom", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
+	alignMenu->insert( new KAction(i18n("To Grid"), "aopos2grid", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
 
 	KActionMenu *sizeMenu = new KActionMenu(i18n("Adjust Widgets' Sizes"), "aogrid", actionCollection(), "adjust_size_menu");
-	sizeMenu->insert( new KAction(i18n("To Fit"), "aofit", KShortcut(0), m_manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust_to_fit") );
-	sizeMenu->insert( new KAction(i18n("To Grid"), "aogrid", KShortcut(0), m_manager, SLOT(adjustSizeToGrid()), actionCollection(), "adjust_size_grid") );
-	sizeMenu->insert( new KAction(i18n("To Shortest"), "aoshortest", KShortcut(0), m_manager, SLOT(adjustHeightToSmall()), actionCollection(), "adjust_height_small") );
-	sizeMenu->insert( new KAction(i18n("To Tallest"), "aotallest", KShortcut(0), m_manager, SLOT(adjustHeightToBig()), actionCollection(), "adjust_height_big") );
-	sizeMenu->insert( new KAction(i18n("To Narrowest"), "aonarrowest", KShortcut(0), m_manager, SLOT(adjustWidthToSmall()), actionCollection(), "adjust_width_small") );
-	sizeMenu->insert( new KAction(i18n("To Widest"), "aowidest", KShortcut(0), m_manager, SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
+	sizeMenu->insert( new KAction(i18n("To Fit"), "aofit", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()), actionCollection(), "adjust_to_fit") );
+	sizeMenu->insert( new KAction(i18n("To Grid"), "aogrid", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustSizeToGrid()), actionCollection(), "adjust_size_grid") );
+	sizeMenu->insert( new KAction(i18n("To Shortest"), "aoshortest", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustHeightToSmall()), actionCollection(), "adjust_height_small") );
+	sizeMenu->insert( new KAction(i18n("To Tallest"), "aotallest", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustHeightToBig()), actionCollection(), "adjust_height_big") );
+	sizeMenu->insert( new KAction(i18n("To Narrowest"), "aonarrowest", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidthToSmall()), actionCollection(), "adjust_width_small") );
+	sizeMenu->insert( new KAction(i18n("To Widest"), "aowidest", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
 
-	m_manager->createActions(actionCollection());
+	KFormDesigner::FormManager::self()->createActions(formsLibrary(), actionCollection());
 	if(m_inShell)
-        	setXMLFile("kformdesigner_part_shell.rc");
+		setXMLFile("kformdesigner_part_shell.rc");
 	else
 		setXMLFile("kformdesigner_part.rc");
 }
@@ -209,18 +248,18 @@ KFormDesignerKDevPart::setupActions()
 void
 KFormDesignerKDevPart::createBlankForm()
 {
-	if(m_manager->activeForm() && m_uniqueFormMode)
+	if(KFormDesigner::FormManager::self()->activeForm() && m_uniqueFormMode)
 	{
 		m_openingFile = true;
 		closeURL();
 		m_openingFile = false;
 	}
 
-	if(m_uniqueFormMode && m_manager->activeForm() && !m_manager->activeForm()->isModified() && m_manager->activeForm()->filename().isNull())
+	if(m_uniqueFormMode && KFormDesigner::FormManager::self()->activeForm() && !KFormDesigner::FormManager::self()->activeForm()->isModified() && KFormDesigner::FormManager::self()->activeForm()->filename().isNull())
 		return;  // active form is already a blank one
 
 	QString n = i18n("Form") + QString::number(++m_count);
-	Form *form = new Form(m_manager, n.latin1());
+	Form *form = new Form(formsLibrary(), n.latin1());
 	FormWidgetBase *w = new FormWidgetBase(this, m_workspace, n.latin1());
 
 	w->setCaption(n);
@@ -230,7 +269,7 @@ KFormDesignerKDevPart::createBlankForm()
 	w->setFocus();
 
 	form->createToplevel(w, w);
-	m_manager->importForm(form);
+	KFormDesigner::FormManager::self()->importForm(form);
 }
 
 void
@@ -246,7 +285,7 @@ KFormDesignerKDevPart::open()
 bool
 KFormDesignerKDevPart::openFile()
 {
-	Form *form = new Form(m_manager);
+	Form *form = new Form(formsLibrary());
 	FormWidgetBase *w = new FormWidgetBase(this, m_workspace);
 	form->createToplevel(w, w);
 
@@ -258,14 +297,14 @@ KFormDesignerKDevPart::openFile()
 	}
 
 	w->show();
-	m_manager->importForm(form, !isReadWrite());
+	KFormDesigner::FormManager::self()->importForm(form, !isReadWrite());
 	return true;
 }
 
 bool
 KFormDesignerKDevPart::saveFile()
 {
-	KFormDesigner::FormIO::saveForm(m_manager->activeForm(), m_file);
+	KFormDesigner::FormIO::saveForm(KFormDesigner::FormManager::self()->activeForm(), m_file);
 	return true;
 }
 
@@ -307,7 +346,7 @@ KFormDesignerKDevPart::closeForms()
 bool
 KFormDesignerKDevPart::closeURL()
 {
-	if(!m_manager->activeForm())
+	if(!KFormDesigner::FormManager::self()->activeForm())
 		return true;
 
 	if(m_uniqueFormMode || !m_openingFile)
@@ -325,11 +364,11 @@ KFormDesignerKDevPart::slotFormModified(Form *, bool isDirty)
 void
 KFormDesignerKDevPart::slotPreviewForm()
 {
-	if(!m_manager->activeForm())
+	if(!KFormDesigner::FormManager::self()->activeForm())
 		return;
 
 	FormWidgetBase *w = new FormWidgetBase(this, m_workspace);
-	m_manager->previewForm(m_manager->activeForm(), w);
+	KFormDesigner::FormManager::self()->previewForm(KFormDesigner::FormManager::self()->activeForm(), w);
 }
 
 void
@@ -370,7 +409,7 @@ KFormDesignerKDevPart::slotWidgetSelected(Form *form, bool multiple)
 	ENABLE_ACTION("layout_vbox", multiple);
 	ENABLE_ACTION("layout_grid", multiple);
 
-	KFormDesigner::Container *container = m_manager->activeForm()->activeContainer();
+	KFormDesigner::Container *container = KFormDesigner::FormManager::self()->activeForm()->activeContainer();
 	ENABLE_ACTION("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
 }
 
@@ -424,7 +463,7 @@ KFormDesignerKDevPart::enableFormActions()
 	ENABLE_ACTION("file_save_as", true);
 	ENABLE_ACTION("preview_form", true);
 
-	ENABLE_ACTION("edit_paste", m_manager->isPasteEnabled());
+	ENABLE_ACTION("edit_paste", KFormDesigner::FormManager::self()->isPasteEnabled());
 	ENABLE_ACTION("edit_select_all", true);
 }
 
@@ -636,7 +675,7 @@ FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &po
 void
 FormWidgetBase::closeEvent(QCloseEvent *ev)
 {
-	Form *form = m_part->manager()->formForWidget(this);
+	Form *form = KFormDesigner::FormManager::self()->formForWidget(this);
 	if(!form || !form->isModified() || !form->objectTree()) // == preview form
 		ev->accept();
 	else

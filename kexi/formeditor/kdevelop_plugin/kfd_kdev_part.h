@@ -65,13 +65,15 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
 		virtual DesignerType designerType() { return QtDesigner; }
 		virtual void openProject(const QString &) {}
 
-		KFormDesigner::FormManager*   manager()  { return m_manager; }
+//		KFormDesigner::FormManager*   manager()  { return m_manager; }
 		void      setUniqueFormMode(bool enable)  { m_uniqueFormMode = enable; }
 
 		bool   closeForm(Form *form);
 		bool   closeForms();
 
 		virtual bool closeURL();
+
+		static KFormDesigner::WidgetLibrary* formsLibrary();
 
 	public slots:
 		/*! Creates a new blank Form. The new Form is shown and become the active Form. */
@@ -99,7 +101,8 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
 		void setupActions();
 
 	private:
-		KFormDesigner::FormManager  *m_manager;
+		static KFormDesigner::WidgetLibrary* static_formsLibrary;
+//		KFormDesigner::FormManager  *m_manager;
 		QWorkspace  *m_workspace;
 		int  m_count;
 		bool   m_uniqueFormMode;

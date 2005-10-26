@@ -912,11 +912,11 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 
 
-	WidgetLibrary *lib=0;
-	if(item->container())
-		lib = item->container()->form()->manager()->lib();
-	else
-		lib = item->parent()->container()->form()->manager()->lib();
+	WidgetLibrary *lib = m_currentForm->library();
+//	if(item->container())
+//		lib = item->container()->form()->manager()->lib();
+//	else
+//		lib = item->parent()->container()->form()->manager()->lib();
 
 	// We create the "widget" element
 	QDomElement tclass = domDoc.createElement("widget");
@@ -1094,7 +1094,7 @@ FormIO::cleanClipboard(QDomElement &uiElement)
 }
 
 void
-FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
+FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 {
 	bool resetCurrentForm = false;
 	if(!m_currentForm) // pasting widget
@@ -1133,7 +1133,9 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			else if(tagName == "grid") {
 				// first, see if it is flow layout
 				for(QDomNode child = n.firstChild(); !child.isNull(); child = child.nextSibling())  {
-					if((child.toElement().tagName() == "property") && (child.toElement().attribute("name") == "customLayout"))  {
+					if((child.toElement().tagName() == "property") 
+						&& (child.toElement().attribute("name") == "customLayout"))
+					{
 						classname = child.toElement().text().latin1();
 						break;
 					}
@@ -1148,7 +1150,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	// We check if this classname is an alternate one, and replace it if necessary
 	{
 		classname = el.attribute("class").local8Bit();
-		alternate = lib->checkAlternateName(classname);
+		alternate = container->form()->library()->checkAlternateName(classname);
 	}
 
 	if(alternate == "CustomWidget")
@@ -1164,9 +1166,11 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		}
 
 		if(!parent)
-			w = lib->createWidget(classname, container->widget(), wname.latin1(), container, widgetOptions);
+			w = container->form()->library()->createWidget(classname, container->widget(), 
+				wname.latin1(), container, widgetOptions);
 		else
-			w = lib->createWidget(classname, parent, wname.latin1(), container, widgetOptions);
+			w = container->form()->library()->createWidget(classname, parent, wname.latin1(), 
+				container, widgetOptions);
 	}
 
 	if(!w)
@@ -1185,7 +1189,8 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
 	if (!item)  {
 		// not yet created
-		item =  new ObjectTreeItem(lib->displayName(classname), wname, w, container);
+		item =  new ObjectTreeItem(container->form()->library()->displayName(classname), 
+			wname, w, container);
 		if(parent)  {
 			ObjectTreeItem *titem = container->form()->objectTree()->lookup(parent->name());
 			if(titem)
@@ -1222,13 +1227,13 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	else if(container->layout())
 		container->layout()->add(w);
 
-	readChildNodes(item, container, lib, el, w);
+	readChildNodes(item, container, el, w);
 
 	if(item->container() && item->container()->layout())
 		item->container()->layout()->activate();
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	QValueList<QCString> list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
+	QValueList<QCString> list(container->form()->library()->autoSaveProperties(w->className()));
 	QValueList<QCString>::ConstIterator endIt = list.constEnd();
 	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		if(w->metaObject()->findProperty(*it, true) != -1)
@@ -1266,7 +1271,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 	m_buddies = new QDict<QLabel>();
 	m_currentItem = form->objectTree();
 
-	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);
+	readChildNodes(form->objectTree(), form->toplevelContainer(), el, container);
 
 	// Now the Form is fully loaded, we can assign the buddies
 	QDictIterator<QLabel> it(*m_buddies);
@@ -1289,7 +1294,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 }
 
 void
-FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w)
+FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomElement &el, QWidget *w)
 {
 	QString eltag = el.tagName();
 
@@ -1337,7 +1342,8 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary
 				if(w->className() == QString("CustomWidget"))
 					item->storeUnknownProperty(node);
 				else {
-					bool read = lib->readSpecialProperty(w->className(), node, w, item);
+					bool read = container->form()->library()->readSpecialProperty(
+						w->className(), node, w, item);
 					if(!read) // the factory doesn't support this property neither
 						item->storeUnknownProperty(node);
 				}
@@ -1366,12 +1372,12 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary
 		else if(tag == "widget") // a child widget
 		{
 			if(item->container()) // we are a Container
-				loadWidget(item->container(), lib, node);
+				loadWidget(item->container(), node);
 			else
-				loadWidget(container, lib, node, w);
+				loadWidget(container, node, w);
 		}
 		else if(tag == "spacer")  {
-			loadWidget(container, lib, node, w);
+			loadWidget(container, node, w);
 		}
 		else if(tag == "grid") {
 			// first, see if it is flow layout
@@ -1400,25 +1406,26 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, WidgetLibrary
 				QGridLayout *layout = new QGridLayout(item->widget(), 1, 1);
 				item->container()->m_layout = (QLayout*)layout;
 			}
-			readChildNodes(item, container, lib, node, w);
+			readChildNodes(item, container, node, w);
 		}
 		else if(tag == "vbox")  {
 			item->container()->m_layType = Container::VBox;
 			QVBoxLayout *layout = new QVBoxLayout(item->widget());
 			item->container()->m_layout = (QLayout*)layout;
-			readChildNodes(item, container, lib, node, w);
+			readChildNodes(item, container, node, w);
 		}
 		else if(tag == "hbox") {
 			item->container()->m_layType = Container::HBox;
 			QHBoxLayout *layout = new QHBoxLayout(item->widget());
 			item->container()->m_layout = (QLayout*)layout;
-			readChildNodes(item, container, lib, node, w);
+			readChildNodes(item, container, node, w);
 		}
 		else {// unknown tag, we let the Factory handle it
 			if(w->className() == QString("CustomWidget"))
 				item->storeUnknownProperty(node);
 			else {
-				bool read = lib->readSpecialProperty(w->className(), node, w, item);
+				bool read = container->form()->library()->readSpecialProperty(
+					w->className(), node, w, item);
 				if(!read) // the factory doesn't suport this property neither
 					item->storeUnknownProperty(node);
 			}

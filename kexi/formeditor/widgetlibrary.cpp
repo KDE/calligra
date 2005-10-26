@@ -299,7 +299,6 @@ WidgetLibrary::addCreateWidgetActions(KActionCollection *parent,  QObject *recei
 	ActionList actions;
 	for (QAsciiDictIterator<WidgetInfo> it(d->widgets); it.current(); ++it)
 	{
-//		kdDebug() << "WidgetLibrary::createActions():" << it.current()->className() << endl;
 		LibActionWidget *a = new LibActionWidget(it.current(), parent);
 		connect(a, SIGNAL(prepareInsert(const QCString &)), receiver, slot);
 		actions.append(a);

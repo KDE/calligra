@@ -365,10 +365,9 @@ ConnectionDialog::newItem()
 void
 ConnectionDialog::newItemByDragnDrop()
 {
-	FormManager *manager = m_form->manager();
-	m_form->manager()->startCreatingConnection();
-	connect(manager, SIGNAL(connectionAborted(KFormDesigner::Form*)), this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
-	connect(manager, SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)), this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)) );
+	KFormDesigner::FormManager::self()->startCreatingConnection();
+	connect(KFormDesigner::FormManager::self(), SIGNAL(connectionAborted(KFormDesigner::Form*)), this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
+	connect(KFormDesigner::FormManager::self(), SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)), this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)) );
 
 	hide();
 }

@@ -21,7 +21,7 @@
 #ifndef KEXIDBFACTORY_H
 #define KEXIDBFACTORY_H
 
-#include <widgetfactory.h>
+#include <formeditor/widgetfactory.h>
 
 class KAction;
 
@@ -29,34 +29,6 @@ namespace KFormDesigner {
 	class Form;
 	class FormManager;
 }
-
-using KFormDesigner::Form;
-
-//! A form embedded as a widget inside other form
-class KexiSubForm : public QScrollView
-{
-	Q_OBJECT
-	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
-
-	public:
-		KexiSubForm(KFormDesigner::Form *parentForm, QWidget *parent, const char *name);
-		~KexiSubForm() {}
-
-		//! \return the name of the subform to display inside this widget
-		QString formName() const { return m_formName; }
-
-		//! Sets the name of the subform to display inside this widget
-		void setFormName(const QString &name);
-
-		//void  paintEvent(QPaintEvent *ev);
-
-	private:
-		Form *m_parentForm;
-		Form *m_form;
-		QWidget *m_widget;
-		QString m_formName;
-};
-
 
 //! Kexi Factory (DB widgets + subform)
 class KexiDBFactory : public KFormDesigner::WidgetFactory

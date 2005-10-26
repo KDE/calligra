@@ -12,6 +12,16 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-10-24..26
+Forms
+- Property editor widget for pixmaps now uses KexiBLOBBuffer
+- forms manager turned into singleton, 
+  and two widget libraries are now created: one for forms and one for reports
+Property Editor
+- show preview box in visible area
+KexiDB
+- DatabaseProperties utility class added to API
+
 2005-10-19
 Forms
 - image box doesn't provide popup in data view mode when 
@@ -26,9 +36,17 @@ KexiDB
 
 2005-10-15
 Table View
+- crash fixed in combo box
+  CCBUG: 114697
+  0.9: backported
+  0.8: backported
 - alt+down shortcut can be used to drop down combo box (previously only F4 worked)
+  0.9: backported
+  0.8: backported
 - combo box editor's popup: 
   row repainting fixed after current highlighted row has changed
+  0.9: backported
+  0.8: backported
 Table Designer
 - avoid possible infinite recursion
 - selecting non-integer type group using 'type combo' clears PKEY flagm, if set

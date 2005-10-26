@@ -21,6 +21,7 @@
 #define KEXICUSTOMPROPFACTORY_P_H
 
 #include <koproperty/editors/pixmapedit.h>
+#include <kexiblobbuffer.h>
 
 //! Kexi-specific image editor for property editor's item
 class KexiImagePropertyEdit : public KoProperty::PixmapEdit
@@ -34,11 +35,14 @@ class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);
+		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, 
+			const QVariant &value);
 
 	public slots:
 		virtual void selectPixmap();
 
-	private:
+	protected:
+		KexiBLOBBuffer::Id_t m_id;
 };
 
 #endif

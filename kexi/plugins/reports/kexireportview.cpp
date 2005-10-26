@@ -71,8 +71,8 @@ KexiReportScrollView::show()
 void
 KexiReportScrollView::slotResizingStarted()
 {
-	if(m_form && m_form->manager())
-		setSnapToGrid(m_form->manager()->snapWidgetsToGrid(), m_form->gridSize());
+	if(m_form && KFormDesigner::FormManager::self())
+		setSnapToGrid(KFormDesigner::FormManager::self()->snapWidgetsToGrid(), m_form->gridSize());
 	else
 		setSnapToGrid(false);
 }
@@ -106,9 +106,9 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
 #endif
 	}
 	else {
-		connect(reportPart()->manager(), SIGNAL(propertySetSwitched(KoProperty::Set *, bool)),
+		connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set *, bool)),
 			this, SLOT(slotPropertySetSwitched(KoProperty::Set *, bool)));
-		connect(reportPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
+		connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
@@ -117,32 +117,32 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
 		connect(reportPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
 		connect(reportPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));*/
 
-		plugSharedAction("edit_copy", reportPart()->manager(), SLOT(copyWidget()));
-		plugSharedAction("edit_cut", reportPart()->manager(), SLOT(cutWidget()));
-		plugSharedAction("edit_paste", reportPart()->manager(), SLOT(pasteWidget()));
-		plugSharedAction("edit_delete", reportPart()->manager(), SLOT(deleteWidget()));
-		plugSharedAction("edit_select_all", reportPart()->manager(), SLOT(selectAll()));
-		plugSharedAction("reportpart_clear_contents", reportPart()->manager(), SLOT(clearWidgetContent()));
-		plugSharedAction("edit_undo", reportPart()->manager(), SLOT(undo()));
-		plugSharedAction("edit_redo", reportPart()->manager(), SLOT(redo()));
+		plugSharedAction("edit_copy", KFormDesigner::FormManager::self(), SLOT(copyWidget()));
+		plugSharedAction("edit_cut", KFormDesigner::FormManager::self(), SLOT(cutWidget()));
+		plugSharedAction("edit_paste", KFormDesigner::FormManager::self(), SLOT(pasteWidget()));
+		plugSharedAction("edit_delete", KFormDesigner::FormManager::self(), SLOT(deleteWidget()));
+		plugSharedAction("edit_select_all", KFormDesigner::FormManager::self(), SLOT(selectAll()));
+		plugSharedAction("reportpart_clear_contents", KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()));
+		plugSharedAction("edit_undo", KFormDesigner::FormManager::self(), SLOT(undo()));
+		plugSharedAction("edit_redo", KFormDesigner::FormManager::self(), SLOT(redo()));
 
-		plugSharedAction("reportpart_format_raise", reportPart()->manager(), SLOT(bringWidgetToFront()) );
-		plugSharedAction("reportpart_format_lower", reportPart()->manager(), SLOT(sendWidgetToBack()) );
+		plugSharedAction("reportpart_format_raise", KFormDesigner::FormManager::self(), SLOT(bringWidgetToFront()) );
+		plugSharedAction("reportpart_format_lower", KFormDesigner::FormManager::self(), SLOT(sendWidgetToBack()) );
 
-		plugSharedAction("reportpart_align_menu", reportPart()->manager(), 0 );
-		plugSharedAction("reportpart_align_to_left", reportPart()->manager(),SLOT(alignWidgetsToLeft()) );
-		plugSharedAction("reportpart_align_to_right", reportPart()->manager(), SLOT(alignWidgetsToRight()) );
-		plugSharedAction("reportpart_align_to_top", reportPart()->manager(), SLOT(alignWidgetsToTop()) );
-		plugSharedAction("reportpart_align_to_bottom", reportPart()->manager(), SLOT(alignWidgetsToBottom()) );
-		plugSharedAction("reportpart_align_to_grid", reportPart()->manager(), SLOT(alignWidgetsToGrid()) );
+		plugSharedAction("reportpart_align_menu", KFormDesigner::FormManager::self(), 0 );
+		plugSharedAction("reportpart_align_to_left", KFormDesigner::FormManager::self(),SLOT(alignWidgetsToLeft()) );
+		plugSharedAction("reportpart_align_to_right", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToRight()) );
+		plugSharedAction("reportpart_align_to_top", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToTop()) );
+		plugSharedAction("reportpart_align_to_bottom", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToBottom()) );
+		plugSharedAction("reportpart_align_to_grid", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToGrid()) );
 
-		plugSharedAction("reportpart_adjust_size_menu", reportPart()->manager(), 0 );
-		plugSharedAction("reportpart_adjust_to_fit", reportPart()->manager(), SLOT(adjustWidgetSize()) );
-		plugSharedAction("reportpart_adjust_size_grid", reportPart()->manager(), SLOT(adjustSizeToGrid()) );
-		plugSharedAction("reportpart_adjust_height_small", reportPart()->manager(),  SLOT(adjustHeightToSmall()) );
-		plugSharedAction("reportpart_adjust_height_big", reportPart()->manager(), SLOT(adjustHeightToBig()) );
-		plugSharedAction("reportpart_adjust_width_small", reportPart()->manager(), SLOT(adjustWidthToSmall()) );
-		plugSharedAction("reportpart_adjust_width_big", reportPart()->manager(), SLOT(adjustWidthToBig()) );
+		plugSharedAction("reportpart_adjust_size_menu", KFormDesigner::FormManager::self(), 0 );
+		plugSharedAction("reportpart_adjust_to_fit", KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()) );
+		plugSharedAction("reportpart_adjust_size_grid", KFormDesigner::FormManager::self(), SLOT(adjustSizeToGrid()) );
+		plugSharedAction("reportpart_adjust_height_small", KFormDesigner::FormManager::self(),  SLOT(adjustHeightToSmall()) );
+		plugSharedAction("reportpart_adjust_height_big", KFormDesigner::FormManager::self(), SLOT(adjustHeightToBig()) );
+		plugSharedAction("reportpart_adjust_width_small", KFormDesigner::FormManager::self(), SLOT(adjustWidthToSmall()) );
+		plugSharedAction("reportpart_adjust_width_big", KFormDesigner::FormManager::self(), SLOT(adjustWidthToBig()) );
 	}
 
 	initForm();
@@ -182,7 +182,7 @@ KexiReportView::setForm(KFormDesigner::Form *f)
 void
 KexiReportView::initForm()
 {
-	setForm( new KFormDesigner::Form(reportPart()->manager()) );
+	setForm( new KFormDesigner::Form(KexiReportPart::library()) );
 	form()->createToplevel(m_reportform, m_reportform);
 
 	// Show the form wizard if this is a new Form
@@ -209,7 +209,7 @@ KexiReportView::initForm()
 	else*/
 		loadForm();
 
-	reportPart()->manager()->importForm(form(), viewMode()==Kexi::DataViewMode);
+	KFormDesigner::FormManager::self()->importForm(form(), viewMode()==Kexi::DataViewMode);
 	m_scrollView->setForm(form());
 	m_scrollView->refreshContentsSize();
 }
@@ -386,7 +386,7 @@ KexiReportView::slotNoFormSelected() // == form in preview mode
 void
 KexiReportView::enableFormActions()
 {
-	setAvailable("edit_paste", reportPart()->manager()->isPasteEnabled());
+	setAvailable("edit_paste", KFormDesigner::FormManager::self()->isPasteEnabled());
 }
 
 void
@@ -467,8 +467,8 @@ KexiReportView::show()
 void
 KexiReportView::slotFocus(bool in)
 {
-	if(in && form() && form()->manager() && form()->manager()->activeForm() != form())
-			form()->manager()->windowChanged(form()->widget());//m_dbform);
+	if(in && form() && KFormDesigner::FormManager::self() && KFormDesigner::FormManager::self()->activeForm() != form())
+			KFormDesigner::FormManager::self()->windowChanged(form()->widget());//m_dbform);
 }
 
 

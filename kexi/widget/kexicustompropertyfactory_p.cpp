@@ -28,6 +28,7 @@ using namespace KoProperty;
 KexiImagePropertyEdit::KexiImagePropertyEdit(
 	Property *property, QWidget *parent, const char *name)
  : PixmapEdit(property, parent, name)
+ , m_id(0)
 {
 }
 
@@ -37,7 +38,11 @@ KexiImagePropertyEdit::~KexiImagePropertyEdit()
 
 void KexiImagePropertyEdit::selectPixmap()
 {
-	PixmapEdit::selectPixmap();
+	QString fileName( PixmapEdit::selectPixmapFileName() );
+	if (fileName.isEmpty())
+		return;
+	KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap( KURL(fileName) ));
+	setValue(h.id());
 #if 0 //will be reenabled for new image collection
 	if(!m_manager->activeForm() || !property())
 		return;
@@ -54,11 +59,20 @@ void KexiImagePropertyEdit::selectPixmap()
 
 QVariant KexiImagePropertyEdit::value() const
 {
-	return QVariant();
+	return m_id;
 }
 
 void KexiImagePropertyEdit::setValue(const QVariant &value, bool emitChange)
 {
+	m_id = value.toInt();
+	PixmapEdit::setValue(KexiBLOBBuffer::self()->objectForId(m_id).pixmap(), emitChange);
+}
+
+void KexiImagePropertyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, 
+	const QVariant &value)
+{
+	KexiBLOBBuffer::Handle h( KexiBLOBBuffer::self()->objectForId(value.toInt()) );
+	PixmapEdit::drawViewer(p, cg, r, h.pixmap());
 }
 
 #include "kexicustompropertyfactory_p.moc"

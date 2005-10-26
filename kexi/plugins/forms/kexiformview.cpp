@@ -90,9 +90,9 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	}
 	else
 	{
-		connect(formPart()->manager(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool)),
+		connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool)),
 			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool)));
-		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
+		connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		connect(m_dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)), 
@@ -101,55 +101,50 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 			this, SLOT(slotHandleDropEvent(QDropEvent*)));
 
 		// action stuff
-//moved to formmanager		connect(formPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), this, SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
-//moved to formmanager		connect(formPart()->manager(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), this, SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
-//moved to formmanager		connect(formPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
-//moved to formmanager		connect(formPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
-
-		plugSharedAction("formpart_taborder", formPart()->manager(), SLOT(editTabOrder()));
-		plugSharedAction("formpart_adjust_size", formPart()->manager(), SLOT(adjustWidgetSize()));
+		plugSharedAction("formpart_taborder", KFormDesigner::FormManager::self(), SLOT(editTabOrder()));
+		plugSharedAction("formpart_adjust_size", KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()));
 //TODO		plugSharedAction("formpart_pixmap_collection", formPart()->manager(), SLOT(editFormPixmapCollection()));
 //TODO		plugSharedAction("formpart_connections", formPart()->manager(), SLOT(editConnections()));
 
-		plugSharedAction("edit_copy", formPart()->manager(), SLOT(copyWidget()));
-		plugSharedAction("edit_cut", formPart()->manager(), SLOT(cutWidget()));
-		plugSharedAction("edit_paste", formPart()->manager(), SLOT(pasteWidget()));
-		plugSharedAction("edit_delete", formPart()->manager(), SLOT(deleteWidget()));
-		plugSharedAction("edit_select_all", formPart()->manager(), SLOT(selectAll()));
-		plugSharedAction("formpart_clear_contents", formPart()->manager(), SLOT(clearWidgetContent()));
-		plugSharedAction("edit_undo", formPart()->manager(), SLOT(undo()));
-		plugSharedAction("edit_redo", formPart()->manager(), SLOT(redo()));
+		plugSharedAction("edit_copy", KFormDesigner::FormManager::self(), SLOT(copyWidget()));
+		plugSharedAction("edit_cut", KFormDesigner::FormManager::self(), SLOT(cutWidget()));
+		plugSharedAction("edit_paste", KFormDesigner::FormManager::self(), SLOT(pasteWidget()));
+		plugSharedAction("edit_delete", KFormDesigner::FormManager::self(), SLOT(deleteWidget()));
+		plugSharedAction("edit_select_all", KFormDesigner::FormManager::self(), SLOT(selectAll()));
+		plugSharedAction("formpart_clear_contents", KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()));
+		plugSharedAction("edit_undo", KFormDesigner::FormManager::self(), SLOT(undo()));
+		plugSharedAction("edit_redo", KFormDesigner::FormManager::self(), SLOT(redo()));
 
-		plugSharedAction("formpart_layout_menu", formPart()->manager(), 0 );
-		plugSharedAction("formpart_layout_hbox", formPart()->manager(), SLOT(layoutHBox()) );
-		plugSharedAction("formpart_layout_vbox", formPart()->manager(), SLOT(layoutVBox()) );
-		plugSharedAction("formpart_layout_grid", formPart()->manager(), SLOT(layoutGrid()) );
-		plugSharedAction("formpart_layout_hsplitter", formPart()->manager(), SLOT(layoutHSplitter()) );
-		plugSharedAction("formpart_layout_vsplitter", formPart()->manager(), SLOT(layoutVSplitter()) );
-		plugSharedAction("formpart_break_layout", formPart()->manager(), SLOT(breakLayout()) );
+		plugSharedAction("formpart_layout_menu", KFormDesigner::FormManager::self(), 0 );
+		plugSharedAction("formpart_layout_hbox", KFormDesigner::FormManager::self(), SLOT(layoutHBox()) );
+		plugSharedAction("formpart_layout_vbox", KFormDesigner::FormManager::self(), SLOT(layoutVBox()) );
+		plugSharedAction("formpart_layout_grid", KFormDesigner::FormManager::self(), SLOT(layoutGrid()) );
+		plugSharedAction("formpart_layout_hsplitter", KFormDesigner::FormManager::self(), SLOT(layoutHSplitter()) );
+		plugSharedAction("formpart_layout_vsplitter", KFormDesigner::FormManager::self(), SLOT(layoutVSplitter()) );
+		plugSharedAction("formpart_break_layout", KFormDesigner::FormManager::self(), SLOT(breakLayout()) );
 
-		plugSharedAction("formpart_format_raise", formPart()->manager(), SLOT(bringWidgetToFront()) );
-		plugSharedAction("formpart_format_lower", formPart()->manager(), SLOT(sendWidgetToBack()) );
+		plugSharedAction("formpart_format_raise", KFormDesigner::FormManager::self(), SLOT(bringWidgetToFront()) );
+		plugSharedAction("formpart_format_lower", KFormDesigner::FormManager::self(), SLOT(sendWidgetToBack()) );
 
-		plugSharedAction("other_widgets_menu", formPart()->manager(), 0 );
+		plugSharedAction("other_widgets_menu", KFormDesigner::FormManager::self(), 0 );
 		setAvailable("other_widgets_menu", true);
 
-		plugSharedAction("formpart_align_menu", formPart()->manager(), 0 );
-		plugSharedAction("formpart_align_to_left", formPart()->manager(),SLOT(alignWidgetsToLeft()) );
-		plugSharedAction("formpart_align_to_right", formPart()->manager(), SLOT(alignWidgetsToRight()) );
-		plugSharedAction("formpart_align_to_top", formPart()->manager(), SLOT(alignWidgetsToTop()) );
-		plugSharedAction("formpart_align_to_bottom", formPart()->manager(), SLOT(alignWidgetsToBottom()) );
-		plugSharedAction("formpart_align_to_grid", formPart()->manager(), SLOT(alignWidgetsToGrid()) );
+		plugSharedAction("formpart_align_menu", KFormDesigner::FormManager::self(), 0 );
+		plugSharedAction("formpart_align_to_left", KFormDesigner::FormManager::self(),SLOT(alignWidgetsToLeft()) );
+		plugSharedAction("formpart_align_to_right", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToRight()) );
+		plugSharedAction("formpart_align_to_top", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToTop()) );
+		plugSharedAction("formpart_align_to_bottom", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToBottom()) );
+		plugSharedAction("formpart_align_to_grid", KFormDesigner::FormManager::self(), SLOT(alignWidgetsToGrid()) );
 
-		plugSharedAction("formpart_adjust_size_menu", formPart()->manager(), 0 );
-		plugSharedAction("formpart_adjust_to_fit", formPart()->manager(), SLOT(adjustWidgetSize()) );
-		plugSharedAction("formpart_adjust_size_grid", formPart()->manager(), SLOT(adjustSizeToGrid()) );
-		plugSharedAction("formpart_adjust_height_small", formPart()->manager(),  SLOT(adjustHeightToSmall()) );
-		plugSharedAction("formpart_adjust_height_big", formPart()->manager(), SLOT(adjustHeightToBig()) );
-		plugSharedAction("formpart_adjust_width_small", formPart()->manager(), SLOT(adjustWidthToSmall()) );
-		plugSharedAction("formpart_adjust_width_big", formPart()->manager(), SLOT(adjustWidthToBig()) );
+		plugSharedAction("formpart_adjust_size_menu", KFormDesigner::FormManager::self(), 0 );
+		plugSharedAction("formpart_adjust_to_fit", KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()) );
+		plugSharedAction("formpart_adjust_size_grid", KFormDesigner::FormManager::self(), SLOT(adjustSizeToGrid()) );
+		plugSharedAction("formpart_adjust_height_small", KFormDesigner::FormManager::self(),  SLOT(adjustHeightToSmall()) );
+		plugSharedAction("formpart_adjust_height_big", KFormDesigner::FormManager::self(), SLOT(adjustHeightToBig()) );
+		plugSharedAction("formpart_adjust_width_small", KFormDesigner::FormManager::self(), SLOT(adjustWidthToSmall()) );
+		plugSharedAction("formpart_adjust_width_big", KFormDesigner::FormManager::self(), SLOT(adjustWidthToBig()) );
 
-		plugSharedAction("format_font", formPart()->manager(), SLOT(changeFont()) );
+		plugSharedAction("format_font", KFormDesigner::FormManager::self(), SLOT(changeFont()) );
 	}
 
 	initForm();
@@ -210,7 +205,7 @@ KexiFormView::setForm(KFormDesigner::Form *f)
 void
 KexiFormView::initForm()
 {
-	setForm( new KFormDesigner::Form(formPart()->manager(), 0, viewMode()==Kexi::DesignViewMode) );
+	setForm( new KFormDesigner::Form(KexiFormPart::library(), 0, viewMode()==Kexi::DesignViewMode) );
 //	if (viewMode()==Kexi::DataViewMode)
 		//form()->setDesignMode(false);
 	form()->createToplevel(m_dbform, m_dbform);
@@ -218,7 +213,7 @@ KexiFormView::initForm()
 	if (viewMode()==Kexi::DesignViewMode) {
 		//we want to be informed about executed commands
 		connect(form()->commandHistory(), SIGNAL(commandExecuted()),
-			formPart()->manager(), SLOT(slotHistoryCommandExecuted()));
+			KFormDesigner::FormManager::self(), SLOT(slotHistoryCommandExecuted()));
 	}
 
 	const bool newForm = parentDialog()->id() < 0;
@@ -255,7 +250,7 @@ KexiFormView::initForm()
 //	if (m_dbform->orderedFocusWidgets()->first())
 	//	m_scrollView->setFocusProxy( m_dbform->orderedFocusWidgets()->first() );
 
-	formPart()->manager()->importForm(form(), viewMode()==Kexi::DataViewMode);
+	KFormDesigner::FormManager::self()->importForm(form(), viewMode()==Kexi::DataViewMode);
 	m_scrollView->setForm(form());
 
 //	m_dbform->updateTabStopsOrder(form());
@@ -441,7 +436,7 @@ KexiFormView::afterSwitchFrom(int mode)
 
 	if (mode==Kexi::DataViewMode && viewMode()==Kexi::DesignViewMode) {
 //		slotPropertySetSwitched
-//		emit form()->manager()->propertySetSwitched( form()->manager()->propertySet()->set(), true );
+//		emit KFormDesigner::FormManager::self()->propertySetSwitched( KFormDesigner::FormManager::self()->propertySet()->set(), true );
 	}
 
 	return true;
@@ -632,7 +627,8 @@ KexiFormView::storeData()
 		KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
 			KexiDB::PreparedStatement::InsertStatement, *blobsTable);
 //		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
-		*st << QVariant()/*id*/ << h.data() << originalFileName << caption << h.mimeType();
+		*st << QVariant()/*id*/ << h.data() << originalFileName << caption 
+			<< h.mimeType() << h.folderId();
 		if (!st->execute()) {
 			kexipluginsdbg << " execute error" << endl;
 			return false;
@@ -655,7 +651,7 @@ KexiFormView::storeData()
 		//set widget's internal property so it can be saved...
 		const QVariant oldStoredPixmapId( it.key()->property("storedPixmapId") );
 		it.key()->setProperty("storedPixmapId", 
-			QVariant((Q_LLONG /* KexiBLOBBuffer::Id_t unsafe - will be fixed in Qt4*/)storedBLOBID));
+			QVariant((long /* KexiBLOBBuffer::Id_t unsafe - will be fixed in Qt4*/)storedBLOBID));
 		KFormDesigner::ObjectTreeItem *widgetItem = form()->objectTree()->lookup(it.key()->name());
 		if (widgetItem)
 			widgetItem->addModifiedProperty( "storedPixmapId", oldStoredPixmapId );
@@ -766,7 +762,7 @@ KexiFormView::enableFormActions()
 	setAvailable("formpart_connections", true);
 	setAvailable("formpart_taborder", true);
 
-	setAvailable("edit_paste", formPart()->manager()->isPasteEnabled());
+	setAvailable("edit_paste", KFormDesigner::FormManager::self()->isPasteEnabled());
 }
 
 void
@@ -879,8 +875,8 @@ KexiFormView::show()
 void
 KexiFormView::slotFocus(bool in)
 {
-	if(in && form() && form()->manager() && form()->manager()->activeForm() != form()) {
-		form()->manager()->windowChanged(m_dbform);
+	if(in && form() && KFormDesigner::FormManager::self() && KFormDesigner::FormManager::self()->activeForm() != form()) {
+		KFormDesigner::FormManager::self()->windowChanged(m_dbform);
 		updateDataSourcePage();
 	}
 }
@@ -890,7 +886,7 @@ KexiFormView::updateDataSourcePage()
 {
 	if (viewMode()==Kexi::DesignViewMode) {
 		QCString dataSourceMimeType, dataSource;
-		KFormDesigner::WidgetPropertySet *set = formPart()->manager()->propertySet();
+		KFormDesigner::WidgetPropertySet *set = KFormDesigner::FormManager::self()->propertySet();
 		if (set->contains("dataSourceMimeType"))
 			dataSourceMimeType = (*set)["dataSourceMimeType"].value().toCString();
 		if (set->contains("dataSource"))
@@ -954,7 +950,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 	KFormDesigner::WidgetList widgetsToSelect;
 	KFormDesigner::CommandGroup *group = new KFormDesigner::CommandGroup(
 		fields.count()==1 ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets").arg(fields.count()),
-		form()->manager()->propertySet()
+		KFormDesigner::FormManager::self()->propertySet()
 	);
 
 	foreach( QStringList::ConstIterator, it, fields ) {
@@ -982,12 +978,12 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		widgetsToSelect.append(newWidget);
 //#if 0
 		KFormDesigner::CommandGroup *subGroup 
-			= new KFormDesigner::CommandGroup("", form()->manager()->propertySet());
+			= new KFormDesigner::CommandGroup("", KFormDesigner::FormManager::self()->propertySet());
 		QMap<QCString, QVariant> propValues;
 		propValues.insert("dataSource", column->aliasOrName());
 		propValues.insert("fieldTypeInternal", (int)column->field->type());
 		propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
-		formPart()->manager()->propertySet()->createPropertyCommandsInDesignMode(
+		KFormDesigner::FormManager::self()->propertySet()->createPropertyCommandsInDesignMode(
 			newWidget, propValues, subGroup, false/*!addToActiveForm*/, 
 			true /*!execFlagForSubCommands*/);
 		subGroup->execute();
@@ -1027,7 +1023,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 			m_dbform->setGeometry( newFormRect );
 			//2. store information about resize
 			KFormDesigner::PropertyCommand *resizeFormCommand = new KFormDesigner::PropertyCommand(
-				formPart()->manager()->propertySet(), m_dbform->name(),
+				KFormDesigner::FormManager::self()->propertySet(), m_dbform->name(),
 				oldFormRect, newFormRect, "geometry"); 
 			group->addCommand(resizeFormCommand, true/*will be executed on CommandGroup::execute()*/);
 		}
@@ -1076,12 +1072,12 @@ void KexiFormView::updateActions(bool activated)
 	if (viewMode()==Kexi::DesignViewMode) {
 		if (form()->selectedWidget()) {
 			if (form()->widget() == form()->selectedWidget())
-				form()->manager()->emitFormWidgetSelected( form() );
+				KFormDesigner::FormManager::self()->emitFormWidgetSelected( form() );
 			else
-				form()->manager()->emitWidgetSelected( form(), false );
+				KFormDesigner::FormManager::self()->emitWidgetSelected( form(), false );
 		}
 		else if (form()->selectedWidgets()) {
-			form()->manager()->emitWidgetSelected( form(), true );
+			KFormDesigner::FormManager::self()->emitWidgetSelected( form(), true );
 		}
 	}
 	KexiDataAwareView::updateActions(activated);

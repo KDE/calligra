@@ -32,6 +32,16 @@
 #include "kexipartitem.h"
 #include "kexi.h"
 
+/*! KexiProject implementation version. 
+ It is altered after every change: 
+ - major number is increased after KexiProject storage format change, 
+ - minor is increased after adding binary-incompatible change.
+ Use KexiProject::versionMajor() and KexiProject::versionMinor() to get real project's version.
+*/
+
+#define KEXIPROJECT_VERSION_MAJOR 1
+#define KEXIPROJECT_VERSION_MINOR 0
+
 namespace KexiDB
 {
 	class DriverManager;
@@ -65,6 +75,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 //		KexiProject(KexiDB::ConnectionData *cdata);
 
 		~KexiProject();
+
+		int versionMajor() const;
+		int versionMinor() const;
 
 		//! Opens existing project using project data.
 		bool open();
@@ -135,9 +148,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		/**
 		 * @return the database connection assosiated with this project
 		 */
-		KexiDB::Connection *dbConnection() const { return m_connection; }
+		KexiDB::Connection *dbConnection() const;
 
-		KexiProjectData *data() const { return m_data; }
+		KexiProjectData *data() const;
 
 		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
 
@@ -193,7 +206,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		KexiDB::Parser* sqlParser();
 
 		/*! \return true if the project is started in final mode */
-		bool final() { return m_final; }
+		bool final() const;
+
+		void setFinal(bool set);
 
 		/*! Shows dialog for creating new blank project,
 		 ans creates one. Dialog is not shown if option for automatic creation 
@@ -286,20 +301,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 //		void objectCreated(const QCString &mime, const QCString& name);
 
 	protected:
-		QGuardedPtr<KexiDB::Connection> m_connection;
-		QGuardedPtr<KexiProjectData> m_data;
-		
-		QString m_error_title;
-
-		//! a cache for item() method, indexed by project part's ids
-		QIntDict<KexiPart::ItemDict> m_itemDictsCache;
-
-		QPtrDict<KexiPart::Item> m_unstoredItems;
-		int m_tempPartItemID_Counter; //!< helper for getting unique 
-		                              //!< temporary identifiers for unstored items
-
-		KexiDB::Parser* m_sqlParser;
-		bool m_final;
+		class Private;
+		Private *d;
 
 		friend class KexiMainWindowImpl;
 };

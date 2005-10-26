@@ -37,7 +37,7 @@ class KexiSubReport : public QScrollView
 	Q_PROPERTY(QString reportName READ reportName WRITE setReportName DESIGNABLE true);
 
 	public:
-		KexiSubReport(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
+		KexiSubReport(QWidget *parent, const char *name);
 		~KexiSubReport() {}
 
 		//! \return the name of the subreport inside the db
@@ -45,7 +45,7 @@ class KexiSubReport : public QScrollView
 		void setReportName(const QString &name);
 
 	private:
-		KFormDesigner::FormManager *m_manager;
+//		KFormDesigner::FormManager *m_manager;
 		Form   *m_form;
 		QWidget  *m_widget;
 		QString   m_reportName;

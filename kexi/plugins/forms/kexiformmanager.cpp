@@ -34,16 +34,15 @@
 #include <koproperty/property.h>
 #include <widget/kexicustompropertyfactory.h>
 
-KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
-	const char* name)
- : KFormDesigner::FormManager(parent, supportedFactoryGroups, 
+KexiFormManager::KexiFormManager(KexiPart::Part *parent, const char* name)
+ : KFormDesigner::FormManager(parent, 
 		KFormDesigner::FormManager::HideEventsInPopupMenu |
 		KFormDesigner::FormManager::SkipFileActions |
 		KFormDesigner::FormManager::HideSignalSlotConnections
 	, name)
  , m_part(parent)
 {
-	lib()->setAdvancedPropertiesVisible(false);
+//moved to KexiFormPart	lib()->setAdvancedPropertiesVisible(false);
 
 	// register custom editors and properties
 	KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(Factory::self());
