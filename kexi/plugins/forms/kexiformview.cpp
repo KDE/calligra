@@ -611,6 +611,12 @@ KexiFormView::storeData()
 //! @todo show message about missing kexi__blobs?
 		return false;
 	}
+	KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
+		KexiDB::PreparedStatement::InsertStatement, *blobsTable);
+	if (!st) {
+		//! @todo show message 
+		return false;
+	}
 	KexiBLOBBuffer *blobBuf = KexiBLOBBuffer::self();
 	for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = m_unsavedLocalBLOBs.constBegin(); 
 		it!=m_unsavedLocalBLOBs.constEnd(); ++it)
@@ -624,8 +630,7 @@ KexiFormView::storeData()
 		QFileInfo fi(originalFileName);
 		QString caption(fi.baseName().replace('_', " ").simplifyWhiteSpace());
 ////////
-		KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
-			KexiDB::PreparedStatement::InsertStatement, *blobsTable);
+
 //		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
 		*st << QVariant()/*id*/ << h.data() << originalFileName << caption 
 			<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
