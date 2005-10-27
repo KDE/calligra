@@ -1913,7 +1913,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
 
     //disallow activating objects outside the "page"
-    if ( !m_activePage->getPageRect().contains(docPoint,m_view->zoomHandler()))
+    if ( !m_activePage->getPageRect().contains(docPoint))
         return;
 
 
