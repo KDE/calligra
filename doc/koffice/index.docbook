@@ -6,11 +6,18 @@
  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
 <book lang="&language;">
 <bookinfo>
 <title>&koffice;</title>
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<affiliation><address><email>raphael.langerhorst@kdemail.net</email></address></affiliation> 
+</author>
 <author>
 <firstname>Jost</firstname>
 <surname>Schenck</surname>
@@ -19,8 +26,8 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2001-06-02</date>
-<releaseinfo>0.01.01</releaseinfo>
+<date>2005-10-27</date>
+<releaseinfo>1.5.0</releaseinfo>
 
 <abstract>
 <para>
@@ -39,51 +46,129 @@
 
 <chapter id="introduction">
 <title>Introduction</title>
+<sect1>
+<title>&koffice; components</title>
 
 <para>
 &koffice; is an integrated office suite for the K Desktop Environment
-(&kde;).  &koffice; currently consists of the following programs:
+(&kde;). &koffice; currently consists of the following components:
 </para>
 
-<simplelist type="vert" columns="1">
-<member>&kword; (a frames-based wordprocessor)</member>
-<member>&kspread; (a spreadsheet application)</member> 
-<member>&kpresenter; (screen and slide presentations)</member>
-<member>&kivio; (a flowchart application)</member>
-<member>Karbon14 (a vector drawing application)</member>
-<member>&krita; (a pixel based drawing application)</member>
-<member>&kugar; (a tool for generating business quality reports)</member>
-<member>Kexi (an integrated environment for managing data)</member>
-<member>&kchart; (a charts/graphs generation application)</member>
-<member>&kformula; (an editor for mathematical formulae)</member>
-
-</simplelist>
+<itemizedlist>
+<listitem><para>&kword; (a frames-based wordprocessor)</para></listitem>
+<listitem><para>&kspread; (a spreadsheet application)</para></listitem> 
+<listitem><para>&kpresenter; (screen and slide presentations)</para></listitem>
+<listitem><para>&kivio; (a flowchart application)</para></listitem>
+<listitem><para>Karbon14 (a vector drawing application)</para></listitem>
+<listitem><para>&krita; (a pixel based drawing application)</para></listitem>
+<listitem><para>&kugar; (a tool for generating business quality reports)</para></listitem>
+<listitem><para>Kexi (an integrated environment for managing data)</para></listitem>
+<listitem><para>&kchart; (a charts/graphs generation application)</para></listitem>
+<listitem><para>&kformula; (an editor for mathematical formulae)</para></listitem>
+</itemizedlist>
 
 <para>
-Because they are based on the KParts component model, &koffice; programs
-are designed to work very well with each other. Any &koffice; component
-can be embedded in another &koffice; document. For instance, you can
-insert a table which you created in &kspread; directly into a &kword;
+Because these components are based on the KParts component model, &koffice;
+components are designed to work very well with each other. Any &koffice;
+component can be embedded in another &koffice; document. For instance, you
+can insert a spreadsheet which you created in &kspread; directly into a &kword;
 document. In this way, complex, compound documents can be created using
-&koffice; programs.
+&koffice;.
 </para>
 
 <para>
-A plug-in mechanism makes it easy to extend the functionality of
-&koffice;. Already, there are two applications, a macro recorder and
-a calculator, which show how this can be done.
+A plugin mechanism makes it easy to extend the functionality of
+&koffice;. You will find many plugins in some of the components
+and can learn how to write plugins yourself. There is also a section
+of this manual dedicated to developing plugins that should get you
+started.
 </para>
 
 <para>
 This manual only covers the general features of &koffice;, those that
-are common to most or all programs in the suite. For detailed information
-about the different programs, have a look at the other manuals.
+are common to most or all components in the suite. For detailed information
+about the different components, have a look at the respective manual.
 </para>
 
-</chapter> 
+</sect1>
 
-<chapter id="kparts">
+<sect1 id="features">
+<title>Overview of &koffice; features</title>
+<sect2 id="featureintegration">
+<title>Integration</title>
+<para>
+&koffice; provides a framework that all components build on. Through
+this framework high integration is achieved. It is possible to develop
+your own component that integrates as well. The technology of this is
+described in more depth in the <link linkend="kparts">chapter on
+KParts</link>.
+</para>
+</sect2>
+<sect2 id="featureleightweight">
+<title>Lightweight</title>
+<para>
+Despite offering so many components, &koffice; is very lightweight, fast and
+has a rather low memory footprint. This is also achieved because &koffice; builds
+on &kde;, which is already a very powerful application development framework.
+</para>
+<para>
+A goal of &koffice; is also to not overload the user interface with features
+that are hardly needed. This results in a lean and mean user interface that
+lets you do your work efficiently.
+</para>
+<para>
+Being lightweight can at times also mean that that very particular special
+functionality you need is not there. In this case you can always add the
+functionality yourself by extending &koffice;. &koffice; really doesn't
+want to get bloated by adding large chunks of features that only very
+few users might need. Such features can always be made available through
+additional plugins or scripts, thus keeping &koffice; itself lightweight.
+</para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title>Completeness</title>
+<para>
+&koffice; offers a wide range of components, covering most of the home
+and business office needs. Additional features can always be implemented
+through scripts, plugins or even whole components based on the &koffice;
+framework.
+</para>
+</sect2>
+<sect2 id="featurefileformat">
+<title>OASIS OpenDocument Format</title>
+<para>
+It is a major importance for any office suite to adhere to established
+standards. Especially on the file format level to allow seamless document
+exchange with other office suites. This also avoids vendor lock-in, which
+is especially important for companies and also for individuals.
+</para>
+<para>
+For this reason &koffice; has adapted the OASIS OpenDocument format
+as native file format.
+</para>
+</sect2>
+<sect2 id="featurekde">
+<title>KDE Features</title>
+<para>
+Since &koffice; builds on &kde; all the features you would expect from a
+&kde; application are also available in &koffice;. This includes DCOP, KParts,
+Desktop Integration, Configurability and so on. All this makes the look and
+feel of &koffice; very familiar and really integrates &koffice; into the
+desktop environment, thus allowing seamless workflows.
+</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+<chapter>
+<title>&koffice; Technology</title>
+
+<sect1 id="kparts">
 <title>KParts - the building blocks of &koffice;</title>
+
+<!-- <sect2 id="kpartsintro"> -->
+<!-- <title>KParts Introduction</title> -->
 
 <para>
 Each &koffice; application is designed to fulfill very specific needs.
@@ -113,7 +198,9 @@ The alternative to this is KParts. Its philosophy is simple: let every
 application do what it does best. 
 </para>
 
-<sect1 id="compound-docs">
+<!-- </sect2> -->
+
+<sect2 id="compound-docs">
 <title>Compound documents with KParts</title>
 
 <para> 
@@ -136,10 +223,10 @@ of that of &kword;. This ability to include the functionality of one
 application in another is called <quote>embedding</quote>.
 </para>
 
-</sect1>
+</sect2>
 
 
-<sect1 id="kparts-try-it">
+<sect2 id="kparts-try-it">
 <title>Using KParts in your document</title>
 
 <para>
@@ -217,18 +304,21 @@ KParts are easy to use. Try inserting other parts or even parts in
 parts.
 </para>
 
+</sect2>
+
 </sect1>
 
 </chapter>
 
-<chapter id="customization">
-<title>Optimizing &koffice; and Your System</title>
+<chapter id="configuration">
+<title>Configuring &koffice; and Your System</title>
 
 <para>
 While &koffice; should work quite nice out of the box, there may well be
 some things to optimize to get the best out of &koffice;. This chapter
 shows you what you might want to do to achieve the best results with
-your new office suite.
+your new office suite and make it suite your needs. &koffice; is
+highly configurable, even down to detailed toolbar and menu layout.
 </para>
 
 <sect1 id="the-font-issue">
@@ -430,6 +520,8 @@ of the C++-toolkit &Qt;. &kde; and &koffice; make use of &Qt;.
 <chapter id="programmersinfo">
 <title>Programming &koffice;</title>
 
+<sect1 id="programmingintro">
+<title>Introduction</title>
 <para>
 If you want to do &koffice; development, the following resources might
 be of interest:
@@ -450,7 +542,54 @@ In the &koffice; sources you'll find an example application in the
 <filename class="directory">example</filename> folder.  
 </para></listitem>
 </itemizedlist>
-    
+</sect1>
+
+<sect1 id="programmingplugin">
+<title>Developing &koffice; Plugins</title>
+<para>
+TO BE WRITTEN.
+</para>
+</sect1>
+
+<sect1 id="scripting">
+<title>Scripting &koffice;</title>
+<para>
+This section gives you information on how you can automate and
+script &koffice;.
+</para>
+<sect2 id="dcop">
+<title>DCOP</title>
+<para>
+TO BE WRITTEN.
+</para>
+</sect2>
+</sect1>
+
+<sect1 id="programmingreport">
+<title>Creating Reports with Kugar</title>
+<para>
+TO BE WRITTEN.
+<!--Maybe this should go completely into the
+Kugar manual? So we just keep a reference to the kugar manual
+here.-->
+</para>
+</sect1>
+
+<sect1 id="programmingdatabase">
+<title>Integrating a Database with Kexi</title>
+<para>
+TO BE WRITTEN.
+<!-- Again, should this just be a reference to kexi documentation? -->
+</para>
+</sect1>
+
+<sect1 id="programmingcomponents">
+<title>Developing &koffice; Components</title>
+<para>
+TO BE WRITTEN.
+</para>
+</sect1>
+
 </chapter>
 
 <chapter id="legal">
