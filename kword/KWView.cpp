@@ -2349,10 +2349,10 @@ void KWView::pasteData( QMimeSource* data )
                 data = QApplication::clipboard()->data();
             }
         }
-        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-        if ( edit && ( ( provides & ProvidesOasis ) || ( provides & ProvidesPlainText ) ) )
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit && ( ( provides & ProvidesOasis ) || ( provides & ProvidesPlainText ) ) ) {
             edit->pasteData( data, provides );
-        else if ( ( provides & ProvidesOasis ) ) {
+        } else if ( ( provides & ProvidesOasis ) ) {
             // Not editing a frameset? We can't paste plain text then... only entire frames.
             QCString returnedTypeMime = KoTextObject::providesOasis( data );
             if ( !returnedTypeMime.isEmpty() )
