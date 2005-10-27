@@ -419,7 +419,7 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	// not inside the boundingbox, it cannot be inside the path either.
 	if(
 		!isClosed() ||
-		!boundingBox().contains( p, true ) )
+		!boundingBox().contains( p ) )
 	{
 		return false;
 	}

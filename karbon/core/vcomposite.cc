@@ -260,7 +260,7 @@ bool
 VPath::pointIsInside( const KoPoint& p ) const
 {
 	// Check if point is inside boundingbox.
-	if( !boundingBox().contains( p, true ) )
+	if( !boundingBox().contains( p ) )
 		return false;
 
 
