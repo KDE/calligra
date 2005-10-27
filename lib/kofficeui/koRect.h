@@ -95,9 +95,19 @@ public:
 
     KoRect &operator|=(const KoRect &rhs);
     KoRect &operator&=(const KoRect &rhs);
-    bool contains(const KoPoint &p, bool proper=false) const;
-    bool contains(const double &x, const double &y, bool proper=false) const;
-    bool contains(const KoRect &r, bool proper=false) const;
+    /**
+     * Returns if the point is contained in the rect.
+     * @param p the point to test
+     * Will return true if the point is contained in the 2d area this rect represents, this means
+     * that it will return true on everthing from the topleft() to the bottomright();
+     * Note that for KoRect(0, 0, 100, 100)  the KoPoint(0, 0) as well as KoPoint(100, 100) are
+     * mathmatically contained in the rect, this in contrary to pixel based rectangles.
+     */
+    bool contains(const KoPoint &p) const;
+    /// Helper function for the above function.
+    bool contains(const double &x, const double &y) const;
+    /// Helper function for the above function.
+    bool contains(const KoRect &r) const;
     KoRect unite(const KoRect &r) const;
     KoRect intersect(const KoRect &r) const;
     bool intersects(const KoRect &r) const;

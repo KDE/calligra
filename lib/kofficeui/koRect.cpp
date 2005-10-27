@@ -143,28 +143,16 @@ KoRect &KoRect::operator&=(const KoRect &rhs) {
     return *this;
 }
 
-bool KoRect::contains(const KoPoint &p, bool proper) const {
-
-    if(proper)
-        return (p.x() > m_tl.x() && p.x() < m_br.x() && p.y() > m_tl.y() && p.y() < m_br.y());
-    else
-        return (p.x() >= m_tl.x() && p.x() <= m_br.x() && p.y() >= m_tl.y() && p.y() <= m_br.y());
+bool KoRect::contains(const KoPoint &p) const {
+    return (p.x() >= m_tl.x() && p.x() <= m_br.x() && p.y() >= m_tl.y() && p.y() <= m_br.y());
 }
 
-bool KoRect::contains(const double &x, const double &y, bool proper) const {
-
-    if(proper)
-        return (x > m_tl.x() && x < m_br.x() && y > m_tl.y() && y < m_br.y());
-    else
-        return (x >= m_tl.x() && x <= m_br.x() && y >= m_tl.y() && y <= m_br.y());
+bool KoRect::contains(const double &x, const double &y) const {
+    return (x >= m_tl.x() && x <= m_br.x() && y >= m_tl.y() && y <= m_br.y());
 }
 
-bool KoRect::contains(const KoRect &r, bool proper) const {
-
-    if(proper)
-        return (r.left() > m_tl.x() && r.right() < m_br.x() && r.top() > m_tl.y() && r.bottom() < m_br.y());
-    else
-        return (r.left() >= m_tl.x() && r.right() <= m_br.x() && r.top() >= m_tl.y() && r.bottom() <= m_br.y());
+bool KoRect::contains(const KoRect &r) const {
+    return (r.left() >= m_tl.x() && r.right() <= m_br.x() && r.top() >= m_tl.y() && r.bottom() <= m_br.y());
 }
 
 
