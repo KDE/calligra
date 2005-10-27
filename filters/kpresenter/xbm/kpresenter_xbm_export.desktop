@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KPresenter XBM Export Filter
 Name[da]=KPresenter XBM-eksportfilter
+Name[ja]=KPresenter XBM エクスポートフィルター
 Name[pt]=Filtro de Exportação de XBM para o KPresenter
 Name[pt_BR]=Filtro de Exportação de XBM para o KPresenter
 Name[sv]=Kpresenter XBM-exportfilter

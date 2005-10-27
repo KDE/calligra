@@ -19,6 +19,7 @@ Comment[fr]=Type de service pour tout type de filtres d'importation de kexi bas�
 Comment[he]=טיפוס שירות עבור כל סוגי מסנני הייבוא של kexi אשר מבוססים על שרת (טבלה, טפסים, שאילתות וכו')
 Comment[hu]=Szolgáltatástípus kiszolgálóalapú Kexi importszűrőkhöz (táblák, űrlapok, lekérdezések...)
 Comment[it]=Tipo di servizio per qualsiasi filtro di importazione per Kexi basato su server (tabelle, moduli, interrogazioni...)
+Comment[ja]=サーバベースのKexiインポートフィルター(テーブル/フォーム/クエリ/...)のサービスタイプ
 Comment[nb]=Tjenestetype for alle typer tjenerbaserte importfiltre for kexi (tabeller, skjemaer, spørringer ...)
 Comment[nl]=servicetype voor elk type servergebaseerde Kexi-importfilters(table,forms,queries, ...)
 Comment[nn]=Tenestetype for alle slags tenarbaserte Kexi-importfilter (tabellar, skjema, spørjingar, ...)
