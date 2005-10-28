@@ -26,8 +26,7 @@
 /******************************************************************/
 
 WUDocument::WUDocument(QWidget *parentWidget, const char *widname, QObject* parent, const char* name, bool singleViewMode )
-    : KWDocument( parentWidget, widname, parent, name, singleViewMode ),
-      m_urlIntern()
+    : KWDocument( parentWidget, widname, parent, name, singleViewMode )
 {
 }
 
