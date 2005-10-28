@@ -7,6 +7,7 @@ COMPILE_BEFORE_kexi = kword kugar
 COMPILE_BEFORE_kplato = kdgantt kugar
 # For kword/mailmerge/kspread
 COMPILE_BEFORE_kword = kspread
+COMPILE_BEFORE_ascend = kword
 COMPILE_LAST = filters
 DISTCLEANFILES = inst-apps
 
