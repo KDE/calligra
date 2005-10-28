@@ -12,7 +12,7 @@
   <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
-        
+
 <book lang="&language;">
 <bookinfo>
 <title>The &kpresenter; User's Manual</title>
