@@ -83,7 +83,7 @@ public:
   static QValueList<KoDocumentEntry> query( const QString &  _constr = QString::null );
 
   /**
-   *  This function will query KDED to find all available filters.
+   *  This function will query the system to find all available filters.
    *
    *  @param _onlyDocEmb specifies if only KOffice Parts should be listed which are
    *                 embeddable into other koDocuments, or all (if false)
@@ -102,7 +102,7 @@ public:
 
 
   /**
-   *  This is only a convenience function.
+   *  This is a convenience function.
    *
    *  @return a document entry for the KOffice component that supports
    *          the requested mimetype and fits the user best.

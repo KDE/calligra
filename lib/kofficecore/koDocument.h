@@ -201,6 +201,13 @@ public:
     static QStringList readExtraNativeMimeTypes( KInstance *instance = 0 );
 
     /**
+     * With the help of @p instance or KApplication::instance() this
+     * method figures out which .desktop file matches this application,
+     * and returns the KService instance for it.
+     */
+    static KService::Ptr readNativeService( KInstance *instance = 0 );
+
+    /**
      * setup the XML reader, so that we don't have to duplicate the code.
      */
     static void setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing = false );
@@ -1043,7 +1050,6 @@ private slots:
     void slotStarted( KIO::Job* );
 
 private:
-    static KService::Ptr readNativeService( KInstance *instance );
     KService::Ptr nativeService();
     bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );

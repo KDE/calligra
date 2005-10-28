@@ -91,17 +91,8 @@ bool KoApplication::start()
     ResetStarting resetStarting; // reset m_starting to false when we're done
     Q_UNUSED( resetStarting );
 
-    // Find out about the mimetype which is natively supported
-    // by this application.
-    QCString nativeFormat = KoDocument::readNativeFormatMimeType();
-    if ( nativeFormat.isEmpty() )
-    {
-        kdError(30003) << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
-        return false;
-    }
-
-    // Find the *.desktop file corresponding to the mime type
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
+    // Find the *.desktop file corresponding to the kapp instance name
+    KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
     if ( entry.isEmpty() )
     {
         // Error message already shown by queryByMimeType
