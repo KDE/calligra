@@ -9,6 +9,7 @@ METASOURCES = AUTO
 
 ## The kdeinit loadable module and the writeup binary
 kdeinit_LTLIBRARIES = writeup.la
+lib_LTLIBRARIES =
 bin_PROGRAMS =
 writeup_la_SOURCES = main.cpp
 writeup_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

@@ -1,0 +1,9 @@
+Reimplement initDoc() to get rid of the template dialog,
+  try just calling initEmpty() from there.
+
+Provide your own rc file in WUView with setXMLFile()
+  In that file, define a big toolbar (see kdelibs/kdeui/kpartgui.dtd
+   for the attributes to use, like iconSize, position etc.)
+
+If you want to get rid of the mainwindow actions, this is going to be more tricky :)
+  Maybe just hide the menubar using mainWindow()->menuBar()->hide().
