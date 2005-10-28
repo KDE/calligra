@@ -53,13 +53,16 @@ void WUView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
     KWView::guiActivateEvent( ev );
 
-    //mainWindow()->menuBar()->hide();
+    mainWindow()->menuBar()->hide();
 
     KToggleAction* actionShowDocStruct = dynamic_cast<KToggleAction *> (actionCollection()->action("show_docstruct"));
     KToggleAction* actionShowRuler     = dynamic_cast<KToggleAction *> (actionCollection()->action("show_ruler"));
 
-    if (actionShowDocStruct) actionShowDocStruct->setEnabled(false);
-    if (actionShowRuler)     actionShowRuler    ->setEnabled(false);
+    if (actionShowDocStruct) actionShowDocStruct->setChecked(false);
+    showDocStructure();
+
+    if (actionShowRuler)     actionShowRuler    ->setChecked(false);
+    showRuler();
 }
 
 

@@ -5,10 +5,10 @@
   In that file, define a big toolbar (see kdelibs/kdeui/kpartgui.dtd
    for the attributes to use, like iconSize, position etc.)
 
-* Get rid of unnecessary stuff in the GUI				----
+* Get rid of unnecessary stuff in the GUI				DONE
    - Hide the menubar using mainWindow()->menuBar()->hide().		done
-   - Hide the document structure window.				--
-   - Hide the rulers							--
+   - Hide the document structure window.				done
+   - Hide the rulers							done
 
 * Transform the GUI							----
    - Use the new icons in toolbars					--
