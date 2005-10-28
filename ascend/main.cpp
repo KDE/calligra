@@ -20,7 +20,7 @@
 #include <koApplication.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
-#include "KWAboutData.h"
+#include "WUAboutData.h"
 
 static const KCmdLineOptions options[]=
 {
@@ -30,7 +30,7 @@ static const KCmdLineOptions options[]=
 
 extern "C" KWORD_EXPORT int kdemain( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, newKWordAboutData());
+    KCmdLineArgs::init( argc, argv, newWriteupAboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

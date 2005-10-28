@@ -35,5 +35,9 @@ WUDocument::~WUDocument()
 {
 }
 
+KoView* WUDocument::createViewInstance( QWidget* parent, const char* name )
+{
+    return new WUView( viewMode(), parent, name, this );
+}
 
 #include "WUDocument.moc"

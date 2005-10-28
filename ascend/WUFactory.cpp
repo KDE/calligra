@@ -62,7 +62,7 @@ KParts::Part* WUFactory::createPartObject( QWidget *parentWidget, const char *wi
 KAboutData* WUFactory::aboutData()
 {
     if(!s_aboutData) {
-        s_aboutData = newWUordAboutData();
+        s_aboutData = newWriteupAboutData();
     }
     return s_aboutData;
 }
