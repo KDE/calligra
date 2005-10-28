@@ -44,8 +44,13 @@ class QWidgetList;
 class KMainWindow;
 
 /** KPanelKbdSizer is an object that improves accessibility for motor impaired users
-*   who may not be able to easily use a mouse.  It allows users to size any widget derived
-*   from QSPlitter and QDockWindow within the application.
+*   who may not be able to easily use a mouse.  It adds two new capabilities using the keyboard:
+*
+*     - Resizing and positioning of panel widgets derived from QSplitter and QDockWindow.
+*     - Setting focus to any widget that accepts focus.
+*
+*   @section sizing_mode Sizing Mode
+*
 *   Users may press F8 or Shift-F8 (defaults) to enter sizing mode.  A sizing icon appears on the first
 *   QSplitter or QDockWindow handle found in the application (F8) or the last such handle (Shift+F8).
 *   (A "handle" is the divider bar that appears to the left, right, above, or below each panel
@@ -55,7 +60,7 @@ class KMainWindow;
 *
 *     - F8          Moves to the next sizing handle.  After the last handle, exits sizing mode.
 *     - Shift+F8    Moves to the previous sizing handle.  After the first handle, exits sizing mode.
-*     - ESC         Exits sizing mode.
+*     - Esc         Exits sizing mode.
 *     - LeftArrow   When on a vertical sizing handle, moves the handle to the left.
 *                   When on a horizontal sizing handle, moves the handle up.
 *     - RightArrow  When on a vertical sizing handle, moves the handle to the right.
@@ -87,13 +92,26 @@ class KMainWindow;
 *   When entering sizing mode, the position of the mouse cursor is saved and restored when
 *   exiting sizing mode.
 *
-*   The F8 and Shift+F8 keys are KShortcuts and therefore user may choose different keys in
+*   For a QSplitter or QDockWindow to be found, it must be in the kapp::allWidgets() list.
+*
+*   @section focus_setting Focus Setting
+*
+*   Users can press Alt-F8.  A small box appears in the upperleft corner of each visible widget
+*   on the screen that can accept focus.  Each box is assigned a single letter or digit.
+*   User can press the corresponding key to set focus to the widget.
+*
+*   At most 36 such shortcuts are possible.  If any application shortcuts are single letters
+*   or digits, those shortcuts are not in any of the boxes.
+*
+*   Clicking any mouse button exits Focus Setting mode.
+*
+*   @section notes Notes
+*
+*   The F8, Shift+F8, and Alt+F8 keys are KShortcuts and therefore user may choose different keys in
 *   the application's Configure Shortcuts dialog.
 *
 *   @note At present, these shortcuts may not be multi-key.  If user sets multi-key
 *   shortcuts, they will not work.
-*
-*   For a QSplitter or QDockWindow to be found, it must be in the kapp::allWidgets() list.
 *
 *   F8/Shift+F8 are the default shortcuts because these are the keys used for similar
 *   functionality in GNOME and Java SWT.
@@ -142,8 +160,26 @@ class KOFFICECORE_EXPORT KPanelKbdSizer : public QObject
         /** Hides the sizer icon. */
         void hideIcon();
 
+        /** Displays the access keys. */
+        void displayAccessKeys();
+        /** Handles an access keypress. */
+        bool handleAccessKey( const QKeyEvent* ev );
+
     private:
         KPanelKbdSizerPrivate* d;
+};
+
+/** Provides a way to sort QLabelss using a QValueList based on their screen position. */
+class KSortedLabel
+{
+public:
+    KSortedLabel(QLabel* l);
+    KSortedLabel();    // default constructor
+    bool operator<( KSortedLabel l);
+    QLabel* label() { return m_l; }
+
+private:
+    QLabel* m_l;
 };
 
 #endif              // __KPANELKBDSIZER_H__

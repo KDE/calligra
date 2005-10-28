@@ -25,6 +25,8 @@
 #include <qcursor.h>
 #include <qobjectlist.h>
 #include <qwidgetlist.h>
+#include <qlabel.h>
+#include <qtooltip.h>
 
 // KDE includes
 #include <klocale.h>
@@ -110,19 +112,29 @@ class KPanelKbdSizerPrivate
         KPanelKbdSizerPrivate() :
             fwdAction(0),
             revAction(0),
+            accessKeysAction(0),
             panel(0),
             handleNdx(0),
             icon(0),
-            stepSize(10) {};
+            stepSize(10),
+            accessKeyLabels(0) {};
 
         ~KPanelKbdSizerPrivate()
         {
             delete icon;
+            // TODO: This crashes, but should delete in the event that KMainWindow is not deleted.
+            if (accessKeyLabels) {
+                accessKeyLabels->setAutoDelete(false);
+                delete accessKeyLabels;
+            }
         }
 
         // Action that starts panel sizing (defaults to F8), forward and reverse;
         KAction* fwdAction;
         KAction* revAction;
+
+        // Action that starts access keys.
+        KAction* accessKeysAction;
 
         // The splitter or dockwindow currently being sized.  If 0, sizing is not in progress.
         QWidget* panel;
@@ -137,6 +149,12 @@ class KPanelKbdSizerPrivate
 
         // Sizing increment.
         int stepSize;
+
+        // List of the access key QLabels.  If not 0, access keys are onscreen.
+        QPtrList<QLabel>* accessKeyLabels;
+
+        // Pointer to the KMainWindow.
+        KMainWindow* mainWindow;
 };
 
 KPanelKbdSizer::KPanelKbdSizer(KMainWindow* parent, const char* name) :
@@ -144,13 +162,17 @@ KPanelKbdSizer::KPanelKbdSizer(KMainWindow* parent, const char* name) :
 {
     // kdDebug() << "KPanelKbdSizer::KPanelKbdSizer: running." << endl;
     d = new KPanelKbdSizerPrivate;
+    d->mainWindow = parent;
     d->fwdAction = new KAction(i18n("Resize Panel Forward"), KShortcut("F8"),
         0, 0, parent->actionCollection(), "resize_panel_forward");
     d->revAction = new KAction(i18n("Resize Panel Reverse"), KShortcut("Shift+F8"),
         0, 0, parent->actionCollection(), "resize_panel_reverse");
+    d->accessKeysAction = new KAction(i18n("Access Keys"), KShortcut("Alt+F8"),
+        0, 0, parent->actionCollection(), "access_keys");
     // "Disable" the shortcuts so we can see them in eventFilter.
     d->fwdAction->setEnabled(false);
     d->revAction->setEnabled(false);
+    d->accessKeysAction->setEnabled(false);
     d->icon = new KPanelKbdSizerIcon();
     kapp->installEventFilter(this);
 }
@@ -176,17 +198,20 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
         // don't fire anymore.
         KShortcut fwdSc = d->fwdAction->shortcut();
         KShortcut revSc = d->revAction->shortcut();
+        KShortcut accessKeysSc = d->accessKeysAction->shortcut();
         QKeyEvent* kev = dynamic_cast<QKeyEvent *>(e);
         KKey k = KKey(kev);
         KShortcut sc = KShortcut(k);
         // kdDebug() << "KPanelKbdSizer::eventFilter: Key press " << sc << endl;
-        if (sc == fwdSc) {
-            nextHandle();
-            return true;
-        }
-        if (sc == revSc) {
-            prevHandle();
-            return true;
+        if (!d->accessKeyLabels) {
+            if (sc == fwdSc) {
+                nextHandle();
+                return true;
+            }
+            if (sc == revSc) {
+                prevHandle();
+                return true;
+            }
         }
         if (d->panel) {
             if (k == KKey(Key_Escape))
@@ -195,11 +220,32 @@ bool KPanelKbdSizer::eventFilter( QObject *o, QEvent *e )
                 resizePanelFromKey(kev->key(), kev->state());
             // Eat the key.
             return true;
-        } else
-            return false;
+        }
+        if (sc == accessKeysSc && !d->panel) {
+            if (d->accessKeyLabels) {
+                delete d->accessKeyLabels;
+                d->accessKeyLabels = 0;
+            } else
+                displayAccessKeys();
+            return true;
+        }
+        if (d->accessKeyLabels) {
+            if (k == KKey(Key_Escape)) {
+                delete d->accessKeyLabels;
+                d->accessKeyLabels = 0;
+            } else
+                handleAccessKey(kev);
+            return true;
+        }
+        return false;
     }
     else if (d->icon->isActive && e->type() == QEvent::MouseButtonPress) {
         exitSizing();
+        return true;
+    }
+    else if (d->accessKeyLabels && e->type() == QEvent::MouseButtonPress) {
+        delete d->accessKeyLabels;
+        d->accessKeyLabels = 0;
         return true;
     }
 /*    else if (e->type() == QEvent::MouseMove && d->icon->isActive) {
@@ -480,41 +526,142 @@ void KPanelKbdSizer::resizePanelFromKey(int key, int state)
         case Qt::Key_Right:     dx = stepSize;      break;
         case Qt::Key_Up:        dy = -stepSize;     break;
         case Qt::Key_Down:      dy = stepSize;      break;
-        case Qt::Key_Prior:     dx = -5 * stepSize; break;
-        case Qt::Key_Next:      dx = 5 * stepSize;  break;
+        case Qt::Key_Prior:     dy = -5 * stepSize; break;
+        case Qt::Key_Next:      dy = 5 * stepSize;  break;
     }
     int adj = dx + dy;
     // kdDebug() << "KPanelKbdSizer::resizePanelFromKey: adj = " << adj << endl;
     if (adj != 0)
         resizePanel(dx, dy, state);
     else {
-        // TODO: This is purely experimental right now.  It is interesting that with this here,
-        // I can get focus to palette tabs, but can't do that using normal tab order.
-        if (key == Qt::Key_F6) {
-            QWidget* p = d->panel;
-            uint ndx = d->handleNdx;
-            exitSizing();
-            if (p->inherits("QDockWindow")) {
-                QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(p);
-                if (dockWindow->widget()) dockWindow->widget()->setFocus();
-            } else {
-                QObjectList *l = p->queryList( "QWidget" );
-                QObjectListIt it( *l ); // iterate over the buttons
-                QObject *obj;
-                ndx--;
-                while ( (obj = it.current()) != 0 && ndx > 0 ) { ndx--; ++it; }
-                if (obj != 0)
-                    dynamic_cast<QWidget*>(obj)->setFocus();
-            }
-        } else {
-            if (key == Qt::Key_Enter && d->panel->inherits("QDockWindow")) {
-                QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
-                if (dockWindow->area())
-                    dockWindow->undock();
-                else
-                    dockWindow->dock();
-            }
+        if (key == Qt::Key_Enter && d->panel->inherits("QDockWindow")) {
+            QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
+            if (dockWindow->area())
+                dockWindow->undock();
+            else
+                dockWindow->dock();
         }
     }
     showIcon();
+}
+
+void KPanelKbdSizer::displayAccessKeys()
+{
+    // Build a list of valid access keys that don't collide with shortcuts.
+    QString availableAccessKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+    QPtrList<KXMLGUIClient> allClients = d->mainWindow->factory()->clients();
+    QPtrListIterator<KXMLGUIClient> it( allClients );
+    KXMLGUIClient *client;
+    while( (client=it.current()) !=0 )
+    {
+        ++it;
+        KActionPtrList actions = client->actionCollection()->actions();
+        for (int j = 0; j < (int)actions.count(); j++) {
+            KAction* action = actions[j];
+            KShortcut sc = action->shortcut();
+            for (int i = 0; i < (int)sc.count(); i++) {
+                KKeySequence seq = sc.seq(i);
+                if (seq.count() == 1) {
+                    QString s = seq.toString();
+                    if (availableAccessKeys.contains(s))
+                        availableAccessKeys.remove(s);
+                }
+            }
+        }
+    }
+    // Find all visible, focusable widgets and create a QLabel for each.  Don't exceed
+    // available list of access keys.
+    QWidgetList* allWidgets = kapp->allWidgets();
+    QWidget* widget = allWidgets->first();
+    int accessCount = 0;
+    int maxAccessCount = availableAccessKeys.length();
+    int overlap = 20;
+    QPoint prevGlobalPos = QPoint(-overlap, -overlap);
+    while (widget && (accessCount < maxAccessCount)) {
+        if (widget->isVisible() && widget->isFocusEnabled() ) {
+            QRect r = widget->rect();
+            QPoint p(r.x(), r.y());
+            // Don't display an access key if within overlap pixels of previous one.
+            QPoint globalPos = widget->mapToGlobal(p);
+            QPoint diffPos = globalPos - prevGlobalPos;
+            if (diffPos.manhattanLength() > overlap) {
+                accessCount++;
+                QLabel* lab=new QLabel(widget, "", widget, 0, Qt::WDestructiveClose);
+                lab->setPalette(QToolTip::palette());
+                lab->setLineWidth(2);
+                lab->setFrameStyle(QFrame::Box | QFrame::Plain);
+                lab->setMargin(3);
+                lab->adjustSize();
+                lab->move(p);
+                if (!d->accessKeyLabels) {
+                    d->accessKeyLabels = new QPtrList<QLabel>;
+                    d->accessKeyLabels->setAutoDelete(true);
+                }
+                d->accessKeyLabels->append(lab);
+                prevGlobalPos = globalPos;
+            }
+        }
+        widget = allWidgets->next();
+    }
+    if (accessCount > 0) {
+        // Sort the access keys from left to right and down the screen.
+        QValueList<KSortedLabel> sortedLabels;
+        for (int i = 0; i < accessCount; i++)
+            sortedLabels.append(KSortedLabel(d->accessKeyLabels->at(i)));
+        qHeapSort( sortedLabels );
+        // Assign access key labels.
+        for (int i = 0; i < accessCount; i++) {
+            QLabel* lab = sortedLabels[i].label();
+            QChar s = availableAccessKeys[i];
+            lab->setText(s);
+            lab->adjustSize();
+            lab->show();
+        }
+    }
+}
+
+// Handling of the HTML accesskey attribute.
+bool KPanelKbdSizer::handleAccessKey( const QKeyEvent* ev )
+{
+// Qt interprets the keyevent also with the modifiers, and ev->text() matches that,
+// but this code must act as if the modifiers weren't pressed
+    if (!d->accessKeyLabels) return false;
+    QChar c;
+    if( ev->key() >= Key_A && ev->key() <= Key_Z )
+        c = 'A' + ev->key() - Key_A;
+    else if( ev->key() >= Key_0 && ev->key() <= Key_9 )
+        c = '0' + ev->key() - Key_0;
+    else {
+        // TODO fake XKeyEvent and XLookupString ?
+        // This below seems to work e.g. for eacute though.
+        if( ev->text().length() == 1 )
+            c = ev->text()[ 0 ];
+    }
+    if( c.isNull())
+        return false;
+
+    QLabel* lab = d->accessKeyLabels->first();
+    while (lab) {
+        if (lab->text() == c) {
+            lab->buddy()->setFocus();
+            delete d->accessKeyLabels;
+            d->accessKeyLabels = 0;
+            return true;
+        }
+        lab = d->accessKeyLabels->next();
+    }
+    return false;
+}
+
+KSortedLabel::KSortedLabel(QLabel* l) :
+    m_l(l) { }
+
+KSortedLabel::KSortedLabel() :
+    m_l(0) { }
+
+bool KSortedLabel::operator<( KSortedLabel l )
+{
+    QPoint p1 = m_l->mapToGlobal(m_l->pos());
+    QPoint p2 = l.label()->mapToGlobal(l.label()->pos());
+    return (p1.y() < p2.y() || (p1.y() == p2.y() && p1.x() < p2.x()));
 }
