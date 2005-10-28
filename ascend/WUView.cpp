@@ -26,6 +26,7 @@
 #include <koMainWindow.h>
 
 #include <kmenubar.h>
+#include <kparts/event.h>
 
 
 WUView::WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
@@ -36,14 +37,31 @@ WUView::WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
         setXMLFile( "writeup_readonly.rc" );
     else
         setXMLFile( "writeup.rc" );
-
-    mainWindow()->menuBar()->hide();
 }
 
 
 WUView::~WUView()
 {
 }
+
+
+// Reimplemented from KWView
+
+void WUView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    if ( ev->activated() )
+    {
+        initGui();
+        if (kWordDocument()->isEmbedded() )
+            setZoom( kWordDocument()->zoom(), true );
+
+	//mainWindow()->menuBar()->hide();
+    }
+    KoView::guiActivateEvent( ev );
+}
+
+
+
 
 
 #include "WUView.moc"

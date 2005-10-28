@@ -35,6 +35,7 @@ public:
     WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument *_doc );
     virtual ~WUView();
 
+   virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
 public slots:
 
