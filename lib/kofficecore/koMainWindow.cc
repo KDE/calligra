@@ -1216,18 +1216,7 @@ void KoMainWindow::slotFilePrintPreview()
 
 void KoMainWindow::slotConfigureKeys()
 {
-    KoView *view = rootView();
-    // We _need_ a view. We use the view's xmlFile() (e.g. kword.rc)
-    Q_ASSERT( view );
-    if ( !view )
-        return;
-
-    KKeyDialog dlg( this );
-    dlg.insert( actionCollection() );
-    dlg.insert( view->actionCollection() );
-    if ( rootDocument() )
-        dlg.insert( rootDocument()->actionCollection() );
-    dlg.configure();
+    guiFactory()->configureShortcuts();
 }
 
 void KoMainWindow::slotConfigureToolbars()
