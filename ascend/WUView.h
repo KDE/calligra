@@ -20,11 +20,7 @@
 #ifndef wuview_h
 #define wuview_h
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <WUView.h>
+#include <KWView.h>
 
 
 /******************************************************************/

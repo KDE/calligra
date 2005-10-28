@@ -20,13 +20,7 @@
 #ifndef wudoc_h
 #define wudoc_h
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
 #include "WUView.h"
-#include "defs.h" // for MouseMeaning
 
 #include <KWDocument.h>
 

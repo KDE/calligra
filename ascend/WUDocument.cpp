@@ -25,30 +25,6 @@
 /* Class: WUDocument                                              */
 /******************************************************************/
 
-void WUDocument::clearUndoRedoInfos()
-{
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>( fit.current() );
-        if ( fs )
-            fs->clearUndoRedoInfo();
-    }
-}
-
-/**
- * Temporary storage for the initial edition info
- * (activeFrameset, cursorParagraph and cursorIndex attributes of the XML)
- */
-class WUDocument::InitialEditing {
-public:
-    QString m_initialFrameSet;
-    int m_initialCursorParag;
-    int m_initialCursorIndex;
-};
-
-const int WUDocument::CURRENT_SYNTAX_VERSION = 3;
-
 WUDocument::WUDocument(QWidget *parentWidget, const char *widname, QObject* parent, const char* name, bool singleViewMode )
     : KWDocument( parentWidget, widname, parent, name, singleViewMode ),
       m_urlIntern()
