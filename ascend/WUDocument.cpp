@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 
 #include "WUDocument.h"
@@ -24,6 +24,7 @@
 /******************************************************************/
 /* Class: WUDocument                                              */
 /******************************************************************/
+
 
 WUDocument::WUDocument(QWidget *parentWidget, const char *widname, QObject* parent, const char* name, bool singleViewMode )
     : KWDocument( parentWidget, widname, parent, name, singleViewMode )
@@ -35,9 +36,20 @@ WUDocument::~WUDocument()
 {
 }
 
+
+bool WUDocument::initDoc(InitDocFlags /*flags*/, QWidget* /*parentWidget*/)
+{
+    initEmpty();
+
+    return true;
+}
+
+
 KoView* WUDocument::createViewInstance( QWidget* parent, const char* name )
 {
     return new WUView( viewMode(), parent, name, this );
 }
+
+
 
 #include "WUDocument.moc"
