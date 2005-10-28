@@ -25,7 +25,7 @@
 
 #include <kiconloader.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkwordpart, WUFactory )
+K_EXPORT_COMPONENT_FACTORY( libwriteup_part, WUFactory )
 
 
 KInstance* WUFactory::s_instance = 0;
