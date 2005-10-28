@@ -981,7 +981,7 @@ void KWCanvas::applyGrid( KoPoint &p )
   // This is a problem when calling applyGrid twice, we get 1 less than the time before.
   p.setX( static_cast<int>( p.x() / m_doc->gridX() + 1e-10 ) * m_doc->gridX() );
   p.setY( static_cast<int>( p.y() / m_doc->gridY() + 1e-10 ) * m_doc->gridY() );
-  
+
   //FIXME It doesn't work in preview mode
 }
 
@@ -993,34 +993,34 @@ void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
   p.save();
   p.setPen( _pen );
 
-//   Enable this when applyGrid works in preview mode. 
+//   Enable this when applyGrid works in preview mode.
 //   if ( m_viewMode->pagesPerRow() > 0 ) //preview mode
 //   {
 //     double const x = dynamic_cast<KWViewModePreview*>(m_viewMode)->leftSpacing();
 //     double const y = dynamic_cast<KWViewModePreview*>(m_viewMode)->topSpacing();
-// 
+//
 //     int const paperWidth = m_doc->paperWidth();
 //     int const paperHeight = m_doc->paperHeight();
-// 
+//
 //     int zoomedX,  zoomedY;
 //     double offsetX = m_doc->gridX();
 //     double offsetY = m_doc->gridY();
-// 
+//
 //     for ( int page = 0; page < m_doc->numPages(); page++ )
 //     {
 //       int row = page / m_viewMode->pagesPerRow();
 //       int col = page % m_viewMode->pagesPerRow();
-// 
+//
 //       QRect pageRect( x + col * ( paperWidth + 10 ),
 //                       y + row * ( paperHeight + 10 ),
 //                       paperWidth, paperHeight );
-// 
+//
 //       for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i )+pageRect.left() ) < pageRect.right() && offsetX < rect.right(); i += offsetX )
 //         for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j )+pageRect.top() ) < pageRect.bottom() && offsetY < rect.bottom(); j += offsetY )
 //           if( rect.contains( zoomedX, zoomedY ) )
 //             p.drawPoint( zoomedX, zoomedY );
 //     }
-// 
+//
 //     p.restore();
 //     return;
 //   }
@@ -2668,7 +2668,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             // Pass event to auto-hide-cursor code (see kcursor.h for details)
             KCursor::autoHideEventFilter( o, e );
         }
-        
+
         switch ( e->type() ) {
             case QEvent::FocusIn:
                 //  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
@@ -3000,9 +3000,11 @@ void KWCanvas::resetStatusBarText()
     }
 }
 
+
+// ##### THIS METHOD IS WRONG - and one should use KWTextFrameSet::cursorPos instead.
 /* Returns the caret position in unzoomed document coordinates, even if the caret is currently
    hidden.  However, the current frame must be editable, i.e., a caret is possible. */
-QPoint KWCanvas::caretPos(int lineHeight)
+QPoint KWCanvas::caretPos(int& lineHeight)
 {
     lineHeight = 0;
     // if (!m_currentFrameSetEdit)
@@ -3016,8 +3018,6 @@ QPoint KWCanvas::caretPos(int lineHeight)
     // if (!cursor) kdDebug() << "KWCanvas::caretPos: cursor not defined" << endl;
     if (!cursor) return QPoint();
     KoTextParag* parag = cursor->parag();
-    // if (!parag) kdDebug() << "KWCanvas::caretPos: parag not defined" << endl;
-    if (!parag) return QPoint();
     KWTextFrameSet* textFrameset = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
     // if (!textFrameset) kdDebug() << "KWCanvas::caretPos: textFrameset not defined" << endl;
     if (!textFrameset) return QPoint();

@@ -223,9 +223,9 @@ public:
 
     bool isFrameResized() { return m_frameResized; }
 
-    /** Returns the position of the caret (pixels).  Null if no caret in this canvas. 
+    /** Returns the position of the caret (pixels).  Null if no caret in this canvas.
         Also returns the lineheight. */
-    QPoint caretPos(int lineHeight);
+    QPoint caretPos(int& lineHeight);
 
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
