@@ -1,0 +1,23 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KOffice Simplified Word Processing Component
+Name[sv]=Koffice förenklad ordbehandlingskomponent
+Name[xx]=xxKOffice Simplified Word Processing Componentxx
+X-KDE-Library=libwriteuppart
+X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
+X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
+X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template
+MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+GenericName=Text Documents
+GenericName[cy]=Dogfennau Testun
+GenericName[es]=Documentos de texto
+GenericName[fr]=Documents texte
+GenericName[ga]=Cáipéisí Téacs
+GenericName[ja]=テキストドキュメント
+GenericName[pt]=Documentos de Texto
+GenericName[pt_BR]=Documentos de Texto
+GenericName[sv]=Textdokument
+GenericName[xx]=xxText Documentsxx
+Icon=writeup
