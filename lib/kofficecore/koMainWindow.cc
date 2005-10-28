@@ -450,8 +450,7 @@ void KoMainWindow::reloadRecentFileList()
 
 KoDocument* KoMainWindow::createDoc() const
 {
-    const QCString mimetype = KoDocument::readNativeFormatMimeType();
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
+    KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
     return entry.createDoc();
 }
 
