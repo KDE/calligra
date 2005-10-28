@@ -51,6 +51,9 @@ WUView::~WUView()
 
 void WUView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
+    if ( !ev->activated() )
+	return;
+
     KWView::guiActivateEvent( ev );
 
     mainWindow()->menuBar()->hide();
