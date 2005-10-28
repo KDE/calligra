@@ -25,6 +25,8 @@
 #include <koView.h>
 #include <koMainWindow.h>
 
+#include <kaction.h>
+#include <kactioncollection.h>
 #include <kmenubar.h>
 #include <kparts/event.h>
 
@@ -49,15 +51,15 @@ WUView::~WUView()
 
 void WUView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    if ( ev->activated() )
-    {
-        initGui();
-        if (kWordDocument()->isEmbedded() )
-            setZoom( kWordDocument()->zoom(), true );
+    KWView::guiActivateEvent( ev );
 
-	//mainWindow()->menuBar()->hide();
-    }
-    KoView::guiActivateEvent( ev );
+    //mainWindow()->menuBar()->hide();
+
+    KToggleAction* actionShowDocStruct = dynamic_cast<KToggleAction *> (actionCollection()->action("show_docstruct"));
+    KToggleAction* actionShowRuler     = dynamic_cast<KToggleAction *> (actionCollection()->action("show_ruler"));
+
+    if (actionShowDocStruct) actionShowDocStruct->setEnabled(false);
+    if (actionShowRuler)     actionShowRuler    ->setEnabled(false);
 }
 
 
