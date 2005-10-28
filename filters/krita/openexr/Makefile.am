@@ -6,8 +6,8 @@ AM_CPPFLAGS= \
 	-I$(top_srcdir)/krita/core/tiles \
 	-I$(top_srcdir)/krita/kritacolor \
 	-I$(top_srcdir)/krita/ui \
-	-I$(top_srcdir)/krita/modules/rgb_f32 \
-	-I$(top_srcdir)/krita/modules/rgb_f16half \
+	-I$(top_srcdir)/krita/colorspaces/rgb_f32 \
+	-I$(top_srcdir)/krita/colorspaces/rgb_f16half \
         $(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \
         $(OPENEXR_CFLAGS) \
