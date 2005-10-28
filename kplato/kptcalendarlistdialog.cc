@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -160,6 +160,11 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
     }    
     dia->setBaseCalendars();
     
+    QListViewItem *f = dia->calendarList->firstChild();
+    if (f) {
+        f->setSelected(true);
+        dia->slotSelectionChanged(f);
+    }
     //kdDebug()<<"size="<<size().width()<<"x"<<size().height()<<" hint="<<sizeHint().width()<<"x"<<sizeHint().height()<<endl;
     resize(QSize(725, 388).expandedTo(minimumSizeHint()));
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -113,7 +113,7 @@ void KPTCalendarListDialogBase::languageChange()
     calendarList->header()->setLabel( 0, tr2i18n( "Calendar name" ) );
     bDelete->setText( tr2i18n( "Remove" ) );
     bAdd->setText( tr2i18n( "Add" ) );
-    textLabel2->setText( tr2i18n( "Base calendar:" ) );
+    textLabel2->setText( tr2i18n( "Parent calendar:" ) );
 }
 
 } //Kplato namespace

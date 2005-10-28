@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003, 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,8 +23,9 @@
 #include "kptmap.h"
 #include "kptduration.h"
 
-#include <qptrlist.h>
+#include <qdatetime.h>
 #include <qpair.h>
+#include <qptrlist.h>
 
 class QDomElement;
 class QDateTime;
@@ -59,9 +60,6 @@ public:
         m_workingIntervals = intervals;
     }
     
-    bool hasIntervalBefore(const QTime &time) const;
-    bool hasIntervalAfter(const QTime &time) const;
-
     QTime startOfDay() const;
     QTime endOfDay() const;
     
@@ -75,22 +73,28 @@ public:
 
     /**
      * Returns the amount of 'worktime' that can be done on
-     * this day between the times @param start and @param end.
+     * this day between the times start and end.
      */
     KPTDuration effort(const QTime &start, const QTime &end);
 
     /**
-     * Returns the actual 'work interval' for the interval @param start to @param end.
+     * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
     QPair<QTime, QTime> interval(const QTime &start, const QTime &end) const;
+    
+    bool hasInterval() const;
+
     /**
      * Returns true if at least a part of a 'work interval' exists 
-     * for the interval @param start to @param end.
+     * for the interval start to end.
      */
     bool hasInterval(const QTime &start, const QTime &end) const;
     
+    bool hasIntervalBefore(const QTime &time) const;
+    bool hasIntervalAfter(const QTime &time) const;
+
     KPTDuration duration() const;
     
     const KPTCalendarDay &copy(const KPTCalendarDay &day);
@@ -123,11 +127,13 @@ public:
      * day is 0..6.
      */
     KPTCalendarDay *weekday(int day) const;
+    KPTCalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
 
     KPTIntMap map();
     
     void setWeekday(KPTIntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
 
+    int state(const QDate &date) const;
     int state(int weekday) const;
     void setState(int weekday, int state);
     
@@ -141,34 +147,34 @@ public:
     KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
     
     /**
-     * Returns the actual 'work interval' on the weekday defined by @param date
-     * for the interval @param start to @param end.
+     * Returns the actual 'work interval' on the weekday defined by date
+     * for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
     QPair<QTime, QTime> interval(const QDate date, const QTime &start, const QTime &end) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
-     * on the weekday defined by @param date
-     * for the interval @param start to @param end.
+     * on the weekday defined by date for the interval start to end.
      */
     bool hasInterval(const QDate date, const QTime &start, const QTime &end) const;
-    
+    bool hasIntervalAfter(const QDate date, const QTime &time) const;
+    bool hasIntervalBefore(const QDate date, const QTime &time) const;
+
     bool hasInterval() const;
 
     KPTDuration duration() const;
     KPTDuration duration(int weekday) const;
 
-    /// Returns the time when the @param weekday starts
+    /// Returns the time when the  weekday starts
     QTime startOfDay(int weekday) const;
-    /// Returns the time when the @param weekday ends
+    /// Returns the time when the  weekday ends
     QTime endOfDay(int weekday) const;
 
     const KPTCalendarWeekdays &copy(const KPTCalendarWeekdays &weekdays);
 
 private:
     QPtrList<KPTCalendarDay> m_weekdays;
-
     double m_workHours;
 
 #ifndef NDEBUG
@@ -213,6 +219,31 @@ public:
 };
 
 class KPTStandardWorktime;
+/**
+ * KPTCalendar defines the working and nonworking days and hours.
+ * A day can have the three states None (Undefined), NonWorking, or Working.
+ * A calendar can have a parent calendar that defines the days that are 
+ * undefined in this calendar. If a day is still undefined, it defaults
+ * to Nonworking.
+ * A Working day has one or more work intervals to define the work hours.
+ *
+ * The definition can consist of three parts: Weekdays, Week, and Day.
+ * Day has highest priority, Weekdays lowest.
+ * Week can only have states None and Nonworking. (Should maybe change this)
+ * The total priorities including parent(s), are:
+ *  1. Own Day
+ *  2. Own Weeks
+ *  3. Parent Day
+ *  4. Parent Weeks
+ *  5. Own Weekdays
+ *  6. Parent weekdays
+ * 
+ * A typical calendar hierarchy could include calendars on three levels:
+ *  1. Definition of normal weekdays and national holidays/vacation days.
+ *  2. Definition of the company's special workdays/-time and vacation days.
+ *  3. Definitions for groups of resources/individual resources.
+ *
+ */
 class KPTCalendar {
 
 public:
@@ -241,10 +272,30 @@ public:
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
+    /**
+     * Find the definition for the day date.
+     * If skipNone=true the day is NOT returned if it has state None.
+     */
     KPTCalendarDay *findDay(const QDate &date, bool skipNone=false) const;
     bool addDay(KPTCalendarDay *day) { return m_days.insert(0, day); }
     bool removeDay(KPTCalendarDay *day) { return m_days.removeRef(day); }
     const QPtrList<KPTCalendarDay> &days() const { return m_days; }
+    
+    /**
+     * Returns the state of definition for the day and week with date in it.
+     * Also checks parent.
+     */
+    int parentDayWeekState(const QDate &date) const;
+    /**
+     * Returns the state of definition for the date's weekday.
+     * Also checks parent.
+     */
+    int parentWeekdayState(const QDate &date) const;
+    /**
+     * Returns the state of definition for the week with date in it.
+     * State can be None or Nonworking.
+     */
+    int weekState(const QDate &date) const;
     
     void setWeek(int week, int year, int type) { m_weeks->setWeek(week, year, type); }
     void setWeek(KPTWeekMap::iterator it, int state){ m_weeks->setWeek(it, state); }
@@ -263,31 +314,39 @@ public:
 
     /**
      * Returns the amount of 'worktime' that can be done on
-     * the date @param date between the times @param start and @param end.
+     * the date  date between the times  start and  end.
      */
-    KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
+    KPTDuration effort(const QDate &date, const QTime &start, const QTime &end) const;
     /**
      * Returns the amount of 'worktime' that can be done in the
-     * interval from @param start with the duration @param duration
+     * interval from start with the duration  duration
      */
-    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration);
+    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
 
     /**
-     * Returns the actual 'work interval' for the interval 
-     * starting at @param start with duration @param duration.
-     * If no 'work interval' exists, returns the interval start, start+duration.
+     * Returns the first 'work interval' for the interval 
+     * starting at start with duration duration.
+     * If no 'work interval' exists, returns the interval (start, end).
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
     QPair<KPTDateTime, KPTDateTime> interval(const KPTDateTime &start, const KPTDateTime &end) const;
     
+    /// Checks if a work interval exists before time
     bool hasIntervalBefore(const KPTDateTime &time) const;
+    /// Checks if a work interval exists after time
     bool hasIntervalAfter(const KPTDateTime &time) const;
 
     /**
-     * Returns true if at lesst a part of a 'work interval' exists 
-     * for the interval starting at @param start with duration @param duration.
+     * Returns true if at least a part of a 'work interval' exists 
+     * for the interval starting at start and ending at end.
      */
     bool hasInterval(const KPTDateTime &start, const KPTDateTime &end) const;
+        
+    /**
+     * Returns true if at least a part of a 'work interval' exists 
+     * for the interval on date, starting at start and ending at end.
+     */
+    bool hasInterval(const QDate &date, const QTime &start, const QTime &end) const;
         
     KPTDateTime availableAfter(const KPTDateTime &time);
     KPTDateTime availableBefore(const KPTDateTime &time);
@@ -298,6 +357,13 @@ public:
     bool removeId(const QString &id);
     void insertId(const QString &id);
     
+    KPTDuration parentDayWeekEffort(const QDate &date, const QTime &start, const QTime &end) const;
+    KPTDuration parentWeekdayEffort(const QDate &date, const QTime &start, const QTime &end) const;
+    int parentDayWeekHasInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    bool parentWeekdayHasInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    QPair<QTime, QTime> parentDayWeekInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    QPair<QTime, QTime> parentWeekdayInterval(const QDate &date, const QTime &start, const QTime &end) const;
+
 protected:
     const KPTCalendar &copy(KPTCalendar &calendar);
     void init();
@@ -342,7 +408,7 @@ public:
     /// Set the work time of a normal week
     void setWeek();
     
-    /// The work time of a @param weekday
+    /// The work time of a  weekday
     KPTDuration durationWeekday(int weekday) const;
     
     /// The work time of a normal day
@@ -350,10 +416,10 @@ public:
     /// The number of work time in a normal day
     void setDay();
     
-    /// Returns the time when the @param weekday starts
+    /// Returns the time when the  weekday starts
     QTime startOfDay(int weekday) const;
     QTime startOfDay(const QDate &date) const;
-    /// Returns the time when the @param weekday ends
+    /// Returns the time when the  weekday ends
     QTime endOfDay(int weekday) const;
     QTime endOfDay(const QDate &date) const;
     

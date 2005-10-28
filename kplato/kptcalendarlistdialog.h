@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,10 +49,12 @@ public:
 
     QPtrList<CalendarListViewItem> &deletedItems();
 
+public slots:    
+    void slotSelectionChanged(QListViewItem *listItem);
+
 private slots:
     void slotCheckAllFieldsFilled();
     void slotBaseCalendarActivated(int id);
-    void slotSelectionChanged(QListViewItem *listItem);
     void slotCalendarModified();
     void slotDeleteClicked();
     void slotAddClicked();
