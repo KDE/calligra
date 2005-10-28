@@ -4,9 +4,15 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 	$(KOTEXT_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = libkwordpart.la
+lib_LTLIBRARIES = libkwmailmerge_interface.la libkwordprivate.la
 
 ## The part
-libkwordpart_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormulaFrameSet.cpp \
+libkwordpart_la_SOURCES = KWFactory.cpp
+libkwordpart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkwordpart_la_LIBADD = libkwordprivate.la
+
+## A lib with all the code
+libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormulaFrameSet.cpp \
 		KWFactory.cpp KWDocument.cpp \
 		KWView.cpp  \
 		KWViewMode.cpp \
@@ -45,12 +51,10 @@ libkwordpart_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWFormula
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
 		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp \
 		KWFrameViewManager.cpp
+libkwordprivate_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
+libkwordprivate_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformulalib.la ./libkwmailmerge_interface.la 
 
-libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformulalib.la ./libkwmailmerge_interface.la 
 METASOURCES = AUTO
-
-lib_LTLIBRARIES = libkwmailmerge_interface.la
 
 ## The mailmerge interface library
 libkwmailmerge_interface_la_SOURCES = KWMailMergeDataSource.cpp KWMailMergeDataSource.skel
