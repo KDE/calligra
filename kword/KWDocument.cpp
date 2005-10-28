@@ -166,7 +166,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_textImageRequests.setAutoDelete(false);
     m_bookmarkList.setAutoDelete( true );
 
-    m_styleColl=new KoStyleCollection();
+    m_styleColl = new KoStyleCollection();
     m_frameStyleColl = new KWFrameStyleCollection();
     m_tableStyleColl = new KWTableStyleCollection();
     m_tableTemplateColl = new KWTableTemplateCollection();
@@ -314,6 +314,7 @@ KWDocument::~KWDocument()
     delete m_viewMode;
     delete m_bufPixmap;
     delete m_pictureCollection;
+    delete m_pageManager;
 }
 
 void KWDocument::initConfig()
