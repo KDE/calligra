@@ -20,8 +20,8 @@ libkrita_openexr_export_la_LIBADD = \
 	$(KOFFICE_LIBS) \
 	$(OPENEXR_LIBS) \
 	$(top_builddir)/krita/libkritacommon.la \
-	$(top_builddir)/krita/modules/rgb_f32/libkrita_rgb_f32.la \
-	$(top_builddir)/krita/modules/rgb_f16half/libkrita_rgb_f16half.la
+	$(top_builddir)/krita/colorspaces/rgb_f32/libkrita_rgb_f32.la \
+	$(top_builddir)/krita/colorspaces/rgb_f16half/libkrita_rgb_f16half.la
 
 
 libkrita_openexr_import_la_LDFLAGS = $(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries) -module -avoid-version -no-undefined
@@ -29,8 +29,8 @@ libkrita_openexr_import_la_LIBADD = \
 	$(KOFFICE_LIBS) \
 	$(OPENEXR_LIBS) \
 	$(top_builddir)/krita/libkritacommon.la \
-	$(top_builddir)/krita/modules/rgb_f32/libkrita_rgb_f32.la \
-	$(top_builddir)/krita/modules/rgb_f16half/libkrita_rgb_f16half.la
+	$(top_builddir)/krita/colorspaces/rgb_f32/libkrita_rgb_f32.la \
+	$(top_builddir)/krita/colorspaces/rgb_f16half/libkrita_rgb_f16half.la
 
 
 service_DATA = krita_openexr_import.desktop krita_openexr_export.desktop
