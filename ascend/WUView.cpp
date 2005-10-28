@@ -22,6 +22,11 @@
 #include "WUDocument.h"
 #include "WUView.h"
 
+#include <koView.h>
+#include <koMainWindow.h>
+
+#include <kmenubar.h>
+
 
 WUView::WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KWView( viewMode, _parent, _name, _doc )
@@ -31,6 +36,8 @@ WUView::WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
         setXMLFile( "writeup_readonly.rc" );
     else
         setXMLFile( "writeup.rc" );
+
+    mainWindow()->menuBar()->hide();
 }
 
 
