@@ -18,12 +18,19 @@
 */
 
 
+#include "WUFactory.h"
+#include "WUDocument.h"
 #include "WUView.h"
 
 
 WUView::WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KWView( viewMode, _parent, _name, _doc )
 {
+    setInstance( WUFactory::instance() );
+    if ( !kWordDocument()->isReadWrite() )
+        setXMLFile( "writeup_readonly.rc" );
+    else
+        setXMLFile( "writeup.rc" );
 }
 
 
