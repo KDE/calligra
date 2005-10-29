@@ -758,7 +758,6 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
                             bool isFloating,
                             KWTableTemplate *tt, int format )
 {
-    kdDebug() << "KWCanvas::createTable: isFloating = " << isFloating << endl;
     // Remember for next time in any case
     m_table.rows = rows;
     m_table.cols = cols;
@@ -785,7 +784,6 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
 
 bool KWCanvas::insertInlineTable()
 {
-    kdDebug() << "KWCanvas::insertInLineTable: running" << endl;
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if(edit)
     {
@@ -2354,9 +2352,7 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
 
 void KWCanvas::terminateCurrentEdit()
 {
-    int lineHeight;
-    m_lastCaretPos = caretPos(lineHeight);
-    // kdDebug() << "KWCanvas::terminateCurrentEdit: m_lastCaretPos = " << m_lastCaretPos << endl;
+    m_lastCaretPos = caretPos();
     m_currentFrameSetEdit->terminate();
     delete m_currentFrameSetEdit;
     m_currentFrameSetEdit = 0L;
@@ -2773,24 +2769,27 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     && (m_mouseMode != MM_EDIT || m_frameInline )) {
                     // When inserting an inline or non-line frame,
                     // simulate mouse press and release at caret position.
-                    // kdDebug() << "m_lastCaretPos = " << m_lastCaretPos << endl;
-                    if (m_frameInline) {
-                        int lineHeight;
-                        m_lastCaretPos = caretPos(lineHeight);
-                        if (m_lastCaretPos.isNull()) return TRUE;
-                        m_lastCaretPos.setY(m_lastCaretPos.y() + lineHeight);
-                    } else
-                        if (m_lastCaretPos.isNull()) return TRUE;
+                    // In the case of a regular frame, the caret position was saved when
+                    // they left edit mode.  In the case of an inline frame,
+                    // get current caret position, since user can type and move caret
+                    // around before they click or hit Enter.
+                    if (m_frameInline)
+                        m_lastCaretPos = caretPos();
+                    if (m_lastCaretPos.isNull()) return TRUE;
                     int page = m_doc->pageManager()->pageNumber(m_lastCaretPos);
-                    // kdDebug() << "page = " << page << endl;
                     if(page == -1) return TRUE;
                     QPoint normalPoint = m_doc->zoomPoint(m_lastCaretPos);
-                    // kdDebug() << "normalPoint = " << normalPoint << endl;
-                    QPoint gP = mapToGlobal(normalPoint);
-                    QMouseEvent mevPress(QEvent::MouseButtonPress, normalPoint,
+                    // Coordinate is at the very top of the caret.  In the case of an
+                    // inline frame, adjust slightly down and to the right in order
+                    // to avoid "clicking" the frame border.
+                    if (m_frameInline)
+                        normalPoint += QPoint(2,2);
+                    QPoint vP = m_viewMode->normalToView(normalPoint);
+                    QPoint gP = mapToGlobal(vP);
+                    QMouseEvent mevPress(QEvent::MouseButtonPress, vP,
                         gP, Qt::LeftButton, 0);
                     contentsMousePressEvent(&mevPress);
-                    QMouseEvent mevRelease(QEvent::MouseButtonRelease, normalPoint,
+                    QMouseEvent mevRelease(QEvent::MouseButtonRelease, vP,
                         gP, Qt::LeftButton, 0);
                     contentsMouseReleaseEvent(&mevRelease);
                 }
@@ -3001,45 +3000,28 @@ void KWCanvas::resetStatusBarText()
 }
 
 
-// ##### THIS METHOD IS WRONG - and one should use KWTextFrameSet::cursorPos instead.
-/* Returns the caret position in unzoomed document coordinates, even if the caret is currently
-   hidden.  However, the current frame must be editable, i.e., a caret is possible. */
-QPoint KWCanvas::caretPos(int& lineHeight)
+/* Returns the caret position in document coordinates.
+   The current frame must be editable, i.e., a caret is possible. */
+KoPoint KWCanvas::caretPos()
 {
-    lineHeight = 0;
-    // if (!m_currentFrameSetEdit)
-    //     kdDebug() << "KWCanvas::caretPos: m_currentFrameSetEdit undefined " << endl;
-    if (!m_currentFrameSetEdit) return QPoint();
+    if (!m_currentFrameSetEdit) return KoPoint();
     KWTextFrameSetEdit* textEdit =
         dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
-    // if (!textEdit) kdDebug() << "KWCanvas::caretPos: textEdit not defined" << endl;
-    if (!textEdit) return QPoint();
+    if (!textEdit) return KoPoint();
     KoTextCursor* cursor = textEdit->cursor();
-    // if (!cursor) kdDebug() << "KWCanvas::caretPos: cursor not defined" << endl;
-    if (!cursor) return QPoint();
-    KoTextParag* parag = cursor->parag();
-    KWTextFrameSet* textFrameset = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
-    // if (!textFrameset) kdDebug() << "KWCanvas::caretPos: textFrameset not defined" << endl;
-    if (!textFrameset) return QPoint();
+    if (!cursor) return KoPoint();
+    KWTextFrameSet* textFrameset = 
+        dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
+    if (!textFrameset) return KoPoint();
     KWFrame* currentFrame = m_currentFrameSetEdit->currentFrame();
-    // if (!currentFrame) kdDebug() << "KWCanvas::caretPos: currentFrame is not defined" << endl;
-    if (!currentFrame) return QPoint();
+    if (!currentFrame) return KoPoint();
 
-    const QPoint topLeft = parag->rect().topLeft();         // in QRT coords
-    kdDebug() << "KWCanvas::caretPos: topLeft = " << topLeft << endl;
-    int lineY;
-    lineHeight = parag->lineHeightOfChar( cursor->index(), 0, &lineY );
-    // kdDebug() << "KWCanvas::caretPos: lineY = " << lineY << endl;
-    // iPoint is the topright corner of the current character
-    QPoint iPoint( topLeft.x() + cursor->x() + parag->at( cursor->index() )->width, topLeft.y() + lineY );
-    // kdDebug() << "KWCanvas::caretPos: iPoint = " << iPoint << endl;
-    KoPoint dPoint;
-    KoPoint hintDPoint = currentFrame->innerRect().topLeft();
-    // kdDebug() << "KWCanvas::caretPos: hintDPoint = " << hintDPoint << endl;
-    textFrameset->internalToDocumentWithHint( iPoint, dPoint, hintDPoint );
-    QPoint p((int)dPoint.x(), (int)dPoint.y());
-    // kdDebug() << "KWCanvas::caretPos: p = " << p << endl;
-    return p;
+    QPoint viewP = textFrameset->cursorPos(cursor, this, currentFrame);
+    viewP.rx() += contentsX();
+    viewP.ry() += contentsY();
+    QPoint normalP = m_viewMode->viewToNormal(viewP);
+    KoPoint docP = m_doc->unzoomPoint(normalP);
+    return docP;
 }
 
 #include "KWCanvas.moc"

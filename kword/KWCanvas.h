@@ -223,9 +223,9 @@ public:
 
     bool isFrameResized() { return m_frameResized; }
 
-    /** Returns the position of the caret (pixels).  Null if no caret in this canvas.
-        Also returns the lineheight. */
-    QPoint caretPos(int& lineHeight);
+    /** Returns the caret position in document coordinates.
+        The current frame must be editable, i.e., a caret is possible. */
+    KoPoint caretPos();
 
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
@@ -339,7 +339,7 @@ private:
     int m_rowColResized; // when resizing a row or column
     bool m_temporaryStatusBarTextShown; // Indicates if the temporary is shown
     double m_previousTableSize; //previous column or row size before resizing it
-    QPoint m_lastCaretPos; // position of caret when editing stopped in document coordinates
+    KoPoint m_lastCaretPos; // position of caret when editing stopped in document coordinates
 
     // Table creation support.
     // Having this as a member variable allows to remember and reuse the last settings
