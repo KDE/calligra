@@ -12,6 +12,17 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-10-27
+KexiDB
+- kexi__parts internal table is now created within KexiProject, 
+   not KexiDB::Connection
+- kexi__useractions and kexi__final are no longer created
+Migration Wizard
+- speedup: table creation and data copying is performed within transactions
+- Added possibility of migrating Kexi projects from one backend to another
+  (e.g. from MySql server to SQLite file) internal kexi__ tables are properly recreated; 
+  data, e.g. for kexi__parts and kexi__blobs is properly copied
+
 2005-10-24..26
 Forms
 - Property editor widget for pixmaps now uses KexiBLOBBuffer
@@ -21,6 +32,15 @@ Property Editor
 - show preview box in visible area
 KexiDB
 - DatabaseProperties utility class added to API
+Table View
+- Fixed ugly bug for switching sorting order (thanks Aaron)
+  0.9: backported
+  0.8: backported
+- Better sorting: 
+-- NULL values are smaller than everything else
+-- Special sorting for data/time/datetime/bin integers/floating point numbers
+  0.9: backported
+  0.8: backported
 
 2005-10-19
 Forms

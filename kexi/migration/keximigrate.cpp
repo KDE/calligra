@@ -24,6 +24,8 @@
 #include <kinputdialog.h>
 #include <kapplication.h>
 
+#include <kexiutils/identifier.h>
+
 using namespace KexiDB;
 using namespace KexiMigration;
 
@@ -32,9 +34,16 @@ KexiMigrate::KexiMigrate()
 }
 
 KexiMigrate::KexiMigrate(QObject *parent, const char *name,
-  const QStringList&) : QObject( parent, name )
+  const QStringList&) 
+  : QObject( parent, name )
+//  , m_copyOfKexi__objects(0)
 {
 }
+
+//! Used for computing progress: 
+//! let's assume that each table creation costs the same as inserting 20 rows
+#define NUM_OF_ROWS_PER_CREATE_TABLE 20
+
 
 //=============================================================================
 // Migration parameters
@@ -77,11 +86,24 @@ bool KexiMigrate::performImport()
 
 	// Step 3 - Read table schemas
 	foreach(QStringList::ConstIterator, it, tables) {
-		if(readTableSchema(*it)) {
+		if (m_migrateData->dest->driver()->isSystemObjectName( *it ))
+			continue;
+
+		const QString tableName( KexiUtils::string2Identifier(*it) );
+		KexiDB::TableSchema *tableSchema;
+		if (tableName.lower().startsWith("kexi__"))
+			tableSchema = new KexiDB::InternalTableSchema(tableName);
+		else
+			tableSchema = new KexiDB::TableSchema(tableName);
+
+		tableSchema->setCaption( *it ); //caption is equal to original name
+
+		if (drv_readTableSchema(*tableSchema)) {
 			//yeah, got a table
 			//Add it to list of tables which we will create if all goes well
-			m_tableSchemas.append(m_table);
+			m_tableSchemas.append(tableSchema);
 		} else {
+			delete tableSchema;
 			return false;
 		}
 	}
@@ -91,23 +113,53 @@ bool KexiMigrate::performImport()
 		return false;
 	}
 
-	if(drv_progressSupported()) {
-		progressInitialise();
-	}
-
-
 	// Step 5 - Copy data if asked to
+	bool ok = true;
 	if (m_migrateData->keepData)
 	{
-		for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
-		kdDebug() << "Copying ... " << ts << endl;
-			if(!copyData(ts.current()->name(), ts)) {
-				kdDebug() << "Failed to copy table " << ts << endl;
-				m_migrateData->dest->debugError();
-				drv_disconnect();
-				m_migrateData->dest->disconnect();
-				return false;
+		KexiDB::Transaction trans = m_migrateData->dest->beginTransaction();
+		//copy data for these two as well
+		m_tableSchemas.append(m_migrateData->dest->tableSchema("kexi__objects")); 
+		m_tableSchemas.append(m_migrateData->dest->tableSchema("kexi__objectdata")); 
+		for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts)
+		{
+			const QString tname( ts.current()->name().lower() );
+			if (m_migrateData->dest->driver()->isSystemObjectName( tname )
+//! @todo what if these two tables are not compatible with tables created in detination db
+//! because newer db format was used?
+				&& tname!="kexi__objectdata" //copy this too
+				&& tname!="kexi__objects" //copy this too
+			)
+			{
+				kdDebug() << "Do not copy data for system table: " << tname << endl;
+//! @todo copy kexi__db contents!
+				continue;
 			}
+			if (tname=="kexi__objects") {
+				// Special case: 
+				// kexi__objects table has been filled while creating tables in destination db
+				// remove these rows before copying
+				ok = m_migrateData->dest->executeSQL("DELETE FROM kexi__objects");
+				if (!ok)
+					break;
+			}
+			kdDebug() << "Copying data for table: " << tname << endl;
+			ok = drv_copyTable(tname, ts);
+			if (!ok) {
+				kdDebug() << "Failed to copy table " << tname << endl;
+				break;
+			}
+		}
+		if (ok) {
+			ok = m_migrateData->dest->commitTransaction(trans);
+		}
+		if (!ok) {
+			m_migrateData->dest->rollbackTransaction(trans);
+			m_migrateData->dest->debugError();
+			drv_disconnect();
+			m_migrateData->dest->disconnect();
+			m_migrateData->dest->dropDatabase(m_migrateData->destName);
+			return false;
 		}
 	}
 	
@@ -116,25 +168,24 @@ bool KexiMigrate::performImport()
 
 //=============================================================================
 // Copy a table
+/*
 bool KexiMigrate::copyData(const QString& table, 
                            KexiDB::TableSchema* dstTable) {
 	kdDebug() << "Copying table " << table << endl;
 	drv_copyTable(table, dstTable);
 	return true;
-}
+}*/
 
 //=============================================================================
 // Create the final database
 bool KexiMigrate::createDatabase(const QString& dbname)
 {
-	bool failure = false;
-	
 	kdDebug() << "Creating database [" << dbname << "]" << endl;
-	if(!m_migrateData->dest->connect()) {
-		kdDebug() << "Couldnt connect to destination database" << endl;
-		return false;
-	}
-
+	m_migrateData->dest->connect(); //(not always succeeds)
+//	if(!m_migrateData->dest->connect()) {
+//		kdDebug() << "Couldnt connect to destination database" << endl;
+//		return false;
+//	}
 
 	if(m_migrateData->dest->databaseExists(dbname)) {
 		//drop before recreating (user confirmed overwriting)
@@ -151,30 +202,50 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	
 	if (!m_migrateData->dest->useDatabase(dbname)) {
 		kdDebug() << "Couldnt use newly created database" << endl;
+		m_migrateData->dest->dropDatabase(dbname);
 		m_migrateData->dest->disconnect();
 		return false;
 	}
 
+	KexiDB::TransactionGuard tg(*m_migrateData->dest);
+	if (tg.transaction().isNull()) {
+		m_migrateData->dest->dropDatabase(dbname);
+		m_migrateData->dest->disconnect();
+		return false;
+	}
+
+	if(drv_progressSupported()) {
+		progressInitialise();
+	}
+
 	//Right, were connected..create the tables
-	for(QPtrListIterator<TableSchema> it (m_tableSchemas); it.current() != 0 ;) {
-		/*! @todo check this earlier: on creating table list! */
-		KexiDB::TableSchema *ts = it.current();
-		if (m_migrateData->dest->driver()->isSystemObjectName( ts->name() ))
-			continue;
-		if(m_migrateData->dest->createTable( ts )) {
+	KexiDB::TableSchema *ts;
+	for(QPtrListIterator<TableSchema> it (m_tableSchemas); (ts = it.current()) != 0;++it) {
+/*		if (m_migrateData->dest->driver()->isSystemObjectName( ts->name() )
+//no longer true:
+//			// kexi__parts table was created at kexidb level but in fact it's for kexi
+//			|| ts->name().lower()=="kexi__parts"
+			)
+		{
 			++it;
-		}
-		else {
+			continue;
+		} */
+		if(!m_migrateData->dest->createTable( ts )) {
 			kdDebug() << "Failed to create a table " << ts->name() << endl;
 			m_migrateData->dest->debugError();
 			m_tableSchemas.remove(ts);
-			delete ts;
-			failure = true;
+//			delete ts;
+			m_migrateData->dest->dropDatabase(dbname);
+			m_migrateData->dest->disconnect();
+			return false;
 		}
+		updateProgress((Q_ULLONG)NUM_OF_ROWS_PER_CREATE_TABLE);
+//		if (ts->name()=="kexi__objects") {
+//			m_copyOfKexi__objects = new KexiDB::TableSchema(*ts);
+//		}
 	}
-	if (failure)
-		m_migrateData->dest->disconnect();
-	return !failure;
+	tg.commit();
+	return true;
 }
 
 //=============================================================================
@@ -186,53 +257,56 @@ bool KexiMigrate::tableNames(QStringList & tn)
 	return drv_tableNames(tn);
 }
 
-bool KexiMigrate::readTableSchema(const QString& table)
+/*bool KexiMigrate::readTableSchema(const QString& table)
 {
 	kdDebug() << "Reading table schema for [" << table << "]" << endl;
 	return drv_readTableSchema(table);
-}
+}*/
 
 
 //=============================================================================
 // Progress functions
 bool KexiMigrate::progressInitialise() {
 	Q_ULLONG sum = 0, size;
-	bool success = true;
+	emit progressPercent(0);
 
   //! @todo Don't copy table names here
 	QStringList tables;
 	if(!tableNames(tables))
 		return false;
 
-	// Get the number of rows/bytes to import
+	// 1) Get the number of rows/bytes to import
+	int fakePercent = 0; //this task will take 5 percents of progress...
+	int tableNumber = 1;
 	for(QStringList::Iterator it = tables.begin();
-	    it != tables.end() && success; ++it) {
-
+	    it != tables.end(); ++it, tableNumber++)
+	{
 		if(drv_getTableSize(*it, size)) {
 			kdDebug() << "KexiMigrate::progressInitialise() - table: " << *it 
 			          << "size: " << (ulong)size << endl;
 			sum += size;
+			emit progressPercent(tableNumber * 5 /* 5% */ / tables.count());
 		} else {
-			success = false;
+			return false;
 		}
-
 	}
 
 	kdDebug() << "KexiMigrate::progressInitialise() - job size: " << (ulong)sum << endl;
-	emit progressPercent(0);
-	progressDone = 0;
 	progressTotal = sum;
+	progressTotal += tables.count() * NUM_OF_ROWS_PER_CREATE_TABLE;
+	progressTotal = progressTotal * 105 / 100; //add 5 percent for above task 1)
 	progressNextReport = sum / 100;
-	return success;
+	progressDone = progressTotal * 5 / 100; //5 perecent already done in task 1)
+	return true;
 }
 
 
-void KexiMigrate::progressDoneRow() {
-	progressDone++;
+void KexiMigrate::updateProgress(Q_ULLONG step) {
+	progressDone += step;
 	if (progressDone >= progressNextReport) {
 		int percent = (progressDone+1) * 100 / progressTotal;
 		progressNextReport = ((percent + 1) * progressTotal) / 100;
-		kdDebug() << "KexiMigrate::progressDoneRow(): " << (ulong)progressDone << "/"
+		kdDebug() << "KexiMigrate::updateProgress(): " << (ulong)progressDone << "/"
 		          << (ulong)progressTotal << " (" << percent << "%) next report at " 
 		          << (ulong)progressNextReport << endl;
 		emit progressPercent(percent);

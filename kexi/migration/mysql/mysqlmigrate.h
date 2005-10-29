@@ -39,7 +39,7 @@ namespace KexiMigration
 			virtual bool drv_tableNames(QStringList& tablenames);
 			
 			//Driver specific implementation to read a table schema
-			virtual bool drv_readTableSchema(const QString table);
+			virtual bool drv_readTableSchema(KexiDB::TableSchema& tableSchema);
 			
 			//Driver specific connection implementation
 			virtual bool drv_connect();

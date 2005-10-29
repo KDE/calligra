@@ -78,16 +78,15 @@ bool MySQLMigrate::drv_disconnect()
 
 /* ************************************************************************** */
 /*! Get the types and properties for each column. */
-bool MySQLMigrate::drv_readTableSchema(const QString table)
+bool MySQLMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 {
-	m_table = new KexiDB::TableSchema(table);
+//	m_table = new KexiDB::TableSchema(table);
 
-	//TODO IDEA: ask for user input for captions
-	m_table->setCaption(table + " table");
+//	//TODO IDEA: ask for user input for captions
+//	tableSchema.setCaption(table + " table");
 
 	//Perform a query on the table to get some data
-	QString query = QString("SELECT * FROM `" + d->escapeIdentifier(table) + 
-	                        "` LIMIT 0");
+	QString query = QString("SELECT * FROM `") + d->escapeIdentifier(tableSchema.name()) + "` LIMIT 0";
 	if(d->executeSQL(query)) {
 		MYSQL_RES *res = mysql_store_result(d->mysql);
 		if (res != NULL) {
@@ -98,16 +97,16 @@ bool MySQLMigrate::drv_readTableSchema(const QString table)
 			for(unsigned int i = 0; i < numFlds; i++) {
 				QString fldName = QString(fields[i].name);
 				KexiDB::Field *fld = 
-				  new KexiDB::Field(fldName, type(table, &fields[i]));
+				  new KexiDB::Field(fldName, type(tableSchema.name(), &fields[i]));
 				
 				if(fld->type() == KexiDB::Field::Enum) {
-					QStringList values = examineEnumField(table, &fields[i]);
+					QStringList values = examineEnumField(tableSchema.name(), &fields[i]);
 				}
 				
 				fld->setCaption(fldName);
 				getConstraints(fields[i].flags, fld);
 				getOptions(fields[i].flags, fld);
-				m_table->addField(fld);
+				tableSchema.addField(fld);
 			}
 			mysql_free_result(res);
 		} else {
@@ -156,7 +155,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable,
 					vals << var;
 				}
 				m_migrateData->dest->insertRecord(*dstTable, vals);
-				progressDoneRow();
+				updateProgress();
 			}
 			/*! @todo Check that wasn't an error, rather than end of result set */
 			mysql_free_result(res);

@@ -128,7 +128,8 @@
 #include <kaboutdata.h>
 #endif
 
-typedef QIntDict<KexiDialogBase> KexiDialogDict;
+//typedef QIntDict<KexiDialogBase> KexiDialogDict;
+typedef QMap< int, QGuardedPtr<KexiDialogBase> > KexiDialogDict; //safer dict
 
 //! @internal
 class KexiMainWindowImpl::Private
@@ -259,8 +260,8 @@ class KexiMainWindowImpl::Private
 #endif
 
 	Private(KexiMainWindowImpl* w)
-		: dialogs(401)
-		, wnd(w)
+//		: dialogs(401)
+		: wnd(w)
 	{
 		propEditor=0;
 		propEditorToolWindow=0;
@@ -1866,7 +1867,7 @@ KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 
 //	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
 	if(dlg->id() != -1)
-		d->dialogs.insert(dlg->id(), dlg);
+		d->dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
 	kdDebug() << "KexiMainWindowImpl::registerChild() ID = " << dlg->id() << endl;
 
 	if (m_mdiMode==KMdi::ToplevelMode || m_mdiMode==KMdi::ChildframeMode) {//kmdi fix
@@ -2095,7 +2096,7 @@ bool
 KexiMainWindowImpl::activateWindow(int id)
 {
 	kdDebug() << "KexiMainWindowImpl::activateWindow()" << endl;
-	return activateWindow( d->dialogs[id] );
+	return activateWindow( (KexiDialogBase*)d->dialogs[id] );
 }
 
 bool
@@ -2846,8 +2847,9 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 	//update navigator
 //this is alreday done in KexiProject::addStoredItem():	d->nav->addItem(dlg->partItem());
 	//item id changed to final one: update association in dialogs' dictionary
-	d->dialogs.take(oldItemID);
-	d->dialogs.insert(dlg->partItem()->identifier(), dlg);
+//	d->dialogs.take(oldItemID);
+	d->dialogs.remove(oldItemID);
+	d->dialogs.insert(dlg->partItem()->identifier(), QGuardedPtr<KexiDialogBase>(dlg));
 	return true;
 }
 
@@ -2933,7 +2935,8 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 			d->nav->updateItemName( *dlg->partItem(), false );
 	}
 
-	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
+//	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
+	d->dialogs.remove(dlg_id); //don't remove -KMDI will do that
 
 	KXMLGUIClient *client = dlg->commonGUIClient();
 	KXMLGUIClient *viewClient = dlg->guiClient();
@@ -3230,7 +3233,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	if (!d->prj || !item)
 		return 0;
 	KexiUtils::WaitCursor wait;
-	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
+	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[ item->identifier() ];
 	bool needsUpdateViewGUIClient = true;
 	if (dlg) {
 		dlg->activate();
@@ -3292,7 +3295,7 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 {
 	if (!d->prj || !item)
 		return false;
-	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
+	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[ item->identifier() ];
 	if (dlg) {
 		if (activateWindow(dlg)) {//item->identifier())) {//just activate
 			invalidateViewModeActions();
@@ -3389,7 +3392,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 			return cancelled;
 	}
 
-	KexiDialogBase *dlg = d->dialogs[item->identifier()];
+	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[item->identifier()];
 	if (dlg) {//close existing window
 //		if (!dlg->tryClose(true))
 		const bool tmp = d->forceDialogClosing;
@@ -3434,7 +3437,7 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 
 void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const QCString& /*oldName*/)
 {
-	KexiDialogBase *dlg = d->dialogs[item.identifier()];
+	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[item.identifier()];
 	if (dlg) {//change item
 		dlg->updateCaption();
 		if (static_cast<KexiDialogBase*>(d->curDialog)==dlg)//optionally, update app. caption

@@ -694,3 +694,9 @@ widget in the form editor without the mouse.
 TODO: 
 - update conn dialog gui
 example: http://www.ntpb.co.uk/kexi/msn.png
+
+Migration:
+- 'select source db type' page: change "sqlite/msa/mysql/pg" to "sqlite/msa/server database"
+  because type of server db is in fact selected on the next page (source conn selection)
+- copy kexi__db contents!
+- kexi__blobs are visible!!!

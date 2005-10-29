@@ -67,22 +67,22 @@ pqxxMigrate::~pqxxMigrate()
 //This is probably going to be quite complex...need to get the types for all columns
 //any any other attributes required by kexi
 //helped by reading the 'tables' test program
-bool pqxxMigrate::drv_readTableSchema(const QString table)
+bool pqxxMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 {
-    m_table = new KexiDB::TableSchema(table);
+//    m_table = new KexiDB::TableSchema(table);
 
     //TODO IDEA: ask for user input for captions
-    m_table->setCaption(table + " table");
+//moved    m_table->setCaption(table + " table");
 
     //Perform a query on the table to get some data
-    if (query("select * from " + table + " limit 1"))
+    if (query("select * from " + d->escapeIdentifier(table) + " limit 1"))
     {
         //Loop round the fields
         for (uint i = 0; i < (uint)m_res->columns(); i++)
         {
             KexiDB::Field::Type fldType = type(m_res->column_type(i), m_res->column_name(i));
             m_f = new KexiDB::Field(m_res->column_name(i), fldType);
-            m_table->addField(m_f);
+            tableSchema.addField(m_f);
             m_f->setCaption(m_res->column_name(i));
             m_f->setPrimaryKey(primaryKey(tableOid(table), i));
             m_f->setUniqueKey(uniqueKey(tableOid(table), i));

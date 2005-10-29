@@ -86,11 +86,10 @@ namespace KexiMigration
 			virtual bool drv_tableNames(QStringList& tablenames) = 0;
 
 			//! Read schema for a given table (driver specific)
-			virtual bool drv_readTableSchema(const QString table) = 0;
+			virtual bool drv_readTableSchema(KexiDB::TableSchema& tableSchema) = 0;
 
 			//! Copy a table from source DB to target DB (driver specific)
-			virtual bool drv_copyTable(const QString& srcTable,
-			                           KexiDB::TableSchema* dstTable) = 0;
+			virtual bool drv_copyTable(const QString& srcTable, KexiDB::TableSchema* dstTable) = 0;
 
 			virtual bool drv_progressSupported() { return false; }
 
@@ -114,7 +113,7 @@ namespace KexiMigration
 			virtual bool drv_getTableSize(const QString&, Q_ULLONG&)
 			{ return false; }
 
-			void progressDoneRow();
+			void updateProgress(Q_ULLONG step = 1ULL);
 
 			//! Prompt user to select a field type for unrecognised fields
 			KexiDB::Field::Type userType(const QString& fname);
@@ -124,20 +123,22 @@ namespace KexiMigration
 			KexiMigration::Data* m_migrateData;
 
 			// Temporary values used during import (set by driver specific methods)
-			KexiDB::TableSchema* m_table;
+//			KexiDB::TableSchema* m_table;
 			KexiDB::Field* m_f;
+
+//			KexiDB::TableSchema* m_copyOfKexi__objects;
 
 		private:
 			//! Get the list of tables
 			bool tableNames(QStringList& tablenames);
 
-			//Perform general functionality and rely on drv_ReadTableSchema()
-			//to do the real work
-			//! Read a table schema object for a table (into m_table)
-			bool readTableSchema(const QString& table);
+			//! Perform general functionality and rely on drv_ReadTableSchema()
+			//! to do the real work
+			//! Read a table schema object for a tableSchema
+//			bool readTableSchema(KexiDB::TableSchema& tableSchema);
 
-			//! Copy data from original table to new table if required
-			bool copyData(const QString& table, KexiDB::TableSchema* dstTable);
+//			//! Copy data from original table to new table if required
+//			bool copyData(const QString& table, KexiDB::TableSchema* dstTable);
 
 			//! Create the target database
 			bool createDatabase(const QString& dbname);

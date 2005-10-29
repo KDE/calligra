@@ -513,10 +513,11 @@ void ImportWizard::accept()
 
     kdDebug() << "Creating connection to destination..." << endl;
     //Create connections to the kexi database
-    QGuardedPtr<KexiDB::Connection> kexi_conn = driver->createConnection(*cdata);
+    KexiDB::Connection *kexi_conn = driver->createConnection(*cdata);
     if(!kexi_conn || driver->error()) {
         kdDebug() << "Creating destination connection error..." << endl;
         KMessageBox::error(this, driver->errorMsg());
+				delete kexi_conn;
         return;
     }
 
@@ -524,9 +525,10 @@ void ImportWizard::accept()
     MigrateManager migrateManager;
 
     KexiMigrate* import = migrateManager.migrateDriver(srcTypeCombo->currentText());
-    if(!import || manager.error()) {
+    if(!import || migrateManager.error()) {
         kdDebug() << "Import migrate driver error..." << endl;
-        KMessageBox::error(this, manager.errorMsg());
+        KMessageBox::error(this, migrateManager.errorMsg());
+				delete kexi_conn;
         return;
     }
 
@@ -593,6 +595,7 @@ void ImportWizard::accept()
 //??        KWizard::reject(); //tmp, before adding "final page"
         KMessageBox::error(this, i18n("Import failed."), i18n("Failure"));
     }
+		delete kexi_conn;
 }
 
 
