@@ -118,6 +118,9 @@ KexiScrollView::setSnapToGrid(bool enable, int gridSize)
 void
 KexiScrollView::refreshContentsSizeLater(bool horizontal, bool vertical)
 {
+	Q_UNUSED( horizontal );
+	Q_UNUSED( vertical );
+
 	if (!m_smodeSet) {
 		m_smodeSet = true;
 		m_vsmode = vScrollBarMode();
@@ -314,6 +317,8 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 void 
 KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int lines)
 {
+	Q_UNUSED( lines );
+
 	QFontMetrics fm(m_helpFont);
 	const int flags = Qt::AlignCenter|Qt::AlignTop;
 	QRect rect(fm.boundingRect(0,0,1000,1000,flags,text));

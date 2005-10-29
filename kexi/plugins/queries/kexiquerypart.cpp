@@ -65,6 +65,8 @@ KexiQueryPart::createTempData(KexiDialogBase* dialog)
 KexiViewBase*
 KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
+	Q_UNUSED( item );
+
 	kdDebug() << "KexiQueryPart::createView()" << endl;
 
 	if (viewMode == Kexi::DataViewMode) {

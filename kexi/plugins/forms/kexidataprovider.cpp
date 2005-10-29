@@ -136,6 +136,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 
 void KexiFormDataProvider::valueChanged(KexiDataItemInterface* item)
 {
+	Q_UNUSED( item );
 }
 
 bool KexiFormDataProvider::cursorAtNewRow()

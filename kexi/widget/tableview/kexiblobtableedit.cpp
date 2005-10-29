@@ -386,6 +386,8 @@ bool KexiKIconTableEdit::cursorAtEnd()
 void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant val, 
 	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
 {
+	Q_UNUSED( y_offset );
+
 #if 0
 #ifdef Q_WS_WIN
 	y_offset = -1;

@@ -171,6 +171,8 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool /* irrelevant h
 
 void KexiDBImageBox::setInvalidState( const QString& displayText )
 {
+	Q_UNUSED( displayText );
+
 //	m_pixmapLabel->setPixmap(QPixmap());
 	if (!dataSource().isEmpty()) {
 		m_value = QByteArray();

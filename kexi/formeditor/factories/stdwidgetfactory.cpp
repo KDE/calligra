@@ -965,6 +965,9 @@ StdWidgetFactory::editListContents()
 void
 StdWidgetFactory::setPropertyOptions( KFormDesigner::WidgetPropertySet& buf, const KFormDesigner::WidgetInfo& info, QWidget *w )
 {
+	Q_UNUSED( info );
+	Q_UNUSED( w );
+
 	if (buf.contains("indent")) {
 		buf["indent"].setOption("min", -1);
 		buf["indent"].setOption("minValueText", i18n("default indent value", "default"));

@@ -105,6 +105,8 @@ void KexiFormScrollView::selectCellInternal()
 
 void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
 {
+	Q_UNUSED( row );
+	Q_UNUSED( col );
 	//! @todo
 //	if (m_currentItem)
 		//fillDataItems(*m_currentItem);
@@ -115,6 +117,7 @@ void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
 {
+	Q_UNUSED( r );
 	//! @todo
 }
 
@@ -150,11 +153,16 @@ void KexiFormScrollView::addNewRecordRequested()
 
 void KexiFormScrollView::clearColumnsInternal(bool repaint)
 {
+	Q_UNUSED( repaint );
 	//! @todo
 }
 
 void KexiFormScrollView::addHeaderColumn(const QString& caption, const QString& description, int width)
 {
+	Q_UNUSED( caption );
+	Q_UNUSED( description );
+	Q_UNUSED( width );
+
 	//! @todo
 }
 
@@ -178,6 +186,8 @@ void KexiFormScrollView::setLocalSortingOrder(int col, int order)
 
 void KexiFormScrollView::sortColumnInternal(int col, int order)
 {
+	Q_UNUSED( col );
+	Q_UNUSED( order );
 	//! @todo
 }
 
@@ -189,6 +199,10 @@ void KexiFormScrollView::updateGUIAfterSorting()
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText, 
 	bool removeOld)
 {
+	Q_UNUSED( row );
+	Q_UNUSED( addText );
+	Q_UNUSED( removeOld );
+
 	if (isReadOnly()) {
 		kexipluginsdbg << "KexiFormScrollView::createEditor(): DATA IS READ ONLY!"<<endl;
 		return;
@@ -244,6 +258,8 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 
 KexiDataItemInterface *KexiFormScrollView::editor( int col, bool ignoreMissingEditor )
 {
+	Q_UNUSED( ignoreMissingEditor );
+
 	if (!m_data || col<0 || col>=columns())
 		return 0;
 
@@ -286,6 +302,8 @@ KexiDataItemInterface *KexiFormScrollView::editor( int col, bool ignoreMissingEd
 
 void KexiFormScrollView::editorShowFocus( int row, int col )
 {
+	Q_UNUSED( row );
+	Q_UNUSED( col );
 	//! @todo
 //	if (m_currentItem)
 //		m_provider->fillDataItems(*m_currentItem);
@@ -293,6 +311,8 @@ void KexiFormScrollView::editorShowFocus( int row, int col )
 
 void KexiFormScrollView::updateCell(int row, int col)
 {
+	Q_UNUSED( row );
+	Q_UNUSED( col );
 	//! @todo
 }
 
@@ -318,6 +338,7 @@ void KexiFormScrollView::updateWidgetScrollBars()
 
 void KexiFormScrollView::slotRowRepaintRequested(KexiTableItem& item)
 {
+	Q_UNUSED( item );
 	//! @todo
 }
 
@@ -334,11 +355,16 @@ void KexiFormScrollView::slotRowRepaintRequested(KexiTableItem& item)
 
 void KexiFormScrollView::slotRowInserted(KexiTableItem *item, bool repaint)
 {
+	Q_UNUSED( item );
+	Q_UNUSED( repaint );
 	//! @todo
 }
 
 void KexiFormScrollView::slotRowInserted(KexiTableItem *item, uint row, bool repaint)
 {
+	Q_UNUSED( item );
+	Q_UNUSED( row );
+	Q_UNUSED( repaint );
 	//! @todo
 }
 

@@ -542,7 +542,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void updateAfterAcceptRowEdit();
 
 		//! Handles KexiTableViewData::rowRepaintRequested() signal
-		virtual void slotRowRepaintRequested(KexiTableItem& item) {}
+		virtual void slotRowRepaintRequested(KexiTableItem& item) { Q_UNUSED( item ); }
 
 		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
 		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, 
@@ -569,7 +569,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! Used in KexiDataAwareObjectInterface::slotRowDeleted() 
 		 to repaint tow \a row and all visible below. 
 		 Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
-		virtual void updateAllVisibleRowsBelow(int row) {}
+		virtual void updateAllVisibleRowsBelow(int row) { Q_UNUSED( row ); }
 
 		virtual void addNewRecordRequested();
 

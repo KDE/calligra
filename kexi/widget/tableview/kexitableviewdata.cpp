@@ -725,6 +725,8 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item, bool repaint)
 
 void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool repaint )
 {
+	Q_UNUSED( repaint );
+
 	if (rowsToDelete.isEmpty())
 		return;
 	int last_r=0;

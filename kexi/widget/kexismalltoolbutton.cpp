@@ -110,6 +110,8 @@ void KexiSmallToolButton::setIconSet( const QString& icon )
 
 void KexiSmallToolButton::setTextLabel( const QString & newLabel, bool tipToo )
 {
+	Q_UNUSED( tipToo );
+
 	update(newLabel, iconSet());
 }
 

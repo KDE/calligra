@@ -234,6 +234,8 @@ KexiDBForm::sizeHint() const
 
 void KexiDBForm::setInvalidState( const QString& displayText )
 {
+	Q_UNUSED( displayText );
+
 	//! @todo draw "invalid data source" text on the surface?
 }
 

@@ -30,7 +30,7 @@ class PixmapIdCustomProperty : public CustomProperty
 			: CustomProperty(parent) {
 		}
 		virtual ~PixmapIdCustomProperty() {};
-		virtual void setValue(const QVariant &value, bool rememberOldValue) {}
+		virtual void setValue(const QVariant &value, bool rememberOldValue) { Q_UNUSED( value ); Q_UNUSED( rememberOldValue); }
 		virtual QVariant value() const { return m_property->value(); }
 		virtual bool handleValue() const {
 			return false; //m_property->type()==KexiCustomPropertyFactory::PixmapData;

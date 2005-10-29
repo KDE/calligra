@@ -426,6 +426,8 @@ WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, 
 void
 WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
 {
+	Q_UNUSED( set );
+
 	if(!d->slotPropertyChangedEnabled || !KFormDesigner::FormManager::self() || !KFormDesigner::FormManager::self()->activeForm()
 		|| ! KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
@@ -630,6 +632,8 @@ WidgetPropertySet::isNameValid(const QString &name)
 void
 WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)
 {
+	Q_UNUSED( set );
+
 	if(d->widgets.count() < 2)
 		return;
 

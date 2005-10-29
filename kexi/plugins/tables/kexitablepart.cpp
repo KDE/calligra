@@ -140,6 +140,8 @@ tristate KexiTablePart::rename(KexiMainWindow *win, KexiPart::Item & item,
 KexiDB::SchemaData*
 KexiTablePart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode)
 {
+	Q_UNUSED( viewMode );
+
 	return dlg->mainWin()->project()->dbConnection()->tableSchema( sdata.name() );
 }
 

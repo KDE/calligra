@@ -44,6 +44,8 @@ KexiAlterTable_DataView::~KexiAlterTable_DataView()
 
 tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
 {
+	Q_UNUSED( dontStore );
+
 	if (mode != Kexi::DataViewMode) {
 		//accept editing before switching
 //		if (!m_view->acceptRowEdit()) {
@@ -57,6 +59,8 @@ tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
 
 tristate KexiAlterTable_DataView::afterSwitchFrom(int mode)
 {
+	Q_UNUSED( mode );
+
 	if (tempData()->tableSchemaChangedInPreviousView) {
 		KexiUtils::WaitCursor wait;
 		KexiDB::Cursor *c = mainWin()->project()->dbConnection()->prepareQuery(*tempData()->table);

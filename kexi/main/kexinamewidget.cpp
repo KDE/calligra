@@ -44,6 +44,10 @@ KexiNameWidget::KexiNameWidget(const QString& message,
 	const QString& captionLabel, const QString& captionText, 
 	QWidget * parent, const char * name, WFlags fl)
 {
+	Q_UNUSED( parent );
+	Q_UNUSED( name );
+	Q_UNUSED( fl );
+
 	init(message, nameLabel, nameText, captionLabel, captionText);
 }
 
@@ -52,6 +56,8 @@ void KexiNameWidget::init(
 	const QString& nameLabel, const QString& nameText, 
 	const QString& captionLabel, const QString& captionText)
 {
+	Q_UNUSED( captionText );
+
 	m_le_name_txtchanged_disable = false;
 	m_le_name_autofill = true;
 	m_caption_required = false;

@@ -223,6 +223,8 @@ KexiFormPart::createTempData(KexiDialogBase* dialog)
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiPart::Item &item, int viewMode)
 {
+	Q_UNUSED( viewMode );
+
 	kexipluginsdbg << "KexiFormPart::createView()" << endl;
 	KexiMainWindow *win = dialog->mainWin();
 	if (!win || !win->project() || !win->project()->dbConnection())
@@ -381,6 +383,8 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
 void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
 {
+	Q_UNUSED( form );
+
 	(*KFormDesigner::FormManager::self()->propertySet())["autoTabStops"].setValue(QVariant(set, 4));
 }
 
@@ -428,6 +432,8 @@ KexiFormPart::i18nMessage(const QCString& englishMessage) const
 void
 KexiFormPart::slotPropertyChanged(QWidget *w, const QCString &name, const QVariant &value)
 {
+	Q_UNUSED( w );
+
 	if (!KFormDesigner::FormManager::self()->activeForm())
 		return;
 	if (name == "autoTabStops") {

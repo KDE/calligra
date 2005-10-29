@@ -354,6 +354,8 @@ HistoryEntry::setSelected(bool selected, const QColorGroup &cg)
 QRect
 HistoryEntry::geometry(int y, int width, QFontMetrics f)
 {
+	Q_UNUSED( f );
+
 //	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
 //	return QRect(0, y, width, h);
 	m_formated->setWidth(width - 2);
