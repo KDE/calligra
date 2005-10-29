@@ -26,7 +26,7 @@ servicedir = $(kde_servicesdir)
 # Note: If your filter exports or exports some special file
 # which KDE doesn't have a mimetype for, yet, you'll have to
 # create a mimetype and install it using those two lines.
-# In case of doubt please ask koffice@mail.kde.org or
-# koffice-devel@mail.kde.org. Thanks.
+# In case of doubt please ask koffice@kde.org or
+# koffice-devel@kde.org. Thanks.
 # data_DATA = x-png.desktop
 # datadir = $(kde_mimedir)/text
