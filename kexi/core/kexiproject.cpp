@@ -322,10 +322,45 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 		d->connection->insertInternalTableSchema(t_blobs);
 	}
 	else {
-		if (!d->connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
+//		if (!d->connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
+		if (!d->connection->createTable( t_blobs, true/*replaceExisting*/ )) {
 			delete t_blobs;
 			return false;
 		}
+	}
+
+	//Store default part infos.
+	//Infos for other parts (forms, reports...) are created on demand in KexiDialogBase::storeNewData()
+	KexiDB::InternalTableSchema *t_parts = new KexiDB::InternalTableSchema("kexi__parts"); //newKexiDBSystemTableSchema("kexi__parts");
+	t_parts->addField( 
+		new KexiDB::Field("p_id", KexiDB::Field::Integer, KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) 
+	)
+	.addField( new KexiDB::Field("p_name", KexiDB::Field::Text) )
+	.addField( new KexiDB::Field("p_mime", KexiDB::Field::Text ) )
+	.addField( new KexiDB::Field("p_url", KexiDB::Field::Text ) );
+
+	bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+	bool partsTableOk = true;
+	if (containsKexi__partsTable) {
+		//! just insert this schema
+		d->connection->insertInternalTableSchema(t_parts);
+	}
+	else {
+		partsTableOk = d->connection->createTable( t_parts, true/*replaceExisting*/ );
+
+		KexiDB::FieldList *fl = t_parts->subList("p_id", "p_name", "p_mime", "p_url");
+		if (partsTableOk)
+			partsTableOk = d->connection->insertRecord(*fl, QVariant(1), QVariant("Tables"), 
+				QVariant("kexi/table"), QVariant("http://koffice.org/kexi/"));
+
+		if (partsTableOk)
+			partsTableOk = d->connection->insertRecord(*fl, QVariant(2), QVariant("Queries"), 
+				QVariant("kexi/query"), QVariant("http://koffice.org/kexi/"));
+	}
+
+	if (!partsTableOk) {
+		delete t_parts;
+		return false;
 	}
 
 	if (insideTransaction) {
@@ -448,8 +483,11 @@ KexiProject::items(KexiPart::Info *i)
 		KexiPart::Item *it = new KexiPart::Item();
 		bool ok;
 		int ident = cursor->value(0).toInt(&ok);
-		QString objName = cursor->value(1).toString();
-		if ( ok && (ident>0) && KexiUtils::isIdentifier(objName) ) {
+		QString objName( cursor->value(1).toString() );
+		
+		if ( ok && (ident>0) && !d->connection->isInternalTableSchema(objName) 
+			&& KexiUtils::isIdentifier(objName) )
+		{
 			it->setIdentifier(ident);
 			it->setMime(i->mime()); //js: may be not null???
 			it->setName(objName);
