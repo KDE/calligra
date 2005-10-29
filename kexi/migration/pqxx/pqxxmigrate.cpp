@@ -75,7 +75,7 @@ bool pqxxMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 //moved    m_table->setCaption(table + " table");
 
     //Perform a query on the table to get some data
-    if (query("select * from " + d->escapeIdentifier(table) + " limit 1"))
+    if (query("select * from \"" + tableSchema.name() + "\" limit 1"))
     {
         //Loop round the fields
         for (uint i = 0; i < (uint)m_res->columns(); i++)
@@ -84,9 +84,9 @@ bool pqxxMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
             m_f = new KexiDB::Field(m_res->column_name(i), fldType);
             tableSchema.addField(m_f);
             m_f->setCaption(m_res->column_name(i));
-            m_f->setPrimaryKey(primaryKey(tableOid(table), i));
-            m_f->setUniqueKey(uniqueKey(tableOid(table), i));
-            m_f->setAutoIncrement(autoInc(tableOid(table), i));//This should be safe for all field types
+            m_f->setPrimaryKey(primaryKey(tableOid(tableSchema.name()), i));
+            m_f->setUniqueKey(uniqueKey(tableOid(tableSchema.name()), i));
+            m_f->setAutoIncrement(autoInc(tableOid(tableSchema.name()), i));//This should be safe for all field types
 
             // Do this for var/char types
             //m_f->setLength(m_res->at(0)[i].size());
