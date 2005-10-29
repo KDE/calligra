@@ -142,6 +142,7 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	,m_data(&conn_data)
 	,m_tables_byname(101, false)
 	,m_queries_byname(101, false)
+	,m_kexiDBSystemTables(101)
 	,d(new ConnectionPrivate(this))
 	,m_driver(driver)
 	,m_is_connected(false)
@@ -151,7 +152,7 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	d->dbProperties = new DatabaseProperties(this);
 	m_tables.setAutoDelete(true);
 	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
-	m_kexiDBSystemtables.setAutoDelete(true);//only system tables
+	m_kexiDBSystemTables.setAutoDelete(true);//only system tables
 	m_queries.setAutoDelete(true);
 	m_queries_byname.setAutoDelete(false);//m_queries is owner, not me
 	m_cursors.setAutoDelete(true);
@@ -368,9 +369,6 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	{ createDatabase_CLOSE; return false; }
 
 
-/*! See doc/dev/kexidb_issues.txt document, chapter "Table schema, query schema, etc. storage"
- for database schema documentation (detailed description of kexi__* 'system' tables).
-*/
 bool Connection::createDatabase( const QString &dbName )
 {
 	if (!checkConnected())
@@ -434,10 +432,12 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	//-physically create system tables
-	for (QPtrListIterator<TableSchema> it(m_kexiDBSystemtables); it.current(); ++it) {
+	for (QPtrDictIterator<TableSchema> it(m_kexiDBSystemTables); it.current(); ++it) {
 		if (!drv_createTable( it.current()->name() ))
 			createDatabase_ERROR;
 	}
+
+/* moved to KexiProject...
 
 	//-create default part info
 	TableSchema *ts;
@@ -450,6 +450,7 @@ bool Connection::createDatabase( const QString &dbName )
 		createDatabase_ERROR;
 	if (!insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://koffice.org/kexi/")))
 		createDatabase_ERROR;
+*/
 
 	//-insert KexiDB version info:
 	TableSchema *t_db = tableSchema("kexi__db");
@@ -578,7 +579,7 @@ bool Connection::closeDatabase()
 	m_cursors.clear();
 	//delete own schemas
 	m_tables.clear();
-	m_kexiDBSystemtables.clear();
+	m_kexiDBSystemTables.clear();
 	m_queries.clear();
 
 	if (!drv_closeDatabase())
@@ -2369,17 +2370,25 @@ TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 	return ts;
 }
 
+bool Connection::isInternalTableSchema(const QString& tableName)
+{
+	return (m_kexiDBSystemTables[ m_tables_byname[tableName] ]) 
+		// these are here for compatiblility because we're no longer instantiate 
+		// them but can exist in projects created with previous Kexi versions:
+		|| tableName=="kexi__final" || tableName=="kexi__useractions";
+}
+
 void Connection::insertInternalTableSchema(TableSchema *tableSchema)
 {
 	tableSchema->setKexiDBSystem(true);
-	m_kexiDBSystemtables.append(tableSchema);
+	m_kexiDBSystemTables.insert(tableSchema, tableSchema);
 	m_tables_byname.insert(tableSchema->name(), tableSchema);
 }
 
 //! Creates kexi__* tables.
 bool Connection::setupKexiDBSystemSchema()
 {
-	if (!m_kexiDBSystemtables.isEmpty())
+	if (!m_kexiDBSystemTables.isEmpty())
 		return true; //already set up
 
 	TableSchema *t_objects = newKexiDBSystemTableSchema("kexi__objects");
@@ -2431,12 +2440,15 @@ bool Connection::setupKexiDBSystemSchema()
 	t_db->addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
 	.addField( new Field("db_value", Field::LongText ) );
 
+/* moved to KexiProject...
 	TableSchema *t_parts = newKexiDBSystemTableSchema("kexi__parts");
 	t_parts->addField( new Field("p_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
 	.addField( new Field("p_name", Field::Text) )
 	.addField( new Field("p_mime", Field::Text ) )
 	.addField( new Field("p_url", Field::Text ) );
+*/
 
+/*UNUSED
 	TableSchema *t_final = newKexiDBSystemTableSchema("kexi__final");
 	t_final->addField( new Field("p_id", Field::Integer, 0, Field::Unsigned) )
 	.addField( new Field("property", Field::LongText ) )
@@ -2450,7 +2462,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("icon", Field::LongText ) )
 	.addField( new Field("method", Field::Integer ) )
 	.addField( new Field("arguments", Field::LongText) );
-
+*/
 	return true;
 }
 

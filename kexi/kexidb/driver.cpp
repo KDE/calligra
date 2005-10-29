@@ -209,7 +209,10 @@ bool Driver::isSystemObjectName( const QString& n ) const
 
 bool Driver::isKexiDBSystemObjectName( const QString& n )
 {
-	return n.lower().startsWith("kexi__");
+	if (!n.lower().startsWith("kexi__"))
+		return false;
+	const QStringList list( Connection::kexiDBSystemTableNames() );
+	return list.find(n.lower())!=list.constEnd();
 }
 
 bool Driver::isSystemFieldName( const QString& n ) const

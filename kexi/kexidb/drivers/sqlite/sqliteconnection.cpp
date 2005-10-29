@@ -114,7 +114,7 @@ bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 bool SQLiteConnection::drv_containsTable( const QString &tableName )
 {
 	bool success;
-	return resultExists(QString("select 1 from sqlite_master where type='table' and name LIKE %1")
+	return resultExists(QString("select name from sqlite_master where type='table' and name LIKE %1")
 		.arg(driver()->escapeString(tableName)), success) && success;
 }
 

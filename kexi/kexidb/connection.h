@@ -112,6 +112,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 false is returned. 
 		 For file-based drivers, \a dbName should be equal to the database
 		 filename (the same as specified for ConnectionData).
+
+		 See doc/dev/kexidb_issues.txt document, chapter "Table schema, query schema, etc. storage"
+		 for database schema documentation (detailed description of kexi__* 'system' tables).
+
 		 \sa useDatabase() */
 		bool createDatabase( const QString &dbName );
 
@@ -719,6 +723,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			TableSchema& tableSchema);
 
+		bool isInternalTableSchema(const QString& tableName);
+
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, ConnectionData &conn_data );
@@ -1049,7 +1055,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		QDict<QuerySchema> m_queries_byname;
 
 		//! used just for removing system TableSchema objects on db close.
-		QPtrList<TableSchema> m_kexiDBSystemtables;
+		QPtrDict<TableSchema> m_kexiDBSystemTables;
 
 		//! cursors created for this connection
 		QPtrDict<KexiDB::Cursor> m_cursors;
