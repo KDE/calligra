@@ -318,6 +318,7 @@ void KexiFormScrollView::updateCell(int row, int col)
 
 void KexiFormScrollView::updateRow(int row)
 {
+	Q_UNUSED(row)
 	//! @todo
 }
 

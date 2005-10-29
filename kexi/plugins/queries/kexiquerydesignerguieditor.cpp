@@ -220,7 +220,7 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 void KexiQueryDesignerGuiEditor::initTableRows()
 {
 	d->data->deleteAllRows();
-	const int columns = d->data->columnsCount();
+	//const int columns = d->data->columnsCount();
 	for (int i=0; i<(int)d->sets->size(); i++) {
 		d->data->append(d->data->createItem());
 	}
@@ -999,7 +999,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 {
 	QString str = fullString.stripWhiteSpace();
 	int len = 0;
-	KexiDB::BaseExpr *expr = 0;
+	//KexiDB::BaseExpr *expr = 0;
 	//1. get token
 	token = 0;
 	//2-char-long tokens
@@ -1363,7 +1363,7 @@ KoProperty::Set*
 KexiQueryDesignerGuiEditor::createPropertySet( int row, 
 	const QString& tableName, const QString& fieldName, bool newOne )
 {
-	const bool asterisk = isAsterisk(tableName, fieldName);
+	//const bool asterisk = isAsterisk(tableName, fieldName);
 	QString typeName = "KexiQueryDesignerGuiEditor::Column";
 	KoProperty::Set *set = new KoProperty::Set(d->sets, typeName);
 	KoProperty::Property *prop;

@@ -188,8 +188,8 @@ class KexiTableView::WhatsThis : public QWhatsThis
 		virtual QString text( const QPoint & pos)
 		{
 			const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
-			const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
-			const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
+			//const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
+			//const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
 			if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
 				return i18n("Contains a pointer to currently selected row");
 			}

@@ -262,7 +262,7 @@ QPtrList<QWidget>* KexiDBForm::orderedDataAwareWidgets() const
 void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 {
 	QWidget *fromWidget = 0;
-	QWidget *topLevelWidget = form->widget()->topLevelWidget();
+	//QWidget *topLevelWidget = form->widget()->topLevelWidget();
 //js	form->updateTabStopsOrder(); //certain widgets can have now updated focusPolicy properties, fix this
 	uint numberOfDataAwareWidgets = 0;
 //	if (d->orderedFocusWidgets.isEmpty()) {
@@ -360,7 +360,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 				if (d->orderedFocusWidgetsIterator.current() != static_cast<QWidget*>(watched)) {
 					d->orderedFocusWidgetsIterator.toFirst();
 					while (d->orderedFocusWidgetsIterator.current() && d->orderedFocusWidgetsIterator.current()!=static_cast<QWidget*>(watched)) {
-						QWidget *ww = d->orderedFocusWidgetsIterator.current();
+						//QWidget *ww = d->orderedFocusWidgetsIterator.current();
 						++d->orderedFocusWidgetsIterator;
 					}
 				}

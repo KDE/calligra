@@ -329,7 +329,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 	}
 
 	kdDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
-	KexiQueryPart::TempData * temp = tempData();
+	//KexiQueryPart::TempData * temp = tempData();
 	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
 	const bool ok = parser->parse( sqlText );
 	delete d->parsedQuery;
