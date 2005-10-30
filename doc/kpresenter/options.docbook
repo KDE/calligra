@@ -649,7 +649,7 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Display field code</guilabel></term>
-<listitem><para>In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed.</para></listitem>
+<listitem><para>In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed. Variables are inserted using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem></menuchoice> menu.</para></listitem>
 </varlistentry>
 
 <varlistentry>
