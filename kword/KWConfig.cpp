@@ -764,7 +764,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     tabStop = new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
-                                              doc->pageManager()->page(0)->width(),
+                                              doc->pageManager()->page(doc->startPage())->width(),
                                               0.1,
                                               doc->tabStopValue(),
                                               unit );
