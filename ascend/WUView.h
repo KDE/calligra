@@ -20,12 +20,27 @@
 #ifndef wuview_h
 #define wuview_h
 
+
+class KoToolBox;
+
+
 #include <KWView.h>
 
 
 /******************************************************************/
 /* Class: WUView                                                  */
 /******************************************************************/
+
+
+enum ToolBoxSection {
+    TB_Insert = 0,
+    TB_Size_Color,
+    TB_Alignment,
+    TB_Type,
+    TB_Style,
+};
+const int  NumToolBoxSections = (int) TB_Style + 1;
+
 
 class WUView : public KWView
 {
@@ -35,7 +50,7 @@ public:
     WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument *_doc );
     virtual ~WUView();
 
-   virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
 public slots:
 
@@ -45,6 +60,12 @@ protected slots:
 
 private:
 
+   void  setupWriteUpGUI();
+
+
+private:
+
+   KoToolBox  *m_toolBox;
 };
 
 
