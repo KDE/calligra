@@ -71,7 +71,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     
     if (m_allPalettesShown) {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Hide all Palette Windows"),
-                                    "f9", this,
+                                    "CTRL+F9", this,
                                     SLOT(slotToggleAllPalettes()),
                                     this, "toggleAllPaletteWindows");
 

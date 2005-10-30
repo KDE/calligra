@@ -27,6 +27,7 @@
 #include <qtoolbar.h>
 #include <qdockwindow.h>
 
+#include <kdebug.h>
 #include <kparts/event.h>
 #include <klocale.h>
 #include <ktoolbar.h>
@@ -47,7 +48,6 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
     : KToolBar( mainWin, Qt::DockLeft, false, name, true, true), m_instance(instance)
 {
     setFullSize( false );
-    setBarPos(Left);
     setMargin(2);
 
     m_buttonGroup = new QButtonGroup( 0L );
@@ -59,8 +59,6 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
         ToolList * tl = new ToolList();
         m_tools.append(tl);
     }
-
-    mainWin->moveDockWindow(this, Qt::DockLeft);
 }
 
 KoToolBox::~KoToolBox()
@@ -93,6 +91,8 @@ void KoToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
 
 QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
 {
+    kdDebug() << "Tool icon name: " << iconName << "\n";
+
     QToolButton *button = new QToolButton(parent);
 
     if ( iconName != "" ) {
