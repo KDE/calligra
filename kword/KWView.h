@@ -115,6 +115,7 @@ public:
     void showStyle( const QString & styleName );
     void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
     void showZoom( int zoom ); // show a zoom value in the combo
+    void showZoom( const QString& zoom ); // show a zoom value in the combo
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
     bool viewFrameBorders() const { return m_viewFrameBorders; }

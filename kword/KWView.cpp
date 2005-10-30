@@ -2898,11 +2898,9 @@ void KWView::changeZoomMenu( int zoom )
         mode = m_gui->canvasWidget()->viewMode()->type();
 
     QStringList lst;
-    lst << i18n( "Zoom to Width" );
+    lst << i18n( "Fit to Width" );
     if ( mode!="ModeText" )
-    {
-        lst << i18n( "Zoom to Whole Page" );
-    }
+        lst << i18n( "Fit to Page" );
 
     if(zoom>0)
     {
@@ -2952,6 +2950,12 @@ void KWView::showZoom( int zoom )
     QStringList list = actionViewZoom->items();
     QString zoomStr( i18n("%1%").arg( zoom ) );
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+}
+
+void KWView::showZoom( const QString& zoom )
+{
+    QStringList list = actionViewZoom->items();
+    actionViewZoom->setCurrentItem( list.findIndex( zoom )  );
 }
 
 void KWView::slotViewFormattingChars()
@@ -3069,17 +3073,17 @@ void KWView::viewZoom( const QString &s )
     KWCanvas * canvas = m_gui->canvasWidget();
     int zoom = 0;
 
-    if ( s == i18n("Zoom to Width") )
+    if ( s == i18n("Fit to Width") )
     {
-        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) );
+        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) ) - 1;
         ok = true;
     }
-    else if ( s == i18n("Zoom to Whole Page") )
+    else if ( s == i18n("Fit to Page") )
     {
         double height = m_doc->resolutionY() * m_doc->pageManager()->page(m_currentPage)->height();
         double width = m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->height();
         zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
-                     qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) );
+                     qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) ) - 1;
         ok = true;
     }
     else
@@ -3090,10 +3094,15 @@ void KWView::viewZoom( const QString &s )
     }
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = m_doc->zoom();
-    //refresh menu
-    changeZoomMenu( zoom );
-    //refresh menu item
-    showZoom(zoom);
+
+    if ( s == i18n("Fit to Width") || s == i18n("Fit to Page") )
+        showZoom( s ); //set current menu item
+    else
+    {
+        changeZoomMenu( zoom ); //add current zoom value to the menu
+        showZoom( zoom ); //set current menu item
+    }
+
     //apply zoom if zoom!=m_doc->zoom()
     if( zoom != m_doc->zoom() )
     {
@@ -5279,7 +5288,13 @@ void KWView::borderSet( borderChanged type )
 void KWView::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
-    if ( m_gui ) m_gui->resize( width(), height() );
+    if ( m_gui )
+    {
+        m_gui->resize( width(), height() );
+        QString s = actionViewZoom->currentText();
+        if ( s == i18n("Fit to Width") || s == i18n("Fit to Page") )
+            viewZoom( s );
+    }
 }
 
 void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
