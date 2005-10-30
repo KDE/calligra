@@ -22,3 +22,5 @@ rcdir = $(kde_datadir)/writeup
 rc_DATA = writeup.rc writeup_readonly.rc
 
 kde_services_DATA = writeuppart.desktop
+
+subdirs = pics

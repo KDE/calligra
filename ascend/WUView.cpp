@@ -71,7 +71,7 @@ void WUView::setupWriteUpGUI()
     KToggleAction* actionShowDocStruct = dynamic_cast<KToggleAction *> (actionCollection()->action("show_docstruct"));
     KToggleAction* actionShowRuler     = dynamic_cast<KToggleAction *> (actionCollection()->action("show_ruler"));
 
-    if (actionShowDocStruct) 
+    if (actionShowDocStruct)
 	actionShowDocStruct->setChecked(false);
     showDocStructure();
 
@@ -80,9 +80,26 @@ void WUView::setupWriteUpGUI()
     showRuler();
 
     // Add some GUI parts unique to WriteUP
-    m_toolBox = new KoToolBox(mainWindow(), "ToolBox", WUFactory::instance(), 
+
+    m_actionFormatBold = dynamic_cast<KToggleAction *> (actionCollection()->action("format_bold" ) );
+    m_actionFormatBold->setIcon( "hi48-action-format_bold_active" );
+    m_actionFormatItalic = dynamic_cast<KToggleAction *> (actionCollection()->action("format_italic" ) );
+    m_actionFormatItalic->setIcon( "hi48-action-format_italic_active" );
+    m_actionFormatUnderline = dynamic_cast<KToggleAction *> (actionCollection()->action("format_underline" ) );
+    m_actionFormatUnderline->setIcon( "hi48-action-format_underline_active" );
+
+
+    m_toolBox = new KoToolBox(mainWindow(), "ToolBox", WUFactory::instance(),
 			      NumToolBoxSections);
     m_toolBox -> setLabel(i18n("WriteUpToolBox"));
+
+    m_toolBox -> registerTool( m_actionFormatBold, TB_Type, 0 );
+    m_toolBox -> registerTool( m_actionFormatItalic, TB_Type, 1 );
+    m_toolBox -> registerTool( m_actionFormatUnderline, TB_Type, 2 );
+
+    m_toolBox->setupTools();
+
+    m_toolBox->setIconSize( 48 );
 
     mainWindow()->addDockWindow( m_toolBox, Qt::DockRight, false);
     mainWindow()->moveDockWindow( m_toolBox, Qt::DockRight, false, 0, 0 );

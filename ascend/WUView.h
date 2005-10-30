@@ -65,7 +65,13 @@ private:
 
 private:
 
-   KoToolBox  *m_toolBox;
+    KoToolBox  *m_toolBox;
+
+    KToggleAction * m_actionFormatBold;
+    KToggleAction * m_actionFormatItalic;
+    KToggleAction * m_actionFormatUnderline;
+
+
 };
 
 
