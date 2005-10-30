@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KChart XBM Export Filter
 Name[da]=KChart XBM-eksportfilter
+Name[es]=Filtro de exportación a XBM para KChart
 Name[ga]=Scagaire Easpórtála XBM KChart
 Name[ja]=KChart XBM エクスポートフィルター
 Name[pt]=Filtro de Exportação de XBM para o KChart

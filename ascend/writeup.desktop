@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=Application
 Name=WriteUp
-Name[xx]=xxWriteUpxx
 Exec=writeup %u
 GenericName=Simplified Word Processing
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite

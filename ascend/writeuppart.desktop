@@ -2,8 +2,6 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Simplified Word Processing Component
-Name[sv]=Koffice förenklad ordbehandlingskomponent
-Name[xx]=xxKOffice Simplified Word Processing Componentxx
 X-KDE-Library=libwriteup_part
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
