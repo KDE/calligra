@@ -354,6 +354,7 @@ public slots:
     void showMouseMode( int /*KWCanvas::MouseMode*/ _mouseMode );
     void frameSelectedChanged();
     void docStructChanged(int _type);
+    void documentModified( bool );
     void slotHRulerDoubleClicked();
     void slotHRulerDoubleClicked( double );
     void slotUnitChanged(KoUnit::Unit);
@@ -768,8 +769,11 @@ private:
     int m_currentPage; ///< 0-based current page number
 
     // Statusbar items
-    KStatusBarLabel * m_sbPageLabel; ///< 'Current page number and page count' label
-    KStatusBarLabel * m_sbFramesLabel; ///< Info about selected frames
+    KStatusBarLabel* m_sbPageLabel; ///< 'Current page number and page count' label
+    KStatusBarLabel* m_sbModifiedLabel;
+    KStatusBarLabel* m_sbFramesLabel; ///< Info about selected frames
+    KStatusBarLabel* m_sbUnitLabel;
+    KStatusBarLabel* m_sbZoomLabel;
 
     // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
     int m_zoomViewModeNormal;

@@ -29,6 +29,7 @@ class KDialogBase;
 class KoDocumentInfo;
 class KoDocumentInfoAuthor;
 class KoDocumentInfoAbout;
+class KoDocumentInfoUserMetadata;
 class KArchiveEntry;
 
 class KOFFICECORE_EXPORT KoDocumentInfoDlg : public QObject
@@ -55,9 +56,11 @@ private slots:
 private:
   void addAuthorPage( KoDocumentInfoAuthor *authorInfo );
   void addAboutPage( KoDocumentInfoAbout *aboutInfo );
+  void addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo );
 
   void save( KoDocumentInfoAuthor *authorInfo );
   void save( KoDocumentInfoAbout *aboutInfo );
+  void save( KoDocumentInfoUserMetadata *userMetadataInfo );
 
   class KoDocumentInfoDlgPrivate;
   KoDocumentInfoDlgPrivate *d;

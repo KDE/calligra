@@ -919,6 +919,11 @@ signals:
     void sigBeginOperation();
     void sigEndOperation();
 
+    /**
+    * Emitted when the document is modified
+    */
+    void modified( bool );
+
 protected:
 
     QString autoSaveFile( const QString & path ) const;

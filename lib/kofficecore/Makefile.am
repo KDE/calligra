@@ -23,6 +23,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
 	koDocumentInfoAboutWidget.ui koDocumentInfoAuthorWidget.ui \
+	koDocumentInfoUserMetadataWidget.ui \
 	KoApplicationIface.cc KoApplicationIface.skel \
 	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel \
 	KoMainWindowIface.cc KoMainWindowIface.skel kofficeversion.cc koOasisStyles.cc \

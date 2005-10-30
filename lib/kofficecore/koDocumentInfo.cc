@@ -45,6 +45,7 @@
 KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* name )
     : QObject( parent, name )
 {
+    (void)new KoDocumentInfoUserMetadata( this );
     (void)new KoDocumentInfoAuthor( this );
     (void)new KoDocumentInfoAbout( this );
 }
@@ -735,7 +736,7 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
     else
         m_creationDate = QDateTime();
 
-    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "date" );
+    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "date"  );
     if ( !e.isNull() && !e.text().isEmpty() )
         m_modificationDate = QDateTime::fromString( e.text(), Qt::ISODate );
     return true;
@@ -884,5 +885,59 @@ void KoDocumentInfoAbout::resetMetaData()
     m_modificationDate = QDateTime();
 }
 
+/*****************************************
+ *
+ * KoDocumentInfoUserMetadata
+ *
+ *****************************************/
+
+KoDocumentInfoUserMetadata::KoDocumentInfoUserMetadata( KoDocumentInfo* info )
+    : KoDocumentInfoPage( info, "user_metadata" )
+{
+    m_reserved << "initial" << "author-title" << "company" << "email" << "telephone"
+    << "telephone-work" << "fax" << "country" << "postal-code" << "city" << "street"
+    << "position";
+}
+
+bool KoDocumentInfoUserMetadata::saveOasis( KoXmlWriter &xmlWriter )
+{
+  QMap<QString, QString>::iterator it;
+  for ( it = m_metaList.begin(); it != m_metaList.end(); ++it )
+  {
+    xmlWriter.startElement( "meta:user-defined");
+    xmlWriter.addAttribute( "meta:name", it.key() );
+    xmlWriter.addTextNode( it.data() );
+    xmlWriter.endElement();
+  }
+}
+
+bool KoDocumentInfoUserMetadata::loadOasis( const QDomNode& metaDoc )
+{
+    QDomNode n = metaDoc.firstChild();
+    for ( ; !n.isNull(); n = n.nextSibling() )
+    {
+        if (n.isElement())
+        {
+            QDomElement e = n.toElement();
+            if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" && !e.text().isEmpty() )
+            {
+                QString name = e.attributeNS( KoXmlNS::meta, "name", QString::null );
+                if ( !m_reserved.contains( name ) )
+                    m_metaList[ name ] = e.text();
+            }
+        }
+    }
+    return true;
+}
+
+// KOffice-1.3 format
+bool KoDocumentInfoUserMetadata::load( const QDomElement& e )
+{
+}
+
+// KOffice-1.3 format
+QDomElement KoDocumentInfoUserMetadata::save( QDomDocument& doc )
+{
+}
 
 #include <koDocumentInfo.moc>

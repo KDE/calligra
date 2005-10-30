@@ -1898,6 +1898,7 @@ void KoDocument::setModified( bool mod )
 
     // This influences the title
     setTitleModified();
+    emit modified( mod );
 }
 
 void KoDocument::setDoNotSaveExtDoc( bool on )

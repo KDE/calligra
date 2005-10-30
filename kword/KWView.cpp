@@ -113,6 +113,7 @@
 #include <ktempfile.h>
 #include <kurldrag.h>
 #include <kdeversion.h>
+#include <kiconloader.h>
 
 #include <qcheckbox.h>
 #include <qclipboard.h>
@@ -131,6 +132,7 @@
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
 #include "kospell.h"
+
 using namespace KSpell2;
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
@@ -189,18 +191,36 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     m_gui->setGeometry( 0, 0, width(), height() );
     m_gui->show();
 
-    KStatusBar * sb = statusBar();
-    m_sbPageLabel = 0L;
-    if ( sb ) // No statusbar in e.g. konqueror
+    m_sbPageLabel = 0;
+    m_sbModifiedLabel = 0;
+    m_sbFramesLabel = 0;
+    m_sbZoomLabel = 0;
+    m_sbUnitLabel = 0;
+    if ( KStatusBar* sb = statusBar() ) // No statusbar in e.g. konqueror
     {
         m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
         m_sbPageLabel->setAlignment( AlignLeft | AlignVCenter );
         addStatusBarItem( m_sbPageLabel, 0 );
 
+        m_sbModifiedLabel = new KStatusBarLabel( "   ", 0, sb );
+        m_sbModifiedLabel->setAlignment( AlignLeft | AlignVCenter );
+        addStatusBarItem( m_sbModifiedLabel, 0 );
+
         m_sbFramesLabel = new KStatusBarLabel( QString::null, 0, sb );
         m_sbFramesLabel->setAlignment( AlignLeft | AlignVCenter );
         addStatusBarItem( m_sbFramesLabel, 1 );
+
+        m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_doc->zoom() ) + "% ", 0, sb );
+        m_sbZoomLabel->setAlignment( AlignHCenter | AlignVCenter );
+        addStatusBarItem( m_sbZoomLabel, 0 );
+
+        m_sbUnitLabel = new KStatusBarLabel( ' ' + KoUnit::unitDescription( m_doc->unit() ) + ' ', 0, sb );
+        m_sbUnitLabel->setAlignment( AlignHCenter | AlignVCenter );
+        addStatusBarItem( m_sbUnitLabel, 0 );
     }
+
+    connect( m_doc, SIGNAL( modified( bool ) ),
+             this, SLOT( documentModified( bool )) );
 
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
@@ -389,8 +409,7 @@ void KWView::initGui()
     }
 
     // Prevention against applyMainWindowSettings hiding the statusbar
-    KStatusBar * sb = statusBar();
-    if ( sb )
+    if ( KStatusBar* sb = statusBar() )
         sb->show();
 
     updatePageInfo();
@@ -1574,7 +1593,7 @@ void KWView::updateFrameStatusBarItem()
             KoUnit::Unit unit = m_doc->unit();
             QString unitName = m_doc->unitName();
             KWFrame * frame = m_doc->getFirstSelectedFrame();
-            m_sbFramesLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (w: %6, h: %7) (%8)" )
+            m_sbFramesLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" )
                     .arg( frame->frameSet()->name() )
                     .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
                     .arg( KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(
@@ -1582,8 +1601,7 @@ void KWView::updateFrameStatusBarItem()
                     .arg( KoUnit::toUserStringValue( frame->right(), unit ) )
                     .arg( KoUnit::toUserStringValue( frame->bottom(), unit ) )
                     .arg( KoUnit::toUserStringValue( frame->width(), unit ) )
-                    .arg( KoUnit::toUserStringValue( frame->height(), unit ) )
-                    .arg( unitName ) );
+                    .arg( KoUnit::toUserStringValue( frame->height(), unit ) ) );
         } else
             m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" ).arg( nbFrame ) );
     }
@@ -1593,9 +1611,8 @@ void KWView::updateFrameStatusBarItem()
 
 void KWView::setTemporaryStatusBarText(const QString &text)
 {
-    KStatusBar * sb = statusBar();
-    if ( sb && m_sbFramesLabel )
-      m_sbFramesLabel->setText( text );
+    if ( statusBar() && m_sbFramesLabel )
+        m_sbFramesLabel->setText( text );
 }
 
 void KWView::clipboardDataChanged()
@@ -3098,6 +3115,9 @@ void KWView::setZoom( int zoom, bool updateViews )
     m_doc->newZoomAndResolution( updateViews, false );
     m_doc->updateZoomRuler();
 
+    if ( statusBar() )
+        m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
+
     // Also set the zoom in KoView (for embedded views)
     //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
@@ -3244,15 +3264,9 @@ void KWView::displayFrameInlineInfo()
                              i18n("Insert Inline Frame"),
                              "SetCursorInsertInlineFrame",true);
 
-    KStatusBar * sb = statusBar();
-    if ( sb )
-    {
-        if( m_sbFramesLabel )
-            m_sbFramesLabel->setText( ' ' + i18n("Set cursor where you want to insert inline frame." ) );
-    }
+    if ( statusBar() && m_sbFramesLabel )
+        m_sbFramesLabel->setText( ' ' + i18n("Set cursor where you want to insert inline frame." ) );
 }
-
-
 
 void KWView::insertSpecialChar()
 {
@@ -5963,6 +5977,17 @@ void KWView::docStructChanged(int _type)
     m_doc->recalcVariables(  VT_STATISTIC );
 }
 
+void KWView::documentModified( bool b )
+{
+    if ( !statusBar() )
+        return;
+
+    if ( b )
+        m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", KIcon::Small ) );
+    else
+        m_sbModifiedLabel->setText( "   " );
+}
+
 void KWView::setViewFrameBorders(bool b)
 {
     m_viewFrameBorders = b;
@@ -7475,6 +7500,8 @@ void KWView::slotUnitChanged( KoUnit::Unit unit )
 {
     getGUI()->getHorzRuler()->setUnit( unit );
     getGUI()->getVertRuler()->setUnit( unit );
+    if ( m_sbUnitLabel )
+        m_sbUnitLabel->setText( ' ' + KoUnit::unitDescription( unit ) + ' ' );
 }
 
 /******************************************************************/

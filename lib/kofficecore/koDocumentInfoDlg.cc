@@ -23,6 +23,7 @@
 #include <koDocumentInfo.h>
 #include <koDocumentInfoAboutWidget.h>
 #include <koDocumentInfoAuthorWidget.h>
+#include <koDocumentInfoUserMetadataWidget.h>
 #include <koDocument.h>
 #include <koGlobal.h>
 #include <koStore.h>
@@ -48,7 +49,9 @@
 #include <ktempfile.h>
 #include <kmimetype.h>
 #include <qlayout.h>
+#include <klistview.h>
 #include <qgrid.h>
+#include <qmap.h>
 #include <kfilterdev.h>
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -69,6 +72,7 @@ public:
   KoDocumentInfo *m_info;
   KoDocumentInfoAboutWidget *m_aboutWidget;
   KoDocumentInfoAuthorWidget *m_authorWidget;
+  KoDocumentInfoUserMetadataWidget *m_metaWidget;
 
   bool m_bDeleteDialog;
   KDialogBase *m_dialog;
@@ -104,6 +108,8 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
       addAuthorPage( static_cast<KoDocumentInfoAuthor *>( pg ) );
     else if ( pg->inherits( "KoDocumentInfoAbout" ) )
       addAboutPage( static_cast<KoDocumentInfoAbout *>( pg ) );
+    else if ( pg->inherits( "KoDocumentInfoUserMetadata" ) )
+      addUserMetadataPage( static_cast<KoDocumentInfoUserMetadata *>( pg ) );
   }
 }
 
@@ -254,7 +260,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
   if ( doc )
   {
     d->m_aboutWidget->leDocFile->setText( doc->file() );
-    d->m_aboutWidget->labelType->setText( doc->mimeType() );
+    d->m_aboutWidget->labelType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
     d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( KIcon::Desktop, 48 ) );
   }
   if ( aboutInfo->creationDate() != QString::null )
@@ -279,6 +285,24 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
            aboutInfo, SLOT( resetMetaData() ) );
   connect( d->m_aboutWidget->pbReset, SIGNAL( clicked() ),
            this, SLOT( resetMetaData() ) );
+}
+
+void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo )
+{
+  QVBox *page = d->m_dialog->addVBoxPage( i18n( "User-defined Metadata" ) );
+  d->m_metaWidget = new KoDocumentInfoUserMetadataWidget( page );
+
+  d->m_metaWidget->metaListView->addColumn( "Name" );
+  d->m_metaWidget->metaListView->setFullWidth( true );
+
+  QMap<QString, QString>::iterator it;
+    for ( it = userMetadataInfo->metadataList()->begin(); it != userMetadataInfo->metadataList()->end(); ++it )
+    {
+        QString name = it.key();
+        QString value = it.data();
+        KListViewItem* it = new KListViewItem( d->m_metaWidget->metaListView, name, value );
+        it->setPixmap( 0, KGlobal::iconLoader()->loadIcon( "text", KIcon::Small ) );
+    }
 }
 
 void KoDocumentInfoDlg::save()
@@ -339,6 +363,11 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
   aboutInfo->setSubject( d->m_aboutWidget->leDocSubject->text() );
   aboutInfo->setKeywords( d->m_aboutWidget->leDocKeywords->text() );
   aboutInfo->setAbstract( d->m_aboutWidget->meDocAbstract->text() );
+}
+
+void KoDocumentInfoDlg::save( KoDocumentInfoUserMetadata *userMetadataInfo )
+{
+    // FIXME
 }
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate

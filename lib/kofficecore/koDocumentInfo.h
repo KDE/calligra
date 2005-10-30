@@ -22,6 +22,7 @@
 #define KO_DOCUMENT_INFO_H
 
 #include <qobject.h>
+#include <qmap.h>
 #include <kconfig.h>
 #include <koffice_export.h>
 
@@ -171,6 +172,24 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     int m_editingCycles;
+};
+
+class KOFFICECORE_EXPORT KoDocumentInfoUserMetadata : public KoDocumentInfoPage
+{
+    Q_OBJECT
+public:
+    KoDocumentInfoUserMetadata( KoDocumentInfo* info );
+
+    virtual bool load( const QDomElement& e );
+    virtual QDomElement save( QDomDocument& doc );
+    virtual bool loadOasis( const QDomNode& metaDoc );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter );
+
+    QMap<QString, QString>* metadataList() { return &m_metaList; }
+
+private:
+    QMap<QString, QString>  m_metaList;
+    QStringList             m_reserved;
 };
 
 #endif

@@ -243,6 +243,7 @@
 </ToolBar>
 <ToolBar name="format_toolbar" position="top"><Text>Format</Text>
   <Action name="format_fontfamily"/>
+  <Separator/>
   <Action name="format_fontsize"/>
   <Separator/>
   <Action name="format_bold"/>
