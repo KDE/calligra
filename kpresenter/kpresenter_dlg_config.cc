@@ -41,6 +41,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qtabwidget.h>
+#include <qwhatsthis.h>
 
 #include "penstylewidget.h"
 #include "brushproperty.h"
@@ -214,10 +215,12 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     }
 
     showRuler= new QCheckBox(i18n("Show rulers"),this);
+    QWhatsThis::add(showRuler, i18n( "This is checked by default and both a vertical and horizontal ruler are shown on KPresenter slide. When unchecked, the rulers are not shown anymore on any slide." ) );
     showRuler->setChecked(bShowRuler);
     box->addWidget(showRuler);
 
     showStatusBar = new QCheckBox(i18n("Show status bar"),this);
+    QWhatsThis::add(showStatusBar, i18n( "Toggle the statusbar which is shown by default." ) );
     showStatusBar->setChecked(oldShowStatusBar);
     box->addWidget(showStatusBar);
 
@@ -225,6 +228,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     recentFiles=new KIntNumInput( oldNbRecentFiles, this);
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent files:"));
+    QWhatsThis::add(recentFiles, i18n( "Set the number of recent files which will be opened using the File->Open Recent menu. Default is to remember 10 filenames. The maximum you can set is 20 and the minimum is 1." ) );
 
     box->addWidget(recentFiles);
 
@@ -236,6 +240,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Text indentation depth:"));
+    QWhatsThis::add(indent, i18n( "This setting is used in the Text menu by Increase Depth and Decrease Depth menu items to change the indentation depth. Default is 1 centimeter." ) );
 
     box->addWidget(indent);
 
@@ -306,6 +311,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
 
     QLabel *lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Background object color:" ) );
+    QWhatsThis::add(lab, i18n( "Change the background color of the text box. The Text boxes background is white by default. If you had a dark background color and you wanted to put some white text over it, you could color the text box so that you could see what you were typing. When you have finished, the area around the text would revert to whatever the background color was. The Defaults button restores the original settings." ) );
     box->addWidget(lab);
 
     bgColor = new KColorButton( oldBgColor,
@@ -317,6 +323,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
 
     lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Grid color:" ) );
+    QWhatsThis::add(lab, i18n( "You can change here the grid color which is black as default." ) );
     box->addWidget(lab);
 
     gridColor = new KColorButton( oldGridColor,
@@ -415,29 +422,35 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
     m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
     m_undoRedoLimit->setRange(10, 60, 1);
+    QWhatsThis::add(m_undoRedoLimit, i18n( "Set the number of actions you can undo and redo (how many actions KPresenter keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten." ) );
     grid->addWidget(m_undoRedoLimit,0,0);
 
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
     m_displayLink=new QCheckBox(i18n("Display links"),tmpQGroupBox);
+    QWhatsThis::add(m_displayLink, i18n( "When you want to include a link in your slide, you will use the Insert->Link... menu which allows you to insert URL, mail or file links. If the option Display links is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible(or not) both in the edited slides and in the slide show." ) );
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),tmpQGroupBox);
     m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
+    QWhatsThis::add(m_underlineLink, i18n( "If this is checked, all links will be underlined. The option is checked per default. If it is not checked, the link will not be underlined." ) );
     grid->addWidget(m_underlineLink,4,0);
 
 
     m_displayComment=new QCheckBox(i18n("Display comments"),tmpQGroupBox);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
+    QWhatsThis::add(m_displayComment, i18n( "Comments are inserted in the text at the cursor using the Insert->Comment... menu. Comments can only be viewed in editing mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right click on it to edit it, remove it or copy its text." ) );
     grid->addWidget(m_displayComment,5,0);
 
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),tmpQGroupBox);
     m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFieldCode());
+    QWhatsThis::add(m_displayFieldCode, i18n( "In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed. Variables are inserted using the Insert -> Variable menu." ) );
     grid->addWidget(m_displayFieldCode,6,0);
 
     m_cbPrintNotes=new QCheckBox(i18n("Print slide notes"),tmpQGroupBox);
     m_cbPrintNotes->setChecked(m_printNotes);
+    QWhatsThis::add(m_cbPrintNotes, i18n( "If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and fifnishing with the Master Page Note. You can see the notes for each slide using the View->Show notebar menu." ) );
     grid->addWidget(m_cbPrintNotes,7,0);
 
     box->addWidget(tmpQGroupBox);
@@ -449,6 +462,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
 
     KoRect rect = doc->masterPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->unitName()), tmpQGroupBox);
+    QWhatsThis::add(lab, i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,0,0);
     KoUnit::Unit unit = doc->unit();
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
@@ -458,6 +472,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     grid->addWidget(resolutionX,1,0);
     
     lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->unitName()), tmpQGroupBox);
+    QWhatsThis::add(lab, i18n( "Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,2,0);
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
@@ -603,6 +618,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
+    QWhatsThis::add(chooseButton, i18n( "Click there if you want to set a new font. The KDE default Select Font dialog will then be displayed." ) );
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));
 
     fontLayout->addWidget(fontTitle, 0, 0);
@@ -616,6 +632,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     languageLayout->setColStretch(1, 1);
 
     QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
+    QWhatsThis::add(languageTitle, i18n( "Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools." ) );
 
     m_globalLanguage = new QComboBox( languageContainer );
     m_globalLanguage->insertStringList( KoGlobal::listOfLanguages() );
@@ -625,6 +642,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     languageLayout->addWidget(m_globalLanguage, 0, 1);
 
     m_autoHyphenation = new QCheckBox( i18n("Automatic hyphenation"), gbDocumentDefaults);
+    QWhatsThis::add(m_autoHyphenation, i18n( "Check this box if you want KPresenter to automatically hyphenate long words when it determines the word wrap in text frames. This is not set as default." ) );
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
     box->addWidget(gbDocumentDefaults);
@@ -634,6 +652,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
+    QWhatsThis::add(m_createBackupFile, i18n( "If checked, this will create a .<name>.kpr.autosave.kpr in the dir where your file is. This backup file can then be used in case of a problem.\nThe backup file is updated everytime you save your document or everytime there is an autosave." ) );
     m_createBackupFile->setChecked( m_oldBackupFile );
 
 
@@ -642,17 +661,20 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     autoSave->setLabel( i18n("Autosave (min):") );
     autoSave->setSpecialValueText( i18n("No autosave") );
     autoSave->setSuffix( i18n("min") );
+    QWhatsThis::add(autoSave, i18n( "You can use this to adjust how often KPresenter saves a temporary file. If you set this value to No autosave, KPresenter will not autosave. You can adjust the autosave from 1 minute to 60 minutes." ) );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPageNumber();
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
+    QWhatsThis::add(m_variableNumberOffset, i18n( "You can change here the number for the first page. It is set to 1 per default.\nTip: this is helpful if you have split a single document into multiple files." ) );
 
     new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
     KoRect rect = doc->masterPage()->getPageRect();
+    QWhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc." ) );
 
     m_tabStopWidth->setRange( KoUnit::toUserValue( MM_TO_POINT(2),doc->unit() ) , KoUnit::toUserValue( rect.width(), doc->unit() ) , 0.1, false);
     m_tabStopWidth->setValue( KoUnit::toUserValue( m_oldTabStopWidth, doc->unit() ));
@@ -663,9 +685,11 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
+    QWhatsThis::add(m_cursorInProtectedArea, i18n( "When this box is checked and you click in a protected frame of your document, a cursor appears. When the mark is removed from this check box, and you click in a protected frame, there is no cursor visible." ) );
 
     m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
     m_directInsertCursor->setChecked(doc->insertDirectCursor());
+    QWhatsThis::add(m_directInsertCursor, i18n( "When this box is checked then you can select a section of text using your mouse. Move the mouse to a new place in your document and click once with the middle mouse button and a copy of the selected text is copied and pasted to the new location in the document.\nWhen there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, manually copy the text in to the clipboard, then manually paste the text in the new location." ) );
     box->addWidget(gbDocumentCursor);
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
