@@ -623,7 +623,7 @@ addresses often contain words run together.</para>
 <title><guilabel>Misc</guilabel></title>
 <varlistentry>
 <term><guilabel>Undo/Redo limit:</guilabel></term>
-<listitem><para>Set the number of actions you can undo and redo (howmany actions &kpresenter; keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten.</para></listitem>
+<listitem><para>Set the number of actions you can undo and redo (how many actions &kpresenter; keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -641,7 +641,7 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Display comments</guilabel></term>
-<listitem><para>Comments are inserted in the text at the cursor using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Comment...</guimenuitem></menuchoice> menu. Comments can only be viewed in editing mode and not in the slide show. If this option is checked (default) then each coment will be shown as a small yellow rectangle. You can then right click on it to edit it, remove it or copy its text. A displayed comment: <inlinemediaobject><imageobject>
+<listitem><para>Comments are inserted in the text at the cursor using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Comment...</guimenuitem></menuchoice> menu. Comments can only be viewed in editing mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right click on it to edit it, remove it or copy its text. A displayed comment: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4c.png" format="PNG"/>
 </imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
