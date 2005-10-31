@@ -21,7 +21,6 @@
 #include "kpttaskdialog.h"
 #include "kpttaskgeneralpanel.h"
 #include "kptrequestresourcespanel.h"
-#include "kpttaskprogresspanel.h"
 
 #include <klocale.h>
 #include <kcommand.h>
@@ -44,20 +43,15 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool 
     page = addVBoxPage(i18n("&Resources"));
     m_resourcesTab = new KPTRequestResourcesPanel(page, task, baseline);
     
-    kdDebug()<<k_funcinfo<<endl;
-    page = addVBoxPage(i18n("&Progress"));
-    m_progressTab = new KPTTaskProgressPanel(task, workTime, page);
-
     // Set the state of all the child widgets.
     enableButtonOK(false);
     
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
-    connect(m_progressTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 }
 
 
-KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
+KCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
     KMacroCommand *m = new KMacroCommand(i18n("Modify Task"));
     bool modified = false;
     KCommand *cmd = m_generalTab->buildCommand(part);
@@ -66,11 +60,6 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
         modified = true;
     }
     cmd = m_resourcesTab->buildCommand(part);
-    if (cmd) {
-        m->addCommand(cmd);
-        modified = true;
-    }
-    cmd = m_progressTab->buildCommand(part);
     if (cmd) {
         m->addCommand(cmd);
         modified = true;
@@ -87,8 +76,7 @@ void KPTTaskDialog::slotOk() {
         return;
     if (!m_resourcesTab->ok())
         return;
-    if (!m_progressTab->ok())
-        return;
+    
     accept();
 }
 

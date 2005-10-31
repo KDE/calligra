@@ -75,9 +75,10 @@ Taken       Cost Breakdown Structure:
             Make it stand-alone, add to task context menu.
 
             KDGantt:
-            - Static IDs
+            - Static/global IDs for items and tasklink groups.
             - Presentation of "week-ends" when it doesn't match scale.
-            - Time-now line
+            - Time-now line.
+            - Progress for event (milestone) item.
             
             Settings/configuration
 
@@ -117,6 +118,10 @@ Taken       Cost Breakdown Structure:
 
             Remove KPT prefix from all KPlato classes (ask mailing list!)
 
+            Implement multiple scheduling. (Expected, optimistic, pessimistic)
+            
+            Make a summarytask dialog.
+            
 ------------------------------------------------------------------
 
 Done        Requirements specification

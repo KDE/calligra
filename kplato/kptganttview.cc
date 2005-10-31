@@ -518,6 +518,8 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         item->setFloatStartTime(QDateTime());
         item->setFloatEndTime(QDateTime());
     }
+    //TODO: Show progress
+    
     //TODO i18n
     QString w="Name: " + task->name();
     w += "\n"; w += "Time: ";
@@ -816,7 +818,7 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos
             //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
         }
         return;
-    }
+    } 
     if (t && t->type() == KPTNode::Type_Summarytask) {
         QPopupMenu *menu = m_mainview->popupMenu("node_popup");
         if (menu)

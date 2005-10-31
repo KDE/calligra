@@ -61,12 +61,14 @@
 
 #include "kptview.h"
 #include "kptfactory.h"
+#include "kptmilestoneprogressdialog.h"
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kptmainprojectdialog.h"
 #include "kptprojectdialog.h"
 #include "kpttask.h"
 #include "kpttaskdialog.h"
+#include "kpttaskprogressdialog.h"
 #include "kptganttview.h"
 #include "kptpertview.h"
 #include "kptreportview.h"
@@ -215,6 +217,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     // ------ Popup
     actionOpenNode = new KAction(i18n("Edit..."), "node_properties", 0, this,
         SLOT(slotOpenNode()), actionCollection(), "node_properties");
+    actionTaskProgress = new KAction(i18n("Progress..."), "task_progress", 0, this,
+        SLOT(slotTaskProgress()), actionCollection(), "task_progress");
     actionDeleteTask = new KAction(i18n("Delete Task"), "editdelete", 0, this,
         SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
@@ -382,7 +386,7 @@ void KPTView::slotProjectEdit() {
 void KPTView::slotProjectCalendar() {
     KPTCalendarListDialog *dia = new KPTCalendarListDialog(getProject());
     if (dia->exec()) {
-        KMacroCommand *cmd = dia->buildCommand(getPart());
+        KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
             //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
             getPart()->addCommand(cmd); //also executes
@@ -406,7 +410,7 @@ void KPTView::slotProjectAccounts() {
 void KPTView::slotProjectWorktime() {
     KPTStandardWorktimeDialog *dia = new KPTStandardWorktimeDialog(getProject());
     if (dia->exec()) {
-        KMacroCommand *cmd = dia->buildCommand(getPart());
+        KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
             //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
             getPart()->addCommand(cmd); //also executes
@@ -467,7 +471,7 @@ void KPTView::slotAddSubTask() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-            KMacroCommand *m = dia->buildCommand(getPart());
+            KCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
             KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Subtask"));
@@ -489,7 +493,7 @@ void KPTView::slotAddTask() {
 		KPTNode* currNode = currentTask();
 		if (currNode)
         {
-            KMacroCommand *m = dia->buildCommand(getPart());
+            KCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
             KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Task"));
@@ -516,7 +520,7 @@ void KPTView::slotAddMilestone() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-            KMacroCommand *m = dia->buildCommand(getPart());
+            KCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
             KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Milestone"));
@@ -595,7 +599,7 @@ void KPTView::slotOpenNode() {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
             KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
-                KMacroCommand *m = dia->buildCommand(getPart());
+                KCommand *m = dia->buildCommand(getPart());
                 if (m) {
                     getPart()->addCommand(m);
                 }
@@ -611,7 +615,53 @@ void KPTView::slotOpenNode() {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
             KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
-                KMacroCommand *m = dia->buildCommand(getPart());
+                KCommand *m = dia->buildCommand(getPart());
+                if (m) {
+                    getPart()->addCommand(m);
+                }
+            }
+            delete dia;
+            break;
+        }
+        case KPTNode::Type_Summarytask: {
+            // TODO
+            break;
+        }
+        default:
+            break; // avoid warnings
+    }
+}
+
+void KPTView::slotTaskProgress() {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTNode *node = currentTask();
+    if (!node)
+        return;
+
+    switch (node->type()) {
+        case KPTNode::Type_Project: {
+            break;
+        }
+        case KPTNode::Type_Subproject:
+            //TODO
+            break;
+        case KPTNode::Type_Task: {
+            KPTTask *task = dynamic_cast<KPTTask *>(node);
+            KPTTaskProgressDialog *dia = new KPTTaskProgressDialog(*task, getProject().standardWorktime());
+            if (dia->exec()) {
+                KCommand *m = dia->buildCommand(getPart());
+                if (m) {
+                    getPart()->addCommand(m);
+                }
+            }
+            delete dia;
+            break;
+        }
+        case KPTNode::Type_Milestone: {
+            KPTTask *task = dynamic_cast<KPTTask *>(node);
+            KPTMilestoneProgressDialog *dia = new KPTMilestoneProgressDialog(*task);
+            if (dia->exec()) {
+                KCommand *m = dia->buildCommand(getPart());
                 if (m) {
                     getPart()->addCommand(m);
                 }

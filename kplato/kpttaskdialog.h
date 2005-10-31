@@ -26,7 +26,7 @@
 class KPTDuration;
 
 class KLineEdit;
-class KMacroCommand;
+class KCommand;
 class KTextEdit;
 class KComboBox;
 class KDoubleNumInput;
@@ -48,10 +48,9 @@ class KPTRequestResourcesPanel;
 class KPTPart;
 class KPTTask;
 class KPTStandardWorktime;
-class KPTTaskProgressPanel;
 
 /**
- * The dialog that shows and allows you to alter any task.  Contains a couple of tabs.
+ * The dialog that shows and allows you to alter any task.
  */
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
@@ -59,13 +58,13 @@ public:
     /**
      * The constructor for the task settings dialog.
      * @param task the task to show
-     * @param workTime
-     * @param baseline
+     * @param workTime defines the number of hours pr day and week
+     * @param baseline if true, project is baselined
      * @param parent parent widget
      */
     KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(KPTPart *part);
 
 protected slots:
     void slotOk();
@@ -73,7 +72,6 @@ protected slots:
 private:
     KPTTaskGeneralPanel *m_generalTab;
     KPTRequestResourcesPanel *m_resourcesTab;
-    KPTTaskProgressPanel *m_progressTab;
 
 };
 

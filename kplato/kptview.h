@@ -123,6 +123,7 @@ protected slots:
     void slotReportGenerate(int);
 
     void slotOpenNode();
+    void slotTaskProgress();
 	void slotDeleteTask();
 	void slotIndentTask();
 	void slotUnindentTask();
@@ -218,6 +219,7 @@ private:
 
     // ------ Popup
     KAction *actionOpenNode;
+    KAction *actionTaskProgress;
     KAction *actionDeleteTask;
     KAction *actionEditResource;
 };

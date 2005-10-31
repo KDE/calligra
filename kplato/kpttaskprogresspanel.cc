@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,7 +42,7 @@ namespace KPlato
 {
 
 KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *parent, const char *name)
-    : KPTTaskProgressPanelBase(parent, name),
+    : KPTTaskProgressPanelImpl(parent, name),
       m_task(task),
       m_dayLength(24)
 {
@@ -120,6 +120,68 @@ void KPTTaskProgressPanel::setEstimateScales( int day )
     scheduledEffort->setFieldScale(0, day);
     scheduledEffort->setFieldRightscale(0, day);
     scheduledEffort->setFieldLeftscale(1, day);
+}
+
+//-------------------------------------
+
+KPTTaskProgressPanelImpl::KPTTaskProgressPanelImpl(QWidget *parent, const char *name, WFlags f)
+    : KPTTaskProgressPanelBase(parent, name, f) {
+    
+    connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
+    connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
+
+    connect(percentFinished, SIGNAL(valueChanged(int)), SLOT(slotPercentFinishedChanged(int)));
+    connect(percentFinished, SIGNAL(valueChanged(int)), SLOT(slotChanged()));
+    
+    connect(startTime, SIGNAL(valueChanged(const QDateTime &)), SLOT(slotChanged()));
+    connect(finishTime, SIGNAL(valueChanged(const QDateTime &)), SLOT(slotChanged()));
+    
+    connect(remainingEffort, SIGNAL(valueChanged()), SLOT(slotChanged()));
+    connect(actualEffort, SIGNAL(valueChanged()), SLOT(slotChanged()));
+
+}
+
+void KPTTaskProgressPanelImpl::slotChanged() {
+    emit changed();
+}
+
+void KPTTaskProgressPanelImpl::slotStartedChanged(bool state) {
+    if (state) {
+        startTime->setDateTime(QDateTime::currentDateTime());
+        percentFinished->setValue(0);
+    }
+    enableWidgets();
+}
+
+
+void KPTTaskProgressPanelImpl::slotFinishedChanged(bool state) {
+    if (state) {
+        percentFinished->setValue(100);
+        if (!finishTime->dateTime().isValid()) {
+            finishTime->setDateTime(QDateTime::currentDateTime());
+        }
+    }   
+    enableWidgets();
+}
+
+
+void KPTTaskProgressPanelImpl::enableWidgets() {
+    started->setEnabled(!finished->isChecked());
+    finished->setEnabled(started->isChecked());
+    finishTime->setEnabled(started->isChecked());
+    startTime->setEnabled(started->isChecked() && !finished->isChecked());
+    performedGroup->setEnabled(started->isChecked() && !finished->isChecked());
+    
+    scheduledStart->setEnabled(false);
+    scheduledFinish->setEnabled(false);
+    scheduledEffort->setEnabled(false);
+}
+
+
+void KPTTaskProgressPanelImpl::slotPercentFinishedChanged( int value ) {
+    if (value == 100) {
+        //remainingEffort->setValue(KPTDuration::zeroDuration); //FIXME
+    }
 }
 
 

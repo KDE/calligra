@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTTASKPROGRESSPANEL_H
-#define KPTTASKPROGRESSPANEL_H
+#ifndef KPTMILESTONEPROGRESSPANEL_H
+#define KPTMILESTONEPROGRESSPANEL_H
 
-#include "kpttaskprogresspanelbase.h"
+#include "kptmilestoneprogresspanelbase.h"
 #include "kpttask.h"
 
 class KCommand;
@@ -31,10 +31,10 @@ namespace KPlato
 class KPTPart;
 class KPTStandardWorktime;
 
-class KPTTaskProgressPanelImpl : public KPTTaskProgressPanelBase {
+class KPTMilestoneProgressPanelImpl : public KPTMilestoneProgressPanelBase {
     Q_OBJECT
 public:
-    KPTTaskProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
+    KPTMilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
     
     void enableWidgets();
 
@@ -43,29 +43,23 @@ signals:
     
 public slots:
     void slotChanged();
-    void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
-    void slotPercentFinishedChanged(int value);
 };
 
-class KPTTaskProgressPanel : public KPTTaskProgressPanelImpl {
+class KPTMilestoneProgressPanel : public KPTMilestoneProgressPanelImpl {
     Q_OBJECT
 public:
-    KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    KPTMilestoneProgressPanel(KPTTask &task, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(KPTPart *part);
     
     bool ok();
 
-protected:
-    void setEstimateScales( int day );
-    
 private:
     KPTTask &m_task;
-    int m_dayLength;
     struct KPTTask::Progress m_progress;
 };
 
 }  //KPlato namespace
 
-#endif // KPTTASKPROGRESSPANEL_H
+#endif // KPTMILESTONEPROGRESSPANEL_H

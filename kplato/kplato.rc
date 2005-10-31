@@ -117,6 +117,8 @@
         <Action name="unindent_task"/>
         <Action name="move_task_up"/>
         <Action name="move_task_down"/>
+        <Separator/>
+        <Action name="task_progress"/>
     </Menu>
     <Menu name="resource_popup">
         <Action name="edit_resource"/>
