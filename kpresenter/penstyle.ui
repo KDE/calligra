@@ -15,6 +15,9 @@
     <property name="caption">
         <string>Pen</string>
     </property>
+    <property name="whatsThis" stdset="0">
+        <string>The settings in this tab are used in the Insert-&gt;Line menu.</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -33,6 +36,9 @@
             </property>
             <property name="title">
                 <string>Arrow Style</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set the styles of the beginning and the end of your line for example you can choose an arrow at the end and a square dot at the beginning.</string>
             </property>
             <grid>
                 <property name="name">
@@ -87,6 +93,9 @@
             <property name="name">
                 <cstring>styleCombo</cstring>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Choose the line style from No Outline which will not draw any line to dotted lines and plain line.</string>
+            </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
             <property name="name">
@@ -117,6 +126,9 @@
             <property name="text">
                 <string></string>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set the color of the line. Clicking on the color will bring the standard KDE Select Color dialog.</string>
+            </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
             <property name="name">
@@ -135,6 +147,9 @@
             </property>
             <property name="suffix">
                 <string> pt</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set the width of the line.</string>
             </property>
         </widget>
     </grid>
