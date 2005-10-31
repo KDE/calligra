@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_TOOLBOX_H_
-#define _KIS_TOOLBOX_H_
+#ifndef _KO_TOOLBOX_H_
+#define _KO_TOOLBOX_H_
 
 #include <qtoolbutton.h>
 #include <qptrvector.h>
@@ -88,22 +88,30 @@ private:
     KInstance* m_instance;
 };
 
+
 class ToolArea : public QWidget {
 
 public:
     ToolArea(QWidget *parent);
-    void setOrientation ( Qt::Orientation o );
-    void add(QWidget *button);
+    ~ToolArea();
+
+    void  setOrientation ( Qt::Orientation o );
+    void  add(QWidget *button);
+
     QWidget* getNextParent();
 
 private:
-    QPtrList<QWidget> m_children;
-    QBoxLayout *m_leftLayout, *m_rightLayout, * m_layout;
-    bool m_left;
-    QWidget * m_leftRow, * m_rightRow;
+    QPtrList<QWidget>  m_children;
+    QBoxLayout        *m_layout;
 
+    QWidget           *m_leftRow;
+    QBoxLayout        *m_leftLayout;
 
+    QWidget           *m_rightRow;
+    QBoxLayout        *m_rightLayout;
+
+    bool               m_left;
 };
 
 
-#endif // _KIS_TOOLBOX_H_
+#endif // _KO_TOOLBOX_H_

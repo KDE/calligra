@@ -107,6 +107,7 @@ QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QS
     return button;
 }
 
+
 void KoToolBox::setupTools()
 {
     int id = 0;
@@ -137,6 +138,7 @@ void KoToolBox::setupTools()
     m_numberOfButtons = id;
 }
 
+
 void KoToolBox::setOrientation ( Qt::Orientation o )
 {
     if ( barPos() == Floating ) { // when floating, make it a standing toolbox.
@@ -150,6 +152,7 @@ void KoToolBox::setOrientation ( Qt::Orientation o )
         t->setOrientation(o);
     }
 }
+
 
 void KoToolBox::enableTools(bool enable)
 {
@@ -185,6 +188,11 @@ void KoToolBox::slotSetTool(const QString & toolname)
     }
 }
 
+
+// ----------------------------------------------------------------
+//                         class ToolArea
+
+
 ToolArea::ToolArea(QWidget *parent)
     : QWidget(parent), m_left(true)
 {
@@ -199,12 +207,18 @@ ToolArea::ToolArea(QWidget *parent)
 
     w = new QWidget(this);
     m_layout->addWidget(w);
+
     grid = new QGridLayout(w, 2, 2);
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
-
     m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 0, 1, 0);
 }
+
+
+ToolArea::~ToolArea()
+{
+}
+
 
 void ToolArea::add(QWidget *button)
 {
@@ -216,6 +230,7 @@ void ToolArea::add(QWidget *button)
     m_left = !m_left;
 }
 
+
 QWidget* ToolArea::getNextParent()
 {
     if (m_left)
@@ -223,12 +238,19 @@ QWidget* ToolArea::getNextParent()
     return m_rightRow;
 }
 
+
 void ToolArea::setOrientation ( Qt::Orientation o )
 {
-    QBoxLayout::Direction dir = o != Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight;
+    QBoxLayout::Direction  dir = (o != Qt::Horizontal 
+				  ? QBoxLayout::TopToBottom
+				  : QBoxLayout::LeftToRight);
     m_leftLayout->setDirection(dir);
     m_rightLayout->setDirection(dir);
-    m_layout->setDirection(o == Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight);
+
+    m_layout->setDirection(o == Qt::Horizontal
+			   ? QBoxLayout::TopToBottom
+			   : QBoxLayout::LeftToRight);
 }
+
 
 #include "kotoolbox.moc"
