@@ -31,11 +31,14 @@
 #include <vector>
 #include <klineedit.h>
 
+
+
 class KSpreadCell;
 class KSpreadSheet;
 //class KSpreadCanvas;
 //struct KSpreadCanvas::HighlightedCell;
 class KSpreadView;
+class KSpreadTextEditor;
 
 
 class KSpreadLocationEditWidget;
@@ -43,6 +46,7 @@ class KSpreadLocationEditWidget;
 
 class QFont;
 class QButton;
+class QTextCursor;
 
 class KTextEdit;
 
@@ -146,6 +150,31 @@ class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
 		bool _refsChanged;
 };
 
+// for autocompletion of function name
+
+class FunctionCompletion : public QObject
+{
+    Q_OBJECT
+  
+public:
+    FunctionCompletion( KSpreadTextEditor* editor );
+    ~FunctionCompletion();
+    
+    bool eventFilter( QObject *o, QEvent *e );
+    void doneCompletion();
+    void showCompletion( const QStringList &choices );
+    
+signals:
+    void selectedCompletion( const QString& item );
+    
+private:
+    class Private;
+    Private* d;
+    FunctionCompletion( const FunctionCompletion& );
+    FunctionCompletion& operator=( const FunctionCompletion& );    
+};
+
+
 class KSpreadTextEditor : public KSpreadCellEditor
 {
     Q_OBJECT
@@ -166,6 +195,8 @@ public:
     virtual void paste();
     virtual void copy();
 
+    QPoint globalCursorPosition() const;
+
     //Colour-code references to cells in formulas
     void colorCellReferences();
 
@@ -177,6 +208,7 @@ private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged(int para,int pos);
+    void  slotTextCursorChanged(QTextCursor*);
 
 protected:
     void resizeEvent( QResizeEvent* );
@@ -185,6 +217,12 @@ protected:
      * it to the @ref KSpreadCancvas ( its parent ) instead.
      */
     bool eventFilter( QObject* o, QEvent* e );
+
+protected slots:   
+    void checkFunctionAutoComplete();
+    void triggerFunctionAutoComplete();
+    void functionAutoComplete( const QString& item );
+
 
 private:
     //QLineEdit* m_pEdit;
@@ -196,8 +234,11 @@ private:
     uint m_length;
     int  m_fontLength;
 
-
     KSpreadTextEditorHighlighter* m_highlighter;
+
+    FunctionCompletion* functionCompletion;
+    QTimer* functionCompletionTimer;
+    QPoint globalCursorPos;
 };
 
 

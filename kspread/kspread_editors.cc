@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include "kspread_editors.h"
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
@@ -27,6 +26,16 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 #include "kspread_util.h"
+#include "formula.h"
+#include "functions.h"
+
+#include <klistbox.h>
+
+#include <qapplication.h>
+#include <qlistbox.h>
+#include <qtimer.h>
+#include <qvbox.h>
+#include <private/qrichtext_p.h>
 
 //#include <klineedit.h>
 #include <ktextedit.h>
@@ -286,6 +295,119 @@ int KSpreadTextEditorHighlighter::highlightParagraph(const QString& text, int /*
 
 /********************************************
  *
+ * FunctionCompletion
+ *
+ ********************************************/
+
+class FunctionCompletion::Private
+{
+public:
+  KSpreadTextEditor* editor;
+  QVBox *completionPopup;
+  KListBox *completionListBox;
+};
+
+FunctionCompletion::FunctionCompletion( KSpreadTextEditor* editor ): 
+QObject( editor )
+{
+  d = new Private;
+  d->editor = editor;
+  
+  d->completionPopup = new QVBox( editor->topLevelWidget(), 0, WType_Popup );
+  d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
+  d->completionPopup->setLineWidth( 1 );
+  d->completionPopup->installEventFilter( this );
+  d->completionPopup->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum);
+  
+  d->completionListBox = new KListBox( d->completionPopup );
+  d->completionPopup->setFocusProxy( d->completionListBox );
+  d->completionListBox->setFrameStyle( QFrame::NoFrame );
+  d->completionListBox->setVariableWidth( true );
+  d->completionListBox->installEventFilter( this );
+}
+
+FunctionCompletion::~FunctionCompletion()
+{
+      delete d;
+}
+
+bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
+{
+    if ( obj == d->completionPopup || obj == d->completionListBox ) 
+    {
+      if ( ev->type() == QEvent::KeyPress )
+      {
+              QKeyEvent *ke = (QKeyEvent*)ev;
+              if ( ke->key() == Key_Enter || ke->key() == Key_Return  )
+              {
+                  doneCompletion();
+                  return true;
+              }
+              else if ( ke->key() == Key_Left || ke->key() == Key_Right ||
+              ke->key() == Key_Up || ke->key() == Key_Down ||
+              ke->key() == Key_Home || ke->key() == Key_End ||
+              ke->key() == Key_Prior || ke->key() == Key_Next ) 
+                  return false;
+                      
+              d->completionPopup->close();
+              d->editor->setFocus();
+              QApplication::sendEvent( d->editor, ev );
+              return true;
+      }
+    
+      if ( ev->type() == QEvent::MouseButtonDblClick )
+      {
+          doneCompletion();
+          return true;
+      }
+    
+  }
+  
+  return false;
+}
+
+void FunctionCompletion::doneCompletion()
+{
+  d->completionPopup->close();
+  d->editor->setFocus();
+  emit selectedCompletion( d->completionListBox->currentText() );
+}
+
+void FunctionCompletion::showCompletion( const QStringList &choices )
+{
+  if( !choices.count() ) return;
+  
+  d->completionListBox->clear();
+  for( unsigned i = 0; i < choices.count(); i++ )
+    new QListBoxText( (QListBox*)d->completionListBox, choices[i] );
+  d->completionListBox->setCurrentItem( 0 );
+  
+  // size of the pop-up
+  d->completionPopup->setMaximumHeight( 100 );
+  d->completionPopup->resize( d->completionListBox->sizeHint() +
+    QSize( d->completionListBox->verticalScrollBar()->width() + 4,
+        d->completionListBox->horizontalScrollBar()->height() + 4 ) );
+  int h = d->completionListBox->height();
+  int w = d->completionListBox->width();
+  
+  QPoint pos = d->editor->globalCursorPosition();
+  
+  // if popup is partially invisible, move to other position
+  // FIXME check it if it works in Xinerama multihead
+  int screen_num = QApplication::desktop()->screenNumber( d->completionPopup );
+  QRect screen = QApplication::desktop()->screenGeometry( screen_num );
+  if( pos.y() + h > screen.y()+screen.height() )
+    pos.setY( pos.y() - h - d->editor->height() );    
+  if( pos.x() + w > screen.x()+screen.width() )
+    pos.setX(  screen.x()+screen.width() - w );    
+          
+  d->completionPopup->move( pos );    
+  d->completionListBox->setFocus();
+  d->completionPopup->show();
+}
+
+/********************************************
+ *
  * KSpreadTextEditor
  *
  ********************************************/
@@ -310,6 +432,14 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 
   m_highlighter=new KSpreadTextEditorHighlighter(m_pEdit,cell()->sheet());
 
+  functionCompletion = new FunctionCompletion( this );
+  functionCompletionTimer = new QTimer( this );
+  connect( functionCompletion, SIGNAL( selectedCompletion( const QString& ) ),
+    SLOT( functionAutoComplete( const QString& ) ) );
+  connect( m_pEdit, SIGNAL( textChanged() ), SLOT( checkFunctionAutoComplete() ) );    
+  connect( functionCompletionTimer, SIGNAL( timeout() ), 
+    SLOT( triggerFunctionAutoComplete() ) );
+
   if (!cell()->multiRow(cell()->column(),cell()->row()))
 	{
 		m_pEdit->setWordWrap(QTextEdit::NoWrap);
@@ -324,6 +454,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   setFocusProxy( m_pEdit );
 
   connect( m_pEdit, SIGNAL( cursorPositionChanged(int,int) ), this, SLOT (slotCursorPositionChanged(int,int)));
+  connect( m_pEdit, SIGNAL( cursorPositionChanged(QTextCursor*) ), this, SLOT (slotTextCursorChanged(QTextCursor*)));
   connect( m_pEdit, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
 
 // connect( m_pEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
@@ -349,7 +480,80 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 KSpreadTextEditor::~KSpreadTextEditor()
 {
   delete m_highlighter;
+  delete functionCompletion;
+  delete functionCompletionTimer;
   canvas()->endChoose();
+}
+
+QPoint KSpreadTextEditor::globalCursorPosition() const
+{
+  return globalCursorPos;
+}
+
+
+void KSpreadTextEditor::checkFunctionAutoComplete()
+{  
+  functionCompletionTimer->stop();
+  functionCompletionTimer->start( 500, true );
+}
+
+void KSpreadTextEditor::triggerFunctionAutoComplete()
+{  
+  // tokenize the expression (don't worry, this is very fast)
+  int para = 0, curPos = 0;
+  m_pEdit->getCursorPosition( &para, &curPos );
+  QString subtext = m_pEdit->text().left( curPos );
+
+  KSpread::Tokens tokens = KSpread::Formula::scan( subtext );
+  if( !tokens.valid() ) return;
+  if( tokens.count()<1 ) return;
+
+  KSpread::Token lastToken = tokens[ tokens.count()-1 ];
+  
+  // last token must be an identifier  
+  if( !lastToken.isIdentifier() ) return;
+  QString id = lastToken.text();
+  if( id.length() < 1 ) return;
+
+  // find matches in function names  
+  QStringList fnames = KSpread::FunctionRepository::self()->functionNames();
+  QStringList choices;
+  for( unsigned i=0; i<fnames.count(); i++ )
+    if( fnames[i].startsWith( id, false ) )
+      choices.append( fnames[i] );
+  choices.sort();    
+      
+  // no match, don't bother with completion
+  if( !choices.count() ) return;
+  
+  // single perfect match, no need to give choices
+  if( choices.count()==1 )
+    if( choices[0].lower() == id.lower() )
+      return;
+  
+  // present the user with completion choices
+  functionCompletion->showCompletion( choices );
+}
+
+void KSpreadTextEditor::functionAutoComplete( const QString& item )
+{
+  if( item.isEmpty() ) return;
+
+  int para = 0, curPos = 0;
+  m_pEdit->getCursorPosition( &para, &curPos );
+  QString subtext = text().left( curPos );
+
+  KSpread::Tokens tokens = KSpread::Formula::scan( subtext );
+  if( !tokens.valid() ) return;
+  if( tokens.count()<1 ) return;
+
+  KSpread::Token lastToken = tokens[ tokens.count()-1 ];
+  if( !lastToken.isIdentifier() ) return;
+  
+  m_pEdit->blockSignals( true );
+  m_pEdit->setSelection( 0, lastToken.pos()+1, 0, lastToken.pos()+lastToken.text().length()+1 );
+  m_pEdit->insert( item );
+  m_pEdit->blockSignals( false );
 }
 
 void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
@@ -367,6 +571,19 @@ void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
 
 		delete highlightedCells;
 	}
+}
+
+void KSpreadTextEditor::slotTextCursorChanged(  QTextCursor* cursor )
+{
+  QTextStringChar *chr = cursor->paragraph()->at( cursor->index() );
+  int h = cursor->paragraph()->lineHeightOfChar( cursor->index() );
+  int x = cursor->paragraph()->rect().x() + chr->x;
+  int y, dummy;
+  cursor->paragraph()->lineHeightOfChar( cursor->index(), &dummy, &y );
+  y += cursor->paragraph()->rect().y();
+
+  globalCursorPos = m_pEdit->mapToGlobal( m_pEdit-> contentsToViewport( QPoint( x, y + h ) ) );
+
 }
 
 void KSpreadTextEditor::cut()
