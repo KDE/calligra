@@ -21,17 +21,8 @@
 *   Boston, MA 02110-1301, USA.
 */
 
-/*
-    Note: This code is not yet integrated into KOffice.  To test, add the following
-    line to koffice/lib/kofficecore/koMainWindow.cc
-        new KPanelKbdSizer(this, "mw-panelSizer");
-    just below the line
-        setCentralWidget( d->m_splitter );
-    in KoMainWindow constructor.  Then "make install" in koffice/lib/kofficecore.
-*/
-
-#ifndef __KPANELKBDSIZER_H__
-#define __KPANELKBDSIZER_H__
+#ifndef __KKBDACCESSEXTENSIONS_H__
+#define __KKBDACCESSEXTENSIONS_H__
 
 // Qt includes.
 #include <qobject.h>
@@ -39,11 +30,11 @@
 // KOffice includes.
 #include <koffice_export.h>
 
-class KPanelKbdSizerPrivate;
+class KKbdAccessExtensionsPrivate;
 class QWidgetList;
 class KMainWindow;
 
-/** KPanelKbdSizer is an object that improves accessibility for motor impaired users
+/** KKbdAccessExtensions is an object that improves accessibility for motor impaired users
 *   who may not be able to easily use a mouse.  It adds two new capabilities using the keyboard:
 *
 *     - Resizing and positioning of panel widgets derived from QSplitter and QDockWindow.
@@ -116,7 +107,7 @@ class KMainWindow;
 *   F8/Shift+F8 are the default shortcuts because these are the keys used for similar
 *   functionality in GNOME and Java SWT.
 */
-class KOFFICECORE_EXPORT KPanelKbdSizer : public QObject
+class KOFFICECORE_EXPORT KKbdAccessExtensions : public QObject
 {
     // TODO: A .moc isn't really needed right now, but see TODO in eventFilter method.
     // Q_OBJECT
@@ -127,10 +118,10 @@ class KOFFICECORE_EXPORT KPanelKbdSizer : public QObject
         *   @param parent       KMainWindow of the application.  Required.
         *   @param name         (optional) Name of this object.
         */
-        KPanelKbdSizer(KMainWindow* parent, const char* name = 0);
+        KKbdAccessExtensions(KMainWindow* parent, const char* name = 0);
 
         /** Destructor. */
-        virtual ~KPanelKbdSizer();
+        virtual ~KKbdAccessExtensions();
 
         /** Returns number of pixels panel is sized for each arrow key pressed.  Default is 10. */
         int stepSize() const;
@@ -166,7 +157,7 @@ class KOFFICECORE_EXPORT KPanelKbdSizer : public QObject
         bool handleAccessKey( const QKeyEvent* ev );
 
     private:
-        KPanelKbdSizerPrivate* d;
+        KKbdAccessExtensionsPrivate* d;
 };
 
 /** Provides a way to sort QLabelss using a QValueList based on their screen position. */
@@ -182,4 +173,4 @@ private:
     QLabel* m_l;
 };
 
-#endif              // __KPANELKBDSIZER_H__
+#endif              // __KKBDACCESSEXTENSIONS_H__

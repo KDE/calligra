@@ -29,6 +29,7 @@
 #include "koFrame.h"
 #include "kofiledialog.h"
 #include "koversiondialog.h"
+#include "kkbdaccessextensions.h"
 
 #include <kprinter.h>
 #include <kdeversion.h>
@@ -235,6 +236,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "mw-splitter");
     setCentralWidget( d->m_splitter );
+    // Keyboard accessibility enhancements.
+    new KKbdAccessExtensions(this, "mw-panelSizer");
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(

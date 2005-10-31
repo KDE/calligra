@@ -29,7 +29,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	KoMainWindowIface.cc KoMainWindowIface.skel kofficeversion.cc koOasisStyles.cc \
 	koStyleStack.cc koGenStyles.cpp koOasisSettings.cc koPageLayout.cpp \
 	kofiledialog.cpp koxmlns.cpp kodom.cpp koversiondialog.cc koOasisStore.cpp \
-	kpanelkbdsizer.cpp
+	kkbdaccessextensions.cpp
 
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 
@@ -45,7 +45,7 @@ include_HEADERS = handler.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
 	koPictureKey.h koPicture.h koPictureCollection.h kofficeversion.h koOasisStyles.h \
 	koStyleStack.h koGenStyles.h koOasisSettings.h koPageLayout.h koxmlns.h kodom.h koversiondialog.h \
-	kpanelkbdsizer.h \
+	kkbdaccessextensions.h \
 	koffice_export.h
 
 noinst_HEADERS = koDocument_p.h koFilterManager_p.h \
