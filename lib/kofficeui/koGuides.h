@@ -28,6 +28,7 @@
 
 class QPaintDevice;
 class KoPoint;
+class KoRect;
 class KoView;
 class KoZoomHandler;
 
@@ -127,6 +128,29 @@ public:
      * @param verticalPos A list of the position of the vertical guide lines.
      */
     void getGuideLines( QValueList<double> &horizontalPos, QValueList<double> &verticalPos ) const;
+
+    /**
+     * @brief Snap rect to guidelines
+     *
+     * This looks fo a guide which is in reach for the guide as defined in snap.
+     *
+     * @param rect the rect which should be snapped
+     * @param snap the distance the guide should snap
+     *
+     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     */
+    KoPoint snapToGuideLines( KoRect &rect, int snap );
+
+    /**
+     * @brief Find the next guide distance to snap to
+     *
+     * @param rect the rect which should be snapped
+     * @param diffx The range in x distance in which the guide has to be.
+     * @param diffy The range in y distance in which the guide has to be.
+     *
+     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     */
+    KoPoint diffGuide( KoRect &rect, double diffx, double diffy );
 
 public slots:
     /**

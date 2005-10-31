@@ -29,6 +29,7 @@
 
 #include <koDocument.h>
 #include <koPoint.h>
+#include <koRect.h>
 #include <koView.h>
 #include <kozoomhandler.h>
 
@@ -339,6 +340,118 @@ void KoGuides::getGuideLines( QValueList<double> &horizontalPos, QValueList<doub
             verticalPos.append( ( *it )->position );
         }
     }
+}
+
+
+KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap )
+{
+    KoPoint diff( 0, 0 );
+    QValueList<double> hGuideLines;
+    QValueList<double> vGuideLines;
+    getGuideLines( hGuideLines, vGuideLines );
+
+    QValueList<double>::const_iterator it( vGuideLines.begin() );
+    for ( ; it != vGuideLines.end(); ++it )
+    {
+        double tmp = rect.left() - *it;
+        if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+        {
+            diff.setX( tmp );
+            break;
+        }
+        tmp = rect.right() - *it;
+        if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+        {
+            diff.setX( tmp );
+            break;
+        }
+    }
+
+    it = hGuideLines.begin();
+    for ( ; it != hGuideLines.end(); ++it )
+    {
+        double tmp = rect.top() - *it;
+        if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+        {
+            diff.setY( tmp );
+            break;
+        }
+        tmp = rect.bottom() - *it;
+        if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+        {
+            diff.setY( tmp );
+            break;
+        }
+    }
+    return diff;
+}
+
+KoPoint KoGuides::diffGuide( KoRect &rect, double diffx, double diffy )
+{
+    KoPoint move( 0, 0 );
+    QValueList<double> horizHelplines;
+    QValueList<double> vertHelplines;
+    getGuideLines( horizHelplines, vertHelplines );
+
+    QValueList<double>::const_iterator it( vertHelplines.begin() );
+    for ( ; it != vertHelplines.end(); ++it )
+    {
+        double movexl = *it - rect.left();
+        double movexr = *it - rect.right();
+        if ( diffx > 0 )
+        {
+            if ( diffx > movexl && movexl > move.x() )
+            {
+                move.setX( movexl );
+            }
+            if ( diffx > movexr && movexr > move.x() )
+            {
+                move.setX( movexr );
+            }
+        }
+        else
+        {
+            if ( diffx < movexl && movexl < move.x() )
+            {
+                move.setX( movexl );
+            }
+            if ( diffx < movexr && movexr < move.x() )
+            {
+                move.setX( movexr );
+            }
+        }
+    }
+
+    it = horizHelplines.begin();
+    for ( ; it != horizHelplines.end(); ++it )
+    {
+        double moveyl = *it - rect.top();
+        double moveyr = *it - rect.bottom();
+        if ( diffy > 0 )
+        {
+            if ( diffy > moveyl && moveyl > move.y() )
+            {
+                move.setY( moveyl );
+            }
+            if ( diffy > moveyr && moveyr > move.y() )
+            {
+                move.setY( moveyr );
+            }
+        }
+        else
+        {
+            if ( diffy < moveyl && moveyl < move.y() )
+            {
+                move.setY( moveyl );
+            }
+            if ( diffy < moveyr && moveyr < move.y() )
+            {
+                move.setY( moveyr );
+            }
+        }
+    }
+
+    return move;
 }
 
 
