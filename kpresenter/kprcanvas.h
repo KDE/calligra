@@ -739,6 +739,7 @@ private:
     bool m_keepRatio;
     /// ratio of the object ( width / height )
     double m_ratio;
+    bool m_isResizing;
 
     //---- stuff needed for moving ----
     bool m_isMoving;

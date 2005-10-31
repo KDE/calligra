@@ -259,11 +259,13 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
   if ( isUpdatesEnabled() )
   {
-        // Note: in drawContents, the painter is already translated to the contents coordinates
+    // Note: in drawContents, the painter is already translated to the contents coordinates
     painter->setBrushOrigin( -contentsX(), -contentsY() );
     drawDocument( painter, QRect( cx, cy, cw, ch ), m_viewMode );
     if ( m_doc->showGrid() )
       drawGrid( *painter, QRect( cx, cy, cw, ch ) );
+    else if ( m_doc->snapToGrid() && ( m_frameMoved || m_frameResized || m_mouseMode != MM_EDIT ) )
+      drawGrid( *painter, rect() );
   }
 }
 
@@ -526,6 +528,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
                 QCursor::setPos( viewport()->mapToGlobal( vPoint ) );
         }
         emit docStructChanged(Pictures);
+        if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+          repaintContents( FALSE ); //draw the grid over the whole canvas
     }
 }
 
@@ -958,10 +962,15 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
 
         // Move resize handles to new position
         frame->updateResizeHandles();
-        // Calculate new rectangle for this frame
-        QRect newRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
-        // Repaint only the changed rects (oldRect U newRect)
-        repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
+        if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+          repaintContents( FALSE ); //draw the grid over the whole canvas
+        else
+        {
+          // Calculate new rectangle for this frame
+          QRect newRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
+          // Repaint only the changed rects (oldRect U newRect)
+          repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
+        }
         m_frameResized = true;
 
         m_gui->getView()->updateFrameStatusBarItem();
@@ -1204,7 +1213,10 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         }
     }
 
-    repaintContents( repaintRegion.boundingRect(), FALSE );
+    if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+      repaintContents( FALSE ); //draw the grid over the whole canvas
+    else
+      repaintContents( repaintRegion.boundingRect(), FALSE );
 
     m_gui->getView()->updateFrameStatusBarItem();
 }
@@ -1445,6 +1457,9 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             }
         }
         m_doc->repaintAllViews();
+        m_frameMoved = m_frameResized = false;
+        if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+            repaintContents();
     }
     else
     {
@@ -1655,6 +1670,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             m_insRect.setBottom(m_insRect.top()+150);
             m_insRect.setRight(m_insRect.left()+200);
         }
+        MouseMode old_mouseMove = m_mouseMode;
         switch ( m_mouseMode ) {
             case MM_EDIT:
                 if ( m_currentFrameSetEdit )
@@ -1694,6 +1710,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 break;
         }
 
+        if ( old_mouseMove != MM_EDIT && !m_doc->showGrid() && m_doc->snapToGrid() )
+          repaintContents( FALSE ); //draw the grid over the whole canvas
         m_mousePressed = false;
     }
 }
@@ -2384,9 +2402,13 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
         }
-    }
 
-    m_mouseMode = newMouseMode;
+        m_mouseMode = newMouseMode;
+        if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+          repaintContents( FALSE ); //draw the grid over the whole canvas
+    }
+    else
+        m_mouseMode = newMouseMode;
     emit currentMouseModeChanged(m_mouseMode);
 
     switch ( m_mouseMode ) {
@@ -2806,8 +2828,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         delete m_moveFrameCommand;
                         m_moveFrameCommand = 0;
                         m_frameMoved = false;
+
                         m_mousePressed = false; //we don't want things to happen in KWCanvas::contentsMouseReleaseEvent
                         m_ctrlClickOnSelectedFrame = false;
+                        if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+                            repaintContents();
                         m_gui->getView()->updateFrameStatusBarItem();
                         setMouseMode( MM_EDIT );
                       }
@@ -2828,11 +2853,16 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         m_ctrlClickOnSelectedFrame = false;
                         // Move resize handles to new position
                         frame->updateResizeHandles();
-                        // Calculate new rectangle for this frame
-                        QRect newRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
-                        // Repaint only the changed rects (oldRect U newRect)
-                        repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
-                        m_gui->getView()->updateFrameStatusBarItem();
+                        if ( !m_doc->showGrid() && m_doc->snapToGrid() )
+                          repaintContents();
+                        else
+                        {
+                          // Calculate new rectangle for this frame
+                          QRect newRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
+                          // Repaint only the changed rects (oldRect U newRect)
+                          repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
+                          m_gui->getView()->updateFrameStatusBarItem();
+                        }
                         setMouseMode( MM_EDIT );
                       }
                       else
