@@ -210,7 +210,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bAllowAutoFormat = true;
 
     m_bViewFormattingChars = false;
-    m_bShowHelplines = false;
+    m_bShowHelplines = true;
+    m_bSnapToGuideLines = true;
+
     m_bShowGrid = true;
     m_bGridToFont = false;
 
@@ -4458,11 +4460,11 @@ void KPresenterDoc::addVertHelpline(double pos)
     }
 }
 
-void KPresenterDoc::updateHelpLineButton()
+void KPresenterDoc::updateGuideLineButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateHelpLineButton();
+        ((KPresenterView*)it.current())->updateGuideLineButton();
 }
 
 void KPresenterDoc::loadHelpLines( const QDomElement &element )

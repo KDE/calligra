@@ -45,7 +45,8 @@
   <Separator/>
   <Action name="view_formattingchars"/>
   <Separator/>
-  <Action name="view_helplines"/>
+  <Action name="view_guidelines"/>
+  <Action name="view_snaptoguidelines"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>
@@ -278,10 +279,8 @@
   <Action name="extra_layout"/>
   <Action name="extra_background"/>
   <Separator/>
-  <Action name="add_helpline"/>
-  <Action name="add_helppoint"/>
-  <Separator/>
-  <Action name="view_helplines"/>
+  <Action name="view_guidelines"/>
+  <Action name="view_snaptoguidelines"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>

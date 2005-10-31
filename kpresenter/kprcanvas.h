@@ -563,6 +563,18 @@ private:
      */
     bool moveObject( int x, int y, bool doApplyGrid );
 
+    /**
+     * @brief Move object by key
+     */
+    void moveObjectsByKey( int x, int y );
+
+    /**
+     * @brief Move object by mouse
+     *
+     * @param pos The position of the mouse
+     */
+    void moveObjectsByMouse( KoPoint &pos );
+
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
     void resizeObject( ModifyType _modType, int _dx, int _dy, bool doApplyGrid );
@@ -603,6 +615,19 @@ private:
     double applyGridY( double y );
     int applyGridOnPosX( int pos ) const;
     int applyGridOnPosY( int pos ) const;
+
+    /**
+     * @brief Find the next grid in distance
+     *
+     * Allways the top left corner is snapped to the grid.
+     *
+     * @param rect The rect which should be snapped to the grid.
+     * @param diffx The range in x distance in which the grid has to be.
+     * @param diffy The range in y distance in which the grid has to be.
+     *
+     * @return the distance to the guide or (  0, 0 ) if there is no guide to snap to.
+     */
+    KoPoint diffGrid( KoRect &rect, double diffx, double diffy );
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
@@ -750,20 +775,14 @@ private:
     int m_xOffset, m_yOffset;
     int m_xOffsetSaved, m_yOffsetSaved; // saved when going fullscreen
 
-    /**
-     * Start position for move with mouse
-     *
-     * This one is used for calculating the whole move
-     * ( from mousePressEvent to mouseReleaseEvent ).
-     */
+    /// Start position for move with mouse
     KoPoint m_moveStartPosMouse;
-    /**
-     * Start position for move with mouse
-     *
-     * This one is used for calculating the move during
-     * the mouseMoveEvent.
-     */
-    QPoint m_origPos;
+    /// This holds the distance it an object was snapped to a guide
+    KoPoint m_moveSnapDiff;
+    /// This is set to true if the snap logic has to be reverted (by pressing shift during move)
+    bool m_changeSnap;
+    /// The last position of the mouse during moving
+    KoPoint m_origMousePos;
     /// start position for move with key
     KoPoint m_moveStartPosKey; 
 

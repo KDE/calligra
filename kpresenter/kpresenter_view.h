@@ -154,7 +154,7 @@ public:
 
     void updateDisplayBackgroundButton();
 
-    void updateHelpLineButton();
+    void updateGuideLineButton();
 
     void updateGridButton();
     void savePicture( const QString& oldName, KoPicture& picture);
@@ -199,7 +199,9 @@ public slots:
     void viewHeader();
     void insertComment();
     void editComment();
-    void viewHelpLines();
+
+    void viewGuideLines();
+    void viewSnapToGuideLines();
 
     void viewGrid();
 
@@ -911,7 +913,8 @@ private:
     KToggleAction *actionViewShowNoteBar;
     KToggleAction *actionViewSlideMaster;
 
-    KToggleAction *actionViewShowHelpLine;
+    KToggleAction *actionViewShowGuideLine;
+    KToggleAction *actionViewSnapToGuideLines;
 
     KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewShowGrid;

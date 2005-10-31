@@ -431,7 +431,7 @@ bool KPresenterDocIface::showHelplines() const
 void KPresenterDocIface::setShowHelplines(bool b)
 {
     doc->setShowHelplines(b);
-    doc->updateHelpLineButton();
+    doc->updateGuideLineButton();
     doc->repaint( false );
 }
 
