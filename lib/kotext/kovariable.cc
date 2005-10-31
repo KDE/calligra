@@ -817,7 +817,8 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
             key = "STRING";
         }
         else if ( localName == "variable-set"
-                  || localName == "user-defined" )
+                  || localName == "user-defined"
+                  || localName == "user-field-get" )
         {
             key = "STRING";
             type = VT_CUSTOM;
@@ -1693,10 +1694,11 @@ void KoCustomVariable::load( QDomElement& elem )
 void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
-    // We treat both the same. For OO the difference is that
+    // We treat all those the same. For OO/OpenDocument the difference is that
+    // - user-field-get is related to text:user-field-decls in <body>
     // - variable-set is related to variable-decls (defined in <body>);
     //                 its value can change in the middle of the document.
-    // - user-defined is related to meta::user-defined in meta.xml
+    // - user-defined is related to meta:user-defined in meta.xml
     if ( localName == "variable-set"
          || localName == "user-defined"
         || localName == "user-field-get" ) {

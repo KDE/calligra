@@ -25,6 +25,7 @@
 #include "koparagcounter.h"
 #include "kocommand.h"
 #include "kooasiscontext.h"
+#include "kovariable.h"
 #include <koxmlns.h>
 #include <kodom.h>
 #include <kdebug.h>
@@ -1515,6 +1516,20 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         {
             // We don't parse variable-decls since we ignore var types right now
             // (and just storing a list of available var names wouldn't be much use)
+        }
+        else if ( isTextNS && localName == "user-field-decls" )
+        {
+            QDomElement fd;
+            forEachElement( fd, tag )
+            {
+                if ( fd.namespaceURI() == KoXmlNS::text && fd.localName() == "user-field-decl" )
+                {
+                    const QString name = fd.attributeNS( KoXmlNS::text, "name", QString::null );
+                    const QString value = fd.attributeNS( KoXmlNS::office, "value", QString::null );
+                    if ( !name.isEmpty() )
+                        context.variableCollection().setVariableValue( name, value );
+                }
+            }
         }
         else if ( isTextNS && localName == "number" ) // text:number
         {
