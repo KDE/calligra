@@ -1326,6 +1326,11 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_initialEditing->m_initialCursorIndex = context.cursorTextIndex();
     }
 
+    if ( !settings.isNull() )
+    {
+        oasisLoader.loadOasisSettings( settings );
+    }
+
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     endOfLoading();
 
@@ -1333,12 +1338,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // so it must be done last.
     setPageLayout( m_pageLayout, columns, hf, false );
 
-    if ( !settings.isNull() )
-    {
-        oasisLoader.loadOasisSettings( settings );
-    }
     //printDebug();
-
     return true;
 }
 
@@ -2347,8 +2347,9 @@ bool KWDocument::completeLoading( KoStore *store )
     // Save memory
     m_urlIntern = QString::null;
 
-    // The fields from documentinfo.xml just got loaded -> update vars
+    // The fields and dates just got loaded -> update vars
     recalcVariables( VT_FIELD );
+    recalcVariables( VT_DATE );
 
     // Finalize all the existing [non-inline] framesets
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -5864,6 +5865,8 @@ void KWDocument::setEmpty()
     KoDocument::setEmpty();
     // Whether loaded from template or from empty doc: this is a new one -> set creation date
     m_varColl->variableSetting()->setCreationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE ); // , VST_CREATION_DATE ...
+    // If we then load a document, it will override that date.
 }
 
 void KWDocument::updateGridButton()

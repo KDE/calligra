@@ -98,10 +98,9 @@ QDateTime KoVariableSettings::creationDate() const
     return d->m_creationDate;
 }
 
-void KoVariableSettings::setCreationDate( const QDateTime & _date)
+void KoVariableSettings::setCreationDate( const QDateTime & _date )
 {
-    if ( !d->m_creationDate.isValid() )
-        d->m_creationDate = _date;
+    d->m_creationDate = _date;
 }
 
 QDateTime KoVariableSettings::modificationDate() const
@@ -139,7 +138,6 @@ void KoVariableSettings::saveOasis( KoXmlWriter &settingsWriter ) const
 
 void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
 {
-    kdDebug() << k_funcinfo << endl;
     KoOasisSettings::Items configurationSettings = settingsDoc.itemSet( "configuration-variable-settings" );
     if ( !configurationSettings.isNull() )
     {
@@ -155,8 +153,9 @@ void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
             d->m_lastPrintingDate.setTime_t(0); // 1970-01-01 00:00:00.000 locale time
 
         str = configurationSettings.parseConfigItemString( "creationDate" );
-        if ( !str.isEmpty() )
+        if ( !str.isEmpty() ) {
             d->m_creationDate = QDateTime::fromString( str, Qt::ISODate );
+        }
 
         str = configurationSettings.parseConfigItemString( "modificationDate" );
         if ( !str.isEmpty() )
@@ -210,8 +209,9 @@ void KoVariableSettings::load( QDomElement &elem )
         else
             d->m_lastPrintingDate.setTime_t(0); // 1970-01-01 00:00:00.000 locale time
 
-        if (e.hasAttribute("creationDate"))
+        if (e.hasAttribute("creationDate")) {
             d->m_creationDate = QDateTime::fromString( e.attribute( "creationDate" ), Qt::ISODate );
+        }
 
         if (e.hasAttribute("modificationDate"))
             d->m_modificationDate = QDateTime::fromString( e.attribute( "modificationDate" ), Qt::ISODate );
@@ -1284,13 +1284,13 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
         }
         break;
     case VST_DATE_LAST_PRINTING:
-        writer.startElement( "text:print" );
+        writer.startElement( "text:print-date" );
         break;
     case VST_DATE_CREATE_FILE:
-        writer.startElement( "text:creation" );
+        writer.startElement( "text:creation-date" );
         break;
-    case  VST_DATE_MODIFY_FILE:
-        writer.startElement( "text:modification" );
+    case VST_DATE_MODIFY_FILE:
+        writer.startElement( "text:modification-date" );
         break;
     }
     QString value(  m_varFormat->formatProperties() );

@@ -3262,6 +3262,8 @@ void KPresenterDoc::setEmpty()
     KoDocument::setEmpty();
     // Whether loaded from template or from empty doc: this is a new one -> set creation date
     m_varColl->variableSetting()->setCreationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE ); // , VST_CREATION_DATE ...
+    // If we then load a document, it will override that date.
 }
 
 void KPresenterDoc::setGridValue( double _x, double _y, bool _replace )
