@@ -98,7 +98,7 @@ QDomDocument KoDocumentInfo::save()
     QDomDocument doc = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
     QDomElement e = doc.documentElement();
 
-    QStringList lst = pages();
+    const QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
@@ -909,6 +909,7 @@ bool KoDocumentInfoUserMetadata::saveOasis( KoXmlWriter &xmlWriter )
     xmlWriter.addTextNode( it.data() );
     xmlWriter.endElement();
   }
+  return true;
 }
 
 bool KoDocumentInfoUserMetadata::loadOasis( const QDomNode& metaDoc )
@@ -933,11 +934,13 @@ bool KoDocumentInfoUserMetadata::loadOasis( const QDomNode& metaDoc )
 // KOffice-1.3 format
 bool KoDocumentInfoUserMetadata::load( const QDomElement& e )
 {
+    return true;
 }
 
 // KOffice-1.3 format
 QDomElement KoDocumentInfoUserMetadata::save( QDomDocument& doc )
 {
+    return QDomElement();
 }
 
 #include <koDocumentInfo.moc>
