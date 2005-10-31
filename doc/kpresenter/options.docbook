@@ -927,7 +927,7 @@ two names? -->
 <textobject><phrase>Paths</phrase></textobject>
 </mediaobject>
 </screenshot>
-<para>There are two paths that are set here, the Backup Path and the Picture Path. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
+<para>There are two paths that are set here, the Backup Path and the Picture Path. The Backup path is the directory where your backup files are saved and the Picture Path is the directory where your pictures are saved. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
 
 </sect2>
 
