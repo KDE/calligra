@@ -725,7 +725,7 @@ addresses often contain words run together.</para>
 <varlistentry>
 <term><guilabel>Tab stop (mm):</guilabel></term>
 <listitem><para>Each &kpresenter; document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops.
-As an example. If you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc....</para></listitem>
+As an example, if you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc.</para></listitem>
 </varlistentry>
 </variablelist>
 
