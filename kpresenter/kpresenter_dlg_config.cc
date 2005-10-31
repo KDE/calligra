@@ -933,7 +933,7 @@ configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, ch
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
-
+    QWhatsThis::add(m_pPathView, i18n( "There are two paths that are set here, the Backup Path and the Picture Path. The Backup path is the directory where your backup files are saved and the Picture Path is the directory where your pictures are saved." ) );
     box->addWidget(m_pPathView);
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), this);
@@ -943,6 +943,7 @@ configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, ch
     connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )),
              this, SLOT( slotSelectionChanged(QListViewItem * )));
     slotSelectionChanged(m_pPathView->currentItem());
+    QWhatsThis::add(m_modifyPath, i18n( "When you click this button, a small dialog appears and if you uncheck Default path, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.." ) );
     box->addWidget(m_modifyPath);
 
 }

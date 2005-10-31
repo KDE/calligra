@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qslider.h>
+#include <qwhatsthis.h>
 #include <qwidgetstack.h>
 
 #include <klocale.h>
@@ -43,6 +44,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     m_typeCombo->insertItem( i18n( "Single Color" ) );
     m_typeCombo->insertItem( i18n( "Gradient" ) );
     m_typeCombo->insertItem( i18n( "Transparent" ) );
+    QWhatsThis::add(m_typeCombo, i18n( "You can choose between Single Color, Gradient or Transparent as the type." ) );
 
     QLabel *typeLabel = new QLabel( i18n( "&Type:" ), this );
     layout->addWidget( typeLabel, 0, 0 );
@@ -72,6 +74,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
 
     m_preview_color = new PBPreview( m_brushUI->previewPanel, 0, PBPreview::Brush );
     QHBoxLayout *hbox = new QHBoxLayout( m_brushUI->previewPanel );
+    QWhatsThis::add(m_preview_color, i18n( "This displays a preview of your choices." ) );
     hbox->addWidget(m_preview_color);
 
     connect( m_brushUI->styleCombo, SIGNAL( activated( int ) ),

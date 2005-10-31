@@ -15,6 +15,9 @@
     <property name="caption">
         <string>Rect</string>
     </property>
+    <property name="whatsThis" stdset="0">
+        <string>All these settings are used in the Insert-&gt;Shape-&gt;Rectangle menu.</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -73,6 +76,9 @@
                             <property name="lineStep">
                                 <number>4</number>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Set the horizontal declination.</string>
+                            </property>
                         </widget>
                         <widget class="QSpinBox" row="0" column="1">
                             <property name="name">
@@ -86,6 +92,9 @@
                             </property>
                             <property name="lineStep">
                                 <number>4</number>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Set the vertical declination.</string>
                             </property>
                         </widget>
                     </grid>
@@ -123,6 +132,9 @@
                     <property name="on">
                         <bool>true</bool>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>You can choose or not to keep the same ratio for the two settings depending of this icon.</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
@@ -135,6 +147,9 @@
                     <width>200</width>
                     <height>100</height>
                 </size>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This displays a preview of your choices.</string>
             </property>
         </widget>
     </vbox>

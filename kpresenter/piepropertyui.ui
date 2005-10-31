@@ -15,6 +15,9 @@
     <property name="caption">
         <string>Pie</string>
     </property>
+    <property name="whatsThis" stdset="0">
+        <string>These settings are used in the Insert-&gt;Shape-&gt;Pie/Arc/Chord menu.</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -22,6 +25,9 @@
         <widget class="KComboBox" row="0" column="1">
             <property name="name">
                 <cstring>typeCombo</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>You can choose among three options in the dropdown box: Pie, Arc or Chord.</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
@@ -56,6 +62,9 @@
                     <height>200</height>
                 </size>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>This displays a preview of your choices.</string>
+            </property>
         </widget>
         <widget class="QSpinBox" row="1" column="1">
             <property name="name">
@@ -70,6 +79,9 @@
             <property name="lineStep">
                 <number>6</number>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set here the start position.</string>
+            </property>
         </widget>
         <widget class="QSpinBox" row="2" column="1">
             <property name="name">
@@ -83,6 +95,9 @@
             </property>
             <property name="lineStep">
                 <number>6</number>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set the length of your pie.</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
