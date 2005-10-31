@@ -237,15 +237,6 @@ bool KPTProject::load(QDomElement &element) {
         kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
         setConstraint(KPTNode::MustStartOn);
     }
-    KPTDateTime dt( QDateTime::currentDateTime() );
-    dt = dt.fromString( element.attribute("project-start", dt.toString()) );
-    //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
-    setStartTime(dt);
-
-    // Use project-start as default
-    dt = dt.fromString( element.attribute("project-end", dt.toString()) );
-    //kdDebug()<<k_funcinfo<<"End="<<dt.toString()<<endl;
-    setEndTime(dt);
 
     // Load the project children
     QDomNodeList list = element.childNodes();
@@ -286,14 +277,6 @@ bool KPTProject::load(QDomElement &element) {
                     // TODO: Complain about this
                     delete child;
                 }
-            } else if (e.tagName() == "appointment") {
-                // Load the appointments. Resources and tasks must allready loaded
-                KPTAppointment *child = new KPTAppointment();
-                if (!child->loadXML(e, *this)) {
-                    // TODO: Complain about this
-                    kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
-                    delete child;
-                }
             } else if (e.tagName() == "calendar") {
                 // Load the calendar.
                 KPTCalendar *child = new KPTCalendar();
@@ -319,6 +302,42 @@ bool KPTProject::load(QDomElement &element) {
                 // Load accounts
                 if (!m_accounts.load(e)) {
                     kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
+                }
+            } else if (e.tagName() == "schedules") {
+                // Prepare for multiple schedules
+                QDomNodeList lst = e.childNodes();
+                for (unsigned int i=0; i<lst.count(); ++i) {
+                    if (lst.item(i).isElement()) {
+                        QDomElement sch = lst.item(i).toElement();
+                        if (sch.tagName() == "schedule") {
+                            KPTDateTime dt( QDateTime::currentDateTime() );
+                            dt = dt.fromString(sch.attribute("project-start", dt.toString()) );
+                            //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
+                            setStartTime(dt);
+                        
+                            // Use project-start as default
+                            dt = dt.fromString(sch.attribute("project-end", dt.toString()) );
+                            //kdDebug()<<k_funcinfo<<"End="<<dt.toString()<<endl;
+                            setEndTime(dt);
+                            
+                            QDomNodeList al = sch.childNodes();
+                            for (unsigned int i=0; i<al.count(); ++i) {
+                                if (al.item(i).isElement()) {
+                                    QDomElement app = al.item(i).toElement();
+                                    if (app.tagName() == "appointment") {
+                                        // Load the appointments. 
+                                        // Resources and tasks must allready loaded
+                                        KPTAppointment *child = new KPTAppointment();
+                                        if (!child->loadXML(app, *this)) {
+                                            // TODO: Complain about this
+                                            kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
+                                            delete child;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -347,9 +366,7 @@ void KPTProject::save(QDomElement &element)  {
     
     //me.setAttribute("baselined",(int)m_baselined); FIXME: Removed for this release  
 
-    me.setAttribute("project-start",startTime().toString());
-    me.setAttribute("project-end",endTime().toString());
-    me.setAttribute("scheduling",constraintToString());
+    me.setAttribute("scheduling",constraintToString());    
     
     m_accounts.save(me);
     
@@ -375,21 +392,32 @@ void KPTProject::save(QDomElement &element)  {
     }
 
     for (int i=0; i<numChildren(); i++)
-	// Save all children
-	getChildNode(i)->save(me);
+    // Save all children
+    getChildNode(i)->save(me);
 
     // Now we can save relations assuming no tasks have relations outside the project
     QPtrListIterator<KPTNode> nodes(m_nodes);
     for ( ; nodes.current(); ++nodes ) {
-	    nodes.current()->saveRelations(me);
+        nodes.current()->saveRelations(me);
     }
-
-    // save appointments
-    QPtrListIterator<KPTResourceGroup> rgit(m_resourceGroups);
-    for ( ; rgit.current(); ++rgit ) {
-        rgit.current()->saveAppointments(me);
+    
+    // Prepare for multiple schedules (expected, optimistic, pessmistic...)
+    // This goes into separate class later.
+    QDomElement schs = me.ownerDocument().createElement("schedules");
+    me.appendChild(schs);
+    QDomElement sch = schs.ownerDocument().createElement("schedule");
+    {
+        schs.appendChild(sch);
+        sch.setAttribute("name", "Standard");
+        sch.setAttribute("type", "Expected");
+        sch.setAttribute("project-start",startTime().toString());
+        sch.setAttribute("project-end",endTime().toString());
+        // save appointments
+        QPtrListIterator<KPTResourceGroup> rgit(m_resourceGroups);
+        for ( ; rgit.current(); ++rgit ) {
+            rgit.current()->saveAppointments(sch);
+        }
     }
-
 }
 
 void KPTProject::addResourceGroup(KPTResourceGroup * group) {

@@ -185,14 +185,6 @@ bool KPTTask::load(QDomElement &element) {
     m_description = element.attribute("description");
     //kdDebug()<<k_funcinfo<<m_name<<": id="<<m_id<<endl;
 
-    earliestStart = KPTDateTime::fromString(element.attribute("earlieststart"));
-    latestFinish = KPTDateTime::fromString(element.attribute("latestfinish"));
-    setStartTime(KPTDateTime::fromString(element.attribute("start")));
-    setEndTime(KPTDateTime::fromString(element.attribute("end")));
-    m_workStartTime = KPTDateTime::fromString(element.attribute("start-work"));
-    m_workEndTime = KPTDateTime::fromString(element.attribute("end-work"));
-    m_duration = KPTDuration::fromString(element.attribute("duration"));
-
     // Allow for both numeric and text
     QString constraint = element.attribute("scheduling","0");
     m_constraint = (KPTNode::ConstraintType)constraint.toInt(&ok);
@@ -202,66 +194,85 @@ bool KPTTask::load(QDomElement &element) {
     m_constraintStartTime = KPTDateTime::fromString(element.attribute("constraint-starttime"));
     m_constraintEndTime = KPTDateTime::fromString(element.attribute("constraint-endtime"));
 
-    m_inCriticalPath = element.attribute("in-critical-path", "0").toInt();
-    
-    m_resourceError = element.attribute("resource-error", "0").toInt();
-    m_resourceOverbooked = element.attribute("resource-overbooked", "0").toInt();
-    m_schedulingError = element.attribute("scheduling-conflict", "0").toInt();
-    m_notScheduled = element.attribute("not-scheduled", "0").toInt();
     
     m_wbs = element.attribute("wbs", "");
     
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
-	if (list.item(i).isElement()) {
-	    QDomElement e = list.item(i).toElement();
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
 
-	    if (e.tagName() == "project") {
-		// Load the subproject
-		KPTProject *child = new KPTProject(this);
-		if (child->load(e))
-		    addChildNode(child);
-		else
-		    // TODO: Complain about this
-		    delete child;
-	    } else if (e.tagName() == "task") {
-		// Load the task
-		KPTTask *child = new KPTTask(this);
-		if (child->load(e))
-		    addChildNode(child);
-		else
-		    // TODO: Complain about this
-		    delete child;
-	    } else if (e.tagName() == "resource") {
-		// TODO: Load the resource
-	    } else if (e.tagName() == "effort") {
-    		//  Load the effort
-            m_effort->load(e);
-	    } else if (e.tagName() == "resourcegroup-request") {
-		    // Load the resource request
-            KPTProject *p = dynamic_cast<KPTProject *>(projectNode());
-            if (p == 0) {
-                kdDebug()<<k_funcinfo<<"Project does not exist"<<endl;
-            } else {
-                KPTResourceGroupRequest *r = new KPTResourceGroupRequest();
-                if (r->load(e, p))
-                    addRequest(r);
-                else {
-                    kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
-                    delete r;
+            if (e.tagName() == "project") {
+                // Load the subproject
+                KPTProject *child = new KPTProject(this);
+                if (child->load(e)) {
+                    addChildNode(child);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
+            } else if (e.tagName() == "task") {
+                // Load the task
+                KPTTask *child = new KPTTask(this);
+                if (child->load(e)) {
+                    addChildNode(child);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
+            } else if (e.tagName() == "resource") {
+                // TODO: Load the resource (projects don't have resources yet)
+            } else if (e.tagName() == "effort") {
+                //  Load the effort
+                m_effort->load(e);
+            } else if (e.tagName() == "resourcegroup-request") {
+                // Load the resource request
+                KPTProject *p = dynamic_cast<KPTProject *>(projectNode());
+                if (p == 0) {
+                    kdDebug()<<k_funcinfo<<"Project does not exist"<<endl;
+                } else {
+                    KPTResourceGroupRequest *r = new KPTResourceGroupRequest();
+                    if (r->load(e, p)) {
+                        addRequest(r);
+                    } else {
+                        kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                        delete r;
+                    }
+                }
+            } else if (e.tagName() == "progress") {
+                m_progress.started = (bool)e.attribute("started", "0").toInt();
+                m_progress.finished = (bool)e.attribute("finished", "0").toInt();
+                m_progress.startTime = KPTDateTime::fromString(e.attribute("startTime"));
+                m_progress.finishTime = KPTDateTime::fromString(e.attribute("finishTime"));
+                m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
+                m_progress.remainingEffort = KPTDuration::fromString(e.attribute("remaining-effort"));
+                m_progress.totalPerformed = KPTDuration::fromString(e.attribute("performed-effort"));
+            } else if (e.tagName() == "schedules") {
+                // Prepare for multiple schedules
+                QDomNodeList lst = e.childNodes();
+                for (unsigned int i=0; i<lst.count(); ++i) {
+                    if (lst.item(i).isElement()) {
+                        QDomElement sch = lst.item(i).toElement();
+                        if (sch.tagName() == "schedule") {
+                            earliestStart = KPTDateTime::fromString(sch.attribute("earlieststart"));
+                            latestFinish = KPTDateTime::fromString(sch.attribute("latestfinish"));
+                            setStartTime(KPTDateTime::fromString(sch.attribute("start")));
+                            setEndTime(KPTDateTime::fromString(sch.attribute("end")));
+                            m_workStartTime = KPTDateTime::fromString(sch.attribute("start-work"));
+                            m_workEndTime = KPTDateTime::fromString(sch.attribute("end-work"));
+                            m_duration = KPTDuration::fromString(sch.attribute("duration"));
+                            m_inCriticalPath = sch.attribute("in-critical-path", "0").toInt();
+                            
+                            m_resourceError = sch.attribute("resource-error", "0").toInt();
+                            m_resourceOverbooked = sch.attribute("resource-overbooked", "0").toInt();
+                            m_schedulingError = sch.attribute("scheduling-conflict", "0").toInt();
+                            m_notScheduled = sch.attribute("not-scheduled", "1").toInt();
+                        }
+                    }
                 }
             }
-        } else if (e.tagName() == "progress") {
-            m_progress.started = (bool)e.attribute("started", "0").toInt();
-            m_progress.finished = (bool)e.attribute("finished", "0").toInt();
-            m_progress.startTime = KPTDateTime::fromString(e.attribute("startTime"));
-            m_progress.finishTime = KPTDateTime::fromString(e.attribute("finishTime"));
-            m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
-            m_progress.remainingEffort = KPTDuration::fromString(e.attribute("remaining-effort"));
-            m_progress.totalPerformed = KPTDuration::fromString(e.attribute("performed-effort"));
         }
-    }
     }
     //kdDebug()<<k_funcinfo<<m_name<<" loaded"<<endl;
     return true;
@@ -278,24 +289,10 @@ void KPTTask::save(QDomElement &element)  {
     me.setAttribute("leader", m_leader);
     me.setAttribute("description", m_description);
 
-    me.setAttribute("earlieststart",earliestStart.toString());
-    me.setAttribute("latestfinish",latestFinish.toString());
-
-    me.setAttribute("start",m_startTime.toString());
-    me.setAttribute("end",m_endTime.toString());
-    me.setAttribute("start-work", m_workStartTime.toString());
-    me.setAttribute("end-work", m_workEndTime.toString());
-    me.setAttribute("duration",m_duration.toString());
     me.setAttribute("scheduling",constraintToString());
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString());
     me.setAttribute("constraint-endtime",m_constraintEndTime.toString());
     
-    me.setAttribute("in-critical-path",m_inCriticalPath);
-    
-    me.setAttribute("resource-error",m_resourceError);
-    me.setAttribute("resource-overbooked",m_resourceOverbooked);
-    me.setAttribute("scheduling-conflict",m_schedulingError);
-    me.setAttribute("not-scheduled",m_notScheduled);
 
     me.setAttribute("wbs", m_wbs);
     
@@ -310,6 +307,32 @@ void KPTTask::save(QDomElement &element)  {
     el.setAttribute("percent-finished", m_progress.percentFinished);
     el.setAttribute("remaining-effort", m_progress.remainingEffort.toString());
     el.setAttribute("performed-effort", m_progress.totalPerformed.toString());
+    
+    // Prepare for multiple schedules (expected, optimistic, pessmistic...)
+    // This goes into separate class later.
+    QDomElement schs = me.ownerDocument().createElement("schedules");
+    me.appendChild(schs);
+    QDomElement sch = schs.ownerDocument().createElement("schedule");
+        schs.appendChild(sch);
+        kdDebug()<<k_funcinfo<<m_name<<" save schedule"<<endl;
+        sch.setAttribute("name", "Standard");
+        sch.setAttribute("type", "Expected");
+        
+        sch.setAttribute("earlieststart",earliestStart.toString());
+        sch.setAttribute("latestfinish",latestFinish.toString());
+        sch.setAttribute("start",m_startTime.toString());
+        sch.setAttribute("end",m_endTime.toString());
+        sch.setAttribute("start-work", m_workStartTime.toString());
+        sch.setAttribute("end-work", m_workEndTime.toString());
+        sch.setAttribute("duration",m_duration.toString());
+    
+        sch.setAttribute("in-critical-path",m_inCriticalPath);
+        
+        sch.setAttribute("resource-error",m_resourceError);
+        sch.setAttribute("resource-overbooked",m_resourceOverbooked);
+        sch.setAttribute("scheduling-conflict",m_schedulingError);
+        sch.setAttribute("not-scheduled",m_notScheduled);
+    
     
     if (m_requests) {
         m_requests->save(me);
