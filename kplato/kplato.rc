@@ -29,7 +29,7 @@
             <Action name="view_gantt_showCriticalTasks"/>
             <Separator/>
             <Separator/>
-            <Action name="view_pert"/>
+            <!--<Action name="view_pert"/> -->
             <Separator/>
             <Action name="view_resources"/>
             <Separator/>
@@ -68,7 +68,7 @@
     </MenuBar>
     <ToolBar name="view" position="top"><Text>View</Text>
         <Action name="view_gantt"/>
-        <Action name="view_pert"/>
+        <!--<Action name="view_pert"/> -->
         <Action name="view_resources"/>
         <Action name="view_resourceuse"/>
     </ToolBar>
