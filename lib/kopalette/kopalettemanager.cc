@@ -444,6 +444,9 @@ void KoPaletteManager::save()
     //   * float location of a floated palette
     //   * order in which the palettes are docked.
     
+    if (!m_view) return;
+    if (!m_view->mainWindow()) return;
+
     KConfig * cfg = KGlobal::config();
     Q_ASSERT(cfg);
     cfg->setGroup("");
