@@ -629,6 +629,8 @@ private:
      */
     KoPoint diffGrid( KoRect &rect, double diffx, double diffy );
 
+    void recalcAutoGuides( );
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
@@ -795,6 +797,8 @@ private:
 
     /// guides
     KoGuides m_gl;
+    /// guides - the auto style ones
+    KoGuides m_autoGl;
     /// true if we are in guide move state, false otherwise
     bool m_moveGuides;
 };

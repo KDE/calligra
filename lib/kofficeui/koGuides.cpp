@@ -68,9 +68,10 @@ private:
     int m_pos;
 };
 
-KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler )
+KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler, bool autoStyle )
 : m_view( view )
-, m_zoomHandler( zoomHandler )    
+, m_zoomHandler( zoomHandler )
+, m_autoStyle(autoStyle)
 {
     m_popup = new Popup( this );
 }
@@ -93,24 +94,30 @@ void KoGuides::paintGuides( QPainter &painter )
     QValueList<KoGuideLine *>::iterator it = m_guideLines.begin();
     for ( ; it != m_guideLines.end(); ++it )
     {
-        painter.save();
-        if ( ( *it )->orientation == Qt::Vertical )
+        if (! m_autoStyle || ( *it )->snapping )
         {
-            painter.translate( m_zoomHandler->zoomItX( ( *it )->position ), 0 );
-            painter.drawLine( 0, 0, 0, height );
+            // dont paint autoStyle guides when they are not snapping
+
+            painter.save();
+            if ( ( *it )->orientation == Qt::Vertical )
+            {
+                painter.translate( m_zoomHandler->zoomItX( ( *it )->position ), 0 );
+                painter.drawLine( 0, 0, 0, height );
+            }
+            else
+            {
+                painter.translate( 0, m_zoomHandler->zoomItY( ( *it )->position ) );
+                painter.drawLine( 0, 0, width, 0 );
+            }
+            painter.restore();
         }
-        else
-        {
-            painter.translate( 0, m_zoomHandler->zoomItY( ( *it )->position ) );
-            painter.drawLine( 0, 0, width, 0 );
-        }
-        painter.restore();
     }
 
     painter.setPen( QPen( red, 0, DotLine ) );
     it = m_selectedGuideLines.begin();
     for ( ; it != m_selectedGuideLines.end(); ++it )
     {
+        // no need to take care of autoStyle guides as they are never selected
         painter.save();
         if ( ( *it )->orientation == Qt::Vertical )
         {
@@ -136,6 +143,9 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
     if ( guideLine )
     {
+        if( m_autoStyle )
+            return false;
+
         m_lastPoint = e->pos();
         if ( e->button() == Qt::LeftButton || e->button() == Qt::RightButton )
         {
@@ -283,7 +293,6 @@ bool KoGuides::keyPressEvent( QKeyEvent *e )
     return eventProcessed;
 }
 
-
 void KoGuides::setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos )
 {
     removeSelected();
@@ -343,46 +352,133 @@ void KoGuides::getGuideLines( QValueList<double> &horizontalPos, QValueList<doub
 }
 
 
-KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap )
+KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
 {
-    KoPoint diff( 0, 0 );
-    QValueList<double> hGuideLines;
-    QValueList<double> vGuideLines;
-    getGuideLines( hGuideLines, vGuideLines );
+    bool needRepaint = false;
+    KoPoint diff( 10000, 10000 );
+    KoGuideLine *vClosest=0;
+    KoGuideLine *hClosest=0;
 
-    QValueList<double>::const_iterator it( vGuideLines.begin() );
-    for ( ; it != vGuideLines.end(); ++it )
+    QValueList<KoGuideLine *>::const_iterator it = m_guideLines.begin();
+    for ( ; it != m_guideLines.end(); ++it )
     {
-        double tmp = rect.left() - *it;
-        if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+        if(( *it )->snapping)
+            needRepaint = true;
+
+        ( *it )->snapping = false;
+
+        if ( ( *it )->orientation == Qt::Horizontal )
         {
-            diff.setX( tmp );
-            break;
+            double tmp = rect.top() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            {
+                if(QABS( tmp ) < diff.y())
+                {
+                    diff.setY( tmp );
+                    hClosest = *it;
+                }
+            }
+            tmp = rect.bottom() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            {
+                if(QABS( tmp ) < diff.y())
+                {
+                    diff.setY( tmp );
+                    hClosest = *it;
+                }
+            }
         }
-        tmp = rect.right() - *it;
-        if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+        else
         {
-            diff.setX( tmp );
-            break;
+            double tmp = rect.left() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            {
+                if(QABS( tmp ) < diff.x())
+                {
+                    diff.setX( tmp );
+                    vClosest = *it;
+                }
+            }
+            tmp = rect.right() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            {
+                if(QABS( tmp ) < diff.x())
+                {
+                    diff.setX( tmp );
+                    vClosest = *it;
+                }
+            }
         }
     }
 
-    it = hGuideLines.begin();
-    for ( ; it != hGuideLines.end(); ++it )
+    it = m_selectedGuideLines.begin();
+    for ( ; it != m_selectedGuideLines.end(); ++it )
     {
-        double tmp = rect.top() - *it;
-        if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+        ( *it )->snapping = false;
+
+        if ( ( *it )->orientation == Qt::Horizontal )
         {
-            diff.setY( tmp );
-            break;
+            double tmp = rect.top() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            {
+                if(QABS( tmp ) < diff.y())
+                {
+                    diff.setY( tmp );
+                    hClosest = *it;
+                }
+            }
+            tmp = rect.bottom() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            {
+                if(QABS( tmp ) < diff.y())
+                {
+                    diff.setY( tmp );
+                    hClosest = *it;
+                }
+            }
         }
-        tmp = rect.bottom() - *it;
-        if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+        else
         {
-            diff.setY( tmp );
-            break;
+            double tmp = rect.left() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            {
+                if(QABS( tmp ) < diff.x())
+                {
+                    diff.setX( tmp );
+                    vClosest = *it;
+                }
+            }
+            tmp = rect.right() - (*it)->position;
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            {
+                if(QABS( tmp ) < diff.x())
+                {
+                    diff.setX( tmp );
+                    vClosest = *it;
+                }
+            }
         }
+     }
+
+    if( vClosest )
+    {
+        vClosest->snapping = true;
+        paint();
     }
+    else
+        diff.setX( 0 );
+
+    if( hClosest )
+    {
+        hClosest->snapping = true;
+        paint();
+    }
+    else
+        diff.setY( 0 );
+
+    if(needRepaint)
+        paint();
+
     return diff;
 }
 

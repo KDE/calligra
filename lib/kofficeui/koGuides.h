@@ -42,7 +42,7 @@ public:
      * @param view The view in which the guides will be shown
      * @param zoomHandler The zoom handler of the view
      */
-    KoGuides( KoView *view, KoZoomHandler *zoomHandler );
+    KoGuides( KoView *view, KoZoomHandler *zoomHandler, bool autoStyle=false );
 
     /**
      * @brief Destructor
@@ -78,7 +78,7 @@ public:
     /**
      * @brief Handle mouseMoveEvent
      *
-     * The mouse button is pressed and a guide was selected it moves the 
+     * If the mouse button is pressed and a guide was selected it moves the 
      * selected guides.
      * If the mouse is moved over a guide line the cursor gets updated.
      *
@@ -111,7 +111,7 @@ public:
     /**
      * @brief Set the guide lines.
      *
-     * This removes all existing guides and set up ne ones at the positions given.
+     * This removes all existing guides and set up new ones at the positions given.
      *
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
@@ -214,10 +214,12 @@ private:
         : orientation( o )
         , position( pos )
         , selected( false )
+        , snapping( false )
         {}
         Qt::Orientation orientation;
         double position;
         bool selected;
+        bool snapping; // if this guide is being snapped to
     };
 
     /**
@@ -325,6 +327,8 @@ private:
     bool m_mouseSelected;
     /// true if a guide is inserted at the moment
     bool m_insertGuide;
+    /// true if the guide are of auto style and thus are not painted until snapped
+    bool m_autoStyle;
     /// popup menu
     class Popup;
     Popup * m_popup;

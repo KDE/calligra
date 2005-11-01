@@ -303,6 +303,11 @@ public:
 
     bool haveAnimation() const;
 
+    /**
+     * Adds its edges to the KoGuides objectCollect all textobjects.
+     */
+    void addSelfToGuides( QValueList<double> &horizontalPos, QValueList<double> &verticalPos );
+
 protected:
     /**
      * Helper function to caluclate the size and the orig of a point object

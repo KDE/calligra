@@ -1567,6 +1567,14 @@ void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
     orig.setY( orig.y() + mid_y + min_y );
 }
 
+void KPObject::addSelfToGuides(QValueList<double> &horizontalPos, QValueList<double> &verticalPos )
+{
+    horizontalPos.append( orig.y() );
+    verticalPos.append( orig.x() );
+    horizontalPos.append( orig.y() +ext.height() );
+    verticalPos.append( orig.x() +ext.width() );
+}
+
 KPShadowObject::KPShadowObject()
     : KPObject()
 {

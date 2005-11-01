@@ -92,6 +92,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
 , buffer( size() )
 , m_gl( _view, _view->zoomHandler() )
+, m_autoGl( _view, _view->zoomHandler(), true )
 , m_moveGuides( false )    
 {
     m_presMenu = 0;
@@ -363,6 +364,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             guidePainter.translate( -diffx(), -diffy() );
             guidePainter.setBrushOrigin( -diffx(), -diffy() );
             m_gl.paintGuides( guidePainter );
+            m_autoGl.paintGuides( guidePainter );
             guidePainter.end();
             bitBlt( this, paintEvent->rect().topLeft(), &m_guideBuffer, paintEvent->rect() );
         }
@@ -581,6 +583,20 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject
     }
 }
 
+void KPrCanvas::recalcAutoGuides( )
+{
+    QValueList<double> horizontalPos;
+    QValueList<double> verticalPos;
+    QPtrListIterator<KPObject> it( m_activePage->objectList() );
+    for ( ; it.current(); ++it )
+    {
+        if( ! it.current()->isSelected() )
+            it.current()->addSelfToGuides( horizontalPos, verticalPos);
+    }
+
+    m_autoGl.setGuideLines( horizontalPos, verticalPos );
+}
+
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
@@ -754,6 +770,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                                 static_cast<double>( kpobject->getSize().height() );
                         m_rectBeforeResize = kpobject->getRect();
                     }
+                    recalcAutoGuides();
                 }
                 else
                 {
@@ -4833,6 +4850,8 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
         }
 
         KoPoint diff( m_gl.snapToGuideLines( movedRect, 4 ) );
+        if ( diff == KoPoint( 0, 0 ) )
+            diff = m_autoGl.snapToGuideLines( movedRect, 4 );
 
         if ( diff != KoPoint( 0, 0 ) )
         {
