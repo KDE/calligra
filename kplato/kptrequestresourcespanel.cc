@@ -43,7 +43,9 @@ namespace KPlato
 {
 
 KPTResourceTableItem::KPTResourceTableItem(KPTResource *resource, KPTResourceRequest *request, bool check)
-    : m_account(0) {
+    : m_accountitem(0),
+      m_account(0),
+      m_curAccountItem(0) {
     m_resource = resource;
     m_request = request;
     m_checked = check;
@@ -63,8 +65,12 @@ KPTResourceTableItem::~KPTResourceTableItem() {
 void KPTResourceTableItem::update() {
     if (m_checkitem)
         m_checked = m_checkitem->isChecked();
-
+    if (m_accountitem) {
+        m_curAccountItem = m_accountitem->currentItem();
+        m_curAccountText = m_accountitem->currentText();
+    }
     m_checkitem = 0;
+    m_accountitem = 0;
     //kdDebug()<<k_funcinfo<<m_resource->name()<<" checked="<<m_checked<<endl;
 }
 
@@ -229,6 +235,9 @@ void KPTRequestResourcesPanel::unitsChanged(int units) {
 KCommand *KPTRequestResourcesPanel::buildCommand(KPTPart *part) {
     //kdDebug()<<k_funcinfo<<endl;
     KMacroCommand *cmd = 0;
+    if (selectedGroup) {
+        selectedGroup->update();
+    }
     QListViewItem *item = groupList->firstChild();
     for (; item; item = item->nextSibling()) {
         KPTGroupLVItem *grp = static_cast<KPTGroupLVItem*>(item);
@@ -257,13 +266,13 @@ KCommand *KPTRequestResourcesPanel::buildCommand(KPTPart *part) {
                 continue;
             }
             if ((it.current()->m_account == 0 && 
-                 it.current()->m_accountitem->currentItem() > 0) ||
+                 it.current()->m_curAccountItem > 0) ||
                 (it.current()->m_account != 0 && 
-                 (it.current()->m_account->name() != it.current()->m_accountitem->currentText()))) {
+                 (it.current()->m_account->name() != it.current()->m_curAccountText))) {
                 
                 if (!cmd) cmd = new KMacroCommand("");                
                 
-                cmd->addCommand(new KPTModifyResourceRequestAccountCmd(part, it.current()->m_request, it.current()->m_accountitem->currentText()));
+                cmd->addCommand(new KPTModifyResourceRequestAccountCmd(part, it.current()->m_request, it.current()->m_curAccountText));
             }
         }
     }

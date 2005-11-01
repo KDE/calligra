@@ -67,6 +67,8 @@ public:
     KPTResourceRequest *m_request;
     QComboTableItem *m_accountitem;
     KPTAccount *m_account;
+    int m_curAccountItem;
+    QString m_curAccountText;
 };
 
 class KPTGroupLVItem : public QListViewItem {
