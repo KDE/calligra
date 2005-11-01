@@ -2178,8 +2178,9 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 
 	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery(
-		QString("select t_id, f_type, f_name, f_length, f_precision, f_constraints, f_options, f_order, f_caption, f_help"
-		" from kexi__fields where t_id=%1 order by f_order").arg(t->m_id) ))) {
+		QString::fromLatin1("select t_id, f_type, f_name, f_length, f_precision, f_constraints, "
+			"f_options, f_default, f_order, f_caption, f_help"
+			" from kexi__fields where t_id=%1 order by f_order").arg(t->m_id) ))) {
 		return 0;
 	}
 	if (!cursor->moveFirst()) {
