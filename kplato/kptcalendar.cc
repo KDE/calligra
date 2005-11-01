@@ -1163,11 +1163,7 @@ bool KPTStandardWorktime::load(QDomElement &element) {
                     return false;
             }
             if (e.tagName() == "day") {
-                if (m_day.load(e)) {
-                    if (!m_day.date().isValid()) {
-                        kdError()<<k_funcinfo<<"Failed to load calendarDay: Invalid date"<<endl;
-                    }
-                } else {
+                if (!m_day.load(e)) {
                     kdError()<<k_funcinfo<<"Failed to load calendarDay"<<endl;
                     return false;
                 }
