@@ -75,7 +75,7 @@ tools.
 </para>
 </sect2>
 
-<sect2 id="using-selections-making">
+<sect2 id="using-selections-new">
 <title>Making a new selection</title>
 <para>
 When you want to make a new selection, replacing the currently active one, you
@@ -96,7 +96,7 @@ on. The selection floods out from the point you click on. In the fuzziness
 option you can set how different the colors are allowed to be before the
 flooding stops.
 </para>
-</sect3>
+</sect2>
 
 <sect2 id="using-selections-similar">
 <title>Selecting similar colors</title>
