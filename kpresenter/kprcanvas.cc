@@ -2153,18 +2153,10 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             int offsetx = 1;
             int offsety = 1;
 
-            if( !m_view->kPresenterDoc()->snapToGrid() )
+            if ( e->state() & ControlButton )
             {
-                if ( e->state() & ControlButton )
-                {
-                    offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
-                    offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
-                }
-            }
-            else
-            {
-                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
-                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
+                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
+                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
             }
 
             if ( !m_keyPressEvent )
@@ -2174,34 +2166,23 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             switch ( e->key() )
             {
                 case Qt::Key_Up:
-                {
                     m_keyPressEvent = true;
-                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                    moveObject( 0, -offsety, doApplyGrid );
+                    moveObjectsByKey( 0, -offsety );
                     break;
-                }
                 case Qt::Key_Down:
-                {
-                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     m_keyPressEvent = true;
-                    moveObject( 0, offsety, doApplyGrid );
+                    moveObjectsByKey( 0, offsety );
                     break;
-                }
                 case Qt::Key_Right:
-                {
-                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     m_keyPressEvent = true;
-                    moveObject( offsetx, 0, doApplyGrid );
-                }
+                    moveObjectsByKey( offsetx, 0 );
                     break;
                 case Qt::Key_Left:
-                {
-                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
                     m_keyPressEvent = true;
-                    moveObject( -offsetx, 0, doApplyGrid );
-                }
+                    moveObjectsByKey( -offsetx, 0 );
                     break;
-                case Qt::Key_Delete: case Key_Backspace:
+                case Qt::Key_Delete: 
+                case Key_Backspace:
                     m_view->editDelete();
                     break;
                 case Qt::Key_Escape:
@@ -4818,23 +4799,34 @@ KoPoint KPrCanvas::diffGrid( KoRect &rect, double diffx, double diffy )
 
 void KPrCanvas::moveObjectsByKey( int x, int y )
 {
-}
-
-
-void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
-{
     KPresenterDoc *doc( m_view->kPresenterDoc() );
 
     KoRect rect( objectRect( false ) );
     KoPoint move( 0, 0 );
-    double diffx = pos.x() - m_origMousePos.x();
-    double diffy = pos.y() - m_origMousePos.y();
+    double diffx = m_view->zoomHandler()->unzoomItX( x );
+    double diffy = m_view->zoomHandler()->unzoomItY( y );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && m_changeSnap );
     bool snapToGuideLines = ( doc->snapToGuideLines() && !m_changeSnap || !doc->snapToGuideLines() && m_changeSnap );
 
     if ( snapToGrid && !snapToGuideLines )
     {
+        if ( diffx > 0 )
+        {
+            diffx = doc->getGridX() + 0.1;
+        }
+        else if ( diffx < 0 )
+        {
+            diffx = -doc->getGridX() - 0.1;
+        }
+        if ( diffy > 0 )
+        {
+            diffy = doc->getGridY() + 0.1;
+        }
+        else if ( diffy < 0 )
+        {
+            diffy = -doc->getGridY() - 0.1;
+        }
         move = diffGrid( rect, diffx, diffy );
     }
     else if ( snapToGuideLines && !snapToGrid )
@@ -4849,14 +4841,137 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
             move -= m_moveSnapDiff;
         }
 
-        KoPoint diff( m_gl.snapToGuideLines( movedRect, 4 ) );
-        if ( diff == KoPoint( 0, 0 ) )
-            diff = m_autoGl.snapToGuideLines( movedRect, 4 );
+        KoPoint diff( m_gl.snapToGuideLines( movedRect, 2 ) );
 
         if ( diff != KoPoint( 0, 0 ) )
         {
             m_moveSnapDiff = diff;
-            move -= diff;
+            move += diff;
+        }
+        else
+        {
+            m_moveSnapDiff = KoPoint( 0, 0 );
+        }
+    }
+    else if ( snapToGrid && snapToGuideLines )
+    {
+        if ( diffx > 0 )
+        {
+            diffx = doc->getGridX() + 0.1;
+        }
+        else if ( diffx < 0 )
+        {
+            diffx = -doc->getGridX() - 0.1;
+        }
+        if ( diffy > 0 )
+        {
+            diffy = doc->getGridY() + 0.1;
+        }
+        else if ( diffy < 0 )
+        {
+            diffy = -doc->getGridY() - 0.1;
+        }
+        move = diffGrid( rect, diffx, diffy );
+        KoPoint diff( m_gl.diffNextGuide( rect, diffx > 0, diffy > 0 ) );
+        if ( diffx > 0 )
+        {
+            if ( diff.x() > 0 && diff.x() < move.x() )
+            {
+                move.setX( diff.x() );
+            }
+        }
+        else if ( diffx < 0 )
+        {
+            if ( diff.x() < 0 && diff.x() > move.x() )
+            {
+                move.setX( diff.x() );
+            }
+        }
+        if ( diffy > 0 )
+        {
+            if ( diff.y() > 0 && diff.y() < move.y() )
+            {
+                move.setY( diff.y() );
+            }
+        }
+        else if ( diffy < 0)
+        {
+            if ( diff.y() < 0 && diff.y() > move.y() )
+            {
+                move.setY( diff.y() );
+            }
+        }
+    }
+    else
+    {
+        move.setX( diffx );
+        move.setY( diffy );
+    }
+
+    // don't move object from canvas
+    KoRect pageRect( m_activePage->getPageRect() );
+    if ( rect.left() + move.x() < pageRect.left() )
+    {
+        move.setX( pageRect.left() - rect.left() );
+    }
+    else if ( rect.right() + move.x() > pageRect.right() )
+    {
+        move.setX( pageRect.right() - rect.right() );
+    }
+    if ( rect.top() + move.y() < pageRect.top() )
+    {
+        move.setY( pageRect.top() - rect.top() );
+    }
+    else if ( rect.bottom() + move.y() > pageRect.bottom() )
+    {
+        move.setY( pageRect.bottom() - rect.bottom() );
+    }
+
+    if ( move != KoPoint( 0, 0 ) )
+    {
+        //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
+        m_activePage->moveObject( m_view, move, false );
+        scrollCanvas( move );
+    }
+}
+
+
+void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
+{
+    KPresenterDoc *doc( m_view->kPresenterDoc() );
+
+    KoRect rect( objectRect( false ) );
+    KoPoint move( 0, 0 );
+    double diffx = pos.x() - m_origMousePos.x();
+    double diffy = pos.y() - m_origMousePos.y();
+    KoPoint mouseDiff( diffx, diffy );
+
+    bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && m_changeSnap );
+    bool snapToGuideLines = ( doc->snapToGuideLines() && !m_changeSnap || !doc->snapToGuideLines() && m_changeSnap );
+
+    if ( snapToGrid && !snapToGuideLines )
+    {
+        move = diffGrid( rect, diffx, diffy );
+        mouseDiff = move;
+    }
+    else if ( snapToGuideLines && !snapToGrid )
+    {
+        move.setX( diffx );
+        move.setY( diffy );
+        KoRect movedRect( rect );
+        movedRect.moveBy( diffx, diffy );
+        if ( m_moveSnapDiff != KoPoint( 0, 0 ) )
+        {
+            movedRect.moveBy( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
+            move -= m_moveSnapDiff;
+        }
+
+        KoPoint diff( m_gl.snapToGuideLines( movedRect, 4 ) );
+
+        if ( diff != KoPoint( 0, 0 ) )
+        {
+            m_moveSnapDiff = diff;
+            move += diff;
         }
         else
         {
@@ -4895,6 +5010,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
                 move.setY( diff.y() );
             }
         }
+        mouseDiff = move;
     }
     else
     {
@@ -4907,18 +5023,22 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     if ( rect.left() + move.x() < pageRect.left() )
     {
         move.setX( pageRect.left() - rect.left() );
+        mouseDiff.setX( pageRect.left() - rect.left() );
     }
     else if ( rect.right() + move.x() > pageRect.right() )
     {
         move.setX( pageRect.right() - rect.right() );
+        mouseDiff.setX( pageRect.right() - rect.right() );
     }
     if ( rect.top() + move.y() < pageRect.top() )
     {
         move.setY( pageRect.top() - rect.top() );
+        mouseDiff.setY( pageRect.top() - rect.top() );
     }
     else if ( rect.bottom() + move.y() > pageRect.bottom() )
     {
         move.setY( pageRect.bottom() - rect.bottom() );
+        mouseDiff.setY( pageRect.bottom() - rect.bottom() );
     }
 
     if ( move != KoPoint( 0, 0 ) )
@@ -4926,49 +5046,10 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
         //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
         scrollCanvas( move );
-        m_origMousePos += move;
     }
+    m_origMousePos += mouseDiff;
 }
 
-
-bool KPrCanvas::moveObject( int x, int y, bool doApplyGrid )
-{
-    KoRect rect( objectRect( false ) );
-
-    double diffX = m_view->zoomHandler()->unzoomItX( x );
-    double diffY = m_view->zoomHandler()->unzoomItY( y );
-    KoPoint move( diffX + rect.left(), diffY + rect.top() );
-
-    KoRect pageRect( m_activePage->getPageRect() );
-    if ( rect.left() + diffX < pageRect.left() )
-    {
-        move.setX( pageRect.left() );
-    }
-    else if ( rect.right() + diffX > pageRect.right() )
-    {
-        move.setX( pageRect.right() - rect.width() );
-    }
-    if ( rect.top() + diffY < pageRect.top() )
-    {
-        move.setY( pageRect.top() );
-    }
-    else if ( rect.bottom() + diffY > pageRect.bottom() )
-    {
-        move.setY( pageRect.bottom() - rect.height() );
-    }
-
-    KoPoint gridPoint( doApplyGrid ? applyGrid( move ) : move);
-    bool moved = false;
-    if ( gridPoint != rect.topLeft() )
-    {
-        move.setX( gridPoint.x() - rect.x() );
-        move.setY( gridPoint.y() - rect.y() );
-        m_activePage->moveObject( m_view, move, false );
-        scrollCanvas( move );
-        moved = true;
-    }
-    return moved;
-}
 
 void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy, bool doApplyGrid )
 {

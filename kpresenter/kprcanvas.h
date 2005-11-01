@@ -557,14 +557,10 @@ private:
     void picViewOrigHelper(int x, int y);
 
     /**
-     * @brief 
-     *
-     * @return true when object is moved
-     */
-    bool moveObject( int x, int y, bool doApplyGrid );
-
-    /**
      * @brief Move object by key
+     *
+     * @param x The distance to move the objects in x direction
+     * @param y The distance to move the objects in y direction
      */
     void moveObjectsByKey( int x, int y );
 
