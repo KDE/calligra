@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Workspace
-DocPath=koshell/index.html
 Name[af]=Koffice Werkspasie
 Name[ar]=حيِّز العمل لدى KOffice
 Name[az]=KOffice İş Sahəsi
@@ -60,6 +59,7 @@ Name[xx]=xxKOffice Workspacexx
 Name[zh_CN]=KOffice 工作空间
 Name[zh_TW]=KOffice 工作空間
 Name[zu]=Isikhala somsebenzi se KOffice
+DocPath=koshell/index.html
 Exec=koshell
 GenericName=Office Suite
 GenericName[af]=Kantoor Paket

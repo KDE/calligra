@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Karbon/CoreModule
 Comment=Core functionality module for Karbon
+Comment[bg]=Модул с основната функционалност на Karbon
 Comment[cy]=Modiwl swyddogaeth craidd ar gyfer Karbon
 Comment[da]=Kernefunktionalitetsmodul for Karbon
 Comment[es]=Módulo de funcionalidad principal para Karbon

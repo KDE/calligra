@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Word Processing Component
+Name[bg]=Компонент за текстообработка в KOffice
 Name[ca]=Component de processament de text de KOffice
 Name[cy]=Cydran Brosesu Geiriau KOffice 
 Name[da]=KOffice tekstbehandlingskomponent
@@ -38,6 +39,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text,application/v
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
+GenericName[bg]=Текстови документи
 GenericName[cy]=Dogfennau Testun
 GenericName[es]=Documentos de texto
 GenericName[fr]=Documents texte

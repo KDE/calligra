@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Spreadsheet Component
+Name[bg]=Компонент за електронна таблица за KOffice
 Name[ca]=Component de full de càlcul de KOffice
 Name[cy]=Cydran Taenlen KOffice 
 Name[da]=KOffice regnearkkomponent
@@ -14,6 +15,7 @@ Name[fr]=Composant tableur de KOffice
 Name[he]=רכיב של KOffice לגיליונות אלקטרוניים
 Name[hu]=KOffice táblázatkezelő komponens
 Name[it]=Componente per fogli di calcolo di KOffice
+Name[ja]=KOffice 表計算コンポーネント
 Name[nb]=Regneark-komponent for KOffice
 Name[nl]=Koffice Spreadsheet-component
 Name[nn]=Rekneark-komponent for KOffice

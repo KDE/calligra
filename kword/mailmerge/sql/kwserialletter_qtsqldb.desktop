@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=Qt-SQL Source (single table)
+Name[bg]=Източник Qt-SQL (една таблица)
 Name[cy]=Ffynhonell Qt-SQL (tabl sengl)
 Name[da]=Qt-SQL-kilde (enkelt tabel)
 Name[de]=Qt-SQL (Einzeltabelle)
@@ -33,7 +34,7 @@ Name[zh_CN]=Qt-SQL 源(单表)
 Comment=This datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).
 Comment[ar]=هذا النّوع من المصادر البيانيّة يتيح لك إمكانية استخدام جداول قاعدة بيانيّة SQL مُخَزَّنة على خادم SQL. بحسب تهيئة نظامك، فإنّ MySQL، PostgreSQL و UnixODBC تُعتبر من بين ما هو مدعوم من وُجهات خلفيّة للقواعد البيانيّة. يمكن حتى أن يتواجد المزيد (Oracle في إصدارات Qt التِّجاريّة أو الوُجهات الخلفيّة المملوكة لطرف ثالث).
 Comment[az]=Bu mənbə sizə SQL verilənlər bazasını istifadə etməyə imkan verir. Sistem qurğularınızdan asılı olaraq : MySQL,Postgres,(Oracle, lisenziyalı QT buraxılışını işlədirsinizsə),....
-Comment[bg]=Този източник на данни използва таблица за съхранение на данните в СУБД (сървър SQL). Най често използваните са MySQL, PostgreSQL и UnixODBC.
+Comment[bg]=Този източник на данни използва таблица за съхранение на данните в СУБД (сървър SQL). В зависимост от конфигурацията, поддръжка имат MySQL, PostgreSQL и UnixODBC. Може да има и още (Oracle в комерсиалните версии на Qt или други).
 Comment[bs]=Ovaj tip izvora podataka vam omogućuje da koristiti SQL tabele smještene na SQL serveru. Ovisno o konfiguraciji vašeg sistema, MySQL, PostgreSQL i UnixODBC su među podržanim bazama podataka. Možda čak i više od toga (Oracle u komercijalnim verzijama Qt-a ili backendima iz trećeg izvora).
 Comment[ca]=Aquest tipus de font de dades permet usar una base de dades SQL guardada a un servidor SQL. Depenent de la configuració del sistem, MySQL, PostgreSQL i UnixODBC estan entre les bases de dades suportades. Inclús n'hi poden haver més(Oracle comercial a la versió Qt i d'altres servidors).
 Comment[cs]=Tento zdroj dat vám umožní požívat tabulky SQL databází uložených na SQL serveru. V závislosti na vašem nastavení systému jsou podporovány databázové systémy MySQL, PostgreSQL a UnixODBC (Oracle je podporována v komerční verzi Qt nebo v databázových systémech jiných výrobců).

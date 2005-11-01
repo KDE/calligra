@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart PNG Export Filter
+Name[bg]=Филтър за експорт от KChart в PNG
 Name[br]=Sil ezporzh PNG evit KChart
 Name[ca]=Filtre d'exportació PNG per a KChart
 Name[cs]=Exportní filtr do formátu PNG pro KChart

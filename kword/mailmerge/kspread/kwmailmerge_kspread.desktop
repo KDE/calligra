@@ -4,7 +4,7 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=KSpread Table Source
-Name[bg]=Източник на данни за KSpread
+Name[bg]=Източник на данни от KSpread
 Name[cy]=Ffynhonell Dabl KSpread
 Name[da]=KSpread-tabelkilde
 Name[de]=KSpread-Tabelle
@@ -37,7 +37,7 @@ Name[uk]=Джерело таблиць KSpread
 Name[xx]=xxKSpread Table Sourcexx
 Name[zh_CN]=KSpread 表源
 Comment=This datasource type lets you use your entries from a kspread file.
-Comment[bg]=Източник на данни за от файл на KSpread.
+Comment[bg]=Този източник на данни чете данните директно от файл на KSpread.
 Comment[cy]=Mae'r math yma o ffynhonell ddata yn eich galluogi i ddefnyddio eich cofnodion o ffeil kspread.
 Comment[da]=Denne datakildetype lader dig bruge dine indgange fra en kspread-fil.
 Comment[de]=Mit diesem Datenquellentyp können Sie Einträge aus einer KSpread-Tabelle verwenden.

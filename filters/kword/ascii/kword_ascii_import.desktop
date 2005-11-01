@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord ASCII Import Filter
+Name[bg]=Филтър за импорт ASCII в KWord
 Name[br]=Sil Enporzh ASCII KWord
 Name[ca]=Filtre d'importació ASCII per a KWord
 Name[cs]=KWord ASCII importní filtr

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Database Component
+Name[bg]=Компонент за СУБД в KOffice
 Name[ca]=Component de bases de dades de KOffice
 Name[cy]=Cydran Gronfa Ddata KOffice 
 Name[da]=KOffice databasekomponent
@@ -14,6 +15,7 @@ Name[fr]=Composant base de données de KOffice
 Name[he]=רכיב מסדי נתונים של KOffice
 Name[hu]=KOffice adatbázis-kezelő komponens
 Name[it]=Componente per banche dati di KOffice
+Name[ja]=KOffice データベース コンポーネント
 Name[nb]=Database-komponent for KOffice
 Name[nl]=Koffice Databasecomponent
 Name[nn]=Database-komponent for KOffice
@@ -38,7 +40,7 @@ X-KDE-NativeMimeType=application/x-kexiproject-sqlite
 X-KDE-Library=libkexipart
 X-KDE-NOTKoDocumentEmbeddable=true
 GenericName=Database Creator
-GenericName[bg]=Създаване на бази от данни
+GenericName[bg]=Създаване на бази данни
 GenericName[br]=Aozer ar stlennvon
 GenericName[ca]=Creador de bases de dades
 GenericName[cy]=Creuydd Cronfa Ddata

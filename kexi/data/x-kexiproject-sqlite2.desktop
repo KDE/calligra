@@ -5,6 +5,7 @@ MimeType=application/x-kexiproject-sqlite2
 Icon=kexiproject_sqlite2
 Patterns=*.kexi
 Comment=Kexi Database File-Based Project
+Comment[bg]=Проект на Kexi, базиран на файлове на СУБД
 Comment[cy]=Cywaith Ffeil ar gyfer Cronfa Ddata Kexi
 Comment[da]=Kexi database filbaseret projekt
 Comment[de]=Kexi-Datenbankprojekt

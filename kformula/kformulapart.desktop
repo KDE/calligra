@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Formula Component
+Name[bg]=Компонент за формули в KOffice
 Name[ca]=Component de fòrmules de KOffice
 Name[cy]=Cydran Fformiwla KOffice 
 Name[da]=KOffice formelkomponent
@@ -14,6 +15,7 @@ Name[fr]=Composant formules de KOffice
 Name[he]=רכיב נוסחאות KOffice
 Name[hu]=KOffice képletszerkesztő komponens
 Name[it]=Componente per formule di KOffice
+Name[ja]=KOffice 数式コンポーネント
 Name[nb]=Formelkomponent for KOffice
 Name[nl]=KOffice Formula-component
 Name[nn]=Formelkomponent for KOffice

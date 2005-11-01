@@ -4,7 +4,7 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=KDE Addressbook Plugin
-Name[bg]=Приставка за адресна книга
+Name[bg]=Приставка за адресника на КДЕ
 Name[br]=Lugent Karned chomlec'hioù KDE
 Name[ca]=Connector de llibreta d'adreces KDE
 Name[cs]=Modul Knihy adres KDE
@@ -43,7 +43,7 @@ Name[wa]=Tchôke-divins calpin d' adresses KDE
 Name[xx]=xxKDE Addressbook Pluginxx
 Name[zh_CN]=KDE 地址簿插件
 Comment=This datasource type lets you use your KDE Address Book entries.
-Comment[bg]=Източник на данни за адресната книга на КДЕ.
+Comment[bg]=Този източник на данни се свързва директно с адресника на КДЕ и чете данните от там.
 Comment[ca]=Aquest tipus de font de dades permet usar les entrades de la teva llibreta d'adreces KDE
 Comment[cs]=Tento zdroj dat umožňuje využít položky z Knihy adres.
 Comment[cy]=Mae'r math yma o ffynhonell ddata yn eich galluogi i ddefnyddio eich cofnodion Llyfr Cyfeiriadau KDE.

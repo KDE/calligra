@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Gnumeric Info
+Name[bg]=Информация за Gnumeric
 Name[br]=Titouroù Gnumeric
 Name[cy]=Gwybodaeth Gnumeric
 Name[da]=Gnumeric info

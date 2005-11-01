@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Abiword Info
+Name[bg]=Информация за Abiword
 Name[br]=Titouroù Abiword
 Name[cy]=Gwybodaeth Abiword
 Name[da]=Abiword-info

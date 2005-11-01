@@ -7,6 +7,7 @@ X-KDE-Import=application/x-kformula
 X-KDE-Weight=1
 ImportDescription=KFormula
 Name=KFormula SVG Export Filter
+Name[bg]=Филтър за експорт от KFormula в SVG
 Name[cy]=Hidlen Allforio SVG KFormula
 Name[da]=KFormula SVG-eksportfilter
 Name[es]=Filtro de exportación a SVG de KFormula

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowLeftDown.atf
 Name=Arrow Left/Down
+Name[bg]=Стрелка наляво/надолу
 Name[cy]=Saeth i'r Chwith/i Lawr
 Name[da]=Pil til venstre/ned
 Name[de]=Pfeil nach links/unten

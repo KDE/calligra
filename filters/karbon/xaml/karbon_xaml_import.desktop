@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon XAML Import Filter
+Name[bg]=Филтър за импорт от XAML в Karbon
 Name[br]=Sil enporzh XAML evit Karbon
 Name[cy]=Hidlen Fewnforio XAML Karbon
 Name[da]=Karbon XAML-importfilter

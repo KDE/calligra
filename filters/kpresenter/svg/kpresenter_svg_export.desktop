@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter SVG Export Filter
+Name[bg]=Филтър за експорт от KPresenter в SVG
 Name[cy]=Hidlen Allforio SVG KPresenter
 Name[da]=KPresenter SVG-eksportfilter
 Name[es]=Filtro de exportación a SVG para KPresenter
