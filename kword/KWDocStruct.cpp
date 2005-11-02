@@ -40,16 +40,16 @@
 #include <ktoolbarbutton.h>
 
 /******************************************************************/
-/* Class: KWOrderedFrameSet                                       */
+/* Class: KWOrderedTextFrameSet                                   */
 /******************************************************************/
 
-KWOrderedFrameSet::KWOrderedFrameSet(KWFrameSet* fs) :
+KWOrderedTextFrameSet::KWOrderedTextFrameSet(KWTextFrameSet* fs) :
     m_frameset(fs) { }
 
-KWOrderedFrameSet::KWOrderedFrameSet() :
+KWOrderedTextFrameSet::KWOrderedTextFrameSet() :
     m_frameset(0) { }
 
-bool KWOrderedFrameSet::operator<( KWOrderedFrameSet ofs )
+bool KWOrderedTextFrameSet::operator<( KWOrderedTextFrameSet ofs )
 {
     if (!m_frameset) return false;
     KWFrame* frame1 = m_frameset->frame(0);
@@ -122,7 +122,7 @@ void KWDocStructParagItem::contextMenu( QListViewItem *_item, const QPoint &p, i
     }
 }
 
-void KWDocStructParagItem::selectFrameSet()
+void KWDocStructParagItem::selectItem()
 {
     KWTextFrameSet * fs = parag->kwTextDocument()->textFrameSet();
     QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
@@ -133,41 +133,42 @@ void KWDocStructParagItem::selectFrameSet()
 
 }
 
-void KWDocStructParagItem::editFrameSet()
+void KWDocStructParagItem::editItem()
 {
     gui->canvasWidget()->editTextFrameSet( parag->kwTextDocument()->textFrameSet(), parag, 0 );
 }
 
-void KWDocStructParagItem::deleteFrameSet()
+void KWDocStructParagItem::deleteItem()
 {
 }
 
 
 /******************************************************************/
-/* Class: KWDocStructFrameSetItem                                 */
+/* Class: KWDocStructTextFrameSetItem                             */
 /******************************************************************/
 
-KWDocStructFrameSetItem::KWDocStructFrameSetItem( QListViewItem *_parent, const QString &_text, KWFrameSet *_frameset, KWGUI*__parent )
+KWDocStructTextFrameSetItem::KWDocStructTextFrameSetItem( QListViewItem *_parent, const QString &_text,
+    KWTextFrameSet *_frameset, KWGUI*__parent )
     : KWDocListViewItem( _parent, _text )
 {
     frameset = _frameset;
     gui = __parent;
 }
 
-KWDocStructFrameSetItem::KWDocStructFrameSetItem( QListViewItem *_parent, QListViewItem *_after,
-    const QString &_text, KWFrameSet *_frameset, KWGUI*__parent )
+KWDocStructTextFrameSetItem::KWDocStructTextFrameSetItem( QListViewItem *_parent, QListViewItem *_after,
+    const QString &_text, KWTextFrameSet *_frameset, KWGUI*__parent )
     : KWDocListViewItem( _parent, _after, _text )
 {
     frameset = _frameset;
     gui = __parent;
 }
 
-void KWDocStructFrameSetItem::setupTextFrames(KWDocument* doc)
+void KWDocStructTextFrameSetItem::setupTextFrames(KWDocument* doc)
 {
     deleteAllChildren();
 
     QString name;
-    KWDocStructFrameItem* child;
+    KWDocStructTextFrameItem* child;
     for ( int j = frameset->frameCount() - 1; j >= 0; j-- )
     {
         if ( KListViewItem::parent()->firstChild() == this && doc->processingType() == KWDocument::WP )
@@ -179,44 +180,45 @@ void KWDocStructFrameSetItem::setupTextFrames(KWDocument* doc)
         }
         else
             name=i18n( "Text Frame %1" ).arg(QString::number(j + 1));
-        child = new KWDocStructFrameItem( this, name, frameset, frameset->frame( j ), gui );
+        child = new KWDocStructTextFrameItem( this, name, frameset, frameset->frame( j ), gui );
     }
 }
 
-void KWDocStructFrameSetItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTextFrameSetItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, frameset);
 }
 
-void KWDocStructFrameSetItem::selectFrameSet()
+void KWDocStructTextFrameSetItem::selectItem()
 {
     KWFrame* frame = frameset->frame(0);
     if (!frame) return;
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
-void KWDocStructFrameSetItem::editFrameSet()
+void KWDocStructTextFrameSetItem::editItem()
 {
     gui->canvasWidget()->editTextFrameSet( frameset, 0L, 0 );
 }
 
-void KWDocStructFrameSetItem::deleteFrameSet()
+void KWDocStructTextFrameSetItem::deleteItem()
 {
     gui->getView()->deleteFrameSet( frameset );
 }
 
-void KWDocStructFrameSetItem::editProperties()
+void KWDocStructTextFrameSetItem::editProperties()
 {
      gui->canvasWidget()->editFrameProperties( frameset );
 }
 
 
 /******************************************************************/
-/* Class: KWDocStructFrameItem                                    */
+/* Class: KWDocStructTextFrameItem                                */
 /******************************************************************/
 
-KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, const QString &_text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI*__parent )
+KWDocStructTextFrameItem::KWDocStructTextFrameItem( QListViewItem *_parent, const QString &_text,
+    KWTextFrameSet *_frameset, KWFrame *_frame, KWGUI*__parent )
     : KWDocListViewItem( _parent, _text )
 {
     frame = _frame;
@@ -224,28 +226,33 @@ KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, const QStrin
     gui = __parent;
 }
 
-void KWDocStructFrameItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTextFrameItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
 {
     if ( _item == this )
         gui->getView()->openDocStructurePopupMenu( p, frameset);
 }
 
-void KWDocStructFrameItem::selectFrameSet()
+void KWDocStructTextFrameItem::selectItem()
 {
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
-void KWDocStructFrameItem::editFrameSet()
+void KWDocStructTextFrameItem::editItem()
 {
-    gui->canvasWidget()->editTextFrameSet( frameset, 0L, 0 );
+    KoTextParag* parag = 0L;
+    int index = 0;
+    // Get upperleft corner of the frame and get coordinates just inside it.
+    KoPoint dPoint = frame->topLeft() + KoPoint(2,2);
+    frameset->findPosition(dPoint, parag, index);
+    gui->canvasWidget()->editTextFrameSet( frameset, parag, 0 );
 }
 
-void KWDocStructFrameItem::deleteFrameSet()
+void KWDocStructTextFrameItem::deleteItem()
 {
     gui->getView()->deleteFrameSet( frameset );
 }
 
-void KWDocStructFrameItem::editProperties()
+void KWDocStructTextFrameItem::editProperties()
 {
      gui->canvasWidget()->editFrameProperties( frameset );
 }
@@ -254,7 +261,8 @@ void KWDocStructFrameItem::editProperties()
 /* Class: KWDocStructTableItem                                    */
 /******************************************************************/
 
-KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, const QString &_text, KWTableFrameSet *_table, KWGUI*__parent )
+KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, const QString &_text,
+    KWTableFrameSet *_table, KWGUI*__parent )
     :KWDocListViewItem( _parent, _text )
 {
     table = _table;
@@ -268,19 +276,19 @@ void KWDocStructTableItem::contextMenu( QListViewItem *_item, const QPoint &p, i
 }
 
 
-void KWDocStructTableItem::selectFrameSet()
+void KWDocStructTableItem::selectItem()
 {
     KWFrame *frame = table->cell( 0, 0 )->frame( 0 );
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
-void KWDocStructTableItem::editFrameSet()
+void KWDocStructTableItem::editItem()
 {
     //activate the first cell
     gui->canvasWidget()->editTextFrameSet( table->cell(0,0), 0L, 0 );
 }
 
-void KWDocStructTableItem::deleteFrameSet()
+void KWDocStructTableItem::deleteItem()
 {
     gui->getView()->deleteFrameSet( table );
 }
@@ -308,14 +316,20 @@ void KWDocStructPictureItem::contextMenu( QListViewItem *_item, const QPoint &p,
 }
 
 
-void KWDocStructPictureItem::selectFrameSet()
+void KWDocStructPictureItem::selectItem()
 {
     KWFrame *frame = pic->frame( 0 );
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 
 }
 
-void KWDocStructPictureItem::deleteFrameSet()
+void KWDocStructPictureItem::editItem()
+{
+    // Pictures cannot be edited.  Edit Properties instead.
+    editProperties();
+}
+
+void KWDocStructPictureItem::deleteItem()
 {
     gui->getView()->deleteFrameSet( pic );
 }
@@ -342,26 +356,28 @@ void KWDocStructFormulaItem::contextMenu( QListViewItem *_item, const QPoint &p,
         gui->getView()->openDocStructurePopupMenu( p, form);
 }
 
-void KWDocStructFormulaItem::selectFrameSet()
+void KWDocStructFormulaItem::selectItem()
 {
     KWFrame *frame = form->frame( 0 );
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
-void KWDocStructFormulaItem::editFrameSet()
+void KWDocStructFormulaItem::editItem()
 {
-    gui->canvasWidget()->editFrameSet(form );
+    // TODO: Formula has to be selected first to bring it into view. Bug?
+    selectItem(); 
+    gui->canvasWidget()->editFrameSet( form );
 
 }
 
-void KWDocStructFormulaItem::deleteFrameSet()
+void KWDocStructFormulaItem::deleteItem()
 {
     gui->getView()->deleteFrameSet( form );
 }
 
 void KWDocStructFormulaItem::editProperties()
 {
-     gui->canvasWidget()->editFrameProperties( form );
+    gui->canvasWidget()->editFrameProperties( form );
 }
 
 /******************************************************************/
@@ -381,18 +397,20 @@ void KWDocStructPartItem::contextMenu( QListViewItem *_item, const QPoint &p, in
 }
 
 
-void KWDocStructPartItem::selectFrameSet()
+void KWDocStructPartItem::selectItem()
 {
     KWFrame *frame = part->frame( 0 );
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
-void KWDocStructPartItem::editFrameSet()
+void KWDocStructPartItem::editItem()
 {
-    //todo
+    // TODO:
+    // part->startEditing();
+    editProperties();
 }
 
-void KWDocStructPartItem::deleteFrameSet()
+void KWDocStructPartItem::deleteItem()
 {
     gui->getView()->deleteFrameSet( part );
 }
@@ -427,8 +445,7 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, const QString &_te
         case Tables: {
             setPixmap( 0, KGlobal::iconLoader()->loadIcon( "inline_table", KIcon::Small ) );
         } break;
-        case Pictures:
-        {
+        case Pictures: {
             setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_image", KIcon::Small ) );
         } break;
         case Embedded: {
@@ -477,7 +494,7 @@ void KWDocStructRootItem::setupArrangement()
     KWTextParag *parag = 0L;
     KoTextDocument * textdoc=0L;
 
-    KWDocStructFrameSetItem *item = 0L;
+    KWDocStructTextFrameSetItem *item = 0L;
     QString _name;
 
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
@@ -485,8 +502,8 @@ void KWDocStructRootItem::setupArrangement()
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
         {
-            item = new KWDocStructFrameSetItem( this, frameset->name(), frameset, gui );
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
+            item = new KWDocStructTextFrameSetItem( this, frameset->name(), tmpParag, gui );
             textdoc= tmpParag->textDocument();
             parag = static_cast<KWTextParag *>(textdoc->firstParag());
             while ( parag )
@@ -530,46 +547,47 @@ void KWDocStructRootItem::setupTextFrameSets()
     if (lvItem && (lvItem->text(0) == i18n("Empty"))) delete lvItem;
 
     KWFrameSet *frameset = 0L;
-    KWDocStructFrameSetItem *item = 0L;
+    KWDocStructTextFrameSetItem *item = 0L;
 
     // Build a list of framesets ordered by their screen position (top left corner).
-    QValueList<KWOrderedFrameSet> orderedFrameSets;
+    QValueList<KWOrderedTextFrameSet> orderedFrameSets;
     for ( int i = doc->numFrameSets() - 1; i >= 0; i-- ) {
         frameset = doc->frameSet(i);
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY &&
             !frameset->groupmanager() && frameset->frameCount()>0)
 
-            orderedFrameSets.append(KWOrderedFrameSet(frameset));
+            orderedFrameSets.append(KWOrderedTextFrameSet(dynamic_cast<KWTextFrameSet *>(frameset)));
     }
     qHeapSort(orderedFrameSets);
 
     // Build a list of frameset pointers from the sorted list.
-    QPtrList<KWFrameSet> frameSetPtrs;
+    QPtrList<KWTextFrameSet> frameSetPtrs;
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
         frameSetPtrs.append(orderedFrameSets[i].frameSet());
 
     // Remove deleted framesets from the listview.
-    item = dynamic_cast<KWDocStructFrameSetItem *>(firstChild());
-    KWDocStructFrameSetItem* delItem;
+    item = dynamic_cast<KWDocStructTextFrameSetItem *>(firstChild());
+    KWDocStructTextFrameSetItem* delItem;
     while (item) {
         delItem = item;
-        item = dynamic_cast<KWDocStructFrameSetItem *>(item->nextSibling());
+        item = dynamic_cast<KWDocStructTextFrameSetItem *>(item->nextSibling());
         if (frameSetPtrs.containsRef(delItem->frameSet()) == 0) delete delItem;
     }
 
     // Add new framesets to the list or update existing ones.
-    KWDocStructFrameSetItem* after = 0L;
+    KWDocStructTextFrameSetItem* after = 0L;
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
     {
-        frameset = orderedFrameSets[i].frameSet();
-        item = findFrameSetItem(frameset);
+        KWTextFrameSet* textFrameset = orderedFrameSets[i].frameSet();
+        item = findTextFrameSetItem(textFrameset);
         if (item)
-            item->setText(0, frameset->name());
+            item->setText(0, textFrameset->name());
         else {
             if (after)
-                item = new KWDocStructFrameSetItem( this, after, frameset->name(), frameset, gui );
+                item = new KWDocStructTextFrameSetItem(
+                    this, after, textFrameset->name(), textFrameset, gui );
             else
-                item = new KWDocStructFrameSetItem( this, frameset->name(), frameset, gui );
+                item = new KWDocStructTextFrameSetItem( this, textFrameset->name(), textFrameset, gui );
         }
         after = item;
         item->setupTextFrames(doc);
@@ -672,15 +690,15 @@ void KWDocStructRootItem::setupEmbedded()
         ( void )new KListViewItem( this, i18n( "Empty" ) );
 }
 
-KWDocStructFrameSetItem* KWDocStructRootItem::findFrameSetItem(const KWFrameSet* frameset)
+KWDocStructTextFrameSetItem* KWDocStructRootItem::findTextFrameSetItem(const KWFrameSet* frameset)
 {
     if ( childCount() > 0 )
     {
         QListViewItem *child = firstChild();
         while( child )
         {
-            if (dynamic_cast<KWDocStructFrameSetItem *>(child)->frameSet() == frameset)
-                return dynamic_cast<KWDocStructFrameSetItem *>(child);
+            if (dynamic_cast<KWDocStructTextFrameSetItem *>(child)->frameSet() == frameset)
+                return dynamic_cast<KWDocStructTextFrameSetItem *>(child);
             child = child->nextSibling();
         }
     }
@@ -758,29 +776,29 @@ void KWDocStructTree::refreshTree(int _type)
     }
 }
 
-void KWDocStructTree::selectFrameSet()
+void KWDocStructTree::selectItem()
 {
     QListViewItem * select=currentItem ();
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
-        tmp->selectFrameSet();
+        tmp->selectItem();
 }
 
-void KWDocStructTree::editFrameSet()
+void KWDocStructTree::editItem()
 {
     QListViewItem * select=currentItem ();
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
-        tmp->editFrameSet();
+        tmp->editItem();
 }
 
 
-void KWDocStructTree::deleteFrameSet()
+void KWDocStructTree::deleteItem()
 {
     QListViewItem * select=currentItem ();
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
-        tmp->deleteFrameSet();
+        tmp->deleteItem();
 }
 
 void KWDocStructTree::editProperties()
@@ -811,17 +829,17 @@ void KWDocStructTree::slotDoubleClicked( QListViewItem *_item )
 {
     KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
     if (item)
-        item->selectFrameSet();
+        item->selectItem();
 }
 
 void KWDocStructTree::slotReturnPressed( QListViewItem *_item )
 {
     KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
-    if (item)
-        // TODO: Would like to change this to editFrameSet, which would improve
-        // keyboard accessibility, but some items are not editable, such as pictures
-        // and embedded objects.  Could default to selectFrameSet in those cases only?
-        item->selectFrameSet();
+    if (item) {
+        item->editItem();
+        //return focus to canvas.
+        gui->canvasWidget()->setFocus();
+    }
 }
 
 
@@ -877,19 +895,19 @@ void KWDocStruct::setFocusHere()
         if (tree->isVisible()) tree->setFocus();
 }
 
-void KWDocStruct::selectFrameSet()
+void KWDocStruct::selectItem()
 {
-    tree->selectFrameSet();
+    tree->selectItem();
 }
 
-void KWDocStruct::editFrameSet()
+void KWDocStruct::editItem()
 {
-    tree->editFrameSet();
+    tree->editItem();
 }
 
-void KWDocStruct::deleteFrameSet()
+void KWDocStruct::deleteItem()
 {
-    tree->deleteFrameSet();
+    tree->deleteItem();
 }
 
 void KWDocStruct::editProperties()

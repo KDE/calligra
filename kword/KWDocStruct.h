@@ -39,27 +39,44 @@ class KWTextParag;
 /******************************************************************/
 
 /** Provides a way to sort framesets using a QValueList based on their top left corner. */
-class KWOrderedFrameSet
+class KWOrderedTextFrameSet
 {
 public:
-    KWOrderedFrameSet(KWFrameSet* fs);
-    KWOrderedFrameSet();    // default constructor
-    bool operator<( KWOrderedFrameSet ofs);
-    KWFrameSet* frameSet() { return m_frameset; }
+    KWOrderedTextFrameSet(KWTextFrameSet* fs);
+    KWOrderedTextFrameSet();    // default constructor
+    bool operator<( KWOrderedTextFrameSet ofs);
+    KWTextFrameSet* frameSet() { return m_frameset; }
 
 private:
-    KWFrameSet* m_frameset;
+    KWTextFrameSet* m_frameset;
 };
 
 class KWDocListViewItem : public KListViewItem
 {
 public:
+    enum ItemType {
+        IT_BASE = FT_BASE,
+        IT_TEXT = FT_TEXT,
+        IT_PICTURE = FT_PICTURE,
+        IT_PART = FT_PART,
+        IT_FORMULA = FT_FORMULA,
+        IT_CLIPART = FT_CLIPART,
+#if 0 // KWORD_HORIZONTAL_LINE
+        IT_HORZLINE = FT_HORZLINE,
+#endif
+        IT_TABLE = FT_TABLE,
+        IT_ROOT = 11,
+        IT_TEXTFRAME = 12,
+        IT_PARAG = 13
+    };
+
     KWDocListViewItem(QListViewItem *_parent, const QString &_text);
     KWDocListViewItem(QListViewItem *_parent, QListViewItem *_after, const QString &_text);
     KWDocListViewItem(QListView *_parent, const QString &_text);
-    virtual void selectFrameSet() {}
-    virtual void editFrameSet() {}
-    virtual void deleteFrameSet() {}
+    virtual ItemType itemType() { return IT_BASE; }
+    virtual void selectItem() {}
+    virtual void editItem() {}
+    virtual void deleteItem() {}
     virtual void editProperties() {}
     virtual void contextMenu(QListViewItem *, const QPoint &, int) {}
 
@@ -76,9 +93,10 @@ class KWDocStructParagItem : public KWDocListViewItem
 public:
     KWDocStructParagItem( QListViewItem *_parent, const QString &_text, KWTextParag *_parag, KWGUI *__parent );
     KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text, KWTextParag *_parag, KWGUI*__parent );
-    virtual void selectFrameSet();
-    virtual void editFrameSet();
-    virtual void deleteFrameSet();
+    virtual ItemType itemType() { return IT_PARAG; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
@@ -88,48 +106,51 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWDocStructFrameSetItem                                 */
+/* Class: KWDocStructTextFrameSetItem                                 */
 /******************************************************************/
 
-class KWDocStructFrameSetItem : public KWDocListViewItem
+class KWDocStructTextFrameSetItem : public KWDocListViewItem
 {
 public:
-    KWDocStructFrameSetItem( QListViewItem *_parent, const QString &_text,
-        KWFrameSet *_frameset, KWGUI *__parent );
-    KWDocStructFrameSetItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text,
-        KWFrameSet *_frameset, KWGUI*__parent );
-    virtual void selectFrameSet();
-    virtual void editFrameSet();
-    virtual void deleteFrameSet();
+    KWDocStructTextFrameSetItem( QListViewItem *_parent, const QString &_text,
+        KWTextFrameSet *_frameset, KWGUI *__parent );
+    KWDocStructTextFrameSetItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text,
+        KWTextFrameSet *_frameset, KWGUI*__parent );
+    virtual int ItemType() { return IT_TEXT; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void editProperties();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
-    KWFrameSet* frameSet() { return frameset; };
+    KWTextFrameSet* frameSet() { return frameset; };
     void setupTextFrames(KWDocument* doc);
 
 protected:
-    KWFrameSet *frameset;
+    KWTextFrameSet *frameset;
     KWGUI *gui;
 
 };
 
 /******************************************************************/
-/* Class: KWDocStructFrameItem                                    */
+/* Class: KWDocStructTextFrameItem                                    */
 /******************************************************************/
 
-class KWDocStructFrameItem : public KWDocListViewItem
+class KWDocStructTextFrameItem : public KWDocListViewItem
 {
 public:
-    KWDocStructFrameItem( QListViewItem *_parent, const QString &_text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI *__parent );
-    virtual void selectFrameSet();
-    virtual void editFrameSet();
-    virtual void deleteFrameSet();
+    KWDocStructTextFrameItem( QListViewItem *_parent, const QString &_text,
+        KWTextFrameSet *_frameset, KWFrame *_frame, KWGUI *__parent );
+    virtual int ItemType() { return IT_TEXTFRAME; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void editProperties();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
 protected:
     KWFrame *frame;
-    KWFrameSet *frameset;
+    KWTextFrameSet *frameset;
     KWGUI *gui;
 };
 
@@ -141,9 +162,10 @@ class KWDocStructTableItem : public KWDocListViewItem
 {
 public:
     KWDocStructTableItem( QListViewItem *_parent, const QString &_text, KWTableFrameSet *_table, KWGUI*__parent );
-    virtual void selectFrameSet();
-    virtual void editFrameSet();
-    virtual void deleteFrameSet();
+    virtual int ItemType() { return IT_TABLE; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void editProperties();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
@@ -160,9 +182,10 @@ class KWDocStructFormulaItem : public KWDocListViewItem
 {
 public:
     KWDocStructFormulaItem( QListViewItem *_parent, const QString &_text, KWFormulaFrameSet *_form, KWGUI*__parent );
-    virtual void selectFrameSet();
-    virtual void editFrameSet();
-    virtual void deleteFrameSet();
+    virtual int ItemType() { return IT_FORMULA; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void editProperties();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
@@ -180,8 +203,10 @@ class KWDocStructPictureItem : public KWDocListViewItem
 {
 public:
     KWDocStructPictureItem( QListViewItem *_parent, const QString &_text, KWPictureFrameSet *_pic, KWGUI*__parent );
-    virtual void selectFrameSet();
-    virtual void deleteFrameSet();
+    virtual int ItemType() { return IT_PICTURE; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void editProperties();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
@@ -198,9 +223,10 @@ class KWDocStructPartItem : public KWDocListViewItem
 {
 public:
     KWDocStructPartItem( QListViewItem *_parent, const QString &_text, KWPartFrameSet *_part, KWGUI*__parent );
-    virtual void selectFrameSet();
-    virtual void editFrameSet();
-    virtual void deleteFrameSet();
+    virtual int ItemType() { return IT_PART; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
     virtual void editProperties();
     virtual void contextMenu(QListViewItem *_item, const QPoint &p, int);
 
@@ -219,6 +245,7 @@ public:
     KWDocStructRootItem( QListView *_parent, const QString &_text,
         KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent );
 
+    virtual int ItemType() { return IT_ROOT; }
     void setupArrangement();
     void setupTextFrameSets();
     void setupTables();
@@ -228,7 +255,7 @@ public:
     virtual void setOpen( bool o );
 
 protected:
-    KWDocStructFrameSetItem* findFrameSetItem(const KWFrameSet* frameset);
+    KWDocStructTextFrameSetItem* findTextFrameSetItem(const KWFrameSet* frameset);
 
     KWDocument *doc;
     TypeStructDocItem type;
@@ -253,9 +280,9 @@ public:
     QSize minimumSizeHint() const {
         return QSize( 0, 0 );
     }
-    void selectFrameSet();
-    void editFrameSet();
-    void deleteFrameSet();
+    void selectItem();
+    void editItem();
+    void deleteItem();
     void editProperties();
 
 public slots:
@@ -281,9 +308,9 @@ class KWDocStruct : public QWidget
 
 public:
     KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
-    void selectFrameSet();
-    void editFrameSet();
-    void deleteFrameSet();
+    void selectItem();
+    void editItem();
+    void deleteItem();
     void editProperties();
     /** Refresh the specified branches of the tree.  Actual refreshing is deferred
         until the paint event. */

@@ -6674,7 +6674,7 @@ void KWView::selectFrameSet()
 {
     if ( m_gui->getDocStruct() )
     {
-        m_gui->getDocStruct()->selectFrameSet();
+        m_gui->getDocStruct()->selectItem();
     }
 }
 
@@ -6682,7 +6682,7 @@ void KWView::editFrameSet()
 {
     if ( m_gui->getDocStruct() )
     {
-        m_gui->getDocStruct()->editFrameSet();
+        m_gui->getDocStruct()->editItem();
         //return focus to canvas.
         m_gui->canvasWidget()->setFocus();
     }
@@ -6700,7 +6700,7 @@ void KWView::deleteFrameSet()
 {
     if ( m_gui->getDocStruct() )
     {
-        m_gui->getDocStruct()->deleteFrameSet();
+        m_gui->getDocStruct()->deleteItem();
     }
 }
 
