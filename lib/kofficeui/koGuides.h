@@ -152,6 +152,17 @@ public:
      */
     KoPoint diffGuide( KoRect &rect, double diffx, double diffy );
 
+    /**
+     * @brief Get the disance to the next guide in the indicated directions
+     *
+     * @param rect The rect which should be snapped
+     * @param right If true, search to the right otherwise to the left.
+     * @param bottom If true, search to the bottom otherwise to the top.
+     *
+     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     */
+    KoPoint diffNextGuide( KoRect &rect, bool right, bool bottom );
+
 public slots:
     /**
      * @brief Move Guide

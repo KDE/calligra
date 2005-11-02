@@ -369,7 +369,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
 
         if ( ( *it )->orientation == Qt::Horizontal )
         {
-            double tmp = rect.top() - (*it)->position;
+            double tmp = (*it)->position - rect.top();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
             {
                 if(QABS( tmp ) < diff.y())
@@ -390,7 +390,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
         }
         else
         {
-            double tmp = rect.left() - (*it)->position;
+            double tmp = (*it)->position - rect.left();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
             {
                 if(QABS( tmp ) < diff.x())
@@ -418,7 +418,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
 
         if ( ( *it )->orientation == Qt::Horizontal )
         {
-            double tmp = rect.top() - (*it)->position;
+            double tmp = (*it)->position - rect.top();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
             {
                 if(QABS( tmp ) < diff.y())
@@ -427,7 +427,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
                     hClosest = *it;
                 }
             }
-            tmp = rect.bottom() - (*it)->position;
+            tmp =  (*it)->position - rect.bottom();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
             {
                 if(QABS( tmp ) < diff.y())
@@ -439,7 +439,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
         }
         else
         {
-            double tmp = rect.left() - (*it)->position;
+            double tmp = (*it)->position - rect.left();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
             {
                 if(QABS( tmp ) < diff.x())
@@ -543,6 +543,85 @@ KoPoint KoGuides::diffGuide( KoRect &rect, double diffx, double diffy )
             if ( diffy < moveyr && moveyr < move.y() )
             {
                 move.setY( moveyr );
+            }
+        }
+    }
+
+    return move;
+}
+
+
+KoPoint KoGuides::diffNextGuide( KoRect &rect, bool right, bool bottom )
+{
+    KoPoint move( 0, 0 );
+    QValueList<double> horizHelplines;
+    QValueList<double> vertHelplines;
+    getGuideLines( horizHelplines, vertHelplines );
+
+    QValueList<double>::const_iterator it( vertHelplines.begin() );
+    bool xset = false;
+    bool yset = false;
+    for ( ; it != vertHelplines.end(); ++it )
+    {
+        double movexl = *it - rect.left();
+        double movexr = *it - rect.right();
+        if ( right )
+        {
+            if ( ( !xset || movexl < move.x() ) && movexl > 0 )
+            {
+                move.setX( movexl );
+                xset = true;
+            }
+            if ( ( !xset || movexr < move.x() ) && movexr > 0 )
+            {
+                move.setX( movexr );
+                xset = true;
+            }
+        }
+        else
+        {
+            if ( ( !xset || movexl > move.x() ) && movexl < 0 )
+            {
+                move.setX( movexl );
+                xset = true;
+            }
+            if ( ( !xset || movexr > move.x() )  && movexr < 0 )
+            {
+                move.setX( movexr );
+                xset = true;
+            }
+        }
+    }
+
+    it = horizHelplines.begin();
+    for ( ; it != horizHelplines.end(); ++it )
+    {
+        double moveyl = *it - rect.top();
+        double moveyr = *it - rect.bottom();
+        if ( bottom )
+        {
+            if ( ( !yset || moveyl < move.y() ) && moveyl > 0 )
+            {
+                move.setY( moveyl );
+                yset = true;
+            }
+            if ( ( !yset || moveyr < move.y() ) && moveyr > 0 )
+            {
+                move.setY( moveyr );
+                yset = true;
+            }
+        }
+        else
+        {
+            if ( ( !yset || moveyl > move.y() ) && moveyl < 0 )
+            {
+                move.setY( moveyl );
+                yset = true;
+            }
+            if ( ( !yset || moveyr > move.y() ) && moveyr < 0 )
+            {
+                move.setY( moveyr );
+                yset = true;
             }
         }
     }
