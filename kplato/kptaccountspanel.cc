@@ -112,6 +112,12 @@ void KPTAccountsPanel::slotChanged() {
 
 void KPTAccountsPanel::slotSelectionChanged() {
     kdDebug()<<k_funcinfo<<endl;
+    if (accountList->childCount() == 0) {
+        removeBtn->setEnabled(false);
+        newBtn->setEnabled(true);
+        subBtn->setEnabled(false);
+        return;
+    }
     QListViewItem *i = accountList->selectedItem();
     removeBtn->setEnabled((bool)i);
     newBtn->setEnabled((bool)i);
@@ -219,17 +225,19 @@ KCommand *KPTAccountsPanel::save(KPTPart *part, KPTProject &project, QListViewIt
     KMacroCommand *cmd=0;
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
-        kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
-        if (!cmd) cmd = new KMacroCommand("");
-        KPTAccount *a = new KPTAccount(item->text(0), item->text(1));
-        if (item->parent()) {
+        if (!item->text(0).isEmpty()) {
             kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
-            cmd->addCommand(new KPTAddAccountCmd(part, project, a, item->parent()->text(0)));
-        } else {
-            cmd->addCommand(new KPTAddAccountCmd(part, project, a));
+            if (!cmd) cmd = new KMacroCommand("");
+            KPTAccount *a = new KPTAccount(item->text(0), item->text(1));
+            if (item->parent()) {
+                kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+                cmd->addCommand(new KPTAddAccountCmd(part, project, a, item->parent()->text(0)));
+            } else {
+                cmd->addCommand(new KPTAddAccountCmd(part, project, a));
+            }
         }
     } else {
-        if (item->text(0) != item->account->name()) {
+        if (!item->text(0).isEmpty() && (item->text(0) != item->account->name())) {
             if (!cmd) cmd = new KMacroCommand("");
             kdDebug()<<k_funcinfo<<"Renamed: "<<item->account->name()<<" to "<<item->text(0)<<endl;
             cmd->addCommand(new KPTRenameAccountCmd(part, item->account, item->text(0)));
@@ -252,6 +260,7 @@ KCommand *KPTAccountsPanel::save(KPTPart *part, KPTProject &project, QListViewIt
 }
 
 void KPTAccountsPanel::slotOk() {
+    //TODO check for empty name
 }
 
 } //namespace KPlato
