@@ -4872,7 +4872,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
             diffy = -doc->getGridY() - 0.1;
         }
         move = diffGrid( rect, diffx, diffy );
-        KoPoint diff( m_gl.diffNextGuide( rect, diffx > 0, diffy > 0 ) );
+        KoPoint diff( m_gl.diffGuide( rect, diffx > 0, diffy > 0 ) );
         if ( diffx > 0 )
         {
             if ( diff.x() > 0 && diff.x() < move.x() )
