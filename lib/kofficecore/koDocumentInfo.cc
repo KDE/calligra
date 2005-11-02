@@ -106,9 +106,11 @@ QDomDocument KoDocumentInfo::save()
         Q_ASSERT( p );
         QDomElement s = p->save( doc );
         if ( s.isNull() )
-            return QDomDocument();
+            continue;
         e.appendChild( s );
     }
+    if ( e.isNull() )
+      return QDomDocument();
 
     return doc;
 }
