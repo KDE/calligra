@@ -53,6 +53,19 @@
 #include "kpclosedlineobject.h"
 #include "kpgroupobject.h"
 
+
+QValidator::State RenamePageValidator::validate( QString & input, int& ) const
+{
+  QString str = input.stripWhiteSpace();
+  if ( str.isEmpty() ) // we want to allow empty titles. Empty == automatic.
+    return Acceptable;
+
+  if ( mStringList.find( str ) == mStringList.end() )
+    return Acceptable;
+  else
+    return Intermediate;
+}
+
 class ThumbToolTip : public QToolTip
 {
 public:
@@ -1122,7 +1135,14 @@ void Outline::renamePageTitle()
 
     bool ok = false;
     QString activeTitle = item->text( 0 );
-    QRegExpValidator validator( QRegExp( ".*" ), 0 ); // we want to allow empty titles. Empty == automatic.
+
+    QStringList page_titles;
+    KPrPage *it;
+    for ( it = m_doc->pageList().first(); it; it = m_doc->pageList().next() )
+      if ( it->pageTitle() != activeTitle )
+        page_titles.append( it->pageTitle() );
+
+    RenamePageValidator validator( page_titles );
     QString newTitle = KInputDialog::getText( i18n("Rename Slide"),
                                               i18n("Slide title:"), activeTitle, &ok, this, 0,
                                               &validator );
@@ -1131,7 +1151,7 @@ void Outline::renamePageTitle()
     if ( ok ) { // User pushed an OK button.
         if ( newTitle != activeTitle ) { // Title changed.
             KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),
-                                                                                  m_doc, activeTitle, newTitle, page  );
+                                                                                  m_doc, activeTitle, newTitle.stripWhiteSpace(), page  );
             cmd->execute();
             m_doc->addCommand(cmd);
         }

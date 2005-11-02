@@ -22,7 +22,9 @@
 #define SIDEBAR_H
 
 #include <qrect.h>
+#include <qstringlist.h>
 #include <qtabwidget.h>
+#include <qvalidator.h>
 
 #include <kiconview.h>
 #include <klistview.h>
@@ -37,6 +39,18 @@ class OutlineSlideItem;
 class ThumbBar;
 class ThumbToolTip;
 class KPrPage;
+
+
+class RenamePageValidator : public QValidator
+{
+  public:
+    RenamePageValidator( const QStringList & list=QStringList() )
+        : QValidator( 0, 0 ), mStringList( list ) {}
+    virtual State validate( QString & input, int & pos ) const;
+
+  protected:
+    QStringList mStringList;
+};
 
 class SideBarBase
 {
