@@ -2,8 +2,14 @@
 Encoding=UTF-8
 Type=Application
 Name=WriteUp
+Name[sv]=Writeup
 Exec=writeup %u
 GenericName=Simplified Word Processing
+GenericName[es]=Procesamiento de texto simplificado
+GenericName[ga]=Próiseáil Focal Simplí
+GenericName[pt]=Processamento de Texto Simplificado
+GenericName[pt_BR]=Processamento de Texto Simplificado
+GenericName[sv]=Förenklad ordbehandling
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 Icon=writeup
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
