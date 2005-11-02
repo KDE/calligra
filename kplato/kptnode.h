@@ -37,6 +37,7 @@ class QDomElement;
 namespace KPlato
 {
 
+class KPTAccount;
 class KPTProject;
 class KPTAppointment;
 class KPTResourceGroup;
@@ -95,7 +96,8 @@ public:
     virtual KPTNode *projectNode();
     
     // The load and save methods
-    virtual bool load(QDomElement &element) = 0;
+    virtual bool load(QDomElement &element) { return true; }
+    virtual bool load(QDomElement &element, KPTProject &project) { return true; }
     virtual void save(QDomElement &element)  = 0;
     /// Save my and my childrens relations.
     virtual void saveRelations(QDomElement &element);
@@ -434,6 +436,21 @@ public:
     virtual void generateWBS(int count, KPTWBSDefinition &def, QString wbs=QString());
     QString wbs() const { return m_wbs; }
     
+    double startupCost() const { return m_startupCost; }
+    void setStartupCost(double cost) { m_startupCost = cost; }
+    
+    KPTAccount *startupAccount() const { return m_startupAccount; }
+    void setStartupAccount(KPTAccount *acc) { m_startupAccount = acc; }
+    
+    double shutdownCost() const { return m_shutdownCost; }
+    void  setShutdownCost(double cost) { m_shutdownCost = cost; }
+    
+    KPTAccount *shutdownAccount() const { return m_shutdownAccount; }
+    void setShutdownAccount(KPTAccount *acc) { m_shutdownAccount = acc; }
+    
+    KPTAccount *runningAccount() const { return m_runningAccount; }
+    void setRunningAccount(KPTAccount *acc) { m_runningAccount = acc; }
+
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
@@ -519,6 +536,12 @@ protected:
 
     bool m_inCriticalPath;
     QString m_wbs;
+    
+    double m_startupCost;
+    KPTAccount *m_startupAccount;
+    double m_shutdownCost;
+    KPTAccount *m_shutdownAccount;
+    KPTAccount *m_runningAccount;
     
 private:
     void init();

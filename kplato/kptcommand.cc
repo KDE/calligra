@@ -1131,4 +1131,85 @@ void KPTModifyAccountDescriptionCmd::unexecute() {
 }
 
 
+KPTNodeModifyStartupCostCmd::KPTNodeModifyStartupCostCmd(KPTPart *part, KPTNode &node, double value, QString name)
+    : KPTNamedCommand(part, name),
+      m_node(node) {
+    m_oldvalue = node.startupCost();
+    m_newvalue = value;
+}
+
+void KPTNodeModifyStartupCostCmd::execute() {
+    m_node.setStartupCost(m_newvalue);        
+    setCommandType(0);
+}
+void KPTNodeModifyStartupCostCmd::unexecute() {
+    m_node.setStartupCost(m_oldvalue);
+    setCommandType(0);
+}
+
+KPTNodeModifyShutdownCostCmd::KPTNodeModifyShutdownCostCmd(KPTPart *part, KPTNode &node, double value, QString name)
+    : KPTNamedCommand(part, name),
+      m_node(node) {
+    m_oldvalue = node.startupCost();
+    m_newvalue = value;
+}
+
+void KPTNodeModifyShutdownCostCmd::execute() {
+    m_node.setShutdownCost(m_newvalue);        
+    setCommandType(0);
+}
+void KPTNodeModifyShutdownCostCmd::unexecute() {
+    m_node.setShutdownCost(m_oldvalue);
+    setCommandType(0);
+}
+
+KPTNodeModifyRunningAccountCmd::KPTNodeModifyRunningAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name)
+    : KPTNamedCommand(part, name),
+      m_node(node) {
+    m_oldvalue = node.runningAccount();
+    m_newvalue = value;
+}
+
+void KPTNodeModifyRunningAccountCmd::execute() {
+    m_node.setRunningAccount(m_newvalue);        
+    setCommandType(0);
+}
+void KPTNodeModifyRunningAccountCmd::unexecute() {
+    m_node.setRunningAccount(m_oldvalue);
+    setCommandType(0);
+}
+
+KPTNodeModifyStartupAccountCmd::KPTNodeModifyStartupAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name)
+    : KPTNamedCommand(part, name),
+      m_node(node) {
+    m_oldvalue = node.startupAccount();
+    m_newvalue = value;
+}
+
+void KPTNodeModifyStartupAccountCmd::execute() {
+    m_node.setStartupAccount(m_newvalue);        
+    setCommandType(0);
+}
+void KPTNodeModifyStartupAccountCmd::unexecute() {
+    m_node.setStartupAccount(m_oldvalue);
+    setCommandType(0);
+}
+
+KPTNodeModifyShutdownAccountCmd::KPTNodeModifyShutdownAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name)
+    : KPTNamedCommand(part, name),
+      m_node(node) {
+    m_oldvalue = node.shutdownAccount();
+    m_newvalue = value;
+}
+
+void KPTNodeModifyShutdownAccountCmd::execute() {
+    m_node.setShutdownAccount(m_newvalue);        
+    setCommandType(0);
+}
+void KPTNodeModifyShutdownAccountCmd::unexecute() {
+    m_node.setShutdownAccount(m_oldvalue);
+    setCommandType(0);
+}
+
+
 }  //KPlato namespace

@@ -477,6 +477,8 @@ public:
     
     void addActualEffort(QDate date, KPTDuration effort, bool overtime=false);
     
+    KPTAccount *account() { return m_account; }
+    
 private:
     KPTNode *m_node;
     KPTResource *m_resource;
@@ -518,6 +520,8 @@ private:
     
     UsedEffort m_actualEffort;
 
+    KPTAccount *m_account;
+    
 #ifndef NDEBUG
 public:
         void printDebug(QString ident);
@@ -565,7 +569,7 @@ class KPTResourceRequest {
         KPTResource *resource() const { return m_resource; }
         void setResource(KPTResource* resource) { m_resource = resource; }
         
-        bool load(QDomElement &element, KPTProject *project);
+        bool load(QDomElement &element, KPTProject &project);
         void save(QDomElement &element);
 
         /**
@@ -614,7 +618,7 @@ class KPTResourceGroupRequest {
         KPTResourceRequest *takeResourceRequest(KPTResourceRequest *request);
         KPTResourceRequest *find(KPTResource *resource) const;
 
-        bool load(QDomElement &element, KPTProject *project);
+        bool load(QDomElement &element, KPTProject &project);
         void save(QDomElement &element);
 
         /**
@@ -682,7 +686,7 @@ public:
     KPTResourceRequest *find(KPTResource *resource) const;
     bool isEmpty() const;
     
-    //bool load(QDomElement &element, KPTProject *project);
+    //bool load(QDomElement &element, KPTProject &project);
     void save(QDomElement &element);
 
     void clear() { m_requests.clear(); }

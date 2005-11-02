@@ -4,6 +4,8 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib
            $(all_includes)
 
 libkplatopart_la_SOURCES = \
+    kpttaskcostpanelbase.ui \
+    kpttaskcostpanel.cc \
     kptmilestoneprogresspanel.cc \
     kptmilestoneprogresspanelbase.ui \
     kptmilestoneprogressdialog.cc \
@@ -42,6 +44,7 @@ libkplatopart_la_SOURCES = \
 
 # (this is not used)
 noinst_HEADERS = \
+    kpttaskcostpanel.h \
     kpttaskprogresspanel.h \
     kpttaskprogressdialog.h \
     kptaccount.h kptaccountsdialog.h kptaccountspanel.h \

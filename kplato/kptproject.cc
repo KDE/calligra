@@ -238,47 +238,19 @@ bool KPTProject::load(QDomElement &element) {
         setConstraint(KPTNode::MustStartOn);
     }
 
-    // Load the project children
+    // Must do these first
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
-    
-            if (e.tagName() == "project") {
-            // Load the subproject
-            KPTProject *child = new KPTProject(this);
-            if (child->load(e))
-                addChildNode(child);
-            else
-                // TODO: Complain about this
-                delete child;
-            } else if (e.tagName() == "task") {
-            // Load the task. Depends on resources already loaded
-            KPTTask *child = new KPTTask(this);
-            if (child->load(e))
-                addChildNode(child);
-            else
-                // TODO: Complain about this
-                delete child;
-            } else if (e.tagName() == "relation") {
-                // Load the relation
-                KPTRelation *child = new KPTRelation();
-                if (!child->load(e, *this)) {
-                    // TODO: Complain about this
-                    kdError()<<k_funcinfo<<"Failed to load relation"<<endl;
-                    delete child;
-                }
-            } else if (e.tagName() == "resource-group") {
-                // Load the resources
-                KPTResourceGroup *child = new KPTResourceGroup(this);
-                if (child->load(e)) {
-                        addResourceGroup(child);
-                } else {
-                    // TODO: Complain about this
-                    delete child;
+            if (e.tagName() == "accounts") {
+                // Load accounts
+                if (!m_accounts.load(e)) {
+                    kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
                 }
             } else if (e.tagName() == "calendar") {
                 // Load the calendar.
+                // References by resources
                 KPTCalendar *child = new KPTCalendar();
                 child->setProject(this);
                 if (child->load(e)) {
@@ -298,13 +270,70 @@ bool KPTProject::load(QDomElement &element) {
                     kdError()<<k_funcinfo<<"Failed to load standard worktime"<<endl;
                     delete child;
                 }
-            } else if (e.tagName() == "accounts") {
-                // Load accounts
-                if (!m_accounts.load(e)) {
-                    kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
+            }
+        }
+    }
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+    
+            if (e.tagName() == "resource-group") {
+                // Load the resources
+                // References calendars
+                KPTResourceGroup *child = new KPTResourceGroup(this);
+                if (child->load(e)) {
+                        addResourceGroup(child);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
+            }
+        }
+    }
+    // Load the project children
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+    
+            if (e.tagName() == "project") {
+                // Load the subproject
+                KPTProject *child = new KPTProject(this);
+                if (child->load(e)) {
+                    addChildNode(child);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
+            } else if (e.tagName() == "task") {
+                // Load the task (and resourcerequests). 
+                // Depends on resources already loaded
+                KPTTask *child = new KPTTask(this);
+                if (child->load(e, *this)) {
+                    addChildNode(child);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
+            }
+        }
+    }
+    // These go last
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+    
+            if (e.tagName() == "relation") {
+                // Load the relation
+                // References tasks
+                KPTRelation *child = new KPTRelation();
+                if (!child->load(e, *this)) {
+                    // TODO: Complain about this
+                    kdError()<<k_funcinfo<<"Failed to load relation"<<endl;
+                    delete child;
                 }
             } else if (e.tagName() == "schedules") {
                 // Prepare for multiple schedules
+                // References tasks and resources
                 QDomNodeList lst = e.childNodes();
                 for (unsigned int i=0; i<lst.count(); ++i) {
                     if (lst.item(i).isElement()) {
@@ -342,7 +371,8 @@ bool KPTProject::load(QDomElement &element) {
             }
         }
     }
-    // fix calendar references
+    
+    // calendars references calendars in arbritary saved order
     QPtrListIterator<KPTCalendar> calit(m_calendars);
     for (; calit.current(); ++calit) {
         if (calit.current()->id() == calit.current()->parentId()) {

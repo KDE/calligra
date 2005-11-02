@@ -54,6 +54,13 @@ KPTNode::KPTNode(KPTNode &node, KPTNode *parent)
     
     m_dateOnlyStartDate = node.startDate();
     m_dateOnlyEndDate = node.endDate();
+    
+    m_runningAccount = node.runningAccount();
+    m_startupAccount = node.startupAccount();
+    m_shutdownAccount = node.shutdownAccount();
+
+    m_startupCost = node.startupCost();
+    m_shutdownCost = node.shutdownCost();
 }
 
 KPTNode::~KPTNode() {
@@ -91,6 +98,12 @@ void KPTNode::init() {
     
     m_dateOnlyStartDate = m_dateOnlyEndDate = QDate::currentDate();
     m_dateOnlyDuration.addDays(1);
+    
+    m_runningAccount = 0;
+    m_startupAccount = 0;
+    m_shutdownAccount = 0;
+    m_startupCost = 0.0;
+    m_shutdownCost = 0.0;
 }
 
 KPTNode *KPTNode::projectNode() {

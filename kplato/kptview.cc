@@ -466,7 +466,7 @@ void KPTView::slotAddSubTask() {
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
     KPTTask* node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().isBaselined());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -488,7 +488,7 @@ void KPTView::slotAddSubTask() {
 
 void KPTView::slotAddTask() {
     KPTTask *node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().isBaselined());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
 		KPTNode* currNode = currentTask();
 		if (currNode)
@@ -515,7 +515,7 @@ void KPTView::slotAddMilestone() {
     //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().isBaselined());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -597,7 +597,7 @@ void KPTView::slotOpenNode() {
             break;
         case KPTNode::Type_Task: {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().isBaselined());
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -613,7 +613,7 @@ void KPTView::slotOpenNode() {
             // enter a duration in case we accidentally set a tasks duration to zero
             // and hence, create a milestone
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().isBaselined());
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {

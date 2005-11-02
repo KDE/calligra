@@ -80,7 +80,7 @@ public:
     void setConstraint(KPTNode::ConstraintType type);
 
     /// Load from document
-    virtual bool load(QDomElement &element);
+    virtual bool load(QDomElement &element, KPTProject &project);
     /// Save to document
     virtual void save(QDomElement &element);
 

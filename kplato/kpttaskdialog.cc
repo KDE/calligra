@@ -19,6 +19,7 @@
 */
 
 #include "kpttaskdialog.h"
+#include "kpttaskcostpanel.h"
 #include "kpttaskgeneralpanel.h"
 #include "kptrequestresourcespanel.h"
 
@@ -31,7 +32,7 @@
 namespace KPlato
 {
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool baseline, QWidget *p)
+KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTAccounts &accounts, KPTStandardWorktime *workTime, bool baseline, QWidget *p)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, "Task Settings Dialog", true, true)
 {
     QVBox *page;
@@ -43,11 +44,15 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool 
     page = addVBoxPage(i18n("&Resources"));
     m_resourcesTab = new KPTRequestResourcesPanel(page, task, baseline);
     
+    page = addVBoxPage(i18n("&Cost"));
+    m_costTab = new KPTTaskCostPanel(task, accounts, page);
+    
     // Set the state of all the child widgets.
     enableButtonOK(false);
     
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+    connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 }
 
 
@@ -60,6 +65,11 @@ KCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
         modified = true;
     }
     cmd = m_resourcesTab->buildCommand(part);
+    if (cmd) {
+        m->addCommand(cmd);
+        modified = true;
+    }
+    cmd = m_costTab->buildCommand(part);
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

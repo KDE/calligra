@@ -43,8 +43,10 @@ class QDateTime;
 namespace KPlato
 {
 
+class KPTAccounts;
 class KPTTaskGeneralPanel;
 class KPTRequestResourcesPanel;
+class KPTTaskCostPanel;
 class KPTPart;
 class KPTTask;
 class KPTStandardWorktime;
@@ -58,11 +60,12 @@ public:
     /**
      * The constructor for the task settings dialog.
      * @param task the task to show
+     * @param accounts all defined accounts
      * @param workTime defines the number of hours pr day and week
      * @param baseline if true, project is baselined
      * @param parent parent widget
      */
-    KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
+    KPTTaskDialog(KPTTask &task, KPTAccounts &accounts, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
 
     KCommand *buildCommand(KPTPart *part);
 
@@ -72,7 +75,7 @@ protected slots:
 private:
     KPTTaskGeneralPanel *m_generalTab;
     KPTRequestResourcesPanel *m_resourcesTab;
-
+    KPTTaskCostPanel *m_costTab;
 };
 
 } //KPlato namespace

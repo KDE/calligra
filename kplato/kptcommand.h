@@ -695,6 +695,71 @@ private:
     QString m_newvalue;
 };
 
+class KPTNodeModifyStartupCostCmd : public KPTNamedCommand
+{
+public:
+    KPTNodeModifyStartupCostCmd(KPTPart *part, KPTNode &node, double value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPTNodeModifyShutdownCostCmd : public KPTNamedCommand
+{
+public:
+    KPTNodeModifyShutdownCostCmd(KPTPart *part, KPTNode &node, double value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPTNodeModifyRunningAccountCmd : public KPTNamedCommand
+{
+public:
+    KPTNodeModifyRunningAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    KPTAccount *m_oldvalue;
+    KPTAccount *m_newvalue;
+};
+
+class KPTNodeModifyStartupAccountCmd : public KPTNamedCommand
+{
+public:
+    KPTNodeModifyStartupAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    KPTAccount *m_oldvalue;
+    KPTAccount *m_newvalue;
+};
+
+class KPTNodeModifyShutdownAccountCmd : public KPTNamedCommand
+{
+public:
+    KPTNodeModifyShutdownAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    KPTAccount *m_oldvalue;
+    KPTAccount *m_newvalue;
+};
+
 
 }  //KPlato namespace
 

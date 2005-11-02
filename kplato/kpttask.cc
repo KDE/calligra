@@ -175,7 +175,7 @@ void KPTTask::setConstraint(KPTNode::ConstraintType type) {
 }
 
 
-bool KPTTask::load(QDomElement &element) {
+bool KPTTask::load(QDomElement &element, KPTProject &project) {
     // Load attributes (TODO: Handle different types of tasks, milestone, summary...)
     bool ok = false;
     m_id = element.attribute("id");
@@ -193,7 +193,21 @@ bool KPTTask::load(QDomElement &element) {
 
     m_constraintStartTime = KPTDateTime::fromString(element.attribute("constraint-starttime"));
     m_constraintEndTime = KPTDateTime::fromString(element.attribute("constraint-endtime"));
-
+    
+    QString s = element.attribute("running-account");
+    if (!s.isEmpty()) {
+        m_runningAccount = project.accounts().findAccount(s);
+    }
+    s = element.attribute("startup-account");
+    if (!s.isEmpty()) {
+        m_startupAccount =  project.accounts().findAccount(s);
+    }
+    s = element.attribute("shutdown-account");
+    if (!s.isEmpty()) {
+        m_shutdownAccount = project.accounts().findAccount(s);
+    }    
+    m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
+    m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
     
     m_wbs = element.attribute("wbs", "");
     
@@ -215,7 +229,7 @@ bool KPTTask::load(QDomElement &element) {
             } else if (e.tagName() == "task") {
                 // Load the task
                 KPTTask *child = new KPTTask(this);
-                if (child->load(e)) {
+                if (child->load(e, project)) {
                     addChildNode(child);
                 } else {
                     // TODO: Complain about this
@@ -228,17 +242,12 @@ bool KPTTask::load(QDomElement &element) {
                 m_effort->load(e);
             } else if (e.tagName() == "resourcegroup-request") {
                 // Load the resource request
-                KPTProject *p = dynamic_cast<KPTProject *>(projectNode());
-                if (p == 0) {
-                    kdDebug()<<k_funcinfo<<"Project does not exist"<<endl;
+                KPTResourceGroupRequest *r = new KPTResourceGroupRequest();
+                if (r->load(e, project)) {
+                    addRequest(r);
                 } else {
-                    KPTResourceGroupRequest *r = new KPTResourceGroupRequest();
-                    if (r->load(e, p)) {
-                        addRequest(r);
-                    } else {
-                        kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
-                        delete r;
-                    }
+                    kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                    delete r;
                 }
             } else if (e.tagName() == "progress") {
                 m_progress.started = (bool)e.attribute("started", "0").toInt();
@@ -291,9 +300,17 @@ void KPTTask::save(QDomElement &element)  {
 
     me.setAttribute("scheduling",constraintToString());
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString());
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString());
-    
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString());    
 
+    if (m_runningAccount)
+        me.setAttribute("running-account", m_runningAccount->name());
+    if (m_startupAccount)
+        me.setAttribute("startup-account", m_startupAccount->name());
+    if (m_shutdownAccount)
+        me.setAttribute("shutdown-account", m_shutdownAccount->name());
+    me.setAttribute("startup-cost", m_startupCost);
+    me.setAttribute("shutdown-cost", m_shutdownCost);
+    
     me.setAttribute("wbs", m_wbs);
     
     m_effort->save(me);

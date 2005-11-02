@@ -819,7 +819,9 @@ KPTAppointment::KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime
 }
 
 KPTAppointment::KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDuration duration, double load) 
-    : m_extraRepeats(), m_skipRepeats() {
+    : m_extraRepeats(), 
+      m_skipRepeats(),
+      m_account(0) {
     
     m_node = node;
     m_resource = resource;
@@ -1157,9 +1159,9 @@ KPTResourceRequest::~KPTResourceRequest() {
     m_resource = 0;
 }
 
-bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
+bool KPTResourceRequest::load(QDomElement &element, KPTProject &project) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_resource = project->resource(element.attribute("resource-id"));
+    m_resource = project.resource(element.attribute("resource-id"));
     if (m_resource == 0) {
         kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
         return false;
@@ -1167,7 +1169,7 @@ bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
     m_units  = element.attribute("units").toInt();
     QString a = element.attribute("account");
     if (!a.isEmpty()) {
-        m_account = project->accounts().findAccount(a);
+        m_account = project.accounts().findAccount(a);
     }
     return true;
 }
@@ -1234,9 +1236,9 @@ KPTResourceRequest *KPTResourceGroupRequest::find(KPTResource *resource) const {
     return 0;
 }
 
-bool KPTResourceGroupRequest::load(QDomElement &element, KPTProject *project) {
+bool KPTResourceGroupRequest::load(QDomElement &element, KPTProject &project) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_group = project->findResourceGroup(element.attribute("group-id"));
+    m_group = project.findResourceGroup(element.attribute("group-id"));
     if (m_group == 0) {
         kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
         return false;
@@ -1523,7 +1525,7 @@ KPTResourceRequest *KPTResourceRequestCollection::find(KPTResource *resource) co
     return req;
 }
 
-// bool KPTResourceRequestCollection::load(QDomElement &element, KPTProject *project) {
+// bool KPTResourceRequestCollection::load(QDomElement &element, KPTProject &project) {
 //     //kdDebug()<<k_funcinfo<<endl;
 //     return true;
 // }
