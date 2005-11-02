@@ -1249,6 +1249,8 @@ void KPresenterView::extraLayout()
         pgLayoutCmd->execute();
         kPresenterDoc()->addCommand( pgLayoutCmd );
         updateRuler();
+        if ( oldUnit != m_pKPresenterDoc->unit() )
+            updateObjectStatusBarItem();
     }
 }
 

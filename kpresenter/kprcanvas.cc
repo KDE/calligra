@@ -1545,15 +1545,18 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     {
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
-                        repaint( false );
+                        if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
+                          repaint( false );
                     }
                     moveObjectsByMouse( docPoint );
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     if ( !m_isResizing )
                     {
                       m_isResizing = true;
-                      repaint( false );
+                      if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
+                        repaint( false );
                     }
+
                     int mx = e->x()+diffx();
                     int my = e->y()+diffy();
                     bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
@@ -4110,7 +4113,8 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
 
     if ( updateView )
         m_view->setTool( toolEditMode );
-    repaint();
+    if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
+        repaint();
 }
 
 
