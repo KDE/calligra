@@ -78,7 +78,7 @@ namespace Kross { namespace Python {
              * \param source The python scripting code.
              * \param filename The filename used on errormessages.
              * \param mode Compilemode, could be 'exec' or 'eval' or 'single'.
-             * \return The compiled \python code object on success else 
+             * \return The compiled python code object on success else 
              *         NULL. The caller owns the resulting object and needs
              *         to take care to decrease the ref-counter it not needed
              *         any longer.
