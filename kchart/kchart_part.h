@@ -99,7 +99,7 @@ private:
 			       QDomDocument &doc) const;
     QFont        toFont(QDomElement &element)     const;
 
-    void         setAxisDefaults();
+    void         setChartDefaults();
 
 private:
     // The chart and its contents

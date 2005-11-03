@@ -167,7 +167,7 @@ void KChartPart::initNullChart()
     m_colLabels << QString("");
     m_rowLabels << QString("");
 
-    setAxisDefaults();
+    setChartDefaults();
 
     m_params->setDrawSolidExcessArrows(true);
 }
@@ -203,7 +203,7 @@ void KChartPart::generateBarChartTemplate()
 	}
     }
 
-    setAxisDefaults();
+    setChartDefaults();
     m_params->setDrawSolidExcessArrows(true);
 }
 
@@ -453,7 +453,7 @@ void KChartPart::doSetData( const KoChart::Data&  data,
     else
         m_currentData = data;
 
-    setAxisDefaults();
+    setChartDefaults();
 
     emit docChanged();
 }
@@ -479,7 +479,7 @@ void KChartPart::initLabelAndLegend()
 }
 
 
-void KChartPart::setAxisDefaults()
+void KChartPart::setChartDefaults()
 {
   // Settings for the Y axis.
   //
@@ -504,9 +504,14 @@ void KChartPart::setAxisDefaults()
 
   m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, xAxis );
 
-  //FIXME: The following has nothing to do with the axis.  Maybe this
-  //       function should change name.
+  // Enable line colors.
   m_params->setLineColor();
+
+ // setting the background layer
+  KDFrame frame;
+  frame.setBackground( QBrush( QColor( 230, 222, 222 ) ) );
+  m_params->setFrame( KDChartEnums::AreaInnermost, frame, 0, 0, 0, 0 );
+
 }
 
 
@@ -614,7 +619,7 @@ void KChartPart::defaultConfig(  )
 {
     delete m_params;
     m_params = new KChartParams();
-    setAxisDefaults();
+    setChartDefaults();
 }
 
 
@@ -832,7 +837,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	    m_rowLabels = params.axisLabelStringList();
 	}
 
-	setAxisDefaults();
+	setChartDefaults();
     }
 
     m_params->setDrawSolidExcessArrows(true);
