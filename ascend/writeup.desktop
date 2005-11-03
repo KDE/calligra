@@ -5,6 +5,7 @@ Name=WriteUp
 Name[sv]=Writeup
 Exec=writeup %u
 GenericName=Simplified Word Processing
+GenericName[da]=Simplificeret tekstbehandling
 GenericName[es]=Procesamiento de texto simplificado
 GenericName[ga]=Próiseáil Focal Simplí
 GenericName[pt]=Processamento de Texto Simplificado
