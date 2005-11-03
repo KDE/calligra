@@ -92,6 +92,7 @@ class KPresenterDoc;
 class KPrPage;
 class KPTextObject;
 class KoTextIterator;
+class KStatusBarLabel;
 
 class KoSpell;
 #include <kspell2/broker.h>
@@ -467,6 +468,7 @@ public slots:
     void displayObjectFromMasterPage();
     void displayBackground();
     void slotUnitChanged(KoUnit::Unit);
+    void documentModified( bool );
 
 public:
     // create GUI
@@ -896,6 +898,9 @@ private:
     QLabel * m_sbPageLabel; // 'Current page number and page count' label
     QLabel * m_sbObjectLabel; // Info about selected object
     QLabel *m_sbSavingLabel; // use when saving file
+    KStatusBarLabel* m_sbModifiedLabel;
+    KStatusBarLabel* m_sbUnitLabel;
+    KStatusBarLabel* m_sbZoomLabel;
 
     // actions
     KAction *actionEditCut;

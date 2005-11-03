@@ -713,6 +713,7 @@ void MoveByCmd::execute()
     }
 
     doc->updateSideBarItem( m_page );
+    doc->updateObjectStatusBarItem();
 }
 
 void MoveByCmd::unexecute()
@@ -732,6 +733,7 @@ void MoveByCmd::unexecute()
     }
 
     doc->updateSideBarItem( m_page );
+    doc->updateObjectStatusBarItem();
 }
 
 AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPresenterDoc *_doc )

@@ -331,16 +331,37 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateMenuBar()),this, SLOT(updateSideBarMenu()));
     connect (m_pKPresenterDoc, SIGNAL(unitChanged(KoUnit::Unit)),this, SLOT(slotUnitChanged(KoUnit::Unit)));
+    connect( m_pKPresenterDoc, SIGNAL( modified( bool ) ), this, SLOT( documentModified( bool )) );
 
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
+    m_sbObjectLabel = 0L;
+    m_sbModifiedLabel = 0;
+    m_sbZoomLabel = 0;
+    m_sbUnitLabel = 0;
+
     if ( sb ) // No statusbar in e.g. konqueror
     {
         m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
+        m_sbPageLabel->setAlignment( AlignLeft | AlignVCenter );
         addStatusBarItem( m_sbPageLabel, 0 );
+
+        m_sbModifiedLabel = new KStatusBarLabel( "   ", 0, sb );
+        m_sbModifiedLabel->setAlignment( AlignLeft | AlignVCenter );
+        addStatusBarItem( m_sbModifiedLabel, 0 );
+
+        m_sbObjectLabel = new KStatusBarLabel( QString::null, 0, sb );
+        m_sbObjectLabel->setAlignment( AlignLeft | AlignVCenter );
+        addStatusBarItem( m_sbObjectLabel, 1 );
+
+        m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_pKPresenterDoc->zoomHandler()->zoom() ) + "% ", 0, sb );
+        m_sbZoomLabel->setAlignment( AlignHCenter | AlignVCenter );
+        addStatusBarItem( m_sbZoomLabel, 0 );
+
+        m_sbUnitLabel = new KStatusBarLabel( ' ' + KoUnit::unitDescription( m_pKPresenterDoc->unit() ) + ' ', 0, sb );
+        m_sbUnitLabel->setAlignment( AlignHCenter | AlignVCenter );
+        addStatusBarItem( m_sbUnitLabel, 0 );
     }
-    m_sbObjectLabel = 0L; // Only added when objects are selected
-    m_sbSavingLabel = 0L; // use when saving file
 
     //when kword is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
@@ -386,6 +407,7 @@ KPresenterView::~KPresenterView()
     delete dcop;
 
     delete m_sbPageLabel;
+    delete m_sbObjectLabel;
     delete notebar;
     delete m_searchEntry;
     m_searchEntry = 0L;
@@ -1249,8 +1271,6 @@ void KPresenterView::extraLayout()
         pgLayoutCmd->execute();
         kPresenterDoc()->addCommand( pgLayoutCmd );
         updateRuler();
-        if ( oldUnit != m_pKPresenterDoc->unit() )
-            updateObjectStatusBarItem();
     }
 }
 
@@ -4005,31 +4025,27 @@ void KPresenterView::updateObjectStatusBarItem()
     int nbObjects = m_canvas->objNums();
 
     if ( m_pKPresenterDoc->showStatusBar() && sb && nbObjects > 0 ) {
-        if ( !m_sbObjectLabel ) {
-            m_sbObjectLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-            addStatusBarItem( m_sbObjectLabel );
-        }
-
         int nbSelected = m_canvas->numberOfObjectSelected();
 
         if (nbSelected == 1) {
+            KoUnit::Unit unit = m_pKPresenterDoc->unit();
+            //QString unitName = m_pKPresenterDoc->unitName();
             KPObject * obj = m_canvas->getSelectedObj();
             KoSize size = obj->getSize();
-            m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 - (width: %2; height: %3)(%4)" )
-                                      .arg(obj->getTypeString())
-                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.width(), m_pKPresenterDoc->unit())), 2)
-                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.height(), m_pKPresenterDoc->unit())), 2)
-                                      .arg(m_pKPresenterDoc->unitName())
-                );
+            m_sbObjectLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" )
+                    .arg( /*frame->frameSet()->name()*/obj->getObjectName() )
+                    .arg( KoUnit::toUserStringValue( obj->getOrig().x(), unit ) )
+                    .arg( KoUnit::toUserStringValue( obj->getOrig().y() , unit) )
+                    .arg( KoUnit::toUserStringValue( obj->getOrig().x() + size.width(), unit ) )
+                    .arg( KoUnit::toUserStringValue( obj->getOrig().y() + size.height(), unit ) )
+                    .arg( KoUnit::toUserStringValue( size.width(), unit ) )
+                    .arg( KoUnit::toUserStringValue( size.height(), unit ) ) );
         }
         else
             m_sbObjectLabel->setText( i18n("1 object selected", "%n objects selected", nbSelected) );
     }
-    else if ( sb && m_sbObjectLabel ) {
-        removeStatusBarItem( m_sbObjectLabel );
-        delete m_sbObjectLabel;
-        m_sbObjectLabel = 0L;
-    }
+    else if ( sb && m_sbObjectLabel )
+        m_sbObjectLabel->setText( QString::null );
 }
 
 void KPresenterView::pageNumChanged()
@@ -5243,6 +5259,9 @@ void KPresenterView::setZoom( int zoom, bool updateViews )
     m_pKPresenterDoc->updateZoomRuler();
 
     setRanges();
+
+    if ( statusBar() )
+      m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 }
 
 void KPresenterView::slotUpdateScrollBarRanges()
@@ -6405,6 +6424,22 @@ void KPresenterView::slotUnitChanged( KoUnit::Unit unit )
 {
     h_ruler->setUnit( unit );
     v_ruler->setUnit( unit );
+    if ( statusBar() )
+    {
+        m_sbUnitLabel->setText( ' ' + KoUnit::unitDescription( unit ) + ' ' );
+        updateObjectStatusBarItem();
+    }
+}
+
+void KPresenterView::documentModified( bool b )
+{
+    if ( !statusBar() )
+        return;
+
+    if ( b )
+        m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", KIcon::Small ) );
+    else
+        m_sbModifiedLabel->setText( "   " );
 }
 
 #include "kpresenter_view.moc"

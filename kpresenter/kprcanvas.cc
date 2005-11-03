@@ -4936,6 +4936,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
         //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
         scrollCanvas( move );
+        m_view->updateObjectStatusBarItem();
     }
 }
 
