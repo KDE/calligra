@@ -59,12 +59,12 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
 {
     KoStore* store = KoStore::createStore(path, KoStore::Read);
 
-    if ( store && store->open( QString("preview.png") ) )
+    if ( store && ( store->open( QString("Thumbnails/thumbnail.png") ) || store->open( QString("preview.png") ) ) )
     {
         // Hooray! No long delay for the user...
         QByteArray bytes = store->read(store->size());
         store->close();
-	delete store;
+        delete store;
         return img.loadFromData(bytes);
     }
     delete store;
