@@ -284,7 +284,20 @@ ContainerHandler::~ContainerHandler()
 }
 
 bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
-{
+{ 
+    if ( ev->type() == QEvent::KeyPress )
+    {
+	QKeyEvent* keyEvent=(QKeyEvent*)ev;
+
+	KoChild* child=m_view->selectedChild();
+
+	if (child != 0)
+	{
+		if (keyEvent->key()==Qt::Key_Delete)
+			emit deleteChild(child);
+	}
+    }
+
     if ( ev->type() == QEvent::MouseButtonPress )
     {
         KoChild::Gadget gadget;

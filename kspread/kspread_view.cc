@@ -1439,6 +1439,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     // Handler for moving and resizing embedded parts
     ContainerHandler* h = new ContainerHandler( this, d->canvas );
     connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
+    connect( h, SIGNAL( deleteChild ( KoChild* )), this, SLOT ( slotDeleteChild( KoChild* ) ) );
 
 
     connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
@@ -4457,6 +4458,15 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 
   // Insert the new child in the active sheet.
   d->activeSheet->insertChild( unzoomedGeometry, _e );
+}
+
+void KSpreadView::slotDeleteChild(KoChild* child)
+{
+	KSpreadChild* spreadChild=static_cast<KSpreadChild*>(child);
+
+	doc()->emitBeginOperation(false);
+	spreadChild->sheet()->deleteChild(spreadChild);
+	doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas )); 
 }
 
 void KSpreadView::slotRemoveChild( KSpreadChild *_child )

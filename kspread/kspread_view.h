@@ -491,7 +491,21 @@ protected slots:
      * Invoked if the popup menu for an embedded document should be opened.
      */
     void popupChildMenu( KoChild*, const QPoint& global_pos );
+
+    /**
+     * Invoked when the "Delete Embedded Document" option from an embedded document's
+     * popup menu is selected.
+     */
     void slotPopupDeleteChild();
+    
+    /**
+    * Deletes an embedded document.  This has a different purpose to the @ref slotRemoveChild function
+    * which is called whilst an embedded document is being deleted in order for the view to make any
+    * necessary updates. 
+    */
+    void slotDeleteChild(KoChild* child);
+
+  
 
     /**
      * Border popup menu

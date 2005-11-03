@@ -119,6 +119,11 @@ signals:
      * child object.
      */
     void popupMenu( KoChild*, const QPoint& global_pos );
+
+    /**
+      * Emitted if the user pressed the delete key whilst a child was selected
+      */
+    void deleteChild( KoChild* );
     
 protected:
     bool eventFilter( QObject*, QEvent* );
