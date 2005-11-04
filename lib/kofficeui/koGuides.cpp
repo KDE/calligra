@@ -463,7 +463,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
     if( vClosest )
     {
         vClosest->snapping = true;
-        paint();
+        needRepaint=true;
     }
     else
         diff.setX( 0 );
@@ -471,12 +471,12 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
     if( hClosest )
     {
         hClosest->snapping = true;
-        paint();
+        needRepaint=true;
     }
     else
         diff.setY( 0 );
 
-    if(needRepaint)
+    if(needRepaint && m_autoStyle)
         paint();
 
     return diff;
