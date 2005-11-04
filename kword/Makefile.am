@@ -86,5 +86,5 @@ SUBDIRS = . mailmerge templates dtd pics toolbar expression data tests
 messages: rc.cpp
 	$(EXTRACTRC) --tag-group=koffice expression/*.xml > xml_doc.cc
 	$(EXTRACTRC) `find mailmerge -name \*.ui` >> rc.cpp
-	$(XGETTEXT) rc.cpp *.cc `find mailmerge -name \*.cc \*.cpp` KWAboutData.h -o $(podir)/kword.pot
+	$(XGETTEXT) rc.cpp *.cc `find mailmerge -name \*.cc -o -name \*.cpp` KWAboutData.h -o $(podir)/kword.pot
 	-rm xml_doc.cc
