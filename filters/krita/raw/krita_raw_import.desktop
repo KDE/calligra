@@ -4,6 +4,6 @@ Type=Service
 Name=Krita RAW Import Filter
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-raw
-X-KDE-Weight=0
+X-KDE-Weight=1
 X-KDE-Library=libkrita_raw_import
 ServiceTypes=KOfficeFilter
