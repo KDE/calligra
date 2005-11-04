@@ -269,7 +269,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
 	bool gotitem = it && it->item();
-	bool gotgroup = it && !it->item();
+	//bool gotgroup = it && !it->item();
  //TODO: also check if the item is not read only
 	setAvailable("edit_delete",gotitem);
 	m_deleteObjectToolButton->setEnabled(gotitem);

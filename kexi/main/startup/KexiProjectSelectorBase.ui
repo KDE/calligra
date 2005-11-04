@@ -20,6 +20,9 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
+    <property name="caption">
+        <string>KexiProjectSelectorBase</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -72,7 +75,7 @@
             </column>
             <column>
                 <property name="text">
-                    <string>Engine</string>
+                    <string>Type</string>
                 </property>
                 <property name="clickable">
                     <bool>true</bool>
