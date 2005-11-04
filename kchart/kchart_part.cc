@@ -53,6 +53,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     kdDebug(35001) << "Constructor started!" << endl;
 
     setInstance( KChartFactory::global(), false );
+    setTemplateType( "kchart_template" );
 
     // Init some members that need it.
     {

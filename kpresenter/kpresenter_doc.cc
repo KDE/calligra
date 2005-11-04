@@ -141,6 +141,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
       m_childCountBeforeInsert( 0 )
 {
     setInstance( KPresenterFactory::global() );
+    setTemplateType( "kpresenter_template" );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
     m_loadingInfo=0L;
@@ -3212,7 +3213,6 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     ret = KoTemplateChooseDia::choose( KPresenterFactory::global(), file,
                                        dlgtype, "kpresenter_template", parentWidget );
-
     if ( ret == KoTemplateChooseDia::Template ) {
         _clean = true; //was a parameter called "clean", but unused
         bool ok = loadNativeFormat( file );
@@ -3242,6 +3242,20 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         return ok;
     } else
         return false;
+}
+
+void KPresenterDoc::openExistingFile( const QString& file )
+{
+    objStartY = 0;
+    _clean = true;
+    KoDocument::openExistingFile( file );
+}
+
+void KPresenterDoc::openTemplate( const QString& file )
+{
+  KoDocument::openTemplate( file );
+  objStartY = 0;
+  _clean = true;
 }
 
 void KPresenterDoc::initEmpty()

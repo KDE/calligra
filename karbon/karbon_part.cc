@@ -64,6 +64,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_toolController = new VToolController( const_cast<KarbonPart *>( this ) );
 	m_toolController->init();
 	setInstance( KarbonFactory::instance(), false );
+	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
 	dcop = 0L;
 
@@ -79,6 +80,14 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	//if( name )
         dcopObject();
+
+	// set as default paper
+	m_pageLayout.format = KoPageFormat::defaultFormat();
+	m_pageLayout.orientation = PG_PORTRAIT;
+	m_pageLayout.ptWidth = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
+	m_pageLayout.ptHeight = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
+	m_doc.setWidth( m_pageLayout.ptWidth );
+	m_doc.setHeight( m_pageLayout.ptHeight );
 }
 
 KarbonPart::~KarbonPart()
@@ -122,13 +131,6 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, dlgtype, "karbon_template", parentWidget );
-	// set as default paper
-        m_pageLayout.format = KoPageFormat::defaultFormat();
-        m_pageLayout.orientation = PG_PORTRAIT;
-        m_pageLayout.ptWidth = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
-        m_pageLayout.ptHeight = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
-	m_doc.setWidth( m_pageLayout.ptWidth );
-	m_doc.setHeight( m_pageLayout.ptHeight );
 
 	if( result == KoTemplateChooseDia::Template )
 	{

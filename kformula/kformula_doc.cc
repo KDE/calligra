@@ -49,6 +49,7 @@
 #include <koxmlwriter.h>
 #include <koStoreDevice.h>
 #include <ktempfile.h>
+#include <koMainWindow.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
@@ -179,6 +180,12 @@ bool KFormulaDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     // If nothing is loaded, do initialize here
     return TRUE;
 }
+
+void KFormulaDoc::showStartUpWidget(KoMainWindow* parent)
+{
+    parent->setRootDocument( this );
+}
+
 
 void KFormulaDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {

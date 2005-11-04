@@ -197,6 +197,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   documents().append( this );
 
   setInstance( KSpreadFactory::global(), false );
+  setTemplateType( "kspread_template" );
 
   d->dcop = 0;
   d->isLoading = false;
@@ -358,6 +359,15 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     }
 
     return false;
+}
+
+void KSpreadDoc::openTemplate (const QString& file)
+{
+    d->m_loadingInfo = new KSPLoadingInfo;
+    d->m_loadingInfo->setLoadTemplate( true );
+    KoDocument::openTemplate( file );
+    deleteLoadingInfo();
+    initConfig();
 }
 
 KLocale *KSpreadDoc::locale () const

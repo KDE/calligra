@@ -852,6 +852,9 @@ protected slots:
     void slotChapterParagraphFormatted( KoTextParag* parag );
     void saveDialogShown(); ///< called just before the save-dialog is shown
 
+    virtual void openExistingFile( const QString& file );
+    virtual void openTemplate( const QString& file );
+
 protected:
     void nextParagraphNeedingCheck();
     /// fix up Z-order for import from older kword versions.

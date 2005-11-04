@@ -116,6 +116,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   m_currentFile = 0;
 
   setInstance( KivioFactory::global(), false );
+  setTemplateType("kivio_template");
 
   if ( !name )
   {
@@ -153,6 +154,9 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   if ( name )
       dcopObject();
+
+  KivioPage *t = createPage();
+  m_pMap->addPage( t );
 }
 
 DCOPObject* KivioDoc::dcopObject()
@@ -175,9 +179,6 @@ QPtrList<KivioDoc>& KivioDoc::documents()
 
 bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
-  KivioPage *t = createPage();
-  m_pMap->addPage( t );
-
   if(flags == KoDocument::InitDocEmpty) {
     setEmpty();
     return true;

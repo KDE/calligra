@@ -53,6 +53,7 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     m_commandHistory = new KoCommandHistory(actionCollection());
 
     setInstance(KPTFactory::global());
+    setTemplateType("kplato_template");
     m_config.setReadWrite(isReadWrite()|| !isEmbedded());
     m_config.load();
 

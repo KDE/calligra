@@ -183,6 +183,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 #endif
 
     setInstance( KWFactory::instance(), false );
+    setTemplateType( "kword_template" );
 
     m_gridX = m_gridY = MM_TO_POINT(5.0 );
     m_indent = MM_TO_POINT( 10.0 );
@@ -563,6 +564,34 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     }
     setModified( FALSE );
     return ok;
+}
+
+void KWDocument::openExistingFile( const QString& file )
+{
+  m_pageColumns.columns = 1;
+  m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
+
+  m_pageHeaderFooter.header = HF_SAME;
+  m_pageHeaderFooter.footer = HF_SAME;
+  m_pageHeaderFooter.ptHeaderBodySpacing = 10;
+  m_pageHeaderFooter.ptFooterBodySpacing = 10;
+  m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
+
+  KoDocument::openExistingFile( file );
+}
+
+void KWDocument::openTemplate( const QString& file )
+{
+  m_pageColumns.columns = 1;
+  m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
+
+  m_pageHeaderFooter.header = HF_SAME;
+  m_pageHeaderFooter.footer = HF_SAME;
+  m_pageHeaderFooter.ptHeaderBodySpacing = 10;
+  m_pageHeaderFooter.ptFooterBodySpacing = 10;
+  m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
+
+  KoDocument::openTemplate( file );
 }
 
 void KWDocument::initEmpty()

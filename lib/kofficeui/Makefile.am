@@ -14,13 +14,14 @@ libkofficeui_la_SOURCES = \
 	koPartSelectDia.cc koPartSelectAction.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc kocontexthelp.cc\
-	kcoloractions.cpp koTemplates.cc \
+	kcoloractions.cpp \
 	koRect.cpp koPictureFilePreview.cc koUnitWidgets.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
 	koCharSelectDia.cc koInsertLink.cc koeditpath.cc kocommandhistory.cpp \
 	koselectaction.cpp kolinewidthaction.cpp kolinestyleaction.cpp \
-	kotoolbutton.cc koImageResource.cc kotoolbox.cc kozoomhandler.cpp \
-    koGuideLineDia.cpp koGuides.cpp
+	kotoolbutton.cc  \
+	koImageResource.cc kotoolbox.cc kozoomhandler.cpp \
+	koGuideLineDia.cpp koGuides.cpp
 
 libkofficeui_la_LDFLAGS	= -version-info 3:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) 
@@ -35,8 +36,8 @@ include_HEADERS = \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
 	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
 	kocommandhistory.h  koImageResource.h \
-	koselectaction.h kolinewidthaction.h kolinestyleaction.h kozoomhandler.h \
-    koGuideLineDia.h koGuides.h
+	koselectaction.h kolinewidthaction.h kolinestyleaction.h \
+	kozoomhandler.h koGuideLineDia.h koGuides.h
 
 # FIXME: Disabled for now as it breaks the installation process if
 # KOffice is not installed in $KDEDIR

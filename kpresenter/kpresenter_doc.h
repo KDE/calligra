@@ -521,6 +521,9 @@ protected slots:
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
 
+    virtual void openExistingFile( const QString& file );
+    virtual void openTemplate( const QString& file );
+
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
     void testAndCloseAllTextObjectProtectedContent();

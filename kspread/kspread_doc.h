@@ -631,6 +631,8 @@ protected slots:
   void commandExecuted();
   void documentRestored();
 
+  virtual void openTemplate( const QString& file );
+
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
 
