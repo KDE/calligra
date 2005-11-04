@@ -245,6 +245,33 @@ clipboard as a new image.</action></para></listitem>
 <listitem><para><action>Clears the selection.</action></para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Alt;&Backspace;</keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Fill with Foreground Color</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Fills the selection with the current foreground color.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>&Backspace;</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Fill with Background Color</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Fills the selection with the current background color.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Fill with Pattern</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Fills the selection with the current pattern.</action></para></listitem>
+</varlistentry>
+
 </variablelist>
 </para>
 
@@ -575,10 +602,46 @@ resize or scale the image using various algorithms here.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
+<guisubmenu>Rotate Image</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Rotates the image.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guisubmenu>Rotate Image</guisubmenu>
 <guimenuitem>Rotate Image...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <guilabel>Rotate Image</guilabel>
 dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guisubmenu>Rotate Image</guisubmenu>
+<guimenuitem>Rotate Image CW</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the image 90 degrees clockwise.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guisubmenu>Rotate Image</guisubmenu>
+<guimenuitem>Rotate CCW</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the image 90 degrees counterclockwise.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guisubmenu>Rotate Image</guisubmenu>
+<guimenuitem>Rotate 180</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the image 180 degrees.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -659,7 +722,7 @@ will effectively convert the current image to grayscale.</para></listitem>
 <guimenu>Adjust</guimenu>
 <guisubmenu>Adjust</guisubmenu>
 <guimenuitem>Gamma Correction...</guimenuitem>
-</menuchoice></term>
+</menuchoice></term>	
 <listitem><para><action>Opens the
 <guilabel>Gamma Correction</guilabel> dialog.</action> You can
 change the gamma of the current image there.</para></listitem>
@@ -1269,36 +1332,18 @@ again.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Oilpaint...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Oilpaint</guilabel> dialog to add an oilpaint effect to the selection or image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Raindrops...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
-<guisubmenu>Artistic</guisubmenu>
-<guimenuitem></guimenuitem>
-</menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
-<guisubmenu>Artistic</guisubmenu>
-<guimenuitem></guimenuitem>
-</menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Raindrops</guilabel> dialog to add a raindrops effect to the selection or image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1314,18 +1359,18 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Blur</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Gaussian Blur</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Performs a slight blur on the image or selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Blur</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Pixelize</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Pixelizes the image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1341,9 +1386,18 @@ the image colors.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Colors</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Invert</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Inverts the image or selection.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu>
+<guimenuitem>Invert with Threads</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inverts the image or selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1358,9 +1412,9 @@ the image colors.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Decor</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Round Corners...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Rounds off the corners of the image or selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1368,62 +1422,52 @@ the image colors.</para></listitem>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
 </menuchoice></term>
-<listitem><para>Contains edge detecting
-filters.</para></listitem>
+<listitem><para>Contains edge detecting filters.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Bottom Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the bottom sides of image parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Left Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the left sides of image parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Right Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the right sides of image parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Sobel</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Sobel</guilabel> dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Top Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
-<guisubmenu>Enhance</guisubmenu>
-<guimenuitem></guimenuitem>
-</menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the top sides of image parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1439,27 +1483,45 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Custom Convolution...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Custom Convolution</guilabel> dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Mean Removal</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Sharpens the image or selection by aggravating color borders.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Sharpen</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Sharpens the image or selection.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem>Simple Noise Reduction</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reduces noise in the image or selection.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem>Wavelet Noise Reducer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reduces noise in the image or selection in a more \"pixelized\" way.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1474,54 +1536,54 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Emboss Horizontal &amp; Vertical</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection on the two main directions.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Emboss with Variable Depth...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Emboss</guilabel> dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Emboss in All Directions</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Emboss Horizontal Only</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection on the horizontal axis only.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Emboss Laplascian</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection using the Laplace technique.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Emboss Vertical Only</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection on the vertical axis only.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1536,9 +1598,9 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Map</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Small Tiles</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Shrinks the image or selection and then tiles it.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1553,27 +1615,18 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>Bumpmap</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Bumpmap</guilabel> dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem></guimenuitem>
+<guimenuitem>CImg Image Restauration...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
-<guisubmenu>Other</guisubmenu>
-<guimenuitem></guimenuitem>
-</menuchoice></term>
-<listitem><para><action>.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Image Restauration</guilabel> dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1592,7 +1645,7 @@ comparison.</para></listitem>
 
 </sect2>
 
-<!-- ====== Scripts ============================================= -->
+<!-- ====== Scripts ============================================= 
 
 
 <sect2 id="commands-menus-scripts">
@@ -1632,7 +1685,7 @@ available scripts.</action></para></listitem>
 
 </sect2>
 
-<!-- ====== Tools =============================================== -->
+ ====== Tools =============================================== -->
 
 
 <sect2 id="commands-menus-tools">
