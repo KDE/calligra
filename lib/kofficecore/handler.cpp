@@ -346,7 +346,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
             targetWidget->setCursor( KCursor::handCursor() );
         else
         {
-            targetWidget->setCursor( arrowCursor );
+//            targetWidget->setCursor( arrowCursor );
             return false;
         }
         return retval;
