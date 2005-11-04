@@ -41,8 +41,8 @@ namespace NAMESPACE {
 MySqlConnectionInternal::MySqlConnectionInternal()
 	: ConnectionInternal()
 	, mysql(0)
-	, res(0)
 	, mysql_owned(true)
+	, res(0)
 {
 }
 

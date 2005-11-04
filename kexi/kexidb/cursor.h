@@ -63,8 +63,10 @@ class RowEditBuffer;
 	instead.
 	- QuerySchema object is not owned by Cursor object that uses it.
 */
-class KEXI_DB_EXPORT Cursor: public Object
+class KEXI_DB_EXPORT Cursor: public QObject, public Object
 {
+	Q_OBJECT
+
 	public:
 		//! Cursor options that describes its behaviour
 		enum Options {
@@ -235,10 +237,10 @@ class KEXI_DB_EXPORT Cursor: public Object
 		bool getNextRecord();
 
 		/* Note for driver developers: this method should initialize engine-specific cursor's
-		 resources using \a statement. It is not required to store \a statement somewhere
+		 resources using m_sql statement. It is not required to store \a statement somewhere
 		 in your Cursor subclass (it is already stored in m_query or m_rawStatement, 
 		 depending query type) - only pass it to proper engine's function. */
-		virtual bool drv_open(const QString& statement) = 0;
+		virtual bool drv_open() = 0;
 
 		virtual bool drv_close() = 0;
 //		virtual bool drv_moveFirst() = 0;

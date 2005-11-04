@@ -75,14 +75,6 @@ TableSchema::TableSchema()
 	init();
 }
 
-void TableSchema::init()
-{
-	d = new Private();
-	m_indices.setAutoDelete( true );
-	m_pkey = new IndexSchema(this);
-	m_indices.append(m_pkey);
-}
-
 TableSchema::TableSchema(const TableSchema& ts)
 	: FieldList(static_cast<const FieldList&>(ts))
 	, SchemaData(static_cast<const SchemaData&>(ts))
@@ -129,6 +121,14 @@ TableSchema::~TableSchema()
 		m_conn->removeMe( this );
 	delete m_query;
 	delete d;
+}
+
+void TableSchema::init()
+{
+	d = new Private();
+	m_indices.setAutoDelete( true );
+	m_pkey = new IndexSchema(this);
+	m_indices.append(m_pkey);
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)

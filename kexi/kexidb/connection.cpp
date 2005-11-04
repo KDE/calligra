@@ -850,11 +850,12 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 #define V_A(a) +","+m_driver->valueToSQL( \
 	tableSchema.field(a) ? tableSchema.field(a)->type() : Field::Text, c ## a )
 
+//		KexiDBDbg << "******** " << QString("INSERT INTO ") + 
+//			escapeIdentifier(tableSchema.name()) + 
+//			" VALUES (" + vals + ")" <<endl; 
+
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
-		KexiDBDbg << "******** " << QString("INSERT INTO ") + \
-			escapeIdentifier(tableSchema.name()) + \
-			" VALUES (" + vals + ")" <<endl; \
 		return executeSQL( \
 		 QString("INSERT INTO ") + escapeIdentifier(tableSchema.name()) + " VALUES (" + vals + ")" \
 		); \
@@ -913,7 +914,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 //	s_val.reserve(4096);
 	m_sql = QString::null;
 	QValueList<QVariant>::ConstIterator it = values.constBegin();
-	int i=0;
+//	int i=0;
 	while (f && (it!=values.end())) {
 		if (m_sql.isEmpty())
 			m_sql = QString("INSERT INTO ") +
@@ -922,13 +923,13 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 		else
 			m_sql += ",";
 		m_sql += m_driver->valueToSQL( f, *it );
-		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
+//		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
 		++it;
 		f=fields->next();
 	}
 	m_sql += ")";
 
-	KexiDBDbg<<"******** "<< m_sql << endl;
+//	KexiDBDbg<<"******** "<< m_sql << endl;
 	return executeSQL(m_sql);
 }
 
@@ -943,7 +944,7 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 //	s_val.reserve(4096);
 	m_sql = QString::null;
 	QValueList<QVariant>::ConstIterator it = values.constBegin();
-	int i=0;
+//	int i=0;
 	while (f && (it!=values.constEnd())) {
 		if (m_sql.isEmpty())
 			m_sql = QString("INSERT INTO ") +
@@ -952,7 +953,7 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 		else
 			m_sql += ",";
 		m_sql += m_driver->valueToSQL( f, *it );
-		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
+//		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
 		++it;
 		f=flist->next();
 	}
@@ -1134,7 +1135,7 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 	if (row_id<=0 || true!=querySingleRecord(
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
 	 +"="+QString::number(row_id), rdata)) {
-		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
+//		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
 	 	return (Q_ULLONG)-1; //ULL;
 	}
 	return rdata[0].toULongLong();
@@ -1901,7 +1902,7 @@ bool Connection::deleteCursor(Cursor *cursor)
 	if (!cursor)
 		return false;
 	if (cursor->connection()!=this) {//illegal call
-		KexiDBDbg << "Connection::deleteCursor(): WARNING! Cannot delete the cursor not owned by the same connection!" << endl;
+		KexiDBWarn << "Connection::deleteCursor(): Cannot delete the cursor not owned by the same connection!" << endl;
 		return false;
 	}
 	bool ret = cursor->close();
@@ -2184,6 +2185,9 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		return 0;
 	}
 	if (!cursor->moveFirst()) {
+		if (!cursor->error() && cursor->eof()) {
+			setError(i18n("Table has no fields defined."));
+		}
 		deleteCursor(cursor);
 		return 0;
 	}
@@ -2611,7 +2615,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		}
 		if (pkey) {
 			QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
-			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
+//			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
 				setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY,
@@ -2646,7 +2650,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		}
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
-	KexiDBDbg << " -- SQL == " << m_sql << endl;
+//	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
 	bool res = executeSQL(m_sql);
 
@@ -2688,21 +2692,21 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		QueryColumnInfo::ListIterator fi_it(*aif_list);
 		QueryColumnInfo *fi;
 		for (uint i=0; (fi = fi_it.current()); ++fi_it, i++) {
-			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == "
-				<< aif_data[i].toInt() << endl;
+//			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == "
+//				<< aif_data[i].toInt() << endl;
 			data[ fieldsOrder[ fi ] ] = aif_data[i];
 		}
 	}
 	else {
 		ROWID = drv_lastInsertRowID();
-		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
+//		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
 		if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE) {
 			KexiDBWarn << "Connection::insertRow(): m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE" << endl;
 			return false;
 		}
 	}
 	if (getROWID) {
-		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
+//		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
 		data[data.size()-1] = ROWID;
 	}
 	return true;

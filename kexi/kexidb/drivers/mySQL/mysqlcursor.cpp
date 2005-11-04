@@ -25,10 +25,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#ifdef Q_WS_WIN
-# include <mysql/config-win.h>
-#endif
-#include <mysql.h>
 #define BOOL bool
 
 using namespace KexiDB;
@@ -55,11 +51,11 @@ MySqlCursor::~MySqlCursor() {
 	close();
 }
 
-bool MySqlCursor::drv_open(const QString& statement) {
-	KexiDBDrvDbg << "MySqlCursor::drv_open:" << statement << endl;
+bool MySqlCursor::drv_open() {
+	KexiDBDrvDbg << "MySqlCursor::drv_open:" << m_sql << endl;
 	// This can't be right?  mysql_real_query takes a length in order that
 	// queries can have binary data - but strlen does not allow binary data.
-	if(mysql_real_query(d->mysql, statement.utf8(), strlen(statement.utf8())) == 0) {
+	if(mysql_real_query(d->mysql, m_sql.utf8(), strlen(m_sql.utf8())) == 0) {
 		if(mysql_errno(d->mysql) == 0) {
 			d->mysqlres= mysql_store_result(d->mysql);
 			m_fieldCount=mysql_num_fields(d->mysqlres);
@@ -154,7 +150,7 @@ void MySqlCursor::drv_bufferMovePointerNext() {
 }
 
 void MySqlCursor::drv_bufferMovePointerPrev() {
-	MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
+	//MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
 	mysql_data_seek(d->mysqlres,m_at-1);
 	d->mysqlrow=mysql_fetch_row(d->mysqlres);
 	d->lengths=mysql_fetch_lengths(d->mysqlres);
@@ -162,7 +158,7 @@ void MySqlCursor::drv_bufferMovePointerPrev() {
 
 
 void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
-	MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
+	//MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
 	mysql_data_seek(d->mysqlres, to);
 	d->mysqlrow=mysql_fetch_row(d->mysqlres);
 	d->lengths=mysql_fetch_lengths(d->mysqlres);

@@ -25,6 +25,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifdef Q_WS_WIN
 #include <mysql/config-win.h>
 #endif
+#include <mysql_version.h>
 #include <mysql.h>
 
 typedef struct st_mysql MYSQL;

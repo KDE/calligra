@@ -23,7 +23,7 @@ kexidbinclude_HEADERS=connection.h connectiondata.h cursor.h \
   driver.h drivermanager.h \
   error.h expression.h field.h fieldlist.h global.h object.h \
   schemadata.h tableschema.h queryschema.h indexschema.h \
-  relationship.h parser/parser.h transaction.h \
+  relationship.h parser/parser.h transaction.h preparedstatement.h \
   kexidb_export.h
 
 libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO) \

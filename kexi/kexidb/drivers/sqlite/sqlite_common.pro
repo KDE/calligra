@@ -8,7 +8,6 @@ SOURCES = \
 sqliteconnection.cpp \
 sqlitedriver.cpp \
 sqlitecursor.cpp \
-../sqlite/sqlitekeywords.cpp \
 sqlitepreparedstatement.cpp
 
 HEADERS		= 

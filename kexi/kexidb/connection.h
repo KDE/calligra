@@ -625,11 +625,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			return selectStatement(querySchema, false, idEscaping);
 		}
 
-		/*! \return sql string of actually executed SQL statement,
-		 usually using drv_executeSQL(). If there was error during executing SQL statement, 
-		 before, that string is returned instead. */
-		const QString recentSQLString() const { return m_errorSql.isEmpty() ? m_sql : m_errorSql; }
-
 		/*! Stores object's schema data (id, name, caption, help text)
 		 described by \a sdata on the backend. 
 		 If \a newObject is true, new entry is created, 
@@ -718,6 +713,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return false if it does not exist or error occured.
 		 The lookup is case insensitive. */
 		virtual bool drv_containsTable( const QString &tableName ) = 0;
+
+		/*! Creates table using \a tableSchema information.
+		 \return true on success. Default implementation 
+		 builds a statement using createTableStatement() and calls drv_executeSQL()
+		 Note for driver developers: reimplement this only if you want do to 
+		 this in other way.
+
+		 Moved to public for KexiMigrate.
+		 @todo fix this after refatoring
+		 */
+		virtual bool drv_createTable( const TableSchema& tableSchema );
 
 		/*! */
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
@@ -834,14 +840,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 but also retrieves ROWID information, if \a alsoRetrieveROWID is true.
 		 Used by cursors. */
 		QString selectStatement( QuerySchema& querySchema, bool alsoRetrieveROWID, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
-
-		/*! Creates table using \a tableSchema information.
-		 \return true on success. Default implementation 
-		 builds a statement using createTableStatement() and calls drv_executeSQL()
-		 Note for driver developers: reimplement this only if you want do to 
-		 this in other way.
-		 */
-		virtual bool drv_createTable( const TableSchema& tableSchema );
 
 		/*! 
 		 Creates table named by \a tableSchemaName. Schema object must be on
@@ -1061,8 +1059,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		QPtrDict<KexiDB::Cursor> m_cursors;
 //		ConnectionInternal* m_internal;
 
-		//! used to store of actually executed SQL statement
-		QString m_sql, m_errorSql;
+//moved to Object		//! used to store of actually executed SQL statement
+//moved to Object		QString m_sql, m_errorSql;
 
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;

@@ -38,6 +38,10 @@ Object::Object(MessageHandler* handler)
 	clearError();
 }
 
+Object::~Object()
+{
+}
+
 #define STORE_PREV_ERR \
 	m_previousServerResultNum = m_previousServerResultNum2; \
 	m_previousServerResultName = m_previousServerResultName2; \
@@ -51,6 +55,7 @@ void Object::setError( int code, const QString &msg )
 	STORE_PREV_ERR;
 
 	m_errno=code;
+	m_errorSql = m_sql;
 	if (m_errno==ERR_OTHER && msg.isEmpty())
 		m_errMsg = i18n("Unspecified error encountered");
 	else
@@ -67,6 +72,7 @@ void Object::setError( const QString &msg )
 
 	m_errno=ERR_OTHER;
 	m_errMsg = msg;
+	m_errorSql = m_sql;
 	m_hasError = true;
 	if (m_hasError)
 		ERRMSG(this);
@@ -81,6 +87,7 @@ void Object::setError( const QString& title, const QString &msg )
 	
 	m_msgTitle += title;
 	m_errMsg = msg;
+	m_errorSql = m_sql;
 	m_hasError = true;
 	if (m_hasError)
 		ERRMSG(this);
@@ -94,8 +101,20 @@ void Object::setError( KexiDB::Object *obj, const QString& prependMessage )
 
 	if (obj) {
 		m_errno = obj->errorNum();
-		m_errMsg = prependMessage + " " + obj->errorMsg();
+		m_errMsg = (prependMessage.isEmpty() ? QString::null : (prependMessage + " ")) 
+			+ obj->errorMsg();
+		m_sql = obj->m_sql;
+		m_errorSql = obj->m_errorSql;
 		m_hasError = obj->error();
+		m_serverResult = obj->serverResult();
+		if (m_serverResult==0) //try copied
+			m_serverResult = obj->m_serverResult;
+		m_serverResultName = obj->serverResultName();
+		if (m_serverResultName.isEmpty()) //try copied
+			m_serverResultName = obj->m_serverResultName;
+		m_serverErrorMsg = obj->serverErrorMsg();
+		if (m_serverErrorMsg.isEmpty()) //try copied
+			m_serverErrorMsg = obj->m_serverErrorMsg;
 	}
 	if (m_hasError)
 		ERRMSG(this);
@@ -106,26 +125,27 @@ void Object::clearError()
 	m_errno = 0;
 	m_hasError = false;
 	m_errMsg = QString::null;
+	m_sql = QString::null;
+	m_errorSql = QString::null;
+	m_serverResult = 0;
+	m_serverResultName = QString::null;
+	m_serverErrorMsg = QString::null;
 	drv_clearServerResult();
 }
 
 QString Object::serverErrorMsg()
 {
-	return QString::null;
+	return m_serverErrorMsg;
 }
 
 int Object::serverResult()
 {
-	return 0;
+	return m_serverResult;
 }
 
 QString Object::serverResultName()
 {
-	return QString::null;
-}
-
-Object::~Object()
-{
+	return m_serverResultName;
 }
 
 void Object::debugError()

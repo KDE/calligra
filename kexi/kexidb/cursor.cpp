@@ -34,7 +34,8 @@ using namespace KexiDB;
 
 
 Cursor::Cursor(Connection* conn, const QString& statement, uint options)
-	: m_conn(conn)
+	: QObject()
+	, m_conn(conn)
 	, m_query(0)
 	, m_rawStatement(statement)
 	, m_options(options)
@@ -48,7 +49,8 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 }
 
 Cursor::Cursor(Connection* conn, QuerySchema& query, uint options )
-	: m_conn(conn)
+	: QObject()
+	, m_conn(conn)
 	, m_query(&query)
 	, m_options(options)
 {
@@ -129,7 +131,8 @@ bool Cursor::open()
 			return false;
 		}
 	}
-	m_opened = drv_open(m_conn->m_sql);
+	m_sql = m_conn->m_sql;
+	m_opened = drv_open();
 //	m_beforeFirst = true;
 	m_afterLast = false; //we are not @ the end
 	m_at = 0; //we are before 1st rec
@@ -500,3 +503,4 @@ void Cursor::debug() const
 	KexiDBDbg << debugString() << endl;
 }
 
+#include "cursor.moc"

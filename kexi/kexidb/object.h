@@ -98,6 +98,11 @@ class KEXI_DB_EXPORT Object
 		 to the main warning/error message. Used by MessageHandler. */
 		QString msgTitle() const { return m_msgTitle; }
 
+		/*! \return sql string of actually executed SQL statement,
+		 usually using drv_executeSQL(). If there was error during executing SQL statement, 
+		 before, that string is returned instead. */
+		const QString recentSQLString() const { return m_errorSql.isEmpty() ? m_sql : m_errorSql; }
+
 	protected:
 		/* Constructs a new object. 
 		 \a handler can be provided to receive error messages. */
@@ -136,6 +141,11 @@ class KEXI_DB_EXPORT Object
 		 \sa serverErrorMsg()
 		*/
 		virtual void drv_clearServerResult() {};
+
+		//! used to store of actually executed SQL statement
+		QString m_sql, m_errorSql;
+		int m_serverResult;
+		QString m_serverResultName, m_serverErrorMsg;
 
 	private:
 		int m_errno;

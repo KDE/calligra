@@ -35,6 +35,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqlcursor.h"
 #include <kexidb/error.h>
 
+
 using namespace KexiDB;
 
 //--------------------------------------------------------------------------
@@ -66,11 +67,13 @@ Cursor* MySqlConnection::prepareQuery( QuerySchema& query, uint cursor_options )
 }
 
 QString MySqlConnection::escapeString(const QString& str) const {
-	return QString();//TODO
+	Q_UNUSED(str);
+	return QString();//!< @todo
 }
 
 QCString MySqlConnection::escapeString(const QCString& str) const {
-	return QCString();//TODO
+	Q_UNUSED(str);
+	return QCString();//!< @todo
 }
 
 bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
@@ -123,9 +126,7 @@ bool MySqlConnection::drv_executeSQL( const QString& statement ) {
 
 Q_ULLONG MySqlConnection::drv_lastInsertRowID()
 {
-#ifndef Q_WS_WIN
-#warning TODO
-#endif
+	//! @todo
 	return (Q_ULLONG)mysql_insert_id(d->mysql);
 }
 
@@ -182,8 +183,10 @@ bool MySqlConnection::drv_getTablesList( QStringList &list )
 PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
 	const TableSchema& tableSchema)
 {
-	return 0;
+	Q_UNUSED(type);
+	Q_UNUSED(tableSchema);
 //! @todo:	return new MySqlPreparedStatement(type, *d, tableSchema);
+	return 0;
 }
 
 

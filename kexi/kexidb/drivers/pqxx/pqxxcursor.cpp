@@ -1,14 +1,22 @@
-//
-// C++ Implementation: pqxxsqlcursor
-//
-// Description: 
-//
-//
-// Author: Adam Pigg <piggz@defiant.piggz.co.uk>, (C) 2003
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/* This file is part of the KDE project
+   Copyright (C) 2003 Adam Pigg <adam@piggz.co.uk>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+
 #include "pqxxcursor.h"
 #include "pqxxconnection.h"
 
@@ -58,9 +66,9 @@ pqxxSqlCursor::~pqxxSqlCursor()
 
 //==================================================================================
 //Create a cursor result set 
-bool pqxxSqlCursor::drv_open(const QString& statement)
+bool pqxxSqlCursor::drv_open()
 {
-	KexiDBDrvDbg << "pqxxSqlCursor::drv_open:" << statement << endl;
+	KexiDBDrvDbg << "pqxxSqlCursor::drv_open:" << m_sql << endl;
 
 	if (!my_conn->is_open())
 	{
@@ -84,7 +92,7 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 			m_implicityStarted = true;
 		}
 
-		m_res = new pqxx::result(((pqxxSqlConnection*)connection())->m_trans->data->exec(statement.utf8()));
+		m_res = new pqxx::result(((pqxxSqlConnection*)connection())->m_trans->data->exec(m_sql.utf8()));
 		((pqxxSqlConnection*)connection())
 			->drv_commitTransaction(((pqxxSqlConnection*)connection())->m_trans);
 //		my_conn->m_trans->commit();

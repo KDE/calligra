@@ -42,12 +42,14 @@ using namespace KexiDB;
 
 SQLiteConnectionInternal::SQLiteConnectionInternal()
  : ConnectionInternal()
- , data(0),errmsg_p(0),res(SQLITE_OK)
- , temp_st(0x10000) //
+ , data(0)
+ , data_owned(true)
+ , errmsg_p(0)
+ , res(SQLITE_OK)
+ , temp_st(0x10000)
 #ifdef SQLITE3
  , result_name(0)
 #endif
- , data_owned(true)
 {
 }
 
@@ -69,10 +71,10 @@ void SQLiteConnectionInternal::storeResult()
 		errmsg = errmsg_p;
 		sqlite_free(errmsg_p);
 		errmsg_p = 0;
-#ifdef SQLITE3
-		result_name = sqlite3_errmsg(data);
-#endif
 	}
+#ifdef SQLITE3
+	errmsg = (data && res!=SQLITE_OK) ? sqlite3_errmsg(data) : 0;
+#endif
 }
 
 /*! Used by driver */
@@ -178,7 +180,9 @@ bool SQLiteConnection::drv_closeDatabase()
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (QFile(m_data->fileName()).exists() && !QDir().remove(m_data->fileName())) {
-		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".").arg(dbName) );
+		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\". "
+			"Please check the file's permission and whether it is locked by other application.")
+			.arg(dbName) );
 		return false;
 	}
 	return true;
@@ -223,16 +227,18 @@ Q_ULLONG SQLiteConnection::drv_lastInsertRowID()
 
 int SQLiteConnection::serverResult()
 {
-	return d->res;
+	return d->res==0 ? Connection::serverResult() : d->res;
 }
 
 QString SQLiteConnection::serverResultName()
 {
+	QString r = 
 #ifdef SQLITE2
-	return QString::fromLatin1( sqlite_error_string(d->res) );
+		QString::fromLatin1( sqlite_error_string(d->res) );
 #else //SQLITE3
-	return QString::fromLatin1( d->result_name );
+		QString::null; //fromLatin1( d->result_name );
 #endif
+	return r.isEmpty() ? Connection::serverResultName() : r;
 }
 
 void SQLiteConnection::drv_clearServerResult()
@@ -240,12 +246,16 @@ void SQLiteConnection::drv_clearServerResult()
 	if (!d)
 		return;
 	d->res = SQLITE_OK;
+#ifdef SQLITE2
 	d->errmsg_p = 0;
+#else
+//	d->result_name = 0;
+#endif
 }
 
 QString SQLiteConnection::serverErrorMsg()
 {
-	return d->errmsg;
+	return d->errmsg.isEmpty() ? Connection::serverErrorMsg() : d->errmsg;
 }
 
 #ifndef SQLITE2 //TEMP IFDEF!

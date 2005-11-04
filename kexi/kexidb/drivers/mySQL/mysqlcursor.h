@@ -32,7 +32,7 @@ public:
 	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = NoOptions );
 	MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
 	virtual ~MySqlCursor();
-	virtual bool drv_open(const QString& statement);
+	virtual bool drv_open();
 	virtual bool drv_close();
 //        virtual bool drv_moveFirst();
 	virtual void drv_getNextRecord();

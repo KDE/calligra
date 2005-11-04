@@ -86,7 +86,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 
 		QCString st;
 		//for sqlite:
-		sqlite_struct *data; //! taken from SQLiteConnection
+//		sqlite_struct *data; //! taken from SQLiteConnection
 #ifdef SQLITE2
 		sqlite_vm *prepared_st_handle; //vm
 #else //SQLITE3
@@ -219,7 +219,7 @@ SQLiteCursor::~SQLiteCursor()
 	delete d;
 }
 
-bool SQLiteCursor::drv_open(const QString& statement)
+bool SQLiteCursor::drv_open()
 {
 //	d->st.resize(statement.length()*2);
 	//TODO: decode
@@ -227,16 +227,15 @@ bool SQLiteCursor::drv_open(const QString& statement)
 //	d->st = m_conn->driver()->escapeString( statement.local8Bit() );
 
 #ifdef SQLITE2
-	d->st = statement.local8Bit();
+	d->st = m_sql.local8Bit();
 	d->res = sqlite_compile(
 		d->data,
 		d->st.data(),
 		(const char**)&d->utail,
 		&d->prepared_st_handle,
 		&d->errmsg_p );
-	d->storeResult();
 #else //SQLITE3
-	d->st = statement.utf8();
+	d->st = m_sql.utf8();
 	d->res = sqlite3_prepare(
 		d->data,            /* Database handle */
 		d->st.data(),       /* SQL statement, UTF-8 encoded */
@@ -245,8 +244,10 @@ bool SQLiteCursor::drv_open(const QString& statement)
 		0/*const char **pzTail*/     /* OUT: Pointer to unused portion of zSql */
 	);
 #endif
-	if (d->res!=SQLITE_OK)
+	if (d->res!=SQLITE_OK) {
+		d->storeResult();
 		return false;
+	}
 //cursor is automatically @ first record
 //	m_beforeFirst = true;
 
@@ -276,8 +277,8 @@ bool SQLiteCursor::drv_close()
 #else //SQLITE3
 	d->res = sqlite3_finalize( d->prepared_st_handle );
 #endif
-	d->storeResult();
 	if (d->res!=SQLITE_OK) {
+		d->storeResult();
 		return false;
 	}
 	return true;
