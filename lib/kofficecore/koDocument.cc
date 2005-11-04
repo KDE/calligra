@@ -30,6 +30,7 @@
 #include "koOasisStyles.h"
 #include "koOasisStore.h"
 #include "koxmlns.h"
+#include "koOpenPane.h"
 
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
@@ -104,7 +105,8 @@ public:
         m_doNotSaveExtDoc( false ),
         m_current( false ),
         m_storeInternal( false ),
-        m_bLoading( false )
+        m_bLoading( false ),
+        m_startUpWidget( 0 )
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
@@ -151,6 +153,9 @@ public:
     bool m_current;
     bool m_storeInternal; // Store this doc internally even if url is external
     bool m_bLoading; // True while loading (openURL is async)
+
+    KoOpenPane* m_startUpWidget;
+    QString m_templateType;
 };
 
 // Used in singleViewMode
@@ -273,6 +278,9 @@ KoDocument::~KoDocument()
     QPtrListIterator<KoView> vIt( d->m_views );
     for (; vIt.current(); ++vIt )
         vIt.current()->setDocumentDeleted();
+
+    delete d->m_startUpWidget;
+    d->m_startUpWidget = 0;
 
     d->m_children.setAutoDelete( true );
     d->m_children.clear();
@@ -2451,6 +2459,67 @@ void KoDocument::setUnit( KoUnit::Unit unit )
 QString KoDocument::unitName() const
 {
     return KoUnit::unitName( unit() );
+}
+
+void KoDocument::showStartUpWidget( KoMainWindow* parent )
+{
+    createOpenPane( parent, instance(), templateType() );
+}
+
+void KoDocument::openExistingFile( const QString& file )
+{
+    KURL url( file );
+    bool ok = openURL( url );
+    setModified( false );
+
+    if( ok ) {
+        d->m_startUpWidget->deleteLater();
+        d->m_startUpWidget = 0;
+        shells().getFirst()->setRootDocument( this );
+    }
+}
+
+void KoDocument::openTemplate( const QString& file )
+{
+    bool ok = loadNativeFormat( file );
+    setModified( false );
+
+    if ( ok ) {
+        d->m_startUpWidget->deleteLater();
+        d->m_startUpWidget = 0;
+        shells().getFirst()->setRootDocument( this );
+        resetURL();
+        setEmpty();
+    } else {
+        showLoadingErrorDialog();
+    }
+}
+
+KoOpenPane* KoDocument::createOpenPane( KoMainWindow* parent, KInstance* instance,
+                                        const QString& templateType )
+{
+    if(d->m_startUpWidget)
+        return d->m_startUpWidget;
+
+    d->m_startUpWidget = new KoOpenPane( parent->centralWidget(), instance, templateType );
+    d->m_startUpWidget->show();
+
+    connect( d->m_startUpWidget, SIGNAL( openExistingFile( const QString& ) ),
+            this, SLOT( openExistingFile( const QString& ) ) );
+    connect( d->m_startUpWidget, SIGNAL( openTemplate( const QString& ) ),
+            this, SLOT( openTemplate( const QString& ) ) );
+
+    return d->m_startUpWidget;
+}
+
+void KoDocument::setTemplateType( const QString& _templateType )
+{
+  d->m_templateType = _templateType;
+}
+
+QString KoDocument::templateType() const
+{
+  return d->m_templateType;
 }
 
 #include "koDocument_p.moc"

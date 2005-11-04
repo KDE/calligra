@@ -49,6 +49,7 @@ class KoDocumentInfo;
 class DCOPObject;
 class KoOasisStyles;
 class KoXmlWriter;
+class KoOpenPane;
 
 /**
  *  The %KOffice document class
@@ -455,6 +456,13 @@ public:
      * @param parentWidget the widget this document belongs with
      */
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0) = 0;
+
+    /**
+     * Creates and shows the start up widget.
+     * You have to overload this method if you want to add a custom pane.
+     * @param parent the KoMainWindow used as parent for the widget.
+     */
+    virtual void showStartUpWidget(KoMainWindow* parent);
 
     /**
      *  Sets the modified flag on the document. This means that it has
@@ -878,6 +886,19 @@ public:
      */
     QString unitName() const;
 
+    /**
+     * Set the template type used. This is used by the start up widget to show
+     * the correct templates.
+     * @since 1.5
+     */
+    void setTemplateType(const QString& _templateType);
+    /**
+     * Template type used. This is used by the start up widget to show
+     * the correct templates.
+     * @since 1.5
+     */
+    QString templateType() const;
+
 signals:
 
     /**
@@ -923,6 +944,20 @@ signals:
     * Emitted when the document is modified
     */
     void modified( bool );
+
+protected slots:
+    /**
+     * This slot loads an existing file and deletes the start up widget.
+     * @param file the file to load (including path)
+     * @since 1.5
+     */
+    virtual void openExistingFile( const QString& file );
+    /**
+     * This slot loads a template and deletes the start up widget.
+     * @param file the template to load
+     * @since 1.5
+     */
+    virtual void openTemplate( const QString& file );
 
 protected:
 
@@ -1047,6 +1082,9 @@ protected:
      * @see #saveChildren for internal children
      */
     virtual bool saveExternalChildren();
+
+    KoOpenPane* createOpenPane( KoMainWindow* parent, KInstance* instance,
+                                const QString& templateType = QString::null);
 
 private slots:
     void slotChildChanged( KoChild *c );

@@ -124,7 +124,7 @@ bool KoApplication::start()
     }
 
     // No argument -> create an empty document
-    if (!argsCount) {
+    if ( !argsCount ) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
         if ( !doc )
             return false;
@@ -135,16 +135,11 @@ bool KoApplication::start()
         // and for KoDocument::slotStarted
         doc->addShell( shell );
 
-	if ( doc->checkAutoSaveFile() || doc->initDoc(KoDocument::InitDocAppStarting, shell) )
-        {
-            shell->setRootDocument( doc );
-        }
-        else
-        {
-            delete doc;
-            return false;
+        if ( !doc->checkAutoSaveFile() ) {
+          doc->showStartUpWidget( shell );
         }
 
+        // FIXME This needs to be moved someplace else
 	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
         bool print = koargs->isSet("print");

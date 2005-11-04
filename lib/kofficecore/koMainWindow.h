@@ -24,8 +24,9 @@
 #include <kparts/mainwindow.h>
 #include <kfiledialog.h>
 #include <koffice_export.h>
+#include "koDocument.h"
+
 class QLabel;
-class KoDocument;
 class KoView;
 class KoMainWindowPrivate;
 class KURL;
