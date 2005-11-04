@@ -135,7 +135,6 @@ on. The selection floods out from the point you click on. In the fuzziness
 option you can set how different the colors are allowed to be before the
 flooding stops.
 </para>
-</sect2>
 
 <screenshot>
 <screeninfo>Before the magic wand.</screeninfo>
