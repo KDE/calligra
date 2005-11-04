@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=image/x-raw
+Icon=image
+Patterns=*.raw;*.RAW;*.dcr;*.DCR;*.dng;*.DNG;*.crw;*.CRW;*.nef;*.NEF
+Comment=Camera RAW image

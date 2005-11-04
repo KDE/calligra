@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Krita
+Name[lo]=ກຣິຕາ
+Name[xx]=xxKritaxx
+Exec=krita %u
+DocPath=krita/index.html
+GenericName=Painting and Image Editing Application
+MimeType=image/x-raw
+Type=Application
+Icon=krita
+Categories=Qt;KDE;Office;Graphics;
+X-KDE-StartupNotify=true
+X-DCOP-ServiceType=Multi
+NoDisplay=true
