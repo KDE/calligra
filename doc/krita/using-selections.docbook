@@ -63,6 +63,32 @@ The guide tools work just like you may be used to from other applications. So
 holding down shift while drawing a rectangle or an ellipse still forces them to
 be a square or a circle respectively.
 </para>
+
+<screenshot>
+<screeninfo>Painting a selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-1.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Painting a selection.</phrase>
+</textobject>
+<caption><para>Painting a selection.</para></caption>
+</mediaobject>
+</screenshot>
+<screenshot>
+<screeninfo>Painting a selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-2.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Painting a selection.</phrase>
+</textobject>
+<caption><para>Painting a selection.</para></caption>
+</mediaobject>
+</screenshot>
+
 </sect2>
 
 <sect2 id="using-selections-unselecting">
@@ -73,9 +99,22 @@ selection. This means that you can use alle your familiar tools to both select
 and unselect. There is also a true selection eraser among the selection paint
 tools.
 </para>
+
+<screenshot>
+<screeninfo>Unselecting.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-3.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Unselecting.</phrase>
+</textobject>
+<caption><para>Unselecting.</para></caption>
+</mediaobject>
+</screenshot>
 </sect2>
 
-<sect2 id="using-selections-new">
+<sect2 id="using-selections-making-new">
 <title>Making a new selection</title>
 <para>
 When you want to make a new selection, replacing the currently active one, you
@@ -98,6 +137,34 @@ flooding stops.
 </para>
 </sect2>
 
+<screenshot>
+<screeninfo>Before the magic wand.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-4.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Before the magic wand.</phrase>
+</textobject>
+<caption><para>Before the magic wand.</para></caption>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo>A magic wand selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-5.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>A magic wand selection.</phrase>
+</textobject>
+<caption><para>A magic wand selection.</para></caption>
+</mediaobject>
+</screenshot>
+
+</sect2>
+
 <sect2 id="using-selections-similar">
 <title>Selecting similar colors</title>
 <para>
@@ -107,6 +174,19 @@ pixel in another corner if they have similar color.
 In the fuzziness option you can set how similar the colors must be to be
 selected.
 </para>
+
+<screenshot>
+<screeninfo>Selecting similar colors.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-6.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Selecting similar colors.</phrase>
+</textobject>
+<caption><para>Selecting similar colors.</para></caption>
+</mediaobject>
+</screenshot>
 </sect2>
 
 <sect2 id="using-selections-inverting">
