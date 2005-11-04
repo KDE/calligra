@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -86,22 +86,39 @@ namespace Kexi
 	{
 		public:
 			ObjectStatus();
+
 			ObjectStatus(const QString& message, const QString& description);
+
 			ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
+
+			~ObjectStatus();
+
 			const ObjectStatus& status() const;
+
 			bool error() const;
+
 			void setStatus(const QString& message, const QString& description);
-			void setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description = QString::null);
+
+			//! Note: for safety, \a dbObject needs to be derived from QObject, 
+			//! otherwise it won't be assigned
+			void setStatus(KexiDB::Object* dbObject, const QString& message = QString::null, const QString& description = QString::null);
+
 			void clearStatus();
+
 			QString singleStatusString() const;
+
 			void append( const ObjectStatus& otherStatus );
 
-			KexiDB::Object *dbObject() const { return dbObj; }
+			KexiDB::Object *dbObject() const { return dynamic_cast<KexiDB::Object*>((QObject*)dbObj); }
+
+			//! Helper returning pseudo handler that just updates this ObjectStatus object 
+			//! by receiving a message
+			operator KexiDB::MessageHandler*();
 
 			QString message, description;
 		protected:
-//todo: make it guarded!
-			KexiDB::Object *dbObj; 
+			QGuardedPtr<QObject> dbObj; //! This is in fact KexiDB::Object
+			KexiDB::MessageHandler* msgHandler;
 	};
 
 	KEXICORE_EXPORT QString msgYouCanImproveData();

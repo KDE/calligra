@@ -170,7 +170,7 @@ TODO: Put Connection::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION
 
 TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - ODBC driver (hello mattr!)
-- Access -> Kexi migration tool
+- Access -> Kexi migration tool (done)
 - scripting
 
 === Kexi Parts TODO ===
@@ -271,6 +271,9 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   only y-position should be changed, not x
 - add support for crossed out rows - that can be used for results of DELETE queries
   (see http://www.gnome-db.org/images/screenshots/mergeant_table_data.png)
+- add combo boxes for fields filtering in column headers, 
+  as in http://www.sqlmanager.net/i/scr/mysql/manager/Main%20100.gif
+
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
   2 methods: 1) in additional dock 2) in property editor
@@ -305,6 +308,10 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - handle older and newer formats in FormIO::loadFormFromDom()
 - KAcceleratorManager::setNoAccel(QWidget*) - use it in data mode, 
     define "auto accels" form's property and if it's false
+- find a way to create more meaningfull default names for widgets than button1, button2.
+  Maybe convert widget text (if available) using string2Identifier()?
+  Maybe ask user to enter meaningfull name (+"do not ask this question again" checkbox)?
+  See also http://charlespetzold.com/etc/DoesVisualStudioRotTheMind.html
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -442,9 +449,8 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
  "select substring(document, 1, 10240) from documents where docid='3'"  this to get chunks:
  "select substring(document, 10241, 10240) from documents where docid='3'"
  ....
--- Other approach: store bianrty data using two tables 1st for metainfo about the data, 
+-- Other approach: store binary data using two tables 1st for metainfo about the data, 
  2nd for data chunks (e.g. 64KiB each): http://php.dreamwerx.net/forums/viewtopic.php?t=6
-
 
 ?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
 	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
@@ -455,6 +461,7 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 	jstaniek	ruurd: of course this is easier to do with read only databases or even databases where you don't plan to change schema (but just process db records)
 - add Connection::ping() or so, using http://dev.mysql.com/doc/mysql/en/mysql-ping.html
   and use it after being idle for a while (eg. call it every minute; also add an option for the delay)
+- Move ObjectStatus to kexidb. Merge with Object.
 
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
@@ -474,10 +481,6 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 - add tests for DatabaseProperties
 - add tests for PreparedStatement
 - add tests for migration
-
-
-=== MDB import TODO ===
-
 
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
@@ -547,13 +550,6 @@ Core TODO:
   not just on LOST FOCUS
 - for now: clicking on empty menu bar's item (eg. "Format") causes to losing shared actions state
 - make core/ non-gui lib. Move data creation code out of KexiDialogBase.
-
-Migration (Import Project Wizard) TODO:
-- change drivers comboboxes to KexiDBDriverList
-  (impl. this one with drv name and description columns)
-- use KexiDB::MessageTitle and KexiDB::MessageHandler for displaying errors
-- close currently opened file-based project if it's the same as imported one
-  (do not save anything)
 
 Reports TODO
 - reuse most of KexiFormPart code in KexiReportPart (eg. creating shared actions)
@@ -638,14 +634,7 @@ FORMS:
  with pane's size when selected widget has very long name
 - resize handles are always black: this is bad on black background!
 
-ImportWizard:
--store "Recent Paths" for browsed directory file 
--set the same path for "destination" file browser as for "source" one
 
-
-MDB Migration:
-- add checks for "no space left on device" error (otherwise Kexi will crash)
-- fix data/time and currency convertion
 
 Combo Box Editor
 - ADD "restrict to list" OPTION: don't copy 1st row's value if there's no value in the combo
@@ -695,8 +684,19 @@ TODO:
 - update conn dialog gui
 example: http://www.ntpb.co.uk/kexi/msn.png
 
-Migration:
+
+Migration (Import Project Wizard) TODO:
+- change drivers comboboxes to KexiDBDriverList
+  (impl. this one with drv name and description columns)
+- close currently opened file-based project if it's the same as imported one
+  (do not save anything)
 - 'select source db type' page: change "sqlite/msa/mysql/pg" to "sqlite/msa/server database"
   because type of server db is in fact selected on the next page (source conn selection)
 - copy kexi__db contents!
-- kexi__blobs are visible!!!
+- store "Recent Paths" for browsed directory file 
+- set the same path for "destination" file browser as for "source" one
+
+MDB Migration:
+- add checks for "no space left on device" error (otherwise Kexi will crash)
+- fix date/time and currency convertion
+- use MSysRelationdhips table to read MSA db relationships (easy, it's not encoded)

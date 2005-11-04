@@ -94,7 +94,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 		return false;
 	}
 
-	kexidbg << "version=" << version 
+/*	kexidbg << "version=" << version 
 		<< " using group key=" << groupKey 
 		<< " type=" << type
 		<< " caption=" << config.readEntry("caption")
@@ -104,7 +104,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 		<< " user=" << config.readEntry("user")
 		<< " password=" << QString().fill('*', config.readEntry("password").length())
 		<< " comment=" << config.readEntry("comment")
-		<< endl;
+		<< endl;*/
 
 	if (d->isDatabaseShortcut) {
 		data.setCaption( config.readEntry("caption") );

@@ -63,49 +63,52 @@ class KexiDialogBase;
  * This class represents a project's controller. It also contains connection data,
  * current file state, etc.
  */
-class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
+class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 {
 	Q_OBJECT
 
 	public:
-		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. 
-		 \a handler can be provided to receive error messages. */
+		/*! Constructor 1. Creates a new object using \a pdata. 
+		 \a pdata which will be then owned by KexiProject object.
+		 \a handler can be provided to receive error messages during 
+		 entire KexiProject object's lifetime. */
 		KexiProject(KexiProjectData* pdata, KexiDB::MessageHandler* handler = 0);
-//		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. */
+
+		/*! Constructor 2. Like above but sets predefined connections \a conn. 
+		 The connection should be created using the same connection data 
+		 as pdata->connectionData(). The connection will become owned by created KexiProject
+		 object, so do not destroy it. */
+		KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler, 
+			KexiDB::Connection* conn);
+
 //		KexiProject(KexiDB::ConnectionData *cdata);
 
 		~KexiProject();
 
+		/*! \return major version of KexiProject object. 
+		 This information is retrieved from database when existing project is opened. */
 		int versionMajor() const;
+
+		/*! \return minor version of KexiProject object. 
+		 @see versionMajor() */
 		int versionMinor() const;
 
 		//! Opens existing project using project data.
 		bool open();
 
 		/*! Creates new, empty project using project data.
-		 Warning: If database exist, it is silently overwritten!
-		*/
+		 If \a forceOverwrite is true, existing database project is silently overwritten.
+		 Connection is created (accessible then with KexiProject::dbConnection()).
+
+		 Since KexiProject inherits KexiDB::Object, it is possible to get error message 
+		 and other informations on error.
+
+		 \return true on success, false on failure, and cancelled when database exists 
+		 but \a forceOverwrite is false. */
 		tristate create(bool forceOverwrite = false);
-		
-		/*! Opens project using created connection
-		 \return true on success, otherwise false and appropriate error is set. */
-//		bool		open(KexiDB::Connection* conn);
 
-		/**
-		 * opens a project/xml-connection
-		 * @return true on success
-		 */
-	//	bool		open(const QString &doc);
-
-		/**
-		 * @return a error wich may have occured at actions like open/openConnection or QString::null if none
-		 */
-//		const QString		error() { return m_error; }
-
-		/**
-		 * @return the part manager
-		 */
-//		KexiPart::Manager	*partManager() { return m_partManager; }
+		/*! \return true if there was error during last operation on the object. */
+		bool error() const { return KexiDB::Object::error(); }
 
 		/**
 		 * @return true if a we are connected to a database
@@ -171,6 +174,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 The item will have assigned a new unique caption like e.g. "Table15",
 		 and unique name like "table15", but no specific identifier 
 		 (because id will be assigned on creation at the backend side).
+
 		 If \a suggestedCaption is not empty, it will be set as a caption 
 		 (with number suffix, to avoid duplicated, e.g. "employees7" 
 		 for "employees" sugested name). Name will be then built based 

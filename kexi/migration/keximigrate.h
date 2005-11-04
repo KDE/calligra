@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -28,6 +28,12 @@
 
 #include <qstringlist.h>
 
+class KexiProject;
+namespace Kexi
+{
+	class ObjectStatus;
+}
+
 /*!
  * \namespace KexiMigration
  * \brief Framework for importing databases into native KexiDB databases.
@@ -53,7 +59,7 @@ namespace KexiMigration
 		Q_OBJECT
 
 		public:
-			KexiMigrate();
+			//KexiMigrate();
 			KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
 			virtual ~KexiMigrate();
 
@@ -61,14 +67,14 @@ namespace KexiMigration
 			void setData(KexiMigration::Data*);
 
 			//! Perform an import operation
-			bool performImport();
+			bool performImport(Kexi::ObjectStatus* result = 0);
 
 			//! Perform an export operation
-			bool performExport();
-
-			inline bool progressSupported() { return drv_progressSupported(); }
+			bool performExport(Kexi::ObjectStatus* result = 0);
 
 			//! Returns true if the migration driver supports progress updates.
+			inline bool progressSupported() { return drv_progressSupported(); }
+
 		signals:
 			void progressPercent(int percent);
 
@@ -86,10 +92,12 @@ namespace KexiMigration
 			virtual bool drv_tableNames(QStringList& tablenames) = 0;
 
 			//! Read schema for a given table (driver specific)
-			virtual bool drv_readTableSchema(KexiDB::TableSchema& tableSchema) = 0;
+			virtual bool drv_readTableSchema(
+				const QString& originalName, KexiDB::TableSchema& tableSchema) = 0;
 
 			//! Copy a table from source DB to target DB (driver specific)
-			virtual bool drv_copyTable(const QString& srcTable, KexiDB::TableSchema* dstTable) = 0;
+			virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn, 
+				KexiDB::TableSchema* dstTable) = 0;
 
 			virtual bool drv_progressSupported() { return false; }
 
@@ -123,47 +131,36 @@ namespace KexiMigration
 			KexiMigration::Data* m_migrateData;
 
 			// Temporary values used during import (set by driver specific methods)
-//			KexiDB::TableSchema* m_table;
 			KexiDB::Field* m_f;
-
-//			KexiDB::TableSchema* m_copyOfKexi__objects;
 
 		private:
 			//! Get the list of tables
 			bool tableNames(QStringList& tablenames);
 
-			//! Perform general functionality and rely on drv_ReadTableSchema()
-			//! to do the real work
-			//! Read a table schema object for a tableSchema
-//			bool readTableSchema(KexiDB::TableSchema& tableSchema);
-
-//			//! Copy data from original table to new table if required
-//			bool copyData(const QString& table, KexiDB::TableSchema* dstTable);
-
-			//! Create the target database
-			bool createDatabase(const QString& dbname);
+			//! Create the target database project
+			KexiProject* createProject(Kexi::ObjectStatus* result);
 
 			//Private data members
 			//! Flag indicating whether data should be copied
 			bool m_keepData;
 
 			//! Table schemas from source DB
-			QPtrList<KexiDB::TableSchema>m_tableSchemas;
+			QPtrList<KexiDB::TableSchema> m_tableSchemas;
 
 			//! Estimate size of migration job
 			/*! Calls drv_getTableSize for each table to be copied.
 			    \return sum of the size of all tables to be copied.
-			 */
+			*/
 			bool progressInitialise();
 
+			KexiProject *m_destPrj;
+
 			//! Size of migration job
-			Q_ULLONG progressTotal;
+			Q_ULLONG m_progressTotal;
 			//! Amount of migration job complete
-			Q_ULLONG progressDone;
+			Q_ULLONG m_progressDone;
 			//! Don't recalculate progress done until this value is reached.
-			Q_ULLONG progressNextReport;
-
-
+			Q_ULLONG m_progressNextReport;
 	};
 } //namespace KexiMigration
 

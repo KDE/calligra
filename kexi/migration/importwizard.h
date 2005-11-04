@@ -63,6 +63,7 @@ protected slots:
     virtual void back();
     void pageSelected(const QString &);
     virtual void accept();
+    virtual void reject();
     void helpClicked();
 
 private:
@@ -76,6 +77,7 @@ private:
     void setupfinish();
     void setupImportType();
     bool checkUserInput();
+		void acceptImport();
 
     void checkIfSrcTypeFileBased(const QString& srcType);
     void checkIfDstTypeFileBased(const QString& dstType);

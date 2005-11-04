@@ -45,6 +45,7 @@
 #include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
+#include <kexiguimsghandler.h>
 
 using namespace KexiMigration;
 
@@ -55,6 +56,7 @@ ImportWizard::ImportWizard(QWidget *parent, QVariant* result)
  , m_result(result)
 {
     setCaption(i18n("Database Importing"));
+    finishButton()->setText(i18n("&Import"));
     if (m_result)
         *m_result = QVariant();
     m_prjSet = 0;
@@ -103,7 +105,7 @@ ImportWizard::ImportWizard(QWidget *parent, QVariant* result)
     this->addPage(srcTypePage, i18n("Select Source Database Type"));
     srcConnPage = new QWidget(this);
     setupsrcconn();
-    this->addPage(srcConnPage, i18n("Select Source Connection"));
+    this->addPage(srcConnPage, i18n("Select Source Database Connection"));
     srcdbPage = new QWidget(this);
     setupsrcdb();
     this->addPage(srcdbPage, i18n("Select Source Database"));
@@ -184,8 +186,8 @@ void ImportWizard::setupsrcconn()
 //
 void ImportWizard::setupsrcdb()
 {
-    QVBoxLayout *vbox = new QVBoxLayout(srcdbPage, KDialog::marginHint());
-    Q_UNUSED(vbox);  // arriveSrcDBPage creates widgets on that page
+//    QVBoxLayout *vbox = new QVBoxLayout(srcdbPage, KDialog::marginHint());
+//    Q_UNUSED(vbox);  // arriveSrcDBPage creates widgets on that page
     srcdbname = NULL;
 }
 
@@ -282,12 +284,11 @@ void ImportWizard::setupfinish()
 
     lblDone->setText(i18n(
                      "All required information has now "
-                     "been gathered. Click Finish below "
-                     "to start the import process\n"
-                     "Note: You may be asked for extra "
+                     "been gathered. Click \"Import\" button to start importing."
+                     /*"Note: You may be asked for extra "
                      "information such as field types if "
                      "the wizard could not automatically "
-                     "determine this for you."));
+                     "determine this for you."*/));
     progress = new KProgress(100, finishPage);
     progress->hide();
 
@@ -323,10 +324,10 @@ bool ImportWizard::checkUserInput()
                     "\n\n" +
                     i18n("Please click 'Back' button and correct these errors.");
     }
-    else
-    {
-        finishtxt = i18n("No problems were found with the data you entered.");
-    }
+//    else
+//    {
+//it was weird        finishtxt = i18n("No problems were found with the data you entered.");
+//    }
     lblfinishTxt->setText(finishtxt);
 
     return !problem;
@@ -379,9 +380,17 @@ void ImportWizard::arriveSrcDBPage()
     {
       srcdbPage->hide();
       kdDebug() << "Looks like we need a project selector widget!" << endl;
-      m_prjSet = new KexiProjectSet(*(srcConn->selectedConnectionData()));
-      srcdbname = new KexiProjectSelectorWidget(srcdbPage,
-          "KexiMigrationProjectSelector", m_prjSet);
+
+      KexiDB::ConnectionData* condata = srcConn->selectedConnectionData();
+      if(condata) {
+          m_prjSet = new KexiProjectSet(*condata);
+					QVBoxLayout *vbox = new QVBoxLayout(srcdbPage, KDialog::marginHint());
+          srcdbname = new KexiProjectSelectorWidget(srcdbPage,
+              "KexiMigrationProjectSelector", m_prjSet);
+					vbox->addWidget( srcdbname );
+					srcdbname->label->setText(i18n("Select source database to you wish to import:"));
+      }
+
       srcdbPage->show();
     }
   }
@@ -390,8 +399,11 @@ void ImportWizard::arriveSrcDBPage()
 void ImportWizard::arriveDstTitlePage()
 {
   if(fileBasedSrc) {
-    // @todo Might want to show the filename here instead
-    dstNewDBName->setText(i18n("Imported Database"));
+    QString suggestedDBName( QFileInfo(srcConn->selectedFileName()).fileName() );
+    const QFileInfo fi( suggestedDBName );
+    suggestedDBName = suggestedDBName.left(suggestedDBName.length() 
+        - (fi.extension().length() ? (fi.extension().length()+1) : 0));
+    dstNewDBName->setText( suggestedDBName );
   } else {
     if (!srcdbname || !srcdbname->selectedProjectData()) {
       back(); //todo!
@@ -464,6 +476,17 @@ void ImportWizard::progressUpdated(int percent) {
 //
 void ImportWizard::accept()
 {
+    backButton()->setEnabled(false);
+    finishButton()->setEnabled(false);
+//    cancelButton()->setEnabled(false);
+    acceptImport();
+    backButton()->setEnabled(true);
+    finishButton()->setEnabled(true);
+//    cancelButton()->setEnabled(true);
+}
+
+void ImportWizard::acceptImport()
+{
     KexiUtils::WaitCursor wait;
     
     kdDebug() << "Creating managers..." << endl;
@@ -512,15 +535,16 @@ void ImportWizard::accept()
     }
 
     kdDebug() << "Creating connection to destination..." << endl;
+/*moved to KexiMigrate
     //Create connections to the kexi database
     KexiDB::Connection *kexi_conn = driver->createConnection(*cdata);
     if(!kexi_conn || driver->error()) {
         kdDebug() << "Creating destination connection error..." << endl;
         KMessageBox::error(this, driver->errorMsg());
-				delete kexi_conn;
+        delete kexi_conn;
         return;
     }
-
+*/
     kdDebug() << "Creating source driver..." << endl;
     MigrateManager migrateManager;
 
@@ -528,7 +552,7 @@ void ImportWizard::accept()
     if(!import || migrateManager.error()) {
         kdDebug() << "Import migrate driver error..." << endl;
         KMessageBox::error(this, migrateManager.errorMsg());
-				delete kexi_conn;
+//        delete kexi_conn;
         return;
     }
 
@@ -537,6 +561,7 @@ void ImportWizard::accept()
       progress->updateGeometry();
       connect(import, SIGNAL(progressPercent(int)),
               this, SLOT(progressUpdated(int)));
+			progressUpdated(0);
     }
 
     kdDebug() << "Setting import data.." << endl;
@@ -558,29 +583,32 @@ void ImportWizard::accept()
     }
     
     KexiMigration::Data* md = new KexiMigration::Data();
+		delete md->destination;
+    md->destination = new KexiProjectData(*cdata, dbname);
     if(fileBasedSrc) {
       KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
       conn_data->setFileName(srcConn->selectedFileName());
       md->source = conn_data;
       md->sourceName = "";
-      md->dest = kexi_conn;
-      md->destName = dbname;
-      md->keepData = keepData;
-      import->setData(md);
+//      md->destName = dbname;
+//      md->keepData = keepData;
+//      import->setData(md);
     }
     else 
     {
       md->source = srcConn->selectedConnectionData();
-			md->sourceName = srcdbname->selectedProjectData()->databaseName();
-      md->dest = kexi_conn;
-      md->destName = dbname;
-      md->keepData = keepData;
-      import->setData(md);
+      md->sourceName = srcdbname->selectedProjectData()->databaseName();
+//      md->destName = dbname;
+//      md->keepData = keepData;
+//      import->setData(md);
 //! @todo Aah, this is so C-like. Move to performImport().
     }
+    md->keepData = keepData;
+    import->setData(md);
     kdDebug() << "Performing import..." << endl;
     KexiUtils::removeWaitCursor();
-    if (import->performImport()) {
+    Kexi::ObjectStatus result;
+    if (import->performImport(&result)) {
         KWizard::accept(); //tmp, before adding "final page"
         KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));
         if (m_result) {
@@ -593,9 +621,18 @@ void ImportWizard::accept()
     else
     {
 //??        KWizard::reject(); //tmp, before adding "final page"
-        KMessageBox::error(this, i18n("Import failed."), i18n("Failure"));
+        progress->setProgress(0);
+        progress->hide();
+        KexiGUIMessageHandler handler;
+        handler.showErrorMessage(i18n("Import failed."), &result);
+//        KMessageBox::error(this, i18n("Import failed."), i18n("Failure"));
     }
-		delete kexi_conn;
+//    delete kexi_conn;
+}
+
+void ImportWizard::reject()
+{
+    KWizard::reject();
 }
 
 
@@ -603,10 +640,18 @@ void ImportWizard::accept()
 //
 void ImportWizard::next()
 {
-    if (currentPage() == srcConnPage && fileBasedSrc 
-        && /*! @todo use KURL? */!QFileInfo(srcConn->selectedFileName()).isFile()) {
-      KMessageBox::sorry(this,i18n("Select source database filename."));
-      return;
+    if (currentPage() == srcConnPage) {
+      if (fileBasedSrc
+          && /*! @todo use KURL? */!QFileInfo(srcConn->selectedFileName()).isFile()) {
+
+        KMessageBox::sorry(this,i18n("Select source database filename."));
+        return;
+      }
+
+      if ( (! fileBasedSrc) && (! srcConn->selectedConnectionData()) ) {
+        KMessageBox::sorry(this,i18n("Select source database."));
+        return;
+      }
     }
 
     setAppropriate( srcdbPage, !fileBasedSrc ); //skip srcdbPage

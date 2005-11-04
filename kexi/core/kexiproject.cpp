@@ -116,7 +116,23 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
  , d(new Private())
 {
 	d->data = pdata;
-//TODO: partmanager is outside project, so can be initialised just once:
+//! @todo partmanager is outside project, so can be initialised just once:
+	Kexi::partManager().lookup();
+}
+
+KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler, 
+	KexiDB::Connection* conn)
+ : QObject(), Object(handler)
+ , d(new Private())
+{
+	d->data = pdata;
+	if (d->data->connectionData() == d->connection->data())
+		d->connection = conn;
+	else
+		kdWarning() << "KexiProject::KexiProject(): passed connection's data ("
+			<< conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
+			<< d->data->connectionData()->serverInfoString() << ")" << endl;
+//! @todo partmanager is outside project, so can be initialised just once:
 	Kexi::partManager().lookup();
 }
 
@@ -161,7 +177,7 @@ KexiProject::open()
 {
 	kdDebug() << "KexiProject::open(): " << d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not open project \"%1\"").arg(d->data->databaseName()));
+		i18n("Could not open project \"%1\".").arg(d->data->databaseName()));
 	
 	if (!createConnection()) {
 		kdDebug() << "KexiProject::open(): !createConnection()" << endl;
@@ -186,7 +202,7 @@ tristate
 KexiProject::create(bool forceOverwrite)
 {
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not create project \"%1\"").arg(d->data->databaseName()));
+		i18n("Could not create project \"%1\".").arg(d->data->databaseName()));
 		
 	if (!createConnection())
 		return false;
@@ -403,6 +419,7 @@ KexiProject::createConnection()
 	}
 
 	//re-init BLOB buffer
+//! @todo won't work for subsequent connection
 	KexiBLOBBuffer::setConnection(d->connection);
 	return true;
 }
@@ -425,7 +442,7 @@ KexiProject::initProject()
 	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
 	if (!Kexi::partManager().checkProject(d->connection)) {
-		setError(&Kexi::partManager());
+		setError(Kexi::partManager().error() ? (KexiDB::Object*)&Kexi::partManager() : (KexiDB::Connection*)d->connection);
 		return false;
 	}
 

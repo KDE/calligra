@@ -24,4 +24,7 @@
 using namespace KexiMigration;
 
 Data::Data()
-{}
+ : source(0)
+ , destination(0)
+{
+}

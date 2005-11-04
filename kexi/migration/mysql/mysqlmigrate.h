@@ -39,14 +39,14 @@ namespace KexiMigration
 			virtual bool drv_tableNames(QStringList& tablenames);
 			
 			//Driver specific implementation to read a table schema
-			virtual bool drv_readTableSchema(KexiDB::TableSchema& tableSchema);
-			
+			virtual bool drv_readTableSchema(
+				const QString& originalName, KexiDB::TableSchema& tableSchema);
 			//Driver specific connection implementation
 			virtual bool drv_connect();
 			virtual bool drv_disconnect();
 
-			virtual bool drv_copyTable(const QString& srcTable,
-			                           KexiDB::TableSchema* dstTable);
+			virtual bool drv_copyTable(const QString& srcTable, 
+				KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
 			virtual bool drv_progressSupported() { return true; }
 			virtual bool drv_getTableSize(const QString& table, Q_ULLONG& size);
@@ -57,10 +57,9 @@ namespace KexiMigration
 //			virtual bool drv_containsTable( const QString &tableName );
 
 		public:
-			~MySQLMigrate();
-			//Constructor
-			MySQLMigrate();
+//			MySQLMigrate();
 			MySQLMigrate(QObject *parent, const char *name, const QStringList& args = QStringList());
+			~MySQLMigrate();
 			
 			KexiDB::Field::Type type(const QString& table, const MYSQL_FIELD* t);
 			

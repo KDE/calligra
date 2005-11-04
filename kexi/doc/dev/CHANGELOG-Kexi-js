@@ -12,12 +12,33 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-11-02..04
+2005-10-31
+Project Migration
+- call KexiProject is used to create destination database instead of KexiDB::Connection
+  because tables like kexi__parts and kexi__blobs have to be created.
+- Moving kexi projects from database servers to database files works.
+  kexi__objects table contents are properly copied if existed in source database,
+  so queries, forms etc. are properly imported
+- Wizard's GUI improvements
+KexiDB
+- More verbose error messages: 
+  Error messages and result numbers can be now inherited by using
+  Object::setError( KexiDB::Object *obj, const QString& prependMessage ),
+  so less information will be lost while displaying message e.g. 
+  on failed cursor opening.
+- mysql/pgsql/sqlite/mdb drivers updated for the current API
+
+- Tables: fixed retrieving field captions and descriptions
+  0.9: backported
+  0.8: backported
+
 2005-10-27
 KexiDB
 - kexi__parts internal table is now created within KexiProject, 
    not KexiDB::Connection
 - kexi__useractions and kexi__final are no longer created
-Migration Wizard
+Project Migration
 - speedup: table creation and data copying is performed within transactions
 - Added possibility of migrating Kexi projects from one backend to another
   (e.g. from MySql server to SQLite file) internal kexi__ tables are properly recreated; 
@@ -171,7 +192,7 @@ KexiDB
 Kexi supports static and data-aware images boxes
 - properties implemented: scaling (aspect ration can be kept), 
   horizontal/vertical alignment
-Migration Wizard
+Project Migration
 - cleaned up the code a bit
 - 'back' button works well on "dest. type" page when file-based driver is used
 - user is warned when no source filename was specified

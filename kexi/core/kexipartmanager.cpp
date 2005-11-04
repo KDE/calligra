@@ -216,6 +216,7 @@ Manager::info(const QCString &mime)
 bool
 Manager::checkProject(KexiDB::Connection *conn)
 {
+	clearError();
 //	QString errmsg = i18n("Invalid project contents.");
 
 //TODO: catch errors!

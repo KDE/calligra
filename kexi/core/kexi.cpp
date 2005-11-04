@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 
 #include "kexi.h"
 #include <kexiutils/identifier.h>
+#include <kexidb/msghandler.h>
 
 #include <qtimer.h>
 #include <qimage.h>
@@ -160,17 +161,25 @@ QString Kexi::msgYouCanImproveData() {
 //--------------------------------------------------------------------------------
 
 ObjectStatus::ObjectStatus()
+: msgHandler(0)
 {
 }
 
 ObjectStatus::ObjectStatus(const QString& message, const QString& description)
+: msgHandler(0)
 {
 	setStatus(message, description);
 }
 
 ObjectStatus::ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+: msgHandler(0)
 {
 	setStatus(dbObject, message, description);
+}
+
+ObjectStatus::~ObjectStatus()
+{
+	delete msgHandler;
 }
 
 const ObjectStatus& ObjectStatus::status() const
@@ -192,7 +201,9 @@ void ObjectStatus::setStatus(const QString& message, const QString& description)
 
 void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
 {
-	this->dbObj=dbObject;
+	if (dynamic_cast<QObject*>(dbObject)) {
+		dbObj = dynamic_cast<QObject*>(dbObject);
+	}
 	this->message=message;
 	this->description=description;
 }
@@ -225,3 +236,36 @@ void ObjectStatus::append( const ObjectStatus& otherStatus ) {
 	description = description + " " + s;
 }
 
+//! @internal
+class ObjectStatusMessageHandler : public KexiDB::MessageHandler
+{
+	public:
+		ObjectStatusMessageHandler(ObjectStatus *status) 
+			: KexiDB::MessageHandler()
+			, m_status(status)
+		{
+		}
+		virtual ~ObjectStatusMessageHandler()
+		{
+		}
+
+		virtual void showErrorMessage(const QString &title, 
+			const QString &details = QString::null)
+		{
+			m_status->setStatus(title, details);
+		}
+		
+		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString::null)
+		{
+			m_status->setStatus(obj, msg);
+		}
+
+		ObjectStatus *m_status;
+};
+
+ObjectStatus::operator KexiDB::MessageHandler*()
+{
+	if (!msgHandler)
+		msgHandler = new ObjectStatusMessageHandler(this);
+	return msgHandler;
+}

@@ -39,7 +39,7 @@ void
 KexiGUIMessageHandler::showErrorMessage(KexiDB::Object *obj, 
 	const QString& msg)
 {
-	QString _msg = msg;
+	QString _msg(msg);
 	if (!obj) {
 		showErrorMessage(_msg);
 		return;
@@ -62,14 +62,15 @@ KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &det
 	showMessage(Sorry, title, details);
 }
 
-void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details, KexiDB::Object *obj)
+void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details, 
+	KexiDB::Object *obj)
 {
-	QString _msg = msg;
+	QString _msg(msg);
 	if (!obj) {
 		showErrorMessage(_msg, details);
 		return;
 	}
-	QString _details;
+	QString _details(details);
 	KexiDB::getHTMLErrorMesage(obj, _msg, _details);
 	showErrorMessage(_msg, _details);
 }
@@ -84,7 +85,7 @@ void
 KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStatus *status)
 {
 	if (status && status->error()) {
-		QString msg = message;
+		QString msg(message);
 		if (msg.isEmpty()) {
 			msg = status->message;
 			status->message = status->description;
@@ -117,7 +118,7 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 	//'wait' cursor is a nonsense now
 	KexiUtils::removeWaitCursor();
 
-	QString msg = title;
+	QString msg(title);
 	if (title.isEmpty())
 		msg = i18n("Unknown error");
 	msg = "<qt><p>"+msg+"</p>";

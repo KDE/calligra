@@ -30,9 +30,36 @@
 
 namespace KexiMigration
 {
-	class pqxxMigrate : public KexiMigrate
+	class PqxxMigrate : public KexiMigrate
 	{
 		Q_OBJECT
+		public:
+//			PqxxMigrate();
+			PqxxMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
+			virtual ~PqxxMigrate();
+			
+			virtual int versionMajor() const;
+			virtual int versionMinor() const;
+		
+		protected:
+			//Driver specific function to return table names
+			virtual bool drv_tableNames(QStringList& tablenames);
+			
+			//Driver specific implementation to read a table schema
+			virtual bool drv_readTableSchema(
+				const QString& originalName, KexiDB::TableSchema& tableSchema);
+			
+			//Driver specific connection implementation
+			virtual bool drv_connect();
+			virtual bool drv_disconnect();
+
+			virtual bool drv_copyTable(const QString& srcTable, 
+				KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+//TODO: move this somewhere to low level class (MIGRATION?)
+			//virtual bool drv_getTablesList( QStringList &list );
+//TODO: move this somewhere to low level class (MIGRATION?)
+			//virtual bool drv_containsTable( const QString &tableName );
+		
 		private:
 			//lowlevel functions/objects
 			//database connection
@@ -69,32 +96,7 @@ namespace KexiMigration
 			
 			//Return whether or not the field is auto incrementing
 			bool autoInc(pqxx::oid table, int col) const;
-			
-		protected:
-			//Driver specific function to return table names
-			virtual bool drv_tableNames(QStringList& tablenames);
-			
-			//Driver specific implementation to read a table schema
-			virtual bool drv_readTableSchema(KexiDB::TableSchema& tableSchema);
-			
-			//Driver specific connection implementation
-			virtual bool drv_connect();
-			virtual bool drv_disconnect();
-
-			virtual bool drv_copyTable(const QString& srcTable,
-																 KexiDB::TableSchema* dstTable);
-//TODO: move this somewhere to low level class (MIGRATION?)
-			//virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
-			//virtual bool drv_containsTable( const QString &tableName );
-		public:
-			~pqxxMigrate();
-			//Constructor
-			pqxxMigrate();
-			pqxxMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
-			virtual int versionMajor() const;
-			virtual int versionMinor() const;
-			
+		
 	};
 }
 

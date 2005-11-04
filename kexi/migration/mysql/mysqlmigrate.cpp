@@ -26,11 +26,14 @@
 #include <qvaluelist.h>
 #include <kdebug.h>
 
+#include <mysql_version.h>
 #include <mysql.h>
+
 #include "migration/keximigratedata.h"
-#include "kexidb/cursor.h"
-#include "kexidb/field.h"
-#include "kexidb/drivers/mySQL/mysqlconnection_p.cpp"
+#include <kexidb/cursor.h>
+#include <kexidb/field.h>
+#include <kexidb/drivers/mySQL/mysqlconnection_p.cpp>
+#include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
 
@@ -40,10 +43,10 @@ KEXIMIGRATE_DRIVER_INFO( MySQLMigrate, mysql );
 
 /* ************************************************************************** */
 //! Constructor
-MySQLMigrate::MySQLMigrate() :
+/*MySQLMigrate::MySQLMigrate() :
 	d(new MySqlConnectionInternal())
 {
-}
+}*/
 
 //! Constructor (needed for trading interface)
 MySQLMigrate::MySQLMigrate(QObject *parent, const char *name,
@@ -78,7 +81,8 @@ bool MySQLMigrate::drv_disconnect()
 
 /* ************************************************************************** */
 /*! Get the types and properties for each column. */
-bool MySQLMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
+bool MySQLMigrate::drv_readTableSchema(
+	const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
 //	m_table = new KexiDB::TableSchema(table);
 
@@ -86,7 +90,7 @@ bool MySQLMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 //	tableSchema.setCaption(table + " table");
 
 	//Perform a query on the table to get some data
-	QString query = QString("SELECT * FROM `") + d->escapeIdentifier(tableSchema.name()) + "` LIMIT 0";
+	QString query = QString("SELECT * FROM `") + d->escapeIdentifier(originalName) + "` LIMIT 0";
 	if(d->executeSQL(query)) {
 		MYSQL_RES *res = mysql_store_result(d->mysql);
 		if (res != NULL) {
@@ -95,12 +99,14 @@ bool MySQLMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 			MYSQL_FIELD *fields = mysql_fetch_fields(res); 
 			
 			for(unsigned int i = 0; i < numFlds; i++) {
-				QString fldName = QString(fields[i].name);
+				QString fldName(fields[i].name);
+				QString fldID( KexiUtils::string2Identifier(fldName) );
+
 				KexiDB::Field *fld = 
-				  new KexiDB::Field(fldName, type(tableSchema.name(), &fields[i]));
+				  new KexiDB::Field(fldID, type(originalName, &fields[i]));
 				
 				if(fld->type() == KexiDB::Field::Enum) {
-					QStringList values = examineEnumField(tableSchema.name(), &fields[i]);
+					QStringList values = examineEnumField(originalName, &fields[i]);
 				}
 				
 				fld->setCaption(fldName);
@@ -141,8 +147,9 @@ bool MySQLMigrate::drv_tableNames(QStringList& tableNames)
 
 
 /*! Copy MySQL table to KexiDB database */
-bool MySQLMigrate::drv_copyTable(const QString& srcTable,
-                                 KexiDB::TableSchema* dstTable) {
+bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn, 
+	KexiDB::TableSchema* dstTable)
+{
 	if(d->executeSQL("SELECT * FROM " + d->escapeIdentifier(srcTable))) {
 		MYSQL_RES *res = mysql_use_result(d->mysql);
 		if (res != NULL) {
@@ -154,7 +161,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable,
 					QVariant var = QVariant(row[i]);
 					vals << var;
 				}
-				m_migrateData->dest->insertRecord(*dstTable, vals);
+				destConn->insertRecord(*dstTable, vals);
 				updateProgress();
 			}
 			/*! @todo Check that wasn't an error, rather than end of result set */

@@ -24,6 +24,8 @@
 
 #include "kexidb/connection.h"
 
+class KexiProjectData;
+
 namespace KexiMigration
 {
         //Use this class to store all possible options that could be used by keximigrate.
@@ -39,16 +41,18 @@ namespace KexiMigration
 			
 			//! Name of the source database
 			QString sourceName;
+
+			//! Destination project data
+			KexiProjectData* destination;
+
+//			//! Actual connection to the new database
+//			KexiDB::Connection* dest;
 			
-			//! Actual connection to the new database
-			KexiDB::Connection* dest;
-			
-			//! New database name
-			QString destName;
+//			//! New database name
+//			QString destName;
 			
 			//! Flag to determin structure copy, or structure + data
 			bool keepData;
-						 
 	};
 }//namespace KexiMigration
 #endif

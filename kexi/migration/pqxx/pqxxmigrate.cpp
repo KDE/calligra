@@ -28,7 +28,8 @@
 #include <string>
 #include <vector>
 
-#include "./kexidb/cursor.h"
+#include <kexidb/cursor.h>
+#include <kexiutils/identifier.h>
 
 using namespace KexiDB;
 using namespace KexiMigration;
@@ -40,19 +41,20 @@ to compile, let alone work.  This is meant as an example of
 what the system might be and is a work in progress
 */
 
-KEXIMIGRATE_DRIVER_INFO( pqxxMigrate, pqxx );
+KEXIMIGRATE_DRIVER_INFO( PqxxMigrate, pqxx );
 
 //==================================================================================
 //Constructor
-pqxxMigrate::pqxxMigrate()
+/*PqxxMigrate::PqxxMigrate()
+ : KexiMigrate(parent, name, args)
 {
     m_res=0;
     m_trans=0;
     m_conn=0;
-}
+}*/
 
-pqxxMigrate::pqxxMigrate(QObject *parent, const char *name, const QStringList &args) :
-        KexiMigrate(parent, name, args)
+PqxxMigrate::PqxxMigrate(QObject *parent, const char *name, const QStringList &args)
+ : KexiMigrate(parent, name, args)
 {
     m_res=0;
     m_trans=0;
@@ -60,14 +62,16 @@ pqxxMigrate::pqxxMigrate(QObject *parent, const char *name, const QStringList &a
 }
 //==================================================================================
 //Destructor
-pqxxMigrate::~pqxxMigrate()
-{}
+PqxxMigrate::~PqxxMigrate()
+{
+}
 
 //==================================================================================
 //This is probably going to be quite complex...need to get the types for all columns
 //any any other attributes required by kexi
 //helped by reading the 'tables' test program
-bool pqxxMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
+bool PqxxMigrate::drv_readTableSchema(
+	const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
 //    m_table = new KexiDB::TableSchema(table);
 
@@ -75,18 +79,23 @@ bool pqxxMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 //moved    m_table->setCaption(table + " table");
 
     //Perform a query on the table to get some data
-    if (query("select * from \"" + tableSchema.name() + "\" limit 1"))
+    if (query("select * from \"" + originalName + "\" limit 1"))
     {
         //Loop round the fields
         for (uint i = 0; i < (uint)m_res->columns(); i++)
         {
-            KexiDB::Field::Type fldType = type(m_res->column_type(i), m_res->column_name(i));
-            m_f = new KexiDB::Field(m_res->column_name(i), fldType);
+            QString fldName(m_res->column_name(i));
+            KexiDB::Field::Type fldType = type(m_res->column_type(i), fldName);
+            QString fldID( KexiUtils::string2Identifier(fldName) );
+            const pqxx::oid toid = tableOid(originalName);
+            if (toid==0)
+                return false;
+            m_f = new KexiDB::Field(fldID, fldType);
+            m_f->setCaption(fldName);
+            m_f->setPrimaryKey(primaryKey(toid, i));
+            m_f->setUniqueKey(uniqueKey(toid, i));
+            m_f->setAutoIncrement(autoInc(toid, i));//This should be safe for all field types
             tableSchema.addField(m_f);
-            m_f->setCaption(m_res->column_name(i));
-            m_f->setPrimaryKey(primaryKey(tableOid(tableSchema.name()), i));
-            m_f->setUniqueKey(uniqueKey(tableOid(tableSchema.name()), i));
-            m_f->setAutoIncrement(autoInc(tableOid(tableSchema.name()), i));//This should be safe for all field types
 
             // Do this for var/char types
             //m_f->setLength(m_res->at(0)[i].size());
@@ -107,7 +116,7 @@ bool pqxxMigrate::drv_readTableSchema(KexiDB::TableSchema& tableSchema)
 
 //==================================================================================
 //get a list of tables and put into the supplied string list
-bool pqxxMigrate::drv_tableNames(QStringList& tableNames)
+bool PqxxMigrate::drv_tableNames(QStringList& tableNames)
 {
     //pg_ = standard postgresql tables, pga_ = tables added by pgaccess, sql_ = probably information schemas, kexi__ = existing kexi tables
     if (query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_') AND (relname !~ '^kexi__')))"))
@@ -127,7 +136,7 @@ bool pqxxMigrate::drv_tableNames(QStringList& tableNames)
 
 //==================================================================================
 //Convert a postgresql type to a kexi type
-KexiDB::Field::Type pqxxMigrate::type(int t, const QString& fname)
+KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
 {
     switch(t)
     {
@@ -146,7 +155,7 @@ KexiDB::Field::Type pqxxMigrate::type(int t, const QString& fname)
     case FLOAT8OID:
         return KexiDB::Field::Double;
     case NUMERICOID:
-		return KexiDB::Field::Double;
+        return KexiDB::Field::Double;
     case DATEOID:
         return KexiDB::Field::Date;
     case TIMEOID:
@@ -170,7 +179,7 @@ KexiDB::Field::Type pqxxMigrate::type(int t, const QString& fname)
 
 //==================================================================================
 //Connect to the db backend
-bool pqxxMigrate::drv_connect()
+bool PqxxMigrate::drv_connect()
 {
     kdDebug() << "drv_connect: " << m_migrateData->sourceName << endl;
 
@@ -215,18 +224,18 @@ bool pqxxMigrate::drv_connect()
     }
     catch(const std::exception &e)
     {
-        kdDebug() << "pqxxMigrate::drv_connect:exception - " << e.what() << endl;
+        kdDebug() << "PqxxMigrate::drv_connect:exception - " << e.what() << endl;
     }
     catch(...)
     {
-        kdDebug() << "pqxxMigrate::drv_connect:exception(...)??" << endl;
+        kdDebug() << "PqxxMigrate::drv_connect:exception(...)??" << endl;
     }
     return false;
 }
 
 //==================================================================================
 //Connect to the db backend
-bool pqxxMigrate::drv_disconnect()
+bool PqxxMigrate::drv_disconnect()
 {
     if (m_conn)
     {
@@ -238,7 +247,7 @@ bool pqxxMigrate::drv_disconnect()
 }
 //==================================================================================
 //Perform a query on the database and store result in m_res
-bool pqxxMigrate::query (const QString& statement)
+bool PqxxMigrate::query (const QString& statement)
 {
     kdDebug() << "query: " << statement.latin1() << endl;
 
@@ -266,14 +275,14 @@ bool pqxxMigrate::query (const QString& statement)
     }
     catch(...)
     {
-        kdDebug() << "pqxxMigrate::query:exception(...)??" << endl;
+        kdDebug() << "PqxxMigrate::query:exception(...)??" << endl;
     }
     return true;
 }
 
 //=========================================================================
 //Clears the current result
-void pqxxMigrate::clearResultInfo ()
+void PqxxMigrate::clearResultInfo ()
 {
     delete m_res;
     m_res = 0;
@@ -284,7 +293,7 @@ void pqxxMigrate::clearResultInfo ()
 
 //=========================================================================
 //Return the OID for a table
-pqxx::oid pqxxMigrate::tableOid(const QString& table)
+pqxx::oid PqxxMigrate::tableOid(const QString& table)
 {
     QString statement;
     static QString otable;
@@ -332,7 +341,7 @@ pqxx::oid pqxxMigrate::tableOid(const QString& table)
     }
     catch(...)
     {
-        kdDebug() << "pqxxMigrate::tableOid:exception(...)??" << endl;
+        kdDebug() << "PqxxMigrate::tableOid:exception(...)??" << endl;
     }
     delete tmpres;
 	tmpres = 0;
@@ -347,7 +356,7 @@ pqxx::oid pqxxMigrate::tableOid(const QString& table)
 //=========================================================================
 //Return whether or not the curent field is a primary key
 //TODO: Add result caching for speed
-bool pqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
+bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
 {
     QString statement;
     bool pkey;
@@ -402,12 +411,12 @@ bool pqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
 
 //=========================================================================
 /*! Copy PostgreSQL table to KexiDB database */
-bool pqxxMigrate::drv_copyTable(const QString& srcTable,
-                                KexiDB::TableSchema* dstTable)
+bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
+	KexiDB::TableSchema* dstTable)
 {
     std::vector<std::string> R;
 
-    pqxx::work T(*m_conn, "pqxxMigrate::drv_copyTable");
+    pqxx::work T(*m_conn, "PqxxMigrate::drv_copyTable");
 
     pqxx::tablereader stream(T, (srcTable.latin1()));
 
@@ -417,11 +426,11 @@ bool pqxxMigrate::drv_copyTable(const QString& srcTable,
         QValueList<QVariant> vals = QValueList<QVariant>();
         for (std::vector<std::string>::const_iterator i = R.begin(); i != R.end(); ++i)
         {
-			QVariant var = QVariant((*i).c_str());
-				vals << var;
+             QVariant var = QVariant((*i).c_str());
+             vals << var;
         }
 
-        m_migrateData->dest->insertRecord(*dstTable, vals);
+        destConn->insertRecord(*dstTable, vals);
         R.clear();
     }
 
@@ -434,7 +443,7 @@ bool pqxxMigrate::drv_copyTable(const QString& srcTable,
 //=========================================================================
 //Return whether or not the curent field is a primary key
 //TODO: Add result caching for speed
-bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
+bool PqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 {
     QString statement;
     bool ukey;
@@ -490,28 +499,28 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 
 //==================================================================================
 //TODO::Implement
-bool pqxxMigrate::autoInc(pqxx::oid /*table_uid*/, int /*col*/) const
+bool PqxxMigrate::autoInc(pqxx::oid /*table_uid*/, int /*col*/) const
 {
 	return false;
 }
 
 //==================================================================================
 //TODO::Implement
-bool pqxxMigrate::notNull(pqxx::oid /*table_uid*/, int /*col*/) const
+bool PqxxMigrate::notNull(pqxx::oid /*table_uid*/, int /*col*/) const
 {
 	return false;
 }
 
 //==================================================================================
 //TODO::Implement
-bool pqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
+bool PqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
 {
 	return false;
 }
 
 //==================================================================================
 //Return a list of database names
-/*bool pqxxMigrate::drv_getDatabasesList( QStringList &list )
+/*bool PqxxMigrate::drv_getDatabasesList( QStringList &list )
 {
     KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
  
