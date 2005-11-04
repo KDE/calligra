@@ -34,6 +34,9 @@ public:
   Presentation* presentation;
   UString title;
   GroupObject* rootObject;
+
+  double pageWidth; 
+  double pageHeight;
 };
 
 Slide::Slide( Presentation* pr )
@@ -41,6 +44,8 @@ Slide::Slide( Presentation* pr )
   d = new Private;
   d->presentation = pr;
   d->rootObject = new GroupObject;
+  d->pageWidth = 0.0; 
+  d->pageHeight = 0.0;
 }
   
 Slide::~Slide()
@@ -110,4 +115,24 @@ TextObject* recursiveSearch( GroupObject* group, unsigned placeId )
 TextObject* Slide::textObject( unsigned placeId )
 {
   return recursiveSearch( d->rootObject, placeId );
+}
+
+double Slide::pageWidth() const
+{ 
+  return d->pageWidth; 
+}
+
+void Slide::setPageWidth( double pageWidth ) 
+{  
+  d->pageWidth = pageWidth; 
+}
+
+double Slide::pageHeight() const
+{
+  return d->pageHeight; 
+}
+
+void Slide::setPageHeight( double pageHeight ) 
+{
+  d->pageHeight = pageHeight; 
 }

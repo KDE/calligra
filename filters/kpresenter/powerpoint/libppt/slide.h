@@ -41,6 +41,12 @@ public:
   GroupObject* rootObject();
   void setRootObject( GroupObject *);
   TextObject* textObject( unsigned placeId );
+
+  double pageWidth() const; 
+  void setPageWidth( double pageWidth ) ; 
+  double pageHeight() const;
+  void setPageHeight( double pageHeight ) ; 
+
 private:
   // no copy or assign
   Slide( const Slide& );

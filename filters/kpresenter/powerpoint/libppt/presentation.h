@@ -65,6 +65,7 @@ public:
    * Returns a slide at given index. If index is invalid (e.g. larger
    * than total number of slides), this function returns NULL.
    */
+
   Slide* slide( unsigned index );
 
   Slide* masterSlide();

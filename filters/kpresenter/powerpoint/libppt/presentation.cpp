@@ -78,6 +78,7 @@ Slide* Presentation::slide( unsigned index )
   return d->slides[index];
 }
 
+
 Slide* Presentation::masterSlide()
 {
   return d->masterSlide;

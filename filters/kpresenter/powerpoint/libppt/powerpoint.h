@@ -2439,6 +2439,7 @@ protected:
   void handleRecord( Record* record, int type );
   void handleContainer( Container* container, int type, unsigned size );
 
+  void handleDocumentAtom( DocumentAtom* r );
   void handleSlidePersistAtom( SlidePersistAtom* r );
   void handleTextHeaderAtom( TextHeaderAtom* r );
   void handleTextCharsAtom( TextCharsAtom* r );

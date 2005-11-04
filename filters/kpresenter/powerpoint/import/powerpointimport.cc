@@ -152,6 +152,9 @@ QByteArray PowerPointImport::createStyles()
   QByteArray stylesData;
   QBuffer stylesBuffer( stylesData );
 
+  QString pageWidth = QString("%1pt").arg( d->presentation->masterSlide()->pageWidth() );
+  QString pageHeight = QString("%1pt").arg( d->presentation->masterSlide()->pageHeight() );
+  
   stylesBuffer.open( IO_WriteOnly );
   stylesWriter = new KoXmlWriter( &stylesBuffer );
 
@@ -175,13 +178,13 @@ QByteArray PowerPointImport::createStyles()
   stylesWriter->addAttribute( "style:name","pm1" );
   stylesWriter->addAttribute( "style:page-usage","all" );
   stylesWriter->startElement( "style:page-layout-properties" );
-  stylesWriter->addAttribute( "fo:margin-bottom","42pt" );
-  stylesWriter->addAttribute( "fo:margin-left","28pt" );
-  stylesWriter->addAttribute( "fo:margin-right","28pt" );
-  stylesWriter->addAttribute( "fo:margin-top","42pt" );
-  stylesWriter->addAttribute( "fo:page-height","841pt" );
-  stylesWriter->addAttribute( "fo:page-width","595pt" );
-  stylesWriter->addAttribute( "style:print-orientation","portrait" );
+  stylesWriter->addAttribute( "fo:margin-bottom","0pt" ); 
+  stylesWriter->addAttribute( "fo:margin-left","0pt" );   
+  stylesWriter->addAttribute( "fo:margin-right","0pt" );  
+  stylesWriter->addAttribute( "fo:margin-top","0pt" );    
+  stylesWriter->addAttribute( "fo:page-height", pageHeight );
+  stylesWriter->addAttribute( "fo:page-width", pageWidth );
+  stylesWriter->addAttribute( "style:print-orientation","landscape" );
   stylesWriter->endElement();
   stylesWriter->endElement();
   stylesWriter->endElement();

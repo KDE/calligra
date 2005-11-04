@@ -1059,7 +1059,8 @@ void TextCharsAtom::setData( unsigned size, const unsigned char* data )
   for( unsigned k=0; k<size/2; k++ )
   {
     unsigned uchar = readU16( data + k*2 );
-    if (uchar == 0x22) uchar = 0x20; 
+    if (uchar == 0x22) uchar = 0x20;
+    
     str.append( UString(uchar) );
 
   }
@@ -3147,6 +3148,8 @@ void TextBytesAtom::setData( unsigned size, const unsigned char* data )
   for( unsigned k=0; k<size; k++ )
   {
     unsigned uchar = ( readU32( data + k ) );
+    if (uchar == 0x0B) uchar = ' '; 
+    if (uchar == 0x22) uchar = 0x20; 
     str.append( UString(uchar) );
   }
   setUString( str );
@@ -4490,6 +4493,7 @@ void PPTReader::loadUserEdit()
         PersistIncrementalBlockAtom* atom = new PersistIncrementalBlockAtom;        
         atom->setData( size, buf );
         delete [] buf;
+      
 
 #ifdef LIBPPT_DEBUG
         std::cout << "Found at pos " << pos << " size is " << size << std::endl;
@@ -4733,6 +4737,8 @@ void PPTReader::handleRecord( Record* record, int type )
 
   switch( type )
   {
+    case DocumentAtom::id:
+      handleDocumentAtom( static_cast<DocumentAtom*>(record) ); break;
     case SlidePersistAtom::id:
       handleSlidePersistAtom( static_cast<SlidePersistAtom*>(record) ); break;
     case TextHeaderAtom::id:
@@ -4778,6 +4784,26 @@ void PPTReader::handleContainer( Container* container, int type, unsigned size )
         loadRecord( container );    
   }
 }
+
+
+void PPTReader::handleDocumentAtom( DocumentAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+
+  double pageWidth = atom->slideWidth() * 0.125; // pt, in cm  * 0.0440972
+  double pageHeight = atom->slideHeight() * 0.125; // pt 
+  
+   d->presentation->masterSlide()->setPageWidth( pageWidth ); 
+   d->presentation->masterSlide()->setPageHeight ( pageHeight ); 
+  
+#ifdef LIBPPT_DEBUG
+  std::cout << std::endl<< "page width = " << pageWidth << std::endl;
+  std::cout << std::endl<< "page height = " << pageHeight << std::endl;
+#endif
+}
+
+
 
 void PPTReader::handleSlidePersistAtom( SlidePersistAtom* atom )
 {
