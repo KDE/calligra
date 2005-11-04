@@ -117,6 +117,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
    , m_objectBlockingPropertyEditorUpdating(0)
    , m_isRedoing(false)
 {
+	Q_UNUSED(options);
 #ifdef KEXI_STANDALONE
 	KGlobal::locale()->insertCatalogue("standalone_kformdesigner");
 #else
@@ -151,7 +152,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 
 FormManager::~FormManager()
 {
-	m_managerDeleter.setObject(0); //safe
+	m_managerDeleter.setObject(_self, 0, false); //safe
 	delete m_popup;
 	delete m_connection;
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
@@ -834,7 +835,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	const bool toplevelWidgetSelected = activeForm()->widget() == w;
 	const uint widgetsCount = container->form()->selectedWidgets()->count();
 	const bool multiple = widgetsCount > 1;
-	const bool enableRemove = w != m_active->widget();
+	//const bool enableRemove = w != m_active->widget();
 	// We only enablelayout creation if more than one widget with the same parent are selected
 	const bool enableLayout = multiple || w == container->widget();
 
@@ -909,7 +910,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 				sub->setItemChecked(index, true);
 		}
 
-		int id = m_popup->insertItem(i18n("Choose Buddy..."), sub);
+		/*int id =*/ m_popup->insertItem(i18n("Choose Buddy..."), sub);
 //		menuIds->append(id);
 		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
 
@@ -946,7 +947,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		if (separatorNeeded) {
 			lastID = m_popup->insertSeparator();
 		}
-		const int oldIndex = m_popup->count()-1;
+		const uint oldIndex = m_popup->count()-1;
 		container->form()->library()->createMenuActions(w->className(), w, m_popup, container);
 		if (oldIndex == (m_popup->count()-1)) {
 //			for (uint i=oldIndex; i<m_popup->count(); i++) {
@@ -1174,7 +1175,7 @@ FormManager::editTabOrder()
 		return;
 	QWidget *topLevel = m_active->widget()->topLevelWidget();
 	TabStopDialog dlg(topLevel);
-	const bool oldAutoTabStops = m_active->autoTabStops();
+	//const bool oldAutoTabStops = m_active->autoTabStops();
 	if (dlg.exec(m_active) == QDialog::Accepted) {
 		//inform about changing "autoTabStop" property
 		// -- this will be received eg. by Kexi, so custom "autoTabStop" property can be updated
