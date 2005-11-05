@@ -27,6 +27,7 @@
 #include <kinstance.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include "koFilterManager.h"
 #include "koTemplates.h"
@@ -59,6 +60,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
                             SmallIcon("fileopen", 48, KIcon::DefaultState, instance));
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(page, instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
+
+  //kdDebug() << "Template type: " << templateType << endl;
 
   if(!templateType.isEmpty())
   {

@@ -2464,6 +2464,7 @@ QString KoDocument::unitName() const
 void KoDocument::showStartUpWidget( KoMainWindow* parent )
 {
     createOpenPane( parent, instance(), templateType() );
+    parent->setDocToOpen( this );
 }
 
 void KoDocument::openExistingFile( const QString& file )

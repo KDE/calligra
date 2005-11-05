@@ -72,6 +72,12 @@ public:
     virtual void setRootDocument( KoDocument *doc );
 
     /**
+     * This is used to handle the document used at start up before it actually
+     * added as root document.
+     */
+    void setDocToOpen( KoDocument *doc );
+
+    /**
      * Update caption from document info - call when document info
      * (title in the about page) changes.
      */

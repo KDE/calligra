@@ -78,6 +78,7 @@ public:
   KoMainWindowPrivate()
   {
     m_rootDoc = 0L;
+    m_docToOpen = 0L;
     m_manager = 0L;
     bMainWindowGUIBuilt = false;
     m_forQuit=false;
@@ -114,6 +115,7 @@ public:
   }
 
   KoDocument *m_rootDoc;
+  KoDocument *m_docToOpen;
   QPtrList<KoView> m_rootViews;
   KParts::PartManager *m_manager;
 
@@ -296,6 +298,11 @@ KoMainWindow::~KoMainWindow()
     if (d->m_rootDoc)
         d->m_rootDoc->removeShell(this);
 
+    if (d->m_docToOpen) {
+      d->m_docToOpen->removeShell(this);
+      delete d->m_docToOpen;
+    }
+
     // safety first ;)
     d->m_manager->setActivePart(0);
 
@@ -324,6 +331,14 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 {
   if ( d->m_rootDoc == doc )
     return;
+
+  if (d->m_docToOpen != doc) {
+    d->m_docToOpen->removeShell(this);
+    delete d->m_docToOpen;
+    d->m_docToOpen = 0;
+  } else {
+    d->m_docToOpen = 0;
+  }
 
   //kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   QPtrList<KoView> oldRootViews = d->m_rootViews;
@@ -1640,6 +1655,11 @@ bool KoMainWindow::isImporting() const
 bool KoMainWindow::isExporting() const
 {
     return d->m_isExporting;
+}
+
+void KoMainWindow::setDocToOpen( KoDocument *doc )
+{
+  d->m_docToOpen = doc;
 }
 
 #include <koMainWindow.moc>
