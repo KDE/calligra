@@ -652,10 +652,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         if ( e->button() == LeftButton ) {
             mousePressed = true;
 
-            if ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) ) {
-                m_dragStartPoint = rasterPoint;
-                m_pointArray.putPoints( m_indexPointArray, 1,m_view->zoomHandler()->unzoomItX( m_dragStartPoint.x()),
-                                        m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
+            if ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) ) 
+            {
+                m_startPoint = snapPoint( docPoint );
+                m_pointArray.putPoints( m_indexPointArray, 1, m_startPoint.x(), m_startPoint.y() );
+                
                 ++m_indexPointArray;
                 return;
             }
@@ -670,6 +671,17 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     p.setBrush( Qt::NoBrush );
                     p.setRasterOp( Qt::NotROP );
 
+#if 0 //TODO
+                    KoPoint newStartPoint = snapPoint( docPoint );
+                    
+                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                                m_view->zoomHandler()->zoomPoint( newStartPoint ) - QPoint( diffx(), diffy() ) );
+
+                    m_startPoint = newStartPoint;
+                    p.end();
+
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_startPoint.x(), m_startPoint.y() );
+#else
                     QPoint oldStartPoint = m_dragStartPoint;
 
                     m_dragStartPoint = rasterPoint;
@@ -679,6 +691,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX( m_dragStartPoint.x()),
                                             m_view->zoomHandler()->unzoomItY( m_dragStartPoint.y()) );
+#endif
                     ++m_indexPointArray;
                     m_drawLineWithCubicBezierCurve = false;
                 }
@@ -857,39 +870,42 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid ( e->pos(), true );
-
-                insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
 
                 m_drawPolyline = true;
                 m_indexPointArray = 0;
-                m_dragStartPoint = tmp;
-                m_dragEndPoint = m_dragStartPoint;
-                m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()),
-                                        m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
+                m_startPoint = snapPoint( docPoint );
+                m_endPoint = m_startPoint;
+                m_pointArray.putPoints( m_indexPointArray, 1, m_startPoint.x(), m_startPoint.y() );
                 ++m_indexPointArray;
             } break;
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE: {
                 deSelectAllObj();
                 mousePressed = true;
+#if 1 //TODO
                 QPoint tmp = e->pos();
                 if ( doApplyGrid )
                   tmp = applyGrid ( e->pos(), true );
 
                 insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
+#endif
 
                 m_drawCubicBezierCurve = true;
                 m_drawLineWithCubicBezierCurve = true;
                 m_indexPointArray = 0;
+
                 m_oldCubicBezierPointArray.putPoints( 0, 4, (double)0,(double)0, (double)0,(double)0,
                                                       (double)0,(double)0, (double)0,(double)0 );
+#if 0 //TODO
+                m_startPoint = snapPoint( docPoint );
+                m_endPoint = m_startPoint;
+                m_pointArray.putPoints( m_indexPointArray, 1, m_startPoint.x(), m_startPoint.y() );
+#else
                 m_dragStartPoint = tmp;
                 m_dragEndPoint = m_dragStartPoint;
                 m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()),
                                         m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
+#endif
                 ++m_indexPointArray;
             } break;
             case INS_POLYGON: {
@@ -911,6 +927,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 if ( doApplyGrid )
                   tmp = applyGrid ( e->pos(), true );
                 insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
+                KoPoint sp( snapPoint( docPoint ) );
+                m_insertRect = KoRect( sp.x(), sp.y(),0 ,0 );
             } break;
             }
         }
@@ -924,16 +942,21 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 p.setBrush( NoBrush );
                 p.save();
                 p.setRasterOp( NotROP );
-                p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
 
-                p.drawLine( m_dragStartPoint, m_view->zoomHandler()->zoomPoint( m_pointArray.at(m_indexPointArray - 2)) );
+                // remove old line
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
+
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                            m_view->zoomHandler()->zoomPoint( m_pointArray.at( m_indexPointArray - 2 ) ) - QPoint( diffx(), diffy() ) );
                 p.restore();
 
-                m_indexPointArray= QMAX(1,m_indexPointArray-1);
-                m_pointArray.resize(m_indexPointArray);
-                m_dragStartPoint=m_view->zoomHandler()->zoomPoint( m_pointArray.at(m_indexPointArray - 1));
+                m_indexPointArray = QMAX( 1, m_indexPointArray - 1 );
+                m_pointArray.resize( m_indexPointArray );
+                m_startPoint = m_pointArray.at( m_indexPointArray - 1 );
 
-                p.drawLine( m_dragStartPoint, m_dragEndPoint );
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
 
                 p.end();
             }
@@ -943,7 +966,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
-                p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
                 p.end();
                 m_pointArray = KoPointArray();
                 m_indexPointArray = 0;
@@ -958,10 +982,15 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                                              || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
              && !m_pointArray.isNull() && m_drawCubicBezierCurve ) {
             if ( m_drawLineWithCubicBezierCurve ) {
+#if 0 //TODO
+                KoPoint point = snapPoint( docPoint );
+                m_pointArray.putPoints( m_indexPointArray, 1, point.x(), point.y() );
+#else
                 QPoint point = e->pos();
                 if ( doApplyGrid )
                   point = applyGrid ( e->pos(), true );
                 m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(point.x()), m_view->zoomHandler()->unzoomItY(point.y()) );
+#endif
                 ++m_indexPointArray;
             }
             else {
@@ -1207,7 +1236,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     }
 
     if ( toolEditMode != INS_LINE )
+    {
         insRect = insRect.normalize();
+        m_insertRect = m_insertRect.normalize();
+    }
 
     switch ( toolEditMode ) {
     case TEM_MOUSE: {
@@ -1370,10 +1402,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
     } break;
     case INS_RECT:
-        if ( !insRect.isNull() )
+        if ( !m_insertRect.isNull() )
         {
-            rectSymetricalObjet();
-            insertRect( insRect );
+            m_activePage->insertRectangle( m_insertRect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
+                                           m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getRndX(), m_view->getRndY(),
+                                           m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
         }
         break;
     case INS_ELLIPSE:
@@ -1698,38 +1731,23 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
-                if ( insRect.width() != 0 && insRect.height() != 0 )
+
+                if ( m_insertRect.width() != 0 && m_insertRect.height() != 0 )
                 {
-                    if ( !m_drawSymetricObject)
-                        p.drawRoundRect( insRect, m_view->getRndX(), m_view->getRndY() );
-                    else
-                    {
-                        QRect tmpRect( insRect );
-                        tmpRect.moveBy( -insRect.width(), -insRect.height());
-                        tmpRect.setSize( 2*insRect.size() );
-                        p.drawRoundRect( tmpRect, m_view->getRndX(), m_view->getRndY() );
-                    }
+                    kdDebug(33001) << "1 m_insertRect = " << m_insertRect << endl;
+                    p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
                 }
-                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid( e->pos(), true);
-                insRect.setRight( tmp.x() );
-                insRect.setBottom( tmp.y() );
-                limitSizeOfObject();
 
-                QRect tmpRect( insRect );
+                KoPoint sp( snapPoint( docPoint ) );
+                m_insertRect.setRight( sp.x() );
+                m_insertRect.setBottom( sp.y() );
 
-                if ( e->state() & AltButton )
+                if ( m_insertRect.width() != 0 && m_insertRect.height() != 0 )
                 {
-                    m_drawSymetricObject = true;
-                    tmpRect.moveBy( -insRect.width(), -insRect.height());
-                    tmpRect.setSize( 2*insRect.size() );
+                    p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
+                    kdDebug(33001) << "2 m_insertRect = " << m_insertRect << endl;
                 }
-                else
-                    m_drawSymetricObject = false;
 
-                p.drawRoundRect( tmpRect, m_view->getRndX(), m_view->getRndY() );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -1849,29 +1867,16 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
-                p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
-                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid( e->pos(), true);
 
-                int posX = tmp.x();
-                int posY = tmp.y();
-                if ( e->state() & ShiftButton )
-                {
-                    int witdh = QABS( posX -m_dragStartPoint.x() );
-                    int height = QABS( posY - m_dragStartPoint.y() );
-                    if ( witdh > height )
-                        posY = m_dragStartPoint.y();
-                    else if ( witdh < height )
-                        posX = m_dragStartPoint.x();
-                }
+                //remove the old line
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
 
-
-                m_dragEndPoint = QPoint( posX, posY);
-                m_dragEndPoint=limitOfPoint(m_dragEndPoint);
-
-                p.drawLine( m_dragStartPoint, m_dragEndPoint );
+                m_endPoint = snapPoint( docPoint );
+                
+                // print the new line
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -1945,11 +1950,11 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         return;
 
 
-    if ( ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) && !m_pointArray.isNull() && m_drawPolyline ) {
-        bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-        m_dragStartPoint = doApplyGrid ? applyGrid( e->pos(), true) : e->pos();
-        m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()),
-                                m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
+    if ( ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) && !m_pointArray.isNull() && m_drawPolyline ) 
+    {
+        m_startPoint = snapPoint( docPoint );
+
+        m_pointArray.putPoints( m_indexPointArray, 1, m_startPoint.x(), m_startPoint.y() );
         ++m_indexPointArray;
         endDrawPolyline();
 
@@ -2005,7 +2010,7 @@ void KPrCanvas::drawPieObject(QPainter *p,  const QRect & rect)
                     rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     case PT_ARC:
-        p->drawArc( rect.x(), insRect.y(), rect.width() - 2,
+        p->drawArc( rect.x(), rect.y(), rect.width() - 2,
                     rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     case PT_CHORD:
@@ -3892,7 +3897,6 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
             tmpPoints.putPoints( index, 1, tmpX,tmpY );
             ++index;
         }
-        rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
         m_activePage->insertPolyline( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
                                       m_view->getLineEnd() );
     }
@@ -4877,6 +4881,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
         }
         move = diffGrid( rect, diffx, diffy );
         KoPoint diff( m_gl.diffNextGuide( rect, diffx > 0, diffy > 0 ) );
+        
         if ( diffx > 0 )
         {
             if ( diff.x() > 0 && diff.x() < move.x() )
@@ -5832,6 +5837,52 @@ void KPrCanvas::layout()
         if ( it.current()->getType() == OT_TEXT )
             static_cast<KPTextObject *>( it.current() )->layout();
     }
+}
+
+KoPoint KPrCanvas::snapPoint( KoPoint &pos )
+{
+    KoPoint sp( pos );
+    KPresenterDoc * doc( m_view->kPresenterDoc() );
+
+    bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && m_changeSnap );
+    bool snapToGuideLines = ( doc->snapToGuideLines() && !m_changeSnap || !doc->snapToGuideLines() && m_changeSnap );
+
+    if ( snapToGrid && !snapToGuideLines )
+    {
+        sp.setX( qRound( pos.x() / doc->getGridX() ) * doc->getGridX() );
+        sp.setY( qRound( pos.y() / doc->getGridY() ) * doc->getGridY() );
+    }
+    else if ( snapToGuideLines && !snapToGrid )
+    {
+        sp += m_gl.snapToGuideLines( pos, 4 );
+    }
+    else if ( snapToGrid && snapToGuideLines )
+    {
+        KoPoint diff( m_gl.snapToGuideLines( pos, QMAX( 
+                        m_view->kPresenterDoc()->zoomHandler()->zoomItX( doc->getGridX() ), 
+                        m_view->kPresenterDoc()->zoomHandler()->zoomItY( doc->getGridY() ) ) ) );
+        double gridx = qRound( pos.x() / doc->getGridX() ) * doc->getGridX();
+        double gridy = qRound( pos.y() / doc->getGridY() ) * doc->getGridY();
+        if ( diff.x() == 0 || QABS( diff.x() ) > QABS( pos.x() - gridx ) )
+        {
+            sp.setX( gridx );
+        }
+        else
+        {
+            sp.setX( sp.x() + diff.x() );
+        }
+        
+        if ( diff.y() == 0 || QABS( diff.y() ) > QABS( pos.y() - gridy ) )
+        {
+            sp.setY( gridy );
+        }
+        else
+        {
+            sp.setY( sp.y() + diff.y() );
+        }
+    }
+
+    return sp;
 }
 
 QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )

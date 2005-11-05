@@ -605,6 +605,17 @@ private:
     bool checkCurrentTextEdit( KPTextObject * textObj );
 
     void rectSymetricalObjet();
+    /**
+     * @brief Snap @p pos to grid and guide lines.
+     *
+     * This method looks if the @p pos has to be snapped to a guide or grid or both. 
+     * If so it returns the position it has snapped to.
+     *
+     * @param pos the point which should be snapped
+     *
+     * @return the position of the snapped point
+     */
+    KoPoint snapPoint( KoPoint &pos );
     QPoint applyGrid( const QPoint &pos,bool offset);
     KoPoint applyGrid( const KoPoint &pos);
     double applyGridX( double x );
@@ -753,6 +764,8 @@ private:
 
     ToolEditMode toolEditMode;
     QRect insRect;
+    /// The rect of the object during insert.
+    KoRect m_insertRect;
     KoDocumentEntry partEntry;
     QString autoform;
     QPixmap buffer;
@@ -763,6 +776,10 @@ private:
 
     KoPointArray m_pointArray, m_oldCubicBezierPointArray;
     QPoint m_dragStartPoint, m_dragEndPoint, m_dragSymmetricEndPoint;
+    /// The start position of an insert for line objects
+    KoPoint m_startPoint;
+    /// The end position of an insert for line objects
+    KoPoint m_endPoint;
     KoPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
     unsigned int m_indexPointArray;
     bool m_drawPolyline;
