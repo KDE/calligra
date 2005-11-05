@@ -49,6 +49,14 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
   public:
     KoRecentDocumentsPane(QWidget* parent, KInstance* instance);
 //     ~KoRecentDocumentsPane();
+
+  signals:
+    void openFile(const QString&);
+
+  protected slots:
+    void selectionChanged(QListViewItem* item);
+    void openFile();
+    void openFile(QListViewItem* item);
 };
 
 #endif //KODETAILSPANE_H

@@ -26,6 +26,7 @@
 #include <kfiledialog.h>
 #include <kinstance.h>
 #include <kpushbutton.h>
+#include <kiconloader.h>
 
 #include "koFilterManager.h"
 #include "koTemplates.h"
@@ -50,9 +51,14 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   d = new KoOpenPanePrivate;
   d->m_instance = instance;
 
-  addButtonBelowList(i18n("Open Existing File"), this, SLOT(showOpenFileDialog()));
+  addButtonBelowList(i18n("Open Existing Document"), this, SLOT(showOpenFileDialog()));
   setRootIsDecorated(false);
   setShowIconsInTreeList(true);
+
+  QVBox* page = addVBoxPage(i18n("Recent Documents"), i18n("Recent Documents"),
+                            SmallIcon("fileopen", 48, KIcon::DefaultState, instance));
+  KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(page, instance);
+  connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
 
   if(!templateType.isEmpty())
   {
@@ -63,8 +69,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
         continue;
       }
 
-      QVBox* page = addVBoxPage(group->name(), group->name(),
-        group->first()->loadPicture(instance));
+      page = addVBoxPage(group->name(), group->name(),
+                         group->first()->loadPicture(instance));
       KoTemplatesPane* pane = new KoTemplatesPane(page, instance, group);
       connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
     }
