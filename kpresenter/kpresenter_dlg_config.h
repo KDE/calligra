@@ -38,10 +38,12 @@ class BrushProperty;
 class RectProperty;
 class PolygonProperty;
 class PieProperty;
+class KoUnitDoubleSpinBox;
 
 namespace KSpell2 {
     class ConfigWidget;
 }
+
 
 class configureInterfacePage : public QWidget
 {
@@ -102,7 +104,7 @@ private:
     int m_oldNbRedo;
     bool m_printNotes;
     QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink, *m_displayFieldCode, *m_cbPrintNotes;
-    KDoubleNumInput * resolutionY, * resolutionX;
+    KoUnitDoubleSpinBox * resolutionY, * resolutionX;
     KDoubleNumInput *m_rotation;
 };
 

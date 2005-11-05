@@ -24,6 +24,7 @@
 
 
 #include <kapplication.h>
+#include <koUnitWidgets.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
@@ -461,23 +462,21 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     KoRect rect = doc->masterPage()->getPageRect();
-    QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->unitName()), tmpQGroupBox);
+    QLabel *lab=new QLabel(i18n("Resolution X:"), tmpQGroupBox);
     QWhatsThis::add(lab, i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,0,0);
     KoUnit::Unit unit = doc->unit();
-    resolutionX = new KDoubleNumInput(tmpQGroupBox);
-    resolutionX->setValue( KoUnit::toUserValue( doc->getGridX(), unit ) );
-    resolutionX->setRange( KoUnit::toUserValue(5.0 , unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue(1, unit ), false);
+    resolutionX = new KoUnitDoubleSpinBox(tmpQGroupBox, 5.0,rect.width(),1,doc->getGridX() );
+    resolutionX->setUnit( unit );
 
     grid->addWidget(resolutionX,1,0);
-    
+
     lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->unitName()), tmpQGroupBox);
     QWhatsThis::add(lab, i18n( "Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,2,0);
 
-    resolutionY = new KDoubleNumInput(tmpQGroupBox);
-    resolutionY->setValue( KoUnit::toUserValue( doc->getGridY(), unit ) );
-    resolutionY->setRange( KoUnit::toUserValue(5.0,unit), KoUnit::toUserValue(rect.width(), unit), KoUnit::toUserValue( 1,unit ), false);
+    resolutionY = new KoUnitDoubleSpinBox(tmpQGroupBox, 5.0,rect.height(),1,doc->getGridY() );
+    resolutionY->setUnit( unit );
 
     grid->addWidget(resolutionY, 3, 0);
     box->addWidget(tmpQGroupBox);
@@ -554,8 +553,8 @@ KCommand * configureMiscPage::apply()
         macroCmd->addCommand(cmd);
     }
 
-    doc->setGridValue( KoUnit::fromUserValue( resolutionX->value(), doc->unit() ),
-                       KoUnit::fromUserValue( resolutionY->value(), doc->unit() ), true);
+    doc->setGridValue( resolutionX->value(),
+                       resolutionY->value(), true);
     doc->repaint( false );
 
     config->sync();
@@ -573,8 +572,8 @@ void configureMiscPage::slotDefault()
     m_cbPrintNotes->setChecked(true);
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-    resolutionY->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->unit() ) );
-    resolutionX->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ), doc->unit() ) );
+    resolutionY->setValue( MM_TO_POINT( 5.0 ));
+    resolutionX->setValue( MM_TO_POINT( 5.0 ));
 }
 
 configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget *parent, char *name )
