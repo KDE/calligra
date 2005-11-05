@@ -3386,8 +3386,11 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 		return false;
 
 	if (!dontAsk) {
-		if (KMessageBox::No == KMessageBox::warningYesNo(this, "<p>"+i18n("Do you want to remove:")
-			+"</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>",
+		if (KMessageBox::No == KMessageBox::warningYesNo(this, 
+			"<p>"+i18n("Do you want to premanently delete:\n"
+			"%1\n"
+			"If you click Yes, you will not be able to undo the deletion.")
+				.arg( "</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>" ),
 			0, KStdGuiItem::yes(), KStdGuiItem::no()))//, "askBeforeDeletePartItem"/*config entry*/))
 			return cancelled;
 	}
