@@ -73,6 +73,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
 
 KoOpenPane::~KoOpenPane()
 {
+  delete d;
 }
 
 void KoOpenPane::showOpenFileDialog()

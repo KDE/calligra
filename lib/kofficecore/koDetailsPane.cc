@@ -84,8 +84,6 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
     m_openButton->setText(i18n("&Open"));
     m_documentList->setColumnText (0, i18n("Documents"));
     m_alwaysUseCheckbox->hide();
-    // TODO fill m_itemsList
-    // TODO select first item in list
 }
 
 #include "koDetailsPane.moc"
