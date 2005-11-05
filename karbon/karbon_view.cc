@@ -770,7 +770,16 @@ KarbonView::zoomChanged( const KoPoint &p )
 		centerY = 0.5;
 		double zoomFactorX = double( width() - hSpace ) / double( part()->document().width() + ( hSpace / 2 ) );
 		double zoomFactorY = double( height() - vSpace ) / double( part()->document().height() + ( vSpace / 2 ) );
-		zoomFactor = kMin( zoomFactorX, zoomFactorY );
+
+		if(zoomFactorX < 0 && zoomFactorY > 0)
+			zoomFactor = zoomFactorY;
+		else if(zoomFactorX > 0 && zoomFactorY < 0)
+			zoomFactor = zoomFactorX;
+		else if(zoomFactorX < 0 && zoomFactorY < 0)
+			zoomFactor = 0.0001;
+		else
+			zoomFactor = kMin( zoomFactorX, zoomFactorY );
+		
 	}
 	else
 	{
