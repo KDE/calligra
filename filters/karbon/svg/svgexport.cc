@@ -43,7 +43,8 @@
 #include "vsegment.h"
 #include "vselection.h"
 #include "vstroke.h"
-//#include "vtext.h"
+#include "vtext.h"
+#include <commands/vtransformcmd.h>
 
 #include <kdebug.h>
 
@@ -61,7 +62,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilter
 
 
 SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter(), m_indent( 0 ), m_indent2( 0 )
+	: KoFilter(), m_indent( 0 ), m_indent2( 0 ), m_trans( 0L )
 {
 	m_gc.setAutoDelete( true );
 }
@@ -133,13 +134,11 @@ SvgExport::visitVDocument( VDocument& document )
 		"<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
 
 	*m_defs <<
-		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
+		"<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
 		rect.width() << "px\" height=\"" << rect.height() << "px\">" << endl;
 	printIndentation( m_defs, ++m_indent2 );
 	*m_defs << "<defs>" << endl;
 
-	printIndentation( m_body, ++m_indent );
-	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.height() << ")\">" << endl;
 	m_indent++;
 	m_indent2++;
 
@@ -150,12 +149,19 @@ SvgExport::visitVDocument( VDocument& document )
 	SvgGraphicsContext *gc = new SvgGraphicsContext;
 	m_gc.push( gc );
 
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( 0, -document.height() );
+
+	m_trans = new VTransformCmd( 0L, mat, false );
+	
 	// export layers:
 	VVisitor::visitVDocument( document );
 
+	delete m_trans;
+	m_trans = 0L;
+
 	// end tag:
-	printIndentation( m_body, --m_indent );
-	*m_body << "</g>" << endl;
 	printIndentation( m_defs, --m_indent2 );
 	*m_defs << "</defs>" << endl;
 	*m_body << "</svg>" << endl;
@@ -200,35 +206,47 @@ SvgExport::visitVLayer( VLayer& layer )
 {
 	printIndentation( m_body, m_indent++ );
 	*m_body << "<g" << getID( &layer ) << ">" << endl;
+	//*m_body << " transform=\"scale(1, -1) translate(0, -" << layer.document()->height() << ")\">" << endl;
 	VVisitor::visitVLayer( layer );
 	printIndentation( m_body, --m_indent );
 	*m_body << "</g>" << endl;
 }
 
 void
-SvgExport::visitVPath( VPath& composite )
+SvgExport::writePathToStream( VPath &composite, const QString &id, QTextStream *stream, unsigned int indent )
 {
-	printIndentation( m_body, m_indent );
-	*m_body << "<path" << getID( &composite );
+	if( ! stream )
+		return;
+
+	printIndentation( stream, indent );
+	*stream << "<path" << id;
 
 	VVisitor::visitVPath( composite );
 
-	getFill( *( composite.fill() ) );
-	getStroke( *( composite.stroke() ) );
+	getFill( *( composite.fill() ), stream );
+	getStroke( *( composite.stroke() ), stream );
 
 	QString d;
 	composite.saveSvgPath( d );
-	*m_body << " d=\"" << d << "\" ";
+	*stream << " d=\"" << d << "\" ";
 
 	if( composite.fillRule() != m_gc.current()->fillRule )
 	{
 		if( composite.fillRule() == evenOdd )
-			*m_body << " fill-rule=\"evenodd\"";
+			*stream << " fill-rule=\"evenodd\"";
 		else
-			*m_body << " fill-rule=\"nonzero\"";
+			*stream << " fill-rule=\"nonzero\"";
 	}
 
-	*m_body << " />" << endl;
+	*stream << " />" << endl;
+}
+
+void
+SvgExport::visitVPath( VPath& composite )
+{
+	m_trans->visitVPath( composite );
+	writePathToStream( composite, getID( &composite ), m_body, m_indent );
+	m_trans->visitVPath( composite );
 }
 
 void
@@ -358,79 +376,79 @@ SvgExport::getPattern( const VPattern & patt )
 }
 
 void
-SvgExport::getFill( const VFill& fill )
+SvgExport::getFill( const VFill& fill, QTextStream *stream )
 {
-	*m_body << " fill=\"";
+	*stream << " fill=\"";
 	if( fill.type() == VFill::none )
-		*m_body << "none";
+		*stream << "none";
 	else if( fill.type() == VFill::grad )
 		getGradient( fill.gradient() );
 	else if( fill.type() == VFill::patt )
 		getPattern( fill.pattern() );
 	else
-		getHexColor( m_body, fill.color() );
-	*m_body << "\"";
+		getHexColor( stream, fill.color() );
+	*stream << "\"";
 
 	if( fill.color().opacity() != m_gc.current()->fill.color().opacity() )
-		*m_body << " fill-opacity=\"" << fill.color().opacity() << "\"";
+		*stream << " fill-opacity=\"" << fill.color().opacity() << "\"";
 }
 
 void
-SvgExport::getStroke( const VStroke& stroke )
+SvgExport::getStroke( const VStroke& stroke, QTextStream *stream )
 {
 	if( stroke.type() != m_gc.current()->stroke.type() )
 	{
-		*m_body << " stroke=\"";
+		*stream << " stroke=\"";
 		if( stroke.type() == VStroke::none )
-			*m_body << "none";
+			*stream << "none";
 		else if( stroke.type() == VStroke::grad )
 			getGradient( stroke.gradient() );
 		else
-			getHexColor( m_body, stroke.color() );
-		*m_body << "\"";
+			getHexColor( stream, stroke.color() );
+		*stream << "\"";
 	}
 
 	if( stroke.color().opacity() != m_gc.current()->stroke.color().opacity() )
-		*m_body << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
+		*stream << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
 
 	if( stroke.lineWidth() != m_gc.current()->stroke.lineWidth() )
-		*m_body << " stroke-width=\"" << stroke.lineWidth() << "\"";
+		*stream << " stroke-width=\"" << stroke.lineWidth() << "\"";
 
 	if( stroke.lineCap() != m_gc.current()->stroke.lineCap() )
 	{
 		if( stroke.lineCap() == VStroke::capButt )
-			*m_body << " stroke-linecap=\"butt\"";
+			*stream << " stroke-linecap=\"butt\"";
 		else if( stroke.lineCap() == VStroke::capRound )
-			*m_body << " stroke-linecap=\"round\"";
+			*stream << " stroke-linecap=\"round\"";
 		else if( stroke.lineCap() == VStroke::capSquare )
-			*m_body << " stroke-linecap=\"square\"";
+			*stream << " stroke-linecap=\"square\"";
 	}
 
 	if( stroke.lineJoin() != m_gc.current()->stroke.lineJoin() )
 	{
 		if( stroke.lineJoin() == VStroke::joinMiter )
 		{
-			*m_body << " stroke-linejoin=\"miter\"";
-			*m_body << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
+			*stream << " stroke-linejoin=\"miter\"";
+			*stream << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
 		}
 		else if( stroke.lineJoin() == VStroke::joinRound )
-			*m_body << " stroke-linejoin=\"round\"";
+			*stream << " stroke-linejoin=\"round\"";
 		else if( stroke.lineJoin() == VStroke::joinBevel )
-				*m_body << " stroke-linejoin=\"bevel\"";
+				*stream << " stroke-linejoin=\"bevel\"";
 	}
 
 	// dash
 	if( stroke.dashPattern().array().count() > 0 )
 	{
-		*m_body << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
-		*m_body << " stroke-dasharray=\" ";
+		*stream << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
+		*stream << " stroke-dasharray=\" ";
 
 		QValueListConstIterator<float> itr;
 		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
 		{
-			*m_body << *itr << " ";
+			*stream << *itr << " ";
 		}
-		*m_body << "\"";
+		*stream << "\"";
 	}
 }
 
@@ -450,57 +468,36 @@ SvgExport::getHexColor( QTextStream *stream, const VColor& color )
 }
 
 void
-SvgExport::visitVText( VText& /*text*/ )
+SvgExport::visitVText( VText& text )
 {
-/*
-	// TODO: set placement once karbon supports it
+	VPath path( 0L );
+	path.combinePath( text.basePath() );
 
-	*m_body << "<text";
+	m_trans->visitVPath( path );
 
-	if( !node.attribute( "size" ).isNull() )
-	{
-		*m_body << " font-size=\"" << node.attribute( "size" ) << "\"";
-	}
+	QString id = createUID();
+	writePathToStream( path, " id=\""+ id + "\"", m_defs, m_indent2 );
 
-	if( !node.attribute( "family" ).isNull() )
-	{
-		*m_body << " font-family=\"" << node.attribute( "family" ) << "\"";
-	}
+	printIndentation( m_body, m_indent++ );
+	*m_body << "<text" << getID( &text );
+	//*m_body << " transform=\"scale(1, -1) translate(0, -" << text.document()->height() << ")\"";
+	getFill( *( text.fill() ), m_body );
+	getStroke( *( text.stroke() ), m_body );
 
-	if( !node.attribute( "bold" ).isNull() )
-	{
+	*m_body << " font-family=\"" << text.font().family() << "\"";
+	*m_body << " font-size=\"" << text.font().pointSize() << "\"";
+	if( text.font().bold() )
 		*m_body << " font-weight=\"bold\"";
-	}
-
-	if( !node.attribute( "italic" ).isNull() )
-	{
+	if( text.font().italic() )
 		*m_body << " font-style=\"italic\"";
-	}
-
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "FILL" )
-				exportFill( s, e );
-			if( e.tagName() == "STROKE" )
-				exportStroke( s, e );
-		}
-	}
-
-	*m_body << ">";
-
-
-	if( !node.attribute( "text" ).isNull() )
-	{
-		*m_body << node.attribute( "text" );
-	}
-
+	*m_body << ">" << endl;
+	
+	printIndentation( m_body, m_indent );
+	*m_body << "<textPath xlink:href=\"#" << id << "\">"; 
+	*m_body << text.text();
+	*m_body << "</textPath>" << endl;
+	printIndentation( m_body, --m_indent );
 	*m_body << "</text>" << endl;
-*/
 }
 
 #include "svgexport.moc"

@@ -40,6 +40,7 @@ class VLayer;
 class VSubpath;
 class VStroke;
 class VText;
+class VTransformCmd;
 
 
 class SvgExport : public KoFilter, private VVisitor
@@ -61,13 +62,15 @@ private:
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
 
-	void getStroke( const VStroke& stroke );
+	void getStroke( const VStroke& stroke, QTextStream *stream );
 	void getColorStops( const QPtrVector<VColorStop> &colorStops );
-	void getFill( const VFill& fill  );
+	void getFill( const VFill& fill, QTextStream *stream );
 	void getGradient( const VGradient& grad );
 	void getPattern( const VPattern& patt );
 	void getHexColor( QTextStream *, const VColor& color  );
 	QString getID( VObject *obj );
+
+	void writePathToStream( VPath &composite, const QString &id, QTextStream *stream, unsigned int indent );
 
 	QTextStream* m_stream;
 	QTextStream* m_defs;
@@ -77,6 +80,8 @@ private:
 
 	unsigned int m_indent;
 	unsigned int m_indent2;
+
+	VTransformCmd *m_trans;
 };
 
 #endif
