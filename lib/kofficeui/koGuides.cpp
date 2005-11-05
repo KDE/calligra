@@ -202,6 +202,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     {
         m_popup->update( m_selectedGuideLines.count() );
         m_popup->exec( QCursor::pos() );
+        emit moveGuides( false );
     }
     
     return eventProcessed;
