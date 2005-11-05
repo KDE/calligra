@@ -712,11 +712,14 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
     }
 }
 
-void KPBackGround::drawBorders( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
+void KPBackGround::drawBorders( QPainter *_painter, const QSize& /*ext*/, const QRect& /*crect*/ )
 {
     _painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     _painter->setBrush( Qt::NoBrush );
-    _painter->drawRect( 0, 0, ext.width() + 1, ext.height() + 1 );
+
+     QRect rect = m_page->getZoomPageRect();
+
+     _painter->drawRect( rect.x()-1,rect.y()-1,rect.width()+1,rect.height()+1 );
 }
 
 void KPBackGround::generateGradient( const QSize& size )
