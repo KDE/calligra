@@ -41,8 +41,9 @@ public:
      *
      * @param view The view in which the guides will be shown
      * @param zoomHandler The zoom handler of the view
+     * @param autoStyle TODO
      */
-    KoGuides( KoView *view, KoZoomHandler *zoomHandler, bool autoStyle=false );
+    KoGuides( KoView *view, KoZoomHandler *zoomHandler, bool autoStyle = false );
 
     /**
      * @brief Destructor
@@ -140,6 +141,18 @@ public:
      * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
      */
     KoPoint snapToGuideLines( KoRect &rect, int snap );
+
+    /**
+     * @brief Snap rect to guidelines
+     *
+     * This looks fo a guide which is in reach for the guide as defined in snap.
+     *
+     * @param pos the position which should be snapped
+     * @param snap the distance the guide should snap
+     *
+     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     */
+    KoPoint snapToGuideLines( KoPoint &pos, int snap );
 
     /**
      * @brief Find the next guide distance to snap to

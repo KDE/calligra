@@ -378,7 +378,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
                     hClosest = *it;
                 }
             }
-            tmp = rect.bottom() - (*it)->position;
+            tmp = (*it)->position - rect.bottom();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
             {
                 if(QABS( tmp ) < diff.y())
@@ -399,7 +399,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
                     vClosest = *it;
                 }
             }
-            tmp = rect.right() - (*it)->position;
+            tmp = (*it)->position - rect.right();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
             {
                 if(QABS( tmp ) < diff.x())
@@ -448,7 +448,7 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
                     vClosest = *it;
                 }
             }
-            tmp = rect.right() - (*it)->position;
+            tmp = (*it)->position - rect.right();
             if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
             {
                 if(QABS( tmp ) < diff.x())
@@ -481,6 +481,102 @@ KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
 
     return diff;
 }
+
+
+KoPoint KoGuides::snapToGuideLines( KoPoint &pos, int snap)
+{
+    bool needRepaint = false;
+    KoPoint diff( 10000, 10000 );
+    KoGuideLine *vClosest=0;
+    KoGuideLine *hClosest=0;
+
+    QValueList<KoGuideLine *>::const_iterator it = m_guideLines.begin();
+    for ( ; it != m_guideLines.end(); ++it )
+    {
+        if(( *it )->snapping)
+            needRepaint = true;
+
+        ( *it )->snapping = false;
+
+        if ( ( *it )->orientation == Qt::Horizontal )
+        {
+            double tmp = (*it)->position - pos.y();
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            {
+                if(QABS( tmp ) < diff.y())
+                {
+                    diff.setY( tmp );
+                    hClosest = *it;
+                }
+            }
+        }
+        else
+        {
+            double tmp = (*it)->position - pos.x();
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            {
+                if(QABS( tmp ) < diff.x())
+                {
+                    diff.setX( tmp );
+                    vClosest = *it;
+                }
+            }
+        }
+    }
+
+    it = m_selectedGuideLines.begin();
+    for ( ; it != m_selectedGuideLines.end(); ++it )
+    {
+        ( *it )->snapping = false;
+
+        if ( ( *it )->orientation == Qt::Horizontal )
+        {
+            double tmp = (*it)->position - pos.y();
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            {
+                if(QABS( tmp ) < diff.y())
+                {
+                    diff.setY( tmp );
+                    hClosest = *it;
+                }
+            }
+        }
+        else
+        {
+            double tmp = (*it)->position - pos.x();
+            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            {
+                if(QABS( tmp ) < diff.x())
+                {
+                    diff.setX( tmp );
+                    vClosest = *it;
+                }
+            }
+        }
+     }
+
+    if( vClosest )
+    {
+        vClosest->snapping = true;
+        needRepaint=true;
+    }
+    else
+        diff.setX( 0 );
+
+    if( hClosest )
+    {
+        hClosest->snapping = true;
+        needRepaint=true;
+    }
+    else
+        diff.setY( 0 );
+
+    if(needRepaint && m_autoStyle)
+        paint();
+
+    return diff;
+}
+
 
 KoPoint KoGuides::diffGuide( KoRect &rect, double diffx, double diffy )
 {
@@ -624,6 +720,15 @@ KoPoint KoGuides::diffNextGuide( KoRect &rect, bool right, bool bottom )
                 yset = true;
             }
         }
+    }
+
+    if ( QABS( move.x() ) < 1E-10 ) 
+    {
+        move.setX( 0 );
+    }
+    if ( QABS( move.y() ) < 1E-10 ) 
+    {
+        move.setY( 0 );
     }
 
     return move;
