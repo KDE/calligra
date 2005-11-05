@@ -904,7 +904,11 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				QString key = uri.mid( start, end - start );
 				if( ! m_defs.contains(key) )
 				{
+					// try to find referenced object in document
 					VObject* obj = findObject( key );
+					// try to find referenced object in actual group, which is not yet part of document
+					if( ! obj )
+						obj = findObject( key, grp );
 					if( obj ) 
 						path = dynamic_cast<VPath*>( obj );
 				}
@@ -950,7 +954,11 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 
 				if( ! m_defs.contains(key) )
 				{
+					// try to find referenced object in document
 					VObject* obj = findObject( key );
+					// try to find referenced object in actual group, which is not yet part of document
+					if( ! obj )
+						obj = findObject( key, grp );
 					if( obj ) 
 						content += dynamic_cast<VText*>( obj )->text();
 				}
@@ -980,6 +988,9 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 		text->setParent( &m_document );
 		
 		parseStyle( text, b );
+
+		text->setFont( m_gc.current()->font );
+
 		trafo.visit( *text );
 
 		if( !b.attribute("id").isEmpty() )
