@@ -3387,7 +3387,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 
 	if (!dontAsk) {
 		if (KMessageBox::No == KMessageBox::warningYesNo(this, 
-			"<p>"+i18n("Do you want to premanently delete:\n"
+			"<p>"+i18n("Do you want to permanently delete:\n"
 			"%1\n"
 			"If you click Yes, you will not be able to undo the deletion.")
 				.arg( "</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>" ),
