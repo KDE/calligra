@@ -2292,9 +2292,11 @@ void KPresenterView::setupActions()
                                                this, SLOT( viewSnapToGuideLines() ),
                                                actionCollection(), "view_snaptoguidelines" );
 
-    actionViewShowGrid = new KToggleAction( i18n( "Grid" ), 0,
+    actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), 0,
                                             this, SLOT( viewGrid() ),
                                             actionCollection(), "view_grid" );
+    actionViewShowGrid->setCheckedState(i18n("Hide &Grid"));
+
     actionViewGridToFront= new KToggleAction( i18n( "Grid to Front" ), 0,
                                               this, SLOT( viewGridToFront() ),
                                               actionCollection(), "view_gridtofront" );
