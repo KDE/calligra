@@ -20,7 +20,6 @@
 
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qtextedit.h>
 #include <qfile.h>
 
 #include <kinstance.h>
@@ -29,42 +28,44 @@
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kurl.h>
+#include <kactivelabel.h>
 
 #include "koTemplates.h"
 
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup *group)
   : KoDetailsPaneBase(parent, "TemplatesPane")
 {
-    m_openButton->setText(i18n("&Use This Template"));
-    m_documentList->setColumnText (0, i18n("Template"));
+  KGuiItem openGItem(i18n("Use This Template"));
+  m_openButton->setGuiItem(openGItem);
+  m_documentList->setColumnText (0, i18n("Template"));
 
-    for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
-      if(t->isHidden())
-        continue;
+  for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
+    if(t->isHidden())
+      continue;
 
-      KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
-      item->setPixmap(0, t->loadPicture(instance));
+    KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
+    item->setPixmap(0, t->loadPicture(instance));
 
 //       if (name == t->name())
 //       {
 //         itemtoreturn = item;
 //       }
-    }
+  }
 
-    connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
-            this, SLOT(selectionChanged(QListViewItem*)));
-    connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-            this, SLOT(openTemplate(QListViewItem*)));
-    connect(m_openButton, SIGNAL(clicked()), this, SLOT(openTemplate()));
+  connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
+          this, SLOT(selectionChanged(QListViewItem*)));
+  connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+          this, SLOT(openTemplate(QListViewItem*)));
+  connect(m_openButton, SIGNAL(clicked()), this, SLOT(openTemplate()));
 
-    m_documentList->setSelected(m_documentList->firstChild(), true);
+  m_documentList->setSelected(m_documentList->firstChild(), true);
 }
 
 void KoTemplatesPane::selectionChanged(QListViewItem* item)
 {
   m_titleLabel->setText(item->text(0));
   m_iconLabel->setPixmap(*(item->pixmap(0)));
-  m_detailsText->setText(item->text(1));
+  m_detailsLabel->setText(item->text(1));
 }
 
 void KoTemplatesPane::openTemplate()
@@ -84,7 +85,8 @@ void KoTemplatesPane::openTemplate(QListViewItem* item)
 KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instance)
   : KoDetailsPaneBase(parent, "RecentDocsPane")
 {
-  m_openButton->setText(i18n("&Open"));
+  KGuiItem openGItem(i18n("Open Document"), "fileopen");
+  m_openButton->setGuiItem(openGItem);
   m_documentList->setColumnText (0, i18n("Documents"));
   m_alwaysUseCheckbox->hide();
 
@@ -136,7 +138,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
   m_titleLabel->setText(item->text(0));
-  m_detailsText->setText(item->text(1));
+  m_detailsLabel->setText(item->text(1));
 }
 
 void KoRecentDocumentsPane::openFile()

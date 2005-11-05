@@ -100,31 +100,6 @@
                             <enum>Horizontal</enum>
                         </property>
                     </widget>
-                    <spacer row="6" column="1">
-                        <property name="name">
-                            <cstring>spacer1_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>190</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QTextEdit" row="5" column="0" rowspan="1" colspan="3">
-                        <property name="name">
-                            <cstring>m_detailsText</cstring>
-                        </property>
-                        <property name="readOnly">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
                     <spacer row="1" column="2">
                         <property name="name">
                             <cstring>spacer20</cstring>
@@ -286,6 +261,11 @@
                             </spacer>
                         </hbox>
                     </widget>
+                    <widget class="KActiveLabel" row="5" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>m_detailsLabel</cstring>
+                        </property>
+                    </widget>
                 </grid>
             </widget>
         </widget>
@@ -295,5 +275,6 @@
 <includehints>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kactivelabel.h</includehint>
 </includehints>
 </UI>

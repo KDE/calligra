@@ -52,7 +52,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   d = new KoOpenPanePrivate;
   d->m_instance = instance;
 
-  addButtonBelowList(i18n("Open Existing Document"), this, SLOT(showOpenFileDialog()));
+  KGuiItem openExistingGItem(i18n("Open Existing Document"), "fileopen");
+  addButtonBelowList(openExistingGItem, this, SLOT(showOpenFileDialog()));
   setRootIsDecorated(false);
   setShowIconsInTreeList(true);
 
