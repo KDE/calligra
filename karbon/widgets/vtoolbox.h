@@ -30,6 +30,9 @@ class VStrokeFillPreview;
 class Vtool;
 class VTypeButtonBox;
 
+
+/// This class...
+
 class VToolBox : public KToolBar
 {
 	Q_OBJECT
@@ -52,12 +55,20 @@ public slots:
 
 private:
 	KarbonPart *m_part;
-	VStrokeFillPreview *m_strokeFillPreview;
-	VTypeButtonBox* m_typeButtonBox;
-	QBoxLayout *leftLayout, *rightLayout, *columnsLayouter;
-	QWidget *left, *right;
-	QButtonGroup *buttonGroup;
-	bool insertLeft;
+
+	VStrokeFillPreview  *m_strokeFillPreview;
+	VTypeButtonBox      *m_typeButtonBox;
+
+	QBoxLayout          *leftLayout;
+	QBoxLayout          *rightLayout;
+	QBoxLayout          *columnsLayouter;
+
+	QWidget             *left;
+	QWidget             *right;
+
+	QButtonGroup        *buttonGroup;
+
+	bool                 insertLeft;
 
 	QToolButton *addButton( const char* iconName, QString tooltip, int id );
 	// tools:

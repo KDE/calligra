@@ -624,6 +624,27 @@ KarbonView::selectionDistributeVerticalTop()
 }
 
 void
+KarbonView::selectionDuplicate()
+{
+#if 1
+	editCopy();
+	editPaste();
+#else
+	VObjectList selection;
+
+	// Get current selection
+	VObject *obj = itr.current();
+
+	
+	part()->document().selection()->clear();
+	part()->document().selection()->append( obj );
+
+	part()->repaintAllViews();
+	selectionChanged();
+#endif
+}
+
+void
 KarbonView::selectionBringToFront()
 {
 	part()->addCommand(
@@ -904,6 +925,9 @@ KarbonView::initActions()
 	// edit <-----
 
 	// object ----->
+	new KAction(
+		i18n( "&Duplicate" ), "duplicate", QKeySequence( "Ctrl+D" ), this,
+		SLOT( selectionDuplicate() ), actionCollection(), "object_duplicate" );
 	new KAction(
 		i18n( "Bring to &Front" ), "bring_forward", QKeySequence( "Ctrl+Shift+]" ), this,
 		SLOT( selectionBringToFront() ), actionCollection(), "object_move_totop" );

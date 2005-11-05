@@ -121,6 +121,7 @@ public slots:
 	void editDeleteSelection();
 	void editPurgeHistory();
 
+	void selectionDuplicate();
 	void selectionBringToFront();
 	void selectionSendToBack();
 	void selectionMoveUp();
@@ -245,14 +246,14 @@ private:
 	VTransformDocker	*m_TransformDocker;
 
 	VSelectToolBar		*m_selectToolBar;
-	QLabel			*m_status;
-	QLabel			*m_cursorCoords;
 
 	// dcop
 	DCOPObject		*m_dcop;
 
 	//Status Bar
-	VSmallPreview		*m_smallPreview;
+	QLabel				*m_status;       // Ordinary status
+	QLabel				*m_cursorCoords; // Cursor coordinates
+	VSmallPreview		*m_smallPreview; // Stroke and Fill
 };
 
 #endif

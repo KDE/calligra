@@ -47,6 +47,7 @@
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>
+		<Action name="object_duplicate"/>
 		<Menu name="object_order">
 			<text>&amp;Order</text>
 			<Action name="object_move_totop"/>

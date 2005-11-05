@@ -234,7 +234,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	QDomElement *style =master ? styles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
 	if( style )
 	{
-        	m_pageLayout.loadOasis( *style );
+		m_pageLayout.loadOasis( *style );
 		m_doc.setWidth( m_pageLayout.ptWidth );
 		m_doc.setHeight( m_pageLayout.ptHeight );
 	}
@@ -259,7 +259,7 @@ KarbonPart::loadOasisSettings( const QDomDocument&settingsDoc )
     if ( !viewSettings.isNull() )
     {
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-        //todo add other config here.
+        // FIXME: add other config here.
     }
 }
 

@@ -1,3 +1,20 @@
+From the usability review of Thomas Zander
+------------------------------------------
+
+* Toolbars
+  - Toolbars should be persistent					----
+  - toolbox to the left by default					----
+
+* Toolbox
+  - select tool dialog has title "insert star"				DONE
+  - difficult to see which tool is selected				----
+  - clicking the "14" icon does not unselect previous tool		DONE
+  - add kbd shortcuts to the tools					----
+  - make 'ESC' select the 'Select tool'					----
+
+
+
+
 BIG TOPICS:
 1) create a consistent tool/plugin system
 	plugin input:
