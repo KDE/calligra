@@ -332,7 +332,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( d->m_rootDoc == doc )
     return;
 
-  if (d->m_docToOpen != doc) {
+  if (d->m_docToOpen && d->m_docToOpen != doc) {
     d->m_docToOpen->removeShell(this);
     delete d->m_docToOpen;
     d->m_docToOpen = 0;
