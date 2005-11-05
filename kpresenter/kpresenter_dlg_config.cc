@@ -669,14 +669,15 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     m_variableNumberOffset->setValue(m_oldStartingPage);
     QWhatsThis::add(m_variableNumberOffset, i18n( "You can change here the number for the first page. It is set to 1 per default.\nTip: this is helpful if you have split a single document into multiple files." ) );
 
-    new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), gbDocumentSettings);
-    m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
+    new QLabel(i18n("Tab stop:"), gbDocumentSettings);
     m_oldTabStopWidth = doc->tabStopValue();
     KoRect rect = doc->masterPage()->getPageRect();
+    m_tabStopWidth = new KoUnitDoubleSpinBox( gbDocumentSettings , MM_TO_POINT(2), rect.width() ,0.1, m_oldTabStopWidth );
+
+    m_tabStopWidth->setUnit( doc->unit() );
+
     QWhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc." ) );
 
-    m_tabStopWidth->setRange( KoUnit::toUserValue( MM_TO_POINT(2),doc->unit() ) , KoUnit::toUserValue( rect.width(), doc->unit() ) , 0.1, false);
-    m_tabStopWidth->setValue( KoUnit::toUserValue( m_oldTabStopWidth, doc->unit() ));
     box->addWidget(gbDocumentSettings);
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), this );
     gbDocumentCursor->setMargin( KDialog::marginHint() );
@@ -758,7 +759,7 @@ KCommand *configureDefaultDocPage::apply()
         macro->addCommand( cmd);
         m_oldStartingPage=newStartingPage;
     }
-    double newTabStop = KoUnit::fromUserValue( m_tabStopWidth->value(), doc->unit() );
+    double newTabStop = m_tabStopWidth->value();
     if ( newTabStop != m_oldTabStopWidth)
     {
         if ( !macro )
@@ -776,7 +777,7 @@ void configureDefaultDocPage::slotDefault()
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
     m_variableNumberOffset->setValue(1);
     m_cursorInProtectedArea->setChecked(true);
-    m_tabStopWidth->setValue(KoUnit::toUserValue( MM_TO_POINT(15), m_pView->kPresenterDoc()->unit()));
+    m_tabStopWidth->setValue( MM_TO_POINT(15));
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
     m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( KGlobal::locale()->language() ) );

@@ -130,7 +130,7 @@ private:
     QLabel *fontName;
     KIntNumInput* autoSave;
     KIntNumInput* m_variableNumberOffset;
-    KDoubleNumInput *m_tabStopWidth;
+    KoUnitDoubleSpinBox *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
