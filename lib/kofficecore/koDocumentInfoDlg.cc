@@ -19,12 +19,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koDocumentInfoDlg.h>
-#include <koDocumentInfo.h>
-#include <koDocumentInfoAboutWidget.h>
-#include <koDocumentInfoAuthorWidget.h>
-#include <koDocumentInfoUserMetadataWidget.h>
-#include <koDocument.h>
+#include "koDocumentInfoDlg.h"
+#include "koDocumentInfo.h"
+#include "koDocumentInfoAboutWidget.h"
+#include "koDocumentInfoAuthorWidget.h"
+#include "koDocumentInfoUserMetadataWidget.h"
+#include "koDocument.h"
+
 #include <koGlobal.h>
 #include <koStore.h>
 
@@ -551,4 +552,4 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *en
 /* vim: sw=2 et
  */
 
-#include <koDocumentInfoDlg.moc>
+#include "koDocumentInfoDlg.moc"
