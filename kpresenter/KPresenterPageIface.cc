@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <kcommand.h>
 #include "kprcommand.h"
+#include <koRect.h>
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page, int pgnum )
     // Make up a nice DCOPObject name like "Document-0 Page-1".
@@ -487,35 +488,35 @@ void KPresenterPageIface::changePicture( const QString & filename )
 }
 
 //create a rectangle and return a dcop reference!
-DCOPRef KPresenterPageIface::insertRectangle(int x, int y, int h, int w)
+DCOPRef KPresenterPageIface::insertRectangle(double x, double y, double h, double w)
 {
     KPresenterView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
-    view->getCanvas()->insertRect( QRect(x,y,h,w) );
+    view->getCanvas()->insertRect( KoRect( x, y, h, w ) );
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertEllipse( int x, int y, int h, int w )
+DCOPRef KPresenterPageIface::insertEllipse( double x, double y, double h, double w )
 {
     KPresenterView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
 
-    view->getCanvas()->insertEllipse(QRect(x,y,h,w) );
+    view->getCanvas()->insertEllipse( KoRect( x, y, h, w ) );
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertPie( int x, int y, int h, int w )
+DCOPRef KPresenterPageIface::insertPie( double x, double y, double h, double w )
 {
     KPresenterView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
 
-    view->getCanvas()->insertPie( QRect(x,y,h,w) );
+    view->getCanvas()->insertPie( KoRect( x, y, h, w ) );
     return selectedObject();
 }
 

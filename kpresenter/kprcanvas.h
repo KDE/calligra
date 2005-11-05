@@ -271,9 +271,27 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void insertLineV( const QRect&, bool );
     void insertLineD1( const QRect&, bool );
     void insertLineD2( const QRect&, bool );
-    void insertRect( const QRect& );
-    void insertEllipse( const QRect& );
-    void insertPie( const QRect& );
+    
+    /**
+     * @brief Add a rectangle
+     *
+     * @param rect the size and position of the rectangle
+     */
+    void insertRect( const KoRect &rect);
+
+    /**
+     * @brief Add a ellipse
+     *
+     * @param rect the size and position of the ellipse
+     */
+    void insertEllipse( const KoRect &rect );
+
+    /**
+     * @brief Add a pie/arc/chord
+     *
+     * @param rect the size and position of the pie/arc/chord
+     */
+    void insertPie( const KoRect &rect );
     KPTextObject* insertTextObject( const QRect& );
     void insertPicture( const QRect &_r, const QPoint & tl = QPoint());
     void changePicture( const KURL & url, QWidget *window );
@@ -591,7 +609,8 @@ private:
 
     void drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint );
 
-    void drawPieObject(QPainter *p,  const QRect & );
+    /// Helper function to draw a pie/arc/chord
+    void drawPieObject( QPainter *p,  const KoRect &rect );
     void limitSizeOfObject();
 
     QPoint limitOfPoint(const QPoint& _point) const;

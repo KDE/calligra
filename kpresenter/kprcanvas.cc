@@ -1404,23 +1404,19 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_RECT:
         if ( !m_insertRect.isNull() )
         {
-            m_activePage->insertRectangle( m_insertRect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
-                                           m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getRndX(), m_view->getRndY(),
-                                           m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
+            insertRect( m_insertRect );
         }
         break;
     case INS_ELLIPSE:
-        if ( !insRect.isNull() )
+        if ( !m_insertRect.isNull() )
         {
-            rectSymetricalObjet();
-            insertEllipse( insRect );
+            insertEllipse( m_insertRect );
         }
         break;
     case INS_PIE:
-        if ( !insRect.isNull() )
+        if ( !m_insertRect.isNull() )
         {
-            rectSymetricalObjet();
-            insertPie( insRect );
+            insertPie( m_insertRect );
         }
         break;
     case INS_OBJECT:
@@ -1689,39 +1685,13 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
-                if ( insRect.width() != 0 && insRect.height() != 0 )
-                {
-                    if ( !m_drawSymetricObject)
-                        p.drawEllipse( insRect );
-                    else
-                    {
-                        QRect tmpRect( insRect );
-                        tmpRect.moveBy( -insRect.width(), -insRect.height());
-                        tmpRect.setSize( 2*insRect.size() );
-                        p.drawEllipse( tmpRect );
-                    }
-                }
-                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid( e->pos(), true);
-                insRect.setRight( tmp.x() );
-                insRect.setBottom( tmp.y() );
-                limitSizeOfObject();
 
+                p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                KoPoint sp( snapPoint( docPoint ) );
+                m_insertRect.setRight( sp.x() );
+                m_insertRect.setBottom( sp.y() );
+                p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
 
-                QRect tmpRect( insRect );
-
-                if ( e->state() & AltButton )
-                {
-                    m_drawSymetricObject = true;
-                    tmpRect.moveBy( -insRect.width(), -insRect.height());
-                    tmpRect.setSize( 2*insRect.size() );
-                }
-                else
-                    m_drawSymetricObject = false;
-
-                p.drawEllipse( tmpRect );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -1732,21 +1702,13 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
 
-                if ( m_insertRect.width() != 0 && m_insertRect.height() != 0 )
-                {
-                    kdDebug(33001) << "1 m_insertRect = " << m_insertRect << endl;
-                    p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
-                }
+                p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
 
                 KoPoint sp( snapPoint( docPoint ) );
                 m_insertRect.setRight( sp.x() );
                 m_insertRect.setBottom( sp.y() );
 
-                if ( m_insertRect.width() != 0 && m_insertRect.height() != 0 )
-                {
-                    p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
-                    kdDebug(33001) << "2 m_insertRect = " << m_insertRect << endl;
-                }
+                p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
 
                 p.end();
 
@@ -1807,37 +1769,13 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
-                if ( insRect.width() != 0 && insRect.height() != 0 ) {
-                    if ( !m_drawSymetricObject)
-                        drawPieObject(&p, insRect);
-                    else
-                    {
-                        QRect tmpRect( insRect );
-                        tmpRect.moveBy( -insRect.width(), -insRect.height());
-                        tmpRect.setSize( 2*insRect.size() );
-                        drawPieObject(&p, tmpRect);
-                    }
-                }
-                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid( e->pos(), true);
 
-                insRect.setRight( tmp.x());
-                insRect.setBottom( tmp.y());
-                limitSizeOfObject();
+                drawPieObject( &p, m_insertRect );
+                KoPoint sp( snapPoint( docPoint ) );
+                m_insertRect.setRight( sp.x() );
+                m_insertRect.setBottom( sp.y() );
+                drawPieObject( &p, m_insertRect );
 
-                QRect lineRect( insRect );
-                if ( e->state() & AltButton )
-                {
-                    m_drawSymetricObject = true;
-                    lineRect.moveBy( -insRect.width(), -insRect.height());
-                    lineRect.setSize( 2*insRect.size() );
-                }
-                else
-                    m_drawSymetricObject = false;
-
-                drawPieObject(&p, lineRect);
                 p.end();
 
                 mouseSelectedObject = true;
@@ -2002,20 +1940,21 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
 }
 
-void KPrCanvas::drawPieObject(QPainter *p,  const QRect & rect)
+void KPrCanvas::drawPieObject( QPainter *p, const KoRect & rect )
 {
+    QRect pRect( m_view->zoomHandler()->zoomRect( rect ) );
     switch ( m_view->getPieType() ) {
     case PT_PIE:
-        p->drawPie( rect.x(), rect.y(), rect.width() - 2,
-                    rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        p->drawPie( pRect.x(), pRect.y(), pRect.width() - 2,
+                    pRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     case PT_ARC:
-        p->drawArc( rect.x(), rect.y(), rect.width() - 2,
-                    rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        p->drawArc( pRect.x(), pRect.y(), pRect.width() - 2,
+                    pRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     case PT_CHORD:
-        p->drawChord( rect.x(), rect.y(), rect.width() - 2,
-                      rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        p->drawChord( pRect.x(), pRect.y(), pRect.width() - 2,
+                      pRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     default: break;
     }
@@ -3797,31 +3736,22 @@ void KPrCanvas::insertLineD2( const QRect &_r, bool rev )
                              LT_LD_RU );
 }
 
-void KPrCanvas::insertRect( const QRect& _r )
+void KPrCanvas::insertRect( const KoRect &rect )
 {
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertRectangle( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                    m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getRndX(), m_view->getRndY(),
                                    m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-void KPrCanvas::insertEllipse( const QRect &_r )
+void KPrCanvas::insertEllipse( const KoRect &rect )
 {
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertCircleOrEllipse( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                          m_view->getGColor1(), m_view->getGColor2(),
                                          m_view->getGType(), m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-void KPrCanvas::insertPie( const QRect &_r )
+void KPrCanvas::insertPie( const KoRect &rect )
 {
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertPie( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                              m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(),
                              m_view->getPieType(), m_view->getPieAngle(), m_view->getPieLength(),
@@ -5880,6 +5810,25 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos )
         {
             sp.setY( sp.y() + diff.y() );
         }
+    }
+
+    // don't snap out of canvas
+    KoRect pageRect( m_activePage->getPageRect() );
+    if ( sp.x() < pageRect.left() )
+    {
+        sp.setX( pageRect.left() );
+    }
+    else if ( sp.x() > pageRect.right() )
+    {
+        sp.setX( pageRect.right() );
+    }
+    if ( sp.y() < pageRect.top() )
+    {
+        sp.setY( pageRect.top() );
+    }
+    else if ( sp.y() > pageRect.bottom() )
+    {
+        sp.setY( pageRect.bottom() );
     }
 
     return sp;
