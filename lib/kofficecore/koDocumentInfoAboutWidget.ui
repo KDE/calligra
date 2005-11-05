@@ -12,9 +12,6 @@
             <height>557</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KoDocumentInfoAboutWidget</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -335,8 +332,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <tabstops>
     <tabstop>leDocFile</tabstop>
     <tabstop>leDocTitle</tabstop>
@@ -345,7 +340,11 @@
     <tabstop>meDocAbstract</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>ktextedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
