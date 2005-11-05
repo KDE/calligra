@@ -462,7 +462,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     KoRect rect = doc->masterPage()->getPageRect();
-    QLabel *lab=new QLabel(i18n("Resolution X:"), tmpQGroupBox);
+    QLabel *lab=new QLabel(i18n("Horizontal grid size:"), tmpQGroupBox);
     QWhatsThis::add(lab, i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,0,0);
     KoUnit::Unit unit = doc->unit();
@@ -471,7 +471,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
 
     grid->addWidget(resolutionX,1,0);
 
-    lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->unitName()), tmpQGroupBox);
+    lab=new QLabel(i18n("Vertical grid size:"), tmpQGroupBox);
     QWhatsThis::add(lab, i18n( "Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,2,0);
 
