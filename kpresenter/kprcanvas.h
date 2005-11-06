@@ -607,7 +607,8 @@ private:
      */
     bool m_setPageTimer;
 
-    void drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint );
+    /// Helper function to draw a polygon
+    void drawPolygon( const KoRect &rect );
 
     /// Helper function to draw a pie/arc/chord
     void drawPieObject( QPainter *p,  const KoRect &rect );

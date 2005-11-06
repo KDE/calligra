@@ -908,18 +908,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 #endif
                 ++m_indexPointArray;
             } break;
-            case INS_POLYGON: {
-                deSelectAllObj();
-                mousePressed = true;
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid ( e->pos(), true );
-                insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
-
-                m_indexPointArray = 0;
-                m_dragStartPoint = tmp;
-                m_dragEndPoint = m_dragStartPoint;
-            } break;
             default: {
                 deSelectAllObj();
                 mousePressed = true;
@@ -1832,19 +1820,13 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 mouseSelectedObject = true;
             } break;
             case INS_POLYGON: {
-                drawPolygon( m_view->zoomHandler()->unzoomPoint( m_dragStartPoint ),
-                             m_view->zoomHandler()->unzoomPoint( m_dragEndPoint ) ); // erase old polygon
-                    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                    QPoint tmp = e->pos();
-                    if ( doApplyGrid )
-                    tmp = applyGrid( e->pos(), true);
+                drawPolygon( m_insertRect );
 
-                m_dragEndPoint = QPoint( tmp.x(),
-                                         tmp.y() );
-                m_dragEndPoint=limitOfPoint(m_dragEndPoint);
+                KoPoint sp( snapPoint( docPoint ) );
+                m_insertRect.setRight( sp.x() );
+                m_insertRect.setBottom( sp.y() );
 
-                drawPolygon( m_view->zoomHandler()->unzoomPoint( m_dragStartPoint ),
-                             m_view->zoomHandler()->unzoomPoint( m_dragEndPoint ) ); // draw new polygon
+                drawPolygon( m_insertRect );
 
                 mouseSelectedObject = true;
             } break;
@@ -3955,7 +3937,6 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-    rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     m_activePage->insertPolygon( tmpPoints, rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                  m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
                                  m_view->getGXFactor(), m_view->getGYFactor(),
@@ -5352,8 +5333,9 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
     p.end();
 }
 
-void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint )
+void KPrCanvas::drawPolygon( const KoRect &rect )
 {
+    KoRect nRect = rect.normalize();
     bool checkConcavePolygon = m_view->getCheckConcavePolygon();
     int cornersValue = m_view->getCornersValue();
     int sharpnessValue = m_view->getSharpnessValue();
@@ -5362,18 +5344,18 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
     p.begin( this );
     p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
     p.setRasterOp( Qt::NotROP );
+    p.translate( -diffx(), -diffy() );
 
+    KoRect _rect( 0, 0, nRect.width(), nRect.height() );
     double angle = 2 * M_PI / cornersValue;
-    double dx = QABS( startPoint.x () - endPoint.x () );
-    double dy = QABS( startPoint.y () - endPoint.y () );
-    double radius = ( dx > dy ? dx / 2.0 : dy / 2.0 );
+    double diameter = static_cast<double>( QMAX( _rect.width(), _rect.height() ) );
+    double radius = diameter * 0.5;
 
-    //xoff / yoff : coordinate of centre of the circle.
-    double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
-    double yoff = startPoint.y() + ( startPoint.y() < endPoint.y() ? radius : -radius );
+    KoPointArray _points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
+    _points.setPoint( 0, 0, qRound( -radius ) );
 
-    KoPointArray points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
-    points.setPoint( 0, xoff, -radius + yoff );
+    double xmin = 0;
+    double ymin = qRound( -radius );
 
     if ( checkConcavePolygon ) {
         angle = angle / 2.0;
@@ -5390,7 +5372,11 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
                 yp = -radius * cos( a );
             }
             a += angle;
-            points.setPoint( i, xp + xoff, yp + yoff );
+            _points.setPoint( i, xp, yp );
+            if (xp < xmin)
+                xmin = xp;
+            if (yp < ymin)
+                ymin = yp;
         }
     }
     else {
@@ -5399,13 +5385,34 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
             double xp = radius * sin( a );
             double yp = -radius * cos( a );
             a += angle;
-            points.setPoint( i, xp + xoff, yp + yoff );
+            _points.setPoint( i, xp, yp );
+            if (xp < xmin)
+                xmin = xp;
+            if (yp < ymin)
+                ymin = yp;
         }
     }
-    p.drawPolygon( points.zoomPointArray( m_view->zoomHandler() ) );
+
+    // calculate the points as offsets to 0,0
+    KoRect _changRect = _points.boundingRect();
+    double fx = _rect.width() / _changRect.width();
+    double fy = _rect.height() / _changRect.height();
+
+    int _index = 0;
+    KoPointArray tmpPoints;
+    KoPointArray::ConstIterator it;
+    for ( it = _points.begin(); it != _points.end(); ++it ) {
+        KoPoint point = (*it);
+        double tmpX = ( point.x() - xmin) * fx + nRect.x();
+        double tmpY = ( point.y() - ymin) * fy + nRect.y();
+
+        tmpPoints.putPoints( _index, 1, tmpX,tmpY );
+        ++_index;
+    }
+    p.drawPolygon( tmpPoints.zoomPointArray( m_view->zoomHandler() ) );
+    m_pointArray = tmpPoints;
     p.end();
 
-    m_pointArray = points;
 }
 
 
