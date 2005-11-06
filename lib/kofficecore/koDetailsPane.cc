@@ -21,6 +21,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qfile.h>
+#include <qimage.h>
 
 #include <kinstance.h>
 #include <klocale.h>
@@ -203,6 +204,9 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
   while(it.current()) {
     if(it.current()->text(1) == fileItem->url().path()) {
       it.current()->setPixmap(2, preview);
+      QImage icon = preview.convertToImage();
+      icon = icon.smoothScale(64, 64, QImage::ScaleMin);
+      it.current()->setPixmap(0, QPixmap(icon));
 
       if(it.current()->isSelected()) {
         m_iconLabel->setPixmap(preview);
