@@ -3766,23 +3766,8 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 {
     KoRect rect = _pointArray.boundingRect();
 
-    double ox = rect.x();
-    double oy = rect.y();
-
-    unsigned int index = 0;
-
-    KoPointArray points( _pointArray );
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() - ox ;
-        double tmpY = point.y() - oy ;
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
     rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
-    m_activePage->insertFreehand( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
+    m_activePage->insertFreehand( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getLineBegin(),
                                   m_view->getLineEnd() );
 
     m_pointArray = KoPointArray();
@@ -3794,22 +3779,7 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
     if( _pointArray.count()> 1)
     {
         KoRect rect = _pointArray.boundingRect();
-
-        double ox = rect.x();
-        double oy = rect.y();
-        unsigned int index = 0;
-
-        KoPointArray points( _pointArray );
-        KoPointArray tmpPoints;
-        KoPointArray::ConstIterator it;
-        for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
-            double tmpX = point.x() - ox ;
-            double tmpY = point.y() - oy ;
-            tmpPoints.putPoints( index, 1, tmpX,tmpY );
-            ++index;
-        }
-        m_activePage->insertPolyline( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
+        m_activePage->insertPolyline( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getLineBegin(),
                                       m_view->getLineEnd() );
     }
     m_pointArray = KoPointArray();
@@ -3922,22 +3892,9 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
 
 void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
 {
-    KoPointArray points( _pointArray );
-    KoRect rect= points.boundingRect();
-    double ox = rect.x();
-    double oy = rect.y();
-    unsigned int index = 0;
+    KoRect rect = _pointArray.boundingRect();
 
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() - ox;
-        double tmpY = point.y() - oy;
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
-    m_activePage->insertPolygon( tmpPoints, rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
+    m_activePage->insertPolygon( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                  m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
                                  m_view->getGXFactor(), m_view->getGYFactor(),
                                  m_view->getCheckConcavePolygon(), m_view->getCornersValue(), m_view->getSharpnessValue() );
@@ -3973,24 +3930,10 @@ void KPrCanvas::insertPicture( const QRect &_r, const QPoint & tl )
 
 void KPrCanvas::insertClosedLine( const KoPointArray &_pointArray )
 {
-    KoPointArray points( _pointArray );
-    KoRect rect =  points.boundingRect();
-    double ox = rect.x();
-    double oy = rect.y();
-    unsigned int index = 0;
-
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() - ox;
-        double tmpY = point.y() - oy;
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
+    KoRect rect = _pointArray.boundingRect();
     rect.moveBy( m_view->zoomHandler()->unzoomItX( diffx() ), m_view->zoomHandler()->unzoomItY( diffy() ) );
 
-    m_activePage->insertClosedLine( tmpPoints, rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
+    m_activePage->insertClosedLine( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                     m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
                                     m_view->getGXFactor(), m_view->getGYFactor(), toolEditMode );
 
@@ -5926,4 +5869,24 @@ KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
     newPos.setY( applyGridY( pos.y() ) );
 
     return newPos;
+}
+
+
+KoPointArray KPrCanvas::getObjectPoints( const KoPointArray &pointArray )
+{
+    KoRect rect = pointArray.boundingRect();
+
+    double ox = rect.x();
+    double oy = rect.y();
+
+    unsigned int index = 0;
+
+    KoPointArray tmpPoints;
+    KoPointArray::ConstIterator it( pointArray.begin() );
+    for ( ; it != pointArray.end(); ++it ) 
+    {
+        tmpPoints.putPoints( index, 1, ( *it ).x() - ox, ( *it ).y() - oy );
+        ++index;
+    }
+    return tmpPoints;
 }

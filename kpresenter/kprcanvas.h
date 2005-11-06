@@ -658,6 +658,13 @@ private:
 
     void recalcAutoGuides( );
 
+    /**
+     * @brief Calculate the points in distance to the top left corner
+     *
+     * @param pointArray the points in coordinate position
+     */
+    KoPointArray getObjectPoints( const KoPointArray &pointArray );
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
