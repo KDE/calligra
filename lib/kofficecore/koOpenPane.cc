@@ -43,7 +43,6 @@ class KoOpenPanePrivate
     }
 
     KInstance* m_instance;
-  
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType)
@@ -97,24 +96,11 @@ void KoOpenPane::showOpenFileDialog()
   emit openExistingFile(filename);
 }
 
-// KoOpenPane::addTemplatesPanel(KoTemplateGroup *group)
-// {
-//     /*
-//         instantiate new koTemplatesPane and add it to the m_widgetStack and a row to
-//         the m_itemsList at position last, unless the customDocumentCreater is already
-//         added, then its at position last - 1
-//     */
-// }
-// 
-// KoOpenPane::addCustomDocumentCreator(KoCustomDocumentCreator *cdc)
-// {
-//     /*
-//     if (dynamic_cast(QWidget*) <cdc>) == 0) {
-//         print error and return
-//     }
-// 
-//     add it to the m_widgetStack and a row to the m_itemsList at position last
-//     */
-// }
+void KoOpenPane::addCustomDocumentPane(const QString& title, const QString& icon, QWidget* widget)
+{
+  QVBox* page = addVBoxPage(title, title,
+                            SmallIcon("fileopen", 48, KIcon::DefaultState, d->m_instance));
+  widget->reparent(page, QPoint(0, 0));
+}
 
 #include "koOpenPane.moc"

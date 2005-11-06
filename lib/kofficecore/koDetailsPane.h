@@ -37,7 +37,6 @@ class KoTemplatesPane : public KoDetailsPaneBase
   Q_OBJECT
   public:
     KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup* group);
-//     ~KoTemplatesPane();
 
 
   signals:
