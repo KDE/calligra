@@ -26,6 +26,7 @@ class KSpreadDoc;
 class KSpreadSheet;
 
 class KoStore;
+class KoOasisStyles;
 
 class DCOPObject;
 
