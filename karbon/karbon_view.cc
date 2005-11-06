@@ -625,9 +625,13 @@ KarbonView::selectionDuplicate()
 	if ( !part()->document().selection()->objects().count() )
 		return;
 
-	VObjectList  objects( part()->document().selection()->clone()->objects() );
+	VObjectList  objects;
 
-
+	// Create copies of all the objects and not just the list.
+	VObjectListIterator itr( part()->document().selection()->objects() );
+	for ( ; itr.current() ; ++itr )	{
+		objects.append( itr.current()->clone() );
+	}
 
 	// Paste with a small offset.
 	double copyOffset = part()->instance()->config()->readNumEntry( "CopyOffset", 10 );
