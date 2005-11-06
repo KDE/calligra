@@ -25,7 +25,11 @@
 #include <qdatetime.h>
 #include <qdom.h>
 
-class KSpreadCell;
+namespace KSpread
+{
+  class Cell;
+}
+
 class KSpreadSheet;
 
 class GNUMERICFilter : public KoFilter
@@ -51,12 +55,12 @@ enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
   void dateInit();
   QString convertVars( QString const & str, KSpreadSheet * table ) const;
   void ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table );
-  void ParseFormat(QString const & formatString, KSpreadCell * kspread_cell);
+  void ParseFormat(QString const & formatString, KSpread::Cell* kspread_cell);
   void setStyleInfo(QDomNode * sheet, KSpreadSheet * table);
-  bool setType( KSpreadCell * kspread_cell, QString const & formatString, QString & cell_content );
+  bool setType( KSpread::Cell* kspread_cell, QString const & formatString, QString & cell_content );
   void convertFormula( QString & formula ) const;
-    void importBorder( QDomElement  border, borderStyle _style,  KSpreadCell *cell);
-    void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell );
+    void importBorder( QDomElement  border, borderStyle _style,  KSpread::Cell*cell);
+    void ParseBorder( QDomElement & gmr_styleborder, KSpread::Cell* kspread_cell );
     double parseAttribute( const QDomElement &_element );
 
 };

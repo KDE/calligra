@@ -266,7 +266,7 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
 
         for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
         {
-            KSpreadCell * cell = sheet->cellAt( currentcolumn, currentrow, false );
+            KSpread::Cell * cell = sheet->cellAt( currentcolumn, currentrow, false );
             colspan_cells=cell->extraXCells();
             if (cell->needsPrinting())
                 nonempty_cells++;
@@ -292,14 +292,14 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
                 text=cell->strOutText();
 #if 0
             switch( cell->content() ) {
-            case KSpreadCell::Text:
+            case KSpread::Cell::Text:
                 text = cell->text();
                 break;
-            case KSpreadCell::RichText:
-            case KSpreadCell::VisualFormula:
+            case KSpread::Cell::RichText:
+            case KSpread::Cell::VisualFormula:
                 text = cell->text(); // untested
                 break;
-            case KSpreadCell::Formula:
+            case KSpread::Cell::Formula:
                 cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
                 text = cell->valueString();
                 break;
@@ -313,32 +313,32 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-            switch((KSpreadCell::Align)cell->defineAlignX())
+            switch((KSpread::Cell::Align)cell->defineAlignX())
             {
-            case KSpreadCell::Left:
+            case KSpread::Cell::Left:
                 line+=" align=\"" + html_left +"\"";
                 break;
-            case KSpreadCell::Right:
+            case KSpread::Cell::Right:
                 line+=" align=\"" + html_right +"\"";
                 break;
-            case KSpreadCell::Center:
+            case KSpread::Cell::Center:
                 line+=" align=\"" + html_center +"\"";
                 break;
-            case KSpreadCell::Undefined:
+            case KSpread::Cell::Undefined:
                 break;
             }
-            switch((KSpreadCell::AlignY)cell-> alignY(currentrow, currentcolumn))
+            switch((KSpread::Cell::AlignY)cell-> alignY(currentrow, currentcolumn))
             {
-            case KSpreadCell::Top:
+            case KSpread::Cell::Top:
                 line+=" valign=\"" + html_top +"\"";
                 break;
-            case KSpreadCell::Middle:
+            case KSpread::Cell::Middle:
                 line+=" valign=\"" + html_middle +"\"";
                 break;
-            case KSpreadCell::Bottom:
+            case KSpread::Cell::Bottom:
                 line+=" valign=\"" + html_bottom +"\"";
                 break;
-            case KSpreadCell::UndefinedY:
+            case KSpread::Cell::UndefinedY:
                 break;
             }
             line+=" width=\""+QString::number(cell->width())+"\"";
@@ -464,7 +464,7 @@ void HTMLExport::detectFilledCells( KSpreadSheet *sheet, int &rows, int &columns
 
   for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow)
   {
-    KSpreadCell * cell = 0L;
+    KSpread::Cell * cell = 0L;
     int iUsedColumn=0;
     for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
     {

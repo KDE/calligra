@@ -107,7 +107,7 @@ KoFilter::ConversionStatus KSpreadLeader::convert() {
 		// Gather data about the cell
 		for (int row = 1; row <= m_maxCellRow; ++row) {
 			for (int column = 1; column <= m_maxCellColumn; ++column) {
-				KSpreadCell *spreadCell = spreadSheet->cellAt(column, row);
+				Cell*spreadCell = spreadSheet->cellAt(column, row);
 				status = doSpreadCell(spreadCell, column, row);
 				if (status != KoFilter::OK)
 					return status;
@@ -256,7 +256,7 @@ KoFilter::ConversionStatus KSpreadLeader::doSpreadSheet(KSpreadSheet *spreadShee
 }
 
 
-KoFilter::ConversionStatus KSpreadLeader::doSpreadCell(KSpreadCell *spreadCell, int column, int row) {
+KoFilter::ConversionStatus KSpreadLeader::doSpreadCell(Cell*spreadCell, int column, int row) {
 	KSpreadFilterProperty docSpreadCellProperty;
 	docSpreadCellProperty["column"] = QString::number(column);
 	docSpreadCellProperty["row"] = QString::number(row);
@@ -339,11 +339,11 @@ void KSpreadLeader::updateMaxCells(KSpreadSheet *spreadSheet) {
 
 	// Go through all the SpreadSheet to find out the minimum rectangle of cells
 	// Maybe we should have something which does that in the KSpreadSheet class,
-	// it would be easy to keep track of this each time a new KSpreadCell is instanciated.
+	// it would be easy to keep track of this each time a new Cellis instanciated.
 	for (int row = 1; row < maxRow; ++row) {
 		bool usedColumn = FALSE;
 		for (int column = 1; column < maxColumn; ++column) {
-			KSpreadCell *cell = spreadSheet->cellAt(column, row);
+			Cell*cell = spreadSheet->cellAt(column, row);
 			if (!cell->isDefault() && !cell->isEmpty()) {
 				if (column > m_maxCellColumn) {
 					m_maxCellColumn = column;

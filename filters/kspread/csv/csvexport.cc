@@ -36,6 +36,8 @@
 
 #include <csvexportdialog.h>
 
+using namespace KSpread;
+
 typedef KGenericFactory<CSVExport, KoFilter> CSVExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "kofficefilters" ) )
 
@@ -65,7 +67,7 @@ CSVExport::CSVExport( KoFilter *, const char *, const QStringList & )
 void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, QString & separators,
                             QString & line, QChar const & csvDelimiter, QChar const & textQuote )
 {
-  KSpreadCell const * const cell = sheet->cellAt( col, row );
+  KSpread::Cell const * const cell = sheet->cellAt( col, row );
 
   QString text;
   if ( !cell->isDefault() && !cell->isEmpty() )
@@ -79,14 +81,14 @@ void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, 
 #if 0
     switch( cell->content() )
     {
-     case KSpreadCell::Text:
+     case Cell:Text:
       text = cell->strOutText();
       break;
-     case KSpreadCell::RichText:
-     case KSpreadCell::VisualFormula:
+     case Cell:RichText:
+     case Cell:VisualFormula:
       text = cell->text(); // untested
       break;
-     case KSpreadCell::Formula:
+     case Cell:Formula:
       //      cell->setCalcDirtyFlag();
       //      cell->calc();
       //      text = cell->value().asString();

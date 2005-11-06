@@ -40,6 +40,8 @@
 
 #include <csvdialog.h>
 
+using namespace KSpread;
+
 // hehe >:->
 
 /*
@@ -109,7 +111,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     ElapsedTime t( "Filling data into document" );
 
-    KSpreadCell *cell;
+    Cell*cell;
     KSpreadSheet *sheet=ksdoc->map()->addNewSheet();
 
     int numRows = dialog->getRows();
@@ -130,7 +132,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
 
-    KSpreadCell * c = sheet->nonDefaultCell( 1, 1 );
+    Cell* c = sheet->nonDefaultCell( 1, 1 );
     QFontMetrics fm( c->textFont( 1, 1 ) );
 
     KSpreadStyle * s = ksdoc->styleManager()->defaultStyle();

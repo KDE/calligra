@@ -53,6 +53,8 @@
 #include <kspread_style_manager.h>
 #include <kspread_util.h>
 
+using namespace KSpread;
+
 typedef QValueList<Reference> AreaList;
 
 class OpenCalcExportFactory : KGenericFactory<OpenCalcExport, KoFilter>
@@ -403,7 +405,7 @@ bool OpenCalcExport::exportContent( KoStore * store, const KSpreadDoc * ksdoc )
  // e.g.: Sheet4.A1:Sheet4.E28
 QString convertRangeToRef( const QString & tableName, const QRect & _area )
 {
-    return tableName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
+    return tableName + "." + Cell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ Cell::name( _area.right(), _area.bottom() );
 }
 
 
@@ -414,7 +416,7 @@ QString convertRefToBase( QString const & table, QRect const & rect )
   QString s( "$" );
   s += table;
   s += ".$";
-  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( bottomRight.x() );
+  s += /*util_encodeColumnLabelText*/Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
@@ -432,11 +434,11 @@ QString convertRefToRange( QString const & table, QRect const & rect )
   QString s( "$" );
   s += table;
   s += ".$";
-  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( topLeft.x() );
+  s += /*util_encodeColumnLabelText*/Cell::columnName( topLeft.x() );
   s += '$';
   s += QString::number( topLeft.y() );
   s += ":.$";
-  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( bottomRight.x() );
+  s += /*util_encodeColumnLabelText*/Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
@@ -633,7 +635,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
   {
     int  repeated = 1;
     bool hasComment = false;
-    const KSpreadCell* cell = sheet->cellAt( i, row );
+    const Cell* cell = sheet->cellAt( i, row );
     QDomElement cellElem;
 
     if ( !cell->isObscuringForced() )
@@ -663,7 +665,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       int j = i + 1;
       while ( j <= maxCols )
       {
-        const KSpreadCell *cell1 = sheet->cellAt( j, row );
+        const Cell *cell1 = sheet->cellAt( j, row );
 
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
@@ -766,7 +768,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 void OpenCalcExport::maxRowCols( const KSpreadSheet *sheet,
                                  int & maxCols, int & maxRows )
 {
-  KSpreadCell const * cell = sheet->firstCell();
+  Cell const * cell = sheet->firstCell();
 
   while ( cell )
   {

@@ -30,6 +30,8 @@
 
 #include <qdom.h>
 
+using namespace KSpread;
+
 OpenCalcStyles::OpenCalcStyles()
 {
   m_cellStyles.setAutoDelete( true );
@@ -443,7 +445,7 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
 }
 
 // all except the number style
-void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
+void CellStyle::loadData( CellStyle & cs, Cell const * const cell )
 {
   int col = cell->column();
   int row = cell->row();

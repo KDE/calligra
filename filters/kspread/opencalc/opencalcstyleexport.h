@@ -28,7 +28,10 @@
 #include <qptrlist.h>
 #include <qstring.h>
 
-class KSpreadCell;
+namespace KSpread
+{
+  class Cell;
+}
 
 class QDomDocument;
 class QDomElement;
@@ -82,7 +85,7 @@ class CellStyle
   static bool isEqual( CellStyle const * const t1, CellStyle const & t2 );
 
   // all except the number style
-  static void loadData( CellStyle & cs, KSpreadCell const * const cell );
+  static void loadData( CellStyle & cs, KSpread::Cell const * const cell );
 
   QString     name;
 

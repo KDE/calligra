@@ -55,6 +55,8 @@
 
 #define SECSPERDAY (24 * 60 * 60)
 
+using namespace KSpread;
+
 class OpenCalcImportFactory : KGenericFactory<OpenCalcImport, KoFilter>
 {
 public:
@@ -387,7 +389,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
   bool ok = true;
   int spanC = 1;
   int spanR = 1;
-  //KSpreadCell * defCell = table->defaultCell();
+  //Cell* defCell = table->defaultCell();
 
   QDomNode cellNode = KoDom::namedItemNS( rowNode, ooNS::table, "table-cell" );
 
@@ -404,7 +406,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       continue;
     }
 
-    KSpreadCell * cell = 0;
+    Cell* cell = 0;
 
     kdDebug(30518) << " Cell: " << columns << ", " << row << endl;
 
@@ -737,7 +739,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       // copy cell from left
       bool ok = false;
       int number = e.attributeNS( ooNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-      KSpreadCell * cellDest = 0;
+      Cell* cellDest = 0;
 
       // don't repeat more than 10 if it is the last cell and empty
       if ( !ok || cellNode.isNull() )
@@ -765,13 +767,13 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
 }
 
 
-void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )
+void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )
 {
-    kdDebug(30518)<<"void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )*******\n";
+    kdDebug(30518)<<"void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )*******\n";
     loadOasisCondition( cell, property );
 }
 
-void OpenCalcImport::loadOasisCondition(KSpreadCell *cell,const QDomElement &property )
+void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
 {
     QDomElement elementItem( property );
     KSpreadStyleManager * manager = cell->sheet()->doc()->styleManager();
@@ -929,9 +931,9 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, KSpreadSheet * tab
   int columns = 1;
   int backupRow = 1;
   QDomElement * rowStyle = 0;
-  //KSpreadCell * cell = 0;
-  //KSpreadCell * cellDest = 0;
-  //KSpreadCell * defCell = table->defaultCell();
+  //Cell* cell = 0;
+  //Cell* cellDest = 0;
+  //Cell* defCell = table->defaultCell();
   QDomNode rowNode = KoDom::namedItemNS( content, ooNS::table, "table-row" );
 
   while ( !rowNode.isNull() )
@@ -980,7 +982,7 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, KSpreadSheet * tab
        *       if so we will probably also need to copy them for repeated col layouts.
       for ( j = 1; j <= columns; ++j )
       {
-        KSpreadCell * cell = table->cellAt( j, backupRow );
+        Cell* cell = table->cellAt( j, backupRow );
 
         kdDebug(30518) << "Cell: " << cell << "DefCell: " << defCell << endl;
         if ( cell && (cell != defCell) )
@@ -1478,7 +1480,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     KSpreadFormat * defaultStyle = m_defaultStyles[ "Default" ];
     if ( defaultStyle )
     {
-      KSpreadCell * defaultCell = table->defaultCell();
+      Cell* defaultCell = table->defaultCell();
       kdDebug(30518) << "Copy default style to default cell" << endl;
       defaultCell->copy( *defaultStyle );
     }

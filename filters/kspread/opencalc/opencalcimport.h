@@ -27,13 +27,17 @@
 #include <qdict.h>
 #include <qdom.h>
 
-class KSpreadCell;
 class KSpreadDoc;
 class KSpreadSheet;
 class KSpreadValidity;
 class KoStyleStack;
 class KSpreadConditional;
 class KoStore;
+
+namespace KSpread
+{
+  class Cell;
+}
 
 class OpenCalcImport : public KoFilter
 {
@@ -101,8 +105,8 @@ class OpenCalcImport : public KoFilter
   void loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStack &styleStack );
     void loadOasisValidationValue( KSpreadValidity* val, const QStringList &listVal );
     QString translatePar( QString & par ) const;
-    void loadCondition( KSpreadCell *cell,const QDomElement &property );
-    void loadOasisCondition(KSpreadCell *cell,const QDomElement &property );
+    void loadCondition( KSpread::Cell*cell,const QDomElement &property );
+    void loadOasisCondition(KSpread::Cell*cell,const QDomElement &property );
     void loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition );
     void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
     void loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition );
