@@ -1,3 +1,19 @@
+if test -z "$MYSQL_INC" -o -z "$MYSQL_LIBS"; then
+
+  echo "----------------------------------------------------------------------"
+
+  echo "  + The MySQL development files were not found."
+  cat <<EOS
+  These are required for MySQL support in Kexi.
+
+  If you want MySQL support in Kexi, you need to install the MySQL development
+  files, ensure that mysql-config is in your path,  and run this configure script
+  again, and finally run make; make install.  
+  If you don't need MySQL support, you can simply run make; make install now.
+EOS
+   all_tests=bad
+fi
+
 if test -z "$PG_INCDIR" -o -z "$PG_LIBDIR" -o \
         -z "$PQXX_INCDIR" -o -z "$PQXX_LIBDIR"; then
 
