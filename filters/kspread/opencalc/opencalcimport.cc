@@ -42,6 +42,7 @@
 #include <ooutils.h>
 
 #include <kspread_cell.h>
+#include <kspread_condition.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_map.h>
