@@ -57,7 +57,7 @@ QString UndoWrapperCommand::name() const
 
 // ----- MergeCellsCommand -----
 
-MergeCellCommand::MergeCellCommand( KSpreadCell* c, int cs, int rs )
+MergeCellCommand::MergeCellCommand( Cell* c, int cs, int rs )
 {
   cell = c;
   colSpan = cs;
@@ -95,7 +95,7 @@ void MergeCellCommand::unexecute()
 
 // ----- DissociateCellCommand -----
 
-DissociateCellCommand::DissociateCellCommand( KSpreadCell* c )
+DissociateCellCommand::DissociateCellCommand( Cell* c )
 {
   cell = c;
   oldColSpan = cell->extraXCells();
@@ -528,7 +528,7 @@ QString PaperLayoutCommand::name() const
     return i18n("Set Page Layout");
 }
 
-LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, const QString& link )
+LinkCommand::LinkCommand( Cell* c, const QString& text, const QString& link )
 {
   cell = c;
   oldText = cell->text();

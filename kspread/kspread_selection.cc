@@ -25,6 +25,8 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
+using namespace KSpread;
+
 KSpreadSelection::KSpreadSelection(KSpreadView* view)
 {
   m_marker = QPoint(1,1);
@@ -55,7 +57,7 @@ void KSpreadSelection::unselect()
 
     QRect r = m_rctSelection;
     // Discard the selection
-    KSpreadCell *cell = cellAt(marker());
+    Cell *cell = cellAt(marker());
     m_rctSelection.setCoords( m_marker.x(), m_marker.y(),
                               m_marker.x() + cell->extraXCells(),
                               m_marker.y() + cell->extraYCells() );
@@ -86,7 +88,7 @@ QRect KSpreadSelection::selection(bool extend) const
 
 bool KSpreadSelection::singleCellSelection() const
 {
-  const KSpreadCell* cell =
+  const Cell* cell =
     m_pView->activeSheet()->cellAt(m_marker.x(), m_marker.y());
 
   QRect currentSelection = selection();
@@ -111,7 +113,7 @@ QRect KSpreadSelection::selectionHandleArea() const
     column = selection().right();
     row = selection().bottom();
   }
-  const KSpreadCell* cell = m_pView->activeSheet()->cellAt(column, row);
+  const Cell* cell = m_pView->activeSheet()->cellAt(column, row);
 
   double xpos = m_pView->activeSheet()->dblColumnPos( column );
   double ypos = m_pView->activeSheet()->dblRowPos( row );
@@ -142,7 +144,7 @@ void KSpreadSelection::setSelection( const QPoint &newMarker,
   //kdDebug(36001) << "setSelection: anchor = " << newAnchor
   //		 << " marker = " << newMarker << endl;
 
-  const KSpreadCell* cell = sheet->cellAt(newMarker);
+  const Cell* cell = sheet->cellAt(newMarker);
   if (!util_isColumnSelected(newSelection) &&
       !util_isRowSelected(newSelection) &&
       cell->isObscured() && cell->isObscuringForced())
@@ -173,7 +175,7 @@ void KSpreadSelection::setMarker( const QPoint &point,
                                   KSpreadSheet* sheet )
 {
   QPoint topLeft(point);
-  const KSpreadCell* cell = sheet->cellAt(topLeft);
+  const Cell* cell = sheet->cellAt(topLeft);
   if (cell->isObscured() && cell->isObscuringForced())
   {
     cell = cell->obscuringCells().first();
@@ -203,7 +205,7 @@ QPoint KSpreadSelection::selectionAnchor()const
                 atTop ? m_rctSelection.bottom() : m_rctSelection.top());
 
   KSpreadSheet* sheet = m_pView->activeSheet();
-  KSpreadCell* cell = sheet->cellAt(anchor);
+  Cell* cell = sheet->cellAt(anchor);
 
   if (cell->isObscured())
   {
@@ -221,7 +223,7 @@ QPoint KSpreadSelection::selectionAnchor()const
 
 bool KSpreadSelection::setCursorPosition( const QPoint &position )
 {
-  const KSpreadCell* cell = m_pView->activeSheet()->cellAt(m_marker);
+  const Cell* cell = m_pView->activeSheet()->cellAt(m_marker);
 
   QRect markerArea(m_marker, QPoint(m_marker.x() + cell->mergedXCells(),
                                     m_marker.y() + cell->mergedYCells()));
@@ -255,7 +257,7 @@ QRect KSpreadSelection::getChooseRect()const
 
 QRect KSpreadSelection::extendToMergedAreas(QRect area) const
 {
-  const KSpreadCell *cell = m_pView->activeSheet()->
+  const Cell *cell = m_pView->activeSheet()->
 			    cellAt(area.left(), area.top());
 
   if( util_isColumnSelected(area) ||

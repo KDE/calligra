@@ -52,7 +52,6 @@ class KSpreadRange;
 class KSpreadView;
 class KSpreadSelection;
 class KSpreadCellEditor;
-class KSpreadCell;
 class QWidget;
 class QTimer;
 class QButton;
@@ -62,6 +61,11 @@ class QPainter;
 class QLabel;
 class QScrollBar;
 class KoRect;
+
+namespace KSpread
+{
+  class Cell;
+}
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
@@ -457,7 +461,7 @@ private:
   bool formatKeyPress( QKeyEvent * _ev );
   
   /** helper method for formatKeyPress */
-  bool formatCellByKey (KSpreadCell *cell, int key, const QRect &rect);
+  bool formatCellByKey (KSpread::Cell *cell, int key, const QRect &rect);
   
   void processClickSelectionHandle(QMouseEvent *event);
   void processLeftClickAnchor();

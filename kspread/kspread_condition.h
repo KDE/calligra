@@ -27,13 +27,17 @@
 #include <qvaluelist.h>
 #include <qdom.h>
 #include <koffice_export.h>
-class KSpreadCell;
 class KSpreadStyle;
 class KoGenStyle;
 
 class QColor;
 class QFont;
 class QString;
+
+namespace KSpread
+{
+  class Cell;
+}
 
 /**
  * Structure to indicate the condition we're testing on a cell and the special
@@ -70,7 +74,7 @@ class KSpreadConditions
    * Constructor.  There is no default constructor - you must use this one
    * with the owner cell as a parameter
    */
-  KSpreadConditions( const KSpreadCell * ownerCell );
+  KSpreadConditions( const KSpread::Cell * ownerCell );
   virtual ~KSpreadConditions();
 
   /**
@@ -128,7 +132,7 @@ class KSpreadConditions
     void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
 
 
-  const KSpreadCell * m_cell;
+  const KSpread::Cell * m_cell;
   QValueList<KSpreadConditional> m_condList;
   KSpreadStyle * m_matchedStyle;
 };

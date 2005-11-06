@@ -40,6 +40,8 @@
 #include "kspread_undo.h"
 #include "kspread_value.h"
 
+using namespace KSpread;
+
 QStringList *AutoFillSequenceItem::month = 0L;
 QStringList *AutoFillSequenceItem::shortMonth = 0L;
 QStringList *AutoFillSequenceItem::day = 0L;
@@ -500,7 +502,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
  *
  **********************************************************************************/
 
-AutoFillSequence::AutoFillSequence( KSpreadCell *_cell )
+AutoFillSequence::AutoFillSequence( Cell *_cell )
 {
     sequence.setAutoDelete( true );
 
@@ -534,7 +536,7 @@ bool AutoFillSequence::matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_
     return false;
 }
 
-void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block, bool down )
+void AutoFillSequence::fillCell( Cell *src, KSpread::Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down )
 {
     QString erg = "";
 
@@ -591,10 +593,10 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
         for ( int y = src.top(); y <= src.bottom(); y++ )
         {
             int x;
-            QPtrList<KSpreadCell> destList;
+            QPtrList<Cell> destList;
             for ( x = src.right() + 1; x <= dest.right(); x++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QPtrList<KSpreadCell> srcList;
+            QPtrList<Cell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
                 srcList.append( cellAt( x, y ) );
             QPtrList<AutoFillSequence> seqList;
@@ -611,10 +613,10 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
         for ( int x = src.left(); x <= dest.right(); x++ )
         {
             int y;
-            QPtrList<KSpreadCell> destList;
+            QPtrList<Cell> destList;
             for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QPtrList<KSpreadCell> srcList;
+            QPtrList<Cell> srcList;
             for ( y = src.top(); y <= src.bottom(); y++ )
             {
                 srcList.append( cellAt( x, y ) );
@@ -636,13 +638,13 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
         for ( int y = dest.top(); y <= dest.bottom(); y++ )
         {
             int x;
-            QPtrList<KSpreadCell> destList;
+            QPtrList<Cell> destList;
 
             for ( x = dest.left(); x < src.left(); x++ )
             {
                 destList.append( nonDefaultCell( x, y ) );
             }
-            QPtrList<KSpreadCell> srcList;
+            QPtrList<Cell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
             {
                 srcList.append( cellAt( x, y ) );
@@ -665,10 +667,10 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
         for ( int x = startVal; x <= endVal; x++ )
         {
             int y;
-            QPtrList<KSpreadCell> destList;
+            QPtrList<Cell> destList;
             for ( y = dest.top(); y < src.top(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QPtrList<KSpreadCell> srcList;
+            QPtrList<Cell> srcList;
             for ( y = dest.top(); y <= dest.bottom(); ++y )
             {
                 srcList.append( cellAt( x, y ) );
@@ -686,8 +688,8 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
 }
 
 
-void KSpreadSheet::fillSequence( QPtrList<KSpreadCell>& _srcList,
-				 QPtrList<KSpreadCell>& _destList,
+void KSpreadSheet::fillSequence( QPtrList<Cell>& _srcList,
+				 QPtrList<Cell>& _destList,
                                  QPtrList<AutoFillSequence>& _seqList,
                                  bool down)
 {
@@ -701,7 +703,7 @@ void KSpreadSheet::fillSequence( QPtrList<KSpreadCell>& _srcList,
 
 }
 
-double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::Type type)
+double getDiff(Cell * cell1, KSpread::Cell * cell2, AutoFillSequenceItem::Type type)
 {
   // note: date and time difference can be calculated as
   // the difference of the serial number
@@ -713,8 +715,8 @@ double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::T
     return 0.0;
 }
 
-bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
-                                            QPtrList<KSpreadCell>& _destList,
+bool KSpreadSheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
+                                            QPtrList<Cell>& _destList,
                                             QPtrList<AutoFillSequence>& _seqList,
                                             bool down)
 {
@@ -735,8 +737,8 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     int count = 0;
     int tmpcount = 0;
 
-    KSpreadCell * cell = _srcList.first();
-    KSpreadCell * cell2 = _srcList.next();
+    Cell * cell = _srcList.first();
+    Cell * cell2 = _srcList.next();
 
     if ( cell->isDate() )
       type = AutoFillSequenceItem::DATE;
@@ -805,8 +807,8 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     {
       double initDouble=0.0;
 
-      KSpreadCell * dest;
-      KSpreadCell * src;
+      Cell * dest;
+      Cell * src;
 
       int i = tmpcount;
       if (down)
@@ -951,7 +953,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
 	int block = _seqList.count() / step;
 
 	// Start iterating with the first cell
-	KSpreadCell * cell;
+	Cell * cell;
         if (down)
           cell = _destList.first();
         else
@@ -1013,13 +1015,13 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
   return ok;
 }
 
-void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
-                                        QPtrList<KSpreadCell>& _destList,
+void KSpreadSheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
+                                        QPtrList<Cell>& _destList,
                                         bool down)
 {
   // We did not find any valid interval. So just copy over the marked
   // area.
-  KSpreadCell * cell;
+  Cell * cell;
 
   if (down)
     cell = _destList.first();

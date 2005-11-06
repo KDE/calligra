@@ -51,6 +51,9 @@
 #include <qwhatsthis.h>
 
 #include <math.h>
+
+using namespace KSpread;
+
 KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & marker,
                                         const char * name, bool, WFlags fl )
   : KDialog( parent, name, false, fl ),
@@ -87,7 +90,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
   m_targetEdit = new QLineEdit( m_startFrame, "m_targetEdit" );
   m_startFrameLayout->addWidget( m_targetEdit, 0, 1 );
-  m_targetEdit->setText( KSpreadCell::name( marker.x(), marker.y() ) );
+  m_targetEdit->setText( Cell::name( marker.x(), marker.y() ) );
 
   m_sourceEdit = new QLineEdit( m_startFrame, "m_sourceEdit" );
   m_startFrameLayout->addWidget( m_sourceEdit, 2, 1 );
@@ -229,7 +232,7 @@ void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _sheet, const QRec
     QString tmp;
 
     tmp.setNum( dy );
-    tmp = _sheet->sheetName() + "!" + KSpreadCell::columnName( dx ) + tmp;
+    tmp = _sheet->sheetName() + "!" + Cell::columnName( dx ) + tmp;
     m_focus->setText( tmp );
   }
   else

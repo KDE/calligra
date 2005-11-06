@@ -54,6 +54,7 @@
 #include <qwhatsthis.h>
 #include <qwidget.h>
 
+using namespace KSpread;
 
 #ifndef QT_NO_SQL
 
@@ -587,7 +588,7 @@ void KSpreadDatabaseDlg::accept()
       queryStr += " ";
   }
 
-  KSpreadCell * cell;
+  Cell * cell;
   QSqlQuery query( QString::null, m_dbConnection );
 
   // Check the whole query for SQL that might modify database.
@@ -1092,7 +1093,7 @@ bool KSpreadDatabaseDlg::optionsDoNext()
   }
 
   m_sqlQuery->setText(query);
-  m_cell->setText(KSpreadCell::name( m_targetRect.left(), m_targetRect.top() ) );
+  m_cell->setText(Cell::name( m_targetRect.left(), m_targetRect.top() ) );
   m_region->setText(util_rangeName( m_targetRect ) );
 
   setFinishEnabled( m_result, true );

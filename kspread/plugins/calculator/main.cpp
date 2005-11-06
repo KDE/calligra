@@ -128,7 +128,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         if ( event->rect().left() == event->rect().right() &&
              event->rect().top() == event->rect().bottom() )
         {
-            KSpreadCell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
+            KSpread::Cell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
             if ( !cell )
                 return FALSE;
 
@@ -180,7 +180,7 @@ void QtCalculator::useData()
             KSpreadSheet* sheet = view->doc()->map()->findSheet( sheet_name );
             if ( !sheet )
                 return;
-            KSpreadCell* cell = sheet->cellAt( x, y, false );
+            KSpread::Cell* cell = sheet->cellAt( x, y, false );
             if ( !cell )
                 return;
 

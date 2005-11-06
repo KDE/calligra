@@ -43,6 +43,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+using namespace KSpread;
+
 KSpreadPaperLayout::KSpreadPaperLayout( QWidget * parent, const char * name,
                                         const KoPageLayout & layout,
                                         const KoHeadFoot & headfoot,
@@ -122,8 +124,8 @@ void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
 
     eRepeatCols = new QLineEdit( rangeGroup );
     if ( print->printRepeatColumns().first != 0 )
-        eRepeatCols->setText( KSpreadCell::columnName( print->printRepeatColumns().first ) +  ":" +
-                              KSpreadCell::columnName( print->printRepeatColumns().second ) );
+        eRepeatCols->setText( Cell::columnName( print->printRepeatColumns().first ) +  ":" +
+                              Cell::columnName( print->printRepeatColumns().second ) );
     grid->addWidget( eRepeatCols, 1, 1 );
 
     QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), rangeGroup );

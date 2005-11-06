@@ -37,7 +37,6 @@ class QTabWidget;
 
 class KSpreadView;
 class KSpreadSheet;
-class KSpreadCell;
 class QLineEdit;
 class QLabel;
 class QListBox;
@@ -45,7 +44,8 @@ class QComboBox;
 class QPushButton;
 class KLineEdit;
 
-namespace KSpread {
+namespace KSpread
+{
   class FunctionDescription;
 }
 

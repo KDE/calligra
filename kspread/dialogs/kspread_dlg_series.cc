@@ -45,6 +45,7 @@
 #include <qwhatsthis.h>
 #include <knuminput.h>
 
+using namespace KSpread;
 
 KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
   : KDialogBase( parent, name,TRUE,i18n("Series"),Ok|Cancel )
@@ -198,7 +199,7 @@ void KSpreadSeriesDlg::slotOk()
 
   m_pSheet->setSeries( marker, dstart, dend, dstep, mode, type );
 
-  KSpreadCell * cell = m_pSheet->cellAt( marker.x(), marker.y() );
+  Cell * cell = m_pSheet->cellAt( marker.x(), marker.y() );
   if ( cell->text() != 0L )
     m_pView->editWidget()->setText( cell->text() );
   else

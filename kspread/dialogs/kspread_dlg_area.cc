@@ -34,6 +34,8 @@
 #include <qlineedit.h>
 #include <kmessagebox.h>
 
+using namespace KSpread;
+
 KSpreadarea::KSpreadarea( KSpreadView * parent, const char * name, const QPoint & _marker )
   : KDialogBase( parent, name, TRUE, i18n("Area Name"), Ok | Cancel )
 {

@@ -30,6 +30,8 @@
 
 #include "kspread_util.h"
 
+using namespace KSpread;
+
 //helper functions for the formatting
 bool formatIsDate (FormatType fmt)
 {
@@ -48,7 +50,7 @@ bool formatIsFraction (FormatType fmt)
 }
 
 
-//used in KSpreadPoint::init, KSpreadCell::encodeFormula and
+//used in KSpreadPoint::init, Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
 int util_decodeColumnLabelText( const QString &_col )
 {
@@ -72,8 +74,8 @@ int util_decodeColumnLabelText( const QString &_col )
 QString util_rangeColumnName( const QRect &_area)
 {
     return QString("%1:%2")
-        .arg( KSpreadCell::columnName( _area.left()))
-        .arg( KSpreadCell::columnName(_area.right()));
+        .arg( Cell::columnName( _area.left()))
+        .arg( Cell::columnName(_area.right()));
 }
 
 //used in dialogs/kspread_dlg_paperlayout.cc
@@ -86,8 +88,8 @@ QString util_rangeRowName( const QRect &_area)
 
 QString util_rangeName(const QRect &_area)
 {
-    return KSpreadCell::name( _area.left(), _area.top() ) + ":" +
-	KSpreadCell::name( _area.right(), _area.bottom() );
+    return Cell::name( _area.left(), _area.top() ) + ":" +
+	Cell::name( _area.right(), _area.bottom() );
 }
 
 QString util_rangeName(KSpreadSheet * _sheet, const QRect &_area)
@@ -347,7 +349,7 @@ KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
     init( _str.mid( p ) );
 }
 
-KSpreadCell *KSpreadPoint::cell() const
+Cell *KSpreadPoint::cell() const
 {
     return sheet->cellAt(pos);
 }
@@ -481,7 +483,7 @@ QString KSpreadRange::toString()
 	}
 	if (topFixed)
 	{
-		result.insert(pos+KSpreadCell::columnName(range.left()).length(),'$');
+		result.insert(pos+Cell::columnName(range.left()).length(),'$');
 	}
 
 	pos=result.find(":")+1;
@@ -494,7 +496,7 @@ QString KSpreadRange::toString()
 	}
 	if (bottomFixed)
 	{
-		result.insert(pos+KSpreadCell::columnName(range.right()).length(),'$');
+		result.insert(pos+Cell::columnName(range.right()).length(),'$');
 	}
 
 
@@ -596,7 +598,7 @@ KSpreadRangeIterator::~KSpreadRangeIterator()
 {
 }
 
-KSpreadCell* KSpreadRangeIterator::first()
+Cell* KSpreadRangeIterator::first()
 {
   current.setY(range.top());
 
@@ -606,14 +608,14 @@ KSpreadCell* KSpreadRangeIterator::first()
   return next();
 }
 
-KSpreadCell* KSpreadRangeIterator::next()
+Cell* KSpreadRangeIterator::next()
 {
   if (current.x() == 0 && current.y() == 0)
   {
     return first();
   }
 
-  KSpreadCell* cell = NULL;
+  Cell* cell = NULL;
   bool done = false;
 
   while (cell == NULL && !done)
@@ -675,7 +677,7 @@ QString convertRefToBase( const QString & sheet, const QRect & rect )
   QString s( "$" );
   s += sheet;
   s += ".$";
-  s += KSpreadCell::columnName( bottomRight.x() );
+  s += Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
@@ -693,18 +695,18 @@ QString convertRefToRange( const QString & sheet, const QRect & rect )
   QString s( "$" );
   s += sheet;
   s += ".$";
-  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( topLeft.x() );
+  s += /*util_encodeColumnLabelText*/Cell::columnName( topLeft.x() );
   s += '$';
   s += QString::number( topLeft.y() );
   s += ":.$";
-  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( bottomRight.x() );
+  s += /*util_encodeColumnLabelText*/Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
   return s;
 }
 
-//used in KSpreadCell::convertFormulaToOasisFormat
+//used in Cell::convertFormulaToOasisFormat
 void insertBracket( QString & s )
 {
   QChar c;
@@ -729,7 +731,7 @@ void insertBracket( QString & s )
  //used in KSpreadSheet::saveOasis
 QString convertRangeToRef( const QString & sheetName, const QRect & _area )
 {
-    return sheetName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + sheetName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
+    return sheetName + "." + Cell::name( _area.left(), _area.top() ) + ":" + sheetName + "."+ KSpread::Cell::name( _area.right(), _area.bottom() );
 }
 
 QString convertOasisPenToString( const QPen & pen )

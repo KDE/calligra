@@ -48,6 +48,7 @@
 
 #include "highlight_range.h"
 
+using namespace KSpread;
 
 /********************************************
  *
@@ -55,7 +56,7 @@
  *
  ********************************************/
 
-KSpreadCellEditor::KSpreadCellEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
+KSpreadCellEditor::KSpreadCellEditor( Cell* _cell, KSpreadCanvas* _parent, const char* _name )
   : QWidget( _parent, _name )
 {
   m_pCell = _cell;
@@ -95,7 +96,7 @@ bool KSpreadTextEditorHighlighter::referencesChanged()
 }
 
 /*
-KSpreadCell* KSpreadTextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
+Cell* KSpreadTextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
 {
 	outCellColor=Qt::black; //outCellColor is black if there is no cell ref at the specified position
 
@@ -412,7 +413,7 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
  *
  ********************************************/
 
-KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
+KSpreadTextEditor::KSpreadTextEditor( Cell* _cell, KSpreadCanvas* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name ),
     m_sizeUpdate(false),
     m_length(0),
@@ -1071,13 +1072,13 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     case Key_Escape:
         // #### Torben says: This is duplicated code. Bad.
         if ( m_pView->selectionInfo()->singleCellSelection() ) {
-            setText( KSpreadCell::columnName( m_pView->canvasWidget()->markerColumn() )
+            setText( Cell::columnName( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );
         } else {
-            setText( KSpreadCell::columnName( m_pView->selection().left() )
+            setText( Cell::columnName( m_pView->selection().left() )
                      + QString::number( m_pView->selection().top() )
                      + ":"
-                     + KSpreadCell::columnName( m_pView->selection().right() )
+                     + Cell::columnName( m_pView->selection().right() )
                      + QString::number( m_pView->selection().bottom() ) );
         }
         m_pView->canvasWidget()->setFocus();

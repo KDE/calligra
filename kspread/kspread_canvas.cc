@@ -70,6 +70,7 @@
 #include "kspread_canvas.h"
 #include "highlight_range.h"
 
+using namespace KSpread;
 
 class CanvasPrivate
 {
@@ -499,7 +500,7 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* sheet,
     else
     {
         QPoint topLeft(location);
-        KSpreadCell* cell = sheet->cellAt(location);
+        Cell* cell = sheet->cellAt(location);
         if ( cell->isObscured() && cell->isObscuringForced() )
         {
             cell = cell->obscuringCells().first();
@@ -534,7 +535,7 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* sheet,
     {
         int col = selectionInfo()->marker().x();
         int row = selectionInfo()->marker().y();
-        KSpreadCell * cell = sheet->cellAt( col,row );
+        Cell * cell = sheet->cellAt( col,row );
         if ( cell && cell->getValidity(0) && cell->getValidity()->displayValidationInformation)
         {
             QString title = cell->getValidity(0)->titleInfo;
@@ -637,7 +638,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
      scroll bar correctly.  I don't like having that as part of the cellAt function
      but I suppose that's ok for now.
   */
-  KSpreadCell* cell = sheet->cellAt(location.x(), location.y(), true);
+  Cell* cell = sheet->cellAt(location.x(), location.y(), true);
   Q_UNUSED(cell);
 
   double  unzoomedWidth  = d->view->doc()->unzoomItX( width() );
@@ -1119,7 +1120,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   // Test whether the mouse is over some anchor
   {
-    KSpreadCell *cell = sheet->visibleCellAt( col, row );
+    Cell *cell = sheet->visibleCellAt( col, row );
     QString anchor;
     if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
       anchor = cell->testAnchor( d->view->doc()->zoomItX( cell->dblWidth() - ev_PosX +
@@ -1191,7 +1192,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
   if ( selectionInfo->singleCellSelection() )
   {
-    KSpreadCell* cell = sheet->cellAt( selectionInfo->marker() );
+    Cell* cell = sheet->cellAt( selectionInfo->marker() );
     cell->clicked( this );
   }
 
@@ -1205,7 +1206,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
         x = s.left();
     if ( y > s.top() )
         y = s.top();
-    KSpreadCell *cell = sheet->nonDefaultCell( x, y );
+    Cell *cell = sheet->nonDefaultCell( x, y );
     if ( !d->view->doc()->undoLocked() )
     {
         KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( d->view->doc(),
@@ -1260,7 +1261,7 @@ void KSpreadCanvas::extendCurrentSelection( QPoint cell )
 {
   KSpreadSheet* sheet = activeSheet();
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
-//  KSpreadCell* destinationCell = sheet->cellAt(cell);
+//  Cell* destinationCell = sheet->cellAt(cell);
 
   if ( d->chooseCell )
   {
@@ -1475,7 +1476,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
-  KSpreadCell *cell = sheet->cellAt( col, row );
+  Cell *cell = sheet->cellAt( col, row );
 
   // Go to the upper left corner of the obscuring object if cells are merged
   if (cell->isObscuringForced())
@@ -1951,7 +1952,7 @@ QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelect
   QPoint cursor = cursorPos ();
 
   QPoint cellCorner = cursor;
-  KSpreadCell* cell = activeSheet()->cellAt(cursor.x(), cursor.y());
+  Cell* cell = activeSheet()->cellAt(cursor.x(), cursor.y());
 
   /* cell is either the same as the marker, or the cell that is forced obscuring
      the marker cell
@@ -2182,7 +2183,7 @@ bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
       QPoint marker = d->chooseCell ?
         selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
-      KSpreadCell * cell = sheet->getFirstCellRow(marker.y());
+      Cell * cell = sheet->getFirstCellRow(marker.y());
       while (cell != NULL && cell->column() < marker.x() && cell->isEmpty())
       {
         cell = sheet->getNextCellRight(cell->column(), cell->row());
@@ -2209,7 +2210,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
 {
   bool makingSelection = event->state() & ShiftButton;
   KSpreadSheet* sheet = activeSheet();
-  KSpreadCell* cell = NULL;
+  Cell* cell = NULL;
   QPoint marker = d->chooseCell ?
     selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
@@ -2370,8 +2371,8 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   bool makingSelection = event->state() & ShiftButton;
 
   KSpreadSheet* sheet = activeSheet();
-  KSpreadCell* cell = NULL;
-  KSpreadCell* lastCell;
+  Cell* cell = NULL;
+  Cell* lastCell;
   QPoint destination;
   bool searchThroughEmpty = true;
   int row;
@@ -2817,7 +2818,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
        && key != Key_NumberSign )
     return false;
 
-  KSpreadCell  * cell = 0L;
+  Cell  * cell = 0L;
   KSpreadSheet * sheet = activeSheet();
   QRect rect = selection();
 
@@ -2993,7 +2994,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
   return true;
 }
 
-bool KSpreadCanvas::formatCellByKey (KSpreadCell *cell, int key, const QRect &rect)
+bool KSpreadCanvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
 {
   QPen pen;
   switch (key)
@@ -3172,7 +3173,7 @@ void KSpreadCanvas::deleteEditor (bool saveChanges, bool array)
 
 void KSpreadCanvas::createEditor()
 {
-  KSpreadCell * cell = activeSheet()->nonDefaultCell( markerColumn(), markerRow(), false );
+  Cell * cell = activeSheet()->nonDefaultCell( markerColumn(), markerRow(), false );
 
   if ( !createEditor( CellEditor ) )
       return;
@@ -3185,7 +3186,7 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
   KSpreadSheet * sheet = activeSheet();
   if ( !d->cellEditor )
   {
-    KSpreadCell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
+    Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
 
     if ( sheet->isProtected() && !cell->notProtected( marker().x(), marker().y() ) )
       return false;
@@ -3353,14 +3354,14 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
     if ( d->chooseStartSheet != sheet )
     {
       if ( newMarker == newAnchor )
-        name_cell = KSpreadCell::fullName( sheet, newChooseRect.left(), newChooseRect.top() );
+        name_cell = Cell::fullName( sheet, newChooseRect.left(), newChooseRect.top() );
       else
         name_cell = util_rangeName( sheet, newChooseRect );
     }
     else
     {
       if ( newMarker == newAnchor )
-        name_cell = KSpreadCell::name( newChooseRect.left(), newChooseRect.top() );
+        name_cell = Cell::name( newChooseRect.left(), newChooseRect.top() );
       else
         name_cell = util_rangeName( newChooseRect );
     }
@@ -3557,7 +3558,7 @@ void KSpreadCanvas::updatePosWidget()
         }
         else
         {
-            buffer = KSpreadCell::columnName( markerColumn() ) +
+            buffer = Cell::columnName( markerColumn() ) +
 		QString::number( markerRow() );
         }
     }
@@ -3576,9 +3577,9 @@ void KSpreadCanvas::updatePosWidget()
                 //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-                buffer=KSpreadCell::columnName( selection().left() ) +
+                buffer=Cell::columnName( selection().left() ) +
 		    QString::number(selection().top()) + ":" +
-		    KSpreadCell::columnName( QMIN( KS_colMax, selection().right() ) ) +
+		    Cell::columnName( QMIN( KS_colMax, selection().right() ) ) +
 		    QString::number(selection().bottom());
                 //buffer=activeSheet()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
@@ -3719,7 +3720,7 @@ void KSpreadCanvas::paintUpdates()
 
   /* paint any visible cell that has the paintDirty flag */
   QRect range = visibleCells();
-  KSpreadCell* cell = NULL;
+  Cell* cell = NULL;
 
   double topPos = activeSheet()->dblRowPos(range.top());
   double leftPos = activeSheet()->dblColumnPos(range.left());
@@ -3760,7 +3761,7 @@ void KSpreadCanvas::paintUpdates()
         bool paintBordersLeft = false;
 	bool paintBordersTop = false; */
 
-	int paintBorder=KSpreadCell::Border_None;
+	int paintBorder=Cell::Border_None;
 
         QPen bottomPen( cell->effBottomBorderPen( x, y ) );
         QPen rightPen( cell->effRightBorderPen( x, y ) );
@@ -3772,19 +3773,19 @@ void KSpreadCanvas::paintUpdates()
         // the pen that is of more "worth"
         if ( x >= KS_colMax )
          // paintBordersRight = true;
-		paintBorder |= KSpreadCell::Border_Right;
+		paintBorder |= Cell::Border_Right;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x + 1, y ) ) )
           {
             //paintBordersRight = true;
-		  paintBorder |= KSpreadCell::Border_Right;
+		  paintBorder |= Cell::Border_Right;
             if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
               rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
           }
         else
         {
          // paintBordersRight = true;
-		paintBorder |= KSpreadCell::Border_Right;
+		paintBorder |= Cell::Border_Right;
           if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
@@ -3793,18 +3794,18 @@ void KSpreadCanvas::paintUpdates()
         // bottom border:
         if ( y >= KS_rowMax )
          // paintBordersBottom = true;
-		paintBorder |= KSpreadCell::Border_Bottom;
+		paintBorder |= Cell::Border_Bottom;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x, y + 1 ) ) )
           {
             if ( cell->effBottomBorderValue( x, y ) > sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
              // paintBordersBottom = true;
-		    paintBorder |= KSpreadCell::Border_Bottom;
+		    paintBorder |= Cell::Border_Bottom;
           }
         else
         {
           //paintBordersBottom = true;
-		paintBorder |= KSpreadCell::Border_Bottom;
+		paintBorder |= Cell::Border_Bottom;
           if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
@@ -3812,18 +3813,18 @@ void KSpreadCanvas::paintUpdates()
         // left border:
         if ( x == 1 )
          // paintBordersLeft = true;
-		paintBorder |= KSpreadCell::Border_Left;
+		paintBorder |= Cell::Border_Left;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x - 1, y ) ) )
           {
            // paintBordersLeft = true;
-		  paintBorder |= KSpreadCell::Border_Left;
+		  paintBorder |= Cell::Border_Left;
             if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
               leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
           }
         else
         {
-		paintBorder |= KSpreadCell::Border_Left;
+		paintBorder |= Cell::Border_Left;
           if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
@@ -3831,19 +3832,19 @@ void KSpreadCanvas::paintUpdates()
         // top border:
         if ( y == 1 )
         //  paintBordersTop = true;
-		paintBorder |= KSpreadCell::Border_Top;
+		paintBorder |= Cell::Border_Top;
         else
           if ( sheet->cellIsPaintDirty( QPoint( x, y - 1 ) ) )
           {
           //  paintBordersTop = true;
-		  paintBorder |= KSpreadCell::Border_Top;
+		  paintBorder |= Cell::Border_Top;
             if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
               topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
           }
         else
         {
         //  paintBordersTop = true;
-		paintBorder |= KSpreadCell::Border_Top;
+		paintBorder |= Cell::Border_Top;
           if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
@@ -5695,7 +5696,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   QFont boldFont = normalFont;
   boldFont.setBold( true );
 
-  KSpreadCell *cell = sheet->cellAt( m_pView->marker() );
+  Cell *cell = sheet->cellAt( m_pView->marker() );
   QRect extraCell;
   extraCell.setCoords( m_pCanvas->markerColumn(),
                        m_pCanvas->markerRow(),
@@ -5756,7 +5757,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
         painter.setFont( boldFont );
       if ( !m_pView->activeSheet()->getShowColumnNumber() )
       {
-        QString colText = KSpreadCell::columnName( x );
+        QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if ( !col_lay->isHide() )
           painter.drawText( zoomedXPos + ( width - len ) / 2,
@@ -5823,7 +5824,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
         painter.setFont( boldFont );
       if ( !m_pView->activeSheet()->getShowColumnNumber() )
       {
-        QString colText = KSpreadCell::columnName( x );
+        QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if (!col_lay->isHide())
           painter.drawText( zoomedXPos + ( width - len ) / 2,
@@ -5886,7 +5887,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     int row = sheet->topRow( (m_canvas->doc()->unzoomItY( p.y() ) +
                                    m_canvas->yOffset()), ypos );
 
-    KSpreadCell* cell = sheet->visibleCellAt( col, row );
+    Cell* cell = sheet->visibleCellAt( col, row );
     if ( !cell )
         return;
 
@@ -5902,8 +5903,8 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     QString tipText;
 
     // If cell is too small, show the content
-    if ( cell->testFlag( KSpreadCell::Flag_CellTooShortX ) ||
-         cell->testFlag( KSpreadCell::Flag_CellTooShortY ) )
+    if ( cell->testFlag( Cell::Flag_CellTooShortX ) ||
+         cell->testFlag( Cell::Flag_CellTooShortY ) )
     {
         tipText = cell->strOutText();
 
@@ -6035,7 +6036,7 @@ void KSpreadCanvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 
 				iter->firstCell->sheet->setRegionPaintDirty(cellRect);
 			}
-			//iter->cell->setFlag(KSpreadCell::Flag_DisplayDirty);
+			//iter->cell->setFlag(Cell::Flag_DisplayDirty);
 		}
 
 				*/

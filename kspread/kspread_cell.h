@@ -34,7 +34,6 @@
 #ifndef KSPREAD_CELL
 #define KSPREAD_CELL
 
-class KSpreadCell;
 class KSpreadSheet;
 class KSpreadCanvas;
 class KSpreadView;
@@ -91,32 +90,32 @@ struct KSpreadValidity
     QStringList listValidity;
 };
 
-class CellPrivate;
-
+namespace KSpread
+{
 
 /**
- * For every cell in the spread sheet there is a KSpreadCell object.
+ * For every cell in the spread sheet there is a Cell object.
  *
- * KSpreadCell contains format information and algorithm and it
+ * Cell contains format information and algorithm and it
  * contains the calculation algorithm.
  *
  * However, all empty cells are represented by one instace, called the
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat
+class KSPREAD_EXPORT Cell : public KSpreadFormat
 {
   friend class SelectPrivate;
   friend class KSpreadConditions;
 public:
 
-  KSpreadCell (KSpreadSheet *_sheet, int _column, int _row);
-  KSpreadCell (KSpreadSheet *_sheet, KSpreadStyle * _style, int _column, int _row);
+  Cell (KSpreadSheet *_sheet, int _column, int _row);
+  Cell (KSpreadSheet *_sheet, KSpreadStyle * _style, int _column, int _row);
 
     /**
      * @see #sheetDies
      */
-    ~KSpreadCell();
+    ~Cell();
 
     /**
      * Returns the worksheet which owns this cell.
@@ -207,10 +206,10 @@ public:
      */
     void setValue( const KSpreadValue& value );
 
-    KSpreadCell* previousCell() const;
-    KSpreadCell* nextCell() const;
-    void setPreviousCell( KSpreadCell* c );
-    void setNextCell( KSpreadCell* c );
+    Cell* previousCell() const;
+    Cell* nextCell() const;
+    void setPreviousCell( Cell* c );
+    void setNextCell( Cell* c );
 
     /**
      * Moves around the cell. It cares about obscured and obscuring cells and
@@ -273,8 +272,8 @@ public:
      *
      * @see #copyAll
      */
-    void copyFormat( KSpreadCell *_cell );
-    void copyContent( KSpreadCell *_cell );
+    void copyFormat( Cell *_cell );
+    void copyContent( Cell *_cell );
     /**
      * Copies the format and the content. It does not copy the #m_row and #m_column attributes.
      * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
@@ -282,7 +281,7 @@ public:
      *
      * @see #copyFormat
      */
-    void copyAll( KSpreadCell *cell);
+    void copyAll( Cell *cell);
     
     enum BorderSides
     {
@@ -306,7 +305,7 @@ public:
      * @param coordinate coordinates on the painter where the top left corner
      *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
-     * @param paintBorder a combination of flags from the KSpreadCell::BorderSides enum which specifies which cell borders to paint
+     * @param paintBorder a combination of flags from the Cell::BorderSides enum which specifies which cell borders to paint
      * @param rightPen pen to use to draw the right border if @p paintBorder includes the Border_Right flag
      * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom includes the Border_Bottom flag
      * @param leftPen pen to use to draw the left border if @p paintBorderLeft includes the Border_Left flag
@@ -591,20 +590,20 @@ public:
     void setDisplayDirtyFlag();
 
     /**
-     * Tells this cell that the @ref KSpreadCell 'cell' obscures this one.
+     * Tells this cell that the @ref Cell 'cell' obscures this one.
      * If this cell has to be redrawn, then the obscuring cell is redrawn instead.
      *
      * @param cell the obscuring cell
      * @param isForcing whether this is a forced obscuring (merged cells) or
      *                  just a temporary obscure (text overlap).
      */
-    void obscure( KSpreadCell *cell, bool isForcing = false);
+    void obscure( Cell *cell, bool isForcing = false);
     /**
      * Tells this cell that it is no longer obscured.
      *
      * @param cell the cell that is no longer obscuring this one.
      */
-    void unobscure(KSpreadCell* cell);
+    void unobscure(Cell* cell);
     /**
      * @return true if this cell is obscured by another.
      */
@@ -622,12 +621,12 @@ public:
      *
      * @return the cell that decides the format for the cell in question.
      */
-    KSpreadCell *ultimateObscuringCell() const;
+    Cell *ultimateObscuringCell() const;
 
     /**
      * @return the obscuring cell list (might be empty)
      */
-    QValueList<KSpreadCell*> obscuringCells() const;
+    QValueList<Cell*> obscuringCells() const;
 
     void clearObscuringCells();
 
@@ -760,8 +759,8 @@ public:
     /**
      * Used for comparing cells (when sorting)
      */
-    bool operator > ( const KSpreadCell & ) const;
-    bool operator < ( const KSpreadCell & ) const;
+    bool operator > ( const Cell & ) const;
+    bool operator < ( const Cell & ) const;
 
     void freeAllObscuredCells();
 
@@ -908,7 +907,8 @@ protected:
     
 private:
 
-    CellPrivate* d;
+    class Private;
+    Private *d;
     // static const char* s_dataTypeToString[];
 
     /* helper functions to the paintCell(...) function */
@@ -992,5 +992,7 @@ private:
     void loadOasisValidationValue( const QStringList &listVal );
 
 };
+
+} // namespace KSpread
 
 #endif  // KSPREAD_CELL

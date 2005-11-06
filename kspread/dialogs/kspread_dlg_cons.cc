@@ -132,7 +132,7 @@ struct st_cell
 {
   QString xdesc;
   QString ydesc;
-  KSpreadCell* cell;
+  Cell* cell;
   QString sheet;
   int x;
   int y;
@@ -266,7 +266,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  KSpreadSheet *t = (*it).sheet;
 	  assert( t );
-	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
+	  Cell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
                 novalue=false;
 	  if ( it != ranges.begin() )
@@ -294,7 +294,7 @@ void KSpreadConsolidate::slotOk()
       kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
       for( int x = (*it).range.left(); x <= (*it).range.right() ; ++x )
       {
-	KSpreadCell *c = t->cellAt( x, (*it).range.top() );
+	Cell *c = t->cellAt( x, (*it).range.top() );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -342,17 +342,17 @@ void KSpreadConsolidate::slotOk()
 	  {
 	    KSpreadSheet *t = (*it).sheet;
 	    assert( t );
-	    KSpreadCell *c = t->cellAt( i, (*it).range.top() );
+	    Cell *c = t->cellAt( i, (*it).range.top() );
 	    if ( c )
 	    {
 	      if ( c->value().asString() == *s )
 	      {
-//		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
+//		Cell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
 		if ( it != ranges.begin() )
 		  formula += ";";
 		formula += (*it).sheetName + "!";
-		formula += KSpreadCell::name( i, y + (*it).range.top() );
+		formula += Cell::name( i, y + (*it).range.top() );
 	      }
 	    }
 	  }
@@ -375,7 +375,7 @@ void KSpreadConsolidate::slotOk()
       assert( t );
       for( int y = (*it).range.top(); y <= (*it).range.bottom() ; ++y )
       {
-	KSpreadCell *c = t->cellAt( (*it).range.left(), y );
+	Cell *c = t->cellAt( (*it).range.left(), y );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -423,17 +423,17 @@ void KSpreadConsolidate::slotOk()
 	  {
 	    KSpreadSheet *t = (*it).sheet;
 	    assert( t );
-	    KSpreadCell *c = t->cellAt( (*it).range.left(), i );
+	    Cell *c = t->cellAt( (*it).range.left(), i );
 	    if ( c )
 	    {
 	      QString v = c->value().asString();
 	      if ( !v.isEmpty() && *s == v )
 	      {
-//		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
+//		Cell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
 		if ( it != ranges.begin() ) formula += ";";
 		formula += (*it).sheetName + "!";
-		formula += KSpreadCell::name( i, y + (*it).range.top() );
+		formula += Cell::name( i, y + (*it).range.top() );
 	      }
 	    }
 	  }
@@ -457,7 +457,7 @@ void KSpreadConsolidate::slotOk()
       assert( t );
       for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
       {
-	KSpreadCell *c = t->cellAt( (*it).range.left(), y );
+	Cell *c = t->cellAt( (*it).range.left(), y );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -477,7 +477,7 @@ void KSpreadConsolidate::slotOk()
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
-	KSpreadCell *c = t->cellAt( x, (*it).range.top() );
+	Cell *c = t->cellAt( x, (*it).range.top() );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -516,17 +516,17 @@ void KSpreadConsolidate::slotOk()
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
-	KSpreadCell *c = t->cellAt( x, (*it).range.top() );
+	Cell *c = t->cellAt( x, (*it).range.top() );
 	if ( c )
 	{
 	  QString ydesc = c->value().asString();
 	  for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
 	  {
-	    KSpreadCell *c2 = t->cellAt( (*it).range.left(), y );
+	    Cell *c2 = t->cellAt( (*it).range.left(), y );
 	    if ( c2 )
 	    {
 	      QString xdesc = c2->value().asString();
-	      KSpreadCell *c3 = t->cellAt( x, y );
+	      Cell *c3 = t->cellAt( x, y );
 	      if ( c3 && c3->value().isNumber() )
 	      {
 		st_cell k;
@@ -575,7 +575,7 @@ void KSpreadConsolidate::slotOk()
 	    count++;
   	    if ( it != ranges.begin() ) formula += ";";
 	    formula += (*it).sheetName + "!";
-	    formula += KSpreadCell::name( i, y + (*it).range.top() );
+	    formula += Cell::name( i, y + (*it).range.top() );
 	  }
 	}
 	formula += ")";

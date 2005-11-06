@@ -40,6 +40,8 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 
+using namespace KSpread;
+
 /*********************************************
  *
  * KSpreadCellProxy
@@ -97,7 +99,7 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 
     KSpreadPoint p( cellID); //obj.data() + m_prefix.length() );
     if ( p.pos.x()<0 ) {
-	kdDebug(36001)<<"KSpreadCellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
+	kdDebug(36001)<<"CellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
         return false;
     }
 
@@ -163,7 +165,7 @@ DCOPRef KSpreadSheetIface::cell( int x, int y )
     if ( y == 0 )
         y = 1;
 
-    QCString str = objId() + '/' + KSpreadCell::name( x, y ).latin1();
+    QCString str = objId() + '/' + Cell::name( x, y ).latin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }

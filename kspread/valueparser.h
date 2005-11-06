@@ -26,10 +26,11 @@
 #include "kspread_global.h"
 
 class KLocale;
-class KSpreadCell;
 class KSpreadValue;
 
-namespace KSpread {
+namespace KSpread
+{
+class Cell;
 
 
 /**
@@ -45,7 +46,7 @@ class ValueParser {
   KLocale* locale();
   
   /** try to parse the text in a given cell and set value accordingly */
-  void parse (const QString& str, KSpreadCell *cell);
+  void parse (const QString& str, KSpread::Cell *cell);
 
   /** try to parse given text, don't set any cell attributes though */
   KSpreadValue parse (const QString &str);
@@ -60,10 +61,10 @@ class ValueParser {
 
   // Try to parse the text as a bool/number/date/time/etc.
   // Helpers for parse.
-  bool tryParseBool (const QString& str, KSpreadCell *cell);
-  bool tryParseNumber (const QString& str, KSpreadCell *cell);
-  bool tryParseDate (const QString& str, KSpreadCell *cell);
-  bool tryParseTime (const QString& str, KSpreadCell *cell);
+  bool tryParseBool (const QString& str, KSpread::Cell *cell);
+  bool tryParseNumber (const QString& str, KSpread::Cell *cell);
+  bool tryParseDate (const QString& str, KSpread::Cell *cell);
+  bool tryParseTime (const QString& str, KSpread::Cell *cell);
   
   /** converts a string to a date/time value */
   QDateTime readTime (const QString & intstr, bool withSeconds, bool *ok,

@@ -41,6 +41,8 @@
 #include <qtextedit.h>
 #include <qcheckbox.h>
 
+using namespace KSpread;
+
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
   :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,KStdGuiItem::ok(),i18n("Clear &All"))
 
@@ -423,7 +425,7 @@ void KSpreadDlgValidity::changeIndexCond(int _index)
 
 void KSpreadDlgValidity::init()
 {
-  KSpreadCell *c = m_pView->activeSheet()->cellAt( marker.left(), marker.top() );
+  Cell *c = m_pView->activeSheet()->cellAt( marker.left(), marker.top() );
   KSpreadValidity * tmpValidity=c->getValidity(0);
   if(tmpValidity!=0)
   {

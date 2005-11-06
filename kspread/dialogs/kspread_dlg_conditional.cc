@@ -45,6 +45,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
+using namespace KSpread;
+
 KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char* name, WFlags fl )
     : QWidget( parent, name, fl )
 {
@@ -306,7 +308,7 @@ void KSpreadConditionalDlg::init()
   QValueList<KSpreadConditional>::iterator it1;
   QValueList<KSpreadConditional>::iterator it2;
 
-  KSpreadCell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
+  Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
                                                      m_marker.top() );
 
   conditionList = obj->conditionList();
@@ -317,7 +319,7 @@ void KSpreadConditionalDlg::init()
   {
     for ( int y = m_marker.top(); y <= m_marker.bottom(); y++ )
     {
-      KSpreadCell * obj2 = m_view->activeSheet()->cellAt( x, y );
+      Cell * obj2 = m_view->activeSheet()->cellAt( x, y );
       otherList = obj2->conditionList();
 
       it1 = conditionList.begin();

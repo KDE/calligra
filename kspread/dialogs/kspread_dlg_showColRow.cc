@@ -31,6 +31,8 @@
 #include <qlayout.h>
 #include <klocale.h>
 
+using namespace KSpread;
+
 KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type )
 	: KDialogBase( parent, name,TRUE,"",Ok|Cancel )
 {
@@ -74,7 +76,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  {
 	    if(!showColNumber)
-	      listCol+=i18n("Column: %1").arg(KSpreadCell::columnName(*it));
+	      listCol+=i18n("Column: %1").arg(Cell::columnName(*it));
 	    else
 	      listCol+=i18n("Column: %1").arg(text.setNum(*it));
 	  }

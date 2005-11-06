@@ -45,6 +45,8 @@ do { \
   KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return; \
 } while(0)
 
+using namespace KSpread;
+
 KSpreadSheetPrint::KSpreadSheetPrint( KSpreadSheet* sheet )
 {
     m_pSheet = sheet;
@@ -108,7 +110,7 @@ QRect KSpreadSheetPrint::cellsPrintRange()
     QRect cell_range;
     cell_range.setCoords( 1, 1, 1, 1 );
 
-    KSpreadCell* c = m_pSheet->firstCell();
+    Cell* c = m_pSheet->firstCell();
     for( ;c; c = c->nextCell() )
     {
         if ( c->needsPrinting() )
@@ -385,7 +387,7 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     //
     // Draw the cells.
     //
-    KSpreadCell *cell;
+    Cell *cell;
     RowFormat *row_lay;
     ColumnFormat *col_lay;
 
@@ -499,11 +501,11 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
 	      
-	      int paintBorder=KSpreadCell::Border_None;
-	      if (paintBordersLeft) paintBorder |= KSpreadCell::Border_Left;
-	      if (paintBordersRight) paintBorder |= KSpreadCell::Border_Right;
-	      if (paintBordersTop) paintBorder |= KSpreadCell::Border_Top;
-	      if (paintBordersBottom) paintBorder |= KSpreadCell::Border_Bottom;
+	      int paintBorder=Cell::Border_None;
+	      if (paintBordersLeft) paintBorder |= Cell::Border_Left;
+	      if (paintBordersRight) paintBorder |= Cell::Border_Right;
+	      if (paintBordersTop) paintBorder |= Cell::Border_Top;
+	      if (paintBordersBottom) paintBorder |= Cell::Border_Bottom;
 	      
 	      QPen highlightPen;
 

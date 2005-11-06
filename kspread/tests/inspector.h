@@ -22,17 +22,16 @@
 
 #include <kdialogbase.h>
 
-class KSpreadCell;
-
 namespace KSpread
 {
+class Cell;
 
 class Inspector : public KDialogBase
 {
 Q_OBJECT
 
 public:
-  Inspector( KSpreadCell* cell );
+  Inspector( KSpread::Cell* cell );
   ~Inspector();
   
 private:

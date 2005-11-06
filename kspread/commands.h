@@ -28,9 +28,13 @@
 
 #include "kspread_sheet.h" // for KSpreadSheet::LayoutDirection
 
-class KSpreadCell;
 class KSpreadDoc;
 class KSpreadUndoAction;
+
+namespace KSpread
+{
+  class Cell;
+}
 
 /** \page commands Commands
 
@@ -98,14 +102,14 @@ protected:
 class MergeCellCommand : public KCommand
 {
 public:
-  MergeCellCommand( KSpreadCell* cell, int colSpan, int rowSpan );
+  MergeCellCommand( KSpread::Cell* cell, int colSpan, int rowSpan );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadCell* cell;
+  KSpread::Cell* cell;
   int colSpan;
   int rowSpan;
   int oldColSpan;
@@ -120,14 +124,14 @@ protected:
 class DissociateCellCommand : public KCommand
 {
 public:
-  DissociateCellCommand( KSpreadCell* cell );
+  DissociateCellCommand( KSpread::Cell* cell );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadCell* cell;
+  KSpread::Cell* cell;
   int oldColSpan;
   int oldRowSpan;
 };
@@ -328,14 +332,14 @@ protected:
 class LinkCommand : public KCommand
 {
 public:
-  LinkCommand( KSpreadCell* cell, const QString& text, const QString& link );
+  LinkCommand( KSpread::Cell* cell, const QString& text, const QString& link );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadCell* cell;
+  KSpread::Cell* cell;
   KSpreadDoc* doc;
   QString oldText;
   QString oldLink;

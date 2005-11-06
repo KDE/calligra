@@ -159,7 +159,7 @@ public:
     CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCustomStyle * style );
-    void apply( KSpreadCell *_cell );
+    void apply( KSpread::Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
     void applyFormat( KSpreadFormat *_obj );
@@ -231,10 +231,10 @@ public:
     CellFormatPageMisc( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCustomStyle * style );
-    void apply( KSpreadCell *_cell );
+    void apply( KSpread::Cell *_cell );
     void applyColumn();
     void applyRow();
-    void applyFormat( KSpreadCell *_obj );
+    void applyFormat( KSpread::Cell *_obj );
     bool getDontPrintTextValue(){return dontPrintText->isChecked();}
 
 public slots:
@@ -263,7 +263,7 @@ public:
     CellFormatPageFloat( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCustomStyle * style );
-    void apply( KSpreadCell *_cell );
+    void apply( KSpread::Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
     void applyFormat( KSpreadFormat *_obj );
@@ -312,7 +312,7 @@ public:
     CellFormatPagePosition( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCustomStyle * style );
-    void apply( KSpreadCell *_cell );
+    void apply( KSpread::Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
     void applyFormat( KSpreadFormat *_obj );
@@ -485,7 +485,7 @@ public:
     CellFormatPagePattern( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCustomStyle * style );
-    void apply( KSpreadCell *_cell );
+    void apply( KSpread::Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
     void applyFormat( KSpreadFormat *_obj );
@@ -534,7 +534,7 @@ class CellFormatPageProtection : public QWidget
   ~CellFormatPageProtection();
 
   void apply( KSpreadCustomStyle * style );
-  void apply( KSpreadCell  * _cell );
+  void apply( KSpread::Cell  * _cell );
   void apply( ColumnFormat * _col );
   void apply( RowFormat    * _row );
   void applyFormat( KSpreadFormat * _obj );
@@ -615,10 +615,10 @@ public:
     QString prefix;
     QString postfix;
     int precision;
-    KSpreadCell::FloatFormat floatFormat;
+    KSpread::Cell::FloatFormat floatFormat;
     bool bFloatFormat;
-    KSpreadCell::FloatColor floatColor;
-    KSpreadCell::Currency   cCurrency;
+    KSpread::Cell::FloatColor floatColor;
+    KSpread::Cell::Currency   cCurrency;
     bool bFloatColor;
     bool bCurrency;
     QColor textColor;
@@ -639,8 +639,8 @@ public:
     QColor bgColor;
     bool bBgColor;
     QString actionText;
-    KSpreadCell::Align alignX;
-    KSpreadCell::AlignY alignY;
+    KSpread::Cell::Align alignX;
+    KSpread::Cell::AlignY alignY;
     QString styleName;
     QString styleParent;
 

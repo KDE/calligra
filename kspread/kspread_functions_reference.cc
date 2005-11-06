@@ -151,7 +151,7 @@ KSpreadValue func_address (valVector args, ValueCalc *calc, FuncExtra *)
     if ( abs )
       result += '$';
 
-    result += KSpreadCell::columnName( col );
+    result += Cell::columnName( col );
 
     abs = false;
     if ( absNum == 1 || absNum == 2 )
@@ -334,7 +334,7 @@ KSpreadValue func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
   if ( !p.isValid() )
     return KSpreadValue::errorVALUE();
 
-  KSpreadCell * cell = p.cell();
+  Cell * cell = p.cell();
   if (cell)
     return cell->value();
   return KSpreadValue::errorVALUE();

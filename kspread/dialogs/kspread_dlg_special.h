@@ -28,8 +28,8 @@
 
 class KSpreadView;
 class KSpreadSheet;
-class KSpreadCell;
 class QRadioButton;
+
 class KSpreadspecial : public KDialogBase
 {
     Q_OBJECT

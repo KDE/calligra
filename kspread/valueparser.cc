@@ -35,7 +35,7 @@ KLocale* ValueParser::locale()
   return parserLocale;
 }
 
-void ValueParser::parse (const QString& str, KSpreadCell *cell)
+void ValueParser::parse (const QString& str, Cell *cell)
 {
   FormatType format = cell->formatType();
   
@@ -131,7 +131,7 @@ KSpreadValue ValueParser::parse (const QString &str)
   return val;
 }
 
-bool ValueParser::tryParseBool (const QString& str, KSpreadCell *cell)
+bool ValueParser::tryParseBool (const QString& str, Cell *cell)
 {
   bool ok;
   KSpreadValue val = tryParseBool (str, &ok);
@@ -140,7 +140,7 @@ bool ValueParser::tryParseBool (const QString& str, KSpreadCell *cell)
   return ok;
 }
 
-bool ValueParser::tryParseNumber (const QString& str, KSpreadCell *cell)
+bool ValueParser::tryParseNumber (const QString& str, Cell *cell)
 {
   bool ok;
   KSpreadValue val = tryParseNumber (str, &ok);
@@ -149,7 +149,7 @@ bool ValueParser::tryParseNumber (const QString& str, KSpreadCell *cell)
   return ok;
 }
 
-bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
+bool ValueParser::tryParseDate (const QString& str, Cell *cell)
 {
   bool ok;
   KSpreadValue value = tryParseDate (str, &ok);
@@ -158,7 +158,7 @@ bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
   return ok;
 }
 
-bool ValueParser::tryParseTime (const QString& str, KSpreadCell *cell)
+bool ValueParser::tryParseTime (const QString& str, Cell *cell)
 {
   bool ok;
   KSpreadValue value = tryParseTime (str, &ok);
@@ -266,7 +266,7 @@ KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
         for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
           fmt.remove( yearPos, 1 );
       }
-      //kdDebug(36001) << "KSpreadCell::tryParseDate short format w/o date: " << fmt << endl;
+      //kdDebug(36001) << "Cell::tryParseDate short format w/o date: " << fmt << endl;
       tmpDate = parserLocale->readDate( str, fmt, &valid );
     }
   }

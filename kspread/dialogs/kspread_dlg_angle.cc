@@ -35,6 +35,8 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+using namespace KSpread;
+
 KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: KDialogBase( parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel|Default )
 {
@@ -48,7 +50,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
   m_pAngle = new KIntNumInput( page );
   m_pAngle->setRange( -90, 90, 1 );
   m_pAngle->setLabel( i18n("Angle:") );
-  m_pAngle->setSuffix(" °");
+  m_pAngle->setSuffix(" ");
   lay->addWidget( m_pAngle );
 
   QWidget* spacer = new QWidget( page );
@@ -59,7 +61,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
-  KSpreadCell *cell = m_pView->activeSheet()->cellAt( marker.x(), marker.y() );
+  Cell *cell = m_pView->activeSheet()->cellAt( marker.x(), marker.y() );
   int angle=-(cell->getAngle(marker.x(), marker.y()));
   m_pAngle->setValue( angle );
 }

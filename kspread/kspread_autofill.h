@@ -36,7 +36,10 @@ class AutoFillSequence;
 #include <qptrlist.h>
 #include <qstringlist.h>
 
-class KSpreadCell;
+namespace KSpread
+{
+  class Cell;
+}
 
 class AutoFillSequenceItem
 {
@@ -78,7 +81,7 @@ protected:
 class AutoFillSequence
 {
 public:
-    AutoFillSequence( KSpreadCell *_obj );
+    AutoFillSequence( KSpread::Cell *_obj );
 
     int count()const { return sequence.count(); }
 
@@ -87,7 +90,7 @@ public:
 
     bool matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta );
 
-    void fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
+    void fillCell( KSpread::Cell *src, KSpread::Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
 
 protected:
     QPtrList<AutoFillSequenceItem> sequence;

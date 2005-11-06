@@ -29,7 +29,6 @@
 class QComboBox;
 class KLineEdit;
 
-class KSpreadCell;
 class KSpreadStyle;
 class KSpreadView;
 #include "kspread_condition.h"

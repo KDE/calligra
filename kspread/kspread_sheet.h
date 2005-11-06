@@ -27,7 +27,6 @@ class KSpreadSheetPrint;
 
 class ColumnFormat;
 class RowFormat;
-class KSpreadCell;
 class KSpreadStyle;
 class KSpreadView;
 class KSpreadPoint;
@@ -44,8 +43,10 @@ class QWidget;
 class QPainter;
 class QDomElement;
 
-namespace KSpread {
-  class DependencyManager;
+namespace KSpread
+{
+class Cell;
+class DependencyManager;
 }
 
 class DCOPObject;
@@ -94,7 +95,7 @@ public:
      *
      * @param _obj may by 0L. In this case all cells may have changed.
      */
-    virtual void cellChanged( KSpreadCell *_obj );
+    virtual void cellChanged( KSpread::Cell *_obj );
 
     virtual void setIgnoreChanges( bool _ignore ) { m_bIgnoreChanges = _ignore; }
 
@@ -104,7 +105,7 @@ public:
     KSpreadSheet* sheet()const { return m_pSheet; }
 
 signals:
-    void changed( KSpreadCell *_obj );
+    void changed( KSpread::Cell *_obj );
 
 protected:
     QRect m_rctDataArea;
@@ -152,7 +153,7 @@ public:
     ChartBinding( KSpreadSheet *_sheet, const QRect& _area, ChartChild *_child );
     virtual ~ChartBinding();
 
-    virtual void cellChanged( KSpreadCell *_obj );
+    virtual void cellChanged( KSpread::Cell *_obj );
 
 private:
     ChartChild* m_child;
@@ -235,7 +236,7 @@ class SheetPrivate;
  */
 class KSPREAD_EXPORT KSpreadSheet : public QObject
 {
-    friend class KSpreadCell;
+    friend class KSpread::Cell;
 
     Q_OBJECT
 
@@ -365,26 +366,26 @@ public:
 
     /**
      * @return the first cell of this sheet. Next cells can
-     * be retrieved by calling @ref KSpreadCell::nextCell.
+     * be retrieved by calling @ref KSpread::Cell::nextCell.
      */
-    KSpreadCell* firstCell() const;
+    KSpread::Cell* firstCell() const;
 
     RowFormat* firstRow() const;
 
     ColumnFormat* firstCol() const;
 
-    KSpreadCell* cellAt( int _column, int _row ) const;
+    KSpread::Cell* cellAt( int _column, int _row ) const;
     /**
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      */
-    KSpreadCell* cellAt( int _column, int _row, bool _scrollbar_update = false );
+    KSpread::Cell* cellAt( int _column, int _row, bool _scrollbar_update = false );
     /**
      * A convenience function.
      */
-    KSpreadCell* cellAt( const QPoint& _point, bool _scrollbar_update = false )
+    KSpread::Cell* cellAt( const QPoint& _point, bool _scrollbar_update = false )
       { return cellAt( _point.x(), _point.y(), _scrollbar_update ); }
     /**
      * @returns the pointer to the cell that is visible at a certain position. That means If the cell
@@ -395,22 +396,22 @@ public:
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      */
-    KSpreadCell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
+    KSpread::Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
     /**
-     * If no special KSpreadCell exists for this position then a new one is created.
+     * If no special KSpread::Cell exists for this position then a new one is created.
      *
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      *
-     * @return a non default KSpreadCell for the position.
+     * @return a non default KSpread::Cell for the position.
      */
-    KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, KSpreadStyle * _style = 0 );
-    KSpreadCell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
+    KSpread::Cell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, KSpreadStyle * _style = 0 );
+    KSpread::Cell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
       { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
 
-    KSpreadCell* defaultCell() const;
+    KSpread::Cell* defaultCell() const;
 
     KSpreadFormat* defaultFormat();
     const KSpreadFormat* defaultFormat() const;
@@ -485,11 +486,11 @@ public:
     void adjustSizeMaxY ( double _y );
 
     /**
-     * Sets the @ref KSpreadCell::layoutDirtyFlag in all cells.
+     * Sets the @ref KSpread::Cell::layoutDirtyFlag in all cells.
      */
     void setLayoutDirtyFlag();
     /**
-     * Sets the @ref KSpreadCell::calcDirtyFlag in all cells.
+     * Sets the @ref KSpread::Cell::calcDirtyFlag in all cells.
      * That means that the cells are marked dirty and will recalculate
      * if requested. This function does only MARK, it does NOT actually calculate.
      * Use @ref #recalc to recaculate dirty values.
@@ -511,7 +512,7 @@ public:
 
     /** handles the fact that a cell has been changed - updates
     things that need to be updated */
-    void valueChanged (KSpreadCell *cell);
+    void valueChanged (KSpread::Cell *cell);
 
     /**
     * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
@@ -877,7 +878,7 @@ public:
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
-    bool getCellRectangle( const QRect &_range, QPtrList<KSpreadCell> &_list );
+    bool getCellRectangle( const QRect &_range, QPtrList<KSpread::Cell> &_list );
 
     /**
      * A convenience function that finds a sheet by its name.
@@ -889,7 +890,7 @@ public:
      * All cells depending on this cell will be actualized.
      * The border range will be actualized, when the cell is out of current range.
      */
-    void insertCell( KSpreadCell *_cell );
+    void insertCell( KSpread::Cell *_cell );
     /**
      * Used by Undo.
      *
@@ -1034,9 +1035,9 @@ public:
     /**
      * Calculates the cell if necessary, makes its layout if necessary,
      * and force redraw.
-     * Then it sets the cell's @ref KSpreadCell::m_bDisplayDirtyFlag to false.
+     * Then it sets the cell's @ref KSpread::Cell::m_bDisplayDirtyFlag to false.
      */
-    void updateCell( KSpreadCell* _cell, int _col, int _row );
+    void updateCell( KSpread::Cell* _cell, int _col, int _row );
 
     /**
      * Like updateCell except it works on a range of cells.  Use this function
@@ -1069,7 +1070,7 @@ public:
     void emit_updateColumn( ColumnFormat *_format, int _column );
 
     /**
-     * Needed for @ref KSpreadCell::leftBorderPen and friends, since we can not
+     * Needed for @ref KSpread::Cell::leftBorderPen and friends, since we can not
      * have a static pen object.
      *
      * The returned pen has pen style NoPen set.
@@ -1107,7 +1108,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getFirstCellColumn(int col) const;
+  KSpread::Cell* getFirstCellColumn(int col) const;
 
   /**
    * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -1118,7 +1119,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getLastCellColumn(int col) const;
+  KSpread::Cell* getLastCellColumn(int col) const;
 
   /**
    * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -1129,7 +1130,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getFirstCellRow(int row) const;
+  KSpread::Cell* getFirstCellRow(int row) const;
 
   /**
    * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -1140,7 +1141,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getLastCellRow(int row) const;
+  KSpread::Cell* getLastCellRow(int row) const;
 
   /**
    * Retrieves the next used cell above the given col/row pair.  The given
@@ -1151,7 +1152,7 @@ public:
    *
    * @return Returns the next used cell above this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellUp(int col, int row) const;
+  KSpread::Cell* getNextCellUp(int col, int row) const;
 
   /**
    * Retrieves the next used cell below the given col/row pair.  The given
@@ -1162,7 +1163,7 @@ public:
    *
    * @return Returns the next used cell below this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellDown(int col, int row) const;
+  KSpread::Cell* getNextCellDown(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the right of the given col/row pair.
@@ -1174,7 +1175,7 @@ public:
    * @return Returns the next used cell to the right of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellLeft(int col, int row) const;
+  KSpread::Cell* getNextCellLeft(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the left of the given col/row pair.
@@ -1186,7 +1187,7 @@ public:
    * @return Returns the next used cell to the left of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellRight(int col, int row) const;
+  KSpread::Cell* getNextCellRight(int col, int row) const;
 
   KSpreadSheetPrint * print() const;
 
@@ -1250,7 +1251,7 @@ protected:
     /**
      * @see #autofill
      */
-    void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
+    void fillSequence( QPtrList<KSpread::Cell>& _srcList, QPtrList<KSpread::Cell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
     static int s_id;
     static QIntDict<KSpreadSheet>* s_mapSheets;
@@ -1272,11 +1273,11 @@ public:
 	virtual bool testCondition( RowFormat* ) { return false; }
 	virtual void doWork( RowFormat* ) { }
 	virtual void doWork( ColumnFormat* ) { }
-	virtual void prepareCell( KSpreadCell* ) { }
+	virtual void prepareCell( KSpread::Cell* ) { }
 
 	// these are needed in all CellWorkers
-	virtual bool testCondition( KSpreadCell* cell ) =0;
-	virtual void doWork( KSpreadCell* cell, bool cellRegion, int x, int y ) =0;
+	virtual bool testCondition( KSpread::Cell* cell ) =0;
+	virtual void doWork( KSpread::Cell* cell, bool cellRegion, int x, int y ) =0;
     };
 
     // this is for type A (surprise :))
@@ -1292,18 +1293,18 @@ protected:
                                CellWorker& worker );
 
 private:
-    bool FillSequenceWithInterval (QPtrList<KSpreadCell>& _srcList,
-				   QPtrList<KSpreadCell>& _destList,
+    bool FillSequenceWithInterval (QPtrList<KSpread::Cell>& _srcList,
+				   QPtrList<KSpread::Cell>& _destList,
 				   QPtrList<AutoFillSequence>& _seqList,
                                    bool down);
 
-    void FillSequenceWithCopy (QPtrList<KSpreadCell>& _srcList,
-			       QPtrList<KSpreadCell>& _destList,
+    void FillSequenceWithCopy (QPtrList<KSpread::Cell>& _srcList,
+			       QPtrList<KSpread::Cell>& _destList,
                                bool down);
 
     void convertObscuringBorders();
-    void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
-    int  adjustColumnHelper( KSpreadCell * c, int _col, int _row );
+    void checkCellContent(KSpread::Cell * cell1, KSpread::Cell * cell2, int & ret);
+    int  adjustColumnHelper( KSpread::Cell * c, int _col, int _row );
     void checkContentDirection( QString const & name );
 
     SheetPrivate* d;

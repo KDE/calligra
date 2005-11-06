@@ -46,6 +46,8 @@
 #include <kspread_undo.h>
 #include <kspread_view.h>
 
+using namespace KSpread;
+
 KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode)
   : KDialogBase( parent, name, true, QString::null, Ok|Cancel ),
     m_pView( parent ),
@@ -69,7 +71,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
 
   // Limit the range
   int column = m_targetRect.left();
-  KSpreadCell* lastCell = m_pView->activeSheet()->getLastCellColumn( column );
+  Cell* lastCell = m_pView->activeSheet()->getLastCellColumn( column );
   if( lastCell )
     if( m_targetRect.bottom() > lastCell->row() )
       m_targetRect.setBottom( lastCell->row() );
@@ -229,7 +231,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   {
     setCaption( i18n( "Text to Columns" ) );
     m_data = "";
-    KSpreadCell  * cell;
+    Cell  * cell;
     KSpreadSheet * sheet = m_pView->activeSheet();
     int col = m_targetRect.left();
     for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
@@ -601,7 +603,7 @@ void KSpreadCSVDialog::accept()
 {
   KSpreadSheet * sheet  = m_pView->activeSheet();
   QString csv_delimiter = QString::null;
-  KSpreadCell  * cell;
+  Cell  * cell;
 
   int numRows = m_sheet->numRows();
   int numCols = m_sheet->numCols();

@@ -28,7 +28,6 @@
 
 class KSpreadView;
 class KSpreadSheet;
-class KSpreadCell;
 class QPushButton;
 class QMultiLineEdit;
 

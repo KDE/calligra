@@ -36,7 +36,7 @@ public:
 class CellDamage::Private
 {
 public:
-  KSpreadCell* cell;
+  KSpread::Cell* cell;
 };
 
 }
@@ -44,7 +44,7 @@ public:
 using namespace KSpread;
 
 
-CellDamage::CellDamage( KSpreadCell* cell )
+CellDamage::CellDamage( KSpread::Cell* cell )
 {
   d = new Private;
   d->cell = cell;
@@ -55,7 +55,7 @@ CellDamage::~CellDamage()
   delete d;
 }
 
-KSpreadCell* CellDamage::cell()
+Cell* CellDamage::cell()
 {
   return d->cell;
 }

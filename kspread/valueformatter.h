@@ -24,10 +24,11 @@
 
 #include <qdatetime.h>
 
-class KSpreadCell;
 class KSpreadValue;
 
-namespace KSpread {
+namespace KSpread
+{
+class Cell;
 
 class ValueConverter;
 
@@ -42,7 +43,7 @@ class ValueFormatter {
   ValueFormatter (ValueConverter *converter);
 
   /** create a text representation of data in this cell */
-  QString formatText (KSpreadCell *cell, FormatType fmtType);
+  QString formatText (KSpread::Cell *cell, FormatType fmtType);
 
   /** create a text representation of data in this KSpreadValue */
   QString formatText (const KSpreadValue &value,
@@ -73,7 +74,7 @@ class ValueFormatter {
   /** create a fraction format */
   QString fractionFormat (double value, FormatType fmtType);
   
-  QString errorFormat (KSpreadCell *cell);
+  QString errorFormat (KSpread::Cell *cell);
 
   /** Remove trailing zeros and the decimal point if necessary
   unless the number has no decimal point */

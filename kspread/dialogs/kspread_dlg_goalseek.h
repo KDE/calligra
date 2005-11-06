@@ -30,7 +30,6 @@
 #include <qpoint.h>
 #include <qrect.h>
 
-class KSpreadCell;
 class KSpreadPoint;
 class KSpreadSheet;
 class KSpreadView;
@@ -42,6 +41,11 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
+
+namespace KSpread
+{
+  class Cell;
+}
 
 class KSpreadGoalSeekDlg : public KDialog
 {
@@ -71,8 +75,8 @@ class KSpreadGoalSeekDlg : public KDialog
 
  private:
   KSpreadView * m_pView;
-  KSpreadCell * m_sourceCell;
-  KSpreadCell * m_targetCell;
+  KSpread::Cell * m_sourceCell;
+  KSpread::Cell * m_targetCell;
   double        m_result;
   int           m_maxIter;
   bool          m_restored;

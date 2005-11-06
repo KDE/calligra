@@ -49,6 +49,8 @@
 
 #include <kstdguiitem.h>
 
+using namespace KSpread;
+
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   : QDialog( parent, name,TRUE )
 {
@@ -229,7 +231,7 @@ void KSpreadreference::slotOk()
     }
 
     m_pView->canvasWidget()->
-	gotoLocation(KSpreadPoint(KSpreadCell::fullName(m_pView->activeSheet(),
+	gotoLocation(KSpreadPoint(Cell::fullName(m_pView->activeSheet(),
         area[ index ].rect.left(), area[ index ].rect.top() ),
 				  m_pView->doc()->map() ) );
     m_pView->selectionInfo()->setSelection(area[ index ].rect.topLeft(),

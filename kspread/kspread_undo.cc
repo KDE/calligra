@@ -31,6 +31,8 @@
 
 #include "kspread_undo.h"
 
+using namespace KSpread;
+
 /****************************************************************************
  *
  * KSpreadUndo
@@ -223,7 +225,7 @@ void KSpreadUndoInsertRemoveAction::undoFormulaReference()
         KSpreadSheet* sheet = doc()->map()->findSheet( (*it).sheetName() );
         if ( sheet )
         {
-            KSpreadCell * cell = sheet->cellAt( (*it).col(), (*it).row() );
+            Cell * cell = sheet->cellAt( (*it).col(), (*it).row() );
             if ( cell && !cell->isDefault() )
             {
                 cell->setCellText( (*it).formula() );
@@ -852,7 +854,7 @@ void KSpreadUndoSetText::undo()
 
     doc()->undoLock();
     doc()->emitBeginOperation();
-    KSpreadCell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
+    Cell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
     m_eFormatTypeRedo=cell->getFormatType( m_iColumn, m_iRow );
     cell->setFormatType(m_eFormatType);
@@ -873,7 +875,7 @@ void KSpreadUndoSetText::redo()
 
     doc()->undoLock();
     doc()->emitBeginOperation();
-    KSpreadCell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
+    Cell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
     m_eFormatType=cell->getFormatType( m_iColumn, m_iRow );
     if ( m_strRedoText.isNull() )
@@ -919,7 +921,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
   }
   list.clear();
 
-  KSpreadCell * cell;
+  Cell * cell;
   int bottom = m_rctRect.bottom();
   int right  = m_rctRect.right();
 
@@ -963,7 +965,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       }
     }
     /*
-      KSpreadCell * c = sheet->firstCell();
+      Cell * c = sheet->firstCell();
       for( ; c; c = c->nextCell() )
       {
       int col = c->column();
@@ -1009,7 +1011,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       }
     }
     /*
-      KSpreadCell * c = sheet->firstCell();
+      Cell * c = sheet->firstCell();
       for( ; c; c = c->nextCell() )
       {
       int row = c->row();
@@ -1031,7 +1033,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
     for ( int y = m_rctRect.top(); y <= bottom; ++y )
       for ( int x = m_rctRect.left(); x <= right; ++x )
       {
-        KSpreadCell * cell = sheet->nonDefaultCell( x, y );
+        Cell * cell = sheet->nonDefaultCell( x, y );
         if ( !cell->isObscuringForced() )
         {
           layoutCell tmplayout;
@@ -1120,7 +1122,7 @@ void KSpreadUndoCellFormat::undo()
   QValueList<layoutCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
-    KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
+    Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
     cell->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
     cell->setDisplayDirtyFlag();
@@ -1164,7 +1166,7 @@ void KSpreadUndoCellFormat::redo()
   QValueList<layoutCell>::Iterator it2;
   for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
   {
-    KSpreadCell * cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
+    Cell * cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
     cell->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
     cell->setDisplayDirtyFlag();
@@ -1238,7 +1240,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
 
   if ( util_isColumnSelected( m_rctRect ) )
   {
-    KSpreadCell * c;
+    Cell * c;
     for (int col = m_rctRect.left(); col <= m_rctRect.right(); ++col)
     {
       layoutColumn tmplayout;
@@ -1267,7 +1269,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
   }
   else if ( util_isRowSelected( m_rctRect ) )
   {
-    KSpreadCell * c;
+    Cell * c;
     for ( int row = m_rctRect.top(); row <= m_rctRect.bottom(); ++row)
     {
       layoutRow tmplayout;
@@ -1297,7 +1299,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
   {
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
-    KSpreadCell * cell;
+    Cell * cell;
     for ( int y = m_rctRect.top(); y <= bottom; ++y )
       for ( int x = m_rctRect.left(); x <= right; ++x )
       {
@@ -1393,7 +1395,7 @@ void KSpreadUndoSort::undo()
   QValueList<layoutTextCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
-    KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
+    Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
     if ( (*it2).text.isEmpty() )
     {
       if(!cell->text().isEmpty())
@@ -1445,7 +1447,7 @@ void KSpreadUndoSort::redo()
     QValueList<layoutTextCell>::Iterator it2;
     for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
     {
-      KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
+      Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
 
       if ( (*it2).text.isEmpty() )
       {
@@ -1914,7 +1916,7 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
 
     if( util_isColumnSelected( m_rctRect ) )
     {
-      KSpreadCell * c;
+      Cell * c;
       for ( int col = m_rctRect.left(); col <= right; ++col )
       {
         c = sheet->getFirstCellColumn( col );
@@ -1934,7 +1936,7 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
     }
     else if ( util_isRowSelected( m_rctRect ) )
     {
-      KSpreadCell * c;
+      Cell * c;
       for ( int row = m_rctRect.top(); row <= bottom; ++row )
       {
         c = sheet->getFirstCellRow( row );
@@ -1954,7 +1956,7 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
     }
     else
     {
-      KSpreadCell * cell;
+      Cell * cell;
       for ( int x = m_rctRect.left(); x <= right; ++x )
       {
         cell = sheet->getFirstCellColumn( x );
@@ -1997,7 +1999,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
       for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
-          KSpreadCell* cell = sheet->nonDefaultCell( x, y );
+          Cell* cell = sheet->nonDefaultCell( x, y );
           bool found = false;
           QValueList<textOfCell>::Iterator it;
           for( it = m_lstTextCell.begin(); it != m_lstTextCell.end(); ++it )
@@ -2016,7 +2018,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
       QValueList<textOfCell>::Iterator it2;
       for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
       {
-        KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
+        Cell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
         if ( (*it2).text.isEmpty() )
         {
           if ( !cell->text().isEmpty() )
@@ -2047,7 +2049,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
       for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
-          KSpreadCell* cell = sheet->nonDefaultCell( x, y );
+          Cell* cell = sheet->nonDefaultCell( x, y );
           bool found = false;
           QValueList<textOfCell>::Iterator it;
           for( it = m_lstRedoTextCell.begin(); it != m_lstRedoTextCell.end(); ++it )
@@ -2066,7 +2068,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
       QValueList<textOfCell>::Iterator it2;
       for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
       {
-        KSpreadCell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
+        Cell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
         if ( (*it2).text.isEmpty() )
         {
           if ( !cell->text().isEmpty() )
@@ -2113,7 +2115,7 @@ void KSpreadUndoMergedCell::undo()
 
     doc()->undoLock();
 
-    KSpreadCell *cell = sheet->nonDefaultCell( m_iCol, m_iRow );
+    Cell *cell = sheet->nonDefaultCell( m_iCol, m_iRow );
     m_iExtraRedoX=cell->extraXCells();
     m_iExtraRedoY=cell->extraYCells();
 
@@ -2791,7 +2793,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
   int right  = m_selection.right();
   if ( util_isColumnSelected( m_selection ) )
   {
-    KSpreadCell * c;
+    Cell * c;
     for ( int col = m_selection.left(); col <= right; ++ col )
     {
       c = sheet->getFirstCellColumn( col );
@@ -2810,7 +2812,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
   }
   else if ( util_isRowSelected( m_selection ) )
   {
-    KSpreadCell * c;
+    Cell * c;
     for ( int row = m_selection.top(); row <= bottom; ++row )
     {
       c = sheet->getFirstCellRow( row );
@@ -2829,7 +2831,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
   }
   else
   {
-    KSpreadCell * cell;
+    Cell * cell;
     for ( int i = m_selection.top(); i <= bottom; ++i)
 	for ( int j = m_selection.left(); j <= right; ++j )
         {

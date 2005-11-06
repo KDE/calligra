@@ -32,7 +32,6 @@
 
 #include <dcopobject.h>
 
-class KSpreadCell;
 class KSpreadSheet;
 class QPoint;
 

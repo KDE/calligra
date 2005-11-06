@@ -20,11 +20,11 @@
 #ifndef KSPREAD_DAMAGES
 #define KSPREAD_DAMAGES
 
-class KSpreadCell;
 class KSpreadSheet;
 
 namespace KSpread
 {
+class Cell;
 
 class Damage
 {
@@ -47,13 +47,13 @@ class CellDamage : public Damage
 {
   public:
   
-    CellDamage( KSpreadCell* cell );
+    CellDamage( KSpread::Cell* cell );
     
     virtual ~CellDamage();
     
     virtual Type type() const { return Cell; }
     
-    KSpreadCell* cell();
+    KSpread::Cell* cell();
     
   private:
     class Private;

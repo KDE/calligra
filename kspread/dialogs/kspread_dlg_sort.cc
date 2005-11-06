@@ -51,6 +51,8 @@
 #include <qwidget.h>
 #include <qvbox.h>
 
+using namespace KSpread;
+
 KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
                                 bool modal )
     : KDialogBase( parent, name, modal,"Sort",Ok|Cancel ),
@@ -299,7 +301,7 @@ void KSpreadSortDlg::init()
 
   QRect r = m_pView->selection();
   QString cellArea;
-  cellArea += KSpreadCell::columnName(r.left());
+  cellArea += Cell::columnName(r.left());
   cellArea += QString::number( r.top() );
   m_outputCell->setText( cellArea );
 
@@ -313,14 +315,14 @@ void KSpreadSortDlg::init()
     for (int i = r.left(); i <= right; ++i)
     {  
 	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
-	    QString colName=i18n(" (Column %1)").arg(KSpreadCell::columnName(i));
+	    QString colName=i18n(" (Column %1)").arg(Cell::columnName(i));
 	    
 	    if (!guessName.isEmpty())
 	    	m_listColumn += guessName + colName;
 	    else
-		m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+		m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
     }
-     // m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+     // m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
   }
   // Entire rows selected ?
   else if ( util_isRowSelected(r) )
@@ -364,12 +366,12 @@ void KSpreadSortDlg::init()
     for (int i = r.left(); i <= right; ++i)
     {  
 	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
-	    QString colName=i18n(" (Column %1)").arg(KSpreadCell::columnName(i));
+	    QString colName=i18n(" (Column %1)").arg(Cell::columnName(i));
 	    
 	    if (!guessName.isEmpty())
 		    m_listColumn += guessName + colName;
 	    else
-		    m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
+		    m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
     }
 
     for (int i = r.top(); i <= bottom; ++i) 

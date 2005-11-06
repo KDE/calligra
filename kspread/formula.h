@@ -24,12 +24,13 @@
 #include <qvaluevector.h>
 
 class KLocale;
-class KSpreadCell;
 class KSpreadSheet;
 class KSpreadValue;
 
 namespace KSpread
 {
+
+class Cell;
 
 class Token
 {
@@ -234,7 +235,7 @@ class Formula
     /*
      * Creates a formula. It must be owned by a sheet, and optionally sheet.
      */
-    Formula (KSpreadSheet *sheet,  KSpreadCell *cell = 0);
+    Formula (KSpreadSheet *sheet,  KSpread::Cell *cell = 0);
     
     /*
      * Creates a formula that is not owned by any sheet.
@@ -254,7 +255,7 @@ class Formula
     /*
      * Returns the cell which owns this formula.
      */
-    KSpreadCell* cell();
+    KSpread::Cell* cell();
     
     /*
      * Sets the expression for this formula.

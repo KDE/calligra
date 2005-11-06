@@ -40,7 +40,6 @@ class KoDocumentEntry;
 class KoTabBar;
 
 class KSpreadCanvas;
-class KSpreadCell;
 class KSpreadChild;
 class KSpreadDoc;
 class KSpreadEditWidget;
@@ -55,6 +54,7 @@ class ViewPrivate;
 
 namespace KSpread
 {
+class Cell;
 class Damage;
 }
 
@@ -598,7 +598,7 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     void initFindReplace();
-    KSpreadCell* findNextCell();
+    KSpread::Cell* findNextCell();
 
 private:
 
@@ -614,7 +614,7 @@ private:
     void spellCleanup();
 
     void endOperation( QRect const & rect );
-    KSpreadCell* nextFindValidCell( int col, int row );
+    KSpread::Cell* nextFindValidCell( int col, int row );
 };
 
 #endif // KSPREAD_VIEW

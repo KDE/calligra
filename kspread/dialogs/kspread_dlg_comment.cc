@@ -34,6 +34,8 @@
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
 
+using namespace KSpread;
+
 KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: KDialogBase( parent, name,TRUE,i18n("Cell Comment"),Ok|Cancel )
 {
@@ -49,7 +51,7 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
     multiLine->setFocus();
 
 
-    KSpreadCell *cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
+    Cell *cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
     if(!cell->comment(marker.x(),marker.y()).isEmpty())
         multiLine->setText(cell->comment(marker.x(),marker.y()));
 

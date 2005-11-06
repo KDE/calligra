@@ -120,18 +120,18 @@ void DependencyManager::reset ()
 
 void DependencyManager::cellChanged (const KSpreadPoint &cell)
 {
-  KSpreadCell *c = cell.cell();
+  Cell *c = cell.cell();
 
   // empty or default cell? do nothing
   if( c->isDefault() )
     return;
   
   //if the cell contains the circle error, we mustn't do anything
-  if (c->testFlag (KSpreadCell::Flag_CircularCalculation))
+  if (c->testFlag (Cell::Flag_CircularCalculation))
     return;
   
   //don't re-generate dependencies if we're updating dependencies
-  if ( !(c->testFlag (KSpreadCell::Flag_Progress)))
+  if ( !(c->testFlag (Cell::Flag_Progress)))
     deps->generateDependencies (cell);
 
   deps->processDependencies (cell);
@@ -320,7 +320,7 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
   removeDependencies (cell);
 
   //new dependencies only need to be generated if the cell contains a formula
-  KSpreadCell *c = sheet->cellAt (cell.column(), cell.row());
+  Cell *c = sheet->cellAt (cell.column(), cell.row());
   if( c->isDefault() )
     return;
   if (!c->isFormula())
@@ -474,21 +474,21 @@ void DependencyList::processDependencies (const RangeList &rangeList)
 
 void DependencyList::updateCell (const KSpreadPoint &cell) const
 {
-  KSpreadCell *c = cell.cell();
+  Cell *c = cell.cell();
   //prevent infinite recursion (circular dependencies)
-  if (c->testFlag (KSpreadCell::Flag_Progress))
+  if (c->testFlag (Cell::Flag_Progress))
   {
     kdError(36001) << "ERROR: Circle" << endl;
-    c->setFlag(KSpreadCell::Flag_CircularCalculation);
+    c->setFlag(Cell::Flag_CircularCalculation);
     KSpreadValue v;
     v.setError ( "####" );
     c->setValue (v);
     //clear the computing-dependencies flag
-    c->clearFlag (KSpreadCell::Flag_Progress);
+    c->clearFlag (Cell::Flag_Progress);
     return;
   }
   //set the computing-dependencies flag
-  c->setFlag (KSpreadCell::Flag_Progress);
+  c->setFlag (Cell::Flag_Progress);
   
   //mark the cell as calc-dirty
   c->setCalcDirtyFlag();
@@ -497,7 +497,7 @@ void DependencyList::updateCell (const KSpreadPoint &cell) const
   c->calc (false);
   
   //clear the computing-dependencies flag
-  c->clearFlag (KSpreadCell::Flag_Progress);
+  c->clearFlag (Cell::Flag_Progress);
 }
 
 KSpreadPoint DependencyList::leadingCell (const KSpreadPoint &cell) const
@@ -537,13 +537,13 @@ QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range
 
 RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
 {
-  KSpreadCell *c = cell.cell();
+  Cell *c = cell.cell();
   if (!c->isFormula())
     return RangeList();   //not a formula -> no dependencies
 
   QString expr = c->text();
 
-  //TODO: when the new parser is in use, KSpreadCell will hold a Formula
+  //TODO: when the new parser is in use, Cell will hold a Formula
   //instance, hence we'll be able to use that one directly
   Tokens tokens = Formula::scan( expr );  
 

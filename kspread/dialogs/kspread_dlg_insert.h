@@ -31,7 +31,6 @@
 
 class KSpreadView;
 class KSpreadSheet;
-class KSpreadCell;
 class QCheckBox;
 class QRadioButton;
 

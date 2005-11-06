@@ -38,7 +38,7 @@ ValueFormatter::ValueFormatter (ValueConverter *conv) : converter( conv )
 {
 }
 
-QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
+QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
 {
   if (cell->hasError ())
     return errorFormat (cell);
@@ -102,12 +102,12 @@ QString ValueFormatter::formatText (const KSpreadValue &value,
     double v = converter->asFloat (value).asFloat();
 
     // Always unsigned ?
-    if ((floatFormat == KSpreadCell::AlwaysUnsigned) && (v < 0.0))
+    if ((floatFormat == Cell::AlwaysUnsigned) && (v < 0.0))
       v *= -1.0;
 
     // Make a string out of it.
     str = createNumberFormat (v, precision, fmtType,
-        (floatFormat == KSpreadCell::AlwaysSigned));
+        (floatFormat == Cell::AlwaysSigned));
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
@@ -623,14 +623,14 @@ QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
   return tmp;
 }
 
-QString ValueFormatter::errorFormat (KSpreadCell *cell)
+QString ValueFormatter::errorFormat (Cell *cell)
 {
   QString err;
-  if (cell->testFlag (KSpreadCell::Flag_ParseError))
+  if (cell->testFlag (Cell::Flag_ParseError))
     err = "#" + i18n ("Parse") + "!";
-  else if ( cell->testFlag (KSpreadCell::Flag_CircularCalculation))
+  else if ( cell->testFlag (Cell::Flag_CircularCalculation))
     err = "#" + i18n ("Circle") + "!";
-  else if ( cell->testFlag (KSpreadCell::Flag_DependancyError))
+  else if ( cell->testFlag (Cell::Flag_DependancyError))
     err = "#" + i18n ("Depend") + "!";
   else
   {

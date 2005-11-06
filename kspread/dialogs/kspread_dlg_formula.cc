@@ -62,7 +62,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_focus = 0;
     m_desc = 0;
 
-    KSpreadCell* cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(),
+    Cell* cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(),
 							m_pView->canvasWidget()->markerRow() );
      m_oldText=cell->text();
     // Make sure that there is a cell editor running.
@@ -735,7 +735,7 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _sheet, const QRect&
         int dy = _selection.bottom();
         QString tmp;
         tmp.setNum( dy );
-        tmp = _sheet->sheetName() + "!" + KSpreadCell::columnName( dx ) + tmp;
+        tmp = _sheet->sheetName() + "!" + Cell::columnName( dx ) + tmp;
         m_focus->setText( tmp );
     }
     else

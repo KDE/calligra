@@ -27,7 +27,6 @@
 #include "kspread_global.h"
 #include "kspread_value.h"
 #include <koffice_export.h>
-class KSpreadCell;
 class KSpreadMap;
 class KSpreadSheet;
 class KLocale;
@@ -36,6 +35,11 @@ class QFont;
 class QPen;
 class QDomElement;
 class QDomDocument;
+
+namespace KSpread
+{
+class Cell;
+}
 
 struct KSPREAD_EXPORT KSpreadPoint
 {
@@ -53,7 +57,7 @@ public:
   bool isValid() const { return ( pos.x() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
   bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
-  KSpreadCell* cell() const;
+  KSpread::Cell* cell() const;
 
   bool operator== (const KSpreadPoint &cell) const;
   bool operator< (const KSpreadPoint &cell) const;
@@ -178,13 +182,13 @@ public:
   /**
    * @return the first allocated cell in the area
    */
-  KSpreadCell* first();
+  KSpread::Cell* first();
 
   /**
    * @return the next allocated cell in the area after the previous one
    * retrieved, or NULL if it was the last one.
    */
-  KSpreadCell* next();
+  KSpread::Cell* next();
 private:
 
   QRect range;

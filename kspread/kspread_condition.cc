@@ -22,7 +22,6 @@
 #include <float.h>
 
 #include "kspread_cell.h"
-#include "kspread_condition.h"
 #include "kspread_sheet.h"
 #include "kspread_doc.h"
 #include "kspread_style.h"
@@ -36,6 +35,8 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
+
+#include "kspread_condition.h"
 
 KSpreadConditional::KSpreadConditional():
   val1( 0.0 ), val2( 0.0 ), strVal1( 0 ), strVal2( 0 ),
@@ -73,8 +74,7 @@ KSpreadConditional& KSpreadConditional::operator=( const KSpreadConditional& d )
   return *this;
 }
 
-
-KSpreadConditions::KSpreadConditions( const KSpreadCell * ownerCell )
+KSpreadConditions::KSpreadConditions( const KSpread::Cell * ownerCell )
   : m_cell( ownerCell ), m_matchedStyle( 0 )
 {
   Q_ASSERT( ownerCell != NULL );

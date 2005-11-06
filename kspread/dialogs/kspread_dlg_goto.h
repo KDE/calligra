@@ -29,7 +29,6 @@
 
 class KSpreadView;
 class KSpreadSheet;
-class KSpreadCell;
 class KLineEdit;
 
 class KSpreadGotoDlg : public KDialogBase

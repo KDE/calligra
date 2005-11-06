@@ -36,7 +36,7 @@ namespace KSpread
 class Inspector::Private
 {
 public:
-  KSpreadCell* cell;
+  Cell* cell;
   KSpreadSheet* sheet;
   
   QListView *cellView;
@@ -133,14 +133,14 @@ void Inspector::Private::handleDep()
     KSpreadPoint point = deps[i];
     int row = point.row();
     int column = point.column();
-    k1 = KSpreadCell::fullName( point.sheet, column, row );
+    k1 = Cell::fullName( point.sheet, column, row );
     
     new QListViewItem( depView, k1, k2 );
   }
   
 }
 
-Inspector::Inspector( KSpreadCell* cell ):
+Inspector::Inspector( Cell* cell ):
   KDialogBase( KDialogBase::Tabbed, "Inspector", KDialogBase::Close, 
   KDialogBase::Close )
 {

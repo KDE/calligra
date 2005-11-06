@@ -35,6 +35,7 @@
 #include <qlistview.h>
 #include <qmemarray.h>
 
+using namespace KSpread;
 
 KSpreadSubtotalDlg::KSpreadSubtotalDlg( KSpreadView * parent, QRect const & selection, const char * name )
   : KDialogBase(parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
@@ -190,7 +191,7 @@ void KSpreadSubtotalDlg::removeSubtotalLines()
   int l = m_selection.left();
   int t = m_selection.top();
 
-  KSpreadCell * cell;
+  Cell * cell;
   QString text;
 
   for ( int y = m_selection.bottom(); y >= t; --y )
@@ -228,7 +229,7 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
   int r = m_selection.right();
   int row = m_selection.top();
 
-  KSpreadCell    * cell;
+  Cell    * cell;
   QCheckListItem * item;
 
   QString text;
@@ -241,7 +242,7 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
 
     if ( text.length() > 0 )
     {
-      text = col.arg( KSpreadCell::columnName( i ) );
+      text = col.arg( Cell::columnName( i ) );
     }
 
     m_dialog->m_columnBox->insertItem( text );
@@ -284,14 +285,14 @@ bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topR
 
     m_selection.setHeight( m_selection.height() + 1 );
 
-    KSpreadCell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
+    Cell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
     cell->setCellText( text );
     cell->setTextFontBold( true );
     cell->setTextFontItalic( true );
     cell->setTextFontUnderline( true );
   }
 
-  QString colName = KSpreadCell::columnName( column );
+  QString colName = Cell::columnName( column );
 
   QString formula("=SUBTOTAL(");
   formula += QString::number( m_dialog->m_functionBox->currentItem() + 1 );
@@ -306,7 +307,7 @@ bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topR
   }
   formula += ")";
 
-  KSpreadCell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
+  Cell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
   cell->setCellText( formula );
   cell->setTextFontBold( true );
   cell->setTextFontItalic( true );

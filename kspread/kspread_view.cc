@@ -230,7 +230,7 @@ public:
       KSpell *   kspell;
       KSpreadSheet *  firstSpellSheet;
       KSpreadSheet *  currentSpellSheet;
-      KSpreadCell  *  currentCell;
+      Cell  *  currentCell;
       KSpreadMacroUndoAction *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
       unsigned int    spellCurrCellY;
@@ -258,9 +258,9 @@ public:
 
     void initActions();
     void adjustActions( bool mode );
-    void adjustActions( KSpreadSheet* sheet, KSpreadCell* cell );
+    void adjustActions( KSpreadSheet* sheet, Cell* cell );
     void adjustWorkbookActions( bool mode );
-    void updateButton( KSpreadCell *cell, int column, int row);
+    void updateButton( Cell *cell, int column, int row);
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 };
 
@@ -1246,7 +1246,7 @@ void ViewPrivate::adjustActions( bool mode )
     view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
 
-void ViewPrivate::adjustActions( KSpreadSheet* sheet, KSpreadCell* cell )
+void ViewPrivate::adjustActions( KSpreadSheet* sheet, Cell* cell )
 {
   QRect selection = selectionInfo->selection();
   if ( sheet->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
@@ -1291,7 +1291,7 @@ void ViewPrivate::adjustWorkbookActions( bool mode )
 }
 
 // TODO this should be merged with adjustActions
-void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
+void ViewPrivate::updateButton( Cell *cell, int column, int row)
 {
     toolbarLock = true;
 
@@ -1369,7 +1369,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
   : KoView( _doc, _parent, _name )
 {
     ElapsedTime et( "KSpreadView constructor" );
-    kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
+    kdDebug(36001) << "sizeof(Cell)=" << sizeof(KSpread::Cell) <<endl;
 
     d = new ViewPrivate;
     d->view = this;
@@ -1999,7 +1999,7 @@ void KSpreadView::spellCheckerReady()
   {
     for ( x = d->spell.spellCurrCellX; x <= d->spell.spellEndCellX; ++x )
     {
-      KSpreadCell * cell = d->spell.currentSpellSheet->cellAt( x, y );
+      Cell * cell = d->spell.currentSpellSheet->cellAt( x, y );
 
       // check text only
       if (cell->isDefault() || !cell->value().isString())
@@ -2121,7 +2121,7 @@ void KSpreadView::spellCheckerMisspelling( const QString &,
 void KSpreadView::spellCheckerCorrected( const QString & old, const QString & corr,
                                          unsigned int pos )
 {
-  KSpreadCell * cell;
+  Cell * cell;
 
   if (d->spell.spellCheckSelection)
   {
@@ -2326,7 +2326,7 @@ void KSpreadView::updateEditWidgetOnPress()
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
 
-    KSpreadCell* cell = d->activeSheet->cellAt( column, row );
+    Cell* cell = d->activeSheet->cellAt( column, row );
     if ( !cell )
     {
         editWidget()->setText( "" );
@@ -2348,7 +2348,7 @@ void KSpreadView::updateEditWidget()
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
 
-    KSpreadCell * cell = d->activeSheet->cellAt( column, row );
+    Cell * cell = d->activeSheet->cellAt( column, row );
     bool active = activeSheet()->getShowFormula()
       && !( d->activeSheet->isProtected() && cell && cell->isHideFormula( column, row ) );
 
@@ -2824,7 +2824,7 @@ void KSpreadView::fontSelected( const QString & _font )
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
   {
-    KSpreadCell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
     d->canvas->editor()->setEditorFont( cell->textFont( cell->column(), cell->row() ), true );
     d->canvas->editor()->setFocus();
   }
@@ -2943,7 +2943,7 @@ void KSpreadView::slotSpecialChar( QChar c, const QString & _font )
   if ( d->activeSheet )
   {
     QPoint marker( selectionInfo()->marker() );
-    KSpreadCell * cell = d->activeSheet->nonDefaultCell( marker );
+    Cell * cell = d->activeSheet->nonDefaultCell( marker );
     if ( cell->textFont( marker.x(), marker.y() ).family() != _font )
     {
       cell->setTextFontFamily( _font );
@@ -2995,7 +2995,7 @@ void KSpreadView::fontSizeSelected( int _size )
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
   {
-    KSpreadCell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
     d->canvas->editor()->setEditorFont( cell->textFont( d->canvas->markerColumn(),
                                                         d->canvas->markerRow() ), true );
     d->canvas->editor()->setFocus();
@@ -3021,7 +3021,7 @@ void KSpreadView::bold( bool b )
 
   if ( d->canvas->editor() )
   {
-    KSpreadCell * cell = d->activeSheet->cellAt( col, row );
+    Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
   }
 
@@ -3043,7 +3043,7 @@ void KSpreadView::underline( bool b )
   d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, -1, -1 ,b );
   if ( d->canvas->editor() )
   {
-    KSpreadCell * cell = d->activeSheet->cellAt( col, row );
+    Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
   }
 
@@ -3065,7 +3065,7 @@ void KSpreadView::strikeOut( bool b )
   d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, -1, -1 ,-1, b );
   if ( d->canvas->editor() )
   {
-    KSpreadCell * cell = d->activeSheet->cellAt( col, row );
+    Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
   }
 
@@ -3088,7 +3088,7 @@ void KSpreadView::italic( bool b )
   d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, -1, b );
   if ( d->canvas->editor() )
   {
-    KSpreadCell * cell = d->activeSheet->cellAt( col, row );
+    Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
   }
 
@@ -3753,7 +3753,7 @@ void KSpreadView::mergeCell()
   }
 
   QPoint topLeft = selection().topLeft();
-  KSpreadCell *cell = d->activeSheet->nonDefaultCell( topLeft );
+  Cell *cell = d->activeSheet->nonDefaultCell( topLeft );
   KCommand* command = new MergeCellCommand( cell, selection().width() - 1,
       selection().height() - 1);
   doc()->addCommand( command );
@@ -3770,7 +3770,7 @@ void KSpreadView::dissociateCell()
   if( doc()->map()->isProtected() )
     return;
 
-  KSpreadCell* cell = d->activeSheet->nonDefaultCell( QPoint( d->canvas->markerColumn(),
+  Cell* cell = d->activeSheet->nonDefaultCell( QPoint( d->canvas->markerColumn(),
       d->canvas->markerRow() ) );
   KCommand* command = new DissociateCellCommand( cell );
   doc()->addCommand( command );
@@ -3799,7 +3799,7 @@ void KSpreadView::decreaseIndent()
   int row = d->canvas->markerRow();
 
   d->activeSheet->decreaseIndent( d->selectionInfo );
-  KSpreadCell * cell = d->activeSheet->cellAt( column, row );
+  Cell * cell = d->activeSheet->cellAt( column, row );
   if ( cell )
     if ( !d->activeSheet->isProtected() )
       d->actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
@@ -3965,7 +3965,7 @@ void KSpreadView::findNext()
         return;
     }
     KFind::Result res = KFind::NoMatch;
-    KSpreadCell* cell = findNextCell();
+    Cell* cell = findNextCell();
     bool forw = ! ( d->findOptions & KFindDialog::FindBackwards );
     while ( res == KFind::NoMatch && cell )
     {
@@ -4023,9 +4023,9 @@ void KSpreadView::findNext()
     }
 }
 
-KSpreadCell* KSpreadView::nextFindValidCell( int col, int row )
+Cell* KSpreadView::nextFindValidCell( int col, int row )
 {
-    KSpreadCell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
+    Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
     if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
         cell = 0L;
     if ( d->typeValue == KSpreadFindOption::Note && cell && cell->comment(col, row).isEmpty())
@@ -4033,13 +4033,13 @@ KSpreadCell* KSpreadView::nextFindValidCell( int col, int row )
     return cell;
 }
 
-KSpreadCell* KSpreadView::findNextCell()
+Cell* KSpreadView::findNextCell()
 {
     // getFirstCellRow / getNextCellRight would be faster at doing that,
     // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
 
     KSpreadSheet* sheet = d->searchInSheets.currentSheet;
-    KSpreadCell* cell = 0L;
+    Cell* cell = 0L;
     bool forw = ! ( d->findOptions & KFindDialog::FindBackwards );
     int col = d->findPos.x();
     int row = d->findPos.y();
@@ -4154,7 +4154,7 @@ void KSpreadView::replace()
 #if 0
     // Refresh the editWidget
     // TODO - after a replacement only?
-    KSpreadCell *cell = activeSheet()->cellAt( canvasWidget()->markerColumn(),
+    Cell *cell = activeSheet()->cellAt( canvasWidget()->markerColumn(),
                                                canvasWidget()->markerRow() );
     if ( cell->text() != 0L )
         editWidget()->setText( cell->text() );
@@ -4180,7 +4180,7 @@ void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/,
 void KSpreadView::slotReplace( const QString &newText, int, int, int )
 {
     // Which cell was this again?
-    KSpreadCell *cell = d->searchInSheets.currentSheet->cellAt( d->findPos );
+    Cell *cell = d->searchInSheets.currentSheet->cellAt( d->findPos );
 
     // ...now I remember, update it!
     cell->setDisplayDirtyFlag();
@@ -4244,7 +4244,7 @@ void KSpreadView::sort()
 void KSpreadView::removeHyperlink()
 {
     QPoint marker( selectionInfo()->marker() );
-    KSpreadCell * cell = d->activeSheet->cellAt( marker );
+    Cell * cell = d->activeSheet->cellAt( marker );
     if( !cell ) return;
     if( cell->link().isEmpty() ) return;
 
@@ -4261,7 +4261,7 @@ void KSpreadView::insertHyperlink()
     d->canvas->closeEditor();
 
     QPoint marker( selectionInfo()->marker() );
-    KSpreadCell* cell = d->activeSheet->cellAt( marker );
+    Cell* cell = d->activeSheet->cellAt( marker );
 
     LinkDialog* dlg = new LinkDialog( this );
     dlg->setCaption( i18n( "Insert Link" ) );
@@ -5175,13 +5175,13 @@ void KSpreadView::slotListChoosePopupMenu( )
   d->popupListChoose = new QPopupMenu();
   int id = 0;
   QRect selection( d->selectionInfo->selection() );
-  KSpreadCell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
+  Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
   QString tmp = cell->text();
   QStringList itemList;
 
   for ( int col = selection.left(); col <= selection.right(); ++col )
   {
-    KSpreadCell * c = d->activeSheet->getFirstCellColumn( col );
+    Cell * c = d->activeSheet->getFirstCellColumn( col );
     while ( c )
     {
       if ( !c->isObscuringForced()
@@ -5253,7 +5253,7 @@ void KSpreadView::slotItemSelected( int id )
   QString tmp = d->popupListChoose->text( id );
   int x = d->canvas->markerColumn();
   int y = d->canvas->markerRow();
-  KSpreadCell * cell = d->activeSheet->nonDefaultCell( x, y );
+  Cell * cell = d->activeSheet->nonDefaultCell( x, y );
 
   if ( tmp == cell->text() )
     return;
@@ -5282,7 +5282,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         return;
 
     d->popupMenu = new QPopupMenu();
-    KSpreadCell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
+    Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
 
     bool isProtected = d->activeSheet->isProtected();
     if ( !cell->isDefault() && cell->notProtected( d->canvas->markerColumn(), d->canvas->markerRow() )
@@ -5396,7 +5396,7 @@ void KSpreadView::slotActivateTool( int _id )
 
       activeSheet()->setWordSpelling( selectionInfo(), text);
 
-      KSpreadCell *cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
+      Cell *cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
       editWidget()->setText( cell->text() );
 
       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -5819,7 +5819,7 @@ void KSpreadView::createStyleFromCell()
     return;
 
   QPoint p( d->selectionInfo->selection().topLeft() );
-  KSpreadCell * cell = d->activeSheet->nonDefaultCell( p.x(), p.y() );
+  Cell * cell = d->activeSheet->nonDefaultCell( p.x(), p.y() );
 
   bool ok = false;
   QString styleName( "" );
@@ -6110,7 +6110,7 @@ void KSpreadView::setText (const QString & _text, bool array)
 
     doc()->emitBeginOperation( false );
     d->activeSheet->setText( y, x, _text );
-    KSpreadCell * cell = d->activeSheet->cellAt( x, y );
+    Cell * cell = d->activeSheet->cellAt( x, y );
 
     if ( cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula() )
       doc()->addStringCompletion( _text );
@@ -6631,7 +6631,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
         if( damage->type() == Damage::Cell )
         {
             CellDamage* cd = static_cast<CellDamage*>( damage );
-            KSpreadCell* damagedCell = cd->cell();
+            Cell* damagedCell = cd->cell();
             KSpreadSheet* damagedSheet = damagedCell->sheet();
             QRect drect( damagedCell->column(), damagedCell->row(), 1, 1 );
             damagedSheet->setRegionPaintDirty( drect );
@@ -6674,7 +6674,7 @@ void KSpreadView::runInspector()
 {
     // useful to inspect objects
     if(!d->activeSheet) return;
-    KSpreadCell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
     KSpread::Inspector* ins = new KSpread::Inspector( cell );
     ins->exec();
     delete ins;

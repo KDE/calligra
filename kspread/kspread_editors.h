@@ -31,7 +31,6 @@
 #include <klineedit.h>
 
 class HighlightRange;
-class KSpreadCell;
 class KSpreadSheet;
 class KSpreadCanvas;
 class KSpreadView;
@@ -42,14 +41,19 @@ class QFont;
 class QButton;
 class QTextCursor;
 
+namespace KSpread
+{
+  class Cell;
+}
+
 class KSpreadCellEditor : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadCellEditor( KSpreadCell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
+    KSpreadCellEditor( KSpread::Cell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
     ~KSpreadCellEditor();
 
-    KSpreadCell* cell()const { return m_pCell; }
+    KSpread::Cell* cell()const { return m_pCell; }
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
     virtual void handleIMEvent( QIMEvent * _ev ) = 0;
@@ -66,7 +70,7 @@ public:
     KSpreadCanvas* canvas()const { return m_pCanvas; }
 
 private:
-    KSpreadCell* m_pCell;
+    KSpread::Cell* m_pCell;
     KSpreadCanvas* m_pCanvas;
 };
 
@@ -99,9 +103,9 @@ class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
 		 *	reference.
 		 *	@param outCellColor Set to the colour of the cell reference in the QTextEdit widget which the highlighter is installed on.
 
-		KSpreadCell* cellRefAt(int pos, QColor& outCellColor);
+		KSpread::Cell* cellRefAt(int pos, QColor& outCellColor);
 	//Returns the cell reference at a given position in the text
-		KSpreadCell* cellRefAt(int pos) {QColor clr;return cellRefAt(pos,clr);}  */
+		KSpread::Cell* cellRefAt(int pos) {QColor clr;return cellRefAt(pos,clr);}  */
 
 	/**
 		 *	Gets information about the references found in the formula (cell,colour)
@@ -171,7 +175,7 @@ class KSpreadTextEditor : public KSpreadCellEditor
 {
     Q_OBJECT
 public:
-    KSpreadTextEditor( KSpreadCell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
+    KSpreadTextEditor( KSpread::Cell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
     ~KSpreadTextEditor();
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev );

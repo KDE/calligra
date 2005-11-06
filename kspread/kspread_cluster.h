@@ -56,11 +56,15 @@ a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/1
 #ifndef kspread_cluster_h
 #define kspread_cluster_h
 
-class KSpreadCell;
 class ColumnFormat;
 class RowFormat;
 
 #include "kspread_value.h"
+
+namespace KSpread
+{
+  class Cell;
+}
 
 class QPoint;
 
@@ -74,7 +78,7 @@ public:
     KSpreadCluster();
     ~KSpreadCluster();
 
-    KSpreadCell* lookup( int x, int y ) const;
+    KSpread::Cell* lookup( int x, int y ) const;
 
     /**
      * Removes all cells from the sheet and frees memory that
@@ -86,7 +90,7 @@ public:
      * Inserts a cell at the requested position. If there is already
      * a cell, then @ref #remove is called on it.
      */
-    void insert( KSpreadCell* cell, int x, int y );
+    void insert( KSpread::Cell* cell, int x, int y );
     /**
      * Removes the cell at the given position, if there is any.
      */
@@ -95,7 +99,7 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    KSpreadCell* firstCell() const;
+    KSpread::Cell* firstCell() const;
 
     bool shiftRow( const QPoint& marker );
     /**
@@ -156,7 +160,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getFirstCellColumn(int col) const;
+  KSpread::Cell* getFirstCellColumn(int col) const;
 
   /**
    * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -167,7 +171,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getLastCellColumn(int col) const;
+  KSpread::Cell* getLastCellColumn(int col) const;
 
   /**
    * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -178,7 +182,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getFirstCellRow(int row) const;
+  KSpread::Cell* getFirstCellRow(int row) const;
 
   /**
    * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -189,7 +193,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getLastCellRow(int row) const;
+  KSpread::Cell* getLastCellRow(int row) const;
 
   /**
    * Retrieves the next used cell above the given col/row pair.  The given
@@ -200,7 +204,7 @@ public:
    *
    * @return Returns the next used cell above this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellUp(int col, int row) const;
+  KSpread::Cell* getNextCellUp(int col, int row) const;
 
   /**
    * Retrieves the next used cell below the given col/row pair.  The given
@@ -211,7 +215,7 @@ public:
    *
    * @return Returns the next used cell below this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellDown(int col, int row) const;
+  KSpread::Cell* getNextCellDown(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the right of the given col/row pair.
@@ -223,7 +227,7 @@ public:
    * @return Returns the next used cell to the right of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellRight(int col, int row) const;
+  KSpread::Cell* getNextCellRight(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the left of the given col/row pair.
@@ -235,7 +239,7 @@ public:
    * @return Returns the next used cell to the left of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellLeft(int col, int row) const;
+  KSpread::Cell* getNextCellLeft(int col, int row) const;
 
 private:
     /**
@@ -251,8 +255,8 @@ private:
     /** helper method used by valueRange */
     KSpreadValue makeArray (int col1, int row1, int col2, int row2) const;
     
-    KSpreadCell*** m_cluster;
-    KSpreadCell* m_first;
+    KSpread::Cell*** m_cluster;
+    KSpread::Cell* m_first;
     bool m_autoDelete;
     int m_biggestX, m_biggestY;
 };

@@ -989,7 +989,7 @@ KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
   if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
     for (int r = r1; r <= r2; ++r)
       for (int c = c1; c <= c2; ++c) {
-        KSpreadCell *cell = e->sheet->cellAt (c, r);
+        Cell *cell = e->sheet->cellAt (c, r);
         if (cell->isDefault())
           continue;
         if (cell->isFormula() && cell->text().find ("SUBTOTAL", 0, false) != -1)
@@ -1093,7 +1093,7 @@ KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
   double oldRow = args[3]->doubleValue();
   kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
-  KSpreadCell * cell;
+  Cell * cell;
   KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
 
   KSpreadPoint point( extra[1]->stringValue() );
@@ -1114,7 +1114,7 @@ KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
               << ", " << point2.pos.y() << endl;
   }
 
-  KSpreadCell * cell1 = sheet->cellAt( point3.pos.x(), point3.pos.y() );
+  Cell * cell1 = sheet->cellAt( point3.pos.x(), point3.pos.y() );
   cell1->calc( false );
 
   double d = cell1->value().asFloat();

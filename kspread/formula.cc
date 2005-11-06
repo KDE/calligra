@@ -95,7 +95,7 @@ class Formula::Private
 {
 public:
   Formula *formula;
-  KSpreadCell *cell;
+  Cell *cell;
   KSpreadSheet *sheet;
   bool dirty;
   bool valid;
@@ -373,7 +373,7 @@ static bool isIdentifier( QChar ch )
 
 // Constructor
 
-Formula::Formula (KSpreadSheet *sheet, KSpreadCell *cell)
+Formula::Formula (KSpreadSheet *sheet, Cell *cell)
 {
   d = new Private;
   d->cell = cell;
@@ -396,7 +396,7 @@ Formula::~Formula()
   delete d;
 }
 
-KSpreadCell* Formula::cell()
+Cell* Formula::cell()
 {
   return d->cell;
 }  
