@@ -29,6 +29,8 @@
 #include <kconfig.h>
 #include <kurl.h>
 #include <kactivelabel.h>
+#include <kfileitem.h>
+#include <kio/previewjob.h>
 
 #include "koTemplates.h"
 
@@ -81,10 +83,29 @@ void KoTemplatesPane::openTemplate(QListViewItem* item)
   }
 }
 
+class KoRecentDocumentsPanePrivate
+{
+  public:
+    KoRecentDocumentsPanePrivate()
+      : m_previewJob(0)
+    {
+      m_fileList.setAutoDelete(true);
+    }
+
+    ~KoRecentDocumentsPanePrivate()
+    {
+      if(m_previewJob)
+        m_previewJob->kill();
+    }
+
+    KIO::PreviewJob* m_previewJob;
+    KFileItemList m_fileList;
+};
 
 KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instance)
   : KoDetailsPaneBase(parent, "RecentDocsPane")
 {
+  d = new KoRecentDocumentsPanePrivate;
   KGuiItem openGItem(i18n("Open Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
   m_documentList->setColumnText (0, i18n("Documents"));
@@ -117,7 +138,11 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         name = url.filename();
 
       if(!url.isLocalFile() || QFile::exists(url.path())) {
+        KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+        d->m_fileList.append(fileItem);
         KListViewItem* item = new KListViewItem(m_documentList, name, url.path());
+        item->setPixmap(0, fileItem->pixmap(32));
+        item->setPixmap(2, fileItem->pixmap(64));
       }
     }
 
@@ -133,12 +158,24 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 
   m_documentList->setSelected(m_documentList->firstChild(), true);
+
+  d->m_previewJob = KIO::filePreview(d->m_fileList, 128, 128);
+
+  connect(d->m_previewJob, SIGNAL(result(KIO::Job*)), this, SLOT(previewResult(KIO::Job*)));
+  connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
+          this, SLOT(updatePreview(const KFileItem*, const QPixmap&)));
+}
+
+KoRecentDocumentsPane::~KoRecentDocumentsPane()
+{
+  delete d;
 }
 
 void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
   m_titleLabel->setText(item->text(0));
   m_detailsLabel->setText(item->text(1));
+  m_iconLabel->setPixmap(*(item->pixmap(2)));
 }
 
 void KoRecentDocumentsPane::openFile()
@@ -153,5 +190,27 @@ void KoRecentDocumentsPane::openFile(QListViewItem* item)
     emit openFile(item->text(1));
 }
 
+void KoRecentDocumentsPane::previewResult(KIO::Job* job)
+{
+  if(d->m_previewJob == job)
+    d->m_previewJob = 0;
+}
+
+void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixmap& preview)
+{
+  QListViewItemIterator it(m_documentList);
+
+  while(it.current()) {
+    if(it.current()->text(1) == fileItem->url().path()) {
+      it.current()->setPixmap(2, preview);
+
+      if(it.current()->isSelected()) {
+        m_iconLabel->setPixmap(preview);
+      }
+
+      break;
+    }
+  }
+}
 
 #include "koDetailsPane.moc"

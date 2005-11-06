@@ -24,6 +24,13 @@
 class KoTemplateGroup;
 class KInstance;
 class QListViewItem;
+class KoRecentDocumentsPanePrivate;
+class KFileItem;
+class QPixmap;
+
+namespace KIO {
+  class Job;
+}
 
 class KoTemplatesPane : public KoDetailsPaneBase
 {
@@ -48,7 +55,7 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
   Q_OBJECT
   public:
     KoRecentDocumentsPane(QWidget* parent, KInstance* instance);
-//     ~KoRecentDocumentsPane();
+    ~KoRecentDocumentsPane();
 
   signals:
     void openFile(const QString&);
@@ -57,6 +64,12 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
     void selectionChanged(QListViewItem* item);
     void openFile();
     void openFile(QListViewItem* item);
+
+    void previewResult(KIO::Job* job);
+    void updatePreview(const KFileItem* fileItem, const QPixmap& preview);
+
+  private:
+    KoRecentDocumentsPanePrivate* d;
 };
 
 #endif //KODETAILSPANE_H
