@@ -1301,10 +1301,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             break;
         }
     } break;
-    case INS_TEXT: {
-        if ( !insRect.isNull() ) {
-            rectSymetricalObjet();
-            KPTextObject* kptextobject = insertTextObject( insRect );
+    case INS_TEXT:
+        if ( !m_insertRect.isNull() ) 
+        {
+            KPTextObject* kptextobject = insertTextObject( m_insertRect );
             setToolEditMode( TEM_MOUSE );
 
             // User-friendlyness: automatically start editing this textobject
@@ -1312,7 +1312,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             //setTextBackground( kptextobject );
             //setCursor( arrowCursor );
         }
-    } break;
+        break;
     case TEM_ZOOM:{
         drawContour = FALSE;
         if( modType == MT_NONE && drawRubber )
@@ -1405,27 +1405,26 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_OBJECT:
     case INS_DIAGRAMM:
     case INS_TABLE:
-    case INS_FORMULA: {
-        if ( !insRect.isNull() ) {
-            rectSymetricalObjet();
-            KPPartObject *kpPartObject = insertObject( insRect );
+    case INS_FORMULA:
+        if ( !m_insertRect.isNull() ) 
+        {
+            KPPartObject *kpPartObject = insertObject( m_insertRect );
             setToolEditMode( TEM_MOUSE );
 
-            if ( kpPartObject ) {
+            if ( kpPartObject ) 
+            {
                 kpPartObject->activate( m_view );
                 editNum = kpPartObject;
             }
         }
-    } break;
-    case INS_AUTOFORM: {
-        bool reverse = insRect.left() > insRect.right() || insRect.top() > insRect.bottom();
-        if ( !insRect.isNull() )
+        break;
+    case INS_AUTOFORM:
+        if ( !m_insertRect.isNull() )
         {
-            rectSymetricalObjet();
-            insertAutoform( insRect, reverse );
+            insertAutoform( m_insertRect );
         }
         setToolEditMode( TEM_MOUSE );
-    } break;
+        break;
     case INS_FREEHAND:
         if ( !m_pointArray.isNull() ) 
         {
@@ -1619,51 +1618,14 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     _repaint( m_rotateObject );
                 }
             }break;
-            case INS_TEXT: case INS_OBJECT: case INS_TABLE:
-            case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
-            {
-                QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
-                p.setRasterOp( NotROP );
-                if ( insRect.width() != 0 && insRect.height() != 0 )
-                {
-                    if ( !m_drawSymetricObject)
-                        p.drawRect( insRect );
-                    else
-                    {
-                        QRect tmpRect( insRect );
-                        tmpRect.moveBy( -insRect.width(), -insRect.height());
-                        tmpRect.setSize( 2*insRect.size() );
-                        p.drawRect( tmpRect );
-                    }
-                }
-
-                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid( e->pos(), true);
-                insRect.setRight( tmp.x() );
-                insRect.setBottom( tmp.y() );
-                limitSizeOfObject();
-
-                QRect tmpRect( insRect );
-
-                if ( e->state() & AltButton )
-                {
-                    m_drawSymetricObject = true;
-                    tmpRect.moveBy( -insRect.width(), -insRect.height());
-                    tmpRect.setSize( 2*insRect.size() );
-                }
-                else
-                    m_drawSymetricObject = false;
-
-                p.drawRect( tmpRect );
-                p.end();
-
-                mouseSelectedObject = true;
-            } break;
-            case INS_PICTURE: case INS_CLIPART: 
+            case INS_AUTOFORM:
+            case INS_DIAGRAMM:
+            case INS_FORMULA:
+            case INS_CLIPART:
+            case INS_PICTURE:
+            case INS_OBJECT:
+            case INS_TABLE:
+            case INS_TEXT:
             {
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
@@ -3686,11 +3648,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     repaint( false );
 }
 
-KPTextObject* KPrCanvas::insertTextObject( const QRect& _r )
+KPTextObject* KPrCanvas::insertTextObject( const KoRect &rect )
 {
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     KPTextObject* obj = m_activePage->insertTextObject( rect );
     selectObj( obj );
     return obj;
@@ -3759,23 +3718,16 @@ void KPrCanvas::insertPie( const KoRect &rect )
                              m_view->getGYFactor() );
 }
 
-void KPrCanvas::insertAutoform( const QRect &_r, bool rev )
+void KPrCanvas::insertAutoform( const KoRect &rect )
 {
-    rev = false;
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertAutoform( rect, m_view->getPen(), m_view->getBrush(),
-                                  !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
+                                  m_view->getLineBegin(), m_view->getLineEnd(),
                                   m_view->getFillType(), m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(),
                                   autoform, m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-KPPartObject* KPrCanvas::insertObject( const QRect &_r )
+KPPartObject* KPrCanvas::insertObject( const KoRect &rect )
 {
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     KPPartObject *kpPartObject = m_activePage->insertObject( rect, partEntry );
     return kpPartObject;
 }

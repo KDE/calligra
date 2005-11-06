@@ -292,7 +292,13 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
      * @param rect the size and position of the pie/arc/chord
      */
     void insertPie( const KoRect &rect );
-    KPTextObject* insertTextObject( const QRect& );
+
+    /**
+     * @brief Add a text object
+     *
+     * @param rect the size and position of the text object
+     */
+    KPTextObject* insertTextObject( const KoRect &rect );
 
     /**
      * @brief Add a picture
@@ -537,8 +543,19 @@ protected:
      */
     void doObjEffects( bool isAllreadyPainted = false );
 
-    KPPartObject *insertObject( const QRect& );
-    void insertAutoform( const QRect&, bool );
+    /**
+     * @brief Add a object
+     *
+     * @param rect the size and position of the object
+     */
+    KPPartObject *insertObject( const KoRect &rect );
+
+    /**
+     * @brief Add a autoform object
+     *
+     * @param rect the size and position of the autoform object
+     */
+    void insertAutoform( const KoRect &rect );
     void insertFreehand( const KoPointArray &_pointArray );
     void insertPolyline( const KoPointArray &_pointArray );
     void insertCubicBezierCurve( const KoPointArray &_pointArray );

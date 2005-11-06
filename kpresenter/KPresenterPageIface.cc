@@ -564,14 +564,14 @@ DCOPRef KPresenterPageIface::insertLineD2( int x, int y, int h, int w, bool rev 
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertTextObject( int x, int y, int h, int w )
+DCOPRef KPresenterPageIface::insertTextObject( double x, double y, double h, double w )
 {
     KPresenterView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
 
-    view->getCanvas()->insertTextObject( QRect(x,y,h,w));
+    view->getCanvas()->insertTextObject( KoRect( x, y, h, w ) );
     return selectedObject();
 }
 
