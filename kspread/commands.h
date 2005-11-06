@@ -21,18 +21,12 @@
 #ifndef KSPREAD_COMMANDS
 #define KSPREAD_COMMANDS
 
-#include <koPageLayout.h>
-#include <koUnit.h>
+#include <qrect.h>
+#include <qstring.h>
 
 #include <kcommand.h>
 
-#include <qstring.h>
-#include <qptrstack.h>
-#include <qrect.h>
-#include <qptrlist.h>
-#include <qvaluelist.h>
-
-#include "kspread_sheet.h"
+#include "kspread_sheet.h" // for KSpreadSheet::LayoutDirection
 
 class KSpreadCell;
 class KSpreadDoc;

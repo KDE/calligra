@@ -23,9 +23,9 @@
 #ifndef KSPREAD_LAYOUT_IFACE_H
 #define KSPREAD_LAYOUT_IFACE_H
 
-class KSpreadFormat;
-#include <qcolor.h>
 #include <dcopobject.h>
+
+class KSpreadFormat;
 
 class KSpreadLayoutIface : virtual public DCOPObject
 {

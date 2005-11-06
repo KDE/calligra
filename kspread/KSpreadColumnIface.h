@@ -22,12 +22,9 @@
 #ifndef KSPREAD_COLUMN_IFACE_H
 #define KSPREAD_COLUMN_IFACE_H
 
-class KSpreadFormat;
-class ColumnFormat;
 #include "KSpreadLayoutIface.h"
-#include <qcolor.h>
-#include <dcopobject.h>
-#include <qbrush.h>
+
+class ColumnFormat;
 
 class KSpreadColumnIface : virtual public KSpreadLayoutIface
 {

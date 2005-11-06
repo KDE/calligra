@@ -28,11 +28,13 @@
 #ifndef KSPREAD_CELL_IFACE_H
 #define KSPREAD_CELL_IFACE_H
 
-class QPoint;
-class KSpreadSheet;
-class KSpreadCell;
-#include <qcolor.h>
+#include <qstringlist.h>
+
 #include <dcopobject.h>
+
+class KSpreadCell;
+class KSpreadSheet;
+class QPoint;
 
 class KSpreadCellIface : virtual public DCOPObject
 {

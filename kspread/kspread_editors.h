@@ -22,33 +22,25 @@
 #ifndef __kspread_editors_h__
 #define __kspread_editors_h__
 
-#include <kcompletion.h>
-#include <kspread_canvas.h>
-#include <qwidget.h>
-#include <qsyntaxhighlighter.h>
-#include <kcombobox.h>
-
 #include <vector>
+
+#include <qsyntaxhighlighter.h>
+#include <qwidget.h>
+
+#include <kcombobox.h>
 #include <klineedit.h>
 
-
-
+class HighlightRange;
 class KSpreadCell;
 class KSpreadSheet;
-//class KSpreadCanvas;
-//struct KSpreadCanvas::HighlightedCell;
+class KSpreadCanvas;
 class KSpreadView;
 class KSpreadTextEditor;
-
-
 class KSpreadLocationEditWidget;
-
-
+class KTextEdit;
 class QFont;
 class QButton;
 class QTextCursor;
-
-class KTextEdit;
 
 class KSpreadCellEditor : public QWidget
 {

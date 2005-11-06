@@ -24,16 +24,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KSpreadViewIface.h"
+#include <dcopclient.h>
+#include <dcopref.h>
+#include <kapplication.h>
 
-#include "kspread_view.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
 #include "kspread_selection.h"
+#include "kspread_sheet.h"
+#include "kspread_view.h"
 
-#include <kapplication.h>
-#include <dcopclient.h>
-#include <dcopref.h>
+#include "KSpreadViewIface.h"
 
 /************************************************
  *

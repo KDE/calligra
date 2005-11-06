@@ -22,12 +22,10 @@
 #ifndef KSPREAD_ROWLAYOUT_IFACE_H
 #define KSPREAD_ROWLAYOUT_IFACE_H
 
+#include "KSpreadLayoutIface.h"
+
 class KSpreadFormat;
 class RowFormat;
-#include "KSpreadLayoutIface.h"
-#include <qcolor.h>
-#include <dcopobject.h>
-#include <qbrush.h>
 
 class KSpreadRowIface : virtual public KSpreadLayoutIface
 {

@@ -23,12 +23,10 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#include "kspread_cell.h"
-#include "kspread_value.h"
-
 class KLocale;
 class KSpreadCell;
 class KSpreadSheet;
+class KSpreadValue;
 
 namespace KSpread
 {

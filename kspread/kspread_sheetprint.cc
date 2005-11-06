@@ -505,7 +505,6 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 	      if (paintBordersTop) paintBorder |= KSpreadCell::Border_Top;
 	      if (paintBordersBottom) paintBorder |= KSpreadCell::Border_Bottom;
 	      
-	      int highlightBorder=KSpreadCell::Border_None;
 	      QPen highlightPen;
 
             if ( m_pSheet->layoutDirection()==KSpreadSheet::RightToLeft )

@@ -23,6 +23,7 @@
 #include <qdatetime.h>
 #include <qstring.h>
 #include <qtextstream.h>
+
 #include <koffice_export.h>
 
 class KSpreadValueData;

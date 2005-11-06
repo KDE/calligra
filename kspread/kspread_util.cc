@@ -17,15 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_util.h"
-#include "kspread_map.h"
-#include "kspread_doc.h"
-#include "kspread_locale.h"
 #include <ctype.h>
 
 #include <qregexp.h>
 
 #include <kdebug.h>
+
+#include "kspread_doc.h"
+#include "kspread_locale.h"
+#include "kspread_map.h"
+#include "kspread_sheet.h"
+
+#include "kspread_util.h"
 
 //helper functions for the formatting
 bool formatIsDate (FormatType fmt)

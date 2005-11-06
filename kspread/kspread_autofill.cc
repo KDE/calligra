@@ -27,15 +27,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_sheet.h"
-#include "kspread_undo.h"
-#include "kspread_doc.h"
-#include "kspread_locale.h"
-
 #include <math.h>
+
+#include <qregexp.h>
+
 #include <kconfig.h>
 #include <kdebug.h>
-#include <qregexp.h>
+
+#include "kspread_doc.h"
+#include "kspread_locale.h"
+#include "kspread_sheet.h"
+#include "kspread_undo.h"
+#include "kspread_value.h"
 
 QStringList *AutoFillSequenceItem::month = 0L;
 QStringList *AutoFillSequenceItem::shortMonth = 0L;

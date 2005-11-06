@@ -20,13 +20,12 @@
 #ifndef KSPREAD_VALUEFORMATTER
 #define KSPREAD_VALUEFORMATTER
 
-#include "kspread_global.h"
 #include "kspread_format.h"
-#include "kspread_value.h"
 
 #include <qdatetime.h>
 
 class KSpreadCell;
+class KSpreadValue;
 
 namespace KSpread {
 

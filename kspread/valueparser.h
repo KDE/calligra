@@ -24,10 +24,10 @@
 #include <qdatetime.h>
 
 #include "kspread_global.h"
-#include "kspread_value.h"
 
-class KSpreadCell;
 class KLocale;
+class KSpreadCell;
+class KSpreadValue;
 
 namespace KSpread {
 

@@ -20,8 +20,6 @@
 #ifndef KSPREAD_DAMAGES
 #define KSPREAD_DAMAGES
 
-#include <qvaluelist.h>
-
 class KSpreadCell;
 class KSpreadSheet;
 

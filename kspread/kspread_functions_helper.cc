@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qdatetime.h>
+
 #include "kspread_functions_helper.h"
 
 /*  DISABLED - we use KCalendarSystem instead

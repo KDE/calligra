@@ -36,9 +36,6 @@
 #include <qtooltip.h>
 #include <qpen.h>
 
-#include <koQueryTrader.h>
-#include <koRect.h>
-
 #include "kspread_util.h"
 #include <vector>
 
@@ -64,6 +61,7 @@ class KSpreadComboboxLocationEditWidget;
 class QPainter;
 class QLabel;
 class QScrollBar;
+class KoRect;
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20

@@ -25,10 +25,9 @@
 #include <qstringlist.h>
 #include <qvaluevector.h>
 
-#include "kspread_value.h"
-
 class QDomElement;
 class KSpreadSheet;
+class KSpreadValue;
 
 typedef QValueVector<KSpreadValue> valVector;
 

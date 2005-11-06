@@ -30,8 +30,6 @@
 #include <dcopref.h>
 
 #include <qstring.h>
-#include <qrect.h>
-#include <qcolor.h>
 
 class KSpreadSheet;
 class KSpreadCellProxy;

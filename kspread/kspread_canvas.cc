@@ -61,11 +61,11 @@
 #include "kspread_global.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
+#include "kspread_sheet.h"
 #include "kspread_selection.h"
 #include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
-#include "kspread_selection.h"
 
 #include "kspread_canvas.h"
 #include "highlight_range.h"
@@ -3973,7 +3973,7 @@ void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
 }
 
 
-void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& viewRect)
+void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
 {
 	if (!d->highlightedRanges)
 		return;

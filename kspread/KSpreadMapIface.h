@@ -21,11 +21,11 @@
 #ifndef KSPREAD_MAP_IFACE_H
 #define KSPREAD_MAP_IFACE_H
 
+#include <qstringlist.h>
+#include <qvaluelist.h>
+
 #include <dcopobject.h>
 #include <dcopref.h>
-
-#include <qvaluelist.h>
-#include <qstringlist.h>
 
 class KSpreadMap;
 

@@ -43,15 +43,16 @@
 #include <math.h>
 
 #include <qapplication.h>
-#include <qregexp.h>
 #include <qpopupmenu.h>
-#include <koStyleStack.h>
+#include <qregexp.h>
 
 #include "kspread_canvas.h"
+#include "kspread_condition.h"
 #include "kspread_doc.h"
 #include "kspread_format.h"
 #include "kspread_global.h"
 #include "kspread_map.h"
+#include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
@@ -59,15 +60,19 @@
 #include "ksploadinginfo.h"
 #include "kspread_genvalidationstyle.h"
 #include "kspread_locale.h"
+#include "kspread_value.h"
 #include "kspread_view.h"
 #include "kspread_value.h"
 #include "formula.h"
 #include "valueformatter.h"
 #include "valueparser.h"
 
+#include <koStyleStack.h>
+#include <koRect.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <koxmlwriter.h>
+#include <koOasisStyles.h>
 
 #include <kmessagebox.h>
 

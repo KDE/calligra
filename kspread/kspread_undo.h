@@ -28,7 +28,6 @@ class KSpreadDoc;
 class ColumnFormat;
 class RowFormat;
 
-#include "kspread_global.h"
 #include "kspread_doc.h"
 
 #include <koUnit.h>

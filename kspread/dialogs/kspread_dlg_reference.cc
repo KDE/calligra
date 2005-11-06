@@ -31,6 +31,7 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 #include "kspread_view.h"
+#include "kspread_sheet.h"
 #include "kspread_selection.h"
 #include "kspread_locale.h"
 

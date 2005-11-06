@@ -24,12 +24,14 @@
 #ifndef KSPREAD_DOC_IFACE_H
 #define KSPREAD_DOC_IFACE_H
 
-#include <dcopref.h>
-#include <KoDocumentIface.h>
-
 #include <qstring.h>
 #include <qcolor.h>
 #include <qstringlist.h>
+
+#include <dcopref.h>
+
+#include <KoDocumentIface.h>
+
 class KSpreadDoc;
 
 class KSpreadDocIface : virtual public KoDocumentIface

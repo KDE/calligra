@@ -64,7 +64,7 @@ class KSpellConfig;
 #include <qstring.h>
 #include <qvaluelist.h>
 
-#include <kspread_global.h>
+#include "kspread_global.h"
 
 #define MIME_TYPE "application/x-kspread"
 

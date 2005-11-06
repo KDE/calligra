@@ -17,24 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <stdlib.h>
+#include <time.h>
 
-#include "kspread_map.h"
-#include "kspread_doc.h"
+#include <qfile.h>
+
+#include <kmdcodec.h>
+#include <ktempfile.h>
+
+#include <kodom.h>
+#include <koGenStyles.h>
+#include <koOasisSettings.h>
+#include <koxmlns.h>
+
 #include "kspread_canvas.h"
-#include "kspread_view.h"
-#include "kspread_locale.h"
+#include "kspread_doc.h"
 #include "kspread_genvalidationstyle.h"
+#include "kspread_locale.h"
+#include "kspread_sheet.h"
+#include "kspread_view.h"
 #include "KSpreadMapIface.h"
 
-#include <koOasisSettings.h>
-#include <kmdcodec.h>
-#include <koGenStyles.h>
-#include <koxmlns.h>
-#include <kodom.h>
-#include <time.h>
-#include <stdlib.h>
-#include <ktempfile.h>
-#include <qfile.h>
+#include "kspread_map.h"
 
 bool KSpreadMap::respectCase = true;
 

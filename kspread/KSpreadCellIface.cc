@@ -29,6 +29,7 @@
 #include "KSpreadCellIface.h"
 
 #include "kspread_sheet.h"
+#include "kspread_value.h"
 
 KSpreadCellIface::KSpreadCellIface()
   : m_point( 0, 0 ), m_sheet( 0 )

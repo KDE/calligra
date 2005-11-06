@@ -23,6 +23,7 @@
 class KSpreadChanges;
 class KSpreadMap;
 class KSpreadDoc;
+class KSpreadSheet;
 
 class KoStore;
 
@@ -41,7 +42,7 @@ class KoOasisSettings;
 #include <qintdict.h>
 #include <qobject.h>
 
-#include "kspread_sheet.h"
+#include <koffice_export.h>
 
 /**
   A map is a simple container for all sheets. Usually a complete map

@@ -22,14 +22,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KSpreadMapIface.h"
-
-#include "kspread_map.h"
-#include "kspread_doc.h"
-
-#include <kapplication.h>
 #include <dcopclient.h>
+#include <kapplication.h>
 #include <kdebug.h>
+
+#include "kspread_doc.h"
+#include "kspread_map.h"
+#include "kspread_sheet.h"
+
+#include "KSpreadMapIface.h"
 
 KSpreadMapIface::KSpreadMapIface( KSpreadMap* map )
     : DCOPObject( map )

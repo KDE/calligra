@@ -47,19 +47,18 @@ class KoGenStyles;
 class KoGenStyle;
 class KSParseNode;
 class KSpreadGenValidationStyles;
-
+class KSpreadConditional;
+class KSpreadValue;
+class KoRect;
+class KoPoint;
+class KoOasisStyles;
 
 #include <qpainter.h>
 #include <qptrlist.h>
 #include <qdatetime.h>
 
 #include "kspread_format.h"
-#include "kspread_global.h"
-#include "kspread_condition.h"
-#include "kspread_value.h"
 
-#include <koOasisStyles.h>
-#include <koRect.h>
 struct KSpreadValidity
 {
     KSpreadValidity()

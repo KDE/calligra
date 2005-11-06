@@ -22,6 +22,7 @@
 
 #include "kspread_cell.h"
 #include "kspread_locale.h"
+#include "kspread_value.h"
 
 using namespace KSpread;
 

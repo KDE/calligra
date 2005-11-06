@@ -21,10 +21,7 @@
 #define kspread_functions_helper_h_
 // helper functions for other functions
 
-#include <qdatetime.h>
-#include <qvaluelist.h>
-
-#include "kspread_value.h"
+class QDate;
 
 /*	0: US 30 / 360
  *	1: real days

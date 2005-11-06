@@ -48,6 +48,7 @@
 #include <koUnit.h>
 #include <koStyleStack.h>
 #include <koOasisSettings.h>
+#include <koQueryTrader.h>
 #include <koxmlns.h>
 #include <kodom.h>
 
@@ -55,6 +56,7 @@
 
 #include "ksprsavinginfo.h"
 #include "kspread_cluster.h"
+#include "kspread_condition.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_locale.h"
