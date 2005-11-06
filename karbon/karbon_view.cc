@@ -53,6 +53,7 @@
 #include "vgroupcmd.h"
 #include "vstrokecmd.h"
 #include "vtransformcmd.h"
+#include "vinsertcmd.h"
 #include "vungroupcmd.h"
 #include "vzordercmd.h"
 
@@ -449,25 +450,18 @@ KarbonView::editPaste()
 	KarbonDrag kd;
 	VObjectList selection;
 
-	if( kd.decode( QApplication::clipboard()->data(), selection, part()->document() ) ) {
-		part()->document().selection()->clear();
+	if ( !kd.decode( QApplication::clipboard()->data(), selection, part()->document() ) )
+		return;
 
-		// Calc new selection
-		VObjectListIterator itr( selection );
-		double copyOffset = m_part->instance()->config()->readNumEntry( "CopyOffset", 10 );
+	//part()->document().selection()->clear();
 
-		for( ; itr.current() ; ++itr )
-		{
-			VObject *obj = itr.current();
-			part()->document().selection()->append( obj );
-			part()->insertObject( obj );
- 			VTranslateCmd cmd( 0L, copyOffset, -copyOffset );
- 			cmd.visit( *obj );
-		}
+	double copyOffset = part()->instance()->config()->readNumEntry( "CopyOffset", 10 );
+	part()->addCommand( new VInsertCmd( &part()->document(), &selection,
+										copyOffset ),
+						true );
 
-		part()->repaintAllViews();
-		selectionChanged();
-	}
+	part()->repaintAllViews();
+	selectionChanged();
 }
 
 void

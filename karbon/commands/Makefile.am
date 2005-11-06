@@ -24,6 +24,7 @@ noinst_HEADERS = \
 	vshapecmd.h \
 	vstrokecmd.h \
 	vtransformcmd.h \
+	vinsertcmd.h \
 	vungroupcmd.h \
 	vzordercmd.h
 
@@ -45,6 +46,7 @@ libkarboncommands_la_SOURCES = \
 	vshapecmd.cc \
 	vstrokecmd.cc \
 	vtransformcmd.cc \
+	vinsertcmd.cc \
 	vungroupcmd.cc \
 	vzordercmd.cc
 

@@ -15,7 +15,7 @@ These are changes that can not be backported, and will be available from KOffice
   This closes the following bugs (#91376, #111207, #60844)
 
 Changes after 1.4.2 (available from 1.4.3 if there will ever be one):
-
+- Make paste operation undo:able (#115752)
 
 Changes after 1.4.1 (available from 1.4.2):
 - Changed version to 0.2
