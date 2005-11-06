@@ -855,16 +855,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid ( e->pos(), true );
-                insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
 
                 m_indexPointArray = 0;
-                m_dragStartPoint = tmp;
-                m_dragEndPoint = m_dragStartPoint;
-                m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()),
-                                        m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
+                m_startPoint = snapPoint( docPoint );
+                m_endPoint = m_startPoint;
+                m_pointArray.putPoints( m_indexPointArray, 1, m_startPoint.x(), m_startPoint.y() );
                 ++m_indexPointArray;
             } break;
             case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
@@ -1432,7 +1427,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         setToolEditMode( TEM_MOUSE );
     } break;
     case INS_FREEHAND:
-        if ( !m_pointArray.isNull() ) insertFreehand( m_pointArray );
+        if ( !m_pointArray.isNull() ) 
+        {
+            insertFreehand( m_pointArray );
+        }
         break;
     case INS_POLYGON:
         if ( !m_pointArray.isNull() )
@@ -1768,23 +1766,25 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 mouseSelectedObject = true;
             } break;
-            case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
-                m_dragEndPoint = QPoint( e->x() , e->y() );
+            case INS_FREEHAND: 
+            case INS_CLOSED_FREEHAND: 
+            {
+                m_endPoint = snapPoint( docPoint );
+                if ( m_endPoint != m_startPoint )
+                {
+                    QPainter p( this );
+                    p.setPen( QPen( black, 1, SolidLine ) );
+                    p.setBrush( NoBrush );
+                    p.setRasterOp( NotROP );
 
-                QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
-                p.setRasterOp( NotROP );
+                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
+                                m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
+                    p.end();
 
-                m_dragEndPoint=limitOfPoint(m_dragEndPoint);
-
-                p.drawLine( m_dragStartPoint, m_dragEndPoint );
-                p.end();
-
-                m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()),
-                                        m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
-                ++m_indexPointArray;
-                m_dragStartPoint = m_dragEndPoint;
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_endPoint.x(), m_endPoint.y() );
+                    ++m_indexPointArray;
+                    m_startPoint = m_endPoint;
+                }
 
                 mouseSelectedObject = true;
             } break;
@@ -3766,7 +3766,6 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 {
     KoRect rect = _pointArray.boundingRect();
 
-    rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     m_activePage->insertFreehand( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getLineBegin(),
                                   m_view->getLineEnd() );
 
@@ -3931,7 +3930,8 @@ void KPrCanvas::insertPicture( const QRect &_r, const QPoint & tl )
 void KPrCanvas::insertClosedLine( const KoPointArray &_pointArray )
 {
     KoRect rect = _pointArray.boundingRect();
-    rect.moveBy( m_view->zoomHandler()->unzoomItX( diffx() ), m_view->zoomHandler()->unzoomItY( diffy() ) );
+    if ( toolEditMode != INS_CLOSED_POLYLINE && toolEditMode != INS_CLOSED_FREEHAND )
+        rect.moveBy( m_view->zoomHandler()->unzoomItX( diffx() ), m_view->zoomHandler()->unzoomItY( diffy() ) );
 
     m_activePage->insertClosedLine( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                     m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
