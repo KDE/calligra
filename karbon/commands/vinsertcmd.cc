@@ -26,9 +26,10 @@
 #include "vtransformcmd.h"
 
 
-VInsertCmd::VInsertCmd( VDocument *doc, VObjectList *objects, 
+VInsertCmd::VInsertCmd( VDocument *doc, const QString& name,
+						VObjectList *objects, 
 						double offset )
-	: VCommand( doc, i18n( "Insert Objects" ), "14_insert" ),
+	: VCommand( doc, name, "14_insert" ),
 	  m_objects( *objects ),
 	  m_offset( offset )
 {

@@ -33,7 +33,8 @@ class VInsert;
 class VInsertCmd : public VCommand
 {
 public:
-	VInsertCmd( VDocument *doc, VObjectList *objects, double offset );
+	VInsertCmd( VDocument *doc, const QString& name,
+				VObjectList *objects, double offset );
 	virtual ~VInsertCmd();
 
 	virtual void execute();

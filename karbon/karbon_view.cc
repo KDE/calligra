@@ -448,16 +448,18 @@ void
 KarbonView::editPaste()
 {
 	KarbonDrag kd;
-	VObjectList selection;
+	VObjectList  objects;
 
-	if ( !kd.decode( QApplication::clipboard()->data(), selection, part()->document() ) )
+	if ( !kd.decode( QApplication::clipboard()->data(), objects, part()->document() ) )
 		return;
 
-	//part()->document().selection()->clear();
-
+	// Paste with a small offset.
 	double copyOffset = part()->instance()->config()->readNumEntry( "CopyOffset", 10 );
-	part()->addCommand( new VInsertCmd( &part()->document(), &selection,
-										copyOffset ),
+	part()->addCommand( new VInsertCmd( &part()->document(), 
+										objects.count() == 1
+											? i18n( "Paste object" )
+											: i18n( "Paste objects" ),
+										&objects, copyOffset ),
 						true );
 
 	part()->repaintAllViews();
