@@ -622,22 +622,24 @@ KarbonView::selectionDistributeVerticalTop()
 void
 KarbonView::selectionDuplicate()
 {
-#if 1
-	editCopy();
-	editPaste();
-#else
-	VObjectList selection;
+	if ( !part()->document().selection()->objects().count() )
+		return;
 
-	// Get current selection
-	VObject *obj = itr.current();
+	VObjectList  objects( part()->document().selection()->clone()->objects() );
 
-	
-	part()->document().selection()->clear();
-	part()->document().selection()->append( obj );
+
+
+	// Paste with a small offset.
+	double copyOffset = part()->instance()->config()->readNumEntry( "CopyOffset", 10 );
+	part()->addCommand( new VInsertCmd( &part()->document(), 
+										objects.count() == 1
+											? i18n( "Duplicate object" )
+											: i18n( "Duplicate objects" ),
+										&objects, copyOffset ),
+						true );
 
 	part()->repaintAllViews();
 	selectionChanged();
-#endif
 }
 
 void
