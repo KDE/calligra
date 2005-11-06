@@ -92,7 +92,7 @@ class KWMailMergeKSpread: public KWMailMergeDataSource
     int rows() const;
     int columns() const;
 
-    QString cellText( const KSpreadCell* ) const;
+    QString cellText( const KSpread::Cell* ) const;
 
     KSpreadDoc *_document;
     KSpreadSheet* _sheet;

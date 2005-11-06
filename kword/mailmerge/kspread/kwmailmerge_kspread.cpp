@@ -27,6 +27,8 @@
 #include "kwmailmerge_kspread.h"
 #include "kwmailmerge_kspread_config.h"
 
+using namespace KSpread;
+
 KWMailMergeKSpread::KWMailMergeKSpread( KInstance *instance, QObject *parent )
   : KWMailMergeDataSource( instance, parent ), _spreadSheetNumber( 1 )
 {
@@ -46,7 +48,7 @@ QString KWMailMergeKSpread::getValue( const QString &name, int record ) const
   if ( record < 0 )
     return name;
 
-  const KSpreadCell* cell = _sheet->cellAt( _columnMap[ name ], record + 2 );
+  const Cell* cell = _sheet->cellAt( _columnMap[ name ], record + 2 );
 
   if ( cell )
     return cellText( cell );
@@ -126,7 +128,7 @@ void KWMailMergeKSpread::initSpreadSheets()
 
   int cols = columns();
   for ( int i = 1; i < cols; ++i ) {
-    const KSpreadCell* cell = _sheet->cellAt( i, 1 );
+    const Cell* cell = _sheet->cellAt( i, 1 );
 
     // init record list
     sampleRecord[ cellText( cell ) ] = cellText( cell );
@@ -142,7 +144,7 @@ int KWMailMergeKSpread::rows() const
   int row = 1;
 
   for (; row < _sheet->maxRow(); ) {
-    const KSpreadCell* cell = _sheet->cellAt( 1, row );
+    const Cell* cell = _sheet->cellAt( 1, row );
     if ( cellText( cell ).isEmpty() )
       break;
 
@@ -160,7 +162,7 @@ int KWMailMergeKSpread::columns() const
   int col = 1;
 
   for (; col < _sheet->maxColumn(); ) {
-    const KSpreadCell* cell = _sheet->cellAt( col, 1 );
+    const Cell* cell = _sheet->cellAt( col, 1 );
     if ( cellText( cell ).isEmpty() )
       break;
 
@@ -170,7 +172,7 @@ int KWMailMergeKSpread::columns() const
   return col;
 }
 
-QString KWMailMergeKSpread::cellText( const KSpreadCell *cell ) const
+QString KWMailMergeKSpread::cellText( const Cell *cell ) const
 {
   QString text = QString::null;
 
@@ -184,12 +186,12 @@ QString KWMailMergeKSpread::cellText( const KSpreadCell *cell ) const
   }
 #if 0
       switch( cell->content() ) {
-     case KSpreadCell::Text:
-     case KSpreadCell::Formula:
+     case Cell::Text:
+     case Cell::Formula:
       text = cell->strOutText();
       break;
-     case KSpreadCell::RichText:
-     case KSpreadCell::VisualFormula:
+     case Cell::RichText:
+     case Cell::VisualFormula:
       text = cell->text(); // untested
       break;
     }
