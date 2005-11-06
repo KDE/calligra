@@ -3,10 +3,9 @@ AM_CPPFLAGS= \
 	-I$(top_srcdir)/krita \
 	-I$(top_srcdir)/krita/core \
 	-I$(top_srcdir)/krita/sdk \
-	-I$(top_srcdir)/krita/core/tiles \
 	-I$(top_srcdir)/krita/kritacolor \
 	-I$(top_srcdir)/krita/ui \
-    $(KOFFICE_INCLUDES) \
+	$(KOFFICE_INCLUDES) \
 	$(all_includes) 
 
 kde_module_LTLIBRARIES = libkrita_raw_import.la 

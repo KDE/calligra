@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>559</width>
-            <height>613</height>
+            <height>690</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,355 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>layout20</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>grpColorSettings</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Color Settings</string>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout12</cstring>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <spacer row="1" column="1">
-                                    <property name="name">
-                                        <cstring>spacer2</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>101</width>
-                                            <height>20</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                                <widget class="QLayoutWidget" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>layout6</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>lblBlackpoint</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Blackpoint:</string>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>dblBlackpoint</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KDoubleSpinBox">
-                                            <property name="name">
-                                                <cstring>dblBlackpoint</cstring>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                                <spacer row="0" column="1">
-                                    <property name="name">
-                                        <cstring>spacer1</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>91</width>
-                                            <height>21</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                                <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                                    <property name="name">
-                                        <cstring>chkClip</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Clip Colors to Prevent &amp;Pink highlights</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string>Alt+P</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                                <widget class="QLayoutWidget" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>layout5</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>lblBrightness</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Brightness:</string>
-                                            </property>
-                                            <property name="buddy" stdset="0">
-                                                <cstring>dblBrightness</cstring>
-                                            </property>
-                                        </widget>
-                                        <widget class="KDoubleSpinBox">
-                                            <property name="name">
-                                                <cstring>dblBrightness</cstring>
-                                            </property>
-                                            <property name="value">
-                                                <number>1</number>
-                                            </property>
-                                            <property name="toolTip" stdset="0">
-                                                <string>Brightness. 1.0 is default</string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                            </grid>
-                        </widget>
-                        <widget class="QButtonGroup">
-                            <property name="name">
-                                <cstring>grpWhiteBalance</cstring>
-                            </property>
-                            <property name="title">
-                                <string>&amp;White Balance</string>
-                            </property>
-                            <property name="exclusive">
-                                <bool>true</bool>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QRadioButton" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>radioAutomatic</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Automatic Whitebalance</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>radioCamera</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Camera White Balance</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>layout7</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout3</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>lblProfile</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&amp;Profile:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring></cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KisCmbIDList">
-                                    <property name="name">
-                                        <cstring>cmbProfile</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>7</hsizetype>
-                                            <vsizetype>5</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout4</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>lblCurve</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&amp;Curve:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>txtCurve</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QLineEdit">
-                                    <property name="name">
-                                        <cstring>txtCurve</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>bnLoadCurve</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>...</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="QButtonGroup" row="0" column="0">
-                    <property name="name">
-                        <cstring>grpCoiorSpace</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Colorspace</string>
-                    </property>
-                    <property name="exclusive">
-                        <bool>true</bool>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>radioGray</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Grayscale</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+G</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>radioRGB</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;RGB</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+R</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox" row="2" column="0">
-                            <property name="name">
-                                <cstring>chkFourColorRGB</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Interpolate RGB as Four Colors</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+I</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QButtonGroup" row="0" column="1">
-                    <property name="name">
-                        <cstring>grpChannelDepth</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Channel Depth</string>
-                    </property>
-                    <property name="exclusive">
-                        <bool>true</bool>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>radio16</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;16 bits per channel</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+1</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>radio8</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;8 bits per channel</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+8</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </grid>
-        </widget>
-        <spacer row="1" column="0">
+        <spacer row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>spacer3</cstring>
             </property>
@@ -384,7 +36,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="1" column="1">
+        <widget class="QPushButton" row="1" column="2">
             <property name="name">
                 <cstring>bnPreview</cstring>
             </property>
@@ -395,7 +47,7 @@
                 <string>Alt+U</string>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>lblPreview</cstring>
             </property>
@@ -418,6 +70,344 @@
             </property>
             <property name="scaledContents">
                 <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpChannelDepth</cstring>
+            </property>
+            <property name="title">
+                <string>Channel Depth</string>
+            </property>
+            <property name="exclusive">
+                <bool>true</bool>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radio16</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;16 bits per channel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+1</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>radio8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;8 bits per channel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+8</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup" row="2" column="0">
+            <property name="name">
+                <cstring>grpColorSpace</cstring>
+            </property>
+            <property name="title">
+                <string>Colorspace</string>
+            </property>
+            <property name="exclusive">
+                <bool>true</bool>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>radioGray</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Grayscale</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radioRGB</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;RGB</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+R</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>grpColorSettings</cstring>
+            </property>
+            <property name="title">
+                <string>Color Settings</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout12</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer row="1" column="1">
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>101</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLayoutWidget" row="1" column="0">
+                            <property name="name">
+                                <cstring>layout6</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>lblBlackpoint</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Blackpoint:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>dblBlackpoint</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDoubleSpinBox">
+                                    <property name="name">
+                                        <cstring>dblBlackpoint</cstring>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <spacer row="0" column="1">
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>91</width>
+                                    <height>21</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>chkClip</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Clip Colors to Prevent &amp;Pink highlights</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+P</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget" row="0" column="0">
+                            <property name="name">
+                                <cstring>layout5</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>lblBrightness</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Brightness:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>dblBrightness</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDoubleSpinBox">
+                                    <property name="name">
+                                        <cstring>dblBrightness</cstring>
+                                    </property>
+                                    <property name="value">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Brightness. 1.0 is default</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>grpWhiteBalance</cstring>
+                    </property>
+                    <property name="title">
+                        <string>&amp;White Balance</string>
+                    </property>
+                    <property name="exclusive">
+                        <bool>true</bool>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>radioAutomatic</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Automatic Whitebalance</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>radioCamera</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Camera White Balance</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>layout7</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout3</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>lblProfile</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Profile:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring></cstring>
+                            </property>
+                        </widget>
+                        <widget class="KisCmbIDList">
+                            <property name="name">
+                                <cstring>cmbProfile</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>lblCurve</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Curve:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>txtCurve</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>txtCurve</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bnLoadCurve</cstring>
+                            </property>
+                            <property name="text">
+                                <string>...</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0">
+            <property name="name">
+                <cstring>chkFourColorRGB</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Interpolate RGB as Four Colors</string>
+            </property>
+            <property name="accel">
+                <string>Alt+I</string>
             </property>
         </widget>
     </grid>
@@ -451,7 +441,6 @@
 <tabstops>
     <tabstop>bnPreview</tabstop>
     <tabstop>radioRGB</tabstop>
-    <tabstop>chkFourColorRGB</tabstop>
     <tabstop>radio16</tabstop>
     <tabstop>txtCurve</tabstop>
     <tabstop>bnLoadCurve</tabstop>

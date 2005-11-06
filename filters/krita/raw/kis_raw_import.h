@@ -22,6 +22,10 @@
 
 #include <koFilter.h>
 
+class KDialogBase;
+class WdgRawImport;
+class KisProfile;
+
 class KisRawImport : public KoFilter {
     Q_OBJECT
 
@@ -31,6 +35,26 @@ public:
 
 public:
     virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+
+
+private slots:
+
+    void slotUpdatePreview();
+    void slotFillCmbProfiles();
+    
+private:
+    QStringList createArgumentList(bool forPreview = false);
+    QSize determineSize(QByteArray data);
+    QByteArray getImageData(QStringList arguments);
+    KisProfile * profile();
+
+    KisID getColorSpace();
+    
+private:
+
+    KDialogBase * m_dialog;
+    WdgRawImport * m_page;
+    KisProfile * m_monitorProfile;
 };
 
 #endif // KIS_RAW_IMPORT_H_
