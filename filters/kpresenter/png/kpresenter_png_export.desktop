@@ -12,6 +12,7 @@ Name[pt]=Filtro de Exportação de PNG para o KPresenter
 Name[pt_BR]=Filtro de Exportação de PNG para o KPresenter
 Name[se]=KPresentera PNG-olggosfievrridansilli
 Name[sv]=Kpresenter PNG-exportfilter
+Name[xx]=xxKPresenter PNG Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/png
 X-KDE-Weight=1

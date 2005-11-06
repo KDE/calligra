@@ -12,6 +12,7 @@ Name[pt]=Filtro de Exportação de SVG para o KPresenter
 Name[pt_BR]=Filtro de Exportação de SVG para o KPresenter
 Name[se]=KPresentera SVG-olggosfievrridansilli
 Name[sv]=Kpresenter SVG-exportfilter
+Name[xx]=xxKPresenter SVG Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1

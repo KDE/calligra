@@ -2,6 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita RAW Import Filter
+Name[da]=Krita RAW-importfilter
+Name[es]=Filtro de importación a RAW de Krita
+Name[ga]=Scagaire Iompórtála RAW Krita
+Name[sv]=Krita RAW-importfilter
+Name[xx]=xxKrita RAW Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-raw
 X-KDE-Weight=1

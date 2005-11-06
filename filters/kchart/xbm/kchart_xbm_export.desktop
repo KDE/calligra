@@ -9,6 +9,7 @@ Name[ja]=KChart XBM エクスポートフィルター
 Name[pt]=Filtro de Exportação de XBM para o KChart
 Name[pt_BR]=Filtro de Exportação de XBM para o KChart
 Name[sv]=Kchart XBM-exportfilter
+Name[xx]=xxKChart XBM Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xbm
 X-KDE-Weight=1

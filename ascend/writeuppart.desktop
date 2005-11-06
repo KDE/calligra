@@ -7,6 +7,7 @@ Name[es]=Componente de procesamiento de texto simplificado de KOffice
 Name[pt]=Componente de Processamento de Texto Simplificado do KOffice
 Name[pt_BR]=Componente de Processamento de Texto Simplificado do KOffice
 Name[sv]=Koffice-förenklad ordbehandlingskomponent
+Name[xx]=xxKOffice Simplified Word Processing Componentxx
 X-KDE-Library=libwriteup_part
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text

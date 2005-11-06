@@ -18,6 +18,7 @@ Name[pt]=Filtro de Exportação de SVG para o KFormula
 Name[pt_BR]=Filtro de Exportação de SVG para o KFormula
 Name[se]=KFormula SVG-olggosfievrridansilli
 Name[sv]=Kformula SVG-exportfilter
+Name[xx]=xxKFormula SVG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkfosvgexport

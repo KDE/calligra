@@ -9,6 +9,7 @@ Name[ja]=KChart JPEG エクスポートフィルター
 Name[pt]=Filtro de Exportação de JPEG para o KChart
 Name[pt_BR]=Filtro de Exportação de JPEG para o KChart
 Name[sv]=Kchart JPEG-exportfilter
+Name[xx]=xxKChart JPEG Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/jpeg
 X-KDE-Weight=1
