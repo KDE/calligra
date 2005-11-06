@@ -407,7 +407,7 @@ public:
     void slotRepaintVariable();
     void recalcPageNum();
     void changePicture( const KURL & url, QWidget *parent );
-    void insertPicture( const QString &, int _x = 10, int _y = 10 );
+    void insertPicture( const QString &filename, const KoPoint &pos );
     void insertPicture( const QString &_file, const KoRect &_rect );
 
     void enableEmbeddedParts( bool f );

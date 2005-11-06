@@ -1441,15 +1441,12 @@ void KPrPage::changePicture( const KURL & url, QWidget *parent )
     }
 }
 
-void KPrPage::insertPicture( const QString &filename, int _x , int _y )
+void KPrPage::insertPicture( const QString &filename, const KoPoint &pos )
 {
     KoPictureKey key = m_doc->pictureCollection()->loadPicture( filename ).getKey();
     KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->pictureCollection() , key );
-    double x=m_doc->zoomHandler()->unzoomItX(_x);
-    double y=m_doc->zoomHandler()->unzoomItY(_y);
 
-    kppixmapobject->setOrig( ( x  / m_doc->getGridX() ) * m_doc->getGridX(),
-                             ( y  / m_doc->getGridY() ) * m_doc->getGridY());
+    kppixmapobject->setOrig( pos );
     kppixmapobject->setSelected( true );
 
     kppixmapobject->setSize( m_doc->zoomHandler()->pixelXToPt( kppixmapobject->originalSize().width() ),

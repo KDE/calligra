@@ -1437,13 +1437,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             insertPolygon( m_pointArray );
         break;
     case INS_PICTURE:
-    case INS_CLIPART: {
-        if ( insRect.width() > 10 && insRect.height() > 10 )
-            insertPicture( insRect );
-        else
-            insertPicture( QRect(), insRect.topLeft() ); // use the default size
+    case INS_CLIPART: 
+        insertPicture( m_insertRect );
         setToolEditMode( TEM_MOUSE );
-    } break;
+        break;
     case INS_CLOSED_FREEHAND: {
         if ( !m_pointArray.isNull() )
             insertClosedLine( m_pointArray );
@@ -1624,7 +1621,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             }break;
             case INS_TEXT: case INS_OBJECT: case INS_TABLE:
             case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
-            case INS_PICTURE: case INS_CLIPART: {
+            {
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
@@ -1666,11 +1663,30 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 mouseSelectedObject = true;
             } break;
+            case INS_PICTURE: case INS_CLIPART: 
+            {
+                QPainter p( this );
+                p.setPen( QPen( black, 1, SolidLine ) );
+                p.setBrush( NoBrush );
+                p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
+                p.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+
+                KoPoint sp( snapPoint( docPoint ) );
+                m_insertRect.setRight( sp.x() );
+                m_insertRect.setBottom( sp.y() );
+
+                p.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                p.end();
+
+                mouseSelectedObject = true;
+            } break;
             case INS_ELLIPSE: {
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
 
                 p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
                 KoPoint sp( snapPoint( docPoint ) );
@@ -1687,6 +1703,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
 
                 p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
 
@@ -1755,6 +1772,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
 
                 drawPieObject( &p, m_insertRect );
                 KoPoint sp( snapPoint( docPoint ) );
@@ -3902,25 +3920,21 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
     m_indexPointArray = 0;
 }
 
-void KPrCanvas::insertPicture( const QRect &_r, const QPoint & tl )
+void KPrCanvas::insertPicture( const KoRect &rect )
 {
     QString file = m_activePage->insPictureFile();
 
     QCursor c = cursor();
     setCursor( waitCursor );
     if ( !file.isEmpty() ) {
-        if (_r.isValid())
+        if ( rect.width() > 10 && rect.height() > 10 )
         {
-            QRect r( _r );
-            r.moveBy( diffx(), diffy() );
-            KoRect rect = m_view->zoomHandler()->unzoomRect( r );
             m_activePage->insertPicture( file, rect );
         }
         else
         {
-            QPoint topleft(tl);
-            topleft += QPoint(diffx(), diffy());
-            m_activePage->insertPicture(file, topleft.x(), topleft.y());
+            KoPoint tl( rect.topLeft() );
+            m_activePage->insertPicture( file, tl );
         }
         m_activePage->setInsPictureFile( QString::null );
     }
@@ -4097,7 +4111,11 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     pix.save( tmpFile.name(), "PNG" );
     QCursor c = cursor();
     setCursor( waitCursor );
-    m_activePage->insertPicture( tmpFile.name(), posX, posY  );
+
+    QPoint pos( posX + diffx(), posY + diffy() );
+    KoPoint docPoint( m_view->zoomHandler()->unzoomPoint( pos ) );
+
+    m_activePage->insertPicture( tmpFile.name(), docPoint  );
 
     tmpFile.close();
 
@@ -4142,7 +4160,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                 if ( mimetype.contains( "image" ) ) {
                     QCursor c = cursor();
                     setCursor( waitCursor );
-                    m_activePage->insertPicture( filename, e->pos().x(), e->pos().y()  );
+                    m_activePage->insertPicture( filename, docPoint );
                     setCursor( c );
                 } else if ( mimetype.contains( "text" ) ) {
                     QCursor c = cursor();

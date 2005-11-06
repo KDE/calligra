@@ -575,7 +575,7 @@ DCOPRef KPresenterPageIface::insertTextObject( int x, int y, int h, int w )
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertPicture( const QString & file, int x, int y, int h, int w )
+DCOPRef KPresenterPageIface::insertPicture( const QString & file, double x, double y, double h, double w )
 {
     m_page->setInsPictureFile(file);
     KPresenterView *view=m_page->kPresenterDoc()->firstView();
@@ -583,7 +583,7 @@ DCOPRef KPresenterPageIface::insertPicture( const QString & file, int x, int y, 
     if ( !view  )
         return DCOPRef();
 
-    view->getCanvas()->insertPicture( QRect(x,y,h,w));
+    view->getCanvas()->insertPicture( KoRect( x, y, h, w ) );
     return selectedObject();
 }
 
