@@ -244,6 +244,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         KisHLineIterator it = layer -> createHLineIterator(0, y, width, true);
         switch(color_type)
         {
+            case PNG_COLOR_TYPE_GRAY:
             case PNG_COLOR_TYPE_GRAY_ALPHA:
                 if(color_nb_bits == 16)
                 {
@@ -267,6 +268,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                 }
                 //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
                 break;
+            case PNG_COLOR_TYPE_RGB:
             case PNG_COLOR_TYPE_RGB_ALPHA:
                 if(color_nb_bits == 16)
                 {
@@ -297,7 +299,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
-    
+
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     
