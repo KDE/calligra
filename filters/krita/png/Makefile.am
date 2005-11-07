@@ -31,8 +31,8 @@ servicedir = $(kde_servicesdir)
 kdelnk_DATA = krita_png.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-libkritapngimport_la_SOURCES = kis_png_import.cpp kis_png_converter.cc
-libkritapngexport_la_SOURCES = kis_png_export.cpp kis_png_converter.cc
+libkritapngimport_la_SOURCES = kis_png_import.cc kis_png_converter.cc
+libkritapngexport_la_SOURCES = kis_png_export.cc kis_png_converter.cc
 
 METASOURCES = AUTO
 
