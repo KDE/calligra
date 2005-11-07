@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" 
-"dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kspread;">
   <!ENTITY package "koffice">
   <!ENTITY % addindex "IGNORE">
@@ -114,7 +113,7 @@ Program copyright 1998-2002 The KSpread Team:
 </listitem>
 <listitem><para>John Dailey <email>dailey@vt.edu</email></para>
 </listitem>
-<listitem><para>Philipp Müller <email>philipp.mueller@gmx.de</email></para>
+<listitem><para>Philipp MÃ¼ller <email>philipp.mueller@gmx.de</email></para>
 </listitem>
 <listitem><para>Ariya Hidayat <email>ariya@kde.org</email></para>
 </listitem>
