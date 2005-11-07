@@ -86,6 +86,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 		i18n("Save all changes made to this connection information. You can later reuse this information.")), 
 		frmBottom, "savechanges");
 	hbox->addWidget( d->btnSaveChanges );
+	hbox->addSpacing( KDialogBase::spacingHint() );
 	QWidget::setTabOrder(titleEdit, d->btnSaveChanges);
 	d->btnSaveChanges->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 

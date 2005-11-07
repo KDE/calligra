@@ -74,9 +74,11 @@ public slots:
 	
 signals:
 	void projectExecuted(KexiProjectData*);
+	void selectionChanged(KexiProjectData*);
 
 protected slots:
-	void itemExecuted(QListViewItem*);
+	void slotItemExecuted(QListViewItem*);
+	void slotItemSelected();
 	virtual void languageChange() { KexiProjectSelectorBase::languageChange(); }
 
 protected:
@@ -120,6 +122,7 @@ public:
 
 protected slots:
 	void slotProjectExecuted(KexiProjectData*);
+	void slotProjectSelectionChanged(KexiProjectData*);
 
 protected:
 	void init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns);

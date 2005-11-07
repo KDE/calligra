@@ -121,8 +121,9 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(
 
 	//show projects
 	setProjectSet( m_prj_set );
-	connect(list,SIGNAL(doubleClicked(QListViewItem*)),this,SLOT(itemExecuted(QListViewItem*)));
-	connect(list,SIGNAL(returnPressed(QListViewItem*)),this,SLOT(itemExecuted(QListViewItem*)));
+	connect(list,SIGNAL(doubleClicked(QListViewItem*)),this,SLOT(slotItemExecuted(QListViewItem*)));
+	connect(list,SIGNAL(returnPressed(QListViewItem*)),this,SLOT(slotItemExecuted(QListViewItem*)));
+	connect(list,SIGNAL(selectionChanged()),this,SLOT(slotItemSelected()));
 }
 
 /*!  
@@ -141,13 +142,21 @@ KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
 	return 0;
 }
 
-void KexiProjectSelectorWidget::itemExecuted(QListViewItem *item)
+void KexiProjectSelectorWidget::slotItemExecuted(QListViewItem *item)
 {
 	if (!d->selectable)
 		return;
 	ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(item);
 	if (ditem)
 		emit projectExecuted( ditem->data );
+}
+
+void KexiProjectSelectorWidget::slotItemSelected()
+{
+	if (!d->selectable)
+		return;
+	ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(list->selectedItem());
+	emit selectionChanged( ditem ? ditem->data : 0 );
 }
 
 void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
@@ -210,7 +219,12 @@ bool KexiProjectSelectorWidget::isSelectable() const
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
 	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialogBase( Plain, i18n("Open Recent Project"), Help | Ok | Cancel, Ok, parent, name )
+	: KDialogBase( Plain, i18n("Open Recent Project"), 
+#ifndef KEXI_NO_UNFINISHED 
+	//! @todo re-add Help when doc is available
+	Help | 
+#endif
+	Ok | Cancel, Ok, parent, name )
 {
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
 }
@@ -219,8 +233,12 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const cha
 	KexiDB::ConnectionData* cdata, 
 	bool showProjectNameColumn, bool showConnectionColumns)
 	: KDialogBase( 
-		Plain, i18n("Open Project"), Help | Ok | Cancel, Ok, parent, name, true/*modal*/,
-		false/*sep*/ )
+		Plain, i18n("Open Project"), 
+#ifndef KEXI_NO_UNFINISHED 
+	//! @todo re-add Help when doc is available
+	Help | 
+#endif
+	Ok | Cancel, Ok, parent, name, true/*modal*/, false/*sep*/ )
 {
 	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")));
 	assert(cdata);
@@ -230,7 +248,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const cha
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
 	
 	m_sel->label->setText( i18n("Select a project on <b>%1</b> database server to open:")
-		.arg(cdata->serverInfoString(true)) );
+		.arg(cdata->serverInfoString(false)) );
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
@@ -251,6 +269,8 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
 	
 	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),
 		this,SLOT(slotProjectExecuted(KexiProjectData*)));
+	connect(m_sel,SIGNAL(selectionChanged(KexiProjectData*)),
+		this,SLOT(slotProjectSelectionChanged(KexiProjectData*)));
 }
 
 KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const
@@ -261,6 +281,11 @@ KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const
 void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
 {
 	accept();
+}
+
+void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pdata)
+{
+	enableButtonOK(pdata);
 }
 
 void KexiProjectSelectorDialog::show()

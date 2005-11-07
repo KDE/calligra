@@ -419,10 +419,11 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 						d->shortcutFile = 0;
 						return false;
 					}
-					d->connDialog = new KexiDBConnectionDialog(*m_projectData, d->shortcutFile->fileName());
-					connect(d->connDialog, SIGNAL(saveChanges()), this, SLOT(slotSaveShortcutFileChanges()));
+					d->connDialog = new KexiDBConnectionDialog(
+						*m_projectData, d->shortcutFile->fileName());
+					connect(d->connDialog, SIGNAL(saveChanges()), 
+						this, SLOT(slotSaveShortcutFileChanges()));
 					int res = d->connDialog->exec();
-
 					if (res == QDialog::Accepted) {
 						//get (possibly changed) prj data
 						*m_projectData = d->connDialog->currentProjectData();
@@ -449,13 +450,36 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 						d->connShortcutFile = 0;
 						return false;
 					}
-					bool cancelled;
+
+					bool cancel = false;
+					int res = 0;
 					while (true) {
-//! @todo add "connecting to database" dialog
-						m_projectData = selectProject(&cdata, cancelled);
-						if (m_projectData || cancelled)
+						//show connection dialog, so user can change parameters
+						d->connDialog = new KexiDBConnectionDialog(
+							cdata, d->connShortcutFile->fileName());
+						connect(d->connDialog, SIGNAL(saveChanges()), 
+							this, SLOT(slotSaveShortcutFileChanges()));
+						res = d->connDialog->exec();
+						if (res == QDialog::Accepted) {
+							//get (possibly changed) prj data
+							cdata = *d->connDialog->currentProjectData().constConnectionData();
+						}
+						else {
+							cancel = true;
+							break;
+						}
+						m_projectData = selectProject(&cdata, cancel);
+						if (m_projectData || cancel)
 							break;
 					}
+
+					delete d->connShortcutFile;
+					d->connShortcutFile = 0;
+					delete d->connDialog;
+					d->connDialog = 0;
+
+					if (cancel)
+						return cancelled;
 				}
 				else
 					m_projectData = new KexiProjectData(cdata, prjName);
@@ -782,10 +806,18 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
 
 void KexiStartupHandler::slotSaveShortcutFileChanges()
 {
-	if (!d->shortcutFile->saveProjectData(d->connDialog->currentProjectData(), 
-		d->connDialog->savePasswordOptionSelected(), 
-		&d->shortcutFileGroupKey ))
-	{
+	bool ok = true;
+	if (d->shortcutFile)
+		ok = d->shortcutFile->saveProjectData(d->connDialog->currentProjectData(), 
+			d->connDialog->savePasswordOptionSelected(), 
+			&d->shortcutFileGroupKey );
+	else if (d->connShortcutFile)
+		ok = d->connShortcutFile->saveConnectionData(
+			*d->connDialog->currentProjectData().connectionData(), 
+			d->connDialog->savePasswordOptionSelected(), 
+			&d->shortcutFileGroupKey );
+
+	if (!ok) {
 		KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.")
 			.arg(d->shortcutFile->fileName()));
 	}

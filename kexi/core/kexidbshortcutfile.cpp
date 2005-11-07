@@ -106,6 +106,9 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 		<< " comment=" << config.readEntry("comment")
 		<< endl;*/
 
+	//no filename by default
+	data.connectionData()->setFileName(QString::null);
+
 	if (d->isDatabaseShortcut) {
 		data.setCaption( config.readEntry("caption") );
 		data.setDescription( config.readEntry("comment") );
