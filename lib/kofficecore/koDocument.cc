@@ -2474,9 +2474,8 @@ void KoDocument::openExistingFile( const QString& file )
     setModified( false );
 
     if( ok ) {
-        d->m_startUpWidget->deleteLater();
-        d->m_startUpWidget = 0;
-        shells().getFirst()->setRootDocument( this );
+      deleteOpenPane();
+      shells().getFirst()->setRootDocument( this );
     }
 }
 
@@ -2486,9 +2485,7 @@ void KoDocument::openTemplate( const QString& file )
     setModified( false );
 
     if ( ok ) {
-        d->m_startUpWidget->deleteLater();
-        d->m_startUpWidget = 0;
-        shells().getFirst()->setRootDocument( this );
+        deleteOpenPane();
         resetURL();
         setEmpty();
     } else {
@@ -2515,12 +2512,29 @@ KoOpenPane* KoDocument::createOpenPane( KoMainWindow* parent, KInstance* instanc
 
 void KoDocument::setTemplateType( const QString& _templateType )
 {
-  d->m_templateType = _templateType;
+    d->m_templateType = _templateType;
 }
 
 QString KoDocument::templateType() const
 {
-  return d->m_templateType;
+    return d->m_templateType;
+}
+
+void KoDocument::deleteOpenPane()
+{
+    if( d->m_startUpWidget ) {
+      d->m_startUpWidget->hide();
+      QTimer::singleShot(0, this, SIGNAL(deleteOpenPaneDelayed()));
+//         d->m_startUpWidget->deleteLater();
+//         d->m_startUpWidget = 0;
+        shells().getFirst()->setRootDocument( this );
+    }
+}
+
+void KoDocument::deleteOpenPaneDelayed()
+{
+    delete d->m_startUpWidget;
+    d->m_startUpWidget = 0;
 }
 
 #include "koDocument_p.moc"

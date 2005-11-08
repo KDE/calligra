@@ -1083,14 +1083,24 @@ protected:
      */
     virtual bool saveExternalChildren();
 
+    /**
+     * Creates the open widget showed at application start up.
+     */
     KoOpenPane* createOpenPane( KoMainWindow* parent, KInstance* instance,
                                 const QString& templateType = QString::null);
+
+    /**
+     * Removes the open widget showed at application start up.
+     */
+    void deleteOpenPane();
 
 private slots:
     void slotChildChanged( KoChild *c );
     void slotChildDestroyed();
     void slotAutoSave();
     void slotStarted( KIO::Job* );
+
+    void deleteOpenPaneDelayed();
 
 private:
     KService::Ptr nativeService();
