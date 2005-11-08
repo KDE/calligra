@@ -142,7 +142,11 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         d->m_fileList.append(fileItem);
         KListViewItem* item = new KListViewItem(m_documentList, name, url.path());
-        item->setPixmap(0, fileItem->pixmap(32));
+        //center all icons in 64x64 area (needed to be done now in case no preview can be made)
+        QImage icon = fileItem->pixmap(32).convertToImage();
+        icon.setAlphaBuffer(true);
+        icon = icon.copy((icon.width()-64)/2, (icon.height()-64)/2, 64, 64);
+        item->setPixmap(0, QPixmap(icon));
         item->setPixmap(2, fileItem->pixmap(64));
       }
     }
@@ -206,6 +210,8 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
       it.current()->setPixmap(2, preview);
       QImage icon = preview.convertToImage();
       icon = icon.smoothScale(64, 64, QImage::ScaleMin);
+      icon.setAlphaBuffer(true);
+      icon = icon.copy((icon.width()-64)/2, (icon.height()-64)/2, 64, 64);
       it.current()->setPixmap(0, QPixmap(icon));
 
       if(it.current()->isSelected()) {
