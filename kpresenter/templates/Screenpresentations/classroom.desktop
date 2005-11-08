@@ -2,7 +2,14 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[ga]=Seomra Ranga
+Name[pt]=Sala de Aulas
+Name[pt_BR]=Sala de Aulas
+Name[sv]=Klassrum
 Comment=Classroom by dannya
+Comment[pt]=Sala de aula por dannya
+Comment[pt_BR]=Sala de aula por dannya
+Comment[sv]=Klassrum av dannya
 Type=Link
 URL=.source/classroom.kpt
 X-KDE-Hidden=false
