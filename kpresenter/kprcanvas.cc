@@ -637,8 +637,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPObject *kpobject = 0;
 
-    m_savedMousePos = contentsPoint;
-
     m_changeSnap = e->state() & ShiftButton;
     
     exitEditMode();
@@ -1410,9 +1408,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    int oldMx = m_savedMousePos.x();
-    int oldMy = m_savedMousePos.y();
-    m_savedMousePos = contentsPoint;
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
@@ -1720,7 +1715,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         QPainter p;
         p.begin( this );
         p.setPen( m_view->kPresenterDoc()->presPen() );
-        p.drawLine( oldMx, oldMy, e->x(), e->y() );
+        p.drawLine( m_drawModeLines[m_drawModeLines.count() - 1].point( m_drawModeLineIndex - 1 ), e->pos() );
         p.end();
         m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
     }

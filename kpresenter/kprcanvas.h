@@ -723,10 +723,6 @@ private:
     bool mousePressed;
     bool drawContour;
     ModifyType modType;
-    /**
-     * Saves the last mouse position during mouse move events.
-     */
-    QPoint m_savedMousePos;
 
     KPObject *editNum;
 
