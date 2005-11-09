@@ -46,6 +46,7 @@
 #include <qlistbox.h>
 #include <qlayout.h>
 #include <qfontdatabase.h>
+#include <qwhatsthis.h>
 #include <kdialog.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -880,7 +881,7 @@ void CellFormatDlg::init()
   tab->addTab( floatPage, i18n("&Data Format") );
 
   fontPage = new CellFormatPageFont( tab, this );
-  tab->addTab( fontPage, i18n("&Text") );
+  tab->addTab( fontPage, i18n("&Font") );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
@@ -1161,33 +1162,43 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     grp->setRadioButtonExclusive( true );
     generic=new QRadioButton(i18n("Generic"),grp);
+    QWhatsThis::add(generic, i18n( "This is the default format and KSpread autodetects the actual data type depending on the current cell data. By default, KSpread right justifies numbers, dates and times within a cell and left justifies anything else." ) );
     grid->addWidget(generic,1,0);
 
     number=new QRadioButton(i18n("Number"),grp);
+    QWhatsThis::add(number, i18n( "The number notation uses the notation you globally choose in KControl -> Regional & Accessibility -> Numbers tab. Numbers are right justified by default." ) );
     grid->addWidget(number,2,0);
 
     percent=new QRadioButton(i18n("Percent"),grp);
+    QWhatsThis::add(percent, i18n( "When you have a number in the current cell and you switch from the dcell format from Generic to Percent, the current cell number will be multiplied by 100%.\nFor example if you enter 12 and set the cell format to Percent, the number will then be 1,200 %. Switching back to Generic cell format will bring it back to 12.\nYou can also use the Percent icon in the Format Toolbar." ) );
     grid->addWidget(percent,3,0);
 
     money=new QRadioButton(i18n("Money"),grp);
+    QWhatsThis::add(money, i18n( "The Money format converts your number into money notation using the settings globally fixed in KControl in Regional & Accessibility -> Money. The currency symbol will be displayed and the precision will be the one set in KControl.\nYou can also use the Currency icon in the Format Toolbar to set the cell formatting to look like your current currency." ) );
     grid->addWidget(money,4,0);
 
     scientific=new QRadioButton(i18n("Scientific"),grp);
+    QWhatsThis::add(scientific, i18n( "The scientific format changes your number using the scientific notation. For example, 0.0012 will be changed to 1.2E-03. Going back using Generic cell format will display 0.0012 again." ) );
     grid->addWidget(scientific,5,0);
 
     fraction=new QRadioButton(i18n("Fraction"),grp);
+    QWhatsThis::add(fraction, i18n( "The fraction format changes your number into a fraction. For example, 0.1 can be changed to 1/8, 2/16, 1/10, etc. You define the type of fraction by choosing it in the field on the right. If the exact fraction is not possible in the fraction mode you choose, the nearest closest match is chosen.\n For example: when we have 1.5 as number, we choose Fraction and Sixteenths 1/16 the text displayed into cell is \"1 8/16\" which is an exact fraction. If you have 1.4 as number in your cell and you choose Fraction and Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest closest Sixteenth fraction." ) );
     grid->addWidget(fraction,6,0);
 
     date=new QRadioButton(i18n("Date format"),grp);
+    QWhatsThis::add(date, i18n( "To enter a date, you should enter it in one of the formats set in KControl in Regional & Accessibility ->Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get dates." ) );
     grid->addWidget(date,7,0);
 
     time=new QRadioButton(i18n("Time format"),grp);
+    QWhatsThis::add(time, i18n( "This formats your cell content as a time. To enter a time, you should enter it in the Time format set in KControl in Regional & Accessibility ->Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in KControl. When the number in the cell does not make sense as a time, KSpread will display 00:00 in the global format you have in KControl." ) );
     grid->addWidget(time,8,0);
 
     textFormat=new QRadioButton(i18n("Text"),grp);
+    QWhatsThis::add(textFormat, i18n( "This formats your cell content as text. This can be useful if you want a number treated as text instead as a number, for example for a ZIP code. Setting a number as text format will left justify it. When numbers are formatted as text, they cannot be used in calculations or formulas. It also change the way the cell is justified." ) );
     grid->addWidget(textFormat,9,0);
 
     customFormat=new QRadioButton(i18n("Custom"),grp);
+    QWhatsThis::add(customFormat, i18n( "The custom format does not work yet. To be enabled in the next release." ) );
     grid->addWidget(customFormat,10,0);
     customFormat->setEnabled( false );
 
@@ -1196,6 +1207,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     QGridLayout *grid3 = new QGridLayout(box2,1,3,KDialog::marginHint(), KDialog::spacingHint());
 
     exampleLabel=new QLabel(box2);
+    QWhatsThis::add(exampleLabel, i18n( "This will display a preview of your choice so you can know what it does before clicking the OK button to validate it." ) );
     grid3->addWidget(exampleLabel,0,1);
 
     grid->addMultiCellWidget(box2,9,10,1,1);
@@ -1206,6 +1218,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     listFormat=new QListBox(grp);
     grid->addMultiCellWidget(listFormat,2,7,1,1);
+    QWhatsThis::add(listFormat, i18n( "Displays choices of format for the fraction, date or time formats." ) );
     layout->addWidget(grp);
 
     /* *** */
@@ -1215,17 +1228,20 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     grid = new QGridLayout(box,3,4,KDialog::marginHint(), KDialog::spacingHint());
 
     postfix = new QLineEdit( box, "LineEdit_1" );
+    QWhatsThis::add(postfix, i18n( "You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format." ) );
     grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
     precision->setSpecialValueText(i18n("variable"));
     precision->setRange(-1,10,1,false);
-
+    QWhatsThis::add(precision, i18n( "You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. " ) );
     grid->addWidget(precision,1,1);
 
     prefix = new QLineEdit( box, "LineEdit_3" );
+    QWhatsThis::add(prefix, i18n( "You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format." ) );
     grid->addWidget(prefix,0,1);
 
     format = new QComboBox( box, "ListBox_1" );
+    QWhatsThis::add(format, i18n( "You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red." ) );
     grid->addWidget(format,0,3);
 
     QLabel* tmpQLabel;
@@ -1240,8 +1256,8 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,0,0);
-    tmpQLabel->setText( i18n("Prefix:") );
 
+    tmpQLabel->setText( i18n("Prefix:") );
     tmpQLabel = new QLabel( box, "Label_3" );
     grid->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText( i18n("Precision:") );
@@ -2857,7 +2873,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
     angleRotation->setLabel(i18n("Angle:"));
     angleRotation->setRange(-90, 90, 1);
-    angleRotation->setSuffix(" ");
+    angleRotation->setSuffix(QString(new QChar(0x00B0), 1));
 
     grid2->addWidget(angleRotation, 1, 0);
     grid3->addWidget(grp, 1, 1);
