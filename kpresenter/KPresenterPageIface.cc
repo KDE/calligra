@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <kcommand.h>
 #include "kprcommand.h"
+#include <koPoint.h>
 #include <koRect.h>
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page, int pgnum )
@@ -520,47 +521,14 @@ DCOPRef KPresenterPageIface::insertPie( double x, double y, double h, double w )
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertLineH( int x, int y, int h, int w, bool rev )
+DCOPRef KPresenterPageIface::insertLine( double x1, double y1, double x2, double y2 )
 {
     KPresenterView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
 
-    view->getCanvas()->insertLineH( QRect(x,y,h,w), rev );
-    return selectedObject();
-}
-
-DCOPRef KPresenterPageIface::insertLineV( int x, int y, int h, int w, bool rev )
-{
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
-    m_page->kPresenterDoc()->deSelectAllObj();
-    if ( !view  )
-        return DCOPRef();
-
-    view->getCanvas()->insertLineV( QRect(x,y,h,w), rev );
-    return selectedObject();
-}
-
-DCOPRef KPresenterPageIface::insertLineD1( int x, int y, int h, int w, bool rev )
-{
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
-    m_page->kPresenterDoc()->deSelectAllObj();
-    if ( !view  )
-        return DCOPRef();
-
-    view->getCanvas()->insertLineD1( QRect(x,y,h,w), rev );
-    return selectedObject();
-}
-
-DCOPRef KPresenterPageIface::insertLineD2( int x, int y, int h, int w, bool rev )
-{
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
-    m_page->kPresenterDoc()->deSelectAllObj();
-    if ( !view  )
-        return DCOPRef();
-
-    view->getCanvas()->insertLineD2( QRect(x,y,h,w), rev );
+    view->getCanvas()->insertLine( KoPoint( x1, y1), KoPoint( x2, y2 ) );
     return selectedObject();
 }
 

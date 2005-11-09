@@ -852,6 +852,13 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_rotateCenter = kpobject->getRealRect().center();
                 }
             } break;
+            case INS_LINE:
+                deSelectAllObj();
+                mousePressed = true;
+
+                m_startPoint = snapPoint( docPoint );
+                m_endPoint = m_startPoint; 
+                break;
             case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                 deSelectAllObj();
                 mousePressed = true;
@@ -1218,11 +1225,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    if ( toolEditMode != INS_LINE )
-    {
-        insRect = insRect.normalize();
-        m_insertRect = m_insertRect.normalize();
-    }
+    insRect = insRect.normalize();
+    m_insertRect = m_insertRect.normalize();
 
     switch ( toolEditMode ) {
     case TEM_MOUSE: {
@@ -1359,31 +1363,12 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             m_rotateObject = NULL;
         }
     }break;
-    case INS_LINE: {
-        if ( insRect.width() != 0 && insRect.height() != 0 ) {
-            rectSymetricalObjet();
-            if ( insRect.top() == insRect.bottom() ) {
-                bool reverse = insRect.left() > insRect.right();
-                insRect = insRect.normalize();
-                insRect.setRect( insRect.left(), insRect.top() - static_cast<int>(m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()) / 2),
-                                 insRect.width(), m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()) );
-                insertLineH( insRect, reverse );
-            } else if ( insRect.left() == insRect.right() ) {
-                bool reverse = insRect.top() > insRect.bottom();
-                insRect = insRect.normalize();
-                insRect.setRect( insRect.left() - static_cast<int>(m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()) / 2), insRect.top(),
-                                 m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()), insRect.height() );
-                insertLineV( insRect, reverse );
-            } else if ( insRect.left() < insRect.right() && insRect.top() < insRect.bottom() ||
-                        insRect.left() > insRect.right() && insRect.top() > insRect.bottom() ) {
-                bool reverse = insRect.left() > insRect.right() && insRect.top() > insRect.bottom();
-                insertLineD1( insRect.normalize(), reverse );
-            } else {
-                bool reverse = insRect.right() < insRect.left() && insRect.top() < insRect.bottom();
-                insertLineD2( insRect.normalize(), reverse );
-            }
+    case INS_LINE:
+        if ( m_startPoint != m_endPoint )
+        {
+            insertLine( m_startPoint, m_endPoint );
         }
-    } break;
+        break;
     case INS_RECT:
         if ( !m_insertRect.isNull() )
         {
@@ -1684,47 +1669,17 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
-                if ( insRect.width() != 0 && insRect.height() != 0 )
-                {
-                    if ( !m_drawSymetricObject)
-                        p.drawLine( insRect.topLeft(), insRect.bottomRight() );
-                    else
-                    {
-                        QRect tmpRect( insRect );
-                        tmpRect.moveBy( -insRect.width(), -insRect.height());
-                        tmpRect.setSize( 2*insRect.size() );
-                        p.drawLine( tmpRect.topLeft(), tmpRect.bottomRight() );
-                    }
-                }
-                bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid( e->pos(), true);
-                int right = tmp.x();
-                int bottom = tmp.y();
-                if ( e->state() & ShiftButton )
-                {
-                    int witdh = QABS( right -insRect.left() );
-                    int height = QABS( bottom - insRect.top() );
-                    if ( witdh > height )
-                        bottom = insRect.top();
-                    else if ( witdh < height )
-                        right = insRect.left();
-                }
-                insRect.setRight( right );
-                insRect.setBottom( bottom );
-                limitSizeOfObject();
+                p.translate( -diffx(), -diffy() );
 
-                QRect lineRect( insRect );
-                if ( e->state() & AltButton )
-                {
-                    m_drawSymetricObject = true;
-                    lineRect.moveBy( -insRect.width(), -insRect.height());
-                    lineRect.setSize( 2*insRect.size() );
-                }
-                else
-                    m_drawSymetricObject = false;
-                p.drawLine( lineRect.topLeft(), lineRect.bottomRight() );
+                //remove the old line
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+
+                m_endPoint = snapPoint( docPoint );
+                
+                // print the new line
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -1756,9 +1711,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     p.setPen( QPen( black, 1, SolidLine ) );
                     p.setBrush( NoBrush );
                     p.setRasterOp( NotROP );
+                    p.translate( -diffx(), -diffy() );
 
-                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
-                                m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
+                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                                m_view->zoomHandler()->zoomPoint( m_endPoint ) );
                     p.end();
 
                     m_pointArray.putPoints( m_indexPointArray, 1, m_endPoint.x(), m_endPoint.y() );
@@ -1773,16 +1729,17 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
 
                 //remove the old line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
 
                 m_endPoint = snapPoint( docPoint );
                 
                 // print the new line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ) - QPoint( diffx(), diffy() ), 
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) - QPoint( diffx(), diffy() ) );
+                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -3655,45 +3612,34 @@ KPTextObject* KPrCanvas::insertTextObject( const KoRect &rect )
     return obj;
 }
 
-void KPrCanvas::insertLineH( const QRect& _r, bool rev )
+void KPrCanvas::insertLine( const KoPoint &startPoint, const KoPoint &endPoint )
 {
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
+    KoRect rect( startPoint, endPoint );
+    bool rev = rect.width() < 0 || rect.height() < 0;
+    rect = rect.normalize();
+    LineType lt = LT_LU_RD;
+    if ( startPoint.x() == endPoint.x() )
+    {
+        lt = LT_VERT;
+        rect.setLeft( rect.left() - 5.0 );
+        rect.setRight( rect.right() + 5.0 );
+    }
+    else if ( startPoint.y() == endPoint.y() )
+    {
+        lt = LT_HORZ;
+        rect.setTop( startPoint.y() - 5.0 );
+        rect.setBottom( startPoint.y() + 5.0 );
+    }
+    else if ( ( startPoint.x() < endPoint.x() && startPoint.y() > endPoint.y() ) ||
+              ( startPoint.x() > endPoint.x() && startPoint.y() < endPoint.y() ) )
+    {
+        lt = LT_LD_RU;
+    }
     m_activePage->insertLine( rect, m_view->getPen(),
                               !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
-                              LT_HORZ );
+                              lt );
 }
 
-void KPrCanvas::insertLineV( const QRect &_r, bool rev )
-{
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
-    m_activePage->insertLine( rect, m_view->getPen(),
-                              !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
-                              LT_VERT );
-}
-
-void KPrCanvas::insertLineD1( const QRect &_r, bool rev )
-{
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
-    m_activePage->insertLine( rect, m_view->getPen(),
-                              !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
-                              LT_LU_RD );
-}
-
-void KPrCanvas::insertLineD2( const QRect &_r, bool rev )
-{
-    QRect r(_r);
-    r.moveBy(diffx(),diffy());
-    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
-    m_activePage->insertLine(rect, m_view->getPen(),
-                             !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
-                             LT_LD_RU );
-}
 
 void KPrCanvas::insertRect( const KoRect &rect )
 {

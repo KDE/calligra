@@ -98,10 +98,7 @@ k_dcop:
     DCOPRef insertRectangle(double x,double y, double h, double w);
     DCOPRef insertEllipse(double x,double y, double h, double w );
     DCOPRef insertPie( double x,double y, double h, double w );
-    DCOPRef insertLineH( int x,int y, int h, int w, bool rev );
-    DCOPRef insertLineV( int x,int y, int h, int w, bool rev );
-    DCOPRef insertLineD1( int x,int y, int h, int w, bool rev );
-    DCOPRef insertLineD2( int x,int y, int h, int w, bool rev );
+    DCOPRef insertLine( double x1, double y1, double x2, double y2 );
     DCOPRef insertTextObject( double x, double y, double h, double w );
     DCOPRef insertPicture( const QString & file, double x, double y, double h, double w );
 

@@ -267,10 +267,13 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void createEditing( KPTextObject *textObj );
 
 
-    void insertLineH( const QRect&, bool );
-    void insertLineV( const QRect&, bool );
-    void insertLineD1( const QRect&, bool );
-    void insertLineD2( const QRect&, bool );
+    /**
+     * @brief Add a line
+     *
+     * @param startPoint the start point of the line
+     * @param endPoint the end point of the line
+     */
+    void insertLine( const KoPoint &startPoint, const KoPoint &endPoint );
     
     /**
      * @brief Add a rectangle
