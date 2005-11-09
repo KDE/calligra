@@ -577,7 +577,8 @@ protected:
 
     void endDrawPolyline();
 
-    void drawCubicBezierCurve( int _dx, int _dy );
+    void drawCubicBezierCurve( KoPoint &point );
+    //void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
 
 
@@ -833,6 +834,7 @@ private:
     KoPoint m_startPoint;
     /// The end position of an insert for line objects
     KoPoint m_endPoint;
+    KoPoint m_symmetricEndPoint;
     KoPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
     unsigned int m_indexPointArray;
     bool m_drawPolyline;
