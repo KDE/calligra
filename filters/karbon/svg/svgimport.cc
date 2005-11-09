@@ -732,7 +732,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		QDomElement b = n.toElement();
 		if( b.isNull() ) continue;
 		VObject *obj = 0L;
-		if( b.tagName() == "g" )
+		
+		// treat svg link <a> as group so we don't miss its child elements
+		if( b.tagName() == "g" || b.tagName() == "a" )
 		{
 			VGroup *group;
 			if ( grp )
