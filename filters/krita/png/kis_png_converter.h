@@ -61,7 +61,7 @@ class KisPNGConverter : public KisProgressSubject {
         virtual ~KisPNGConverter();
     public:
         KisImageBuilder_Result buildImage(const KURL& uri);
-        KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
+        KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
         /** Retrieve the constructed image
         */
         KisImageSP image();

@@ -23,6 +23,8 @@
 #include <stdio.h>
 
 #include <kapplication.h>
+#include <koDocumentInfo.h>
+
 #include <kio/netaccess.h>
 
 #include <kis_abstract_colorspace.h>
@@ -42,10 +44,16 @@ namespace {
     const Q_UINT8 PIXEL_ALPHA = 3;
 
     
-    int getColorTypeforColorSpace( KisColorSpace * cs )
+    int getColorTypeforColorSpace( KisColorSpace * cs , bool alpha)
     {
-        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") ) return PNG_COLOR_TYPE_GRAY_ALPHA;
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") ) return PNG_COLOR_TYPE_RGB_ALPHA;
+        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") )
+        {
+            return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
+        }
+        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
+        {
+            return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
+        }
 
         kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
         return -1;
@@ -75,30 +83,17 @@ namespace {
         return "";
     }
 
-/*    KisProfileSP getProfileForProfileInfo(const Image * image, KisAbstractColorSpace * cs)
+
+    void fillText(png_text* p_text, char* key, QString& text)
     {
+        p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
+        p_text->key = key;
+        char* textc = new char[text.length()+1];
+        strcpy(textc, text.ascii());
+        p_text->text = textc;
+        p_text->text_length = text.length()+1;
     }
 
-    void setAnnotationsForImage(const Image * src, KisImageSP image)
-    {
-    }
-
-    void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotationSP_it& annotationsEnd)
-    {
-    }
-
-    MagickBooleanType monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
-    {
-        KApplication *app = KApplication::kApplication();
-
-        Q_ASSERT(app);
-
-        if (app -> hasPendingEvents())
-            app -> processEvents();
-
-        printf("%s\n", text);
-        return MagickTrue;
-    }*/
 }
 
 KisPNGConverter::KisPNGConverter(KisDoc *doc, KisUndoAdapter *adapter)
@@ -212,11 +207,30 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    int channels = png_get_channels(png_ptr, info_ptr);
+    
+    png_text* text_ptr;
+    int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+    KoDocumentInfo * info = m_doc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author"));
+    for(int i = 0; i < num_comments; i++)
+    {
+        if(QString::compare(text_ptr[i].key, "title"))
+        {
+                aboutPage->setTitle(text_ptr[i].text);
+        } else if(QString::compare(text_ptr[i].key, "abstract"))
+        {
+                aboutPage->setAbstract(text_ptr[i].text);
+        } else if(QString::compare(text_ptr[i].key, "author"))
+        {
+                authorPage->setFullName(text_ptr[i].text);
+        }
+    }
+    
     // Read image data
     png_bytepp row_pointers = new png_bytep[height];
     int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-    for(int y=0; y < height; y++)
+    for(png_uint_32 y=0; y < height; y++)
     {
         row_pointers[y] = new png_byte[rowbytes];
     }
@@ -240,7 +254,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 
     KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
     m_img->add(layer, 0);
-    for (int y = 0; y < height; y++) {
+    for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> createHLineIterator(0, y, width, true);
         switch(color_type)
         {
@@ -303,7 +317,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     
-    for (int y = 0; y < height; y++) {
+    for (png_uint_32 y = 0; y < height; y++) {
         delete row_pointers[y];
     }
     delete row_pointers;
@@ -340,7 +354,7 @@ KisImageSP KisPNGConverter::image()
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -386,10 +400,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
 // FIXME    png_set_write_status_fn(png_ptr, progress);
 //     setProgressTotalSteps(100/*height*/);
             
-    // FIXME: see if it a usefull option to offer : png_set_filter(png_ptr, 0, PNG_FILTER_NONE  | PNG_FILTER_VALUE_NONE | PNG_FILTER_SUB   | PNG_FILTER_VALUE_SUB  | PNG_FILTER_UP    | PNG_FILTER_VALUE_UP   | PNG_FILTER_AVE   | PNG_FILTER_VALUE_AVE  | PNG_FILTER_PAETH | PNG_FILTER_VALUE_PAETH| PNG_ALL_FILTERS);
 
     /* set the zlib compression level */
-    png_set_compression_level(png_ptr, Z_BEST_COMPRESSION); // FIXME: allow configuration
+    png_set_compression_level(png_ptr, compression);
 
     /* set other zlib parameters */
     png_set_compression_mem_level(png_ptr, 8);
@@ -399,21 +412,23 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
     png_set_compression_buffer_size(png_ptr, 8192);
     
     int color_nb_bits = 8 * layer -> pixelSize() / layer -> nChannels();
-    int color_type = getColorTypeforColorSpace(img->colorSpace());
+    int color_type = getColorTypeforColorSpace(img->colorSpace(), alpha);
     
     if(color_type == -1)
     {
         return KisImageBuilder_RESULT_UNSUPPORTED;
     }
-    kdDebug() << " Nb bits : " << color_nb_bits << " color_type : " << color_type << endl;
+    
+    int interlacetype = interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
+    
     png_set_IHDR(png_ptr, info_ptr,
                  width,
                  height,
                  color_nb_bits,
-                 color_type, PNG_INTERLACE_NONE, //FIXME: interlace needs to be configurable
+                 color_type, interlacetype,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
     
-    png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE); // FIXME: configurable, need to interstand what it is first
+    png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
     
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
@@ -430,14 +445,39 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
             kdDebug() << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
-            char* name = new char[(*it)->type().length()];
+            char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().ascii());
             png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
         }
         ++it;
     }
 
-    // FIXME: offers comments in configuration dialog
+    // read comments from the document information
+    png_text texts[3];
+    int nbtexts = 0;
+    KoDocumentInfo * info = m_doc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    QString title = aboutPage->title();
+    if(title != "")
+    {
+        fillText(texts+nbtexts, "title", title);
+        nbtexts++;
+    }
+    QString abstract = aboutPage->abstract();
+    if(abstract != "")
+    {
+        fillText(texts+nbtexts, "abstract", abstract);
+        nbtexts++;
+    }
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    QString author = authorPage->fullName();
+    if(author != "")
+    {
+        fillText(texts+nbtexts, "author", author);
+        nbtexts++;
+    }
+    
+    png_set_text(png_ptr, info_ptr, texts, nbtexts);
     
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
@@ -453,6 +493,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
         row_pointers[y] = new png_byte[width*layer -> pixelSize()];
         switch(color_type)
         {
+            case PNG_COLOR_TYPE_GRAY:
             case PNG_COLOR_TYPE_GRAY_ALPHA:
                 if(color_nb_bits == 16)
                 {
@@ -460,7 +501,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
                     while (!it.isDone()) {
                         const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
                         *(dst++) = d[0];
-                        *(dst++) = d[1];
+                        if(alpha) *(dst++) = d[1];
                         ++it;
                     }
                 } else {
@@ -468,11 +509,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
                     while (!it.isDone()) {
                         const Q_UINT8 *d = it.rawData();
                         *(dst++) = d[0];
-                        *(dst++) = d[1];
+                        if(alpha) *(dst++) = d[1];
                         ++it;
                     }
                 }
                 break;
+            case PNG_COLOR_TYPE_RGB:
             case PNG_COLOR_TYPE_RGB_ALPHA:
                 if(color_nb_bits == 16)
                 {
@@ -482,7 +524,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];
-                        *(dst++) = d[3];
+                        if(alpha) *(dst++) = d[3];
                         ++it;
                     }
                 } else {
@@ -492,7 +534,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];
-                        *(dst++) = d[3];
+                        if(alpha) *(dst++) = d[3];
                         ++it;
                     }
                 }
@@ -504,13 +546,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
     
     png_write_image(png_ptr, row_pointers);
 
-
-    
-    png_write_flush(png_ptr);
     // Writting is over
     png_write_end(png_ptr, info_ptr);
-    png_write_flush(png_ptr);
-
+    
     // Free memory
     png_destroy_write_struct(&png_ptr, &info_ptr);
     for (int y = 0; y < height; y++) {

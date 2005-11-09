@@ -19,6 +19,11 @@
 
 #include "kis_png_export.h"
 
+#include <qcheckbox.h>
+#include <qslider.h>
+
+#include <kapplication.h>
+#include <kdialogbase.h>
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
@@ -29,6 +34,7 @@
 #include <kis_progress_display_interface.h>
 
 #include "kis_png_converter.h"
+#include "kis_wdg_options_png.h"
 
 typedef KGenericFactory<KisPNGExport, KoFilter> KisPNGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngexport, KisPNGExportFactory("kofficefilters"))
@@ -48,6 +54,22 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+    
+    KDialogBase* kdb = new KDialogBase(0, "", false, i18n("PNG Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
+ 
+    KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
+    kdb->setMainWidget(wdg);
+    kapp->restoreOverrideCursor();
+    if(kdb->exec() == KDialogBase::Cancel)
+    {
+        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    }
+
+    bool alpha = wdg->alpha->isChecked();
+    bool interlace = wdg->interlacing->isChecked();
+    int compression = wdg->compressionLevel->value();
+    
+    delete kdb;
     // XXX: Add dialog about flattening layers here
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
@@ -82,7 +104,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, dst, beginIt, endIt)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, dst, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kdDebug() << "success !" << endl;
         return KoFilter::OK;
     }

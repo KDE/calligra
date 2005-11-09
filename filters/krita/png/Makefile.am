@@ -32,7 +32,7 @@ kdelnk_DATA = krita_png.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 libkritapngimport_la_SOURCES = kis_png_import.cc kis_png_converter.cc
-libkritapngexport_la_SOURCES = kis_png_export.cc kis_png_converter.cc
+libkritapngexport_la_SOURCES = kis_wdg_options_png.ui kis_png_export.cc kis_png_converter.cc
 
 METASOURCES = AUTO
 
