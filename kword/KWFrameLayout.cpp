@@ -376,11 +376,11 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     // Final cleanup: delete all frames after lastFrameNumber in each frameset
     QPtrListIterator<HeaderFooterFrameset> it( m_headersFooters );
     for ( ; it.current() ; ++it )
-        if ( it.current()->deleteFramesAfterLast( pages - 1 ) )
+        if ( it.current()->deleteFramesAfterLast( pages ) )
             m_framesetsToUpdate.insert( it.current()->m_frameset, true );
     QPtrListIterator<HeaderFooterFrameset> it2( m_footnotes );
     for ( ; it2.current() ; ++it2 )
-        if ( it2.current()->deleteFramesAfterLast( pages - 1 ) )
+        if ( it2.current()->deleteFramesAfterLast( pages ) )
             m_framesetsToUpdate.insert( it2.current()->m_frameset, true );
     if ( mainTextFrameSet ) {
         // For the last main text frameset, we use m_lastMainFramePage, so that
