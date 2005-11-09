@@ -2873,7 +2873,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
     angleRotation->setLabel(i18n("Angle:"));
     angleRotation->setRange(-90, 90, 1);
-    angleRotation->setSuffix(QString(new QChar(0x00B0), 1));
+    angleRotation->setSuffix(QString::fromUtf8("°"));
 
     grid2->addWidget(angleRotation, 1, 0);
     grid3->addWidget(grp, 1, 1);
