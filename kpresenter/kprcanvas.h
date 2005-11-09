@@ -618,7 +618,7 @@ private:
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, int _dx, int _dy, bool doApplyGrid );
+    void resizeObject( ModifyType _modType, const KoPoint & point );
     /// create ResizeCmd
     void finishResizeObject( const QString &name, int mx, int my, bool layout = true );
 
