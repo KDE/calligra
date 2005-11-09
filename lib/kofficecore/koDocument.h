@@ -959,6 +959,8 @@ protected slots:
      */
     virtual void openTemplate( const QString& file );
 
+    void deleteOpenPaneDelayed();
+
 protected:
 
     QString autoSaveFile( const QString & path ) const;
@@ -1099,8 +1101,6 @@ private slots:
     void slotChildDestroyed();
     void slotAutoSave();
     void slotStarted( KIO::Job* );
-
-    void deleteOpenPaneDelayed();
 
 private:
     KService::Ptr nativeService();

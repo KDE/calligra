@@ -41,17 +41,6 @@
                         <bool>false</bool>
                     </property>
                 </column>
-                <column>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="clickable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="resizable">
-                        <bool>true</bool>
-                    </property>
-                </column>
                 <property name="name">
                     <cstring>m_documentList</cstring>
                 </property>
@@ -62,9 +51,6 @@
                         <horstretch>30</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="allColumnsShowFocus">
-                    <bool>true</bool>
                 </property>
                 <property name="resizeMode">
                     <enum>LastColumn</enum>
