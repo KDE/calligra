@@ -620,7 +620,7 @@ private:
     /// resize the m_resizeObject
     void resizeObject( ModifyType _modType, const KoPoint & point );
     /// create ResizeCmd
-    void finishResizeObject( const QString &name, int mx, int my, bool layout = true );
+    void finishResizeObject( const QString &name, bool layout = true );
 
     void raiseObject( KPObject *_kpobject );
     void lowerObject();
@@ -639,7 +639,6 @@ private:
 
     /// Helper function to draw a pie/arc/chord
     void drawPieObject( QPainter *p,  const KoRect &rect );
-    void limitSizeOfObject();
 
     QPoint limitOfPoint(const QPoint& _point) const;
 
@@ -651,7 +650,6 @@ private:
     KPTextObject* textUnderMouse( const QPoint & point );
     bool checkCurrentTextEdit( KPTextObject * textObj );
 
-    void rectSymetricalObjet();
     /**
      * @brief Snap @p pos to grid and guide lines.
      *
@@ -663,12 +661,6 @@ private:
      * @return the position of the snapped point
      */
     KoPoint snapPoint( KoPoint &pos );
-    QPoint applyGrid( const QPoint &pos,bool offset);
-    KoPoint applyGrid( const KoPoint &pos);
-    double applyGridX( double x );
-    double applyGridY( double y );
-    int applyGridOnPosX( int pos ) const;
-    int applyGridOnPosY( int pos ) const;
 
     /**
      * @brief Find the next grid in distance
@@ -817,7 +809,6 @@ private:
     double m_angleBeforeRotate;
 
     ToolEditMode toolEditMode;
-    QRect insRect;
     /// The rect of the object during insert.
     KoRect m_insertRect;
     KoDocumentEntry partEntry;

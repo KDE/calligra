@@ -639,13 +639,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     m_savedMousePos = contentsPoint;
 
-    bool const doApplyGrid = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
     m_changeSnap = e->state() & ShiftButton;
     
-    QPoint rasterPoint =  e->pos();
-    if ( doApplyGrid )
-        rasterPoint = applyGrid( e->pos(), true );
-
     exitEditMode();
 
     if ( editMode ) {
@@ -893,10 +888,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             default: {
                 deSelectAllObj();
                 mousePressed = true;
-                QPoint tmp = e->pos();
-                if ( doApplyGrid )
-                  tmp = applyGrid ( e->pos(), true );
-                insRect = QRect( tmp.x(), tmp.y(), 0, 0 );
                 KoPoint sp( snapPoint( docPoint ) );
                 m_insertRect = KoRect( sp.x(), sp.y(),0 ,0 );
             } break;
@@ -1186,11 +1177,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, contentsPoint.x(), contentsPoint.y() );
         return;
     }
-    bool state = !( ( (e->state() & ShiftButton) && m_view->kPresenterDoc()->snapToGrid() ) || ( !(e->state() & ShiftButton) && !m_view->kPresenterDoc()->snapToGrid() ) );
-    int mx = state ? applyGridOnPosX( contentsPoint.x()) : contentsPoint.x();
-    int my = state ? applyGridOnPosY( contentsPoint.y()) : contentsPoint.y();
-    firstX = state ? applyGridOnPosX( firstX) : firstX;
-    firstY = state ? applyGridOnPosY( firstY) : firstY;
+
     QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
 
@@ -1200,7 +1187,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    insRect = insRect.normalize();
     m_insertRect = m_insertRect.normalize();
 
     switch ( toolEditMode ) {
@@ -1240,8 +1226,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             }
         } break;
         case MT_MOVE: {
-            if ( firstX != mx || firstY != my ) {
-                KoPoint move( objectRect( false ).topLeft() - m_moveStartPosMouse );
+            KoPoint move( objectRect( false ).topLeft() - m_moveStartPosMouse );
+            if ( move != KoPoint( 0, 0 ) )
+            {
                 KCommand *cmd=m_activePage->moveObject(m_view, move.x(), move.y());
                 if(cmd)
                     m_view->kPresenterDoc()->addCommand( cmd );
@@ -1255,28 +1242,28 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
             break;
         case MT_RESIZE_UP:
-            finishResizeObject( i18n( "Resize Object Up" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Up" ) );
             break;
         case MT_RESIZE_DN:
-            finishResizeObject( i18n( "Resize Object Down" ), mx, my, false );
+            finishResizeObject( i18n( "Resize Object Down" ), false );
             break;
         case MT_RESIZE_LF:
-            finishResizeObject( i18n( "Resize Object Left" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Left" ) );
             break;
         case MT_RESIZE_RT:
-            finishResizeObject( i18n( "Resize Object Right" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Right" ) );
             break;
         case MT_RESIZE_LU:
-            finishResizeObject( i18n( "Resize Object Left && Up" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Left && Up" ) );
             break;
         case MT_RESIZE_LD:
-            finishResizeObject( i18n( "Resize Object Left && Down" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Left && Down" ) );
             break;
         case MT_RESIZE_RU:
-            finishResizeObject( i18n( "Resize Object Right && Up" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Right && Up" ) );
             break;
         case MT_RESIZE_RD:
-            finishResizeObject( i18n( "Resize Object Right && Down" ), mx, my );
+            finishResizeObject( i18n( "Resize Object Right && Down" ) );
             break;
         }
     } break;
@@ -1837,35 +1824,6 @@ void KPrCanvas::drawPieObject( QPainter *p, const KoRect & rect )
     default: break;
     }
 
-}
-
-void KPrCanvas::limitSizeOfObject()
-{
-    QRect pageRect=m_activePage->getZoomPageRect();
-
-    if(insRect.right()>pageRect.right()-1)
-        insRect.setRight(pageRect.right()-1);
-    else if( insRect.right()<pageRect.left()-1)
-        insRect.setRight(pageRect.left()+1);
-    if(insRect.bottom()>pageRect.bottom()-1)
-        insRect.setBottom(pageRect.bottom()-1);
-    else if( insRect.bottom()<pageRect.top()-1)
-        insRect.setBottom(pageRect.top()+1);
-}
-
-QPoint KPrCanvas::limitOfPoint(const QPoint& _point) const
-{
-    QRect pageRect=m_activePage->getZoomPageRect();
-    QPoint point(_point);
-    if(point.x()>pageRect.right()-1)
-        point.setX(pageRect.right()-1);
-    else if( point.x()<pageRect.left()-1)
-        point.setX(pageRect.left()+1);
-    if(point.y()>pageRect.bottom()-1)
-        point.setY(pageRect.bottom()-1);
-    else if( point.y()<pageRect.top()-1)
-        point.setY(pageRect.top()+1);
-    return point;
 }
 
 void KPrCanvas::wheelEvent( QWheelEvent *e )
@@ -4912,7 +4870,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
 }
 
 
-void KPrCanvas::finishResizeObject( const QString &name, int mx, int my, bool layout )
+void KPrCanvas::finishResizeObject( const QString &name, bool layout )
 {
     if ( m_resizeObject )
     {
@@ -4921,7 +4879,8 @@ void KPrCanvas::finishResizeObject( const QString &name, int mx, int my, bool la
         KoSize size = KoSize( m_resizeObject->getSize().width() - m_rectBeforeResize.width(),
                               m_resizeObject->getSize().height() - m_rectBeforeResize.height() );
 
-        if ( firstX != mx || firstY != my ) {
+        if ( ( m_resizeObject->getRect() ) != m_rectBeforeResize ) 
+        {
             ResizeCmd *resizeCmd = new ResizeCmd( name, move, size, m_resizeObject,
                                                   m_view->kPresenterDoc() );
             // the command is not executed as the object is allready resized.
@@ -5545,16 +5504,6 @@ bool KPrCanvas::canMoveOneObject() const
     return m_activePage->canMoveOneObject();
 }
 
-void KPrCanvas::rectSymetricalObjet()
-{
-    if ( m_drawSymetricObject )
-    {
-        m_drawSymetricObject = false;
-        insRect.moveBy( -insRect.width(), -insRect.height());
-        insRect.setSize( 2*insRect.size() );
-    }
-}
-
 void KPrCanvas::closeObject(bool /*close*/)
 {
     QPtrList<KPObject> lst;
@@ -5653,47 +5602,6 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos )
     return sp;
 }
 
-QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
-{
-    bool state =m_view->kPresenterDoc()->snapToGrid();
-    if (  !state && offset )
-        return pos;
-
-    double gridX = m_view->kPresenterDoc()->getGridX();
-    double gridY = m_view->kPresenterDoc()->getGridY();
-    if ( !state && ! offset )
-    {
-        gridX = 1.0;
-        gridY = 1.0;
-    }
-    KoPoint newPos;
-    if (offset )
-        newPos = m_view->kPresenterDoc()->zoomHandler()->unzoomPoint( pos+QPoint(diffx(),diffy()) );
-    else
-        newPos = m_view->kPresenterDoc()->zoomHandler()->unzoomPoint( pos );
-    newPos.setX( static_cast<int>( newPos.x() / gridX ) * gridX );
-    newPos.setY( static_cast<int>( newPos.y() / gridY ) * gridY );
-    QPoint point( m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos ) );
-    if ( offset )
-      point -= QPoint( diffx(), diffy() );
-    return point;
-}
-
-int KPrCanvas::applyGridOnPosX( int pos ) const
-{
-    double gridX = m_view->kPresenterDoc()->getGridX();
-    double point = m_view->kPresenterDoc()->zoomHandler()->unzoomItX( pos );
-    double result = static_cast<int>( point / gridX ) * gridX;
-    return m_view->kPresenterDoc()->zoomHandler()->zoomItX( result );
-}
-
-int KPrCanvas::applyGridOnPosY( int pos ) const
-{
-    double gridY = m_view->kPresenterDoc()->getGridY();
-    double point = m_view->kPresenterDoc()->zoomHandler()->unzoomItY( pos );
-    double result = static_cast<int>( point / gridY ) * gridY;
-    return m_view->kPresenterDoc()->zoomHandler()->zoomItY( result );
-}
 
 void KPrCanvas::alignVertical( VerticalAlignmentType _type )
 {
@@ -5705,39 +5613,6 @@ void KPrCanvas::alignVertical( VerticalAlignmentType _type )
 KPPixmapObject * KPrCanvas::getSelectedImage() const
 {
     return m_activePage->getSelectedImage();
-}
-
-
-double KPrCanvas::applyGridX( double x )
-{
-    if (  !m_view->kPresenterDoc()->snapToGrid() )
-        return x;
-
-    double gridX = m_view->kPresenterDoc()->getGridX();
-    return qRound( x / gridX ) * gridX;
-}
-
-
-double KPrCanvas::applyGridY( double y )
-{
-    if (  !m_view->kPresenterDoc()->snapToGrid() )
-        return y;
-
-    double gridY = m_view->kPresenterDoc()->getGridY();
-    return qRound( y / gridY ) * gridY;
-}
-
-
-KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
-{
-    if (  !m_view->kPresenterDoc()->snapToGrid() )
-        return pos;
-
-    KoPoint newPos;
-    newPos.setX( applyGridX( pos.x() ) );
-    newPos.setY( applyGridY( pos.y() ) );
-
-    return newPos;
 }
 
 
