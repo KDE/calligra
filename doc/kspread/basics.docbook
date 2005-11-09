@@ -20,13 +20,13 @@ To cut down on some of the possibilities for confusion, it it suggested that
 when you first start to use &kspread; you set the default options in all pages
 of the &kspread; configuration dialog (obtained by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
-Kspread...</guimenuitem></menuchoice>) except for <guilabel>Completion mode
+&kspread;...</guimenuitem></menuchoice>) except for <guilabel>Completion mode
 </guilabel> in the <guisubmenu>Misc</guisubmenu> page, which should be set to
 <guimenuitem>None</guimenuitem>.
 </para>
-<para>You may also find it helpful to enable Tooltips in the K menu
-<menuchoice><guimenu>Preferences</guimenu><guisubmenu>Appearance &amp;
-Themes</guisubmenu><guimenuitem>Style</guimenuitem></menuchoice>
+<para>You may also find it helpful to globally enable Tooltips in &kcontrolcenter;
+in <menuchoice><guimenu>Appearance &amp;
+Themes</guimenu><guimenuitem>Style</guimenuitem></menuchoice>
 dialog box. </para></note>
 
 <sect1 id="starting">

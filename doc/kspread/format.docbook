@@ -15,6 +15,13 @@
 <address><email>raphael.langerhorst@kdemail.net</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
@@ -25,8 +32,8 @@
 <title>Cell Format</title>
 <para>To change the format and appearance of selected cell(s), row(s) or column(s) use
 the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format
-</guimenu> menu or from the <mousebutton>right</mousebutton> mouse button pop
-up menu.</para>
+</guimenu> menu or from the <mousebutton>right</mousebutton> mouse button popup
+menu.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -40,6 +47,7 @@ up menu.</para>
 <para>This will bring up the <guilabel>Cell Format</guilabel> dialog box
 which has several tabbed pages:</para>
 <sect2 id="formatdata">
+<!-- beginning of annma writing -->
 <title>Data Formats and Representation</title>
 <para>
 <mediaobject>
@@ -54,8 +62,136 @@ which has several tabbed pages:</para>
 <para>The <guilabel>Data Format</guilabel> page of the Cell Format dialog box 
 lets you control how the values of cells are displayed.</para>
 <para>The top part of this page lets you select the format to be used when 
-displaying numeric values, dates or times.
+displaying numeric values, dates or times. A <guilabel>Preview</guilabel> pane
+allows you to see the effect of the new format.
 </para>
+<para>You can set the same data format for a row or a column by selecting the
+row or column and calling the Cell Format dialog with the &RMB;.</para>
+<note><para>You can increase the precision decimal for any number in Generic,
+Number, Percent, Money or Scientific formats using the Increase decimal
+precision icon in the Format Toolbar: <inlinemediaobject><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+<para>You can decrease the precision decimal for any number in Generic, Number,
+Percent, Money or Scientific formats using the Decrease decimal precision icon
+in the Format Toolbar: <inlinemediaobject><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+</note>
+<variablelist>
+<varlistentry>
+<term><guilabel>Generic</guilabel></term>
+<listitem><para>This is the default format and &kspread; autodetects the actual
+data type depending on the current cell data. By default, &kspread; right
+justifies numbers, dates and times within a cell and left justifies anything
+else.</para>
+<para>If the Generic format does not suit you, you can change to a specific
+format among the choices below.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Number</guilabel></term>
+<listitem><para>The number notation uses the notation you globally choose in
+&kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
+Accessibility</guimenu><guimenuitem>Numbers</guimenuitem></menuchoice>. Numbers
+are right justified by default.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Percent</guilabel></term>
+<listitem><para>When you have a number in the current cell and you switch the
+cel  format from Generic to Percent, the current cell number will be multiplied
+by 100%.</para>
+<para>For example if you enter 2 and set the cell format to Percent, the number
+will then be 200 %. Switching back to Generic cell format will bring it back to
+2.</para>
+<para>You can also use the Percent icon in the Format
+Toolbar: <inlinemediaobject><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Money</guilabel></term>
+<listitem><para>The Money format converts your number into money notation using
+the settings globally fixed in &kcontrolcenter; in <menuchoice><guimenu>Regional
+&amp; Accessibility</guimenu><guimenuitem>Money</guimenuitem></menuchoice>. The
+currency symbol will be displayed and the precision will be the one set in
+&kcontrolcenter;.</para>
+<para>You can also use the Currency icon in the Format Toolbar to set the
+cell formatting to look like your current currency:
+<inlinemediaobject><imageobject>
+<imagedata fileref="currency.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Scientific</guilabel></term>
+<listitem><para>The scientific format changes your number using the scientific
+notation. For example, 0.0012 will be changed to 1.2E-03. Going back using
+Generic cell format will display 0.0012 again. The Generic cell data format does
+not keep scientific notation so if you want this notation, you have to specify
+it using this menu item. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Fraction</guilabel></term>
+<listitem><para>The fraction format changes your number into a fraction. For
+example, 0.1 can be changed to 1/8, 2/16, 1/10, &etc;. You define the type of
+fraction by choosing it in the field on the right. If the exact fraction is not
+possible in the fraction mode you choose, the nearest closest match is chosen. 
+For example: when we have 1.5 as number, we choose <guilabel>Fraction</guilabel>
+and <guilabel>Sixteenths 1/16</guilabel> the text displayed into cell is "1
+8/16" which is an exact fraction. If you have 1.4 as number in your cell and you
+choose <guilabel>Fraction</guilabel> and <guilabel>Sixteenths 1/16</guilabel>
+then the cell will display "1 6/16" which is the nearest closest Sixteenth
+fraction.</para>
+</listitem><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term><guilabel>Date format</guilabel></term>
+<listitem><para>To enter a date, you should enter it in one of the formats set
+in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
+Accessibility</guimenu><guimenuitem>Time &amp;
+Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
+and the short date format.</para>
+<para>A random natural number NN will be transformed in the date from 1st
+January 1900 with the number of days NN added. For example if you have a cell
+with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be displayed
+in the cell witch is 100 days after 1st January 1900.</para>
+<note><para>Just like you can drag down numbers you can also drag down dates and
+the next cells will also get dates.</para></note><!--TODO explain that better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Time format</guilabel></term>
+<listitem><para>This formats your cell content as a time. To enter a time, you
+should enter it in the <guilabel>Time format</guilabel> set in &kcontrolcenter;
+in <menuchoice><guimenu>Regional &amp; Accessibility</guimenu><guimenuitem>Time
+&amp; Dates</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
+dialog box you can set how the time should be displayed by choosing one of the
+available time format options. The default format is the system format set in
+&kcontrolcenter;. When the number in the cell does not make sense as a time,
+&kspread; will display 00:00 in the global format you have in
+&kcontrolcenter;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Text</guilabel></term>
+<listitem><para>This formats your cell content as text. This can be useful if
+you want a number treated as text instead as a number, for example for a ZIP
+code. Setting a number as text format will left justify it. When numbers are
+formatted as text, they cannot be used in calculations or formulas. It also
+change the way the cell is justified.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Custom</guilabel></term>
+<listitem><para>Does not work yet. To be enabled in the next release.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
 <para>The lower part of the <guilabel>Data Format</guilabel> page lets you add 
 a <guilabel>Prefix</guilabel> such as a $ symbol at the start of each item or 
 a <guilabel>Postfix</guilabel> such as $HK to the end. You can also control 
@@ -63,7 +199,7 @@ how many digits are displayed after the decimal point for numeric values,
 whether positive values are displayed with a leading + sign and whether 
 negative values are shown in red.
 </para>
-</sect2>
+</sect2> <!--end of annma writing -->
 
 <sect2 id="formattext">
 <title>Fonts and Text Settings</title>
@@ -73,11 +209,11 @@ negative values are shown in red.
 <imagedata fileref="cellformat2.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Text page.</phrase>
+<phrase>Font page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para>The <guilabel>Text</guilabel> page lets you select the font style, size 
+<para>The <guilabel>Font</guilabel> page lets you select the font style, size 
 and color, including some additional options like underlined or striked out text.
 The lower part of the page gives a preview of the selected text format.</para>
 </sect2>
@@ -143,11 +279,37 @@ can also add a diagonal strike-through line to the cell(s).</para>
 and the background color.</para>
 <para>At the bottom of this page you can see a preview of the configured
 cell background.</para>
-
+</sect2>
+<sect2 id="formatprotection">
+<title>Cell Protection</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Cell protection page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>You can change the way the content of a cell is protected in the
+<guilabel>Cell protection</guilabel> page.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Protection</guilabel></term>
+<listitem><para>-</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Printing</guilabel></term>
+<listitem><para>If you check <guilabel>Do not print text</guilabel> then the
+text in the cell will not be printed. This is unchecked per default which means
+that the cell text will always be printed by default.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 </sect2>
 </sect1>
-
-<!-- TODO find out about Cell Protection and add some description here - raphael -->
 
 <sect1 id="conditional">
 <title>Conditional Cell Attributes</title>
