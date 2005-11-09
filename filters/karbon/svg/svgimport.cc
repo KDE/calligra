@@ -794,16 +794,13 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 
 			if( !b.attribute( "xlink:href" ).isEmpty() )
 			{
-				QString params = b.attribute( "xlink:href" );
-				unsigned int start = params.find("#") + 1;
-				unsigned int end = params.findRev(")");
-				QString key = params.mid( start, end - start );
+				QString key = b.attribute( "xlink:href" ).mid( 1 );
 				if(m_defs.contains(key))
 				{
 					QDomElement a = m_defs[key];
 					obj = createObject( a );
+					setupTransform( b );
 					m_gc.current()->matrix.translate(tx,ty);
-					parsePA( grp, m_gc.current(), "fill", b.attribute( "fill" ) );
 				}
 			}
 		}
@@ -898,10 +895,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				if( e.attribute( "xlink:href" ).isEmpty() )
 					continue;
 
-				QString uri = e.attribute( "xlink:href" );
-				unsigned int start = uri.find("#") + 1;
-				unsigned int end = uri.findRev(")");
-				QString key = uri.mid( start, end - start );
+				QString key = e.attribute( "xlink:href" ).mid( 1 );
 				if( ! m_defs.contains(key) )
 				{
 					// try to find referenced object in document
@@ -947,11 +941,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				if( e.attribute( "xlink:href" ).isEmpty() )
 					continue;
 
-				QString uri = e.attribute( "xlink:href" );
-				unsigned int start = uri.find("#") + 1;
-				unsigned int end = uri.findRev(")");
-				QString key = uri.mid( start, end - start );
-
+				QString key = e.attribute( "xlink:href" ).mid( 1 );
 				if( ! m_defs.contains(key) )
 				{
 					// try to find referenced object in document
