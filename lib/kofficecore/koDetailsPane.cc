@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qfile.h>
 #include <qimage.h>
+#include <qheader.h>
 
 #include <kinstance.h>
 #include <klocale.h>
@@ -40,8 +41,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
 {
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
-  m_documentList->setColumnText(0, "");
-  m_documentList->setColumnText(1, i18n("Template"));
+  m_documentList->header()->hide();
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
     if(t->isHidden())
@@ -110,8 +110,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   d = new KoRecentDocumentsPanePrivate;
   KGuiItem openGItem(i18n("Open Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
-  m_documentList->setColumnText(0, "");
-  m_documentList->setColumnText(1, i18n("Documents"));
+  m_documentList->header()->hide();
   m_alwaysUseCheckbox->hide();
 
   QString oldGroup = instance->config()->group();

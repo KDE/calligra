@@ -2523,10 +2523,8 @@ QString KoDocument::templateType() const
 void KoDocument::deleteOpenPane()
 {
     if( d->m_startUpWidget ) {
-      d->m_startUpWidget->hide();
-      QTimer::singleShot(0, this, SIGNAL(deleteOpenPaneDelayed()));
-//         d->m_startUpWidget->deleteLater();
-//         d->m_startUpWidget = 0;
+        d->m_startUpWidget->hide();
+        QTimer::singleShot(0, this, SIGNAL(deleteOpenPaneDelayed()));
         shells().getFirst()->setRootDocument( this );
     }
 }
