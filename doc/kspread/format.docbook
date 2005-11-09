@@ -155,10 +155,10 @@ in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
 Accessibility</guimenu><guimenuitem>Time &amp;
 Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
 and the short date format.</para>
-<para>A random natural number NN will be transformed in the date from 1st
+<!--TODO wait until the bug 115954 is fixed <para>A random natural number NN will be transformed in the date from 1st
 January 1900 with the number of days NN added. For example if you have a cell
 with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be displayed
-in the cell witch is 100 days after 1st January 1900.</para>
+in the cell witch is 100 days after 1st January 1900.</para>-->
 <note><para>Just like you can drag down numbers you can also drag down dates and
 the next cells will also get dates.</para></note><!--TODO explain that better-->
 </listitem>
