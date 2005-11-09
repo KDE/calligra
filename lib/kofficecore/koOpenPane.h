@@ -19,7 +19,7 @@
 #ifndef KOOPENPANE_H
 #define KOOPENPANE_H
 
-#include <kjanuswidget.h>
+#include <qwidget.h>
 
 class KoCustomDocumentCreator;
 class KConfig;
@@ -27,7 +27,7 @@ class KoTemplateGroup;
 class KoOpenPanePrivate;
 class KInstance;
 
-class KoOpenPane : public KJanusWidget
+class KoOpenPane : public QWidget
 {
   Q_OBJECT
 

@@ -20,7 +20,9 @@
 #include "koOpenPane.h"
 
 #include <qvbox.h>
+#include <qlayout.h>
 
+#include <kjanuswidget.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
@@ -28,6 +30,7 @@
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kdialog.h>
 
 #include "koFilterManager.h"
 #include "koTemplates.h"
@@ -38,26 +41,32 @@ class KoOpenPanePrivate
 {
   public:
     KoOpenPanePrivate() :
-      m_instance(0)
+      m_instance(0),
+      m_mainWidget(0)
     {
     }
 
     KInstance* m_instance;
+    KJanusWidget* m_mainWidget;
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType)
-  : KJanusWidget(parent, "OpenPane", TreeList)
+  : QWidget(parent, "OpenPane")
 {
   d = new KoOpenPanePrivate;
   d->m_instance = instance;
 
-  KGuiItem openExistingGItem(i18n("Open Existing Document"), "fileopen");
-  addButtonBelowList(openExistingGItem, this, SLOT(showOpenFileDialog()));
-  setRootIsDecorated(false);
-  setShowIconsInTreeList(true);
+  QVBoxLayout* layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+  layout->setAutoAdd(true);
+  d->m_mainWidget = new KJanusWidget(this,"OpenPane", KJanusWidget::TreeList);
 
-  QVBox* page = addVBoxPage(i18n("Recent Documents"), i18n("Recent Documents"),
-                            SmallIcon("fileopen", 48, KIcon::DefaultState, instance));
+  KGuiItem openExistingGItem(i18n("Open Existing Document"), "fileopen");
+  d->m_mainWidget->addButtonBelowList(openExistingGItem, this, SLOT(showOpenFileDialog()));
+  d->m_mainWidget->setRootIsDecorated(false);
+  d->m_mainWidget->setShowIconsInTreeList(true);
+
+  QVBox* page = d->m_mainWidget->addVBoxPage(i18n("Recent Documents"), i18n("Recent Documents"),
+                                             SmallIcon("fileopen", 48, KIcon::DefaultState, instance));
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(page, instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
 
@@ -72,8 +81,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
         continue;
       }
 
-      page = addVBoxPage(group->name(), group->name(),
-                         group->first()->loadPicture(instance));
+      page = d->m_mainWidget->addVBoxPage(group->name(), group->name(),
+                                          group->first()->loadPicture(instance));
       KoTemplatesPane* pane = new KoTemplatesPane(page, instance, group);
       connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
     }
@@ -98,8 +107,8 @@ void KoOpenPane::showOpenFileDialog()
 
 void KoOpenPane::addCustomDocumentPane(const QString& title, const QString& icon, QWidget* widget)
 {
-  QVBox* page = addVBoxPage(title, title,
-                            SmallIcon("fileopen", 48, KIcon::DefaultState, d->m_instance));
+  QVBox* page = d->m_mainWidget->addVBoxPage(title, title, SmallIcon("fileopen",
+                                             48, KIcon::DefaultState, d->m_instance));
   widget->reparent(page, QPoint(0, 0));
 }
 
