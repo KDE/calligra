@@ -423,14 +423,14 @@ void KPresenterDocIface::setDisplayComment( bool b)
     doc->recalcVariables(VT_NOTE);
 }
 
-bool KPresenterDocIface::showHelplines() const
+bool KPresenterDocIface::showGuideLines() const
 {
-    return doc->showHelplines();
+    return doc->showGuideLines();
 }
 
-void KPresenterDocIface::setShowHelplines(bool b)
+void KPresenterDocIface::setShowGuideLines( bool b )
 {
-    doc->setShowHelplines(b);
+    doc->setShowGuideLines( b );
     doc->updateGuideLineButton();
     doc->repaint( false );
 }
@@ -449,12 +449,12 @@ void KPresenterDocIface::addHoriHelpLine( double val)
 
 unsigned int KPresenterDocIface::nbHorizontalHelpLine() const
 {
-    return doc->horizHelplines().count();
+    return doc->horizontalGuideLines().count();
 }
 
 unsigned int KPresenterDocIface::nbVerticalHelpLine() const
 {
-    return doc->vertHelplines().count();
+    return doc->verticalGuideLines().count();
 }
 
 bool KPresenterDocIface::showGrid() const

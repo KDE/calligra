@@ -357,7 +357,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         }
 
 
-        if ( editMode && doc->showHelplines() ) 
+        if ( editMode && doc->showGuideLines() ) 
         {
             QPixmap m_guideBuffer( buffer );
             QPainter guidePainter( &m_guideBuffer, &buffer );
@@ -4162,17 +4162,6 @@ void KPrCanvas::deleteObjs()
     setToolEditMode( toolEditMode );
 }
 
-void KPrCanvas::rotateObjs()
-{
-    m_view->extraRotate();
-    setToolEditMode( toolEditMode );
-}
-
-void KPrCanvas::shadowObjs()
-{
-    m_view->extraShadow();
-    setToolEditMode( toolEditMode );
-}
 
 void KPrCanvas::enterEvent( QEvent *e )
 {

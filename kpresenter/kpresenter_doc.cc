@@ -211,7 +211,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bAllowAutoFormat = true;
 
     m_bViewFormattingChars = false;
-    m_bShowHelplines = true;
+    m_bShowGuideLines = true;
     m_bSnapToGuideLines = true;
 
     m_bShowGrid = true;
@@ -550,8 +550,8 @@ QDomDocument KPresenterDoc::saveXML()
     presenter.appendChild( element );
 
     element=doc.createElement("HELPLINES");
-    element.setAttribute("show", static_cast<int>( showHelplines() ));
-    saveHelpLines( doc, element );
+    element.setAttribute("show", static_cast<int>( showGuideLines() ));
+    saveGuideLines( doc, element );
     presenter.appendChild(element);
 
     if ( saveOnlyPage == -1 )
@@ -1262,22 +1262,22 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
     //ooimpress save it as this line.
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
-    QString helpLineOasis;
+    QString guideLinesOasis;
     //save in mm as in oo
-    for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
+    for( QValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it )
     {
         int tmpX = ( int ) ( KoUnit::toMM( *it  )*100 );
-        helpLineOasis+="V"+QString::number( tmpX );
+        guideLinesOasis += "V" + QString::number( tmpX );
     }
 
-    for(QValueList<double>::Iterator it = m_horizHelplines.begin(); it != m_horizHelplines.end(); ++it)
+    for( QValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it )
     {
         int tmpY = ( int ) ( KoUnit::toMM( *it  )*100 );
-        helpLineOasis+="H"+QString::number( tmpY );
+        guideLinesOasis += "H" + QString::number( tmpY );
     }
-    if ( !helpLineOasis.isEmpty() )
+    if ( !guideLinesOasis.isEmpty() )
     {
-        settingsWriter.addConfigItem("SnapLinesDrawing", helpLineOasis );
+        settingsWriter.addConfigItem( "SnapLinesDrawing", guideLinesOasis );
     }
     //<config:config-item config:name="IsSnapToGrid" config:type="boolean">false</config:config-item>
     settingsWriter.addConfigItem( "IsSnapToGrid", m_bSnapToGrid );
@@ -1298,7 +1298,7 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.addConfigItem( "SelectedPage", activePage );
 
     //not define into oo spec
-    settingsWriter.addConfigItem( "SnapLineIsVisible", showHelplines() );
+    settingsWriter.addConfigItem( "SnapLineIsVisible", showGuideLines() );
     settingsWriter.endElement();
     settingsWriter.endElement();
 }
@@ -1313,8 +1313,8 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
     KoOasisSettings::Items firstView = viewMap.entry( 0 );
     if ( !firstView.isNull() )
     {
-        parseOasisHelpLine( firstView.parseConfigItemString( "SnapLinesDrawing" ) );
-        setShowHelplines( firstView.parseConfigItemBool( "SnapLineIsVisible" ) );
+        parseOasisGuideLines( firstView.parseConfigItemString( "SnapLinesDrawing" ) );
+        setShowGuideLines( firstView.parseConfigItemBool( "SnapLineIsVisible" ) );
         int valx = firstView.parseConfigItemInt( "GridFineWidth" );
         m_gridX = MM_TO_POINT( valx / 100.0 );
         int valy = firstView.parseConfigItemInt( "GridFineHeight" );
@@ -1332,7 +1332,7 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
     m_varColl->variableSetting()->loadOasis( settings );
 }
 
-void KPresenterDoc::parseOasisHelpLine( const QString &text )
+void KPresenterDoc::parseOasisGuideLines( const QString &text )
 {
     QString str;
     int newPos = text.length()-1; //start to element = 1
@@ -1344,7 +1344,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
             str = text.mid( pos+1, ( newPos-pos ) );
             //kdDebug()<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
-            m_vertHelplines.append( MM_TO_POINT( posX ) );
+            m_vGuideLines.append( MM_TO_POINT( posX ) );
             newPos = pos-1;
         }
         else if ( text[pos]=='H' )
@@ -1353,7 +1353,7 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
             str = text.mid( pos+1, ( newPos-pos ) );
             //kdDebug()<<" horizontal  :"<< str <<endl;
             int posY = ( str.toInt()/100 );
-            m_horizHelplines.append( MM_TO_POINT( posY ) );
+            m_hGuideLines.append( MM_TO_POINT( posY ) );
             newPos = pos-1;
         }
     }
@@ -2421,9 +2421,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         }else if( elem.tagName()=="HELPLINES"){
             if ( _clean  ) {
                 if(elem.hasAttribute("show")) {
-                    setShowHelplines( static_cast<bool>(elem.attribute("show").toInt() ) );
+                    setShowGuideLines( static_cast<bool>(elem.attribute("show").toInt() ) );
                 }
-                loadHelpLines( elem );
+                loadGuideLines( elem );
             }
         }else if( elem.tagName()=="SPELLCHECKIGNORELIST"){
             QDomElement spellWord=elem.toElement();
@@ -4107,13 +4107,13 @@ void KPresenterDoc::slotRepaintVariable()
 
 void KPresenterDoc::slotGuideLinesChanged( KoView *view )
 {
-    ( (KPresenterView*)view )->getCanvas()->guideLines().getGuideLines( m_horizHelplines, m_vertHelplines );
+    ( (KPresenterView*)view )->getCanvas()->guideLines().getGuideLines( m_hGuideLines, m_vGuideLines );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
         if ( it.current() != view )
         {
-            ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_horizHelplines, m_vertHelplines );
+            ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
         }
     }
 }
@@ -4440,39 +4440,39 @@ QValueList<KoTextObject *> KPresenterDoc::visibleTextObjects( ) const
     return lst;
 }
 
-void KPresenterDoc::setShowHelplines(bool b)
+void KPresenterDoc::setShowGuideLines( bool b )
 {
-    m_bShowHelplines = b;
+    m_bShowGuideLines = b;
     setModified( true );
 }
 
-void KPresenterDoc::horizHelplines(const QValueList<double> &lines)
+void KPresenterDoc::horizontalGuideLines( const QValueList<double> &lines )
 {
-    m_horizHelplines = lines;
+    m_hGuideLines = lines;
 }
 
-void KPresenterDoc::vertHelplines(const QValueList<double> &lines)
+void KPresenterDoc::verticalGuideLines( const QValueList<double> &lines )
 {
-    m_vertHelplines = lines;
+    m_vGuideLines = lines;
 }
 
 void KPresenterDoc::addHorizHelpline(double pos)
 {
-    m_horizHelplines.append(pos);
+    m_hGuideLines.append(pos);
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_horizHelplines, m_vertHelplines );
+        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
     }
 }
 
 void KPresenterDoc::addVertHelpline(double pos)
 {
-    m_vertHelplines.append(pos);
+    m_vGuideLines.append(pos);
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_horizHelplines, m_vertHelplines );
+        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
     }
 }
 
@@ -4483,34 +4483,36 @@ void KPresenterDoc::updateGuideLineButton()
         ((KPresenterView*)it.current())->updateGuideLineButton();
 }
 
-void KPresenterDoc::loadHelpLines( const QDomElement &element )
+void KPresenterDoc::loadGuideLines( const QDomElement &element )
 {
     // In early versions of KPresenter 1.2 (up to Beta 2), there is child also naed <HELPLINES>
-    QDomElement helplines=element.namedItem("HELPLINES").toElement();
-    if (helplines.isNull())
-        helplines=element;
+    // Before KPresenter 1.5 the guide lines where named helplines that is why they are still 
+    // named like this in the fileformat 
+    QDomElement guidelines = element.namedItem( "HELPLINES" ).toElement();
+    if ( guidelines.isNull() )
+        guidelines = element;
 
-    helplines=helplines.firstChild().toElement();
-    while ( !helplines.isNull() )
+    guidelines = guidelines.firstChild().toElement();
+    while ( !guidelines.isNull() )
     {
-        if ( helplines.tagName()=="Vertical" )
-            m_vertHelplines.append(helplines.attribute("value").toDouble());
-        else if ( helplines.tagName()=="Horizontal" )
-            m_horizHelplines.append(helplines.attribute("value").toDouble());
-        helplines=helplines.nextSibling().toElement();
+        if ( guidelines.tagName() == "Vertical" )
+            m_vGuideLines.append( guidelines.attribute( "value" ).toDouble() );
+        else if ( guidelines.tagName() == "Horizontal" )
+            m_hGuideLines.append( guidelines.attribute( "value" ).toDouble() );
+        guidelines = guidelines.nextSibling().toElement();
     }
 }
 
-void KPresenterDoc::saveHelpLines( QDomDocument &doc, QDomElement& element )
+void KPresenterDoc::saveGuideLines( QDomDocument &doc, QDomElement& element )
 {
-    for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
+    for(QValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Vertical");
         lines.setAttribute("value", (double)*it);
         element.appendChild( lines );
     }
 
-    for(QValueList<double>::Iterator it = m_horizHelplines.begin(); it != m_horizHelplines.end(); ++it)
+    for(QValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Horizontal");
         lines.setAttribute("value", *it);

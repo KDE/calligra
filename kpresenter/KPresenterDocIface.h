@@ -138,8 +138,8 @@ k_dcop:
     bool displayComment()const;
     void setDisplayComment( bool b);
 
-    bool showHelplines() const;
-    void setShowHelplines(bool b);
+    bool showGuideLines() const;
+    void setShowGuideLines( bool b );
 
     void addVertHelpLine( double val);
 

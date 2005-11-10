@@ -396,14 +396,36 @@ class KPresenterDoc : public KoDocument
     void setViewFormattingChars(bool _b) { m_bViewFormattingChars=_b; }
 
 
-    bool showHelplines() const {return m_bShowHelplines; }
-    void setShowHelplines(bool b);
+    bool showGuideLines() const { return m_bShowGuideLines; }
+    void setShowGuideLines( bool b );
 
-    QValueList<double> &horizHelplines() {return m_horizHelplines; }
-    QValueList<double> &vertHelplines() {return m_vertHelplines; }
+    /**
+     * @brief Get the positions of the horizontal guide lines
+     *
+     * @return list of positions of the horizontal guide lines
+     */
+    QValueList<double> &horizontalGuideLines() { return m_hGuideLines; }
 
-    void horizHelplines(const QValueList<double> &lines);
-    void vertHelplines(const QValueList<double> &lines);
+    /**
+     * @brief Get the positions of the vertical guide lines
+     *
+     * @return list of positions of the vertical guide lines
+     */
+    QValueList<double> &verticalGuideLines() { return m_vGuideLines; }
+
+    /**
+     * @brief Set the positions of the horizontal guide lines
+     *
+     * @param lines a list of positions of the horizontal guide lines
+     */
+    void horizontalGuideLines( const QValueList<double> &lines );
+
+    /**
+     * @brief Set the positions of the vertical guide lines
+     *
+     * @param lines a list of positions of the vertical guide lines
+     */
+    void verticalGuideLines( const QValueList<double> &lines );
 
     void addHorizHelpline(double pos);
     void addVertHelpline(double pos);
@@ -544,10 +566,10 @@ protected:
     QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list );
     void loadTextStyle( const QDomElement& domElement );
     void saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset );
-    void saveHelpLines( QDomDocument &doc, QDomElement& element );
+    void saveGuideLines( QDomDocument &doc, QDomElement& element );
 
     void loadBackground( const QDomElement &element );
-    void loadHelpLines( const QDomElement &element );
+    void loadGuideLines( const QDomElement &element );
     KCommand * loadObjects( const QDomElement &element,bool paste=false );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
@@ -583,7 +605,7 @@ protected:
     //we move presSpeed to each table => compatibility with old file format
     void compatibilityFromOldFileFormat();
 
-    void parseOasisHelpLine( const QString &str );
+    void parseOasisGuideLines( const QString &str );
 
     /**
      * recalc the variables
@@ -640,7 +662,7 @@ protected:
     bool m_bShowRuler;
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;
-    bool m_bShowHelplines;
+    bool m_bShowGuideLines;
     bool m_bSnapToGuideLines;
     bool m_bViewFormattingChars;
 
@@ -658,8 +680,10 @@ protected:
     QColor m_gridColor;
     bool _duplicatePage;
 private:
-    QValueList<double> m_horizHelplines;
-    QValueList<double> m_vertHelplines;
+    /// list of positions of horizontal guide lines
+    QValueList<double> m_hGuideLines;
+    /// list of positions of vertical guide lines
+    QValueList<double> m_vGuideLines;
 
     QPtrList<KPrPage> m_pageList;
     QPtrList<KPrPage> m_deletedPageList;

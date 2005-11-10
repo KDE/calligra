@@ -2132,7 +2132,7 @@ void KPresenterView::createGUI()
                  m_canvas, SLOT( setMoveGuides( bool ) ) );
         connect( &( m_canvas->guideLines() ), SIGNAL( guideLinesChanged( KoView * ) ),
                  m_pKPresenterDoc, SLOT( slotGuideLinesChanged( KoView * ) ) );
-        m_canvas->guideLines().setGuideLines( m_pKPresenterDoc->horizHelplines(), m_pKPresenterDoc->vertHelplines() );
+        m_canvas->guideLines().setGuideLines( m_pKPresenterDoc->horizontalGuideLines(), m_pKPresenterDoc->verticalGuideLines() );
     }
 
     if ( sidebar )
@@ -5001,7 +5001,7 @@ void KPresenterView::slotUpdateRuler()
     }
     else
     {
-        refreshRuler( kPresenterDoc()->showHelplines() );
+        refreshRuler( kPresenterDoc()->showGuideLines() );
         updateRuler();
     }
 }
@@ -5587,7 +5587,7 @@ void KPresenterView::editComment()
 void KPresenterView::viewGuideLines()
 {
     bool state=actionViewShowGuideLine->isChecked();
-    m_pKPresenterDoc->setShowHelplines( state );
+    m_pKPresenterDoc->setShowGuideLines( state );
     m_pKPresenterDoc->updateGuideLineButton();
     deSelectAllObjects();
     refreshRuler( state );
@@ -5622,7 +5622,7 @@ void KPresenterView::viewGridToFront()
 
 void KPresenterView::updateGuideLineButton()
 {
-    bool state = m_pKPresenterDoc->showHelplines();
+    bool state = m_pKPresenterDoc->showGuideLines();
     actionViewShowGuideLine->setChecked( state );
     refreshRuler( state );
 }

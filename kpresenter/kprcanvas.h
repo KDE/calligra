@@ -372,9 +372,6 @@ public slots:
     void copyObjs();
     void copyOasisObjs();
 
-    void rotateObjs();
-    void shadowObjs();
-
     void chPic();
     void picViewOriginalSize();
     void picViewOrig640x480();
