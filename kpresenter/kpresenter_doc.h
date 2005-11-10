@@ -427,8 +427,13 @@ class KPresenterDoc : public KoDocument
      */
     void verticalGuideLines( const QValueList<double> &lines );
 
-    void addHorizHelpline(double pos);
-    void addVertHelpline(double pos);
+    /**
+     * @brief Add a guide line
+     *
+     * @param p the orientation of the guide line
+     * @param p the position of the guide line
+     */
+    void addGuideLine( Qt::Orientation o, double pos );
 
     void updateGuideLineButton();
 

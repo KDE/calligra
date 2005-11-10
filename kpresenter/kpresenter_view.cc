@@ -121,6 +121,7 @@
 #include <koParagDia.h>
 #include <kovariable.h>
 #include <koVariableDlgs.h>
+#include <koGuideLineDia.h>
 
 #include <kspell.h>
 #include <kstatusbar.h>
@@ -2938,9 +2939,9 @@ void KPresenterView::setupActions()
                                      this,SLOT(editComment()),
                                      actionCollection(), "edit_comment");
 
-    actionAddHelpLine = new KAction( i18n( "Add New Help Line..."), 0,
-                                     this, SLOT(addHelpLine()),
-                                     actionCollection(), "add_helpline");
+    actionAddGuideLine = new KAction( i18n( "Add Guide Line..."), 0,
+                                      this, SLOT( addGuideLine()),
+                                      actionCollection(), "add_guideline");
 
     actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
                                        this,SLOT(removeComment()),
@@ -4160,6 +4161,7 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
     }
     if ( actionList.count()>0)
         plugActionList( "picture_action", actionList );
+    m_mousePos = _point;
     QPopupMenu* menu = dynamic_cast<QPopupMenu*>(factory()->container("menupage_popup",this));
     if ( menu )
         menu->exec(_point);
@@ -5695,24 +5697,16 @@ void KPresenterView::refreshRuler( bool state )
 
 }
 
-void KPresenterView::addHelpLine()
+void KPresenterView::addGuideLine()
 {
-#if 0 // TODO tz
-    KoRect r=m_canvas->activePage()->getPageRect();
+    KoRect rect( m_canvas->activePage()->getPageRect() );
 
-    KPrInsertHelpLineDia *dlg= new KPrInsertHelpLineDia(this, r,  m_pKPresenterDoc);
-    if ( dlg->exec())
+    KoPoint pos( zoomHandler()->unzoomPoint( m_canvas->mapFromGlobal( m_mousePos ) + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
+    KoGuideLineDia dia( 0, pos, rect, m_pKPresenterDoc->unit() );
+    if ( dia.exec() == QDialog::Accepted )
     {
-        double pos = dlg->newPosition();
-        if ( dlg->addHorizontalHelpLine() )
-            m_pKPresenterDoc->addHorizHelpline( pos );
-        else
-            m_pKPresenterDoc->addVertHelpline( pos );
+        m_pKPresenterDoc->addGuideLine( dia.orientation(), dia.pos() );
     }
-    delete dlg;
-    m_pKPresenterDoc->setModified( true );
-    m_pKPresenterDoc->repaint( false );
-#endif
 }
 
 void KPresenterView::removeComment()

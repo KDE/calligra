@@ -435,15 +435,9 @@ void KPresenterDocIface::setShowGuideLines( bool b )
     doc->repaint( false );
 }
 
-void KPresenterDocIface::addVertHelpLine( double val)
+void KPresenterDocIface::addGuideLine( bool horizontal, double pos )
 {
-    doc->addVertHelpline(val);
-    doc->repaint( false );
-}
-
-void KPresenterDocIface::addHoriHelpLine( double val)
-{
-    doc->addHorizHelpline(val);
+    doc->addGuideLine( horizontal ? Qt::Horizontal: Qt::Vertical, pos );
     doc->repaint( false );
 }
 

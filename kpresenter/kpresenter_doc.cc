@@ -4456,9 +4456,18 @@ void KPresenterDoc::verticalGuideLines( const QValueList<double> &lines )
     m_vGuideLines = lines;
 }
 
-void KPresenterDoc::addHorizHelpline(double pos)
+
+void KPresenterDoc::addGuideLine( Qt::Orientation o, double pos )
 {
-    m_hGuideLines.append(pos);
+    if ( o == Qt::Horizontal )
+    {
+        m_hGuideLines.append( pos );
+    }
+    else
+    {
+        m_vGuideLines.append( pos );
+    }
+
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
@@ -4466,15 +4475,6 @@ void KPresenterDoc::addHorizHelpline(double pos)
     }
 }
 
-void KPresenterDoc::addVertHelpline(double pos)
-{
-    m_vGuideLines.append(pos);
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-    {
-        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
-    }
-}
 
 void KPresenterDoc::updateGuideLineButton()
 {

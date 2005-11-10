@@ -281,6 +281,7 @@
   <Separator/>
   <Action name="view_guidelines"/>
   <Action name="view_snaptoguidelines"/>
+  <Action name="add_guideline"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>

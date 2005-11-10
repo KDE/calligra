@@ -738,7 +738,7 @@ protected slots:
     void slotViewFormattingChars();
     void slotUpdateScrollBarRanges();
 
-    void addHelpLine();
+    void addGuideLine();
 
     void refreshRuler( bool state );
     void slotApplyFont();
@@ -863,6 +863,8 @@ private:
     bool checkConcavePolygon;
     int cornersValue;
     int sharpnessValue;
+    /// used to save mouse pos
+    QPoint m_mousePos;
 
     // for Picture Object
     PictureMirrorType mirrorType;
@@ -1102,7 +1104,7 @@ private:
 
     KAction *actionFormatStylist;
 
-    KAction *actionAddHelpLine;
+    KAction *actionAddGuideLine;
 
     KAction *actionConfigureCompletion;
 

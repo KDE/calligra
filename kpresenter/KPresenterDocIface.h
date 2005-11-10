@@ -141,9 +141,7 @@ k_dcop:
     bool showGuideLines() const;
     void setShowGuideLines( bool b );
 
-    void addVertHelpLine( double val);
-
-    void addHoriHelpLine( double val);
+    void addGuideLine( bool horizontal, double pos );
 
     unsigned int nbHorizontalHelpLine() const;
     unsigned int nbVerticalHelpLine() const;
