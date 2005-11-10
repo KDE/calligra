@@ -28,14 +28,16 @@
 namespace Kross { namespace Api {
 
     /**
-     *
+     * \todo implement EventScript ?!
      */
     class EventScript : public Event<EventScript>
     {
 
         public:
 
-            /// Shared pointer to implement reference-counting.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<EventScript> Ptr;
 
             /**

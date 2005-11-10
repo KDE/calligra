@@ -65,12 +65,6 @@ namespace Kross { namespace Api {
 
         protected:
 
-/*
-            Event<T> * getFunction(const QString& name, ArgumentList arglist)
-            {
-            }
-*/
-
             /**
              * Add a \a Callable methodfunction to the list of functions
              * this Object supports.

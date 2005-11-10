@@ -41,12 +41,15 @@ namespace Kross { namespace Api {
 
             /// The error message.
             QString m_error;
+
             /// The line number where the exception got thrown
             long m_lineno;
 
         public:
 
-            /// Shared pointer to implement reference-counting.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<Exception> Ptr;
 
             /**

@@ -50,7 +50,10 @@ namespace Kross { namespace Api {
             class Option
             {
                 public:
-                    /// Map of options.
+
+                    /**
+                    * Map of options.
+                    */
                     typedef QMap<QString, Option*> Map;
 
                     /**
@@ -63,10 +66,13 @@ namespace Kross { namespace Api {
                      */
                     Option(const QString& name, const QString& comment, const QVariant& value)
                         : name(name), comment(comment), value(value) {}
+
                     /// The short name of the option.
                     QString name;
+
                     /// A description of the option.
                     QString comment;
+
                     /// The value the option has.
                     QVariant value;
             };

@@ -37,16 +37,28 @@ namespace Kross { namespace Api {
             friend class Value< List, QValueList<Object::Ptr> >;
         public:
 
-            /// Shared objects.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<List> Ptr;
 
-            /// Constructor.
+            /**
+             * Constructor.
+             *
+             * \param value The list of \a Object instances this
+             *        list has initialy.
+             * \param name A name this list has.
+             */
             explicit List(QValueList<Object::Ptr> value, const QString& name = "list");
 
-            /// Destructor.
+            /**
+             * Destructor.
+             */
             virtual ~List();
 
-            /// See \see Kross::Api::Object::getClassName()
+            /**
+             * See \see Kross::Api::Object::getClassName()
+             */
             virtual const QString getClassName() const;
 
             /**
@@ -62,7 +74,7 @@ namespace Kross { namespace Api {
              *
              * \throw TypeException If index is out of bounds.
              * \param idx The QValueList-index.
-             * \return The \a Object.
+             * \return The \a Object instance.
              */
             Object::Ptr item(uint idx);
 

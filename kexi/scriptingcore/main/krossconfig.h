@@ -91,9 +91,9 @@ namespace Kross {
     }
 
     // The name of the global krosspyhon library. Loaded dynamicly
-    // during runtime. Comment out to disable the usage or for
-    // developing refer to your not jet installed lib like I did at
-    // the following line.
+    // during runtime. Comment out to disable compiling of the python
+    // support or for developing refer to your not jet installed lib
+    // like I did at the following line.
     //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/trunk/koffice/kexi/scriptingcore/python/krosspython.la"
     #define KROSS_PYTHON_LIBRARY "krosspython"
 

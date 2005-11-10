@@ -46,7 +46,9 @@ namespace Kross { namespace Api {
     {
         public:
 
-            /// Shared pointer to implement reference-counting.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<QtObject> Ptr;
 
             /**

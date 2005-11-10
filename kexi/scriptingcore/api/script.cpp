@@ -26,7 +26,7 @@
 
 using namespace Kross::Api;
 
-Script::Script(Interpreter* interpreter, ScriptContainer* scriptcontainer)
+Script::Script(Interpreter* const interpreter, ScriptContainer* const scriptcontainer)
     : m_interpreter(interpreter)
     , m_scriptcontainer(scriptcontainer)
     , m_exception(0)

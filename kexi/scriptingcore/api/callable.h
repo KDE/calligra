@@ -42,7 +42,9 @@ namespace Kross { namespace Api {
     {
         public:
 
-            /// Shared pointer to implement reference-counting.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<Callable> Ptr;
 
             /**
@@ -78,7 +80,7 @@ namespace Kross { namespace Api {
 
             /**
              * Wrapper for the \a Kross::Api::Object::hasChild() method
-             * to check if this object has a children.
+             * to check if this object has children.
              */
             Object::Ptr hasChild(List::Ptr args);
 
@@ -123,11 +125,18 @@ namespace Kross { namespace Api {
             bool validArguments(List::Ptr arguments);
 
         protected:
-            /// List of arguments this callable object supports.
+
+            /**
+             * List of arguments this callable object supports.
+             */
             ArgumentList m_arglist;
 
-            /// Check the passed arguments against the \a m_arglist and throws an exception if failed.
+            /**
+             * Check the passed arguments against the \a m_arglist and throws 
+             * an exception if failed.
+             */
             void checkArguments(KSharedPtr<List> arguments);
+
     };
 
 }}

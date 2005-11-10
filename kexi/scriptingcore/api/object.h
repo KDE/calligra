@@ -44,11 +44,11 @@ namespace Kross { namespace Api {
      * The common Object class all other object-classes are
      * inheritated from.
      *
-     * The Object class is used as base class to spend common
-     * functionality. It's similar to what we know in Python
-     * as PyObject or in Qt as QObject.
+     * The Object class is used as base class to provide
+     * common functionality. It's similar to what we know 
+     * in Python as PyObject or in Qt as QObject.
      *
-     * Inherited from e.g. \a Value, \a Module and \a Class.
+     * Inherited from e.g. \a Value, \a Module and \a Class .
      *
      * This class implementates reference counting for shared
      * objects. So, no need to take care of freeing objects.
@@ -57,7 +57,9 @@ namespace Kross { namespace Api {
     {
         public:
 
-            /// Shared pointer to implement reference-counting.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<Object> Ptr;
 
             /**
@@ -157,9 +159,9 @@ namespace Kross { namespace Api {
             void removeAllChildren();
 
             /**
-             * Pass a call to the object and evaluated it resursive
+             * Pass a call to the object and evaluated it recursive
              * down the object-hierachy. Objects like \a Class are able
-             * to handle call's by just implementating this function.
+             * to handle call's by just implementing this function.
              * If the call is done the \a called() method will be
              * executed recursive from bottom up the call hierachy.
              *
@@ -180,8 +182,8 @@ namespace Kross { namespace Api {
              *
              * \return List of supported calls.
              */
-//TODO: replace function with getChildren() functionality
             virtual QStringList getCalls() { return QStringList(); }
+            //FIXME replace function with getChildren() functionality ?
 
             /**
              * Try to convert the \a Object instance to the

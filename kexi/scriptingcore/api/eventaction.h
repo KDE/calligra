@@ -32,8 +32,6 @@ namespace Kross { namespace Api {
     // Forward declarations.
     class ScriptContainer;
 
-//TODO handle KActionPtrList too.
-
     /**
      * The EventAction class is used to wrap KAction instances
      * into the Kross object hierachy and provide access to
@@ -44,7 +42,9 @@ namespace Kross { namespace Api {
 
         public:
 
-            /// Shared pointer to implement reference-counting.
+            /**
+             * Shared pointer to implement reference-counting.
+             */
             typedef KSharedPtr<EventAction> Ptr;
 
             /**

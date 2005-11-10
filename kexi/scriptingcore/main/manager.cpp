@@ -126,7 +126,7 @@ const QStringList Manager::getInterpreters()
     for(; it != d->interpreterinfos.end(); ++it)
         list << it.key();
 
-list << "TestCase";
+//list << "TestCase";
 
     return  list;
 }
@@ -152,7 +152,7 @@ Module* Manager::loadModule(const QString& modulename)
     }
 
     KLibLoader* loader = KLibLoader::self();
-    KLibrary* lib = loader->globalLibrary(modulename.latin1());
+    KLibrary* lib = loader->globalLibrary( modulename.latin1() );
     if(! lib) {
         kdWarning() << QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) << endl;
         return 0;

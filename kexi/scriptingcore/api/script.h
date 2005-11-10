@@ -36,7 +36,11 @@ namespace Kross { namespace Api {
 
     /**
      * Base class for interpreter dependend functionality
-     * each script spends.
+     * each script provides.
+     *
+     * Each \a ScriptContainer holds a pointer to a class
+     * that implements the \a Script functionality for the
+     * defined \a Interpreter .
      */
     class Script
     {
@@ -50,7 +54,7 @@ namespace Kross { namespace Api {
              * \param scriptcontainer The \a ScriptContainer instance
              *       this script is associated with.
              */
-            Script(Interpreter* interpreter, ScriptContainer* scriptcontainer);
+            Script(Interpreter* const interpreter, ScriptContainer* const scriptcontainer);
 
             /**
              * Destructor.
@@ -121,9 +125,9 @@ namespace Kross { namespace Api {
 
         protected:
             /// The \a Interpreter used to create this Script instance.
-            Interpreter* m_interpreter;
+            Interpreter* const m_interpreter;
             /// The \a ScriptContainer associated with this Script.
-            ScriptContainer* m_scriptcontainer;
+            ScriptContainer* const m_scriptcontainer;
 
         private:
             /// The \a Exception this script throwed.

@@ -20,6 +20,7 @@
 #include "pythonmodule.h"
 #include "pythoninterpreter.h"
 
+#include <qregexp.h>
 #include <kdebug.h>
 
 using namespace Kross::Python;
@@ -82,9 +83,17 @@ Py::Object PythonModule::import(const Py::Tuple& args)
         QString modname = args[0].as_string().c_str();
         if(modname.startsWith("kross")) {
             kdDebug() << QString("PythonModule::import() module=%1").arg(modname) << endl;
-            Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
-            if(module)
-                return PythonExtension::toPyObject(module);
+
+            if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
+                kdWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
+            }
+            else {
+                Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
+                if(module)
+                    return PythonExtension::toPyObject(module);
+                kdWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
+            }
+
         }
     }
     return Py::None();

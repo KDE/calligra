@@ -94,7 +94,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         TestObject* testobject = new TestObject(app, scriptcontainer);
         manager->addQObject( testobject );
 
-        TestAction* testaction = new TestAction(scriptcontainer);
+        /*TestAction* testaction =*/ new TestAction(scriptcontainer);
         //manager->addQObject( testaction );
 
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
             app->setMainWidget(mainWin);
             mainWin->show();
             args->clear();
-            int result = app->exec();
+            result = app->exec();
         }
         else {
             app = new KApplication(true, true);

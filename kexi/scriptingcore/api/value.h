@@ -56,6 +56,8 @@ namespace Kross { namespace Api {
              */
             virtual ~Value() {}
 
+            //operator V&() const { return m_value; }
+
             /**
              * Return the value.
              *
@@ -63,8 +65,8 @@ namespace Kross { namespace Api {
              */
             V& getValue() { return m_value; }
 
-//#ifdef 0
-//to we need it anyway?
+#if 0
+//do we need it anyway?
             /**
              * Set the value.
              * The value is call-by-value cause it may
@@ -74,8 +76,8 @@ namespace Kross { namespace Api {
              *
              * \param value The value to set.
              */
-            void setValue(V value) { m_value = value; }
-//#endif
+            void setValue(V& value) { m_value = value; }
+#endif
 
         private:
             V m_value;
