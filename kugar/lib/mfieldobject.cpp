@@ -120,11 +120,17 @@ void MFieldObject::setText( const QString txt )
         break;
     case MFieldObject::Currency:
         int prec = precision < 2 ? precision : 2;
-        text.setNum( txt.toDouble(), 'f', prec );
-        if ( comma )
-            formatCommas();
-        formatNegValue();
-        text = QString( currency + text );
+        bool ok;
+        text.setNum( txt.toDouble( &ok ), 'f', prec );
+        if( !ok )
+            text = QString::null;
+        else
+        {
+            if ( comma )
+                formatCommas();
+            formatNegValue();
+            text = QString( currency + text );
+        }
         break;
     }
 }
