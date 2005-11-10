@@ -4752,8 +4752,8 @@ bool KSpreadView::showSheet(const QString& sheetName) {
   return true;
 }
 
-void KSpreadView::nextSheet(){
-
+void KSpreadView::nextSheet()
+{
   KSpreadSheet * t = doc()->map()->nextSheet( activeSheet() );
   if ( !t )
   {
@@ -4762,6 +4762,8 @@ void KSpreadView::nextSheet(){
   }
   d->canvas->closeEditor();
   setActiveSheet( t );
+  d->tabBar->setActiveTab( t->sheetName() );
+  d->tabBar->ensureVisible( t->sheetName() );
 }
 
 void KSpreadView::previousSheet()
@@ -4774,6 +4776,8 @@ void KSpreadView::previousSheet()
   }
   d->canvas->closeEditor();
   setActiveSheet( t );
+  d->tabBar->setActiveTab( t->sheetName() );
+  d->tabBar->ensureVisible( t->sheetName() );
 }
 
 void KSpreadView::firstSheet()
@@ -4786,6 +4790,8 @@ void KSpreadView::firstSheet()
   }
   d->canvas->closeEditor();
   setActiveSheet( t );
+  d->tabBar->setActiveTab( t->sheetName() );
+  d->tabBar->ensureVisible( t->sheetName() );
 }
 
 void KSpreadView::lastSheet()
@@ -4798,6 +4804,8 @@ void KSpreadView::lastSheet()
   }
   d->canvas->closeEditor();
   setActiveSheet( t );
+  d->tabBar->setActiveTab( t->sheetName() );
+  d->tabBar->ensureVisible( t->sheetName() );
 }
 
 void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
