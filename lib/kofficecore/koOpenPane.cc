@@ -107,6 +107,7 @@ void KoOpenPane::showOpenFileDialog()
 
 void KoOpenPane::addCustomDocumentPane(const QString& title, const QString& icon, QWidget* widget)
 {
+  Q_UNUSED( icon );
   QVBox* page = d->m_mainWidget->addVBoxPage(title, title, SmallIcon("fileopen",
                                              48, KIcon::DefaultState, d->m_instance));
   widget->reparent(page, QPoint(0, 0));
