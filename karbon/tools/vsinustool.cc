@@ -77,13 +77,13 @@ VSinusTool::VSinusOptionsWidget::periods() const
 void
 VSinusTool::VSinusOptionsWidget::setWidth( double value )
 {
-	m_width->setValue( value );
+	m_width->changeValue( value );
 }
 
 void
 VSinusTool::VSinusOptionsWidget::setHeight( double value )
 {
-	m_height->setValue( value );
+	m_height->changeValue( value );
 }
 
 void
@@ -127,8 +127,8 @@ VSinusTool::shape( bool interactive ) const
 			new VSinus(
 				0L,
 				m_p,
-				KoUnit::fromUserValue( m_optionsWidget->width(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->height(), view()->part()->unit() ),
+				m_optionsWidget->width(),
+				m_optionsWidget->height(),
 				m_optionsWidget->periods() );
 	else
 		return

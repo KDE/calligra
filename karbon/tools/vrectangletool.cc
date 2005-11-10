@@ -109,8 +109,8 @@ VRectangleTool::shape( bool interactive ) const
 			new VRectangle(
 				0L,
 				m_p,
-				KoUnit::fromUserValue( m_optionWidget->width(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionWidget->height(), view()->part()->unit() ) );
+				m_optionWidget->width(),
+				m_optionWidget->height() );
 	}
 	else
 		return

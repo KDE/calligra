@@ -26,6 +26,7 @@
 #include <qstylesheet.h>
 #include <koRuler.h>
 #include <koUnit.h>
+#include <koUnitWidgets.h>
 #include <qdict.h>
 #include <qlineedit.h>
 #include "koparaglayout.h"
@@ -128,7 +129,7 @@ private slots:
 private:
     void updateLineSpacing( KoParagLayout::SpacingType _type );
 
-    KDoubleNumInput *eBefore, *eAfter, *eSpacing;
+    KoUnitDoubleSpinBox *eBefore, *eAfter, *eSpacing;
     KoUnitDoubleSpinBox *eLeft, *eRight, *eFirstLine;
     QComboBox *cSpacing;
     KPagePreview *prev1;
@@ -338,11 +339,12 @@ private:
 /**
  *
  */
-class KoTabulatorsLineEdit : public KDoubleNumInput
+class KoTabulatorsLineEdit : public KoUnitDoubleSpinBox
 {
     Q_OBJECT
 public:
-    KoTabulatorsLineEdit ( QWidget * parent, const char * name=0 );
+    KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
 protected:
     virtual void keyPressEvent ( QKeyEvent * );

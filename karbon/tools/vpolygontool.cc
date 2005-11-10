@@ -64,7 +64,7 @@ VPolygonTool::VPolygonOptionsWidget::edges() const
 void
 VPolygonTool::VPolygonOptionsWidget::setRadius( double value )
 {
-	m_radius->setValue( value );
+	m_radius->changeValue( value );
 }
 
 void
@@ -127,8 +127,8 @@ VPolygonTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::fromUserValue( m_optionsWidget->radius(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->radius(), view()->part()->unit() ),
+				m_optionsWidget->radius(),
+				m_optionsWidget->radius(),
 				m_optionsWidget->edges(), 0, 0, 0, VStar::polygon );
 	}
 	else

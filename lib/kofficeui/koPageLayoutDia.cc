@@ -46,6 +46,7 @@
 #include <qvgroupbox.h>
 #include <qhbuttongroup.h>
 #include <qvbuttongroup.h>
+#include <koUnitWidgets.h>//for KoUnitDoubleSpinBox
 
 /******************************************************************/
 /* class KoPagePreview                                            */
@@ -346,7 +347,7 @@ void KoPageLayoutDia::setupTab1()
     QLabel *lpgWidth = new QLabel( i18n( "&Width:" ), formatCustomSize );
 
     // linedit width
-    epgWidth = new KDoubleNumInput( formatCustomSize, "Width" );
+    epgWidth = new KoUnitDoubleSpinBox( formatCustomSize, "Width" );
     lpgWidth->setBuddy( epgWidth );
     if ( m_layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
@@ -356,7 +357,7 @@ void KoPageLayoutDia::setupTab1()
     QLabel *lpgHeight = new QLabel( i18n( "&Height:" ), formatCustomSize );
 
     // linedit height
-    epgHeight = new KDoubleNumInput( formatCustomSize, "Height" );
+    epgHeight = new KoUnitDoubleSpinBox( formatCustomSize, "Height" );
     lpgHeight->setBuddy( epgHeight );
     if ( m_layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
@@ -391,25 +392,25 @@ void KoPageLayoutDia::setupTab1()
        KDialog::spacingHint() );
 
     // left margin
-    ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
+    ebrLeft = new KoUnitDoubleSpinBox( marginsFrame, "Left" );
     marginsLayout->addWidget( ebrLeft, 1, 0 );
     connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    ebrRight = new KDoubleNumInput( marginsFrame, "Right" );
+    ebrRight = new KoUnitDoubleSpinBox( marginsFrame, "Right" );
     marginsLayout->addWidget( ebrRight, 1, 2 );
     connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
-    ebrTop = new KDoubleNumInput( marginsFrame, "Top" );
+    ebrTop = new KoUnitDoubleSpinBox( marginsFrame, "Top" );
     marginsLayout->addWidget( ebrTop, 0, 1 , Qt::AlignCenter );
     connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
-    ebrBottom = new KDoubleNumInput( marginsFrame, "Bottom" );
+    ebrBottom = new KoUnitDoubleSpinBox( marginsFrame, "Bottom" );
     marginsLayout->addWidget( ebrBottom, 2, 1, Qt::AlignCenter );
     connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
@@ -455,27 +456,32 @@ void KoPageLayoutDia::setValuesTab1()
 
 void KoPageLayoutDia::setValuesTab1Helper()
 {
-    epgWidth->setValue( KoUnit::toUserValue( m_layout.ptWidth, m_unit ) );
-    epgWidth->setSuffix( KoUnit::unitName( m_unit ) );
+//setUnit always befor changeValue
+    epgWidth->setUnit( m_unit );
+    epgWidth->setMinMaxStep( 0, KoUnit::fromUserValue( 9999, m_unit ), KoUnit::fromUserValue( 0.01, m_unit ) );
+    epgWidth->changeValue( m_layout.ptWidth );
 
-    epgHeight->setValue( KoUnit::toUserValue( m_layout.ptHeight, m_unit ) );
-    epgHeight->setSuffix( KoUnit::unitName( m_unit ) );
+    epgHeight->setUnit( m_unit );
+    epgHeight->setMinMaxStep( 0, KoUnit::fromUserValue( 9999, m_unit ), KoUnit::fromUserValue( 0.01, m_unit ) );
+    epgHeight->changeValue( m_layout.ptHeight );
 
-    ebrLeft->setValue( KoUnit::toUserValue( m_layout.ptLeft, m_unit ) );
-    ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrLeft->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit), 0.2, false );
+    double dStep = KoUnit::fromUserValue( 0.2, m_unit );
 
-    ebrRight->setValue( KoUnit::toUserValue( m_layout.ptRight, m_unit ) );
-    ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrRight->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit), 0.2, false );
+    ebrLeft->setUnit( m_unit );
+    ebrLeft->changeValue( m_layout.ptLeft );
+    ebrLeft->setMinMaxStep( 0, m_layout.ptWidth, dStep );
 
-    ebrTop->setValue( KoUnit::toUserValue( m_layout.ptTop, m_unit ) );
-    ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrTop->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit), 0.2, false );
+    ebrRight->setUnit( m_unit );
+    ebrRight->changeValue( m_layout.ptRight );
+    ebrRight->setMinMaxStep( 0, m_layout.ptWidth, dStep );
 
-    ebrBottom->setValue( KoUnit::toUserValue( m_layout.ptBottom, m_unit ) );
-    ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrBottom->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit), 0.2, false );
+    ebrTop->setUnit( m_unit );
+    ebrTop->changeValue( m_layout.ptTop );
+    ebrTop->setMinMaxStep( 0, m_layout.ptHeight, dStep );
+
+    ebrBottom->setUnit( m_unit );
+    ebrBottom->changeValue( m_layout.ptBottom );
+    ebrBottom->setMinMaxStep( 0, m_layout.ptHeight, dStep );
 }
 
 /*================ setup header and footer tab ===================*/
@@ -616,8 +622,6 @@ void KoPageLayoutDia::setupTab3()
 /*================================================================*/
 void KoPageLayoutDia::setupTab4()
 {
-    QString str = KoUnit::unitName(m_unit);
-
     QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, 0, KDialog::spacingHint() );
 
@@ -747,8 +751,8 @@ void KoPageLayoutDia::formatChanged( int _format )
         m_layout.ptWidth = w;
         m_layout.ptHeight = h;
 
-        epgWidth->setValue( KoUnit::toUserValue( m_layout.ptWidth, m_unit ) );
-        epgHeight->setValue( KoUnit::toUserValue( m_layout.ptHeight, m_unit ) );
+        epgWidth->changeValue( m_layout.ptWidth );
+        epgHeight->changeValue( m_layout.ptHeight );
 
         updatePreview( m_layout );
     }
@@ -765,12 +769,12 @@ void KoPageLayoutDia::orientationChanged()
     // even though the orientation has not changed
     if (m_layout.orientation == oldOrientation) return;
 
-    m_layout.ptWidth = KoUnit::fromUserValue( epgWidth->value(), m_unit );
-    m_layout.ptHeight = KoUnit::fromUserValue( epgHeight->value(), m_unit );
-    m_layout.ptLeft = KoUnit::fromUserValue( ebrLeft->value(), m_unit );
-    m_layout.ptRight = KoUnit::fromUserValue( ebrRight->value(), m_unit );
-    m_layout.ptTop = KoUnit::fromUserValue( ebrTop->value(), m_unit );
-    m_layout.ptBottom = KoUnit::fromUserValue( ebrBottom->value(), m_unit );
+    m_layout.ptWidth = epgWidth->value();
+    m_layout.ptHeight = epgHeight->value();
+    m_layout.ptLeft = ebrLeft->value();
+    m_layout.ptRight = ebrRight->value();
+    m_layout.ptTop = ebrTop->value();
+    m_layout.ptBottom = ebrBottom->value();
 
     // swap dimension and adjust margins
     qSwap( m_layout.ptWidth, m_layout.ptHeight );
@@ -784,13 +788,13 @@ void KoPageLayoutDia::orientationChanged()
     updatePreview( m_layout );
 }
 
-void KoPageLayoutDia::changed(KDoubleNumInput *line, double &pt) {
+void KoPageLayoutDia::changed(KoUnitDoubleSpinBox *line, double &pt) {
 
     if ( line->value() == 0 && retPressed )
-        line->setValue( 0.0 );
+        line->changeValue( 0.0 );
     if ( line->value()<0)
-        line->setValue( 0.0 );
-    pt = KoUnit::fromUserValue( line->value(), m_unit );
+        line->changeValue( 0.0 );
+    pt = line->value();
     retPressed = false;
 }
 

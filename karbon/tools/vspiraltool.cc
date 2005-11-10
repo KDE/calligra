@@ -96,7 +96,7 @@ VSpiralTool::VSpiralOptionsWidget::type() const
 void
 VSpiralTool::VSpiralOptionsWidget::setRadius( double value )
 {
-	m_radius->setValue( value );
+	m_radius->changeValue( value );
 }
 
 void
@@ -173,7 +173,7 @@ VSpiralTool::shape( bool interactive ) const
 			new VSpiral(
 				0L,
 				m_p,
-				KoUnit::fromUserValue( m_optionsWidget->radius(), view()->part()->unit() ),
+				m_optionsWidget->radius(),
 				m_optionsWidget->segments(),
 				m_optionsWidget->fade(),
 				m_optionsWidget->clockwise(),

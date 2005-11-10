@@ -156,8 +156,8 @@ VEllipseTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		double d1 = KoUnit::fromUserValue( m_optionsWidget->width(), view()->part()->unit() ) / 2.0;
-		double d2 = KoUnit::fromUserValue( m_optionsWidget->height(), view()->part()->unit() ) / 2.0;
+		double d1 = m_optionsWidget->width() / 2.0;
+		double d2 = m_optionsWidget->height() / 2.0;
 		return
 			new VEllipse(
 				0L,

@@ -818,7 +818,9 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     if(frameWidth==-1) {
         frameWidth=9999;
     } else {
-        length=i18n("Frame width: %1").arg(KoUnit::toUserStringValue(frameWidth,m_unit));
+        length=i18n("Frame width: %1 %2")
+		.arg(KoUnit::toUserStringValue(frameWidth,m_unit))
+		.arg(KoUnit::unitName(m_unit));
         frameWidth=KoUnit::toUserValue(frameWidth,m_unit);
     }
 
@@ -883,7 +885,8 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
-    eSpacing = new KDoubleNumInput( spacingFrame );
+    eSpacing = new KoUnitDoubleSpinBox( spacingFrame, 0, 9999, CM_TO_POINT(1),
+					0.0, m_unit );
     eSpacing->setRange( 0, 9999, 1, false);
     connect( eSpacing, SIGNAL( valueChanged( double ) ), this, SLOT( spacingChanged( double ) ) );
     spacingGrid->addWidget( eSpacing, 1, 1 );
@@ -901,21 +904,21 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2,
                                                 KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lBefore = new QLabel( i18n("Before (%1):").arg(unitName), pSpaceFrame );
+    QLabel * lBefore = new QLabel( i18n("Before:"), pSpaceFrame );
     lBefore->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
-    eBefore = new KDoubleNumInput( pSpaceFrame );
+    eBefore = new KoUnitDoubleSpinBox( pSpaceFrame, 0, 9999, CM_TO_POINT(1), 0.0, m_unit );
     eBefore->setRange( 0 , 9999, 1, false);
     connect( eBefore, SIGNAL( valueChanged( double ) ), this, SLOT( beforeChanged( double ) ) );
     pSpaceGrid->addWidget( eBefore, 1, 1 );
 
-    QLabel * lAfter = new QLabel( i18n("After (%1):").arg(unitName), pSpaceFrame );
+    QLabel * lAfter = new QLabel( i18n("After:"), pSpaceFrame );
     lAfter->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
-    eAfter = new KDoubleNumInput( pSpaceFrame );
-    eAfter->setRange( 0 , 9999, 1, false);
+    eAfter = new KoUnitDoubleSpinBox( pSpaceFrame, 0, 9999, 1, 0.0, m_unit );
+    eAfter->setRange( 0, 9999, 1, false);
     connect( eAfter, SIGNAL( valueChanged( double ) ), this, SLOT( afterChanged( double ) ) );
     pSpaceGrid->addWidget( eAfter, 2, 1 );
 
@@ -935,27 +938,27 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
 
 double KoIndentSpacingWidget::leftIndent() const
 {
-    return QMAX(0,KoUnit::fromUserValue( eLeft->value(), m_unit ));
+    return QMAX(0, eLeft->value() );
 }
 
 double KoIndentSpacingWidget::rightIndent() const
 {
-    return QMAX(0,KoUnit::fromUserValue( eRight->value(), m_unit ));
+    return QMAX(0,eRight->value() );
 }
 
 double KoIndentSpacingWidget::firstLineIndent() const
 {
-    return KoUnit::fromUserValue( eFirstLine->value(), m_unit );
+    return eFirstLine->value();
 }
 
 double KoIndentSpacingWidget::spaceBeforeParag() const
 {
-    return QMAX(0, KoUnit::fromUserValue( eBefore->value(), m_unit ));
+    return QMAX(0, eBefore->value() );
 }
 
 double KoIndentSpacingWidget::spaceAfterParag() const
 {
-    return QMAX(0,KoUnit::fromUserValue( eAfter->value(), m_unit ));
+    return QMAX(0, eAfter->value() );
 }
 
 KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
@@ -993,25 +996,24 @@ double KoIndentSpacingWidget::lineSpacing() const
 void KoIndentSpacingWidget::display( const KoParagLayout & lay )
 {
     double _left = lay.margins[QStyleSheetItem::MarginLeft];
-    double leftInUnit = KoUnit::toUserValue(  _left, m_unit );
-    eLeft->setValue( leftInUnit );
+    eLeft->changeValue( _left );
     //prev1->setLeft( _left );  done by leftChanged() below
     leftChanged( _left ); // sets min value for eFirstLine
 
     double _right = lay.margins[QStyleSheetItem::MarginRight];
-    eRight->setValue( KoUnit::toUserValue( _right, m_unit ) );
+    eRight->changeValue( _right );
     prev1->setRight( _right );
 
     double _first = lay.margins[QStyleSheetItem::MarginFirstLine];
-    eFirstLine->setValue( KoUnit::toUserValue( _first, m_unit ) );
+    eFirstLine->changeValue( _first );
     prev1->setFirst( _first );
 
     double _before = lay.margins[QStyleSheetItem::MarginTop];
-    eBefore->setValue( KoUnit::toUserValue( _before, m_unit ) );
+    eBefore->changeValue( _before );
     prev1->setBefore( _before );
 
     double _after = lay.margins[QStyleSheetItem::MarginBottom];
-    eAfter->setValue( KoUnit::toUserValue( _after, m_unit ) );
+    eAfter->changeValue( _after );
     prev1->setAfter( _after );
 
     double _spacing = lay.lineSpacingValue();
@@ -1067,19 +1069,19 @@ QString KoIndentSpacingWidget::tabName()
 
 void KoIndentSpacingWidget::leftChanged( double _val )
 {
-    prev1->setLeft( _val );
+    prev1->setLeft( KoUnit::fromUserValue( _val, m_unit ) );
     // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
     eFirstLine->setMinValue( -QMAX( 0, _val ) );
 }
 
 void KoIndentSpacingWidget::rightChanged( double _val )
 {
-    prev1->setRight( _val );
+    prev1->setRight( KoUnit::fromUserValue( _val, m_unit ) );
 }
 
 void KoIndentSpacingWidget::firstChanged( double _val )
 {
-    prev1->setFirst( _val );
+    prev1->setFirst( KoUnit::fromUserValue( _val, m_unit ) );
 }
 
 void KoIndentSpacingWidget::updateLineSpacing( KoParagLayout::SpacingType _type )
@@ -1112,12 +1114,12 @@ void KoIndentSpacingWidget::spacingChanged( double _val )
 
 void KoIndentSpacingWidget::beforeChanged( double _val )
 {
-    prev1->setBefore( _val );
+    prev1->setBefore( KoUnit::fromUserValue( _val, m_unit ) );
 }
 
 void KoIndentSpacingWidget::afterChanged( double _val )
 {
-    prev1->setAfter( _val );
+    prev1->setAfter( KoUnit::fromUserValue( _val, m_unit ) );
 }
 
 
@@ -1648,8 +1650,8 @@ void KoParagCounterWidget::save( KoParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
-KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget * parent, const char * name)
-    :KDoubleNumInput ( parent, name )
+KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value /*= 0.0*/, KoUnit::Unit unit /*= KoUnit::U_PT*/, unsigned int precision /*= 2*/, const char *name /*= 0*/ )
+    : KoUnitDoubleSpinBox ( parent, lower, upper, step, value, unit, precision, name )
 {
     setRange( 0, 9999, 1, false);
 }
@@ -1662,7 +1664,7 @@ void KoTabulatorsLineEdit::keyPressEvent ( QKeyEvent *ke )
         emit keyReturnPressed();
         return;
     }
-    KDoubleNumInput::keyPressEvent (ke);
+    KoUnitDoubleSpinBox::keyPressEvent (ke);
 }
 
 KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double frameWidth,QWidget * parent, const char * name )
@@ -1673,7 +1675,9 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
         m_toplimit=9999;
     } else {
         m_toplimit=frameWidth;
-        length=i18n("\nFrame width: %1").arg(KoUnit::toUserStringValue(frameWidth,m_unit));
+        length=i18n("Frame width: %1 %2")
+		.arg(KoUnit::toUserStringValue(frameWidth,m_unit))
+		.arg(KoUnit::unitName(m_unit));
         frameWidth=KoUnit::toUserValue(frameWidth,m_unit);
     }
     QVBoxLayout* Form1Layout = new QVBoxLayout( this );
@@ -1707,7 +1711,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     Layout5->setSpacing( KDialog::spacingHint() );
     Layout5->setMargin( 0 ); //?
 
-    sTabPos = new KoTabulatorsLineEdit( gPosition);
+    sTabPos = new KoTabulatorsLineEdit( gPosition, 0, 9999, 1, 0.0, m_unit );
+    sTabPos->setRange( 0, 9999, 1 );
     sTabPos->setMaximumSize( QSize( 100, 32767 ) );
     Layout5->addWidget( sTabPos );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -1717,9 +1722,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     QLabel* TextLabel1 = new QLabel( gPosition );
     QString unitDescription = KoUnit::unitDescription( m_unit );
-    TextLabel1->setText( i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitDescription)+length);
+    TextLabel1->setText( length );
     GroupBox2Layout->addWidget( TextLabel1 );
-
 
     bgAlign = new QButtonGroup( this );
     bgAlign->setTitle( i18n( "Alignment" ) );
@@ -1825,6 +1829,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     Layout4->addItem( spacer_5 );
     Form1Layout->addLayout( Layout4 );
 
+    //signal valueChanged passes value which the user see (unlike the value() function)
+    //so fromUserValue has to be used in slotTabValueChanged
     connect(sTabPos,SIGNAL(valueChanged(double)), this, SLOT(slotTabValueChanged(double )));
     connect(sTabPos,SIGNAL( keyReturnPressed()),this,SLOT(newClicked()));
     connect(sAlignChar,SIGNAL(textChanged( const QString & )), this, SLOT(slotAlignCharChanged( const QString & )));
@@ -1841,7 +1847,9 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 void KoParagTabulatorsWidget::slotTabValueChanged( double val ) {
     if(noSignals) return;
     noSignals=true;
+    //see comment where this slot is connected
     m_tabList[lstTabs->currentItem()].ptPos = KoUnit::fromUserValue( val, m_unit );
+
     lstTabs->changeItem(tabToString(m_tabList[lstTabs->currentItem()]), lstTabs->currentItem());
 
     sortLists();
@@ -1891,7 +1899,7 @@ void KoParagTabulatorsWidget::deleteClicked() {
     int selected = lstTabs->currentItem();
     if (selected < 0) return;
     noSignals=true;
-    sTabPos->setValue(0.0);
+    sTabPos->changeValue(0.0);
     noSignals=false;
     lstTabs->removeItem(selected);
     m_tabList.remove(m_tabList[selected]);
@@ -1909,7 +1917,7 @@ void KoParagTabulatorsWidget::deleteClicked() {
 void KoParagTabulatorsWidget::deleteAllClicked()
 {
     noSignals=true;
-    sTabPos->setValue(0.0);
+    sTabPos->changeValue(0.0);
     noSignals=false;
     lstTabs->clear();
     m_tabList.clear();

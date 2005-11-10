@@ -112,7 +112,7 @@ public:
     // lower, upper, step and value are in pt
     KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
-
+    // added so the class can be used in .ui files(by Tymoteusz Majewski, maju7@o2.pl)
     virtual void changeValue( double );
     virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
@@ -131,6 +131,8 @@ public:
     /// Set step size in points.
     void setLineStepPt(double step);
 
+    /// Set minimum, maximum value and the step size (all in points) (by Tymoteusz Majewski, maju7@o2.pl)
+    void setMinMaxStep( double min, double max, double step );
 private:
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points

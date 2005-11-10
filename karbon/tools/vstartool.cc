@@ -156,7 +156,7 @@ VStarOptionsWidget::typeChanged( int type )
 
 	// set optimal inner radius
 	if( type == VStar::star )
-		m_innerR->setValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
+		m_innerR->changeValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
 VStarTool::VStarTool( KarbonPart *part )
@@ -206,8 +206,8 @@ VStarTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::fromUserValue( m_optionsWidget->outerRadius(), view()->part()->unit() ),
-				KoUnit::fromUserValue( m_optionsWidget->innerRadius(), view()->part()->unit() ),
+				m_optionsWidget->outerRadius(),
+				m_optionsWidget->innerRadius(),
 				m_optionsWidget->edges(), 0.0, m_optionsWidget->innerAngle(),
 				m_optionsWidget->roundness(), (VStar::VStarType)m_optionsWidget->type() );
 	}

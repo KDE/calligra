@@ -186,12 +186,12 @@ private:
     QComboBox *cpgUnit;
     QRadioButton *rbPortrait;
     QRadioButton *rbLandscape;
-    KDoubleNumInput *epgWidth;
-    KDoubleNumInput *epgHeight;
-    KDoubleNumInput *ebrLeft;
-    KDoubleNumInput *ebrRight;
-    KDoubleNumInput *ebrTop;
-    KDoubleNumInput *ebrBottom;
+    KoUnitDoubleSpinBox *epgWidth;
+    KoUnitDoubleSpinBox *epgHeight;
+    KoUnitDoubleSpinBox *ebrLeft;
+    KoUnitDoubleSpinBox *ebrRight;
+    KoUnitDoubleSpinBox *ebrTop;
+    KoUnitDoubleSpinBox *ebrBottom;
     KoPagePreview *pgPreview;
     KoPagePreview *pgPreview2;
     QLineEdit *eHeadLeft;
@@ -248,7 +248,7 @@ private slots:
     void nSpaceChanged( double );
 
 private:
-    void changed(KDoubleNumInput *line, double &pt);
+    void changed(KoUnitDoubleSpinBox *line, double &pt);
 
     KoPageLayoutDiaPrivate *d;
 };

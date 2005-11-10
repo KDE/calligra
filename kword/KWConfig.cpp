@@ -892,7 +892,7 @@ void ConfigureDefaultDocPage::setUnit( KoUnit::Unit unit )
 {
     m_columnSpacing->setUnit( unit );
     m_tabStopWidth->setUnit( unit );
-    tabStop->setText(i18n("Tab stop (%1):").arg(KoUnit::unitName(unit)));
+    tabStop->setText( i18n( "Tab stop:" ) );
 }
 
 ////

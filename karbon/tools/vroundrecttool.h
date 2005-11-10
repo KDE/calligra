@@ -64,10 +64,10 @@ private:
 
 	private:
 
-		KDoubleSpinBox* m_width;
-		KDoubleSpinBox* m_height;
-		KDoubleSpinBox* m_roundx;
-		KDoubleSpinBox* m_roundy;
+		KoUnitDoubleSpinBox* m_width;
+		KoUnitDoubleSpinBox* m_height;
+		KoUnitDoubleSpinBox* m_roundx;
+		KoUnitDoubleSpinBox* m_roundy;
 
 		KarbonPart* m_part;
 
