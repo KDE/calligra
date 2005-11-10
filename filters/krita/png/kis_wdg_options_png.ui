@@ -8,18 +8,21 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>283</width>
-            <height>136</height>
+            <width>286</width>
+            <height>106</height>
         </rect>
     </property>
     <property name="caption">
         <string>Options of your PNG</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout6</cstring>
             </property>
@@ -32,13 +35,17 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Compression level :</string>
+                        <string>Compress:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignTop</set>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Note : the compression level doesn't change the quality of the result, but the time spend to compress and uncompress</string>
+                        <string>Note : the compression level doesn't change the quality of the result</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -69,7 +76,14 @@
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="tickmarks">
-                                <enum>Below</enum>
+                                <enum>NoMarks</enum>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Note : the compression level doesn't change the quality of the result</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                             </property>
                         </widget>
                         <widget class="QLayoutWidget">
@@ -85,7 +99,11 @@
                                         <cstring>textLabel3</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Fastest</string>
+                                        <string>Fast</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -93,10 +111,14 @@
                                         <cstring>textLabel4</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Best</string>
+                                        <string>Small</string>
                                     </property>
                                     <property name="alignment">
                                         <set>AlignVCenter|AlignRight</set>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                                     </property>
                                 </widget>
                             </hbox>
@@ -105,32 +127,57 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QCheckBox">
+        <spacer row="3" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>5</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QCheckBox" row="1" column="0">
             <property name="name">
                 <cstring>interlacing</cstring>
             </property>
             <property name="text">
-                <string>interlacing ?</string>
+                <string>Interlacing</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Interlacing is useful if you intend to publish your image on internet, as with interlacing, the image will be displayer by the browser even before the dowmloading is finished</string>
+                <string>Use Interlacing when publishing on the internet</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;Interlacing is useful if you intend to publish your image on internet.&lt;br&gt;
+Enabling interlacing will make the image be displayed by the browser even while downloading.&lt;/p&gt;</string>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="2" column="0">
             <property name="name">
                 <cstring>alpha</cstring>
             </property>
             <property name="text">
-                <string>save alpha channel ? (transparency)</string>
+                <string>Store Alpha Channel  (Transparency)</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>If you do not use transparency in your image you can safely uncheck this box as the resulting file will be smaller</string>
+                <string>Disable to get smaller files if your image has no transparancy</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparancy in your image to be stored by saving an alpha channel.
+You can uncheck the box if you are not using transparancy and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
             </property>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
