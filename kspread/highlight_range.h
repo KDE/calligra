@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
-
+#ifndef KSPREAD_HIGHLIGHT_RANGE_H
+#define KSPREAD_HIGHLIGHT_RANGE_H
 
 //Qt
 #include <qcolor.h>
@@ -78,3 +78,5 @@ class HighlightRange
         KSpreadPoint* _lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells
         QColor   _color; //Colour to highlight this range with
 };
+
+#endif
