@@ -199,7 +199,7 @@ void KoTabBarPrivate::layoutTabs()
                 QString text = tabs[ c ];
                 int tw = fm.width( text ) + 4;
                 rect = QRect( x, 0, tw + 20, tabbar->height() );
-                x = x + tw + 10;
+                x = x + tw + 20;
             }
             tabRects.append( rect );
         }
@@ -224,7 +224,7 @@ void KoTabBarPrivate::layoutTabs()
                 QString text = tabs[ c ];
                 int tw = fm.width( text ) + 4;
                 rect = QRect( x - tw - 20, 0, tw + 20, tabbar->height() );
-                x = x - tw - 10;
+                x = x - tw - 20;
             }
             tabRects.append( rect );
         }
@@ -253,26 +253,40 @@ int KoTabBarPrivate::tabAt( const QPoint& pos )
 
 void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text, bool active )
 {
-    QPointArray pa;
-    pa.setPoints( 4, rect.x(), rect.y(), rect.x()+10, rect.bottom()-1,
-      rect.right()-10, rect.bottom()-1, rect.right(), rect.top() );
-
-    QColor bgcolor = tabbar->colorGroup().background();
-    if( active ) bgcolor = tabbar->colorGroup().base();
-
-    painter.setClipping( true );
-    painter.setClipRegion( QRegion( pa ) );
-    painter.setBackgroundColor( bgcolor );
-    painter.eraseRect( rect );
-    painter.setClipping( false );
-
-    painter.drawLine( rect.x(), rect.y(), rect.x()+10, rect.bottom()-1 );
-    painter.drawLine( rect.x()+10, rect.bottom()-1, rect.right()-10, rect.bottom()-1 );
-    painter.drawLine( rect.right()-10, rect.bottom()-1, rect.right(), rect.top() );
-    if( !active )
-      painter.drawLine( rect.x(), rect.y(), rect.right(), rect.y() );
+    QPointArray polygon;
+    
+    if( !reverseLayout )
+        polygon.setPoints( 6, rect.x(), rect.y(),
+            rect.x(), rect.bottom()-3,
+            rect.x()+2, rect.bottom(),
+            rect.right()-4, rect.bottom(),
+            rect.right()-2, rect.bottom()-2,
+            rect.right()+5, rect.top() );
+    else      
+        polygon.setPoints( 6, rect.right(), rect.top(),
+            rect.right(), rect.bottom()-3,
+            rect.right()-2, rect.bottom(),
+            rect.x()+4, rect.bottom(),
+            rect.x()+2, rect.bottom()-2,
+            rect.x()-5, rect.top() );
 
     painter.save();
+
+    // fill it first  
+    QBrush bg = tabbar->colorGroup().background();
+    if( active ) bg = tabbar->colorGroup().base();
+    painter.setBrush( bg );
+    painter.setPen( QPen( Qt::NoPen ) );
+    painter.drawPolygon( polygon );
+
+    // draw the lines
+    painter.setPen( tabbar->colorGroup().dark() );
+    if( !active )
+      painter.drawLine( rect.x()-25, rect.y(), rect.right()+25, rect.top() );
+    // Qt4: painter.setRenderHint( QPainter::Antialiasing );
+    painter.drawPolyline( polygon );
+
+    painter.setPen( tabbar->colorGroup().buttonText() );
     QFont f = painter.font();
     if( active ) f.setBold( true );
     painter.setFont( f );
@@ -280,6 +294,7 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
     int tx =  rect.x() + ( rect.width() - fm.width( text ) ) / 2;
     int ty =  rect.y() + ( rect.height() - fm.height() ) / 2 + fm.ascent();
     painter.drawText( tx, ty, text );
+
     painter.restore();
 }
 
@@ -648,15 +663,17 @@ void KoTabBar::paintEvent( QPaintEvent* )
     pm.fill( colorGroup().background() );
     painter.begin( &pm, this );
 
-    QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-    qDrawShadePanel( &painter, 0, 0, width(),
-                     height(), colorGroup(), FALSE, 1, &fill );
+    painter.setPen( colorGroup().dark() );
+    painter.drawLine( 0, 0, width(), 0 );
+
+    if( !d->reverseLayout )
+        painter.translate( 5, 0 );
 
     d->layoutTabs();
     d->updateButtons();
     
     // draw first all non-active, visible tabs
-    for( unsigned c = 0; c < d->tabRects.count(); c++ )
+    for( int c = d->tabRects.count()-1; c>=0; c-- )
     {
         QRect rect = d->tabRects[ c ];
         if( rect.isNull() ) continue;
