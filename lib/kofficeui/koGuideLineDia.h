@@ -24,9 +24,12 @@
 
 #include <kdialogbase.h>
 #include <koUnit.h>
+#include "koRect.h"
+#include "koPoint.h"
 
 
 class KoUnitDoubleSpinBox;
+class QRadioButton;
 
 /**
  * @brief Class for setting a guide line position.
@@ -49,13 +52,44 @@ public:
                     KoUnit::Unit unit, const char *name = 0L );
 
     /**
+     * @brief Constructor
+     *
+     * This shows a dialog to add a guide line. As long the position is not changed 
+     * and the orientation of the guide line is changed the value will be set to pos.x()
+     * or pos.y() according to the orientation.
+     *
+     * @param parent the parent widget
+     * @param pos the actual position of cursor
+     * @param rect the rect in where the guide can be placed
+     * @param unit the unit used in the document
+     * @param name the name is send to the QObject constructor
+     */
+    KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
+                    KoUnit::Unit unit, const char *name = 0L );
+    /**
      * @brief the position
      *
-     * @return The value of the position input
+     * @return the value of the position input
      */
     double pos() const;
 
+    /**
+     * @brief the orientation
+     *
+     * @return the orientation of the added guide line
+     */
+    Qt::Orientation orientation() const;
+
+protected slots:
+    void slotOrientationChanged();
+    void slotPositionChanged();
+
 protected:
+    KoRect m_rect;
+    KoPoint m_pos;
+    bool m_positionChanged;
+    QRadioButton * m_hButton;
+    QRadioButton * m_vButton;
     KoUnitDoubleSpinBox* m_position;
 };
 

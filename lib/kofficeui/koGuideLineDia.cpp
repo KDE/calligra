@@ -21,17 +21,22 @@
 
 #include "koGuideLineDia.h"
 
+#include <qbuttongroup.h>
 #include <qhbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qradiobutton.h>
 
 #include <klocale.h>
 #include <koUnitWidgets.h>
 
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
-                               KoUnit::Unit unit, const char *name )
+                                KoUnit::Unit unit, const char *name )
 : KDialogBase( parent, name , true, "", Ok | Cancel, Ok, true )
+, m_hButton( 0 )
+, m_vButton( 0 )
 {
     setCaption( i18n("Set Guide Line Position") );
     QHBox *page = makeHBoxMainWidget();
@@ -40,10 +45,87 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
     m_position->setFocus();
 }
 
+
+KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
+                                KoUnit::Unit unit, const char *name )
+: KDialogBase( parent, name , true, "", Ok | Cancel, Ok, true )
+, m_rect( rect )
+, m_pos( pos )
+, m_positionChanged( false )
+, m_hButton( 0 )
+, m_vButton( 0 )
+{
+    setCaption( i18n("Add Guide Line") );
+    QVBox * vbox = makeVBoxMainWidget();
+
+    QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Orientation" ), vbox );
+    group->setRadioButtonExclusive( true );
+    //group->layout();
+    m_hButton = new QRadioButton( i18n( "Horizontal" ), group );
+    m_vButton = new QRadioButton( i18n( "Vertical" ), group );
+
+    connect( group, SIGNAL( clicked( int ) ), this, SLOT( slotOrientationChanged() ) );
+
+    m_vButton->setChecked( true );;
+
+    QHBox *hbox = new QHBox( vbox );
+    QLabel *label = new QLabel( i18n( "&Position:" ), hbox );
+    m_position= new KoUnitDoubleSpinBox( hbox, QMAX( 0.0, m_rect.left() ), QMAX( 0.0, m_rect.right() ), 1, QMAX( 0.0, pos.x() ), unit );
+    m_position->setFocus();
+    label->setBuddy( m_position );
+
+    connect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
+}
+
+
 double KoGuideLineDia::pos() const
 {
     return m_position->value();
 }
 
 
+Qt::Orientation KoGuideLineDia::orientation() const
+{
+    Qt::Orientation o = Qt::Horizontal;
+    if ( m_vButton && m_vButton->isChecked() )
+    {
+        o = Qt::Vertical;
+    }
+    return o;
+}
+
+
+void KoGuideLineDia::slotOrientationChanged()
+{
+    if ( m_hButton && m_vButton )
+    {
+        if ( m_hButton->isChecked() )
+        {
+            m_position->setMinValue( QMAX( 0.0, m_rect.top() ) );
+            m_position->setMaxValue( QMAX( 0.0, m_rect.bottom() ) );
+            if ( ! m_positionChanged )
+            {
+                disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
+                m_position->changeValue( m_pos.y() );
+                connect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
+            }
+        }
+        else if ( m_vButton->isChecked() )
+        {
+            m_position->setMinValue( QMAX( 0.0, m_rect.left() ) );
+            m_position->setMaxValue( QMAX( 0.0, m_rect.right() ) );
+            if ( ! m_positionChanged )
+            {
+                disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
+                m_position->changeValue( m_pos.x() );
+                connect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
+            }
+        }
+    }
+}
+
+void KoGuideLineDia::slotPositionChanged()
+{
+    m_positionChanged = true;
+}
 #include "koGuideLineDia.moc"

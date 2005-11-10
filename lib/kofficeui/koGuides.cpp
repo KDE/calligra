@@ -799,6 +799,7 @@ void KoGuides::slotChangePosition()
     {
         guideLine->position = dia.pos();
         paint();
+        emit guideLinesChanged( m_view );
     }
 }
 
