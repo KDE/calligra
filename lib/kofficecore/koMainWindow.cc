@@ -1052,7 +1052,7 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
-    if ( !doc || !doc->isEmpty() )
+    if ( ( !doc  && ( initDocFlags == KoDocument::InitDocFileNew ) ) || ( doc && !doc->isEmpty() ) )
     {
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
@@ -1061,7 +1061,12 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
         return;
     }
 
-    setRootDocument( 0 );
+    if( doc ) {
+        setRootDocument( 0 );
+        delete d->m_rootDoc;
+        d->m_rootDoc = 0;
+    }
+
     newdoc->addShell( this );
     newdoc->showStartUpWidget( this );
 }
