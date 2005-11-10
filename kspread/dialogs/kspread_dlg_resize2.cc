@@ -29,6 +29,7 @@
 #include <knuminput.h>
 
 #include <koUnit.h>
+#include <koUnitWidgets.h>//for KoUnitDoubleSpinBox
 
 #include "kspread_dlg_resize2.h"
 #include <kspread_global.h>

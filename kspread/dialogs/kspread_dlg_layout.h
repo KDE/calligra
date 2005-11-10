@@ -45,6 +45,7 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 
+class KoUnitDoubleSpinBox;
 class QPixmap;
 class QRadioButton;
 class QPushButton;

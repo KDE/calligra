@@ -1514,6 +1514,8 @@ void KSpreadDoc::enableRedo( bool _b )
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double /*zoomY*/ )
 {
+    kdDebug(36001) << "paintContent() called on " << rect << endl;
+
   //  ElapsedTime et( "KSpreadDoc::paintContent1" );
     //kdDebug(36001) << "KSpreadDoc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
