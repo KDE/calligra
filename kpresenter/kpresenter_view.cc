@@ -252,10 +252,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     notebar = 0;
     splitter = 0;
     pageBase = 0;
-    sticky = FALSE;
-    protect = FALSE;
-    keepRatio = FALSE;
-    protectContent = FALSE;
     m_canvas = 0L;
     m_spell.kospell = 0;
     m_spell.textIterator = 0L;
