@@ -75,6 +75,7 @@ class EditorPrivate
 			insideFill = false;
 			previouslyCollapsedGroupItem = 0;
 			childFormPreviouslyCollapsedGroupItem = 0;
+			slotPropertyChanged_enabled = true;
 		}
 		~EditorPrivate()
 		{
@@ -99,8 +100,10 @@ class EditorPrivate
 		bool doNotSetFocusOnSelection : 1;
 		//! Used in setFocus() to prevent scrolling to previously selected item on mouse click
 		bool justClickedItem : 1;
-		//! paint optim.
+		//! Paint optimization
 		bool insideFill : 1;
+		//! Helper for slotWidgetValueChanged()
+		bool slotPropertyChanged_enabled : 1;
 		//! Helper for changeSet()
 		Set* setListLater_list;
 
@@ -370,6 +373,8 @@ Editor::undo()
 void
 Editor::slotPropertyChanged(Set& set, Property& property)
 {
+	if (!d->slotPropertyChanged_enabled)
+		return;
 	if(&set != d->set)
 		return;
 
@@ -453,8 +458,10 @@ Editor::slotWidgetValueChanged(Widget *widget)
 				 d->sync : (propertySync!=0);
 
 	if(sync) {
+		d->slotPropertyChanged_enabled = false;
 		widget->property()->setValue(value);
 		showUndoButton( widget->property()->isModified() );
+		d->slotPropertyChanged_enabled = true;
 	}
 
 	d->insideSlotValueChanged = false;
