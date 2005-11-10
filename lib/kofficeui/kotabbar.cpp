@@ -230,10 +230,10 @@ void KoTabBarPrivate::layoutTabs()
         }
 
         lastTab = tabRects.count();
-        for( unsigned i = 0; i < tabRects.count(); i++ )
-            if( tabRects[i].right() < 0 )
+        for( unsigned i = tabRects.count()-1; i>0; i-- )
+            if( tabRects[i].left() > 0 )
             {
-                lastTab = i;
+                lastTab = i+1;
                 break;
             }
     }    
