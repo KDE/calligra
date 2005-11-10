@@ -90,18 +90,18 @@ public:
      */
     bool reverseLayout() const;
     
-    /*
+    /**
      * Returns all the tab as list of strings.
      */
     QStringList tabs() const;
 
-    /*
+    /**
      * Returns number of tabs.
      * This is the same as KoTabBar::tabs().count()
      */
     unsigned count() const;
 
-    /*
+    /**
      * Returns the active tab.
      */
     QString activeTab() const;
