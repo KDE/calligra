@@ -2524,7 +2524,9 @@ void KoDocument::deleteOpenPane()
 {
     if( d->m_startUpWidget ) {
         d->m_startUpWidget->hide();
-        QTimer::singleShot(0, this, SIGNAL(deleteOpenPaneDelayed()));
+        QTimer::singleShot(1000, this, SLOT(deleteOpenPaneDelayed()));
+
+        kdDebug() << "Shell: " << shells().getFirst() << endl;
         shells().getFirst()->setRootDocument( this );
     }
 }

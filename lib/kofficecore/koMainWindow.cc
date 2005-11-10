@@ -1044,30 +1044,26 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
 {
     KoDocument* doc = rootDocument();
     KoDocument *newdoc = createDoc();
+
     if ( !newdoc )
         return;
+
+    //FIXME: This needs to be handled differently
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    if ( !newdoc->initDoc( (KoDocument::InitDocFlags)initDocFlags, this ) )
-    {
-        delete newdoc;
-        // See cancelQuits() in KoTemplateChooseDia.
-        // The quit() must be done here so that the KoDocument got deleted already.
-        bool onlyDoc = !KoDocument::documentList() || KoDocument::documentList()->isEmpty();
-        bool onlyMainWindow = !KMainWindow::memberList || KMainWindow::memberList->count() <= 1;
-        if ( onlyDoc && onlyMainWindow && kapp->instanceName() != "koshell" ) {
-            kapp->quit();
-        }
-        return;
-    }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    if ( doc && !doc->isEmpty() )
+
+    if ( !doc || !doc->isEmpty() )
     {
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
-        s->setRootDocument( newdoc );
+        newdoc->addShell( s );
+        newdoc->showStartUpWidget( s );
         return;
     }
-    setRootDocument( newdoc );
+
+    setRootDocument( 0 );
+    newdoc->addShell( this );
+    newdoc->showStartUpWidget( this );
 }
 
 void KoMainWindow::slotFileNew()
