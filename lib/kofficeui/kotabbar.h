@@ -120,6 +120,11 @@ public:
      */
     bool canScrollForward() const;
 
+    /**
+     * Ensures that specified tab is visible.
+     */
+    void ensureVisible( const QString& tab );
+
 public slots:
 
     /**

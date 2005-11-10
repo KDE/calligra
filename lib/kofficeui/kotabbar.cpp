@@ -555,6 +555,26 @@ void KoTabBar::scrollLast()
     update();
 }
 
+void KoTabBar::ensureVisible( const QString& tab )
+{
+    int i = d->tabs.findIndex( tab );
+    if ( i == -1 )
+        return;
+    i++;
+
+    // already visible, then do nothing
+    if( ( i >= d->firstTab ) && ( i <= d->lastTab ) )
+      return;
+
+    if( i < d->firstTab )
+        while( i < d->firstTab )
+            scrollBack();
+
+    if( i > d->lastTab )
+        while( i > d->lastTab )
+            scrollForward();
+}
+
 void KoTabBar::moveTab( unsigned tab, unsigned target )
 {
     QString tabName = d->tabs[ tab ];
