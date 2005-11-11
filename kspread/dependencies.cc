@@ -594,8 +594,15 @@ QValueList<Point> DependencyList::leadingCells (const Range &range) const
 RangeList DependencyList::computeDependencies (const Point &cell) const
 {
   Cell *c = cell.cell();
+
+  // Not a formula -> no dependencies
   if (!c->isFormula())
-    return RangeList();   //not a formula -> no dependencies
+    return RangeList();
+
+  // Broken formula -> meaningless dependencies
+  // (tries to avoid c->formula() being null)
+  if (c->hasError())
+    return RangeList();
 
   Tokens tokens = c->formula()->tokens();
 
