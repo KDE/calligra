@@ -20,6 +20,7 @@
 
 #include "highlight_range.h"
 
+
 using namespace KSpread;
 
 HighlightRange::HighlightRange(const HighlightRange& rhs)
@@ -46,3 +47,5 @@ void HighlightRange::getRange(Range& rg)
         rg=Range(*_firstCell,*_firstCell);
     }
 }
+
+

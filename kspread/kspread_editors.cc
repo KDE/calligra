@@ -71,11 +71,14 @@ CellEditor::~CellEditor()
 
 /********************************************
  *
- * KSpreadTextEditorHighlighter
+ * FormulaEditorHighlighter
  *
  ********************************************/
 
-TextEditorHighlighter::TextEditorHighlighter(QTextEdit* textEdit, Sheet* sheet)
+namespace KSpread
+{
+FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit,Sheet* sheet)
+
   : QSyntaxHighlighter(textEdit) , _sheet(sheet), _refsChanged(true)
 {
   _colors.push_back(Qt::red);
@@ -88,7 +91,8 @@ TextEditorHighlighter::TextEditorHighlighter(QTextEdit* textEdit, Sheet* sheet)
   _colors.push_back(Qt::darkYellow);
 }
 
-bool TextEditorHighlighter::referencesChanged()
+
+bool FormulaEditorHighlighter::referencesChanged()
 {
   bool result=_refsChanged;
   _refsChanged=false;
@@ -170,14 +174,14 @@ Cell* TextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
   return 0;
 }*/
 
-void TextEditorHighlighter::getReferences(std::vector<HighlightRange>* cellRefs)
+void FormulaEditorHighlighter::getReferences(std::vector<KSpread::HighlightRange>* cellRefs)
 {
   if (!cellRefs)
     return;
 
   for (unsigned int i=0;i<_refs.size();i++)
   {
-    HighlightRange hc;
+    KSpread::HighlightRange hc;
 
     //Is this a single point or a range of cells?
     if (_refs[i].find(':') == -1)
@@ -210,7 +214,8 @@ void TextEditorHighlighter::getReferences(std::vector<HighlightRange>* cellRefs)
   }
 }
 
-int TextEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
+
+int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
 {
   _refs.clear();
   _refsChanged=true;
@@ -292,6 +297,7 @@ int TextEditorHighlighter::highlightParagraph(const QString& text, int /* endSta
   }
 
   return 0;
+}
 }
 
 /********************************************
@@ -413,11 +419,14 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
  *
  ********************************************/
 
-TextEditor::TextEditor( Cell* _cell, Canvas* _parent, const char* _name )
+
+TextEditor::TextEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, const char* _name )
   : CellEditor( _cell, _parent, _name ),
+  
     m_sizeUpdate(false),
     m_length(0),
-    m_fontLength(0)
+    m_fontLength(0),
+    m_captureAllKeyEvents(captureAllKeyEvents)
 
 {
  // m_pEdit = new KLineEdit( this );
@@ -431,7 +440,7 @@ TextEditor::TextEditor( Cell* _cell, Canvas* _parent, const char* _name )
   m_pEdit->setLineWidth(0);
   m_pEdit->installEventFilter( this );
 
-  m_highlighter=new TextEditorHighlighter(m_pEdit,cell()->sheet());
+  m_highlighter=new FormulaEditorHighlighter(m_pEdit,cell()->sheet());
 
   functionCompletion = new FunctionCompletion( this );
   functionCompletionTimer = new QTimer( this );
@@ -910,7 +919,10 @@ bool TextEditor::eventFilter( QObject* o, QEvent* e )
         // forward Left/Right keys - so that pressing left/right in this
         // editor leaves editing mode ... otherwise editing is annoying
         // left/right arrows still work with the F2-editor.
-        if ((k->key() == Qt::Key_Left) || (k->key() == Qt::Key_Right)) {
+        
+        // Forward left & right arrows to parent, unless this editor has been set to capture arrow key events
+        // Changed to this behaviour for consistancy with OO Calc & MS Office.
+        if ( ((k->key() == Qt::Key_Left) || (k->key() == Qt::Key_Right)) && (!m_captureAllKeyEvents)) {
           QApplication::sendEvent (parent(), e);
           return true;
         }

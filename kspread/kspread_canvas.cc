@@ -914,12 +914,17 @@ bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector<Hi
 	return result;
 }
 
+
+/*void KSpreadCanvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
+
 void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
+
 {
 	if (!range) return;
 	if (!d->cellEditor) return;
 	if (!d->editWidget) return;
 
+	//Normalise the area because 'negative' ranges (eg: B1:A1) are not valid.
 	QRect normArea=newArea.normalize();
 
 	if ( (normArea.right() > KS_colMax) || (normArea.bottom() > KS_rowMax) )
@@ -943,8 +948,8 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 	int refSeparator=oldRangeRef.find(":");
 
 	QString oldPointRef=oldRangeRef.mid(refSeparator+1);
-	//if ( (rg.range.width()==1) && (rg.range.height()==1) )
-	//	oldPointRef=oldRangeRef.mid(refSeparator+1);
+	
+
 
 	//Adjust range to fit new area selected by user
 	rg.setRange(normArea);
@@ -955,12 +960,14 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 	if ( (rg.range.width()==1) && (rg.range.height()==1) )
 		newRangeRef.remove(0,newRangeRef.find(":")+1);
 
-	kdDebug() << "Old Range Ref - " << oldRangeRef << " -- New Range Ref - " << newRangeRef << endl;
+	//kdDebug() << "Old Range Ref - " << oldRangeRef << " -- New Range Ref - " << newRangeRef << endl;
 
 	QString formulaText=d->cellEditor->text();
 
 	int pos=formulaText.find(oldRangeRef);
 	int pointPos=formulaText.find(oldPointRef);
+	int cellEditorCursorPos=d->cellEditor->cursorPosition();
+	int canvasEditWidgetCursorPos=d->editWidget->cursorPosition();
 
 	while ( (pos != -1) || (pointPos != -1))
 	{
@@ -1009,8 +1016,15 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 	}
 
 	d->cellEditor->setText(formulaText);
+	d->cellEditor->setCursorPosition(cellEditorCursorPos);
+
 	d->editWidget->setText(formulaText);
-}
+	d->editWidget->setCursorPosition(canvasEditWidgetCursorPos);
+
+<<<<<<< .mine
+	
+}*/
+
 
 void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 {
@@ -1065,7 +1079,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 	  QRect newRange;
 	  newRange.setCoords(rg.range.left(),rg.range.top(),col,row);
 
-	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
+//	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
 
 	  setCursor(Qt::SizeFDiagCursor);
 
@@ -1645,7 +1659,7 @@ void Canvas::chooseMousePressEvent( QMouseEvent * _ev )
 void Canvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
   if ( d->view->koDocument()->isReadWrite() && activeSheet() )
-    createEditor();
+    createEditor(true);
 }
 
 void Canvas::wheelEvent( QWheelEvent* _ev )
@@ -3171,17 +3185,18 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
   setFocus();
 }
 
-void Canvas::createEditor()
+
+void Canvas::createEditor(bool captureArrowKeys)
 {
   Cell * cell = activeSheet()->nonDefaultCell( markerColumn(), markerRow(), false );
 
-  if ( !createEditor( CellEditor ) )
+  if ( !createEditor( CellEditor , true , captureArrowKeys ) )
       return;
   if ( cell )
       d->cellEditor->setText( cell->text() );
 }
 
-bool Canvas::createEditor( EditorType ed, bool addFocus )
+bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 {
   Sheet * sheet = activeSheet();
   if ( !d->cellEditor )
@@ -3195,7 +3210,8 @@ bool Canvas::createEditor( EditorType ed, bool addFocus )
     {
       d->editWidget->setEditMode( true );
 
-      d->cellEditor = new TextEditor( cell, this );
+      d->cellEditor = new TextEditor( cell, this, captureArrowKeys );
+
     }
 
     double w, h;

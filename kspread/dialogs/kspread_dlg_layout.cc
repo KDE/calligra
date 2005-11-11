@@ -869,7 +869,7 @@ void CellFormatDialog::init()
   }
 
   tab = new QTabDialog( (QWidget*)m_pView, 0L, true );
-  tab->setGeometry( tab->x(), tab->y(), 420, 400 );
+  //tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
   if ( m_style )
   {
@@ -902,6 +902,8 @@ void CellFormatDialog::init()
   tab->setOkButton( i18n( "&OK" ) );
 
   tab->setCaption( i18n( "Cell Format" ) );
+
+  tab->adjustSize();
 
   connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
 

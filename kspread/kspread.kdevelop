@@ -16,7 +16,7 @@
 It is part of the KOffice project</description>
     <ignoreparts/>
     <secondaryLanguages/>
-    <versioncontrol>kdevcvsservice</versioncontrol>
+    <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevfileview>
     <groups>
@@ -74,12 +74,12 @@ It is part of the KOffice project</description>
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>../libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <dbgshell></dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -107,14 +107,14 @@ It is part of the KOffice project</description>
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
     </make>
     <run>
-      <directoryradio>build</directoryradio>
-      <customdirectory>/</customdirectory>
-      <mainprogram>kspread</mainprogram>
-      <programargs/>
+      <directoryradio>custom</directoryradio>
+      <customdirectory>/usr/bin/kspread/</customdirectory>
+      <mainprogram>/usr/bin/kspread</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -161,11 +161,9 @@ It is part of the KOffice project</description>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
-    <references>
-      <pcs>Qt</pcs>
-    </references>
+    <references/>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -193,7 +191,16 @@ It is part of the KOffice project</description>
     <revertoptions>-C</revertoptions>
   </kdevcvsservice>
   <ctagspart>
-    <customArguments/>
-    <customTagfilePath/>
+    <customArguments></customArguments>
+    <customTagfilePath></customTagfilePath>
   </ctagspart>
+  <kdevvisualadvance>
+    <emulator>VisualBoyAdvance</emulator>
+    <binary></binary>
+    <addOptions></addOptions>
+    <terminal>false</terminal>
+    <fullscreen>false</fullscreen>
+    <graphicFilter>-f0</graphicFilter>
+    <scaling>-1</scaling>
+  </kdevvisualadvance>
 </kdevelop>

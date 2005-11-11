@@ -2500,7 +2500,8 @@ void View::autoSum()
 
   rg.range=sel;
 
-    d->canvas->createEditor( Canvas::CellEditor );
+  d->canvas->createEditor( Canvas::CellEditor , true , true );
+
 
   if ( (rg.range.isValid() ) && (!rg.range.isEmpty()) )
   {
@@ -4741,7 +4742,7 @@ void View::editCell()
   if ( d->canvas->editor() )
     return;
 
-  d->canvas->createEditor();
+  d->canvas->createEditor(true);
 }
 
 bool View::showSheet(const QString& sheetName) {

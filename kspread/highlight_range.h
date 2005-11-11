@@ -25,8 +25,10 @@
 
 #include "kspread_util.h"
 
+
 namespace KSpread
 {
+
 /**
  * Holds information about a range of cells to be highlighted (ie. a coloured border is to be
  * drawn around them).  This is used to highlight areas on the sheet which are referenced in
@@ -42,6 +44,11 @@ class HighlightRange
         * have no area associated with it and its color will be set to black.
         */
         HighlightRange() : _firstCell(0),_lastCell(0),_color(QColor(0,0,0)) {}
+
+	/**
+	* Creates a copy of a HighlightRange.  The new object will have the same range and
+	* colour as the existing HighlightRange.
+	*/
         HighlightRange(const HighlightRange& rhs);
 
         virtual ~HighlightRange() {delete _firstCell; delete _lastCell;
@@ -57,12 +64,19 @@ class HighlightRange
 
         /**
         * Sets the first cell in the range
+	*
+	* @param fc A KSpreadPoint object containing the co-ordinates (in rows and columns)
+	* of the first cell in the highlighted range.
         */
         void setFirstCell(Point* fc) {_firstCell=fc;}
         Point* firstCell() {return _firstCell;}
 
         /**
         * Sets the last cell in the range.
+	*
+	* @param lc A KSpreadPoint object containing the co-ordinates (in rows and columns) of 
+	* the last cell in the highlighted range.  This pointer can be null, in which case
+	* only the first cell (set with @ref setFirstCell ) will be highlighted
         */
         void setLastCell(Point* lc) {_lastCell=lc;}
         Point* lastCell() {return _lastCell;}
@@ -73,11 +87,22 @@ class HighlightRange
         void setColor(QColor& clr) {_color=clr;}
         QColor color() {return _color;}
 
+	/**
+	* Convenience function to change the area of a highlighted range.  This will cause an areaChanged() signal to be emitted.
+	* @param newArea The area in rows and columns that the range should occupy.  
+	*/
+	void setArea(const QRect& newArea);
+
+    signals:
+	/** Emitted when the area of the range has been changed via a call to @ref setArea.*/
+	void areaChanged(Sheet* sheet, QRect& oldArea, QRect& newArea);
+
     protected:
         Point* _firstCell; //First cell in range, will either be in same row or same col as last cell
         Point* _lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells
         QColor   _color; //Colour to highlight this range with
 };
+
 
 } // namespace KSpread
 

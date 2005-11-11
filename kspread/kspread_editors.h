@@ -30,6 +30,7 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 
+
 class KTextEdit;
 class QFont;
 class QButton;
@@ -44,6 +45,7 @@ class Canvas;
 class View;
 class TextEditor;
 class LocationEditWidget;
+
 
 class CellEditor : public QWidget
 {
@@ -77,42 +79,31 @@ private:
 	Colours cell references in formulas.  Installed by TextEditor instances in
 	the constructor.
  */
-class TextEditorHighlighter : public QSyntaxHighlighter
+class FormulaEditorHighlighter : public QSyntaxHighlighter
 {
 	//Q_OBJECT
 
 	public:
 	/**
-	 *	Constructs a TextEditorHighlighter to colour-code cell references in a QTextEdit.
+	 * Constructs a KSpreadTextEditorHighlighter to colour-code cell references in a QTextEdit.
 	 *
-	 *	@param textEdit The QTextEdit widget which the highlighter should operate on
-	 *	@param sheet The active Sheet object
+	 * @param textEdit The QTextEdit widget which the highlighter should operate on
+	 * @param sheet The active KSpreadSheet object
 	 */
-		TextEditorHighlighter(QTextEdit* textEdit,Sheet* sheet);
-		virtual ~TextEditorHighlighter(){}
+		FormulaEditorHighlighter(QTextEdit* textEdit,Sheet* sheet);
+		virtual ~FormulaEditorHighlighter(){}
+
 
 	/**
-		 *	Called automatically by KTextEditor to highlight text when modified.
-	 */
+	* Called automatically by KTextEditor to highlight text when modified.
+	*/
 		virtual int highlightParagraph(const QString& text, int endStateOfLastPara);
-
-	/*
-		 *	Overload of cellRefAt(pos), outCellColor receives the colour of the text at the specified position
-		 *	@param pos Position of the cell reference in the text.  This can be next to or in any of the characters that make up the
-		 *	reference.
-		 *	@param outCellColor Set to the colour of the cell reference in the QTextEdit widget which the highlighter is installed on.
-
-		Cell* cellRefAt(int pos, QColor& outCellColor);
-	//Returns the cell reference at a given position in the text
-		Cell* cellRefAt(int pos) {QColor clr;return cellRefAt(pos,clr);}  */
-
+		
 	/**
-		 *	Gets information about the references found in the formula (cell,colour)
-		 *	@param ranges A vector containing HighlightRage elements.  Information about the references found in the formula
-		 *	will be added to the end of the vector.
-	 */
-
-		void getReferences(std::vector<HighlightRange>* ranges);
+	*
+	*
+	*/
+		void getReferences(std::vector<KSpread::HighlightRange>* ranges);
 
 
 	/**	Set spread sheet used for cell reference checking
@@ -122,9 +113,9 @@ class TextEditorHighlighter : public QSyntaxHighlighter
 		Sheet* sheet() {return _sheet;}
 
 	/**
-		 *	Returns true if the cell references in the formula have changed since the last call
-		 *	to referencesChanged().
-		 *	The first call always returns true.
+	*	Returns true if the cell references in the formula have changed since the last call
+	*	to referencesChanged().
+	*	The first call always returns true.
 	 */
 		bool referencesChanged();
 
@@ -145,18 +136,36 @@ class TextEditorHighlighter : public QSyntaxHighlighter
 		bool _refsChanged;
 };
 
-// for autocompletion of function name
 
+/**
+* Provides autocompletition facilities in formula editors.
+* When the user types in the first few characters of a function name in a @ref KSpreadTextEditor which has a @ref FunctionCompletion
+* object installed on it, the @ref FunctionCompletion object creates and displays a list of possible names which the user can select from.
+* If the user selects a function name from the list, the @ref selectedCompletion signal is emitted
+*/
 class FunctionCompletion : public QObject
 {
     Q_OBJECT
   
 public:
+
     FunctionCompletion( TextEditor* editor );
     ~FunctionCompletion();
     
+    /**
+    * Handles various keyboard and mouse actions which may occur on the autocompletion popup list
+    */
     bool eventFilter( QObject *o, QEvent *e );
+    
+    /**
+    * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
+    */
     void doneCompletion();
+    
+    /**
+    * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.
+    * @param choices A list of possible function names which match the characters that the user has already entered.
+    */
     void showCompletion( const QStringList &choices );
     
 signals:
@@ -174,8 +183,17 @@ class TextEditor : public CellEditor
 {
     Q_OBJECT
 public:
-    TextEditor( Cell*, Canvas* _parent = 0, const char* _name = 0 );
+
+    /**
+    * Creates a new KSpreadTextEditor.
+    * @param cell The spreadsheet cell to associate the cell text editor with
+    * @param _parent The @ref KSpreadCanvas object to associate this cell text editor with
+    * @param captureAllKeyEvents Controls whether or not the text editor swallows arrow key events or sends them to the parent canvas instead.  If this is set to true, pressing the arrow keys will navigate backwards and forwards through the text in the editor.  If it is false, the key events will be sent to the parent canvas which will change the cell being edited (depending on the direction of the arrow pressed).  Generally this should be set to true if the user double clicks on the cell to edit it, and false if the user initiates editing by typing whilst the cell is selected.
+    * @param _name This parameter is sent to the QObject constructor
+    */
+    TextEditor( KSpread::Cell* cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
     ~TextEditor();
+
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev );
     virtual void handleIMEvent( QIMEvent * _ev );
@@ -224,12 +242,15 @@ private:
    // KLineEdit* m_pEdit;
 	KTextEdit* m_pEdit;
 
+    bool m_captureAllKeyEvents;
     bool m_blockCheck;
     bool m_sizeUpdate;
     uint m_length;
     int  m_fontLength;
 
-    TextEditorHighlighter* m_highlighter;
+
+    FormulaEditorHighlighter* m_highlighter;
+
 
     FunctionCompletion* functionCompletion;
     QTimer* functionCompletionTimer;

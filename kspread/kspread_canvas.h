@@ -55,6 +55,7 @@ class KoRect;
 
 namespace KSpread
 {
+
 class Cell;
 class EditWidget;
 class Canvas;
@@ -69,9 +70,9 @@ class Selection;
 class CellEditor;
 class LocationEditWidget;
 class ComboboxLocationEditWidget;
-
-class CanvasPrivate;
 class HighlightRange;
+class CanvasPrivate;
+
 
 /**
  * The canvas builds a part of the GUI of KSpread.
@@ -209,8 +210,8 @@ public:
      * Chooses the correct EditorType by looking at
      * the current cells value. By default CellEditor is chosen.
      */
-    void createEditor();
-    bool createEditor( EditorType type, bool addFocus = true );
+    void createEditor( bool captureArrowKeys=false );
+    bool createEditor( EditorType type, bool addFocus = true, bool captureArrowKeys=false );
     /**
      * Deletes the current cell editor.
      *
@@ -289,16 +290,8 @@ public:
     void setHighlightedRanges(std::vector<HighlightRange>* ranges);
     
     
-    
-    /**
-    * Resizes a highlighted range, and updates the text in the formula edit box accordingly.
-    *
-    * @param range Highlighted range to be resized.  References to this range in the formula edit
-    * box will be changed accordingly.
-    * @param newArea The new area for the highlighted range.  @see resizeHighlightedRange 
-    * normalises this area before applying it to @p range.
-    */
-    void resizeHighlightedRange(HighlightRange* range, const QRect& newArea);
+    //Moved this functionality elsewhere --
+    //void resizeHighlightedRange(KSpread::HighlightRange* range, const QRect& newArea);
     
 	
     
