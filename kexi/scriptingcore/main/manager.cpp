@@ -30,6 +30,7 @@
 
 #include <qobject.h>
 #include <kdebug.h>
+#include <kstaticdeleter.h>
 #include <klibloader.h>
 
 extern "C"
@@ -52,7 +53,32 @@ namespace Kross { namespace Api {
             QMap<QString, Module::Ptr> modules;
     };
 
+    /**
+     * Free the static Manager instance if the lib is unloaded or
+     * the app terminates by using the KStaticDeleter template.
+     */
+    static KStaticDeleter<Manager> m_managerdeleter;
+
+    /**
+     * The Manager-singleton instance is NULL by default till the
+     * Manager::scriptManager() method got called first time.
+     */
+    static Manager* m_manager = 0;
+
 }}
+
+Manager* Manager::scriptManager()
+{
+    if(! m_manager) {
+        // Create the Manager-singleton on demand and let the
+        // KStaticDeleter take care of freeing it if not needed
+        // any longer.
+        m_managerdeleter.setObject(m_manager, new Manager());
+    }
+
+    // and finally return the singleton.
+    return m_manager;
+}
 
 Manager::Manager()
     : MainModule("Kross") // the manager has the name "Kross"

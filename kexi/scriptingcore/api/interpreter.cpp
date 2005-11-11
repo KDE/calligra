@@ -116,12 +116,11 @@ Interpreter* InterpreterInfo::getInterpreter()
         // and execute the extern krosspython_instance function.
         m_interpreter = (Interpreter*) (interpreter_func)(this);
         if(! m_interpreter) {
-            //setException( new Exception("Failed to load PythonInterpreter instance from krosspython library.") );
             kdWarning() << "Failed to load the Interpreter instance from library." << endl;
         }
         else {
             // Job done. The library is loaded and our Interpreter* points
-            // to the external Kross::Python::PythonInterpreter* instance.
+            // to the external Kross::Python::Interpreter* instance.
             kdDebug()<<"Successfully loaded Interpreter instance from library."<<endl;
         }
     }

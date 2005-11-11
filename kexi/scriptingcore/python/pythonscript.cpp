@@ -237,6 +237,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
         // Initialize context before execution.
         QString s =
             "import sys\n"
+//"sys.path = __main__.path\n"
             "if self.has(\"stdout\"):\n"
             "  sys.stdout = Redirect( self.get(\"stdout\") )\n"
             "if self.has(\"stderr\"):\n"

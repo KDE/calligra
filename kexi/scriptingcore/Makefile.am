@@ -1,1 +1,2 @@
-SUBDIRS = api kjs main python test
+SUBDIRS = api main python test
+#kjs

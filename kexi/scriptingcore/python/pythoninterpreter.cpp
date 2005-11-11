@@ -40,7 +40,13 @@ extern "C"
      */
     void* krossinterpreter(Kross::Api::InterpreterInfo* info)
     {
-        return new Kross::Python::PythonInterpreter(info);
+        try {
+            return new Kross::Python::PythonInterpreter(info);
+        }
+        catch(Kross::Api::Exception::Ptr e) {
+            kdWarning() << "krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception." << endl;
+        }
+        return 0;
     }
 };
 
@@ -80,19 +86,49 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     // Set name of the program.
     Py_SetProgramName(const_cast<char*>("Kross"));
 
+/*
     // Set arguments.
-    char* comm[0];
-    comm[0] = const_cast<char*>("kross"); // name.
+    //char* comm[0];
+    const char* comm = const_cast<char*>("kross"); // name.
     PySys_SetArgv(1, comm);
+*/
+
+    
+
+    QString path;
+
+    Py::Module sysmod( PyImport_ImportModule("sys"), true );
+    Py::Dict sysmoddict = sysmod.getDict();
+    PyObject* syspath = PyDict_GetItemString(sysmoddict.ptr(), "path");
+    if(syspath && PyList_Check(syspath)) {
+        for(int i = 0; i < PyList_Size(syspath); i++) {
+            PyObject *e = PyList_GetItem(syspath, i);
+            if(e && PyString_Check(e)) {
+                if(path.isEmpty())
+                    path = PyString_AsString(e);
+                else {
+#if defined(Q_WS_WIN)
+                    path += ";"; // win32 delimiter for python sys-paths.
+#else
+                    path += ":";
+#endif
+                    path += PyString_AsString(e);
+                }
+            }
+        }
+    }
+    else
+        path = Py_GetPath();
+
 
     // Set the python path.
     //PySys_SetPath(Py_GetPath());
-    QString path = Py_GetPath();
+//QString path = Py_GetPath();
     QStringList dirs = KGlobal::dirs()->findDirs("appdata", "scripts/kross");
     for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it) {
         path.append(
 #if defined(Q_WS_WIN)
-                ";" // windows delimiter for python sys-paths.
+                ";" // win32 delimiter for python sys-paths.
 #else
                 ":"
 #endif
@@ -118,6 +154,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     // Prepare the interpreter.
     QString s =
         "import sys\n"
+        //"sys.setdefaultencoding('latin-1')\n"
 
         // Dirty hack to get sys.argv defined. Needed for e.g. TKinter.
         "sys.argv = ['']\n"
