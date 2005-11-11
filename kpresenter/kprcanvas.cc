@@ -88,6 +88,9 @@
 #include "pageeffects.h"
 #include <unistd.h>
 
+const int KPrCanvas::MOUSE_SNAP_DISTANCE = 4;
+const int KPrCanvas::KEY_SNAP_DISTANCE = 2;
+
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
 , buffer( size() )
@@ -4517,7 +4520,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
             move -= m_moveSnapDiff;
         }
 
-        KoPoint diff( m_gl.snapToGuideLines( movedRect, 2 ) );
+        KoPoint diff( m_gl.snapToGuideLines( movedRect, KEY_SNAP_DISTANCE ) );
 
         if ( diff != KoPoint( 0, 0 ) )
         {
@@ -4644,7 +4647,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
             move -= m_moveSnapDiff;
         }
 
-        KoPoint diff( m_gl.snapToGuideLines( movedRect, 4 ) );
+        KoPoint diff( m_gl.snapToGuideLines( movedRect, MOUSE_SNAP_DISTANCE ) );
 
         if ( diff != KoPoint( 0, 0 ) )
         {
@@ -5536,7 +5539,7 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos )
     }
     else if ( snapToGuideLines && !snapToGrid )
     {
-        sp += m_gl.snapToGuideLines( pos, 4 );
+        sp += m_gl.snapToGuideLines( pos, MOUSE_SNAP_DISTANCE );
     }
     else if ( snapToGrid && snapToGuideLines )
     {

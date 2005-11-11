@@ -713,6 +713,10 @@ private slots:
     void slotDoPageEffect();
 
 private:
+    /// Distance for snapping to guide line with mouse 
+    static const int MOUSE_SNAP_DISTANCE;
+    /// Distance for snapping to guide line with key 
+    static const int KEY_SNAP_DISTANCE;
     // variables
     /// Popup menu used in presentation mode.
     KPopupMenu *m_presMenu;
