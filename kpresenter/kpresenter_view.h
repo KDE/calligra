@@ -206,7 +206,6 @@ public slots:
 
     void viewGrid();
 
-    void viewGridToFront();
     void viewSnapToGrid();
 
     // insert menu
@@ -921,8 +920,6 @@ private:
     KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewShowGrid;
     KToggleAction *actionViewSnapToGrid;
-    KToggleAction *actionViewGridToFront;
-
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;

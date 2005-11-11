@@ -318,13 +318,10 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
                 else
                     selectionMode = SM_NONE;
 
-                if ( doc->showGrid() && !doc->gridToFront() || ( !doc->showGrid() && doc->snapToGrid() && ( toolEditMode != TEM_MOUSE || m_isMoving || m_isResizing ) ) )
-                    drawGrid( &bufPainter, crect);
+                if ( doc->showGrid() )
+                    drawGrid( &bufPainter, crect );
 
                 drawEditPage( &bufPainter, crect, page, selectionMode );
-
-                if ( doc->showGrid() && doc->gridToFront())
-                    drawGrid( &bufPainter, crect);
             }
             else
             {
@@ -1238,8 +1235,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_activePage->repaintObj();
             }
             m_isMoving = false;
-            if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-                repaint( false );
         }
             break;
         case MT_RESIZE_UP:
@@ -1501,16 +1496,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     {
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
-                        if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-                          repaint( false );
                     }
                     moveObjectsByMouse( docPoint );
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     if ( !m_isResizing )
                     {
                       m_isResizing = true;
-                      if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-                        repaint( false );
                     }
 
                     KoPoint sp( snapPoint( docPoint ) );
@@ -1993,8 +1984,6 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                         m_isResizing = false;
                         mousePressed = false;
                         modType = MT_NONE;
-                        if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-                            repaint( false );
                         return;
                       }
                       case MT_MOVE:
@@ -2007,8 +1996,6 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                           mousePressed = false;
                           modType = MT_NONE;
                           m_isMoving = false;
-                          if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-                            repaint( false );
                           return;
                         }
                         break;
@@ -3795,8 +3782,6 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
 
     if ( updateView )
         m_view->setTool( toolEditMode );
-    if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-        repaint();
 }
 
 
@@ -4880,10 +4865,7 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
         m_ratio = 0.0;
         m_keepRatio = false;
         m_isResizing = false;
-        if ( !m_view->kPresenterDoc()->showGrid() && m_view->kPresenterDoc()->snapToGrid() )
-          repaint( false );
-        else
-          _repaint( m_resizeObject );
+        _repaint( m_resizeObject );
         m_resizeObject = NULL;
     }
 }

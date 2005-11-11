@@ -47,7 +47,6 @@
   <Separator/>
   <Action name="view_guidelines"/>
   <Action name="view_grid"/>
-  <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
   <Action name="view_zoom"/>
@@ -281,7 +280,6 @@
   <Action name="view_guidelines"/>
   <Action name="add_guideline"/>
   <Action name="view_grid"/>
-  <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
   <Action name="insert_page_popup"/>

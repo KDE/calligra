@@ -2290,10 +2290,6 @@ void KPresenterView::setupActions()
                                             actionCollection(), "view_grid" );
     actionViewShowGrid->setCheckedState(i18n("Hide &Grid"));
 
-    actionViewGridToFront= new KToggleAction( i18n( "Grid to Front" ), 0,
-                                              this, SLOT( viewGridToFront() ),
-                                              actionCollection(), "view_gridtofront" );
-
     actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
                                              this, SLOT(viewSnapToGrid() ),
                                              actionCollection(), "view_snaptogrid" );
@@ -5597,14 +5593,6 @@ void KPresenterView::viewGrid()
     m_pKPresenterDoc->repaint(false);
 }
 
-void KPresenterView::viewGridToFront()
-{
-    m_pKPresenterDoc->setGridToFront( actionViewGridToFront->isChecked() );
-    m_pKPresenterDoc->setModified( true );
-    m_pKPresenterDoc->updateGridButton();
-    m_pKPresenterDoc->repaint(false);
-}
-
 
 void KPresenterView::updateGuideLineButton()
 {
@@ -5616,7 +5604,6 @@ void KPresenterView::updateGuideLineButton()
 void KPresenterView::updateGridButton()
 {
     actionViewShowGrid->setChecked( m_pKPresenterDoc->showGrid() );
-    actionViewGridToFront->setChecked ( m_pKPresenterDoc->gridToFront() );
     actionViewSnapToGrid->setChecked ( m_pKPresenterDoc->snapToGrid() );
 }
 

@@ -445,10 +445,6 @@ class KPresenterDoc : public KoDocument
     double getGridY()const { return m_gridY; }
     void setGridY(double _y) { m_gridY=_y; }
 
-
-    bool gridToFront() const { return m_bGridToFont; }
-    void setGridToFront( bool _front ) { m_bGridToFont = _front; }
-
     bool snapToGrid() const { return m_bSnapToGrid; }
     void setSnapToGrid( bool _b ) { m_bSnapToGrid = _b; }
 
@@ -669,7 +665,6 @@ protected:
 
     bool m_bShowGrid;
 
-    bool m_bGridToFont;
     bool m_bSnapToGrid;
     double m_indent; // in pt
 

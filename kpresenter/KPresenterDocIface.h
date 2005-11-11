@@ -155,9 +155,6 @@ k_dcop:
     double gridY() const;
     void setGridY(double _y);
 
-    bool gridToFront() const;
-    void setGridToFront( bool _front );
-
     bool configAutoSuperScript() const;
     void setConfigAutoSuperScript( bool b);
 

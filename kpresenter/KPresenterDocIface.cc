@@ -487,19 +487,6 @@ void KPresenterDocIface::setGridY(double _y)
         doc->repaint( false );
 }
 
-bool KPresenterDocIface::gridToFront() const
-{
-    return doc->gridToFront();
-}
-
-void KPresenterDocIface::setGridToFront( bool _front )
-{
-    doc->setGridToFront( _front);
-    doc->updateGridButton();
-    if( showGrid() )
-        doc->repaint( false );
-}
-
 bool KPresenterDocIface::configAutoSuperScript() const
 {
     return doc->getAutoFormat()->getConfigAutoSuperScript();
