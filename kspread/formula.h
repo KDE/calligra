@@ -293,11 +293,11 @@ class Formula
     KSpreadValue eval() const;
     
     /*
-     * Given an expression, this static function separates it into tokens.
+     * Given an expression, this function separates it into tokens.
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */     
-    static Tokens scan( const QString& expr, KLocale* locale = 0 );
+    Tokens scan( const QString& expr, KLocale* locale = 0 ) const;
 
     QString dump() const;
 

@@ -385,8 +385,17 @@ KSpreadSheet::KSpreadSheet (KSpreadMap* map,
   }
   d->print = new KSpreadSheetPrint( this );
 
-  //initialize dependencies
+  // initialize dependencies
   d->dependencies = new KSpread::DependencyManager (this);
+  
+  // connect to named area slots
+  QObject::connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ),
+    this, SLOT( slotAreaModified( const QString & ) ) );
+
+  QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), 
+    this, SLOT( slotAreaModified( const QString & ) ) );
+
+
 }
 
 QString KSpreadSheet::sheetName() const
@@ -712,10 +721,10 @@ int KSpreadSheet::leftColumn( double _xpos, double &_left,
     {
         // Should never happen
         if ( col >= KS_colMax )
-	{
-	    kdDebug(36001) << "KSpreadSheet:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
-	    return KS_colMax + 1; //Return out of range value, so other code can react on this
-	}
+  {
+      kdDebug(36001) << "KSpreadSheet:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
+      return KS_colMax + 1; //Return out of range value, so other code can react on this
+  }
         _left += columnFormat( col )->dblWidth( _canvas );
         col++;
         x += columnFormat( col )->dblWidth( _canvas );
@@ -735,10 +744,10 @@ int KSpreadSheet::rightColumn( double _xpos, const KSpreadCanvas *_canvas ) cons
     {
         // Should never happen
         if ( col > KS_colMax )
-	{
-	    kdDebug(36001) << "KSpreadSheet:rightColumn: invalid column (col: " << col << ")" << endl;
+  {
+      kdDebug(36001) << "KSpreadSheet:rightColumn: invalid column (col: " << col << ")" << endl;
             return KS_colMax + 1; //Return out of range value, so other code can react on this
-	}
+  }
         x += columnFormat( col )->dblWidth( _canvas );
         col++;
     }
@@ -852,10 +861,10 @@ int KSpreadSheet::bottomRow( double _ypos, const KSpreadCanvas *_canvas ) const
     {
         // Should never happen
         if ( row > KS_rowMax )
-	{
-	    kdDebug(36001) << "KSpreadSheet:bottomRow: invalid row (row: " << row << ")" << endl;
+  {
+      kdDebug(36001) << "KSpreadSheet:bottomRow: invalid row (row: " << row << ")" << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
-	}
+  }
         y += rowFormat( row )->dblHeight( _canvas );
         row++;
     }
@@ -872,10 +881,10 @@ double KSpreadSheet::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) cons
     {
         // Should never happen
         if ( col > KS_colMax )
-	{
-	    kdDebug(36001) << "KSpreadSheet:columnPos: invalid column (col: " << col << ")" << endl;
+  {
+      kdDebug(36001) << "KSpreadSheet:columnPos: invalid column (col: " << col << ")" << endl;
             return x;
-	}
+  }
 
         x += columnFormat( col )->dblWidth( _canvas );
     }
@@ -899,10 +908,10 @@ double KSpreadSheet::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
     {
         // Should never happen
         if ( row > KS_rowMax )
-	{
-	    kdDebug(36001) << "KSpreadSheet:rowPos: invalid row (row: " << row << ")" << endl;
+  {
+      kdDebug(36001) << "KSpreadSheet:rowPos: invalid row (row: " << row << ")" << endl;
             return y;
-	}
+  }
 
         y += rowFormat( row )->dblHeight( _canvas );
     }
@@ -1255,140 +1264,140 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
     bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( !selected )
-	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+  r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
     // create cells in rows if complete columns selected
     Cell *cell;
     if ( !worker.type_B && selected && isColumnSelected() )
     {
-	for ( RowFormat* rw =d->rows.first(); rw; rw = rw->next() )
-	{
-	    if ( !rw->isDefault() && worker.testCondition( rw ) )
-	    {
-		for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
-		{
-		    cell = cellAt( i, rw->row() );
-		    if ( cell == d->defaultCell )
-			// '&& worker.create_if_default' unnecessary as never used in type A
-		    {
-			cell = new Cell( this, i, rw->row() );
-			insertCell( cell );
-		    }
-		}
-	    }
-	}
+  for ( RowFormat* rw =d->rows.first(); rw; rw = rw->next() )
+  {
+      if ( !rw->isDefault() && worker.testCondition( rw ) )
+      {
+    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
+    {
+        cell = cellAt( i, rw->row() );
+        if ( cell == d->defaultCell )
+      // '&& worker.create_if_default' unnecessary as never used in type A
+        {
+      cell = new Cell( this, i, rw->row() );
+      insertCell( cell );
+        }
+    }
+      }
+  }
     }
 
     // create an undo action
     if ( !doc()->undoLocked() )
     {
-	KSpreadUndoAction *undo = worker.createUndoAction( doc(), this, r );
+  KSpreadUndoAction *undo = worker.createUndoAction( doc(), this, r );
         // test if the worker has an undo action
         if ( undo != 0L )
-	    doc()->addCommand( undo );
+      doc()->addCommand( undo );
     }
 
     // complete rows selected ?
     if ( selected && isRowSelected() )
     {
-	int row;
-	for ( Cell* cell = d->cells.firstCell(); cell; cell = cell->nextCell() )
-	{
-	    row = cell->row();
-	    if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-		 && worker.testCondition( cell ) )
-		if ( worker.type_B )
-		    worker.doWork( cell, false, cell->column(), row );
-		else
-		    worker.prepareCell( cell );
-	}
+  int row;
+  for ( Cell* cell = d->cells.firstCell(); cell; cell = cell->nextCell() )
+  {
+      row = cell->row();
+      if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+     && worker.testCondition( cell ) )
+    if ( worker.type_B )
+        worker.doWork( cell, false, cell->column(), row );
+    else
+        worker.prepareCell( cell );
+  }
 
-	if ( worker.type_B ) {
+  if ( worker.type_B ) {
             // for type B there's nothing left to do
-	    if ( worker.emit_signal )
-		emit sig_updateView( this, r );
-	} else {
+      if ( worker.emit_signal )
+    emit sig_updateView( this, r );
+  } else {
             // for type A now work on row formats
-	    for ( int i=m_rctSelection.top(); i<=m_rctSelection.bottom(); i++ )
-	    {
-		RowFormat *rw=nonDefaultRowFormat(i);
-		worker.doWork( rw );
-	    }
-	    if ( worker.emit_signal )
-		emit sig_updateView( this );
-	}
-	return CompleteRows;
+      for ( int i=m_rctSelection.top(); i<=m_rctSelection.bottom(); i++ )
+      {
+    RowFormat *rw=nonDefaultRowFormat(i);
+    worker.doWork( rw );
+      }
+      if ( worker.emit_signal )
+    emit sig_updateView( this );
+  }
+  return CompleteRows;
     }
     // complete columns selected ?
     else if ( selected && isColumnSelected() )
     {
-	int col;
-	for ( Cell* cell = d->cells.firstCell(); cell; cell = cell->nextCell() )
-	{
-	    col = cell->column();
-	    if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-		 && worker.testCondition( cell ) )
-		if ( worker.type_B )
-		    worker.doWork( cell, false, col, cell->row() );
-		else
-		    worker.prepareCell( cell );
-	}
+  int col;
+  for ( Cell* cell = d->cells.firstCell(); cell; cell = cell->nextCell() )
+  {
+      col = cell->column();
+      if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+     && worker.testCondition( cell ) )
+    if ( worker.type_B )
+        worker.doWork( cell, false, col, cell->row() );
+    else
+        worker.prepareCell( cell );
+  }
 
-	if ( worker.type_B ) {
-	    if ( worker.emit_signal )
-		emit sig_updateView( this, r );
-	} else {
-	    // for type A now work on column formats
-	    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
-	    {
-		ColumnFormat *cl=nonDefaultColumnFormat(i);
-		worker.doWork( cl );
-	    }
-	    Cell *cell;
-	    for ( RowFormat* rw =d->rows.first(); rw; rw = rw->next() )
-	    {
-		if ( !rw->isDefault() && worker.testCondition( rw ) )
-		{
-		    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
-		    {
-			cell = cellAt( i, rw->row() );
-			// ### this if should be not necessary; cells are created
-			//     before the undo object is created, aren't they?
-			if ( cell == d->defaultCell )
-			{
-			    cell = new Cell( this, i, rw->row() );
-			    insertCell( cell );
-			}
-			worker.doWork( cell, false, i, rw->row() );
-		    }
-		}
-	    }
+  if ( worker.type_B ) {
+      if ( worker.emit_signal )
+    emit sig_updateView( this, r );
+  } else {
+      // for type A now work on column formats
+      for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
+      {
+    ColumnFormat *cl=nonDefaultColumnFormat(i);
+    worker.doWork( cl );
+      }
+      Cell *cell;
+      for ( RowFormat* rw =d->rows.first(); rw; rw = rw->next() )
+      {
+    if ( !rw->isDefault() && worker.testCondition( rw ) )
+    {
+        for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
+        {
+      cell = cellAt( i, rw->row() );
+      // ### this if should be not necessary; cells are created
+      //     before the undo object is created, aren't they?
+      if ( cell == d->defaultCell )
+      {
+          cell = new Cell( this, i, rw->row() );
+          insertCell( cell );
+      }
+      worker.doWork( cell, false, i, rw->row() );
+        }
+    }
+      }
             if ( worker.emit_signal )
-		emit sig_updateView( this );
-	}
-	return CompleteColumns;
+    emit sig_updateView( this );
+  }
+  return CompleteColumns;
     }
     // cell region selected
     else
     {
-	Cell *cell;
-	for ( int x = r.left(); x <= r.right(); x++ )
-	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {
-		cell = cellAt( x, y );
+  Cell *cell;
+  for ( int x = r.left(); x <= r.right(); x++ )
+      for ( int y = r.top(); y <= r.bottom(); y++ )
+      {
+    cell = cellAt( x, y );
                 if ( worker.testCondition( cell ) )
-		{
-		    if ( worker.create_if_default && cell == d->defaultCell )
-		    {
-			cell = new Cell( this, x, y );
-			insertCell( cell );
-		    }
+    {
+        if ( worker.create_if_default && cell == d->defaultCell )
+        {
+      cell = new Cell( this, x, y );
+      insertCell( cell );
+        }
                     if ( cell != d->defaultCell )
-			worker.doWork( cell, true, x, y );
-		}
-	    }
+      worker.doWork( cell, true, x, y );
+    }
+      }
         if ( worker.emit_signal )
-	    emit sig_updateView( this, r );
+      emit sig_updateView( this, r );
         return CellRegion;
     }
 }
@@ -1494,7 +1503,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
       cell = getFirstCellColumn( col );
       while ( cell )
       {
-	if ( worker.testCondition( cell ) )
+  if ( worker.testCondition( cell ) )
         {
           if ( worker.type_B )
             worker.doWork( cell, false, col, cell->row() );
@@ -1579,64 +1588,64 @@ struct SetSelectionFontWorker : public KSpreadSheet::CellWorkerTypeA
     signed char _underline;
     signed char _strike;
     SetSelectionFontWorker( const char *font, int size, signed char bold, signed char italic,signed char underline, signed char strike )
-	: _font( font ), _size( size ), _bold( bold ), _italic( italic ), _underline( underline ), _strike( strike ) { }
+  : _font( font ), _size( size ), _bold( bold ), _italic( italic ), _underline( underline ), _strike( strike ) { }
 
     QString getUndoTitle() { return i18n("Change Font"); }
     bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( Cell::PFont ) );
     }
     void doWork( RowFormat* rw ) {
-	if ( _font )
-	    rw->setTextFontFamily( _font );
-	if ( _size > 0 )
-	    rw->setTextFontSize( _size );
-	if ( _italic >= 0 )
-	    rw->setTextFontItalic( (bool)_italic );
-	if ( _bold >= 0 )
-	    rw->setTextFontBold( (bool)_bold );
-	if ( _underline >= 0 )
-	    rw->setTextFontUnderline( (bool)_underline );
-	if ( _strike >= 0 )
-	    rw->setTextFontStrike( (bool)_strike );
+  if ( _font )
+      rw->setTextFontFamily( _font );
+  if ( _size > 0 )
+      rw->setTextFontSize( _size );
+  if ( _italic >= 0 )
+      rw->setTextFontItalic( (bool)_italic );
+  if ( _bold >= 0 )
+      rw->setTextFontBold( (bool)_bold );
+  if ( _underline >= 0 )
+      rw->setTextFontUnderline( (bool)_underline );
+  if ( _strike >= 0 )
+      rw->setTextFontStrike( (bool)_strike );
     }
     void doWork( ColumnFormat* cl ) {
-	if ( _font )
-	    cl->setTextFontFamily( _font );
-	if ( _size > 0 )
-	    cl->setTextFontSize( _size );
-	if ( _italic >= 0 )
-	    cl->setTextFontItalic( (bool)_italic );
-	if ( _bold >= 0 )
-	    cl->setTextFontBold( (bool)_bold );
-	if ( _underline >= 0 )
-	    cl->setTextFontUnderline( (bool)_underline );
-	if ( _strike >= 0 )
-	    cl->setTextFontStrike( (bool)_strike );
+  if ( _font )
+      cl->setTextFontFamily( _font );
+  if ( _size > 0 )
+      cl->setTextFontSize( _size );
+  if ( _italic >= 0 )
+      cl->setTextFontItalic( (bool)_italic );
+  if ( _bold >= 0 )
+      cl->setTextFontBold( (bool)_bold );
+  if ( _underline >= 0 )
+      cl->setTextFontUnderline( (bool)_underline );
+  if ( _strike >= 0 )
+      cl->setTextFontStrike( (bool)_strike );
     }
     void prepareCell( Cell* cell ) {
-	cell->clearProperty( Cell::PFont );
-	cell->clearNoFallBackProperties( Cell::PFont );
+  cell->clearProperty( Cell::PFont );
+  cell->clearNoFallBackProperties( Cell::PFont );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	if ( _font )
-	    cell->setTextFontFamily( _font );
-	if ( _size > 0 )
-	    cell->setTextFontSize( _size );
-	if ( _italic >= 0 )
-	    cell->setTextFontItalic( (bool)_italic );
-	if ( _bold >= 0 )
-	    cell->setTextFontBold( (bool)_bold );
-	if ( _underline >= 0 )
-	    cell->setTextFontUnderline( (bool)_underline );
-	if ( _strike >= 0 )
-	    cell->setTextFontStrike( (bool)_strike );
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  if ( _font )
+      cell->setTextFontFamily( _font );
+  if ( _size > 0 )
+      cell->setTextFontSize( _size );
+  if ( _italic >= 0 )
+      cell->setTextFontItalic( (bool)_italic );
+  if ( _bold >= 0 )
+      cell->setTextFontBold( (bool)_bold );
+  if ( _underline >= 0 )
+      cell->setTextFontUnderline( (bool)_underline );
+  if ( _strike >= 0 )
+      cell->setTextFontStrike( (bool)_strike );
         if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1658,24 +1667,24 @@ struct SetSelectionSizeWorker : public KSpreadSheet::CellWorkerTypeA {
         return ( rw->hasProperty( Cell::PFont ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setTextFontSize( size + _size) ;
+  rw->setTextFontSize( size + _size) ;
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setTextFontSize( size + _size );
+  cl->setTextFontSize( size + _size );
     }
     void prepareCell( Cell* cell ) {
-	cell->clearProperty( Cell::PFont );
-	cell->clearNoFallBackProperties( Cell::PFont );
+  cell->clearProperty( Cell::PFont );
+  cell->clearNoFallBackProperties( Cell::PFont );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setTextFontSize( size + _size );
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setTextFontSize( size + _size );
         if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1699,21 +1708,21 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
       : KSpreadSheet::CellWorker( false ), _type( type ),  _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
-	return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
+  return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( Cell* c ) {
-	return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
-		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
-		 && !c->isObscuringForced() );
+  return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
+     && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
+     && !c->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int )
     {
-	cell->setDisplayDirtyFlag();
-	if ( _type == -1 )
-	    cell->setCellText( (cell->text().lower()));
-	else if ( _type == 1 )
-	    cell->setCellText( (cell->text().upper()));
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  if ( _type == -1 )
+      cell->setCellText( (cell->text().lower()));
+  else if ( _type == 1 )
+      cell->setCellText( (cell->text().upper()));
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1733,21 +1742,21 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker
       : KSpreadSheet::CellWorker( false ),  _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
-	return   new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
+  return   new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( Cell* c ) {
-	return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
-		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
-		 && !c->isObscuringForced() );
+  return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
+     && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
+     && !c->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int )
     {
 
-	cell->setDisplayDirtyFlag();
-	QString tmp = cell->text();
-	int len = tmp.length();
-	cell->setCellText( (tmp.at(0).upper()+tmp.right(len-1)) );
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  QString tmp = cell->text();
+  int len = tmp.length();
+  cell->setCellText( (tmp.at(0).upper()+tmp.right(len-1)) );
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1764,17 +1773,17 @@ struct SetSelectionVerticalTextWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Vertical Text");
-	return new KSpreadUndoCellFormat( doc, sheet, r, title );
+  return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->setDisplayDirtyFlag();
-	cell->setVerticalText( _b );
-	cell->setMultiRow( false );
-	cell->setAngle( 0 );
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  cell->setVerticalText( _b );
+  cell->setMultiRow( false );
+  cell->setAngle( 0 );
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1792,15 +1801,15 @@ struct SetSelectionCommentWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Add Comment");
-	return new KSpreadUndoCellFormat( doc, sheet, r, title );
+  return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->setDisplayDirtyFlag();
-	cell->setComment( _comment );
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  cell->setComment( _comment );
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1825,27 +1834,27 @@ struct SetSelectionAngleWorker : public KSpreadSheet::CellWorkerTypeA {
         return ( rw->hasProperty( Cell::PAngle ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setAngle( _value );
+  rw->setAngle( _value );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setAngle( _value );
+  cl->setAngle( _value );
     }
     void prepareCell( Cell* cell ) {
-	cell->clearProperty( Cell::PAngle );
-	cell->clearNoFallBackProperties( Cell::PAngle );
+  cell->clearProperty( Cell::PAngle );
+  cell->clearNoFallBackProperties( Cell::PAngle );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setAngle( _value );
-	if ( cellRegion ) {
-	    cell->setVerticalText(false);
-	    cell->setMultiRow( false );
-	    cell->clearDisplayDirtyFlag();
-	}
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setAngle( _value );
+  if ( cellRegion ) {
+      cell->setVerticalText(false);
+      cell->setMultiRow( false );
+      cell->clearDisplayDirtyFlag();
+  }
     }
 };
 
@@ -1861,15 +1870,15 @@ struct SetSelectionRemoveCommentWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Remove Comment");
-	return new KSpreadUndoCellFormat( doc, sheet, r, title );
+  return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->setDisplayDirtyFlag();
-	cell->setComment( "" );
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  cell->setComment( "" );
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1891,24 +1900,24 @@ struct SetSelectionTextColorWorker : public KSpreadSheet::CellWorkerTypeA {
         return ( rw->hasProperty( Cell::PTextPen ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setTextColor( tb_Color );
+  rw->setTextColor( tb_Color );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setTextColor( tb_Color );
+  cl->setTextColor( tb_Color );
     }
     void prepareCell( Cell* cell ) {
-	cell->clearProperty( Cell::PTextPen );
-	cell->clearNoFallBackProperties( Cell::PTextPen );
+  cell->clearProperty( Cell::PTextPen );
+  cell->clearNoFallBackProperties( Cell::PTextPen );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setTextColor( tb_Color );
-	if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setTextColor( tb_Color );
+  if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1929,24 +1938,24 @@ struct SetSelectionBgColorWorker : public KSpreadSheet::CellWorkerTypeA {
         return ( rw->hasProperty( Cell::PBackgroundColor ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setBgColor( bg_Color );
+  rw->setBgColor( bg_Color );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setBgColor( bg_Color );
+  cl->setBgColor( bg_Color );
     }
     void prepareCell( Cell* cell ) {
-	cell->clearProperty( Cell::PBackgroundColor );
-	cell->clearNoFallBackProperties( Cell::PBackgroundColor );
+  cell->clearProperty( Cell::PBackgroundColor );
+  cell->clearNoFallBackProperties( Cell::PBackgroundColor );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setBgColor( bg_Color );
-	if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setBgColor( bg_Color );
+  if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1964,28 +1973,28 @@ struct SetSelectionBorderColorWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Change Border Color");
-	return new KSpreadUndoCellFormat( doc, sheet, r, title );
+  return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->setDisplayDirtyFlag();
-	int it_Row = cell->row();
-	int it_Col = cell->column();
-	if ( cell->topBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-	    cell->setTopBorderColor( bd_Color );
-	if ( cell->leftBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-	    cell->setLeftBorderColor( bd_Color );
-	if ( cell->fallDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
-	    cell->setFallDiagonalColor( bd_Color );
-	if ( cell->goUpDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
-	    cell->setGoUpDiagonalColor( bd_Color );
-	if ( cell->bottomBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-	    cell->setBottomBorderColor( bd_Color );
-	if ( cell->rightBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-	    cell->setRightBorderColor( bd_Color );
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  int it_Row = cell->row();
+  int it_Col = cell->column();
+  if ( cell->topBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+      cell->setTopBorderColor( bd_Color );
+  if ( cell->leftBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+      cell->setLeftBorderColor( bd_Color );
+  if ( cell->fallDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
+      cell->setFallDiagonalColor( bd_Color );
+  if ( cell->goUpDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
+      cell->setGoUpDiagonalColor( bd_Color );
+  if ( cell->bottomBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+      cell->setBottomBorderColor( bd_Color );
+  if ( cell->rightBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+      cell->setRightBorderColor( bd_Color );
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -2022,7 +2031,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
      * when n = ln(end) / ln(start)
      */
     numberOfCells = (int)( (log((double)end) / log((double)start)) +
-			     DBL_EPSILON) + 1;
+           DBL_EPSILON) + 1;
   }
 
   Cell * cell = NULL;
@@ -2059,9 +2068,9 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
         undoRegion.setLeft(QMIN(undoRegion.left(), cell->column()));
       }
       /* case 1.  Add the extra space to numberOfCells and then skip
-	     over the region.  Note that because of the above if block 'cell'
-	     points to the correct cell in the case where both case 1 and 2
-	     are true
+       over the region.  Note that because of the above if block 'cell'
+       points to the correct cell in the case where both case 1 and 2
+       are true
       */
       numberOfCells += cell->extraYCells();
       y += cell->extraYCells();
@@ -2269,25 +2278,25 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
         return ( true );
     }
     void doWork( RowFormat* rw ) {
-	//rw->setPrecision( 0 );
-	rw->setFormatType( b ? Percentage_format : Generic_format);
+  //rw->setPrecision( 0 );
+  rw->setFormatType( b ? Percentage_format : Generic_format);
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setFormatType( b ? Percentage_format : Generic_format);
+  cl->setFormatType( b ? Percentage_format : Generic_format);
     }
     void prepareCell( Cell* cell ) {
-	cell->clearProperty(Cell::PFormatType);
-	cell->clearNoFallBackProperties( Cell::PFormatType );
+  cell->clearProperty(Cell::PFormatType);
+  cell->clearNoFallBackProperties( Cell::PFormatType );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setFormatType( b ? Percentage_format : Generic_format);
-	if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setFormatType( b ? Percentage_format : Generic_format);
+  if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -2295,6 +2304,11 @@ void KSpreadSheet::setSelectionPercent( KSpreadSelection* selectionInfo, bool b 
 {
     SetSelectionPercentWorker w( b );
     workOnCells( selectionInfo, w );
+}
+
+void KSpreadSheet::slotAreaModified (const QString &name)
+{
+  d->dependencies->areaModified (name);
 }
 
 
@@ -2664,29 +2678,29 @@ void KSpreadSheet::hideRow( int _row, int nbRow, QValueList<int>_list )
     {
       KSpreadUndoHideRow *undo ;
       if( nbRow!=-1 )
-	undo= new KSpreadUndoHideRow( doc(), this, _row, nbRow );
+  undo= new KSpreadUndoHideRow( doc(), this, _row, nbRow );
       else
-	undo= new KSpreadUndoHideRow( doc(), this, _row, nbRow, _list );
+  undo= new KSpreadUndoHideRow( doc(), this, _row, nbRow, _list );
       doc()->addCommand( undo  );
     }
 
     RowFormat *rl;
     if( nbRow!=-1 )
     {
-	for( int i=0; i<=nbRow; i++ )
-	{
-	    rl=nonDefaultRowFormat( _row+i );
-	    rl->setHide(true);
-	}
+  for( int i=0; i<=nbRow; i++ )
+  {
+      rl=nonDefaultRowFormat( _row+i );
+      rl->setHide(true);
+  }
     }
     else
     {
-	QValueList<int>::Iterator it;
-	for( it = _list.begin(); it != _list.end(); ++it )
-	{
-	    rl=nonDefaultRowFormat( *it );
-	    rl->setHide(true);
-	}
+  QValueList<int>::Iterator it;
+  for( it = _list.begin(); it != _list.end(); ++it )
+  {
+      rl=nonDefaultRowFormat( *it );
+      rl->setHide(true);
+  }
     }
     emitHideRow();
 }
@@ -2705,27 +2719,27 @@ void KSpreadSheet::showRow( int _row, int nbRow, QValueList<int>_list )
       if(nbRow!=-1)
         undo = new KSpreadUndoShowRow( doc(), this, _row,nbRow );
       else
-	undo = new KSpreadUndoShowRow( doc(), this, _row,nbRow, _list );
+  undo = new KSpreadUndoShowRow( doc(), this, _row,nbRow, _list );
       doc()->addCommand( undo );
     }
 
     RowFormat *rl;
     if( nbRow!=-1 )
       {
-	for( int i=0; i<=nbRow; i++ )
-	  {
-	    rl=nonDefaultRowFormat( _row + i );
-	    rl->setHide( false );
-	  }
+  for( int i=0; i<=nbRow; i++ )
+    {
+      rl=nonDefaultRowFormat( _row + i );
+      rl->setHide( false );
+    }
       }
     else
       {
-	QValueList<int>::Iterator it;
-	for( it = _list.begin(); it != _list.end(); ++it )
-	  {
-	    rl=nonDefaultRowFormat( *it );
-	    rl->setHide( false );
-	  }
+  QValueList<int>::Iterator it;
+  for( it = _list.begin(); it != _list.end(); ++it )
+    {
+      rl=nonDefaultRowFormat( *it );
+      rl->setHide( false );
+    }
       }
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
@@ -2737,30 +2751,30 @@ void KSpreadSheet::hideColumn( int _col, int nbCol, QValueList<int>_list )
     if ( !doc()->undoLocked() )
     {
         KSpreadUndoHideColumn *undo;
-	if( nbCol!=-1 )
-	  undo= new KSpreadUndoHideColumn( doc(), this, _col, nbCol );
-	else
-	  undo= new KSpreadUndoHideColumn( doc(), this, _col, nbCol, _list );
+  if( nbCol!=-1 )
+    undo= new KSpreadUndoHideColumn( doc(), this, _col, nbCol );
+  else
+    undo= new KSpreadUndoHideColumn( doc(), this, _col, nbCol, _list );
         doc()->addCommand( undo );
     }
 
     ColumnFormat *cl;
     if( nbCol != -1 )
     {
-	for( int i=0; i<=nbCol; i++ )
-	{
-	    cl=nonDefaultColumnFormat( _col + i );
-	    cl->setHide( true );
-	}
+  for( int i=0; i<=nbCol; i++ )
+  {
+      cl=nonDefaultColumnFormat( _col + i );
+      cl->setHide( true );
+  }
     }
     else
     {
-	QValueList<int>::Iterator it;
-	for( it = _list.begin(); it != _list.end(); ++it )
-	{
-	    cl=nonDefaultColumnFormat( *it );
-	    cl->setHide( true );
-	}
+  QValueList<int>::Iterator it;
+  for( it = _list.begin(); it != _list.end(); ++it )
+  {
+      cl=nonDefaultColumnFormat( *it );
+      cl->setHide( true );
+  }
     }
     emitHideColumn();
 }
@@ -2778,9 +2792,9 @@ void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
     {
       KSpreadUndoShowColumn *undo;
       if( nbCol != -1 )
-	undo = new KSpreadUndoShowColumn( doc(), this, _col, nbCol );
+  undo = new KSpreadUndoShowColumn( doc(), this, _col, nbCol );
       else
-	undo = new KSpreadUndoShowColumn( doc(), this, _col, nbCol, _list );
+  undo = new KSpreadUndoShowColumn( doc(), this, _col, nbCol, _list );
       doc()->addCommand( undo );
     }
 
@@ -2789,8 +2803,8 @@ void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
     {
       for( int i=0; i<=nbCol; i++ )
       {
-	cl=nonDefaultColumnFormat( _col + i );
-	cl->setHide( false );
+  cl=nonDefaultColumnFormat( _col + i );
+  cl->setHide( false );
       }
     }
     else
@@ -2798,8 +2812,8 @@ void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
        QValueList<int>::Iterator it;
        for( it = _list.begin(); it != _list.end(); ++it )
        {
-	   cl=nonDefaultColumnFormat( *it );
-	   cl->setHide( false );
+     cl=nonDefaultColumnFormat( *it );
+     cl->setHide( false );
        }
     }
     emit sig_updateHBorder( this );
@@ -3513,45 +3527,45 @@ struct SetSelectionBorderAllWorker : public KSpreadSheet::CellWorkerTypeA {
 
     QString getUndoTitle() { return i18n("Change Border"); }
     bool testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PRightBorder )
-		 || rw->hasProperty( Cell::PLeftBorder )
-		 || rw->hasProperty( Cell::PTopBorder )
-		 || rw->hasProperty( Cell::PBottomBorder ) );
+  return ( rw->hasProperty( Cell::PRightBorder )
+     || rw->hasProperty( Cell::PLeftBorder )
+     || rw->hasProperty( Cell::PTopBorder )
+     || rw->hasProperty( Cell::PBottomBorder ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setTopBorderPen( pen );
+  rw->setTopBorderPen( pen );
         rw->setRightBorderPen( pen );
         rw->setLeftBorderPen( pen );
         rw->setBottomBorderPen( pen );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setTopBorderPen( pen );
+  cl->setTopBorderPen( pen );
         cl->setRightBorderPen( pen );
         cl->setLeftBorderPen( pen );
         cl->setBottomBorderPen( pen );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PTopBorder );
-	c->clearNoFallBackProperties( Cell::PTopBorder );
-	c->clearProperty( Cell::PBottomBorder );
-	c->clearNoFallBackProperties( Cell::PBottomBorder );
-	c->clearProperty( Cell::PLeftBorder );
-	c->clearNoFallBackProperties( Cell::PLeftBorder );
-	c->clearProperty( Cell::PRightBorder );
-	c->clearNoFallBackProperties( Cell::PRightBorder );
+  c->clearProperty( Cell::PTopBorder );
+  c->clearNoFallBackProperties( Cell::PTopBorder );
+  c->clearProperty( Cell::PBottomBorder );
+  c->clearNoFallBackProperties( Cell::PBottomBorder );
+  c->clearProperty( Cell::PLeftBorder );
+  c->clearNoFallBackProperties( Cell::PLeftBorder );
+  c->clearProperty( Cell::PRightBorder );
+  c->clearNoFallBackProperties( Cell::PRightBorder );
     }
 
   bool testCondition( Cell */* cell*/ ) { return true; }
 
     void doWork( Cell* cell, bool, int, int ) {
-	//if ( cellRegion )
-	//    cell->setDisplayDirtyFlag();
-	cell->setTopBorderPen( pen );
+  //if ( cellRegion )
+  //    cell->setDisplayDirtyFlag();
+  cell->setTopBorderPen( pen );
         cell->setRightBorderPen( pen );
         cell->setLeftBorderPen( pen );
         cell->setBottomBorderPen( pen );
-	//if ( cellRegion )
-	//    cell->clearDisplayDirtyFlag();
+  //if ( cellRegion )
+  //    cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -3574,15 +3588,15 @@ struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionBorderRemoveWorker() : pen( Qt::black, 1, Qt::NoPen  ) { }
     QString getUndoTitle() { return i18n("Change Border"); }
     bool testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PRightBorder )
-		 || rw->hasProperty( Cell::PLeftBorder )
-		 || rw->hasProperty( Cell::PTopBorder )
-		 || rw->hasProperty( Cell::PBottomBorder )
-		 || rw->hasProperty( Cell::PFallDiagonal )
-		 || rw->hasProperty( Cell::PGoUpDiagonal ) );
+  return ( rw->hasProperty( Cell::PRightBorder )
+     || rw->hasProperty( Cell::PLeftBorder )
+     || rw->hasProperty( Cell::PTopBorder )
+     || rw->hasProperty( Cell::PBottomBorder )
+     || rw->hasProperty( Cell::PFallDiagonal )
+     || rw->hasProperty( Cell::PGoUpDiagonal ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setTopBorderPen( pen );
+  rw->setTopBorderPen( pen );
         rw->setRightBorderPen( pen );
         rw->setLeftBorderPen( pen );
         rw->setBottomBorderPen( pen);
@@ -3590,7 +3604,7 @@ struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
         rw->setGoUpDiagonalPen (pen );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setTopBorderPen( pen );
+  cl->setTopBorderPen( pen );
         cl->setRightBorderPen( pen );
         cl->setLeftBorderPen( pen );
         cl->setBottomBorderPen( pen);
@@ -3598,33 +3612,33 @@ struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
         cl->setGoUpDiagonalPen (pen );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PTopBorder );
-	c->clearNoFallBackProperties( Cell::PTopBorder );
-	c->clearProperty( Cell::PLeftBorder );
-	c->clearNoFallBackProperties( Cell::PLeftBorder );
-	c->clearProperty( Cell::PRightBorder );
-	c->clearNoFallBackProperties( Cell::PRightBorder );
-	c->clearProperty( Cell::PBottomBorder );
-	c->clearNoFallBackProperties( Cell::PBottomBorder );
-	c->clearProperty( Cell::PFallDiagonal );
-	c->clearNoFallBackProperties( Cell::PFallDiagonal );
-	c->clearProperty( Cell::PGoUpDiagonal );
-	c->clearNoFallBackProperties( Cell::PGoUpDiagonal );
+  c->clearProperty( Cell::PTopBorder );
+  c->clearNoFallBackProperties( Cell::PTopBorder );
+  c->clearProperty( Cell::PLeftBorder );
+  c->clearNoFallBackProperties( Cell::PLeftBorder );
+  c->clearProperty( Cell::PRightBorder );
+  c->clearNoFallBackProperties( Cell::PRightBorder );
+  c->clearProperty( Cell::PBottomBorder );
+  c->clearNoFallBackProperties( Cell::PBottomBorder );
+  c->clearProperty( Cell::PFallDiagonal );
+  c->clearNoFallBackProperties( Cell::PFallDiagonal );
+  c->clearProperty( Cell::PGoUpDiagonal );
+  c->clearNoFallBackProperties( Cell::PGoUpDiagonal );
     }
 
     bool testCondition(Cell* /*cell*/ ){ return true; }
 
     void doWork( Cell* cell, bool, int, int ) {
-	//if ( cellRegion )
-	//    cell->setDisplayDirtyFlag();
-	cell->setTopBorderPen( pen );
+  //if ( cellRegion )
+  //    cell->setDisplayDirtyFlag();
+  cell->setTopBorderPen( pen );
         cell->setRightBorderPen( pen );
         cell->setLeftBorderPen( pen );
         cell->setBottomBorderPen( pen);
         cell->setFallDiagonalPen( pen );
         cell->setGoUpDiagonalPen (pen );
-	//if ( cellRegion )
-	//    cell->clearDisplayDirtyFlag();
+  //if ( cellRegion )
+  //    cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -4775,79 +4789,79 @@ struct SetSelectionAlignWorker
     SetSelectionAlignWorker( KSpreadFormat::Align align ) : _align( align ) {}
     QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
     bool testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PAlign ) );
+  return ( rw->hasProperty( Cell::PAlign ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setAlign( _align );
+  rw->setAlign( _align );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setAlign( _align );
+  cl->setAlign( _align );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PAlign );
-	c->clearNoFallBackProperties( Cell::PAlign );
+  c->clearProperty( Cell::PAlign );
+  c->clearNoFallBackProperties( Cell::PAlign );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setAlign( _align );
-	if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setAlign( _align );
+  if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
     }
 };
 
 QString KSpreadSheet::guessColumnTitle(QRect& area, int col)
 {
-	//Verify range
-	KSpreadRange rg;
-	rg.setRange(area);
-	rg.sheet=this;
+  //Verify range
+  KSpreadRange rg;
+  rg.setRange(area);
+  rg.sheet=this;
 
-	if ( (!rg.isValid()) || (col < area.left()) || (col > area.right()))
-		return QString();
+  if ( (!rg.isValid()) || (col < area.left()) || (col > area.right()))
+    return QString();
 
-	//The current guess logic is fairly simple - if the top row of the given area
-	//appears to contain headers (ie. there is text in each column) the text in the column at
-	//the top row of the area is returned.
+  //The current guess logic is fairly simple - if the top row of the given area
+  //appears to contain headers (ie. there is text in each column) the text in the column at
+  //the top row of the area is returned.
 
-/*	for (int i=area.left();i<=area.right();i++)
-	{
-		KSpreadValue cellValue=value(i,area.top());
+/*  for (int i=area.left();i<=area.right();i++)
+  {
+    KSpreadValue cellValue=value(i,area.top());
 
-		if (!cellValue.isString())
-			return QString();
-	}*/
+    if (!cellValue.isString())
+      return QString();
+  }*/
 
-	KSpreadValue cellValue=value(col,area.top());
-	return cellValue.asString();
+  KSpreadValue cellValue=value(col,area.top());
+  return cellValue.asString();
 }
 
 QString KSpreadSheet::guessRowTitle(QRect& area, int row)
 {
-	//Verify range
-	KSpreadRange rg;
-	rg.setRange(area);
-	rg.sheet=this;
+  //Verify range
+  KSpreadRange rg;
+  rg.setRange(area);
+  rg.sheet=this;
 
-	if ( (!rg.isValid()) || (row < area.top()) || (row > area.bottom()) )
-		return QString();
+  if ( (!rg.isValid()) || (row < area.top()) || (row > area.bottom()) )
+    return QString();
 
-	//The current guess logic is fairly simple - if the leftmost column of the given area
-	//appears to contain headers (ie. there is text in each row) the text in the row at
-	//the leftmost column of the area is returned.
-	/*for (int i=area.top();i<=area.bottom();i++)
-	{
-		KSpreadValue cellValue=value(area.left(),i);
+  //The current guess logic is fairly simple - if the leftmost column of the given area
+  //appears to contain headers (ie. there is text in each row) the text in the row at
+  //the leftmost column of the area is returned.
+  /*for (int i=area.top();i<=area.bottom();i++)
+  {
+    KSpreadValue cellValue=value(area.left(),i);
 
-		if (!cellValue.isString())
-			return QString();
-	}*/
+    if (!cellValue.isString())
+      return QString();
+  }*/
 
-	KSpreadValue cellValue=value(area.left(),row);
-	return cellValue.asString();
+  KSpreadValue cellValue=value(area.left(),row);
+  return cellValue.asString();
 }
 
 void KSpreadSheet::setSelectionAlign( KSpreadSelection* selectionInfo,
@@ -4867,29 +4881,29 @@ struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
     }
     QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
     bool testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PAlignY ) );
+  return ( rw->hasProperty( Cell::PAlignY ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setAlignY( _alignY );
+  rw->setAlignY( _alignY );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setAlignY( _alignY );
+  cl->setAlignY( _alignY );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PAlignY );
-	c->clearNoFallBackProperties( Cell::PAlignY );
+  c->clearProperty( Cell::PAlignY );
+  c->clearNoFallBackProperties( Cell::PAlignY );
     }
     bool testCondition( Cell* cell ) {
         kdDebug() << "testCondition" << endl;
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
         kdDebug() << "cell->setAlignY: " << _alignY << endl;
-	cell->setAlignY( _alignY );
-	if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+  cell->setAlignY( _alignY );
+  if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -4909,18 +4923,18 @@ struct SetSelectionPrecisionWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Change Precision");
-	return new KSpreadUndoCellFormat( doc, sheet, r, title );
+  return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->setDisplayDirtyFlag();
-	if ( _delta == 1 )
-	    cell->incPrecision();
-	else
-	    cell->decPrecision();
-	cell->clearDisplayDirtyFlag();
+  cell->setDisplayDirtyFlag();
+  if ( _delta == 1 )
+      cell->incPrecision();
+  else
+      cell->decPrecision();
+  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -4985,33 +4999,33 @@ struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA
     SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
     QString getUndoTitle() { return i18n("Format Money"); }
     bool testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PFormatType )
-		 || rw->hasProperty( Cell::PPrecision ) );
+  return ( rw->hasProperty( Cell::PFormatType )
+     || rw->hasProperty( Cell::PPrecision ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setFormatType( b ? Money_format : Generic_format );
-	rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
+  rw->setFormatType( b ? Money_format : Generic_format );
+  rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setFormatType( b ? Money_format : Generic_format );
-	cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
+  cl->setFormatType( b ? Money_format : Generic_format );
+  cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PPrecision );
-	c->clearNoFallBackProperties( Cell::PPrecision );
-	c->clearProperty( Cell::PFormatType );
-	c->clearNoFallBackProperties( Cell::PFormatType );
+  c->clearProperty( Cell::PPrecision );
+  c->clearNoFallBackProperties( Cell::PPrecision );
+  c->clearProperty( Cell::PFormatType );
+  c->clearNoFallBackProperties( Cell::PFormatType );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-	if ( cellRegion )
-	    cell->setDisplayDirtyFlag();
-	cell->setFormatType( b ? Money_format : Generic_format );
-	cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
-	if ( cellRegion )
-	    cell->clearDisplayDirtyFlag();
+  if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+  cell->setFormatType( b ? Money_format : Generic_format );
+  cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
+  if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -5029,44 +5043,44 @@ struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     double   valIndent;
 
     IncreaseIndentWorker( double _tmpIndent, double _valIndent )
-	: tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
+  : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
 
     QString  getUndoTitle() { return i18n("Increase Indent"); }
     bool     testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PIndent ) );
+  return ( rw->hasProperty( Cell::PIndent ) );
     }
 
     void doWork( RowFormat* rw ) {
-	rw->setIndent( tmpIndent+valIndent );
-	//rw->setAlign( Cell::Left );
+  rw->setIndent( tmpIndent+valIndent );
+  //rw->setAlign( Cell::Left );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setIndent( tmpIndent+valIndent );
-	//cl->setAlign( Cell::Left );
+  cl->setIndent( tmpIndent+valIndent );
+  //cl->setAlign( Cell::Left );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PIndent );
-	c->clearNoFallBackProperties( Cell::PIndent );
-	//c->clearProperty( Cell::PAlign );
-	//c->clearNoFallBackProperties( Cell::PAlign );
+  c->clearProperty( Cell::PIndent );
+  c->clearNoFallBackProperties( Cell::PIndent );
+  //c->clearProperty( Cell::PAlign );
+  //c->clearNoFallBackProperties( Cell::PAlign );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
-	if ( cellRegion ) {
-	    if(cell->align(x,y)!=Cell::Left)
-	    {
-		//cell->setAlign(Cell::Left);
-		//cell->setIndent( 0.0 );
-	    }
-	    cell->setDisplayDirtyFlag();
-	    cell->setIndent( /* ### ??? --> */ cell->getIndent(x,y) /* <-- */ +valIndent );
-	    cell->clearDisplayDirtyFlag();
-	} else {
-	    cell->setIndent( tmpIndent+valIndent);
-	    //cell->setAlign( Cell::Left);
-	}
+  if ( cellRegion ) {
+      if(cell->align(x,y)!=Cell::Left)
+      {
+    //cell->setAlign(Cell::Left);
+    //cell->setIndent( 0.0 );
+      }
+      cell->setDisplayDirtyFlag();
+      cell->setIndent( /* ### ??? --> */ cell->getIndent(x,y) /* <-- */ +valIndent );
+      cell->clearDisplayDirtyFlag();
+  } else {
+      cell->setIndent( tmpIndent+valIndent);
+      //cell->setAlign( Cell::Left);
+  }
     }
 };
 
@@ -5088,7 +5102,7 @@ struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     DecreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Decrease Indent"); }
     bool testCondition( RowFormat* rw ) {
-	return ( rw->hasProperty( Cell::PIndent ) );
+  return ( rw->hasProperty( Cell::PIndent ) );
     }
     void doWork( RowFormat* rw ) {
         rw->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
@@ -5097,20 +5111,20 @@ struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
         cl->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
     void prepareCell( Cell* c ) {
-	c->clearProperty( Cell::PIndent );
-	c->clearNoFallBackProperties( Cell::PIndent );
+  c->clearProperty( Cell::PIndent );
+  c->clearNoFallBackProperties( Cell::PIndent );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscuringForced() );
+  return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
-	if ( cellRegion ) {
-	    cell->setDisplayDirtyFlag();
-	    cell->setIndent( QMAX( 0.0, cell->getIndent( x, y ) - valIndent ) );
-	    cell->clearDisplayDirtyFlag();
-	} else {
-	    cell->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
-	}
+  if ( cellRegion ) {
+      cell->setDisplayDirtyFlag();
+      cell->setIndent( QMAX( 0.0, cell->getIndent( x, y ) - valIndent ) );
+      cell->clearDisplayDirtyFlag();
+  } else {
+      cell->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
+  }
     }
 };
 
@@ -5296,10 +5310,10 @@ struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
       : KSpreadSheet::CellWorker( ),  _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
-	return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
+  return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscured() );
+  return ( !cell->isObscured() );
     }
     void doWork( Cell* cell, bool, int, int )
     {
@@ -5321,13 +5335,13 @@ struct ClearValiditySelectionWorker : public KSpreadSheet::CellWorker {
     ClearValiditySelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
-	return new KSpreadUndoConditional( doc, sheet, r );
+  return new KSpreadUndoConditional( doc, sheet, r );
     }
     bool testCondition( Cell* cell ) {
-	return ( !cell->isObscured() );
+  return ( !cell->isObscured() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->removeValidity();
+  cell->removeValidity();
     }
 };
 
@@ -5346,8 +5360,8 @@ struct ClearConditionalSelectionWorker : public KSpreadSheet::CellWorker
   ClearConditionalSelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
   class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
-					     KSpreadSheet* sheet,
-					     QRect& r )
+               KSpreadSheet* sheet,
+               QRect& r )
   {
     return new KSpreadUndoConditional( doc, sheet, r );
   }
@@ -5451,13 +5465,13 @@ struct DefaultSelectionWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
         QString title=i18n("Default Parameters");
-	return new KSpreadUndoCellFormat( doc, sheet, r, title );
+  return new KSpreadUndoCellFormat( doc, sheet, r, title );
     }
     bool testCondition( Cell* ) {
-	return true;
+  return true;
     }
     void doWork( Cell* cell, bool, int, int ) {
-	cell->defaultStyle();
+  cell->defaultStyle();
     }
 };
 
@@ -5497,7 +5511,7 @@ struct SetConditionalWorker : public KSpreadSheet::CellWorker
     KSpreadSheet::CellWorker( ), conditionList( _tmp ) { }
 
   class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
-					     KSpreadSheet* sheet, QRect& r )
+               KSpreadSheet* sheet, QRect& r )
   {
     return new KSpreadUndoConditional( doc, sheet, r );
   }
@@ -5553,39 +5567,39 @@ struct SetValidityWorker : public KSpreadSheet::CellWorker {
     SetValidityWorker( KSpreadValidity _tmp ) : KSpreadSheet::CellWorker( ), tmp( _tmp ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
-	return new KSpreadUndoConditional( doc, sheet, r );
+  return new KSpreadUndoConditional( doc, sheet, r );
     }
     bool testCondition( Cell* ) {
         return true;
     }
     void doWork( Cell* cell, bool, int, int ) {
-	if ( !cell->isObscured() ) {
-	    cell->setDisplayDirtyFlag();
-	    if ( tmp.m_allow==Allow_All )
-		cell->removeValidity();
-	    else
-	    {
-		KSpreadValidity *tmpValidity = cell->getValidity();
-		tmpValidity->message=tmp.message;
-		tmpValidity->title=tmp.title;
-		tmpValidity->valMin=tmp.valMin;
-		tmpValidity->valMax=tmp.valMax;
-		tmpValidity->m_cond=tmp.m_cond;
-		tmpValidity->m_action=tmp.m_action;
-		tmpValidity->m_allow=tmp.m_allow;
-		tmpValidity->timeMin=tmp.timeMin;
-		tmpValidity->timeMax=tmp.timeMax;
-		tmpValidity->dateMin=tmp.dateMin;
-		tmpValidity->dateMax=tmp.dateMax;
+  if ( !cell->isObscured() ) {
+      cell->setDisplayDirtyFlag();
+      if ( tmp.m_allow==Allow_All )
+    cell->removeValidity();
+      else
+      {
+    KSpreadValidity *tmpValidity = cell->getValidity();
+    tmpValidity->message=tmp.message;
+    tmpValidity->title=tmp.title;
+    tmpValidity->valMin=tmp.valMin;
+    tmpValidity->valMax=tmp.valMax;
+    tmpValidity->m_cond=tmp.m_cond;
+    tmpValidity->m_action=tmp.m_action;
+    tmpValidity->m_allow=tmp.m_allow;
+    tmpValidity->timeMin=tmp.timeMin;
+    tmpValidity->timeMax=tmp.timeMax;
+    tmpValidity->dateMin=tmp.dateMin;
+    tmpValidity->dateMax=tmp.dateMax;
                 tmpValidity->displayMessage=tmp.displayMessage;
                 tmpValidity->allowEmptyCell=tmp.allowEmptyCell;
                 tmpValidity->displayValidationInformation=tmp.displayValidationInformation;
                 tmpValidity->titleInfo=tmp.titleInfo;
                 tmpValidity->messageInfo=tmp.messageInfo;
                 tmpValidity->listValidity=tmp.listValidity;
-	    }
-	    cell->clearDisplayDirtyFlag();
-	}
+      }
+      cell->clearDisplayDirtyFlag();
+  }
     }
 };
 
@@ -5602,20 +5616,20 @@ struct GetWordSpellingWorker : public KSpreadSheet::CellWorker {
     GetWordSpellingWorker( QString& _listWord ) : KSpreadSheet::CellWorker( false, false, true ), listWord( _listWord ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc*, KSpreadSheet*, QRect& ) {
-	return 0L;
+  return 0L;
     }
     bool testCondition( Cell* ) {
         return true;
     }
     void doWork( Cell* c, bool cellRegion, int, int ) {
-	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-		 && !c->isDate()
-		 && !c->text().isEmpty())
-	    {
-		listWord+=c->text()+'\n';
-	    }
-	}
+  if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
+      if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
+     && !c->isDate()
+     && !c->text().isEmpty())
+      {
+    listWord+=c->text()+'\n';
+      }
+  }
     }
 };
 
@@ -5636,24 +5650,24 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
       : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ),  sheet( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) {
-	return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
+  return new KSpreadUndoChangeAreaTextCell( doc, sheet, r );
     }
     bool testCondition( Cell* ) {
         return true;
     }
     void doWork( Cell* c, bool cellRegion, int, int )
     {
-	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-		 && !c->isDate()
-		 && !c->text().isEmpty())
-	    {
+  if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
+      if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
+     && !c->isDate()
+     && !c->text().isEmpty())
+      {
 
 
-		c->setCellText( list[pos] );
-		pos++;
-	    }
-	}
+    c->setCellText( list[pos] );
+    pos++;
+      }
+  }
     }
 };
 
@@ -5824,12 +5838,12 @@ void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
     {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
-	QString _text = QApplication::clipboard()->text();
+  QString _text = QApplication::clipboard()->text();
         doc()->emitBeginOperation();
-	pasteTextPlain( _text, pasteArea);
+  pasteTextPlain( _text, pasteArea);
         emit sig_updateView( this );
         // doc()->emitEndOperation();
-	return;
+  return;
     }
     else
         return;
@@ -6125,7 +6139,7 @@ void KSpreadSheet::loadSelectionUndo( const QDomDocument & d, const QRect &loadA
         }
         if(insert)
                  insertColumn(  _xshift+1,pasteWidth-1,false);
-	return;
+  return;
     }
 
     if ( !e.namedItem( "rows" ).toElement().isNull() )
@@ -6135,9 +6149,9 @@ void KSpreadSheet::loadSelectionUndo( const QDomDocument & d, const QRect &loadA
                 KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( doc(), this, 0,pasteHeight, _xshift,_yshift,rect,insert );
                 doc()->addCommand( undo );
         }
-	if(insert)
-	    insertRow(  _yshift+1,pasteHeight-1,false);
-	return;
+  if(insert)
+      insertRow(  _yshift+1,pasteHeight-1,false);
+  return;
     }
 
     rect.setRect( _xshift+1, _yshift+1, pasteWidth, pasteHeight );
@@ -6417,15 +6431,15 @@ bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
        if ( selection.left() <= col && selection.right() >= col &&
             !c->isObscuringForced() &&
             !(col==marker.x() && c->row()==marker.y()))
-	 {
-	   if(!c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty()
-	      && !c->isTime() &&!c->isDate() )
-	     {
+   {
+     if(!c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty()
+        && !c->isTime() &&!c->isDate() )
+       {
                  if(c->text()!=tmp)
                      different=true;
-	     }
+       }
 
-	 }
+   }
      }
    return different;
 }
@@ -6526,20 +6540,20 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
     Cell *cell;
     bool insert;
     for (int i=_rect.left();i<=_rect.right();i++)
-	for(int j=_rect.top();j<=_rect.bottom();j++)
-	{
-	    insert = false;
-	    cell = cellAt( i, j );
-	    if ( cell == d->defaultCell )
-	    {
-		cell = new Cell( this, i, j );
-		insertCell( cell );
-		insert=true;
-	    }
-	    spread.appendChild( cell->save( dd, _rect.left() - 1, _rect.top() - 1, true, copy, era ) );
-	    if( insert )
-	        d->cells.remove(i,j);
-	}
+  for(int j=_rect.top();j<=_rect.bottom();j++)
+  {
+      insert = false;
+      cell = cellAt( i, j );
+      if ( cell == d->defaultCell )
+      {
+    cell = new Cell( this, i, j );
+    insertCell( cell );
+    insert=true;
+      }
+      spread.appendChild( cell->save( dd, _rect.left() - 1, _rect.top() - 1, true, copy, era ) );
+      if( insert )
+          d->cells.remove(i,j);
+  }
 
     return dd;
 }
@@ -8209,10 +8223,10 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
             if ( ch->load( e ) )
                 insertChild( ch );
             else
-	    {
-		ch->setDeleted(true);
+      {
+    ch->setDeleted(true);
                 delete ch;
-	    }
+      }
         }
 
         n = n.nextSibling();
@@ -8410,7 +8424,7 @@ void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
         insertChild( ch );
     else
     {
-	    ch->setDeleted(true);
+      ch->setDeleted(true);
         delete ch;
     }
 }

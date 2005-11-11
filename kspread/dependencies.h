@@ -65,6 +65,9 @@ class DependencyManager {
   /** handle the fact that a range list has been changed */
   void rangeListChanged (const RangeList &rangeList);
 
+  /** a named area was somehow modified */
+  void areaModified (const QString &name);
+
   /** get dependencies of a cell */
   RangeList getDependencies (const KSpreadPoint &cell);
   /** get cells depending on this cell, either through normal or range dependency */

@@ -1729,11 +1729,11 @@ void KSpreadView::initConfig()
         if ( !doc()->configLoadFromFile() )
             doc()->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
-	doc()->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
+  doc()->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
 
-	doc()->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
+  doc()->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 
-	doc()->setShowFormulaBar(config->readBoolEntry("Formula bar",true));
+  doc()->setShowFormulaBar(config->readBoolEntry("Formula bar",true));
         doc()->setShowStatusBar(config->readBoolEntry("Status bar",true));
 
         changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
@@ -1762,10 +1762,10 @@ if ( config->hasGroup("KSpread Page Layout" ) )
    config->setGroup( "KSpread Page Layout" );
    if ( d->activeSheet->isEmpty())
      {
-	d->activeSheet->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
+  d->activeSheet->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
 
-	d->activeSheet->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
-	d->activeSheet->setPaperUnit((KoUnit::Unit)config->readNumEntry("Default unit page",0));
+  d->activeSheet->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
+  d->activeSheet->setPaperUnit((KoUnit::Unit)config->readNumEntry("Default unit page",0));
      }
  }
 */
@@ -2460,53 +2460,53 @@ void KSpreadView::autoSum()
     if ( d->canvas->editor() )
         return;
 
-	//Get the selected range and remove the current cell from it (as that is
-	//where the result of the autosum will be stored - perhaps change
-	//this behaviour??)
-	KSpreadRange rg;
-	//rg.sheet=activeSheet();
-	QRect sel=selection(false);
+  //Get the selected range and remove the current cell from it (as that is
+  //where the result of the autosum will be stored - perhaps change
+  //this behaviour??)
+  KSpreadRange rg;
+  //rg.sheet=activeSheet();
+  QRect sel=selection(false);
 
-	if (sel.height() > 1)
-	{
-		if (marker().y()==sel.top())
-			sel.setTop(sel.top()+1);
-		if (marker().y()==sel.bottom())
-			sel.setBottom(sel.bottom()-1);
-	}
-	else
-	{
-		if (sel.width() > 1)
-		{
-			if (marker().x()==sel.left())
-				sel.setLeft(sel.left()+1);
+  if (sel.height() > 1)
+  {
+    if (marker().y()==sel.top())
+      sel.setTop(sel.top()+1);
+    if (marker().y()==sel.bottom())
+      sel.setBottom(sel.bottom()-1);
+  }
+  else
+  {
+    if (sel.width() > 1)
+    {
+      if (marker().x()==sel.left())
+        sel.setLeft(sel.left()+1);
 
-			if (marker().x()==sel.right())
-				sel.setRight(sel.right()-1);
-		}
-		else
-		{
-			sel=QRect();
-		}
-	}
+      if (marker().x()==sel.right())
+        sel.setRight(sel.right()-1);
+    }
+    else
+    {
+      sel=QRect();
+    }
+  }
 
-	if ( (sel.width() > 1) && (sel.height() > 1) )
-		sel=QRect();
+  if ( (sel.width() > 1) && (sel.height() > 1) )
+    sel=QRect();
 
-	rg.range=sel;
+  rg.range=sel;
 
     d->canvas->createEditor( KSpreadCanvas::CellEditor );
 
-	if ( (rg.range.isValid() ) && (!rg.range.isEmpty()) )
-	{
-    		d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
-		d->canvas->deleteEditor(true);
-	}
-	else
-	{
-		d->canvas->editor()->setText( "=SUM( )" );
-    		d->canvas->editor()->setCursorPosition( 5 );
-	}
+  if ( (rg.range.isValid() ) && (!rg.range.isEmpty()) )
+  {
+        d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
+    d->canvas->deleteEditor(true);
+  }
+  else
+  {
+    d->canvas->editor()->setText( "=SUM( )" );
+        d->canvas->editor()->setCursorPosition( 5 );
+  }
 }
 
 /*
@@ -3864,7 +3864,7 @@ void KSpreadView::textToColumns()
 
 /* if ( d->selectionInfo->selection().width() > 1 )
   {
-	//Only use the first column
+  //Only use the first column
 
     KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
     return;
@@ -4252,8 +4252,8 @@ void KSpreadView::removeHyperlink()
     doc()->addCommand( command );
     command->execute();
 
-	canvasWidget()->setFocus();
-	editWidget()->setText( cell->text() );
+  canvasWidget()->setFocus();
+  editWidget()->setText( cell->text() );
 }
 
 void KSpreadView::insertHyperlink()
@@ -4284,8 +4284,8 @@ void KSpreadView::insertHyperlink()
         command->execute();
 
         //refresh editWidget
-	    canvasWidget()->setFocus();
-	    editWidget()->setText( cell->text() );
+      canvasWidget()->setFocus();
+      editWidget()->setText( cell->text() );
     }
     delete dlg;
 }
@@ -4297,14 +4297,14 @@ void KSpreadView::insertFromDatabase()
 
     QRect rect = d->selectionInfo->selection();
 
-	QStringList str = QSqlDatabase::drivers();
- 	if ( str.isEmpty() )
-  	{
-    	KMessageBox::error( this, i18n("No database drivers available.  To use this feature you need "
-				"to install the necessary Qt 3 database drivers.") );
+  QStringList str = QSqlDatabase::drivers();
+  if ( str.isEmpty() )
+    {
+      KMessageBox::error( this, i18n("No database drivers available.  To use this feature you need "
+        "to install the necessary Qt 3 database drivers.") );
 
-		return;
-  	}
+    return;
+    }
 
     KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
     dlg.exec();
@@ -4462,11 +4462,11 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 
 void KSpreadView::slotDeleteChild(KoChild* child)
 {
-	KSpreadChild* spreadChild=static_cast<KSpreadChild*>(child);
+  KSpreadChild* spreadChild=static_cast<KSpreadChild*>(child);
 
-	doc()->emitBeginOperation(false);
-	spreadChild->sheet()->deleteChild(spreadChild);
-	doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas )); 
+  doc()->emitBeginOperation(false);
+  spreadChild->sheet()->deleteChild(spreadChild);
+  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas )); 
 }
 
 void KSpreadView::slotRemoveChild( KSpreadChild *_child )
@@ -4830,7 +4830,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
     QWidget::keyPressEvent( _ev );
   }
   else
-   	QApplication::sendEvent( d->canvas, _ev );
+    QApplication::sendEvent( d->canvas, _ev );
 }
 
 KoDocument * KSpreadView::hitTest( const QPoint &pos )
@@ -4970,7 +4970,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
 void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
 {
     if ( !child )
-	return;
+  return;
 
     delete d->popupChild;
 
@@ -4986,7 +4986,7 @@ void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
 void KSpreadView::slotPopupDeleteChild()
 {
     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
-	return;
+  return;
 
     //Removed popup warning dialog because
     // a) It is annoying from a user's persepective
@@ -5118,7 +5118,7 @@ void KSpreadView::popupRowMenu( const QPoint & _point )
       // If there is no selection
       if ( (util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
       {
-	d->actions->areaName->plug( d->popupRow );
+  d->actions->areaName->plug( d->popupRow );
       }
 
       d->actions->resizeRow->plug( d->popupRow );
@@ -5212,13 +5212,13 @@ void KSpreadView::slotListChoosePopupMenu( )
    {
      int col = c->column();
      if ( selection.left() <= col && selection.right() >= col
-	  &&!c->isObscuringForced()&& !(col==d->canvas->markerColumn()&& c->row()==d->canvas->markerRow()))
+    &&!c->isObscuringForced()&& !(col==d->canvas->markerColumn()&& c->row()==d->canvas->markerRow()))
        {
-	 if (c->isString() && c->text()!=tmp && !c->text().isEmpty())
-	   {
-	     if (itemList.findIndex(c->text())==-1)
+   if (c->isString() && c->text()!=tmp && !c->text().isEmpty())
+     {
+       if (itemList.findIndex(c->text())==-1)
                  itemList.append(c->text());
-	   }
+     }
 
        }
     }
@@ -5334,8 +5334,8 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
       if (activeSheet()->testListChoose(selectionInfo()))
       {
-	d->popupMenu->insertSeparator();
-	d->popupMenu->insertItem( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
+  d->popupMenu->insertSeparator();
+  d->popupMenu->insertItem( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
       }
     }
 

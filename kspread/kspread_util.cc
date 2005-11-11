@@ -89,7 +89,7 @@ QString util_rangeRowName( const QRect &_area)
 QString util_rangeName(const QRect &_area)
 {
     return Cell::name( _area.left(), _area.top() ) + ":" +
-	Cell::name( _area.right(), _area.bottom() );
+  Cell::name( _area.right(), _area.bottom() );
 }
 
 QString util_rangeName(KSpreadSheet * _sheet, const QRect &_area)
@@ -197,8 +197,8 @@ void KSpreadPoint::init(const QString & _str)
     uint len = _str.length();
     if ( !len )
     {
-	kdDebug(36001) << "KSpreadPoint::init: len = 0" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: len = 0" << endl;
+  return;
     }
 
     QString str( _str );
@@ -215,25 +215,25 @@ void KSpreadPoint::init(const QString & _str)
     // Fixed ?
     if ( str[0] == '$' )
     {
-	columnFixed = true;
-	p++;
+  columnFixed = true;
+  p++;
     }
     else
-	columnFixed = false;
+  columnFixed = false;
 
     // Malformed ?
     if ( p == len )
     {
-	kdDebug(36001) << "KSpreadPoint::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
+  return;
     }
     if ( str[p] < 'A' || str[p] > 'Z' )
     {
-	if ( str[p] < 'a' || str[p] > 'z' )
-	{
-	    kdDebug(36001) << "KSpreadPoint::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
-	    return;
-	}
+  if ( str[p] < 'a' || str[p] > 'z' )
+  {
+      kdDebug(36001) << "KSpreadPoint::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
+      return;
+  }
     }
     //default is error
     int x = -1;
@@ -242,68 +242,68 @@ void KSpreadPoint::init(const QString & _str)
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
-	x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
+  x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return
     {
-	kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
+  return;
     }
     p = result;
 
     //limit is KS_colMax
     if ( x > KS_colMax )
     {
-	kdDebug(36001) << "KSpreadPoint::init: column value too high (col: " << x << ")" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: column value too high (col: " << x << ")" << endl;
+  return;
     }
 
     // Malformed ?
     if (p == len)
     {
-	kdDebug(36001) << "KSpreadPoint::init: p==len after cols" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: p==len after cols" << endl;
+  return;
     }
 
     if (str[p] == '$')
     {
-	rowFixed = true;
-	p++;
-	// Malformed ?
-	if ( p == len )
-	{
-	    kdDebug(36001) << "KSpreadPoint::init: p==len after $ of row" << endl;
-	    return;
-	}
+  rowFixed = true;
+  p++;
+  // Malformed ?
+  if ( p == len )
+  {
+      kdDebug(36001) << "KSpreadPoint::init: p==len after $ of row" << endl;
+      return;
+  }
     }
     else
-	rowFixed = false;
+  rowFixed = false;
 
     uint p2 = p;
     while ( p < len )
     {
-	if ( !isdigit( QChar(str[p++]) ) )
-	{
-	    kdDebug(36001) << "KSpreadPoint::init: no number" << endl;
-	    return;
-	}
+  if ( !isdigit( QChar(str[p++]) ) )
+  {
+      kdDebug(36001) << "KSpreadPoint::init: no number" << endl;
+      return;
+  }
     }
 
     bool ok;
     int y = str.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-	kdDebug(36001) << "KSpreadPoint::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
+  return;
     }
     if ( y > KS_rowMax )
     {
-	kdDebug(36001) << "KSpreadPoint::init: row value too high (row: " << y << ")" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: row value too high (row: " << y << ")" << endl;
+  return;
     }
     if ( y <= 0 )
     {
-	kdDebug(36001) << "KSpreadPoint::init: y <= 0" << endl;
-	return;
+  kdDebug(36001) << "KSpreadPoint::init: y <= 0" << endl;
+  return;
     }
     pos = QPoint( x, y );
 }
@@ -369,13 +369,13 @@ bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
 
 KSpreadRange::KSpreadRange()
 {
-  	sheet = 0;
-	range.setLeft( -1 );
+    sheet = 0;
+  range.setLeft( -1 );
 
-	leftFixed=false;
-	rightFixed=false;
-	topFixed=false;
-	bottomFixed=false;
+  leftFixed=false;
+  rightFixed=false;
+  topFixed=false;
+  bottomFixed=false;
 }
 KSpreadRange::KSpreadRange(const QString & _str)
 {
@@ -384,7 +384,7 @@ KSpreadRange::KSpreadRange(const QString & _str)
 
     int p = _str.find(':');
     if (p == -1)
-	return;
+  return;
 
     KSpreadPoint ul(_str.left(p));
     KSpreadPoint lr(_str.mid(p + 1));
@@ -398,30 +398,36 @@ KSpreadRange::KSpreadRange(const QString & _str)
 }
 
 KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
-			   KSpreadSheet * _sheet)
+         KSpreadSheet * _sheet)
 {
-    range.setLeft(-1);
-    sheet = 0;
-    //used area Name as range
-    if (_str.at(0) == "'" && _str.at(_str.length() - 1) == "'") {
-	QString tmp = _str.right(_str.length() - 1);
-	tmp = tmp.left(tmp.length() - 1);
-	QValueList < Reference >::Iterator it;
-	QValueList < Reference > area = _map->doc()->listArea();
-	for (it = area.begin(); it != area.end(); ++it) {
-	    if ((*it).ref_name == tmp) {
-		range = (*it).rect;
-		sheet = _map->findSheet((*it).sheet_name);
-		break;
-	    }
-	}
-	leftFixed = false;
-	rightFixed = false;
-	topFixed = false;
-	bottomFixed = false;
-	return;
+  range.setLeft(-1);
+  sheet = 0;
+
+  //try to parse as named area
+  bool gotNamed = false;
+  QString tmp = _str.lower();
+  QValueList < Reference >::Iterator it;
+  QValueList < Reference > area = _map->doc()->listArea();
+  for (it = area.begin(); it != area.end(); ++it) {
+    if ((*it).ref_name.lower() == tmp) {
+      // success - such named area exists
+      range = (*it).rect;
+      sheet = _map->findSheet((*it).sheet_name);
+      gotNamed = true;
+      namedArea = tmp;
+      break;
     }
-    range.setLeft(-1);
+  }
+  if (gotNamed) {
+    // we have a named area - no need to proceed further
+    leftFixed = false;
+    rightFixed = false;
+    topFixed = false;
+    bottomFixed = false;
+    return;
+  }
+
+  range.setLeft(-1);
     sheet = 0;
 
     int p = 0;
@@ -431,7 +437,7 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
       sheetName = _str.left(p2++);
       while ( true )
       {
-	sheet = _map->findSheet(sheetName);
+  sheet = _map->findSheet(sheetName);
         if ( !sheet && sheetName[0] == ' ' )
         {
           sheetName = sheetName.right( sheetName.length() - 1 );
@@ -446,7 +452,7 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
 
     int p3 = _str.find(':', p);
     if (p3 == -1)
-	return;
+  return;
 
     KSpreadPoint ul(_str.mid(p, p3 - p));
     KSpreadPoint lr(_str.mid(p3 + 1));
@@ -460,71 +466,71 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
 
 QString KSpreadRange::toString()
 {
-	QString result;
+  QString result;
 
-	if (sheet)
-	{
-		result=util_rangeName(sheet,range);
-	}
-	else
-	{
-		result=util_rangeName(range);
-	}
+  if (sheet)
+  {
+    result=util_rangeName(sheet,range);
+  }
+  else
+  {
+    result=util_rangeName(range);
+  }
 
-	//Insert $ characters to show fixed parts of range
+  //Insert $ characters to show fixed parts of range
 
-	int pos=result.find("!")+1;
-	Q_ASSERT(pos != -1);
+  int pos=result.find("!")+1;
+  Q_ASSERT(pos != -1);
 
-	if (leftFixed)
-	{
-		result.insert(pos,'$');
-		pos++; //Takes account of extra character added in
-	}
-	if (topFixed)
-	{
-		result.insert(pos+Cell::columnName(range.left()).length(),'$');
-	}
+  if (leftFixed)
+  {
+    result.insert(pos,'$');
+    pos++; //Takes account of extra character added in
+  }
+  if (topFixed)
+  {
+    result.insert(pos+Cell::columnName(range.left()).length(),'$');
+  }
 
-	pos=result.find(":")+1;
-	Q_ASSERT(pos != -1);
+  pos=result.find(":")+1;
+  Q_ASSERT(pos != -1);
 
-	if (rightFixed)
-	{
-		result.insert(pos,'$');
-		pos++; //Takes account of extra character added in
-	}
-	if (bottomFixed)
-	{
-		result.insert(pos+Cell::columnName(range.right()).length(),'$');
-	}
+  if (rightFixed)
+  {
+    result.insert(pos,'$');
+    pos++; //Takes account of extra character added in
+  }
+  if (bottomFixed)
+  {
+    result.insert(pos+Cell::columnName(range.right()).length(),'$');
+  }
 
 
-	return result;
+  return result;
 }
 
 void KSpreadRange::getStartPoint(KSpreadPoint* pt)
 {
-	if (!isValid()) return;
+  if (!isValid()) return;
 
-	pt->setRow(startRow());
-	pt->setColumn(startCol());
-	pt->columnFixed=leftFixed;
-	pt->rowFixed=topFixed;
-	pt->sheet=sheet;
-	pt->sheetName=sheetName;
+  pt->setRow(startRow());
+  pt->setColumn(startCol());
+  pt->columnFixed=leftFixed;
+  pt->rowFixed=topFixed;
+  pt->sheet=sheet;
+  pt->sheetName=sheetName;
 }
 
 void KSpreadRange::getEndPoint(KSpreadPoint* pt)
 {
-	if (!isValid()) return;
+  if (!isValid()) return;
 
-	pt->setRow(endRow());
-	pt->setColumn(endCol());
-	pt->columnFixed=rightFixed;
-	pt->rowFixed=bottomFixed;
-	pt->sheet=sheet;
-	pt->sheetName=sheetName;
+  pt->setRow(endRow());
+  pt->setColumn(endCol());
+  pt->columnFixed=rightFixed;
+  pt->rowFixed=bottomFixed;
+  pt->sheet=sheet;
+  pt->sheetName=sheetName;
 }
 
 bool KSpreadRange::contains (const KSpreadPoint &cell) const
@@ -539,16 +545,16 @@ bool KSpreadRange::intersects (const KSpreadRange &r) const
 
 bool KSpreadRange::isValid() const
 {
-	return  ( range.left() >= 0 ) &&
-		( range.right() >= 0 ) &&
-		( sheet != 0 || sheetName.isEmpty() ) &&
-		( range.isValid() ) ;
+  return  ( range.left() >= 0 ) &&
+    ( range.right() >= 0 ) &&
+    ( sheet != 0 || sheetName.isEmpty() ) &&
+    ( range.isValid() ) ;
 }
 
 bool util_isAllSelected(const QRect &selection)
 {
   return ( selection.top() == 1 && selection.bottom() == KS_rowMax
-	   && selection.left() == 1 && selection.right() == KS_colMax);
+     && selection.left() == 1 && selection.right() == KS_colMax);
 }
 
 bool util_isColumnSelected(const QRect &selection)

@@ -143,6 +143,7 @@ struct KSPREAD_EXPORT KSpreadRange
 
   KSpreadSheet* sheet;
   QString sheetName;
+  QString namedArea;
   QRect range;
   bool leftFixed;
   bool rightFixed;

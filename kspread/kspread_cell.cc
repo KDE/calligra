@@ -442,6 +442,11 @@ QString Cell::strOutText() const
     return d->strOutText;
 }
 
+Formula *Cell::formula () const
+{
+  return d->formula;
+}
+
 
 // Return the value of this cell.
 //
@@ -673,7 +678,7 @@ void Cell::forceExtraCells( int _col, int _row, int _x, int _y )
   for ( int x = _col; x <= _col + _x; ++x )
     for ( int y = _row; y <= _row + _y; ++y ) {
       if ( x != _col || y != _row )
-	m_pSheet->nonDefaultCell( x, y )->obscure( this, true );
+  m_pSheet->nonDefaultCell( x, y )->obscure( this, true );
     }
 
   // Refresh the layout
@@ -745,7 +750,7 @@ bool Cell::needsPrinting() const
         return false;
 
     if ( !d->strText.isEmpty() ) {
-	//kdWarning(36001) << name() << ": not empty - needs printing" << endl;
+  //kdWarning(36001) << name() << ": not empty - needs printing" << endl;
         return true;
     }
 
@@ -753,23 +758,23 @@ bool Cell::needsPrinting() const
     if ( hasProperty( PTopBorder ) || hasProperty( PLeftBorder ) ||
          hasProperty( PRightBorder ) || hasProperty( PBottomBorder ) ||
          hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ) {
-	//kdDebug(36001) << name()
-	//		 << ": has border property - needs printing" << endl;
-	return true;
+  //kdDebug(36001) << name()
+  //     << ": has border property - needs printing" << endl;
+  return true;
     }
 
     // Background color or brush?
     if ( hasProperty( PBackgroundBrush ) ) {
-	//kdDebug(36001) << name()
-	//		 << ": has brush property - needs printing" << endl;
+  //kdDebug(36001) << name()
+  //     << ": has brush property - needs printing" << endl;
         return true;
     }
 
     if ( hasProperty( PBackgroundColor ) ) {
-	//kdDebug(36001) << name()
-	//		 << ": has backgroundColor property - needs printing"
-	//		 << endl;
-	return true;
+  //kdDebug(36001) << name()
+  //     << ": has backgroundColor property - needs printing"
+  //     << endl;
+  return true;
     }
 
     return false;
@@ -813,8 +818,8 @@ bool Cell::isObscuringForced() const
       // extra isn't enough.  We have to know that this cell is one of
       // the ones it is forcing over.
       if (column() <= cell->column() + cell->d->extra()->mergedXCells
-	  && row() <= cell->row() + cell->mergedYCells() )
-	return true;
+    && row() <= cell->row() + cell->mergedYCells() )
+  return true;
     }
   }
 
@@ -853,8 +858,8 @@ Cell *KSpread::Cell::ultimateObscuringCell() const
       // extra isn't enough.  We have to know that this cell is one of
       // the ones it is forcing over.
       if (column() <= cell->column() + cell->d->extra()->mergedXCells
-	  && row() <= cell->row() + cell->mergedYCells() )
-	return true;
+    && row() <= cell->row() + cell->mergedYCells() )
+  return true;
     }
   }
 
@@ -1147,9 +1152,9 @@ void Cell::freeAllObscuredCells()
     return;
 
   for ( int x = d->column + d->extra()->mergedXCells;
-	x <= d->column + d->extra()->extraXCells; ++x ) {
+  x <= d->column + d->extra()->extraXCells; ++x ) {
     for ( int y = d->row + d->extra()->mergedYCells;
-	  y <= d->row + d->extra()->extraYCells; ++y ) {
+    y <= d->row + d->extra()->extraYCells; ++y ) {
       if ( x != d->column || y != d->row ) {
         Cell *cell = m_pSheet->cellAt( x, y );
         cell->unobscure(this);
@@ -1204,7 +1209,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   freeAllObscuredCells();
   if (d->hasExtra())
     forceExtraCells( d->column, d->row,
-		     d->extra()->mergedXCells, d->extra()->mergedYCells );
+         d->extra()->mergedXCells, d->extra()->mergedYCells );
 
   // If the column for this cell is hidden or the row is too low,
   // there is no use in remaking the layout.
@@ -1284,8 +1289,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   //
   int  lines = 1;
   if ( d->textWidth > (width - 2 * BORDER_SPACE
-		       - leftBorderWidth( _col, _row )
-		       - rightBorderWidth( _col, _row ) )
+           - leftBorderWidth( _col, _row )
+           - rightBorderWidth( _col, _row ) )
        && multiRow( _col, _row ) )
   {
     // Copy of d->strOutText but without the newlines.
@@ -1300,41 +1305,41 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
       // Make sure that we have a space at the end.
       o += ' ';
 
-      int start = 0;		// Start of the line we are handling now
-      int breakpos = 0;		// The next candidate pos to break the string
+      int start = 0;    // Start of the line we are handling now
+      int breakpos = 0;   // The next candidate pos to break the string
       int pos1 = 0;
       int availableWidth = (int) ( width - 2 * BORDER_SPACE
-			     - leftBorderWidth( _col, _row )
-			     - rightBorderWidth( _col, _row ) );
+           - leftBorderWidth( _col, _row )
+           - rightBorderWidth( _col, _row ) );
 
       do {
-	breakpos = o.find( ' ', breakpos );
-	double lineWidth = m_pSheet->doc()
-	  ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
-				 + o.mid( pos1, breakpos - pos1 ) ) );
+  breakpos = o.find( ' ', breakpos );
+  double lineWidth = m_pSheet->doc()
+    ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
+         + o.mid( pos1, breakpos - pos1 ) ) );
 
-	if ( lineWidth <= availableWidth ) {
-	  // We have room for the rest of the line.  End it here.
-	  d->strOutText += o.mid( pos1, breakpos - pos1 );
-	  pos1 = breakpos;
-	}
-	else {
-	  // Still not enough room.  Try to split further.
-	  if ( o.at( pos1 ) == ' ' )
-	    pos1++;
+  if ( lineWidth <= availableWidth ) {
+    // We have room for the rest of the line.  End it here.
+    d->strOutText += o.mid( pos1, breakpos - pos1 );
+    pos1 = breakpos;
+  }
+  else {
+    // Still not enough room.  Try to split further.
+    if ( o.at( pos1 ) == ' ' )
+      pos1++;
 
-	  if ( pos1 != 0 && breakpos != -1 ) {
-	    d->strOutText += "\n" + o.mid( pos1, breakpos - pos1 );
-	    lines++;
-	  }
-	  else
-	    d->strOutText += o.mid( pos1, breakpos - pos1 );
+    if ( pos1 != 0 && breakpos != -1 ) {
+      d->strOutText += "\n" + o.mid( pos1, breakpos - pos1 );
+      lines++;
+    }
+    else
+      d->strOutText += o.mid( pos1, breakpos - pos1 );
 
-	  start = pos1;
-	  pos1 = breakpos;
-	}
+    start = pos1;
+    pos1 = breakpos;
+  }
 
-	breakpos++;
+  breakpos++;
       } while( o.find( ' ', breakpos ) != -1 );
     }
 
@@ -1354,15 +1359,15 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
       i = d->strOutText.find( "\n", pos );
 
       if ( i == -1 )
-	t = d->strOutText.mid( pos, d->strOutText.length() - pos );
+  t = d->strOutText.mid( pos, d->strOutText.length() - pos );
       else {
-	t = d->strOutText.mid( pos, i - pos );
-	pos = i + 1;
+  t = d->strOutText.mid( pos, i - pos );
+  pos = i + 1;
       }
 
       double  tw = m_pSheet->doc()->unzoomItX( fm.width( t ) );
       if ( tw > d->textWidth )
-	d->textWidth = tw;
+  d->textWidth = tw;
     } while ( i != -1 );
   }
 
@@ -1392,8 +1397,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   //        empty and use the extra space?  No, probably not.
   //
   if ( d->textWidth + indent > ( width - 2 * BORDER_SPACE
-				 - leftBorderWidth( _col, _row )
-				 - rightBorderWidth( _col, _row ) )
+         - leftBorderWidth( _col, _row )
+         - rightBorderWidth( _col, _row ) )
        && ( !d->hasExtra() || d->extra()->mergedYCells == 0 ) )
   {
     int c = d->column;
@@ -1405,18 +1410,18 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
       Cell   *cell = m_pSheet->visibleCellAt( c + 1, d->row );
 
       if ( cell->isEmpty() ) {
-	width += cl2->dblWidth() - 1;
-	c++;
+  width += cl2->dblWidth() - 1;
+  c++;
 
-	// Enough space?
-	if ( d->textWidth + indent <= ( width - 2 * BORDER_SPACE
-					- leftBorderWidth( _col, _row )
-					- rightBorderWidth( _col, _row ) ) )
-	  end = 1;
+  // Enough space?
+  if ( d->textWidth + indent <= ( width - 2 * BORDER_SPACE
+          - leftBorderWidth( _col, _row )
+          - rightBorderWidth( _col, _row ) ) )
+    end = 1;
       }
       else
-	// Not enough space, but the next cell is not empty
-	end = -1;
+  // Not enough space, but the next cell is not empty
+  end = -1;
     }
 
     // Try to use additional space from the neighboring cells that
@@ -1432,23 +1437,23 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     //        setting Flag_CellTooShortX?
     //
     if ( align( _col, _row ) == Cell::Left
-	 || ( align( _col, _row ) == Cell::Undefined
-	      && !value().isNumber() ) )
+   || ( align( _col, _row ) == Cell::Undefined
+        && !value().isNumber() ) )
     {
       if ( c - d->column > d->extra()->mergedXCells ) {
-	d->extra()->extraXCells = c - d->column;
-	d->extra()->extraWidth  = width;
-	for ( int i = d->column + 1; i <= c; ++i ) {
-	  Cell *cell = m_pSheet->nonDefaultCell( i, d->row );
-	  cell->obscure( this );
-	}
+  d->extra()->extraXCells = c - d->column;
+  d->extra()->extraWidth  = width;
+  for ( int i = d->column + 1; i <= c; ++i ) {
+    Cell *cell = m_pSheet->nonDefaultCell( i, d->row );
+    cell->obscure( this );
+  }
 
-	// Not enough space
-	if ( end == -1 )
-	  setFlag( Flag_CellTooShortX );
+  // Not enough space
+  if ( end == -1 )
+    setFlag( Flag_CellTooShortX );
       }
       else
-	setFlag( Flag_CellTooShortX );
+  setFlag( Flag_CellTooShortX );
     }
     else
       setFlag( Flag_CellTooShortX );
@@ -1460,8 +1465,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   //
   if ( multiRow( _col, _row )
        && d->textHeight > ( height - 2 * BORDER_SPACE
-			    - topBorderWidth( _col, _row )
-			    - bottomBorderWidth( _col, _row ) ) )
+          - topBorderWidth( _col, _row )
+          - bottomBorderWidth( _col, _row ) ) )
   {
     int  r   = d->row;
     int  end = 0;
@@ -1472,18 +1477,18 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
       Cell  *cell = m_pSheet->visibleCellAt( d->column, r + 1 );
 
       if ( cell->isEmpty() ) {
-	height += rl2->dblHeight() - 1.0;
-	r++;
+  height += rl2->dblHeight() - 1.0;
+  r++;
 
-	// Enough space ?
-	if ( d->textHeight <= ( height - 2 * BORDER_SPACE
-				- topBorderWidth( _col, _row )
-				- bottomBorderWidth( _col, _row ) ) )
-	  end = 1;
+  // Enough space ?
+  if ( d->textHeight <= ( height - 2 * BORDER_SPACE
+        - topBorderWidth( _col, _row )
+        - bottomBorderWidth( _col, _row ) ) )
+    end = 1;
       }
       else
-	// Not enough space, but the next cell is not empty.
-	end = -1;
+  // Not enough space, but the next cell is not empty.
+  end = -1;
     }
 
     // Check to make sure we haven't already force-merged enough cells.
@@ -1492,13 +1497,13 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
       d->extra()->extraHeight = height;
 
       for ( int i = d->row + 1; i <= r; ++i ) {
-	Cell  *cell = m_pSheet->nonDefaultCell( d->column, i );
-	cell->obscure( this );
+  Cell  *cell = m_pSheet->nonDefaultCell( d->column, i );
+  cell->obscure( this );
       }
 
       // Not enough space?
       if ( end == -1 )
-	setFlag( Flag_CellTooShortY );
+  setFlag( Flag_CellTooShortY );
     }
     else
       setFlag( Flag_CellTooShortY );
@@ -1546,7 +1551,7 @@ void Cell::setOutputText()
     d->strOutText = d->strText;
   else {
     d->strOutText = sheet()->doc()->formatter()->formatText (this,
-							     formatType());
+                   formatType());
   }
 
   // Check conditions if needed.
@@ -1625,13 +1630,13 @@ void Cell::offsetAlign( int _col, int _row )
   case Cell::Top:
     if ( tmpAngle == 0 )
       d->textY = tmpTopBorderWidth + BORDER_SPACE
-	+ (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     else if ( tmpAngle < 0 )
       d->textY = tmpTopBorderWidth + BORDER_SPACE;
     else
       d->textY = tmpTopBorderWidth + BORDER_SPACE
-	+ ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
-	    / m_pSheet->doc()->zoomedResolutionY() );
+  + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
+      / m_pSheet->doc()->zoomedResolutionY() );
     break;
 
   case Cell::Bottom:
@@ -1640,46 +1645,46 @@ void Cell::offsetAlign( int _col, int _row )
     }
     else if ( tmpAngle != 0 ) {
       if ( h - BORDER_SPACE - d->textHeight
-	   - effBottomBorderPen( _col, _row ).width() > 0 )
+     - effBottomBorderPen( _col, _row ).width() > 0 )
       {
-	if ( tmpAngle < 0 )
-	  d->textY = h - BORDER_SPACE - d->textHeight
-	    - effBottomBorderPen( _col, _row ).width();
-	else
-	  d->textY = h - BORDER_SPACE - d->textHeight
-	    - effBottomBorderPen( _col, _row ).width()
-	    + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-		/ m_pSheet->doc()->zoomedResolutionY() );
+  if ( tmpAngle < 0 )
+    d->textY = h - BORDER_SPACE - d->textHeight
+      - effBottomBorderPen( _col, _row ).width();
+  else
+    d->textY = h - BORDER_SPACE - d->textHeight
+      - effBottomBorderPen( _col, _row ).width()
+      + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
+    / m_pSheet->doc()->zoomedResolutionY() );
       }
       else if ( tmpAngle < 0 )
-	d->textY = tmpTopBorderWidth + BORDER_SPACE ;
+  d->textY = tmpTopBorderWidth + BORDER_SPACE ;
       else
-	d->textY = tmpTopBorderWidth + BORDER_SPACE
-	  + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-	      / m_pSheet->doc()->zoomedResolutionY() );
+  d->textY = tmpTopBorderWidth + BORDER_SPACE
+    + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
+        / m_pSheet->doc()->zoomedResolutionY() );
     }
     else if ( tmpMultiRow ) {
       int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
       if ( tmpline > 1 )
-	tmpline--;  //number of extra lines
+  tmpline--;  //number of extra lines
 
       if ( h - BORDER_SPACE - d->textHeight * d->extra()->nbLines
-	   - effBottomBorderPen( _col, _row ).width() > 0 )
-	d->textY = h - BORDER_SPACE - d->textHeight * tmpline
-	  - effBottomBorderPen( _col, _row ).width();
+     - effBottomBorderPen( _col, _row ).width() > 0 )
+  d->textY = h - BORDER_SPACE - d->textHeight * tmpline
+    - effBottomBorderPen( _col, _row ).width();
       else
-	d->textY = tmpTopBorderWidth + BORDER_SPACE
-	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  d->textY = tmpTopBorderWidth + BORDER_SPACE
+    + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     }
     else {
       if ( h - BORDER_SPACE - d->textHeight
-	   - effBottomBorderPen( _col, _row ).width() > 0 )
-	d->textY = h - BORDER_SPACE - d->textHeight
-	  - effBottomBorderPen( _col, _row ).width()
-	  + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+     - effBottomBorderPen( _col, _row ).width() > 0 )
+  d->textY = h - BORDER_SPACE - d->textHeight
+    - effBottomBorderPen( _col, _row ).width()
+    + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
       else
-	d->textY = tmpTopBorderWidth + BORDER_SPACE
-	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  d->textY = tmpTopBorderWidth + BORDER_SPACE
+    + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     }
     break;
 
@@ -1687,45 +1692,45 @@ void Cell::offsetAlign( int _col, int _row )
   case Cell::UndefinedY:
     if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
       d->textY = ( h - d->textHeight ) / 2
-	+ (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     }
     else if ( tmpAngle != 0 ) {
       if ( h - d->textHeight > 0 ) {
-	if ( tmpAngle < 0 )
-	  d->textY = ( h - d->textHeight ) / 2 ;
-	else
-	  d->textY = ( h - d->textHeight ) / 2 +
-	    (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
-	    m_pSheet->doc()->zoomedResolutionY();
+  if ( tmpAngle < 0 )
+    d->textY = ( h - d->textHeight ) / 2 ;
+  else
+    d->textY = ( h - d->textHeight ) / 2 +
+      (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
+      m_pSheet->doc()->zoomedResolutionY();
       }
       else {
-	if ( tmpAngle < 0 )
-	  d->textY = tmpTopBorderWidth + BORDER_SPACE;
-	else
-	  d->textY = tmpTopBorderWidth + BORDER_SPACE
-	    + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
-		/ m_pSheet->doc()->zoomedResolutionY() );
+  if ( tmpAngle < 0 )
+    d->textY = tmpTopBorderWidth + BORDER_SPACE;
+  else
+    d->textY = tmpTopBorderWidth + BORDER_SPACE
+      + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
+    / m_pSheet->doc()->zoomedResolutionY() );
       }
     }
     else if ( tmpMultiRow ) {
       int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
       if ( tmpline == 0 )
-	tmpline = 1;
+  tmpline = 1;
 
       if ( h - d->textHeight * tmpline > 0 )
-	d->textY = ( h - d->textHeight * tmpline ) / 2
-	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  d->textY = ( h - d->textHeight * tmpline ) / 2
+    + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
       else
-	d->textY = tmpTopBorderWidth + BORDER_SPACE
-	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  d->textY = tmpTopBorderWidth + BORDER_SPACE
+    + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     }
     else {
       if ( h - d->textHeight > 0 )
-	d->textY = ( h - d->textHeight ) / 2
-	  + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  d->textY = ( h - d->textHeight ) / 2
+    + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
       else
-	d->textY = tmpTopBorderWidth + BORDER_SPACE
-	  + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+  d->textY = tmpTopBorderWidth + BORDER_SPACE
+    + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     }
     break;
   }
@@ -1742,7 +1747,7 @@ void Cell::offsetAlign( int _col, int _row )
     break;
   case Cell::Right:
     d->textX = ( w - BORDER_SPACE - d->textWidth
-		 - effRightBorderPen( _col, _row ).width() );
+     - effRightBorderPen( _col, _row ).width() );
     break;
   case Cell::Center:
     d->textX = ( w - d->textWidth ) / 2;
@@ -1793,8 +1798,8 @@ void Cell::textSize( QPainter &_paint )
 
     if ( style->hasFeature( KSpreadStyle::SFontFlag, true ) )
       fontUnderlined = ( style->fontFlags()
-			 // FIXME: Should be & (uint)...?
-			 && (uint) KSpreadStyle::FUnderline );
+       // FIXME: Should be & (uint)...?
+       && (uint) KSpreadStyle::FUnderline );
     else
       fontUnderlined = textFontUnderline( _col, _row );
   }
@@ -1818,22 +1823,22 @@ void Cell::textSize( QPainter &_paint )
     }
 
     d->textHeight = m_pSheet->doc()->unzoomItY( fm.ascent() + fm.descent()
-						+ offsetFont );
+            + offsetFont );
   }
   else if ( tmpAngle!= 0 ) {
     // Rotated text.
 
     d->textHeight = m_pSheet->doc()
       ->unzoomItY( int( cos( tmpAngle * M_PI / 180 )
-			* ( fm.ascent() + fm.descent() )
-			+ abs( int( ( fm.width( d->strOutText )
-				      * sin( tmpAngle * M_PI / 180 ) ) ) ) ) );
+      * ( fm.ascent() + fm.descent() )
+      + abs( int( ( fm.width( d->strOutText )
+              * sin( tmpAngle * M_PI / 180 ) ) ) ) ) );
 
     d->textWidth = m_pSheet->doc()
       ->unzoomItX( int( abs( int( ( sin( tmpAngle * M_PI / 180 )
-				    * ( fm.ascent() + fm.descent() ) ) ) )
-			+ fm.width( d->strOutText )
-			  * cos ( tmpAngle * M_PI / 180 ) ) );
+            * ( fm.ascent() + fm.descent() ) ) ) )
+      + fm.width( d->strOutText )
+        * cos ( tmpAngle * M_PI / 180 ) ) );
   }
   else {
     // Vertical text.
@@ -1843,7 +1848,7 @@ void Cell::textSize( QPainter &_paint )
 
     d->textWidth  = m_pSheet->doc()->unzoomItX( width );
     d->textHeight = m_pSheet->doc()->unzoomItY( ( fm.ascent() + fm.descent() )
-						* d->strOutText.length() );
+            * d->strOutText.length() );
   }
 }
 
@@ -1889,10 +1894,10 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
    * could somebody please explaint why we check for isProtected or isHideFormula here
    */
    if ( d->extra()->conditions
-	&& d->extra()->conditions->currentCondition( condition )
-	&& !(m_pSheet->getShowFormula()
-	     && !( m_pSheet->isProtected()
-		   && isHideFormula( d->column, d->row ) ) ) )
+  && d->extra()->conditions->currentCondition( condition )
+  && !(m_pSheet->getShowFormula()
+       && !( m_pSheet->isProtected()
+       && isHideFormula( d->column, d->row ) ) ) )
    {
      if ( condition.fontcond )
        tmpFont = *(condition.fontcond);
@@ -1903,7 +1908,7 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
 
   // Scale the font size according to the current zoom.
   tmpFont.setPointSizeFloat( 0.01 * m_pSheet->doc()->zoom()
-			     * tmpFont.pointSizeFloat() );
+           * tmpFont.pointSizeFloat() );
 
   painter.setFont( tmpFont );
 }
@@ -1911,7 +1916,7 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
 
 //used in KSpreadSheet::adjustColumnHelper and KSpreadSheet::adjustRow
 void Cell::calculateTextParameters( QPainter &_painter,
-					   int _col, int _row )
+             int _col, int _row )
 {
   // Apply the correct font to _painter.
   applyZoomedFont( _painter, _col, _row );
@@ -2026,23 +2031,23 @@ bool Cell::calc(bool delay)
 
 void Cell::paintCell( const KoRect   &rect, QPainter & painter,
                              KSpreadView    *view,
-			     const KoPoint  &coordinate,
+           const KoPoint  &coordinate,
                              const QPoint   &cellRef,
-			    /* bool paintBorderRight, bool paintBorderBottom,
-			     bool paintBorderLeft,  bool paintBorderTop,*/
-			     int paintBorder,
-			     QPen & rightPen, QPen & bottomPen,
-			     QPen & leftPen,  QPen & topPen,
+          /* bool paintBorderRight, bool paintBorderBottom,
+           bool paintBorderLeft,  bool paintBorderTop,*/
+           int paintBorder,
+           QPen & rightPen, QPen & bottomPen,
+           QPen & leftPen,  QPen & topPen,
 
-			     bool drawCursor )
+           bool drawCursor )
 {
-	
-	//kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
+  
+  //kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
 
-	bool paintBorderRight = paintBorder & Border_Right;
-	bool paintBorderBottom = paintBorder & Border_Bottom;
-	bool paintBorderLeft = paintBorder & Border_Left;
-	bool paintBorderTop = paintBorder & Border_Top;
+  bool paintBorderRight = paintBorder & Border_Right;
+  bool paintBorderBottom = paintBorder & Border_Bottom;
+  bool paintBorderLeft = paintBorder & Border_Left;
+  bool paintBorderTop = paintBorder & Border_Top;
 
   //kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
 
@@ -2073,7 +2078,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
   // The parameter cellref should be *this, unless this is the default cell.
   Q_ASSERT(isDefault()
-	   || (((cellRef.x() == d->column) && (cellRef.y() == d->row))));
+     || (((cellRef.x() == d->column) && (cellRef.y() == d->row))));
 
   KSpreadSheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
 
@@ -2128,9 +2133,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 #else
       // FIXME: Make extraWidth/Height really contain the *extra* width/height.
       if ( d->extra()->extraXCells )
-	width  = d->extra()->extraWidth;
+  width  = d->extra()->extraWidth;
       if ( d->extra()->extraYCells )
-	height = d->extra()->extraHeight;
+  height = d->extra()->extraHeight;
 #endif
     }
   }
@@ -2147,7 +2152,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     // But the cell doesn't look selected if this is the marker cell.
     Cell  *cell = m_pSheet->cellAt( view->marker() );
     QPoint        bottomRight( view->marker().x() + cell->extraXCells(),
-			       view->marker().y() + cell->extraYCells() );
+             view->marker().y() + cell->extraYCells() );
     QRect         markerArea( view->marker(), bottomRight );
     selected = selected && !( markerArea.contains( cellRef ) );
 
@@ -2201,9 +2206,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( painter.device()->devType() != QInternal::Printer
        || m_pSheet->print()->printGrid())
     paintDefaultBorders( painter, rect, cellRect, cellRef,
-			 paintBorderRight, paintBorderBottom,
+       paintBorderRight, paintBorderBottom,
                          paintBorderLeft,  paintBorderTop,
-			 rightPen, bottomPen, leftPen, topPen );
+       rightPen, bottomPen, leftPen, topPen );
 
   // 3. Paint all the cells that this one obscures.  They may only be
   //    partially obscured.
@@ -2214,13 +2219,13 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   paintingObscured++;
 
   if (d->hasExtra() && (d->extra()->extraXCells > 0
-			|| d->extra()->extraYCells > 0))
+      || d->extra()->extraYCells > 0))
     //kdDebug(36001) << "painting obscured cells for " << name() << endl;
 
   paintObscuredCells( rect, painter, view, cellRect, cellRef,
-		      paintBorderRight, paintBorderBottom,
-		      paintBorderLeft,  paintBorderTop,
-		      rightPen, bottomPen, leftPen, topPen );
+          paintBorderRight, paintBorderBottom,
+          paintBorderLeft,  paintBorderTop,
+          rightPen, bottomPen, leftPen, topPen );
   paintingObscured--;
 
   // If we print pages, then we disable clipping, otherwise borders are
@@ -2233,12 +2238,12 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   //
   //  FIXME: I don't like the term "force" here. Find a better one.
   if ( !isObscuringForced() )
-	 // if (!testFlag(Flag_Highlight))
+   // if (!testFlag(Flag_Highlight))
     paintCellBorders( painter, rect, cellRect0,
-		      cellRef,
-		      paintBorderRight, paintBorderBottom,
+          cellRef,
+          paintBorderRight, paintBorderBottom,
                       paintBorderLeft,  paintBorderTop,
-		      rightPen, bottomPen, leftPen, topPen );
+          rightPen, bottomPen, leftPen, topPen );
 
   if ( painter.device()->isExtDev() )
     painter.setClipping( true );
@@ -2246,7 +2251,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   // 5. Paint diagonal lines and page borders..
   paintCellDiagonalLines( painter, cellRect0, cellRef );
   paintPageBorders( painter, cellRect0, cellRef,
-		    paintBorderRight, paintBorderBottom );
+        paintBorderRight, paintBorderBottom );
 
 
 
@@ -2255,12 +2260,12 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
     // 6a. Paint possible comment indicator.
     if ( !painter.device()->isExtDev()
-	 || m_pSheet->print()->printCommentIndicator() )
+   || m_pSheet->print()->printCommentIndicator() )
       paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
 
     // 6b. Paint possible formula indicator.
     if ( !painter.device()->isExtDev()
-	 || m_pSheet->print()->printFormulaIndicator() )
+   || m_pSheet->print()->printFormulaIndicator() )
       paintFormulaIndicator( painter, cellRect, backgroundColor );
 
     // 6c. Paint possible indicator for clipped text.
@@ -2268,7 +2273,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
      //6c. Paint cell highlight
    /* if (highlightBorder != Border_None)
-	paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
+  paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
     rightHighlightPen, bottomHighlightPen, leftHighlightPen, topHighlightPen );*/
 
     // 6d. Paint the text in the cell unless:
@@ -2276,9 +2281,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     //  b) something indicates that the text should not be painted
     //  c) the sheet is protected and the cell is hidden.
     if ( !d->strOutText.isEmpty()
-	 && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(),
-								  cellRef.y() ) )
-	 && !( m_pSheet->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
+   && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(),
+                  cellRef.y() ) )
+   && !( m_pSheet->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
       paintText( painter, cellRect, cellRef );
     }
@@ -2306,7 +2311,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
         Cell *obscuringCell = *it;
 
         listPoints.append( QPoint( obscuringCell->column(),
-				   obscuringCell->row() ) );
+           obscuringCell->row() ) );
       }
 
       QValueList<QPoint>::iterator  it1  = listPoints.begin();
@@ -2314,7 +2319,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
       for ( ; it1 != end1; ++it1 ) {
         QPoint obscuringCellRef = *it1;
         Cell *obscuringCell = m_pSheet->cellAt( obscuringCellRef.x(),
-						       obscuringCellRef.y() );
+                   obscuringCellRef.y() );
 
         if ( obscuringCell != 0 ) {
           double x = m_pSheet->dblColumnPos( obscuringCellRef.x() );
@@ -2327,29 +2332,29 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
           KoPoint corner( x, y );
           painter.save();
 
-	  // Get the effective pens for the borders.  These are
-	  // determined by possible conditions on the cell with
-	  // associated styles.
+    // Get the effective pens for the borders.  These are
+    // determined by possible conditions on the cell with
+    // associated styles.
           QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(),
-						     obscuringCellRef.y() ) );
+                 obscuringCellRef.y() ) );
           QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(),
-						      obscuringCellRef.y() ) );
+                  obscuringCellRef.y() ) );
           QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(),
-						    obscuringCellRef.y() ) );
+                obscuringCellRef.y() ) );
           QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
-						   obscuringCellRef.y() ) );
+               obscuringCellRef.y() ) );
 
 
-	  //kdDebug(36001) << "  painting obscuring cell "
-	  //		 << obscuringCell->name() << endl;
-	 // QPen highlightPen;
+    //kdDebug(36001) << "  painting obscuring cell "
+    //     << obscuringCell->name() << endl;
+   // QPen highlightPen;
 
-	  //Note: Painting of highlight isn't quite right.  If several cells are merged, then the
-	  //whole merged cell will be painted with the colour of the last cell referenced which is inside the merged range
+    //Note: Painting of highlight isn't quite right.  If several cells are merged, then the
+    //whole merged cell will be painted with the colour of the last cell referenced which is inside the merged range
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef,
-				    Border_Left|Border_Top|Border_Right|Border_Bottom,
-						    rp, bp, lp, tp); // new pens
+            Border_Left|Border_Top|Border_Right|Border_Bottom,
+                rp, bp, lp, tp); // new pens
           painter.restore();
         }
       }
@@ -2395,67 +2400,67 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
 /*
  void Cell::paintCellHighlight(QPainter& painter,
-			 const KoRect& cellRect,
-			 const QPoint& cellRef,
-			 const int highlightBorder,
-			 const QPen& rightPen,
-			 const QPen& bottomPen,
-			 const QPen& leftPen,
-			 const QPen& topPen
-			)
+       const KoRect& cellRect,
+       const QPoint& cellRef,
+       const int highlightBorder,
+       const QPen& rightPen,
+       const QPen& bottomPen,
+       const QPen& leftPen,
+       const QPen& topPen
+      )
 {
-	//painter.drawLine(cellRect.left(),cellRect.top(),cellRect.right(),cellRect.bottom());
-	//QPen pen(d->extra()->highlight);
-	//painter.setPen(highlightPen);
+  //painter.drawLine(cellRect.left(),cellRect.top(),cellRect.right(),cellRect.bottom());
+  //QPen pen(d->extra()->highlight);
+  //painter.setPen(highlightPen);
 
-	QBrush nullBrush;
-	painter.setBrush(nullBrush);
+  QBrush nullBrush;
+  painter.setBrush(nullBrush);
 
-	QRect zoomedCellRect = sheet()->doc()->zoomRect( cellRect );
+  QRect zoomedCellRect = sheet()->doc()->zoomRect( cellRect );
 
-	//The highlight rect is just inside the main cell rect
-	//This saves the hassle of repainting nearby cells when the highlight is changed as the highlight areas
-	//do not overlap
-	zoomedCellRect.setLeft(zoomedCellRect.left()+1);
-	//zoomedCellRect.setRight(zoomedCellRect.right()-1);
-	zoomedCellRect.setTop(zoomedCellRect.top()+1);
-	//zoomedCellRect.setBottom(zoomedCellRect.bottom()-1);
+  //The highlight rect is just inside the main cell rect
+  //This saves the hassle of repainting nearby cells when the highlight is changed as the highlight areas
+  //do not overlap
+  zoomedCellRect.setLeft(zoomedCellRect.left()+1);
+  //zoomedCellRect.setRight(zoomedCellRect.right()-1);
+  zoomedCellRect.setTop(zoomedCellRect.top()+1);
+  //zoomedCellRect.setBottom(zoomedCellRect.bottom()-1);
 
-	if ( cellRef.x() != KS_colMax )
-		zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
-	if ( cellRef.y() != KS_rowMax )
-	zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
+  if ( cellRef.x() != KS_colMax )
+    zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
+  if ( cellRef.y() != KS_rowMax )
+  zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
 
-	if (highlightBorder & Border_Top)
-	{
-		painter.setPen(topPen);
-		painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.top());
-	}
-	if (highlightBorder & Border_Left)
-	{
-		painter.setPen(leftPen);
-		painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.left(),zoomedCellRect.bottom());
-	}
-	if (highlightBorder & Border_Right)
-	{
-		painter.setPen(rightPen);
-		painter.drawLine(zoomedCellRect.right(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.bottom());
-	}
-	if (highlightBorder & Border_Bottom)
-	{
-		painter.setPen(bottomPen);
-		painter.drawLine(zoomedCellRect.left(),zoomedCellRect.bottom(),zoomedCellRect.right(),zoomedCellRect.bottom());
-	}
+  if (highlightBorder & Border_Top)
+  {
+    painter.setPen(topPen);
+    painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.top());
+  }
+  if (highlightBorder & Border_Left)
+  {
+    painter.setPen(leftPen);
+    painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.left(),zoomedCellRect.bottom());
+  }
+  if (highlightBorder & Border_Right)
+  {
+    painter.setPen(rightPen);
+    painter.drawLine(zoomedCellRect.right(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.bottom());
+  }
+  if (highlightBorder & Border_Bottom)
+  {
+    painter.setPen(bottomPen);
+    painter.drawLine(zoomedCellRect.left(),zoomedCellRect.bottom(),zoomedCellRect.right(),zoomedCellRect.bottom());
+  }
 
-	if (highlightBorder & Border_SizeGrip)
-	{
-		QBrush brush(rightPen.color());
-		painter.setBrush(brush);
-		painter.setPen(rightPen);
-		painter.drawRect(zoomedCellRect.right()-3,zoomedCellRect.bottom()-3,4,4);
-	}
+  if (highlightBorder & Border_SizeGrip)
+  {
+    QBrush brush(rightPen.color());
+    painter.setBrush(brush);
+    painter.setPen(rightPen);
+    painter.drawRect(zoomedCellRect.right()-3,zoomedCellRect.bottom()-3,4,4);
+  }
 
-	//painter.drawRect(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.width(),zoomedCellRect.height());
+  //painter.drawRect(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.width(),zoomedCellRect.height());
 }  */
 
 // Paint all the cells that this cell obscures (helper function to paintCell).
@@ -2467,7 +2472,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      bool paintBorderRight,
                                      bool _paintBorderBottom,
                                      bool paintBorderLeft,
-				     bool _paintBorderTop,
+             bool _paintBorderTop,
                                      QPen & rightPen, QPen & _bottomPen,
                                      QPen & leftPen,  QPen & _topPen )
 {
@@ -2487,62 +2492,62 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
     for( int x = 0; x <= maxX; ++ x ) {
       ColumnFormat * cl = m_pSheet->columnFormat( cellRef.x() + x );
       if ( y != 0 || x != 0 ) {
-	uint  column = cellRef.x() + x;
-	uint  row    = cellRef.y() + y;
+  uint  column = cellRef.x() + x;
+  uint  row    = cellRef.y() + y;
 
-	QPen  topPen;
-	QPen  bottomPen;
-	bool  paintBorderTop;
-	bool  paintBorderBottom;
+  QPen  topPen;
+  QPen  bottomPen;
+  bool  paintBorderTop;
+  bool  paintBorderBottom;
 
-	Cell  *cell = m_pSheet->cellAt( column, row );
-	KoPoint       corner( xpos, ypos );
+  Cell  *cell = m_pSheet->cellAt( column, row );
+  KoPoint       corner( xpos, ypos );
 
-	// Check if the upper and lower borders should be painted, and
-	// if so which pens we should use.  There used to be a nasty
-	// bug here (#61452).
-	// Check top pen.  Only check if this is not on the top row.
-	topPen         = _topPen;
-	paintBorderTop = _paintBorderTop;
-	if ( row > 1 && !cell->isObscuringForced() ) {
-	  Cell  *cellUp = m_pSheet->cellAt( column, row - 1 );
+  // Check if the upper and lower borders should be painted, and
+  // if so which pens we should use.  There used to be a nasty
+  // bug here (#61452).
+  // Check top pen.  Only check if this is not on the top row.
+  topPen         = _topPen;
+  paintBorderTop = _paintBorderTop;
+  if ( row > 1 && !cell->isObscuringForced() ) {
+    Cell  *cellUp = m_pSheet->cellAt( column, row - 1 );
 
-	  if ( cellUp->isDefault() )
-	    paintBorderTop = false;
-	  else {
-	  // If the cell towards the top is part of a merged cell, get
-	  // the pointer to the master cell.
-	    cellUp = cellUp->ultimateObscuringCell();
+    if ( cellUp->isDefault() )
+      paintBorderTop = false;
+    else {
+    // If the cell towards the top is part of a merged cell, get
+    // the pointer to the master cell.
+      cellUp = cellUp->ultimateObscuringCell();
 
-	    topPen = cellUp->effBottomBorderPen( cellUp->column(),
-						 cellUp->row() );
+      topPen = cellUp->effBottomBorderPen( cellUp->column(),
+             cellUp->row() );
 
 #if 0
-	    int  penWidth = QMAX(1, sheet()->doc()->zoomItY( topPen.width() ));
-	    topPen.setWidth( penWidth );
+      int  penWidth = QMAX(1, sheet()->doc()->zoomItY( topPen.width() ));
+      topPen.setWidth( penWidth );
 #endif
-	  }
-	}
+    }
+  }
 
-	// FIXME: I thought we had to check bottom pen as well.
-	//        However, it looks as if we don't need to.  It works anyway.
-	bottomPen         = _bottomPen;
-	paintBorderBottom = _paintBorderBottom;
+  // FIXME: I thought we had to check bottom pen as well.
+  //        However, it looks as if we don't need to.  It works anyway.
+  bottomPen         = _bottomPen;
+  paintBorderBottom = _paintBorderBottom;
 
-	int  paintBorder = Border_None;
-	if (paintBorderLeft) 	paintBorder |= Cell::Border_Left;
-	if (paintBorderRight) 	paintBorder |= Cell::Border_Right;
-	if (paintBorderTop)	paintBorder |= Cell::Border_Top;
-	if (paintBorderBottom)	paintBorder |= Cell::Border_Bottom;
+  int  paintBorder = Border_None;
+  if (paintBorderLeft)  paintBorder |= Cell::Border_Left;
+  if (paintBorderRight)   paintBorder |= Cell::Border_Right;
+  if (paintBorderTop) paintBorder |= Cell::Border_Top;
+  if (paintBorderBottom)  paintBorder |= Cell::Border_Bottom;
 
-	/*Cell::BorderSides highlightBorder = Border_None;
-	QPen highlightPen;*/
+  /*Cell::BorderSides highlightBorder = Border_None;
+  QPen highlightPen;*/
 
-	cell->paintCell( rect, painter, view,
-			 corner,
-			 QPoint( cellRef.x() + x, cellRef.y() + y ),
-			 paintBorder,
-			 rightPen, bottomPen, leftPen, topPen);
+  cell->paintCell( rect, painter, view,
+       corner,
+       QPoint( cellRef.x() + x, cellRef.y() + y ),
+       paintBorder,
+       rightPen, bottomPen, leftPen, topPen);
       }
       xpos += cl->dblWidth();
     }
@@ -2647,11 +2652,11 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   bool paintRight;
 
   paintLeft   = ( paintBorderLeft && leftPen.style() == Qt::NoPen
-		  && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() );
   paintRight  = ( paintBorderRight && rightPen.style() == Qt::NoPen
-		  && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() );
   paintTop    = ( paintBorderTop && topPen.style() == Qt::NoPen
-		  && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() );
   paintBottom = ( paintBorderBottom && sheet()->getShowGrid()
                   && bottomPen.style() == Qt::NoPen );
 
@@ -2685,7 +2690,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     if ( cellRef.x() > 1 ) {
       Cell  *cell_west = m_pSheet->cellAt( cellRef.x() - 1,
-						  cellRef.y() );
+              cellRef.y() );
       QPen t = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
       QPen b = cell_west->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
 
@@ -2732,7 +2737,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     if ( cellRef.x() < KS_colMax ) {
       Cell  *cell_east = m_pSheet->cellAt( cellRef.x() + 1,
-						  cellRef.y() );
+              cellRef.y() );
 
       QPen t = cell_east->effTopBorderPen(    cellRef.x() + 1, cellRef.y() );
       QPen b = cell_east->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
@@ -2779,7 +2784,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     int dr = 0;
     if ( cellRef.y() > 1 ) {
       Cell  *cell_north = m_pSheet->cellAt( cellRef.x(),
-						   cellRef.y() - 1 );
+               cellRef.y() - 1 );
 
       QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
       QPen r = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
@@ -2814,7 +2819,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     int dr = 0;
     if ( cellRef.y() < KS_rowMax ) {
       Cell  *cell_south = m_pSheet->cellAt( cellRef.x(),
-						   cellRef.y() + 1 );
+               cellRef.y() + 1 );
 
       QPen l = cell_south->effLeftBorderPen(  cellRef.x(), cellRef.y() + 1 );
       QPen r = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
@@ -2966,8 +2971,8 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
     QColor penColor = Qt::red;
     // If background has high red part, switch to blue.
     if ( qRed( backgroundColor.rgb() ) > 127 &&
-	 qGreen( backgroundColor.rgb() ) < 80 &&
-	 qBlue( backgroundColor.rgb() ) < 80 )
+   qGreen( backgroundColor.rgb() ) < 80 &&
+   qBlue( backgroundColor.rgb() ) < 80 )
     {
         penColor = Qt::blue;
     }
@@ -3032,11 +3037,11 @@ void Cell::paintText( QPainter& painter,
     if ( value().isNumber()
          && !( m_pSheet->getShowFormula()
                && !( m_pSheet->isProtected()
-		     && isHideFormula( d->column, d->row ) ) ) )
+         && isHideFormula( d->column, d->row ) ) ) )
     {
       double v = value().asFloat();
       if ( floatColor( cellRef.x(), cellRef.y()) == Cell::NegRed
-	   && v < 0.0 )
+     && v < 0.0 )
         tmpPen.setColor( Qt::red );
     }
   }
@@ -3126,7 +3131,7 @@ void Cell::paintText( QPainter& painter,
     //        This should be done throughout the entire file.
     //
     if ( d->hasExtra()
-	 && d->extra()->conditions
+   && d->extra()->conditions
          && d->extra()->conditions->matchedStyle()
          && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
       indent = d->extra()->conditions->matchedStyle()->indent();
@@ -3229,8 +3234,8 @@ void Cell::paintText( QPainter& painter,
 
       int align = effAlignX();
       if ( m_pSheet->getShowFormula()
-	   && !( m_pSheet->isProtected()
-		 && isHideFormula( d->column, d->row ) ) )
+     && !( m_pSheet->isProtected()
+     && isHideFormula( d->column, d->row ) ) )
         align = Cell::Left;
 
       // #### Torben: This looks duplicated for me
@@ -3453,16 +3458,16 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-	// FIXME: There is probably Cut&Paste bugs here as well as below.
-	//        The QMIN/QMAX and left/right pairs don't really make sense.
-	//
-	//    UPDATE: In fact, most of these QMIN/QMAX combinations
-	//            are TOTALLY BOGUS.  For one thing, the idea
-	//            that we always have full cells on paper is wrong
-	//            since we can have embedded sheets in e.g. kword,
-	//            and those can be arbitrarily clipped.  WE HAVE TO
-	//            REVISE THIS WHOLE BORDER PAINTING SECTION!
-	//
+  // FIXME: There is probably Cut&Paste bugs here as well as below.
+  //        The QMIN/QMAX and left/right pairs don't really make sense.
+  //
+  //    UPDATE: In fact, most of these QMIN/QMAX combinations
+  //            are TOTALLY BOGUS.  For one thing, the idea
+  //            that we always have full cells on paper is wrong
+  //            since we can have embedded sheets in e.g. kword,
+  //            and those can be arbitrarily clipped.  WE HAVE TO
+  //            REVISE THIS WHOLE BORDER PAINTING SECTION!
+  //
       if ( sheetDir == KSpreadSheet::RightToLeft )
         painter.drawLine( QMIN( zrect_right,  zcellRect_right ),
                           QMAX( zrect_top,    zcellRect_top - top ),
@@ -3506,15 +3511,15 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                           QMAX( zrect_left, zcellRect_left ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
       else {
-	// FIXME: This is the way all these things should look.
-	//        Make it so.
-	//
-	// Only print the right border if it is visible.
-	if ( zcellRect_right <= zrect_right + right_penWidth / 2)
-	  painter.drawLine( zcellRect_right,
-			    QMAX( zrect_top, zcellRect_top - top ),
-			    zcellRect_right,
-			    QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+  // FIXME: This is the way all these things should look.
+  //        Make it so.
+  //
+  // Only print the right border if it is visible.
+  if ( zcellRect_right <= zrect_right + right_penWidth / 2)
+    painter.drawLine( zcellRect_right,
+          QMAX( zrect_top, zcellRect_top - top ),
+          zcellRect_right,
+          QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
       }
     }
     else {
@@ -3535,17 +3540,17 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     painter.setPen( topPen );
 
     //kdDebug(36001) << "    painting top border of cell " << name()
-    //		   << " [" << zcellRect_left << "," << zcellRect_right
-    //		   << ": " << zcellRect_right - zcellRect_left << "]" << endl;
+    //       << " [" << zcellRect_left << "," << zcellRect_right
+    //       << ": " << zcellRect_right - zcellRect_left << "]" << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( zcellRect_top >= zrect_top + top_penWidth / 2)
-	painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
-			  zcellRect_top,
-			  QMIN( zrect_right,  zcellRect_right ),
-			  zcellRect_top );
+  painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+        zcellRect_top,
+        QMIN( zrect_right,  zcellRect_right ),
+        zcellRect_top );
     }
     else {
       painter.drawLine( zcellRect_left, zcellRect_top,
@@ -3557,17 +3562,17 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     painter.setPen( bottomPen );
 
     //kdDebug(36001) << "    painting bottom border of cell " << name()
-    //		   << " [" << zcellRect_left << "," << zcellRect_right
-    //		   << ": " << zcellRect_right - zcellRect_left << "]" << endl;
+    //       << " [" << zcellRect_left << "," << zcellRect_right
+    //       << ": " << zcellRect_right - zcellRect_left << "]" << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( zcellRect_bottom <= zrect_bottom + bottom_penWidth / 2)
-	painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
-			  zcellRect_bottom,
-			  QMIN( zrect_right,  zcellRect_right ),
-			  zcellRect_bottom );
+  painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+        zcellRect_bottom,
+        QMIN( zrect_right,  zcellRect_right ),
+        zcellRect_bottom );
     }
     else {
       painter.drawLine( zcellRect_left, zcellRect_bottom,
@@ -3592,21 +3597,21 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
   // Some useful referenses.
   Cell  *cell_north     = m_pSheet->cellAt( cellRef.x(),
-						   cellRef.y() - 1 );
+               cellRef.y() - 1 );
   Cell  *cell_northwest = m_pSheet->cellAt( cellRef.x() - 1,
-						   cellRef.y() - 1 );
+               cellRef.y() - 1 );
   Cell  *cell_west      = m_pSheet->cellAt( cellRef.x() - 1,
-						   cellRef.y() );
+               cellRef.y() );
   Cell  *cell_northeast = m_pSheet->cellAt( cellRef.x() + 1,
-						   cellRef.y() - 1 );
+               cellRef.y() - 1 );
   Cell  *cell_east      = m_pSheet->cellAt( cellRef.x() + 1,
-						   cellRef.y() );
+               cellRef.y() );
   Cell  *cell_south     = m_pSheet->cellAt( cellRef.x(),
-						   cellRef.y() + 1 );
+               cellRef.y() + 1 );
   Cell  *cell_southwest = m_pSheet->cellAt( cellRef.x() - 1,
-						   cellRef.y() + 1 );
+               cellRef.y() + 1 );
   Cell  *cell_southeast = m_pSheet->cellAt( cellRef.x() + 1,
-						   cellRef.y() + 1 );
+               cellRef.y() + 1 );
 
   // Fix the borders which meet at the top left corner
   if ( cell_north->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
@@ -3614,7 +3619,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     vert_pen = cell_north->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
   else
     vert_pen = cell_northwest->effRightBorderPen( cellRef.x() - 1,
-						  cellRef.y() - 1 );
+              cellRef.y() - 1 );
 
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
@@ -3625,7 +3630,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       horz_pen = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
     else
       horz_pen = cell_northwest->effBottomBorderPen( cellRef.x() - 1,
-						     cellRef.y() - 1 );
+                 cellRef.y() - 1 );
 
     horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
     int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2 + 1;
@@ -3658,11 +3663,11 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // Fix the borders which meet at the top right corner
   if ( cell_north->effRightBorderValue( cellRef.x(), cellRef.y() - 1 )
        >= cell_northeast->effLeftBorderValue( cellRef.x() + 1,
-					      cellRef.y() - 1 ) )
+                cellRef.y() - 1 ) )
     vert_pen = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
   else
     vert_pen = cell_northeast->effLeftBorderPen( cellRef.x() + 1,
-						 cellRef.y() - 1 );
+             cellRef.y() - 1 );
 
   // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
@@ -3670,11 +3675,11 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
     if ( cell_east->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
          >= cell_northeast->effBottomBorderValue( cellRef.x() + 1,
-						  cellRef.y() - 1 ) )
+              cellRef.y() - 1 ) )
       horz_pen = cell_east->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
     else
       horz_pen = cell_northeast->effBottomBorderPen( cellRef.x() + 1,
-						     cellRef.y() - 1 );
+                 cellRef.y() - 1 );
 
     // horz_pen = effTopBorderPen( cellRef.x() + 1, cellRef.y() );
     horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
@@ -3710,11 +3715,11 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // Fix the borders which meet at the bottom left corner
     if ( cell_south->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 )
          >= cell_southwest->effRightBorderValue( cellRef.x() - 1,
-						 cellRef.y() + 1 ) )
+             cellRef.y() + 1 ) )
       vert_pen = cell_south->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
     else
       vert_pen = cell_southwest->effRightBorderPen( cellRef.x() - 1,
-						    cellRef.y() + 1 );
+                cellRef.y() + 1 );
 
     // vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
     vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
@@ -3722,12 +3727,12 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     if ( vert_pen.style() != Qt::NoPen ) {
       if ( cell_west->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
            >= cell_southwest->effTopBorderValue( cellRef.x() - 1,
-						 cellRef.y() + 1 ) )
+             cellRef.y() + 1 ) )
         horz_pen = cell_west->effBottomBorderPen( cellRef.x() - 1,
-						  cellRef.y() );
+              cellRef.y() );
       else
         horz_pen = cell_southwest->effTopBorderPen( cellRef.x() - 1,
-						    cellRef.y() + 1 );
+                cellRef.y() + 1 );
 
       // horz_pen = effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
       horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
@@ -3761,11 +3766,11 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // Fix the borders which meet at the bottom right corner
     if ( cell_south->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
          >= cell_southeast->effLeftBorderValue( cellRef.x() + 1,
-						cellRef.y() + 1 ) )
+            cellRef.y() + 1 ) )
       vert_pen = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
     else
       vert_pen = cell_southeast->effLeftBorderPen( cellRef.x() + 1,
-						   cellRef.y() + 1 );
+               cellRef.y() + 1 );
 
     // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
     vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
@@ -3773,13 +3778,13 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
       if ( cell_east ->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
            >= cell_southeast->effTopBorderValue( cellRef.x() + 1,
-						 cellRef.y() + 1 ) )
+             cellRef.y() + 1 ) )
 
         horz_pen = m_pSheet->cellAt( cellRef.x() + 1, cellRef.y() )
-	  ->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+    ->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
       else
         horz_pen = m_pSheet->cellAt( cellRef.x() + 1, cellRef.y() + 1 )
-	  ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+    ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
 
       // horz_pen = effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
       horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
@@ -3827,17 +3832,17 @@ void Cell::paintCellDiagonalLines( QPainter& painter,
   if ( effFallDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen ) {
     painter.setPen( effFallDiagonalPen( cellRef.x(), cellRef.y() ) );
     painter.drawLine( doc->zoomItX( cellRect.x() ),
-		      doc->zoomItY( cellRect.y() ),
-		      doc->zoomItX( cellRect.right() ),
-		      doc->zoomItY( cellRect.bottom() ) );
+          doc->zoomItY( cellRect.y() ),
+          doc->zoomItX( cellRect.right() ),
+          doc->zoomItY( cellRect.bottom() ) );
   }
 
   if ( effGoUpDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen ) {
     painter.setPen( effGoUpDiagonalPen( cellRef.x(), cellRef.y() ) );
     painter.drawLine( doc->zoomItX( cellRect.x() ),
-		      doc->zoomItY( cellRect.bottom() ),
-		      doc->zoomItX( cellRect.right() ),
-		      doc->zoomItY( cellRect.y() ) );
+          doc->zoomItY( cellRect.bottom() ),
+          doc->zoomItX( cellRect.right() ),
+          doc->zoomItY( cellRect.y() ) );
   }
 }
 
@@ -3915,35 +3920,35 @@ QString Cell::textDisplaying( QPainter &_painter )
     // when the text finally fits, return it.
     for ( int i = d->strOutText.length(); i != 0; i-- ) {
       if ( a == Cell::Left || a == KSpread::Cell::Undefined )
-	tmp = d->strOutText.left(i);
+  tmp = d->strOutText.left(i);
       else if ( a == Cell::Right)
-	tmp = d->strOutText.right(i);
+  tmp = d->strOutText.right(i);
       else
-	tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
+  tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
 
       // 4 equal lenght of red triangle +1 point.
       if ( m_pSheet->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent
-	   < len - 4.0 - 1.0 )
+     < len - 4.0 - 1.0 )
       {
-	if ( getAngle( column(), row() ) != 0 ) {
-	  QString tmp2;
-	  RowFormat *rl = m_pSheet->rowFormat( row() );
-	  if ( d->textHeight > rl->dblHeight() ) {
-	    for ( int j = d->strOutText.length(); j != 0; j-- ) {
-	      tmp2 = d->strOutText.left( j );
-	      if ( m_pSheet->doc()->unzoomItY( fm.width( tmp2 ) )
-		   < rl->dblHeight() - 1.0 )
-	      {
-		return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
-	      }
-	    }
-	  }
-	  else
-	    return tmp;
+  if ( getAngle( column(), row() ) != 0 ) {
+    QString tmp2;
+    RowFormat *rl = m_pSheet->rowFormat( row() );
+    if ( d->textHeight > rl->dblHeight() ) {
+      for ( int j = d->strOutText.length(); j != 0; j-- ) {
+        tmp2 = d->strOutText.left( j );
+        if ( m_pSheet->doc()->unzoomItY( fm.width( tmp2 ) )
+       < rl->dblHeight() - 1.0 )
+        {
+    return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
+        }
+      }
+    }
+    else
+      return tmp;
 
-	}
-	else
-	  return tmp;
+  }
+  else
+    return tmp;
       }
     }
     return QString( "" );
@@ -3973,8 +3978,8 @@ QString Cell::textDisplaying( QPainter &_painter )
 
     for ( int i = d->strOutText.length(); i != 0; i-- ) {
       if ( m_pSheet->doc()->unzoomItY( fm.ascent() + fm.descent() ) * i
-	   < rl->dblHeight() - 1.0 )
-	return d->strOutText.left( i );
+     < rl->dblHeight() - 1.0 )
+  return d->strOutText.left( i );
     }
 
     return QString( "" );
@@ -4972,8 +4977,8 @@ void Cell::checkNumberFormat()
 
 
 QDomElement Cell::save( QDomDocument& doc,
-			       int _x_offset, int _y_offset,
-			       bool force, bool copy, bool era )
+             int _x_offset, int _y_offset,
+             bool force, bool copy, bool era )
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );

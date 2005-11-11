@@ -61,16 +61,16 @@ class KoOasisStyles;
 struct KSpreadValidity
 {
     KSpreadValidity()
-	{
-	    valMin = 0.0;
-	    valMax = 0.0;
-	    m_cond = None;
-	    m_action = Stop;
-	    m_allow = Allow_All;
-	    displayMessage = true;
-	    allowEmptyCell = false;
+  {
+      valMin = 0.0;
+      valMax = 0.0;
+      m_cond = None;
+      m_action = Stop;
+      m_allow = Allow_All;
+      displayMessage = true;
+      allowEmptyCell = false;
             displayValidationInformation = false;
-	};
+  };
     QString message;
     QString title;
     QString titleInfo;
@@ -93,6 +93,8 @@ struct KSpreadValidity
 namespace KSpread
 {
 
+class Formula;
+  
 /**
  * For every cell in the spread sheet there is a Cell object.
  *
@@ -195,6 +197,7 @@ public:
 
     QString strOutText() const;
 
+    Formula *formula () const;
     /**
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
@@ -253,7 +256,7 @@ public:
     QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, bool force = false, bool copy = false );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
-	       Operation op = OverWrite, bool paste = false );
+         Operation op = OverWrite, bool paste = false );
 
     bool loadOasis( const QDomElement & element, const KoOasisStyles &oasisStyles );
     void loadOasisValidation( const QString& validationName );
@@ -285,14 +288,14 @@ public:
     
     enum BorderSides
     {
-	    Border_None		=0x00,
-	    Border_Left		=0x01,
-	    Border_Right	=0x02,
-	    Border_Top		=0x04,
-	    Border_Bottom	=0x08,
-	    Border_SizeGrip  	=0x10 	//the size grip is the little square on the bottom right-hand corner of a highlighted range of cells
-			    		//which the user can click and drag to resize the range and change which cells are included.
-			    		//this is not used with normal borders
+      Border_None   =0x00,
+      Border_Left   =0x01,
+      Border_Right  =0x02,
+      Border_Top    =0x04,
+      Border_Bottom =0x08,
+      Border_SizeGrip   =0x10   //the size grip is the little square on the bottom right-hand corner of a highlighted range of cells
+              //which the user can click and drag to resize the range and change which cells are included.
+              //this is not used with normal borders
     };
 
     /**
@@ -315,13 +318,13 @@ public:
     void paintCell( const KoRect & rect, QPainter & painter,
                     KSpreadView * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
-		    int paintBorder,
-		    
+        int paintBorder,
+        
                     QPen & rightPen,
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
-		    
+        
                     bool drawCursor = true );
    
 
@@ -782,7 +785,7 @@ public:
       Flag_DependancyError       = 0x04000000,
       Flag_PaintingCell          = 0x08000000, // On during painting
       Flag_TextFormatDirty       = 0x10000000,
-     // Flag_Highlight		 = 0x20000000
+     // Flag_Highlight     = 0x20000000
     };
 
     void clearFlag( CellFlags flag );
@@ -913,19 +916,19 @@ private:
 
     /* helper functions to the paintCell(...) function */
  /*   void paintCellHighlight(QPainter& painter,
-			    const KoRect& cellRect,
-			    const QPoint& cellRef,
-			    const int highlightBorder,
-			    const QPen& rightPen,
-			    const QPen& bottomPen,
-			    const QPen& leftPen,
-			    const QPen& topPen
-			   );*/
+          const KoRect& cellRect,
+          const QPoint& cellRef,
+          const int highlightBorder,
+          const QPen& rightPen,
+          const QPen& bottomPen,
+          const QPen& leftPen,
+          const QPen& topPen
+         );*/
    
     
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, 
-			   const QPoint &cellRef,
+         const QPoint &cellRef,
                            bool paintBorderRight, bool paintBorderBottom,
                            bool paintBorderLeft, bool paintBorderTop,
                            QPen & rightPen, QPen & bottomPen,

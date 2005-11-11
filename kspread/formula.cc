@@ -60,7 +60,6 @@
 
  /*
 TODO - features:
- - array/list for function arguments
  - handle Intersection
  - cell reference is made relative (absolute now)
  - shared formula (different owner, same data)
@@ -467,7 +466,7 @@ Tokens Formula::tokens() const
   return scan( d->expression, locale );
 }
 
-Tokens Formula::scan( const QString& expr, KLocale* locale )
+Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 {
   // to hold the result
   Tokens tokens;
@@ -612,7 +611,23 @@ Tokens Formula::scan( const QString& expr, KLocale* locale )
              state = InCell;
            else
            {
-             tokens.append( Token( Token::Identifier, tokenText, tokenStart ) );
+             bool gotNamed = false;
+             // check for named areas ...
+             if (d->sheet) {
+               const QValueList<Reference> areas = d->sheet->doc()->listArea();
+               QValueList<Reference>::const_iterator it;
+               for (it = areas.begin(); it != areas.end(); ++it) {
+                 if ((*it).ref_name.lower() == tokenText.lower()) {
+                   // we got a named area
+                   tokens.append (Token (Token::Range, tokenText, tokenStart));
+                   gotNamed = true;
+                   break;
+                  }
+                }
+             }
+             if (!gotNamed)
+               tokens.append (Token (Token::Identifier, tokenText,
+                 tokenStart));
              tokenStart = i;
              tokenText = "";
              state = Start;
@@ -643,6 +658,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale )
          {
 
            // we're done with named area
+           // (Tomas) huh? this doesn't seem to check for named areas ...
            tokens.append( Token( Token::Range, tokenText, tokenStart ) );
            tokenText = "";
            state = Start;

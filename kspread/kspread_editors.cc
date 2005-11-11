@@ -76,222 +76,222 @@ KSpreadCellEditor::~KSpreadCellEditor()
  ********************************************/
 
 KSpreadTextEditorHighlighter::KSpreadTextEditorHighlighter(QTextEdit* textEdit,KSpreadSheet* sheet)
-	: QSyntaxHighlighter(textEdit) , _sheet(sheet), _refsChanged(true)
+  : QSyntaxHighlighter(textEdit) , _sheet(sheet), _refsChanged(true)
 {
-	_colors.push_back(Qt::red);
-	_colors.push_back(Qt::blue);
-	_colors.push_back(Qt::magenta);
-	_colors.push_back(Qt::darkRed);
-	_colors.push_back(Qt::darkGreen);
-	_colors.push_back(Qt::darkMagenta);
-	_colors.push_back(Qt::darkCyan);
-	_colors.push_back(Qt::darkYellow);
+  _colors.push_back(Qt::red);
+  _colors.push_back(Qt::blue);
+  _colors.push_back(Qt::magenta);
+  _colors.push_back(Qt::darkRed);
+  _colors.push_back(Qt::darkGreen);
+  _colors.push_back(Qt::darkMagenta);
+  _colors.push_back(Qt::darkCyan);
+  _colors.push_back(Qt::darkYellow);
 }
 
 bool KSpreadTextEditorHighlighter::referencesChanged()
 {
-	bool result=_refsChanged;
-	_refsChanged=false;
-	return result;
+  bool result=_refsChanged;
+  _refsChanged=false;
+  return result;
 }
 
 /*
 Cell* KSpreadTextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
 {
-	outCellColor=Qt::black; //outCellColor is black if there is no cell ref at the specified position
+  outCellColor=Qt::black; //outCellColor is black if there is no cell ref at the specified position
 
-	QString t=textEdit()->text();
+  QString t=textEdit()->text();
 
-	if ( (t.length() < 1) || (t[0] != '=') )
-		return 0;
+  if ( (t.length() < 1) || (t[0] != '=') )
+    return 0;
 
-	int startPos=-1,endPos=t.length();
+  int startPos=-1,endPos=t.length();
 
-	//Walk backwards to get start of ref name
-	for (int i=position;i>=0;i--)
-	{
-		QChar ch=t[i];
-		if ( (!ch.isLetterOrNumber()) && (ch != '$') && (ch != '!') )
-		{
-			//Replace the 'QChar(0)' bit below with '0' and compile with gcc 3.3 -
-			//it seems that someone doesn't think too much of the C++ standard
-			if (i != position)
-			{
-				startPos=i+1;
-				break;
-			}
-			else
-				//If the cursor is positioned at the end of a cell reference,
-				//move the search starting position backwards
-				position=i;
-		}
-	}
+  //Walk backwards to get start of ref name
+  for (int i=position;i>=0;i--)
+  {
+    QChar ch=t[i];
+    if ( (!ch.isLetterOrNumber()) && (ch != '$') && (ch != '!') )
+    {
+      //Replace the 'QChar(0)' bit below with '0' and compile with gcc 3.3 -
+      //it seems that someone doesn't think too much of the C++ standard
+      if (i != position)
+      {
+        startPos=i+1;
+        break;
+      }
+      else
+        //If the cursor is positioned at the end of a cell reference,
+        //move the search starting position backwards
+        position=i;
+    }
+  }
 
-	//Walk forwards to get end of ref name
-	for (unsigned int i=position;i<t.length();i++)
-	{
-		QChar ch=t[i];
-		if ( (!ch.isLetterOrNumber()) && (ch != '$') && (ch != '!') )
-		{
-			endPos=i;
-			break;
-		}
-	}
+  //Walk forwards to get end of ref name
+  for (unsigned int i=position;i<t.length();i++)
+  {
+    QChar ch=t[i];
+    if ( (!ch.isLetterOrNumber()) && (ch != '$') && (ch != '!') )
+    {
+      endPos=i;
+      break;
+    }
+  }
 
-	if (startPos == -1)
-		return 0;
+  if (startPos == -1)
+    return 0;
 
-	QString ref=t.mid(startPos,endPos-startPos);
+  QString ref=t.mid(startPos,endPos-startPos);
 
-	KSpreadPoint pt(ref,_sheet->workbook(),_sheet);
+  KSpreadPoint pt(ref,_sheet->workbook(),_sheet);
 
-	if (pt.isValid())
-	{
-		//Get colour at position
-		int oldPara,oldIndex;
+  if (pt.isValid())
+  {
+    //Get colour at position
+    int oldPara,oldIndex;
 
-		//setCursorPosition emits a cursorPositionChanged signal, we don't want that to happen in case
-		//this function is called as a result of a cursor position change.
-		textEdit()->blockSignals(true);
-		textEdit()->getCursorPosition(&oldPara,&oldIndex);
-		textEdit()->setCursorPosition(oldPara,position);
+    //setCursorPosition emits a cursorPositionChanged signal, we don't want that to happen in case
+    //this function is called as a result of a cursor position change.
+    textEdit()->blockSignals(true);
+    textEdit()->getCursorPosition(&oldPara,&oldIndex);
+    textEdit()->setCursorPosition(oldPara,position);
 
-		outCellColor=textEdit()->color();
+    outCellColor=textEdit()->color();
 
-		textEdit()->setCursorPosition(oldPara,oldIndex);
-		textEdit()->blockSignals(false);
+    textEdit()->setCursorPosition(oldPara,oldIndex);
+    textEdit()->blockSignals(false);
 
-//		kdDebug() << "Cell ref color at " << position << " - Red (" << outCellColor.red() << ") Green (" << outCellColor.green() <<
-//				") Blue (" << outCellColor.blue() << ")" << endl;
+//    kdDebug() << "Cell ref color at " << position << " - Red (" << outCellColor.red() << ") Green (" << outCellColor.green() <<
+//        ") Blue (" << outCellColor.blue() << ")" << endl;
 
-		return pt.cell();
-	}
+    return pt.cell();
+  }
 
-	return 0;
+  return 0;
 }*/
 
 void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* cellRefs)
 {
-	if (!cellRefs)
-		return;
+  if (!cellRefs)
+    return;
 
-	for (unsigned int i=0;i<_refs.size();i++)
-	{
-		HighlightRange hc;
+  for (unsigned int i=0;i<_refs.size();i++)
+  {
+    HighlightRange hc;
 
-		//Is this a single point or a range of cells?
-		if (_refs[i].find(':') == -1)
-		{
+    //Is this a single point or a range of cells?
+    if (_refs[i].find(':') == -1)
+    {
 
-			KSpreadPoint* pt=new KSpreadPoint(_refs[i],_sheet->workbook(),_sheet);
+      KSpreadPoint* pt=new KSpreadPoint(_refs[i],_sheet->workbook(),_sheet);
 
-			hc.setFirstCell(pt);
-			hc.setLastCell(0);
-
-
-		}
-		else
-		{
-
-			KSpreadRange rg(_refs[i],_sheet->workbook(),_sheet);
-
-			//kdDebug() << "Range from ref " << _refs[i] << endl;
-			hc.setFirstCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
-			hc.setLastCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
-
-			rg.getStartPoint(hc.firstCell());
-			rg.getEndPoint(hc.lastCell());
-		}
+      hc.setFirstCell(pt);
+      hc.setLastCell(0);
 
 
+    }
+    else
+    {
 
-		hc.setColor(_colors[i%_colors.size()]);
-		cellRefs->push_back(hc);
-	}
+      KSpreadRange rg(_refs[i],_sheet->workbook(),_sheet);
+
+      //kdDebug() << "Range from ref " << _refs[i] << endl;
+      hc.setFirstCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
+      hc.setLastCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
+
+      rg.getStartPoint(hc.firstCell());
+      rg.getEndPoint(hc.lastCell());
+    }
+
+
+
+    hc.setColor(_colors[i%_colors.size()]);
+    cellRefs->push_back(hc);
+  }
 }
 
 int KSpreadTextEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
 {
-	_refs.clear();
-	_refsChanged=true;
+  _refs.clear();
+  _refsChanged=true;
 
-	int wordStart=-1;
+  int wordStart=-1;
 
-	setFormat(0,text.length(),Qt::black);
+  setFormat(0,text.length(),Qt::black);
 
-	for (unsigned int i=0;i<text.length();i++)
-	{
-		const QChar ch=text[i];
+  for (unsigned int i=0;i<text.length();i++)
+  {
+    const QChar ch=text[i];
 
-		//Formulas must start with an equals sign ,
-		//if this is not a formula then don't highlight the text
-		if ( (i==0) && (ch != '='))
-			return 0;
-
-
-
-		if ( (ch.isLetterOrNumber()) || (ch=='$') || (ch=='!') || (ch==':'))
-		{
-			if (wordStart == -1)
-				wordStart=i;
-			//setFormat(i,1,QColor(255,0,0));
-		}
-		else
-		{
-			if (wordStart != -1)
-			{
-				const QString cellRef=text.mid(wordStart,i-wordStart);
-				QString relativeRef=cellRef.lower();
-
-				//relativeRef.remove('$');
-
-				if (relativeRef.find('!')==-1)
-					relativeRef.prepend(_sheet->sheetName().lower()+"!");
-
-				bool cellRefValid=false;
-
-				if (cellRef.find(':' ) != -1)
-				{
-					KSpreadRange rg(cellRef,_sheet->workbook(),_sheet);
-					//Check that the syntax of the range is valid and that
-					//the range is not an invalid rectangle.
-					cellRefValid=(rg.isValid());
-				}
-				else
-				{
-					KSpreadPoint pt(cellRef,_sheet->workbook(),_sheet);
-					cellRefValid=pt.isValid();
-				}
-
-				if (cellRefValid)
-				{
-					int refIndex=-1;
-
-					//Check to see if this cell has been referenced earlier in the formula
-					//if it has been, we should use the same colour as previously
-					for (unsigned int k=0;k<_refs.size();k++)
-						if (_refs[k]==relativeRef)
-							refIndex=k;
+    //Formulas must start with an equals sign ,
+    //if this is not a formula then don't highlight the text
+    if ( (i==0) && (ch != '='))
+      return 0;
 
 
-					if (refIndex == -1)
-					{
-						_refs.push_back(relativeRef);
-						//_refsChanged=true;
-						refIndex=_refs.size()-1;
-					}
 
-					QColor clr=_colors[refIndex%_colors.size()];
+    if ( (ch.isLetterOrNumber()) || (ch=='$') || (ch=='!') || (ch==':'))
+    {
+      if (wordStart == -1)
+        wordStart=i;
+      //setFormat(i,1,QColor(255,0,0));
+    }
+    else
+    {
+      if (wordStart != -1)
+      {
+        const QString cellRef=text.mid(wordStart,i-wordStart);
+        QString relativeRef=cellRef.lower();
 
-					setFormat(wordStart,i-wordStart,clr);
-				}
+        //relativeRef.remove('$');
 
-				wordStart = -1;
-			}
-		}
-	}
+        if (relativeRef.find('!')==-1)
+          relativeRef.prepend(_sheet->sheetName().lower()+"!");
 
-	return 0;
+        bool cellRefValid=false;
+
+        if (cellRef.find(':' ) != -1)
+        {
+          KSpreadRange rg(cellRef,_sheet->workbook(),_sheet);
+          //Check that the syntax of the range is valid and that
+          //the range is not an invalid rectangle.
+          cellRefValid=(rg.isValid());
+        }
+        else
+        {
+          KSpreadPoint pt(cellRef,_sheet->workbook(),_sheet);
+          cellRefValid=pt.isValid();
+        }
+
+        if (cellRefValid)
+        {
+          int refIndex=-1;
+
+          //Check to see if this cell has been referenced earlier in the formula
+          //if it has been, we should use the same colour as previously
+          for (unsigned int k=0;k<_refs.size();k++)
+            if (_refs[k]==relativeRef)
+              refIndex=k;
+
+
+          if (refIndex == -1)
+          {
+            _refs.push_back(relativeRef);
+            //_refsChanged=true;
+            refIndex=_refs.size()-1;
+          }
+
+          QColor clr=_colors[refIndex%_colors.size()];
+
+          setFormat(wordStart,i-wordStart,clr);
+        }
+
+        wordStart = -1;
+      }
+    }
+  }
+
+  return 0;
 }
 
 /********************************************
@@ -442,9 +442,9 @@ KSpreadTextEditor::KSpreadTextEditor( Cell* _cell, KSpreadCanvas* _parent, const
     SLOT( triggerFunctionAutoComplete() ) );
 
   if (!cell()->multiRow(cell()->column(),cell()->row()))
-	{
-		m_pEdit->setWordWrap(QTextEdit::NoWrap);
-	}
+  {
+    m_pEdit->setWordWrap(QTextEdit::NoWrap);
+  }
 
 //TODO - Custom KTextEdit class which supports text completion
 /*
@@ -505,7 +505,8 @@ void KSpreadTextEditor::triggerFunctionAutoComplete()
   m_pEdit->getCursorPosition( &para, &curPos );
   QString subtext = m_pEdit->text().left( curPos );
 
-  KSpread::Tokens tokens = KSpread::Formula::scan( subtext );
+  KSpread::Formula f;
+  KSpread::Tokens tokens = f.scan( subtext );
   if( !tokens.valid() ) return;
   if( tokens.count()<1 ) return;
 
@@ -544,7 +545,8 @@ void KSpreadTextEditor::functionAutoComplete( const QString& item )
   m_pEdit->getCursorPosition( &para, &curPos );
   QString subtext = text().left( curPos );
 
-  KSpread::Tokens tokens = KSpread::Formula::scan( subtext );
+  KSpread::Formula f;
+  KSpread::Tokens tokens = f.scan( subtext );
   if( !tokens.valid() ) return;
   if( tokens.count()<1 ) return;
 
@@ -559,19 +561,19 @@ void KSpreadTextEditor::functionAutoComplete( const QString& item )
 
 void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
 {
-//	m_highlighter->cellRefAt(pos);
+//  m_highlighter->cellRefAt(pos);
 
-	if (m_highlighter->referencesChanged())
-	{
-		std::vector<HighlightRange>* highlightedCells=
-				new std::vector<HighlightRange>;
+  if (m_highlighter->referencesChanged())
+  {
+    std::vector<HighlightRange>* highlightedCells=
+        new std::vector<HighlightRange>;
 
-		m_highlighter->getReferences(highlightedCells);
+    m_highlighter->getReferences(highlightedCells);
 
-		canvas()->setHighlightedRanges(highlightedCells);
+    canvas()->setHighlightedRanges(highlightedCells);
 
-		delete highlightedCells;
-	}
+    delete highlightedCells;
+  }
 }
 
 void KSpreadTextEditor::slotTextCursorChanged(  QTextCursor* cursor )
@@ -650,40 +652,40 @@ void KSpreadTextEditor::slotTextChanged( /*const QString& t*/ )
 
   if (t.length() > m_length)
   {
-	m_length = t.length();
+  m_length = t.length();
 
-	QFontMetrics fm(m_pEdit->font());
-	int requiredWidth=fm.width(t) + (2*fm.width('x')); // - requiredWidth = width of text plus some spacer characters
+  QFontMetrics fm(m_pEdit->font());
+  int requiredWidth=fm.width(t) + (2*fm.width('x')); // - requiredWidth = width of text plus some spacer characters
 
-	//For normal single-row cells, the text editor must be expanded horizontally to
-	//allow the text to fit if the new text is too wide
-	//For multi-row (word-wrap enabled) cells, the text editor must expand vertically to
-	//allow for new rows of text & the width of the text editor is not affected
-	if (m_pEdit->wordWrap() == QTextEdit::NoWrap)
-	{
+  //For normal single-row cells, the text editor must be expanded horizontally to
+  //allow the text to fit if the new text is too wide
+  //For multi-row (word-wrap enabled) cells, the text editor must expand vertically to
+  //allow for new rows of text & the width of the text editor is not affected
+  if (m_pEdit->wordWrap() == QTextEdit::NoWrap)
+  {
 
 
-		if (requiredWidth > width())
-		{
-			if (t.isRightToLeft())
-			{
+    if (requiredWidth > width())
+    {
+      if (t.isRightToLeft())
+      {
 
-				setGeometry(x() - requiredWidth + width(),y(),requiredWidth,height());
-			}
-			else
-			{
-				setGeometry(x(),y(),requiredWidth,height());
-			}
-		}
-	}
-	else
-	{
-		int requiredHeight=m_pEdit->heightForWidth(width());
+        setGeometry(x() - requiredWidth + width(),y(),requiredWidth,height());
+      }
+      else
+      {
+        setGeometry(x(),y(),requiredWidth,height());
+      }
+    }
+  }
+  else
+  {
+    int requiredHeight=m_pEdit->heightForWidth(width());
 
-		if (requiredHeight > height())
-			setGeometry(x(),y(),width(),requiredHeight);
+    if (requiredHeight > height())
+      setGeometry(x(),y(),width(),requiredHeight);
 
-	}
+  }
 
    /* // allocate more space than needed. Otherwise it might be too slow
     m_length = t.length();
@@ -729,16 +731,16 @@ bool KSpreadTextEditor::checkChoose()
         canvas()->endChoose();
     else
     {
-	int para,cur;
-	m_pEdit->getCursorPosition(&para,&cur);
+  int para,cur;
+  m_pEdit->getCursorPosition(&para,&cur);
 
       QChar r = t[ cur - 1 - canvas()->chooseTextLen() ];
       if ( ( r == '*' || r == '|' || r == '&' || r == '-' ||
              r == '+' || r == '/' || r == '!' || r == '(' ||
              r == '^' || r == ',' || r == '%' || r == '[' ||
              r == '{' || r == '~' || r == '=' || r == ';' ||
-	     r == '>' || r == '<') )
-	{
+       r == '>' || r == '<') )
+  {
 
           canvas()->startChoose();
       }
@@ -767,8 +769,8 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
 
-	int para,cur;
-	m_pEdit->getCursorPosition(&para,&cur);
+  int para,cur;
+  m_pEdit->getCursorPosition(&para,&cur);
    // int cur = m_pEdit->cursorPosition();
     QString tmp, tmp2;
     int n = -1;
@@ -828,14 +830,14 @@ QString KSpreadTextEditor::text() const
 void KSpreadTextEditor::setText(QString text)
 {
     if (m_pEdit != 0)
-	{
-        	m_pEdit->setText(text);
-		//Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
-		//be quickly deleted using the backspace key
+  {
+          m_pEdit->setText(text);
+    //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
+    //be quickly deleted using the backspace key
 
-		//This also ensures that the caret is sized correctly for the text
-		m_pEdit->setCursorPosition(0,text.length());
-	}
+    //This also ensures that the caret is sized correctly for the text
+    m_pEdit->setCursorPosition(0,text.length());
+  }
 
     if (m_fontLength == 0)
     {
@@ -846,9 +848,9 @@ void KSpreadTextEditor::setText(QString text)
 
 int KSpreadTextEditor::cursorPosition() const
 {
-	int para,cur;
-	m_pEdit->getCursorPosition(&para,&cur);
-	return cur;
+  int para,cur;
+  m_pEdit->getCursorPosition(&para,&cur);
+  return cur;
    // return m_pEdit->cursorPosition();
 }
 
@@ -879,15 +881,15 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
         QKeyEvent* k = (QKeyEvent*)e;
         if ( !( k->state() & Qt::ShiftButton )|| canvas()->chooseFormulaArea())
         {
-		//If the user presses the return key to finish editing this cell, choose mode must be turned off first
-		//otherwise it will merely select a different cell
-		if (k->key() == Key_Return)
-		{
-			canvas()->endChoose();
-		}
+    //If the user presses the return key to finish editing this cell, choose mode must be turned off first
+    //otherwise it will merely select a different cell
+    if (k->key() == Key_Return)
+    {
+      canvas()->endChoose();
+    }
 
-		//NB - Added check for Key_Return when migrating text edit from KLineEdit to KTextEdit, since
-		//normal behaviour for KTextEdit is to swallow return key presses
+    //NB - Added check for Key_Return when migrating text edit from KLineEdit to KTextEdit, since
+    //normal behaviour for KTextEdit is to swallow return key presses
             if ( k->key() == Key_Up || k->key() == Key_Down ||
                  k->key() == Key_Next || k->key() == Key_Prior ||
                  k->key() == Key_Escape || k->key() == Key_Tab || k->key() == Key_Return)
@@ -1127,17 +1129,17 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
 void KSpreadEditWidget::showEditWidget(bool _show)
 {
     if (_show)
-	{
-	    m_pCancelButton->show();
-	    m_pOkButton->show();
-	    show();
-	}
+  {
+      m_pCancelButton->show();
+      m_pOkButton->show();
+      show();
+  }
     else
-	{
-	    m_pCancelButton->hide();
-	    m_pOkButton->hide();
-	    hide();
-	}
+  {
+      m_pCancelButton->hide();
+      m_pOkButton->hide();
+      hide();
+  }
 }
 
 void KSpreadEditWidget::slotAbortEdit()

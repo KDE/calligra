@@ -42,7 +42,10 @@ class DependencyList {
   ~DependencyList () { reset (); };
   /** clear internal structures */
   void reset ();
-  
+
+  /** handle the fact that a cell has been changed */
+  void cellChanged (const KSpreadPoint &cell);
+
   /** generate list of dependencies of a cell */
   void generateDependencies (const KSpreadPoint &cell);
   /** generate list of dependencies of a range */
@@ -62,7 +65,8 @@ class DependencyList {
   /** get cells depending on this cell, either through normal or range dependency */
   QValueList<KSpreadPoint> getDependants (const KSpreadPoint &cell);
 
- protected:
+  void areaModified (const QString &name);
+  protected:
   /** update structures: cell 1 depends on cell 2 */
   void addDependency (const KSpreadPoint &cell1, const KSpreadPoint &cell2);
   /** update structures: cell depends on a range */
@@ -96,6 +100,8 @@ class DependencyList {
   QMap<KSpreadPoint, QValueList<KSpreadPoint> > cellDeps;
   /** all range dependencies splitted into cell-chunks (TODO: describe) */
   QMap<KSpreadPoint, QValueList<RangeDependency> > rangeDeps;
+  /** list of cells referencing a given named area */
+  QMap<QString, QMap<KSpreadPoint, bool> > areaDeps;
 };
 
 }
@@ -120,6 +126,7 @@ void DependencyManager::reset ()
 
 void DependencyManager::cellChanged (const KSpreadPoint &cell)
 {
+  deps->cellChanged (cell);
   Cell *c = cell.cell();
 
   // empty or default cell? do nothing
@@ -149,6 +156,11 @@ void DependencyManager::rangeListChanged (const RangeList &rangeList)
   deps->processDependencies (rangeList);
 }
 
+void DependencyManager::areaModified (const QString &name)
+{
+  deps->areaModified (name);
+}
+
 RangeList DependencyManager::getDependencies (const KSpreadPoint &cell)
 {
   return deps->getDependencies (cell);
@@ -169,6 +181,25 @@ void DependencyList::reset ()
   dependencies.clear();
   cellDeps.clear();
   rangeDeps.clear();
+}
+
+void DependencyList::cellChanged (const KSpreadPoint &cell)
+{
+  Cell *c = cell.cell();
+
+  // empty or default cell? do nothing
+  if( c->isDefault() )
+    return;
+  
+  //if the cell contains the circle error, we mustn't do anything
+  if (c->testFlag (Cell::Flag_CircularCalculation))
+    return;
+  
+  //don't re-generate dependencies if we're updating dependencies
+  if ( !(c->testFlag (Cell::Flag_Progress)))
+    generateDependencies (cell);
+
+  processDependencies (cell);
 }
 
 RangeList DependencyList::getDependencies (const KSpreadPoint &cell)
@@ -214,6 +245,20 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
   return list;
 }
 
+void DependencyList::areaModified (const QString &name)
+{
+  // since area names are something like aliases, modifying an area name
+  // basically means that all cells referencing this area should be treated
+  // as modified - that will retrieve updated area ranges and also update
+  // everything as necessary ...
+  if (!areaDeps.contains (name))
+    return;
+  
+  QMap<KSpreadPoint, bool>::iterator it;
+  for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
+    cellChanged (it.key());
+}
+
 void DependencyList::addDependency (const KSpreadPoint &cell1,
     const KSpreadPoint &cell2)
 {
@@ -243,6 +288,10 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
   QValueList<KSpreadPoint>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
     sh->dependencies()->deps->rangeDeps[*it].push_back (rd);
+
+  // the target range could be a named area ...
+  if (!rd.range.namedArea.isNull())
+    areaDeps[rd.range.namedArea][cell] = true;
 }
 
 void DependencyList::removeDependencies (const KSpreadPoint &cell)
@@ -308,7 +357,14 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
     }
   }
   
-  //finally, remove the entry about this cell
+  // remove information about named area dependencies
+  QMap<QString, QMap<KSpreadPoint, bool> >::iterator itr;
+  for (itr = areaDeps.begin(); itr != areaDeps.end(); ++itr) {
+    if (itr.data().contains (cell))
+      itr.data().remove (cell);
+  }
+
+  // finally, remove the entry about this cell
   dependencies[cell].cells.clear();
   dependencies[cell].ranges.clear();
   dependencies.erase (cell);
@@ -541,11 +597,7 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
   if (!c->isFormula())
     return RangeList();   //not a formula -> no dependencies
 
-  QString expr = c->text();
-
-  //TODO: when the new parser is in use, Cell will hold a Formula
-  //instance, hence we'll be able to use that one directly
-  Tokens tokens = Formula::scan( expr );  
+  Tokens tokens = c->formula()->tokens();
 
   //return empty list if the tokens aren't valid
   if (!tokens.valid())

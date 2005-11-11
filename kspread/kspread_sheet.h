@@ -726,7 +726,7 @@ public:
     void borderRight( KSpreadSelection* selectionInfo, const QColor &_color );
 
     void setConditional( KSpreadSelection* selectionInfo,
-			 QValueList<KSpreadConditional> const & newConditions );
+       QValueList<KSpreadConditional> const & newConditions );
 
     void setValidity( KSpreadSelection* selectionInfo,KSpreadValidity tmp );
 
@@ -1220,6 +1220,10 @@ signals:
     void sig_SheetActivated( KSpreadSheet* );
     void sig_RefreshView( KSpreadSheet* );
 
+protected slots:
+  /** react on modification (add/remove) of a named area */
+  void slotAreaModified (const QString &name);
+
 protected:
     /**
      * Change the name of a sheet in all formulas.
@@ -1260,31 +1264,31 @@ public:
     // see kspread_sheet.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)
     struct CellWorker {
-	const bool create_if_default;
-	const bool emit_signal;
-	const bool type_B;
+  const bool create_if_default;
+  const bool emit_signal;
+  const bool type_B;
 
-	CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
-	virtual ~CellWorker() { }
+  CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
+  virtual ~CellWorker() { }
 
-	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) =0;
+  virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) =0;
 
-	// these are only needed for type A
-	virtual bool testCondition( RowFormat* ) { return false; }
-	virtual void doWork( RowFormat* ) { }
-	virtual void doWork( ColumnFormat* ) { }
-	virtual void prepareCell( KSpread::Cell* ) { }
+  // these are only needed for type A
+  virtual bool testCondition( RowFormat* ) { return false; }
+  virtual void doWork( RowFormat* ) { }
+  virtual void doWork( ColumnFormat* ) { }
+  virtual void prepareCell( KSpread::Cell* ) { }
 
-	// these are needed in all CellWorkers
-	virtual bool testCondition( KSpread::Cell* cell ) =0;
-	virtual void doWork( KSpread::Cell* cell, bool cellRegion, int x, int y ) =0;
+  // these are needed in all CellWorkers
+  virtual bool testCondition( KSpread::Cell* cell ) =0;
+  virtual void doWork( KSpread::Cell* cell, bool cellRegion, int x, int y ) =0;
     };
 
     // this is for type A (surprise :))
     struct CellWorkerTypeA : public CellWorker {
-	CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
-	virtual QString getUndoTitle( ) =0;
-	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r );
+  CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
+  virtual QString getUndoTitle( ) =0;
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r );
     };
     static QString translateOpenCalcPoint( const QString & str );
 protected:
@@ -1294,12 +1298,12 @@ protected:
 
 private:
     bool FillSequenceWithInterval (QPtrList<KSpread::Cell>& _srcList,
-				   QPtrList<KSpread::Cell>& _destList,
-				   QPtrList<AutoFillSequence>& _seqList,
+           QPtrList<KSpread::Cell>& _destList,
+           QPtrList<AutoFillSequence>& _seqList,
                                    bool down);
 
     void FillSequenceWithCopy (QPtrList<KSpread::Cell>& _srcList,
-			       QPtrList<KSpread::Cell>& _destList,
+             QPtrList<KSpread::Cell>& _destList,
                                bool down);
 
     void convertObscuringBorders();
