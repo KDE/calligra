@@ -27,6 +27,12 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
+#if defined(Q_WS_WIN)
+  #define PYPATHDELIMITER ";"
+#else
+  #define PYPATHDELIMITER ":"
+#endif
+
 extern "C"
 {
     /**
@@ -86,54 +92,37 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     // Set name of the program.
     Py_SetProgramName(const_cast<char*>("Kross"));
 
-/*
+    /*
     // Set arguments.
     //char* comm[0];
     const char* comm = const_cast<char*>("kross"); // name.
     PySys_SetArgv(1, comm);
-*/
+    */
 
-    
-
+    // In the python sys.path are all module-directories are
+    // listed in.
     QString path;
 
+    // First import the sys-module to remember it's sys.path
+    // list in our path QString.
     Py::Module sysmod( PyImport_ImportModule("sys"), true );
     Py::Dict sysmoddict = sysmod.getDict();
-    PyObject* syspath = PyDict_GetItemString(sysmoddict.ptr(), "path");
-    if(syspath && PyList_Check(syspath)) {
-        for(int i = 0; i < PyList_Size(syspath); i++) {
-            PyObject *e = PyList_GetItem(syspath, i);
-            if(e && PyString_Check(e)) {
-                if(path.isEmpty())
-                    path = PyString_AsString(e);
-                else {
-#if defined(Q_WS_WIN)
-                    path += ";"; // win32 delimiter for python sys-paths.
-#else
-                    path += ":";
-#endif
-                    path += PyString_AsString(e);
-                }
-            }
-        }
+    Py::Object syspath = sysmoddict.getItem("path");
+    if(syspath.isList()) {
+        Py::List syspathlist = syspath;
+        for(Py::List::iterator it = syspathlist.begin(); it != syspathlist.end(); ++it)
+            if( (*it).isString() )
+                path.append( QString(Py::String(*it).as_string().c_str()) + PYPATHDELIMITER );
     }
     else
         path = Py_GetPath();
 
-
-    // Set the python path.
-    //PySys_SetPath(Py_GetPath());
-//QString path = Py_GetPath();
+    // Determinate additional module-paths we like to add.
     QStringList dirs = KGlobal::dirs()->findDirs("appdata", "scripts/kross");
-    for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it) {
-        path.append(
-#if defined(Q_WS_WIN)
-                ";" // win32 delimiter for python sys-paths.
-#else
-                ":"
-#endif
-                + *it);
-    }
+    for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it)
+        path.append(PYPATHDELIMITER + *it);
+
+    // Set the extended sys.path.
     PySys_SetPath( const_cast<char*>( path.latin1() ) );
 
     kdDebug() << "Python ProgramName: " << Py_GetProgramName() << endl;
@@ -143,6 +132,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     kdDebug() << "Python Prefix: " << Py_GetPrefix() << endl;
     kdDebug() << "Python ExecPrefix: " << Py_GetExecPrefix() << endl;
     kdDebug() << "Python Path: " << Py_GetPath() << endl;
+    kdDebug() << "Python System Path: " << path << endl;
 
     // Initialize the main module.
     d->mainmodule = new PythonModule(this);
