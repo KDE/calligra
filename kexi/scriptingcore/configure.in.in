@@ -1,5 +1,8 @@
 # Check if python is installed.
+#KDE_CHECK_PYTHON(2.3)
 KDE_CHECK_PYTHON
 
+# Compile the Kross python plugin only if both, $LIBPYTHON and
+# $PYTHONINC, are defined.
 AM_CONDITIONAL(compile_kross_python,
                test -n "$LIBPYTHON" && test -n "$PYTHONINC")
