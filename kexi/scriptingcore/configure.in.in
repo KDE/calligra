@@ -1,0 +1,5 @@
+# Check if python is installed.
+KDE_CHECK_PYTHON
+
+AM_CONDITIONAL(compile_kross_python,
+               test -n "$LIBPYTHON" && test -n "$PYTHONINC")
