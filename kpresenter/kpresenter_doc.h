@@ -437,9 +437,6 @@ class KPresenterDoc : public KoDocument
 
     void updateGuideLineButton();
 
-    bool snapToGuideLines() const { return m_bSnapToGuideLines; }
-    void setSnapToGuideLines( bool b ) { m_bSnapToGuideLines = b; }
-    
     void updateGridButton();
 
     double getGridX()const { return m_gridX; }
@@ -668,7 +665,6 @@ protected:
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;
     bool m_bShowGuideLines;
-    bool m_bSnapToGuideLines;
     bool m_bViewFormattingChars;
 
     bool m_bShowGrid;

@@ -2285,10 +2285,6 @@ void KPresenterView::setupActions()
                                                this, SLOT( viewGuideLines() ),
                                                actionCollection(), "view_guidelines" );
 
-    actionViewSnapToGuideLines = new KToggleAction( i18n( "Snap to Guide Lines" ), 0,
-                                               this, SLOT( viewSnapToGuideLines() ),
-                                               actionCollection(), "view_snaptoguidelines" );
-
     actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), 0,
                                             this, SLOT( viewGrid() ),
                                             actionCollection(), "view_grid" );
@@ -5590,14 +5586,6 @@ void KPresenterView::viewGuideLines()
     deSelectAllObjects();
     refreshRuler( state );
     m_pKPresenterDoc->repaint(false);
-}
-
-
-void KPresenterView::viewSnapToGuideLines()
-{
-    m_pKPresenterDoc->setSnapToGuideLines( actionViewSnapToGuideLines->isChecked() );
-    m_pKPresenterDoc->setModified( true );
-    m_pKPresenterDoc->updateGridButton();
 }
 
 

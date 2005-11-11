@@ -203,7 +203,6 @@ public slots:
     void editComment();
 
     void viewGuideLines();
-    void viewSnapToGuideLines();
 
     void viewGrid();
 
@@ -918,7 +917,6 @@ private:
     KToggleAction *actionViewSlideMaster;
 
     KToggleAction *actionViewShowGuideLine;
-    KToggleAction *actionViewSnapToGuideLines;
 
     KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewShowGrid;

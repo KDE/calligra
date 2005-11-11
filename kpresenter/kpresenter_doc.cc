@@ -212,7 +212,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_bViewFormattingChars = false;
     m_bShowGuideLines = true;
-    m_bSnapToGuideLines = true;
 
     m_bShowGrid = true;
     m_bGridToFont = false;

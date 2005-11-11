@@ -4486,7 +4486,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     double diffy = m_view->zoomHandler()->unzoomItY( y );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && m_changeSnap );
-    bool snapToGuideLines = ( doc->snapToGuideLines() && !m_changeSnap || !doc->snapToGuideLines() && m_changeSnap );
+    bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
 
     if ( snapToGrid && !snapToGuideLines )
     {
@@ -4628,7 +4628,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     KoPoint mouseDiff( diffx, diffy );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && m_changeSnap );
-    bool snapToGuideLines = ( doc->snapToGuideLines() && !m_changeSnap || !doc->snapToGuideLines() && m_changeSnap );
+    bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
 
     if ( snapToGrid && !snapToGuideLines )
     {
@@ -5530,7 +5530,7 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos )
     KPresenterDoc * doc( m_view->kPresenterDoc() );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && m_changeSnap );
-    bool snapToGuideLines = ( doc->snapToGuideLines() && !m_changeSnap || !doc->snapToGuideLines() && m_changeSnap );
+    bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
 
     if ( snapToGrid && !snapToGuideLines )
     {
